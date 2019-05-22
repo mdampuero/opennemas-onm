@@ -302,6 +302,39 @@ class Poll extends Content
     }
 
     /**
+     * Increases the votes for a poll basing on the answer id.
+     *
+     * @param int $id The answer id.
+     *
+     * @return bool True if vote was saved successfully. False otherwise.
+     */
+    public function vote(int $id) : bool
+    {
+        $this->total_votes++;
+
+        $conn = getService('dbal_connection');
+
+        try {
+            $conn->executeUpdate(
+                "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=?",
+                [ $id ]
+            );
+
+            $conn->update('polls', [
+                'total_votes' => $this->total_votes
+            ], [ 'pk_poll' => $this->id ]);
+
+            dispatchEventWithParams('content.update', [ 'item' => $this ]);
+
+            return true;
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
      * Loads all items in the poll.
      *
      * @param int $id The poll id.
@@ -341,7 +374,7 @@ class Poll extends Content
         foreach ($this->items as &$item) {
             $item['percent'] = 0;
 
-            if (!empty($item['votes']) && !empty($this->totalVotes)) {
+            if (!empty($item['votes']) && !empty($this->total_votes)) {
                 $item['percent'] = sprintf(
                     '%.2f',
                     round($item['votes'] / $this->total_votes, 4) * 100
@@ -383,7 +416,7 @@ class Poll extends Content
 
             try {
                 $conn->insert('poll_items', [
-                    'pk_item'    => $item['pk_item'],
+                    'pk_item'    => (int) $item['pk_item'],
                     'fk_pk_poll' => $id,
                     'item'       => $item['item'],
                     'votes'      => $item['votes']
