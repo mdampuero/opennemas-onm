@@ -268,7 +268,7 @@ class Poll extends Content
      */
     public function update($data)
     {
-        $this->parseItems($data['items'] ?? []);
+        $this->parseItems($data['items']);
 
         $conn = getService('dbal_connection');
 
@@ -374,7 +374,7 @@ class Poll extends Content
             try {
                 $conn->insert('poll_items', [
                     'fk_pk_poll' => $id,
-                    'item'       => $item->item,
+                    'item'       => $item['item'],
                 ]);
             } catch (\Exception $e) {
                 getService('error.log')->error(
