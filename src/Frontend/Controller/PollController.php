@@ -144,6 +144,15 @@ class PollController extends FrontendController
         return $response;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExpectedUri($action, $params = [])
+    {
+        return parent::getExpectedUri($action, array_merge($params, [
+            'component' => 'poll'
+        ]));
+    }
 
     /**
      * {@inheritdoc}

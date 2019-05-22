@@ -1,6 +1,6 @@
 frontend_poll_frontpage:
     path:     /{component}
-    defaults: { _controller: FrontendBundle:Poll:list, component: poll }
+    defaults: { _controller: FrontendBundle:Poll:list }
     requirements:
         component: 'encuesta|poll|enquerito|enquisa'
     options:
@@ -8,7 +8,7 @@ frontend_poll_frontpage:
 
 frontend_poll_frontpage_category:
     path:     /{component}/{category_name}
-    defaults: { _controller: FrontendBundle:Poll:list, component: poll, page: 1 }
+    defaults: { _controller: FrontendBundle:Poll:list, page: 1 }
     requirements:
         category_name: '[^/]+'
         component:     'encuesta|poll|enquerito|enquisa'
@@ -17,7 +17,7 @@ frontend_poll_frontpage_category:
 
 frontend_poll_show:
     path: /{component}/{category_name}/{slug}/{created}{id}.html
-    defaults: { _controller: FrontendBundle:Poll:show, component: poll }
+    defaults: { _controller: FrontendBundle:Poll:show }
     requirements:
         component:     'encuesta|poll|enquerito|enquisa'
         category_name: '[^/]+'
