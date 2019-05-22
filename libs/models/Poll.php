@@ -12,6 +12,11 @@ use Common\Data\Serialize\Serializer\PhpSerializer;
 class Poll extends Content
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $l10nExclusiveKeys = [ 'pretitle' ];
+
+    /**
      * The poll id
      *
      * @var int
@@ -52,14 +57,6 @@ class Poll extends Content
      * @var string
      */
     protected $pretitle = null;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getL10nKeys()
-    {
-        return array_merge(parent::getL10nKeys(), [ 'pretitle' ]);
-    }
 
     /**
      * Initializes the poll instance
@@ -270,7 +267,11 @@ class Poll extends Content
      */
     public function update($data)
     {
-        $this->parseItems($data['items']);
+        foreach ($this->getL10nKeys(true) as $key) {
+            if (array_key_exists($key, $data) && is_array($data[$key])) {
+                $data[$key] = PhpSerializer::serialize($data[$key]);
+            }
+        }
 
         $conn = getService('dbal_connection');
 
@@ -340,7 +341,7 @@ class Poll extends Content
         foreach ($this->items as &$item) {
             $item['percent'] = 0;
 
-            if (!empty($item['votes'])) {
+            if (!empty($item['votes']) && !empty($this->totalVotes)) {
                 $item['percent'] = sprintf(
                     '%.2f',
                     round($item['votes'] / $this->total_votes, 4) * 100

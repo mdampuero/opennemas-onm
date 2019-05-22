@@ -11,14 +11,31 @@ use Common\Data\Serialize\Serializable\CsvSerializable;
 
 class Content implements \JsonSerializable, CsvSerializable
 {
-    const AVAILABLE     = 'available';
-    const TRASHED       = 'trashed';
-    const PENDING       = 'pending';
-    const NOT_SCHEDULED = 'not-scheduled';
-    const SCHEDULED     = 'scheduled';
-    const DUED          = 'dued';
-    const IN_TIME       = 'in-time';
-    const POSTPONED     = 'postponed';
+    const AVAILABLE          = 'available';
+    const TRASHED            = 'trashed';
+    const PENDING            = 'pending';
+    const NOT_SCHEDULED      = 'not-scheduled';
+    const SCHEDULED          = 'scheduled';
+    const DUED               = 'dued';
+    const IN_TIME            = 'in-time';
+    const POSTPONED          = 'postponed';
+    const L10N_CONTENT_TYPES = [
+        'album', 'article', 'opinion', 'poll', 'video'
+    ];
+
+    /**
+     * The list of common l10n supported keys.
+     *
+     * @var array
+     */
+    protected static $l10nKeys = [ 'body', 'description', 'slug', 'title' ];
+
+    /**
+     * The list of l10n supported keys for this specific content type.
+     *
+     * @var array
+     */
+    protected static $l10nExclusiveKeys = [];
 
     /**
      * The main text of the content
@@ -260,11 +277,7 @@ class Content implements \JsonSerializable, CsvSerializable
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
-                $contentTypesWithL10n = [
-                    'album', 'article', 'opinion', 'poll', 'video'
-                ];
-
-                if (in_array($this->content_type_name, $contentTypesWithL10n)
+                if (in_array($this->content_type_name, self::L10N_CONTENT_TYPES)
                     && in_array($name, $this->getL10nKeys())
                 ) {
                     if (!getService('core.instance')->hasMultilanguage()
@@ -314,9 +327,9 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function __set($name, $value)
     {
-        if ($this->content_type_name === 'article'
-            && getService('core.instance')->hasMultilanguage()
+        if (in_array($this->content_type_name, self::L10N_CONTENT_TYPES)
             && in_array($name, $this->getL10nKeys())
+            && getService('core.instance')->hasMultilanguage()
         ) {
             $value = getService('data.manager.filter')
                 ->set($value)
@@ -1914,12 +1927,20 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Returns the list of properties that support multiple languages.
      *
+     * @param boolean $exclusive The list of article's exclusive properties
+     *                           that support multiple languages.
+     *
      * @return array The list of properties that can be localized to multiple
      *               languages.
      */
-    public static function getL10nKeys()
+
+    public static function getL10nKeys($exclusive = false)
     {
-        return [ 'body', 'description', 'slug', 'title' ];
+        if ($exclusive) {
+            return static::$l10nExclusiveKeys;
+        }
+
+        return array_merge(static::$l10nKeys, static::$l10nExclusiveKeys);
     }
 
     /**
