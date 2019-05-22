@@ -383,8 +383,10 @@ class Poll extends Content
 
             try {
                 $conn->insert('poll_items', [
+                    'pk_item'    => $item['pk_item'],
                     'fk_pk_poll' => $id,
                     'item'       => $item['item'],
+                    'votes'      => $item['votes']
                 ]);
             } catch (\Exception $e) {
                 getService('error.log')->error(
