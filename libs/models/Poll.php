@@ -126,26 +126,23 @@ class Poll extends Content
     }
 
     /**
+     * Checks if the current poll is already closed.
+     *
+     * @return bool True if the poll is closed. False otherwise.
+     */
+    public function isClosed()
+    {
+        return array_key_exists('closetime', $this->params)
+            && !empty($this->params['closetime'])
+            && $this->params['closetime'] < date('Y-m-d H:i:s');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function load($properties)
     {
         parent::load($properties);
-
-        $this->status = 'opened';
-
-        if (is_string($this->params)) {
-            $this->params = unserialize($this->params);
-        }
-
-        if (is_array($this->params)
-            && array_key_exists('closetime', $this->params)
-            && (!empty($this->params['closetime']))
-            && ($this->params['closetime'] != date('00-00-00 00:00:00'))
-            && ($this->params['closetime'] < date('Y-m-d H:i:s'))
-        ) {
-            $this->status = 'closed';
-        }
     }
 
     /**
