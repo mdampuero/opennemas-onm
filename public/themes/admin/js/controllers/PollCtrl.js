@@ -81,7 +81,13 @@
          *   Adds an empty answer to the answer list.
          */
         $scope.addAnswer = function() {
-          $scope.item.items.push({ pk_item: '', votes: 0, item: '' });
+          var item = { pk_item: '', votes: 0, item: '' };
+
+          $scope.data.item.items.push(item);
+
+          // Localize and add new item to localized item
+          $scope.item.items.push($scope.localizeOption(item,
+            $scope.data.item.items.length));
         };
 
         /**
@@ -165,6 +171,7 @@
          */
         $scope.removeAnswer = function(index) {
           $scope.item.items.splice(index, 1);
+          $scope.data.item.items.splice(index, 1);
         };
       }
     ]);
