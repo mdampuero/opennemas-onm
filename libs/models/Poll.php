@@ -17,13 +17,6 @@ class Poll extends Content
     public $pk_poll = null;
 
     /**
-     * The poll pretitle
-     *
-     * @var string
-     */
-    public $pretitle = null;
-
-    /**
      * The total amount of votes for this poll
      *
      * @var int
@@ -45,6 +38,28 @@ class Poll extends Content
     public $visualization = null;
 
     /**
+     * The list of items.
+     *
+     * @var array
+     */
+    protected $items = [];
+
+    /**
+     * The poll pretitle
+     *
+     * @var string
+     */
+    protected $pretitle = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getL10nKeys()
+    {
+        return array_merge(parent::getL10nKeys(), [ 'pretitle' ]);
+    }
+
+    /**
      * Initializes the poll instance
      *
      * @param int $id the poll id
@@ -58,31 +73,6 @@ class Poll extends Content
         $this->content_type_name      = 'poll';
 
         parent::__construct($id);
-    }
-
-    /**
-     * Magic method for calculating undefined object properties
-     *
-     * @param string $name the property name
-     *
-     * @return mixed the property value
-     */
-    public function __get($name)
-    {
-        switch ($name) {
-            case 'uri':
-                $uri = Uri::generate('poll', [
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'slug'     => urlencode($this->slug),
-                    'category' => urlencode($this->category_name),
-                ]);
-
-                return ($uri !== '') ? $uri : $this->permalink;
-
-            default:
-                return parent::__get($name);
-        }
     }
 
     /**
@@ -112,45 +102,32 @@ class Poll extends Content
     }
 
     /**
-     * Loads a poll given its id
-     *
-     * @param int $id the poll id
-     *
-     * @return Poll the poll instance
+     * {@inheritdoc}
      */
-    public function read($id)
+    public function __get($name)
     {
-        // If no valid id then return
-        if ((int) $id <= 0) {
-            return;
-        }
+        switch ($name) {
+            case 'items':
+                if (!getService('core.instance')->hasMultilanguage()
+                    || getService('core.locale')->getContext() !== 'backend'
+                ) {
+                    foreach ($this->items as &$item) {
+                        $item['item'] = getService('data.manager.filter')
+                            ->set($item['item'])
+                            ->filter('localize')
+                            ->get();
+                    }
+                }
 
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
-                . 'LEFT JOIN polls ON pk_content = pk_poll WHERE pk_content=?',
-                [ $id ]
-            );
+                return $this->items;
 
-            if (!$rs) {
-                return false;
-            }
-
-            $this->load($rs);
-            $this->items = $this->getItems($this->id);
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return false;
+            default:
+                return parent::__get($name);
         }
     }
 
     /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
+     * {@inheritdoc}
      */
     public function load($properties)
     {
@@ -173,33 +150,27 @@ class Poll extends Content
     }
 
     /**
-     * Creates a new poll given an array of data
-     *
-     * @param array $data the data for the new poll
-     *
-     * @return boolean true if the poll was created
+     * {@inheritdoc}
      */
-    public function create($data)
+    public function read($id)
     {
-        parent::create($data);
+        if (empty($id)) {
+            return;
+        }
 
-        $conn = getService('dbal_connection');
         try {
-            $conn->insert('polls', [
-                'pk_poll'       => (int) $this->id,
-                'pretitle'      => $data['pretitle'],
-                'total_votes'   => 0,
-            ]);
+            $rs = getService('dbal_connection')->fetchAssoc(
+                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                . 'LEFT JOIN polls ON pk_content = pk_poll WHERE pk_content=?',
+                [ $id ]
+            );
 
-            // Save poll items
-            if (is_array($data['item']) && !empty($data['item'])) {
-                foreach ($data['item'] as $item) {
-                    $conn->insert('poll_items', [
-                        'fk_pk_poll' => $this->id,
-                        'item'       => $item->item,
-                    ]);
-                }
+            if (!$rs) {
+                return false;
             }
+
+            $this->load($rs);
+            $this->loadItems($id);
 
             return $this;
         } catch (\Exception $e) {
@@ -210,54 +181,33 @@ class Poll extends Content
     }
 
     /**
-     * Updates a poll from an array of data
-     *
-     * @param array $data the array of data
-     *
-     * @return Poll the object instance
+     * {@inheritdoc}
      */
-    public function update($data)
+    public function create($data)
     {
-        parent::update($data);
-
         $conn = getService('dbal_connection');
+
         try {
-            if (!$data['item']) {
-                $data['item'] = [];
-            }
+            $conn->beginTransaction();
 
-            $total = 0;
-            foreach ($data['item'] as $key => &$item) {
-                $total += $item->votes;
-            }
+            parent::create($data);
 
-            // Update the poll info
-            $conn->update('polls', [
-                'pretitle'      => $data['pretitle'],
-                'total_votes'   => $total,
-            ], [ 'pk_poll' => $data['id'] ]);
+            $this->pk_content = (int) $this->id;
+            $this->pk_poll    = (int) $this->id;
 
-            $this->total   = $total;
-            $this->pk_poll = $data['id'];
+            $conn->insert('polls', [
+                'pk_poll'     => (int) $this->id,
+                'pretitle'    => $data['pretitle'],
+                'total_votes' => 0,
+            ]);
 
-            $conn->executeUpdate(
-                "DELETE FROM poll_items WHERE fk_pk_poll =?",
-                [ (int) $this->id ]
-            );
+            $this->saveItems($this->id, $data['items'] ?? []);
+            $conn->commit();
 
-            // Save poll items
-            foreach ($data['item'] as $key => &$item) {
-                $conn->insert('poll_items', [
-                    'pk_item'    => (int) $item->pk_item,
-                    'fk_pk_poll' => (int) $this->id,
-                    'item'       => $item->item,
-                    'votes'      => $item->votes,
-                ]);
-                $total += $item->votes;
-            }
-
-            return true;
+            return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             getService('error.log')->error($e->getMessage());
 
             return false;
@@ -265,161 +215,34 @@ class Poll extends Content
     }
 
     /**
-     * Removes permanently the poll
-     *
-     * @param int $id the poll id
-     *
-     * @return boolean true if the poll was removed
+     * {@inheritdoc}
      */
     public function remove($id)
     {
-        parent::remove($id);
-
-        try {
-            $rs = getService('dbal_connection')->delete(
-                'polls',
-                [ 'pk_poll' => $id ]
-            );
-
-            $rs = getService('dbal_connection')->delete(
-                'poll_items',
-                [ 'fk_pk_poll' => $id ]
-            );
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Returns the list of poll answers given the poll id
-     *
-     * @param int $pkPoll the poll id
-     *
-     * @return array the list of poll answers
-     */
-
-    public function getItems($pkPoll)
-    {
-        $items = [];
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT * FROM poll_items WHERE fk_pk_poll =? ORDER BY pk_item',
-                [ $pkPoll ]
-            );
-
-            $total = 0;
-            foreach ($rs as $item) {
-                $items[] = [
-                    'pk_item'  => $item['pk_item'],
-                    'item'     => $item['item'],
-                    'votes'    => isset($item['votes']) ? $item['votes'] : 0,
-                    'metadata' => $item['metadata']
-                ];
-
-                $total += $item['votes'];
-            }
-
-            foreach ($items as &$item) {
-                $item['percent'] = 0;
-                if (!empty($item['votes'])) {
-                    $item['percent'] = sprintf(
-                        "%.2f",
-                        round($item['votes'] / $total, 4) * 100
-                    );
-                }
-            }
-
-            return $items;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return [];
-        }
-    }
-
-    /**
-     * Registers a poll answer vote given the answer id
-     *
-     * @param int    $pkItem the poll answer
-     * @param string $ip     the ip that votes
-     *
-     * @return boolean true if the vote was registered
-     */
-    public function vote($pkItem, $ip)
-    {
-        $this->used_ips = $this->addCount($this->used_ips, $ip);
-        if (!$this->used_ips) {
-            return false;
-        }
-
-        $this->total_votes++;
-
         $conn = getService('dbal_connection');
+
         try {
-            $conn->executeUpdate(
-                "UPDATE poll_items SET `votes`=`votes`+1 WHERE pk_item=?",
-                [ $pkItem ]
-            );
+            $conn->beginTransaction();
 
-            $conn->executeUpdate(
-                "UPDATE polls SET `total_votes`=?, `used_ips`=? WHERE pk_poll=?",
-                [
-                    $this->total_votes,
-                    serialize($this->used_ips),
-                    $this->id
-                ]
-            );
+            parent::remove($id);
 
-            dispatchEventWithParams('content.update', [ 'item' => $this ]);
+            $conn->delete('polls', [ 'pk_poll' => $id ]);
+            $this->removeItems($id);
 
-            return true;
+            $conn->commit();
         } catch (\Exception $e) {
+            $conn->rollback();
+
             getService('error.log')->error($e->getMessage());
-
-            return false;
         }
     }
 
     /**
-     * Adds a new ip to the arrays vote list
+     * Renders the poll.
      *
-     * @param array $ips_count
-     * @param string $ip
+     * @param array $params The list of parameters.
      *
-     * @return array
-     */
-    public function addCount($ips_count, $ip)
-    {
-        $ips = [];
-        if ($ips_count) {
-            foreach ($ips_count as $ip_array) {
-                $ips[] = $ip_array['ip'];
-            }
-        }
-        //Se busca si existe algún voto desde la ip
-        $kip_count = array_search($ip, $ips);
-
-        if ($kip_count === false) {
-            //No se ha votado desde esa ip
-            $ips_count[] = [ 'ip' => $ip, 'count' => 1 ];
-        } else {
-            if ($ips_count[$kip_count]['count'] == 50) {
-                return false;
-            }
-            $ips_count[$kip_count]['count']++;
-        }
-
-        return $ips_count;
-    }
-
-    /**
-     * Renders the poll
-     *
-     * @param arrray $params parameters for rendering the content
-     *
-     * @return string the generated HTML
+     * @return string The generated HTML.
      */
     public function render($params)
     {
@@ -434,5 +257,132 @@ class Poll extends Content
         }
 
         return $html;
+    }
+
+    /**
+     * Updates a poll from an array of data
+     *
+     * @param array $data the array of data
+     *
+     * @return Poll the object instance
+     */
+    public function update($data)
+    {
+        $this->parseItems($data['items'] ?? []);
+
+        $conn = getService('dbal_connection');
+
+        try {
+            $conn->beginTransaction();
+
+            parent::update($data);
+
+            $conn->update('polls', [
+                'pretitle'    => $data['pretitle'],
+                'total_votes' => $this->total_votes
+            ], [ 'pk_poll' => $this->id ]);
+
+            $this->removeItems($this->id);
+            $this->saveItems($this->id, $data['items'] ?? []);
+
+            $conn->commit();
+            $this->load($data);
+
+            return true;
+        } catch (\Exception $e) {
+            $conn->rollback();
+
+            getService('error.log')->error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * Loads all items in the poll.
+     *
+     * @param int $id The poll id.
+     */
+    protected function loadItems(int $id) : void
+    {
+        try {
+            $this->items = getService('dbal_connection')->fetchAll(
+                'SELECT * FROM poll_items WHERE fk_pk_poll =? ORDER BY pk_item',
+                [ $id ]
+            );
+
+            $this->parseItems($this->items);
+        } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage());
+
+            $this->items = [];
+        }
+    }
+
+    /**
+     * Parses items and calculates total votes and the percentage of votes per
+     * item.
+     *
+     * @param array $items The list of items.
+     */
+    protected function parseItems(array &$items) : void
+    {
+        $this->total_votes = 0;
+
+        foreach ($items as $item) {
+            $this->total_votes += $item['votes'];
+        }
+
+        foreach ($this->items as &$item) {
+            $item['percent'] = 0;
+
+            if (!empty($item['votes'])) {
+                $item['percent'] = sprintf(
+                    '%.2f',
+                    round($item['votes'] / $this->total_votes, 4) * 100
+                );
+            }
+        }
+    }
+
+    /**
+     * Removes all items for the poll.
+     *
+     * @param int $id The poll id.
+     */
+    protected function removeItems(int $id) : void
+    {
+        getService('dbal_connection')
+            ->delete('poll_items', [ 'fk_pk_poll' => $id ]);
+    }
+
+    /**
+     * Saves items for the poll.
+     *
+     * @param int   $id    The poll id.
+     * @param array $items The list of items.
+     */
+    protected function saveItems($id, $items)
+    {
+        if (empty($items)) {
+            return;
+        }
+
+        $conn = getService('dbal_connection');
+
+        foreach ($items as $item) {
+            try {
+                $conn->insert('poll_items', [
+                    'fk_pk_poll' => $id,
+                    'item'       => $item->item,
+                ]);
+            } catch (\Exception $e) {
+                getService('error.log')->error(
+                    $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+                );
+
+                return;
+            }
+        }
     }
 }
