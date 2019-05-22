@@ -91,8 +91,18 @@ class PollController extends FrontendController
         $answer = (int) $request->request->get('answer');
         $poll   = $this->getItem($request);
 
+        // Prevent vote when no answer
+        if (empty($answer)) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Error: no vote value!'));
+
+            return new RedirectResponse(
+                $this->get('core.helper.url_generator')->generate($poll)
+            );
+        }
+
         // Prevent vote when poll is closed
-        if ($poll->status === 'closed') {
+        if ($poll->isClosed()) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('You can\'t vote this poll, it is closed.'));
 
