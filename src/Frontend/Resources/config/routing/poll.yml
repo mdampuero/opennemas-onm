@@ -1,6 +1,6 @@
 frontend_poll_frontpage:
     path:     /{component}
-    defaults: { _controller: FrontendBundle:Poll:frontpage, component: poll }
+    defaults: { _controller: FrontendBundle:Poll:list, component: poll }
     requirements:
         component: 'encuesta|poll|enquerito|enquisa'
     options:
@@ -8,7 +8,7 @@ frontend_poll_frontpage:
 
 frontend_poll_frontpage_category:
     path:     /{component}/{category_name}
-    defaults: { _controller: FrontendBundle:Poll:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Poll:list, component: poll, page: 1 }
     requirements:
         category_name: '[^/]+'
         component:     'encuesta|poll|enquerito|enquisa'
@@ -29,7 +29,7 @@ frontend_poll_show:
         l10n: true
 
 frontend_poll_vote:
-    path: /poll/vote/{id}
+    path: /poll/{id}/vote
     defaults: { _controller: FrontendBundle:Poll:vote }
     requirements:
         id: '([0-9]+)'
@@ -37,7 +37,7 @@ frontend_poll_vote:
 # Deprecated route, keep for automatic redirections
 frontend_poll_frontpage_deprecated:
     path:     /{component}/{page}
-    defaults: { _controller: FrontendBundle:Poll:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Poll:list, page: 1 }
     requirements:
         page     : '([0-9]+)?'
         component: 'encuesta|poll|enquerito|enquisa'
@@ -45,7 +45,7 @@ frontend_poll_frontpage_deprecated:
 # Deprecated route, keep for automatic redirections
 frontend_poll_frontpage_category_deprecated:
     path: /{component}/{category_name}/{page}
-    defaults: { _controller: FrontendBundle:Poll:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Poll:list, page: 1 }
     requirements:
         category_name: '[^/]+'
         page         : '([0-9]+)?'
