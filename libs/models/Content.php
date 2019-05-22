@@ -2231,7 +2231,7 @@ class Content implements \JsonSerializable, CsvSerializable
         return array_merge([
             'body'           => $data['body'] ?? null,
             'content_status' => $data['content_status'] ?? 0,
-            'created'        => date('Y-m-d H:i:s'),
+            'created'        => $data['created'] ?? date('Y-m-d H:i:s'),
             'description'    => $data['description'] ?? null,
             'endtime'        => !empty($data['endtime']) ? $data['endtime'] : null,
             'favorite'       => $data['favorite'] ?? 0,
