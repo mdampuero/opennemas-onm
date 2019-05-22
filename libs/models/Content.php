@@ -1933,7 +1933,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * @return array The list of properties that can be localized to multiple
      *               languages.
      */
-
     public static function getL10nKeys($exclusive = false)
     {
         if ($exclusive) {

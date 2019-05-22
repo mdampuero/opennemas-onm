@@ -241,9 +241,9 @@ class Video extends Content
     /**
      * {@inheritdoc}
      */
-    public static function getL10nKeys()
+    public static function getL10nKeys($exclusive = false)
     {
-        $parent = parent::getL10nKeys();
+        $parent = parent::getL10nKeys($exclusive);
 
         $parent = array_filter($parent, function ($el) {
             return $el !== 'body';
