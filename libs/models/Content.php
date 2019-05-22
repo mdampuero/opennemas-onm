@@ -260,7 +260,9 @@ class Content implements \JsonSerializable, CsvSerializable
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
                 }
 
-                $contentTypesWithL10n = [ 'album', 'article', 'opinion', 'video' ];
+                $contentTypesWithL10n = [
+                    'album', 'article', 'opinion', 'poll', 'video'
+                ];
 
                 if (in_array($this->content_type_name, $contentTypesWithL10n)
                     && in_array($name, $this->getL10nKeys())
