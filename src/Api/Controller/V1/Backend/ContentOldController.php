@@ -38,11 +38,10 @@ class ContentOldController extends ContentController
     }
 
     /**
-     * Returns the list of l10n keys
-     * @param Type $var Description
+     * Returns the list of l10n keys.
      *
-     * @return array
-     **/
+     * @return array The list of l10n keys.
+     */
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys();
@@ -61,10 +60,10 @@ class ContentOldController extends ContentController
     }
 
     /**
-     * Returns the lit of authors
+     * Returns the lit of authors.
      *
-     * @return array the list of authors
-     **/
+     * @return array The list of authors.
+     */
     public function getAuthors()
     {
         $us = $this->get('api.service.author');

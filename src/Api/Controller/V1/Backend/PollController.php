@@ -43,6 +43,6 @@ class PollController extends ContentOldController
      */
     public function getL10nKeys()
     {
-        return $this->get($this->service)->getL10nKeys('album');
+        return $this->get($this->service)->getL10nKeys('Poll');
     }
 }
