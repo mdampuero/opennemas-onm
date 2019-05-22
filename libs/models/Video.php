@@ -239,8 +239,8 @@ class Video extends Content
     }
 
     /**
-     * {@inheritDoc}
-     **/
+     * {@inheritdoc}
+     */
     public static function getL10nKeys()
     {
         $parent = parent::getL10nKeys();
