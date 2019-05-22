@@ -101,7 +101,7 @@ class AlbumController extends FrontendController
             $date,
             $date,
             $epp,
-            $page
+            $epp * ($page - 1)
         ));
 
         $params = array_merge($params, [
