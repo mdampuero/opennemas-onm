@@ -331,9 +331,8 @@ class Poll extends Content
     {
         $this->total_votes = 0;
 
-        foreach ($items as $item) {
-            $item['item'] =
-                PhpSerializer::unserialize($item['item']);
+        foreach ($items as &$item) {
+            $item['item'] = PhpSerializer::unserialize($item['item']);
 
             $this->total_votes += $item['votes'];
         }
