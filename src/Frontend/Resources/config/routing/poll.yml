@@ -1,35 +1,54 @@
 frontend_poll_frontpage:
-    path: /{component}/{page}
-    defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
+    path:     /{component}
+    defaults: { _controller: FrontendBundle:Poll:frontpage, component: poll }
     requirements:
-        page     : '([0-9]+)?'
-        component: 'encuesta|poll|enquerito|enquisa|encuestas|polls'
+        component: 'encuesta|poll|enquerito|enquisa'
     options:
         l10n: true
 
-frontend_poll_vote:
-    path: /poll/addvote/{id}
-    defaults: { _controller: FrontendBundle:Polls:addVote }
-    requirements:
-        id           : '([0-9]+)'
-
 frontend_poll_frontpage_category:
-    path: /{component}/{category_name}/{page}
-    defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
+    path:     /{component}/{category_name}
+    defaults: { _controller: FrontendBundle:Poll:frontpage, page: 1 }
     requirements:
         category_name: '[^/]+'
-        page         : '([0-9]+)?'
-        component    : 'encuesta|poll|enquerito|enquisa'
+        component:     'encuesta|poll|enquerito|enquisa'
     options:
         l10n: true
 
 frontend_poll_show:
-    path: /{component}/{category_name}/{slug}/{id}.{_format}
-    defaults: { _controller: FrontendBundle:Polls:show, _format: html, page: 1 }
+    path: /{component}/{category_name}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Poll:show, component: poll }
+    requirements:
+        component:     'encuesta|poll|enquerito|enquisa'
+        category_name: '[^/]+'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
+
+frontend_poll_vote:
+    path: /poll/vote/{id}
+    defaults: { _controller: FrontendBundle:Poll:vote }
+    requirements:
+        id: '([0-9]+)'
+
+# Deprecated route, keep for automatic redirections
+frontend_poll_frontpage_deprecated:
+    path:     /{component}/{page}
+    defaults: { _controller: FrontendBundle:Poll:frontpage, page: 1 }
+    requirements:
+        page     : '([0-9]+)?'
+        component: 'encuesta|poll|enquerito|enquisa'
+
+# Deprecated route, keep for automatic redirections
+frontend_poll_frontpage_category_deprecated:
+    path: /{component}/{category_name}/{page}
+    defaults: { _controller: FrontendBundle:Poll:frontpage, page: 1 }
     requirements:
         category_name: '[^/]+'
-        slug         : '[^/]+'
-        id           : '([0-9]+)'
-        component: 'encuesta|poll|enquerito|enquisa'
+        page         : '([0-9]+)?'
+        component    : 'encuesta|poll|enquerito|enquisa'
     options:
         l10n: true
