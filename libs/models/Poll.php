@@ -7,6 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Common\Data\Serialize\Serializer\PhpSerializer;
+
 class Poll extends Content
 {
     /**
@@ -330,6 +332,9 @@ class Poll extends Content
         $this->total_votes = 0;
 
         foreach ($items as $item) {
+            $item['item'] =
+                PhpSerializer::unserialize($item['item']);
+
             $this->total_votes += $item['votes'];
         }
 
@@ -371,6 +376,11 @@ class Poll extends Content
         $conn = getService('dbal_connection');
 
         foreach ($items as $item) {
+            if (is_array($item['item'])) {
+                $item['item'] =
+                    PhpSerializer::serialize($item['item']);
+            }
+
             try {
                 $conn->insert('poll_items', [
                     'fk_pk_poll' => $id,
