@@ -32,9 +32,9 @@ class AlbumController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'showamp' => 'amp_inner',
         'list'    => 'album_frontpage',
         'show'    => 'album_inner',
+        'showamp' => 'amp_inner',
     ];
 
     /**
@@ -77,10 +77,8 @@ class AlbumController extends FrontendController
 
     /**
      * {@inheritdoc}
-     *
-     * Action specific for the frontpage
      */
-    public function hydrateList(array &$params = []): void
+    protected function hydrateList(array &$params = []) : void
     {
         $category = $params['o_category'];
         $page     = $params['page'] ?? 1;
@@ -90,7 +88,7 @@ class AlbumController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $categoryOQL = ($category)
+        $categoryOQL = !empty($category)
             ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
             : '';
 
@@ -116,12 +114,12 @@ class AlbumController extends FrontendController
                 'page'        => $page,
                 'total'       => $response['total'],
                 'route'       => [
-                    'name'   => (!$category)
+                    'name'   => empty($category)
                         ? 'frontend_album_frontpage'
                         : 'frontend_album_frontpage_category',
-                    'params' => (!$category)
+                    'params' => empty($category)
                         ? []
-                        : ['category_name' => $category->name],
+                        : [ 'category_name' => $category->name ],
                 ]
             ])
         ]);
@@ -130,7 +128,7 @@ class AlbumController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateShow(array &$params = []):void
+    protected function hydrateShow(array &$params = []) : void
     {
         $params['author'] = $this->get('user_repository')
             ->find($params['content']->fk_author);
