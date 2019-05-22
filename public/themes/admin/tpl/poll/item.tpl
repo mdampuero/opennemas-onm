@@ -59,14 +59,24 @@
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.closed = !expanded.closed">
         <i class="fa fa-calendar m-r-10"></i>
-        {t}Publication closed date{/t}
+        {t}Poll close date{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.closed }"></i>
+        <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase"  ng-show="!expanded.closed">
+          <strong>
+            {t}Open{/t}
+          </strong>
+        </span>
+        <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase" ng-show="isClosed(item)">
+          <strong>
+            {t}Closed{/t}
+          </strong>
+        </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.closed }">
         <div class="form-group no-margin">
           <div class="controls">
             <div class="input-group">
-              <input class="form-control" id="closetime" name="params[closetime]" type="datetime" value="{$poll->params['closetime']}">
+              <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current="true" datetime-picker-min="item.created" id="closetime" name="closetime" ng-model="item.params.closetime" type="datetime">
               <span class="input-group-addon add-on">
                 <span class="fa fa-calendar"></span>
               </span>

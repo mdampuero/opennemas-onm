@@ -116,6 +116,22 @@
         };
 
         /**
+         * @function isClosed
+         * @memberOf PollCtrl
+         *
+         * @description
+         *   Checks if the current poll is already closed.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if the poll is closed. False otherwise.
+         */
+        $scope.isClosed = function(item) {
+          return item && item.params && item.params.closetime &&
+            new Date(item.params.closetime) < new Date();
+        };
+
+        /**
          * @function localizeOption
          * @memberOf PollCtrl
          *
