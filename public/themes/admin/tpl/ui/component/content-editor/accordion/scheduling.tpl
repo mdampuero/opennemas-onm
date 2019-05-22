@@ -2,7 +2,7 @@
   <i class="fa fa-clock-o m-r-10"></i>{t}Schedule{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.schedule }"></i>
 
-  <span class="scheduling ng-cloak pull-right text-uppercase m-r-10 m-t-2" {*ng-show="!expanded.schedule"*}>
+  <span class="scheduling ng-cloak pull-right text-uppercase m-r-10 m-t-2" ng-show="!expanded.schedule">
     <span class="badge badge-primary text-bold" ng-show="getContentScheduling(item) == 1">{t}Planned{/t}<strong class="hidden-lg visible-xlg pull-right">: [% item.starttime %]</strong></span>
     <span class="badge badge-danger text-bold" ng-show="getContentScheduling(item) == -1">{t}Dued{/t}<strong class="hidden-lg visible-xlg pull-right">: [% item.endtime %]</strong></span>
     <span class="badge badge-default text-bold" ng-show="getContentScheduling(item) == 0"><strong>{t}In time{/t}</strong></span>
