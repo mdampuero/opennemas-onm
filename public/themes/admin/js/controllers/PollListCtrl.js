@@ -99,6 +99,7 @@
           $scope.configure(data.extra);
           $scope.buildCharts(data.items);
           $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
         };
       }
     ]);
