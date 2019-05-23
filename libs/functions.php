@@ -171,6 +171,18 @@ function getService($serviceName)
 }
 
 /**
+ * Prepares HTML code to use it as html entity attribute
+ *
+ * @param string $string the string to clean
+ *
+ * @return string $string the cleaned string
+ */
+function html_attribute($string)
+{
+    return \Onm\StringUtils::htmlAttribute($string);
+}
+
+/**
  * undocumented function
  *
  * @return void

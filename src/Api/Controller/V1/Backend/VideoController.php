@@ -109,8 +109,8 @@ class VideoController extends ContentOldController
     public function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
+            'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
-            'categories' => $this->getCategories($items)
         ]);
     }
 

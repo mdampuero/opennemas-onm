@@ -179,9 +179,9 @@
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
-                <a class="label label-default m-r-5" href="[% routing.generate('backend_category_show', { id: data.extra.categories[item.category].pk_content_category })%]">
+                <a class="label label-default m-r-5" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
                   <strong>
-                    [% data.extra.categories[item.category].title %]
+                    [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
                   </strong>
                 </a>
               </td>
