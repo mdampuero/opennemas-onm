@@ -85,7 +85,7 @@ class Poll extends Content
         $data['total_votes'] = $this->total_votes;
 
         $i = 0;
-        foreach ($this->items as $item) {
+        foreach ($this->__get('items') as $item) {
             foreach ($item as $key => $value) {
                 if (in_array($key, $ignore)) {
                     continue;
