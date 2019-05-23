@@ -115,6 +115,28 @@
         };
 
         /**
+         * @function getExportUrl
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Generates the URL to export items to a CSV file.
+         *
+         * @return {String} The URL to export items to a CSV file.
+         */
+        $scope.getExportUrl = function() {
+          var criteria = angular.copy($scope.criteria);
+
+          if (!criteria) {
+            return '';
+          }
+
+          return $scope.routing.generate($scope.routes.list, {
+            format: '.csv',
+            oql: oqlEncoder.getOql(criteria)
+          });
+        };
+
+        /**
          * @function list
          * @memberOf RestListCtrl
          *
