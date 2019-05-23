@@ -26,7 +26,16 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->csv = $this->getMockBuilder('Common\Core\Component\Helper\CsvHelper')
+            ->setMethods([ 'getReport' ])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContext', 'setContext' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
@@ -40,7 +49,31 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
             null
         );
 
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
         $this->listener = new ResponseListener($this->container);
+    }
+
+    /**
+     * Returns a mocked service basing on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.helper.csv':
+                return $this->csv;
+
+            case 'core.locale':
+                return $this->locale;
+
+            default:
+                return null;
+        }
     }
 
     /**
@@ -91,14 +124,7 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCsvResponseWhenError()
     {
-        $ch = $this->getMockBuilder('CsvHelper')
-            ->setMethods([ 'getReport' ])
-            ->getMock();
-
-        $this->container->expects($this->once())->method('get')
-            ->willReturn($ch);
-
-        $ch->expects($this->once())->method('getReport')
+        $this->csv->expects($this->once())->method('getReport')
             ->will($this->throwException(new \Exception()));
 
         $method = new \ReflectionMethod($this->listener, 'getCsvResponse');
@@ -121,14 +147,7 @@ class ResponseListenerTest extends \PHPUnit\Framework\TestCase
             'o-filename' => 'foo'
         ];
 
-        $ch = $this->getMockBuilder('CsvHelper')
-            ->setMethods([ 'getReport' ])
-            ->getMock();
-
-        $this->container->expects($this->once())->method('get')
-            ->willReturn($ch);
-
-        $ch->expects($this->once())->method('getReport')
+        $this->csv->expects($this->once())->method('getReport')
             ->willReturn($csv);
 
         $method = new \ReflectionMethod($this->listener, 'getCsvResponse');
