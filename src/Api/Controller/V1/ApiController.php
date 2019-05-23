@@ -277,10 +277,7 @@ class ApiController extends Controller
                 ->getListByIds($ids)['items']
         );
 
-        return $this->get('data.manager.filter')
-            ->set($categories)
-            ->filter('mapify', [ 'key' => 'pk_content_category' ])
-            ->get();
+        return $categories;
     }
 
     /**
