@@ -96,7 +96,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'subscriber-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({

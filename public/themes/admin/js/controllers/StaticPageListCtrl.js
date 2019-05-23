@@ -56,9 +56,7 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'static_page-columns';
-          $scope.backup.criteria = $scope.criteria;
-
+          $scope.backup.criteria  = $scope.criteria;
           $scope.criteria.orderBy = { title: 'asc' };
 
           oqlEncoder.configure({ placeholder: {
@@ -72,10 +70,6 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
-          if (data.extra.locale) {
-            $scope.config.locale = data.extra.locale;
-          }
-
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
         };

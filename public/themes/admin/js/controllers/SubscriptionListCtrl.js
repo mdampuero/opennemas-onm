@@ -58,7 +58,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'subscription-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });

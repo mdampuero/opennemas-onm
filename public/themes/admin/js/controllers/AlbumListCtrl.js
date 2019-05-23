@@ -58,7 +58,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'album-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({

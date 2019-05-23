@@ -43,7 +43,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'tag-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });

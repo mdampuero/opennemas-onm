@@ -56,7 +56,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'event-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: {

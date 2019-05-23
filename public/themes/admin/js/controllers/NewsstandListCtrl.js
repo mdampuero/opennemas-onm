@@ -57,7 +57,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'newsstand-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });

@@ -191,9 +191,7 @@
          * @description
          *   Configures the controller.
          */
-        $scope.init = function(locale) {
-          $scope.locale          = locale;
-          $scope.columns.key     = 'category-columns';
+        $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
 
           $scope.criteria.orderBy = { name: 'asc' };
