@@ -47,49 +47,29 @@
         $scope.views = [ 10, 25, 50, 100 ];
 
         /**
-         * @function closeColumns
-         * @memberOf ClientListCtrl
-         *
-         * @description
-         *   Hides the dropdown to toggle table columns.
-         */
-        $scope.closeColumns = function() {
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.app.columns.collapsed = true;
-          }, 500);
-        };
-
-        /**
-         * @function list
+         * @function deselectAll
          * @memberOf ListCtrl
          *
          * @description
-         *   Just a dummy actions that forces the developer
-         *   to overwrite this method on child classes.
+         *   Deselects all elements.
          */
-        $scope.list = function() {
-          throw Error('Method not implemented');
+        $scope.deselectAll = function() {
+          $scope.selected = { all: false, items: [] };
         };
 
         /**
-         * @function openColumns
-         * @memberOf ClientListCtrl
+         * @function getId
+         * @memberOf ListCtrl
          *
          * @description
-         *   Shows the dropdown to toggle table columns.
+         *   Returns the item id.
+         *
+         * @param {Object} item The item.
+         *
+         * @return {Integer} The item id.
          */
-        $scope.openColumns = function() {
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.app.columns.collapsed = false;
-          }, 500);
+        $scope.getId = function(item) {
+          return item.id;
         };
 
         /**
@@ -127,6 +107,33 @@
         };
 
         /**
+         * @function isSelectable
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Checks if the item is selectable.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if the item is selectable. False otherwise.
+         */
+        $scope.isSelectable = function() {
+          return true;
+        };
+
+        /**
+         * @function list
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Just a dummy actions that forces the developer
+         *   to overwrite this method on child classes.
+         */
+        $scope.list = function() {
+          throw Error('Method not implemented');
+        };
+
+        /**
          * @function isSelected
          * @memberOf ListCtrl
          *
@@ -140,14 +147,29 @@
         };
 
         /**
-         * @function deselectAll
+         * @function resetFilters
          * @memberOf ListCtrl
          *
          * @description
-         *   Deselects all elements.
+         *   Resets all filters to the initial value.
          */
-        $scope.deselectAll = function() {
-          $scope.selected = { all: false, items: [] };
+        $scope.resetFilters = function() {
+          $scope.criteria = $scope.backup.criteria;
+        };
+
+        /**
+         * @function scroll
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Increases page one by one.
+         */
+        $scope.scroll = function() {
+          if ($scope.data.total === $scope.items.length) {
+            return;
+          }
+
+          $scope.criteria.page++;
         };
 
         /**
@@ -199,6 +221,23 @@
         };
 
         /**
+         * @function toggleItem
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Selects/unselects an item when in grid mode.
+         */
+        $scope.toggleItem = function(item) {
+          if ($scope.selected.items.indexOf($scope.getId(item)) < 0) {
+            $scope.selected.items.push($scope.getId(item));
+          } else {
+            $scope.selected.items = $scope.selected.items.filter(function(el) {
+              return el !== $scope.getId(item);
+            });
+          }
+        };
+
+        /**
          * @function toggleAll
          * @memberOf ListCtrl
          *
@@ -207,8 +246,10 @@
          */
         $scope.toggleAll = function() {
           if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(item) {
-              return item.id;
+            $scope.selected.items = $scope.items.filter(function(item) {
+              return $scope.isSelectable(item);
+            }).map(function(item) {
+              return $scope.getId(item);
             });
           } else {
             $scope.selected.items = [];
@@ -224,19 +265,7 @@
          */
         $scope.toggleColumns = function() {
           $scope.app.columns.collapsed = !$scope.app.columns.collapsed;
-
-          if (!$scope.app.columns.collapsed) {
-            $scope.scrollTop();
-          }
         };
-
-        // Marks variables to delete for garbage collector
-        $scope.$on('$destroy', function() {
-          $scope.criteria = null;
-          $scope.config   = null;
-          $scope.items    = null;
-          $scope.selected = null;
-        });
 
         // Updates linkers when locale changes
         $scope.$watch('config.locale', function(nv, ov) {
