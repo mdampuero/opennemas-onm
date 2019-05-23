@@ -180,7 +180,7 @@
         /**
          * @inheritdoc
          */
-        $scope.getId = function(item) {
+        $scope.getItemId = function(item) {
           return item.pk_content_category;
         };
 
@@ -217,8 +217,8 @@
          *                   otherwise.
          */
         $scope.isEmpty = function(item) {
-          return !$scope.data.extra.stats[$scope.getId(item)] ||
-            $scope.data.extra.stats[$scope.getId(item)] === 0;
+          return !$scope.data.extra.stats[$scope.getItemId(item)] ||
+            $scope.data.extra.stats[$scope.getItemId(item)] === 0;
         };
 
         /**
@@ -330,7 +330,7 @@
           var data  = angular.copy(item);
           var route = {
             name: $scope.routes.patchRss,
-            params: { id: $scope.getId(item) }
+            params: { id: $scope.getItemId(item) }
           };
 
           data.params.inrss = value;
@@ -365,10 +365,10 @@
 
           for (var i = 0; i < parents.length; i++) {
             sorted.push(parents[i]);
-            $scope.levels[$scope.getId(parents[i])] = level;
+            $scope.levels[$scope.getItemId(parents[i])] = level;
 
             var children = $scope.sortItems(items,
-              $scope.getId(parents[i]), level + 1);
+              $scope.getItemId(parents[i]), level + 1);
 
             if (children.length > 0) {
               sorted = sorted.concat(children);

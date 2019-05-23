@@ -162,10 +162,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getId(item)) }">
+                <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(getItemId(item)) }">
                   <td class="text-center v-align-middle">
                     <div class="checkbox check-default" ng-if="isSelectable(item)">
-                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
+                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getItemId(item)" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
@@ -176,11 +176,11 @@
                  </span>
                  <div class="listing-inline-actions">
                   {acl isAllowed="STATIC_PAGE_UPDATE"}
-                    <a class="btn btn-default btn-small" href="[% routing.generate('backend_static_page_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+                    <a class="btn btn-default btn-small" href="[% routing.generate('backend_static_page_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                       <i class="fa fa-pencil m-r-5"></i>
                       {t}Edit{/t}
                     </a>
-                    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_static_page_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_static_page_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                   {/acl}
                   {acl isAllowed="STATIC_PAGE_DELETE"}
                     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">

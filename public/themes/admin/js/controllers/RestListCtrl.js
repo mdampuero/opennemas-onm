@@ -169,7 +169,7 @@
 
           var route = {
             name:   $scope.routes.patch,
-            params: { id: $scope.getId(item) }
+            params: { id: $scope.getItemId(item) }
           };
 
           return http.patch(route, data).then(function(response) {
@@ -194,7 +194,7 @@
          */
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
-            var id = $scope.getId($scope.items[i]);
+            var id = $scope.getItemId($scope.items[i]);
 
             if ($scope.selected.items.indexOf(id) !== -1) {
               $scope.items[i][property + 'Loading'] = 1;

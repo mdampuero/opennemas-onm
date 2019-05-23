@@ -10,7 +10,7 @@
       </div>
       {/acl}
       {acl isAllowed="ALBUM_UPDATE"}
-      <a class="thumbnail-action" href="[% routing.generate('backend_album_show', { id: getId(item) }) %]">
+      <a class="thumbnail-action" href="[% routing.generate('backend_album_show', { id: getItemId(item) }) %]">
         <i class="fa fa-pencil fa-2x"></i>
       </a>
       {/acl}

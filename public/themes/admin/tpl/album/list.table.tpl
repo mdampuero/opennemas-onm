@@ -69,11 +69,11 @@
 
 {block name="itemActions"}
   {acl isAllowed="ALBUM_UPDATE"}
-    <a class="btn btn-default btn-small" href="[% routing.generate('backend_album_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+    <a class="btn btn-default btn-small" href="[% routing.generate('backend_album_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
       <i class="fa fa-pencil m-r-5"></i>
       {t}Edit{/t}
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_album_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_album_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   {acl isAllowed="ALBUM_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">

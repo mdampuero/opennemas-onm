@@ -121,7 +121,7 @@
          */
         $scope.isSelectable = function(item) {
           return $scope.backup.master ||
-            $scope.getId(item) !== $scope.backup.id;
+            $scope.getItemId(item) !== $scope.backup.id;
         };
       }
     ]);

@@ -156,7 +156,7 @@
                     <td>
                       [% item.name %]
                       <div class="listing-inline-actions">
-                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_tag_show', { id: getId(item) }) %]">
+                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_tag_show', { id: getItemId(item) }) %]">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
                         <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
@@ -168,9 +168,9 @@
                       [% item.slug %]
                     </td>
                     <td class="text-center">
-                      <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">
+                      <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getItemId(item)] || data.extra.stats[getItemId(item)] == 0 }">
                         <strong>
-                          [% data.extra.stats[getId(item)] ? data.extra.stats[getId(item)] : 0 %]
+                          [% data.extra.stats[getItemId(item)] ? data.extra.stats[getItemId(item)] : 0 %]
                         </strong>
                       </span>
                     </td>

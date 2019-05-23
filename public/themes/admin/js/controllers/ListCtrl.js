@@ -58,7 +58,7 @@
         };
 
         /**
-         * @function getId
+         * @function getItemId
          * @memberOf ListCtrl
          *
          * @description
@@ -68,7 +68,7 @@
          *
          * @return {Integer} The item id.
          */
-        $scope.getId = function(item) {
+        $scope.getItemId = function(item) {
           return item.id;
         };
 
@@ -122,18 +122,6 @@
         };
 
         /**
-         * @function list
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Just a dummy actions that forces the developer
-         *   to overwrite this method on child classes.
-         */
-        $scope.list = function() {
-          throw Error('Method not implemented');
-        };
-
-        /**
          * @function isSelected
          * @memberOf ListCtrl
          *
@@ -144,6 +132,18 @@
          */
         $scope.isSelected = function(id) {
           return $scope.selected.items.indexOf(id) !== -1;
+        };
+
+        /**
+         * @function list
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Just a dummy actions that forces the developer
+         *   to overwrite this method on child classes.
+         */
+        $scope.list = function() {
+          throw Error('Method not implemented');
         };
 
         /**
@@ -221,23 +221,6 @@
         };
 
         /**
-         * @function toggleItem
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Selects/unselects an item when in grid mode.
-         */
-        $scope.toggleItem = function(item) {
-          if ($scope.selected.items.indexOf($scope.getId(item)) < 0) {
-            $scope.selected.items.push($scope.getId(item));
-          } else {
-            $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el !== $scope.getId(item);
-            });
-          }
-        };
-
-        /**
          * @function toggleAll
          * @memberOf ListCtrl
          *
@@ -249,7 +232,7 @@
             $scope.selected.items = $scope.items.filter(function(item) {
               return $scope.isSelectable(item);
             }).map(function(item) {
-              return $scope.getId(item);
+              return $scope.getItemId(item);
             });
           } else {
             $scope.selected.items = [];
@@ -282,6 +265,23 @@
             $scope.config.linkers[key].update();
           }
         });
+
+        /**
+         * @function toggleItem
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Selects/unselects an item when in grid mode.
+         */
+        $scope.toggleItem = function(item) {
+          if ($scope.selected.items.indexOf($scope.getItemId(item)) < 0) {
+            $scope.selected.items.push($scope.getItemId(item));
+          } else {
+            $scope.selected.items = $scope.selected.items.filter(function(el) {
+              return el !== $scope.getItemId(item);
+            });
+          }
+        };
 
         // Reloads the list when filters change.
         $scope.$watch('criteria', function(nv, ov) {

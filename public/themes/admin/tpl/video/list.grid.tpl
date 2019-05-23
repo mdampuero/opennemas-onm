@@ -10,7 +10,7 @@
         </div>
       {/acl}
       {acl isAllowed="VIDEO_UPDATE"}
-        <a class="thumbnail-action" ng-href="[% routing.generate('backend_video_show', { id: getId(item) }) %]">
+        <a class="thumbnail-action" ng-href="[% routing.generate('backend_video_show', { id: getItemId(item) }) %]">
           <i class="fa fa-pencil fa-2x"></i>
         </a>
       {/acl}
@@ -25,7 +25,7 @@
         </div>
       {/acl}
       {acl isAllowed="VIDEO_UPDATE"}
-        <a class="thumbnail-action" ng-href="[% routing.generate('backend_video_show', { id: getId(item) }) %]">
+        <a class="thumbnail-action" ng-href="[% routing.generate('backend_video_show', { id: getItemId(item) }) %]">
           <i class="fa fa-pencil fa-2x"></i>
         </a>
       {/acl}

@@ -62,21 +62,6 @@
           oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
           $scope.list();
         };
-
-        /**
-         * @function getId
-         * @memberOf NewsstandListCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
-         */
-        $scope.getId = function(item) {
-          return item.id;
-        };
       }
     ]);
 })();

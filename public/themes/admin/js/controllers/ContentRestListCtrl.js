@@ -22,7 +22,7 @@
         /**
          * @inheritdoc
          */
-        $scope.getId = function(item) {
+        $scope.getItemId = function(item) {
           return item.pk_content;
         };
 

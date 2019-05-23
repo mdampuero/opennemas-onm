@@ -36,17 +36,9 @@
         };
 
         /**
-         * @function getId
-         * @memberOf SubscriptionListCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
+         * @inheritdoc
          */
-        $scope.getId = function(item) {
+        $scope.getItemId = function(item) {
           return item.pk_user_group;
         };
 

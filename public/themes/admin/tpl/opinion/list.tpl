@@ -204,10 +204,10 @@
                     </div>
                     <div class="listing-inline-actions">
                       {acl isAllowed="OPINION_UPDATE"}
-                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_opinion_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_opinion_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
-                      <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_opinion_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                      <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_opinion_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                       {/acl}
 
                       {acl isAllowed="OPINION_DELETE"}
