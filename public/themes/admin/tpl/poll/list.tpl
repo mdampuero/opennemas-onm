@@ -5,7 +5,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="PollListCtrl" ng-init="forcedLocale = '{$locale}'; init()"
+  ng-controller="PollListCtrl" ng-init="forcedLocale = '{$locale}'; ignoreMode = true; init()"
 {/block}
 
 {block name="icon"}
@@ -17,14 +17,14 @@
 {/block}
 
 {block name="primaryActions"}
-  <li class="quicklinks">
+  <li class="hidden-xs quicklinks">
     <a class="btn btn-white" href="[% getExportUrl() %]">
       <span class="fa fa-download"></span>
       {t}Download{/t}
     </a>
   </li>
   {acl isAllowed="POLL_CREATE"}
-    <li class="quicklinks">
+    <li class="hidden-xs quicklinks">
       <span class="h-seperate"></span>
     </li>
     <li class="quicklinks">

@@ -1,7 +1,7 @@
-<div class="column-filters-toggle hidden-sm ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && app.mode === 'list' && items.length > 0">
+<div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
   <span class="column-filters-ellipsis"></span>
 </div>
-<div class="column-filters collapsed hidden-sm ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && app.mode === 'list' && items.length > 0">
+<div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
   <h5>{t}Columns{/t}</h5>
   <div>
   {block name="commonColumns"}
@@ -69,7 +69,7 @@
     </div>
   </div>
 </div>
-<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && app.mode === 'list' && items.length > 0">
+<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">
       <table class="table table-fixed table-hover no-margin">
@@ -82,7 +82,7 @@
                   <label for="select-all"></label>
                 </div>
               </th>
-              <th class="hidden-xs text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+              <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
                 <i class="fa fa-picture-o"></i>
               </th>
               <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
