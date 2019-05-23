@@ -186,7 +186,9 @@
                 </a>
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-                <span ng-if="!item.tags || item.tags.length === 0">{t}No tags{/t}</span>
+                <i ng-if="!item.tags || item.tags.length === 0">
+                  {t}No tags{/t}
+                </i>
                 <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!data.extra.tags[id].locale || data.extra.tags[id].locale === config.locale.selected">
                   <a class="label label-defaul label-info" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]">
                     <strong>
