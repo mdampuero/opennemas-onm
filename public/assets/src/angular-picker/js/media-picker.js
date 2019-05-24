@@ -117,7 +117,7 @@
                       '</div>' +
                       '<ul class="media-information">' +
                         '<li>' +
-                          '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.pk_photo}) %]" target="_blank">' +
+                          '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.id}) %]" target="_blank">' +
                             '<strong>' +
                               '[% selected.lastSelected.name %]' +
                               '<i class="fa fa-edit"></i>' +
@@ -142,7 +142,7 @@
                                 '<i class="fa" ng-class="{ \'fa-circle-o-notch fa-spin\': saving, \'fa-check text-success\': saved, \'fa-times text-danger\': error }"></i>' +
                               '</div>' +
                             '</label>' +
-                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.pk_photo)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
+                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
                           '</div>' +
                         '</li>' +
                       '</ul>' +
@@ -463,7 +463,7 @@
                 }
 
                 for (var i = 0; i < target.length; i++) {
-                  $scope.selected.ids.push(target[i].pk_photo);
+                  $scope.selected.ids.push(target[i].id);
                 }
 
                 $scope.selected.items = target;
@@ -696,7 +696,7 @@
          *                 returns false.
          */
         $scope.isSelected = function(item) {
-          return $scope.selected.ids.indexOf(item.pk_photo) !== -1;
+          return $scope.selected.ids.indexOf(item.id) !== -1;
         };
 
         /**
@@ -841,13 +841,13 @@
               $scope.uploader.removeFromQueue(fileItem);
 
               // Autoselect items uploaded
-              if (!response.pk_photo) {
+              if (!response.id) {
                 $scope.uploadError = true;
                 return;
               }
 
               $scope.addItem(response);
-              $scope.selected.ids.push(response.pk_photo);
+              $scope.selected.ids.push(response.id);
               $scope.selected.items.push(response);
 
               if ($scope.picker.selection.enabled) {
@@ -886,7 +886,7 @@
           var data = { description: $scope.selected.lastSelected.description };
           var route  = {
             name:   'backend_ws_picker_save_description',
-            params: { id: $scope.selected.lastSelected.pk_photo }
+            params: { id: $scope.selected.lastSelected.id }
           };
 
           http.post(route, data).then(function() {
@@ -946,7 +946,7 @@
           // Add all items between selected
           while (itemsToInsert > 0 && i < $scope.contents.length) {
             if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
-              $scope.selected.ids.push($scope.contents[i].pk_photo);
+              $scope.selected.ids.push($scope.contents[i].id);
               $scope.selected.items.push($scope.contents[i]);
               itemsToInsert--;
             }
@@ -987,7 +987,7 @@
             return;
           }
 
-          var index = $scope.selected.ids.indexOf(item.pk_photo);
+          var index = $scope.selected.ids.indexOf(item.id);
 
           // Remove element
           if (index !== -1) {
@@ -1005,7 +1005,7 @@
 
           // Add element
           if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
-            $scope.selected.ids.push(item.pk_photo);
+            $scope.selected.ids.push(item.id);
             $scope.selected.items.push(item);
           }
         };
