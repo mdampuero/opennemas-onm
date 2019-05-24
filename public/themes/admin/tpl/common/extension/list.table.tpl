@@ -134,11 +134,9 @@
                   <i class="fa fa-calendar"></i>
                   [% item.created | moment : 'YYYY-MM-DD' %]
                 </div>
-                <small>
+                <small class="text-bold">
                   <i class="fa fa-clock-o"></i>
-                  <strong>
-                    [% item.created | moment : 'HH:mm:ss' %]
-                  </strong>
+                  [% item.created | moment : 'HH:mm:ss' %]
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('changed')">
@@ -146,63 +144,59 @@
                   <i class="fa fa-calendar"></i>
                   [% item.changed | moment : 'YYYY-MM-DD' %]
                 </div>
-                <small>
+                <small class="text-bold">
                   <i class="fa fa-clock-o"></i>
-                  <strong>
-                    [% item.changed | moment : 'HH:mm:ss' %]
-                  </strong>
+                  [% item.changed | moment : 'HH:mm:ss' %]
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
-                <strong ng-if="!item.starttime">
+                <span class="text-bold" ng-if="!item.starttime">
                   ∞
-                </strong>
+                </span>
                 <div ng-if="item.starttime">
                   <i class="fa fa-calendar"></i>
                   [% item.starttime | moment : 'YYYY-MM-DD' %]
                 </div>
-                <small ng-if="item.starttime">
+                <small class="text-bold" ng-if="item.starttime">
                   <i class="fa fa-clock-o"></i>
-                  <strong>
-                    [% item.starttime | moment : 'HH:mm:ss' %]
-                  </strong>
+                  [% item.starttime | moment : 'HH:mm:ss' %]
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('endtime')">
-                <strong ng-if="!item.endtime">
+                <span class="text-bold" ng-if="!item.endtime">
                   ∞
-                </strong>
+                </span>
                 <div ng-if="item.endtime">
                   <i class="fa fa-calendar"></i>
                   [% item.endtime | moment : 'YYYY-MM-DD' %]
                 </div>
-                <small ng-if="item.endtime">
+                <small class="text-bold" ng-if="item.endtime">
                   <i class="fa fa-clock-o"></i>
-                  <strong>
-                    [% item.endtime | moment : 'HH:mm:ss' %]
-                  </strong>
+                  [% item.endtime | moment : 'HH:mm:ss' %]
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
-                <a class="label label-default m-r-5" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
-                  <strong>
-                    [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
-                  </strong>
+                <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
+                  [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
                 </a>
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-                <i ng-if="!item.tags || item.tags.length === 0">
-                  {t}No tags{/t}
-                </i>
-                <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!data.extra.tags[id].locale || data.extra.tags[id].locale === config.locale.selected">
-                  <a class="label label-defaul label-info" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]">
-                    <strong>
-                      [% data.extra.tags[id].name %]
-                    </strong>
+                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0">
+                  &lt;{t}No tags{/t}&gt;
+                </small>
+                <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!(data.extra.tags | filter : { id: id })[0].locale || (data.extra.tags | filter : { id: id })[0].locale === config.locale.selected">
+                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]">
+                    [% (data.extra.tags | filter : { id: id })[0].name %]
                   </a>
                 </div>
               </td>
-              <td class="v-align-middle" ng-if="isColumnEnabled('author')">
+              <td class="text-center v-align-middle" ng-if="isColumnEnabled('author')">
+                <small class="text-italic" ng-if="!item.fk_author || (data.extra.authors | filter : { id: item.fk_author }).length === 0">
+                  &lt;{t}No author{/t}&gt;
+                </small>
+                <a href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]" ng-if="item.fk_author && (data.extra.authors | filter : { id: item.fk_author }).length > 0">
+                  [% (data.extra.authors | filter : { id: item.fk_author })[0].name %]
+                </a>
               </td>
             {/block}
             {block name="customColumnsBody"}
