@@ -36,7 +36,7 @@
                   '<i class="fa fa-angle-down"></i>' +
                 '</button>' +
                 '<ul class="dropdown-menu no-padding" role="menu">' +
-                  '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
+                  '<li ng-repeat="language in languages">' +
                     '<a href="{{link + \'?locale=\' + language.value}}">' +
                       '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                       '{{language.name}}' +
@@ -59,7 +59,7 @@
                 '<i class="fa fa-angle-down"></i>' +
               '</button>' +
               '<ul class="dropdown-menu no-padding" role="menu">' +
-                '<li ng-repeat="language in languages" ng-if="language.value != ngModel">' +
+                '<li ng-repeat="language in languages" ng-class="{ \'active\':  language.value === ngModel }">' +
                   '<a href="#" ng-click="changeCurrentLanguage($event, language.value)">' +
                     '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
                     '{{language.name}}' +
@@ -69,7 +69,7 @@
             '</div>';
           },
           link: function($scope) {
-            $scope.max           = 4;
+            $scope.max           = 0;
             $scope.collapseWidth = 992;
             $scope.collapsed     = $window.innerWidth < $scope.collapseWidth;
             $scope.languages     = {};
