@@ -76,6 +76,18 @@ class AlbumController extends FrontendController
     ];
 
     /**
+     * {@inheritDoc}
+     */
+    protected function getRoute($action, $params = [])
+    {
+        if ($action == 'list' && array_key_exists('category_name', $params)) {
+            return 'frontend_album_frontpage_category';
+        }
+
+        return parent::getRoute($action, $params);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
@@ -144,20 +156,5 @@ class AlbumController extends FrontendController
             ->set($photos)
             ->filter('mapify', [ 'key' => 'pk_photo' ])
             ->get();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * This func overrides the parent function just to
-     * propertly generate urls to category frontpages
-     **/
-    protected function getRoute($action, $params = [])
-    {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
-            return 'frontend_album_frontpage_category';
-        }
-
-        return parent::getRoute($action, $params);
     }
 }

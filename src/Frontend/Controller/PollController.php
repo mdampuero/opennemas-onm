@@ -145,13 +145,15 @@ class PollController extends FrontendController
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getExpectedUri($action, $params = [])
+    protected function getRoute($action, $params = [])
     {
-        return parent::getExpectedUri($action, array_merge($params, [
-            'component' => 'poll'
-        ]));
+        if ($action == 'list' && array_key_exists('category_name', $params)) {
+            return 'frontend_poll_frontpage_category';
+        }
+
+        return parent::getRoute($action, $params);
     }
 
     /**
