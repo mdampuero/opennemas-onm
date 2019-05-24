@@ -96,7 +96,7 @@
                       <i class="fa fa-times fa-lg"></i>
                       {t}No{/t}
                     </button>
-                    <button class="btn btn-link" ng-click="removeItem('item.photos', $index);toggleOverlay('photo_'+ $index)" type="button">
+                    <button class="btn btn-link" ng-click="removeItem('item.photos', $index); removeItem('data.item.photos', $index);toggleOverlay('photo_'+ $index)" type="button">
                       <i class="fa fa-check fa-lg"></i>
                       {t}Yes{/t}
                     </button>
