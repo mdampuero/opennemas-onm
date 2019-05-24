@@ -87,9 +87,10 @@
 
           var url = routing.generate('backend_ws_news_agency_import');
           var data = {
-            category: $scope.template.category,
-            ids:      ids,
-            type:     $scope.template.type
+            category: $scope.template.category ?
+              $scope.template.category : null,
+            ids: ids,
+            type: $scope.template.type
           };
 
           if ($scope.template.author) {
