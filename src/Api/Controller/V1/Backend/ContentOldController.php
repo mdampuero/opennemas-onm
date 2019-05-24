@@ -58,22 +58,4 @@ class ContentOldController extends ContentController
     {
         return [];
     }
-
-    /**
-     * Returns the lit of authors.
-     *
-     * @return array The list of authors.
-     */
-    public function getAuthors()
-    {
-        $us = $this->get('api.service.author');
-
-        $response = $us->getList('order by name asc');
-        $authors  = $this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'id'])
-            ->get();
-
-        return $us->responsify($authors);
-    }
 }

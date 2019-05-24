@@ -33,8 +33,9 @@ class PollController extends ContentOldController
     public function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
+            'authors'    => $this->getAuthors($items),
+            'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
-            'categories' => $this->getCategories($items)
         ]);
     }
 
