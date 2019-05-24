@@ -29,7 +29,6 @@ class UserGroupService extends OrmService
                 ->getRepository($this->entity, $this->origin)
                 ->findOneBy($oql);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }

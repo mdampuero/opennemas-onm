@@ -37,10 +37,6 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getIdKeys' ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('Logger' . uniqid())
-            ->setMethods([ 'error' ])
-            ->getMock();
-
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
@@ -64,9 +60,6 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'error.log':
-                return $this->logger;
-
             case 'orm.manager':
                 return $this->em;
 
@@ -89,6 +82,16 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getItem when the provided id is empty.
+     *
+     * @expectedException \Api\Exception\GetItemException
+     */
+    public function testGetItemWhemEmptyId()
+    {
+        $this->service->getItem(0);
+    }
+
+    /**
      * Tests getItem when the item has no user group property to true.
      *
      * @expectedException \Api\Exception\GetItemException
@@ -98,7 +101,6 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('pk_user_group = 1 and type = 0')
             ->will($this->throwException(new \Exception));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->getItem(1);
     }
