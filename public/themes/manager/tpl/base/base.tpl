@@ -49,6 +49,13 @@
   {/stylesheets}
   <script>
     var appVersion = '{$smarty.const.DEPLOYED_AT}';
+
+    var strings = {
+      pagination: {
+        of: '{t}of{/t}'
+      },
+    };
+
     var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
   </script>
 </head>
