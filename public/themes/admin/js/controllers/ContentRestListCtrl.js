@@ -73,23 +73,13 @@
         /**
          * Updates the array of contents.
          *
-         * @param {String}  route The route name.
          * @param {Boolean} reset Whether to reset the list.
          */
-        $scope.list = function(route, reset) {
-          if (!reset && $scope.app.mode === 'grid') {
-            $scope.flags.http.loadingMore = 1;
+        $scope.list = function(reset) {
+          if (reset || $scope.ignoreMode || $scope.app.mode === 'list') {
+            $scope.flags.http.loading = 1;
           } else {
-            if ($scope.app.mode === 'grid') {
-              $scope.flags.http.loadingMore = 1;
-            } else {
-              $scope.flags.http.loading  = 1;
-            }
-
-            if ($scope.data) {
-              $scope.items      = [];
-              $scope.data.items = [];
-            }
+            $scope.flags.http.loadingMore = 1;
           }
 
           var oql   = oqlEncoder.getOql($scope.criteria);
@@ -101,7 +91,7 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if (reset || $scope.app.mode === 'grid') {
+            if ($scope.app.mode === 'grid') {
               $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
 
               // Merge items
@@ -136,8 +126,8 @@
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
-          if ($scope.app.mode === 'list' ||
-            $scope.items.length === $scope.data.total) {
+          if ($scope.ignoreMode || $scope.app.mode === 'list' ||
+              $scope.items.length === $scope.data.total) {
             return;
           }
 
