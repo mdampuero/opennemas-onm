@@ -43,7 +43,7 @@
           autoGrow_maxHeight: 500,
           wordcount: {
             showWordCount: true,
-            showCharCount: false
+            showCharCount: true
           },
           allowedContent: true,
           extraPlugins: 'magicline,font',
