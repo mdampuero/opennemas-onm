@@ -18,20 +18,23 @@
 {block name="customColumnsHeader"}
   {acl isAllowed="VIDEO_HOME"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('home')" width="150">
-      <i class="fa fa-home" ng-if="!isHelpEnabled()" uib-tooltip="{t}Home{/t}" tooltip-placement="left"></i>
-      <span class="m-l-5" ng-if="isHelpEnabled()">{t}Home{/t}</span>
+      <span class="m-l-5">
+        {t}Home{/t}
+      </span>
     </th>
   {/acl}
   {acl isAllowed="VIDEO_FAVORITE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')" width="150">
-      <i class="fa fa-star" ng-if="!isHelpEnabled()" uib-tooltip="{t}Favorite{/t}" tooltip-placement="left"></i>
-      <span class="m-l-5" ng-if="isHelpEnabled()">{t}Favorite{/t}</span>
+      <span class="m-l-5">
+        {t}Favorite{/t}
+      </span>
     </th>
   {/acl}
   {acl isAllowed="VIDEO_AVAILABLE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
-      <i class="fa fa-check" ng-if="!isHelpEnabled()" uib-tooltip="{t}Published{/t}" tooltip-placement="left"></i>
-      <span class="m-l-5" ng-if="isHelpEnabled()">{t}Published{/t}</span>
+      <span class="m-l-5">
+        {t}Published{/t}
+      </span>
     </th>
   {/acl}
 {/block}

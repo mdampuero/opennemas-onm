@@ -83,7 +83,6 @@
                 </div>
               </th>
               <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
-                <i class="fa fa-picture-o"></i>
               </th>
               <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
                 {t}Title{/t}
