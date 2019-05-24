@@ -47,6 +47,20 @@
         $scope.views = [ 10, 25, 50, 100 ];
 
         /**
+         * @function areAllSelected
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Checks if all items are already selected.
+         *
+         * @return {Boolean} True if all items are selected. False otherwise.
+         */
+        $scope.areAllSelected = function() {
+          return $scope.items &&
+            $scope.selected.items.length === $scope.items.length;
+        };
+
+        /**
          * @function deselectAll
          * @memberOf ListCtrl
          *
@@ -228,7 +242,7 @@
          *   Toggles all items selection.
          */
         $scope.toggleAll = function() {
-          if ($scope.selected.all) {
+          if (!$scope.areAllSelected()) {
             $scope.selected.items = $scope.items.filter(function(item) {
               return $scope.isSelectable(item);
             }).map(function(item) {
