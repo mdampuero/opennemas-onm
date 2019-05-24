@@ -16,6 +16,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-close" checklist-model="app.columns.selected" checklist-value="'close'" type="checkbox">
+    <label for="checkbox-close">
+      {t}Close date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-home" checklist-model="app.columns.selected" checklist-value="'home'" type="checkbox">
     <label for="checkbox-home">
       {t}Home{/t}
@@ -33,6 +39,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('votes')" width="80">
     <span class="m-l-5">
       {t}Votes{/t}
+    </span>
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('close')" width="150">
+    <span class="m-l-5">
+      {t}Close date{/t}
     </span>
   </th>
   {acl isAllowed="POLL_HOME"}
@@ -65,6 +76,21 @@
         [% item.total_votes %]
       </strong>
     </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('close')">
+    <strong ng-if="!item.params.closetime">
+      ∞
+    </strong>
+    <div ng-if="item.params.closetime">
+      <i class="fa fa-calendar"></i>
+      [% item.params.closetime | moment : 'YYYY-MM-DD' %]
+    </div>
+    <small ng-if="item.params.closetime">
+      <i class="fa fa-clock-o"></i>
+      <strong>
+        [% item.params.closetime | moment : 'HH:mm:ss' %]
+      </strong>
+    </small>
   </td>
   {acl isAllowed="POLL_HOME"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('home')">

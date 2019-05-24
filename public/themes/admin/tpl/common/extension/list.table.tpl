@@ -154,11 +154,14 @@
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
-                <div>
+                <strong ng-if="!item.starttime">
+                  ∞
+                </strong>
+                <div ng-if="item.starttime">
                   <i class="fa fa-calendar"></i>
                   [% item.starttime | moment : 'YYYY-MM-DD' %]
                 </div>
-                <small>
+                <small ng-if="item.starttime">
                   <i class="fa fa-clock-o"></i>
                   <strong>
                     [% item.starttime | moment : 'HH:mm:ss' %]
@@ -166,6 +169,9 @@
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('endtime')">
+                <strong ng-if="!item.endtime">
+                  ∞
+                </strong>
                 <div ng-if="item.endtime">
                   <i class="fa fa-calendar"></i>
                   [% item.endtime | moment : 'YYYY-MM-DD' %]
