@@ -1,45 +1,56 @@
 <?php
 /**
- * Render menu items.Returns the BING webmaster HTML meta tag
+ * Displays a menu basing on parameters. The supported parameters to identify
+ * the menu are the menu id, the menu name and the menu position.
  *
- * @param array $params the list of parameters
- * @param \Smarty $smarty the smarty instance
+ * The menu is first searched by id, then by name and last by position.
  *
- * @return string
+ * @example {render_menu tpl="xyzzy/wobble.tpl" pk_menu=10}
+ * @example {render_menu tpl="glorp/foo.tpl" pk_menu=25 name="norf"}
+ * @example {render_menu tpl="norf/glork.tpl" pk_menu=30 name="norf" position="fred"}
+ *
+ * @param array   $params The list of parameters.
+ * @param \Smarty $smarty The smarty object.
+ *
+ * @return string The HTML string for menu.
  */
 function smarty_function_render_menu($params, &$smarty)
 {
-    // Initializing parameters
-    $tpl      = (isset($params['tpl']) ? $params['tpl'] : null);
-    $menuName = (isset($params['name']) ? $params['name'] : null);
-    $position = (isset($params['position']) ? $params['position'] : null);
-    $output   = '';
+    $tpl  = $params['tpl'] ?? null;
+    $keys = [
+        'pk_menu'  => $params['pk_menu'] ?? null,
+        'name'     => $params['name'] ?? null,
+        'position' => $params['position'] ?? null,
+    ];
 
-    if (empty($menuName) && empty($position)) {
-        $smarty->trigger_error("Menu doesn't exists");
+    $validKeys = array_filter($keys, function ($a) {
+        return !empty($a);
+    });
 
-        return $output;
+    if (empty($validKeys) || empty($tpl)) {
+        return '';
     }
 
-    // Get menu from name or position
-    $criteria = [ 'position' => [ [ 'value' => $position ] ] ];
+    $menu = null;
+    $i    = 0;
 
-    if (!empty($menuName)) {
-        $criteria = [ 'name' => [ [ 'value' => $menuName ] ], ];
+    while (!$menu && $i < count($validKeys)) {
+        $key      = array_keys($validKeys)[$i++];
+        $criteria = [ $key => [ [ 'value' => $validKeys[$key] ] ] ];
+
+        $menu = $smarty->getContainer()->get('menu_repository')
+            ->findOneBy($criteria, null, 1, 1);
     }
 
-    $menu = getService('menu_repository')->findOneBy($criteria, null, 1, 1);
-
-    // Menu does not exist
-    if (is_null($menu)) {
-        return $output;
+    if (empty($menu)) {
+        return '';
     }
 
     $menu->items = $menu->localize($menu->getRawItems());
 
     $smarty->assign([
-        'menuItems'       => ((!empty($menu->items)) ? $menu->items : []),
-        'actual_category' => $params['actual_category'],
+        'menuItems'       => !empty($menu->items) ? $menu->items : [],
+        'actual_category' => $params['actual_category'] ?? null
     ]);
 
     // Disable caching for this partial
@@ -47,7 +58,7 @@ function smarty_function_render_menu($params, &$smarty)
 
     $smarty->caching = 0;
 
-    $output .= "\n" . $smarty->fetch($tpl);
+    $output = $smarty->fetch($tpl);
 
     // Restore previous caching value
     $smarty->caching = $caching;

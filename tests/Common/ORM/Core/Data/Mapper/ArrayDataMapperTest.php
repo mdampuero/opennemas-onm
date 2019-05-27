@@ -13,8 +13,8 @@ class ArrayDataMapperTest extends \PHPUnit\Framework\TestCase
 
     public function testDefault()
     {
-        $this->assertEmpty($this->mapper->fromDatetime(new \Datetime()));
-        $this->assertEquals([ 'foo', 'bar' ], $this->mapper->fromArray([ 'foo', 'bar' ]));
+        $this->assertEquals([], $this->mapper->fromFoo());
+        $this->assertEquals(['gorp'], $this->mapper->fromFoo([ 'gorp' ]));
     }
 
     public function testFromArray()
@@ -104,11 +104,13 @@ class ArrayDataMapperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             'a:1:{s:3:"foo";s:3:"bar";}',
-            $this->mapper->toString([ 'foo' => 'bar'])
+            $this->mapper->toString([ 'foo' => 'bar', 'glorp' => '' ])
         );
 
         $this->assertEmpty($this->mapper->toString(null));
         $this->assertEmpty($this->mapper->toString(''));
+        $this->assertEmpty($this->mapper->toString([ 'garply' => null ]));
+        $this->assertEmpty($this->mapper->toString([ 'mumble' => '' ]));
     }
 
     public function testToText()

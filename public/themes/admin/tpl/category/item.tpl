@@ -161,6 +161,35 @@
                     </div>
                   </div>
                 </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.menu }" ng-click="expanded.menu = !expanded.menu" ng-show="data.extra.menu">
+                  <i class="fa fa-list-alt m-r-10"></i>{t}Menu{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.menu }"></i>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.menu }" ng-show="data.extra.menu">
+                  <div class="form-group no-margin">
+                    <div class="controls">
+                      <onm-menu-selector class="block" ng-model="item.params.menu" default-value-text="{t}Default{/t}" placeholder="{t}Default{/t}" label-text></onm-menu-selector>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.type }" ng-click="expanded.type = !expanded.type" ng-show="data.extra.types && data.extra.types.length > 0">
+                  <i class="fa fa-magic m-r-10"></i>{t}Type{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.type }"></i>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.type }" ng-show="data.extra.types && data.extra.types.length > 0">
+                  <div class="form-group no-margin">
+                    <div class="controls">
+                      <ui-select class="block" name="activated" theme="select2" ng-model="item.params.type">
+                        <ui-select-match>
+                          [% $select.selected.name %]
+                        </ui-select-match>
+                        <ui-select-choices repeat="item.id as item in addEmptyValue(data.extra.types, 'id', 'name', '{t}Default{/t}') | filter: $select.search">
+                          <div ng-bind-html="item.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

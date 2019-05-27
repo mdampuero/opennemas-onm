@@ -9,6 +9,8 @@
  */
 namespace Common\ORM\Core\Data\Mapper;
 
+use Common\Data\Serialize\Serializer\PhpSerializer;
+
 class ArrayDataMapper
 {
     /**
@@ -109,7 +111,7 @@ class ArrayDataMapper
             return [];
         }
 
-        return @unserialize($value);
+        return PhpSerializer::unserialize($value);
     }
 
     /**
@@ -165,11 +167,19 @@ class ArrayDataMapper
      */
     public function toString($value)
     {
-        if (empty($value) || !is_array($value)) {
+        if (!is_array($value)) {
             return null;
         }
 
-        return @serialize($value);
+        $value = array_filter($value, function ($a) {
+            return !empty($a);
+        });
+
+        if (empty($value)) {
+            return null;
+        }
+
+        return PhpSerializer::serialize($value);
     }
 
     /**

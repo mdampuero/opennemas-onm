@@ -39,7 +39,7 @@
     @Common/src/webarch/css/custom-icon-set.css,
     @Common/src/webarch/css/magic_space.css,
     @Common/src/angular-dynamic-image/less/main.less,
-    @Common/src/angular-onm-pagination/less/main.less,
+    @Common/src/angular-onm-ui/less/main.less,
     @Common/src/sidebar/less/main.less,
     @Common/src/opennemas-webarch/css/layout/*,
     @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
@@ -50,6 +50,20 @@
   <script>
     var appVersion = '{$smarty.const.DEPLOYED_AT}';
     var CKEDITOR_BASEPATH = '/assets/components/ckeditor/';
+
+    var strings = {
+      pagination: {
+        of: '{t}of{/t}'
+      },
+      tags: {
+        clear: '{t}Clear{/t}',
+        generate: '{t}Generate{/t}',
+        newItem: '{t}New tag{/t}',
+      },
+      forms: {
+        'not_valid' : '{t}The form has some missing or invalid fields, please review it.{/t}',
+      }
+    };
   </script>
 </head>
 <body id="manager" ng-class="{ 'collapsed': sidebar.isCollapsed(), 'login-body': !app.auth.status, 'pinned': sidebar.isPinned(), 'unauthorized': !app.auth.status }" ng-app="ManagerApp" ng-controller="MasterCtrl" ng-init="init('{{$smarty.const.CURRENT_LANGUAGE}}', '{t}Any{/t}')" resizable ng-class="{ 'collapsed': sidebar.isCollapsed() }">
@@ -322,8 +336,8 @@
     @Common/src/angular-history/history.js,
     @Common/src/angular-http/http.js,
     @Common/src/angular-item-service/itemService.js,
-    @Common/src/angular-onm-editor/onm-editor.js,
-    @Common/src/angular-onm-pagination/js/onm-pagination.js,
+    @Common/src/angular-localize/localize.js,
+    @Common/src/angular-onm-ui/js/*,
     @Common/src/angular-oql/oql.js,
     @Common/src/angular-resizable/resizable.js,
     @Common/src/angular-routing/routing.js,

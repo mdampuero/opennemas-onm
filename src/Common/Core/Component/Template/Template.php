@@ -99,7 +99,7 @@ class Template extends \Smarty
     {
         $this->theme = $theme;
 
-        $this->setTemplateVars($theme);
+        $this->setTemplateVars();
         $this->setupCompiles($theme);
         $this->setupPlugins($theme);
 
@@ -151,31 +151,6 @@ class Template extends \Smarty
             $this->container->get('core.locale')
                 ->addTextDomain($theme->text_domain, $path);
         }
-    }
-
-    /**
-     * Returns the cache id basing on the section, subsection and resource
-     * names.
-     *
-     * @param string $section    The section name.
-     * @param string $subsection The section name.
-     * @param string $resource   The resource name.
-     *
-     * @return string The cache id.
-     */
-    public function generateCacheId($section, $subsection = null, $resource = null)
-    {
-        $cacheId = 'home|' . $resource;
-
-        if (!empty($subsection)) {
-            $cacheId = preg_replace('/[^a-zA-Z0-9\s]+/', '', $subsection) . '|' . $resource;
-        } elseif (!empty($section)) {
-            $cacheId = preg_replace('/[^a-zA-Z0-9\s]+/', '', $section) . '|' . $resource;
-        }
-
-        $cacheId = preg_replace('@-@', '', $cacheId);
-
-        return $cacheId;
     }
 
     /**
@@ -262,11 +237,9 @@ class Template extends \Smarty
      */
     public function getThemeSkinName()
     {
-        return $this->theme->getCurrentSkinName(
-            $this->container->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('theme_skin', 'default')
-        );
+        return $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('theme_skin', 'default');
     }
 
     /**
@@ -276,7 +249,7 @@ class Template extends \Smarty
      */
     public function getThemeSkinProperty($propertyName)
     {
-        return $this->theme->getCurrentSkinProperty(
+        return $this->theme->getSkinProperty(
             $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('theme_skin', 'default'),
@@ -398,16 +371,10 @@ class Template extends \Smarty
     }
 
     /**
-     * Sets some template paths
-     *
-     * @param string $theme The current theme.
+     * Sets some template paths.
      */
-    protected function setTemplateVars($theme)
+    protected function setTemplateVars()
     {
-        if (!empty($theme)) {
-            $theme = str_replace('es.openhost.theme.', '', $theme->uuid);
-        }
-
         // Keep this to ignore notice
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
@@ -426,6 +393,8 @@ class Template extends \Smarty
      * Configures the smarty cache path.
      *
      * @param Instance $instance The current instance.
+     *
+     * @codeCoverageIgnore
      */
     protected function setupCache($instance)
     {
@@ -465,6 +434,8 @@ class Template extends \Smarty
      * Configures the smarty compiles path.
      *
      * @param Theme $theme The current theme.
+     *
+     * @codeCoverageIgnore
      */
     protected function setupCompiles($theme)
     {
@@ -494,10 +465,9 @@ class Template extends \Smarty
         $this->addPluginsDir($path);
         $this->addPluginsDir(SITE_LIBS_PATH . '/smarty-onm-plugins/');
 
-        // Load filters
-        foreach ($this->filters as $filterSectionName => $filters) {
-            foreach ($filters as $filterName) {
-                $this->loadFilter($filterSectionName, $filterName);
+        foreach ($this->filters as $section => $filters) {
+            foreach ($filters as $filter) {
+                $this->loadFilter($section, $filter);
             }
         }
     }
