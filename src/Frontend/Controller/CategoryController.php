@@ -285,24 +285,6 @@ class CategoryController extends FrontendController
             'actual_category'       => $item->name,
         ]);
 
-        $params['categories'] = [];
-
-        // Get all parents for category
-        $parent = $params['o_category']->fk_content_category;
-
-        while (!empty($parent)) {
-            try {
-                $category = $this->get('api.service.category')
-                    ->getItem($parent);
-
-                $params['categories'][$parent] = $category;
-
-                $parent = $category->fk_content_category;
-            } catch (\Exception $e) {
-                $parent = null;
-            }
-        }
-
         if (!array_key_exists('page', $params)) {
             $params['page'] = 1;
         }
