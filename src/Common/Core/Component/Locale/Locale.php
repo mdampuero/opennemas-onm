@@ -113,11 +113,7 @@ class Locale
      */
     public function apply()
     {
-        $locale = $this->getLocale();
-
-        if (array_key_exists($locale, $this->fixes)) {
-            $locale = $this->fixes[$locale];
-        }
+        $locale = $this->getRequestLocale();
 
         $this->changeLocale($locale);
         $this->changeTimeZone($this->getTimeZone()->getName());
@@ -271,6 +267,10 @@ class Locale
         }
 
         foreach ($codes as $code) {
+            if (strlen($code) <= 2) {
+                continue;
+            }
+
             $locales[$code] = ucfirst(\Locale::getDisplayName($code));
         }
 
@@ -385,6 +385,10 @@ class Locale
      */
     protected function changeLocale($locale)
     {
+        if (array_key_exists($locale, $this->fixes)) {
+            $locale = $this->fixes[$locale];
+        }
+
         \Locale::setDefault($locale);
 
         // Set locale for gettext
