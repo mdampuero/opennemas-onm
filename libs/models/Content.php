@@ -249,6 +249,9 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
+            case 'category_title':
+                return $this->loadCategoryTitle();
+
             case 'comments':
                 return 0;
 
@@ -449,12 +452,6 @@ class Content implements \JsonSerializable, CsvSerializable
             && !empty($this->pk_fk_content_category)
         ) {
             $this->loadCategoryName();
-        }
-
-        if (empty($this->category_title)
-            && !empty($this->pk_fk_content_category)
-        ) {
-            $this->loadCategoryTitle();
         }
 
         if (!empty($this->params) && is_string($this->params)) {
@@ -1344,9 +1341,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return null;
         }
 
-        $this->category_title = $category->title;
-
-        return $this->category_title;
+        return $category->title;
     }
 
     /**

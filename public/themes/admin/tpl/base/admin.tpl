@@ -44,9 +44,8 @@
       @Common/src/webarch/css/custom-icon-set.css,
       @Common/src/webarch/css/magic_space.css,
       @Common/src/angular-dynamic-image/less/main.less,
-      @Common/src/angular-onm-pagination/less/main.less,
+      @Common/src/angular-onm-ui/less/main.less,
       @Common/src/sidebar/less/main.less,
-      @Common/src/photo-editor/css/photo-editor.css,
       @Common/src/opennemas-webarch/less/main.less" filters="cssrewrite,less" output="common"}
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
@@ -57,6 +56,7 @@
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
+      @Common/src/photo-editor/css/photo-editor.css,
       @AdminTheme/less/*" filters="cssrewrite,less" output="admin"}
     {/stylesheets}
   {/block}
@@ -510,15 +510,14 @@
       @Common/src/angular-history/history.js,
       @Common/src/angular-http/http.js,
       @Common/src/angular-item-service/itemService.js,
-      @Common/src/angular-onm-editor/onm-editor.js,
-      @Common/src/angular-onm-pagination/js/onm-pagination.js,
+      @Common/src/angular-localize/localize.js,
+      @Common/src/angular-onm-ui/js/*,
       @Common/src/angular-oql/oql.js,
       @Common/src/angular-resizable/resizable.js,
       @Common/src/angular-routing/routing.js,
       @Common/src/angular-security/security.js,
       @Common/src/angular-serializer/serializer.js,
       @Common/src/opennemas-webarch/js/core.js,
-      @Common/src/photo-editor/js/photo-editor.js,
       @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
     {/javascripts}
     {javascripts src="
@@ -544,15 +543,11 @@
       @Common/src/fablock/fablock.js,
       @Common/src/angular-autoform/js/*,
       @Common/src/angular-bootstrap-multiselect/template.js,
-      @Common/src/angular-category-selector/js/onm-category-selector.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
-      @Common/src/angular-localize/localize.js,
-      @Common/src/angular-oql-encoder/oql-encoder.js,
       @Common/src/angular-picker/js/picker.js,
       @Common/src/angular-picker/js/content-picker.js,
       @Common/src/angular-picker/js/media-picker.js,
-      @Common/src/onm-tags-input/js/onm-tags-input.js,
       @Common/src/angular-query-manager/query-manager.js,
       @Common/src/angular-renderer/renderer.js,
       @Common/src/angular-repeat-finish/repeat-finish.js,

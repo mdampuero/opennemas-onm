@@ -3,17 +3,17 @@
 
   /**
    * @ngdoc module
-   * @name  onm.categorySelector
+   * @name  onm.ui.categorySelector
    *
    * @requires onm.http
    * @requires onm.localize
    * @requires ui.select
    *
    * @description
-   *   The `onm.categorySelector` module provides a directive to automagically
-   *   generate a category selector with multilanguage support.
+   *   The `onm.ui.categorySelector` module provides a directive to
+   *   automagically generate a category selector with multilanguage support.
    */
-  angular.module('onm.categorySelector', [ 'onm.http', 'onm.localize', 'ui.select' ])
+  angular.module('onm.ui.categorySelector', [ 'onm.http', 'onm.localize', 'ui.select' ])
 
     /**
      * @ngdoc directive

@@ -15,34 +15,110 @@ namespace Common\ORM\Entity;
 class Theme extends Extension
 {
     /**
-     * Returns the list of available styles for the Theme.
-     * If no available styles it returns an empty array.
+     * Checks if categories can change the page menu in the current theme.
      *
-     * @return array|null the list of available styles
+     * @return bool True if acategories can change the menu. False otherwise.
+     */
+    public function canCategoriesChangeMenu() : bool
+    {
+        if (!empty($this->parameters)
+            && array_key_exists('categories', $this->parameters)
+            && array_key_exists('menu', $this->parameters['categories'])
+        ) {
+            return $this->parameters['categories']['menu'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the skin information basing on the skin id.
+     *
+     * @param string $id The skin id.
+     *
+     * @return array The skin information.
+     */
+    public function getSkin($id)
+    {
+        $skins = $this->getSkins();
+
+        if (empty($skins)) {
+            return null;
+        }
+
+        if (array_key_exists($id, $skins)) {
+            return $skins[$id];
+        }
+
+        return $this->getDefaultSkin();
+    }
+
+    /**
+     * Returns the list of available skings for the Theme.
+     *
+     * @return array The list of available styles.
      */
     public function getSkins()
     {
-        if (array_key_exists('parameters', $this->data)
-            && array_key_exists('skins', $this->data['parameters'])
+        if (!array_key_exists('parameters', $this->data)
+            || !array_key_exists('skins', $this->data['parameters'])
         ) {
-            foreach ($this->data['parameters']['skins'] as $key => &$value) {
-                $value['internal_name'] = $key;
-            }
+            return [];
+        }
 
-            return $this->data['parameters']['skins'];
+        foreach ($this->data['parameters']['skins'] as $key => &$value) {
+            $value['internal_name'] = $key;
+        }
+
+        return $this->data['parameters']['skins'];
+    }
+
+    /**
+     * Returns a property for a skin.
+     *
+     * @param string $skin     The skin id.
+     * @param string $property The property name.
+     *
+     * @return mixed The property value.
+     */
+    public function getSkinProperty($id, $property)
+    {
+        $skin = $this->getSkin($id);
+
+        if (empty($skin)
+            || !array_key_exists('params', $skin)
+            || !is_array($skin['params'])
+            || !array_key_exists($property, $skin['params'])
+        ) {
+            return null;
+        }
+
+        return $skin['params'][$property];
+    }
+
+    /**
+     * Returns the list of types for categories.
+     *
+     * @return array The list of types for categories.
+     */
+    public function getTypesForCategories() : array
+    {
+        if (!empty($this->parameters)
+            && array_key_exists('categories', $this->parameters)
+            && array_key_exists('types', $this->parameters['categories'])
+        ) {
+            return $this->parameters['categories']['types'];
         }
 
         return [];
     }
 
     /**
-     * Returns the default style for the Theme.
-     * If no default style it returns the first one.
-     * If no styles it returns null.
+     * Returns the default skin for the Theme.
      *
-     * @return array|null the defeault style
+     * @return array The default skin.
      */
-    public function getDefaultSkin()
+    protected function getDefaultSkin()
     {
         $skins = $this->getSkins();
 
@@ -50,89 +126,10 @@ class Theme extends Extension
             return null;
         }
 
-        $default = null;
-        foreach ($skins as $key => &$value) {
-            if (array_key_exists('default', $value)
-                && $value['default'] == true
-            ) {
+        foreach ($skins as $value) {
+            if (array_key_exists('default', $value) && $value['default']) {
                 return $value;
             }
         }
-
-        // If no default style just pick the first one
-        if (empty($default)) {
-            $default = array_shift($skins);
-        }
-
-        return $default;
-    }
-
-    /**
-     * Returns the style information given its name.
-     * If the given name is not valid it returns the default style.
-     * If no styles it returns null.
-     *
-     * @param string $name the style name
-     *
-     * @return array|null the defeault style
-     */
-    public function getCurrentSkin($name)
-    {
-        $skins = $this->getSkins();
-
-        if (empty($skins)) {
-            return null;
-        }
-
-        // Return the default style if the name doesnt exists
-        if (!array_key_exists($name, $skins)) {
-            return $this->getDefaultSkin();
-        }
-
-        return $skins[$name];
-    }
-
-    /**
-     * Returns the name of the currently sking given its name
-     *
-     * @param string $internalName the internal name of the skin
-     *
-     * @return string|null the skin name
-     */
-    public function getCurrentSkinName($internalName)
-    {
-        $skin = $this->getCurrentSkin($internalName);
-
-        if (!is_array($skin)
-            || !array_key_exists('internal_name', $skin)
-        ) {
-            return null;
-        }
-
-        return $skin['internal_name'];
-    }
-
-    /**
-     * Returns a property value defined for the current skin given the property name
-     *
-     * @param string $internalName the internal name of the skin to select
-     * @param string $propertyName the property name of the skin to select
-     *
-     * @return string|null the property value
-     * @author
-     */
-    public function getCurrentSkinProperty($internalName, $propertyName)
-    {
-        $skin = $this->getCurrentSkin($internalName);
-
-        if (!is_array($skin)
-            || !array_key_exists('params', $skin)
-            || !is_array($skin['params'])
-            || !array_key_exists($propertyName, $skin['params'])
-        ) {
-            return null;
-        }
-
-        return $skin['params'][$propertyName];
     }
 }

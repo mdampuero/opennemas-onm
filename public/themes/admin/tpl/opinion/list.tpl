@@ -71,12 +71,12 @@
             {acl isAllowed="CONTENT_OTHER_UPDATE"}
               {acl isAllowed="OPINION_AVAILABLE"}
                 <li class="quicklinks">
-                  <button class="btn btn-link" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
+                  <button class="btn btn-link" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
                     <i class="fa fa-check fa-lg"></i>
                   </button>
                 </li>
                 <li class="quicklinks">
-                  <button class="btn btn-link" href="#" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
+                  <button class="btn btn-link" href="#" ng-click="patchSelected('content_status', 0)" uib-tooltip="{t}Unpublish{/t}" tooltip-placement="bottom">
                     <i class="fa fa-times fa-lg"></i>
                   </button>
                 </li>

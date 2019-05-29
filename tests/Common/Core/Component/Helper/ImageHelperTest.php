@@ -31,7 +31,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
-                'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
+                'getDescription', 'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
             ])->getMock();
 
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
@@ -79,11 +79,14 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn(23920);
         $this->processor->expects($this->once())->method('getWidth')
             ->willReturn(400);
+        $this->processor->expects($this->once())->method('getDescription')
+            ->willReturn('gorp');
 
         $this->assertEquals([
-            'size'   => 23920 / 1024,
-            'width'  => 400,
-            'height' => 220,
+            'size'        => 23920 / 1024,
+            'width'       => 400,
+            'height'      => 220,
+            'description' => 'gorp'
         ], $this->helper->getInformation('corge/quux/grault.jpg'));
     }
 

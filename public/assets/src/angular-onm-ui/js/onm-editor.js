@@ -6,13 +6,13 @@
 
   /**
    * @ngdoc module
-   * @name  onm.editor
+   * @name  onm.ui.editor
    *
    * @description
-   *   The `onm.editor` module provides a service and a directive to create and
+   *   The `onm.ui.editor` module provides a service and a directive to create and
    *   initialize CKEditor components.
    */
-  angular.module('onm.editor', [])
+  angular.module('onm.ui.editor', [])
 
     /**
      * @ngdoc provider
