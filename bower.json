@@ -45,7 +45,7 @@
     "bootstrap-wysiwyg": "*",
     "bootstrap2": "bootstrap#2.3.2",
     "breakpoints": "https://github.com/xoxco/breakpoints.git",
-    "chart.js": "2.7.0",
+    "chart.js": "2.8.0",
     "ckeditor": "4.5.0",
     "datatables": "1.10.11",
     "datatables-responsive": "2.0.2",
