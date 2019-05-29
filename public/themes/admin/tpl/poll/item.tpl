@@ -61,12 +61,12 @@
         <i class="fa fa-calendar m-r-10"></i>
         {t}Poll close date{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.closed }"></i>
-        <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase"  ng-show="!expanded.closed">
+        <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase"  ng-show="!expanded.closed && !isClosed(item)">
           <strong>
             {t}Open{/t}
           </strong>
         </span>
-        <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase" ng-show="isClosed(item)">
+        <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase" ng-show="!expanded.closed && isClosed(item)">
           <strong>
             {t}Closed{/t}
           </strong>
