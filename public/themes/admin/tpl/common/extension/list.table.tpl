@@ -185,7 +185,7 @@
                   &lt;{t}No tags{/t}&gt;
                 </small>
                 <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!(data.extra.tags | filter : { id: id })[0].locale || (data.extra.tags | filter : { id: id })[0].locale === config.locale.selected">
-                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: data.extra.tags[id].id }) %]">
+                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: (data.extra.tags | filter : { id: id })[0].id }) %]">
                     [% (data.extra.tags | filter : { id: id })[0].name %]
                   </a>
                 </div>
