@@ -5,6 +5,8 @@ frontend_rss_facebook_instant_articles:
 frontend_rss_listing:
     path:     /rss/listado
     defaults: { _controller: FrontendBundle:Rss:index }
+    options:
+        l10n: true
 
 frontend_rss_author:
     path: /rss/author/{author_slug}
