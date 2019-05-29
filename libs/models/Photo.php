@@ -112,7 +112,6 @@ class Photo extends Content
         $this->width       = $properties['width'];
         $this->height      = $properties['height'];
         $this->author_name = $properties['author_name'];
-        $this->description = ($this->description);
         $this->address     = $properties['address'];
         $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
 

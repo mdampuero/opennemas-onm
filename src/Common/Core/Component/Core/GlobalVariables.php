@@ -86,6 +86,16 @@ class GlobalVariables implements \ArrayAccess
     /**
      * Returns the service container.
      *
+     * @return CategoryService The Category service.
+     */
+    public function getCategories()
+    {
+        return $this->container->get('api.service.category');
+    }
+
+    /**
+     * Returns the service container.
+     *
      * @return ServiceContainer The service container.
      */
     public function getContainer()

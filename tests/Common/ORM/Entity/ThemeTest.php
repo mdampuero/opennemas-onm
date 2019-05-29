@@ -14,7 +14,7 @@ use \Common\ORM\Entity\Theme;
 class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers \Common\ORM\Entity\Theme::__construct
+     * Tests constructor.
      */
     public function testConstructor()
     {
@@ -48,362 +48,218 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\ORM\Entity\Theme::getSkins
+     * Tests canCategoriesChangeMenu when parameter is enabled and
+     * disabled in the theme.
      */
-    public function testGetSkinsWithOneSkin()
+    public function testCanCategoriesChangeMenu()
     {
-        $styles = [
-            'default' => [
-                'default'       => true,
-                'name'          => 'Default',
-                'internal_name' => 'default',
-                'params'        => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'          => 'Skin two',
-                'internal_name' => 'style-two',
-                'params'        => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
+        $theme = new Theme([]);
 
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
+        $this->assertFalse($theme->canCategoriesChangeMenu());
 
-        $this->assertEquals($styles, $entity->getSkins());
+        $theme = new Theme([ 'parameters' => [
+            'categories' => [ 'menu' => false ]
+        ] ]);
+
+        $this->assertFalse($theme->canCategoriesChangeMenu());
+
+        $theme = new Theme([ 'parameters' => [
+            'categories' => [ 'menu' => true ]
+        ] ]);
+
+        $this->assertTrue($theme->canCategoriesChangeMenu());
     }
 
     /**
-     * @covers \Common\ORM\Entity\Theme::getSkins
+     * Tests getSkins when theme has no skins.
      */
-    public function testGetSkinsWithNoSkins()
+    public function testGetSkinsWhenNoSkins()
     {
-        $entity = new Theme([]);
+        $theme = new Theme([]);
 
-        $this->assertEquals([], $entity->getSkins());
+        $this->assertEmpty($theme->getSkins());
     }
 
     /**
-     * @covers \Common\ORM\Entity\Theme::getSkins
+     * Tests getSkins when theme has skins.
      */
-    public function testGetDefaultSkinWithNoSkins()
+    public function testGetSkinsWhenSkins()
     {
-        $entity = new Theme([]);
-
-        $this->assertEquals(null, $entity->getDefaultSkin());
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getDefaultSkin
-     */
-    public function testGetDefaultSkinWithSkins()
-    {
-        $styles = [
-            'default' => [
-                'default' => true,
-                'name'   => 'Default',
-                'params' => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'    => 'Skin two',
-                'params'  => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
-
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
-
-        $this->assertEquals(
-            [
-                'internal_name' => 'default',
-                'default' => true,
-                'name'   => 'Default',
-                'params' => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            $entity->getDefaultSkin()
-        );
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getDefaultSkin
-     */
-    public function testGetDefaultSkinWithSkinsButNoDefault()
-    {
-        $styles = [
-            'default' => [
-                'name'   => 'Default',
-                'params' => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'    => 'Skin two',
-                'params'  => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
-
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
-
-        $this->assertEquals(
-            [
-                'internal_name' => 'default',
-                'name'   => 'Default',
-                'params' => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            $entity->getDefaultSkin()
-        );
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getDefaultSkin
-     */
-    public function testGetCurrentSkinWithValidSelected()
-    {
-        $styles = [
-            'default' => [
-                'name'   => 'Default',
-                'params' => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'    => 'Skin two',
-                'params'  => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
-
-        $selected = 'default';
-
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
-
-        $this->assertEquals(
-            [
-                'name'   => 'Default',
-                'internal_name' => 'default',
-                'params' => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            $entity->getCurrentSkin($selected)
-        );
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getCurrentSkin
-     */
-    public function testGetCurrentSkinWithInValidSelected()
-    {
-        $styles = [
-            'default' => [
-                'default' => true,
-                'name'    => 'Default',
-                'params'  => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'    => 'Skin two',
-                'params'  => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
-
-        $selected = 'style-not-valid';
-
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
-
-        $this->assertEquals(
-            [
-                'default'       => true,
-                'name'          => 'Default',
-                'internal_name' => 'default',
-                'params'        => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            $entity->getCurrentSkin($selected)
-        );
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getCurrentSkin
-     */
-    public function testGetCurrentSkinWithInValidSelectedAndNoSkins()
-    {
-        $selected = 'style-not-valid';
-
-        $entity = new Theme([
-            'parameters' => []
-        ]);
-
-        $this->assertEquals(null, $entity->getCurrentSkin($selected));
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getCurrentSkinName
-     */
-    public function testgetCurrentSkinNameWithInValidSelectedAndNoSkins()
-    {
-        $selected = 'style-not-valid';
-
-        $entity = new Theme([
-            'parameters' => []
-        ]);
-
-        $this->assertEquals(null, $entity->getCurrentSkinName($selected));
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getCurrentSkinName
-     */
-    public function testgetCurrentSkinNameWithValidSelected()
-    {
-        $styles = [
-            'default' => [
-                'default' => true,
-                'name'    => 'Default',
-                'params'  => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'    => 'Skin two',
-                'params'  => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
-
-        $selected = 'default';
-
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
-
-        $this->assertEquals('default', $entity->getCurrentSkinName($selected));
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getCurrentSkinProperty
-     */
-    public function testgetCurrentSkinPropertyWithInValidSelectedAndNoSkins()
-    {
-        $selected = 'style-not-valid';
-
-        $entity = new Theme([
-            'parameters' => []
-        ]);
-
-        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
-    }
-
-    /**
-     * @covers \Common\ORM\Entity\Theme::getCurrentSkinProperty
-     */
-    public function testgetCurrentSkinPropertyWithValidSelected()
-    {
-        $styles = [
-            'default' => [
-                'default' => true,
-                'name'    => 'Default',
-                'params'  => [
-                    'css_file' => 'style.css',
-                ]
-            ],
-            'style-two' => [
-                'name'    => 'Skin two',
-                'params'  => [
-                    'css_file' => 'style-two.css',
-                ]
-            ],
-        ];
-
-        $selected = 'default';
-
-        $entity = new Theme([
-            'parameters' => [
-                'skins' => $styles,
-            ]
-        ]);
-
-        $this->assertEquals('style.css', $entity->getCurrentSkinProperty($selected, 'css_file'));
-
-        $selected = 'default';
-
-        $entity = new Theme([
+        $theme = new Theme([
             'parameters' => [
                 'skins' => [
                     'default' => [
+                        'default' => true,
+                        'name'    => 'Default'
                     ]
                 ]
             ]
         ]);
 
-        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
+        $this->assertEquals([ 'default' => [
+            'default'       => true,
+            'internal_name' => 'default',
+            'name'          => 'Default',
+        ] ], $theme->getSkins());
+    }
 
-        $selected = 'default';
+    /**
+     * Tests getSkin when the theme has no skins defined.
+     */
+    public function testGetSkinWhenNoSkins()
+    {
+        $theme = new Theme([ 'parameters' => [] ]);
 
-        $entity = new Theme([
+        $this->assertEmpty($theme->getSkin('fred'));
+    }
+
+    /**
+     * Tests getSkin when the theme has skins for valid and invalid ids.
+     */
+    public function testGetSkinWhenSkins()
+    {
+        $theme = new Theme([
             'parameters' => [
                 'skins' => [
                     'default' => [
+                        'name'   => 'Default',
                         'params' => [
+                            'css_file' => 'style.css',
                         ]
                     ]
                 ]
             ]
         ]);
 
-        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
+        $this->assertEmpty($theme->getSkin('plugh'));
+        $this->assertEquals([
+            'name'          => 'Default',
+            'internal_name' => 'default',
+            'params'        => [ 'css_file' => 'style.css', ]
+        ], $theme->getSkin('default'));
+    }
 
-        $selected = 'default';
+    /**
+     * Tests getSkinProperty when the theme has no skins.
+     */
+    public function testGetSkinPropertyWhenNoSkins()
+    {
+        $theme = new Theme([ 'parameters' => [] ]);
 
-        $entity = new Theme([
+        $this->assertEmpty($theme->getSkinProperty('fred', 'css_file'));
+    }
+
+    /**
+     * Tests getSkinProperty when theme has skins for valid and invalid skins
+     * and properties.
+     */
+    public function testGetSkinPropertyWhenSkins()
+    {
+        $theme = new Theme([
             'parameters' => [
                 'skins' => [
-                    'default' => [
-                        'params' => null
+                    'valid' => [
+                        'default' => true,
+                        'name'    => 'Valid skin',
+                        'params'  => [
+                            'css_file' => 'style.css',
+                        ]
+                    ],
+                    'incomplete' => [
+                        'name'    => 'Incomplete skin',
+                        'params'  => []
                     ]
                 ]
             ]
         ]);
 
-        $this->assertEquals(null, $entity->getCurrentSkinProperty($selected, 'css_file'));
+        $this->assertEmpty($theme->getSkinProperty('incomplete', 'css_file'));
+        $this->assertEmpty($theme->getSkinProperty('valid', 'baz'));
+        $this->assertEquals('style.css', $theme->getSkinProperty('valid', 'css_file'));
+    }
+
+    /**
+     * Tests getTypesForCategories when types defined and not defined in theme.
+     */
+    public function testGetTypesForCategories()
+    {
+        $theme = new Theme([]);
+
+        $this->assertEmpty($theme->getTypesForCategories());
+
+        $theme = new Theme([ 'parameters' => [
+            'categories' => [
+                'types' => [ 'plugh' ]
+            ]
+        ] ]);
+
+        $this->assertEquals([ 'plugh' ], $theme->getTypesForCategories());
+    }
+
+    /**
+     * Tests getDefaultSkin when no skins defined.
+     */
+    public function testGetDefaultSkinWithNoSkins()
+    {
+        $theme  = new Theme([]);
+        $method = new \ReflectionMethod($theme, 'getDefaultSkin');
+
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($theme, []));
+    }
+
+    /**
+     * Tests getDefaultSkin when skins
+     */
+    public function testGetDefaultSkinWhenNoDefaultSkin()
+    {
+        $theme = new Theme([
+            'parameters' => [
+                'skins' => [
+                    'default' => [
+                        'name'   => 'Default',
+                        'params' => [
+                            'css_file' => 'style.css',
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $method = new \ReflectionMethod($theme, 'getDefaultSkin');
+
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($theme, []));
+    }
+
+    /**
+     * Tests getDefaultSkin when skins
+     */
+    public function testGetDefaultSkinWhenDefaultSkin()
+    {
+        $theme = new Theme([
+            'parameters' => [
+                'skins' => [
+                    'default' => [
+                        'default' => true,
+                        'name'    => 'Default',
+                        'params'  => [ 'css_file' => 'style.css' ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $method = new \ReflectionMethod($theme, 'getDefaultSkin');
+
+        $method->setAccessible(true);
+
+        $this->assertEquals([
+            'default'       => true,
+            'internal_name' => 'default',
+            'name'          => 'Default',
+            'params'        => [ 'css_file' => 'style.css' ]
+        ], $method->invokeArgs($theme, []));
     }
 }

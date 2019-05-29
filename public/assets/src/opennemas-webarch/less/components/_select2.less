@@ -158,3 +158,30 @@
 .form-group.has-error .select2-choice {
   border: 1px solid @danger-color !important;
 }
+
+.ui-select-container[theme=select2].direction-up .ui-select-dropdown {
+  border: none;
+}
+
+.ui-select-container[theme=select2].direction-up .ui-select-dropdown .select2-search {
+  margin-top: 0;
+}
+
+.ui-select-container[theme=select2].direction-up .ui-select-dropdown {
+  margin-top: -4px !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .25);
+}
+
+.direction-up .select2-with-searchbox:before {
+  bottom: -7px;
+  border-bottom: 0;
+  border-top: 6px solid #ccc;
+  top: auto;
+}
+
+.direction-up .select2-with-searchbox:after {
+  bottom: -6px;
+  border-bottom: 0;
+  border-top: 6px solid #fff;
+  top: auto;
+}

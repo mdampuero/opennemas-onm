@@ -3,13 +3,13 @@
 
   /**
    * @ngdoc module
-   * @name  onm.pagination
+   * @name  onm.ui.pagination
    *
    * @description
-   *   The `onm.pagination` module provides a directive and a controller to
+   *   The `onm.ui.pagination` module provides a directive and a controller to
    *   create pagination controls for lists.
    */
-  angular.module('onm.pagination', [])
+  angular.module('onm.ui.pagination', [])
 
     /**
      * @ngdoc directive

@@ -437,7 +437,7 @@ class CategoryController extends FrontendController
             if (!empty($content->fk_video)
                 && array_key_exists($content->fk_video, $params['o_media'])
             ) {
-                $video = $params['o_media'][$content->img1];
+                $video = $params['o_media'][$content->fk_video];
 
                 $content->video     = $video;
                 $content->obj_video = $video;

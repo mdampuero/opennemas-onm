@@ -4,7 +4,7 @@
     <div class="p-b-50" ng-click="$event.stopPropagation()">
       <uib-carousel active="a"  class="carousel-minimal" ng-if="item.images.length > 0">
         <uib-slide ng-repeat="screenshot in item.images track by $index" index="$index">
-          <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/scale,1024,768' + item.path + '/' + screenshot %]">
+          <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/zoomcrop,1024,768' + item.path + '/' + screenshot %]">
         </uib-slide>
       </uib-carousel>
       <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="//placehold.it/1024x768">

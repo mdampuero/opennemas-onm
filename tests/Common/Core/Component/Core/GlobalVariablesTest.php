@@ -33,18 +33,33 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdvertisementGroup()
     {
-        $helper = $this->getMockBuilder('AdvertisementHelper')
+        $helper = $this->getMockBuilder('Core\Component\Helper\AdvertisementHelper')
+            ->disableOriginalConstructor()
             ->setMethods([ 'getGroup' ])
             ->getMock();
 
-        $this->container->expects($this->once())->method('get')
-            ->with('core.helper.advertisement')
-            ->willReturn($helper);
-
         $helper->expects($this->once())->method('getGroup')
-            ->willReturn('foo');
+            ->willReturn('wobble');
 
-        $this->assertEquals('foo', $this->globals->getAdvertisementGroup());
+        $this->container->expects($this->once())->method('get')
+            ->with('core.helper.advertisement')->willReturn($helper);
+
+        $this->assertEquals('wobble', $this->globals->getAdvertisementGroup());
+    }
+
+    /**
+     * Tests getCategories.
+     */
+    public function testGetCategories()
+    {
+        $service = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('api.service.category')->willReturn($service);
+
+        $this->assertEquals($service, $this->globals->getCategories());
     }
 
     /**
@@ -89,7 +104,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getSection.
+     * Tests getSection when category assigned to template.
      */
     public function testGetSectionWithCategory()
     {
@@ -116,7 +131,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getSection.
+     * Tests getSection when no category assigned to template.
      */
     public function testGetSectionWithoutCategory()
     {

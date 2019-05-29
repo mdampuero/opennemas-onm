@@ -321,7 +321,7 @@ class Importer
             return $this->config['category'];
         }
 
-        return 20;
+        return null;
     }
 
     /**

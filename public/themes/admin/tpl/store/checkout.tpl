@@ -43,7 +43,7 @@
                   <scrollable>
                   <ul class="cart-list">
                     <li class="clearfix" ng-repeat="item in cart | orderBy: name">
-                      <img class="img-responsive pull-left" ng-src="[% '/asset/scale,300,300' + item.path + '/' + item.images[0] %]">
+                      <img class="img-responsive pull-left" ng-src="[% '/asset/zoomcrop,200,200' + item.path + '/' + item.images[0] %]">
                       <span class="pull-left">
                         <h5>[% item.name %]</h5>
                         <p class="description">[% item.description %]</p>
