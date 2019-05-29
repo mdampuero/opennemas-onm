@@ -202,7 +202,7 @@
                   </div>
                   <div class="listing-inline-actions">
                     {acl isAllowed="ARTICLE_UPDATE"}
-                      <translator item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="config.locale.multilanguage" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                      <translator item="data.results[$index]" keys="data.extra.keys" link="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="config.locale.multilanguage" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                       <a class="btn btn-default btn-small" href="[% routing.generate('admin_article_show', { id: content.id }) %]" ng-if="!config.locale.multilanguage">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
