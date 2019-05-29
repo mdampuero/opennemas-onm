@@ -42,18 +42,13 @@
           created: new Date(),
           starttime: null,
           endtime: null,
-          thumbnail: null,
           title: '',
           type: 0,
           with_comments: 0,
           categories: [],
-          related_contents: [],
           tags: [],
-          external_link: '',
           agency: '',
-          cover: null,
-          cover_image: null,
-          photos: [],
+          items: [],
         };
 
         /**
