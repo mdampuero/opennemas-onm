@@ -27,6 +27,7 @@ class PollsController extends Controller
     public function init()
     {
         $category_real_name = 'Portada';
+        $category           = null;
         $this->categoryName = 'home';
         $this->category     = 0;
         $actual_category_id = 0;
@@ -44,7 +45,7 @@ class PollsController extends Controller
 
         $this->view->assign([
             'category_name'         => $this->categoryName,
-            'category'              => $this->category,
+            'category'              => $category,
             'actual_category_id'    => $actual_category_id,
             'category_real_name'    => $category_real_name,
             'actual_category_title' => $category_real_name,

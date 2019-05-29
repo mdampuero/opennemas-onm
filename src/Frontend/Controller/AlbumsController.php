@@ -45,7 +45,7 @@ class AlbumsController extends Controller
 
             $this->view->assign([
                 'category_name'         => $this->categoryName ,
-                'category'              => $category->pk_content_category,
+                'category'              => $category,
                 'actual_category_id'    => $category->pk_content_category,
                 'actual_category_title' => $category->title,
                 'category_real_name'    => $category->title,
