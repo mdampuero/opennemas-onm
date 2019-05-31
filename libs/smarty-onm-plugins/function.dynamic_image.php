@@ -49,7 +49,8 @@ function smarty_function_dynamic_image($params, &$smarty)
         $resource = $params['site_url'] . $resource;
     }
 
-    $lazyload = ($params['data-src'] == 'lazyload');
+    $lazyload = array_key_exists('data-src', $params)
+        && $params['data-src'] == 'lazyload';
 
     unset($params['src']);
     unset($params['base_url']);

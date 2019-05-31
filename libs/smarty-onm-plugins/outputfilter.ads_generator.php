@@ -9,11 +9,11 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-    $ads = $smarty->parent->tpl_vars['advertisements']->value;
-    $app = $smarty->parent->tpl_vars['app']->value;
+    $ads = $smarty->getValue('advertisements');
+    $app = $smarty->getValue('app');
 
     if (!is_array($ads)
-        || count($ads) <= 0
+        || empty($ads)
         || preg_match('/newsletter/', $smarty->source->resource)
     ) {
         return $output;
@@ -31,8 +31,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
-    $category  = $smarty->parent->tpl_vars['actual_category']->value;
-    $content   = $smarty->parent->tpl_vars['content']->value;
+    $content = $smarty->hasValue('content')
+        ? $smarty->getValue('content')
+        : null;
+
     $positions = [];
     $settings  = $smarty->getContainer()
         ->get('orm.manager')
@@ -50,7 +52,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         });
 
         $params = [
-            'category'           => $category,
+            'category'           => $app['section'],
             'extension'          => $app['extension'],
             'advertisementGroup' => $app['advertisementGroup'],
             'content'            => $content,
@@ -86,10 +88,10 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $content = getService('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
             'debug'              => $app['environment'] === 'dev' ? 'true' : 'false',
-            'category'           => $category,
+            'category'           => $app['section'],
             'extension'          => $app['extension'],
             'advertisementGroup' => $app['advertisementGroup'],
-            'contentId'          => $content->id,
+            'contentId'          => $content->id ?? null,
             'lifetime'           => $settings['lifetime_cookie'],
             'positions'          => implode(',', $positions),
             'url'                => getService('router')
