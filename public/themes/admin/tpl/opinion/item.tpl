@@ -79,11 +79,16 @@
           <div class="grid-body no-padding">
             <div class="grid-collapse-title">
               {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
-              {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
-              {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Home{/t}" field="in_home"}
-              {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+              <div class="m-t-5">
+                {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Home{/t}" field="in_home"}
+              </div>
+              <div class="m-t-5">
+                {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
+              </div>
+              <div class="m-t-5">
+                {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+              </div>
             </div>
-
             {include file="ui/component/content-editor/accordion/author.tpl" required=true blog=true}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
             {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getFrontendUrl(item) %]"}

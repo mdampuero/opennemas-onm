@@ -24,6 +24,10 @@
 
 .grid-title a {
   color: #505458;
+
+  &.shaded {
+    background-color: #f8f8f8;
+  }
 }
 
 .grid-title a:hover {
@@ -119,10 +123,51 @@
   background-color: #e5e9ec;
 }
 
-/*Disable border-radius from nav-tabs*/
-.grid-body .nav-tabs > li > a,
-.grid-body .nav-tabs > li.active > a,
-.grid-body .nav-tabs > li.active > a:hover,
-.grid-body .nav-tabs > li.active > a:focus {
-  /*border-radius: 0;*/
+.column-filters {
+  background: #fff;
+  border: 1px solid @border-color;
+  border-bottom: 0;
+  max-height: 250px;
+  margin: 0;
+  overflow: hidden;
+  padding: 0 15px 15px;
+  transition: all .5s;
+
+  h5 {
+    transition: all .5s;
+    margin: 15px 0;
+  }
+
+  &.collapsed {
+    border-bottom: 0 solid @border-color;
+    border-top: 0 solid @border-color;
+    padding: 0 15px;
+    max-height: 0;
+
+    h5 {
+      margin: 0;
+    }
+  }
+}
+
+.column-filters-toggle {
+  background: #fff;
+  border: 1px solid @border-color;
+  border-bottom: 0;
+  cursor: pointer;
+  height: 10px;
+}
+
+.column-filters-checkbox {
+  float: left;
+  margin-top: 0 !important;
+  margin-bottom: 10px;
+  width: 200px;
+}
+
+.column-filters-ellipsis {
+  border-top: 3px dotted @border-color;
+  display: block;
+  width: 15px;
+  margin: 3px auto;
 }

@@ -76,18 +76,14 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param {Object} data The data in the response.
      */
     $scope.parseItem = function(data) {
-      if (data.item) {
-        $scope.data.item      = angular.extend($scope.item, data.item);
-
-        var type = '';
-
-        switch ($scope.data.item.author_name) {
+      switch ($scope.data.item.author_name) {
         case 'script':
-          type = 'script';
+          $scope.setType('script');
           break;
 
         case 'external':
-          type = 'external';
+          $scope.setType('external');
+
           var info = $scope.data.item.information.source;
 
           $scope.data.item.type = info.flv ? 'flv' : 'html5';
@@ -95,21 +91,18 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
         default:
           if (data.item.video_url) {
-            type = 'web-source';
+            $scope.setType('web-source');
           }
           break;
-        }
+      }
 
-        $scope.setType(type);
+      // Assign the cover image
+      var cover = data.extra.related_contents.filter(function(el) {
+        return el && el.pk_photo == $scope.item.information.thumbnail;
+      }).shift();
 
-        // Assign the cover image
-        var cover = data.extra.related_contents.filter(function(el) {
-          return el && el.pk_photo == $scope.item.information.thumbnail;
-        }).shift();
-
-        if (cover) {
-          $scope.cover = cover;
-        }
+      if (cover) {
+        $scope.cover = cover;
       }
 
       $scope.configure(data.extra);
@@ -124,6 +117,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      *   Updates the scope to the proper video type.
      */
     $scope.setType = function(type) {
+      if (!type) {
+        return;
+      }
+
       if (type === 'external' || type === 'script') {
         $scope.data.item.author_name = type;
       }
@@ -132,7 +129,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.type = 'html5';
       }
 
-      $scope.type = type;
+      $scope.type               = type;
+      $scope.flags.visible.grid = true;
     };
 
     /**

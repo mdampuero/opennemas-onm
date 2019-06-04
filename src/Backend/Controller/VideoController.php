@@ -13,26 +13,16 @@ use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- */
 class VideoController extends BackendController
 {
     /**
-     * The extension name required by this controller.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $extension = 'VIDEO_MANAGER';
 
     /**
-     * The list of permissions for every action.
-     *
-     * @var type
+     * {@inheritdoc}
      */
     protected $permissions = [
         'create' => 'VIDEO_CREATE',
@@ -49,9 +39,7 @@ class VideoController extends BackendController
     ];
 
     /**
-     * The resource name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $resource = 'video';
 

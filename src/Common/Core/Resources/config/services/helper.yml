@@ -87,7 +87,7 @@ services:
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
-        arguments: [ '@orm.manager', '@api.service.tag' ]
+        arguments: [ '@core.instance', '@orm.manager', '@api.service.tag' ]
         public:    true
 
     core.helper.subscription:

@@ -204,7 +204,7 @@ class MenusController extends Controller
     /**
      * {@inheritdoc}
      */
-    protected function getCategories()
+    protected function getCategories($items = null)
     {
         $context = $this->get('core.locale')->getContext();
         $this->get('core.locale')->setContext('frontend');

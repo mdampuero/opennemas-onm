@@ -9,6 +9,10 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Common\ORM\Core\EntityManager;
+use Common\ORM\Entity\Instance;
+use Api\Service\V1\TagService;
+
 /**
  * Generates json-ld code for different type of Objects
  * See more: https://schema.org/
@@ -17,15 +21,38 @@ namespace Common\Core\Component\Helper;
 class StructuredData
 {
     /**
+     * The current instance.
+     *
+     * @var Instance
+     */
+    protected $instance;
+
+    /**
+     * The dataset service.
+     *
+     * @var DataSet
+     */
+    protected $ds;
+
+    /**
+     * The tag service.
+     *
+     * @var TagService
+     */
+    protected $ts;
+
+    /**
      * Initializes StructuredData
      *
-     * @param EntityManager $em The entity manager.
-     * @param TagService    $ts The tag service.
+     * @param Instance      $instance The current instance.
+     * @param EntityManager $em       The entity manager.
+     * @param TagService    $ts       The tag service.
      */
-    public function __construct($em, $ts)
+    public function __construct(Instance $instance, EntityManager $em, TagService $ts)
     {
-        $this->ds = $em->getDataSet('Settings', 'instance');
-        $this->ts = $ts;
+        $this->instance = $instance;
+        $this->ds       = $em->getDataSet('Settings', 'instance');
+        $this->ts       = $ts;
     }
 
     /**
@@ -119,20 +146,25 @@ class StructuredData
                 "width": ' . $data['image']->width . '
             }';
 
-        $photos     = $data['content']->_getAttachedPhotos($data['content']->id);
         $imgObjects = '';
-        if (!empty($photos)) {
+        if (!empty($data['content']->photos) && !empty($data['photos'])) {
             $code .= ',"associatedMedia":[';
-            foreach ($photos as $photo) {
-                $photo['photo']->url = MEDIA_IMG_ABSOLUTE_URL .
-                    $photo['photo']->path_file . $photo['photo']->name;
 
-                $code         .= '{
-                            "url": "' . $photo['photo']->url . '",
-                            "height": ' . $photo['photo']->height . ',
-                            "width": ' . $photo['photo']->width . '
-                    },';
-                $data['image'] = $photo['photo'];
+            foreach ($data['content']->photos as $photo) {
+                $data['photos'][$photo['pk_photo']]->url =
+                    $this->instance->getBaseUrl()
+                    . $this->instance->getImagesShortPath()
+                    . $data['photos'][$photo['pk_photo']]->path_file
+                    . $data['photos'][$photo['pk_photo']]->name;
+
+                $code .= sprintf(
+                    '{ "url": "%s", "height": %s, "width": %s },',
+                    $data['photos'][$photo['pk_photo']]->url,
+                    $data['photos'][$photo['pk_photo']]->height,
+                    $data['photos'][$photo['pk_photo']]->width
+                );
+
+                $data['image'] = $data['photos'][$photo['pk_photo']];
                 $imgObjects   .= $this->generateImageJsonLDCode($data);
             }
 

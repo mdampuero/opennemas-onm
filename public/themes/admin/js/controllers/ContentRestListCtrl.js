@@ -35,6 +35,23 @@
         };
 
         /**
+         * @function select
+         * @memberOf AlbumListCtrl
+         *
+         * @description
+         *   Adds and removes the item from the selected array.
+         */
+        $scope.select = function(item) {
+          if ($scope.selected.items.indexOf($scope.getId(item)) < 0) {
+            $scope.selected.items.push($scope.getId(item));
+          } else {
+            $scope.selected.items = $scope.selected.items.filter(function(el) {
+              return el !== $scope.getId(item);
+            });
+          }
+        };
+
+        /**
          * @function sendToTrash
          * @memberOf UserCtrl
          *
@@ -87,7 +104,6 @@
           }
 
           $scope.criteria.page++;
-          $scope.$apply();
         };
 
         /**
@@ -97,18 +113,10 @@
          * @param {Boolean} reset Whether to reset the list.
          */
         $scope.list = function(route, reset) {
-          if (!reset && $scope.mode === 'grid') {
-            $scope.flags.loadingMore = 1;
+          if (!$scope.isModeSupported() || reset || $scope.app.mode === 'list') {
+            $scope.flags.http.loading  = 1;
           } else {
-            if ($scope.mode === 'grid') {
-              $scope.flags.loadingMore = 1;
-            } else {
-              $scope.flags.http.loading  = 1;
-            }
-
-            if ($scope.data) {
-              $scope.data.items = [];
-            }
+            $scope.flags.http.loadingMore = 1;
           }
 
           var oql   = oqlEncoder.getOql($scope.criteria);
@@ -120,29 +128,36 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if (reset || $scope.mode === 'grid') {
-              $scope.data = $scope.data ? $scope.data : { items: [] };
+            if ($scope.isModeSupported() && !reset && $scope.app.mode === 'grid') {
+              $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
 
+              // Merge items
               response.data.items = [].concat($scope.data.items, response.data.items);
-              $scope.data = response.data;
-            } else {
-              $scope.data = response.data;
+
+              // Merge extra info with the scope
+              for (var key in response.data.extra) {
+                if (angular.isArray(response.data.extra[key]) &&
+                    angular.isArray($scope.data.extra[key])) {
+                  response.data.extra[key] = [].concat($scope.data.extra[key],
+                    response.data.extra[key]);
+                }
+
+                if (angular.isObject(response.data.extra[key]) &&
+                    angular.isObject($scope.data.extra[key])) {
+                  response.data.extra[key] = angular.merge($scope.data.extra[key],
+                    response.data.extra[key]);
+                }
+              }
             }
+
+            $scope.data = response.data;
 
             $scope.parseList(response.data);
-
             $scope.disableFlags('http');
-            $scope.disableFlags('loadingMore');
-
-            // Scroll top
-            if ($scope.mode !== 'grid') {
-              $('body').animate({ scrollTop: '0px' }, 1000);
-            }
           }, function(response) {
             messenger.post(response.data);
 
             $scope.disableFlags('http');
-            $scope.disableFlags('loadingMore');
             $scope.data = {};
           });
         };
@@ -181,14 +196,13 @@
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
-          if (!$scope.mode ||
-            $scope.mode === 'list' ||
+          if ($scope.app.mode === 'list' ||
             $scope.items.length === $scope.data.total) {
             return;
           }
 
           if (!$scope.flags.http.loadingMore && $(document).height() <=
-          $(window).height() + $(window).scrollTop()) {
+              $(window).height() + $(window).scrollTop()) {
             $scope.scroll();
           }
         });

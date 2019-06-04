@@ -102,7 +102,7 @@ class AdvertisementsController extends Controller
             'endtime'            => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             'timeout'            => $request->request->filter('timeout', '', FILTER_SANITIZE_STRING),
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
+            'path'               => $request->request->filter('path', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'positions'          => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,
@@ -179,8 +179,8 @@ class AdvertisementsController extends Controller
         }
 
         // If the advertisement has photo assigned retrieve it
-        if (!empty($advertisement->img)) {
-            $photo1 = new \Photo($advertisement->img);
+        if (!empty($advertisement->path)) {
+            $photo1 = new \Photo($advertisement->path);
             $this->view->assign('photo1', $photo1);
         }
 
@@ -249,7 +249,7 @@ class AdvertisementsController extends Controller
             'endtime'            => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             'timeout'            => $request->request->filter('timeout', '', FILTER_SANITIZE_STRING),
             'url'                => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'img'                => $request->request->filter('img', '', FILTER_SANITIZE_STRING),
+            'path'               => $request->request->filter('path', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'positions'          => $request->request->get('positions', []),
             'fk_author'          => $this->getUser()->id,

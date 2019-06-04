@@ -33,7 +33,14 @@
          *
          * @type {Object}
          */
-        $scope.app = { help: true };
+        $scope.app = {
+          help: true,
+          mode: 'grid',
+          columns: {
+            collapsed: true,
+            selected: [ 'category', 'created', 'content_status', 'tags', 'title' ]
+          },
+        };
 
         /**
          * Flag to enable/disable forced notifications.
@@ -138,7 +145,7 @@
           $translate.use(language);
 
           if (webStorage.has('app')) {
-            $scope.app = webStorage.get('app');
+            $scope.app = angular.merge($scope.app, webStorage.get('app'));
           }
 
           if ($('body').hasClass('unpinned-on-server')) {

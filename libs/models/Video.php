@@ -1,16 +1,11 @@
 <?php
 /**
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-
-/**
- * Handles video CRUD actions.
- *
- * @package    Model
  */
 class Video extends Content
 {
@@ -52,6 +47,8 @@ class Video extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Video');
+        $this->content_type           = 9;
+        $this->content_type_name      = 'video';
 
         parent::__construct($id);
     }
@@ -155,8 +152,10 @@ class Video extends Content
         } catch (\Exception $e) {
             $conn->rollback();
 
-            $logger = getService('error.log');
-            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
+            getService('error.log')->error(
+                $e->getMessage() . ' ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -196,8 +195,10 @@ class Video extends Content
         } catch (\Exception $e) {
             $conn->rollback();
 
-            $logger = getService('error.log');
-            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
+            getService('error.log')->error(
+                $e->getMessage() . ' ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -229,8 +230,10 @@ class Video extends Content
 
             return true;
         } catch (\Exception $e) {
-            $logger = getService('error.log');
-            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
+            getService('error.log')->error(
+                $e->getMessage() . ' ' . $e->getTraceAsString()
+            );
+
             return false;
         }
     }
@@ -307,8 +310,10 @@ class Video extends Content
         try {
             $html = $tpl->fetch($template, $params);
         } catch (\Exception $e) {
-            $logger = getService('error.log');
-            $logger->error($e->getMessage() . ' ' . $e->getTraceAsString());
+            getService('error.log')->error(
+                $e->getMessage() . ' ' . $e->getTraceAsString()
+            );
+
             $html = _('Video not available');
         }
 

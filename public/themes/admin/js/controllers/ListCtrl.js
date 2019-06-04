@@ -59,7 +59,7 @@
           }
 
           $scope.tm = $timeout(function() {
-            $scope.config.columns.collapsed = true;
+            $scope.app.columns.collapsed = true;
           }, 500);
         };
 
@@ -88,7 +88,7 @@
           }
 
           $scope.tm = $timeout(function() {
-            $scope.config.columns.collapsed = false;
+            $scope.app.columns.collapsed = false;
           }, 500);
         };
 
@@ -102,7 +102,7 @@
          * @param {String} name The columns name.
          */
         $scope.isColumnEnabled = function(name) {
-          return $scope.config.columns.selected.indexOf(name) !== -1;
+          return $scope.app.columns.selected.indexOf(name) !== -1;
         };
 
         /**
@@ -223,9 +223,9 @@
          *   Toggles column filters container.
          */
         $scope.toggleColumns = function() {
-          $scope.config.columns.collapsed = !$scope.config.columns.collapsed;
+          $scope.app.columns.collapsed = !$scope.app.columns.collapsed;
 
-          if (!$scope.config.columns.collapsed) {
+          if (!$scope.app.columns.collapsed) {
             $scope.scrollTop();
           }
         };

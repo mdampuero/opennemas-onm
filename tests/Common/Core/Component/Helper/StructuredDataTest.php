@@ -24,14 +24,15 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('EntityManager')
+        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
-        $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'hasMultilanguage' ])
-            ->getMock();
+        $this->instance = $this->getMockBuilder('Common\ORM\Entity\Instance')
+            ->setMethods([
+                'getBaseUrl', 'getImagesShortPath', 'hasMultilanguage'
+            ])->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
@@ -46,7 +47,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->ts = $this->getMockBuilder('TagService')
+        $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
             ->disableOriginalConstructor()
             ->setMethods([ 'getListByIds' ])
             ->getMock();
@@ -56,6 +57,11 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://xyzzy.com');
+        $this->instance->expects($this->any())->method('getImagesShortPath')
+            ->willReturn('/media/images/');
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -73,7 +79,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             'author'   => 'John Doe',
             'created'  => '2016-10-13 11:40:32',
             'changed'  => '2016-10-13 11:40:32',
-            'category' => new \ContentCategory(),
+            'category' => new \StdClass(),
             'summary'  => '<p>This is the summary</p>',
             'tags'     => [1,2,3,4],
             'logo'     => [
@@ -101,7 +107,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->data['content']->metadata = [1,2,3,4,5];
         $this->data['content']->body     = "This is the body text";
 
-        $this->object = new StructuredData($this->em, $this->ts);
+        $this->object = new StructuredData($this->instance, $this->em, $this->ts);
     }
 
     public function serviceContainerCallback($name)
@@ -213,12 +219,12 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
                 "width": 700
             }';
 
-        $this->data['content'] = $this->getMockBuilder('Album')
-            ->disableOriginalConstructor()
-            ->setMethods([ '_getAttachedPhotos' ])
-            ->getMock();
-
-        $this->data['content']->tags = [1,2,3,4,5];
+        $this->data['content']->tags   = [ 1, 2, 3, 4, 5 ];
+        $this->data['content']->photos = [
+            [ 'pk_photo' => 4094, 'description' => 'xyzzy' ],
+            [ 'pk_photo' => 20044, 'description' => 'foobar' ],
+            [ 'pk_photo' => 8562, 'description' => 'wobble' ],
+        ];
 
         // Gallery only with cover image
         $onlyCover = $galleryJson . '}';
@@ -236,67 +242,66 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($onlyCover, $this->object->generateImageGalleryJsonLDCode($this->data));
 
         // Load album photos
-        $albumPhotos = [
-            [ 'photo' => new \Photo() ],
-            [ 'photo' => new \Photo() ],
-            [ 'photo' => new \Photo() ]
+        $photos = [
+            4094  => new \Photo(),
+            20044 => new \Photo(),
+            8562  => new \Photo()
         ];
 
-        foreach ($albumPhotos as $key => &$value) {
-            $value['photo']->url         = 'http://image' . $key . '-url.com';
-            $value['photo']->path_file   = $key;
-            $value['photo']->name        = '-url.com';
-            $value['photo']->width       = 700 + $key;
-            $value['photo']->height      = 450 + $key;
-            $value['photo']->description = "Image description/caption " . $key;
+        foreach ($photos as $key => &$photo) {
+            $photo->url         = 'http://image' . $key . '-url.com';
+            $photo->path_file   = $key;
+            $photo->name        = '-url.com';
+            $photo->width       = 700 + $key;
+            $photo->height      = 450 + $key;
+            $photo->description = "Image description/caption " . $key;
         }
 
-        $this->data['content']->expects($this->once())->method('_getAttachedPhotos')
-            ->willReturn($albumPhotos);
+        $this->data['photos'] = $photos;
 
-        $albumPhotosJson = ',"associatedMedia":[{
-                            "url": "' . MEDIA_IMG_ABSOLUTE_URL . '0-url.com",
-                            "height": 450,
-                            "width": 700
-                    },{
-                            "url": "' . MEDIA_IMG_ABSOLUTE_URL . '1-url.com",
-                            "height": 451,
-                            "width": 701
-                    },{
-                            "url": "' . MEDIA_IMG_ABSOLUTE_URL . '2-url.com",
-                            "height": 452,
-                            "width": 702
-                    }]';
+        $albumPhotosJson = ',"associatedMedia":[{ '
+                . '"url": "http://xyzzy.com/media/images/4094-url.com", '
+                . '"height": 4544, '
+                . '"width": 4794'
+        . ' },{ '
+                . '"url": "http://xyzzy.com/media/images/20044-url.com", '
+                . '"height": 20494, '
+                . '"width": 20744'
+        . ' },{ '
+                . '"url": "http://xyzzy.com/media/images/8562-url.com", '
+                . '"height": 9012, '
+                . '"width": 9262'
+        . ' }]';
 
         $albumPhotosObjectJson = ',{
             "@context": "http://schema.org",
             "@type": "ImageObject",
             "author": "John Doe",
-            "contentUrl": "' . MEDIA_IMG_ABSOLUTE_URL . '0-url.com",
-            "height": 450,
-            "width": 700,
+            "contentUrl": "http://xyzzy.com/media/images/4094-url.com",
+            "height": 4544,
+            "width": 4794,
             "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption 0",
+            "caption": "Image description/caption 4094",
             "name": "This is the object title"
         },{
             "@context": "http://schema.org",
             "@type": "ImageObject",
             "author": "John Doe",
-            "contentUrl": "' . MEDIA_IMG_ABSOLUTE_URL . '1-url.com",
-            "height": 451,
-            "width": 701,
+            "contentUrl": "http://xyzzy.com/media/images/20044-url.com",
+            "height": 20494,
+            "width": 20744,
             "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption 1",
+            "caption": "Image description/caption 20044",
             "name": "This is the object title"
         },{
             "@context": "http://schema.org",
             "@type": "ImageObject",
             "author": "John Doe",
-            "contentUrl": "' . MEDIA_IMG_ABSOLUTE_URL . '2-url.com",
-            "height": 452,
-            "width": 702,
+            "contentUrl": "http://xyzzy.com/media/images/8562-url.com",
+            "height": 9012,
+            "width": 9262,
             "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption 2",
+            "caption": "Image description/caption 8562",
             "name": "This is the object title"
         }';
 

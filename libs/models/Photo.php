@@ -1,24 +1,15 @@
 <?php
 /**
- * Contains the Photo class definition
- *
  * This file is part of the Onm package.
  *
- * (c)  Fran Dieguez <fran@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package Model
  */
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
-/**
- * Photo class
- *
- * @package Model
- */
 class Photo extends Content
 {
     /**
@@ -87,6 +78,8 @@ class Photo extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Image');
+        $this->content_type           = 8;
+        $this->content_type_name      = 'photo';
 
         parent::__construct($id);
     }
@@ -153,6 +146,7 @@ class Photo extends Content
             }
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
+
             return false;
         }
 

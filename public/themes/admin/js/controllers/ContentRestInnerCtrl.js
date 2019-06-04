@@ -30,8 +30,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags and, then, saves the item.
      */
     $scope.submit = function() {
-      if (!$('[name=form]')[0].checkValidity()) {
-        $('[name=form]')[0].reportValidity();
+      if (!$scope.validate()) {
         return;
       }
 
@@ -44,6 +43,25 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.save();
         }
       });
+    };
+
+    /**
+     * @function validate
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Validates the form and/or the current item in the scope.
+     *
+     * @return {Boolean} True if the form and/or the item are valid. False
+     *                   otherwise.
+     */
+    $scope.validate = function() {
+      if (!$('[name=form]')[0].checkValidity()) {
+        $('[name=form]')[0].reportValidity();
+        return false;
+      }
+
+      return true;
     };
 
     // Update slug when title is updated

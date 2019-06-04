@@ -1,22 +1,11 @@
 <?php
 /**
- * Defines the Attachment class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
- */
-
-/**
- * Attachment
- *
- * Handles all the functionality of Attachments and asociations with contents
- *
- * @package    Model
  */
 class Attachment extends Content
 {
@@ -61,6 +50,8 @@ class Attachment extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('File');
+        $this->content_type           = 3;
+        $this->content_type_name      = 'attachment';
 
         parent::__construct($id);
     }
@@ -120,7 +111,8 @@ class Attachment extends Content
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -163,7 +155,8 @@ class Attachment extends Content
                 return false;
             }
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
 
@@ -204,7 +197,8 @@ class Attachment extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -261,7 +255,8 @@ class Attachment extends Content
 
             return intval($rs) > 0;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }
@@ -298,7 +293,8 @@ class Attachment extends Content
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

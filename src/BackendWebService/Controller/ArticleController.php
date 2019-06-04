@@ -104,8 +104,6 @@ class ArticleController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $article = new \Article();
-
         $data = $request->request->all();
 
         $data['category'] = $data['pk_fk_content_category'];

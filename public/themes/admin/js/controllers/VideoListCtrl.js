@@ -9,9 +9,7 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires messenger
      * @requires oqlEncoder
-     * @requires queryManager
      *
      * @description
      *   Controller for video list.
@@ -63,13 +61,24 @@
           $scope.columns.key     = 'video-columns';
           $scope.backup.criteria = $scope.criteria;
 
-          oqlEncoder.configure({ placeholder: {
-            title: '[key] ~ "%[value]%"'
-          } });
+          oqlEncoder.configure({
+            placeholder: {
+              title: '[key] ~ "%[value]%"'
+            }
+          });
 
-          $scope.setMode('grid');
+          if ($scope.app.mode === 'grid') {
+            $scope.criteria.epp = $scope.getEppInGrid();
+          }
 
           $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.isModeSupported = function() {
+          return true;
         };
 
         /**
@@ -78,73 +87,24 @@
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
         };
 
-        /**
-         * @function select
-         * @memberOf VideoListCtrl
-         *
-         * @description
-         *   Adds and removes the item from the selected array.
-         */
-        $scope.select = function(item) {
-          if ($scope.selected.items.indexOf(item.id) < 0) {
-            $scope.selected.items.push(item.id);
-          } else {
-            $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el !== item.id;
-            });
-          }
-        };
-
-        /**
-         * Changes the list mode.
-         *
-         * @param {String} mode The new list mode.
-         */
-        $scope.setMode = function(mode) {
-          $scope.mode = mode;
-
-          if (mode !== 'grid') {
+        // Update epp when mode changes
+        $scope.$watch(function() {
+          return $scope.app.mode;
+        }, function(nv, ov) {
+          if (nv === ov) {
             return;
           }
 
-          var maxHeight = $(window).height() - $('.header').height() -
-            $('.actions-navbar').height();
-          var maxWidth  = $(window).width() - $('.sidebar').width();
-          var padding   = 40;
+          var epp = $scope.getEppInGrid();
 
-          if ($('.content-wrapper').length > 0) {
-            maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
+          if (epp !== $scope.criteria.epp) {
+            $scope.flags.http.loading = true;
+            $scope.criteria.epp = nv === 'grid' ? epp : 10;
           }
-
-          var containerBaseSize = 150;
-          var containerSize = $('.infinite-col').width();
-
-          if (containerBaseSize > containerSize) {
-            containerSize = containerBaseSize;
-          }
-
-          var height = containerSize + padding;
-          var width = containerSize + padding;
-
-          var rows = Math.ceil(maxHeight / height);
-          var cols = Math.floor(maxWidth / width);
-
-          if (rows === 0) {
-            rows = 1;
-          }
-
-          if (cols === 0) {
-            cols = 1;
-          }
-
-          if ($scope.criteria.epp !== rows * cols && $scope.data) {
-            $scope.data.items = [];
-          }
-
-          $scope.criteria.epp = rows * cols;
-        };
+        }, true);
       }
     ]);
 })();
