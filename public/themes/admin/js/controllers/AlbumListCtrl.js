@@ -77,6 +77,13 @@
         /**
          * @inheritdoc
          */
+        $scope.isModeSupported = function() {
+          return true;
+        };
+
+        /**
+         * @inheritdoc
+         */
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');

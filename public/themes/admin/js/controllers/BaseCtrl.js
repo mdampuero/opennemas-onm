@@ -371,6 +371,20 @@
         };
 
         /**
+         * @function isModeSupported
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Checks if the mode is supported in the current controller.
+         *
+         * @return {Boolean} True if the mode is supported in the current
+         *                   controller. False otherwise.
+         */
+        $scope.isModeSupported = function() {
+          return false;
+        };
+
+        /**
          * @function isTranslated
          * @memberOf BaseCtrl
          *

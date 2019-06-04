@@ -113,19 +113,10 @@
          * @param {Boolean} reset Whether to reset the list.
          */
         $scope.list = function(route, reset) {
-          if (!reset && $scope.app.mode === 'grid') {
-            $scope.flags.http.loadingMore = 1;
+          if (!$scope.isModeSupported() || reset || $scope.app.mode === 'list') {
+            $scope.flags.http.loading  = 1;
           } else {
-            if ($scope.app.mode === 'grid') {
-              $scope.flags.http.loadingMore = 1;
-            } else {
-              $scope.flags.http.loading  = 1;
-            }
-
-            if ($scope.data) {
-              $scope.items      = [];
-              $scope.data.items = [];
-            }
+            $scope.flags.http.loadingMore = 1;
           }
 
           var oql   = oqlEncoder.getOql($scope.criteria);
@@ -137,7 +128,7 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if (reset || $scope.app.mode === 'grid') {
+            if ($scope.isModeSupported() && !reset && $scope.app.mode === 'grid') {
               $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
 
               // Merge items
@@ -163,11 +154,6 @@
 
             $scope.parseList(response.data);
             $scope.disableFlags('http');
-
-            // Scroll top
-            if ($scope.app.mode !== 'grid') {
-              $('body').animate({ scrollTop: '0px' }, 1000);
-            }
           }, function(response) {
             messenger.post(response.data);
 
