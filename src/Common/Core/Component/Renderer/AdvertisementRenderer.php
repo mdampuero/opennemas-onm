@@ -807,7 +807,7 @@ class AdvertisementRenderer
      */
     protected function getImage($ad)
     {
-        if (empty($ad->img)) {
+        if (empty($ad->path)) {
             $this->container->get('application.log')->info(
                 'The advertisement photo for the ad (' . $ad->id . ') is empty'
             );
@@ -817,7 +817,7 @@ class AdvertisementRenderer
 
         try {
             return $this->container->get('entity_repository')
-                ->find('Photo', $ad->img);
+                ->find('Photo', $ad->path);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
         }
