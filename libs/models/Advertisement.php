@@ -248,7 +248,7 @@ class Advertisement extends Content
             $this->pk_advertisement = (int) $this->id;
 
             getService('dbal_connection')->insert('advertisements', [
-                'pk_advertisement'      => $data['pk_advertisement'],
+                'pk_advertisement'      => $this->id,
                 'fk_content_categories' => $data['categories'],
                 'path'                  => $data['path'],
                 'url'                   => $data['url'],
