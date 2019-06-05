@@ -105,7 +105,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'safeframe' ]);
 
-        $this->smarty->expects($this->any())->method('getTemplateVars')
+        $this->smarty->expects($this->at(3))->method('getTemplateVars')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
