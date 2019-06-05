@@ -78,7 +78,7 @@
         $scope.getData = function() {
           var data = angular.extend({}, $scope.item);
 
-          if ($scope.config.locale.multilanguage) {
+          if ($scope.config.locale && $scope.config.locale.multilanguage) {
             data = angular.extend({}, $scope.data.item);
           }
 
