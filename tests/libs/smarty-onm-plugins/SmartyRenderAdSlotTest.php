@@ -38,7 +38,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getValue' ])
+            ->setMethods([ 'getContainer', 'getValue', 'getTemplateVars' ])
             ->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -105,7 +105,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'safeframe' ]);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->any())->method('getTemplateVars')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
@@ -132,7 +132,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getTemplateVars')
             ->with('advertisements')
             ->willReturn(null);
 
@@ -158,7 +158,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getTemplateVars')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
@@ -189,7 +189,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getTemplateVars')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
@@ -247,7 +247,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getTemplateVars')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 

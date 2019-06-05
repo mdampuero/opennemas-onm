@@ -5,7 +5,7 @@
  * @param array    $params The list of parameters.
  * @param Template $tpl    The template object.
  */
-function smarty_function_render_ad_slot($params, $smarty)
+function smarty_function_render_ad_slot($params, &$smarty)
 {
     $safeframeEnabled = $smarty->getContainer()
         ->get('orm.manager')
@@ -36,7 +36,8 @@ function smarty_function_render_ad_slot($params, $smarty)
         $format = $params['format'];
     }
 
-    $ads    = $smarty->getValue('advertisements');
+    // We need to use this methos due to consume mode (get tpl vars by ref)
+    $ads    = $smarty->getTemplateVars('advertisements');
     $slotId = $params['position'];
 
     if (!is_array($ads)) {
