@@ -36,7 +36,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
         $format = $params['format'];
     }
 
-    // We need to use this methos due to consume mode (get tpl vars by ref)
+    // Need to use this smarty method due to consume mode (get tpl vars by ref)
     $ads    = $smarty->getTemplateVars('advertisements');
     $slotId = $params['position'];
 
