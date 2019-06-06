@@ -456,7 +456,7 @@
               }
 
               if (attrs.mediaPickerTarget && $scope.mediaPickerTarget) {
-                var target = $scope.mediaPickerTarget;
+                var target = angular.copy($scope.mediaPickerTarget);
 
                 if (!(target instanceof Array)) {
                   target = [ target ];
@@ -841,13 +841,13 @@
               $scope.uploader.removeFromQueue(fileItem);
 
               // Autoselect items uploaded
-              if (!response.pk_photo) {
+              if (!response.id) {
                 $scope.uploadError = true;
                 return;
               }
 
               $scope.addItem(response);
-              $scope.selected.ids.push(response.pk_photo);
+              $scope.selected.ids.push(response.id);
               $scope.selected.items.push(response);
 
               if ($scope.picker.selection.enabled) {
@@ -1060,7 +1060,7 @@
 
           http.post(route, body).then(function() {
             $scope.list(true);
-          }, function(response) {
+          }, function() {
             return false;
           });
         };

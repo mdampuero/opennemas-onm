@@ -188,7 +188,8 @@
         "id-match":                         [ "off" ],
         "indent":                           [ "warn", 2, {
             "CallExpression": { "arguments": 1 },
-            "FunctionExpression": { "body": 1, "parameters": 2 }
+            "FunctionExpression": { "body": 1, "parameters": 2 },
+            "SwitchCase": 1
         } ],
         "jsx-quotes":                       [ "warn", "prefer-double" ],
         "key-spacing":                      [ "error", { "mode": "minimum" } ],

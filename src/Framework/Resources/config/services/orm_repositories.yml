@@ -44,11 +44,6 @@ services:
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
         public: true
 
-    setting_repository:
-        class: Repository\SettingManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
-        public: true
-
     # TODO: Remove arguments when new ORM repositories replace search features
     core.manager.menu:
         class: Repository\MenuManager

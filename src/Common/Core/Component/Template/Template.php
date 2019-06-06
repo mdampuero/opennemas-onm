@@ -176,10 +176,8 @@ class Template extends \Smarty
             $params[] = $this->container->get('core.locale')->getRequestLocale();
         }
 
-        if (!empty($this->getTemplateVars())
-            && array_key_exists('token', $this->getTemplateVars())
-        ) {
-            $params[] = $this->getTemplateVars()['token'];
+        if ($this->hasValue('token')) {
+            $params[] = $this->getValue('token');
         }
 
         return implode('|', $params);
@@ -267,9 +265,7 @@ class Template extends \Smarty
      */
     public function getValue($name)
     {
-        $values = $this->getTemplateVars();
-
-        return array_key_exists($name, $values) ? $values[$name] : null;
+        return $this->getTemplateVars($name) ?? null;
     }
 
     /**
@@ -339,6 +335,17 @@ class Template extends \Smarty
         $this->locale = $locale;
 
         return $this;
+    }
+
+    /**
+     * Assigns a value to template.
+     *
+     * @param string $name  The value name.
+     * @param string $value The value to assign.
+     */
+    public function setValue($name, $value)
+    {
+        $this->assign($name, $value);
     }
 
     /**

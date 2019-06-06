@@ -282,7 +282,7 @@
             };
 
             /**
-             * @function updateNgModel
+             * @function updateExportModel
              * @memberOf onmCategorySelector
              *
              * @description

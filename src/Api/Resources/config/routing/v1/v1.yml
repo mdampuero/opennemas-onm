@@ -1,3 +1,7 @@
+api_v1_backend_album:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/album.yml'
+    prefix:   /backend
+
 api_v1_backend_article:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
     prefix:   /backend

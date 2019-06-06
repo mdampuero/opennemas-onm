@@ -1,11 +1,35 @@
 .album-thumbnail-sortable {
-  float: left;
-  margin: 15px;
+  background: #fff;
+  border: 1px solid transparent;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  padding: 15px;
 
-  .dynamic-image-placeholder {
-    height: 210px;
-    width: 210px;
-    margin: 0 auto 8px
+  &.album-thumbnail-sortable-placeholder {
+    background: #f4f5f7;
+    border: 1px dashed #e5e5e5;
+  }
+
+  &:hover {
+    border: 1px solid #e5e5e5;
+  }
+
+  .img-thumbnail {
+    display: block;
+  }
+
+  .sort-icon {
+    border-left: 3px dotted #ccc;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    height: 15px;
+    margin: -7px 0 0 -8px;
+    width: 2px;
+  }
+
+  .thumbnail-wrapper .confirm-dialog.open {
+    margin-top: -33px;
   }
 
   .img-thumbnail {
@@ -15,30 +39,39 @@
   }
 
   textarea {
-    border-color: transparent;
-    resize: none;
+    resize: vertical;
+  }
+}
 
-    &:hover {
-      border-color: #eee;
-    }
+.album-thumbnail-sortable-grid {
+  float: left;
+  height: 383px;
+  width: 200px;
 
-    &:focus {
-      border-color: #ddd;
-    }
+  .album-thumbnail-description {
+    margin-top: 15px;
+    height: 168px !important;
+  }
+
+  .dynamic-image-placeholder {
+    margin: 0 auto;
+  }
+}
+
+.album-thumbnail-sortable-list {
+  min-height: 190px;
+
+  .album-thumbnail-description {
+    min-height: 158px;
+  }
+
+  .dynamic-image-placeholder {
+    margin: 0 auto;
   }
 }
 
 .album-thumbnail-placeholder {
   float: left;
-  height: 210px;
-  margin: 15px;
-  width: 210px;
-
-  .img-thumbnail {
-    display: block;
-    height: 210px;
-    width: 210px;
-  }
 
   .thumbnail-empty {
     background: #eee;
@@ -50,6 +83,29 @@
   }
 }
 
-.ui-sortable {
-  min-height: 0 !important;
+.album-thumbnail-placeholder-grid {
+  height: 168px;
+  width: 168px;
+  margin: 15px;
+
+  .img-thumbnail {
+    display: block;
+    height: 168px;
+  }
+}
+
+.album-thumbnail-placeholder-list {
+  height: 158px;
+  margin-left: 15px;
+  padding-top: 100%;
+
+  .img-thumbnail {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .album-thumbnail-description {
+    margin-top: 15px;
+  }
 }

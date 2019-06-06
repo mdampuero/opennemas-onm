@@ -428,6 +428,22 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests setValue.
+     */
+    public function testSetValue()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setMethods([ 'assign' ])
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $template->expects($this->once())->method('assign')
+            ->with('wibble', 14600);
+
+        $template->setValue('wibble', 14600);
+    }
+
+    /**
      * Tests registerFilters when filters are empty and not empty.
      */
     public function testRegisterFilters()

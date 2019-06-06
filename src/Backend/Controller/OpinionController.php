@@ -49,39 +49,6 @@ class OpinionController extends BackendController
     protected $resource = 'opinion';
 
     /**
-     * Shows the information form for a opinion given its id.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     */
-    public function showAction(Request $request, $id)
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
-
-        $params = [ 'id' => $id ];
-
-        if ($this->get('core.helper.locale')->hasMultilanguage()) {
-            $params['locale'] = $request->query->get('locale');
-        }
-
-        return $this->render($this->resource . '/item.tpl', $params);
-    }
-
-    /**
-     * Handles the form for creating a new opinion.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('OPINION_CREATE')")
-     */
-    public function createAction(Request $request)
-    {
-        return $this->render('opinion/item.tpl');
-    }
-
-    /**
      * Lists the available opinions for the frontpage manager.
      *
      * @param  Request $request The request object.

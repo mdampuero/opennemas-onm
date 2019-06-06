@@ -388,6 +388,8 @@ class FrontendController extends Controller
 
             $params['x-tags'][] = $item->id;
 
+            // Ensure that all templates are using params['content'] and
+            // then remove the line below
             $params[$item->content_type_name] = $item;
 
             $params['content']     = $item;

@@ -1,47 +1,50 @@
 <?php
 /**
- * Defines the Album class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
  */
+use Common\Data\Serialize\Serializer\PhpSerializer;
 
-/**
- * Handles all the CRUD actions over albums.
- *
- * @package    Model
- */
 class Album extends Content
 {
     /**
-     * the album id
-     */
-    public $pk_album = null;
-
-    /**
-     * the subtitle for this album
-     */
-    public $subtitle = null;
-
-    /**
-     * the agency which created this album originaly
+     * The agency which created this album originally.
+     *
+     * @var string
      */
     public $agency = null;
 
     /**
-     * the id of the image that is the cover for this album
+     * The photo id of the album cover
+     *
+     * @var int
      */
     public $cover_id = null;
 
     /**
-     * List of photos ids for the album
+     * The album id.
+     *
+     * @var int
      */
-    public $album_photos = null;
+    public $pk_album = null;
+
+    /**
+     * The list of photos.
+     *
+     * @var array
+     */
+    protected $photos = [];
+
+    /**
+     * The subtitle for this album.
+     *
+     * @var string
+     */
+    public $subtitle = null;
 
     /**
      * Initializes the Album class.
@@ -51,44 +54,31 @@ class Album extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Album');
+        $this->content_type           = 7;
+        $this->content_type_name      = 'album';
 
         parent::__construct($id);
     }
 
     /**
-     * Magic function for getting uninitilized object properties.
-     *
-     * @param string $name the name of the property to get.
-     *
-     * @return mixed the value for the property
+     * {@inheritdoc}
      */
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate(
-                    'album',
-                    [
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => urlencode($this->category_name),
-                        'slug'     => urlencode($this->slug),
-                    ]
-                );
-
-                return ($uri !== '') ? $uri : $this->permalink;
-
-            case 'content_type_name':
-                $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
-
-                if (isset($contentTypeName)) {
-                    $returnValue = $contentTypeName;
-                } else {
-                    $returnValue = $this->content_type;
+            case 'photos':
+                if (!getService('core.instance')->hasMultilanguage()
+                    || getService('core.locale')->getContext() !== 'backend'
+                ) {
+                    foreach ($this->photos as &$photo) {
+                        $photo['description'] = getService('data.manager.filter')
+                            ->set($photo['description'])
+                            ->filter('localize')
+                            ->get();
+                    }
                 }
-                $this->content_type_name = $returnValue;
 
-                return $returnValue;
+                return $this->photos;
 
             default:
                 return parent::__get($name);
@@ -96,45 +86,30 @@ class Album extends Content
     }
 
     /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
-     *
-     * @return Album
+     * {@inheritdoc}
      */
     public function load($properties)
     {
         parent::load($properties);
 
-        if (array_key_exists('pk_album', $properties) && !is_null($properties['pk_album'])) {
-            $this->pk_album = $properties['pk_album'];
-        }
+        if (!empty($this->cover_id)) {
+            $this->cover_image = getService('entity_repository')
+                ->find('Photo', $this->cover_id);
 
-        if (array_key_exists('subtitle', $properties) && !is_null($properties['subtitle'])) {
-            $this->subtitle = $properties['subtitle'];
-        }
-
-        if (array_key_exists('cover_id', $properties) && !is_null($properties['cover_id'])) {
-            $this->cover_id    = $properties['cover_id'];
-            $this->cover_image = getService('entity_repository')->find('Photo', $this->cover_id);
-            $this->cover       = $this->cover_image->path_file . $this->cover_image->name;
+            $this->cover = $this->cover_image->path_file
+                . $this->cover_image->name;
         }
 
         return $this;
     }
 
     /**
-     * Fetches one Album by its id.
-     *
-     * @param string $id the album id to get info from.
-     *
-     * @return null|Album the object instance
+     * {@inheritdoc}
      */
     public function read($id)
     {
-        // If no valid id then return
-        if (((int) $id) <= 0) {
-            return null;
+        if (empty($id)) {
+            return;
         }
 
         try {
@@ -145,312 +120,80 @@ class Album extends Content
             );
 
             if (!$rs) {
-                return null;
+                return;
             }
 
             $this->load($rs);
+            $this->loadPhotos();
+            $this->id = $id;
 
             return $this;
         } catch (\Exception $e) {
             getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+                'Error fetching content with id' . $id . ': ' . $e->getMessage()
             );
-
-            return null;
         }
     }
 
     /**
-     * Creates an album from a data array and stores it in db
-     *
-     * @param array $data the data of the album
-     *
-     * @return bool|\Album true if the object was stored
+     * {@inheritdoc}
      */
     public function create($data)
     {
-        $data['subtitle'] = (empty($data['subtitle'])) ? '' : $data['subtitle'];
-
         $conn = getService('dbal_connection');
+
         try {
             $conn->beginTransaction();
+
             parent::create($data);
 
             $this->pk_content = (int) $this->id;
             $this->pk_album   = (int) $this->id;
 
-            $conn->insert(
-                'albums',
-                [
-                    'pk_album' => (int) $this->id,
-                    'subtitle' => $data["subtitle"],
-                    'agency'   => array_key_exists('agency', $data) ? $data["agency"] : '',
-                    'cover_id' => array_key_exists('album_frontpage_image', $data) ?
-                        (int) $data['album_frontpage_image'] : null,
-                ]
-            );
+            $conn->insert('albums', [
+                'pk_album' => $this->id,
+                'subtitle' => $data['subtitle'] ?? null,
+                'agency'   => $data['agency'] ?? null,
+                'cover_id' => $data['cover_id'] ?? null
+            ]);
 
-            $this->saveAttachedPhotos($data);
-
+            $this->savePhotos($this->id, $data['photos'] ?? []);
             $conn->commit();
 
             return $this;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
-
-            $conn->rollback();
 
             return false;
         }
     }
 
     /**
-     * Updates the information of the album given an array of key-values
-     *
-     * @param array $data the new data to update the album
-     *
-     * @return null|\Album the object instance
-     */
-    public function update($data)
-    {
-        $data['subtitle'] = (empty($data['subtitle'])) ? 0 : $data['subtitle'];
-
-        $conn = getService('dbal_connection');
-        try {
-            $conn->beginTransaction();
-
-            parent::update($data);
-
-            $conn->update(
-                'albums',
-                [
-                    'subtitle' => $data['subtitle'],
-                    'agency'   => $data['agency'],
-                    'cover_id' => (int) $data['album_frontpage_image'],
-                ],
-                [ 'pk_album' => (int) $data['id'] ]
-            );
-
-            $this->removeAttachedImages($data['id']);
-            $this->saveAttachedPhotos($data);
-
-            $conn->commit();
-
-            $this->load($data);
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            $conn->rollback();
-
-            return false;
-        }
-    }
-
-    /**
-     * Removes an album given id.
-     *
-     * @param string $id the album id
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function remove($id)
     {
         $conn = getService('dbal_connection');
+
         try {
             $conn->beginTransaction();
 
             parent::remove($id);
 
-            getService('dbal_connection')->delete(
-                "albums",
-                [ 'pk_album' => $id ]
-            );
-
-
-            $this->removeAttachedImages($id);
+            $conn->delete('albums', [ 'pk_album' => $id ]);
+            $this->removePhotos($id);
 
             $conn->commit();
-
-            return true;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
 
             $conn->rollback();
-
-            return false;
-        }
-    }
-
-    /**
-     * Returns a multidimensional array with the images related to this album
-     *
-     * @param int $albumID the album id
-     *
-     * @return mixed array of array(pk_photo, position, description)
-     */
-    public function _getAttachedPhotos($albumID)
-    {
-        if ($albumID == null) {
-            return false;
-        }
-
-        $photosAlbum = [];
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT DISTINCT pk_photo, description, position'
-                . ' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
-                [
-                    $albumID
-                ]
-            );
-
-            foreach ($rs as $photo) {
-                $photoObject = getService('entity_repository')
-                    ->find('Photo', $photo['pk_photo']);
-                if (is_null($photoObject)) {
-                    continue;
-                }
-
-                $photosAlbum [] = [
-                    'id'          => $photo['pk_photo'],
-                    'position'    => $photo['position'],
-                    'description' => $photo['description'],
-                    'photo'       => $photoObject,
-                ];
-            }
-
-            return $photosAlbum;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-            return false;
-        }
-    }
-
-    /**
-     * Returns a multidimensional array with the images related to this album
-     * and results are separated by pages
-     *
-     * @param int $albumID    the album id
-     * @param int $items_page the number of page to get
-     * @param int $page       the number of page to get
-     *
-     * @return mixed array of array(pk_photo, position, description)
-     */
-    public function getAttachedPhotosPaged($albumID, $items_page, $page = 1)
-    {
-        if ($albumID == null) {
-            return false;
-        }
-
-        if (empty($page)) {
-            $limit = "LIMIT " . ($items_page + 1);
-        } else {
-            $limit = "LIMIT " . ($page - 1) * $items_page . ', ' . ($items_page + 1);
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT DISTINCT pk_photo, description, position'
-                . ' FROM albums_photos '
-                . ' WHERE pk_album =? ORDER BY position ASC ' . $limit,
-                [ $albumID ]
-            );
-
-            $photosAlbum = [];
-            foreach ($rs as $photo) {
-                $photosAlbum [] = [
-                    'id'          => $photo['pk_photo'],
-                    'position'    => $photo['position'],
-                    'description' => $photo['description'],
-                    'photo'       => new Photo($photo['pk_photo']),
-                ];
-            }
-
-            return $photosAlbum;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-            return false;
-        }
-    }
-
-    /**
-     * Saves the photos attached to one album
-     *
-     * @param array $data the new photos data
-     *
-     * @return boolean|\Album the object instance
-     */
-    public function saveAttachedPhotos($data)
-    {
-        if (!array_key_exists('album_photos_id', $data)
-            || empty($data['album_photos_id'])
-        ) {
-            return false;
-        }
-
-        $photoIds = $data['album_photos_id'];
-        if (isset($photoIds) && !empty($photoIds)) {
-            foreach ($photoIds as $position => $photoID) {
-                $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);
-
-                try {
-                    $rs = getService('dbal_connection')->insert(
-                        "albums_photos",
-                        [
-                            "pk_album" => (int) $this->id,
-                            "pk_photo" => (int) $photoID,
-                            "position" => (int) $position,
-                            "description" => $photoFooter,
-                        ]
-                    );
-                } catch (\Exception $e) {
-                    getService('error.log')->error(
-                        $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-                    );
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Delete one album by a given id
-     *
-     * @param  int      $albumID the foreighn key for the album
-     * @return boolean true if the album was deleted, false if it wasn't
-     */
-    public function removeAttachedImages($albumID)
-    {
-        try {
-            $rs = getService('dbal_connection')->delete(
-                'albums_photos',
-                [ 'pk_album' => (int) $albumID]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-            return false;
         }
     }
 
@@ -462,7 +205,7 @@ class Album extends Content
      *
      * @return string the generated HTML
      */
-    public function render($params, $tpl = null)
+    public function render(array $params, $tpl = null)
     {
         $tpl = getService('core.template');
 
@@ -480,5 +223,114 @@ class Album extends Content
         }
 
         return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update($data)
+    {
+        $conn = getService('dbal_connection');
+
+        try {
+            $conn->beginTransaction();
+
+            parent::update($data);
+
+            $conn->update('albums', [
+                'subtitle' => $data['subtitle'] ?? null,
+                'agency'   => $data['agency'] ?? null,
+                'cover_id' => !empty($data['cover_id']) ? $data['cover_id'] : null
+            ], [ 'pk_album' => $this->id ]);
+
+            $this->removePhotos($this->id);
+            $this->savePhotos($this->id, $data['photos'] ?? []);
+
+            $conn->commit();
+            $this->load($data);
+
+            return true;
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
+            $conn->rollback();
+        }
+
+        return false;
+    }
+
+    /**
+     * Loads all photos in the album.
+     */
+    protected function loadPhotos() : void
+    {
+        try {
+            $this->photos = getService('dbal_connection')->fetchAll(
+                'SELECT DISTINCT pk_photo, description, position'
+                . ' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
+                [ $this->id ]
+            );
+
+            foreach ($this->photos as &$photo) {
+                $photo['description'] =
+                    PhpSerializer::unserialize($photo['description']);
+            }
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+            );
+
+            $this->photos = [];
+        }
+    }
+
+    /**
+     * Removes all photos for the album.
+     *
+     * @param int $id The album id.
+     */
+    protected function removePhotos(int $id) : void
+    {
+        getService('dbal_connection')
+            ->delete('albums_photos', [ 'pk_album' => $id ]);
+    }
+
+    /**
+     * Saves photos for the album.
+     *
+     * @param int   $id     The album id.
+     * @param array $photos The list of photos.
+     */
+    protected function savePhotos(int $id, array $photos) : void
+    {
+        if (empty($photos)) {
+            return;
+        }
+
+        $conn = getService('dbal_connection');
+
+        foreach ($photos as $position => $photo) {
+            if (is_array($photo['description'])) {
+                $photo['description'] =
+                    PhpSerializer::serialize($photo['description']);
+            }
+
+            try {
+                $conn->insert('albums_photos', [
+                    'pk_album'    => $id,
+                    'pk_photo'    => $photo['pk_photo'],
+                    'position'    => $position,
+                    'description' => $photo['description'],
+                ]);
+            } catch (\Exception $e) {
+                getService('error.log')->error(
+                    $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+                );
+
+                return;
+            }
+        }
     }
 }

@@ -252,6 +252,35 @@ class ApiController extends Controller
     }
 
     /**
+     * Returns the list of tags for an item or a list of items.
+     *
+     * @param mixed $items The item or the list of items to get tags for.
+     *
+     * @return array The list of tags.
+     */
+    protected function getCategories($items = null)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = array_unique(array_map(function ($a) {
+            return $a->pk_fk_content_category;
+        }, $items));
+
+        $categories = $this->get('api.service.category')->responsify(
+            $this->get('api.service.category')
+                ->getListByIds($ids)['items']
+        );
+
+        return $categories;
+    }
+
+    /**
      * Returns a list of extra data.
      *
      * @param mixed $items The item when called in a single-item action or the
@@ -274,5 +303,40 @@ class ApiController extends Controller
     protected function getItemId($item)
     {
         return $item->id;
+    }
+
+    /**
+     * Returns the list of tags for an item or a list of items.
+     *
+     * @param mixed $items The item or the list of items to get tags for.
+     *
+     * @return array The list of tags.
+     */
+    protected function getTags($items = null)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = [];
+
+        foreach ($items as $item) {
+            if (!empty($item->tags)) {
+                $ids = array_unique(array_merge($ids, $item->tags));
+            }
+        }
+
+        $tags = $this->get('api.service.tag')->responsify(
+            $this->get('api.service.tag')->getListByIds($ids)['items']
+        );
+
+        return $this->get('data.manager.filter')
+            ->set($tags)
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
     }
 }

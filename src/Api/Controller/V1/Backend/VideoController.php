@@ -108,17 +108,12 @@ class VideoController extends ContentOldController
      **/
     public function getExtraData($items = null)
     {
-        $us = $this->get('api.service.category');
-
-        $categories = $this->container->get('data.manager.filter')
-            ->set($us->getList('inmenu=1')['items'])
-            ->filter('mapify', [ 'key' => 'pk_content_category' ])
-            ->get();
-
         return array_merge(parent::getExtraData($items), [
-            'categories' => $us->responsify($categories),
+            'categories' => $this->getCategories($items),
+            'tags'       => $this->getTags($items),
         ]);
     }
+
     /**
      * Returns the list of l10n keys
      * @param Type $var Description

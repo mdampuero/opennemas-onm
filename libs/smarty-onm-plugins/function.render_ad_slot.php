@@ -5,7 +5,7 @@
  * @param array    $params The list of parameters.
  * @param Template $tpl    The template object.
  */
-function smarty_function_render_ad_slot($params, $smarty)
+function smarty_function_render_ad_slot($params, &$smarty)
 {
     $safeframeEnabled = $smarty->getContainer()
         ->get('orm.manager')
@@ -57,8 +57,7 @@ function smarty_function_render_ad_slot($params, $smarty)
     if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
         $ad = array_pop($ads);
 
-        // Save advertisement array state
-        $smarty->assign('advertisements', $ads);
+        $smarty->setValue('advertisements', $ads);
     }
 
     if ($safeframeEnabled && $format === 'safeframe') {

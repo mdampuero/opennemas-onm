@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Core;
 
 use Common\Core\Component\Core\GlobalVariables;
+use Common\ORM\Entity\Category;
 
 /**
  * Defines test cases for GlobalVariables class.
@@ -108,7 +109,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSectionWithCategory()
     {
-        $category       = new \ContentCategory();
+        $category       = new Category();
         $category->name = 'foo';
 
         $smarty = $this->getMockBuilder('Smarty')

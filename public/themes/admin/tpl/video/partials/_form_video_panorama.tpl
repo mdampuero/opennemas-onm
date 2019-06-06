@@ -43,44 +43,58 @@
   <div class="ng-cloak" ng-show="item.information.service && !flags.http.fetch_video_info">
     {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
     {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
-
-    <div class="form-group">
-      <label for="preview" class="form-label">{t}Video preview{/t}</label>
-      <div class="controls">
+    <label for="preview" class="form-label">
+      {t}Video preview{/t}
+    </label>
+    <div class="row">
+      <div class="col-md-6">
         <div class="thumbnail center" ng-if="item">
-          <div ng-bind-html="trustHTML(item.information.embedHTML)" style="max-width:600px; overflow:hidden; margin:0 auto"></div>
+          <div class="video-preview" ng-bind-html="trustHTML(item.information.embedHTML)"></div>
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="other_info" class="form-label">{t}Other information{/t}</label>
-      <div class="controls">
-        <table style="width:80%; margin:20xp;">
-          <tr>
-            <td width="200"><strong>{t}Original Title{/t}</strong></td>
-            <td>[% item.information.title %]</td>
-          </tr>
-          <tr>
-            <td><strong>{t}Service{/t}</strong></td>
-            <td>[% item.information.service %]</td>
-          </tr>
-          <tr>
-            <td><strong>{t}Duration{/t}</strong></td>
-            <td>[% item.information.duration %]</td>
-          </tr>
-          <tr>
-            <td><strong>{t}Embed Url{/t}</strong></td>
-            <td><a href="[% item.information.embedUrl %]">[% item.information.embedUrl %]</a></td>
-          </tr>
-          <tr>
-            <td><strong>{t}Thumbnail URL{/t}</strong></td>
-            <td><a href="item.information.thumbnail" ng-if="item.information.thumbnail">[% item.information.thumbnail %]</a></td>
-          </tr>
-          <tr>
-            <td><strong>{t}Thumbnail image{/t}</strong></td>
-            <td><img ng-src="[% item.information.thumbnail %]" ng-if="item.information.thumbnail" width="100"></td>
-          </tr>
-        </table>
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="form-label">
+            <strong>
+              {t}Original Title{/t}
+            </strong>
+          </div>
+          <div class="controls">
+            [% item.information.title %]
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">
+            <strong>
+              {t}Service{/t}
+            </strong>
+          </div>
+          <div class="controls">
+            [% item.information.service %]
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">
+            <strong>
+              {t}Embed Url{/t}
+            </strong>
+          </div>
+          <div class="controls">
+            <a href="[% item.information.embedUrl %]">
+              [% item.information.embedUrl %]
+            </a>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">
+            <strong>
+              {t}Thumbnail{/t}
+            </strong>
+          </div>
+          <div class="controls">
+            <img ng-src="[% item.information.thumbnail %]" ng-if="item.information.thumbnail" width="100">
+          </div>
+        </div>
       </div>
     </div>
   </div>

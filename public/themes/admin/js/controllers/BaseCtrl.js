@@ -41,10 +41,6 @@
          * @type {Object}
          */
         $scope.config = {
-          columns: {
-            collapsed: true,
-            selected: []
-          },
           linkers: {},
           locale: null,
           multilanguage: null,
@@ -62,7 +58,8 @@
         $scope.flags = {
           block: { slug: true },
           generate: {},
-          http: {}
+          http: {},
+          visible: { grid: true }
         };
 
         /**
@@ -86,6 +83,54 @@
         $scope.overlay = {};
 
         /**
+         * @function BaseCtrl
+         * @memberOf availableItemsInGrid
+         *
+         * @description
+         *   Returns the number of items that can be shown in grid mode basing
+         *   on the window size.
+         *
+         * @return {Integer} The number of items per page.
+         */
+        $scope.getEppInGrid = function() {
+          var maxHeight = $(window).height() - $('.header').height() -
+            $('.actions-navbar').height();
+          var maxWidth  = $(window).width() - $('.sidebar').width();
+          var padding   = 40;
+
+          if ($('.content-wrapper').length > 0) {
+            maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
+          }
+
+          var containerBaseSize = 150;
+          var containerSize = $('.infinite-col').width();
+
+          if (containerBaseSize > containerSize) {
+            containerSize = containerBaseSize;
+          }
+
+          var height = containerSize + padding;
+          var width = containerSize + padding;
+
+          var rows = Math.ceil(maxHeight / height);
+          var cols = Math.floor(maxWidth / width);
+
+          if (rows === 0) {
+            rows = 1;
+          }
+
+          if (cols === 0) {
+            cols = 1;
+          }
+
+          if ($scope.criteria.epp !== rows * cols && $scope.data) {
+            $scope.data.items = [];
+          }
+
+          return rows * cols;
+        };
+
+        /**
          * @function removeImage
          * @memberOf InnerCtrl
          *
@@ -96,6 +141,51 @@
          */
         $scope.removeImage = function(image) {
           delete $scope[image];
+        };
+
+        /**
+         * @function removeItem
+         * @memberOf InnerCtrl
+         *
+         * @description
+         *   Removes an item from an array of related items.
+         *
+         * @param string  from  The array name in the current scope.
+         * @param integer index The index of the element to remove.
+         */
+        $scope.removeItem = function(from, index) {
+          var keys  = from.split('.');
+          var model = $scope;
+
+          for (var i = 0; i < keys.length - 1; i++) {
+            if (!model[keys[i]]) {
+              model[keys[i]] = {};
+            }
+
+            model = model[keys[i]];
+          }
+
+          if (angular.isArray(model[keys[i]])) {
+            model[keys[i]].splice(index, 1);
+            return;
+          }
+
+          model[keys[i]] = null;
+        };
+
+        /**
+         * @function toggleMode
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Changes the current mode.
+         */
+        $scope.setMode = function(mode) {
+          if ($scope.app.mode === mode) {
+            return;
+          }
+
+          $scope.app.mode = mode;
         };
 
         /**
@@ -281,6 +371,20 @@
         };
 
         /**
+         * @function isModeSupported
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Checks if the mode is supported in the current controller.
+         *
+         * @return {Boolean} True if the mode is supported in the current
+         *                   controller. False otherwise.
+         */
+        $scope.isModeSupported = function() {
+          return false;
+        };
+
+        /**
          * @function isTranslated
          * @memberOf BaseCtrl
          *
@@ -367,7 +471,7 @@
          * @param {String} The name of the property where localized items will
          *                 be stored in scope.
          */
-        $scope.localize = function(items, key, clean) {
+        $scope.localize = function(items, key, clean, ignore) {
           var lz = localizer.get($scope.config.locale);
 
           // Localize items
@@ -377,7 +481,7 @@
           // Initialize linker
           if (!$scope.config.linkers[key]) {
             $scope.config.linkers[key] = linker.get($scope.data.extra.keys,
-              $scope.config.locale.default, $scope, clean);
+              $scope.config.locale.default, $scope, clean, ignore);
           }
 
           // Link original and localized items

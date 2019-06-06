@@ -177,23 +177,23 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo1', function(nv, ov) {
-      if (angular.isObject(nv)) {
-        $scope.item.img1 = nv.pk_photo;
+      if (angular.equals(nv, ov)) {
+        return;
+      }
 
-        if (angular.isUndefined($scope.item.img1_footer) ||
-          angular.isUndefined(ov) ||
-          ov === null ||
-          nv.pk_photo !== ov.pk_photo
-        ) {
-          $scope.item.img1_footer = $scope.photo1.description;
-        }
-        // Set inner image if empty
-        if (!angular.isObject($scope.photo2) && nv !== ov) {
-          $scope.photo2 = $scope.photo1;
-        }
-      } else {
-        $scope.item.img1 = null;
+      if (!nv) {
+        $scope.item.img1        = null;
         $scope.item.img1_footer = null;
+        return;
+      }
+
+      if (!$scope.item.id || $scope.item.img1 !== nv.pk_photo) {
+        $scope.item.img1        = nv.pk_photo;
+        $scope.item.img1_footer = nv.description;
+
+        if (angular.equals(ov, $scope.photo2)) {
+          $scope.photo2 = nv;
+        }
       }
     }, true);
 
@@ -204,19 +204,19 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @param array ov The old values.
      */
     $scope.$watch('photo2', function(nv, ov) {
-      if (angular.isObject(nv)) {
-        $scope.item.img2 = nv.id;
+      if (angular.equals(nv, ov)) {
+        return;
+      }
 
-        if (angular.isUndefined($scope.item.img2_footer) ||
-          angular.isUndefined(ov) ||
-          ov === null ||
-          nv.pk_photo !== ov.pk_photo
-        ) {
-          $scope.item.img2_footer = $scope.photo2.description;
-        }
-      } else {
-        $scope.item.img2 = null;
+      if (!nv) {
+        $scope.item.img2        = null;
         $scope.item.img2_footer = null;
+        return;
+      }
+
+      if (!$scope.item.id || $scope.item.img2 !== nv.pk_photo) {
+        $scope.item.img2        = nv.pk_photo;
+        $scope.item.img2_footer = nv.description;
       }
     }, true);
   }

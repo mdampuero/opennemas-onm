@@ -45,12 +45,10 @@ class ContentController extends ApiController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('save'));
 
-        $msg = $this->get('core.messenger');
-
+        $msg  = $this->get('core.messenger');
         $data = $request->request->all();
+        $item = $this->get($this->service)->createItem($data);
 
-        $item = $this->get($this->service)
-            ->createItem($data);
         $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -76,12 +74,10 @@ class ContentController extends ApiController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
-        $msg = $this->get('core.messenger');
-
+        $msg  = $this->get('core.messenger');
         $data = $request->request->all();
 
-        $this->get($this->service)
-            ->updateItem($id, $data);
+        $this->get($this->service)->updateItem($id, $data);
 
         $msg->add(_('Item saved successfully'), 'success');
 

@@ -20,9 +20,11 @@
   width: 10%;
 }
 
-.table td:first-child,
-.table td:last-child {
-  border-radius: 0;
+.table td {
+  &:first-child,
+  &td:last-child {
+    border-radius: 0;
+  }
 }
 
 .table thead tr .tooltip {
@@ -47,6 +49,10 @@
   }
 }
 
+.table-fixed {
+  table-layout: fixed;
+}
+
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th,
 .table tr.row_selected td {
@@ -61,6 +67,22 @@
 .table tbody tr.row_selected:hover>td,
 .table tbody tr.row_selected:hover>th {
   background-color: lighten(@info-color, 45%) !important;
+}
+
+.table-label {
+  font-weight: bold;
+  margin: 5px 0;
+  text-transform: uppercase;
+}
+
+.table-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-value {
+  padding-left: 15px;
 }
 
 tr:hover .listing-inline-actions {

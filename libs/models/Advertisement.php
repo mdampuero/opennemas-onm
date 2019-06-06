@@ -7,67 +7,54 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-/**
- * Advertisement class
- *
- * Handles all the CRUD operations with advertisement content.
- * The class use MethodCacheManager for better performance.
- */
 class Advertisement extends Content
 {
     /**
-     * The category that all the advertisements belongs to
-     *
-     * @var int
-     */
-    const ADVERTISEMENT_CATEGORY = 2;
-
-    /**
-     * the advertisement id
+     * The advertisement id.
      *
      * @var int
      */
     public $pk_advertisement = null;
 
     /**
-     * TODO: To be replaced by the property 'positions'
-     * The type of advertisement
+     * TODO: To be replaced by the property 'positions'.
+     *
+     * The type of advertisement.
      *
      * @var int
      */
     public $type_advertisement = null;
 
     /**
-     * List of categories that this advertisement will be available
+     * List of categories that this advertisement will be available.
      *
-     * @var string
+     * @var string.
      */
     public $fk_content_categories = [];
 
     /**
-     * The related image id to this ad
+     * The related image id to this ad.
      *
      * @var int
      */
     public $img = null;
 
     /**
-     * The position of the advertisement
+     * The position of the advertisement.
      *
      * @var int
      */
     public $path = null;
 
     /**
-     * The url that this advertisment links to
+     * The url that this advertisment links to.
      *
      * @var string
      */
     public $url = null;
 
     /**
-     * The type of measure for this ad (views, clicks, data range)
+     * The type of measure for this ad (views, clicks, data range).
      *
      * @var string
      */
@@ -75,68 +62,69 @@ class Advertisement extends Content
 
     /**
      * TODO: maybe this is replicated with num_clic_count
-     * Number of user clicks in this advertismenet
+     *
+     * Number of user clicks in this advertismenet.
      *
      * @var int
      */
-    public $num_clic = null;
+    public $num_clic = 0;
 
     /**
-     * Number of user clicks in this advertisement
+     * Number of user clicks in this advertisement.
      *
      * @var int
      */
-    public $num_clic_count = null;
+    public $num_clic_count = 0;
 
     /**
-     * Number of views for this advertisement
+     * Number of views for this advertisement.
      *
      * @var int
      */
-    public $num_view = null;
+    public $num_view = 0;
 
     /**
-     * Whether overlap flash events when rendering this advertisement
+     * Whether overlap flash events when rendering this advertisement.
      *
-     * @var boolean
+     * @var bool
      */
-    public $overlap = null;
+    public $overlap = 0;
 
     /**
-     * The list of positions this ad is assigned to
+     * The list of positions this ad is assigned to.
      *
      * @var array
      */
-    public $positions = null;
+    public $positions = [];
 
     /**
-     * The script content of this advertisement
+     * The script content of this advertisement.
      *
      * @varstring
      */
     public $script = null;
 
     /**
-     * Whether this advertisement has a script content
+     * Whether this advertisement has a script content.
      *
-     * @var boolean
+     * @var bool
      */
-    public $with_script = null;
+    public $with_script = 0;
 
     /**
      * In interstitial advertisements this is the amount of time that it will
-     * be shown to the user
+     * be shown to the user.
      *
      * @var int
      */
-    public $timeout = null;
+    public $timeout = 0;
 
     /**
-     * Whether this advertisement has a flash image
+     * Whether this advertisement has a flash image.
      *
-     * @var boolean
+     * @var bool
      */
-    public $is_flash = null;
+    public $is_flash = false;
 
     /**
      * Initializes the Advertisement class
@@ -146,36 +134,32 @@ class Advertisement extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Advertisement');
+        $this->content_type           = 2;
+        $this->content_type_name      = 'advertisement';
 
         parent::__construct($id);
     }
 
     /**
-     * Load object properties
-     *
-     * @param array $properties
-     *
-     * @return Advertisement
+     * {@inheritdoc}
      */
     public function load($properties)
     {
         parent::load($properties);
 
-        // FIXME: review that this property is not used ->img
-        $this->img = $this->path;
-
         // Initialize the categories array of this advertisement
-        if (!is_array($this->fk_content_categories) && !is_null($this->fk_content_categories)) {
-            $this->fk_content_categories = explode(',', $this->fk_content_categories);
+        if (!is_array($this->fk_content_categories)
+            && !is_null($this->fk_content_categories)
+        ) {
+            $this->fk_content_categories =
+                explode(',', $this->fk_content_categories);
         }
 
         // Check if it contains a flash element
-        $this->is_flash = 0;
         if ($this->with_script == 0) {
             $img = getService('entity_repository')->find('Photo', $this->path);
-            if (!empty($img) && $img->type_img == "swf") {
-                $this->is_flash = 1;
-            }
+
+            $this->is_flash = !empty($img) && $img->type_img == "swf";
         }
 
         if (is_null($this->params)
@@ -202,21 +186,20 @@ class Advertisement extends Content
             $this->positions = [];
         }
 
+        if (base64_decode($this->script)) {
+            $this->script = base64_decode($this->script);
+        }
+
         return $this;
     }
 
     /**
-     * Get an instance of a particular ad from its ID
-     *
-     * @param int $id the ID of the Advertisement
-     *
-     * @return null|boolean|Advertisement the instance for the Ad
+     * {@inheritdoc}
      */
     public function read($id)
     {
-        // If no valid id then return
-        if (((int) $id) <= 0) {
-            return null;
+        if (empty($id)) {
+            return;
         }
 
         try {
@@ -235,87 +218,58 @@ class Advertisement extends Content
                 . 'WHERE advertisement_id=?',
                 [ $id ]
             );
-            if ($positions === false) {
-                return false;
+
+            if ($positions) {
+                $rs['positions'] = array_map(function ($el) {
+                    return $el['position_id'];
+                }, $positions);
             }
 
-            $rs['positions'] = array_map(function ($el) {
-                return $el['position_id'];
-            }, $positions);
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
-            return false;
         }
-
-        if (array_key_exists('script', $rs)) {
-            // Decode base64 if isn't decoded yet
-            $isBase64 = base64_decode($rs['script']);
-            if ($isBase64) {
-                $rs['script'] = $isBase64;
-            }
-        }
-
-        $this->load($rs);
-
-        if (is_string($this->params)) {
-            $this->params = unserialize($this->params);
-
-            if (!is_array($this->params)) {
-                $this->params = [];
-            }
-        }
-
-        // Return instance to method chaining
-        return $this;
     }
 
     /**
-     * Create and save into database the ad instance from one array
-     *
-     * @param array $data the needed data for create a new ad.
-     *
-     * @return boolean|Advertisement
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function create($data)
     {
         $conn = getService('dbal_connection');
-        $conn->beginTransaction();
-
-        parent::create($data);
-
-        $data['pk_advertisement'] = $data['id'] = $this->id;
-
         try {
-            getService('dbal_connection')->insert(
-                'advertisements',
-                [
-                    'pk_advertisement'      => $data['pk_advertisement'],
-                    'fk_content_categories' => $data['categories'],
-                    'path'                  => $data['img'],
-                    'url'                   => $data['url'],
-                    'num_clic'              => (int) $data['num_clic'],
-                    'num_clic_count'        => 0, // num_clic_count
-                    'num_view'              => (int) $data['num_view'],
-                    'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
-                    'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
-                    'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
-                    'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
-                    'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
+            $conn->beginTransaction();
 
-                ]
-            );
+            parent::create($data);
 
-            $this->savePositions($data['id'], $data['positions']);
+            $this->pk_content       = (int) $this->id;
+            $this->pk_advertisement = (int) $this->id;
 
+            getService('dbal_connection')->insert('advertisements', [
+                'pk_advertisement'      => $this->id,
+                'fk_content_categories' => $data['categories'],
+                'path'                  => $data['path'],
+                'url'                   => $data['url'],
+                'num_clic'              => (int) $data['num_clic'],
+                'num_clic_count'        => 0, // num_clic_count
+                'num_view'              => (int) $data['num_view'],
+                'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
+                'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
+                'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
+                'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
+                'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
+
+            ]);
+
+            $this->savePositions($this->id, $data['positions']);
             $conn->commit();
-
-            // $this->load($data);
 
             return $this;
         } catch (\Exception $e) {
             $conn->rollback();
+
             getService('error.log')->error($e->getMessage());
 
             return false;
@@ -332,45 +286,36 @@ class Advertisement extends Content
     public function update($data)
     {
         $conn = getService('dbal_connection');
-        $conn->beginTransaction();
 
         // TODO: Remove when dispatching events from custom contents
         $this->old_position = $this->positions;
 
-        parent::update($data);
-
         try {
-            getService('dbal_connection')->update(
-                'advertisements',
-                [
-                    'fk_content_categories' => $data['categories'],
-                    'path'                  => $data['img'],
-                    'url'                   => $data['url'],
-                    'num_clic'              => (int) $data['num_clic'],
-                    'num_view'              => (int) $data['num_view'],
-                    'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
-                    'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
-                    'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
-                    'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
-                    'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
-                ],
-                [ 'pk_advertisement' => (int) $data['id'] ]
-            );
+            $conn->beginTransaction();
 
-            getService('dbal_connection')->delete(
-                'advertisements_positions',
-                [ 'advertisement_id' => $data['id'] ]
-            );
+            parent::update($data);
 
-            $this->savePositions($data['id'], $data['positions']);
+            $conn->update('advertisements', [
+                'fk_content_categories' => $data['categories'],
+                'path'                  => $data['path'],
+                'url'                   => $data['url'],
+                'num_clic'              => (int) $data['num_clic'],
+                'num_view'              => (int) $data['num_view'],
+                'type_medida'           => (!empty($data['type_medida'])) ? $data['type_medida'] : null,
+                'with_script'           => (isset($data['with_script'])) ? (int) $data['with_script'] : 0,
+                'script'                => (!empty($data['script'])) ? base64_encode($data['script']) : '',
+                'overlap'               => (isset($data['overlap'])) ? (int) $data['overlap'] : 0,
+                'timeout'               => (isset($data['timeout'])) ? (int) $data['timeout'] : null,
+            ], [ 'pk_advertisement' => (int) $data['id'] ]);
 
+            $this->removePositions($this->id);
+            $this->savePositions($this->id, $data['positions']);
             $conn->commit();
-
-            $this->load($data);
 
             return $this;
         } catch (\Exception $e) {
             $conn->rollback();
+
             getService('error.log')->error($e->getMessage());
 
             return false;
@@ -378,72 +323,23 @@ class Advertisement extends Content
     }
 
     /**
-     * Deletes one advertisement from db given an id.
-     *
-     * @param string $id the id of the ad to delete from db.
-     *
-     * @return boolean
-     *
+     * {@inheritdoc}
      */
     public function remove($id)
     {
-        if ((int) $id <= 0) {
-            return false;
-        }
-
-        parent::remove($id);
-
         try {
-            $rs = getService('dbal_connection')
-                ->delete("advertisements", [ 'pk_advertisement' => $id ]);
-
-            if (!$rs) {
+            if (!parent::remove($id)) {
                 return false;
             }
+
+            getService('dbal_connection')
+                ->delete("advertisements", [ 'pk_advertisement' => $id ]);
+
+            return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
             return false;
         }
-
-        return true;
-    }
-
-    /**
-     * Get url of advertisement
-     *
-     * @param int $id Advertisement Id
-     *
-     * @return null|string
-     */
-    public function getUrl($id)
-    {
-        // If no valid id then return
-        if (((int) $id) <= 0) {
-            return null;
-        }
-
-        // Try to minimize the database overload if this object was preloaded
-        // or doesn't fit the rules
-        if (isset($this) && isset($this->url) && ($this->id == $id)) {
-            return $this->url;
-        }
-
-        try {
-            // Fetch data for the ad from the database
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT url FROM `advertisements` WHERE `advertisements`.`pk_advertisement`=?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return null;
-            }
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-            return null;
-        }
-
-        return $rs['url'];
     }
 
     /**
@@ -575,28 +471,45 @@ class Advertisement extends Content
     }
 
     /**
-     * Saves the advertisement positions given the id and an array of positions
+     * Removes positions for the advertisement.
      *
-     * @param int   $id                     The id of the advertisement
-     * @param array $advertisementPositions array of integers that depicts
-     *                                      the list of advertisement ids
-     *
-     * @return boolean true if the positions were saved
-     **/
-    private function savePositions($id, $advertisementPositions)
+     * @param int $id The advertisement id.
+     */
+    protected function removePositions($id)
     {
-        if (empty($advertisementPositions)) {
-            return true;
+        getService('dbal_connection')
+            ->delete('advertisements_positions', [ 'advertisement_id' => $id ]);
+    }
+
+    /**
+     * Saves the advertisement positions given the id and an array of positions.
+     *
+     * @param int   $id        The advertisement id.
+     * @param array $positions The list of positions.
+     *
+     * @return bool True if positions were saved.
+     */
+    protected function savePositions($id, $positions)
+    {
+        if (empty($positions)) {
+            return;
         }
 
-        $positions = [];
-        foreach (array_unique($advertisementPositions) as $position) {
-            $positions[] = sprintf('(%s, %s)', $id, (int) $position);
+        $conn = getService('dbal_connection');
+
+        foreach ($positions as $position) {
+            try {
+                $conn->insert('advertisements_positions', [
+                    'advertisement_id' => $id,
+                    'position_id'      => $position
+                ]);
+            } catch (\Exception $e) {
+                getService('error.log')->error(
+                    $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+                );
+
+                return;
+            }
         }
-
-        $sql = 'INSERT INTO `advertisements_positions`(`advertisement_id`, `position_id`) VALUES %s';
-        getService('dbal_connection')->executeUpdate(sprintf($sql, implode(', ', $positions)));
-
-        return true;
     }
 }

@@ -61,6 +61,8 @@ class LocaleListener implements EventSubscriberInterface
 
     /**
      * Configures the Locale service basing on the current request.
+     *
+     * @param GetResponseEvent $event The event object.
      */
     protected function configureRequestLocale(GetResponseEvent $event)
     {

@@ -1,20 +1,11 @@
 <?php
 /**
- * Defines the Article class
+ * This file is part of the Onm package.
  *
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package    Model
- */
-
-/**
- * Class for handling articles.
- *
- * @package    Model
  */
 class Article extends Content
 {
@@ -119,6 +110,8 @@ class Article extends Content
     public function __construct($id = null)
     {
         $this->content_type_l10n_name = _('Article');
+        $this->content_type           = 1;
+        $this->content_type_name      = 'article';
 
         parent::__construct($id);
     }
@@ -183,6 +176,7 @@ class Article extends Content
             }
 
             $this->load($rs);
+            $this->id = $id;
 
             return $this;
         } catch (\Exception $e) {

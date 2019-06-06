@@ -96,6 +96,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
     // Generate NewsArticle tags
     $output = '<script type="application/ld+json">[';
     if ($content->content_type_name == 'album') {
+        $data['photos'] = $smarty->getValue('photos');
         $output .= $structData->generateImageGalleryJsonLDCode($data);
     } elseif (!empty($data['video'])) {
         $output .= $structData->generateVideoJsonLDCode($data);

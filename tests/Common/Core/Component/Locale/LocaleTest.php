@@ -23,7 +23,7 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
     {
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->setMethods([ 'addTextDomain', 'changeLocale', 'changeTimeZone'])
-            ->setConstructorArgs([ [ 'en_US', 'es' ], '/foo/bar' ])
+            ->setConstructorArgs([ [ 'en_US', 'es_ES' ], '/foo/bar' ])
             ->getMock();
     }
 
@@ -40,7 +40,7 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('/foo/bar', $path->getValue($this->locale));
         $this->assertEquals(
-            [ 'en_US', 'es' ],
+            [ 'en_US', 'es_ES' ],
             $config->getValue($this->locale)['backend']['language']['available']
         );
     }
@@ -59,7 +59,7 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
 
         $this->locale->apply();
 
-        $this->locale->setLocale('es');
+        $this->locale->setLocale('es_ES');
         $this->locale->apply();
     }
 
@@ -135,8 +135,8 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
         $this->locale->setLocale('foo');
         $this->assertEquals('en_US', $this->locale->getLocale());
 
-        $this->locale->setLocale('es');
-        $this->assertEquals('es', $this->locale->getLocale());
+        $this->locale->setLocale('es_ES');
+        $this->assertEquals('es_ES', $this->locale->getLocale());
     }
 
     /**
@@ -229,13 +229,10 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSupportedLocales()
     {
-        $this->assertEquals(
-            [
-                'en_US' => ucfirst(\Locale::getDisplayName('en_US')),
-                'es'    => ucfirst(\Locale::getDisplayName('es'))
-            ],
-            $this->locale->getSupportedLocales()
-        );
+        $this->assertEquals([
+            'en_US' => ucfirst(\Locale::getDisplayName('en_US')),
+            'es_ES' => ucfirst(\Locale::getDisplayName('es_ES'))
+        ], $this->locale->getSupportedLocales());
 
         $this->assertNotEquals(
             count($this->locale->getSupportedLocales()),

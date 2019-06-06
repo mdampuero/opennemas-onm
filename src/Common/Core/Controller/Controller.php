@@ -243,7 +243,7 @@ class Controller extends SymfonyController
      *
      * @return array The list of categories.
      */
-    protected function getCategories()
+    protected function getCategories($items = null)
     {
         $categories = $this->get('orm.manager')
             ->getRepository('Category')
@@ -252,7 +252,7 @@ class Controller extends SymfonyController
         $categories = array_map(function ($a) {
             // Sometimes category is array. When create & update advertisement
             $a = $this->get('data.manager.filter')->set($a)->filter('localize', [
-                'keys' => \ContentCategory::getL10nKeys(),
+                'keys'   => $this->get('api.service.category')->getL10nKeys(),
                 'locale' => $this->getLocaleData('frontend')['default']
             ])->get();
 
@@ -295,8 +295,7 @@ class Controller extends SymfonyController
         $locale = empty($locale) ? $default : $locale;
 
         if ($translation
-            && $this->get('core.security')
-            ->hasPermission('es.openhost.module.translation')
+            && $this->get('core.security')->hasPermission('es.openhost.module.translation')
         ) {
             $translators = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')

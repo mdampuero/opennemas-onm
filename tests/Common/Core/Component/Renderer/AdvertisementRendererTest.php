@@ -172,8 +172,8 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testRenderInlineWithImage()
     {
-        $ad      = new \Advertisement();
-        $ad->img = '123';
+        $ad       = new \Advertisement();
+        $ad->path = '123';
 
         $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -947,8 +947,8 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testRenderSafeFrameWithImage()
     {
-        $ad      = new \Advertisement();
-        $ad->img = '123';
+        $ad       = new \Advertisement();
+        $ad->path = '123';
 
         $params = [];
 
@@ -1514,9 +1514,9 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testGetImage()
     {
-        $photo   = new \Photo();
-        $ad      = new \Advertisement();
-        $ad->img = 0;
+        $photo    = new \Photo();
+        $ad       = new \Advertisement();
+        $ad->path = 0;
 
         $method = new \ReflectionMethod($this->renderer, 'getImage');
         $method->setAccessible(true);
@@ -1524,10 +1524,10 @@ class AdvertisementRendererTest extends TestCase
         $this->assertEmpty($method->invokeArgs($this->renderer, [ $ad ]));
 
         // Not empty image
-        $ad->img = 1;
+        $ad->path = 1;
 
         $this->em->expects($this->any())->method('find')
-            ->with('Photo', $ad->img)
+            ->with('Photo', $ad->path)
             ->willReturn($photo);
 
         $this->assertEquals(
@@ -1536,7 +1536,7 @@ class AdvertisementRendererTest extends TestCase
         );
 
         $this->em->expects($this->any())->method('find')
-            ->with('Photo', $ad->img)
+            ->with('Photo', $ad->path)
             ->will($this->throwException(new \Exception()));
 
         $this->assertEmpty($method->invokeArgs($this->renderer, [ $ad ]));
