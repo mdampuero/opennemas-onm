@@ -38,7 +38,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getValue', 'getTemplateVars' ])
+            ->setMethods([ 'getContainer', 'getValue', 'setValue' ])
             ->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -105,7 +105,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'safeframe' ]);
 
-        $this->smarty->expects($this->at(3))->method('getTemplateVars')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
@@ -132,7 +132,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getTemplateVars')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn(null);
 
@@ -158,7 +158,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getTemplateVars')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
@@ -189,22 +189,25 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getTemplateVars')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('setValue')
+            ->with('advertisements', []);
+
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('app')
             ->willReturn([
                 'extension' => 'foo',
                 'advertisementGroup' => 'bar'
             ]);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(6))->method('getValue')
             ->with('actual_category')
             ->willReturn([ 'baz' ]);
 
-        $this->smarty->expects($this->at(6))->method('getValue')
+        $this->smarty->expects($this->at(7))->method('getValue')
             ->with('content')
             ->willReturn(new \StdClass());
 
@@ -247,7 +250,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('render_params')
             ->willReturn([ 'ads-format' => 'inline' ]);
 
-        $this->smarty->expects($this->at(3))->method('getTemplateVars')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 

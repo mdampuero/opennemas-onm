@@ -37,7 +37,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
     }
 
     // Need to use this smarty method due to consume mode (get tpl vars by ref)
-    $ads    = $smarty->getTemplateVars('advertisements');
+    $ads    = $smarty->getValue('advertisements');
     $slotId = $params['position'];
 
     if (!is_array($ads)) {
@@ -58,8 +58,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
     if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
         $ad = array_pop($ads);
 
-        // Save advertisement array state
-        $smarty->assign('advertisements', $ads);
+        $smarty->setValue('advertisements', $ads);
     }
 
     if ($safeframeEnabled && $format === 'safeframe') {
