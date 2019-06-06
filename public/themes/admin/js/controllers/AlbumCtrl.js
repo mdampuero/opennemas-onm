@@ -200,6 +200,14 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       }
     }, true);
 
+    // Update photos order when it changes
+    $scope.$watch('item.photos', function(nv) {
+      for (var i = 0; i < nv.length; i++) {
+        $scope.data.item.photos[i] = nv[i];
+        $scope.data.item.photos[i].position = i;
+      }
+    }, true);
+
     // Update the ids and footers when photos change
     $scope.$watch('photos', function(nv, ov) {
       if (!nv || nv === ov) {
