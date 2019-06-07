@@ -95,22 +95,20 @@ class ArticleController extends FrontendController
         list($positions, $advertisements) = $this->getAdvertisements();
 
         return $this->render('article/article.tpl', [
-            'actual_category_title' => $article->category_title,
-            'ads_positions'         => $positions,
-            'advertisements'        => $advertisements,
-            'article'               => $article,
-            'cache_id'              => $cacheID,
-            'category_name'         => $categoryName,
-            'content'               => $article,
-            'contentId'             => $article->id,// Used on module_comments.tpl
-            'ext'                   => 1,
-            'photoInt'              => $article->photoInt,
-            'relationed'            => $article->relatedContents,
-            'suggested'             => $article->suggested,
-            'videoInt'              => $article->videoInt,
-            'o_content'             => $article,
-            'x-cache-for'           => '+1 day',
-            'x-tags'                => 'ext-article,' . $article->id
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'article'        => $article,
+            'cache_id'       => $cacheID,
+            'content'        => $article,
+            'contentId'      => $article->id,// Used on module_comments.tpl
+            'ext'            => 1,
+            'photoInt'       => $article->photoInt,
+            'relationed'     => $article->relatedContents,
+            'suggested'      => $article->suggested,
+            'videoInt'       => $article->videoInt,
+            'o_content'      => $article,
+            'x-cache-for'    => '+1 day',
+            'x-tags'         => 'ext-article,' . $article->id
         ]);
     }
 

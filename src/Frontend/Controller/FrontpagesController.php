@@ -176,18 +176,13 @@ class FrontpagesController extends Controller
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
 
         return $this->render('frontpage/frontpage.tpl', [
-            'actual_category'       => $categoryName,
-            'actual_category_id'    => $categoryId,
-            'actual_category_title' => $categoryTitle,
-            'ads_positions'         => $adsPositions,
-            'advertisements'        => $advertisements,
-            'cache_id'              => $cacheId,
-            'category'              => $category,
-            'category_data'         => $category,
-            'category_name'         => $categoryName,
-            'time'                  => $systemDate->getTimestamp(),
-            'x-cache-for'           => $invalidationDt->format('Y-m-d H:i:s'),
-            'x-tags'                => 'frontpage-page,' . $categoryName
+            'ads_positions'  => $adsPositions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheId,
+            'category'       => $category,
+            'time'           => $systemDate->getTimestamp(),
+            'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-tags'         => 'frontpage-page,' . $categoryName
         ]);
     }
 
@@ -246,13 +241,7 @@ class FrontpagesController extends Controller
                 $layout = 'default';
             }
 
-            $this->view->assign([
-                'category_name'         => $category->name,
-                'actual_category'       => $category->name,
-                'actual_category_id'    => $category->pk_content_category,
-                'actual_category_title' => $category->title,
-                'layoutFile'            => 'layouts/' . $layout . '.tpl',
-            ]);
+            $this->view->assign([ 'layoutFile' => 'layouts/' . $layout . '.tpl' ]);
         }
 
         $ads = unserialize($cm->getUrlContent(

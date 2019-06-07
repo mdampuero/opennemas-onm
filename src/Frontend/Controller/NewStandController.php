@@ -35,7 +35,6 @@ class NewStandController extends Controller
         $this->category_name = $this->get('request_stack')
             ->getCurrentRequest()
             ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $this->view->assign([ 'actual_category' => $this->category_name, ]);
     }
 
     /**

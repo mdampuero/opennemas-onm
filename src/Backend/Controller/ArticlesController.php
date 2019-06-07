@@ -269,14 +269,11 @@ class ArticlesController extends Controller
         // Fetch article category name
         if (!empty($article->category)) {
             $category = $this->getCategory($article->category);
-
-            $params['category_name']         = $category->name;
-            $params['actual_category_title'] = $category->title;
-            $params['actual_category']       = $category->name;
         }
 
         list($positions, $advertisements) = $this->getAdvertisements($category);
 
+        $params['category']       = $category;
         $params['ads_positions']  = $positions;
         $params['advertisements'] = $advertisements;
 

@@ -131,11 +131,9 @@ class CategoryController extends FrontendController
             );
 
             $this->view->assign([
-                'articles'              => $articles,
-                'category'              => $category,
-                'pagination'            => $pagination,
-                'actual_category_title' => $category->title,
-                'actual_category'       => $slug
+                'articles'   => $articles,
+                'category'   => $category,
+                'pagination' => $pagination
             ]);
         }
 
@@ -278,11 +276,6 @@ class CategoryController extends FrontendController
             'o_category' => $item,
             'x-tags'     => $this->get('core.globals')->getExtension()
                 . ',' . $item->pk_content_category,
-
-            // TODO: Remove this ASAP
-            'actual_category_title' => $item->title,
-            'category_name'         => $item->title,
-            'actual_category'       => $item->name,
         ]);
 
         if (!array_key_exists('page', $params)) {

@@ -26,31 +26,21 @@ class PollsController extends Controller
      */
     public function init()
     {
-        $category_real_name = 'Portada';
-        $category           = null;
-        $this->categoryName = 'home';
         $this->category     = 0;
-        $actual_category_id = 0;
-        $this->categoryName = $this->get('request_stack')->getCurrentRequest()
-            ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->categoryName = $this->get('request_stack')
+            ->getCurrentRequest()
+            ->query->get('category_name', '');
 
         if (!empty($this->categoryName)) {
             $category = $this->get('api.service.category')
                 ->getItemBySlug($this->categoryName);
 
-            $this->category     = $category->pk_content_category;
-            $actual_category_id = $category->pk_content_category;
-            $category_real_name = $category->title;
+            $this->category = $category->pk_content_category;
         }
 
         $this->view->assign([
-            'category_name'         => $this->categoryName,
-            'category'              => $category,
-            'actual_category_id'    => $actual_category_id,
-            'category_real_name'    => $category_real_name,
-            'actual_category_title' => $category_real_name,
-            'actual_category'       => $this->categoryName,
-            'settings'              => $this->get('orm.manager')
+            'category' => $category,
+            'settings' => $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('poll_settings'),
         ]);

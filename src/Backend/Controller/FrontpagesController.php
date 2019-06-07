@@ -396,9 +396,6 @@ class FrontpagesController extends Controller
         $this->view->assign([
             'ads_positions'        => $positions,
             'advertisements'       => $advertisements,
-            'actual_category'      => $categoryName,
-            'actual_category_id'   => $id,
-            'category_name'        => $categoryName,
             'column'               => $contentsInHomepage,
             'contentPositionByPos' => $contentPositionMap,
             'layoutFile'           => 'layouts/' . $layout . '.tpl',

@@ -130,7 +130,6 @@ class ArchiveController extends Controller
             'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
-            'actual_category' => 'archive',
             'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categoryName,
         ]);
     }
