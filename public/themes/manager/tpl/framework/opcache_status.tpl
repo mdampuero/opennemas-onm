@@ -23,13 +23,20 @@
       <uib-tab heading="{t}Status{/t}">
         <h4>{t}Opcache summary{/t}</h4>
         <div class="row">
-          <div google-chart chart="chartObjectMem" style="[% cssStyle %] min-height:300px" class="col-md-4"></div>
-          <div google-chart chart="chartObjectKeys" style="[% cssStyle %] min-height:300px" class="col-md-4"></div>
-          <div google-chart chart="chartObjectHits" style="[% cssStyle %] min-height:300px" class="col-md-4"></div>
+          <div class="col-xs-4 text-center">
+            <canvas class="chart chart-pie" chart-data="memory.data" chart-labels="memory.labels" chart-options="memory.options"></canvas>
+            <h5>Memory usage</h5>
+          </div>
+          <div class="col-xs-4 text-center">
+            <canvas class="chart chart-pie" chart-data="keys.data" chart-labels="keys.labels" chart-options="keys.options"></canvas>
+            <h5>Keys usage</h5>
+          </div>
+          <div class="col-xs-4 text-center">
+            <canvas class="chart chart-pie" chart-data="hits.data" chart-labels="hits.labels" chart-options="hits.options"></canvas>
+            <h5>Hit rate</h5>
+          </div>
         </div>
-
         <h4>{t}Detailed statistics{/t}</h4>
-
         <table class="table table-condensed table-stripped">
           <tr ng-repeat="(key, value) in serverData.status_key_values">
             <td>[% key %]</td>

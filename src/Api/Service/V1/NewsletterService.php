@@ -9,7 +9,6 @@
  */
 namespace Api\Service\V1;
 
-
 class NewsletterService extends OrmService
 {
     /**

@@ -2,12 +2,12 @@
  * Controller to handle list actions.
  */
 angular.module('BackendApp.controllers').controller('ContentListCtrl', [
-  '$controller', '$http', '$location', '$uibModal', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger', 'webStorage', 'oqlEncoder', 'localizer',
-  function($controller, $http, $location, $uibModal, $scope, $timeout, $window, http, routing, messenger, webStorage, oqlEncoder, localizer) {
+  '$controller', '$http', '$location', '$uibModal', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger', 'oqlEncoder', 'localizer',
+  function($controller, $http, $location, $uibModal, $scope, $timeout, $window, http, routing, messenger, oqlEncoder, localizer) {
     'use strict';
 
     // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+    $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
     /**
      * The criteria to search.
@@ -75,35 +75,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.edit = function(id, route) {
       return routing.generate(route, { id: id });
-    };
-
-    /**
-     * @function getExportUrl
-     * @memberOf ContentListCtrl
-     *
-     * @description
-     *   Generates the URL to export comments to a CSV file.
-     *
-     * @return {String} The URL to export comments to a CSV file.
-     */
-    $scope.getExportUrl = function() {
-      var criteria = angular.copy($scope.criteria);
-
-      if (!criteria || !criteria.content_type_name) {
-        return '';
-      }
-
-      oqlEncoder.configure({
-        placeholder: {
-          title: 'title ~ "%[value]%"',
-        }
-      });
-
-      return $scope.routing.generate('backend_ws_contents_list', {
-        contentType: criteria.content_type_name,
-        format: '.csv',
-        oql: oqlEncoder.getOql(criteria)
-      });
     };
 
     /**
@@ -328,13 +299,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           $scope.list($scope.route);
         }
       }
-    };
-
-    /**
-     * Reloads the full page.
-     */
-    $scope.reloadPage = function() {
-      $window.location.reload();
     };
 
     $scope.select = function(item) {

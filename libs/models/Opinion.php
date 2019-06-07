@@ -17,6 +17,13 @@ class Opinion extends Content
     const EXTRA_INFO_TYPE = 'extraInfoContents.OPINION_MANAGER';
 
     /**
+     * {@inheritdoc}
+     */
+    protected static $l10nExclusiveKeys = [
+        'summary', 'img1_footer', 'img2_footer'
+    ];
+
+    /**
      * The opinion id
      *
      * @var int
@@ -341,15 +348,7 @@ class Opinion extends Content
         return $tpl->fetch($template, $params);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public static function getL10nKeys()
-    {
-        return array_merge(parent::getL10nKeys(), [ 'summary', 'img1_footer', 'img2_footer' ]);
-    }
-
-    /**
+   /**
     * Get latest Opinions without opinions present in frontpage
     *
     * @param array $params list of parameters

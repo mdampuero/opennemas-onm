@@ -58,7 +58,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'video-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({

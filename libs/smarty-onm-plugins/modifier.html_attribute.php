@@ -6,7 +6,7 @@
  *
  * @return string
  */
-function smarty_modifier_clean_for_html_attributes($html)
+function smarty_modifier_html_attribute($html)
 {
     return \Onm\StringUtils::htmlAttribute($html);
 }

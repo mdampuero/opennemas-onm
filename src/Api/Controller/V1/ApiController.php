@@ -252,6 +252,21 @@ class ApiController extends Controller
     }
 
     /**
+     * Returns the list of authors for an item or a list of items.
+     *
+     * @param mixed $items The item or the list of items to get authors for.
+     *
+     * @return array The list of authors.
+     */
+    protected function getAuthors($items = null)
+    {
+        return $this->get('api.service.author')->responsify(
+            $this->get('api.service.author')
+                ->getList()['items']
+        );
+    }
+
+    /**
      * Returns the list of tags for an item or a list of items.
      *
      * @param mixed $items The item or the list of items to get tags for.
@@ -268,16 +283,20 @@ class ApiController extends Controller
             $items = [ $items ];
         }
 
-        $ids = array_unique(array_map(function ($a) {
+        $ids = array_unique(array_values(array_filter(array_map(function ($a) {
             return $a->pk_fk_content_category;
-        }, $items));
+        }, $items), function ($a) {
+            return !empty($a);
+        })));
 
-        $categories = $this->get('api.service.category')->responsify(
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->get('api.service.category')->responsify(
             $this->get('api.service.category')
                 ->getListByIds($ids)['items']
         );
-
-        return $categories;
     }
 
     /**
@@ -330,13 +349,16 @@ class ApiController extends Controller
             }
         }
 
-        $tags = $this->get('api.service.tag')->responsify(
+        $ids = array_values(array_filter($ids, function ($a) {
+            return !empty($a);
+        }));
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->get('api.service.tag')->responsify(
             $this->get('api.service.tag')->getListByIds($ids)['items']
         );
-
-        return $this->get('data.manager.filter')
-            ->set($tags)
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
     }
 }

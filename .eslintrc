@@ -241,7 +241,7 @@
         "no-unneeded-ternary":              [ "warn" ],
         "no-whitespace-before-property":    [ "error" ],
         "nonblock-statement-body-position": [ "warn" ],
-        "object-curly-newline":             [ "warn", { "consistent": true, "minProperties": 3 } ],
+        "object-curly-newline":             [ "warn", { "consistent": true, "minProperties": 5 } ],
         "object-curly-spacing":             [ "warn", "always" ],
         "object-property-newline":          [ "warn", {
             "allowMultiplePropertiesPerLine": true

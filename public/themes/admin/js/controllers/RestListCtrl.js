@@ -14,29 +14,14 @@
      * @requires http
      * @requires messenger
      * @requires oqlEncoder
-     * @requires webStorage
      *
      * @description
      *   Handles all actions in list.
      */
     .controller('RestListCtrl', [
-      '$controller', '$location', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $uibModal, http, messenger, oqlEncoder, webStorage) {
+      '$controller', '$location', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder',
+      function($controller, $location, $scope, $uibModal, http, messenger, oqlEncoder) {
         $.extend(this, $controller('ListCtrl', { $scope: $scope }));
-
-        /**
-         * @memberOf RestListCtrl
-         *
-         * @description
-         *   The visible table columns.
-         *
-         * @type {Object}
-         */
-        $scope.columns = {
-          key: 'columns',
-          collapsed: 1,
-          selected:  [ 'name' ]
-        };
 
         /**
          * @memberOf RestListCtrl
@@ -109,7 +94,7 @@
                 return { selected: $scope.selected.items.length };
               },
               success: function() {
-                return function(modalWindow) {
+                return function() {
                   var route = $scope.routes.deleteSelected;
                   var data  = { ids: $scope.selected.items };
 
@@ -130,33 +115,25 @@
         };
 
         /**
-         * @function getId
+         * @function getExportUrl
          * @memberOf RestListCtrl
          *
          * @description
-         *   Returns the item id.
+         *   Generates the URL to export items to a CSV file.
          *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
+         * @return {String} The URL to export items to a CSV file.
          */
-        $scope.getId = function(item) {
-          return item.id;
-        };
+        $scope.getExportUrl = function() {
+          var criteria = angular.copy($scope.criteria);
 
-        /**
-         * @function isSelectable
-         * @memberOf RestListCtrl
-         *
-         * @description
-         *   Checks if the item is selectable.
-         *
-         * @param {Object} item The item to check.
-         *
-         * @return {Boolean} True if the item is selectable. False otherwise.
-         */
-        $scope.isSelectable = function() {
-          return true;
+          if (!criteria) {
+            return '';
+          }
+
+          return $scope.routing.generate($scope.routes.list, {
+            format: '.csv',
+            oql: oqlEncoder.getOql(criteria)
+          });
         };
 
         /**
@@ -188,9 +165,6 @@
 
             $scope.parseList(response.data);
             $scope.disableFlags('http');
-
-            // Scroll top
-            $('body').animate({ scrollTop: '0px' }, 1000);
           }, function(response) {
             messenger.post(response.data);
             $scope.disableFlags('http');
@@ -217,7 +191,7 @@
 
           var route = {
             name:   $scope.routes.patch,
-            params: { id: $scope.getId(item) }
+            params: { id: $scope.getItemId(item) }
           };
 
           return http.patch(route, data).then(function(response) {
@@ -242,7 +216,7 @@
          */
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
-            var id = $scope.getId($scope.items[i]);
+            var id = $scope.getItemId($scope.items[i]);
 
             if ($scope.selected.items.indexOf(id) !== -1) {
               $scope.items[i][property + 'Loading'] = 1;
@@ -279,48 +253,6 @@
         $scope.parseList = function(data) {
           return data;
         };
-
-        /**
-         * @function resetFilters
-         * @memberOf RestListCtrl
-         *
-         * @description
-         *   Resets all filters to the initial value.
-         */
-        $scope.resetFilters = function() {
-          $scope.criteria = $scope.backup.criteria;
-        };
-
-        /**
-         * @function toggleAll
-         * @memberOf RestListCtrl
-         *
-         * @description
-         *   Toggles all items selection.
-         */
-        $scope.toggleAll = function() {
-          if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.filter(function(item) {
-              return $scope.isSelectable(item);
-            }).map(function(item) {
-              return $scope.getId(item);
-            });
-          } else {
-            $scope.selected.items = [];
-          }
-        };
-
-        // Updates the columns stored in localStorage.
-        $scope.$watch('columns', function(nv, ov) {
-          if (nv !== ov) {
-            webStorage.local.set($scope.columns.key, nv);
-          }
-        }, true);
-
-        // Get enabled columns from localStorage
-        if (webStorage.local.get($scope.columns.key)) {
-          $scope.columns = webStorage.local.get($scope.columns.key);
-        }
       }
     ]);
 })();

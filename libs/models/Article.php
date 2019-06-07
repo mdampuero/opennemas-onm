@@ -12,6 +12,14 @@ class Article extends Content
     const EXTRA_INFO_TYPE = 'extraInfoContents.ARTICLE_MANAGER';
 
     /**
+     * {@inheritdoc}
+     */
+    protected static $l10nExclusiveKeys = [
+        'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
+        'pretitle', 'summary', 'title_int'
+    ];
+
+    /**
      * The id of the article
      *
      * @var int
@@ -496,28 +504,5 @@ class Article extends Content
         }
 
         return $this->author;
-    }
-
-    /**
-     * Returns the list of properties that support multiple languages.
-     *
-     * @param boolean $exclusive The list of article's exclusive properties
-     *                           that support multiple languages.
-     *
-     * @return array The list of properties that can be localized to multiple
-     *               languages.
-     */
-    public static function getL10nKeys($exclusive = false)
-    {
-        $keys = [
-            'footer_video', 'footer_video2', 'img1_footer', 'img2_footer',
-            'pretitle', 'summary', 'title_int'
-        ];
-
-        if ($exclusive) {
-            return $keys;
-        }
-
-        return array_merge(parent::getL10nKeys(), $keys);
     }
 }

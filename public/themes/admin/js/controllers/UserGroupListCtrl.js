@@ -36,17 +36,9 @@
         };
 
         /**
-         * @function getId
-         * @memberOf SubscriptionListCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
+         * @inheritdoc
          */
-        $scope.getId = function(item) {
+        $scope.getItemId = function(item) {
           return item.pk_user_group;
         };
 
@@ -58,7 +50,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'user-group-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });

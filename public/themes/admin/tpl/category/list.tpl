@@ -174,20 +174,20 @@
                 <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
                   <td class="text-center v-align-middle">
                     <div class="checkbox check-default" ng-if="isSelectable(item)">
-                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getId(item)" type="checkbox">
+                      <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getItemId(item)" type="checkbox">
                       <label for="checkbox[%$index%]"></label>
                     </div>
                   </td>
                   <td class="v-align-middle">
-                    <div class="[% 'm-l-' + 30 * levels[getId(item)] %]">
+                    <div class="[% 'm-l-' + 30 * levels[getItemId(item)] %]">
                       [% item.title %]
                       <div class="listing-inline-actions">
-                        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
-                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+                        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                        <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                         </a>
-                        <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getId(item)] > 0" tooltip-class="tooltip-danger">
-                          <button class="btn btn-danger btn-small" ng-click="delete(getId(item))" ng-disabled="data.extra.stats[getId(item)] > 0" type="button">
+                        <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getItemId(item)] > 0" tooltip-class="tooltip-danger">
+                          <button class="btn btn-danger btn-small" ng-click="delete(getItemId(item))" ng-disabled="data.extra.stats[getItemId(item)] > 0" type="button">
                             <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                           </button>
                         </div>
@@ -198,13 +198,13 @@
                             </button>
                             <ul class="dropdown-menu no-padding">
                               <li>
-                                <a href="#" ng-click="move(getId(item), item)">
+                                <a href="#" ng-click="move(getItemId(item), item)">
                                   <i class="fa fa-flip-horizontal fa-reply"></i>
                                   {t}Move contents{/t}
                                 </a>
                               </li>
                               <li>
-                                <a href="#" ng-click="empty(getId(item))">
+                                <a href="#" ng-click="empty(getItemId(item))">
                                   <i class="fa fa-fire"></i>
                                   {t}Delete contents{/t}
                                 </a>
@@ -225,9 +225,9 @@
                     <span class="badge badge-white" ng-if="item.color" ng-style="{ 'background-color': item.color}">&nbsp;&nbsp;</span>
                   </td>
                   <td class="hidden-xs text-center v-align-middle">
-                    <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getId(item)] || data.extra.stats[getId(item)] == 0 }">
+                    <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getItemId(item)] || data.extra.stats[getItemId(item)] == 0 }">
                       <strong>
-                        [% data.extra.stats[getId(item)] ? data.extra.stats[getId(item)] : 0 %]
+                        [% data.extra.stats[getItemId(item)] ? data.extra.stats[getItemId(item)] : 0 %]
                       </strong>
                     </span>
                   </td>

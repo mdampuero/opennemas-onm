@@ -30,6 +30,7 @@
       @Common/components/angular-ui-select/dist/select.min.css,
       @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.css,
       @Common/components/animate.css/animate.min.css,
+      @Common/components/chart.js/dist/Chart.min.css,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css,
       @Common/components/messenger/build/css/messenger-theme-flat.css,
       @Common/components/messenger/build/css/messenger.css,
@@ -156,7 +157,7 @@
                       {is_module_activated name="POLL_MANAGER"}
                         {acl isAllowed="POLL_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_poll_create}">
+                            <a href="{url name=backend_poll_create}">
                               <i class="fa fa-pie-chart"></i>
                               <span class="title">{t}Poll{/t}</span>
                             </a>
@@ -450,6 +451,7 @@
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
       @Common/components/angular/angular.min.js,
+      @Common/components/chart.js/dist/Chart.min.js,
       @Common/components/ckeditor/ckeditor.js,
       @Common/components/ckeditor/config.js,
       @Common/components/ckeditor/lang/en.js,
@@ -484,6 +486,7 @@
       @Common/components/angular-animate/angular-animate.min.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
       @Common/components/angular-bootstrap/ui-bootstrap-tpls.min.js,
+      @Common/components/angular-chart.js/dist/angular-chart.min.js,
       @Common/components/angular-checklist-model/checklist-model.js,
       @Common/components/angular-loading-bar/build/loading-bar.min.js,
       @Common/components/angular-nanoscroller/scrollable.js,

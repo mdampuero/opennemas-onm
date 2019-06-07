@@ -40,10 +40,6 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getIdKeys' ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('Logger' . uniqid())
-            ->setMethods([ 'error' ])
-            ->getMock();
-
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
@@ -73,9 +69,6 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.user':
                 return $this->user;
-
-            case 'error.log':
-                return $this->logger;
 
             case 'orm.manager':
                 return $this->em;
@@ -123,7 +116,6 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->repository->expects($this->any())->method('findOneBy')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->deleteItem(23);
     }
@@ -144,8 +136,6 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->once())->method('persist')
             ->with($item)->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error');
-
         $this->service->deleteItem(23);
     }
 
@@ -163,6 +153,16 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getItem when the provided id is empty.
+     *
+     * @expectedException \Api\Exception\GetItemException
+     */
+    public function testGetItemWhemEmptyId()
+    {
+        $this->service->getItem(0);
+    }
+
+    /**
      * Tests getItem when the item has no author property to true.
      *
      * @expectedException \Api\Exception\GetItemException
@@ -172,7 +172,6 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('id = 1 and type != 1 and user_group_id = 3')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->getItem(1);
     }

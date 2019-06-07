@@ -33,10 +33,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([ 'getRepository' ])->getMock();
 
-        $this->logger = $this->getMockBuilder('Logger')
-            ->setMethods([ 'error' ])
-            ->getMock();
-
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([
                 'countContents', 'moveContents', 'removeContents'
@@ -60,9 +56,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
-            case 'error.log':
-                return $this->logger;
-
             case 'orm.manager':
                 return $this->em;
         }
@@ -80,8 +73,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->expects($this->once())->method('getItem')
             ->with(1)->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error');
-
         $this->service->emptyItem(1);
     }
 
@@ -97,8 +88,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->repository->expects($this->once())->method('countContents')
             ->with(18752)->willReturn([]);
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->emptyItem(1);
     }
@@ -148,8 +137,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->service->expects($this->once())->method('getListByIds')
             ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->emptyList([ 1, 2 ]);
     }
@@ -252,8 +239,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->expects($this->once())->method('getItem')
             ->with(4937)->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error');
-
         $this->service->moveItem(4937, 26252);
     }
 
@@ -269,8 +254,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->repository->expects($this->once())->method('countContents')
             ->with(24036)->willReturn([]);
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->moveItem(24036, 6506);
     }
@@ -325,8 +308,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->expects($this->once())->method('getListByIds')
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error');
-
         $this->service->moveList([ 1, 2 ], 22933);
     }
 
@@ -373,8 +354,6 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->repository->expects($this->once())->method('countContents')
             ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->once())->method('error');
 
         $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ]);
     }

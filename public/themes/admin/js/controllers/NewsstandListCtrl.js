@@ -57,26 +57,10 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'newsstand-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
           $scope.list();
-        };
-
-        /**
-         * @function getId
-         * @memberOf NewsstandListCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
-         */
-        $scope.getId = function(item) {
-          return item.id;
         };
       }
     ]);

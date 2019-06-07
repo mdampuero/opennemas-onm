@@ -204,10 +204,10 @@
                     </div>
                     <div class="listing-inline-actions">
                       {acl isAllowed="OPINION_UPDATE"}
-                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_opinion_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+                      <a class="btn btn-default btn-small" href="[% routing.generate('backend_opinion_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
                         <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                       </a>
-                      <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_opinion_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+                      <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_opinion_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
                       {/acl}
 
                       {acl isAllowed="OPINION_DELETE"}
@@ -220,8 +220,8 @@
                   <td class="hidden-xs nowrap">
                     <span ng-if="item.fk_author">
                       <a href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]">
-                        [% data.extra.authors[item.fk_author].name %]
-                        <span ng-if="data.extra.authors[item.fk_author].is_blog == 1">(Blog)</span>
+                        [% (data.extra.authors | filter : { id: item.fk_author })[0].name %]
+                        <span ng-if="(data.extra.authors | filter : { id: item.fk_author })[0].is_blog == 1">(Blog)</span>
                       </a>
                     </span>
                     <span ng-if="!item.fk_author || item.fk_author == 0 || item.type_opinion != 0">

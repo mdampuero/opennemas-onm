@@ -124,7 +124,7 @@ class Album extends Content
             }
 
             $this->load($rs);
-            $this->loadPhotos();
+            $this->loadPhotos($id);
             $this->id = $id;
 
             return $this;
@@ -189,35 +189,29 @@ class Album extends Content
 
             $conn->commit();
         } catch (\Exception $e) {
+            $conn->rollback();
+
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
-
-            $conn->rollback();
         }
     }
 
     /**
-     * Renders the album
+     * Renders the album.
      *
-     * @param array $params parameters for rendering the content
-     * @param null $tpl variable remaining for back compatability
+     * @param array $params The list of parameters.
      *
-     * @return string the generated HTML
+     * @return string The generated HTML.
      */
-    public function render(array $params, $tpl = null)
+    public function render(array $params)
     {
         $tpl = getService('core.template');
 
         $params['item'] = $this;
-        $template       = 'frontpage/contents/_album.tpl';
-
-        if ($params['custom'] == 1) {
-            $template = $params['tpl'];
-        }
 
         try {
-            $html = $tpl->fetch($template, $params);
+            $html = $tpl->fetch('frontpage/contents/_album.tpl', $params);
         } catch (\Exception $e) {
             $html = _('Album not available');
         }
@@ -251,11 +245,11 @@ class Album extends Content
 
             return true;
         } catch (\Exception $e) {
+            $conn->rollback();
+
             getService('error.log')->error(
                 $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
             );
-
-            $conn->rollback();
         }
 
         return false;
@@ -263,14 +257,16 @@ class Album extends Content
 
     /**
      * Loads all photos in the album.
+     *
+     * @param int $id The album id.
      */
-    protected function loadPhotos() : void
+    protected function loadPhotos(int $id) : void
     {
         try {
             $this->photos = getService('dbal_connection')->fetchAll(
                 'SELECT DISTINCT pk_photo, description, position'
                 . ' FROM albums_photos WHERE pk_album =? ORDER BY position ASC',
-                [ $this->id ]
+                [ $id ]
             );
 
             foreach ($this->photos as &$photo) {
