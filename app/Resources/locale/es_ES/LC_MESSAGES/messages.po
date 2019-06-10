@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-16 15:35+0000\n"
+"POT-Creation-Date: 2019-06-10 14:14+0000\n"
 "PO-Revision-Date: 2019-05-16 17:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -6102,15 +6102,6 @@ msgstr "URL de embebido"
 msgid "Thumbnail"
 msgstr "Miniatura"
 
-msgid "You must put %1 videos in the HOME"
-msgstr "Debes tener %1 vídeos para la portada"
-
-msgid "Unable to find any video that matches your search."
-msgstr "No se pudieron encontrar vídeos que coincidan con tu búsqueda."
-
-msgid "Video details"
-msgstr "Detalles del vídeo"
-
 msgid "Config video module"
 msgstr "Configuración de módulo «Vídeo»"
 
@@ -7467,6 +7458,18 @@ msgstr "Aceptar todo"
 msgid "Back to purposes"
 msgstr "Volver a los propósitos"
 
+msgid "Columns"
+msgstr "Columnas"
+
+msgid "Updated"
+msgstr "Actualizado"
+
+msgid "Start date"
+msgstr "Fecha de inicio"
+
+msgid "End date"
+msgstr "Fecha de fin"
+
 msgid "Connect with"
 msgstr "Conectar con"
 
@@ -7882,18 +7885,6 @@ msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
 msgid "I have read and accept the Terms of redirection"
 msgstr "Leí y acepto los Términos de redirección"
 
-msgid "Delete album"
-msgstr "Eliminar álbum"
-
-msgid "Are you sure that do you want delete \"%1\"?"
-msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
-
-msgid "Delete albums"
-msgstr "Eliminar álbumes"
-
-msgid "Are you sure you want to delete <span>%num%</span> albums?"
-msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> álbumes?"
-
 msgid "Complete all the required album information before save it"
 msgstr ""
 "Complete toda la información requerida para el álbum antes de guardarlo"
@@ -7910,14 +7901,8 @@ msgstr "Lugar"
 msgid "Event date"
 msgstr "Fecha del evento"
 
-msgid "Start date"
-msgstr "Fecha de inicio"
-
 msgid "Start hour"
 msgstr "Hora de inicio"
-
-msgid "End date"
-msgstr "Fecha de fin"
 
 msgid "End hour"
 msgstr "Hora de fin"
@@ -8006,9 +7991,6 @@ msgstr ""
 
 msgid "Reset filters"
 msgstr "Reiniciar filtros"
-
-msgid "Columns"
-msgstr "Columnas"
 
 msgid "Group name"
 msgstr "Nombre del grupo"
@@ -8170,9 +8152,6 @@ msgstr "ID de pago"
 
 msgid "Invoice ID"
 msgstr "ID de factura"
-
-msgid "Updated"
-msgstr "Actualizado"
 
 msgid "No information"
 msgstr "Sin información"
@@ -8730,6 +8709,27 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "You must put %1 videos in the HOME"
+#~ msgstr "Debes tener %1 vídeos para la portada"
+
+#~ msgid "Unable to find any video that matches your search."
+#~ msgstr "No se pudieron encontrar vídeos que coincidan con tu búsqueda."
+
+#~ msgid "Video details"
+#~ msgstr "Detalles del vídeo"
+
+#~ msgid "Delete album"
+#~ msgstr "Eliminar álbum"
+
+#~ msgid "Are you sure that do you want delete \"%1\"?"
+#~ msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
+
+#~ msgid "Delete albums"
+#~ msgstr "Eliminar álbumes"
+
+#~ msgid "Are you sure you want to delete <span>%num%</span> albums?"
+#~ msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> álbumes?"
 
 #~ msgid "Album created successfully"
 #~ msgstr "Álbum creado correctamente"
