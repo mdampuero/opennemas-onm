@@ -200,6 +200,21 @@ angular.module('BackendApp.controllers').controller('AlbumCtrl', [
       }
     }, true);
 
+    // Update photos order when it changes
+    $scope.$watch('item.photos', function(nv, ov) {
+      if (!nv || nv === ov) {
+        return;
+      }
+
+      var ids = nv.map(function(e) {
+        return e.pk_photo;
+      });
+
+      $scope.data.item.photos.sort(function(a, b) {
+        return ids.indexOf(a.pk_photo) - ids.indexOf(b.pk_photo);
+      });
+    }, true);
+
     // Update the ids and footers when photos change
     $scope.$watch('photos', function(nv, ov) {
       if (!nv || nv === ov) {
