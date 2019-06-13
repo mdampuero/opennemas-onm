@@ -33,6 +33,15 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTimeZone' ])
+            ->getMock();
+
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([ 'getDeviceCssClasses', 'renderInline', 'getMark' ])
             ->getMock();
@@ -47,8 +56,13 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
     }
 
     /**
@@ -61,6 +75,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.locale':
+                return $this->locale;
+
             case 'core.renderer.advertisement':
                 return $this->renderer;
 
