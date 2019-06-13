@@ -1488,8 +1488,10 @@ class Content implements \JsonSerializable, CsvSerializable
             return false;
         }
 
-        $end = new \DateTime($this->endtime);
-        $now = new \DateTime($now);
+        $timezone = getService('core.locale')->getTimeZone();
+
+        $end = new \DateTime($this->endtime, $timezone);
+        $now = new \DateTime($now, $timezone);
 
         return ($now->getTimeStamp() > $end->getTimeStamp());
     }
