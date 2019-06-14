@@ -65,6 +65,11 @@ class AlbumController extends FrontendController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.album';
+
+    /**
      * The list of templates per action.
      *
      * @var array

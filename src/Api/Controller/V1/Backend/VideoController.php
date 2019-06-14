@@ -21,11 +21,14 @@ class VideoController extends ContentOldController
     protected $extension = 'VIDEO_MANAGER';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $getItemRoute = 'api_v1_backend_video_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.video';
 
     /**
      * Saves configuration for tags.

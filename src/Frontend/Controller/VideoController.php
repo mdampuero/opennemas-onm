@@ -48,9 +48,7 @@ class VideoController extends FrontendController
     ];
 
     /**
-     * The list of valid query parameters per action.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $queries = [
         'list'       => [ 'page', 'category_name' ],
@@ -58,13 +56,16 @@ class VideoController extends FrontendController
     ];
 
     /**
-     * The list of routes per action.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $routes = [
         'list' => 'frontend_video_frontpage'
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.video';
 
     /**
      * The list of templates per action.

@@ -21,11 +21,14 @@ class OpinionController extends ContentOldController
     protected $extension = 'OPINION_MANAGER';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $getItemRoute = 'api_v1_backend_opinion_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.opinion';
 
     /**
      * Saves configuration for tags.
@@ -197,10 +200,8 @@ class OpinionController extends ContentOldController
     }
 
     /**
-     * Returns a list of extra data
-     *
-     * @return array
-     **/
+     * {@inheritdoc}
+     */
     protected function getExtraData($items = null)
     {
         $extra = parent::getExtraData($items);
@@ -219,22 +220,15 @@ class OpinionController extends ContentOldController
     }
 
     /**
-     * Returns the list of l10n keys
-     * @param Type $var Description
-     *
-     * @return array
-     **/
+     * {@inheritdoc}
+     */
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('opinion');
     }
 
     /**
-     * Returns the list of contents related with items.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
+     * {@inheritdoc}
      */
     protected function getRelatedContents($content)
     {

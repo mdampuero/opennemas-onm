@@ -16,23 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ContentController extends ApiController
 {
     /**
-     * The API service name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $service = 'api.service.content';
-
-    /**
-     * Returns the content id
-     *
-     * @param Content $item the item
-     *
-     * @return integer
-     **/
-    public function getItemId($item)
-    {
-        return $item->pk_content;
-    }
 
     /**
      * Saves a new item.
@@ -85,10 +71,8 @@ class ContentController extends ApiController
     }
 
     /**
-     * Returns a list of extra data
-     *
-     * @return array
-     **/
+     * {@inheritdoc}
+     */
     protected function getExtraData($items = null)
     {
         return [
@@ -99,6 +83,14 @@ class ContentController extends ApiController
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
             ],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemId($item)
+    {
+        return $item->pk_content;
     }
 
     /**

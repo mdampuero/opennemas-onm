@@ -19,11 +19,14 @@ class AlbumController extends ContentOldController
     protected $extension = 'ALBUM_MANAGER';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $getItemRoute = 'api_v1_backend_album_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.album';
 
     /**
      * {@inheritDoc}

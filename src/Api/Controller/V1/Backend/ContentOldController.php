@@ -12,16 +12,12 @@ namespace Api\Controller\V1\Backend;
 class ContentOldController extends ContentController
 {
     /**
-     * The API service name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $service = 'api.service.content_old';
 
     /**
-     * Returns a list of extra data.
-     *
-     * @return array The extra data.
+     * {@inheritdoc}
      */
     protected function getExtraData($items = null)
     {
