@@ -195,7 +195,7 @@ $menuXml = [
                 'id'          => 'file_manager',
                 'title'       => _('Files'),
                 'icon'        => 'fa fa-file',
-                'link'        => url('admin_files'),
+                'link'        => url('backend_files_list'),
                 'module_name' => 'FILE_MANAGER',
                 'privilege'   => 'ATTACHMENT_ADMIN',
             ],
