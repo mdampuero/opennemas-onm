@@ -1,0 +1,15 @@
+backend_file_create:
+    path:     /files/new
+    defaults: { _controller: BackendBundle:File:create }
+
+backend_file_show:
+    path:     /files/{id}
+    defaults: { _controller: BackendBundle:File:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_files_list:
+    path:     /files
+    defaults: { _controller: BackendBundle:File:list }
