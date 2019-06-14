@@ -1,132 +1,97 @@
-{extends file="base/admin.tpl"}
+{extends file="common/extension/item.tpl"}
 
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      $(document).ready(function($) {
-        $('.fileinput').fileinput({ name: 'path' });
-      });
-    </script>
-  {/javascripts}
+{block name="metaTitle"}
+  > {t}Files{/t} >
+  {if empty($id)}
+    {t}Create{/t}
+  {else}
+    {t}Edit{/t} ({$id})
+  {/if}
 {/block}
 
-{block name="content"}
-  <form action="{if !is_null($attaches)}{url name=admin_files_update id=$attaches->id}{else}{url name=admin_files_create}{/if}" enctype="multipart/form-data" id="formulario" method="POST" name="form" ng-controller="FileCtrl" ng-init="file = {json_encode($attaches)|clear_json}">
-    <div class="page-navbar actions-navbar">
-      <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-          <ul class="nav quick-section">
-            <li class="quicklinks">
-              <h4>
-                <i class="fa fa-file-o m-r-10"></i>
-              </h4>
-            </li>
-            <li class="quicklinks">
-              <h4>
-                <a class="no-padding" href="{url name=admin_files}">
-                  {t}Files{/t}
-                </a>
-              </h4>
-            </li>
-            <li class="quicklinks hidden-xs m-l-5 m-r-5">
-              <h4>
-                <i class="fa fa-angle-right"></i>
-              </h4>
-            </li>
-            <li class="quicklinks hidden-xs">
-              <h4>
-                {if $attaches}{t}Edit{/t}{else}{t}Create{/t}{/if}
-              </h4>
-            </li>
-          </ul>
-          <div class="pull-right">
-            <ul class="nav quick-section">
-              {acl isAllowed="ATTACHMENT_CREATE"}
-                <li class="quicklinks">
-                  <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="submit">
-                    <i class="fa fa-save m-r-5"></i>
-                    {t}Save{/t}
-                  </button>
-                </li>
-              {/acl}
-            </ul>
+{block name="ngInit"}
+  ng-controller="FileCtrl" ng-init="getItem({$id});"
+{/block}
+
+{block name="icon"}
+  <i class="fa fa-file-o m-r-10"></i>
+{/block}
+
+{block name="title"}
+  <a class="no-padding" href="{url name=backend_files_list}">
+    {t}Files{/t}
+  </a>
+{/block}
+
+{block name="rightColumn"}
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        {acl isAllowed="ATTACHMENT_AVAILABLE"}
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
+        {/acl}
+        <div class="m-t-5">
+          {acl isAllowed="ATTACHMENT_FAVORITE"}
+            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
+          {/acl}
+        </div>
+        <div class="m-t-5">
+          {acl isAllowed="ATTACHMENT_HOME"}
+            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Home{/t}" field="in_home"}
+          {/acl}
+        </div>
+      </div>
+      {include file="ui/component/content-editor/accordion/author.tpl"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="item.category"}
+      {include file="ui/component/content-editor/accordion/tags.tpl"}
+      {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+    </div>
+  </div>
+{/block}
+
+{block name="leftColumn"}
+  <div class="grid simple">
+    <div class="grid-body">
+      <div class="row">
+        <div class="col-lg-4 m-b-30">
+          <div class="p-l-30 p-r-30 p-t-15">
+            <div class="text-center">
+              <div>
+                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
+                  <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
+                </span>
+              </div>
+              <p class="m-t-15 text-center">
+                <strong ng-if="item.path">
+                  [% getFileName() %]
+                </strong>
+                <strong ng-if="!item.path">
+                  {t}No file selected{/t}
+                </strong>
+              </p>
+            </div>
+            <label class="btn btn-white btn-block m-t-15" for="file">
+              <input class="hidden" id="file" name="file" file-model="item.path" type="file"/>
+              <span ng-if="!item.path">
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Add{/t}
+              </span>
+              <span ng-if="item.path">
+                <i class="fa fa-edit m-r-5"></i>
+                {t}Change{/t}
+              </span>
+            </label>
+            <a class="btn btn-default btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.FILE_IMG_URL + item.path +  item.name %]" target="_blank">
+              <i class="fa fa-download m-r-5"></i>
+              {t}Download{/t}
+            </a>
           </div>
+        </div>
+        <div class="col-lg-8">
+          {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
+          {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Description{/t}" field="description" rows=5}
         </div>
       </div>
     </div>
-    <div class="content">
-      <div class="row">
-        <div class="col-md-8">
-          <div class="grid simple">
-            <div class="grid-body">
-              <div class="form-group">
-                <label for="" class="form-label">{t}Title{/t}</label>
-                <div class="controls">
-                  <input type="text" id="title" name="title" ng-blur="generate()" ng-model="title" value="{$attaches->title|clearslash}" class="form-control" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="description" class="form-label">{t}Description{/t}</label>
-                <div class="controls">
-                  <textarea id="description" name="description" class="form-control" ng-model="description" required class="required" onm-editor onm-editor-preset="simple">{$attaches->description|clearslash}</textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="grid simple">
-            <div class="grid-body">
-              <div class="form-group">
-                <label for="category" class="form-label">{t}Category{/t}</label>
-                <div class="controls">
-                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="file.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="metadata" class="form-label">{t}Tags{/t}</label>
-                <div class="controls">
-                  {include file="ui/component/tags-input/tags.tpl" ngModel="file.tags"}
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="path" class="form-label">{t}File{/t}</label>
-                <div class="controls">
-                  {if !is_null($attaches)}
-                    <a class="btn btn-white thumbnail center" target="_blank" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">
-                      <span class="fa fa-download fa-2x"></span> <br>{t}Download{/t}
-                    </a>
-                    <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="form-control" required readonly="readonly">
-                  {else}
-                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                      <div class="form-control" data-trigger="fileinput" style="height: 37px;">
-                        <i class="fa fa-file fileinput-exists"></i>
-                        <span class="fileinput-filename"></span>
-                      </div>
-                      <span class="input-group-btn">
-                        <span class="btn btn-default btn-file">
-                          <span class="fileinput-new">Select file</span>
-                          <span class="fileinput-exists">Change</span>
-                          <input type="file" id="path" name="path" />
-                        </span>
-                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">{t}Remove{/t}</a>
-                      </span>
-                    </div>
-                    <div class="help">
-                      {t 1=$smarty.const.MAX_UPLOAD_FILE/1024/1024}Max allowed file size: %1 Mb{/t}
-                      <!-- <span class="fa fa-info-circle" uib-tooltip="{t}File types allowed{/t}: 7z avi bmp bz2 css csv doc docx eot flac flv gif gz ico jpeg jpg js mka mkv mov mp3 mp4 mpeg mpg odt odp ods odw otf ogg ogm opus pdf png ppt pptx rar rtf svg svgz swf tar tbz tgz ttf txt txz wav webm webp woff woff2 xls xlsx xml xz zip"> -->
-                    </span></div>
-                  {/if}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {if !is_null($attaches->id)}
-        <input type="hidden" id="id" name="id"  value="{$attaches->id|default:""}" />
-        <input type="hidden" id="fich" name="fich" value="{$attaches->pk_attachment}" />
-      {/if}
-      <input type="hidden" name="page" id="page" value="{$page|default:"1"}" />
-  </form>
+  </div>
 {/block}
