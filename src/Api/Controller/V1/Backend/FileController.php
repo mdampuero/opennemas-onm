@@ -11,13 +11,21 @@ namespace Api\Controller\V1\Backend;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Common\Core\Controller\Controller;
 
-/**
- * Lists and displays files for content.
- */
-class FileController extends Controller
+class FileController extends ContentOldController
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'FILE_MANAGER';
+
+    /**
+     * The route name to generate URL from when creating a new item.
+     *
+     * @var string
+     */
+    protected $getItemRoute = 'api_v1_backend_file_show';
+
     /**
      * Returns a list with the file name and id of files in JSON format.
      *
@@ -45,5 +53,16 @@ class FileController extends Controller
         }, $results);
 
         return new JsonResponse([ 'results' => $results ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        return array_merge(parent::getExtraData($items), [
+            'categories' => $this->getCategories($items),
+            'tags'       => $this->getTags($items)
+        ]);
     }
 }
