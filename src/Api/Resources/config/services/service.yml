@@ -1,4 +1,9 @@
 services:
+    api.service.album:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Album' ]
+        public: true
+
     api.service.author:
         class:     Api\Service\V1\AuthorService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
@@ -24,6 +29,11 @@ services:
         arguments: [ '@service_container', 'Common\ORM\Entity\ContentPosition' ]
         public: true
 
+    api.service.file:
+        class:     Api\Service\V1\FileService
+        arguments: [ '@service_container', '\Attachment' ]
+        public: true
+
     api.service.frontpage:
         class:     Api\Service\V1\FrontpageService
         arguments: [ '@service_container', 'Common\ORM\Entity\Frontpage' ]
@@ -37,6 +47,16 @@ services:
     api.service.newsletter:
         class:     Api\Service\V1\NewsletterService
         arguments: [ '@service_container', 'Common\ORM\Entity\Newsletter' ]
+        public: true
+
+    api.service.opinion:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Opinion' ]
+        public: true
+
+    api.service.poll:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Poll' ]
         public: true
 
     api.service.subscriber:
@@ -67,3 +87,8 @@ services:
     api.service.url:
         class:     Api\Service\V1\OrmService
         arguments: [ '@service_container', 'Common\ORM\Entity\Url' ]
+
+    api.service.video:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Video' ]
+        public: true
