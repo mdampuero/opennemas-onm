@@ -1,0 +1,103 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Common\Core\Component\Helper;
+
+use Common\Core\Component\Helper\FileHelper;
+use Common\ORM\Entity\Instance;
+
+/**
+ * Defines test cases for FileHelper class.
+ */
+class FileHelperTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->instance = new Instance([ 'internal_name' => 'bar' ]);
+
+        $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'exists', 'remove' ])
+            ->getMock();
+
+        $this->helper = new FileHelper($this->instance, '/waldo/grault');
+
+        $property = new \ReflectionProperty($this->helper, 'fs');
+        $property->setAccessible(true);
+
+        $property->setValue($this->helper, $this->fs);
+    }
+
+    /**
+     * Tests generatePath.
+     */
+    public function testGeneratePath()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $file->expects($this->any())->method('getClientOriginalName')
+            ->willReturn('xyzzy.gorp');
+
+        $this->assertRegexp(
+            '/\/waldo\/grault\/media\/bar\/files\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/xyzzy.gorp/',
+            $this->helper->generatePath($file)
+        );
+
+        $this->assertRegexp(
+            '/\/waldo\/grault\/media\/bar\/files\/2010\/01\/01\/xyzzy.gorp/',
+            $this->helper->generatePath($file, '2010-01-01 15:20:45')
+        );
+    }
+
+    /**
+     * Tests generateRelativePath.
+     */
+    public function testGenerateRelativePath()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $file->expects($this->any())->method('getClientOriginalName')
+            ->willReturn('xyzzy.gorp');
+
+        $this->assertRegexp(
+            '/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/xyzzy.gorp/',
+            $this->helper->generateRelativePath($file)
+        );
+
+        $this->assertEquals(
+            '/2010/01/01/xyzzy.gorp',
+            $this->helper->generateRelativePath($file, '2010-01-01 15:20:45')
+        );
+    }
+
+    /**
+     * Tests move when the original file is copied to target.
+     */
+    public function testMove()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'move' ])
+            ->getMock();
+
+        $file->expects($this->once())->method('move')
+            ->with('/thud/fred/', 'norf.txt');
+
+        $this->helper->move($file, '/thud/fred/norf.txt');
+    }
+}

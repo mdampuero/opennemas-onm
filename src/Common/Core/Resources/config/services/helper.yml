@@ -32,6 +32,11 @@ services:
         class:     Common\Core\Component\Helper\CsvHelper
         public:    true
 
+    core.helper.file:
+        class:     Common\Core\Component\Helper\FileHelper
+        arguments: [ '@core.instance', '%core.paths.public%' ]
+        public:    true
+
     core.helper.http_fetcher:
         class:     Common\Core\Component\Http\Fetcher
         public:    true
@@ -44,7 +49,7 @@ services:
     core.helper.image:
         class:     Common\Core\Component\Helper\ImageHelper
         arguments: [ '@core.instance', '@core.image.processor', '%core.paths.public%' ]
-        public: true
+        public:    true
 
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
