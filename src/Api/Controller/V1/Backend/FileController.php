@@ -20,11 +20,59 @@ class FileController extends ContentOldController
     protected $extension = 'FILE_MANAGER';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $getItemRoute = 'api_v1_backend_file_show';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.file';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
+        $file = $request->files->get('path');
+
+        $item = $this->get($this->service)->createItem($data, $file);
+
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                [ 'id' => $this->getItemId($item) ]
+            ));
+        }
+
+        return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
+        $file = $request->files->get('path');
+
+        $this->get($this->service)->updateItem($id, $data, $file);
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 
     /**
      * Returns a list with the file name and id of files in JSON format.
