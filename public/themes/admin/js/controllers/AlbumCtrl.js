@@ -133,6 +133,11 @@
           $scope.configure(data.extra);
           $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
 
+          // Remove unexisting photos
+          $scope.data.item.photos = $scope.data.item.photos.filter(function(e) {
+            return data.extra.photos[e.pk_photo];
+          });
+
           $scope.item.photos = [];
           for (var i = 0; i < $scope.data.item.photos.length; i++) {
             $scope.item.photos.push($scope.localizePhoto(
@@ -199,6 +204,21 @@
           if (nv) {
             $scope.item.cover_id = nv.pk_content;
           }
+        }, true);
+
+        // Update photos order when it changes
+        $scope.$watch('item.photos', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+
+          var ids = nv.map(function(e) {
+            return e.pk_photo;
+          });
+
+          $scope.data.item.photos.sort(function(a, b) {
+            return ids.indexOf(a.pk_photo) - ids.indexOf(b.pk_photo);
+          });
         }, true);
 
         // Update the ids and footers when photos change

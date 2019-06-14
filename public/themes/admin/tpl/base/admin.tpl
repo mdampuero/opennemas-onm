@@ -207,7 +207,7 @@
                       {is_module_activated name="ALBUM_MANAGER"}
                         {acl isAllowed="ALBUM_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_album_create}">
+                            <a href="{url name=backend_album_create}">
                               <i class="fa fa-stack-overflow"></i>
                               <span class="title">{t}Album{/t}</span>
                             </a>

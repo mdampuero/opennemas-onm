@@ -109,10 +109,9 @@ class Processor
      */
     public function getDescription() : ?string
     {
-        $description = $this->image->getImagick()
-            ->getImageProperties('exif:ImageDescription');
+        $description = $this->image->metadata();
 
-        return $description['exif:ImageDescription'] ?? null;
+        return $description['ifd0.ImageDescription'] ?? null;
     }
 
     /**

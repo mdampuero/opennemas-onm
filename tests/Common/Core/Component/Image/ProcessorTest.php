@@ -30,7 +30,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->image = $this->getMockBuilder('Image')
             ->setMethods([
                 'crop', 'get', 'getHeight','getImagick', 'getSize', 'getWidth',
-                'resize', 'save', 'strip', 'thumbnail'
+                'metadata', 'resize', 'save', 'strip', 'thumbnail'
             ])->getMock();
 
         $this->imagick = $this->getMockBuilder('Imagick')
@@ -132,9 +132,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDescriptionWithExif()
     {
-        $this->imagick->expects($this->once())->method('getImageProperties')
-            ->with('exif:ImageDescription')
-            ->willReturn([ 'exif:ImageDescription' => 'glorp']);
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn([ 'ifd0.ImageDescription' => 'glorp']);
 
         $this->assertEquals('glorp', $this->im->getDescription());
     }
@@ -144,8 +143,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDescriptionWithoutExif()
     {
-        $this->imagick->expects($this->once())->method('getImageProperties')
-            ->with('exif:ImageDescription')
+        $this->image->expects($this->once())->method('metadata')
             ->willReturn([]);
 
         $this->assertEquals('', $this->im->getDescription());

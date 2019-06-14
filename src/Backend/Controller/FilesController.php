@@ -98,7 +98,7 @@ class FilesController extends Controller
         }
 
         $rtbMediaManager = '';
-        if ($this->get('core.security')->hasExtension('es.openhost.module.rtb_media_advertisement')) {
+        if ($this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
             $rtbMediaManager = '|js|html';
         }
 
@@ -156,7 +156,7 @@ class FilesController extends Controller
                 ->filter('title', null, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'path'           => $directoryDate . $fileName,
             'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-            'content_status' => !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
+            'content_status' => (int) !preg_match('@(js|html)$@', $uploadedFile->getClientOriginalExtension()),
             'description'    => $request->request->get('description', ''),
             'fk_publisher'   => $this->getUser()->id,
             'tags'           => json_decode($request->request->get('tags', ''), true)
