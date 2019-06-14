@@ -45,7 +45,7 @@
           with_comments: 0,
           categories: [],
           tags: [],
-          agency: '',
+          agency: ''
         };
 
         /**
