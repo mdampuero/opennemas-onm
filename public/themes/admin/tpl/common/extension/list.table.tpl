@@ -6,12 +6,6 @@
   <div>
   {block name="commonColumns"}
     <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-media" checklist-model="app.columns.selected" checklist-value="'media'" type="checkbox">
-      <label for="checkbox-media">
-        {t}Media{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox">
       <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" disabled type="checkbox">
       <label for="checkbox-title">
         {t}Title{/t}
@@ -75,15 +69,13 @@
       <table class="table table-fixed table-hover no-margin">
         <thead>
           <tr>
+            <th class="text-center v-align-middle" width="50">
+              <div class="checkbox checkbox-default">
+                <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
+                <label for="select-all"></label>
+              </div>
+            </th>
             {block name="commonColumnsHeader"}
-              <th class="text-center v-align-middle" width="50">
-                <div class="checkbox checkbox-default">
-                  <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
-                  <label for="select-all"></label>
-                </div>
-              </th>
-              <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
-              </th>
               <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
                 {t}Title{/t}
               </th>

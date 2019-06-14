@@ -1,5 +1,25 @@
 {extends file="common/extension/list.table.tpl"}
 
+{block name="commonColumns" prepend}
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-media" checklist-model="app.columns.selected" checklist-value="'media'" type="checkbox">
+    <label for="checkbox-media">
+      {t}Media{/t}
+    </label>
+  </div>
+{/block}
+
+{block name="commonColumnsHeader" prepend}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+  </th>
+{/block}
+
+{block name="commonColumnsBody" prepend}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
+  </td>
+{/block}
+
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-home" checklist-model="app.columns.selected" checklist-value="'home'" type="checkbox">
@@ -37,12 +57,6 @@
       </span>
     </th>
   {/acl}
-{/block}
-
-{block name="commonColumnsBody" prepend}
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.cover" transform="zoomcrop,220,220"></dynamic-image>
-  </td>
 {/block}
 
 {block name="customColumnsBody"}
