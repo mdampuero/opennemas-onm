@@ -105,8 +105,8 @@ class VideoController extends ContentOldController
 
     /**
      * {@inheritDoc}
-     **/
-    public function getExtraData($items = null)
+     */
+    protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
@@ -115,12 +115,9 @@ class VideoController extends ContentOldController
     }
 
     /**
-     * Returns the list of l10n keys
-     * @param Type $var Description
-     *
-     * @return array
-     **/
-    public function getL10nKeys()
+     * {@inheritdoc}
+     */
+    protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('video');
     }

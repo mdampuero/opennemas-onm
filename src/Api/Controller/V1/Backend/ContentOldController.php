@@ -19,10 +19,10 @@ class ContentOldController extends ContentController
     protected $service = 'api.service.content_old';
 
     /**
-     * Returns a list of extra data
+     * Returns a list of extra data.
      *
-     * @return array
-     **/
+     * @return array The extra data.
+     */
     protected function getExtraData($items = null)
     {
         return [
@@ -42,7 +42,7 @@ class ContentOldController extends ContentController
      *
      * @return array The list of l10n keys.
      */
-    public function getL10nKeys()
+    protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys();
     }

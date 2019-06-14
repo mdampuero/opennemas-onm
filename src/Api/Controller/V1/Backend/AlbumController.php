@@ -9,8 +9,6 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class AlbumController extends ContentOldController
@@ -30,7 +28,7 @@ class AlbumController extends ContentOldController
     /**
      * {@inheritDoc}
      */
-    public function getExtraData($items = null)
+    protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
@@ -40,9 +38,9 @@ class AlbumController extends ContentOldController
     }
 
     /**
-     * {@inheritDoc}`
+     * {@inheritDoc}
      */
-    public function getL10nKeys()
+    protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('album');
     }

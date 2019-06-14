@@ -30,7 +30,7 @@ class PollController extends ContentOldController
     /**
      * {@inheritDoc}
      */
-    public function getExtraData($items = null)
+    protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
             'authors'    => $this->getAuthors($items),
@@ -40,9 +40,9 @@ class PollController extends ContentOldController
     }
 
     /**
-     * {@inheritDoc}`
+     * {@inheritDoc}
      */
-    public function getL10nKeys()
+    protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('Poll');
     }
