@@ -126,7 +126,7 @@
 
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
-          if ($scope.ignoreMode || $scope.app.mode === 'list' ||
+          if (!$scope.isModeSupported() || $scope.app.mode === 'list' ||
               $scope.items.length === $scope.data.total) {
             return;
           }

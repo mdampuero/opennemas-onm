@@ -1,7 +1,7 @@
-<div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
+<div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <span class="column-filters-ellipsis"></span>
 </div>
-<div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
+<div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <h5>{t}Columns{/t}</h5>
   <div>
   {block name="commonColumns"}
@@ -63,7 +63,7 @@
     </div>
   </div>
 </div>
-<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
+<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">
       <table class="table table-fixed table-hover no-margin">

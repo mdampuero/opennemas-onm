@@ -5,7 +5,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="PollListCtrl" ng-init="forcedLocale = '{$locale}'; ignoreMode = true; init()"
+  ng-controller="PollListCtrl" ng-init="forcedLocale = '{$locale}'; init()"
 {/block}
 
 {block name="icon"}
