@@ -98,7 +98,7 @@ class FilesController extends Controller
         }
 
         $rtbMediaManager = '';
-        if ($this->get('core.security')->hasExtension('es.openhost.module.rtb_media_advertisement')) {
+        if ($this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
             $rtbMediaManager = '|js|html';
         }
 
