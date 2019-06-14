@@ -13,3 +13,5 @@ backend_file_show:
 backend_files_list:
     path:     /files
     defaults: { _controller: BackendBundle:File:list }
+    options:
+        expose: true
