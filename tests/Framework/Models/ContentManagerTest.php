@@ -17,6 +17,28 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'hasParameter' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTimeZone' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->with('core.locale')->willReturn($this->locale);
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+        $this->locale->expects($this->any())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('UTC'));
+
+        $GLOBALS['kernel'] = $this->kernel;
+
         $this->object = new \Content;
     }
 

@@ -31,6 +31,11 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 
         $this->fm = new FilterManager($this->container);
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTimeZone' ])
+            ->getMock();
+
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();
@@ -45,6 +50,8 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+        $this->locale->expects($this->any())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('UTC'));
 
         $GLOBALS['kernel'] = $this->kernel;
 
@@ -66,19 +73,22 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 
     public function serviceContainerCallback($name)
     {
-        if ($name === 'cache') {
-            return $this->cache;
-        }
+        switch ($name) {
+            case 'cache':
+                return $this->cache;
 
-        if ($name === 'data.manager.filter') {
-            return $this->fm;
-        }
+            case 'core.locale':
+                return $this->locale;
 
-        if ($name === 'core.instance') {
-            return $this->instance;
-        }
+            case 'data.manager.filter':
+                return $this->fm;
 
-        return null;
+            case 'core.instance':
+                return $this->instance;
+
+            default:
+                return null;
+        }
     }
 
     public function testValidContent()
