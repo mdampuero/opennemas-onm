@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  FileListCtrl
+     * @name  AttachmentListCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -14,7 +14,7 @@
      * @description
      *   Controller for file list.
      */
-    .controller('FileListCtrl', [
+    .controller('AttachmentListCtrl', [
       '$controller', '$scope', 'oqlEncoder',
       function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
@@ -35,7 +35,7 @@
         };
 
         /**
-         * @memberOf FileListCtrl
+         * @memberOf AttachmentListCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -43,16 +43,16 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_file_delete',
-          deleteSelected: 'api_v1_backend_files_delete',
-          list:           'api_v1_backend_files_list',
-          patch:          'api_v1_backend_file_patch',
-          patchSelected:  'api_v1_backend_files_patch'
+          delete:         'api_v1_backend_attachment_delete',
+          deleteSelected: 'api_v1_backend_attachments_delete',
+          list:           'api_v1_backend_attachments_list',
+          patch:          'api_v1_backend_attachment_patch',
+          patchSelected:  'api_v1_backend_attachments_patch'
         };
 
         /**
          * @function init
-         * @memberOf FileListCtrl
+         * @memberOf AttachmentListCtrl
          *
          * @description
          *   Configures the controller.

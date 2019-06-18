@@ -5,7 +5,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="FileListCtrl" ng-init="init()"
+  ng-controller="AttachmentListCtrl" ng-init="init()"
 {/block}
 
 {block name="icon"}

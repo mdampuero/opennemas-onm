@@ -15,14 +15,14 @@
      * @requires messenger
      * @requires routing
      */
-    .controller('FileCtrl', [
+    .controller('AttachmentCtrl', [
       '$controller', '$scope',
       function($controller, $scope) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf FileCtrl
+         * @memberOf AttachmentCtrl
          *
          * @description
          *  The item object.
@@ -49,7 +49,7 @@
         };
 
         /**
-         * @memberOf FileCtrl
+         * @memberOf AttachmentCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -57,16 +57,16 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_file_create',
-          redirect: 'backend_file_show',
-          save:     'api_v1_backend_file_save',
-          show:     'api_v1_backend_file_show',
-          update:   'api_v1_backend_file_update'
+          create:   'api_v1_backend_attachment_create',
+          redirect: 'backend_attachment_show',
+          save:     'api_v1_backend_attachment_save',
+          show:     'api_v1_backend_attachment_show',
+          update:   'api_v1_backend_attachment_update'
         };
 
         /**
          * @function getFileName
-         * @memberOf FileCtrl
+         * @memberOf AttachmentCtrl
          *
          * @description
          *   Returns the filename for a File or a string.
@@ -87,7 +87,7 @@
 
         /**
          * @function removeFile
-         * @memberOf FileCtrl
+         * @memberOf AttachmentCtrl
          *
          * @description
          *   Removes the file.
