@@ -32,6 +32,11 @@
   </td>
 {/block}
 
+{block name="categoryColumn"}
+  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: category }) %]" ng-repeat="category in item.categories">
+    [% (categories | filter: { pk_content_category: category })[0].title %]
+  </a>
+{/block}
 
 {block name="itemActions"}
   <a class="btn btn-default btn-small" ng-if="['article', 'special', 'letter', 'photo', 'book' ].indexOf(item.content_type_name) < 0" ng-href="[% routing.generate('backend_' + item.content_type_name + '_show', { id: item.pk_content }) %]">

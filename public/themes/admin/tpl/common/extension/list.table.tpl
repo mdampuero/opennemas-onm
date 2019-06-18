@@ -162,9 +162,11 @@
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
-                <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
-                  [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
-                </a>
+                {block name="categoryColumn"}
+                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
+                    [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
+                  </a>
+                {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
                 <small class="text-italic" ng-if="!item.tags || item.tags.length === 0">
