@@ -35,18 +35,30 @@
       {t}Close date{/t}
     </label>
   </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-home" checklist-model="app.columns.selected" checklist-value="'home'" type="checkbox">
-    <label for="checkbox-home">
-      {t}Home{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-favorite" checklist-model="app.columns.selected" checklist-value="'favorite'" type="checkbox">
-    <label for="checkbox-favorite">
-      {t}Favorite{/t}
-    </label>
-  </div>
+  {acl isAllowed="POLL_HOME"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-home" checklist-model="app.columns.selected" checklist-value="'home'" type="checkbox">
+      <label for="checkbox-home">
+        {t}Home{/t}
+      </label>
+    </div>
+  {/acl}
+  {acl isAllowed="POLL_FAVORITE"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-favorite" checklist-model="app.columns.selected" checklist-value="'favorite'" type="checkbox">
+      <label for="checkbox-favorite">
+        {t}Favorite{/t}
+      </label>
+    </div>
+  {/acl}
+  {acl isAllowed="POLL_AVAILABLE"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'content_status'" type="checkbox">
+      <label for="checkbox-published">
+        {t}Published{/t}
+      </label>
+    </div>
+  {/acl}
 {/block}
 
 {block name="customColumnsHeader"}

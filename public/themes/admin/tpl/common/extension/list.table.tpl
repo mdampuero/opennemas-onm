@@ -55,12 +55,6 @@
     </div>
     {/block}
     {block name="customColumns"}{/block}
-    <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'content_status'" type="checkbox">
-      <label for="checkbox-published">
-        {t}Published{/t}
-      </label>
-    </div>
   </div>
 </div>
 <div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
