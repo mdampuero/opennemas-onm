@@ -66,7 +66,7 @@
 
 {block name="itemActions"}
   {acl isAllowed="ATTACHMENT_UPDATE"}
-    <a class="btn btn-default btn-small" href="[% routing.generate('backend_file_show', { id: getItemId(item) }) %]">
+    <a class="btn btn-default btn-small" href="[% routing.generate('backend_attachment_show', { id: getItemId(item) }) %]">
       <i class="fa fa-pencil m-r-5"></i>
       {t}Edit{/t}
     </a>

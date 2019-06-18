@@ -12,7 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class FileController extends ContentOldController
+class AttachmentController extends ContentOldController
 {
     /**
      * {@inheritdoc}
@@ -22,12 +22,12 @@ class FileController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_file_show';
+    protected $getItemRoute = 'api_v1_backend_attachment_show';
 
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.file';
+    protected $service = 'api.service.attachment';
 
     /**
      * {@inheritdoc}

@@ -403,6 +403,10 @@ backend_album:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/album.yml'
 
+backend_attachment:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/attachment.yml'
+
 backend_authentication:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/authentication.yml'
@@ -426,10 +430,6 @@ backend_domain:
 backend_event:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/event.yml'
-
-backend_file:
-    prefix: /
-    resource: '@BackendBundle/Resources/config/routing/file.yml'
 
 backend_frontpage:
     prefix:   /

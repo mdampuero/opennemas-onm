@@ -13,7 +13,7 @@ use Common\ORM\Entity\Instance;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FileHelper
+class AttachmentHelper
 {
     /**
      * The Filesystem component.

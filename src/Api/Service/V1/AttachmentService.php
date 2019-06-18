@@ -13,7 +13,7 @@ use Api\Exception\CreateItemException;
 use Api\Exception\FileAlreadyExistsException;
 use Api\Exception\UpdateItemException;
 
-class FileService extends ContentOldService
+class AttachmentService extends ContentOldService
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class FileService extends ContentOldService
         try {
             $item = new $this->class;
 
-            $fh   = $this->container->get('core.helper.file');
+            $fh   = $this->container->get('core.helper.attachment');
             $path = $fh->generatePath($file, $data['created'] ?? null);
 
             if ($fh->exists($path)) {
@@ -67,7 +67,7 @@ class FileService extends ContentOldService
             $item = $this->getItem($id);
 
             if (!empty($file)) {
-                $fh   = $this->container->get('core.helper.file');
+                $fh   = $this->container->get('core.helper.attachment');
                 $path = $fh->generatePath($file, $data['created'] ?? null);
 
                 if ($fh->exists($path)) {

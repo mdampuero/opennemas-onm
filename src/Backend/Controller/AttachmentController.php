@@ -12,7 +12,7 @@ namespace Backend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class FileController extends BackendController
+class AttachmentController extends BackendController
 {
     /**
      * {@inheritdoc}
@@ -32,5 +32,5 @@ class FileController extends BackendController
     /**
      * {@inheritdoc}
      */
-    protected $resource = 'file';
+    protected $resource = 'attachment';
 }

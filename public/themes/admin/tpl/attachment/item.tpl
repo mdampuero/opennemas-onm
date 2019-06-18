@@ -18,7 +18,7 @@
 {/block}
 
 {block name="title"}
-  <a class="no-padding" href="{url name=backend_files_list}">
+  <a class="no-padding" href="{url name=backend_attachments_list}">
     {t}Files{/t}
   </a>
 {/block}

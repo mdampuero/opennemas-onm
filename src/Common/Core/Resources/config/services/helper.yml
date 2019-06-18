@@ -13,6 +13,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.attachment:
+        class:     Common\Core\Component\Helper\AttachmentHelper
+        arguments: [ '@core.instance', '%core.paths.public%' ]
+        public:    true
+
     core.helper.comment:
         class:     Common\Core\Component\Helper\CommentHelper
         arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
@@ -30,11 +35,6 @@ services:
 
     core.helper.csv:
         class:     Common\Core\Component\Helper\CsvHelper
-        public:    true
-
-    core.helper.file:
-        class:     Common\Core\Component\Helper\FileHelper
-        arguments: [ '@core.instance', '%core.paths.public%' ]
         public:    true
 
     core.helper.http_fetcher:

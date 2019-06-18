@@ -1,0 +1,77 @@
+api_v1_backend_attachment_create:
+    path:     /attachments/new
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:create }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_attachment_delete:
+    path:     /attachments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_attachment_patch:
+    path:     /attachments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_attachment_save:
+    path:     /attachments
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_attachment_show:
+    path:     /attachments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_attachment_update:
+    path:     /attachments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_attachments_delete:
+    path:     /attachments
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_attachments_list:
+    path:     /attachments
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:list, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_attachments_patch:
+    path:     /attachments
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_attachments_autocomplete:
+    path:     /attachments/autocomplete
+    defaults: { _controller: ApiBundle:V1/Backend/Attachment:autocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true

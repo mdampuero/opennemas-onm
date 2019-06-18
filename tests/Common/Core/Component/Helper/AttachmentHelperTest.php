@@ -9,13 +9,13 @@
  */
 namespace Tests\Common\Core\Component\Helper;
 
-use Common\Core\Component\Helper\FileHelper;
+use Common\Core\Component\Helper\AttachmentHelper;
 use Common\ORM\Entity\Instance;
 
 /**
- * Defines test cases for FileHelper class.
+ * Defines test cases for AttachmentHelper class.
  */
-class FileHelperTest extends \PHPUnit\Framework\TestCase
+class AttachmentHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -29,7 +29,7 @@ class FileHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'exists', 'remove' ])
             ->getMock();
 
-        $this->helper = new FileHelper($this->instance, '/waldo/grault');
+        $this->helper = new AttachmentHelper($this->instance, '/waldo/grault');
 
         $property = new \ReflectionProperty($this->helper, 'fs');
         $property->setAccessible(true);

@@ -1,12 +1,17 @@
 services:
+    api.service.album:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Album' ]
+        public: true
+
     api.service.article:
         class:     Api\Service\V1\ContentOldService
         arguments: [ '@service_container', '\Article' ]
         public: true
 
-    api.service.album:
-        class:     Api\Service\V1\ContentOldService
-        arguments: [ '@service_container', '\Album' ]
+    api.service.attachment:
+        class:     Api\Service\V1\AttachmentService
+        arguments: [ '@service_container', '\Attachment' ]
         public: true
 
     api.service.author:
@@ -32,11 +37,6 @@ services:
     api.service.content_position:
         class:     Api\Service\V1\ContentPositionService
         arguments: [ '@service_container', 'Common\ORM\Entity\ContentPosition' ]
-        public: true
-
-    api.service.file:
-        class:     Api\Service\V1\FileService
-        arguments: [ '@service_container', '\Attachment' ]
         public: true
 
     api.service.frontpage:

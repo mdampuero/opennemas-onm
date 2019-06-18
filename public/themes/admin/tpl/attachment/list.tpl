@@ -19,7 +19,7 @@
 {block name="primaryActions"}
   {acl isAllowed="ATTACHMENT_CREATE"}
     <li class="quicklinks">
-      <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_file_create}">
+      <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_attachment_create}">
         <span class="fa fa-plus m-r-5"></span>
         {t}Create{/t}
       </a>
@@ -104,7 +104,7 @@
 {/block}
 
 {block name="list"}
-  {include file="file/list.table.tpl"}
+  {include file="attachment/list.table.tpl"}
 {/block}
 
 {block name="modals"}

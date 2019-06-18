@@ -9,14 +9,14 @@
  */
 namespace Tests\Api\Service\V1;
 
-use Api\Service\V1\FileService;
-use Common\Core\Component\Helper\FileHelper;
+use Api\Service\V1\AttachmentService;
+use Common\Core\Component\Helper\AttachmentHelper;
 use Common\ORM\Entity\Instance;
 
 /**
- * Defines test cases for FileService class.
+ * Defines test cases for AttachmentService class.
  */
-class FileServiceTest extends \PHPUnit\Framework\TestCase
+class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -38,7 +38,7 @@ class FileServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
-        $this->fh = $this->getMockBuilder('Common\Core\Component\Helper\FileHelper')
+        $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AttachmentHelper')
             ->setConstructorArgs([ $this->instance, '/wibble/flob' ])
             ->setMethods([ 'generatePath', 'generateRelativePath', 'move', 'remove' ])
             ->getMock();
@@ -46,7 +46,7 @@ class FileServiceTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
-        $this->service = $this->getMockBuilder('Api\Service\V1\FileService')
+        $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
             ->setConstructorArgs([ $this->container, '\Attachment' ])
             ->setMethods([ 'getItem' ])
             ->getMock();
@@ -68,8 +68,8 @@ class FileServiceTest extends \PHPUnit\Framework\TestCase
             case 'entity_repository':
                 return $this->em;
 
-            case 'core.helper.file':
-                return $this->fh;
+            case 'core.helper.attachment':
+                return $this->ah;
 
             default:
                 return null;
@@ -101,7 +101,7 @@ class FileServiceTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->any())->method('getClientOriginalName')
             ->willReturn('xyzzy.glorp');
 
-        $this->fh->expects($this->once())->method('move')
+        $this->ah->expects($this->once())->method('move')
             ->will($this->throwException(new \Exception()));
 
         $this->service->createItem([ 'title' => 'waldo' ], $file);
@@ -127,7 +127,7 @@ class FileServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->expects($this->once())->method('getItem')
             ->willReturn($item);
 
-        $this->fh->expects($this->once())->method('generatePath')
+        $this->ah->expects($this->once())->method('generatePath')
             ->will($this->throwException(new \Exception()));
 
         $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
