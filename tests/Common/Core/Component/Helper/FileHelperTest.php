@@ -38,6 +38,20 @@ class FileHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests exists.
+     */
+    public function testExists()
+    {
+        $this->fs->expects($this->at(0))->method('exists')
+            ->with('/glork/quux.foo')->willReturn(true);
+        $this->fs->expects($this->at(1))->method('exists')
+            ->with('/foo/wobble.bar')->willReturn(false);
+
+        $this->assertTrue($this->helper->exists('/glork/quux.foo'));
+        $this->assertFalse($this->helper->exists('/foo/wobble.bar'));
+    }
+
+    /**
      * Tests generatePath.
      */
     public function testGeneratePath()
