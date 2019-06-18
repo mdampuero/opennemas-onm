@@ -718,6 +718,6 @@ jQuery(document).ready(function($) {
     </script>
   </form>
   <script type="text/ng-template" id="modal-adblock">
-    {include file="base/modal/modal.adblock.tpl"}
+    {include file="advertisement/modal.adblock.tpl"}
   </script>
 {/block}
