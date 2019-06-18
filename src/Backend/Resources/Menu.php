@@ -210,7 +210,7 @@ $menuXml = [
             [
                 'id'          => 'album_manager',
                 'title'       => _('Albums'),
-                'icon'        => 'fa fa-picture-o',
+                'icon'        => 'fa fa-stack-overflow',
                 'link'        => url('backend_albums_list'),
                 'module_name' => 'ALBUM_MANAGER',
                 'privilege'   => 'ALBUM_ADMIN',
