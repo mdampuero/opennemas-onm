@@ -121,5 +121,5 @@ services:
 
     core.helper.varnish:
         class:     Common\Core\Component\Helper\VarnishHelper
-        arguments: [ '@varnish_ban_message_exchanger' ]
+        arguments: [ '@core.helper.url_generator', '@varnish_ban_message_exchanger' ]
         public:    true

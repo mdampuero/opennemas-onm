@@ -22,11 +22,37 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->uh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
         $this->varnish = $this->getMockBuilder('Onm\Varnish\MessageExchanger')
             ->setMethods([ 'addBanMessage' ])
             ->getMock();
 
-        $this->helper = new VarnishHelper($this->varnish);
+        $this->helper = new VarnishHelper($this->uh, $this->varnish);
+    }
+
+    /**
+     * Tests deleteFiles.
+     */
+    public function testDeleteFiles()
+    {
+        $itemA = new \Attachment();
+        $itemB = new \Attachment();
+
+        $this->uh->expects($this->at(0))->method('generate')
+            ->with($itemA)->willReturn('/plugh/norf.wubble');
+        $this->uh->expects($this->at(1))->method('generate')
+            ->with($itemB)->willReturn('/norf/flob.garply');
+
+        $this->varnish->expects($this->at(0))->method('addBanMessage')
+            ->with('req.url ~ /plugh/norf.wubble');
+        $this->varnish->expects($this->at(1))->method('addBanMessage')
+            ->with('req.url ~ /norf/flob.garply');
+
+        $this->helper->deleteFiles([ $itemA, $itemB ]);
     }
 
     /**
