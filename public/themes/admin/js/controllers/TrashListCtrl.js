@@ -18,250 +18,178 @@
      *   Controller for Trash list.
      */
     .controller('TrashListCtrl', [
-      '$controller', 'http', '$uibModal', '$scope', 'localizer', 'messenger',
-      function($controller, http, $uibModal, $scope, localizer, messenger) {
+      '$controller', 'http', '$uibModal', '$scope', 'localizer', 'messenger', 'oqlEncoder',
+      function($controller, http, $uibModal, $scope, localizer, messenger, oqlEncoder) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
-         * Permanently removes a contents by using a confirmation dialog
+         * The criteria to search.
+         *
+         * @type {Object}
          */
-        $scope.removeAll = function() {
-          $uibModal.open({
-            backdropClass: 'modal-remove-all',
-            controller:  'YesNoModalCtrl',
-            templateUrl: 'modal-remove-all',
+        $scope.criteria = {
+          content_type_name: null,
+          epp: 10,
+          in_litter: 1,
+          orderBy: { created: 'desc' },
+          page: 1
+        };
+
+        /**
+         * @memberOf AlbumListCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          delete:         'api_v1_backend_trash_delete_item',
+          deleteSelected: 'api_v1_backend_trash_delete_list',
+          empty:          'api_v1_backend_trash_empty',
+          list:           'api_v1_backend_trash_list',
+          patch:          'api_v1_backend_trash_restore_item',
+          patchSelected:  'api_v1_backend_trash_restore_list'
+        };
+
+        /**
+         * @function init
+         * @memberOf AlbumListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.init = function() {
+          $scope.backup.criteria = $scope.criteria;
+
+          oqlEncoder.configure({
+            placeholder: {
+              title: '[key] ~ "%[value]%"'
+            }
+          });
+
+          $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
+        };
+
+        /**
+         * @function empty
+         * @memberOf TrashListCtrl
+         *
+         * @description
+         *   Confirms empty action.
+         */
+        $scope.empty = function() {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-empty',
+            backdrop: 'static',
+            controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return {};
+                return null;
               },
-              yes: function() {
-                return function(modalWindow) {
-                  var url = { name: 'backend_ws_contents_empty_trash' };
-
-                  return http.get(url).then(function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  }, function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  });
-                };
-              },
-              no: function() {
-                return function(modalWindow) {
-                  modalWindow.close({ response: false, success: true });
+              success: function() {
+                return function() {
+                  return http.delete($scope.routes.empty);
                 };
               }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
             }
           });
         };
 
         /**
-         * Takes out of trash a content by using a confirmation dialog
+         * @function restore
+         * @memberOf TrashListCtrl
+         *
+         * @description
+         *   Confirms restore action.
+         *
+         * @param {Integer} id The item id.
          */
-        $scope.restoreFromTrash = function(content) {
-          $uibModal.open({
+        $scope.restore = function(id) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-restore',
             backdrop: 'static',
-            controller:  'YesNoModalCtrl',
-            templateUrl: 'modal-restore-from-trash',
+            controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { content: content };
+                return null;
               },
-              yes: function() {
-                return function(modalWindow) {
-                  var url = {
-                    name: 'backend_ws_content_restore_from_trash',
-                    params: {
-                      contentType: content.content_type_name,
-                      id: content.id
-                    }
+              success: function() {
+                return function() {
+                  var route = {
+                    name: $scope.routes.patch,
+                    params: { id: id }
                   };
 
-                  return http.get(url).then(function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  }, function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  });
-                };
-              },
-              no: function() {
-                return function(modalWindow) {
-                  modalWindow.close({ response: false, success: true });
+                  return http.patch(route, { in_litter: 0 });
                 };
               }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
             }
           });
         };
 
         /**
-         * Takes out of trash a list of contents by using a confirmation dialog
+         * @function restoreSelected
+         * @memberOf TrashListCtrl
+         *
+         * @description
+         *   Confirms restore action.
          */
-        $scope.restoreFromTrashSelected = function() {
-          $uibModal.open({
+        $scope.restoreSelected = function() {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-restore',
             backdrop: 'static',
-            controller:  'YesNoModalCtrl',
-            templateUrl: 'modal-batch-restore',
+            controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { selected: $scope.selected };
+                return { selected: $scope.selected.items.length };
               },
-              yes: function() {
-                return function(modalWindow) {
-                  var url = {
-                    name: 'backend_ws_contents_batch_restore_from_trash',
-                    params: { contentType: 'content' }
-                  };
+              success: function() {
+                return function() {
+                  var route = $scope.routes.patchSelected;
 
-                  return http.post(url, { ids: $scope.selected.contents }).then(function(response) {
-                    $scope.selected.total = 0;
-                    $scope.selected.contents = [];
-
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  }, function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  });
-                };
-              },
-              no: function() {
-                return function(modalWindow) {
-                  modalWindow.close({ response: false, success: true });
+                  return http.patch(route, { ids: $scope.selected.items,
+                    in_litter: 0 });
                 };
               }
             }
           });
-        };
 
-        /**
-         * Permanently removes a contents by using a confirmation dialog
-         */
-        $scope.removePermanently = function(content) {
-          $uibModal.open({
-            backdrop: 'static',
-            controller:  'YesNoModalCtrl',
-            templateUrl: 'modal-remove-permanently',
-            resolve: {
-              template: function() {
-                return {
-                  content: content
-                };
-              },
-              yes: function() {
-                return function(modalWindow) {
-                  var url = {
-                    name: 'backend_ws_content_remove_permanently',
-                    params: { contentType: content.content_type_name, id: content.id }
-                  };
+          modal.result.then(function(response) {
+            messenger.post(response.data);
 
-                  return http.post(url, { ids: $scope.selected.contents }).then(function(response) {
-                    $scope.selected.total = 0;
-                    $scope.selected.contents = [];
-
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  }, function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  });
-                };
-              },
-              no: function() {
-                return function(modalWindow) {
-                  modalWindow.close({ response: false, success: true });
-                };
-              }
+            if (response.success) {
+              $scope.selected = { all: false, items: [] };
+              $scope.list();
             }
           });
         };
-
-        /**
-         * Permanently removes a list of contents by using a confirmation dialog
-         */
-        $scope.removePermanentlySelected = function() {
-          $uibModal.open({
-            backdrop: 'static',
-            controller: 'YesNoModalCtrl',
-            templateUrl: 'modal-batch-remove-permanently',
-            resolve: {
-              template: function() {
-                return {
-                  selected: $scope.selected
-                };
-              },
-              yes: function() {
-                return function(modalWindow) {
-                  var url = {
-                    name: 'backend_ws_contents_batch_remove_permanently',
-                    params: { contentType: 'content' }
-                  };
-
-                  return http.post(url, { ids: $scope.selected.contents }).then(function(response) {
-                    $scope.selected.total = 0;
-                    $scope.selected.contents = [];
-
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  }, function(response) {
-                    messenger.post(response.data.messages);
-
-                    modalWindow.close({ response: false, success: true });
-
-                    $scope.list($scope.route);
-                  });
-                };
-              },
-              no: function() {
-                return function(modalWindow) {
-                  modalWindow.close({ response: false, success: true });
-                };
-              }
-            }
-          });
-        };
-
-        // Localize titles when content list changes
-        $scope.$watch('contents', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          var lz   = localizer.get($scope.extra.options);
-          var keys = [ 'title' ];
-
-          $scope.contents = lz.localize(nv, keys, $scope.extra.options.default);
-        }, true);
       }
     ]);
 })();

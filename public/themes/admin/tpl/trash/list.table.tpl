@@ -1,0 +1,53 @@
+{extends file="common/extension/list.table.tpl"}
+
+{block name="commonColumns" prepend}
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-media" checklist-model="app.columns.selected" checklist-value="'media'" type="checkbox">
+    <label for="checkbox-media">
+      {t}Media{/t}
+    </label>
+  </div>
+{/block}
+
+{block name="commonColumnsHeader" prepend}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+  </th>
+{/block}
+
+{block name="commonColumnsBody" prepend}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
+    <i class="fa fa-lg fa-file-o" uib-tooltip="{t}Article{/t}" ng-if="item.content_type_name === 'article'"></i>
+    <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
+    <i class="fa fa-lg fa-calendar" uib-tooltip="{t}Event{/t}" ng-if="item.content_type_name === 'event'"></i>
+    <i class="fa fa-lg fa-chart-pie" uib-tooltip="{t}Poll{/t}" ng-if="item.content_type_name === 'poll'"></i>
+    <i class="fa fa-lg fa-file" uib-tooltip="{t}Static Page{/t}" ng-if="item.content_type_name === 'static_page'"></i>
+    <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
+    <i class="fa fa-lg fa-envelope" uib-tooltip="{t}Letter{/t}" ng-if="item.content_type_name === 'letter'"></i>
+    <i class="fa fa-lg fa-picture-o" uib-tooltip="{t}Image{/t}" ng-if="item.content_type_name === 'image'"></i>
+    <i class="fa fa-lg fa-paperclip" uib-tooltip="{t}File{/t}" ng-if="item.content_type_name === 'attachment'"></i>
+    <i class="fa fa-lg fa-film" uib-tooltip="{t}Video{/t}" ng-if="item.content_type_name === 'video'"></i>
+    <i class="fa fa-lg fa-stack-overflow" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
+    <i class="fa fa-lg fa-newspaper-o" uib-tooltip="{t}NewsStand{/t}" ng-if="item.content_type_name === 'kiosko'"></i>
+    <i class="fa fa-lg fa-book" uib-tooltip="{t}Book{/t}" ng-if="item.content_type_name === 'book'"></i>
+  </td>
+{/block}
+
+
+{block name="itemActions"}
+  <a class="btn btn-default btn-small" ng-if="['article', 'special', 'letter', 'photo', 'book' ].indexOf(item.content_type_name) < 0" ng-href="[% routing.generate('backend_' + item.content_type_name + '_show', { id: item.pk_content }) %]">
+    <i class="fa fa-pencil m-r-5"></i>
+    {t}Edit{/t}
+  </a>
+  <a class="btn btn-default btn-small" ng-if="['article', 'special', 'letter', 'photo', 'book' ].indexOf(item.content_type_name) >= 0" ng-href="[% routing.generate('admin_' + item.content_type_name + '_show', { id: item.pk_content }) %]">
+    <i class="fa fa-pencil m-r-5"></i>
+    {t}Edit{/t}
+  </a>
+  <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
+    <i class="fa fa-trash-o m-r-5"></i>
+    {t}Delete{/t}
+  </button>
+  <a class="btn btn-success btn-small" ng-click="restore(item.pk_content)" type="button">
+    <i class="fa fa-retweet m-r-5"></i>
+    {t}Restore{/t}
+  </a>
+{/block}
