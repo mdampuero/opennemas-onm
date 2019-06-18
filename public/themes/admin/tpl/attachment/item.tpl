@@ -14,7 +14,7 @@
 {/block}
 
 {block name="icon"}
-  <i class="fa fa-file-o m-r-10"></i>
+  <i class="fa fa-paperclip m-r-10"></i>
 {/block}
 
 {block name="title"}
