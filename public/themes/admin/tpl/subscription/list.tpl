@@ -227,7 +227,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="base/modal/modal.delete.tpl"}
+      {include file="common/extension/modal.delete.tpl"}
     </script>
   </form>
 {/block}
