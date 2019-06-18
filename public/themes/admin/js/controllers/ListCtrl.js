@@ -47,49 +47,43 @@
         $scope.views = [ 10, 25, 50, 100 ];
 
         /**
-         * @function closeColumns
-         * @memberOf ClientListCtrl
-         *
-         * @description
-         *   Hides the dropdown to toggle table columns.
-         */
-        $scope.closeColumns = function() {
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.app.columns.collapsed = true;
-          }, 500);
-        };
-
-        /**
-         * @function list
+         * @function areAllSelected
          * @memberOf ListCtrl
          *
          * @description
-         *   Just a dummy actions that forces the developer
-         *   to overwrite this method on child classes.
+         *   Checks if all items are already selected.
+         *
+         * @return {Boolean} True if all items are selected. False otherwise.
          */
-        $scope.list = function() {
-          throw Error('Method not implemented');
+        $scope.areAllSelected = function() {
+          return $scope.items &&
+            $scope.selected.items.length === $scope.items.length;
         };
 
         /**
-         * @function openColumns
-         * @memberOf ClientListCtrl
+         * @function deselectAll
+         * @memberOf ListCtrl
          *
          * @description
-         *   Shows the dropdown to toggle table columns.
+         *   Deselects all elements.
          */
-        $scope.openColumns = function() {
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
+        $scope.deselectAll = function() {
+          $scope.selected = { all: false, items: [] };
+        };
 
-          $scope.tm = $timeout(function() {
-            $scope.app.columns.collapsed = false;
-          }, 500);
+        /**
+         * @function getItemId
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Returns the item id.
+         *
+         * @param {Object} item The item.
+         *
+         * @return {Integer} The item id.
+         */
+        $scope.getItemId = function(item) {
+          return item.id;
         };
 
         /**
@@ -127,6 +121,21 @@
         };
 
         /**
+         * @function isSelectable
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Checks if the item is selectable.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {Boolean} True if the item is selectable. False otherwise.
+         */
+        $scope.isSelectable = function() {
+          return true;
+        };
+
+        /**
          * @function isSelected
          * @memberOf ListCtrl
          *
@@ -140,14 +149,41 @@
         };
 
         /**
-         * @function deselectAll
+         * @function list
          * @memberOf ListCtrl
          *
          * @description
-         *   Deselects all elements.
+         *   Just a dummy actions that forces the developer
+         *   to overwrite this method on child classes.
          */
-        $scope.deselectAll = function() {
-          $scope.selected = { all: false, items: [] };
+        $scope.list = function() {
+          throw Error('Method not implemented');
+        };
+
+        /**
+         * @function resetFilters
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = $scope.backup.criteria;
+        };
+
+        /**
+         * @function scroll
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Increases page one by one.
+         */
+        $scope.scroll = function() {
+          if ($scope.data.total === $scope.items.length) {
+            return;
+          }
+
+          $scope.criteria.page++;
         };
 
         /**
@@ -206,9 +242,11 @@
          *   Toggles all items selection.
          */
         $scope.toggleAll = function() {
-          if ($scope.selected.all) {
-            $scope.selected.items = $scope.items.map(function(item) {
-              return item.id;
+          if (!$scope.areAllSelected()) {
+            $scope.selected.items = $scope.items.filter(function(item) {
+              return $scope.isSelectable(item);
+            }).map(function(item) {
+              return $scope.getItemId(item);
             });
           } else {
             $scope.selected.items = [];
@@ -224,138 +262,7 @@
          */
         $scope.toggleColumns = function() {
           $scope.app.columns.collapsed = !$scope.app.columns.collapsed;
-
-          if (!$scope.app.columns.collapsed) {
-            $scope.scrollTop();
-          }
         };
-
-        /**
-         * Translates contents
-         *
-         * @param mixed content The content to send to trash.
-         */
-        $scope.selectedItemsAreTranslatedTo = function(translateToParam) {
-          var anyTranslated = false;
-
-          $scope.selected.items.forEach(function(selectedId) {
-            $scope.data.results.forEach(function(el) {
-              if (el.id === selectedId) {
-                if (el.title[translateToParam] && el.title[translateToParam].length > 0) {
-                  anyTranslated = anyTranslated || true;
-                }
-              }
-            });
-          });
-
-          return anyTranslated;
-        };
-
-        /**
-         * Translates contents
-         *
-         * @param mixed content The content to send to trash.
-         */
-        $scope.translateSelected = function(translateToParam) {
-          var config = {
-            translateFrom:  $scope.data.extra.locale,
-            translateTo: translateToParam,
-            locales: $scope.data.extra.options.available,
-            translators: $scope.data.extra.translators,
-            translatorSelected: 0,
-          };
-
-          config.translators.forEach(function(el, index) {
-            if (el.from === config.translateFrom &&
-              el.to === config.translateTo &&
-              el.default === true || el.default === 'true') {
-              config.translatorSelected = index;
-            }
-          });
-
-          config.translators = config.translators.filter(function(el) {
-            return el.from === config.translateFrom && el.to === config.translateTo;
-          });
-
-          var topScope = $scope;
-
-          // Raise a modal indicating that we are translating in background
-          $uibModal.open({
-            backdrop: 'static',
-            keyboard: false,
-            backdropClass: 'modal-backdrop-dark',
-            controller:  'BackgroundTaskModalCtrl',
-            openedClass: 'modal-relative-open',
-            templateUrl: 'modal-translate-selected',
-            resolve: {
-              template: function() {
-                return {
-                  selected: $scope.selected.items,
-                  config: config,
-                  translating: false,
-                };
-              },
-              callback: function() {
-                return function(modal, template) {
-                  var translateParams = {
-                    ids: $scope.selected.items,
-                    from: config.translateFrom,
-                    to: config.translateTo,
-                    translator: config.translatorSelected,
-                  };
-
-                  if (template.config.translators.length < 1) {
-                    topScope.selected = { all: false, items: [] };
-                    return;
-                  }
-
-                  template.translating = true;
-                  template.translation_done = false;
-
-                  http.post({
-                    name: 'api_v1_backend_tools_translate_contents', params: { }
-                  }, translateParams)
-                    .then(function(response) {
-                      var message = {
-                        id: new Date().getTime(),
-                        message: 'Unable to translate contents. Please check your configuration.',
-                        type: 'error'
-                      };
-
-                      if (response) {
-                        if (response.data) {
-                          topScope.selected = { all: false, items: [] };
-                          message = response.data.message;
-
-                          template.translating = false;
-                          template.translation_done = true;
-
-                          $scope.list();
-                        }
-                      }
-                    }, function(response) {
-                      var message = {
-                        id: new Date().getTime(),
-                        message: 'Unable to translate contents. Please check your configuration.',
-                        type: 'error'
-                      };
-
-                      modal.close({ response: true, success: true });
-                      messenger.post(message);
-                    });
-                };
-              }
-            }
-          });
-        };
-
-        // Marks variables to delete for garbage collector
-        $scope.$on('$destroy', function() {
-          $scope.criteria = null;
-          $scope.config   = null;
-          $scope.items    = null;
-          $scope.selected = null;
-        });
 
         // Updates linkers when locale changes
         $scope.$watch('config.locale', function(nv, ov) {
@@ -372,6 +279,23 @@
             $scope.config.linkers[key].update();
           }
         });
+
+        /**
+         * @function toggleItem
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Selects/unselects an item when in grid mode.
+         */
+        $scope.toggleItem = function(item) {
+          if ($scope.selected.items.indexOf($scope.getItemId(item)) < 0) {
+            $scope.selected.items.push($scope.getItemId(item));
+          } else {
+            $scope.selected.items = $scope.selected.items.filter(function(el) {
+              return el !== $scope.getItemId(item);
+            });
+          }
+        };
 
         // Reloads the list when filters change.
         $scope.$watch('criteria', function(nv, ov) {

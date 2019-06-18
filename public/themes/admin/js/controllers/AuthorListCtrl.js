@@ -43,7 +43,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'author-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({
@@ -66,7 +65,7 @@
          */
         $scope.isSelectable = function(item) {
           return $scope.backup.master ||
-            $scope.getId(item) !== $scope.backup.id;
+            $scope.getItemId(item) !== $scope.backup.id;
         };
       }
     ]);

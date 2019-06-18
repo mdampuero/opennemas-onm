@@ -20,35 +20,10 @@
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
-         * @function getId
-         * @memberOf ContentistCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @param {Object} item The item.
-         *
-         * @return {Integer} The item id.
+         * @inheritdoc
          */
-        $scope.getId = function(item) {
+        $scope.getItemId = function(item) {
           return item.pk_content;
-        };
-
-        /**
-         * @function select
-         * @memberOf AlbumListCtrl
-         *
-         * @description
-         *   Adds and removes the item from the selected array.
-         */
-        $scope.select = function(item) {
-          if ($scope.selected.items.indexOf($scope.getId(item)) < 0) {
-            $scope.selected.items.push($scope.getId(item));
-          } else {
-            $scope.selected.items = $scope.selected.items.filter(function(el) {
-              return el !== $scope.getId(item);
-            });
-          }
         };
 
         /**
@@ -96,25 +71,13 @@
         };
 
         /**
-         * Updates the criteria.page, used in listings with mode == grid.
-         */
-        $scope.scroll = function() {
-          if ($scope.total === $scope.items.length) {
-            return;
-          }
-
-          $scope.criteria.page++;
-        };
-
-        /**
          * Updates the array of contents.
          *
-         * @param {String}  route The route name.
          * @param {Boolean} reset Whether to reset the list.
          */
-        $scope.list = function(route, reset) {
+        $scope.list = function(reset) {
           if (!$scope.isModeSupported() || reset || $scope.app.mode === 'list') {
-            $scope.flags.http.loading  = 1;
+            $scope.flags.http.loading = 1;
           } else {
             $scope.flags.http.loadingMore = 1;
           }
@@ -156,48 +119,15 @@
             $scope.disableFlags('http');
           }, function(response) {
             messenger.post(response.data);
-
             $scope.disableFlags('http');
             $scope.data = {};
           });
         };
 
-        // Reloads the list when criteria changes
-        $scope.$watch('criteria', function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          var changes = [];
-
-          // Get which values change ignoring page
-          for (var key in $scope.criteria) {
-            if (key !== 'page' && !angular.equals(nv[key], ov[key])) {
-              changes.push(key);
-            }
-          }
-
-          // Reset the list if search changes
-          var reset = changes.length > 0;
-
-          // Change page when scrolling in grid mode
-          if ($scope.tm) {
-            $timeout.cancel($scope.tm);
-          }
-
-          if (ov.page === nv.page) {
-            $scope.criteria.page = 1;
-          }
-
-          $scope.tm = $timeout(function() {
-            $scope.list($scope.routes.list, reset);
-          }, 500);
-        }, true);
-
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
-          if ($scope.app.mode === 'list' ||
-            $scope.items.length === $scope.data.total) {
+          if (!$scope.isModeSupported() || $scope.app.mode === 'list' ||
+              $scope.items.length === $scope.data.total) {
             return;
           }
 

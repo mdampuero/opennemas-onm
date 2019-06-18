@@ -313,7 +313,7 @@
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}
           <li>
-            <a href="{url name=admin_polls_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Polls{/t}</a>
+            <a href="{url name=backend_polls_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Polls{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="ADS_MANAGER"}

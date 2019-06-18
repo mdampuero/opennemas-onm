@@ -37,10 +37,6 @@ class SubscriptionServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getIdKeys' ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('Logger' . uniqid())
-            ->setMethods([ 'error' ])
-            ->getMock();
-
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
             ->getMock();
@@ -64,9 +60,6 @@ class SubscriptionServiceTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'error.log':
-                return $this->logger;
-
             case 'orm.manager':
                 return $this->em;
 
@@ -98,7 +91,6 @@ class SubscriptionServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('pk_user_group = 1 and type = 1')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->getItem(1);
     }

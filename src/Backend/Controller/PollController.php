@@ -9,40 +9,41 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class AlbumController extends BackendController
+class PollController extends BackendController
 {
     /**
      * {@inheritdoc}
      */
-    protected $extension = 'ALBUM_MANAGER';
+    protected $extension = 'POLL_MANAGER';
 
     /**
      * {@inheritdoc}
      */
     protected $permissions = [
-        'create' => 'ALBUM_CREATE',
-        'update' => 'ALBUM_UPDATE',
-        'list'   => 'ALBUM_ADMIN',
-        'show'   => 'ALBUM_UPDATE',
+        'create' => 'POLL_CREATE',
+        'update' => 'POLL_UPDATE',
+        'list'   => 'POLL_ADMIN',
+        'show'   => 'POLL_UPDATE',
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'preview' => 'album_inner'
+        'preview' => 'poll_inner'
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected $resource = 'album';
+    protected $resource = 'poll';
 
     /**
-     * Render the content provider for albums.
+     * Render the content provider for polls.
      *
      * @param Request $request The request object.
      *
@@ -54,7 +55,7 @@ class AlbumController extends BackendController
 
         $categoryId         = $request->query->getDigits('category', 0);
         $page               = $request->query->getDigits('page', 1);
-        $itemsPerPage       = 8;
+        $epp                = 8;
         $frontpageVersionId =
             $request->query->getDigits('frontpage_version_id', null);
         $frontpageVersionId = $frontpageVersionId === '' ?
@@ -63,17 +64,18 @@ class AlbumController extends BackendController
 
         $em  = $this->get('entity_repository');
         $ids = $this->get('api.service.frontpage_version')
-            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Album');
+            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Poll');
 
+        $order   = [ 'created' => 'desc' ];
         $filters = [
-            'content_type_name' => [ [ 'value' => 'album' ] ],
+            'content_type_name' => [ [ 'value' => 'poll' ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
             'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $countAlbums = true;
-        $albums      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAlbums);
+        $count = true;
+        $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -81,17 +83,17 @@ class AlbumController extends BackendController
         $pagination = $this->get('paginator')->get([
             'boundary'    => true,
             'directional' => true,
-            'epp'         => $itemsPerPage,
+            'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countAlbums,
+            'total'       => $count,
             'route'       => [
-                'name'   => 'backend_albums_content_provider',
-                'params' => ['category' => $categoryId]
+                'name'   => 'backend_polls_content_provider',
+                'params' => [ 'category' => $categoryId ]
             ],
         ]);
 
-        return $this->render('album/content-provider.tpl', [
-            'albums'     => $albums,
+        return $this->render('poll/content-provider.tpl', [
+            'polls'      => $polls,
             'pagination' => $pagination,
         ]);
     }

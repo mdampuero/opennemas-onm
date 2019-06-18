@@ -57,10 +57,6 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('Logger' . uniqid())
-            ->setMethods([ 'error' ])
-            ->getMock();
-
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'countBy', 'findBy', 'findOneBy' ])
             ->getMock();
@@ -105,9 +101,6 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'core.user':
                 return $this->user;
-
-            case 'error.log':
-                return $this->logger;
 
             case 'orm.manager':
                 return $this->em;
@@ -277,7 +270,6 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->repository->expects($this->any())->method('findOneBy')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->deleteItem(23);
     }
@@ -295,8 +287,6 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($item);
         $this->em->expects($this->once())->method('remove')
             ->with($item)->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->deleteItem(23);
     }
@@ -378,6 +368,8 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests deleteList when one error happens while removing.
+     *
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenOneErrorWhileRemoving()
     {
@@ -395,8 +387,6 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->at(3))->method('remove');
         $this->em->expects($this->at(4))->method('remove')
             ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
     }
@@ -417,8 +407,6 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
             ->with('type != 0 and id in [1,2]')
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->exactly(2))->method('error');
-
         $this->service->deleteList([ 1, 2 ]);
     }
 
@@ -433,6 +421,16 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
             ->with('id = 1 and type != 1')->willReturn($item);
 
         $this->assertEquals($item, $this->service->getItem(1));
+    }
+
+    /**
+     * Tests getItem when the provided id is empty.
+     *
+     * @expectedException \Api\Exception\GetItemException
+     */
+    public function testGetItemWhemEmptyId()
+    {
+        $this->service->getItem(0);
     }
 
     /**

@@ -82,7 +82,7 @@ class VideoController extends FrontendController
      *
      * Action specific for the frontpage
      */
-    public function hydrateList(array &$params = []): void
+    protected function hydrateList(array &$params = []): void
     {
         $category = $params['o_category'];
         $page     = $params['page'] ?? 1;

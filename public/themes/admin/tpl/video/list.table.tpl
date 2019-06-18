@@ -18,26 +18,29 @@
 {block name="customColumnsHeader"}
   {acl isAllowed="VIDEO_HOME"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('home')" width="150">
-      <i class="fa fa-home" ng-if="!isHelpEnabled()" uib-tooltip="{t}Home{/t}" tooltip-placement="left"></i>
-      <span class="m-l-5" ng-if="isHelpEnabled()">{t}Home{/t}</span>
+      <span class="m-l-5">
+        {t}Home{/t}
+      </span>
     </th>
   {/acl}
   {acl isAllowed="VIDEO_FAVORITE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')" width="150">
-      <i class="fa fa-star" ng-if="!isHelpEnabled()" uib-tooltip="{t}Favorite{/t}" tooltip-placement="left"></i>
-      <span class="m-l-5" ng-if="isHelpEnabled()">{t}Favorite{/t}</span>
+      <span class="m-l-5">
+        {t}Favorite{/t}
+      </span>
     </th>
   {/acl}
   {acl isAllowed="VIDEO_AVAILABLE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
-      <i class="fa fa-check" ng-if="!isHelpEnabled()" uib-tooltip="{t}Published{/t}" tooltip-placement="left"></i>
-      <span class="m-l-5" ng-if="isHelpEnabled()">{t}Published{/t}</span>
+      <span class="m-l-5">
+        {t}Published{/t}
+      </span>
     </th>
   {/acl}
 {/block}
 
 {block name="commonColumnsBody" prepend}
-  <td class="hidden-xs text-center v-align-middle" ng-if="isColumnEnabled('media')">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-if="item.thumb_image" ng-model="item.thumb_image"></dynamic-image>
     <dynamic-image class="img-thumbnail" ng-if="!item.thumb_image" ng-model="item.thumb"></dynamic-image>
   </td>
@@ -70,10 +73,10 @@
 
 {block name="itemActions"}
   {acl isAllowed="VIDEO_UPDATE"}
-    <a class="btn btn-default btn-small" href="[% routing.generate('backend_video_show', { id: getId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+    <a class="btn btn-default btn-small" href="[% routing.generate('backend_video_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_video_show', { id: getId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_video_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= data.items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   {acl isAllowed="VIDEO_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">

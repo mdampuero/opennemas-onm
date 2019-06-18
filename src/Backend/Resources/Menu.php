@@ -132,7 +132,7 @@ $menuXml = [
                 'id'          => 'poll_manager',
                 'title'       => _('Polls'),
                 'icon'        => 'fa fa-pie-chart',
-                'link'        => url('admin_polls'),
+                'link'        => url('backend_polls_list'),
                 'module_name' => 'POLL_MANAGER',
                 'privilege'   => 'POLL_ADMIN',
             ],

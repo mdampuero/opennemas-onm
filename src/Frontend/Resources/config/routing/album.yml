@@ -1,5 +1,5 @@
 frontend_album_frontpage:
-    path: /album
+    path:     /album
     defaults: { _controller: FrontendBundle:Album:list }
     options:
         l10n: true
@@ -14,13 +14,12 @@ frontend_album_frontpage_category:
 
 frontend_album_show:
     path: /album/{category_name}/{slug}/{created}{id}.html
-    defaults: { _controller: FrontendBundle:Album:show, page: 1 }
+    defaults: { _controller: FrontendBundle:Album:show }
     requirements:
         category_name: '[^/]+'
-        slug         : '[^/]+'
-        video_id     : '([0-9]+)'
+        slug:          '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
     options:
-        l10n: true
         expose: true
+        l10n: true

@@ -5,28 +5,26 @@
 
     /**
      * @ngdoc controller
-     * @name  AlbumListCtrl
+     * @name  PollListCtrl
      *
      * @requires $controller
      * @requires $scope
      * @requires oqlEncoder
      *
      * @description
-     *   Controller for album list.
+     *   Controller for poll list.
      */
-    .controller('AlbumListCtrl', [
+    .controller('PollListCtrl', [
       '$controller', '$scope', 'oqlEncoder',
       function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
-         * The criteria to search.
-         *
-         * @type {Object}
+         * @inheritdoc
          */
         $scope.criteria = {
-          content_type_name: 'album',
+          content_type_name: 'poll',
           pk_fk_content_category: null,
           epp: 10,
           in_litter: 0,
@@ -35,24 +33,43 @@
         };
 
         /**
-         * @memberOf AlbumListCtrl
-         *
-         * @description
-         *  The list of routes for the controller.
-         *
-         * @type {Object}
+         * @inheritdoc
          */
         $scope.routes = {
-          delete:         'api_v1_backend_album_delete',
-          deleteSelected: 'api_v1_backend_albums_delete',
-          list:           'api_v1_backend_albums_list',
-          patch:          'api_v1_backend_album_patch',
-          patchSelected:  'api_v1_backend_albums_patch'
+          delete:         'api_v1_backend_poll_delete',
+          deleteSelected: 'api_v1_backend_polls_delete',
+          list:           'api_v1_backend_polls_list',
+          patch:          'api_v1_backend_poll_patch',
+          patchSelected:  'api_v1_backend_polls_patch'
+        };
+
+        /**
+         * @function buildCharts
+         * @memberOf PollListCtrl
+         *
+         * @description
+         *   Builds an object with chart configuration basing on the list of
+         *   items.
+         *
+         * @param {Array} items The list of items.
+         */
+        $scope.buildCharts = function(items) {
+          $scope.chart = { data: [], labels: [] };
+
+          for (var i = 0; i < items.length; i++) {
+            $scope.chart.data.push(items[i].items.map(function(e) {
+              return e.votes;
+            }));
+
+            $scope.chart.labels.push(items[i].items.map(function(e) {
+              return e.item;
+            }));
+          }
         };
 
         /**
          * @function init
-         * @memberOf AlbumListCtrl
+         * @memberOf PollListCtrl
          *
          * @description
          *   Configures the controller.
@@ -66,18 +83,12 @@
             }
           });
 
-          if ($scope.app.mode === 'grid') {
-            $scope.criteria.epp = $scope.getEppInGrid();
-          }
-
           $scope.list();
-        };
 
-        /**
-         * @inheritdoc
-         */
-        $scope.isModeSupported = function() {
-          return true;
+          $scope.options = {
+            tooltips: { enabled: false },
+            elements: { arc: { borderWidth: 0 } },
+          };
         };
 
         /**
@@ -85,25 +96,10 @@
          */
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
+          $scope.buildCharts(data.items);
           $scope.localize($scope.data.items, 'items');
           $scope.localize($scope.data.extra.categories, 'categories');
         };
-
-        // Update epp when mode changes
-        $scope.$watch(function() {
-          return $scope.app.mode;
-        }, function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          var epp = $scope.getEppInGrid();
-
-          if (epp !== $scope.criteria.epp) {
-            $scope.flags.http.loading = true;
-            $scope.criteria.epp = nv === 'grid' ? epp : 10;
-          }
-        }, true);
       }
     ]);
 })();

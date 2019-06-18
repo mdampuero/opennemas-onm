@@ -84,33 +84,6 @@ admin_instance_sync_delete:
     path:     /instance-sync/delete
     defaults: { _controller: BackendBundle:InstanceSync:delete }
 
-# Polls manager routes
-admin_polls:
-    path:     /polls
-    defaults: { _controller: BackendBundle:Polls:list }
-
-admin_poll_create:
-    path:     /polls/create
-    defaults: { _controller: BackendBundle:Polls:create }
-
-admin_poll_show:
-    path:     /polls/{id}/show
-    defaults: { _controller: BackendBundle:Polls:show }
-    options:
-        expose: true
-
-admin_poll_update:
-    path:     /polls/{id}/update
-    defaults: { _controller: BackendBundle:Polls:update }
-
-admin_polls_config:
-    path:     /polls/config
-    defaults: { _controller: BackendBundle:Polls:config }
-
-admin_polls_content_provider:
-    path:     /polls/content-provider
-    defaults: { _controller: BackendBundle:Polls:contentProvider }
-
 # Ads manager routes
 admin_ads:
     path:     /ads
@@ -540,6 +513,10 @@ backend_opinion:
 backend_password:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/password.yml'
+
+backend_poll:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/poll.yml'
 
 backend_purchase:
     prefix:   /

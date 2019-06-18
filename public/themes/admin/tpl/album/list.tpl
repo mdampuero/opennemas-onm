@@ -33,14 +33,14 @@
 {block name="selectedActions"}
   {acl isAllowed="ALBUM_FAVORITE"}
     <li class="quicklinks hidden-xs">
-      <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 1)" uib-tooltip="{t escape="off"}Favorite{/t}" tooltip-placement="bottom">
-        <i class="fa fa-star"></i>
-      </button>
-    </li>
-    <li class="quicklinks hidden-xs">
       <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 0)" uib-tooltip="{t escape="off"}Unfavorite{/t}" tooltip-placement="bottom">
         <i class="fa fa-star"></i>
         <i class="fa fa-times fa-sub text-danger"></i>
+      </button>
+    </li>
+    <li class="quicklinks hidden-xs">
+      <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 1)" uib-tooltip="{t escape="off"}Favorite{/t}" tooltip-placement="bottom">
+        <i class="fa fa-star"></i>
       </button>
     </li>
     <li class="quicklinks hidden-xs">
@@ -100,7 +100,7 @@
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="app.mode === 'list'">
+  <li class="quicklinks hidden-xs ng-cloak" ng-show="ignoreMode || app.mode === 'list'">
     {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
   </li>
 {/block}

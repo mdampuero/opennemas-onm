@@ -84,7 +84,6 @@ class UserService extends OrmService
 
             $this->em->remove($item, $item->getOrigin());
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
     }
@@ -103,7 +102,6 @@ class UserService extends OrmService
         try {
             $response = parent::getList($oql);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
@@ -125,7 +123,7 @@ class UserService extends OrmService
                 $this->em->remove($item, $item->getOrigin());
                 $deleted++;
             } catch (\Exception $e) {
-                $this->container->get('error.log')->error($e->getMessage());
+                throw new DeleteListException($e->getMessage(), $e->getCode());
             }
         }
 
@@ -148,7 +146,6 @@ class UserService extends OrmService
                 ->getRepository($this->entity, $this->origin)
                 ->findOneBy($oql);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }

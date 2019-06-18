@@ -98,6 +98,16 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getItem when the provided id is empty.
+     *
+     * @expectedException \Api\Exception\GetItemException
+     */
+    public function testGetItemWhemEmptyId()
+    {
+        $this->service->getItem(0);
+    }
+
+    /**
      * Tests getItem when the item has no subscriber property to true.
      *
      * @expectedException \Api\Exception\GetItemException

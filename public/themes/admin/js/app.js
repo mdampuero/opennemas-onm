@@ -4,6 +4,7 @@ angular.module('BackendApp', [
   'angularTinycon',
   'angulartics',
   'angulartics.google.analytics',
+  'chart.js',
   'checklist-model',
   'colorpicker.module',
   'file-model',

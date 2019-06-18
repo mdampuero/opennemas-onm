@@ -59,7 +59,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key     = 'opinion-columns';
           $scope.backup.criteria = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: {

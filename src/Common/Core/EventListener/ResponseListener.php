@@ -73,14 +73,18 @@ class ResponseListener
      */
     protected function getCsvResponse($content)
     {
-        $filename = (array_key_exists('o-filename', $content) ?
-            $content['o-filename'] : 'report') . '-' . date('YmdHis');
-        $contents = array_key_exists('results', $content) ?
-            $content['results'] : [];
+        $filename = ($content['o_filename'] ?? 'report') . '-' . date('YmdHis');
+        $contents = $content['results'] ?? $content['items'] ?? [];
 
         try {
+            $context = $this->container->get('core.locale')->getContext();
+
+            $this->container->get('core.locale')->setContext('frontend');
+
             $csv = $this->container->get('core.helper.csv')
                 ->getReport($contents);
+
+            $this->container->get('core.locale')->setContext($context);
 
             return new Response($csv, 200, [
                 'Content-Encoding'    => 'none',

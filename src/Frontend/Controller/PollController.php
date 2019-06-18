@@ -9,31 +9,35 @@
  */
 namespace Frontend\Controller;
 
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
- * Displays an album or a list of albums.
+ * Displays a poll or a list of polls.
  */
-class AlbumController extends FrontendController
+class PollController extends FrontendController
 {
     /**
      * {@inheritdoc}
      */
     protected $caches = [
-        'list'    => 'gallery-frontpage',
-        'show'    => 'gallery-inner',
-        'showamp' => 'gallery-inner',
+        'list'    => 'poll-frontpage',
+        'show'    => 'poll-inner',
+        'showamp' => 'poll-inner',
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected $extension = 'ALBUM_MANAGER';
+    protected $extension = 'POLL_MANAGER';
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list'    => 'album_frontpage',
-        'show'    => 'album_inner',
+        'list'    => 'poll_frontpage',
+        'show'    => 'poll_inner',
         'showamp' => 'amp_inner',
     ];
 
@@ -41,8 +45,8 @@ class AlbumController extends FrontendController
      * {@inheritdoc}
      */
     protected $positions = [
-        'album_frontpage' => [ 7, 9 ],
-        'album_inner'     => [ 7 ],
+        'poll_frontpage' => [ 7, 9 ],
+        'poll_inner'     => [ 7 ],
     ];
 
     /**
@@ -61,7 +65,7 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $routes = [
-        'list' => 'frontend_album_frontpage'
+        'list' => 'frontend_poll_frontpage'
     ];
 
     /**
@@ -70,10 +74,75 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $templates = [
-        'list'    => 'album/album_frontpage.tpl',
-        'show'    => 'album/album.tpl',
+        'list'    => 'poll/poll_frontpage.tpl',
+        'show'    => 'poll/poll.tpl',
         'showamp' => 'amp/content.tpl',
     ];
+
+    /**
+     * Add vote & show poll result.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function voteAction(Request $request)
+    {
+        $answer = (int) $request->request->get('answer');
+        $poll   = $this->getItem($request);
+
+        // Prevent vote when no answer
+        if (empty($answer)) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Error: no vote value!'));
+
+            return new RedirectResponse(
+                $this->get('core.helper.url_generator')->generate($poll)
+            );
+        }
+
+        // Prevent vote when poll is closed
+        if ($poll->isClosed()) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('You can\'t vote this poll, it is closed.'));
+
+            return new RedirectResponse(
+                $this->get('core.helper.url_generator')->generate($poll)
+            );
+        }
+
+        $cookieName = 'poll-' . $poll->pk_poll;
+        $cookie     = $request->cookies->get($cookieName);
+
+        // Prevent vote when already voted
+        if (!empty($cookie)) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('You have voted this poll previously.'));
+
+            return new RedirectResponse(
+                $this->get('core.helper.url_generator')->generate($poll)
+            );
+        }
+
+        try {
+            $poll->vote($answer);
+
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Thanks for participating.'));
+
+            $cookie   = new Cookie($cookieName, 'voted');
+            $response = new RedirectResponse(
+                $this->get('core.helper.url_generator')->generate($poll)
+            );
+
+            $response->headers->setCookie($cookie);
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Error while updating content'));
+        }
+
+        return $response;
+    }
 
     /**
      * {@inheritDoc}
@@ -81,7 +150,7 @@ class AlbumController extends FrontendController
     protected function getRoute($action, $params = [])
     {
         if ($action == 'list' && array_key_exists('category_name', $params)) {
-            return 'frontend_album_frontpage_category';
+            return 'frontend_poll_frontpage_category';
         }
 
         return parent::getRoute($action, $params);
@@ -105,7 +174,7 @@ class AlbumController extends FrontendController
             : '';
 
         $response = $this->get('api.service.content_old')->getList(sprintf(
-            'content_type_name="album" and content_status=1 and in_litter=0 %s '
+            'content_type_name="poll" and content_status=1 and in_litter=0 %s '
             . 'and (starttime IS NULL or starttime < "%s") '
             . 'and (endtime IS NULL or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
@@ -117,7 +186,7 @@ class AlbumController extends FrontendController
         ));
 
         $params = array_merge($params, [
-            'albums'     => $response['items'],
+            'polls'      => $response['items'],
             'pagination' => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
@@ -127,12 +196,13 @@ class AlbumController extends FrontendController
                 'total'       => $response['total'],
                 'route'       => [
                     'name'   => empty($category)
-                        ? 'frontend_album_frontpage'
-                        : 'frontend_album_frontpage_category',
+                        ? 'frontend_poll_frontpage'
+                        : 'frontend_poll_frontpage_category',
                     'params' => empty($category)
                         ? []
                         : [ 'category_name' => $category->name ],
                 ]
+
             ])
         ]);
     }
@@ -144,17 +214,5 @@ class AlbumController extends FrontendController
     {
         $params['author'] = $this->get('user_repository')
             ->find($params['content']->fk_author);
-
-        $cacheIds = array_map(function ($a) {
-            return [ 'photo', $a['pk_photo'] ];
-        }, $params['content']->photos);
-
-        $photos = $this->get('entity_repository')
-            ->findMulti($cacheIds);
-
-        $params['photos'] = $this->get('data.manager.filter')
-            ->set($photos)
-            ->filter('mapify', [ 'key' => 'pk_photo' ])
-            ->get();
     }
 }

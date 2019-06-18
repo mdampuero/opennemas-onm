@@ -35,7 +35,6 @@ class CategoryService extends OrmService
                 'item' => $item,
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
     }
@@ -68,7 +67,6 @@ class CategoryService extends OrmService
                 'items' => $response['items'],
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
 
@@ -116,7 +114,6 @@ class CategoryService extends OrmService
                 'contents' => $moved
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
     }
@@ -153,7 +150,6 @@ class CategoryService extends OrmService
                 'contents' => $moved
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
 
@@ -188,7 +184,6 @@ class CategoryService extends OrmService
                 ->getRepository($this->entity, $this->origin)
                 ->countContents($ids);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
     }
@@ -215,7 +210,6 @@ class CategoryService extends OrmService
 
             return true;
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new ApiException($e->getMessage(), $e->getCode());
         }
     }

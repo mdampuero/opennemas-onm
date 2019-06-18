@@ -115,7 +115,6 @@ class OrmService implements Service
 
             return $item;
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
     }
@@ -135,7 +134,6 @@ class OrmService implements Service
                 'item' => $item
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
     }
@@ -152,7 +150,6 @@ class OrmService implements Service
         try {
             $response = $this->getListByIds($ids);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
@@ -167,7 +164,7 @@ class OrmService implements Service
                 $deleted[] = array_pop($id);
                 $items[]   = $item;
             } catch (\Exception $e) {
-                $this->container->get('error.log')->error($e->getMessage());
+                throw new DeleteListException($e->getMessage(), $e->getCode());
             }
         }
 
@@ -200,7 +197,6 @@ class OrmService implements Service
 
             return $item;
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }
@@ -225,7 +221,6 @@ class OrmService implements Service
         try {
             $response = $this->getList($oql);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
 
@@ -268,7 +263,6 @@ class OrmService implements Service
 
             return $response;
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new GetListException($e->getMessage(), $e->getCode());
         }
     }
@@ -346,7 +340,6 @@ class OrmService implements Service
                 'item' => $item
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new PatchItemException($e->getMessage(), $e->getCode());
         }
     }
@@ -365,8 +358,7 @@ class OrmService implements Service
         try {
             $response = $this->getListByIds($ids);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
-            throw new PatchListException($e->getMessage());
+            throw new PatchListException($e->getMessage(), $e->getCode());
         }
 
         $updated = [];
@@ -382,7 +374,7 @@ class OrmService implements Service
                 $updated[] = array_pop($id);
                 $items[]   = $item;
             } catch (\Exception $e) {
-                $this->container->get('error.log')->error($e->getMessage());
+                throw new PatchListException($e->getMessage(), $e->getCode());
             }
         }
 
@@ -455,7 +447,6 @@ class OrmService implements Service
                 'item' => $item
             ]);
         } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
             throw new UpdateItemException($e->getMessage());
         }
     }

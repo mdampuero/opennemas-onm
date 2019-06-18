@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\CsvHelper;
+use Common\Data\Core\FilterManager;
 
 /**
  * Defines test cases for CsvHelper class.
@@ -21,11 +22,55 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->cache = $this->getMockBuilder('Cache')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get', 'hasParameter' ])
+            ->getMock();
+
+        $this->fm = new FilterManager($this->container);
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
         $this->writer = $this->getMockBuilder('Writer')
             ->setMethods([ 'insertAll', 'insertOne', '__toString' ])
             ->getMock();
 
+        $this->cache->expects($this->any())->method('fetch')
+            ->willReturn([]);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
         $this->helper = new CsvHelper();
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'cache':
+                return $this->cache;
+
+            case 'data.manager.filter':
+                return $this->fm;
+
+            case 'core.instance':
+                return $this->instance;
+
+            default:
+                return null;
+        }
     }
 
     /**

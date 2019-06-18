@@ -43,7 +43,6 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.columns.key      = 'url-columns';
           $scope.criteria.orderBy = { id: 'asc' };
           $scope.backup.criteria  = $scope.criteria;
 

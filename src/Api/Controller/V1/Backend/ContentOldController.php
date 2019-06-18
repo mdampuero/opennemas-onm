@@ -38,11 +38,10 @@ class ContentOldController extends ContentController
     }
 
     /**
-     * Returns the list of l10n keys
-     * @param Type $var Description
+     * Returns the list of l10n keys.
      *
-     * @return array
-     **/
+     * @return array The list of l10n keys.
+     */
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys();
@@ -58,23 +57,5 @@ class ContentOldController extends ContentController
     protected function getRelatedContents($items)
     {
         return [];
-    }
-
-    /**
-     * Returns the lit of authors
-     *
-     * @return array the list of authors
-     **/
-    public function getAuthors()
-    {
-        $us = $this->get('api.service.author');
-
-        $response = $us->getList('order by name asc');
-        $authors  = $this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'id'])
-            ->get();
-
-        return $us->responsify($authors);
     }
 }

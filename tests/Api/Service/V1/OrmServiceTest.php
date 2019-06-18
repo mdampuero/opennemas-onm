@@ -52,10 +52,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContext' ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('Logger' . uniqid())
-            ->setMethods([ 'error' ])
-            ->getMock();
-
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([ 'countBy', 'find', 'findBy' ])
             ->getMock();
@@ -100,9 +96,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             case 'data.manager.filter':
                 return $this->fm;
 
-            case 'error.log':
-                return $this->logger;
-
             case 'orm.manager':
                 return $this->em;
         }
@@ -137,7 +130,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->converter->expects($this->any())->method('objectify')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->createItem([]);
     }
@@ -152,7 +144,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->converter->expects($this->any())->method('objectify');
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->createItem([]);
     }
@@ -186,7 +177,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->repository->expects($this->any())->method('find')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->deleteItem(23);
     }
@@ -207,8 +197,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('entity.getItem', [ 'id' => 23, 'item' => $item ]);
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->deleteItem(23);
     }
@@ -260,6 +248,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests deleteList when one error happens while removing.
+     *
+     * @expectedException \Api\Exception\DeleteListException
      */
     public function testDeleteListWhenOneErrorWhileRemoving()
     {
@@ -284,13 +274,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
                 'ids'   => [ 1, 2 ],
                 'items' => [ $itemA, $itemB ]
             ]);
-        $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.deleteList', [
-                'ids'   => [ 1 ],
-                'items' => [ $itemA ]
-            ]);
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
     }
@@ -305,8 +288,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->exactly(1))->method('error');
 
         $this->service->deleteList([ 1, 2 ]);
     }
@@ -328,6 +309,16 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getItem when the provided id is empty.
+     *
+     * @expectedException \Api\Exception\GetItemException
+     */
+    public function testGetItemWhemEmptyId()
+    {
+        $this->service->getItem(0);
+    }
+
+    /**
      * Tests getItem when an error happens while converting data.
      *
      * @expectedException \Api\Exception\GetItemException
@@ -336,8 +327,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->repository->expects($this->once())->method('find')
             ->with(1)->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->getItem(1);
     }
@@ -470,7 +459,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->repository->expects($this->once())->method('countBy')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->getList('order by title asc');
     }
@@ -484,7 +472,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->repository->expects($this->once())->method('findBy')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->once())->method('error');
 
         $this->service->getList('order by title asc');
     }
@@ -586,7 +573,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->patchItem(1, $data);
     }
@@ -607,7 +593,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception));
-        $this->logger->expects($this->once())->method('error');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('entity.getItem', [ 'id' => 1, 'item' => $item ]);
@@ -667,6 +652,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests patchList when one error happens while updating.
+     *
+     * @expectedException \Api\Exception\PatchListException
      */
     public function testPatchListWhenOneErrorWhileUpdating()
     {
@@ -676,8 +663,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->metadata->expects($this->at(0))->method('getL10nKeys')
             ->willReturn([]);
-        $this->metadata->expects($this->at(2))->method('getId')
-            ->willReturn([ 'id' => 2 ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
@@ -686,21 +671,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->at(4))->method('persist')
             ->will($this->throwException(new \Exception()));
 
-        $this->em->expects($this->at(4))->method('persist');
-
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('entity.getListByIds', [
                 'ids'   => [ 1, 2 ],
                 'items' => [ $itemA, $itemB ]
             ]);
-
-        $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.patchList', [
-                'ids'   => [ 2 ],
-                'items' => [ $itemB ]
-            ]);
-
-        $this->logger->expects($this->once())->method('error');
 
         $this->assertEquals(1, $this->service->patchList([ 1, 2 ], $data));
     }
@@ -715,8 +690,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->will($this->throwException(new \Exception()));
-
-        $this->logger->expects($this->exactly(1))->method('error');
 
         $this->service->patchList([ 1, 2 ], [ 'enabled' => true ]);
     }
@@ -801,7 +774,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with($data)->willReturn($data);
         $this->repository->expects($this->once())->method('find')
             ->will($this->throwException(new \Exception()));
-        $this->logger->expects($this->exactly(2))->method('error');
 
         $this->service->updateItem(1, $data);
     }
@@ -822,7 +794,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($item);
         $this->em->expects($this->once())->method('persist')
             ->will($this->throwException(new \Exception));
-        $this->logger->expects($this->once())->method('error');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('entity.getItem', [
