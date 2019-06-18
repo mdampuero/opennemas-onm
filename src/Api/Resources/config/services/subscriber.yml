@@ -4,3 +4,9 @@ services:
         arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager' ]
         tags:
             - { name: kernel.event_subscriber }
+
+    core.subscriber.file:
+        class:     Api\EventSubscriber\FileSubscriber
+        arguments: [ '@core.helper.varnish' ]
+        tags:
+            - { name: kernel.event_subscriber }
