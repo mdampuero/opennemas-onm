@@ -10,6 +10,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
+use Api\Exception\FileAlreadyExistsException;
 use Api\Exception\UpdateItemException;
 
 class FileService extends ContentOldService
@@ -29,13 +30,17 @@ class FileService extends ContentOldService
             $fh   = $this->container->get('core.helper.file');
             $path = $fh->generatePath($file, $data['created'] ?? null);
 
+            if ($fh->exists($path)) {
+                throw new FileAlreadyExistsException();
+            }
+
             $data['path'] =
                 $fh->generateRelativePath($file, $data['created'] ?? null);
 
             $fh->move($file, $path);
 
             if (!$id = $item->create($data)) {
-                throw new \Exception('Unable to create the item  "%s"');
+                throw new \Exception();
             }
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
@@ -65,6 +70,10 @@ class FileService extends ContentOldService
                 $fh   = $this->container->get('core.helper.file');
                 $path = $fh->generatePath($file, $data['created'] ?? null);
 
+                if ($fh->exists($path)) {
+                    throw new FileAlreadyExistsException();
+                }
+
                 $data['path'] =
                     $fh->generateRelativePath($file, $data['created'] ?? null);
 
@@ -73,9 +82,7 @@ class FileService extends ContentOldService
             }
 
             if (!$item->update($data)) {
-                throw new \Exception(
-                    sprintf('Unable to update the item with id "%s"', $id)
-                );
+                throw new \Exception();
             }
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
