@@ -180,7 +180,7 @@
                 <small class="text-italic" ng-if="!item.fk_author || (data.extra.authors | filter : { id: item.fk_author }).length === 0">
                   &lt;{t}No author{/t}&gt;
                 </small>
-                <a href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]" ng-if="item.fk_author && (data.extra.authors | filter : { id: item.fk_author }).length > 0">
+                <a class="text-bold" href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]" ng-if="item.fk_author && (data.extra.authors | filter : { id: item.fk_author }).length > 0">
                   [% (data.extra.authors | filter : { id: item.fk_author })[0].name %]
                 </a>
               </td>
