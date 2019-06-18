@@ -66,7 +66,7 @@
                       '<div class="items" ng-if="!searchLoading">' +
                         '<div class="list-item [selectable]"[selection] ng-repeat="content in contents track by $index">' +
                           '<div>' +
-                            '[% content.content_type_l10n_name %] - [% content.title %]' +
+                            '[% (picker.params.explore.contentTypes | filter: { name: content.content_type_name })[0].title %] - [% content.title %]' +
                           '</div>' +
                         '</div>' +
                       '</div>' +
