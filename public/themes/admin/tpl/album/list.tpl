@@ -120,6 +120,6 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/modal.trash.tpl"}
+    {include file="common/extension/modal.trash.tpl"}
   </script>
 {/block}
