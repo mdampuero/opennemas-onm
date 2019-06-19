@@ -404,19 +404,6 @@ class FrontendController extends Controller
             $params['categories'] = [];
         }
 
-        // TODO: Clean this ASAP
-        if (array_key_exists('o_category', $params)
-            && !empty($params['o_category'])
-        ) {
-            $params = array_merge($params, [
-                'actual_category'       => $params['o_category']->name,
-                'actual_category_id'    => $params['o_category']->pk_content_category,
-                'actual_category_title' => $params['o_category']->title,
-                'category_data'         => $params['o_category'],
-                'category_name'         => $params['o_category']->name,
-            ]);
-        }
-
         if ($this->get('core.globals')->getAction() == 'showamp') {
             $params['render_params'] = ['ads-format' => 'amp'];
         }

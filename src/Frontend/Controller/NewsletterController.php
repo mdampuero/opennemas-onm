@@ -79,10 +79,9 @@ class NewsletterController extends Controller
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [
-            'actual_category' => 'newsletter',
-            'ads_positions'   => $positions,
-            'advertisements'  => $advertisements,
-            'recaptcha' => $this->get('core.recaptcha')
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
         ]);
@@ -160,12 +159,11 @@ class NewsletterController extends Controller
         list($positions, $advertisements) = $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [
-            'actual_category' => 'newsletter',
-            'class'           => $rs['class'],
-            'message'         => $rs['message'],
-            'ads_positions'   => $positions,
-            'advertisements'  => $advertisements,
-            'recaptcha' => $this->get('core.recaptcha')
+            'class'          => $rs['class'],
+            'message'        => $rs['message'],
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
         ]);

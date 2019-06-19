@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Core;
 
 use Common\Core\Component\Core\GlobalVariables;
+use Common\ORM\Entity\Category;
 
 /**
  * Defines test cases for GlobalVariables class.
@@ -101,6 +102,52 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
             ->with('core.locale');
 
         $this->globals->getLocale();
+    }
+
+    /**
+     * Tests getSection when category assigned to template.
+     */
+    public function testGetSectionWithCategory()
+    {
+        $category       = new Category();
+        $category->name = 'foo';
+
+        $smarty = $this->getMockBuilder('Smarty')
+            ->setMethods([ 'getValue', 'hasValue' ])
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('core.template')
+            ->willReturn($smarty);
+
+        $smarty->expects($this->at(0))->method('hasValue')
+            ->with('category')
+            ->willReturn(true);
+
+        $smarty->expects($this->at(1))->method('getValue')
+            ->with('category')
+            ->willReturn($category);
+
+        $this->assertEquals('foo', $this->globals->getSection());
+    }
+
+    /**
+     * Tests getSection when no category assigned to template.
+     */
+    public function testGetSectionWithoutCategory()
+    {
+        $smarty = $this->getMockBuilder('Smarty')
+            ->setMethods([ 'hasValue' ])
+            ->getMock();
+
+        $this->container->expects($this->once())->method('get')
+            ->with('core.template')
+            ->willReturn($smarty);
+
+        $smarty->expects($this->once())->method('hasValue')
+            ->willReturn(false);
+
+        $this->assertEquals('home', $this->globals->getSection());
     }
 
     /**

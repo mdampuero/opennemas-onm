@@ -40,6 +40,13 @@ class GlobalVariables implements \ArrayAccess
     protected $extension;
 
     /**
+     * The section name.
+     *
+     * @var string
+     */
+    protected $section;
+
+    /**
      * The route name.
      *
      * @var string
@@ -154,6 +161,21 @@ class GlobalVariables implements \ArrayAccess
     public function getRoute()
     {
         return $this->route;
+    }
+
+    /**
+     * Returns the section name.
+     *
+     * @return string The section name.
+     */
+    public function getSection()
+    {
+        $template = $this->container->get('core.template');
+        if ($template->hasValue('category')) {
+            return $template->getValue('category')->name;
+        }
+
+        return 'home';
     }
 
     /**

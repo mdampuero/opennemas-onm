@@ -64,7 +64,7 @@ function smarty_function_renderLink($params, &$smarty)
             break;
     }
 
-    if ($params['noslash'] == 1) {
+    if (array_key_exists('noslash', $params) && !empty($params['noslash'])) {
         $link = substr($link, 1);
     }
 

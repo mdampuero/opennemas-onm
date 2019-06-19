@@ -203,14 +203,9 @@ class AmpController extends Controller
         $advertisements = $this->getAds($category->pk_content_category);
 
         return $this->render('amp/article.tpl', [
-            'actual_category'       => $category->name,
-            'actual_category_id'    => $category->pk_content_category,
-            'actual_category_title' => $category->title,
             'advertisements'        => $advertisements,
             'article'               => $article,
             'cache_id'              => $cacheID,
-            'category_data'         => $category,
-            'category_name'         => $category->name,
             'content'               => $article,
             'contentId'             => $article->id,
             'render_params'         => ['ads-format' => 'amp'],

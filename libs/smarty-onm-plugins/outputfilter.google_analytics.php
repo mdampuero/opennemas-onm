@@ -32,11 +32,11 @@ function smarty_outputfilter_google_analytics($output, $smarty)
             $code   = getGoogleAnalyticsCode(['type' => 'amp']);
             $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $code, $output);
         } else {
-            $category  = $smarty->parent->tpl_vars['actual_category']->value;
-            $extension = $smarty->parent->tpl_vars['app']->value['extension'];
+            $category  = $smarty->getValue('app')->getSection();
+            $extension = $smarty->getValue('app')->getExtension();
 
             $code = getGoogleAnalyticsCode([
-                'category' => $category,
+                'category'  => $category,
                 'extension' => $extension
             ]);
 

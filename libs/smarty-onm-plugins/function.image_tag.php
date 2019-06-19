@@ -29,7 +29,8 @@ function smarty_function_image_tag($params, &$smarty)
     $resource = $baseUrl . $src;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    $lazyload = ($params['data-src'] == 'lazyload');
+    $lazyload = array_key_exists('data-src', $params)
+        && $params['data-src'] == 'lazyload';
 
     unset($params['src']);
     unset($params['base_url']);
