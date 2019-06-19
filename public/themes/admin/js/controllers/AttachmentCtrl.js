@@ -57,11 +57,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_attachment_create',
-          redirect: 'backend_attachment_show',
-          save:     'api_v1_backend_attachment_save',
-          show:     'api_v1_backend_attachment_show',
-          update:   'api_v1_backend_attachment_update'
+          createItem: 'api_v1_backend_attachment_create_item',
+          getItem:    'api_v1_backend_attachment_get_item',
+          redirect:   'backend_attachment_show',
+          saveItem:   'api_v1_backend_attachment_save_item',
+          updateItem: 'api_v1_backend_attachment_update_item'
         };
 
         /**

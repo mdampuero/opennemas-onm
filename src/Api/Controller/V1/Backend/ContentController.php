@@ -21,63 +21,13 @@ class ContentController extends ApiController
     protected $service = 'api.service.content';
 
     /**
-     * Saves a new item.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveAction(Request $request)
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
-
-        $msg  = $this->get('core.messenger');
-        $data = $request->request->all();
-        $item = $this->get($this->service)->createItem($data);
-
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-
-        if (!empty($this->getItemRoute)) {
-            $response->headers->set('Location', $this->generateUrl(
-                $this->getItemRoute,
-                [ 'id' => $this->getItemId($item) ]
-            ));
-        }
-
-        return $response;
-    }
-
-    /**
-     * Updates the item information given its id and the new information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
-
-        $msg  = $this->get('core.messenger');
-        $data = $request->request->all();
-
-        $this->get($this->service)->updateItem($id, $data);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function getExtraData($items = null)
     {
         return [
             'related_contents' => $this->getRelatedContents($items),
-            'keys'             => $this->get($this->service)->getL10nKeys(),
+            'keys'             => $this->getL10nKeys(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'template_vars'    => [
                 'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
@@ -91,6 +41,16 @@ class ContentController extends ApiController
     protected function getItemId($item)
     {
         return $item->pk_content;
+    }
+
+    /**
+     * Returns the list of l10n keys.
+     *
+     * @return array The list of l10n keys.
+     */
+    protected function getL10nKeys()
+    {
+        return $this->get($this->service)->getL10nKeys();
     }
 
     /**

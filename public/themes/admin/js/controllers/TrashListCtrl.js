@@ -45,12 +45,12 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_trash_delete_item',
-          deleteSelected: 'api_v1_backend_trash_delete_list',
-          empty:          'api_v1_backend_trash_empty',
-          list:           'api_v1_backend_trash_list',
-          patch:          'api_v1_backend_trash_restore_item',
-          patchSelected:  'api_v1_backend_trash_restore_list'
+          deleteItem: 'api_v1_backend_trash_delete_item',
+          deleteList: 'api_v1_backend_trash_delete_list',
+          emptyList:  'api_v1_backend_trash_empty_list',
+          getList:    'api_v1_backend_trash_get_list',
+          patchItem:  'api_v1_backend_trash_restore_item',
+          patchList:  'api_v1_backend_trash_restore_list'
         };
 
         /**
@@ -99,7 +99,7 @@
               },
               success: function() {
                 return function() {
-                  return http.put($scope.routes.empty);
+                  return http.put($scope.routes.emptyList);
                 };
               }
             }
@@ -135,7 +135,7 @@
               success: function() {
                 return function() {
                   var route = {
-                    name: $scope.routes.patch,
+                    name: $scope.routes.patchItem,
                     params: { id: id }
                   };
 
@@ -172,7 +172,7 @@
               },
               success: function() {
                 return function() {
-                  var route = $scope.routes.patchSelected;
+                  var route = $scope.routes.patchList;
 
                   return http.patch(route, { ids: $scope.selected.items,
                     in_litter: 0 });

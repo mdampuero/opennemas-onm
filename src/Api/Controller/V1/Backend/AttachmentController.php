@@ -22,7 +22,7 @@ class AttachmentController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_attachment_show';
+    protected $getItemRoute = 'api_v1_backend_attachment_get_item';
 
     /**
      * {@inheritdoc}
@@ -32,7 +32,7 @@ class AttachmentController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    public function saveAction(Request $request)
+    public function saveItemAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('save'));
 
@@ -59,7 +59,7 @@ class AttachmentController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    public function updateAction(Request $request, $id)
+    public function updateItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 

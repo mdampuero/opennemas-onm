@@ -23,12 +23,63 @@ class VideoController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_video_show';
+    protected $getItemRoute = 'api_v1_backend_video_get_item';
 
     /**
      * {@inheritdoc}
      */
     protected $service = 'api.service.video';
+
+    /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('video_settings', []);
+
+        return new JsonResponse($settings);
+    }
+
+    /**
+     * Returns the video information for a given url.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function getInformationAction(Request $request)
+    {
+        $url    = $request->query->get('url', null, FILTER_DEFAULT);
+        $url    = rawurldecode($url);
+        $params = $this->container->getParameter('panorama');
+
+        $msg = $this->get('core.messenger');
+
+        if (!$url) {
+            $msg->add(_("Please check the video url, seems to be incorrect"), 'error', 412);
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        try {
+            $videoP = new \Panorama\Video($url, $params);
+            $output = $videoP->getVideoDetails();
+
+            return new JsonResponse($output, 200);
+        } catch (\Exception $e) {
+            $msg->add(_("Can't get video information. Check the url"), 'error', 412);
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+    }
 
     /**
      * Saves configuration for tags.
@@ -57,56 +108,6 @@ class VideoController extends ContentOldController
     }
 
     /**
-     * Get the tag config.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function showConfigAction()
-    {
-        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get('video_settings', []);
-
-        return new JsonResponse($settings);
-    }
-
-    /**
-     * Returns the video information for a given url.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     */
-    public function fetchInformationAction(Request $request)
-    {
-        $url    = $request->query->get('url', null, FILTER_DEFAULT);
-        $url    = rawurldecode($url);
-        $params = $this->container->getParameter('panorama');
-
-        $msg = $this->get('core.messenger');
-
-        if (!$url) {
-            $msg->add(_("Please check the video url, seems to be incorrect"), 'error', 412);
-
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        try {
-            $videoP = new \Panorama\Video($url, $params);
-            $output = $videoP->getVideoDetails();
-
-            return new JsonResponse($output, 200);
-        } catch (\Exception $e) {
-            $msg->add(_("Can't get video information. Check the url"), 'error', 412);
-
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     protected function getExtraData($items = null)
@@ -126,11 +127,7 @@ class VideoController extends ContentOldController
     }
 
     /**
-     * Returns the list of contents related with items.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
+     * {@inheritdoc}
      */
     protected function getRelatedContents($content)
     {

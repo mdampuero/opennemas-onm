@@ -23,12 +23,47 @@ class OpinionController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_opinion_show';
+    protected $getItemRoute = 'api_v1_backend_opinion_get_item';
 
     /**
      * {@inheritdoc}
      */
     protected $service = 'api.service.opinion';
+
+    /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(\Opinion::EXTRA_INFO_TYPE, []);
+
+        return new JsonResponse([ 'extrafields' => $settings ]);
+    }
+
+    /**
+     * Description of this action.
+     *
+     * @return Response The response object.
+     */
+    public function getPreviewAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $session = $this->get('session');
+        $content = $session->get('last_preview');
+
+        $session->remove('last_preview');
+
+        return new Response($content);
+    }
 
     /**
      * Saves configuration for tags.
@@ -58,30 +93,13 @@ class OpinionController extends ContentOldController
     }
 
     /**
-     * Get the tag config.
+     * Previews an opinion in frontend by sending the opinion info by POST.
      *
      * @param Request $request The request object.
      *
-     * @return JsonResponse The response object.
+     * @return Response The response object.
      */
-    public function showConfigAction()
-    {
-        $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get(\Opinion::EXTRA_INFO_TYPE, []);
-
-        return new JsonResponse([ 'extrafields' => $settings ]);
-    }
-
-    /**
-     * Previews an opinion in frontend by sending the opinion info by POST.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     */
-    public function previewAction(Request $request)
+    public function savePreviewAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
@@ -180,23 +198,6 @@ class OpinionController extends ContentOldController
         );
 
         return new Response('OK');
-    }
-
-    /**
-     * Description of this action.
-     *
-     * @return Response The response object.
-     */
-    public function getPreviewAction()
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
-
-        $session = $this->get('session');
-        $content = $session->get('last_preview');
-
-        $session->remove('last_preview');
-
-        return new Response($content);
     }
 
     /**

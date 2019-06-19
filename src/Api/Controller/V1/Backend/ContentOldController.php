@@ -32,26 +32,4 @@ class ContentOldController extends ContentController
             ],
         ];
     }
-
-    /**
-     * Returns the list of l10n keys.
-     *
-     * @return array The list of l10n keys.
-     */
-    protected function getL10nKeys()
-    {
-        return $this->get($this->service)->getL10nKeys();
-    }
-
-    /**
-     * Returns the list of contents related with items.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
-     */
-    protected function getRelatedContents($items)
-    {
-        return [];
-    }
 }

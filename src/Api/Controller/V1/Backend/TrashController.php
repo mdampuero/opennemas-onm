@@ -26,7 +26,7 @@ class TrashController extends ContentOldController
     /**
      * Deletes all items in the trash.
      */
-    public function emptyAction()
+    public function emptyListAction()
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('empty'));
 

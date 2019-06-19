@@ -29,11 +29,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_static_page_create',
-          redirect: 'backend_static_page_show',
-          save:     'api_v1_backend_static_page_save',
-          show:     'api_v1_backend_static_page_show',
-          update:   'api_v1_backend_static_page_update'
+          createItem: 'api_v1_backend_static_page_create_item',
+          getItem:    'api_v1_backend_static_page_get_item',
+          redirect:   'backend_static_page_show',
+          saveItem:   'api_v1_backend_static_page_save_item',
+          updateItem: 'api_v1_backend_static_page_update_item'
         };
 
         /**

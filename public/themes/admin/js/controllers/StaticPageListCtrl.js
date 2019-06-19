@@ -41,11 +41,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_static_page_delete',
-          deleteSelected: 'api_v1_backend_static_pages_delete',
-          list:           'api_v1_backend_static_pages_list',
-          patch:          'api_v1_backend_static_page_patch',
-          patchSelected:  'api_v1_backend_static_pages_patch'
+          deleteItem: 'api_v1_backend_static_page_delete_item',
+          deleteList: 'api_v1_backend_static_page_delete_list',
+          getList:    'api_v1_backend_static_page_get_list',
+          patchItem:  'api_v1_backend_static_page_patch_item',
+          patchList:  'api_v1_backend_static_page_patch_list'
         };
 
         /**

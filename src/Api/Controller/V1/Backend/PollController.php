@@ -25,7 +25,7 @@ class PollController extends ContentOldController
      *
      * @var string
      */
-    protected $getItemRoute = 'api_v1_backend_poll_show';
+    protected $getItemRoute = 'api_v1_backend_poll_get_item';
 
     /**
      * {@inheritDoc}

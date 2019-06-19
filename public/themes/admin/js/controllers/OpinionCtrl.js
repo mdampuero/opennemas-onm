@@ -67,11 +67,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @type {Object}
      */
     $scope.routes = {
-      create:   'api_v1_backend_opinion_create',
-      redirect: 'backend_opinion_show',
-      save:     'api_v1_backend_opinion_save',
-      show:     'api_v1_backend_opinion_show',
-      update:   'api_v1_backend_opinion_update'
+      createItem: 'api_v1_backend_opinion_create_item',
+      getItem:    'api_v1_backend_opinion_get_item',
+      redirect:   'backend_opinion_show',
+      saveItem:   'api_v1_backend_opinion_save_item',
+      updateItem: 'api_v1_backend_opinion_update_item'
     };
 
     /**

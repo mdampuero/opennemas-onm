@@ -21,7 +21,7 @@ class AlbumController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_album_show';
+    protected $getItemRoute = 'api_v1_backend_album_get_item';
 
     /**
      * {@inheritdoc}
