@@ -99,7 +99,7 @@
               },
               success: function() {
                 return function() {
-                  return http.delete($scope.routes.empty);
+                  return http.put($scope.routes.empty);
                 };
               }
             }
