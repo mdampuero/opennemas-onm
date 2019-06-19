@@ -52,7 +52,7 @@ orm:
                     arguments: [ '@orm.metadata.content' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Common\ORM\Database\Repository\ContentRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             persisters:
                 instance:
