@@ -8,15 +8,18 @@
      * @name  SettingsCtrl
      *
      * @requires $controller
-     * @requires $rootScope
      * @requires $scope
+     * @requires cleaner
+     * @requires http
+     * @requires messenger
+     * @requires oqlEncoder
      *
      * @description
      *   Handles actions for paywall settings configuration form.
      */
     .controller('SettingsCtrl', [
-      '$controller', '$rootScope', '$scope', 'http', 'cleaner', 'messenger',
-      function($controller, $rootScope, $scope, http, cleaner, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger', 'oqlEncoder',
+      function($controller, $scope, cleaner, http, messenger, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -202,9 +205,17 @@
          * @param {String} domain The input domain.
          */
         $scope.getFiles = function(query) {
+          oqlEncoder.configure({
+            placeholder: {
+              title: '[key] ~ "%[value]%"'
+            }
+          });
+
+          var oql = oqlEncoder.getOql({ title: query, in_litter: 0, epp: 10 });
+
           var route = {
-            name: 'api_v1_backend_files_autocomplete',
-            params: { query: query }
+            name: 'api_v1_backend_attachments_list',
+            params: { oql: oql }
           };
 
           $scope.searching = true;
@@ -212,7 +223,12 @@
           return http.get(route).then(function(response) {
             $scope.searching = false;
 
-            return response.data.results;
+            return response.data.items.map(function(e) {
+              return {
+                id: e.pk_content,
+                filename: e.path.replace(/^.*\/([^/]+)$/, '$1')
+              };
+            });
           }, function() {
             $scope.searching = false;
           });
