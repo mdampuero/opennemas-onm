@@ -232,7 +232,7 @@ class FixCommand extends ContainerAwareCommand
      */
     protected function prepareQuery($q)
     {
-        if (!preg_match_all('/\[[a-z.]+\]/', $q, $matches)) {
+        if (!preg_match_all('/\[[a-z.0-9]+\]/', $q, $matches)) {
             return $q;
         }
 
