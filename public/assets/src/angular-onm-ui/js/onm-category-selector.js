@@ -304,6 +304,7 @@
               });
 
               if (found.length === 0) {
+                $scope.exportModel = $scope.multiple ? [] : null;
                 return;
               }
 
