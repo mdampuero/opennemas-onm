@@ -171,8 +171,8 @@ class GlobalVariables implements \ArrayAccess
     public function getSection()
     {
         $template = $this->container->get('core.template');
-        if ($template->hasValue('category')) {
-            return $template->getValue('category')->name;
+        if ($template->hasValue('o_category')) {
+            return $template->getValue('o_category')->name;
         }
 
         return 'home';
