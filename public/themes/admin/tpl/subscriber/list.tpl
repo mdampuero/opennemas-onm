@@ -27,7 +27,7 @@
                 </li>
               {/acl}
               <li class="quicklinks">
-                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscribers_export') %]">
+                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscriber_get_report') %]">
                   <span class="fa fa-download"></span>
                   {t}Download{/t}
                 </a>

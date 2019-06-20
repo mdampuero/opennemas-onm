@@ -137,41 +137,10 @@
                         {t}The user can assign contents to the selected categories only{/t}
                       </small>
                     </div>
-                    <div class="checkbox p-b-5">
-                      <input id="toggle-categories" name="toggle-categories" ng-change="areAllCategoriesSelected()" ng-model="flags.categories.all" type="checkbox">
-                      <label class="form-label" for="toggle-categories">
-                        {t}Select/deselect all{/t}
-                      </label>
-                    </div>
-                    <div class="checkbox-list checkbox-list-categories">
-                      <div class="checkbox p-b-5" ng-repeat="category in (filteredCategories = (data.extra.categories | filter : { parent: 0 } : true))" ng-if="category.id != 0">
-                        <div class="m-t-15" ng-if="$index > 0 && category.type != filteredCategories[$index - 1].type">
-                          <h5 ng-if="category.type == 1"><i class="fa fa-sticky-note m-r-5"></i>{t}Contents{/t}</h5>
-                          <h5 ng-if="category.type == 7"><i class="fa fa-camera m-r-5"></i>{t}Albums{/t}</h5>
-                          <h5 ng-if="category.type == 9"><i class="fa fa-play-circle-o m-r-5"></i>{t}Videos{/t}</h5>
-                          <h5 ng-if="category.type == 11"><i class="fa fa-pie-chart m-r-5"></i>{t}Polls{/t}</h5>
-                        </div>
-                        <div ng-if="category.parent == 0">
-                          <input id="category-[% category.id %]" name="category-[% category.id %]" checklist-model="item.categories" checklist-value="category.id" type="checkbox">
-                          <label class="form-label" for="category-[% category.id %]">
-                            [% category.name %]
-                          </label>
-                        </div>
-                        <div ng-if="category.id != 0">
-                          <div ng-repeat="subcategory in data.extra.categories | filter : { parent: category.id } : true">
-                            <input id="category-[% subcategory.id %]" name="category-[% subcategory.id %]" checklist-model="item.categories" checklist-value="subcategory.id" type="checkbox">
-                            <label class="form-label" for="category-[% subcategory.id %]">
-                              &rarr; [% subcategory.name %]
-                            </label>
-                          </div>
-                        </div>
+                    <div class="form-group no-margin">
+                      <div class="controls">
+                        <onm-category-selector class="block" default-value-text="{t}All{/t}/{t}None{/t}" locale="config.locale.selected" multiple="true" ng-model="item.categories" placeholder="{t}Select a category{/t}…" selected-text="{t}selected{/t}"/>
                       </div>
-                    </div>
-                    <div class="m-t-5" ng-if="flags.categories.all" ng-show="isHelpEnabled()">
-                      <small class="help m-l-3">
-                        <i class="fa fa-exclamation-triangle m-r-5 text-warning"></i>
-                        {t}We recommend you to use the "Access to all categories" mark to avoid unchecked future created categories{/t}
-                      </small>
                     </div>
                   </div>
                 </div>

@@ -29,11 +29,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_user_delete',
-          deleteSelected: 'api_v1_backend_users_delete',
-          list:           'api_v1_backend_users_list',
-          patch:          'api_v1_backend_user_patch',
-          patchSelected:  'api_v1_backend_users_patch'
+          deleteItem: 'api_v1_backend_user_delete_item',
+          deleteList: 'api_v1_backend_user_delete_list',
+          getList:    'api_v1_backend_user_get_list',
+          patchItem:  'api_v1_backend_user_patch_item',
+          patchList:  'api_v1_backend_user_patch_list'
         };
 
         /**
@@ -105,15 +105,7 @@
         };
 
         /**
-         * @function isSelectable
-         * @memberOf UserListCtrl
-         *
-         * @description
-         *   Checks if the item is selectable.
-         *
-         * @param {Object} item The item to check.
-         *
-         * @return {Boolean} True if the item is selectable. False otherwise.
+         * @inheritdoc
          */
         $scope.isSelectable = function(item) {
           return $scope.backup.master ||

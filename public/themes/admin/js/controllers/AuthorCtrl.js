@@ -49,11 +49,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_author_create',
-          redirect: 'backend_author_show',
-          save:     'api_v1_backend_author_save',
-          show:     'api_v1_backend_author_show',
-          update:   'api_v1_backend_author_update'
+          createItem: 'api_v1_backend_author_create_item',
+          getItem:    'api_v1_backend_author_get_item',
+          redirect:   'backend_author_show',
+          saveItem:   'api_v1_backend_author_save_item',
+          updateItem: 'api_v1_backend_author_update_item'
         };
 
         /**
