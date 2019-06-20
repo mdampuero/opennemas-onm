@@ -96,6 +96,9 @@ class PollController extends FrontendController
             $this->get('session')->getFlashBag()
                 ->add('error', _('Error: no vote value!'));
 
+            $this->get('core.dispatcher')
+                ->dispatch('content.update', [ 'item' => $poll ]);
+
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)
             );
@@ -105,6 +108,9 @@ class PollController extends FrontendController
         if ($poll->isClosed()) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('You can\'t vote this poll, it is closed.'));
+
+            $this->get('core.dispatcher')
+                ->dispatch('content.update', [ 'item' => $poll ]);
 
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)
@@ -118,6 +124,9 @@ class PollController extends FrontendController
         if (!empty($cookie)) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('You have voted this poll previously.'));
+
+            $this->get('core.dispatcher')
+                ->dispatch('content.update', [ 'item' => $poll ]);
 
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)
