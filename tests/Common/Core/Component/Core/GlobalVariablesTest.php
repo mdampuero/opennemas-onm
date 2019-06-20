@@ -121,11 +121,11 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
             ->willReturn($smarty);
 
         $smarty->expects($this->at(0))->method('hasValue')
-            ->with('category')
+            ->with('o_category')
             ->willReturn(true);
 
         $smarty->expects($this->at(1))->method('getValue')
-            ->with('category')
+            ->with('o_category')
             ->willReturn($category);
 
         $this->assertEquals('foo', $this->globals->getSection());
