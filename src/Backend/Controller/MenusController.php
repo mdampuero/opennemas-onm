@@ -270,47 +270,113 @@ class MenusController extends Controller
         $pages = [['title' => _("Frontpage"),'link' => "/"]];
 
         if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
-            array_push($pages, ['title' => _("Opinion"),'link' => "opinion/"]);
+            $pages[] = [
+                'title' => _('Opinions'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_opinion_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('BLOG_MANAGER')) {
-            array_push($pages, ['title' => _("Bloggers"),'link' => "blog/"]);
+            $pages[] = [
+                'title' => _('Blogs'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_blog_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
-            array_push($pages, ['title' => _("Album"),'link' => "album/"]);
+            $pages[] = [
+                'title' => _('Albums'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_album_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
-            array_push($pages, ['title' => _("Video"),'link' => "video/"]);
+            $pages[] = [
+                'title' => _('Videos'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_video_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
-            array_push($pages, ['title' => _("Poll"),'link' => "poll/"]);
+            $pages[] = [
+                'title' => _('Polls'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_poll_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.events')) {
-            array_push($pages, ['title' => _("Events"),'link' => "events/"]);
+            $pages[] = [
+                'title' => _('Events'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_events'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
-            array_push($pages, ['title' => _("Letters to the Editor"),'link' => "cartas-al-director/"]);
+            $pages[] = [
+                'title' => _('Letters to the Editor'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_letter_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
-            array_push($pages, ['title' => _("News Stand"),'link' => "portadas-papel/"]);
+            $pages[] = [
+                'title' => _('News Stand'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_newstand_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('FORM_MANAGER')) {
-            array_push($pages, ['title' => _("Form"),'link' => "participa/"]);
+            $pages[] = [
+                'title' => _('Form'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_participa_frontpage'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('NEWSLETTER_MANAGER')) {
-            array_push($pages, ['title' => _("Newsletter"),'link' => "newsletter/"]);
+            $pages[] = [
+                'title' => _('Newsletter'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_newsletter_subscribe_show'),
+                    '/'
+                )
+            ];
         }
 
         if ($this->get('core.security')->hasExtension('LIBRARY_MANAGER')) {
-            array_push($pages, ['title' => _("Archive"),'link' => "archive/content/"]);
+            $pages[] = [
+                'title' => _('Archive'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_archive', [ 'component' => 'content' ]),
+                    '/'
+                )
+            ];
         }
 
         return $pages;
