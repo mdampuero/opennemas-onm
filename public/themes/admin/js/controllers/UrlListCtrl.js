@@ -30,7 +30,7 @@
         $scope.routes = {
           deleteItem: 'api_v1_backend_url_delete_item',
           deleteList: 'api_v1_backend_url_delete_list',
-          getList:    'api_v1_backend_urls_get_list',
+          getList:    'api_v1_backend_url_get_list',
           patchItem:  'api_v1_backend_url_patch_item',
           patchList:  'api_v1_backend_url_patch_list'
         };
