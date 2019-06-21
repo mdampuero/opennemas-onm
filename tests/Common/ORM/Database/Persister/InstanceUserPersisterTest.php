@@ -84,38 +84,61 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
             'users',
             [ 'id' => null, 'name' => 'xyzzy' ],
             [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
         );
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 25, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+        $this->conn->expects($this->at(5))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
             [ 1, [ 25 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
-        $this->conn->expects($this->at(5))->method('commit');
-
+        $this->conn->expects($this->at(6))->method('commit');
         $this->conn->expects($this->at(7))->method('executeQuery')->with(
-            'replace into users_content_categories values (?,?),(?,?)',
-            [ 1, 1, 1, 2 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
-        );
-        $this->conn->expects($this->at(6))->method('executeQuery')->with(
             'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
             [ 1, [ 1, 2 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
+        $this->conn->expects($this->at(8))->method('executeQuery')->with(
+            'replace into users_content_categories values (?,?),(?,?)',
+            [ 1, 1, 1, 2 ],
+            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
+        );
 
         $this->persister->create($entity);
         $this->assertEquals(1, $entity->id);
+    }
+
+    /**
+     * Tests create when an error while inserting is thrown
+     *
+     * @expectedException \Throwable
+     */
+    public function testCreateWhenError()
+    {
+        $entity = new User([
+            'name'        => 'xyzzy',
+            'categories'  => [ 1, 2 ],
+            'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
+        ]);
+
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('rollback');
+        $this->conn->expects($this->once())->method('insert')->with(
+            'users',
+            [ 'id' => null, 'name' => 'xyzzy' ],
+            [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
+        )->will($this->throwException(new \Exception()));
+
+        $this->persister->create($entity);
     }
 
     /**
@@ -130,38 +153,63 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
         $this->conn->expects($this->once())->method('update')->with(
             'users',
             [ 'name' => 'garply' ],
             [ 'id' => 1 ],
             [ 'name' => \PDO::PARAM_STR ]
         );
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
+        $this->conn->expects($this->at(3))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 24, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
             'delete from user_user_group where user_id = ? and user_group_id not in (?)',
             [ 1, [ 24 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
-        $this->conn->expects($this->at(4))->method('commit');
+        $this->conn->expects($this->at(5))->method('commit');
 
-        $this->conn->expects($this->at(5))->method('executeQuery')->with(
+        $this->conn->expects($this->at(6))->method('executeQuery')->with(
             'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
             [ 1, [ 1 ] ],
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
-        $this->conn->expects($this->at(6))->method('executeQuery')->with(
+        $this->conn->expects($this->at(7))->method('executeQuery')->with(
             'replace into users_content_categories values (?,?)',
             [ 1, 1 ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
 
         $this->persister->update($entity);
-        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Tests update when an error while updating is thrown.
+     *
+     * @expectedException \Throwable
+     */
+    public function testUpdateWhenError()
+    {
+        $entity = new User([
+            'id'          => 1,
+            'name'        => 'garply',
+            'categories'  => [ 1 ],
+            'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
+        ]);
+
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('rollback');
+        $this->conn->expects($this->once())->method('update')->with(
+            'users',
+            [ 'name' => 'garply' ],
+            [ 'id' => 1 ],
+            [ 'name' => \PDO::PARAM_STR ]
+        )->will($this->throwException(new \Exception()));
+
+        $this->persister->update($entity);
     }
 
     /**

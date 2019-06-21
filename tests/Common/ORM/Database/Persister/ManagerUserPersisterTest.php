@@ -101,6 +101,31 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests create when an error while inserting is thrown.
+     *
+     * @expectedException \Throwable
+     */
+    public function testCreateWhenError()
+    {
+        $entity = new User([
+            'name'        => 'xyzzy',
+            'instances'   => [ 'bar' ],
+            'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
+        ]);
+
+        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->once())->method('rollback');
+        $this->conn->expects($this->once())->method('insert')->with(
+            'users',
+            [ 'id' => null, 'name' => 'xyzzy' ],
+            [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
+        )->will($this->throwException(new \Exception()));
+
+        $this->persister->create($entity);
+        $this->assertEquals(1, $entity->id);
+    }
+
+    /**
      * Tests update for an user with instances and user groups.
      */
     public function testUpdate()
@@ -132,9 +157,35 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
         );
         $this->conn->expects($this->once())->method('commit');
 
+        $this->persister->update($entity);
+    }
+
+    /**
+     * Tests update when an error while updating is thrown.
+     *
+     * @expectedException \Throwable
+     */
+    public function testUpdateWhenError()
+    {
+        $entity = new User([
+            'id'          => 1,
+            'name'        => 'garply',
+            'instances'   => [ 'grault' ],
+            'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
+        ]);
+
+        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->once())->method('update')->with(
+            'users',
+            [ 'name' => 'garply' ],
+            [ 'id' => 1 ],
+            [ 'name' => \PDO::PARAM_STR ]
+        )->will($this->throwException(new \Exception()));
 
         $this->persister->update($entity);
     }
+
+
 
     /**
      * Tests update for an user with categories but no user groups.

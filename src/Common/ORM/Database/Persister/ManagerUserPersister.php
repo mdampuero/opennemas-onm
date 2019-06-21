@@ -47,9 +47,9 @@ class ManagerUserPersister extends BasePersister
             $entity->user_groups = $userGroups;
 
             $this->conn->commit();
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             $this->conn->rollback();
-            return;
+            throw $e;
         }
 
         $entity->refresh();
@@ -83,6 +83,7 @@ class ManagerUserPersister extends BasePersister
         $entity->setNotStored('user_groups');
 
         $this->conn->beginTransaction();
+
         try {
             parent::update($entity);
 
@@ -95,15 +96,14 @@ class ManagerUserPersister extends BasePersister
             $entity->instances   = $instances;
             $entity->user_groups = $userGroups;
 
+            $this->conn->commit();
+
             if ($this->hasCache()) {
                 $this->cache->remove($this->metadata->getPrefixedId($entity));
             }
-
-            $this->conn->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->conn->rollback();
-
-            return;
+            throw $e;
         }
     }
 
