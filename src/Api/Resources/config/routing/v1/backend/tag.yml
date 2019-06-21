@@ -67,7 +67,7 @@ api_v1_backend_tag_update_item:
     requirements:
         id: \d+
 
-api_v1_backend_tags_validate_item:
+api_v1_backend_tag_validate_item:
     path:     /tags/validator
     defaults: { _controller: ApiBundle:V1/Backend/Tag:validateItem }
     methods:  [ GET ]

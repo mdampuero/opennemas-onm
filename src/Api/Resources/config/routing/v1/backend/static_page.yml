@@ -1,12 +1,12 @@
 api_v1_backend_static_page_create_item:
-    path:     /static_pages/new
+    path:     /static-pages/new
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_static_page_delete_item:
-    path:     /static_pages/{id}
+    path:     /static-pages/{id}
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:deleteItem }
     methods:  [ DELETE ]
     options:
@@ -15,14 +15,14 @@ api_v1_backend_static_page_delete_item:
         id: \d+
 
 api_v1_backend_static_page_delete_list:
-    path:     /static_pages
+    path:     /static-pages
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:deleteList }
     methods:  [ DELETE ]
     options:
         expose: true
 
 api_v1_backend_static_page_get_item:
-    path:     /static_pages/{id}
+    path:     /static-pages/{id}
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:getItem }
     methods:  [ GET ]
     options:
@@ -31,14 +31,14 @@ api_v1_backend_static_page_get_item:
         id: \d+
 
 api_v1_backend_static_page_get_list:
-    path:     /static_pages
+    path:     /static-pages
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:getList, format: '.json' }
     methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_static_page_patch_item:
-    path:     /static_pages/{id}
+    path:     /static-pages/{id}
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:patchItem }
     methods:  [ PATCH ]
     options:
@@ -47,22 +47,22 @@ api_v1_backend_static_page_patch_item:
         id: \d+
 
 api_v1_backend_static_page_patch_list:
-    path:     /static_pages
+    path:     /static-pages
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:patchList }
     methods:  [ PATCH ]
     options:
         expose: true
 
 api_v1_backend_static_page_save_item:
-    path:     /static_pages
+    path:     /static-pages
     defaults: { _controller: ApiBundle:V1/Backend/StaticPage:saveItem }
     methods:  [ POST ]
     options:
         expose: true
 
-api_v1_backend_static_page_update:
-    path:     /static_pages/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:update }
+api_v1_backend_static_page_update_item:
+    path:     /static-pages/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/StaticPage:updateItem }
     methods:  [ PUT ]
     options:
         expose: true

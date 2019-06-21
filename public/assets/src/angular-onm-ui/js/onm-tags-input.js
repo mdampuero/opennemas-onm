@@ -241,7 +241,7 @@
           var oql = oqlEncoder.getOql(criteria);
 
           return http.get({
-            name: 'api_v1_backend_tags_list',
+            name: 'api_v1_backend_tag_get_list',
             params: { oql: oql }
           }).then(function(response) {
             $scope.data = response.data;
@@ -284,7 +284,7 @@
          * @return {Integer} The tag id.
          */
         $scope.saveTag = function(data) {
-          var route = { name: 'api_v1_backend_tag_save' };
+          var route = { name: 'api_v1_backend_tag_save_item' };
 
           delete data.id;
 
@@ -315,7 +315,7 @@
           }
 
           return http.get({
-            name: 'api_v1_backend_tags_validate',
+            name: 'api_v1_backend_tag_validate_item',
             params: tag
           }).then(function() {
             return true;
@@ -400,7 +400,7 @@
           oqlEncoder.configure({ placeholder: { id: '[key] in [[value]]' } });
 
           http.get({
-            name: 'api_v1_backend_tags_list',
+            name: 'api_v1_backend_tag_get_list',
             params: { oql: oqlEncoder.getOql(criteria) }
           }).then(function(response) {
             $scope.loading = false;
