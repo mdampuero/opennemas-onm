@@ -1,62 +1,62 @@
-api_v1_backend_user_group_create:
+api_v1_backend_user_group_create_item:
     path:     /user-groups/new
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:create }
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_user_group_delete:
+api_v1_backend_user_group_delete_item:
     path:     /user-groups/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_user_group_patch:
+api_v1_backend_user_group_delete_list:
+    path:     /user-groups
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:deleteList }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_user_group_get_item:
     path:     /user-groups/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:patch }
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:getItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_user_group_get_list:
+    path:     /user-groups
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_user_group_patch_item:
+    path:     /user-groups/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:patchItem }
     methods:  [ PATCH ]
     options:
         expose: true
 
-api_v1_backend_user_group_save:
+api_v1_backend_user_group_patch_list:
     path:     /user-groups
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:save }
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_user_group_save_item:
+    path:     /user-groups
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:saveItem }
     methods:  [ POST ]
     options:
         expose: true
 
-api_v1_backend_user_group_show:
+api_v1_backend_user_group_update_item:
     path:     /user-groups/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:show }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_user_group_update:
-    path:     /user-groups/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:update }
+    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:updateItem }
     methods:  [ PUT ]
-    options:
-        expose: true
-
-api_v1_backend_user_groups_list:
-    path:     /user-groups
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:list }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_user_groups_patch:
-    path:     /user-groups
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:patchSelected }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-
-api_v1_backend_user_groups_delete:
-    path:     /user-groups
-    defaults: { _controller: ApiBundle:V1/Backend/UserGroup:deleteSelected }
-    methods:  [ DELETE ]
     options:
         expose: true

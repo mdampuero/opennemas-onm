@@ -9,233 +9,54 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Api\Controller\V1\ApiController;
 
 /**
  * Displays, saves, modifies and removes subscriptions.
  */
-class SubscriptionController extends Controller
+class SubscriptionController extends ApiController
 {
     /**
-     * Returns the data to create a new subscription.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
+    protected $extension = 'CONTENT_SUBSCRIPTIONS';
 
     /**
-     * Deletes a subscription.
-     *
-     * @param integer $id The subscription id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteAction($id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.subscription')->deleteItem($id);
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $getItemRoute = 'api_v1_backend_subscription_get_item';
 
     /**
-     * Deletes the selected subscriptions.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteSelectedAction(Request $request)
-    {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.subscription')->deleteList($ids);
-
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
-        }
-
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $permissions = [
+        'create' => 'SUBSCRIPTION_CREATE',
+        'delete' => 'SUBSCRIPTION_DELETE',
+        'list'   => 'SUBSCRIPTION_ADMIN',
+        'patch'  => 'SUBSCRIPTION_UPDATE',
+        'save'   => 'SUBSCRIPTION_CREATE',
+        'show'   => 'SUBSCRIPTION_UPDATE',
+        'update' => 'SUBSCRIPTION_UPDATE',
+    ];
 
     /**
-     * Returns the list of subscriptions.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_LIST')")
+     * {@inheritdoc}
      */
-    public function listAction(Request $request)
-    {
-        $ss       = $this->get('api.service.subscription');
-        $oql      = $request->query->get('oql', '');
-        $response = $ss->getList($oql);
-
-        $response['items'] = $ss->responsify($response['items']);
-
-        return new JsonResponse($response);
-    }
+    protected $service = 'api.service.subscription';
 
     /**
-     * Updates some instance properties.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_UPDATE')")
+     * {@inheritdoc}
      */
-    public function patchAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.subscription')
-            ->patchItem($id, $request->request->all());
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Updates some subscription properties.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_UPDATE')")
-     */
-    public function patchSelectedAction(Request $request)
-    {
-        $params = $request->request->all();
-        $ids    = $params['ids'];
-        $msg    = $this->get('core.messenger');
-
-        unset($params['ids']);
-
-        $updated = $this->get('api.service.subscription')
-            ->patchList($ids, $params);
-
-        if ($updated > 0) {
-            $msg->add(
-                sprintf(_('%s items updated successfully'), $updated),
-                'success'
-            );
-        }
-
-        if ($updated !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be updated successfully'),
-                count($ids) - $updated
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Saves a new subscription.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_CREATE')")
-     */
-    public function saveAction(Request $request)
-    {
-        $msg = $this->get('core.messenger');
-
-        $userGroup = $this->get('api.service.subscription')
-            ->createItem($request->request->all());
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_subscription_show',
-                [ 'id' => $userGroup->pk_user_group ]
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * Returns a subscription.
-     *
-     * @param integer $id The group id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_UPDATE')")
-     */
-    public function showAction($id)
-    {
-        $ss = $this->get('api.service.subscription');
-
-        return new JsonResponse([
-            'item'  => $ss->responsify($ss->getItem($id)),
-            'extra' => $this->getExtraData()
-        ]);
-    }
-
-    /**
-     * Updates the subscription information given its id and the new
-     * information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIPTION_UPDATE')")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.subscription')
-            ->updateItem($id, $request->request->all());
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of extra data.
-     *
-     * @return array The extra data.
-     */
-    private function getExtraData()
+    protected function getExtraData($items = null)
     {
         return [ 'modules' => \Privilege::getPrivilegesByModules() ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemId($item)
+    {
+        return $item->pk_user_group;
     }
 }

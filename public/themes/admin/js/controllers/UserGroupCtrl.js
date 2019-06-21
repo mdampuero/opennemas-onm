@@ -66,11 +66,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_user_group_create',
-          redirect: 'backend_user_group_show',
-          save:     'api_v1_backend_user_group_save',
-          show:     'api_v1_backend_user_group_show',
-          update:   'api_v1_backend_user_group_update'
+          createItem: 'api_v1_backend_user_group_create_item',
+          getItem:    'api_v1_backend_user_group_get_item',
+          redirect:   'backend_user_group_show',
+          saveItem:   'api_v1_backend_user_group_save_item',
+          updateItem: 'api_v1_backend_user_group_update_item'
         };
 
         /**
