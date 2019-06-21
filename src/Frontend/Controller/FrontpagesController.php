@@ -180,6 +180,7 @@ class FrontpagesController extends Controller
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'category'       => $category,
+            'o_category'     => $category,
             'time'           => $systemDate->getTimestamp(),
             'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
             'x-tags'         => 'frontpage-page,' . $categoryName
