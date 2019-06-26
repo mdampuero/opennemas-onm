@@ -105,7 +105,7 @@
                   <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-repeat="subscription in item.user_groups">
                     <label class="form-label">
                       <span ng-class="{ 'text-danger': subscription.status === 2 }">
-                        [% subscription.name %]
+                        [% data.extra.subscriptions[subscription.user_group_id].name %]
                         <span ng-if="subscription.status === 2">({t}Pending{/t})</span>
                       </span>
                     </label>
