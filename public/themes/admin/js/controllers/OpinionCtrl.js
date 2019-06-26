@@ -67,11 +67,13 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @type {Object}
      */
     $scope.routes = {
-      createItem: 'api_v1_backend_opinion_create_item',
-      getItem:    'api_v1_backend_opinion_get_item',
-      redirect:   'backend_opinion_show',
-      saveItem:   'api_v1_backend_opinion_save_item',
-      updateItem: 'api_v1_backend_opinion_update_item'
+      createItem:  'api_v1_backend_opinion_create_item',
+      getItem:     'api_v1_backend_opinion_get_item',
+      getPreview:  'api_v1_backend_opinion_get_preview',
+      redirect:    'backend_opinion_show',
+      saveItem:    'api_v1_backend_opinion_save_item',
+      savePreview: 'api_v1_backend_opinion_save_preview',
+      updateItem:  'api_v1_backend_opinion_update_item'
     };
 
     /**
@@ -110,11 +112,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
     /**
      * Opens a modal with the preview of the article.
-     *
-     * @param {String} previewUrl    The URL to generate the preview.
-     * @param {String} getPreviewUrl The URL to get the preview.
      */
-    $scope.preview = function(previewUrl, getPreviewUrl) {
+    $scope.preview = function() {
       $scope.flags.http.generating_preview = true;
 
       // Force ckeditor
@@ -126,7 +125,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         locale: $scope.config.locale.selected
       };
 
-      http.put(previewUrl, data).success(function() {
+      http.put($scope.routes.savePreview, data).success(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
@@ -134,7 +133,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
           resolve: {
             template: function() {
               return {
-                src: routing.generate(getPreviewUrl)
+                src: routing.generate($scope.routes.getPreview)
               };
             },
             success: function() {
