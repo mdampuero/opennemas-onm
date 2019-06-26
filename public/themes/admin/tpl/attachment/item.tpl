@@ -81,7 +81,7 @@
                 {t}Change{/t}
               </span>
             </label>
-            <a class="btn btn-default btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.FILE_IMG_URL + item.path +  item.name %]" target="_blank">
+            <a class="btn btn-default btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.paths.attachments +  item.path %]" target="_blank">
               <i class="fa fa-download m-r-5"></i>
               {t}Download{/t}
             </a>

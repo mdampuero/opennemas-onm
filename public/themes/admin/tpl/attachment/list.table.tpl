@@ -77,7 +77,7 @@
       {t}Remove{/t}
     </button>
   {/acl}
-  <a class="btn btn-white btn-small" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
+  <a class="btn btn-white btn-small" href="[% data.extra.paths.attachments + item.path %]" target="_blank">
     <i class="fa fa-download m-r-5"></i>
     {t}Download{/t}
   </a>

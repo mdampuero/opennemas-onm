@@ -15,21 +15,4 @@ class ContentOldController extends ContentController
      * {@inheritdoc}
      */
     protected $service = 'api.service.content_old';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getExtraData($items = null)
-    {
-        return [
-            'related_contents' => $this->getRelatedContents($items),
-            'keys'             => $this->getL10nKeys(),
-            'authors'          => $this->getAuthors(),
-            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
-            'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-            'template_vars'    => [
-                'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
-            ],
-        ];
-    }
 }

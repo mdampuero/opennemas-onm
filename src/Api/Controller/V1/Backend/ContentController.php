@@ -26,12 +26,15 @@ class ContentController extends ApiController
     protected function getExtraData($items = null)
     {
         return [
-            'related_contents' => $this->getRelatedContents($items),
+            'authors'          => $this->getAuthors(),
+            'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'keys'             => $this->getL10nKeys(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
-            'template_vars'    => [
-                'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
+            'paths'            => [
+                'photos'       => $this->get('core.instance')->getImagesShortPath(),
+                'attachments'  => $this->get('core.instance')->getFilesShortPath(),
             ],
+            'related_contents' => $this->getRelatedContents($items),
         ];
     }
 
