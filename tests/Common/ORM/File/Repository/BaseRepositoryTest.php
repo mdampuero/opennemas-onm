@@ -69,7 +69,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->repository =
-            new BaseRepository('foo', $this->container, $this->paths, $this->metadata, $this->cache);
+            new BaseRepository('foo', $this->container, $this->paths, [], $this->metadata, $this->cache);
 
         $this->repository->entities = [
             new Entity([ 'foo' => 'thud', 'bar' => 'flob' ]),
@@ -84,7 +84,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $repository = $this->getMockBuilder('Common\ORM\File\Repository\BaseRepository')
             ->setMethods([ 'load' ])
-            ->setConstructorArgs([ 'foo', $this->container, [ 'foo' ], $this->metadata, $this->cache ])
+            ->setConstructorArgs([ 'foo', $this->container, [ 'foo' ], [ 'flob' ], $this->metadata, $this->cache ])
             ->getMock();
 
         $method = new \ReflectionMethod($repository, 'load');
@@ -327,5 +327,25 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($method->invokeArgs($this->repository, [ 'foo', '^b' ]));
         $this->assertFalse($method->invokeArgs($this->repository, [ 'foo', 'oo$' ]));
+    }
+
+    /**
+     * Tests sort for asc and desc directions.
+     */
+    public function testSort()
+    {
+        $itemA = new Entity([ 'wobble' => 'qux' ]);
+        $itemB = new Entity([ 'wobble' => 'garply' ]);
+
+        $entities = [ $itemA, $itemB ];
+
+        $method = new \ReflectionMethod($this->repository, 'sort');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->repository, [ &$entities, [ 'wobble', 'asc' ] ]);
+        $this->assertEquals([ $itemB, $itemA ], $entities);
+
+        $method->invokeArgs($this->repository, [ &$entities, [ 'wobble', 'desc' ] ]);
+        $this->assertEquals([ $itemA, $itemB ], $entities);
     }
 }

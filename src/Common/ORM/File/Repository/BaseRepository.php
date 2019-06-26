@@ -48,15 +48,18 @@ class BaseRepository extends Repository
      * @param string           $name     The repository name.
      * @param ServiceContainer $cache    The service container.
      * @param string           $paths    The path to folders to load from.
+     * @param mixed            $exclude  A path or a list of paths to folders
+     *                                   to ignore.
      * @param Metadata         $metadata The entity metadata.
      *
      * @throws InvalidArgumentException If the path is not valid.
      */
-    public function __construct($name, $container, $paths, Metadata $metadata, Cache $cache)
+    public function __construct($name, $container, $paths, $exclude, Metadata $metadata, Cache $cache)
     {
         $this->cache      = $cache;
         $this->container  = $container;
         $this->converter  = new BaseConverter($metadata);
+        $this->exclude    = $exclude;
         $this->metadata   = $metadata;
         $this->name       = $name;
         $this->paths      = $paths;
@@ -331,6 +334,8 @@ class BaseRepository extends Repository
 
     /**
      * Loads all items in the repository.
+     *
+     * @codeCoverageIgnore
      */
     protected function load()
     {
@@ -348,7 +353,12 @@ class BaseRepository extends Repository
             $path = $this->container->getParameter('kernel.root_dir')
                 . DS . '..' . DS . $path . DS;
 
-            $finder->followLinks()->files()->in($path)->name('*.yml');
+            $finder->followLinks()->files()->in($path)
+                ->exclude($this->exclude)
+                ->ignoreDotFiles(true)
+                ->ignoreUnreadableDirs(true)
+                ->ignoreVCS(true)
+                ->name('*.yml');
 
             foreach ($finder as $file) {
                 $this->loadEntity($file->getPathname());
@@ -362,6 +372,8 @@ class BaseRepository extends Repository
      * Load an entity from a file.
      *
      * @param string $path The path to the entity file.
+     *
+     * @codeCoverageIgnore
      */
     protected function loadEntity($path)
     {
