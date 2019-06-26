@@ -28,7 +28,7 @@
 {/block}
 
 {block name="selectedActions"}
-  {acl isAllowed="FILE_FAVORITE"}
+  {acl isAllowed="ATTACHMENT_FAVORITE"}
     <li class="quicklinks hidden-xs">
       <button class="btn btn-link" href="#" ng-click="patchSelected('favorite', 0)" uib-tooltip="{t escape="off"}Unfavorite{/t}" tooltip-placement="bottom">
         <i class="fa fa-star"></i>
