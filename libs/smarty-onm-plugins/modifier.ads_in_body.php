@@ -17,7 +17,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         return !in_array(trim($a), ['<p>&nbsp;</p>', '<p></p>']);
     });
 
-    $id     = $contentType === 'opinion' ? 3200 : 2200;
+    $id     = $contentType === 'amp' ? 1060 : ($contentType === 'opinion' ? 3200 : 2200);
     $smarty = getService('core.template');
     $ads    = $smarty->getValue('advertisements');
 
@@ -40,7 +40,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     }
 
     $slots = array_unique(array_filter($slots, function ($a) use ($id) {
-        return $a > $id && $a < $id + 100;
+        return $a > $id && $a < $id + 20;
     }));
 
     sort($slots);
