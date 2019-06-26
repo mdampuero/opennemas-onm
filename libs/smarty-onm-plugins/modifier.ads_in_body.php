@@ -40,7 +40,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     }
 
     $slots = array_unique(array_filter($slots, function ($a) use ($id) {
-        return $a > $id && $a < $id + 20;
+        return $a > $id && $a < $id + 10;
     }));
 
     sort($slots);
