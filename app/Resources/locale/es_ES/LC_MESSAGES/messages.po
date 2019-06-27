@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-10 14:14+0000\n"
-"PO-Revision-Date: 2019-05-16 17:36+0200\n"
+"POT-Creation-Date: 2019-06-27 10:08+0000\n"
+"PO-Revision-Date: 2019-06-27 12:09+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -176,48 +176,6 @@ msgstr "No tienes permiso para realizar esta acción."
 msgid ""
 "Oups! Seems that we had an unknown problem while trying to run your request."
 msgstr "Oups! Parece que hemos tenido un problema al ejecutar tu consulta."
-
-msgid "You must pick a file before submitting the form"
-msgstr "Debes seleccionar un fichero antes de enviar el formulario"
-
-#, php-format
-msgid "You must pick a file smaller than %d Mb"
-msgstr "Debes seleccionar un archivo más pequeño que %d Mb"
-
-#, php-format
-msgid ""
-"We are sorry, file extension %s is not allowed for upload as it could "
-"contain malicious code. Please contact with our support  or retry using a "
-"different file extension."
-msgstr ""
-"No está permitido subir archivos con extension %s ya que pueden contener "
-"contenido malicioso. Contacta con nuestro soporte o intentalo con otra "
-"extension de fichero."
-
-#, php-format
-msgid "Unable to create the directory to save the file"
-msgstr "No se pudo crear el directorio donde se guarda el fichero"
-
-msgid "There was an error while uploading the file."
-msgstr "Se ha producido un error al subir el fichero."
-
-msgid "File created successfuly."
-msgstr "Archivo creado correctamente."
-
-msgid "Unable to upload the file: A file with the same name already exists."
-msgstr "No se pudo subir el archivo: Ya existe un archivo con el mismo nombre."
-
-#, php-format
-msgid "Unable to find the file with the id \"%s\""
-msgstr "No se pudo encontrar el archivo con el identificador «%s»"
-
-#, php-format
-msgid "File successfully updated."
-msgstr "Fichero actualizado correctamente."
-
-#, php-format
-msgid "There was a problem while saving the file information."
-msgstr "Se ha producido un error al guardar la información del archivo."
 
 msgid ""
 "Unable to save content positions: Data sent from the client were not valid."
@@ -525,35 +483,6 @@ msgstr "Configuración de Paywall guardada."
 msgid "Paypal IPN configuration is incorrect. Please correct it and try again."
 msgstr ""
 "La configuración del IPN de Paypal es incorrecta. Por favor, corríjelo."
-
-msgid "Poll successfully created."
-msgstr "Encuesta actualizada correctamente."
-
-msgid "Unable to create the new poll."
-msgstr "No se pudo crear la nueva encuesta."
-
-#, php-format
-msgid "Unable to find the poll with the id \"%d\""
-msgstr "No se pudo encontrar la encuesta con el identificador «%d»"
-
-msgid "Poll data sent not valid."
-msgstr "Los datos enviados de la encuesta no son válidos."
-
-#, php-format
-msgid "Unable to find a poll with the id \"%s\"."
-msgstr "No se pudo encontrar la encuesta con el identificador «%s»."
-
-msgid "Poll successfully updated."
-msgstr "Encuesta actualizada correctamente."
-
-msgid "Unable to update the poll."
-msgstr "No se pudo actualizar la encuesta."
-
-msgid "You must give an id for delete a poll."
-msgstr "Debe proporcionar un identificador para eliminar una encuesta."
-
-msgid "Poll deleted successfully."
-msgstr "Encuesta eliminada con éxito."
 
 msgid "Special successfully created."
 msgstr "Especial creado con éxito."
@@ -1610,14 +1539,11 @@ msgstr "No se ha podido crear tu suscripción. Por favor, inténtalo de nuevo."
 msgid "You can't vote this poll, it is closed."
 msgstr "La encuesta está cerrada, no puedes votar."
 
-msgid "Thanks for participating."
-msgstr "Gracias por participar."
-
-msgid "Please select a valid poll answer."
-msgstr "Selecciona una respuesta válida de la encuesta."
-
 msgid "You have voted this poll previously."
 msgstr "Ya has votado esta encuesta anteriormente."
+
+msgid "Thanks for participating."
+msgstr "Gracias por participar."
 
 msgid "Homepage News"
 msgstr "Noticias de la portada principal"
@@ -2034,6 +1960,9 @@ msgstr "No"
 
 msgid "Contents translated successfully"
 msgstr "Contenidos traducidos correctamente"
+
+msgid "Items deleted successfully"
+msgstr "Elementos eliminados correctamente"
 
 msgid "Tag"
 msgstr "Etiqueta"
@@ -4815,18 +4744,6 @@ msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
 msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1</a>?"
 
-msgid "Do you want to delete the item?"
-msgstr "¿Quieres eliminar el elemento?"
-
-msgid "Do you want to delete the selected items?"
-msgstr "¿Quieres eliminar los elementos seleccionados?"
-
-msgid "Ad block detected"
-msgstr "Bloqueador de publicidad detectado"
-
-msgid "Please, disable it to work with Opennemas"
-msgstr "Por favor, desactívelo para trabajar correctamente con Opennemas"
-
 msgid "Welcome"
 msgstr "Bienvenido"
 
@@ -4938,6 +4855,15 @@ msgstr "Ir a mi periódico"
 msgid "Show help"
 msgstr "Mostrar ayuda"
 
+msgid "Static Page"
+msgstr "Página estática"
+
+msgid "NewsStand"
+msgstr "Portadas de papel"
+
+msgid "Restore"
+msgstr "Restaurar"
+
 msgid "Delete all trashed contents"
 msgstr "Eliminar todos los contenidos en la papelera"
 
@@ -4951,11 +4877,14 @@ msgstr ""
 msgid "Yes, remove all"
 msgstr "Si, eliminarlos todos"
 
-msgid "Remove all"
-msgstr "Eliminar todo"
+msgid "Do you want to restore the item?"
+msgstr "¿Quieres recuperar el elemento?"
 
-msgid "Restore"
-msgstr "Restaurar"
+msgid "Do you want to restore the selected items?"
+msgstr "¿Quieres recuperar los elementos seleccionados?"
+
+msgid "Empty"
+msgstr "Vaciar"
 
 msgid "Content Type"
 msgstr "Tipo de contenido"
@@ -4969,13 +4898,8 @@ msgstr "Portadas"
 msgid "Reload"
 msgstr "Recargar"
 
-msgid "No contents in the trash that matches your search."
-msgstr ""
-"No se pudieron encontrar contenidos en la papelera que coincidan con tu "
-"búsqueda."
-
-msgid "Remove permanently"
-msgstr "Eliminar de forma permanente"
+msgid "Do you want to empty the trash?"
+msgstr "¿Quieres vaciar la papelera?"
 
 msgid "Biography"
 msgstr "Biografía"
@@ -5008,35 +4932,20 @@ msgstr "URL del blog"
 msgid "Short Biography"
 msgstr "Biografía corta"
 
-msgid "Poll section preferences"
-msgstr "Preferencias para las secciones de encuestas"
+msgid "Votes"
+msgstr "Votos"
 
-msgid "Highlighted"
-msgstr "Destacado"
-
-msgid "Values type"
-msgstr "Tipo de valores"
-
-msgid "Percents"
-msgstr "Porcentajes"
-
-msgid "Vote count"
-msgstr "Recuento de votos"
-
-msgid "Config poll module"
-msgstr "Configuración módulo de encuestas"
+msgid "Vote end date"
+msgstr "Fecha de fin de votación"
 
 msgid "New poll"
 msgstr "Nueva encuesta"
 
-msgid "Unable to find any poll that matches your search."
-msgstr "No se pudieron encontrar encuestas que coincidan con tu búsqueda."
+msgid "Open"
+msgstr "Abierta"
 
-msgid "Section"
-msgstr "Sección"
-
-msgid "Votes"
-msgstr "Votos"
+msgid "Closed"
+msgstr "Cerrada"
 
 msgid "Pretitle"
 msgstr "Antetítulo"
@@ -5044,32 +4953,11 @@ msgstr "Antetítulo"
 msgid "Answers"
 msgstr "Respuestas"
 
+msgid "Original"
+msgstr "Original"
+
 msgid "No votes"
 msgstr "Sin votos"
-
-msgid "Remove poll answer"
-msgstr "Quitar respuesta"
-
-msgid "Add new answer"
-msgstr "Añadir nueva respuesta"
-
-msgid "Attributes"
-msgstr "Atributos"
-
-msgid "Allow comments"
-msgstr "Permitir comentarios"
-
-msgid "Publication closed date"
-msgstr "Fecha de final de publicación"
-
-msgid "Select a category"
-msgstr "Seleccione una categoría"
-
-msgid "Subscription"
-msgstr "Suscripción"
-
-msgid "Only available for registered users"
-msgstr "Solo disponible para usuarios registrados"
 
 msgid "Number of elements in widget home"
 msgstr "Número de elementos en el widget de portada"
@@ -5112,6 +5000,9 @@ msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
 msgid "You must put %1 specials in the HOME"
 msgstr "Debe tener %d especiales para la portada"
 
+msgid "Section"
+msgstr "Sección"
+
 msgid "Widget Home"
 msgstr "Widget de portada"
 
@@ -5120,6 +5011,9 @@ msgstr "Configuración módulo de especiales"
 
 msgid "Save positions"
 msgstr "Guardar posiciones"
+
+msgid "Select a category"
+msgstr "Seleccione una categoría"
 
 msgid "Slug"
 msgstr "Slug"
@@ -5492,14 +5386,14 @@ msgstr "Borrador guardado a las "
 msgid "Go back"
 msgstr "Atrás"
 
-msgid "Original"
-msgstr "Original"
-
 msgid "Inner title"
 msgstr "Título interior"
 
 msgid "Signature"
 msgstr "Firma"
+
+msgid "Allow comments"
+msgstr "Permitir comentarios"
 
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
@@ -6169,6 +6063,12 @@ msgstr "Ancho"
 msgid "Height"
 msgstr "Alto"
 
+msgid "Ad block detected"
+msgstr "Bloqueador de publicidad detectado"
+
+msgid "Please, disable it to work with Opennemas"
+msgstr "Por favor, desactívelo para trabajar correctamente con Opennemas"
+
 msgid "Ads"
 msgstr "Publicidades"
 
@@ -6624,6 +6524,9 @@ msgstr "Divide los decimales con un punto"
 msgid "Item"
 msgstr "Elemento"
 
+msgid "Subscription"
+msgstr "Suscripción"
+
 msgid "Delete letter"
 msgstr "Eliminar carta"
 
@@ -6665,21 +6568,6 @@ msgstr "Grupo de caché"
 
 msgid "Expire time"
 msgstr "Fecha de expiración"
-
-msgid "Unable to find any file that matches your search."
-msgstr "No se pudieron encontrar archivos que coincidan con tu búsqueda."
-
-msgid "Unassigned"
-msgstr "Sin asignar"
-
-msgid "You must put %1 polls in the HOME"
-msgstr "Debe tener %d encuestas para la portada"
-
-msgid "Max allowed file size: %1 Mb"
-msgstr "Tamaño máximo de fichero permitido: %1 Mb"
-
-msgid "File types allowed"
-msgstr "Tipos de archivos permitidos"
 
 msgid "Reset <strong>password</strong>"
 msgstr "Reiniciar <strong>contraseña</strong>"
@@ -7120,6 +7008,9 @@ msgstr "No se pudieron encontrar libros que coincidan con tu búsqueda."
 msgid "You must put %1 books in the HOME"
 msgstr "Debe tener %d libros para la portada"
 
+msgid "Unassigned"
+msgstr "Sin asignar"
+
 msgid "Editorial"
 msgstr "Editorial"
 
@@ -7254,6 +7145,9 @@ msgstr ""
 "Para proteger tu privacidad, sólo se enviará esta información a la dirección "
 "de correo electrónico registrada para esta cuenta"
 
+msgid "No file selected"
+msgstr "Fichero no seleccionado"
+
 msgid "Are you sure that do you want send to the trash \"%1\"?"
 msgstr "¿Estás seguro de que quieres enviar a la papelera \"%1\"?"
 
@@ -7344,12 +7238,6 @@ msgstr "Traduciendo los contenidos seleccionados a «%1»"
 
 msgid "%1 contents propertly translated into \"%2\"."
 msgstr "%1 contenidos traducidos con éxito al «%2»."
-
-msgid "Do you want to send the item to trash?"
-msgstr "¿Deseas enviar el elemento a la papelera?"
-
-msgid "Do you want to send the selected items to trash?"
-msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
 
 msgid "Update selected items"
 msgstr "Actualizar los elementos seleccionados"
@@ -7470,6 +7358,18 @@ msgstr "Fecha de inicio"
 msgid "End date"
 msgstr "Fecha de fin"
 
+msgid "Do you want to delete the item?"
+msgstr "¿Quieres eliminar el elemento?"
+
+msgid "Do you want to delete the selected items?"
+msgstr "¿Quieres eliminar los elementos seleccionados?"
+
+msgid "Do you want to send the item to trash?"
+msgstr "¿Deseas enviar el elemento a la papelera?"
+
+msgid "Do you want to send the selected items to trash?"
+msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
+
 msgid "Connect with"
 msgstr "Conectar con"
 
@@ -7566,13 +7466,6 @@ msgstr "Acceso a todas las categorías"
 msgid "The user can assign contents to the selected categories only"
 msgstr ""
 "El usuario solo puede asignar contenidos a las categorías seleccionadas"
-
-msgid ""
-"We recommend you to use the \"Access to all categories\" mark to avoid "
-"unchecked future created categories"
-msgstr ""
-"Recomendamos usar la opción \"Acceso a todas las categorías\" para evitar "
-"que categorías futuras queden sin desmarcar"
 
 msgid "Used for interface, messages and units in the control panel"
 msgstr ""
@@ -7695,9 +7588,6 @@ msgstr "Añadir nuevo elemento"
 
 msgid "Category blog"
 msgstr "Categoría tipo Blog"
-
-msgid "Static Page"
-msgstr "Página estática"
 
 msgid "Synchronized Category"
 msgstr "Categoría sincronizada"
@@ -8710,6 +8600,148 @@ msgstr "Bienvenido al Gestor de Opennemas"
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
+#, fuzzy
+#~ msgid "Close date"
+#~ msgstr "Pulsa para establecer una fecha"
+
+#, fuzzy
+#~ msgid "Poll close date"
+#~ msgstr "Fecha de final de publicación"
+
+#, fuzzy
+#~ msgid "Do you want to restore the selected items to trash?"
+#~ msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
+
+#~ msgid "You must pick a file before submitting the form"
+#~ msgstr "Debes seleccionar un fichero antes de enviar el formulario"
+
+#~ msgid "You must pick a file smaller than %d Mb"
+#~ msgstr "Debes seleccionar un archivo más pequeño que %d Mb"
+
+#~ msgid ""
+#~ "We are sorry, file extension %s is not allowed for upload as it could "
+#~ "contain malicious code. Please contact with our support  or retry using a "
+#~ "different file extension."
+#~ msgstr ""
+#~ "No está permitido subir archivos con extension %s ya que pueden contener "
+#~ "contenido malicioso. Contacta con nuestro soporte o intentalo con otra "
+#~ "extension de fichero."
+
+#~ msgid "Unable to create the directory to save the file"
+#~ msgstr "No se pudo crear el directorio donde se guarda el fichero"
+
+#~ msgid "There was an error while uploading the file."
+#~ msgstr "Se ha producido un error al subir el fichero."
+
+#~ msgid "File created successfuly."
+#~ msgstr "Archivo creado correctamente."
+
+#~ msgid "Unable to upload the file: A file with the same name already exists."
+#~ msgstr ""
+#~ "No se pudo subir el archivo: Ya existe un archivo con el mismo nombre."
+
+#~ msgid "Unable to find the file with the id \"%s\""
+#~ msgstr "No se pudo encontrar el archivo con el identificador «%s»"
+
+#~ msgid "File successfully updated."
+#~ msgstr "Fichero actualizado correctamente."
+
+#~ msgid "There was a problem while saving the file information."
+#~ msgstr "Se ha producido un error al guardar la información del archivo."
+
+#~ msgid "Poll successfully created."
+#~ msgstr "Encuesta actualizada correctamente."
+
+#~ msgid "Unable to create the new poll."
+#~ msgstr "No se pudo crear la nueva encuesta."
+
+#~ msgid "Unable to find the poll with the id \"%d\""
+#~ msgstr "No se pudo encontrar la encuesta con el identificador «%d»"
+
+#~ msgid "Poll data sent not valid."
+#~ msgstr "Los datos enviados de la encuesta no son válidos."
+
+#~ msgid "Unable to find a poll with the id \"%s\"."
+#~ msgstr "No se pudo encontrar la encuesta con el identificador «%s»."
+
+#~ msgid "Poll successfully updated."
+#~ msgstr "Encuesta actualizada correctamente."
+
+#~ msgid "Unable to update the poll."
+#~ msgstr "No se pudo actualizar la encuesta."
+
+#~ msgid "You must give an id for delete a poll."
+#~ msgstr "Debe proporcionar un identificador para eliminar una encuesta."
+
+#~ msgid "Poll deleted successfully."
+#~ msgstr "Encuesta eliminada con éxito."
+
+#~ msgid "Please select a valid poll answer."
+#~ msgstr "Selecciona una respuesta válida de la encuesta."
+
+#~ msgid "Remove all"
+#~ msgstr "Eliminar todo"
+
+#~ msgid "No contents in the trash that matches your search."
+#~ msgstr ""
+#~ "No se pudieron encontrar contenidos en la papelera que coincidan con tu "
+#~ "búsqueda."
+
+#~ msgid "Remove permanently"
+#~ msgstr "Eliminar de forma permanente"
+
+#~ msgid "Poll section preferences"
+#~ msgstr "Preferencias para las secciones de encuestas"
+
+#~ msgid "Highlighted"
+#~ msgstr "Destacado"
+
+#~ msgid "Values type"
+#~ msgstr "Tipo de valores"
+
+#~ msgid "Percents"
+#~ msgstr "Porcentajes"
+
+#~ msgid "Vote count"
+#~ msgstr "Recuento de votos"
+
+#~ msgid "Config poll module"
+#~ msgstr "Configuración módulo de encuestas"
+
+#~ msgid "Unable to find any poll that matches your search."
+#~ msgstr "No se pudieron encontrar encuestas que coincidan con tu búsqueda."
+
+#~ msgid "Remove poll answer"
+#~ msgstr "Quitar respuesta"
+
+#~ msgid "Add new answer"
+#~ msgstr "Añadir nueva respuesta"
+
+#~ msgid "Attributes"
+#~ msgstr "Atributos"
+
+#~ msgid "Only available for registered users"
+#~ msgstr "Solo disponible para usuarios registrados"
+
+#~ msgid "Unable to find any file that matches your search."
+#~ msgstr "No se pudieron encontrar archivos que coincidan con tu búsqueda."
+
+#~ msgid "You must put %1 polls in the HOME"
+#~ msgstr "Debe tener %d encuestas para la portada"
+
+#~ msgid "Max allowed file size: %1 Mb"
+#~ msgstr "Tamaño máximo de fichero permitido: %1 Mb"
+
+#~ msgid "File types allowed"
+#~ msgstr "Tipos de archivos permitidos"
+
+#~ msgid ""
+#~ "We recommend you to use the \"Access to all categories\" mark to avoid "
+#~ "unchecked future created categories"
+#~ msgstr ""
+#~ "Recomendamos usar la opción \"Acceso a todas las categorías\" para evitar "
+#~ "que categorías futuras queden sin desmarcar"
+
 #~ msgid "You must put %1 videos in the HOME"
 #~ msgstr "Debes tener %1 vídeos para la portada"
 
@@ -9252,9 +9284,6 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
 #~ msgid "No available categories for listing"
 #~ msgstr "No hay ninguna categoría para mostrar aquí"
-
-#~ msgid "Empty"
-#~ msgstr "Vaciar"
 
 #~ msgid "Delete category"
 #~ msgstr "Eliminar categoría"
