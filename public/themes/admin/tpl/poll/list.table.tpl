@@ -32,7 +32,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-close" checklist-model="app.columns.selected" checklist-value="'close'" type="checkbox">
     <label for="checkbox-close">
-      {t}Close date{/t}
+      {t}Vote end date{/t}
     </label>
   </div>
   {acl isAllowed="POLL_HOME"}
@@ -69,7 +69,7 @@
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('close')" width="150">
     <span class="m-l-5">
-      {t}Close date{/t}
+      {t}Vote end date{/t}
     </span>
   </th>
   {acl isAllowed="POLL_HOME"}
