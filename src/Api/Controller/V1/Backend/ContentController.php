@@ -31,8 +31,8 @@ class ContentController extends ApiController
             'keys'             => $this->getL10nKeys(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'paths'            => [
-                'photos'       => $this->get('core.instance')->getImagesShortPath(),
-                'attachments'  => $this->get('core.instance')->getFilesShortPath(),
+                'photo'        => $this->get('core.instance')->getImagesShortPath(),
+                'attachment'   => $this->get('core.instance')->getFilesShortPath(),
             ],
             'related_contents' => $this->getRelatedContents($items),
         ];
