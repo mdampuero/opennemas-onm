@@ -220,7 +220,7 @@ class Loader
      */
     public function loadInstanceFromUri($host, $uri)
     {
-        if (preg_match("@^\/(manager|_profiler|_wdt|framework)@", $uri)) {
+        if (preg_match("@^\/(manager|framework)@", $uri)) {
             $this->loadManagerInstance();
             return $this->instance;
         }
