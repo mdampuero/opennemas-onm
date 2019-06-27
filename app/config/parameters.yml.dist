@@ -84,9 +84,10 @@ parameters:
             namespace: internal
             path:      '%kernel.root_dir%/../tmp/cache/%kernel.environment%/file'
         redis:
-            server:    127.0.0.1
-            port:      6379
-            prefix:    onm
+            ttl:    86400
+            server: 127.0.0.1
+            port:   6379
+            prefix: onm
 
     cache_handler:     Onm\Cache\Redis
     cache_handler_params:
@@ -94,6 +95,7 @@ parameters:
         port:   11211
         connection_string: tcp:\\127.0.0.1
         options:
+            ttl:    86400
             server: localhost
             prefix: onm
 
