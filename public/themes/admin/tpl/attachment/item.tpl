@@ -70,7 +70,7 @@
                 </strong>
               </p>
             </div>
-            <label class="btn btn-white btn-block m-t-15" for="file">
+            <label class="btn btn-default btn-block m-t-15" for="file">
               <input class="hidden" id="file" name="file" file-model="item.path" type="file"/>
               <span ng-if="!item.path">
                 <i class="fa fa-plus m-r-5"></i>
@@ -81,7 +81,7 @@
                 {t}Change{/t}
               </span>
             </label>
-            <a class="btn btn-default btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.paths.attachment +  item.path %]" target="_blank">
+            <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.paths.attachment +  item.path %]" target="_blank">
               <i class="fa fa-download m-r-5"></i>
               {t}Download{/t}
             </a>
