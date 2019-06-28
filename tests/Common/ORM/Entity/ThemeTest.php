@@ -201,16 +201,13 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsMultiRepo()
     {
-        $theme = new Theme([ 'parameters' => [ 'multirepo' => true ] ]);
+        $theme = new Theme([ 'multirepo' => true ]);
         $this->assertTrue($theme->isMultiRepo());
 
         $theme = new Theme([]);
         $this->assertFalse($theme->isMultiRepo());
 
-        $theme = new Theme([ 'parameters' => [] ]);
-        $this->assertFalse($theme->isMultiRepo());
-
-        $theme = new Theme([ 'parameters' => [ 'multirepo' => false ] ]);
+        $theme = new Theme([ 'multirepo' => false ]);
         $this->assertFalse($theme->isMultiRepo());
     }
 

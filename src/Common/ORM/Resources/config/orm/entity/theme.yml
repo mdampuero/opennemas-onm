@@ -23,6 +23,7 @@ orm:
                 enabled:             boolean
                 id:                  integer
                 images:              array
+                multirepo:           boolean
                 name:                string
                 parameters:          array
                 price:               array

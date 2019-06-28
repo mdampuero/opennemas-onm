@@ -120,9 +120,7 @@ class Theme extends Extension
      */
     public function isMultiRepo() : bool
     {
-        return !empty($this->parameters)
-            && array_key_exists('multirepo', $this->parameters)
-            && $this->parameters['multirepo'] === true;
+        return $this->multirepo === true;
     }
 
     /**
