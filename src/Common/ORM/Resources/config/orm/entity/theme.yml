@@ -38,7 +38,7 @@ orm:
             repositories:
                 file:
                     class:     Common\ORM\File\Repository\BaseRepository
-                    arguments: [ '@service_container', [ 'public/themes' ], '@orm.metadata.theme', '@cache.connection.internal' ]
+                    arguments: [ '@service_container', [ 'public/themes' ], [ 'node_modules', 'vendor' ], '@orm.metadata.theme', '@cache.connection.internal' ]
             persisters:
                 database:
                     class:     Common\ORM\Database\Persister\BasePersister
