@@ -19,31 +19,19 @@ class TrashService extends OrmService
     public function emptyTrash()
     {
         try {
-            if ($this->isTrashEmpty()) {
+            $response = $this->getList('in_litter = 1');
+
+            if ($response['total'] === 0) {
                 throw new ApiException('The trash is already empty', 400);
             }
 
-            $this->em->getRepository($this->entity, $this->origin)
-                ->removeContentsInTrash();
+            $ids = array_map(function ($a) {
+                return $a->pk_content;
+            }, $response['items']);
+
+            $this->deleteList($ids);
 
             $this->dispatcher->dispatch($this->getEventName('emptyTrash'));
-        } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * Checks if the trash is empty.
-     *
-     * @return boolean True if the trash is empty. False otherwise.
-     */
-    protected function isTrashEmpty()
-    {
-        try {
-            $contents = $this->em->getRepository($this->entity, $this->origin)
-                ->countBy('in_litter = 1');
-
-            return $contents === 0;
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
         }

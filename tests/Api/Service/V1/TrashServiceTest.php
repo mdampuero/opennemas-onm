@@ -10,6 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\TrashService;
+use Common\ORM\Entity\Content;
 
 /**
  * Defines test cases for TrashService class.
@@ -33,7 +34,7 @@ class TrashServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'removeContentsInTrash' ])
+            ->setMethods([ 'countBy', 'findBy' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -42,7 +43,10 @@ class TrashServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
-        $this->service = new TrashService($this->container, 'Common\ORM\Entity\Content');
+        $this->service = $this->getMockBuilder('Api\Service\V1\TrashService')
+            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])
+            ->setMethods([ 'deleteList', 'getList' ])
+            ->getMock();
     }
 
     /**
@@ -71,10 +75,15 @@ class TrashServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyList()
     {
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('in_litter = 1')->willReturn(10);
+        $this->service->expects($this->once())->method('getList')
+            ->with('in_litter = 1')->willReturn([
+                'items' => [
+                    new Content([ 'pk_content' => 1909 ]),
+                    new Content([ 'pk_content' => 11991 ])
+                ], 'total' => 2 ]);
 
-        $this->repository->expects($this->once())->method('removeContentsInTrash');
+        $this->service->expects($this->once())->method('deleteList')
+            ->with([ 1909, 11991 ]);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('content.emptyTrash');
@@ -89,8 +98,8 @@ class TrashServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyListWhenEmpty()
     {
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('in_litter = 1')->willReturn(0);
+        $this->service->expects($this->once())->method('getList')
+            ->willReturn([ 'items' => [], 'total' => 0 ]);
 
         $this->service->emptyTrash();
     }
@@ -102,43 +111,10 @@ class TrashServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyListWhenError()
     {
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('in_litter = 1')->willReturn(10);
-
-        $this->repository->expects($this->once())->method('removeContentsInTrash')
+        $this->service->expects($this->once())->method('getList')
+            ->with('in_litter = 1')
             ->will($this->throwException(new \Exception()));
 
         $this->service->emptyTrash();
-    }
-
-    public function testIsTrashEmpty()
-    {
-        $this->repository->expects($this->at(0))->method('countBy')
-            ->with('in_litter = 1')->willReturn(0);
-        $this->repository->expects($this->at(1))->method('countBy')
-            ->with('in_litter = 1')->willReturn(10);
-
-
-        $method = new \ReflectionMethod($this->service, 'isTrashEmpty');
-        $method->setAccessible(true);
-
-        $this->assertTrue($method->invokeArgs($this->service, []));
-        $this->assertFalse($method->invokeArgs($this->service, []));
-    }
-
-    /**
-     * Tests isTrashEmpty when an error is thrown.
-     *
-     * @expectedException Api\Exception\ApiException
-     */
-    public function testIsTrashEmptyWhenError()
-    {
-        $this->repository->expects($this->once())->method('countBy')
-            ->will($this->throwException(new \Exception()));
-
-        $method = new \ReflectionMethod($this->service, 'isTrashEmpty');
-        $method->setAccessible(true);
-
-        $method->invokeArgs($this->service, []);
     }
 }
