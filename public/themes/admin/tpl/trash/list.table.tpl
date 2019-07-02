@@ -19,7 +19,7 @@
     <i class="fa fa-lg fa-file-o" uib-tooltip="{t}Article{/t}" ng-if="item.content_type_name === 'article'"></i>
     <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
     <i class="fa fa-lg fa-calendar" uib-tooltip="{t}Event{/t}" ng-if="item.content_type_name === 'event'"></i>
-    <i class="fa fa-lg fa-chart-pie" uib-tooltip="{t}Poll{/t}" ng-if="item.content_type_name === 'poll'"></i>
+    <i class="fa fa-lg fa-pie-chart" uib-tooltip="{t}Poll{/t}" ng-if="item.content_type_name === 'poll'"></i>
     <i class="fa fa-lg fa-file" uib-tooltip="{t}Static Page{/t}" ng-if="item.content_type_name === 'static_page'"></i>
     <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
     <i class="fa fa-lg fa-envelope" uib-tooltip="{t}Letter{/t}" ng-if="item.content_type_name === 'letter'"></i>
