@@ -163,7 +163,10 @@
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
                 {block name="categoryColumn"}
-                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
+                  <small class="text-italic" ng-if="!item.pk_fk_content_category">
+                    &lt;{t}No category{/t}&gt;
+                  </small>
+                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]" ng-if="item.pk_fk_content_category">
                     [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
                   </a>
                 {/block}
