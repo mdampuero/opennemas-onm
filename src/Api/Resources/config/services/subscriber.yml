@@ -1,12 +1,12 @@
 services:
-    core.subscriber.category:
-        class:     Api\EventSubscriber\CategorySubscriber
-        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager' ]
+    core.subscriber.attachment:
+        class:     Api\EventSubscriber\AttachmentSubscriber
+        arguments: [ '@core.helper.varnish' ]
         tags:
             - { name: kernel.event_subscriber }
 
-    core.subscriber.file:
-        class:     Api\EventSubscriber\FileSubscriber
-        arguments: [ '@core.helper.varnish' ]
+    core.subscriber.category:
+        class:     Api\EventSubscriber\CategorySubscriber
+        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager' ]
         tags:
             - { name: kernel.event_subscriber }

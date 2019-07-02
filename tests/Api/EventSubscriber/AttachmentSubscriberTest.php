@@ -9,14 +9,14 @@
  */
 namespace Tests\Api\EventSubscriber;
 
-use Api\EventSubscriber\FileSubscriber;
-use Common\ORM\Entity\File;
+use Api\EventSubscriber\AttachmentSubscriber;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Instance;
 
 /**
- * Defines test cases for FileSubscriber class.
+ * Defines test cases for AttachmentSubscriber class.
  */
-class FileSubscriberTest extends \PHPUnit\Framework\TestCase
+class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -32,7 +32,7 @@ class FileSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'deleteFiles' ])
             ->getMock();
 
-        $this->subscriber = new FileSubscriber($this->vh);
+        $this->subscriber = new AttachmentSubscriber($this->vh);
     }
 
     /**
@@ -40,30 +40,30 @@ class FileSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSubscribedEvents()
     {
-        $this->assertIsArray(FileSubscriber::getSubscribedEvents());
+        $this->assertIsArray(AttachmentSubscriber::getSubscribedEvents());
     }
 
     /**
-     * Tests onFileDelete.
+     * Tests onAttachmentDelete.
      */
-    public function testOnFileDelete()
+    public function testOnAttachmentDelete()
     {
-        $subscriber = $this->getMockBuilder('Api\EventSubscriber\FileSubscriber')
+        $subscriber = $this->getMockBuilder('Api\EventSubscriber\AttachmentSubscriber')
             ->setConstructorArgs([ $this->vh ])
-            ->setMethods([ 'onFileUpdate' ])
+            ->setMethods([ 'onAttachmentUpdate' ])
             ->getMock();
 
-        $subscriber->expects($this->once())->method('onFileUpdate');
+        $subscriber->expects($this->once())->method('onAttachmentUpdate');
 
-        $subscriber->onFileDelete($this->event);
+        $subscriber->onAttachmentDelete($this->event);
     }
 
     /**
-     * Tests onFileUpdate.
+     * Tests onAttachmentUpdate.
      */
-    public function testOnFileUpdate()
+    public function testOnAttachmentUpdate()
     {
-        $item = new \Attachment();
+        $item = new Content([ 'content_type_name' => 'attachment' ]);
 
         $this->event->expects($this->once())->method('hasArgument')
             ->with('item')->willReturn(true);
@@ -73,6 +73,6 @@ class FileSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->vh->expects($this->once())->method('deleteFiles')->with([ $item ]);
 
-        $this->subscriber->onFileUpdate($this->event);
+        $this->subscriber->onAttachmentUpdate($this->event);
     }
 }
