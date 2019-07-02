@@ -124,7 +124,7 @@ class ContentOldService implements Service
         try {
             $item = $this->getItem($id);
 
-            $item->remove();
+            $item->remove($id);
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
                 'id'   => $id,
