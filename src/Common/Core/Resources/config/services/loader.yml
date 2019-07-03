@@ -1,0 +1,20 @@
+services:
+    core.loader:
+        class:     Common\Core\Component\Loader\CoreLoader
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.loader.instance:
+        class:     Common\Core\Component\Loader\InstanceLoader
+        arguments: [ '@cache.manager', '@orm.manager' ]
+        public:    true
+
+    core.loader.theme:
+        class:     Common\Core\Component\Loader\ThemeLoader
+        arguments: [ '@orm.manager' ]
+        public:    true
+
+    core.loader.widget:
+        class:     Common\Core\Component\Loader\WidgetLoader
+        arguments: [ '@service_container' ]
+        public:    true
