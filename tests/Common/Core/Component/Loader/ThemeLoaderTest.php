@@ -55,6 +55,25 @@ class ThemeLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getThemeParents when theme has parents configured.
+     */
+    public function testGetThemeParents()
+    {
+        $this->assertEquals([], $this->loader->getThemeParents());
+
+        $themes = [
+            new Theme([ 'uuid' => 'es.openhost.theme.gorp' ]),
+            new Theme([ 'uuid' => 'es.openhost.theme.foo' ])
+        ];
+
+        $property = new \ReflectionProperty($this->loader, 'parents');
+        $property->setAccessible(true);
+        $property->setValue($this->loader, $themes);
+
+        $this->assertEquals($themes, $this->loader->getThemeParents());
+    }
+
+    /**
      * Tests loadThemeByUuid.
      */
     public function testLoadThemeByUuid()
@@ -66,38 +85,39 @@ class ThemeLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getParents when theme has no parents.
+     * Test loadThemeParents when theme has no parents.
      */
-    public function testGetParentsWhenNoParents()
+    public function testLoadThemeParentsWhenNoParents()
     {
         $theme = new Theme();
 
-        $method = new \ReflectionMethod($this->loader, 'getParents');
-        $method->setAccessible(true);
+        $property = new \ReflectionProperty($this->loader, 'theme');
+        $property->setAccessible(true);
+        $property->setValue($this->loader, $theme);
 
-        $this->assertEquals([], $method->invokeArgs($this->loader, [ $theme ]));
+        $this->assertEquals($this->loader, $this->loader->loadThemeParents());
     }
 
     /**
-     * Test getParents when theme has parents configured.
+     * Test loadThemeParents when theme has no parents.
      */
-    public function testGetParentsWhenParentsConfigured()
+    public function testLoadThemeParentsWhenNoParets()
     {
         $theme = new Theme([ 'parameters' => [
             'parent' => [ 'es.openhost.theme.foo', 'es.openhost.theme.gorp' ]
         ] ]);
 
-        $method = new \ReflectionMethod($this->loader, 'getParents');
-        $method->setAccessible(true);
+        $property = new \ReflectionProperty($this->loader, 'theme');
+        $property->setAccessible(true);
+        $property->setValue($this->loader, $theme);
 
         $themeA = new Theme([ 'uuid' => 'es.openhost.theme.gorp' ]);
         $themeB = new Theme([ 'uuid' => 'es.openhost.theme.foo' ]);
-
 
         $this->repository->expects($this->once())->method('findBy')
             ->with('uuid in ["es.openhost.theme.foo", "es.openhost.theme.gorp"]')
             ->willReturn([ $themeA, $themeB ]);
 
-        $this->assertEquals([ $themeB, $themeA ], $method->invokeArgs($this->loader, [ $theme ]));
+        $this->assertEquals($this->loader, $this->loader->loadThemeParents());
     }
 }

@@ -22,6 +22,13 @@ class ThemeLoader
     protected $theme;
 
     /**
+     * The list of current theme parents'.
+     *
+     * @var array
+     */
+    protected $parents = [];
+
+    /**
      * Initializes the InstanceLoader
      *
      * @param EntityManager $em The entity manager service.
@@ -39,6 +46,16 @@ class ThemeLoader
     public function getTheme() : ?Theme
     {
         return $this->theme;
+    }
+
+    /**
+     * Returns the current loaded Theme.
+     *
+     * @return Theme The current loaded Theme.
+     */
+    public function getThemeParents() : array
+    {
+        return $this->parents;
     }
 
     /**
@@ -61,33 +78,33 @@ class ThemeLoader
     }
 
     /**
-     * Returns the list of parents of the current theme.
+     * Loads the list of parents for the current theme.
      *
-     * @param Theme $theme The theme to get parents from.
-     *
-     * @return array The list of parents.
+     * @return ThemeLoader The current ThemeLoader.
      */
-    protected function getParents(Theme $theme) : array
+    public function loadThemeParents() : ThemeLoader
     {
-        if (empty($theme)
-            || empty($theme->parameters)
-            || !array_key_exists('parent', $theme->parameters)
+        if (empty($this->theme)
+            || empty($this->theme->parameters)
+            || !array_key_exists('parent', $this->theme->parameters)
         ) {
-            return [];
+            return $this;
         }
 
-        $uuids = $theme->parameters['parent'];
+        $uuids = $this->theme->parameters['parent'];
         $oql   = sprintf('uuid in ["%s"]', implode('", "', $uuids));
 
         $themes = $this->em->getRepository('theme', 'file')->findBy($oql);
 
-        foreach ($themes as $t) {
-            $parents[$t->uuid] = $t;
+        foreach ($themes as $theme) {
+            $parents[$theme->uuid] = $theme;
         }
 
         // Keep original order
         $parents = array_merge(array_flip($uuids), $parents);
 
-        return array_values($parents);
+        $this->parents = array_values($parents);
+
+        return $this;
     }
 }
