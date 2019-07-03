@@ -37,10 +37,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
-        $this->wr = $this->getMockBuilder('WidgetManager')
-            ->setMethods([ 'addPath' ])
-            ->getMock();
-
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -59,9 +55,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
             case 'request_stack':
                 return $this->rs;
-
-            case 'widget_repository':
-                return $this->wr;
 
             default:
                 return null;
@@ -148,8 +141,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template->expects($this->once())->method('addTemplateDir')
             ->with('/glorp/waldo/tpl');
-        $this->wr->expects($this->once())->method('addPath')
-            ->with('/glorp/waldo/tpl/widgets');
         $this->locale->expects($this->once())->method('addTextDomain')
             ->with('wubble', '/glorp/waldo/locale');
 

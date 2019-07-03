@@ -137,13 +137,8 @@ class Template extends \Smarty
      */
     public function addTheme($theme)
     {
-        $wm = $this->container->get('widget_repository');
-
         $path = $theme->realpath . '/tpl';
         $this->addTemplateDir($path);
-
-        $path = $theme->realpath . '/tpl/widgets';
-        $wm->addPath($path);
 
         if (!empty($theme->text_domain)) {
             $path = $theme->realpath . '/locale';
