@@ -252,7 +252,7 @@ class Widget extends Content
      */
     public function factoryWidget($params = null)
     {
-        getService('widget_repository')->loadWidget($this->content);
+        getService('core.loader.widget')->loadWidget($this->content);
 
         $class = 'Widget' . $this->content;
 
