@@ -33,8 +33,10 @@ class WidgetLoader
      * Sets the current theme.
      *
      * @param Theme $theme The current theme.
+     *
+     * @return WidgetLoader The current WidgetLoader.
      */
-    public function addTheme(Theme $theme) : void
+    public function addTheme(Theme $theme) : WidgetLoader
     {
         $widgets = $theme->isMultiRepo()
             ? $this->getWidgetsFromConfig($theme)
@@ -46,6 +48,8 @@ class WidgetLoader
         );
 
         ksort($this->widgets);
+
+        return $this;
     }
 
     /**
@@ -63,13 +67,17 @@ class WidgetLoader
      *
      * @param string $name The widget name.
      *
+     * @return WidgetLoader The current WidgetLoader.
+     *
      * @codeCoverageIgnore
      */
-    public function loadWidget(string $name) : void
+    public function loadWidget(string $name) : WidgetLoader
     {
         if (array_key_exists($name, $this->widgets)) {
             include_once $this->widgets[$name];
         }
+
+        return $this;
     }
 
     /**
