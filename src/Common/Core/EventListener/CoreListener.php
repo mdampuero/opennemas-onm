@@ -9,8 +9,6 @@
  */
 namespace Common\Core\EventListener;
 
-use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
-use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -73,22 +71,15 @@ class CoreListener
         $request = $event->getRequest();
         $host    = $request->getHost();
         $uri     = $request->getRequestUri();
-        $loader  = $this->container->get('core.loader');
 
-        try {
-            $instance = $loader->loadInstanceFromUri($host, $uri);
-        } catch (\Exception $e) {
-            throw new InstanceNotFoundException();
-        }
+        $this->container->get('core.loader')
+            ->load($host, $uri)
+            ->onlyEnabled()
+            ->init();
 
-        // If this instance is not activated throw an exception
-        if (!$instance->activated) {
-            throw new InstanceNotActivatedException($instance->internal_name);
-        }
+        $instance = $this->container->get('core.instance');
 
         $this->security->setInstance($instance);
-
-        $loader->init();
 
         if ($this->isIgnored($uri)) {
             return;
