@@ -87,7 +87,7 @@ class SearchController extends Controller
 
             $ids = array_map(function ($a) {
                 return $a->id;
-            }, $tags);
+            }, $tags['items']);
 
             //Create the query if exist tagsWords
             if (!empty($tagsWords)) {
