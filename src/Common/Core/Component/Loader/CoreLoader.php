@@ -9,6 +9,8 @@
  */
 namespace Common\Core\Component\Loader;
 
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Common\ORM\Entity\Instance;
 use Common\ORM\Entity\Theme;
 
@@ -79,10 +81,10 @@ class CoreLoader
             ->selectDatabase($database);
 
         // TODO: Remove when no MEDIA_URL constant usage
-        if (!array_key_exists('MEDIA_URL', $this->instance->settings)
-            || empty($this->instance->settings['MEDIA_URL'])
+        if (!array_key_exists('MEDIA_URL', $instance->settings)
+            || empty($instance->settings['MEDIA_URL'])
         ) {
-            $this->instance->settings['MEDIA_URL'] = '/media/';
+            $instance->settings['MEDIA_URL'] = '/media/';
         }
 
         return $this;
@@ -144,14 +146,6 @@ class CoreLoader
             }
         }
 
-        if (file_exists($theme->realpath . '.deploy.themes.php')) {
-            include_once $theme->realpath . '.deploy.themes.php';
-        }
-
-        if (!defined('THEMES_DEPLOYED_AT')) {
-            define('THEMES_DEPLOYED_AT', '00000000000000');
-        }
-
         return $this;
     }
 
@@ -159,6 +153,8 @@ class CoreLoader
      * Initializes all the application values for the instance.
      *
      * @return CoreLoader The current CoreLoader.
+     *
+     * @codeCoverageIgnore
      */
     public function init() : CoreLoader
     {
@@ -209,6 +205,35 @@ class CoreLoader
         define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
         define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
 
+        if (file_exists($this->theme->realpath . '.deploy.themes.php')) {
+            include_once $this->theme->realpath . '.deploy.themes.php';
+        }
+
+        if (!defined('THEMES_DEPLOYED_AT')) {
+            define('THEMES_DEPLOYED_AT', '00000000000000');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Force CoreLoader to only load enabled instances.
+     *
+     * @return CoreLoader The current CoreLoader.
+     *
+     * @throws InstanceNotActivatedException When the loaded instance is not
+     *                                       activated.
+     */
+    public function onlyEnabled() : CoreLoader
+    {
+        if (empty($this->instance)) {
+            throw new InstanceNotFoundException();
+        }
+
+        if (!$this->instance->activated) {
+            throw new InstanceNotActivatedException($this->instance->internal_name);
+        }
+
         return $this;
     }
 
@@ -219,12 +244,18 @@ class CoreLoader
      * @param string $uri  The request URI.
      *
      * @return CoreLoader The current CoreLoader.
+     *
+     * @throws InstanceNotFoundException When the instance can not be found.
      */
     public function load(string $host, string $uri) : CoreLoader
     {
-        $this->instance = $this->container->get('core.loader.instance')
-            ->loadInstanceByDomain($host, $uri)
-            ->getInstance();
+        try {
+            $this->instance = $this->container->get('core.loader.instance')
+                ->loadInstanceByDomain($host, $uri)
+                ->getInstance();
+        } catch (\Exception $e) {
+            throw new InstanceNotFoundException();
+        }
 
         $this->container->get('core.loader.theme')
             ->loadThemeByUuid($this->instance->settings['TEMPLATE_USER'])
@@ -266,10 +297,9 @@ class CoreLoader
     /**
      * Adds menu positions defined by theme to the menu manager.
      *
-     * @param array  $menus The list of menu positions.
-     * @param string $themeName The theme name
+     * @param array $menus The list of menu positions.
      */
-    protected function loadMenus($menus, $themeName)
+    protected function loadMenus($menus)
     {
         $this->container->get('core.manager.menu')->addMenus($menus);
     }
