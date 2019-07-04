@@ -1,5 +1,7 @@
 .media-item {
   &.selectable {
+    cursor: pointer;
+
     &:before {
       background-color: #fff;
       border-radius: 4px;
@@ -54,6 +56,10 @@
       width: 24px;
       z-index: 20;
     }
+  }
+
+  &.ignored {
+    opacity: .2;
   }
 }
 
