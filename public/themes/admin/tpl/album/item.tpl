@@ -83,7 +83,21 @@
         <i class="fa" ng-class="{ 'fa-th': app.mode === 'grid', 'fa-list': app.mode === 'list' }"></i>
       </button>
     </div>
-    <div class="grid-body">
+    <div class="grid-body relative">
+      <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photos }"></div>
+      <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photos }">
+        <p>{t}Are you sure?{/t}</p>
+        <div class="confirm-actions">
+          <button class="btn btn-link" ng-click="toggleOverlay('photos')" type="button">
+            <i class="fa fa-times fa-lg"></i>
+            {t}No{/t}
+          </button>
+          <button class="btn btn-link" ng-click="item.photos = []; data.item.photos = [];toggleOverlay('photos')" type="button">
+            <i class="fa fa-check fa-lg"></i>
+            {t}Yes{/t}
+          </button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-12">
           <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable album-thumbnail-sortable-placeholder album-thumbnail-sortable-' + app.mode }" ng-model="item.photos">
@@ -126,12 +140,20 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-4 col-lg-offset-4 col-sm-6 col-sm-offset-3 p-b-15 p-t-15">
-          <button class="btn btn-block btn-loading btn-success" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos">
-            <h4 class="text-uppercase text-white">
+        <div class="col-xs-6 p-b-15 p-t-15" ng-class="{ 'col-lg-4 col-lg-offset-4 col-xs-offset-3': !item.photos || item.photos.length === 0, 'col-lg-3 col-lg-offset-3': item.photos && item.photos.length > 0 }">
+          <button class="btn btn-block btn-default btn-loading" media-picker media-picker-ignore="item.photos" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos">
+            <h5 class="text-uppercase">
               <i class="fa fa-plus m-r-5"></i>
               {t}Add{/t}
-            <h4>
+            <h5>
+          </button>
+        </div>
+        <div class="col-lg-3 col-xs-6 p-b-15 p-t-15" ng-if="item.photos && item.photos.length > 0">
+          <button class="btn btn-block btn-loading btn-danger" ng-click="toggleOverlay('photos')">
+            <h5 class="text-uppercase text-white">
+              <i class="fa fa-trash m-r-5"></i>
+              {t}Empty{/t}
+            <h5>
           </button>
         </div>
       </div>
