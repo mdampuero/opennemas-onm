@@ -83,35 +83,21 @@
         <i class="fa" ng-class="{ 'fa-th': app.mode === 'grid', 'fa-list': app.mode === 'list' }"></i>
       </button>
     </div>
-    <div class="grid-body relative">
-      <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photos }"></div>
-      <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photos }">
-        <p>{t}Are you sure?{/t}</p>
-        <div class="confirm-actions">
-          <button class="btn btn-link" ng-click="toggleOverlay('photos')" type="button">
-            <i class="fa fa-times fa-lg"></i>
-            {t}No{/t}
-          </button>
-          <button class="btn btn-link" ng-click="item.photos = []; data.item.photos = [];toggleOverlay('photos')" type="button">
-            <i class="fa fa-check fa-lg"></i>
-            {t}Yes{/t}
-          </button>
-        </div>
-      </div>
+    <div class="grid-body">
       <div class="row">
         <div class="col-md-12">
           <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable album-thumbnail-sortable-placeholder album-thumbnail-sortable-' + app.mode }" ng-model="item.photos">
             <div class="album-thumbnail-sortable album-thumbnail-sortable-[% app.mode %]" ng-repeat="(index, photo) in item.photos">
               <div class="thumbnail-wrapper row">
-                <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }"></div>
-                <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ $index] }">
+                <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ photo.pk_photo] }"></div>
+                <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ photo.pk_photo] }">
                   <p>{t}Are you sure?{/t}</p>
                   <div class="confirm-actions">
-                    <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ $index)" type="button">
+                    <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ photo.pk_photo)" type="button">
                       <i class="fa fa-times fa-lg"></i>
                       {t}No{/t}
                     </button>
-                    <button class="btn btn-link" ng-click="removeItem('item.photos', $index); removeItem('data.item.photos', $index);toggleOverlay('photo_'+ $index)" type="button">
+                    <button class="btn btn-link" ng-click="removeItem('item.photos', $index); removeItem('data.item.photos', $index);toggleOverlay('photo_'+ photo.pk_photo)" type="button">
                       <i class="fa fa-check fa-lg"></i>
                       {t}Yes{/t}
                     </button>
@@ -122,7 +108,7 @@
                   <div class="dynamic-image-placeholder">
                     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,200,200">
                       <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ $index)">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ photo.pk_photo)">
                           <i class="fa fa-trash-o fa-2x"></i>
                         </div>
                       </div>
@@ -149,7 +135,7 @@
           </button>
         </div>
         <div class="col-lg-3 col-xs-6 p-b-15 p-t-15" ng-if="item.photos && item.photos.length > 0">
-          <button class="btn btn-block btn-loading btn-danger" ng-click="toggleOverlay('photos')">
+          <button class="btn btn-block btn-loading btn-danger" ng-click="empty()">
             <h5 class="text-uppercase text-white">
               <i class="fa fa-trash m-r-5"></i>
               {t}Empty{/t}
@@ -162,6 +148,9 @@
 {/block}
 
 {block name="modals"}
+  <script type="text/ng-template" id="modal-delete">
+    {include file="base/modal/modal.delete.tpl"}
+  </script>
   <script type="text/ng-template" id="modal-edit-album-error">
     {include file="album/modal.validate.tpl"}
   </script>
