@@ -161,7 +161,7 @@
                     '<li>' +
                       '<h4 ng-if="!uploadError && selected.items.length">' +
                         '[% selected.items.length %]' +
-                        '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
+                        '<span class="hidden-xs m-l-5">[% picker.params.explore.itemsSelected %]</span>' +
                       '</h4>' +
                       '<h4 ng-if="uploadError">' +
                         '<span class="hidden-xs">[% picker.params.explore.error %]</span>' +
