@@ -40,7 +40,6 @@
           file: '',
           price: 0,
           tags: [],
-          tags: [],
           thumbnail: null,
           title: '',
           type: 0,
@@ -57,11 +56,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_newsstand_create',
-          redirect: 'backend_newsstand_show',
-          save:     'api_v1_backend_newsstand_save',
-          show:     'api_v1_backend_newsstand_show',
-          update:   'api_v1_backend_newsstand_update'
+          createItem: 'api_v1_backend_newsstand_create',
+          getItem:    'api_v1_backend_newsstand_show',
+          redirect:   'backend_newsstand_show',
+          saveItem:   'api_v1_backend_newsstand_save',
+          updateItem: 'api_v1_backend_newsstand_update'
         };
 
         /**
