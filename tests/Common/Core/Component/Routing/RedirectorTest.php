@@ -55,6 +55,11 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
+        $this->fm = $this->getMockBuilder('Common\Data\Core\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
+
         $this->headers = $this->getMockBuilder('HeaderBag')
             ->setMethods([ 'get', 'set' ])
             ->getMock();
@@ -132,12 +137,15 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             case 'core.theme':
                 return $this->theme;
 
-            case 'entity_repository':
-            case 'opinion_repository':
-                return $this->repository;
+            case 'data.manager.filter':
+                return $this->fm;
 
             case 'dbal_connection':
                 return $this->conn;
+
+            case 'entity_repository':
+            case 'opinion_repository':
+                return $this->repository;
 
             case 'kernel':
                 return $this->kernel;
@@ -231,6 +239,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             'type'         => 0
         ]);
 
+        $this->fm->expects($this->once())->method('set')
+            ->with('garply')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('url_decode')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('garply');
+
         $this->cache->expects($this->once())->method('exists')
             ->with('redirector-' . md5('garply') . '-norf')->willReturn(true);
         $this->cache->expects($this->once())->method('get')
@@ -268,6 +283,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getLiteralUrl' ])
             ->getMock();
 
+        $this->fm->expects($this->once())->method('set')
+            ->with('baz')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('url_decode')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('baz');
+
         $this->cache->expects($this->at(0))->method('exists')
             ->with('redirector-' . md5('baz') . '-norf');
         $this->cache->expects($this->at(1))->method('set')
@@ -297,6 +319,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
             ->setMethods([ 'getLiteralUrl', 'getRegExpUrl' ])
             ->getMock();
+
+        $this->fm->expects($this->once())->method('set')
+            ->with('baz-quux')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('url_decode')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('baz-quux');
 
         $this->cache->expects($this->at(0))->method('exists')
             ->with('redirector-' . md5('baz-quux') . '-norf')->willReturn(false);

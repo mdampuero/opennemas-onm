@@ -36,7 +36,10 @@ class AssetController extends Controller
     public function imageAction(Request $request, $params, $path)
     {
         $action = $this->get('core.globals')->getAction();
-        $params = $this->decodeParameters($params);
+        $params = $this->container->get('data.manager.filter')
+            ->set($params)
+            ->filter('url_decode')
+            ->get();
 
         $expectedUri = $this->getExpectedUri($action, [
             'params' => $params,
