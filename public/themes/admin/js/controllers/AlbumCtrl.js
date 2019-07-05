@@ -206,7 +206,8 @@
          * Shows a warning in a modal when cover and/or photos are missing.
          */
         $scope.validatePhotosAndCover = function() {
-          if ($scope.item.photos && $scope.item.cover_id) {
+          if ($scope.item.photos && $scope.item.photos.length > 0 &&
+              $scope.item.cover_id) {
             return true;
           }
 
