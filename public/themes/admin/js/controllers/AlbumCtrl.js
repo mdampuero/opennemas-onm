@@ -16,8 +16,8 @@
      * @requires routing
      */
     .controller('AlbumCtrl', [
-      '$controller', '$scope', '$uibModal', 'linker', 'localizer', 'messenger', 'routing',
-      function($controller, $scope, $uibModal, linker, localizer, messenger, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', 'linker', 'localizer', 'messenger', 'routing',
+      function($controller, $scope, $timeout, $uibModal, linker, localizer, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -68,6 +68,36 @@
           redirect:   'backend_album_show',
           saveItem:   'api_v1_backend_album_save_item',
           updateItem: 'api_v1_backend_album_update_item'
+        };
+
+        /**
+         * @function empty
+         * @memberOf AlbumCtrl
+         *
+         * @description
+         *   Shows a modal window to confirm if album has to be emptied.
+         */
+        $scope.empty = function() {
+          $uibModal.open({
+            templateUrl: 'modal-delete',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return { selected: $scope.item.photos.length };
+              },
+              success: function() {
+                return function(modalWindow) {
+                  return $timeout(function() {
+                    $scope.item.photos      = [];
+                    $scope.data.item.photos = [];
+
+                    modalWindow.close();
+                  });
+                };
+              }
+            }
+          });
         };
 
         /**
@@ -176,7 +206,8 @@
          * Shows a warning in a modal when cover and/or photos are missing.
          */
         $scope.validatePhotosAndCover = function() {
-          if ($scope.item.photos && $scope.item.cover_id) {
+          if ($scope.item.photos && $scope.item.photos.length > 0 &&
+              $scope.item.cover_id) {
             return true;
           }
 

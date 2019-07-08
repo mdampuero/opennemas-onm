@@ -2184,10 +2184,12 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @return Content The current content.
      */
-    protected function generateSlug(array $data) : Content
+    protected function generateSlug(array &$data) : Content
     {
-        $data['slug'] =
-            \Onm\StringUtils::generateSlug($data['slug'] ?? $data['title']);
+        $data['slug'] = getService('data.manager.filter')
+            ->set(empty($data['slug']) ? $data['title'] : $data['slug'])
+            ->filter('slug')
+            ->get();
 
         return $this;
     }
@@ -2241,11 +2243,8 @@ class Content implements \JsonSerializable, CsvSerializable
             'in_home'        => $data['in_home'] ?? 0,
             'params'         => $data['params'] ?? null,
             'position'       => $data['position'] ?? 2,
+            'slug'           => $data['slug'] ?? null,
             'starttime'      => $data['starttime'] ?? null,
-            'slug'           => $data['slug'] ?? getService('data.manager.filter')
-                ->set($data['title'])
-                ->filter('slug')
-                ->get(),
             'title'          => $data['title'],
             'urn_source'     => !empty($data['urn_source']) ? $data['urn_source'] : null,
             'with_comment'   => $data['with_comment'] ?? 0,
