@@ -35,7 +35,8 @@
         $scope.item = {
           name: null,
           privileges: [],
-          type: 1
+          type: 1,
+          user_groups: []
         };
 
         /**
