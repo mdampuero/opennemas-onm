@@ -1,3 +1,52 @@
+.confirm-dialog,
+.overlay {
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.confirm-dialog {
+  margin-top: -75px;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  top: 40%;
+  transition: all .25s;
+  visibility: hidden;
+  width: 100%;
+  z-index: 120;
+
+  &.open {
+    opacity: 1;
+    top: 50%;
+    visibility: visible;
+  }
+
+  p {
+    font-size: 16px;
+    font-weight: 900;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .confirm-actions {
+    .btn {
+      font-weight: 900;
+      margin: 0 15px;
+      text-transform: uppercase;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
 .dynamic-image-placeholder {
   height: 100%;
   width: 100%;
@@ -122,55 +171,6 @@
 
 .thumbnail-wrapper {
   position: relative;
-
-  .confirm-dialog,
-  .overlay {
-    &.open {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
-  .confirm-dialog {
-    margin-top: -75px;
-    opacity: 0;
-    position: absolute;
-    text-align: center;
-    top: 40%;
-    transition: all .25s;
-    visibility: hidden;
-    width: 100%;
-    z-index: 120;
-
-    &.open {
-      opacity: 1;
-      top: 50%;
-      visibility: visible;
-    }
-
-    p {
-      font-size: 16px;
-      font-weight: 900;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-    }
-
-    .confirm-actions {
-      .btn {
-        font-weight: 900;
-        margin: 0 15px;
-        text-transform: uppercase;
-
-        &:first-child {
-          margin-left: 0;
-        }
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-  }
 }
 
 @media screen and (max-width: 992px) {

@@ -22,6 +22,7 @@
           controller: 'MediaPickerCtrl',
           restrict: 'A',
           scope: {
+            mediaPickerIgnore: '=',
             mediaPickerTarget: '='
           },
           link: function($scope, elm, attrs) {
@@ -74,7 +75,7 @@
                             '</div>' +
                           '</div>' +
                         '</div>' +
-                        '<div class="media-item [selectable]"[selection] ng-repeat="content in contents track by $index" style="width: 120px;">' +
+                        '<div class="media-item"[selection] ng-repeat="content in contents track by $index" style="width: 120px;">' +
                           '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
                             $window.instanceMedia +
                              '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
@@ -160,7 +161,7 @@
                     '<li>' +
                       '<h4 ng-if="!uploadError && selected.items.length">' +
                         '[% selected.items.length %]' +
-                        '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
+                        '<span class="hidden-xs m-l-5">[% picker.params.explore.itemsSelected %]</span>' +
                       '</h4>' +
                       '<h4 ng-if="uploadError">' +
                         '<span class="hidden-xs">[% picker.params.explore.error %]</span>' +
@@ -376,7 +377,6 @@
               render: function() {
                 var content = '';
                 var picker  = pickerTpl;
-                var selectable = '';
                 var selection = '';
                 var sidebar = '';
 
@@ -387,11 +387,13 @@
 
                 // Add selection actions
                 if (this.selection.enabled) {
-                  selectable = ' selectable';
-                  selection  = 'ng-class="{ \'selected\': isSelected(content) }" ng-click="toggle(content, $event)"';
+                  selection  = 'ng-class="{ ' +
+                    '\'selected\': isSelected(content), ' +
+                    '\'ignored\': isIgnored(content), ' +
+                    '\'selectable\': isSelectable(content) ' +
+                    '}" ng-click="toggle(content, $event)"';
                 }
 
-                content = content.replace(/\[selectable\]/g, selectable);
                 content = content.replace(/\[selection\]/g, selection);
 
                 picker = picker.replace(/\[sidebar\]/g, sidebar);
@@ -684,6 +686,44 @@
         };
 
         /**
+         * @function isIgnored
+         * @memberof MediaPickerCtrl
+         *
+         * @description
+         *   Checks if the given item is included in the list of ignored items.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {boolean} True if the item is in the list of ignored items.
+         *                   False otherwise.
+         */
+        $scope.isIgnored = function(item) {
+          return $scope.mediaPickerIgnore &&
+            $scope.mediaPickerIgnore.map(function(e) {
+              return e.pk_photo;
+            }).indexOf(item.id) !== -1;
+        };
+
+        /**
+         * @function isSelectable
+         * @memberof MediaPickerCtrl
+         *
+         * @description
+         *   Checks if the item can be selected.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {boolean} True if the item can be selected. False otherwise.
+         */
+        $scope.isSelectable = function(item) {
+          return $scope.picker.selection.enabled &&
+            (!$scope.mediaPickerIgnore ||
+            $scope.mediaPickerIgnore.map(function(e) {
+              return e.pk_photo;
+            }).indexOf(item.id) === -1);
+        };
+
+        /**
          * @function isSelected
          * @memberof MediaPickerCtrl
          *
@@ -945,6 +985,12 @@
 
           // Add all items between selected
           while (itemsToInsert > 0 && i < $scope.contents.length) {
+            if (!$scope.isSelectable($scope.contents[i])) {
+              itemsToInsert--;
+              i++;
+              continue;
+            }
+
             if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
               $scope.selected.ids.push($scope.contents[i].id);
               $scope.selected.items.push($scope.contents[i]);
@@ -969,6 +1015,10 @@
          * @param {Object} event The event object.
          */
         $scope.toggle = function(item, event) {
+          if (!$scope.isSelectable(item)) {
+            return;
+          }
+
           // If shifKey
           if (event.shiftKey) {
             $scope.selectionMultiple(item);
@@ -1020,15 +1070,12 @@
          */
         $scope.enhanceAction = function() {
           $scope.enhance = !$scope.enhance;
-          var photoEditor = new window.OnmPhotoEditor(
-            {
-              container: 'photoEditor',
-              image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path_img,
-              closeCallBack: $scope.uploadMediaImg,
-              maximunSize: { width: 800, height: 600 }
-            },
-            photoEditorTranslations
-          );
+          var photoEditor = new window.OnmPhotoEditor({
+            container: 'photoEditor',
+            image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path_img,
+            closeCallBack: $scope.uploadMediaImg,
+            maximunSize: { width: 800, height: 600 }
+          }, photoEditorTranslations);
 
           $('.picker-dialog').addClass('picker-photo-editor');
           photoEditor.init();
