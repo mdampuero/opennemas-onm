@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-10 14:14+0000\n"
-"PO-Revision-Date: 2019-05-16 17:36+0200\n"
+"POT-Creation-Date: 2019-07-09 11:04+0000\n"
+"PO-Revision-Date: 2019-07-09 13:06+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -328,20 +328,20 @@ msgstr "Se ha producido un error al actualizar el menú."
 msgid "Frontpage"
 msgstr "Portada"
 
-msgid "Opinion"
-msgstr "Opinión"
+msgid "Opinions"
+msgstr "Opiniones"
 
-msgid "Bloggers"
-msgstr "Autor de blog"
+msgid "Blogs"
+msgstr "Blogs"
 
-msgid "Album"
-msgstr "Álbum"
+msgid "Albums"
+msgstr "Álbumes"
 
-msgid "Video"
-msgstr "Vídeo"
+msgid "Videos"
+msgstr "Vídeos"
 
-msgid "Poll"
-msgstr "Encuesta"
+msgid "Polls"
+msgstr "Encuestas"
 
 msgid "Events"
 msgstr "Eventos"
@@ -526,35 +526,6 @@ msgid "Paypal IPN configuration is incorrect. Please correct it and try again."
 msgstr ""
 "La configuración del IPN de Paypal es incorrecta. Por favor, corríjelo."
 
-msgid "Poll successfully created."
-msgstr "Encuesta actualizada correctamente."
-
-msgid "Unable to create the new poll."
-msgstr "No se pudo crear la nueva encuesta."
-
-#, php-format
-msgid "Unable to find the poll with the id \"%d\""
-msgstr "No se pudo encontrar la encuesta con el identificador «%d»"
-
-msgid "Poll data sent not valid."
-msgstr "Los datos enviados de la encuesta no son válidos."
-
-#, php-format
-msgid "Unable to find a poll with the id \"%s\"."
-msgstr "No se pudo encontrar la encuesta con el identificador «%s»."
-
-msgid "Poll successfully updated."
-msgstr "Encuesta actualizada correctamente."
-
-msgid "Unable to update the poll."
-msgstr "No se pudo actualizar la encuesta."
-
-msgid "You must give an id for delete a poll."
-msgstr "Debe proporcionar un identificador para eliminar una encuesta."
-
-msgid "Poll deleted successfully."
-msgstr "Encuesta eliminada con éxito."
-
 msgid "Special successfully created."
 msgstr "Especial creado con éxito."
 
@@ -635,14 +606,8 @@ msgstr "Contenidos"
 msgid "Articles"
 msgstr "Artículos"
 
-msgid "Opinions"
-msgstr "Opiniones"
-
 msgid "Comments"
 msgstr "Comentarios"
-
-msgid "Polls"
-msgstr "Encuestas"
 
 msgid "Static Pages"
 msgstr "Páginas estáticas"
@@ -664,12 +629,6 @@ msgstr "Imágenes"
 
 msgid "Files"
 msgstr "Ficheros"
-
-msgid "Videos"
-msgstr "Vídeos"
-
-msgid "Albums"
-msgstr "Álbumes"
 
 msgid "Books"
 msgstr "Libros"
@@ -1610,14 +1569,11 @@ msgstr "No se ha podido crear tu suscripción. Por favor, inténtalo de nuevo."
 msgid "You can't vote this poll, it is closed."
 msgstr "La encuesta está cerrada, no puedes votar."
 
-msgid "Thanks for participating."
-msgstr "Gracias por participar."
-
-msgid "Please select a valid poll answer."
-msgstr "Selecciona una respuesta válida de la encuesta."
-
 msgid "You have voted this poll previously."
 msgstr "Ya has votado esta encuesta anteriormente."
+
+msgid "Thanks for participating."
+msgstr "Gracias por participar."
 
 msgid "Homepage News"
 msgstr "Noticias de la portada principal"
@@ -1974,9 +1930,6 @@ msgstr "Lista de contenidos"
 
 msgid "No filter"
 msgstr "Sin filtro"
-
-msgid "Blogs"
-msgstr "Blogs"
 
 msgid "Last in 24 hours"
 msgstr "En las últimas 24 horas"
@@ -2338,6 +2291,9 @@ msgstr "Llave de la API"
 msgid "Translator"
 msgstr "Traductor"
 
+msgid "Album"
+msgstr "Álbum"
+
 msgid "Album not available"
 msgstr "Álbum no disponible"
 
@@ -2389,6 +2345,9 @@ msgstr "en tiempo"
 msgid "postponed"
 msgstr "aplazado"
 
+msgid "Opinion"
+msgstr "Opinión"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -2398,8 +2357,14 @@ msgstr "Comentario"
 msgid "Image"
 msgstr "Imagen"
 
+msgid "Video"
+msgstr "Vídeo"
+
 msgid "Special"
 msgstr "Especial"
+
+msgid "Poll"
+msgstr "Encuesta"
 
 msgid "Widget"
 msgstr "Widget"
@@ -5008,35 +4973,23 @@ msgstr "URL del blog"
 msgid "Short Biography"
 msgstr "Biografía corta"
 
-msgid "Poll section preferences"
-msgstr "Preferencias para las secciones de encuestas"
+msgid "Votes"
+msgstr "Votos"
 
-msgid "Highlighted"
-msgstr "Destacado"
-
-msgid "Values type"
-msgstr "Tipo de valores"
-
-msgid "Percents"
-msgstr "Porcentajes"
-
-msgid "Vote count"
-msgstr "Recuento de votos"
-
-msgid "Config poll module"
-msgstr "Configuración módulo de encuestas"
+msgid "Close date"
+msgstr "Fecha de cierre"
 
 msgid "New poll"
 msgstr "Nueva encuesta"
 
-msgid "Unable to find any poll that matches your search."
-msgstr "No se pudieron encontrar encuestas que coincidan con tu búsqueda."
+msgid "Poll close date"
+msgstr "Fecha de cierre de encuesta"
 
-msgid "Section"
-msgstr "Sección"
+msgid "Open"
+msgstr "Abierta"
 
-msgid "Votes"
-msgstr "Votos"
+msgid "Closed"
+msgstr "Cerrada"
 
 msgid "Pretitle"
 msgstr "Antetítulo"
@@ -5044,32 +4997,11 @@ msgstr "Antetítulo"
 msgid "Answers"
 msgstr "Respuestas"
 
+msgid "Original"
+msgstr "Original"
+
 msgid "No votes"
 msgstr "Sin votos"
-
-msgid "Remove poll answer"
-msgstr "Quitar respuesta"
-
-msgid "Add new answer"
-msgstr "Añadir nueva respuesta"
-
-msgid "Attributes"
-msgstr "Atributos"
-
-msgid "Allow comments"
-msgstr "Permitir comentarios"
-
-msgid "Publication closed date"
-msgstr "Fecha de final de publicación"
-
-msgid "Select a category"
-msgstr "Seleccione una categoría"
-
-msgid "Subscription"
-msgstr "Suscripción"
-
-msgid "Only available for registered users"
-msgstr "Solo disponible para usuarios registrados"
 
 msgid "Number of elements in widget home"
 msgstr "Número de elementos en el widget de portada"
@@ -5112,6 +5044,9 @@ msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
 msgid "You must put %1 specials in the HOME"
 msgstr "Debe tener %d especiales para la portada"
 
+msgid "Section"
+msgstr "Sección"
+
 msgid "Widget Home"
 msgstr "Widget de portada"
 
@@ -5120,6 +5055,9 @@ msgstr "Configuración módulo de especiales"
 
 msgid "Save positions"
 msgstr "Guardar posiciones"
+
+msgid "Select a category"
+msgstr "Seleccione una categoría"
 
 msgid "Slug"
 msgstr "Slug"
@@ -5492,14 +5430,14 @@ msgstr "Borrador guardado a las "
 msgid "Go back"
 msgstr "Atrás"
 
-msgid "Original"
-msgstr "Original"
-
 msgid "Inner title"
 msgstr "Título interior"
 
 msgid "Signature"
 msgstr "Firma"
+
+msgid "Allow comments"
+msgstr "Permitir comentarios"
 
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
@@ -6108,8 +6046,8 @@ msgstr "Configuración de módulo «Vídeo»"
 msgid "Unfavorite"
 msgstr "No Favorito"
 
-msgid "Pick type"
-msgstr "Tipo de elemento"
+msgid "Cover image"
+msgstr "Imagen de portada"
 
 msgid "Pick the method to add the video"
 msgstr "El tipo de método para añadir el vídeo"
@@ -6122,9 +6060,6 @@ msgstr "Usar código HTML"
 
 msgid "Use file video URLs (External HTML5/FLV)"
 msgstr "Usar URLs a ficheros de vídeo (HTML5/FLV externo)"
-
-msgid "Cover image"
-msgstr "Imagen de portada"
 
 msgid "Private"
 msgstr "Privada"
@@ -6623,6 +6558,9 @@ msgstr "Divide los decimales con un punto"
 
 msgid "Item"
 msgstr "Elemento"
+
+msgid "Subscription"
+msgstr "Suscripción"
 
 msgid "Delete letter"
 msgstr "Eliminar carta"
@@ -7895,6 +7833,9 @@ msgstr "Comprueba que has incluído más de una imagen en este álbum"
 msgid "Assign an image as a cover image"
 msgstr "Asigna una imagen como imagen de portada"
 
+msgid "Empty"
+msgstr "Vaciar"
+
 msgid "Place"
 msgstr "Lugar"
 
@@ -8710,6 +8651,75 @@ msgstr "Bienvenido al Gestor de Opennemas"
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
+#~ msgid "Bloggers"
+#~ msgstr "Autor de blog"
+
+#~ msgid "Poll successfully created."
+#~ msgstr "Encuesta actualizada correctamente."
+
+#~ msgid "Unable to create the new poll."
+#~ msgstr "No se pudo crear la nueva encuesta."
+
+#~ msgid "Unable to find the poll with the id \"%d\""
+#~ msgstr "No se pudo encontrar la encuesta con el identificador «%d»"
+
+#~ msgid "Poll data sent not valid."
+#~ msgstr "Los datos enviados de la encuesta no son válidos."
+
+#~ msgid "Unable to find a poll with the id \"%s\"."
+#~ msgstr "No se pudo encontrar la encuesta con el identificador «%s»."
+
+#~ msgid "Poll successfully updated."
+#~ msgstr "Encuesta actualizada correctamente."
+
+#~ msgid "Unable to update the poll."
+#~ msgstr "No se pudo actualizar la encuesta."
+
+#~ msgid "You must give an id for delete a poll."
+#~ msgstr "Debe proporcionar un identificador para eliminar una encuesta."
+
+#~ msgid "Poll deleted successfully."
+#~ msgstr "Encuesta eliminada con éxito."
+
+#~ msgid "Please select a valid poll answer."
+#~ msgstr "Selecciona una respuesta válida de la encuesta."
+
+#~ msgid "Poll section preferences"
+#~ msgstr "Preferencias para las secciones de encuestas"
+
+#~ msgid "Highlighted"
+#~ msgstr "Destacado"
+
+#~ msgid "Values type"
+#~ msgstr "Tipo de valores"
+
+#~ msgid "Percents"
+#~ msgstr "Porcentajes"
+
+#~ msgid "Vote count"
+#~ msgstr "Recuento de votos"
+
+#~ msgid "Config poll module"
+#~ msgstr "Configuración módulo de encuestas"
+
+#~ msgid "Unable to find any poll that matches your search."
+#~ msgstr "No se pudieron encontrar encuestas que coincidan con tu búsqueda."
+
+#~ msgid "Remove poll answer"
+#~ msgstr "Quitar respuesta"
+
+#~ msgid "Add new answer"
+#~ msgstr "Añadir nueva respuesta"
+
+#~ msgid "Attributes"
+#~ msgstr "Atributos"
+
+#~ msgid "Only available for registered users"
+#~ msgstr "Solo disponible para usuarios registrados"
+
+#~ msgid "Pick type"
+#~ msgstr "Tipo de elemento"
+
 #~ msgid "You must put %1 videos in the HOME"
 #~ msgstr "Debes tener %1 vídeos para la portada"
 
@@ -9252,9 +9262,6 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
 #~ msgid "No available categories for listing"
 #~ msgstr "No hay ninguna categoría para mostrar aquí"
-
-#~ msgid "Empty"
-#~ msgstr "Vaciar"
 
 #~ msgid "Delete category"
 #~ msgstr "Eliminar categoría"
