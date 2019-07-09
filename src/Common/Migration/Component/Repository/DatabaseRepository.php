@@ -43,6 +43,32 @@ class DatabaseRepository implements Repository
         $this->config  = $config;
         $this->conn    = new Connection($config['connection']);
         $this->tracker = $tracker;
+
+        $this->conn->getConfiguration()->setSQLLogger(null);
+
+        $ids   = implode(',', $this->config['source']['id']);
+        $table = $this->config['source']['table'];
+
+        $filters = [];
+        $where   = '';
+
+        if (!empty($this->config['source']['filter'])) {
+            $filters[] = $this->config['source']['filter'];
+        }
+
+        if (!empty($filters)) {
+            $where = ' WHERE ' . implode(' AND ', $filters);
+        }
+
+        $query = sprintf(
+            'CREATE TABLE IF NOT EXISTS migration_fix_items (PRIMARY KEY (%s)) AS SELECT DISTINCT %s FROM %s%s',
+            $ids,
+            $ids,
+            $table,
+            $where
+        );
+
+        $this->conn->executeQuery($query);
     }
 
     /**
@@ -50,26 +76,11 @@ class DatabaseRepository implements Repository
      */
     public function count()
     {
-        $sql = sprintf(
-            'SELECT COUNT(*) as total FROM %s',
-            $this->config['source']['table']
-        );
+        $sql = 'SELECT COUNT(*) as total FROM migration_fix_items';
 
-        // Support single value and array of values
-        $parsed  = $this->tracker->count();
-        $filters = [];
+        $result = $this->conn->fetchAll($sql);
 
-        if (!empty($this->config['source']['filter'])) {
-            $filters[] = $this->config['source']['filter'];
-        }
-
-        if (!empty($filters)) {
-            $sql .= ' WHERE ' . implode(' AND ', $filters);
-        }
-
-        $rs = $this->conn->fetchAll($sql);
-
-        return $rs[0]['total'] - $parsed;
+        return $result[0]['total'];
     }
 
     /**
@@ -92,9 +103,9 @@ class DatabaseRepository implements Repository
             $sql .= ' WHERE ' . implode(' AND ', $filters);
         }
 
-        $rs = $this->conn->fetchAll($sql);
+        $result = $this->conn->fetchAll($sql);
 
-        return $rs[0]['total'];
+        return $result[0]['total'];
     }
 
     /**
@@ -110,35 +121,47 @@ class DatabaseRepository implements Repository
      */
     public function next()
     {
+        $table = $this->config['source']['table'];
+
+        $join = [];
+
+        foreach ($this->config['source']['id'] as $id) {
+            $join[] = sprintf(
+                'fixing.%s = %s.%s',
+                $id,
+                $table,
+                $id
+            );
+        }
+
         $sql = sprintf(
-            'SELECT * FROM %s',
-            $this->config['source']['table']
+            'SELECT %s.* FROM %s JOIN (SELECT * FROM migration_fix_items LIMIT 1) fixing ON %s',
+            $table,
+            $table,
+            implode(' AND ', $join)
         );
 
-        $parsed  = $this->tracker->count();
-        $filters = [];
+        $result = $this->conn->fetchAll($sql);
 
-        if (!empty($this->config['source']['filter'])) {
-            $filters[] = $this->config['source']['filter'];
-        }
-
-        if (!empty($filters)) {
-            $sql .= ' WHERE ' . implode(' AND ', $filters);
-        }
-
-        if (!array_key_exists('limit', $this->config['source'])
-            || $this->config['source']['limit']
-        ) {
-            $sql .= sprintf(' LIMIT 1 OFFSET %s', $parsed);
-        }
-
-        $rs = $this->conn->fetchAll($sql);
-
-        if (empty($rs)) {
+        if (empty($result)) {
             return false;
         }
 
-        return $rs[0];
+        $where = [];
+
+        foreach ($this->config['source']['id'] as $id) {
+            $where[] = sprintf(
+                '%s = %s',
+                $id,
+                $result[0][$id]
+            );
+        }
+
+        $sql = 'DELETE FROM migration_fix_items WHERE ' . implode(' AND ', $where);
+
+        $this->conn->executeQuery($sql);
+
+        return $result[0];
     }
 
     /**
@@ -149,5 +172,10 @@ class DatabaseRepository implements Repository
         foreach ($sqls as $sql) {
             $this->conn->executeQuery($sql);
         }
+    }
+
+    public function end()
+    {
+        $this->conn->executeQuery('DROP TABLE IF EXISTS migration_fix_items');
     }
 }
