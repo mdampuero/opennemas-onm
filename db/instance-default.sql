@@ -476,7 +476,9 @@ CREATE TABLE `contents` (
   KEY `available` (`available`),
   KEY `starttime` (`starttime`,`endtime`),
   KEY `created` (`created`),
-  KEY `fk_author` (`fk_author`)
+  KEY `fk_author` (`fk_author`),
+  KEY `content_type_name` (`content_type_name`),
+  KEY `category_name` (`category_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=864 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1446,4 +1448,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-29 16:57:41
+-- Dump completed on 2019-07-11  8:45:13
