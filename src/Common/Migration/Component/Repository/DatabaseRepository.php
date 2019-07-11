@@ -45,7 +45,10 @@ class DatabaseRepository implements Repository
         $this->tracker = $tracker;
 
         $this->conn->getConfiguration()->setSQLLogger(null);
+    }
 
+    public function start()
+    {
         $ids   = implode(',', $this->config['source']['id']);
         $table = $this->config['source']['table'];
 

@@ -86,6 +86,7 @@ class FixCommand extends ContainerAwareCommand
             $tracker->end();
         }
 
+        $this->mm->getRepository()->start();
         $tracker->start();
 
         $this->getCounters();
