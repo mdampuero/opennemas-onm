@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-02 14:16+0000\n"
-"PO-Revision-Date: 2019-07-02 16:16+0200\n"
+"POT-Creation-Date: 2019-07-11 08:51+0000\n"
+"PO-Revision-Date: 2019-07-11 10:50+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -286,20 +286,20 @@ msgstr "Se ha producido un error al actualizar el menú."
 msgid "Frontpage"
 msgstr "Portada"
 
-msgid "Opinion"
-msgstr "Opinión"
+msgid "Opinions"
+msgstr "Opiniones"
 
-msgid "Bloggers"
-msgstr "Autor de blog"
+msgid "Blogs"
+msgstr "Blogs"
 
-msgid "Album"
-msgstr "Álbum"
+msgid "Albums"
+msgstr "Álbumes"
 
-msgid "Video"
-msgstr "Vídeo"
+msgid "Videos"
+msgstr "Vídeos"
 
-msgid "Poll"
-msgstr "Encuesta"
+msgid "Polls"
+msgstr "Encuestas"
 
 msgid "Events"
 msgstr "Eventos"
@@ -564,14 +564,8 @@ msgstr "Contenidos"
 msgid "Articles"
 msgstr "Artículos"
 
-msgid "Opinions"
-msgstr "Opiniones"
-
 msgid "Comments"
 msgstr "Comentarios"
-
-msgid "Polls"
-msgstr "Encuestas"
 
 msgid "Static Pages"
 msgstr "Páginas estáticas"
@@ -593,12 +587,6 @@ msgstr "Imágenes"
 
 msgid "Files"
 msgstr "Ficheros"
-
-msgid "Videos"
-msgstr "Vídeos"
-
-msgid "Albums"
-msgstr "Álbumes"
 
 msgid "Books"
 msgstr "Libros"
@@ -1901,9 +1889,6 @@ msgstr "Lista de contenidos"
 msgid "No filter"
 msgstr "Sin filtro"
 
-msgid "Blogs"
-msgstr "Blogs"
-
 msgid "Last in 24 hours"
 msgstr "En las últimas 24 horas"
 
@@ -2267,6 +2252,9 @@ msgstr "Llave de la API"
 msgid "Translator"
 msgstr "Traductor"
 
+msgid "Album"
+msgstr "Álbum"
+
 msgid "Album not available"
 msgstr "Álbum no disponible"
 
@@ -2318,6 +2306,9 @@ msgstr "en tiempo"
 msgid "postponed"
 msgstr "aplazado"
 
+msgid "Opinion"
+msgstr "Opinión"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -2327,8 +2318,14 @@ msgstr "Comentario"
 msgid "Image"
 msgstr "Imagen"
 
+msgid "Video"
+msgstr "Vídeo"
+
 msgid "Special"
 msgstr "Especial"
+
+msgid "Poll"
+msgstr "Encuesta"
 
 msgid "Widget"
 msgstr "Widget"
@@ -6002,8 +5999,8 @@ msgstr "Configuración de módulo «Vídeo»"
 msgid "Unfavorite"
 msgstr "No Favorito"
 
-msgid "Pick type"
-msgstr "Tipo de elemento"
+msgid "Cover image"
+msgstr "Imagen de portada"
 
 msgid "Pick the method to add the video"
 msgstr "El tipo de método para añadir el vídeo"
@@ -6016,9 +6013,6 @@ msgstr "Usar código HTML"
 
 msgid "Use file video URLs (External HTML5/FLV)"
 msgstr "Usar URLs a ficheros de vídeo (HTML5/FLV externo)"
-
-msgid "Cover image"
-msgstr "Imagen de portada"
 
 msgid "Private"
 msgstr "Privada"
@@ -8602,6 +8596,12 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "Bloggers"
+#~ msgstr "Autor de blog"
+
+#~ msgid "Pick type"
+#~ msgstr "Tipo de elemento"
 
 #, fuzzy
 #~ msgid "Close date"

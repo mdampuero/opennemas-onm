@@ -698,9 +698,10 @@
          *                   False otherwise.
          */
         $scope.isIgnored = function(item) {
-          return $scope.mediaPickerIgnore.map(function(e) {
-            return e.pk_photo;
-          }).indexOf(item.id) !== -1;
+          return $scope.mediaPickerIgnore &&
+            $scope.mediaPickerIgnore.map(function(e) {
+              return e.pk_photo;
+            }).indexOf(item.id) !== -1;
         };
 
         /**
@@ -716,9 +717,10 @@
          */
         $scope.isSelectable = function(item) {
           return $scope.picker.selection.enabled &&
+            (!$scope.mediaPickerIgnore ||
             $scope.mediaPickerIgnore.map(function(e) {
               return e.pk_photo;
-            }).indexOf(item.id) === -1;
+            }).indexOf(item.id) === -1);
         };
 
         /**

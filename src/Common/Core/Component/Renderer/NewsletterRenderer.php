@@ -128,11 +128,7 @@ class NewsletterRenderer
         ];
 
         $time = new \DateTime();
-        $this->tpl->assign(
-            'current_date',
-            $days[$time->format('w')] . ' ' . $time->format('j') . ' de ' .
-            $months[(int) $time->format('n')] . ' ' . $time->format('Y')
-        );
+        $this->tpl->assign('current_date', $time);
 
         // Process and assign public URL for images and links
         $publicUrl = preg_replace(
