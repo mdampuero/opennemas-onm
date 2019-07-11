@@ -253,25 +253,6 @@ class AssetController extends Controller
     }
 
     /**
-     * Decodes parameters for image action until they are completely decode.
-     *
-     * @param string $params The parameters to decode.
-     *
-     * @return string The decoded parameters.
-     */
-    protected function decodeParameters($params)
-    {
-        $decoded = urldecode($params);
-
-        // Already decoded
-        if ($params === $decoded) {
-            return $params;
-        }
-
-        return $this->decodeParameters($decoded);
-    }
-
-    /**
      * Returns the expected URI for the provided action basing on a list of
      * parameters.
      *
