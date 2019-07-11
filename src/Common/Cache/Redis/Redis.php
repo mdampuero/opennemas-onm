@@ -110,6 +110,8 @@ class Redis extends Cache
      * Gets a new Redis connection.
      *
      * @return BaseRedis The redis client.
+     *
+     * @codeCoverageIgnore
      */
     protected function getRedis()
     {
@@ -142,12 +144,16 @@ class Redis extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function saveMulti($data)
+    protected function saveMulti($data, $ttl)
     {
         $data = array_map(function ($a) {
             return serialize($a);
         }, $data);
 
         $this->getRedis()->mSet($data);
+
+        foreach (array_keys($data) as $key) {
+            $this->getRedis()->expire($key, $ttl);
+        }
     }
 }

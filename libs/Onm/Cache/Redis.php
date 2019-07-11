@@ -25,6 +25,13 @@ class Redis extends AbstractCache
     private $redis;
 
     /**
+     * The default TTL
+     *
+     * @var int
+     */
+    protected $ttl;
+
+    /**
      * Initializes the backend layer connection
      */
     public function __construct($options)
@@ -43,6 +50,12 @@ class Redis extends AbstractCache
             $this->setRedis($redis);
         }
 
+        if (array_key_exists('options', $options)
+            && array_key_exists('ttl', $options['options'])
+        ) {
+            $this->ttl = $options['options']['ttl'];
+        }
+
         return $this;
     }
 
@@ -53,7 +66,6 @@ class Redis extends AbstractCache
      */
     public function setRedis(RedisBase $redis)
     {
-        // $redis->setOption(Redis::OPT_SERIALIZER, $this->getSerializerValue());
         $this->redis = $redis;
     }
 
@@ -126,6 +138,8 @@ class Redis extends AbstractCache
      */
     protected function doSave($id, $data = null, $lifeTime = 0)
     {
+        $ttl = empty($lifeTime) && !empty($this->ttl) ? $this->ttl : $lifeTime;
+
         if (is_array($id)) {
             $values = [];
             foreach ($id as $key => $value) {
@@ -136,9 +150,9 @@ class Redis extends AbstractCache
             $saved = $this->getRedis()->mSet($values);
 
             // Set the expire time for this key if valid lifeTime
-            if ($lifeTime > 0) {
+            if ($ttl > 0) {
                 foreach (array_keys($id) as $key) {
-                    $this->redis->expire($key, $lifeTime);
+                    $this->redis->expire($key, $ttl);
                 }
             }
         } else {
@@ -148,12 +162,10 @@ class Redis extends AbstractCache
             $saved   = $this->getRedis()->set($id, $dataAux);
 
             // Set the expire time for this key if valid lifeTime
-            if ($lifeTime > 0) {
-                $this->redis->expire($id, $lifeTime);
+            if ($ttl > 0) {
+                $this->redis->expire($id, $ttl);
             }
         }
-
-
 
         return $saved;
     }
