@@ -673,6 +673,15 @@ contents:
             name: urn_source
             columns: [urn_source]
             unique: true
+        -
+            name: content_type_name
+            columns: [content_type_name]
+            unique: false
+        -
+            name: category_name
+            columns: [category_name]
+            unique: false
+
 contents_categories:
     columns:
         pk_fk_content:
