@@ -291,11 +291,6 @@ class OpinionController extends FrontendController
         $numOpinions = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page');
-        if (!empty($configurations)
-            && array_key_exists('total_opinions', $configurations)
-        ) {
-            $numOpinions = $configurations['total_opinions'];
-        }
 
         // Get the number of total opinions for this author for pagination purposes
         $countOpinions = $this->get('opinion_repository')->countBy($filters);
