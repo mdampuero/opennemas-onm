@@ -60,12 +60,12 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_poll_create',
-          public:   'frontend_poll_show',
-          redirect: 'backend_poll_show',
-          save:     'api_v1_backend_poll_save',
-          show:     'api_v1_backend_poll_show',
-          update:   'api_v1_backend_poll_update'
+          createItem: 'api_v1_backend_poll_create_item',
+          getItem:    'api_v1_backend_poll_get_item',
+          public:     'frontend_poll_show',
+          redirect:   'backend_poll_show',
+          saveItem:   'api_v1_backend_poll_save_item',
+          updateItem: 'api_v1_backend_poll_update_item'
         };
 
         /**

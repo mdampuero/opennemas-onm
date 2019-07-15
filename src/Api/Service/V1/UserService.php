@@ -14,11 +14,19 @@ use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
+use Api\Exception\InvalidArgumentException;
 use Api\Exception\UpdateItemException;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
 class UserService extends OrmService
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $defaults = [
+        'type' => 0
+    ];
+
     /**
      * The default type value for users.
      */
@@ -36,7 +44,7 @@ class UserService extends OrmService
     {
         try {
             if (!array_key_exists('email', $data)) {
-                throw new \Exception('The email is required', 400);
+                throw new InvalidArgumentException('The email is required', 400);
             }
 
             $item = $this->checkItem($data['email']);

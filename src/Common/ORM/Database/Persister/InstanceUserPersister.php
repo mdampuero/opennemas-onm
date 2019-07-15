@@ -28,13 +28,22 @@ class InstanceUserPersister extends ManagerUserPersister
             unset($entity->categories);
         }
 
-        parent::create($entity);
+        $this->conn->beginTransaction();
 
-        $id = $this->metadata->getId($entity);
+        try {
+            parent::create($entity);
 
-        $this->persistCategories($id, $categories);
+            $id = $this->metadata->getId($entity);
 
-        $entity->categories = $categories;
+            $this->persistCategories($id, $categories);
+
+            $entity->categories = $categories;
+
+            $this->conn->commit();
+        } catch (\Throwable $e) {
+            $this->conn->rollback();
+            throw $e;
+        }
 
         $entity->refresh();
     }
@@ -56,18 +65,27 @@ class InstanceUserPersister extends ManagerUserPersister
         unset($entity->categories);
         $entity->setNotStored('categories');
 
-        parent::update($entity);
+        $this->conn->beginTransaction();
 
-        $id = $this->metadata->getId($entity);
+        try {
+            parent::update($entity);
 
-        if (array_key_exists('categories', $changes)) {
-            $this->persistCategories($id, $categories);
-        }
+            $id = $this->metadata->getId($entity);
 
-        $entity->categories = $categories;
+            if (array_key_exists('categories', $changes)) {
+                $this->persistCategories($id, $categories);
+            }
 
-        if ($this->hasCache()) {
-            $this->cache->remove($this->metadata->getPrefixedId($entity));
+            $entity->categories = $categories;
+
+            $this->conn->commit();
+
+            if ($this->hasCache()) {
+                $this->cache->remove($this->metadata->getPrefixedId($entity));
+            }
+        } catch (\Throwable $e) {
+            $this->conn->rollback();
+            throw $e;
         }
     }
 

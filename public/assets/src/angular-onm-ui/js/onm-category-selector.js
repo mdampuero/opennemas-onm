@@ -103,7 +103,7 @@
                 });
             }
 
-            http.get('api_v1_backend_categories_list').then(function(response) {
+            http.get('api_v1_backend_category_get_list').then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
                 return !$scope.exclude || $scope.exclude.length === 0 ||
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
@@ -304,6 +304,7 @@
               });
 
               if (found.length === 0) {
+                $scope.exportModel = $scope.multiple ? [] : null;
                 return;
               }
 

@@ -62,11 +62,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_event_create',
-          redirect: 'backend_event_show',
-          save:     'api_v1_backend_event_save',
-          show:     'api_v1_backend_event_show',
-          update:   'api_v1_backend_event_update'
+          createItem: 'api_v1_backend_event_create_item',
+          getItem:    'api_v1_backend_event_get_item',
+          redirect:   'backend_event_show',
+          saveItem:   'api_v1_backend_event_save_item',
+          updateItem: 'api_v1_backend_event_update_item'
         };
 
         /**

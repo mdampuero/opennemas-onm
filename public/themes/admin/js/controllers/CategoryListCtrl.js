@@ -36,18 +36,17 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_category_delete',
-          deleteSelected: 'api_v1_backend_categories_delete',
-          empty:          'api_v1_backend_category_empty',
-          emptySelected:  'api_v1_backend_categories_empty',
-          list:           'api_v1_backend_categories_list',
-          move:           'api_v1_backend_category_move',
-          moveSelected:   'api_v1_backend_categories_move',
-          patch:          'api_v1_backend_category_patch',
-          patchRss:       'api_v1_backend_category_update',
-          patchSelected:  'api_v1_backend_categories_patch',
-          save:           'api_v1_backend_category_save',
-          update:         'api_v1_backend_category_update',
+          deleteItem: 'api_v1_backend_category_delete_item',
+          deleteList: 'api_v1_backend_category_delete_list',
+          emptyItem:  'api_v1_backend_category_empty_item',
+          emptyList:  'api_v1_backend_category_empty_list',
+          getList:    'api_v1_backend_category_get_list',
+          moveItem:   'api_v1_backend_category_move_item',
+          moveList:   'api_v1_backend_category_move_list',
+          patchItem:  'api_v1_backend_category_patch_item',
+          patchList:  'api_v1_backend_category_patch_list',
+          saveItem:   'api_v1_backend_category_save',
+          updateItem: 'api_v1_backend_category_update',
         };
 
         /**
@@ -117,7 +116,7 @@
               success: function() {
                 return function() {
                   var route = {
-                    name: $scope.routes.empty,
+                    name: $scope.routes.emptyItem,
                     params: { id: id }
                   };
 
@@ -158,7 +157,7 @@
               },
               success: function() {
                 return function() {
-                  return http.put($scope.routes.emptySelected, {
+                  return http.put($scope.routes.emptyList, {
                     ids: $scope.selected.items
                   });
                 };
@@ -246,7 +245,7 @@
               success: function() {
                 return function(modal, template) {
                   var route = {
-                    name: $scope.routes.move,
+                    name: $scope.routes.moveItem,
                     params: { id: id }
                   };
 
@@ -288,7 +287,7 @@
               },
               success: function() {
                 return function(modal, template) {
-                  return http.put($scope.routes.moveSelected, {
+                  return http.put($scope.routes.moveList, {
                     ids: $scope.selected.items, target: template.target
                   });
                 };
@@ -329,7 +328,7 @@
 
           var data  = angular.copy(item);
           var route = {
-            name: $scope.routes.patchRss,
+            name: $scope.routes.updateItem,
             params: { id: $scope.getItemId(item) }
           };
 

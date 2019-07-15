@@ -97,10 +97,10 @@
         $scope.getItem = function(id) {
           $scope.flags.http.loading = true;
 
-          var route = { name: $scope.routes.create };
+          var route = { name: $scope.routes.createItem };
 
           if (id) {
-            route.name   = $scope.routes.show;
+            route.name   = $scope.routes.getItem;
             route.params = { id: id };
           }
 
@@ -182,7 +182,7 @@
           $scope.flags.http.saving = true;
 
           var data  = $scope.getData();
-          var route = { name: $scope.routes.save };
+          var route = { name: $scope.routes.saveItem };
 
           /**
            * Callback executed when subscriber is saved/updated successfully.
@@ -210,7 +210,7 @@
           };
 
           if ($scope.itemHasId()) {
-            route.name   = $scope.routes.update;
+            route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
             http.put(route, data).then(successCb, $scope.errorCb);
 

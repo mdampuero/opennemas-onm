@@ -1,98 +1,98 @@
-api_v1_backend_opinion_create:
+api_v1_backend_opinion_create_item:
     path:     /opinions/new
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_opinion_delete:
+api_v1_backend_opinion_delete_item:
     path:     /opinions/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_opinion_patch:
-    path:     /opinions/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:patch }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_opinion_save:
+api_v1_backend_opinion_delete_list:
     path:     /opinions
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:save }
-    methods:  [ POST ]
-    options:
-        expose: true
-
-api_v1_backend_opinion_show:
-    path:     /opinions/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:show }
-    methods:  [ GET ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_opinion_update:
-    path:     /opinions/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:update }
-    methods:  [ PUT ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_opinions_delete:
-    path:     /opinions
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:deleteSelected }
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:deleteList }
     methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_opinions_list:
-    path:     /opinions
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:list, format: '.json' }
+api_v1_backend_opinion_get_config:
+    path:     /opinions/config
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:getConfig }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_opinions_patch:
-    path:     /opinions
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:patchSelected }
-    methods:  [ PATCH ]
+api_v1_backend_opinion_get_item:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:getItem }
+    methods:  [ GET ]
     options:
         expose: true
+    requirements:
+        id: \d+
 
-api_v1_backend_opinion_preview:
-    path:     /opinions/preview
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:preview }
-    methods:  [ PUT ]
+api_v1_backend_opinion_get_list:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:getList, format: '.json' }
+    methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_opinion_get_preview:
-    path:     /opinions/get-preview
+    path:     /opinions/preview
     defaults: { _controller: ApiBundle:V1/Backend/Opinion:getPreview }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_opinion_config_save:
+api_v1_backend_opinion_patch_item:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_opinion_patch_list:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_save_config:
     path:     /opinions/config
     defaults: { _controller: ApiBundle:V1/Backend/Opinion:saveConfig }
     methods:  [ PUT ]
     options:
         expose: true
 
-api_v1_backend_opinion_config_show:
-    path:     /opinions/config
-    defaults: { _controller: ApiBundle:V1/Backend/Opinion:showConfig }
-    methods:  [ GET ]
+api_v1_backend_opinion_save_item:
+    path:     /opinions
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:saveItem }
+    methods:  [ POST ]
     options:
         expose: true
+
+api_v1_backend_opinion_save_preview:
+    path:     /opinions/preview
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:savePreview }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_opinion_update_item:
+    path:     /opinions/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Opinion:updateItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+

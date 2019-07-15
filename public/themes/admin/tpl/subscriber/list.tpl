@@ -27,7 +27,7 @@
                 </li>
               {/acl}
               <li class="quicklinks">
-                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscribers_export') %]">
+                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscriber_get_report') %]">
                   <span class="fa fa-download"></span>
                   {t}Download{/t}
                 </a>
@@ -264,7 +264,7 @@
       {include file="user/modal.confirm.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete">
-      {include file="base/modal/modal.delete.tpl"}
+      {include file="common/extension/modal.delete.tpl"}
     </script>
   </form>
 {/block}

@@ -27,7 +27,7 @@ class AdvertisementController extends Controller
      *
      * @return JsonResponse The list of advertisements.
      */
-    public function listAction(Request $request)
+    public function getListAction(Request $request)
     {
         $places   = explode(',', $request->query->get('places'));
         $category = $request->query->get('category');
@@ -67,7 +67,7 @@ class AdvertisementController extends Controller
      *
      * @return Response The advertisement.
      */
-    public function showAction(Request $request, $id)
+    public function getItemAction(Request $request, $id)
     {
         $category           = $request->query->get('category', 'home');
         $module             = $request->query->get('module', 'frontpage');

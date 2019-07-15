@@ -149,7 +149,7 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
-    {include file="base/modal/modal.delete.tpl"}
+    {include file="common/extension/modal.delete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-edit-album-error">
     {include file="album/modal.validate.tpl"}

@@ -84,10 +84,10 @@ class ContentPersister extends BasePersister
             $entity->related_contents = $relatedContents;
 
             $this->conn->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->conn->rollback();
 
-            return;
+            throw $e;
         }
 
         $entity->refresh();
@@ -149,8 +149,10 @@ class ContentPersister extends BasePersister
             if ($this->hasCache()) {
                 $this->cache->remove($this->metadata->getPrefixedId($entity));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->conn->rollback();
+
+            throw $e;
         }
     }
 
@@ -175,10 +177,10 @@ class ContentPersister extends BasePersister
             if ($this->hasCache()) {
                 $this->cache->remove($this->metadata->getPrefixedId($entity));
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->conn->rollback();
 
-            return;
+            throw $e;
         }
     }
 

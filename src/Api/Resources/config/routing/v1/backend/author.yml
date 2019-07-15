@@ -1,70 +1,70 @@
-api_v1_backend_author_create:
+api_v1_backend_author_create_item:
     path:     /authors/new
-    defaults: { _controller: ApiBundle:V1/Backend/Author:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_author_delete:
+api_v1_backend_author_delete_item:
     path:     /authors/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Author:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_author_patch:
-    path:     /authors/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Author:patch }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_author_save:
+api_v1_backend_author_delete_list:
     path:     /authors
-    defaults: { _controller: ApiBundle:V1/Backend/Author:save }
-    methods:  [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Author:deleteList }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_author_show:
+api_v1_backend_author_get_item:
     path:     /authors/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Author:show }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:getItem }
     methods:  [ GET ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_author_update:
+api_v1_backend_author_get_list:
+    path:     /authors
+    defaults: { _controller: ApiBundle:V1/Backend/Author:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_author_patch_item:
     path:     /authors/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Author:update }
+    defaults: { _controller: ApiBundle:V1/Backend/Author:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_author_patch_list:
+    path:     /authors
+    defaults: { _controller: ApiBundle:V1/Backend/Author:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_author_save_item:
+    path:     /authors
+    defaults: { _controller: ApiBundle:V1/Backend/Author:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_author_update_item:
+    path:     /authors/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Author:updateItem }
     methods:  [ PUT ]
     options:
         expose: true
     requirements:
         id: \d+
-
-api_v1_backend_authors_delete:
-    path:     /authors
-    defaults: { _controller: ApiBundle:V1/Backend/Author:deleteSelected }
-    methods:  [ DELETE ]
-    options:
-        expose: true
-
-api_v1_backend_authors_list:
-    path:     /authors
-    defaults: { _controller: ApiBundle:V1/Backend/Author:list }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_authors_patch:
-    path:     /authors
-    defaults: { _controller: ApiBundle:V1/Backend/Author:patchSelected }
-    methods:  [ PATCH ]
-    options:
-        expose: true

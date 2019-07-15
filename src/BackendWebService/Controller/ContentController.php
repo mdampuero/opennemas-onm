@@ -940,6 +940,10 @@ class ContentController extends Controller
             $extra['categories'][$item->pk_content_category] = $item->title;
         }
 
+        $extra['paths'] = [
+            'photo'      => $this->get('core.instance')->getImagesShortPath(),
+            'attachment' => $this->get('core.instance')->getFilesShortPath(),
+        ];
 
         return $extra;
     }

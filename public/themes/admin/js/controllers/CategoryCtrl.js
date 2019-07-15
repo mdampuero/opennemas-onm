@@ -31,11 +31,11 @@
          * @inheritdoc
          */
         $scope.routes = {
-          create:   'api_v1_backend_category_create',
-          redirect: 'backend_category_show',
-          save:     'api_v1_backend_category_save',
-          show:     'api_v1_backend_category_show',
-          update:   'api_v1_backend_category_update'
+          createItem: 'api_v1_backend_category_create_item',
+          getItem:    'api_v1_backend_category_get_item',
+          redirect:   'backend_category_show',
+          saveItem:   'api_v1_backend_category_save_item',
+          updateItem: 'api_v1_backend_category_update_item'
         };
 
         /**

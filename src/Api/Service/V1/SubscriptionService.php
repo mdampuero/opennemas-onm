@@ -16,6 +16,13 @@ class SubscriptionService extends OrmService
     /**
      * {@inheritdoc}
      */
+    protected $defaults = [
+        'type' => 1
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItem($id)
     {
         try {

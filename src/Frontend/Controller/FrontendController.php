@@ -43,6 +43,13 @@ class FrontendController extends Controller
     ];
 
     /**
+     * The API service to use to return the content.
+     *
+     * @var string
+     */
+    protected $service = 'api.service.content_old';
+
+    /**
      * The list of templates per action.
      *
      * @var array
@@ -349,13 +356,8 @@ class FrontendController extends Controller
      */
     protected function getItem(Request $request)
     {
-        $contentType = $request->get('content_type')
-            ?? $this->get('core.globals')->getExtension();
-
-        $item = $this->get('entity_repository')->find(
-            \classify($contentType),
-            $this->getIdFromRequest($request)
-        );
+        $item = $this->get($this->service)
+            ->getItem($this->getIdFromRequest($request));
 
         if (empty($item) || !$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();

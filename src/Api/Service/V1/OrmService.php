@@ -43,6 +43,13 @@ class OrmService implements Service
     protected $count = true;
 
     /**
+     * Default values to use when creating a new item.
+     *
+     * @var array
+     */
+    protected $defaults = [];
+
+    /**
      * The event dispatcher service.
      *
      * @var EventDispatcher
@@ -99,7 +106,7 @@ class OrmService implements Service
     {
         try {
             $data = $this->em->getConverter($this->entity)
-                ->objectify($data);
+                ->objectify(array_merge($this->defaults, $data));
 
             $item = new $this->class($data);
 

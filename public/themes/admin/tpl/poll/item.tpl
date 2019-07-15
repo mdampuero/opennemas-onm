@@ -59,7 +59,7 @@
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.closed = !expanded.closed">
         <i class="fa fa-calendar m-r-10"></i>
-        {t}Poll close date{/t}
+        {t}Vote end date{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.closed }"></i>
         <span class="badge badge-default m-r-10 m-t-2 pull-right text-uppercase"  ng-show="!expanded.closed && !isClosed(item)">
           <strong>

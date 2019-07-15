@@ -69,6 +69,11 @@ class PollController extends FrontendController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.poll';
+
+    /**
      * The list of templates per action.
      *
      * @var array

@@ -272,6 +272,26 @@ class Controller extends SymfonyController
     }
 
     /**
+     * Returns the client information for the current instance.
+     *
+     * @return array The client information.
+     */
+    protected function getClient()
+    {
+        if (empty($this->get('core.instance')->getClient())) {
+            return null;
+        }
+
+        $client = $this->get('orm.manager')
+            ->getRepository('Client')
+            ->find($this->get('core.instance')->getClient());
+
+        return $this->get('orm.manager')
+            ->getConverter('Client')
+            ->responsify($client);
+    }
+
+    /**
      * Get the locale info needed for multiLanguage.
      *
      * @param String    $context    Locale context
