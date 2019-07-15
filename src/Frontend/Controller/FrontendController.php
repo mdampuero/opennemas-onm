@@ -356,8 +356,12 @@ class FrontendController extends Controller
      */
     protected function getItem(Request $request)
     {
-        $item = $this->get($this->service)
-            ->getItem($this->getIdFromRequest($request));
+        try {
+            $item = $this->get($this->service)
+                ->getItem($this->getIdFromRequest($request));
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
 
         if (empty($item) || !$item->isReadyForPublish()) {
             throw new ResourceNotFoundException();
