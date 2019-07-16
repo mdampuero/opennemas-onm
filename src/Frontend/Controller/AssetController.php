@@ -36,7 +36,10 @@ class AssetController extends Controller
     public function imageAction(Request $request, $params, $path)
     {
         $action = $this->get('core.globals')->getAction();
-        $params = $this->decodeParameters($params);
+        $params = $this->container->get('data.manager.filter')
+            ->set($params)
+            ->filter('url_decode')
+            ->get();
 
         $expectedUri = $this->getExpectedUri($action, [
             'params' => $params,
@@ -247,25 +250,6 @@ class AssetController extends Controller
         $mimeType = $this->get('core.image.processor')->getMimeType();
 
         return new Response($content, 200, [ 'Content-Type' => $mimeType ]);
-    }
-
-    /**
-     * Decodes parameters for image action until they are completely decode.
-     *
-     * @param string $params The parameters to decode.
-     *
-     * @return string The decoded parameters.
-     */
-    protected function decodeParameters($params)
-    {
-        $decoded = urldecode($params);
-
-        // Already decoded
-        if ($params === $decoded) {
-            return $params;
-        }
-
-        return $this->decodeParameters($decoded);
     }
 
     /**

@@ -129,17 +129,20 @@ class RedisTest extends \PHPUnit\Framework\TestCase
      */
     public function testWithMultipleValues()
     {
-        $this->baseRedis->expects($this->at(1))->method('exists')
+        $this->baseRedis->expects($this->at(0))->method('mSet')
+            ->with([ '_foo' => 's:3:"bar";', '_fred' => 's:6:"wibble";' ]);
+        $this->baseRedis->expects($this->exactly(2))->method('expire');
+
+        $this->baseRedis->expects($this->at(3))->method('exists')
             ->willReturn(true);
-        $this->baseRedis->expects($this->at(2))->method('mGet')
+        $this->baseRedis->expects($this->at(4))->method('mGet')
             ->with([ '_foo', '_fred' ])->willReturn([ serialize('bar'), serialize('wibble') ]);
-        $this->baseRedis->expects($this->at(3))->method('mGet')
-            ->with([ '_garply' ])->willReturn([ null ]);
         $this->baseRedis->expects($this->at(5))->method('mGet')
+            ->with([ '_garply' ])->willReturn([ null ]);
+        $this->baseRedis->expects($this->at(7))->method('mGet')
             ->with(['_foo', '_fred'])->willReturn([ null, null ]);
 
         $this->redis->set([ 'foo' => 'bar', 'fred' => 'wibble' ]);
-
         $this->assertTrue($this->redis->exists('foo'));
         $this->assertEquals(['foo' => 'bar', 'fred' => 'wibble' ], $this->redis->get([ 'foo', 'fred' ]));
         $this->assertEquals(['foo' => 'bar' ], $this->redis->get([ 'foo', 'garply' ]));

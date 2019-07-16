@@ -14,6 +14,13 @@ use Api\Exception\GetItemException;
 class SubscriberService extends UserService
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $defaults = [
+        'type' => 1
+    ];
+
+    /**
      * The default type value for users.
      */
     protected $type = 1;

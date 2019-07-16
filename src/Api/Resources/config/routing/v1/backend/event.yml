@@ -1,70 +1,70 @@
-api_v1_backend_event_create:
+api_v1_backend_event_create_item:
     path:     /events/new
-    defaults: { _controller: ApiBundle:V1/Backend/Event:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Event:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_event_delete:
+api_v1_backend_event_delete_item:
     path:     /events/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Event:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/Event:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_event_patch:
-    path:     /events/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Event:patch }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_event_save:
+api_v1_backend_event_delete_list:
     path:     /events
-    defaults: { _controller: ApiBundle:V1/Backend/Event:save }
-    methods:  [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Event:deleteList }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_event_show:
+api_v1_backend_event_get_item:
     path:     /events/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Event:show }
+    defaults: { _controller: ApiBundle:V1/Backend/Event:getItem }
     methods:  [ GET ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_event_update:
+api_v1_backend_event_get_list:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_event_patch_item:
     path:     /events/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Event:update }
+    defaults: { _controller: ApiBundle:V1/Backend/Event:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_event_patch_list:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_event_save_item:
+    path:     /events
+    defaults: { _controller: ApiBundle:V1/Backend/Event:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_event_update_item:
+    path:     /events/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Event:updateItem }
     methods:  [ PUT ]
     options:
         expose: true
     requirements:
         id: \d+
-
-api_v1_backend_events_delete:
-    path:     /events
-    defaults: { _controller: ApiBundle:V1/Backend/Event:deleteSelected }
-    methods:  [ DELETE ]
-    options:
-        expose: true
-
-api_v1_backend_events_list:
-    path:     /events
-    defaults: { _controller: ApiBundle:V1/Backend/Event:list, format: '.json' }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_events_patch:
-    path:     /events
-    defaults: { _controller: ApiBundle:V1/Backend/Event:patchSelected }
-    methods:  [ PATCH ]
-    options:
-        expose: true

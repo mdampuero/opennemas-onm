@@ -104,6 +104,11 @@ class Redirector
             throw new \InvalidArgumentException();
         }
 
+        $source = $this->container->get('data.manager.filter')
+            ->set($source)
+            ->filter('url_decode')
+            ->get();
+
         if (!is_array($contentType) && !empty($contentType)) {
             $contentType = [ $contentType ];
         }

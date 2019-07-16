@@ -9,7 +9,6 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $window
      *
      * @description
      *   Provides actions to edit, save and update subscriptions.
@@ -42,21 +41,15 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_subscription_create',
-          redirect: 'backend_subscription_show',
-          save:     'api_v1_backend_subscription_save',
-          show:     'api_v1_backend_subscription_show',
-          update:   'api_v1_backend_subscription_update'
+          createItem: 'api_v1_backend_subscription_create_item',
+          getItem:    'api_v1_backend_subscription_get_item',
+          redirect:   'backend_subscription_show',
+          saveItem:   'api_v1_backend_subscription_save_item',
+          updateItem: 'api_v1_backend_subscription_update_item'
         };
 
         /**
-         * @function getItemId
-         * @memberOf SubscriptionCtrl
-         *
-         * @description
-         *   Returns the item id.
-         *
-         * @return {Integer} The item id.
+         * @inheritdoc
          */
         $scope.getItemId = function() {
           return $scope.item.pk_user_group;
@@ -85,20 +78,6 @@
 
           return privileges.length ?
             parseInt(privileges[0].pk_privilege) : null;
-        };
-
-        /**
-         * @function itemHasId
-         * @memberOf SubscriptionCtrl
-         *
-         * @description
-         *   Checks if the current item has an id.
-         *
-         * @return {Boolean} True if the item has an id. False otherwise.
-         */
-        $scope.itemHasId = function() {
-          return $scope.item.pk_user_group &&
-            $scope.item.pk_user_group !== null;
         };
       }
     ]);

@@ -21,11 +21,49 @@ class OpinionController extends ContentOldController
     protected $extension = 'OPINION_MANAGER';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_opinion_show';
+    protected $getItemRoute = 'api_v1_backend_opinion_get_item';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.opinion';
+
+    /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(\Opinion::EXTRA_INFO_TYPE, []);
+
+        return new JsonResponse([ 'extrafields' => $settings ]);
+    }
+
+    /**
+     * Description of this action.
+     *
+     * @return Response The response object.
+     */
+    public function getPreviewAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $session = $this->get('session');
+        $content = $session->get('last_preview');
+
+        $session->remove('last_preview');
+
+        return new Response($content);
+    }
 
     /**
      * Saves configuration for tags.
@@ -55,30 +93,13 @@ class OpinionController extends ContentOldController
     }
 
     /**
-     * Get the tag config.
+     * Previews an opinion in frontend by sending the opinion info by POST.
      *
      * @param Request $request The request object.
      *
-     * @return JsonResponse The response object.
+     * @return Response The response object.
      */
-    public function showConfigAction()
-    {
-        $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get(\Opinion::EXTRA_INFO_TYPE, []);
-
-        return new JsonResponse([ 'extrafields' => $settings ]);
-    }
-
-    /**
-     * Previews an opinion in frontend by sending the opinion info by POST.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     */
-    public function previewAction(Request $request)
+    public function savePreviewAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
@@ -180,27 +201,8 @@ class OpinionController extends ContentOldController
     }
 
     /**
-     * Description of this action.
-     *
-     * @return Response The response object.
+     * {@inheritdoc}
      */
-    public function getPreviewAction()
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
-
-        $session = $this->get('session');
-        $content = $session->get('last_preview');
-
-        $session->remove('last_preview');
-
-        return new Response($content);
-    }
-
-    /**
-     * Returns a list of extra data
-     *
-     * @return array
-     **/
     protected function getExtraData($items = null)
     {
         $extra = parent::getExtraData($items);
@@ -219,22 +221,15 @@ class OpinionController extends ContentOldController
     }
 
     /**
-     * Returns the list of l10n keys
-     * @param Type $var Description
-     *
-     * @return array
-     **/
+     * {@inheritdoc}
+     */
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('opinion');
     }
 
     /**
-     * Returns the list of contents related with items.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
+     * {@inheritdoc}
      */
     protected function getRelatedContents($content)
     {

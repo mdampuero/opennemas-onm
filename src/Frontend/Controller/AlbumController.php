@@ -65,6 +65,11 @@ class AlbumController extends FrontendController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.album';
+
+    /**
      * The list of templates per action.
      *
      * @var array
@@ -142,6 +147,7 @@ class AlbumController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
+        $params['tags']   = $this->getTags($params['content']);
         $params['author'] = $this->get('user_repository')
             ->find($params['content']->fk_author);
 

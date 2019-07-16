@@ -48,11 +48,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_url_create',
-          redirect: 'backend_url_show',
-          save:     'api_v1_backend_url_save',
-          show:     'api_v1_backend_url_show',
-          update:   'api_v1_backend_url_update'
+          createItem: 'api_v1_backend_url_create_item',
+          getItem:    'api_v1_backend_url_get_item',
+          redirect:   'backend_url_show',
+          saveItem:   'api_v1_backend_url_save_item',
+          updateItem: 'api_v1_backend_url_update_item'
         };
 
         // Updates item target when selected content from content picker changes

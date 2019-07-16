@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  SubscriberSettingsCtrl
+     * @name  SubscriberConfigCtrl
      *
      * @requires $controller
      * @requires $uibModal
@@ -14,11 +14,11 @@
      * @description
      *   Handles actions for advertisement inner.
      */
-    .controller('SubscriberSettingsCtrl', [
+    .controller('SubscriberConfigCtrl', [
       '$scope', 'cleaner', 'http', 'messenger',
       function($scope, cleaner, http, messenger) {
         /**
-         * @memberOf SubscriberSettingsCtrl
+         * @memberOf SubscriberConfigCtrl
          *
          * @description
          *  The settings object.
@@ -29,7 +29,7 @@
 
         /**
          * @function add
-         * @memberOf SubscriberSettingsCtrl
+         * @memberOf SubscriberConfigCtrl
          *
          * @description
          *   Adds a new field to the field list.
@@ -44,7 +44,7 @@
 
         /**
          * @function list
-         * @memberOf SubscriberSettingsCtrl
+         * @memberOf SubscriberConfigCtrl
          *
          * @description
          *   Gets the list of settings.
@@ -52,7 +52,7 @@
         $scope.list = function() {
           $scope.loading = true;
 
-          http.get('api_v1_backend_subscribers_settings_list')
+          http.get('api_v1_backend_subscriber_get_config')
             .then(function(response) {
               $scope.loading = false;
 
@@ -68,7 +68,7 @@
 
         /**
          * @function removeField
-         * @memberOf SubscriberSettingsCtrl
+         * @memberOf SubscriberConfigCtrl
          *
          * @description
          *   Removes a field from the field list.
@@ -81,7 +81,7 @@
 
         /**
          * @function save
-         * @memberOf SubscriberSettingsCtrl
+         * @memberOf SubscriberConfigCtrl
          *
          * @description
          *   Saves the list of settings.
@@ -91,7 +91,7 @@
 
           var data = cleaner.clean($scope.settings);
 
-          http.put('api_v1_backend_subscribers_settings_save', data)
+          http.put('api_v1_backend_subscriber_save_config', data)
             .then(function(response) {
               $scope.saving = false;
 

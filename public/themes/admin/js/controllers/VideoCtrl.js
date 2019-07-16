@@ -49,11 +49,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @type {Object}
      */
     $scope.routes = {
-      create:   'api_v1_backend_video_create',
-      redirect: 'backend_video_show',
-      save:     'api_v1_backend_video_save',
-      show:     'api_v1_backend_video_show',
-      update:   'api_v1_backend_video_update'
+      createItem: 'api_v1_backend_video_create_item',
+      getItem:    'api_v1_backend_video_get_item',
+      redirect:   'backend_video_show',
+      saveItem:   'api_v1_backend_video_save_item',
+      updateItem: 'api_v1_backend_video_update_item'
     };
 
     /**

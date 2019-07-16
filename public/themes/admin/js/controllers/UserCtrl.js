@@ -48,34 +48,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_user_create',
-          redirect: 'backend_user_show',
-          save:     'api_v1_backend_user_save',
-          show:     'api_v1_backend_user_show',
-          update:   'api_v1_backend_user_update'
-        };
-
-        /**
-         * @function areAllCategoriesSelected
-         * @memberOf AdvertisementCtrl
-         *
-         * @description
-         *   Checks if all user groups are selected.
-         *
-         * @return {Boolean} True if all user groups are selected. False
-         *                   otherwise.
-         */
-        $scope.areAllCategoriesSelected = function() {
-          if ($scope.flags.categories.all) {
-            $scope.item.categories = $scope.data.extra.categories
-              .map(function(e) {
-                return e.id;
-              });
-
-            return;
-          }
-
-          $scope.item.categories = [];
+          createItem: 'api_v1_backend_user_create_item',
+          getItem:    'api_v1_backend_user_get_item',
+          redirect:   'backend_user_show',
+          saveItem:   'api_v1_backend_user_save_item',
+          updateItem: 'api_v1_backend_user_update_item'
         };
 
         /**
@@ -143,7 +120,7 @@
                 return function() {
                   var data  = $scope.getData();
                   var route = {
-                    name: 'api_v1_backend_user_update',
+                    name: $scope.routes.updateItem,
                     params: { id: $scope.item.id }
                   };
 
@@ -311,19 +288,6 @@
             $scope.item.categories = [];
           }
         });
-
-        // Updates flag for "Select/deselect all" control when categories change
-        $scope.$watch('item.categories', function(nv) {
-          if (!$scope.flags.categories) {
-            return;
-          }
-
-          $scope.flags.categories.all = false;
-
-          if (nv.length === Object.keys($scope.data.extra.categories).length) {
-            $scope.flags.categories.all = true;
-          }
-        }, true);
       }
     ]);
 })();

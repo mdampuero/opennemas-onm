@@ -1,70 +1,70 @@
-api_v1_backend_user_create:
+api_v1_backend_user_create_item:
     path:     /users/new
-    defaults: { _controller: ApiBundle:V1/Backend/User:create }
+    defaults: { _controller: ApiBundle:V1/Backend/User:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_user_delete:
+api_v1_backend_user_delete_item:
     path:     /users/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/User:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/User:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_user_patch:
-    path:     /users/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/User:patch }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_user_save:
+api_v1_backend_user_delete_list:
     path:     /users
-    defaults: { _controller: ApiBundle:V1/Backend/User:save }
-    methods:  [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/User:deleteList }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_user_show:
+api_v1_backend_user_get_item:
     path:     /users/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/User:show }
+    defaults: { _controller: ApiBundle:V1/Backend/User:getItem }
     methods:  [ GET ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_user_update:
+api_v1_backend_user_get_list:
+    path:     /users
+    defaults: { _controller: ApiBundle:V1/Backend/User:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_user_patch_item:
     path:     /users/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/User:update }
+    defaults: { _controller: ApiBundle:V1/Backend/User:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_user_patch_list:
+    path:     /users
+    defaults: { _controller: ApiBundle:V1/Backend/User:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_user_save_item:
+    path:     /users
+    defaults: { _controller: ApiBundle:V1/Backend/User:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_user_update_item:
+    path:     /users/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/User:updateItem }
     methods:  [ PUT ]
     options:
         expose: true
     requirements:
         id: \d+
-
-api_v1_backend_users_delete:
-    path:     /users
-    defaults: { _controller: ApiBundle:V1/Backend/User:deleteSelected }
-    methods:  [ DELETE ]
-    options:
-        expose: true
-
-api_v1_backend_users_list:
-    path:     /users
-    defaults: { _controller: ApiBundle:V1/Backend/User:list }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_users_patch:
-    path:     /users
-    defaults: { _controller: ApiBundle:V1/Backend/User:patchSelected }
-    methods:  [ PATCH ]
-    options:
-        expose: true

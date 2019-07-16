@@ -100,8 +100,16 @@
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="ignoreMode || app.mode === 'list'">
+  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
     {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
+  </li>
+  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
+    <span class="h-seperate"></span>
+  </li>
+  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
+    <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': flags.http.loading }"></i>
+    </button>
   </li>
 {/block}
 
@@ -112,6 +120,6 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/modals/modal.trash.tpl"}
+    {include file="common/extension/modal.trash.tpl"}
   </script>
 {/block}

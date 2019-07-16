@@ -41,7 +41,7 @@ class ApiController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function createAction()
+    public function createItemAction()
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('create'));
 
@@ -55,7 +55,7 @@ class ApiController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function deleteAction($id)
+    public function deleteItemAction($id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
 
@@ -75,7 +75,7 @@ class ApiController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function deleteSelectedAction(Request $request)
+    public function deleteListAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
 
@@ -101,13 +101,33 @@ class ApiController extends Controller
     }
 
     /**
+     * Returns an item.
+     *
+     * @param integer $id The item id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getItemAction($id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('show'));
+
+        $ss   = $this->get($this->service);
+        $item = $ss->getItem($id);
+
+        return new JsonResponse([
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData($item)
+        ]);
+    }
+
+    /**
      * Returns a list of items.
      *
      * @param Request $request The request object.
      *
      * @return array The list of items and all extra information.
      */
-    public function listAction(Request $request)
+    public function getListAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
@@ -131,7 +151,7 @@ class ApiController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function patchAction(Request $request, $id)
+    public function patchItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
 
@@ -151,7 +171,7 @@ class ApiController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function patchSelectedAction(Request $request)
+    public function patchListAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
 
@@ -188,7 +208,7 @@ class ApiController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function saveAction(Request $request)
+    public function saveItemAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('save'));
 
@@ -211,33 +231,13 @@ class ApiController extends Controller
     }
 
     /**
-     * Returns an item.
-     *
-     * @param integer $id The item id.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function showAction($id)
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('show'));
-
-        $ss   = $this->get($this->service);
-        $item = $ss->getItem($id);
-
-        return new JsonResponse([
-            'item'  => $ss->responsify($item),
-            'extra' => $this->getExtraData($item)
-        ]);
-    }
-
-    /**
      * Updates the item information given its id and the new information.
      *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      */
-    public function updateAction(Request $request, $id)
+    public function updateItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 

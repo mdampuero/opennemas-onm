@@ -54,11 +54,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_newsletter_delete',
-          deleteSelected: 'api_v1_backend_newsletters_delete',
-          list:           'api_v1_backend_newsletters_list',
-          patch:          'api_v1_backend_newsletter_patch',
-          patchSelected:  'api_v1_backend_newsletters_patch'
+          deleteItem: 'api_v1_backend_newsletter_delete',
+          deletelist: 'api_v1_backend_newsletters_delete',
+          getList:    'api_v1_backend_newsletters_list',
+          patchItem:  'api_v1_backend_newsletter_patch',
+          patchList:  'api_v1_backend_newsletters_patch'
         };
 
         /**

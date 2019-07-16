@@ -28,7 +28,7 @@ class TagController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_tag_show';
+    protected $getItemRoute = 'api_v1_backend_tag_get_item';
 
     /**
      * {@inheritdoc}
@@ -47,6 +47,32 @@ class TagController extends ApiController
      * {@inheritdoc}
      */
     protected $service = 'api.service.tag';
+
+    /**
+     * Get the tag config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get([ 'blacklist_tag', 'tags_maxItems', 'tags_maxResults' ]);
+
+        if (array_key_exists('tags_maxItems', $settings)) {
+            $settings['tags_maxItems'] = (int) $settings['tags_maxItems'];
+        }
+
+        if (array_key_exists('tags_maxResults', $settings)) {
+            $settings['tags_maxResults'] = (int) $settings['tags_maxResults'];
+        }
+
+        return new JsonResponse($settings);
+    }
 
     /**
      * Saves configuration for tags.
@@ -81,40 +107,13 @@ class TagController extends ApiController
     }
 
     /**
-     * Get the tag config.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function showConfigAction()
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get([ 'blacklist_tag', 'tags_maxItems', 'tags_maxResults' ]);
-
-        if (array_key_exists('tags_maxItems', $settings)) {
-            $settings['tags_maxItems'] = (int) $settings['tags_maxItems'];
-        }
-
-        if (array_key_exists('tags_maxResults', $settings)) {
-            $settings['tags_maxResults'] = (int) $settings['tags_maxResults'];
-        }
-
-        return new JsonResponse($settings);
-    }
-
-
-    /**
      * Checks if the information in the request is valid to create a new Tag.
      *
      * @param Request $request The request object.
      *
      * @return Response The response object.
      */
-    public function validateAction(Request $request)
+    public function validateItemAction(Request $request)
     {
         $msg  = $this->get('core.messenger');
         $data = $request->query->all();

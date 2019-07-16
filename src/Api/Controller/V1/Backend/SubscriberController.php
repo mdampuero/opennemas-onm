@@ -9,84 +9,57 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
+use Api\Controller\V1\ApiController;
 use League\Csv\Writer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Intl\Intl;
 
 /**
  * Displays, saves, modifies and removes subscribers.
  */
-class SubscriberController extends Controller
+class SubscriberController extends ApiController
 {
     /**
-     * Returns the data to create a new subscriber.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
+    protected $extension = 'CONTENT_SUBSCRIPTIONS';
 
     /**
-     * Deletes a subscriber.
-     *
-     * @param integer $id The subscriber id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteAction($id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.subscriber')->deleteItem($id);
-
-        // TODO: Remove when deprecated old user_repository
-        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
-
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $getItemRoute = 'api_v1_backend_subscriber_get_item';
 
     /**
-     * Deletes the selected subscribers.
-     *
-     * @param Request $request The request object.
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'SUBSCRIBER_CREATE',
+        'delete' => 'SUBSCRIBER_DELETE',
+        'list'   => 'SUBSCRIBER_ADMIN',
+        'patch'  => 'SUBSCRIBER_UPDATE',
+        'save'   => 'SUBSCRIBER_CREATE',
+        'show'   => 'SUBSCRIBER_UPDATE',
+        'update' => 'SUBSCRIBER_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.subscriber';
+
+    /**
+     * Returns the list of settings for CONTENT_SUBSCRIPTIONS extension.
      *
      * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_DELETE')")
      */
-    public function deleteSelectedAction(Request $request)
+    public function getConfigAction()
     {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.subscriber')->deleteList($ids);
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('user_settings', []);
 
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
-        }
-
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return new JsonResponse([ 'settings' => $settings ]);
     }
 
     /**
@@ -96,7 +69,7 @@ class SubscriberController extends Controller
      *
      * @return Response The response object.
      */
-    public function exportAction()
+    public function getReportAction()
     {
         // Get information
         $items = $this->get('api.service.subscriber')->getList();
@@ -169,109 +142,13 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Returns the list of subscribers.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_LIST')")
-     */
-    public function listAction(Request $request)
-    {
-        $ss       = $this->get('api.service.subscriber');
-        $oql      = $request->query->get('oql', '');
-        $response = $ss->getList($oql);
-
-        $response['extra'] = $this->getExtraData($response['items']);
-        $response['items'] = $ss->responsify($response['items']);
-
-        return new JsonResponse($response);
-    }
-
-    /**
-     * Returns the list of settings for CONTENT_SUBSCRIPTIONS extension.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function listSettingsAction()
-    {
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('user_settings', []);
-
-        return new JsonResponse([ 'settings' => $settings ]);
-    }
-
-    /**
-     * Updates some properties for a subscriber.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
-     */
-    public function patchAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.subscriber')
-            ->patchItem($id, $request->request->all());
-
-        // TODO: Remove when deprecated old user_repository
-        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Updates some properties for a list of subscribers.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
-     */
-    public function patchSelectedAction(Request $request)
-    {
-        $params = $request->request->all();
-        $ids    = $params['ids'];
-        $msg    = $this->get('core.messenger');
-
-        unset($params['ids']);
-
-        $updated = $this->get('api.service.subscriber')
-            ->patchList($ids, $params);
-
-        if ($updated > 0) {
-            $msg->add(
-                sprintf(_('%s items updated successfully'), $updated),
-                'success'
-            );
-        }
-
-        if ($updated !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be updated successfully'),
-                count($ids) - $updated
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
      * Saves settings for CONTENT_SUBSCRIPTIONS extension.
      *
      * @param Request $request The request object.
      *
-     * @return JsonResposne The response object.
+     * @return JsonResponse The response object.
      */
-    public function saveSettingsAction(Request $request)
+    public function saveConfigAction(Request $request)
     {
         $msg      = $this->get('core.messenger');
         $settings = $request->request->all();
@@ -296,102 +173,57 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Saves a new subscriber.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_CREATE')")
+     * {@inheritdoc}
      */
-    public function saveAction(Request $request)
+    protected function getExtraData($items = null)
     {
-        $msg = $this->get('core.messenger');
-
-        $user = $this->get('api.service.subscriber')
-            ->createItem($request->request->all());
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_subscriber_show',
-                [ 'id' => $user->id ]
-            )
-        );
-
-        return $response;
+        return [
+            'client'        => $this->getClient(),
+            'countries'     => $this->get('core.geo')->getCountries(),
+            'photos'        => $this->getPhotos($items),
+            'settings'      => $this->getSettings(),
+            'subscriptions' => $this->getSubscriptions()
+        ];
     }
 
     /**
-     * Returns a subscriber.
+     * Returns the list of photos for all items in the list.
      *
-     * @param integer $id The subscriber id.
+     * @param mixed $items The item or the list of items.
      *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
+     * @return array The list of photos.
      */
-    public function showAction($id)
+    protected function getPhotos($items = null) : array
     {
-        $ss   = $this->get('api.service.subscriber');
-        $item = $ss->getItem($id);
+        if (empty($items)) {
+            return [];
+        }
 
-        $item->user_groups = $this->get('data.manager.filter')
-            ->set($item->user_groups)
-            ->filter('mapify', [ 'key' => 'user_group_id' ])
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = array_filter(array_map(function ($a) {
+            return [ 'photo', $a->avatar_img_id ];
+        }, $items), function ($a) {
+            return !empty($a[1]);
+        });
+
+        $photos = $this->get('entity_repository')->findMulti($ids);
+
+        return $this->get('data.manager.filter')
+            ->set($photos)
+            ->filter('mapify', [ 'key' => 'pk_photo' ])
             ->get();
-
-        return new JsonResponse([
-            'item'  => $ss->responsify($item),
-            'extra' => $this->getExtraData([ $item ])
-        ]);
     }
 
     /**
-     * Updates the subscriber information given its id and the new information.
+     * Returns the list of extra fields for subscribers.
      *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('SUBSCRIBER_UPDATE')")
+     * @return array The list of extra fields.
      */
-    public function updateAction(Request $request, $id)
+    protected function getSettings() : array
     {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.subscriber')
-            ->updateItem($id, $request->request->all());
-
-        // TODO: Remove when deprecated old user_repository
-        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of extra data.
-     *
-     * @param array $item The list of items.
-     *
-     * @return array The extra data.
-     */
-    private function getExtraData($items = null)
-    {
-        $client   = null;
-        $ss       = $this->get('api.service.subscription');
-        $photos   = [];
-        $response = $ss->getList();
-
-        $subscriptions = $this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', [ 'key' => 'pk_user_group' ])
-            ->get();
-
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('user_settings', []);
@@ -400,39 +232,29 @@ class SubscriberController extends Controller
             $settings = [ 'fields' => [] ];
         }
 
-        if (!array_key_exists('fields', $settings) || !is_array($settings['fields'])) {
+        if (!array_key_exists('fields', $settings)
+            || !is_array($settings['fields'])
+        ) {
             $settings['fields'] = [];
         }
 
-        if (!empty($items)) {
-            $ids = array_filter(array_map(function ($a) {
-                return [ 'photo', $a->avatar_img_id ];
-            }, $items), function ($a) {
-                return !empty($a);
-            });
+        return $settings;
+    }
 
-            $photos = $this->get('entity_repository')->findMulti($ids);
-            $photos = $this->get('data.manager.filter')
-                ->set($photos)
-                ->filter('mapify', [ 'key' => 'pk_photo' ])
-                ->get();
-        }
+    /**
+     * Returns the list of subscriptions.
+     *
+     * @return array The list of subscriptions.
+     */
+    protected function getSubscriptions() : array
+    {
+        $ss = $this->get('api.service.subscription');
 
-        $em = $this->get('orm.manager');
+        $subscriptions = $ss->getList()['items'];
 
-        if (!empty($this->get('core.instance')->getClient())) {
-            $client = $em->getRepository('Client')
-                ->find($this->get('core.instance')->getClient());
-
-            $client = $em->getConverter('Client')->responsify($client);
-        }
-
-        return [
-            'countries'     => Intl::getRegionBundle()->getCountryNames(),
-            'client'        => $client,
-            'photos'        => $photos,
-            'settings'      => $settings,
-            'subscriptions' => $ss->responsify($subscriptions)
-        ];
+        return $ss->responsify($this->get('data.manager.filter')
+            ->set($subscriptions)
+            ->filter('mapify', [ 'key' => 'pk_user_group'])
+            ->get());
     }
 }

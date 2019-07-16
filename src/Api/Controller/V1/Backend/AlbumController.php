@@ -9,8 +9,6 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class AlbumController extends ContentOldController
@@ -21,16 +19,19 @@ class AlbumController extends ContentOldController
     protected $extension = 'ALBUM_MANAGER';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_album_show';
+    protected $getItemRoute = 'api_v1_backend_album_get_item';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.album';
 
     /**
      * {@inheritDoc}
      */
-    public function getExtraData($items = null)
+    protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
@@ -40,9 +41,9 @@ class AlbumController extends ContentOldController
     }
 
     /**
-     * {@inheritDoc}`
+     * {@inheritDoc}
      */
-    public function getL10nKeys()
+    protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('album');
     }

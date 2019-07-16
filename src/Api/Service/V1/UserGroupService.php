@@ -16,6 +16,13 @@ class UserGroupService extends OrmService
     /**
      * {@inheritdoc}
      */
+    protected $defaults = [
+        'type' => 0
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItem($id)
     {
         try {

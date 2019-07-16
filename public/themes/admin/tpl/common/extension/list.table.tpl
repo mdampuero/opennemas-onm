@@ -1,16 +1,10 @@
-<div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
+<div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <span class="column-filters-ellipsis"></span>
 </div>
-<div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
+<div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <h5>{t}Columns{/t}</h5>
   <div>
   {block name="commonColumns"}
-    <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-media" checklist-model="app.columns.selected" checklist-value="'media'" type="checkbox">
-      <label for="checkbox-media">
-        {t}Media{/t}
-      </label>
-    </div>
     <div class="checkbox column-filters-checkbox">
       <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" disabled type="checkbox">
       <label for="checkbox-title">
@@ -61,29 +55,21 @@
     </div>
     {/block}
     {block name="customColumns"}{/block}
-    <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'content_status'" type="checkbox">
-      <label for="checkbox-published">
-        {t}Published{/t}
-      </label>
-    </div>
   </div>
 </div>
-<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (ignoreMode || app.mode === 'list')">
+<div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">
       <table class="table table-fixed table-hover no-margin">
         <thead>
           <tr>
+            <th class="text-center v-align-middle" width="50">
+              <div class="checkbox checkbox-default">
+                <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
+                <label for="select-all"></label>
+              </div>
+            </th>
             {block name="commonColumnsHeader"}
-              <th class="text-center v-align-middle" width="50">
-                <div class="checkbox checkbox-default">
-                  <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
-                  <label for="select-all"></label>
-                </div>
-              </th>
-              <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
-              </th>
               <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
                 {t}Title{/t}
               </th>
@@ -176,9 +162,14 @@
                 </small>
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
-                <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]">
-                  [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
-                </a>
+                {block name="categoryColumn"}
+                  <small class="text-italic" ng-if="!item.pk_fk_content_category">
+                    &lt;{t}No category{/t}&gt;
+                  </small>
+                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]" ng-if="item.pk_fk_content_category">
+                    [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
+                  </a>
+                {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
                 <small class="text-italic" ng-if="!item.tags || item.tags.length === 0">
@@ -194,7 +185,7 @@
                 <small class="text-italic" ng-if="!item.fk_author || (data.extra.authors | filter : { id: item.fk_author }).length === 0">
                   &lt;{t}No author{/t}&gt;
                 </small>
-                <a href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]" ng-if="item.fk_author && (data.extra.authors | filter : { id: item.fk_author }).length > 0">
+                <a class="text-bold" href="[% routing.generate('backend_author_show', { id: item.fk_author }) %]" ng-if="item.fk_author && (data.extra.authors | filter : { id: item.fk_author }).length > 0">
                   [% (data.extra.authors | filter : { id: item.fk_author })[0].name %]
                 </a>
               </td>

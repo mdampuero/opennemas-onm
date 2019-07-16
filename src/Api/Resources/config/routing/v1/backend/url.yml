@@ -1,70 +1,70 @@
-api_v1_backend_url_create:
+api_v1_backend_url_create_item:
     path:     /urls/new
-    defaults: { _controller: ApiBundle:V1/Backend/Url:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Url:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_url_delete:
+api_v1_backend_url_delete_item:
     path:     /urls/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Url:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/Url:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_url_patch:
-    path:     /urls/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Url:patch }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_url_save:
+api_v1_backend_url_delete_list:
     path:     /urls
-    defaults: { _controller: ApiBundle:V1/Backend/Url:save }
-    methods:  [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Url:deleteList }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_url_show:
+api_v1_backend_url_get_item:
     path:     /urls/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Url:show }
+    defaults: { _controller: ApiBundle:V1/Backend/Url:getItem }
     methods:  [ GET ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_url_update:
+api_v1_backend_url_get_list:
+    path:     /urls
+    defaults: { _controller: ApiBundle:V1/Backend/Url:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_url_patch_item:
     path:     /urls/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Url:update }
+    defaults: { _controller: ApiBundle:V1/Backend/Url:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_url_patch_list:
+    path:     /urls
+    defaults: { _controller: ApiBundle:V1/Backend/Url:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_url_save_item:
+    path:     /urls
+    defaults: { _controller: ApiBundle:V1/Backend/Url:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_url_update_item:
+    path:     /urls/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Url:updateItem }
     methods:  [ PUT ]
     options:
         expose: true
     requirements:
         id: \d+
-
-api_v1_backend_urls_delete:
-    path:     /urls
-    defaults: { _controller: ApiBundle:V1/Backend/Url:deleteSelected }
-    methods:  [ DELETE ]
-    options:
-        expose: true
-
-api_v1_backend_urls_list:
-    path:     /urls
-    defaults: { _controller: ApiBundle:V1/Backend/Url:list, format: '.json' }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_urls_patch:
-    path:     /urls
-    defaults: { _controller: ApiBundle:V1/Backend/Url:patchSelected }
-    methods:  [ PATCH ]
-    options:
-        expose: true

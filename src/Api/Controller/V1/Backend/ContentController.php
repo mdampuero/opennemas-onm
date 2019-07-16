@@ -16,89 +16,44 @@ use Symfony\Component\HttpFoundation\Request;
 class ContentController extends ApiController
 {
     /**
-     * The API service name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $service = 'api.service.content';
 
     /**
-     * Returns the content id
-     *
-     * @param Content $item the item
-     *
-     * @return integer
-     **/
-    public function getItemId($item)
+     * {@inheritdoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        return [
+            'authors'          => $this->getAuthors(),
+            'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
+            'keys'             => $this->getL10nKeys(),
+            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
+            'paths'            => [
+                'photo'        => $this->get('core.instance')->getImagesShortPath(),
+                'attachment'   => $this->get('core.instance')->getFilesShortPath(),
+            ],
+            'related_contents' => $this->getRelatedContents($items),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemId($item)
     {
         return $item->pk_content;
     }
 
     /**
-     * Saves a new item.
+     * Returns the list of l10n keys.
      *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
+     * @return array The list of l10n keys.
      */
-    public function saveAction(Request $request)
+    protected function getL10nKeys()
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
-
-        $msg  = $this->get('core.messenger');
-        $data = $request->request->all();
-        $item = $this->get($this->service)->createItem($data);
-
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-
-        if (!empty($this->getItemRoute)) {
-            $response->headers->set('Location', $this->generateUrl(
-                $this->getItemRoute,
-                [ 'id' => $this->getItemId($item) ]
-            ));
-        }
-
-        return $response;
-    }
-
-    /**
-     * Updates the item information given its id and the new information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
-
-        $msg  = $this->get('core.messenger');
-        $data = $request->request->all();
-
-        $this->get($this->service)->updateItem($id, $data);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of extra data
-     *
-     * @return array
-     **/
-    protected function getExtraData($items = null)
-    {
-        return [
-            'related_contents' => $this->getRelatedContents($items),
-            'keys'             => $this->get($this->service)->getL10nKeys(),
-            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
-            'template_vars'    => [
-                'media_dir' => $this->get('core.instance')->getMediaShortPath() . '/images',
-            ],
-        ];
+        return $this->get($this->service)->getL10nKeys();
     }
 
     /**

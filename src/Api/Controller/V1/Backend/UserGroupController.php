@@ -9,237 +9,52 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Api\Controller\V1\ApiController;
 
 /**
  * Displays, saves, modifies and removes user groups.
  */
-class UserGroupController extends Controller
+class UserGroupController extends ApiController
 {
     /**
-     * Returns the data to create a new user group.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
+    protected $extension = 'USER_GROUP_MANAGER';
 
     /**
-     * Deletes an user group.
-     *
-     * @param integer $id The user group id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteAction($id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.user_group')->deleteItem($id);
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $getItemRoute = 'api_v1_backend_user_group_get_item';
 
     /**
-     * Deletes the selected user groups.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteSelectedAction(Request $request)
-    {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.user_group')->deleteList($ids);
-
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
-        }
-
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $permissions = [
+        'create' => 'GROUP_CREATE',
+        'delete' => 'GROUP_DELETE',
+        'list'   => 'GROUP_ADMIN',
+        'patch'  => 'GROUP_UPDATE',
+        'save'   => 'GROUP_CREATE',
+        'show'   => 'GROUP_UPDATE',
+        'update' => 'GROUP_UPDATE',
+    ];
 
     /**
-     * Returns the list of user groups.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_LIST')")
+     * {@inheritdoc}
      */
-    public function listAction(Request $request)
-    {
-        $ss       = $this->get('api.service.user_group');
-        $oql      = $request->query->get('oql', '');
-        $response = $ss->getList($oql);
-
-        $response['items'] = $ss->responsify($response['items']);
-
-        return new JsonResponse($response);
-    }
+    protected $service = 'api.service.user_group';
 
     /**
-     * Updates some instance properties.
+     * Returns the list of extensions.
      *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_UPDATE')")
+     * @return array The list of extensions.
      */
-    public function patchAction(Request $request, $id)
+    protected function getExtensions() : array
     {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.user_group')
-            ->patchItem($id, $request->request->all());
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Updates some user group properties.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_UPDATE')")
-     */
-    public function patchSelectedAction(Request $request)
-    {
-        $params = $request->request->all();
-        $ids    = $params['ids'];
-        $msg    = $this->get('core.messenger');
-
-        unset($params['ids']);
-
-        $updated = $this->get('api.service.user_group')
-            ->patchList($ids, $params);
-
-        if ($updated > 0) {
-            $msg->add(
-                sprintf(_('%s items updated successfully'), $updated),
-                'success'
-            );
-        }
-
-        if ($updated !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be updated successfully'),
-                count($ids) - $updated
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Saves a new user group.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_CREATE')")
-     */
-    public function saveAction(Request $request)
-    {
-        $msg = $this->get('core.messenger');
-
-        $userGroup = $this->get('api.service.user_group')
-            ->createItem($request->request->all());
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_user_group_show',
-                [ 'id' => $userGroup->pk_user_group ]
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * Returns an user group.
-     *
-     * @param integer $id The group id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_UPDATE')")
-     */
-    public function showAction($id)
-    {
-        $ss = $this->get('api.service.user_group');
-
-        return new JsonResponse([
-            'item'  => $ss->responsify($ss->getItem($id)),
-            'extra' => $this->getExtraData()
-        ]);
-    }
-
-    /**
-     * Updates the user group information given its id and the new information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('GROUP_UPDATE')")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.user_group')
-            ->updateItem($id, $request->request->all());
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of extra data.
-     *
-     * @return array The extra data.
-     */
-    private function getExtraData()
-    {
-        $locale  = $this->get('core.locale')->getLocaleShort();
-        $modules = \Privilege::getPrivilegesByModules();
-        $oql     = sprintf(
+        $locale = $this->get('core.locale')->getLocaleShort();
+        $oql    = sprintf(
             "uuid in ['%s']",
-            implode("','", array_keys($modules))
+            implode("','", array_keys(\Privilege::getPrivilegesByModules()))
         );
 
         $extensions = $this->get('orm.manager')
@@ -251,13 +66,27 @@ class UserGroupController extends Controller
             ->filter('mapify', [ 'key' => 'uuid' ])
             ->get();
 
-        $extensions = array_map(function ($a) use ($locale) {
+        return array_map(function ($a) use ($locale) {
             return $a->getName($locale);
         }, $extensions);
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtraData($items = null)
+    {
         return [
-            'extensions' => $extensions,
-            'modules'    => $modules
+            'extensions' => $this->getExtensions(),
+            'modules'    => \Privilege::getPrivilegesByModules()
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItemId($item)
+    {
+        return $item->pk_user_group;
     }
 }

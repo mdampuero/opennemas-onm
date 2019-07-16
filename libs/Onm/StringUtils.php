@@ -410,7 +410,6 @@ class StringUtils
         'bien',
         'cabe',
         'cinco',
-        'como',
         'con',
         'conmigo',
         'contra',

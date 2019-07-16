@@ -38,7 +38,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks hidden-xs">
-              <button class="btn btn-white" id="preview-button" ng-click="preview('api_v1_backend_opinion_preview', 'api_v1_backend_opinion_get_preview')" type="button" id="preview_button">
+              <button class="btn btn-white" id="preview-button" ng-click="preview()" type="button" id="preview_button">
                 <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
                 {t}Preview{/t}
               </button>

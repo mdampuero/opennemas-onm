@@ -9,185 +9,54 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Api\Controller\V1\ApiController;
 
-class AuthorController extends UserController
+/**
+ * Displays, saves, modifies and removes authors.
+ */
+class AuthorController extends ApiController
 {
     /**
-     * Returns the data to create a new user.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('AUTHOR_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
+    protected $extension = 'USER_MANAGER';
 
     /**
-     * Deletes an user.
-     *
-     * @param integer $id The subscriber id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('AUTHOR_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteAction($id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.author')->deleteItem($id);
-
-        // TODO: Remove when deprecated old user_repository
-        $this->get('core.dispatcher')->dispatch('user.delete', ['id' => $id]);
-
-        $msg->add(_('Item deleted successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
+    protected $getItemRoute = 'api_v1_backend_author_get_item';
 
     /**
-     * Deletes the selected users.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('AUTHOR_DELETE')")
+     * {@inheritdoc}
      */
-    public function deleteSelectedAction(Request $request)
-    {
-        $ids     = $request->request->get('ids', []);
-        $msg     = $this->get('core.messenger');
-        $deleted = $this->get('api.service.author')->deleteList($ids);
+    protected $permissions = [
+        'create' => 'AUTHOR_CREATE',
+        'delete' => 'AUTHOR_DELETE',
+        'list'   => 'AUTHOR_ADMIN',
+        'patch'  => 'AUTHOR_UPDATE',
+        'save'   => 'AUTHOR_CREATE',
+        'show'   => 'AUTHOR_UPDATE',
+        'update' => 'AUTHOR_UPDATE',
+    ];
 
-        if ($deleted > 0) {
-            $msg->add(
-                sprintf(_('%s items deleted successfully'), $deleted),
-                'success'
-            );
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.author';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        if (empty($items)) {
+            return [];
         }
 
-        if ($deleted !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be deleted successfully'),
-                count($ids) - $deleted
-            ), 'error');
+        if (!is_array($items)) {
+            $items = [ $items ];
         }
 
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     *
-     * @Security("hasExtension('OPINION_MANAGER')
-     *     and hasPermission('AUTHOR_ADMIN')")
-     */
-    public function listAction(Request $request)
-    {
-        $us  = $this->get('api.service.author');
-        $oql = $request->query->get('oql', '');
-
-        $response = $us->getList($oql);
-
-        return new JsonResponse([
-            'items' => $us->responsify($response['items']),
-            'total' => $response['total'],
-            'extra' => $this->getExtraData($response['items'])
-        ]);
-    }
-
-    /**
-     * Saves a new user.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('AUTHOR_CREATE')")
-     */
-    public function saveAction(Request $request)
-    {
-        $msg = $this->get('core.messenger');
-
-        $user = $this->get('api.service.author')
-            ->createItem($request->request->all());
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-        $response->headers->set(
-            'Location',
-            $this->generateUrl(
-                'api_v1_backend_user_show',
-                [ 'id' => $user->id ]
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * Returns an user.
-     *
-     * @param integer $id The group id.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('AUTHOR_UPDATE')")
-     */
-    public function showAction($id)
-    {
-        $ss   = $this->get('api.service.author');
-        $item = $ss->getItem($id);
-
-        return new JsonResponse([
-            'item'  => $ss->responsify($item),
-            'extra' => $this->getExtraData([ $item ])
-        ]);
-    }
-
-    /**
-     * Updates the user information given its id and the new information.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('AUTHOR_UPDATE')")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $this->get('api.service.author')
-            ->updateItem($id, $request->request->all());
-
-        // TODO: Remove when deprecated old user_repository
-        $this->get('core.dispatcher')->dispatch('user.update', ['id' => $id]);
-
-        $msg->add(_('Item saved successfully'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of extra data.
-     *
-     * @param array $item The list of items.
-     *
-     * @return array Array of template parameters.
-     */
-    private function getExtraData($items = null)
-    {
         $photos = [];
 
         if (!empty($items)) {

@@ -1,70 +1,70 @@
-api_v1_backend_album_create:
+api_v1_backend_album_create_item:
     path:     /albums/new
-    defaults: { _controller: ApiBundle:V1/Backend/Album:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Album:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_album_delete:
+api_v1_backend_album_delete_item:
     path:     /albums/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Album:delete }
+    defaults: { _controller: ApiBundle:V1/Backend/Album:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_album_patch:
-    path:     /albums/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Album:patch }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_album_save:
+api_v1_backend_album_delete_list:
     path:     /albums
-    defaults: { _controller: ApiBundle:V1/Backend/Album:save }
-    methods:  [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Album:deleteList }
+    methods:  [ DELETE ]
     options:
         expose: true
 
-api_v1_backend_album_show:
+api_v1_backend_album_get_item:
     path:     /albums/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Album:show }
+    defaults: { _controller: ApiBundle:V1/Backend/Album:getItem }
     methods:  [ GET ]
     options:
         expose: true
     requirements:
         id: \d+
 
-api_v1_backend_album_update:
+api_v1_backend_album_get_list:
+    path:     /albums
+    defaults: { _controller: ApiBundle:V1/Backend/Album:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_album_patch_item:
     path:     /albums/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Album:update }
+    defaults: { _controller: ApiBundle:V1/Backend/Album:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_album_patch_list:
+    path:     /albums
+    defaults: { _controller: ApiBundle:V1/Backend/Album:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_album_save_item:
+    path:     /albums
+    defaults: { _controller: ApiBundle:V1/Backend/Album:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_album_update_item:
+    path:     /albums/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Album:updateItem }
     methods:  [ PUT ]
     options:
         expose: true
     requirements:
         id: \d+
-
-api_v1_backend_albums_delete:
-    path:     /albums
-    defaults: { _controller: ApiBundle:V1/Backend/Album:deleteSelected }
-    methods:  [ DELETE ]
-    options:
-        expose: true
-
-api_v1_backend_albums_list:
-    path:     /albums
-    defaults: { _controller: ApiBundle:V1/Backend/Album:list, format: '.json' }
-    methods:  [ GET ]
-    options:
-        expose: true
-
-api_v1_backend_albums_patch:
-    path:     /albums
-    defaults: { _controller: ApiBundle:V1/Backend/Album:patchSelected }
-    methods:  [ PATCH ]
-    options:
-        expose: true

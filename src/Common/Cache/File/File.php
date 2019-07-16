@@ -163,10 +163,10 @@ class File extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function saveMulti($data)
+    protected function saveMulti($data, $ttl)
     {
         foreach ($data as $key => $value) {
-            $this->save($key, $value);
+            $this->save($key, $value, $ttl);
         }
     }
 }

@@ -33,11 +33,11 @@
          * @inheritdoc
          */
         $scope.routes = {
-          create:   'api_v1_backend_tag_create',
-          redirect: 'backend_tag_show',
-          save:     'api_v1_backend_tag_save',
-          show:     'api_v1_backend_tag_show',
-          update:   'api_v1_backend_tag_update'
+          createItem: 'api_v1_backend_tag_create_item',
+          getItem:    'api_v1_backend_tag_get_item',
+          redirect:   'backend_tag_show',
+          saveItem:   'api_v1_backend_tag_save_item',
+          updateItem: 'api_v1_backend_tag_update_item'
         };
 
         /**

@@ -1,4 +1,10 @@
 services:
+    core.subscriber.attachment:
+        class:     Api\EventSubscriber\AttachmentSubscriber
+        arguments: [ '@core.helper.varnish' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
     core.subscriber.category:
         class:     Api\EventSubscriber\CategorySubscriber
         arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager' ]

@@ -68,11 +68,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_newsletter_template_create',
-          redirect: 'backend_newsletter_template_show',
-          save:     'api_v1_backend_newsletter_template_save',
-          show:     'api_v1_backend_newsletter_template_show',
-          update:   'api_v1_backend_newsletter_template_update'
+          createItem: 'api_v1_backend_newsletter_template_create',
+          redirect:   'backend_newsletter_template_show',
+          saveItem:   'api_v1_backend_newsletter_template_save',
+          getItem:    'api_v1_backend_newsletter_template_show',
+          updateItem: 'api_v1_backend_newsletter_template_update'
         };
 
         /**

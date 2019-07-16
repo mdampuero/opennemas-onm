@@ -17,6 +17,15 @@ class AuthorService extends UserService
     /**
      * {@inheritdoc}
      */
+    protected $defaults = [
+        'type'        => 0,
+        'activated'   => 0,
+        'user_groups' => [ [ 'user_group_id' => 3, 'status' => 1 ] ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItem($id)
     {
         try {
