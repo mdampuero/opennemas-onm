@@ -45,8 +45,8 @@
           moveList:   'api_v1_backend_category_move_list',
           patchItem:  'api_v1_backend_category_patch_item',
           patchList:  'api_v1_backend_category_patch_list',
-          saveItem:   'api_v1_backend_category_save',
-          updateItem: 'api_v1_backend_category_update',
+          saveItem:   'api_v1_backend_category_save_item',
+          updateItem: 'api_v1_backend_category_update_item',
         };
 
         /**
