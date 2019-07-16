@@ -20,6 +20,6 @@ class NoHtmlFilter extends Filter
      */
     public function filter($str)
     {
-        return strip_tags($str);
+        return strip_tags(html_entity_decode($str));
     }
 }
