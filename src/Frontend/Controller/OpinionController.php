@@ -276,14 +276,10 @@ class OpinionController extends FrontendController
             ],
         ];
 
-        $author->slug = \Onm\StringUtils::getTitle($author->name);
-        if ($author->id == 1 && $author->username == 'editorial') {
-            // Editorial
-            $author->slug = 'editorial';
-        } elseif ($author->id == 2 && $author->username == 'director') {
-            // Director
-            $author->slug = 'director';
-        }
+        $author->slug = $this->get('data.manager.filter')
+            ->set($author->name)
+            ->filter('slug')
+            ->get();
 
         $orderBy = ['created' => 'DESC'];
 
