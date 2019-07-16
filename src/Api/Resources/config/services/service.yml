@@ -103,3 +103,8 @@ services:
         class:     Api\Service\V1\ContentOldService
         arguments: [ '@service_container', '\Video' ]
         public:    true
+
+    api.service.widget:
+        class:     Api\Service\V1\WidgetService
+        arguments: [ '@service_container', '\Widget' ]
+        public:    true
