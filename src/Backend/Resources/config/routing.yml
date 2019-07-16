@@ -18,28 +18,6 @@ admin_content_update_property:
     path:     /content/update-property
     defaults: { _controller: BackendBundle:Content:updateProperty }
 
-# Widget manager routes
-admin_widgets:
-    path:     /widgets
-    defaults: { _controller: BackendBundle:Widgets:list }
-
-admin_widget_show:
-    path:     /widgets/{id}/show
-    defaults: { _controller: BackendBundle:Widgets:show }
-    options:
-        expose: true
-
-admin_widget_create:
-    path:     /widgets/create
-    defaults: { _controller: BackendBundle:Widgets:create }
-
-admin_widget_update:
-    path:     /widget/{id}/update
-    defaults: { _controller: BackendBundle:Widgets:update }
-
-admin_widgets_content_provider:
-    path:     /widget/content-provider
-    defaults: { _controller: BackendBundle:Widgets:contentProvider }
 
 # Menu manager routes
 admin_menus:
@@ -514,3 +492,7 @@ backend_user:
 backend_user_group:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/user_group.yml'
+
+backend_widget:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/widget.yml'
