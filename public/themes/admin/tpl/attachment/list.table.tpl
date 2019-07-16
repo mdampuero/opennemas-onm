@@ -74,7 +74,7 @@
   {acl isAllowed="ATTACHMENT_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
       <i class="fa fa-trash-o m-r-5"></i>
-      {t}Remove{/t}
+      {t}Delete{/t}
     </button>
   {/acl}
   <a class="btn btn-white btn-small" href="[% data.extra.paths.attachment + item.path %]" target="_blank">
