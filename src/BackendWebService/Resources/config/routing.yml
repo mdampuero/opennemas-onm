@@ -65,10 +65,6 @@ backend_ws_usergroups:
     resource: '@BackendWebServiceBundle/Resources/config/routing/usergroups.yml'
     prefix:   /
 
-backend_ws_widgets:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/widgets.yml'
-    prefix:   /
-
 backend_ws_keywords:
     resource: '@BackendWebServiceBundle/Resources/config/routing/keywords.yml'
     prefix:   /
