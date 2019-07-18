@@ -107,6 +107,18 @@
         $scope.removeFile = function() {
           $scope.item.path = null;
         };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.validate = function() {
+          if (!$('[name=form]')[0].checkValidity() || !$scope.item.path) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          return true;
+        };
       }
     ]);
 })();
