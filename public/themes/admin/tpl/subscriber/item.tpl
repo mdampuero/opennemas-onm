@@ -115,17 +115,17 @@
                         {t}Subscribed{/t}
                       </label>
                     </div>
-                    <div class="controls" ng-if="item.user_groups && item.user_groups[subscription.pk_user_group] && item.user_groups[subscription.pk_user_group].status === 2">
+                    <div class="controls" ng-if="subscription.status === 2">
                       <p>{t}The subscriber has requested this subscription{/t}</p>
                       <div class="row">
                         <div class="col-lg-4 col-xs-6">
-                          <button class="btn btn-block btn-success m-r-15" ng-click="accept(subscription.pk_user_group)">
+                          <button class="btn btn-block btn-success m-r-15" ng-click="accept($index)">
                             <i class="fa fa-thumbs-up"></i>
                             {t}Accept{/t}
                           </button>
                         </div>
                         <div class="col-lg-4 col-xs-6">
-                          <button class="btn btn-block btn-danger" ng-click="reject(subscription.pk_user_group)">
+                          <button class="btn btn-block btn-danger" ng-click="reject($index)">
                             <i class="fa fa-thumbs-down"></i>
                             {t}Reject{/t}
                           </button>
