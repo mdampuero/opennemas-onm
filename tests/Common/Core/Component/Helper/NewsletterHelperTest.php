@@ -51,7 +51,7 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
         $this->service = $this->getMockBuilder('Api\Service\Service')
             ->setMethods([
                 'createItem', 'delete', 'deleteItem', 'deleteList', 'getItem',
-                'getList', 'patchItem', 'patchList', 'updateItem',
+                'getList', 'getStats', 'patchItem', 'patchList', 'updateItem',
             ])->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -197,38 +197,43 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->service->expects($this->at(0))->method('getList')
-            ->willReturn([ 'items' => [], 'total' => 0 ]);
-
-        $this->service->expects($this->at(1))->method('getList')
             ->willReturn([
                 'items' => [
                     json_decode(json_encode([
                         'pk_user_group' => 1,
                         'name'          => 'thud',
                         'privileges'    => []
-                    ]))
-                ],
-                'total' => 1
-            ]);
-
-        $this->service->expects($this->at(2))->method('getList')
-            ->willReturn([
-                'items' => [
+                    ])),
                     json_decode(json_encode([
-                        'pk_user_group' => 234,
-                        'name'          => 'thud',
+                        'pk_user_group' => 2,
+                        'name'          => 'glork',
+                        'privileges'    => [ 224 ]
+                    ])),
+                    json_decode(json_encode([
+                        'pk_user_group' => 3,
+                        'name'          => 'plugh',
                         'privileges'    => [ 224 ]
                     ])),
                 ],
                 'total' => 1
             ]);
 
-        $this->assertEquals([], $method->invokeArgs($this->helper, []));
-        $this->assertEquals([], $method->invokeArgs($this->helper, []));
-        $this->assertEquals([ [
-            'id' => 234,
-            'name'  => 'thud',
-            'type'  => 'list'
-        ] ], $method->invokeArgs($this->helper, []));
+        $this->service->expects($this->at(1))->method('getStats')
+            ->willReturn([ 2 => 4356 ]);
+
+        $this->assertEquals([
+            [
+                'id'    => '2',
+                'name'  => 'glork',
+                'type'  => 'list',
+                'users' => 4356
+            ],
+            [
+                'id'    => '3',
+                'name'  => 'plugh',
+                'type'  => 'list',
+                'users' => 0
+            ]
+        ], $method->invokeArgs($this->helper, []));
     }
 }

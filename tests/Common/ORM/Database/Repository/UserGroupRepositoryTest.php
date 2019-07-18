@@ -63,6 +63,60 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests countUsers when the list of provided ids is an array.
+     */
+    public function testCountUsersWhenArray()
+    {
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with(
+                'SELECT user_group_id AS "id", COUNT(1) AS "users" '
+                . 'FROM user_user_group WHERE user_group_id IN (?) '
+                . 'GROUP BY user_group_id',
+                [ [ 1, 2 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn([
+                [ 'id' => 1, 'users' => 30256 ],
+                [ 'id' => 2, 'users' => 3115 ],
+            ]);
+
+        $this->assertEquals([
+            1 => 30256,
+            2 => 3115,
+        ], $this->repository->countUsers([ 1, 2 ]));
+    }
+
+    /**
+     * Tests countUsers when the list of provided ids is empty.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCountUsersWhenEmptyIds()
+    {
+        $this->repository->countUsers([]);
+    }
+
+    /**
+     * Tests countUsers when the list of provided ids is an integer.
+     */
+    public function testCountUsersWhenNotArray()
+    {
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with(
+                'SELECT user_group_id AS "id", COUNT(1) AS "users" '
+                . 'FROM user_user_group WHERE user_group_id IN (?) '
+                . 'GROUP BY user_group_id',
+                [ [ 1 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn([
+                [ 'id' => 1, 'users' => 30256 ],
+            ]);
+
+        $this->assertEquals([
+            1 => 30256,
+        ], $this->repository->countUsers(1));
+    }
+
+    /**
      * Tests refresh and getPrivileges.
      */
     public function testRefresh()

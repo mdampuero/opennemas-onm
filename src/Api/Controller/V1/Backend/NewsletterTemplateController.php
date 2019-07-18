@@ -199,20 +199,7 @@ class NewsletterTemplateController extends Controller
             'hours'              => [],
             'newsletter_handler' => $nh->getSubscriptionType(),
             'recipients'         => $nh->getRecipients(),
-            'subscribers'        => []
         ];
-
-        $ssb = $this->get('api.service.subscriber');
-
-        foreach ($extra['recipients'] as $recipient) {
-            if ($recipient['type'] !== 'list') {
-                continue;
-            }
-
-            $extra['subscribers'][$recipient['id']] = $ssb->getList(
-                sprintf('status = 1 and user_group_id = %s', $recipient['id'])
-            )['total'];
-        }
 
         for ($i = 0; $i < 24; $i++) {
             $extra['hours'][] = sprintf("%02d:00", $i);

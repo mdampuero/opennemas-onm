@@ -38,7 +38,7 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
+            ->setMethods([ 'countBy', 'countUsers', 'findBy', 'findOneBy'])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -103,6 +103,50 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception));
 
         $this->service->getItem(1);
+    }
+
+    /**
+     * Tests getStats when the list of provided items is empty.
+     */
+    public function testGetStatsWhenEmptyItems()
+    {
+        $this->assertEquals([], $this->service->getStats(null));
+        $this->assertEquals([], $this->service->getStats([]));
+    }
+
+    /**
+     * Tests getStats when an error is thrown.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testGetStatsWhenError()
+    {
+        $this->repository->expects($this->once())->method('countUsers')
+            ->with([ 32725 ])
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->getStats(json_decode(json_encode([
+            'pk_user_group' => 32725,
+            'name'          => 'foobar'
+        ])));
+    }
+
+    /**
+     * Tests getStats when the provided items is only an single item.
+     */
+    public function testGetStatsWhenSingleItem()
+    {
+        $this->repository->expects($this->once())->method('countUsers')
+            ->with([ 32725 ])
+            ->willReturn([ 32725 => 16369 ]);
+
+        $this->assertEquals(
+            [ 32725 => 16369 ],
+            $this->service->getStats(json_decode(json_encode([
+                'pk_user_group' => 32725,
+                'name'          => 'foobar'
+            ])))
+        );
     }
 
     /*

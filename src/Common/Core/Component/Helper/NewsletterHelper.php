@@ -140,15 +140,20 @@ class NewsletterHelper
     {
         $response = $this->service->getList();
 
-        $subscriptions = array_filter($response['items'], function ($a) {
-            return in_array(224, $a->privileges);
-        });
+        $subscriptions = array_values(
+            array_filter($response['items'], function ($a) {
+                return in_array(224, $a->privileges);
+            })
+        );
 
-        return array_map(function ($a) {
+        $stats = $this->service->getStats($subscriptions);
+
+        return array_map(function ($a) use ($stats) {
             return [
-                'id'   => (string) $a->pk_user_group,
-                'name' => $a->name,
-                'type' => 'list'
+                'id'    => (string) $a->pk_user_group,
+                'name'  => $a->name,
+                'type'  => 'list',
+                'users' => $stats[$a->pk_user_group] ?? 0
             ];
         }, $subscriptions);
     }
