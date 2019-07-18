@@ -109,7 +109,7 @@
           <div id="answers">
             <div class="form-group" ng-repeat="answer in item.items track by $index">
               <div class="input-group">
-                <input class="form-control" ng-model="answer.item" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.items[$index].item[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.items[$index].item[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected"required type="text"/>
+                <input class="form-control" ng-model="answer.item" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.items[$index].item[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.items[$index].item[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected" required type="text"/>
                 <div class="input-group-addon">
                   <small ng-if="answer.votes > 0">{t}Votes{/t}:  [% answer.votes %] / [% item.total_votes %]</small>
                   <small ng-if="answer.votes <= 0">{t}No votes{/t}</small>

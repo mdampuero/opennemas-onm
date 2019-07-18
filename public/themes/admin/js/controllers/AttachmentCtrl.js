@@ -86,6 +86,18 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            $scope.data.item = angular.extend($scope.item, data.item);
+          }
+
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.item, 'item', true);
+        };
+
+        /**
          * @function removeFile
          * @memberOf AttachmentCtrl
          *
@@ -94,6 +106,18 @@
          */
         $scope.removeFile = function() {
           $scope.item.path = null;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.validate = function() {
+          if (!$('[name=form]')[0].checkValidity() || !$scope.item.path) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          return true;
         };
       }
     ]);

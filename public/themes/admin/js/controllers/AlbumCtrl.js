@@ -189,8 +189,6 @@
 
           if ($scope.form.$invalid) {
             $('[name=form]')[0].reportValidity();
-            messenger.post(window.strings.forms.not_valid, 'error');
-
             return false;
           }
 

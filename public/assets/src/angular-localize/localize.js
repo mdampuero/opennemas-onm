@@ -137,24 +137,24 @@
 
             // Localized changes
             this.scope.$watch(function() {
-              return localized;
+              return JSON.stringify(localized);
             }, function(nv, ov) {
               if (nv === ov) {
                 return;
               }
 
-              that.updateOriginal(original, nv);
+              that.updateOriginal(original, localized);
             }, true);
 
             // Original changes
             this.scope.$watch(function() {
-              return original;
+              return JSON.stringify(original);
             }, function(nv, ov) {
               if (nv === ov) {
                 return;
               }
 
-              that.updateLocalized(localized, nv);
+              that.updateLocalized(localized, original);
             }, true);
           },
 
