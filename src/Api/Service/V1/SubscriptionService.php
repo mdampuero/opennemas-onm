@@ -11,7 +11,7 @@ namespace Api\Service\V1;
 
 use Api\Exception\GetItemException;
 
-class SubscriptionService extends OrmService
+class SubscriptionService extends UserGroupService
 {
     /**
      * {@inheritdoc}
