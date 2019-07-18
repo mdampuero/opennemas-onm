@@ -153,7 +153,7 @@ class NewsletterHelper
                 'id'    => (string) $a->pk_user_group,
                 'name'  => $a->name,
                 'type'  => 'list',
-                'users' => $stats[$a->pk_user_group]
+                'users' => $stats[$a->pk_user_group] ?? 0
             ];
         }, $subscriptions);
     }

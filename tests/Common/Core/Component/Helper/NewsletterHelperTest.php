@@ -208,7 +208,12 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
                         'pk_user_group' => 2,
                         'name'          => 'glork',
                         'privileges'    => [ 224 ]
-                    ]))
+                    ])),
+                    json_decode(json_encode([
+                        'pk_user_group' => 3,
+                        'name'          => 'plugh',
+                        'privileges'    => [ 224 ]
+                    ])),
                 ],
                 'total' => 1
             ]);
@@ -216,11 +221,19 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
         $this->service->expects($this->at(1))->method('getStats')
             ->willReturn([ 2 => 4356 ]);
 
-        $this->assertEquals([ [
-            'id'    => 2,
-            'name'  => 'glork',
-            'type'  => 'list',
-            'users' => 4356
-        ] ], $method->invokeArgs($this->helper, []));
+        $this->assertEquals([
+            [
+                'id'    => '2',
+                'name'  => 'glork',
+                'type'  => 'list',
+                'users' => 4356
+            ],
+            [
+                'id'    => '3',
+                'name'  => 'plugh',
+                'type'  => 'list',
+                'users' => 0
+            ]
+        ], $method->invokeArgs($this->helper, []));
     }
 }
