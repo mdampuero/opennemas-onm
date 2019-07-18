@@ -75,7 +75,7 @@ advertisements:
             columns: [fk_content_categories]
             primary: false
             unique: false
-            flags: {  }
+            flags: { type: fulltext }
     foreign_keys:
         -
             name: advertisement_id_contents_id
