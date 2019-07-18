@@ -86,6 +86,18 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.parseItem = function(data) {
+          if (data.item) {
+            $scope.data.item = angular.extend($scope.item, data.item);
+          }
+
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.item, 'item', true);
+        };
+
+        /**
          * @function removeFile
          * @memberOf AttachmentCtrl
          *
