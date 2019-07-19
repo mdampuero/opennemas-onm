@@ -10,14 +10,26 @@
      * @description
      *   Handles actions in widget inner.
      *
+     * @requires $compile
      * @requires $controller
      * @requires $scope
+     * @requires http
      */
     .controller('WidgetCtrl', [
-      '$compile', '$controller', '$http', '$uibModal', '$sce', '$scope', 'routing',
-      function($compile, $controller, $http, $uibModal, $sce, $scope, routing) {
+      '$compile', '$controller', '$scope', 'http',
+      function($compile, $controller, $scope, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *  The HTML string with the form for the widget
+         *
+         * @type {String}
+         */
+        $scope.widgetForm = false;
 
         /**
          * @memberOf AlbumCtrl
@@ -64,8 +76,6 @@
           updateItem: 'api_v1_backend_widget_update_item'
         };
 
-        $scope.form = false;
-
         /**
          * @function addParameter
          * @memberOf WidgetCtrl
@@ -74,7 +84,23 @@
          *   Adds an empty parameter to the parameters list.
          */
         $scope.addParameter = function() {
-          $scope.params.push({ name: '', value: '' });
+          $scope.item.params.push({ name: '', value: '' });
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          var params = {};
+
+          // Convert array of parameters to object
+          for (var i = 0; i < data.params.length; i++) {
+            params[data.params[i].name] = data.params[i].value;
+          }
+
+          data.params = params;
+
+          return data;
         };
 
         /**
@@ -95,18 +121,19 @@
 
           $('.widget-form').empty();
 
-          var url = routing.generate($scope.routes.getForm, { uuid: uuid });
+          var route = {
+            name: $scope.routes.getForm,
+            params: { uuid: uuid }
+          };
 
-          $http.get(url).then(function(response) {
-            $scope.form = $sce.trustAsHtml(response.data);
+          http.get(route).then(function(response) {
+            $scope.widgetForm = true;
 
-            var e = $compile(response.data)($scope);
-
-            $('.widget-form').append(e);
+            $('.widget-form').append($compile(response.data)($scope));
 
             $scope.disableFlags('http');
           }, function() {
-            $scope.form = false;
+            $scope.widgetForm = false;
             $scope.disableFlags('http');
           });
         };
@@ -116,6 +143,19 @@
          */
         $scope.hasMultilanguage = function() {
           return false;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseItem = function(data) {
+          var params = [];
+
+          for (var key in data.item.params) {
+            params.push({ name: key, value: data.item.params[key] });
+          }
+
+          $scope.item.params = params;
         };
 
         /**

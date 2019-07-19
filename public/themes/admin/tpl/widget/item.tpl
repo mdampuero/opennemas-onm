@@ -88,15 +88,15 @@
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div id="params" ng-show="!flags.http.formLoading && !form">
+        <div id="params" ng-show="!flags.http.formLoading && !widgetForm">
           <label for="params">{t}Parameters{/t}</label>
-          <div class="form-group ng-cloak" ng-repeat="(name, value) in item.params track by $index">
+          <div class="form-group ng-cloak" ng-repeat="param in item.params track by $index">
             <div class="row">
               <div class="control col-md-2 col-sm-3 col-xs-12">
-                <input class="form-control" ng-model="name" placeholder="{t}Parameter name{/t}"  type="text">
+                <input class="form-control" ng-model="param.name" placeholder="{t}Parameter name{/t}" type="text">
               </div>
               <div class="control col-md-9 col-sm-7 col-xs-12">
-                <input class="form-control" ng-model="value" placeholder="{t}Parameter value{/t}" type="text">
+                <input class="form-control" ng-model="param.value" placeholder="{t}Parameter value{/t}" type="text">
               </div>
               <div class="control col-md-1 col-sm-2 col-xs-12">
                 <button type="button" ng-click="removeParameter($index)" class="btn addon del"><i class="fa fa-trash"></i></button>
@@ -109,7 +109,7 @@
             {t}Add parameter{/t}
           </a>
         </div>
-        <div class="widget-form" ng-show="!flags.http.formLoading && form"></div>
+        <div class="widget-form" ng-show="!flags.http.formLoading && widgetForm"></div>
       </div>
     </div>
   </div>
