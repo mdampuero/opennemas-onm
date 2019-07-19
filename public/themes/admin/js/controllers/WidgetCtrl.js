@@ -112,6 +112,13 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return false;
+        };
+
+        /**
          * @function removeParameter
          * @memberOf WidgetCtrl
          *

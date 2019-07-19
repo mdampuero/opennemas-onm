@@ -52,6 +52,13 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return false;
+        };
+
+        /**
          * @function init
          * @memberOf WidgetListCtrl
          *
