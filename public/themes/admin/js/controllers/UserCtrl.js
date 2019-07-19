@@ -56,6 +56,45 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.backup.activated = $scope.item.activated;
+          $scope.flags.categories = { none: false, all: false };
+
+          if (!$scope.item.user_groups) {
+            $scope.item.user_groups = {};
+          }
+
+          var userGroups = Object.keys($scope.data.extra.user_groups);
+          var userGroupsPresent =  $scope.item.user_groups.map(function(userGroup) {
+            return userGroup.user_group_id;
+          });
+
+          for (var index in userGroups) {
+            if (userGroupsPresent.indexOf(parseInt(userGroups[index])) === -1) {
+              $scope.item.user_groups.push({
+                user_id: $scope.item.id,
+                user_group_id: parseInt(userGroups[index]),
+                status: 0,
+                expire: null
+              });
+            }
+          }
+
+          if (!$scope.item.categories ||
+              $scope.item.categories.length === 0) {
+            $scope.flags.categories = { none: true };
+          }
+
+          if ($scope.data.extra.photos &&
+              $scope.data.extra.photos[$scope.item.avatar_img_id]) {
+            $scope.item.avatar_img_id =
+              $scope.data.extra.photos[$scope.item.avatar_img_id];
+          }
+        };
+
+        /**
          * @function confirmUser
          * @memberOf UserCtrl
          *
@@ -231,55 +270,6 @@
               $scope.form.username.$setDirty(true);
             });
           }, 500);
-        };
-
-        /**
-         * @function parseItem
-         * @memberOf UserCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item             = angular.extend($scope.item, data.item);
-            $scope.backup.activated = $scope.item.activated;
-          }
-
-          $scope.flags.categories = { none: false, all: false };
-
-          if (!$scope.item.user_groups) {
-            $scope.item.user_groups = {};
-          }
-
-          var userGroups = Object.keys(data.extra.user_groups);
-          var userGroupsPresent =  $scope.item.user_groups.map(function(userGroup) {
-            return userGroup.user_group_id;
-          });
-
-          for (var index in userGroups) {
-            if (userGroupsPresent.indexOf(parseInt(userGroups[index])) === -1) {
-              $scope.item.user_groups.push({
-                user_id: $scope.item.id,
-                user_group_id: parseInt(userGroups[index]),
-                status: 0,
-                expire: null
-              });
-            }
-          }
-
-          if (!$scope.item.categories ||
-              $scope.item.categories.length === 0) {
-            $scope.flags.categories = { none: true };
-          }
-
-          if (data.extra.photos &&
-              data.extra.photos[$scope.item.avatar_img_id]) {
-            $scope.item.avatar_img_id =
-              data.extra.photos[$scope.item.avatar_img_id];
-          }
         };
 
         // Removes categories from item when flag changes

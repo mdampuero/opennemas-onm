@@ -90,17 +90,14 @@
         /**
          * @inheritdoc
          */
-        $scope.parseData = function(data) {
-          var params = {};
+        $scope.buildScope = function() {
+          var params = [];
 
-          // Convert array of parameters to object
-          for (var i = 0; i < data.params.length; i++) {
-            params[data.params[i].name] = data.params[i].value;
+          for (var key in $scope.item.params) {
+            params.push({ name: key, value: $scope.item.params[key] });
           }
 
-          data.params = params;
-
-          return data;
+          $scope.item.params = params;
         };
 
         /**
@@ -148,14 +145,17 @@
         /**
          * @inheritdoc
          */
-        $scope.parseItem = function(data) {
-          var params = [];
+        $scope.parseData = function(data) {
+          var params = {};
 
-          for (var key in data.item.params) {
-            params.push({ name: key, value: data.item.params[key] });
+          // Convert array of parameters to object
+          for (var i = 0; i < data.params.length; i++) {
+            params[data.params[i].name] = data.params[i].value;
           }
 
-          $scope.item.params = params;
+          data.params = params;
+
+          return data;
         };
 
         /**

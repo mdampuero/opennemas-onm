@@ -26,17 +26,6 @@
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
-         * @function generate
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Forces automatic field generation.
-         */
-        $scope.generate = function() {
-          $scope.flags.generate = { slug: true, tags: true };
-        };
-
-        /**
          * @memberOf RestInnerCtrl
          *
          * @description
@@ -55,6 +44,29 @@
          * @type {Boolean}
          */
         $scope.refreshOnUpdate = false;
+
+        /**
+         * @function buildScope
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Updates the scope after assigning the information from the
+         *   response to the scope.
+         */
+        $scope.buildScope = function() {
+          return true;
+        };
+
+        /**
+         * @function generate
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Forces automatic field generation.
+         */
+        $scope.generate = function() {
+          $scope.flags.generate = { slug: true, tags: true };
+        };
 
         /**
          * @function generateTagsFrom
@@ -117,7 +129,7 @@
             $scope.item      = angular.extend({}, response.data.item);
 
             $scope.configure($scope.data.extra);
-            $scope.parseItem($scope.data);
+            $scope.buildScope();
             $scope.disableFlags('http');
           }, function() {
             $scope.item = null;
@@ -149,19 +161,6 @@
          */
         $scope.itemHasId = function() {
           return $scope.getItemId() && $scope.getItemId() !== null;
-        };
-
-        /**
-         * @function parseItem
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          return data;
         };
 
         /**
@@ -248,21 +247,6 @@
           }
 
           return 0;
-        };
-
-        /**
-         * @function parseData
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Parses the cleaned data before saving/updating the item.
-         *
-         * @param {Object} The data to parse.
-         *
-         * @return {Object} The parsed data.
-         */
-        $scope.parseData = function(data) {
-          return data;
         };
       }
     ]);

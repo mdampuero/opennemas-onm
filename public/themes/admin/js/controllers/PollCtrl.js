@@ -86,6 +86,20 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true, [ 'items' ]);
+
+          $scope.item.items = [];
+
+          for (var i = 0; i < $scope.data.item.items.length; i++) {
+            $scope.item.items.push($scope.localizeOption(
+              $scope.data.item.items[i], $scope.item.items.length));
+          }
+        };
+
+        /**
          * @function getFrontendUrl
          * @memberOf AlbumCtrl
          *
@@ -151,24 +165,6 @@
           $scope.config.linkers[index].link(original, localized);
 
           return localized;
-        };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.data.item = angular.extend($scope.item, data.item);
-          }
-
-          $scope.configure(data.extra);
-          $scope.localize($scope.data.item, 'item', true, [ 'items' ]);
-
-          $scope.item.items = [];
-          for (var i = 0; i < $scope.data.item.items.length; i++) {
-            $scope.item.items.push($scope.localizeOption(
-              $scope.data.item.items[i], $scope.item.items.length));
-          }
         };
 
         /**

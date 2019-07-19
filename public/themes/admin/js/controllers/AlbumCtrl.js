@@ -71,6 +71,31 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
+
+          // Remove unexisting photos from response data
+          $scope.data.item.photos = $scope.data.item.photos.filter(function(e) {
+            return $scope.data.extra.photos[e.pk_photo];
+          });
+
+          $scope.item.photos = [];
+
+          for (var i = 0; i < $scope.data.item.photos.length; i++) {
+            // Localize photos 1 by 1
+            $scope.item.photos.push($scope.localizePhoto(
+              $scope.data.item.photos[i], $scope.item.photos.length));
+          }
+
+          if ($scope.data.extra.photos &&
+              $scope.data.extra.photos[$scope.item.cover_id]) {
+            $scope.cover = $scope.data.extra.photos[$scope.item.cover_id];
+          }
+        };
+
+        /**
          * @function empty
          * @memberOf AlbumCtrl
          *
@@ -150,33 +175,6 @@
           $scope.config.linkers[index].link(original, localized);
 
           return localized;
-        };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.data.item = angular.extend($scope.item, data.item);
-          }
-
-          $scope.configure(data.extra);
-          $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
-
-          // Remove unexisting photos
-          $scope.data.item.photos = $scope.data.item.photos.filter(function(e) {
-            return data.extra.photos[e.pk_photo];
-          });
-
-          $scope.item.photos = [];
-          for (var i = 0; i < $scope.data.item.photos.length; i++) {
-            $scope.item.photos.push($scope.localizePhoto(
-              $scope.data.item.photos[i], $scope.item.photos.length));
-          }
-
-          if (data.extra.photos && data.extra.photos[$scope.item.cover_id]) {
-            $scope.cover = data.extra.photos[$scope.item.cover_id];
-          }
         };
 
         /**

@@ -73,6 +73,40 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          if (!$scope.item.user_groups) {
+            $scope.item.user_groups = {};
+          }
+
+          var subscriptions        = Object.keys($scope.data.extra.subscriptions);
+          var subscriptionsPresent = $scope.item.user_groups
+            .map(function(subscription) {
+              return subscription.user_group_id;
+            });
+
+          for (var index in subscriptions) {
+            var id = parseInt(subscriptions[index]);
+
+            if (subscriptionsPresent.indexOf(id) === -1) {
+              $scope.item.user_groups.push({
+                user_id: $scope.item.id,
+                user_group_id: id,
+                status: 0,
+                expire: null
+              });
+            }
+          }
+
+          if ($scope.data.extra.photos &&
+              $scope.data.extra.photos[$scope.item.avatar_img_id]) {
+            $scope.item.avatar_img_id =
+              $scope.data.extra.photos[$scope.item.avatar_img_id];
+          }
+        };
+
+        /**
          * @function convertTo
          * @memberOf SubscriberListCtrl
          *
@@ -150,49 +184,6 @@
           }
 
           return data;
-        };
-
-        /**
-         * @function parseItem
-         * @memberOf SubscriberCtrl
-         *
-         * @description
-         *   Gets the subscriber to show.
-         *
-         * @param {Integer} id The subscriber id.
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item = angular.extend($scope.item, data.item);
-          }
-
-          if (!$scope.item.user_groups) {
-            $scope.item.user_groups = {};
-          }
-
-          var subscriptions = Object.keys(data.extra.subscriptions);
-          var subscriptionsPresent = $scope.item.user_groups.map(function(subscription) {
-            return subscription.user_group_id;
-          });
-
-          for (var index in subscriptions) {
-            var id = parseInt(subscriptions[index]);
-
-            if (subscriptionsPresent.indexOf(id) === -1) {
-              $scope.item.user_groups.push({
-                user_id: $scope.item.id,
-                user_group_id: id,
-                status: 0,
-                expire: null
-              });
-            }
-          }
-
-          if (data.extra.photos &&
-              data.extra.photos[$scope.item.avatar_img_id]) {
-            $scope.item.avatar_img_id =
-              data.extra.photos[$scope.item.avatar_img_id];
-          }
         };
 
         /**
