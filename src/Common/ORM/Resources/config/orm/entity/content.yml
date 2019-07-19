@@ -17,6 +17,7 @@ orm:
                     - special
                     - static_page
                     - video
+                    - widget
             properties:
                 available:           boolean
                 body:                l10n_string
