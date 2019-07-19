@@ -345,6 +345,11 @@
                   return;
                 }
 
+                // Prevent double changes when comparing null and ''
+                if (instance.getData() === '' && !ngModel.$viewValue) {
+                  return;
+                }
+
                 if (instance.getData() !== value) {
                   instance.setData(value, { internal: false });
                 }
@@ -367,6 +372,11 @@
                 }
 
                 var data = instance.getData();
+
+                // Prevent double changes when comparing null and ''
+                if (data === '' && !ngModel.$viewValue) {
+                  return;
+                }
 
                 if (data !== ngModel.$viewValue) {
                   $timeout(function() {

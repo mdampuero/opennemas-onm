@@ -41,7 +41,6 @@
           endtime: null,
           renderlet: 'html',
           title: '',
-          intelligent_type: null,
           params: [],
           categories: [],
           tags: [],
