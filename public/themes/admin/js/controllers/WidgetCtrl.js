@@ -88,6 +88,10 @@
          * @param {String} uuid The widget uuid.
          */
         $scope.getForm = function(uuid) {
+          if ($scope.item.renderlet === 'html') {
+            return;
+          }
+
           $scope.flags.http.formLoading = true;
 
           $('.widget-form').empty();
