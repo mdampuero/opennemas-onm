@@ -45,33 +45,6 @@ class DatabaseRepository implements Repository
         $this->tracker = $tracker;
     }
 
-    public function start()
-    {
-        $ids   = implode(',', $this->config['source']['id']);
-        $table = $this->config['source']['table'];
-
-        $filters = [];
-        $where   = '';
-
-        if (!empty($this->config['source']['filter'])) {
-            $filters[] = $this->config['source']['filter'];
-        }
-
-        if (!empty($filters)) {
-            $where = ' WHERE ' . implode(' AND ', $filters);
-        }
-
-        $query = sprintf(
-            'CREATE TABLE IF NOT EXISTS migration_fix_items (PRIMARY KEY (%s)) AS SELECT DISTINCT %s FROM %s%s',
-            $ids,
-            $ids,
-            $table,
-            $where
-        );
-
-        $this->conn->executeQuery($query);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -115,6 +88,14 @@ class DatabaseRepository implements Repository
     public function countFixed()
     {
         return $this->tracker->count();
+    }
+
+    /**
+     * Removes the table to track the items to fix.
+     */
+    public function end()
+    {
+        $this->conn->executeQuery('DROP TABLE IF EXISTS migration_fix_items');
     }
 
     /**
@@ -175,8 +156,33 @@ class DatabaseRepository implements Repository
         }
     }
 
-    public function end()
+    /**
+     * Checks and creates table to track the items to fix.
+     */
+    public function start()
     {
-        $this->conn->executeQuery('DROP TABLE IF EXISTS migration_fix_items');
+        $ids   = implode(',', $this->config['source']['id']);
+        $table = $this->config['source']['table'];
+
+        $filters = [];
+        $where   = '';
+
+        if (!empty($this->config['source']['filter'])) {
+            $filters[] = $this->config['source']['filter'];
+        }
+
+        if (!empty($filters)) {
+            $where = ' WHERE ' . implode(' AND ', $filters);
+        }
+
+        $query = sprintf(
+            'CREATE TABLE IF NOT EXISTS migration_fix_items (PRIMARY KEY (%s)) AS SELECT DISTINCT %s FROM %s%s',
+            $ids,
+            $ids,
+            $table,
+            $where
+        );
+
+        $this->conn->executeQuery($query);
     }
 }
