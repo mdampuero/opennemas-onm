@@ -182,6 +182,8 @@ class Attachment extends Content
         parent::update($data);
 
         try {
+            $this->serializeL10nKeys($data);
+
             getService('dbal_connection')->update('attachments', [
                 'title'    => $data['title'],
                 'path'     => $data['path']

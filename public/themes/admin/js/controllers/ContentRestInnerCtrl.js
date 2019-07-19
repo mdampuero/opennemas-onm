@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing', '$timeout',
-  function($controller, $http, $uibModal, $rootScope, $scope, routing, $timeout) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'messenger', 'routing', '$timeout',
+  function($controller, $http, $uibModal, $rootScope, $scope, messenger, routing, $timeout) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -39,6 +39,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
     $scope.submit = function() {
       if (!$scope.validate()) {
+        messenger.post(window.strings.forms.not_valid, 'error');
         return;
       }
 

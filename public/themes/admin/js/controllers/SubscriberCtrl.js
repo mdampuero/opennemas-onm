@@ -62,14 +62,15 @@
          * @description
          *   Accepts a subscription.
          *
-         * @param {Integer} id The subscription id.
+         * @param {Integer} index The position of the subscription in the list
+         *                        of subscriptions.
          */
-        $scope.accept = function(id) {
-          if (!$scope.item.user_groups[id]) {
-            $scope.item.user_groups[id] = { status: 0, expires: null };
+        $scope.accept = function(index) {
+          if (!$scope.item.user_groups[index]) {
+            $scope.item.user_groups[index] = { status: 0, expires: null };
           }
 
-          $scope.item.user_groups[id].status = 1;
+          $scope.item.user_groups[index].status = 1;
         };
 
         /**
@@ -193,10 +194,11 @@
          * @description
          *   Rejects a subscription.
          *
-         * @param {Integer} id The subscription id.
+         * @param {Integer} index The position of the subscription in the list
+         *                        of subscriptions.
          */
-        $scope.reject = function(id) {
-          delete $scope.item.user_groups[id];
+        $scope.reject = function(index) {
+          $scope.item.user_groups[index].status = 0;
         };
       }
     ]);

@@ -27,9 +27,29 @@ class NoHtmlFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests filter when the string contains HTML.
+     * Tests filter when the string contains HTML tags and entities.
+     */
+    public function testFilterWithHtml()
+    {
+        $str = '<p>&lsquo;The string to parse&rsquo;</p>';
+
+        $this->assertEquals('‘The string to parse’', $this->filter->filter($str));
+    }
+
+    /**
+     * Tests filter when the string contains HTML entities.
      */
     public function testFilterWithHtmlEntities()
+    {
+        $str = '&lsquo;The string to parse&rsquo;';
+
+        $this->assertEquals('‘The string to parse’', $this->filter->filter($str));
+    }
+
+    /**
+     * Tests filter when the string contains HTML tags.
+     */
+    public function testFilterWithHtmlTags()
     {
         $str = '<p>The string to parse</p>';
 
@@ -39,7 +59,7 @@ class NoHtmlFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests filter when the string does not contain HTML.
      */
-    public function testFilterWithNoHtmlEntities()
+    public function testFilterWithNoHtml()
     {
         $str = 'The string to parse';
 

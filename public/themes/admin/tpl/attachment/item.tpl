@@ -10,7 +10,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="AttachmentCtrl" ng-init="getItem({$id});"
+  ng-controller="AttachmentCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"
 {/block}
 
 {block name="icon"}
