@@ -114,6 +114,7 @@
             $scope.data.item = angular.extend($scope.item, $scope.data.item);
             $scope.item      = angular.extend({}, response.data.item);
 
+            $scope.configure($scope.data.extra);
             $scope.parseItem($scope.data);
             $scope.disableFlags('http');
           }, function() {
@@ -158,8 +159,6 @@
          * @param {Object} data The data in the response.
          */
         $scope.parseItem = function(data) {
-          $scope.configure(data.extra);
-
           return data;
         };
 
@@ -183,6 +182,9 @@
 
           var data  = $scope.getData();
           var route = { name: $scope.routes.saveItem };
+
+          // Parses data before save
+          data = $scope.parseData(data);
 
           /**
            * Callback executed when subscriber is saved/updated successfully.
@@ -244,6 +246,21 @@
           }
 
           return 0;
+        };
+
+        /**
+         * @function parseData
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Parses the cleaned data before saving/updating the item.
+         *
+         * @param {Object} The data to parse.
+         *
+         * @return {Object} The parsed data.
+         */
+        $scope.parseData = function(data) {
+          return data;
         };
       }
     ]);
