@@ -28,7 +28,7 @@
         $scope.criteria = {
           content_type_name: 'widget',
           pk_fk_content_category: null,
-          renderlet: 'html',
+          renderlet: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },
