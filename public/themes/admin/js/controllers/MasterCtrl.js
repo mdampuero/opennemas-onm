@@ -38,6 +38,7 @@
           mode: 'grid',
           columns: {
             collapsed: true,
+            hidden: [],
             selected: [ 'category', 'created', 'content_status', 'tags', 'title' ]
           },
         };
