@@ -127,7 +127,7 @@
       </div>
       <div class="row">
         <div class="col-xs-6 p-b-15 p-t-15" ng-class="{ 'col-lg-4 col-lg-offset-4 col-xs-offset-3': !item.photos || item.photos.length === 0, 'col-lg-3 col-lg-offset-3': item.photos && item.photos.length > 0 }">
-          <button class="btn btn-block btn-default btn-loading" media-picker media-picker-ignore="item.photos" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos">
+          <button class="btn btn-block btn-default btn-loading" media-picker media-picker-ignore="item.photos" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="photos" type="button">
             <h5 class="text-uppercase">
               <i class="fa fa-plus m-r-5"></i>
               {t}Add{/t}
@@ -135,7 +135,7 @@
           </button>
         </div>
         <div class="col-lg-3 col-xs-6 p-b-15 p-t-15" ng-if="item.photos && item.photos.length > 0">
-          <button class="btn btn-block btn-loading btn-danger" ng-click="empty()">
+          <button class="btn btn-block btn-loading btn-danger" ng-click="empty()" type="button">
             <h5 class="text-uppercase text-white">
               <i class="fa fa-trash m-r-5"></i>
               {t}Empty{/t}
