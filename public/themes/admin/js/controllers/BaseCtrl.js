@@ -221,7 +221,10 @@
 
           if ($scope.forcedLocale && Object.keys(data.locale.available)
             .indexOf($scope.forcedLocale) !== -1) {
-            $scope.config.locale.selected = $scope.forcedLocale;
+            // Force localization
+            $timeout(function() {
+              $scope.config.locale.selected = $scope.forcedLocale;
+            });
           }
         };
 
