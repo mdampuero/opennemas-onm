@@ -75,7 +75,9 @@ class InstanceLoader
         }
 
         $domain   = preg_replace('/\.+$/', '', $domain);
-        $instance = $this->cache->get($domain);
+        $instance = $this->cache->exists($domain)
+            ? $this->cache->get($domain)
+            : null;
 
         if ($this->isValid($instance, $domain)) {
             $this->instance = $instance;

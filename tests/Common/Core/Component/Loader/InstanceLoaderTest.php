@@ -24,7 +24,7 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
     {
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'get', 'set' ])
+            ->setMethods([ 'exists', 'get', 'set' ])
             ->getMock();
 
         $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
@@ -85,6 +85,8 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadInstanceByDomainWhenInstanceInCache()
     {
+        $this->cache->expects($this->once())->method('exists')
+            ->with('fubar.foo')->willReturn(true);
         $this->cache->expects($this->once())->method('get')
             ->with('fubar.foo')
             ->willReturn(new Instance([
@@ -105,9 +107,8 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadInstanceByDomainWhenInstanceInDatabase()
     {
-        $this->cache->expects($this->once())->method('get')
-            ->with('fubar.foo')
-            ->willReturn(null);
+        $this->cache->expects($this->once())->method('exists')
+            ->with('fubar.foo')->willReturn(false);
 
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('domains regexp "^fubar.foo($|,)|,\s*fubar.foo\s*,|(^|,)\s*fubar.foo$"')
