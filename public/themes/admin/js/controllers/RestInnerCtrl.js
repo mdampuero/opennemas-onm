@@ -9,14 +9,16 @@
      *
      * @requires $controller
      * @requires $scope
+     * @requires $timeout
      * @requires $uibModal
      * @requires $window
      * @requires cleaner
      * @requires http
      * @requires messenger
+     * @requires routing
      *
      * @description
-     *   Provides actions to edit, save and update subscribers.
+     *   Provides generic actions to edit, save and update items.
      */
     .controller('RestInnerCtrl', [
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
@@ -171,7 +173,7 @@
          */
         $scope.save = function() {
           if ($scope.form.$invalid) {
-            messenger.post(window.strings.forms.not_valid, 'error');
+            messenger.post($window.strings.forms.not_valid, 'error');
             $scope.disableFlags('http');
 
             return false;
