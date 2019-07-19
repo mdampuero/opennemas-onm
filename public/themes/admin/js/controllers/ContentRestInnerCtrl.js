@@ -23,6 +23,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @inheritdoc
+     */
+    $scope.hasMultilanguage = function() {
+      return $scope.config && $scope.config.locale &&
+        $scope.config.locale.multilanguage;
+    };
+
+    /**
      * @function submit
      * @memberOf StaticPageCtrl
      *
