@@ -43,8 +43,6 @@ class DatabaseRepository implements Repository
         $this->config  = $config;
         $this->conn    = new Connection($config['connection']);
         $this->tracker = $tracker;
-
-        $this->conn->getConfiguration()->setSQLLogger(null);
     }
 
     public function start()
