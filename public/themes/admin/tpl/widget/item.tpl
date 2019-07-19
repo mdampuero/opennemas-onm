@@ -50,13 +50,13 @@
                 {t}Type{/t}
               </label>
               <div class="radio m-t-5">
-                <input id="renderlet-html" ng-change="item.content = null" ng-model="item.renderlet" ng-value="'html'" type="radio">
+                <input id="renderlet-html" ng-model="item.renderlet" ng-value="'html'" type="radio">
                 <label for="renderlet-html">
                   HTML
                 </label>
               </div>
               <div class="radio m-t-5">
-                <input id="renderlet-intelligent" ng-change="item.content = null" ng-model="item.renderlet" ng-value="'intelligentwidget'" type="radio">
+                <input id="renderlet-intelligent" ng-model="item.renderlet" ng-value="'intelligentwidget'" type="radio">
                 <label for="renderlet-intelligent">
                   {t}IntelligentWidget{/t}
                 </label>

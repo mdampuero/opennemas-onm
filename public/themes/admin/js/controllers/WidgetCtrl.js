@@ -179,6 +179,15 @@
 
           $scope.getForm(nv);
         }, true);
+
+        // Resets the widget content when the widget type changes
+        $scope.$watch('item.renderlet', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.content = null;
+        }, true);
       }
     ]);
 })();
