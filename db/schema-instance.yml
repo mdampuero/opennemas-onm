@@ -1397,7 +1397,7 @@ settings:
             options: { length: 128 }
         value:
             type: text
-            options: { length: 65532, default: null }
+            options: { length: 4294967295, default: null }
     index:
         -
             name: PRIMARY
