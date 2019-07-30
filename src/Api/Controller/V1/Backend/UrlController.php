@@ -21,7 +21,7 @@ class UrlController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_url_show';
+    protected $getItemRoute = 'api_v1_backend_url_get_item';
 
     /**
      * {@inheritdoc}

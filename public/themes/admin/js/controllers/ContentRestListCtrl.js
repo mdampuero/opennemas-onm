@@ -84,7 +84,7 @@
 
           var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
-            name: $scope.routes.list,
+            name: $scope.routes.getList,
             params: { oql: oql }
           };
 

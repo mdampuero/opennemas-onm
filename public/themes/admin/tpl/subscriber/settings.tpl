@@ -1,24 +1,32 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form ng-controller="SubscriberSettingsCtrl">
+  <form ng-controller="SubscriberConfigCtrl">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
+                <i class="fa fa-address-card m-r-10"></i>
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
                 <a class="no-padding" href="[% routing.generate('backend_subscribers_list') %]">
-                  <i class="fa fa-user"></i>
                   {t}Subscribers{/t}
                 </a>
               </h4>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
             </li>
             <li class="quicklinks hidden-xs">
-              <h5>{t}Settings{/t}</h5>
+              <h4>
+                {t}Settings{/t}
+              </h4>
             </li>
           </ul>
           <div class="all-actions pull-right">

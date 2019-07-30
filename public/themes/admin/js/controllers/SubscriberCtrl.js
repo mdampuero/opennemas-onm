@@ -35,7 +35,8 @@
         $scope.item = {
           name: null,
           privileges: [],
-          type: 1
+          type: 1,
+          user_groups: []
         };
 
         /**
@@ -47,11 +48,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          create:   'api_v1_backend_subscriber_create',
-          redirect: 'backend_subscriber_show',
-          save:     'api_v1_backend_subscriber_save',
-          show:     'api_v1_backend_subscriber_show',
-          update:   'api_v1_backend_subscriber_update'
+          createItem: 'api_v1_backend_subscriber_create_item',
+          getItem:    'api_v1_backend_subscriber_get_item',
+          redirect:   'backend_subscriber_show',
+          saveItem:   'api_v1_backend_subscriber_save_item',
+          updateItem: 'api_v1_backend_subscriber_update_item'
         };
 
         /**
@@ -61,14 +62,15 @@
          * @description
          *   Accepts a subscription.
          *
-         * @param {Integer} id The subscription id.
+         * @param {Integer} index The position of the subscription in the list
+         *                        of subscriptions.
          */
-        $scope.accept = function(id) {
-          if (!$scope.item.user_groups[id]) {
-            $scope.item.user_groups[id] = { status: 0, expires: null };
+        $scope.accept = function(index) {
+          if (!$scope.item.user_groups[index]) {
+            $scope.item.user_groups[index] = { status: 0, expires: null };
           }
 
-          $scope.item.user_groups[id].status = 1;
+          $scope.item.user_groups[index].status = 1;
         };
 
         /**
@@ -94,7 +96,7 @@
                 return function() {
                   var data  = $scope.getData();
                   var route = {
-                    name: 'api_v1_backend_subscriber_update',
+                    name: $scope.routes.updateItem,
                     params: { id: $scope.item.id }
                   };
 
@@ -165,19 +167,25 @@
             $scope.item = angular.extend($scope.item, data.item);
           }
 
-          if (!$scope.item.user_groups ||
-              angular.isArray($scope.item.user_groups) &&
-              $scope.item.user_groups.length === 0) {
+          if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }
 
-          for (var id in data.extra.subscriptions) {
-            if (!$scope.item.user_groups[id]) {
-              $scope.item.user_groups[id] = {
-                expires: null,
+          var subscriptions = Object.keys(data.extra.subscriptions);
+          var subscriptionsPresent = $scope.item.user_groups.map(function(subscription) {
+            return subscription.user_group_id;
+          });
+
+          for (var index in subscriptions) {
+            var id = parseInt(subscriptions[index]);
+
+            if (subscriptionsPresent.indexOf(id) === -1) {
+              $scope.item.user_groups.push({
+                user_id: $scope.item.id,
+                user_group_id: id,
                 status: 0,
-                user_group_id: id
-              };
+                expire: null
+              });
             }
           }
 
@@ -195,10 +203,11 @@
          * @description
          *   Rejects a subscription.
          *
-         * @param {Integer} id The subscription id.
+         * @param {Integer} index The position of the subscription in the list
+         *                        of subscriptions.
          */
-        $scope.reject = function(id) {
-          delete $scope.item.user_groups[id];
+        $scope.reject = function(index) {
+          $scope.item.user_groups[index].status = 0;
         };
       }
     ]);

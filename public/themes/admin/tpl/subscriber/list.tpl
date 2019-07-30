@@ -27,7 +27,7 @@
                 </li>
               {/acl}
               <li class="quicklinks">
-                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscribers_export') %]">
+                <a class="btn btn-white" href="[% routing.generate('api_v1_backend_subscriber_get_report') %]">
                   <span class="fa fa-download"></span>
                   {t}Download{/t}
                 </a>
@@ -222,8 +222,8 @@
                   <td class="hidden-xs">[% item.email %]</td>
                   <td class="hidden-sm hidden-xs">
                     <ul class="no-style">
-                      <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, subscription) in item.user_groups" ng-if="data.extra.subscriptions[subscription.user_group_id] && subscription.status !== 0" uib-tooltip="[% subscription.status === 2 ? '{t}Subscription requested{/t}' : '{t}Subscription disabled{/t}' %]" tooltip-enable="subscription.status === 2 || data.extra.subscriptions[id].enabled === 0">
-                        <a class="label text-uppercase no-animate" ng-class="{ 'label-danger': subscription.status !== 2 && !data.extra.subscriptions[id].enabled, 'label-default': subscription.status !== 2 && data.extra.subscriptions[id].enabled, 'label-warning': subscription.status === 2 }" href="[% routing.generate('backend_subscription_show', { id: subscription.user_id }) %]">
+                      <li class="m-b-5 m-r-5 pull-left" ng-repeat="subscription in item.user_groups" ng-if="data.extra.subscriptions[subscription.user_group_id] && subscription.status !== 0" uib-tooltip="[% subscription.status === 2 ? '{t}Subscription requested{/t}' : '{t}Subscription disabled{/t}' %]" tooltip-enable="subscription.status === 2 || data.extra.subscriptions[subscription.user_group_id].enabled === 0">
+                        <a class="label text-uppercase no-animate" ng-class="{ 'label-danger': subscription.status !== 2 && !data.extra.subscriptions[subscription.user_group_id].enabled, 'label-default': subscription.status !== 2 && data.extra.subscriptions[subscription.user_group_id].enabled, 'label-warning': subscription.status === 2 }" href="[% routing.generate('backend_subscription_show', { id: subscription.user_group_id }) %]">
                           <strong>[% data.extra.subscriptions[subscription.user_group_id].name %]</strong>
                         </span>
                         </a>
@@ -264,7 +264,7 @@
       {include file="user/modal.confirm.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete">
-      {include file="base/modal/modal.delete.tpl"}
+      {include file="common/extension/modal.delete.tpl"}
     </script>
   </form>
 {/block}

@@ -25,7 +25,7 @@ class StaticPageController extends ContentController
      *
      * @var string
      */
-    protected $getItemRoute = 'api_v1_backend_static_page_show';
+    protected $getItemRoute = 'api_v1_backend_static_page_get_item';
 
     /**
      * The API service name.

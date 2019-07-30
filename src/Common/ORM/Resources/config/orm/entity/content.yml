@@ -3,7 +3,20 @@ orm:
         -
             name: Content
             enum:
-                content_type_name: [ static_page, event ]
+                content_type_name:
+                    - album
+                    - article
+                    - attachment
+                    - book
+                    - event
+                    - kiosko
+                    - letter
+                    - opinion
+                    - photo
+                    - poll
+                    - special
+                    - static_page
+                    - video
             properties:
                 available:           boolean
                 body:                l10n_string

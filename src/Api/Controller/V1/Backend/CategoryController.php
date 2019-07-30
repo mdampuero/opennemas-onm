@@ -23,7 +23,7 @@ class CategoryController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_category_show';
+    protected $getItemRoute = 'api_v1_backend_category_get_item';
 
     /**
      * {@inheritdoc}
@@ -52,7 +52,7 @@ class CategoryController extends ApiController
      *
      * @return JsonResponse The response object.
      */
-    public function emptyAction($id)
+    public function emptyItemAction($id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('empty'));
 
@@ -72,7 +72,7 @@ class CategoryController extends ApiController
      *
      * @return JsonResponse The response object.
      */
-    public function emptySelectedAction(Request $request)
+    public function emptyListAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('empty'));
 
@@ -105,7 +105,7 @@ class CategoryController extends ApiController
      *
      * @return JsonResponse The response object.
      */
-    public function moveAction(Request $request, $id)
+    public function moveItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('move'));
 
@@ -127,7 +127,7 @@ class CategoryController extends ApiController
      *
      * @return JsonResponse The response object.
      */
-    public function moveSelectedAction(Request $request)
+    public function moveListAction(Request $request)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('move'));
 

@@ -194,8 +194,8 @@ $menuXml = [
             [
                 'id'          => 'file_manager',
                 'title'       => _('Files'),
-                'icon'        => 'fa fa-file',
-                'link'        => url('admin_files'),
+                'icon'        => 'fa fa-paperclip',
+                'link'        => url('backend_attachments_list'),
                 'module_name' => 'FILE_MANAGER',
                 'privilege'   => 'ATTACHMENT_ADMIN',
             ],
@@ -210,7 +210,7 @@ $menuXml = [
             [
                 'id'          => 'album_manager',
                 'title'       => _('Albums'),
-                'icon'        => 'fa fa-picture-o',
+                'icon'        => 'fa fa-stack-overflow',
                 'link'        => url('backend_albums_list'),
                 'module_name' => 'ALBUM_MANAGER',
                 'privilege'   => 'ALBUM_ADMIN',

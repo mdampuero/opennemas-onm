@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `advertisements`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `advertisements` (
   `pk_advertisement` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fk_content_categories` varchar(255) DEFAULT '',
+  `fk_content_categories` text,
   `path` varchar(150) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `type_medida` varchar(50) DEFAULT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `advertisements` (
   `overlap` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide Flash events',
   `timeout` int(4) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`pk_advertisement`),
-  KEY `fk_content_categories` (`fk_content_categories`),
+  FULLTEXT KEY `fk_content_categories` (`fk_content_categories`),
   CONSTRAINT `advertisement_id_contents_id` FOREIGN KEY (`pk_advertisement`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=829 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -476,7 +476,9 @@ CREATE TABLE `contents` (
   KEY `available` (`available`),
   KEY `starttime` (`starttime`,`endtime`),
   KEY `created` (`created`),
-  KEY `fk_author` (`fk_author`)
+  KEY `fk_author` (`fk_author`),
+  KEY `content_type_name` (`content_type_name`),
+  KEY `category_name` (`category_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=864 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1030,7 +1032,7 @@ DROP TABLE IF EXISTS `settings`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `settings` (
   `name` varchar(128) NOT NULL,
-  `value` text NOT NULL,
+  `value` longtext NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1446,4 +1448,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-29 16:57:41
+-- Dump completed on 2019-07-11  8:45:13

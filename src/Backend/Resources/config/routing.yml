@@ -40,10 +40,6 @@ admin_widget_update:
 admin_widgets_content_provider:
     path:     /widget/content-provider
     defaults: { _controller: BackendBundle:Widgets:contentProvider }
-# Sidebar manager routes
-admin_sidebars:
-    path:     /sidebars
-    defaults: { _controller: BackendBundle:Sidebars:list }
 
 # Menu manager routes
 admin_menus:
@@ -220,39 +216,6 @@ admin_books_update:
 admin_books_save_positions:
     path:     /books/save-positions
     defaults: { _controller: BackendBundle:Books:savePositions }
-
-# Files controller routes
-admin_files:
-    path:     /files
-    defaults: { _controller: BackendBundle:Files:list }
-
-admin_files_widget:
-    path:     /files/widget
-    defaults: { _controller: BackendBundle:Files:widget }
-
-admin_files_create:
-    path:     /files/create
-    defaults: { _controller: BackendBundle:Files:create }
-
-admin_file_show:
-    path:     /files/{id}/show
-    defaults: { _controller: BackendBundle:Files:show }
-    options:
-        expose: true
-
-admin_attachment_show:
-    path:     /files/{id}/show
-    defaults: { _controller: BackendBundle:Files:show }
-    options:
-        expose: true
-
-admin_files_update:
-    path:     /files/{id}/update
-    defaults: { _controller: BackendBundle:Files:update }
-
-admin_file_save_positions:
-    path:     /files/save-positions
-    defaults: { _controller: BackendBundle:Files:savePositions }
 
 # Search controller routes
 admin_search:
@@ -431,24 +394,18 @@ admin_getting_started_finish:
     path:     /getting-started/finish
     defaults: { _controller: BackendBundle:GettingStarted:finishWizard }
 
-admin_menu_sidebar_set:
-    path: /sidebar
-    defaults: { _controller: BackendBundle:MenuSidebar:set }
-    methods:  [ PUT ]
-    options:
-        expose: true
-
-admin_menu_sidebar_get:
-    path: /sidebar
-    defaults: { _controller: BackendBundle:MenuSidebar:get }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 # Routing refactoring starts here
+backend_account:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/account.yml'
+
 backend_album:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/album.yml'
+
+backend_attachment:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/attachment.yml'
 
 backend_authentication:
     prefix:   /
@@ -457,10 +414,6 @@ backend_authentication:
 backend_author:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/author.yml'
-
-backend_account:
-    prefix:   /
-    resource: '@BackendBundle/Resources/config/routing/account.yml'
 
 backend_category:
     prefix:   /
@@ -474,12 +427,12 @@ backend_domain:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain.yml'
 
-backend_events:
+backend_event:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/event.yml'
 
 backend_frontpage:
-    prefix: /
+    prefix:   /
     resource: '@BackendBundle/Resources/config/routing/frontpage.yml'
 
 backend_newsletter:

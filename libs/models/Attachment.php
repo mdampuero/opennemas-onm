@@ -140,16 +140,12 @@ class Attachment extends Content
 
         // now save all the specific information into the attachment table
         try {
-            $rs = getService('dbal_connection')->executeUpdate(
-                "INSERT INTO attachments (`pk_attachment`,`title`, `path`, `category`) "
-                . " VALUES (?,?,?,?)",
-                [
-                    (int) $this->id,
-                    $data['title'],
-                    $data['path'],
-                    (int) $data['category'],
-                ]
-            );
+            $rs = getService('dbal_connection')->insert('attachments', [
+                'pk_attachment' => $this->id,
+                'title'         => $data['title'],
+                'path'          => $data['path'],
+                'category'      => $data['category']
+            ]);
 
             if (!$rs) {
                 return false;
@@ -186,14 +182,12 @@ class Attachment extends Content
         parent::update($data);
 
         try {
-            getService('dbal_connection')->update(
-                'attachments',
-                [
-                    'title'    => $data['title'],
-                    'category' => (int) $data['category'],
-                ],
-                [ 'pk_attachment' => (int) $data['id'] ]
-            );
+            $this->serializeL10nKeys($data);
+
+            getService('dbal_connection')->update('attachments', [
+                'title'    => $data['title'],
+                'path'     => $data['path']
+            ], [ 'pk_attachment' => (int) $data['id'] ]);
 
             return true;
         } catch (\Exception $e) {
@@ -328,5 +322,10 @@ class Attachment extends Content
     public function getFileSystemPath()
     {
         return $this->file_path . DS . $this->path;
+    }
+
+    public function getRelativePath()
+    {
+        return $this->path;
     }
 }

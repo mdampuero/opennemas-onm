@@ -31,8 +31,8 @@ advertisements:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         fk_content_categories:
-            type: string
-            options: { length: 255, default: '', notnull: false }
+            type: text
+            options: { length: 65532, default: null, notnull: false }
         path:
             type: string
             options: { length: 150, default: null, notnull: false }
@@ -75,7 +75,7 @@ advertisements:
             columns: [fk_content_categories]
             primary: false
             unique: false
-            flags: {  }
+            flags: { type: fulltext }
     foreign_keys:
         -
             name: advertisement_id_contents_id
@@ -673,6 +673,15 @@ contents:
             name: urn_source
             columns: [urn_source]
             unique: true
+        -
+            name: content_type_name
+            columns: [content_type_name]
+            unique: false
+        -
+            name: category_name
+            columns: [category_name]
+            unique: false
+
 contents_categories:
     columns:
         pk_fk_content:
@@ -1388,7 +1397,7 @@ settings:
             options: { length: 128 }
         value:
             type: text
-            options: { length: 65532, default: null }
+            options: { length: 4294967295, default: null }
     index:
         -
             name: PRIMARY

@@ -124,7 +124,7 @@ class ContentOldService implements Service
         try {
             $item = $this->getItem($id);
 
-            $item->remove();
+            $item->remove($id);
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
                 'id'   => $id,
@@ -183,15 +183,17 @@ class ContentOldService implements Service
                 throw new \InvalidArgumentException();
             }
 
-            $item = $this->container->get('entity_repository')->findBy([
-                'pk_content' => [['value' => $id]],
-            ]);
+            $item = $this->entity !== 'Content'
+                ? $this->container->get('entity_repository')->find($this->entity, $id)
+                : $this->container->get('entity_repository')->findBy([
+                    'pk_content' => [['value' => $id]]
+                ]);
 
             if (empty($item)) {
                 throw new \Exception(sprintf('Unable to find an element with id %s', $id));
             }
 
-            $item = array_pop($item);
+            $item = is_array($item) ? array_pop($item) : $item;
 
             $this->localizeItem($item);
 

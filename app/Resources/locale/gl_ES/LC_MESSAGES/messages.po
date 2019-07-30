@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-09 11:04+0000\n"
-"PO-Revision-Date: 2019-07-09 13:07+0200\n"
+"POT-Creation-Date: 2019-07-11 08:51+0000\n"
+"PO-Revision-Date: 2019-07-11 10:50+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -178,47 +178,6 @@ msgstr "Non tes permiso para realizar esta acción."
 msgid ""
 "Oups! Seems that we had an unknown problem while trying to run your request."
 msgstr "Oups! Semella que tivemos algún problema ao executar a túa consulta."
-
-msgid "You must pick a file before submitting the form"
-msgstr "Selecciona un ficheiro antes de enviar o formulario"
-
-#, php-format
-msgid "You must pick a file smaller than %d Mb"
-msgstr "Debes seleccionar un ficheiro máis pequeno que %d Mb"
-
-#, php-format
-msgid ""
-"We are sorry, file extension %s is not allowed for upload as it could "
-"contain malicious code. Please contact with our support  or retry using a "
-"different file extension."
-msgstr ""
-"Non está permitido subir ficheiros con extensión %s xa que poden ter contido "
-"malicioso. Contacte co noso soporte ou tente con outra extensión de ficheiro."
-
-#, php-format
-msgid "Unable to create the directory to save the file"
-msgstr "Non foi posíbel crear o directorio onde gardar o ficheiro"
-
-msgid "There was an error while uploading the file."
-msgstr "Produciuse un erro ao actualizar o widget."
-
-msgid "File created successfuly."
-msgstr "Ficheiro creado correctamente."
-
-msgid "Unable to upload the file: A file with the same name already exists."
-msgstr "Non se puido subir o ficheiro: Xa existe un ficheiro co mesmo nome."
-
-#, php-format
-msgid "Unable to find the file with the id \"%s\""
-msgstr "Non se puido atopar o ficheiro co identificador «%s»"
-
-#, php-format
-msgid "File successfully updated."
-msgstr "Artigo actualizado correctamente."
-
-#, php-format
-msgid "There was a problem while saving the file information."
-msgstr "Produciuse un erro ao gardar a información do ficheiro."
 
 msgid ""
 "Unable to save content positions: Data sent from the client were not valid."
@@ -1963,6 +1922,9 @@ msgstr "Non"
 
 msgid "Contents translated successfully"
 msgstr "Contido traducido correctamente"
+
+msgid "Items deleted successfully"
+msgstr "Elementos eliminados correctamente"
 
 msgid "Tag"
 msgstr "Etiqueta"
@@ -4747,18 +4709,6 @@ msgstr "<a href=\"http://www.opennemas.com\">%1</a> non existe."
 msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr "Desexas rexistrar <a href=\"http://www.opennemas.com\">%1?</a>"
 
-msgid "Do you want to delete the item?"
-msgstr "Queres eliminar o elemento?"
-
-msgid "Do you want to delete the selected items?"
-msgstr "¿Queres eliminar os elementos seleccionados?"
-
-msgid "Ad block detected"
-msgstr "Bloqueador de publicidade detectado"
-
-msgid "Please, disable it to work with Opennemas"
-msgstr "Por favor, desactíveo para traballar correctamente con Opennemas"
-
 msgid "Welcome"
 msgstr "Benvido"
 
@@ -4869,6 +4819,15 @@ msgstr "Ir ao meu periódico"
 msgid "Show help"
 msgstr "Mostrar axuda"
 
+msgid "Static Page"
+msgstr "Páxina estática"
+
+msgid "NewsStand"
+msgstr "Portadas de papel"
+
+msgid "Restore"
+msgstr "Restaurar"
+
 msgid "Delete all trashed contents"
 msgstr "Eliminar todos os contidos no lixo"
 
@@ -4876,17 +4835,20 @@ msgid ""
 "Are you sure you want to remove permanently all the contents inside the "
 "trash?"
 msgstr ""
-"Tes certeza que queres eliminar de forma permanente todos os contidos do "
-"lixo?"
+"¿Estás seguro de que queres eliminar de forma permanente todos os contidos "
+"do lixo?"
 
 msgid "Yes, remove all"
 msgstr "Si, eliminalos todos"
 
-msgid "Remove all"
-msgstr "Eliminar todos"
+msgid "Do you want to restore the item?"
+msgstr "¿Queres restaurar o elemento?"
 
-msgid "Restore"
-msgstr "Restaurar"
+msgid "Do you want to restore the selected items?"
+msgstr "¿Queres restaurar os elementos seleccionados?"
+
+msgid "Empty"
+msgstr "Baleiro"
 
 msgid "Content Type"
 msgstr "Tipo de contido"
@@ -4900,11 +4862,8 @@ msgstr "Portadas"
 msgid "Reload"
 msgstr "Recargar"
 
-msgid "No contents in the trash that matches your search."
-msgstr "Non se puideron atopar contidos no lixo que coincidan coa súa busca."
-
-msgid "Remove permanently"
-msgstr "Eliminar de forma permanente"
+msgid "Do you want to empty the trash?"
+msgstr "¿Queres baleirar a papeleira?"
 
 msgid "Biography"
 msgstr "Biografia"
@@ -4939,14 +4898,11 @@ msgstr "Biografia curta"
 msgid "Votes"
 msgstr "Votos"
 
-msgid "Close date"
-msgstr "Data de peche"
+msgid "Vote end date"
+msgstr "Data de fin de votación"
 
 msgid "New poll"
 msgstr "Nova enquisa"
-
-msgid "Poll close date"
-msgstr "Data de peche de enquisa"
 
 msgid "Open"
 msgstr "Aberta"
@@ -6057,6 +6013,12 @@ msgstr "Ancho"
 msgid "Height"
 msgstr "Alto"
 
+msgid "Ad block detected"
+msgstr "Bloqueador de publicidade detectado"
+
+msgid "Please, disable it to work with Opennemas"
+msgstr "Por favor, desactíveo para traballar correctamente con Opennemas"
+
 msgid "Ads"
 msgstr "Anuncios"
 
@@ -6555,21 +6517,6 @@ msgstr "Grupo de caché"
 msgid "Expire time"
 msgstr "Tempo de expiración"
 
-msgid "Unable to find any file that matches your search."
-msgstr "Non se puideron atopar ficheiros que coincidan coa súa busca."
-
-msgid "Unassigned"
-msgstr "Sen asignar"
-
-msgid "You must put %1 polls in the HOME"
-msgstr "Debes ter %d enquisas na portada"
-
-msgid "Max allowed file size: %1 Mb"
-msgstr "Tamaño de ficheiro máximo permitido: %1 Mb"
-
-msgid "File types allowed"
-msgstr "Tipos de ficheiro permitidos"
-
 msgid "Reset <strong>password</strong>"
 msgstr "Reiniciar <strong>contrasinal</strong>"
 
@@ -7007,6 +6954,9 @@ msgstr "Non se puideron atopar libros que coincidan coa súa busca."
 msgid "You must put %1 books in the HOME"
 msgstr "Debes ter %d libros na portada"
 
+msgid "Unassigned"
+msgstr "Sen asignar"
+
 msgid "Editorial"
 msgstr "Editorial"
 
@@ -7139,6 +7089,9 @@ msgstr ""
 "Para protexer a túa privacidade, só che enviaremos esta información ao teu "
 "enderezo de correo electrónico baixo petición"
 
+msgid "No file selected"
+msgstr "Ficheiro non seleccionado"
+
 msgid "Are you sure that do you want send to the trash \"%1\"?"
 msgstr "Tes certeza que queres enviar ao lixo «%1»?"
 
@@ -7227,12 +7180,6 @@ msgstr "Traducindo os contidos seleccionados a «%1»"
 
 msgid "%1 contents propertly translated into \"%2\"."
 msgstr "%1 contidos traducidos correctamente ao «%2»."
-
-msgid "Do you want to send the item to trash?"
-msgstr "Tes certeza que queres enviar o elemento ao lixo?"
-
-msgid "Do you want to send the selected items to trash?"
-msgstr "Tes certeza que queres envair ao lixo os elementos seleccionados?"
 
 msgid "Update selected items"
 msgstr "Eliminar os elementos seleccionados"
@@ -7353,6 +7300,21 @@ msgstr "Data de inicio"
 msgid "End date"
 msgstr "Data de fin"
 
+msgid "No category"
+msgstr "Sin categoría"
+
+msgid "Do you want to delete the item?"
+msgstr "Queres eliminar o elemento?"
+
+msgid "Do you want to delete the selected items?"
+msgstr "¿Queres eliminar os elementos seleccionados?"
+
+msgid "Do you want to send the item to trash?"
+msgstr "Tes certeza que queres enviar o elemento ao lixo?"
+
+msgid "Do you want to send the selected items to trash?"
+msgstr "Tes certeza que queres envair ao lixo os elementos seleccionados?"
+
 msgid "Connect with"
 msgstr "Conectar con"
 
@@ -7447,13 +7409,6 @@ msgstr "Acceso a todas as categorías"
 
 msgid "The user can assign contents to the selected categories only"
 msgstr "O usuario só pode asignar contidos ás categorías seleccionadas"
-
-msgid ""
-"We recommend you to use the \"Access to all categories\" mark to avoid "
-"unchecked future created categories"
-msgstr ""
-"Recomendamos usar a opción \"Mostrar en todas as categorías\" para evitar "
-"que categorías futuras queden sen marcar."
 
 msgid "Used for interface, messages and units in the control panel"
 msgstr ""
@@ -7574,9 +7529,6 @@ msgstr "Engadir novo elemento"
 
 msgid "Category blog"
 msgstr "Categoria tipo Blog"
-
-msgid "Static Page"
-msgstr "Páxina estática"
 
 msgid "Synchronized Category"
 msgstr "Categoría sincronizada"
@@ -7772,9 +7724,6 @@ msgstr "Comproba que incluiches cando menos unha imaxe neste álbum"
 
 msgid "Assign an image as a cover image"
 msgstr "Debes asignar unha imaxe como imaxe principal"
-
-msgid "Empty"
-msgstr "Baleirar"
 
 msgid "Place"
 msgstr "Lugar"
@@ -8581,6 +8530,57 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ msgid "Bloggers"
 #~ msgstr "Autores de blog"
 
+#~ msgid "Pick type"
+#~ msgstr "Escolla tipo"
+
+#, fuzzy
+#~ msgid "Close date"
+#~ msgstr "Prema para estabelecer unha data"
+
+#, fuzzy
+#~ msgid "Poll close date"
+#~ msgstr "Data de final de publicación"
+
+#, fuzzy
+#~ msgid "Do you want to restore the selected items to trash?"
+#~ msgstr "Tes certeza que queres envair ao lixo os elementos seleccionados?"
+
+#~ msgid "You must pick a file before submitting the form"
+#~ msgstr "Selecciona un ficheiro antes de enviar o formulario"
+
+#~ msgid "You must pick a file smaller than %d Mb"
+#~ msgstr "Debes seleccionar un ficheiro máis pequeno que %d Mb"
+
+#~ msgid ""
+#~ "We are sorry, file extension %s is not allowed for upload as it could "
+#~ "contain malicious code. Please contact with our support  or retry using a "
+#~ "different file extension."
+#~ msgstr ""
+#~ "Non está permitido subir ficheiros con extensión %s xa que poden ter "
+#~ "contido malicioso. Contacte co noso soporte ou tente con outra extensión "
+#~ "de ficheiro."
+
+#~ msgid "Unable to create the directory to save the file"
+#~ msgstr "Non foi posíbel crear o directorio onde gardar o ficheiro"
+
+#~ msgid "There was an error while uploading the file."
+#~ msgstr "Produciuse un erro ao actualizar o widget."
+
+#~ msgid "File created successfuly."
+#~ msgstr "Ficheiro creado correctamente."
+
+#~ msgid "Unable to upload the file: A file with the same name already exists."
+#~ msgstr "Non se puido subir o ficheiro: Xa existe un ficheiro co mesmo nome."
+
+#~ msgid "Unable to find the file with the id \"%s\""
+#~ msgstr "Non se puido atopar o ficheiro co identificador «%s»"
+
+#~ msgid "File successfully updated."
+#~ msgstr "Artigo actualizado correctamente."
+
+#~ msgid "There was a problem while saving the file information."
+#~ msgstr "Produciuse un erro ao gardar a información do ficheiro."
+
 #~ msgid "Poll successfully created."
 #~ msgstr "Enquisa gardada correctamente."
 
@@ -8610,6 +8610,16 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 
 #~ msgid "Please select a valid poll answer."
 #~ msgstr "Selecciona unha resposta válida da enquisa."
+
+#~ msgid "Remove all"
+#~ msgstr "Eliminar todos"
+
+#~ msgid "No contents in the trash that matches your search."
+#~ msgstr ""
+#~ "Non se puideron atopar contidos no lixo que coincidan coa súa busca."
+
+#~ msgid "Remove permanently"
+#~ msgstr "Eliminar de forma permanente"
 
 #~ msgid "Poll section preferences"
 #~ msgstr "Preferencias das enquisas"
@@ -8644,8 +8654,24 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ msgid "Only available for registered users"
 #~ msgstr "Só dispoñíbel para usuarios rexistrados"
 
-#~ msgid "Pick type"
-#~ msgstr "Escolla tipo"
+#~ msgid "Unable to find any file that matches your search."
+#~ msgstr "Non se puideron atopar ficheiros que coincidan coa súa busca."
+
+#~ msgid "You must put %1 polls in the HOME"
+#~ msgstr "Debes ter %d enquisas na portada"
+
+#~ msgid "Max allowed file size: %1 Mb"
+#~ msgstr "Tamaño de ficheiro máximo permitido: %1 Mb"
+
+#~ msgid "File types allowed"
+#~ msgstr "Tipos de ficheiro permitidos"
+
+#~ msgid ""
+#~ "We recommend you to use the \"Access to all categories\" mark to avoid "
+#~ "unchecked future created categories"
+#~ msgstr ""
+#~ "Recomendamos usar a opción \"Mostrar en todas as categorías\" para evitar "
+#~ "que categorías futuras queden sen marcar."
 
 #~ msgid "Album created successfully"
 #~ msgstr "Álbum creado correctamente"
@@ -9669,7 +9695,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ "Are you sure you want to toggle subscription status for those <span>%num"
 #~ "%</span> subscribers?"
 #~ msgstr ""
-#~ "¿Estás segudo de querer cambiar o estado de subscrición para <span>%num%</"
+#~ "¿Estás seguro de querer cambiar o estado de subscrición para <span>%num%</"
 #~ "span> subscritores?"
 
 #~ msgid "Creating subscriber"

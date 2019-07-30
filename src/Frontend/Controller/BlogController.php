@@ -61,9 +61,7 @@ class BlogController extends FrontendController
     ];
 
     /**
-     * The list of valid query parameters per action.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $queries = [
         'list'       => [ 'page' ],
@@ -71,9 +69,7 @@ class BlogController extends FrontendController
     ];
 
     /**
-     * The list of routes per action.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $routes = [
         'listauthor' => 'frontend_blog_author_frontpage',
@@ -82,9 +78,12 @@ class BlogController extends FrontendController
     ];
 
     /**
-     * The list of templates per action.
-     *
-     * @var array
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.opinion';
+
+    /**
+     * {@inheritdoc}
      */
     protected $templates = [
         'list'       => 'opinion/blog_frontpage.tpl',

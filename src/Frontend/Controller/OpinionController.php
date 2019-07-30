@@ -51,9 +51,7 @@ class OpinionController extends FrontendController
     ];
 
     /**
-     * The list of valid query parameters per action.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $queries = [
         'list'       => [ 'page' ],
@@ -62,9 +60,7 @@ class OpinionController extends FrontendController
     ];
 
     /**
-     * The list of routes per action.
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $routes = [
         'listauthor' => 'frontend_opinion_author_frontpage',
@@ -72,9 +68,12 @@ class OpinionController extends FrontendController
     ];
 
     /**
-     * The list of templates per action.
-     *
-     * @var array
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.opinion';
+
+    /**
+     * {@inheritdoc}
      */
     protected $templates = [
         'list'       => 'opinion/opinion_frontpage.tpl',
@@ -260,8 +259,9 @@ class OpinionController extends FrontendController
         // Setting filters for the further SQLs
         $date    = date('Y-m-d H:i:s');
         $filters = [
-            'content_status'    => [['value' => 1]],
-            'content_type_name' => [['value' => 'opinion']],
+            'content_status'       => [['value' => 1]],
+            'content_type_name'    => [['value' => 'opinion']],
+            'opinions`.`fk_author' => [['value' => $author->id]],
             'starttime' => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS' ],
@@ -276,23 +276,10 @@ class OpinionController extends FrontendController
             ],
         ];
 
-        if ($author->id == 1 && $author->username == 'editorial') {
-            // Editorial
-            $filters['type_opinion'] = [['value' => 1]];
-
-            $author->slug = 'editorial';
-        } elseif ($author->id == 2 && $author->username == 'director') {
-            // Director
-            $filters['type_opinion'] = [['value' => 2]];
-
-            $author->slug = 'director';
-        } else {
-            // Regular authors
-            $filters['type_opinion']         = [['value' => 0]];
-            $filters['opinions`.`fk_author'] = [['value' => $author->id]];
-
-            $author->slug = \Onm\StringUtils::getTitle($author->name);
-        }
+        $author->slug = $this->get('data.manager.filter')
+            ->set($author->name)
+            ->filter('slug')
+            ->get();
 
         $orderBy = ['created' => 'DESC'];
 
@@ -300,11 +287,6 @@ class OpinionController extends FrontendController
         $numOpinions = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page');
-        if (!empty($configurations)
-            && array_key_exists('total_opinions', $configurations)
-        ) {
-            $numOpinions = $configurations['total_opinions'];
-        }
 
         // Get the number of total opinions for this author for pagination purposes
         $countOpinions = $this->get('opinion_repository')->countBy($filters);

@@ -21,25 +21,17 @@ class EventController extends ContentController
     protected $extension = 'es.openhost.module.events';
 
     /**
-     * The route name to generate URL from when creating a new item.
-     *
-     * @var string
+     * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_event_show';
+    protected $getItemRoute = 'api_v1_backend_event_get_item';
 
     /**
-     * The API service name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $service = 'api.service.content';
 
     /**
-     * Returns the list of photos linked to the article.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
+     * {@inheritdoc}
      */
     protected function getRelatedContents($content)
     {

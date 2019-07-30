@@ -13,6 +13,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.attachment:
+        class:     Common\Core\Component\Helper\AttachmentHelper
+        arguments: [ '@core.instance', '%core.paths.public%' ]
+        public:    true
+
     core.helper.comment:
         class:     Common\Core\Component\Helper\CommentHelper
         arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
@@ -44,7 +49,7 @@ services:
     core.helper.image:
         class:     Common\Core\Component\Helper\ImageHelper
         arguments: [ '@core.instance', '@core.image.processor', '%core.paths.public%' ]
-        public: true
+        public:    true
 
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
@@ -116,5 +121,5 @@ services:
 
     core.helper.varnish:
         class:     Common\Core\Component\Helper\VarnishHelper
-        arguments: [ '@varnish_ban_message_exchanger' ]
+        arguments: [ '@core.helper.url_generator', '@varnish_ban_message_exchanger' ]
         public:    true

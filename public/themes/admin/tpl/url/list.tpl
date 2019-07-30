@@ -216,13 +216,13 @@
                     </div>
                   </td>
                   <td>
-                    <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && item.content_type !== 'user' && item.content_type !== 'user_group'">
+                    <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'book', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) !== -1">
                       [% item.target %] ([% item.content_type %])
                     </a>
                     <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4">
                       [% item.target %]
                     </a>
-                    <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="item.content_type === 'user' || item.content_type === 'user_group'">
+                    <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'book', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) === -1">
                       [% item.target %] ([% item.content_type %])
                     </a>
                   </td>
@@ -262,7 +262,7 @@
       </div>
     </div>
     <script type="text/ng-template" id="modal-delete">
-      {include file="base/modal/modal.delete.tpl"}
+      {include file="common/extension/modal.delete.tpl"}
     </script>
   </form>
 {/block}

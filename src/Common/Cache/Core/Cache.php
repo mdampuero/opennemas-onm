@@ -164,11 +164,13 @@ abstract class Cache extends DataBuffer
     {
         $this->addToBuffer('set', [ 'id' => $id, 'data' => $data ]);
 
+        $ttl = empty($ttl) && !empty($this->ttl) ? $this->ttl : $ttl;
+
         if (is_array($id)) {
             $ids  = $this->getNamespacedId(array_keys($id));
             $data = array_combine($ids, array_values($id));
 
-            $this->saveMulti($data);
+            $this->saveMulti($data, $ttl);
             return;
         }
 
@@ -298,16 +300,17 @@ abstract class Cache extends DataBuffer
     /**
      * Saves data into the cache.
      *
-     * @param string   $id   The cache id.
-     * @param mixed    $data The data.
-     * @param intetger $ttl  The time to live (in seconds).
+     * @param string $id   The cache id.
+     * @param mixed  $data The data.
+     * @param int    $ttl  The time to live (in seconds).
      */
     abstract protected function save($id, $data, $ttl);
 
     /**
      * Saves data into the cache given an array with keys and data.
      *
-     * @param mixed    $data The array with keys and data.
+     * @param mixed $data The array with keys and data.
+     * @param int   $ttl  The time to live (in seconds).
      */
-    abstract protected function saveMulti($data);
+    abstract protected function saveMulti($data, $ttl);
 }

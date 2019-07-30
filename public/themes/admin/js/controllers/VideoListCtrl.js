@@ -43,11 +43,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          delete:         'api_v1_backend_video_delete',
-          deleteSelected: 'api_v1_backend_videos_delete',
-          list:           'api_v1_backend_videos_list',
-          patch:          'api_v1_backend_video_patch',
-          patchSelected:  'api_v1_backend_videos_patch'
+          deleteItem: 'api_v1_backend_video_delete_item',
+          deleteList: 'api_v1_backend_video_delete_list',
+          getList:    'api_v1_backend_video_get_list',
+          patchItem:  'api_v1_backend_video_patch_item',
+          patchList:  'api_v1_backend_video_patch_list'
         };
 
         /**

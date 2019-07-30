@@ -205,7 +205,7 @@
                         <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
                       </button>
                       {/acl}
-                      <a class="link" href="{$smarty.const.INSTANCE_MAIN_DOMAIN}{$MEDIA_IMG_URL}[% content.path_file + '/' + content.name %]">
+                      <a class="link" href="[% extra.paths.photo + content.path_file + '/' + content.name %]" target="_blank">
                         <i class="fa fa-external-link m-r-5"></i>{t}Link{/t}
                       </a>
                     </div>

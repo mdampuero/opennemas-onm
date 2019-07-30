@@ -278,7 +278,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
     {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
   <script type="text/ng-template" id="modal-adblock">
-    {include file="base/modal/modal.adblock.tpl"}
+    {include file="advertisement/modal.adblock.tpl"}
   </script>
   <script type="text/ng-template" id="ad_position_template">
     <div ng-repeat="position in content.positions">[% map[position].name %]</div>

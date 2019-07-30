@@ -25,12 +25,12 @@ class PollController extends ContentOldController
      *
      * @var string
      */
-    protected $getItemRoute = 'api_v1_backend_poll_show';
+    protected $getItemRoute = 'api_v1_backend_poll_get_item';
 
     /**
      * {@inheritDoc}
      */
-    public function getExtraData($items = null)
+    protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
             'authors'    => $this->getAuthors($items),
@@ -40,9 +40,9 @@ class PollController extends ContentOldController
     }
 
     /**
-     * {@inheritDoc}`
+     * {@inheritDoc}
      */
-    public function getL10nKeys()
+    protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('Poll');
     }

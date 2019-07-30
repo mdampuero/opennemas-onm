@@ -58,7 +58,7 @@
               success: function() {
                 return function() {
                   var route = {
-                    name: $scope.routes.delete,
+                    name: $scope.routes.deleteItem,
                     params: { id: id }
                   };
 
@@ -95,7 +95,7 @@
               },
               success: function() {
                 return function() {
-                  var route = $scope.routes.deleteSelected;
+                  var route = $scope.routes.deleteList;
                   var data  = { ids: $scope.selected.items };
 
                   return http.delete(route, data);
@@ -130,7 +130,7 @@
             return '';
           }
 
-          return $scope.routing.generate($scope.routes.list, {
+          return $scope.routing.generate($scope.routes.getList, {
             format: '.csv',
             oql: oqlEncoder.getOql(criteria)
           });
@@ -148,7 +148,7 @@
 
           var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
-            name: $scope.routes.list,
+            name: $scope.routes.getList,
             params: { oql: oql }
           };
 
@@ -190,7 +190,7 @@
           data[property] = value;
 
           var route = {
-            name:   $scope.routes.patch,
+            name:   $scope.routes.patchItem,
             params: { id: $scope.getItemId(item) }
           };
 
@@ -227,7 +227,7 @@
 
           data[property] = value;
 
-          return http.patch($scope.routes.patchSelected, data)
+          return http.patch($scope.routes.patchList, data)
             .then(function(response) {
               $scope.list().then(function() {
                 $scope.selected = { all: false, items: [] };

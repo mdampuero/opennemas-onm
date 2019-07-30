@@ -48,6 +48,11 @@ class ArticleController extends FrontendController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.article';
+
+    /**
      * Displays the external article given its id
      *
      * @param Request $request the request object

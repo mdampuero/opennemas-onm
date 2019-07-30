@@ -12,6 +12,45 @@ namespace Common\ORM\Database\Repository;
 class UserGroupRepository extends BaseRepository
 {
     /**
+     * Returns a list where key is the user group id and value is the number of
+     * users assigned to the category.
+     *
+     * @param mixed $ids A user group id or a list of user group ids.
+     *
+     * @return array The list where keys are the user group ids and values are
+     *               the number of users.
+     */
+    public function countUsers($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT user_group_id AS "id", COUNT(1) AS "users" '
+            . 'FROM user_user_group '
+            . 'WHERE user_group_id IN (?) '
+            . 'GROUP BY user_group_id';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['users'];
+        }
+
+        return $contents;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function refresh($ids)

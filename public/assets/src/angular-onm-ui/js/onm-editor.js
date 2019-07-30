@@ -38,6 +38,7 @@
             'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
             'resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
+          autoParagraph: false,
           uiColor: '#ffffff',
           autoGrow_onStartup: true,
           autoGrow_maxHeight: 500,

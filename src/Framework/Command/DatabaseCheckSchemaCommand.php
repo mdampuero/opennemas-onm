@@ -183,12 +183,16 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
                     $value['name'] = null;
                 }
 
+                if (!array_key_exists('flags', $value)) {
+                    $value['flags'] = [];
+                }
+
                 if (array_key_exists('primary', $value) && $value['primary']) {
                     $table->setPrimaryKey($value['columns'], $value['name']);
                 } elseif (array_key_exists('unique', $value) && $value['unique']) {
                     $table->addUniqueIndex($value['columns'], $value['name']);
                 } else {
-                    $table->addIndex($value['columns'], $value['name']);
+                    $table->addIndex($value['columns'], $value['name'], $value['flags']);
                 }
             }
 

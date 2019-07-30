@@ -4,7 +4,7 @@
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.author">
     <span ng-show="!item.fk_author"><strong>{t}No author{/t}</strong></span>
     <span ng-show="item.fk_author">
-      <strong>[% data.extra.authors[item.fk_author].name %]</span></strong>
+      <strong>[% (data.extra.authors | filter : { id: item.fk_author } : true)[0].name %]</span></strong>
     </span>
   </span>
 </div>

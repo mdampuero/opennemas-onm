@@ -10,9 +10,17 @@
 namespace Api\Service\V1;
 
 use Api\Exception\GetItemException;
+use Api\Exception\ApiException;
 
 class UserGroupService extends OrmService
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $defaults = [
+        'type' => 0
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -30,6 +38,38 @@ class UserGroupService extends OrmService
                 ->findOneBy($oql);
         } catch (\Exception $e) {
             throw new GetItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Returns the number of users associated to a user group in a list of user
+     * groups.
+     *
+     * @param array The list of user groups.
+     *
+     * @return array A list where the key is a user groups id and the value is
+     *               the number of users associated to the user group.
+     */
+    public function getStats($items)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = array_map(function ($a) {
+            return $a->pk_user_group;
+        }, $items);
+
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->countUsers($ids);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
         }
     }
 
