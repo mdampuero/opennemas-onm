@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-11 08:51+0000\n"
-"PO-Revision-Date: 2019-07-11 10:50+0200\n"
+"PO-Revision-Date: 2019-08-05 17:02+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -916,7 +916,7 @@ msgid "From"
 msgstr "Desde"
 
 msgid "Pick the item to insert"
-msgstr "Seleccione o elemento a insertar"
+msgstr "Selecciona o elemento a insertar"
 
 msgid "Insert"
 msgstr "Inserir"
@@ -1535,7 +1535,7 @@ msgid "Unable to activate your account"
 msgstr "Non foi posíbel activar a túa conta"
 
 msgid "Select a country"
-msgstr "Seleccione un país"
+msgstr "Selecciona un país"
 
 msgid "The email address is already in use."
 msgstr "O enderezo que escribiu xa está en uso."
@@ -1598,7 +1598,7 @@ msgid "Client saved successfully"
 msgstr "Cliente gardado correctamente"
 
 msgid "Select an user..."
-msgstr "Seleccione un usuario…"
+msgstr "Selecciona un usuario…"
 
 msgid "Instance deleted successfully"
 msgstr "Instancia eliminada correctamente"
@@ -2533,7 +2533,7 @@ msgid "Widget %s not available"
 msgstr "Widget %s non dispoñíbel"
 
 msgid "Select a category..."
-msgstr "Seleccione unha categoría…"
+msgstr "Selecciona unha categoría…"
 
 msgid "Frontpage mobile version"
 msgstr "Móbil: portada"
@@ -3906,7 +3906,7 @@ msgid "Translate to"
 msgstr "Traducir a"
 
 msgid "Select to language"
-msgstr "Seleccione un idioma"
+msgstr "Selecciona un idioma"
 
 msgid "Required params for Service"
 msgstr "Parámetros requeridos para o servizo"
@@ -3915,7 +3915,7 @@ msgid "Service"
 msgstr "Servizo"
 
 msgid "Select a service..."
-msgstr "Seleccione un servizo…"
+msgstr "Selecciona un servizo…"
 
 msgid "Default translator for \"%1\""
 msgstr "Tradutor por omisión para «%1»"
@@ -4335,7 +4335,7 @@ msgid ""
 "Your theme offers multiple skins to slightly change your theme. Select which "
 "one do you want."
 msgstr ""
-"O teu tema ofrece varias skins que o cambian lixeiramente. Seleccione o que "
+"O teu tema ofrece varias skins que o cambian lixeiramente. Selecciona o que "
 "quere."
 
 msgid "Custom CSS"
@@ -4976,7 +4976,7 @@ msgid "Save positions"
 msgstr "Gardar posicións"
 
 msgid "Select a category"
-msgstr "Seleccione unha categoría"
+msgstr "Selecciona unha categoría"
 
 msgid "Slug"
 msgstr "Slug"
@@ -5256,13 +5256,13 @@ msgid "Text size for title"
 msgstr "Tamaño do texto para o titulo"
 
 msgid "Select a size..."
-msgstr "Seleccione un tamaño…"
+msgstr "Selecciona un tamaño…"
 
 msgid "Image position"
 msgstr "Posición da imaxe"
 
 msgid "Select a position..."
-msgstr "Seleccione unha posición…"
+msgstr "Selecciona unha posición…"
 
 msgid "Settings home frontpage"
 msgstr "Preferencias para a portada principal"
@@ -5486,7 +5486,7 @@ msgid "A list with all payment method used will appear."
 msgstr "Aparecerá unha lista con todos os métodos de pago."
 
 msgid "Select one of the listed payment methods or add a new payment method."
-msgstr "Seleccione un dos métodos de pago mostrados ou engada un novo."
+msgstr "Selecciona un dos métodos de pago mostrados ou engada un novo."
 
 msgid "Purchased"
 msgstr "Mercado"
@@ -5513,7 +5513,7 @@ msgid "Please, continue to the next step"
 msgstr "Continúa ao seguinte paso"
 
 msgid "Select the payment method."
-msgstr "Seleccione o modo de pagamento"
+msgstr "Selecciona o modo de pagamento"
 
 msgid "You'll have a chance to review your order before it's placed."
 msgstr "Poderá revisar a súa compra antes de finalizala."
@@ -5658,7 +5658,7 @@ msgid "Empty equals to frontpage"
 msgstr "Baleiro igual a portada"
 
 msgid "Select a content"
-msgstr "Seleccione un contido"
+msgstr "Selecciona un contido"
 
 msgid "Examples"
 msgstr "Exemplos"
@@ -6437,7 +6437,7 @@ msgstr "Ordenar portada de Kiosko segundo"
 
 msgid "Select if order newsstand's frontpage by dates or by section."
 msgstr ""
-"Seleccione se quere ordenar a portada de kioskos por datas ou por seccións"
+"Selecciona se quere ordenar a portada de kioskos por datas ou por seccións"
 
 msgid "Grouped by date is recommended for weekly newspapers."
 msgstr "Agrupado por datas é o recomendábel para periódicos semanais."
@@ -7010,7 +7010,7 @@ msgid "No image assigned"
 msgstr "Imaxe non asignada"
 
 msgid "Select an author"
-msgstr "Seleccione un autor"
+msgstr "Selecciona un autor"
 
 msgid "Add a tag..."
 msgstr "Engadir unha etiqueta ..."
@@ -7881,7 +7881,7 @@ msgid "Icon"
 msgstr "Icona"
 
 msgid "Pick an icon..."
-msgstr "Seleccione un tipo…"
+msgstr "Selecciona un tipo…"
 
 msgid "No icon"
 msgstr "Sen icona"
@@ -8050,7 +8050,7 @@ msgid "This UUID is invalid"
 msgstr "Este UUID é válido"
 
 msgid "Select a type"
-msgstr "Seleccione un tipo"
+msgstr "Selecciona un tipo"
 
 msgid "Theme"
 msgstr "Tema"
@@ -8380,7 +8380,7 @@ msgid ""
 "                    <br>Select 'All' for cleaning all the cache/compile "
 "files."
 msgstr ""
-"Seleccione a instancia onde desexa limpar ficheiros de caché e compiles.\n"
+"Selecciona a instancia onde desexa limpar ficheiros de caché e compiles.\n"
 "<br>Selecciona «Todas» para eliminar todos os ficheiros de caché e compiles."
 
 msgid "Delete instance"
@@ -8716,7 +8716,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ msgstr "Miniatura da imaxe"
 
 #~ msgid "Select an author..."
-#~ msgstr "Seleccione un autor…"
+#~ msgstr "Selecciona un autor…"
 
 #~ msgid "Album images"
 #~ msgstr "Imaxes do álbum"
@@ -8753,7 +8753,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ "Select if order album's frontpage by most views or albums checked as "
 #~ "favorites."
 #~ msgstr ""
-#~ "Seleccione se quere ordenar o widget de álbums por máis vistos ou por "
+#~ "Selecciona se quere ordenar o widget de álbums por máis vistos ou por "
 #~ "favoritos."
 
 #~ msgid "Created Date"
@@ -9009,7 +9009,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 
 #~ msgid "Select if order blogs's frontpages by created date or bloggers name."
 #~ msgstr ""
-#~ "Seleccione se quere ordenar a portada de blogues por data de creación ou "
+#~ "Selecciona se quere ordenar a portada de blogues por data de creación ou "
 #~ "por nome do autor."
 
 #~ msgid "Blogger"
@@ -9028,7 +9028,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ msgstr "En portada principal"
 
 #~ msgid "-- Select opinion type --"
-#~ msgstr "-- Seleccione tipo de opinión --"
+#~ msgstr "-- Selecciona tipo de opinión --"
 
 #~ msgid "Opinion from author"
 #~ msgstr "Opinión de autor"
@@ -9176,7 +9176,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ msgstr "-- Todas as categorías --"
 
 #~ msgid "- Select a category -"
-#~ msgstr "- Seleccione categoría -"
+#~ msgstr "- Selecciona categoría -"
 
 #~ msgid "Config categories module"
 #~ msgstr "Configurar o módulo «Categorías»"
@@ -9587,7 +9587,7 @@ msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 #~ msgstr "Eliminar ficheiros locais"
 
 #~ msgid " - Select one author - "
-#~ msgstr " - Seleccione un autor - "
+#~ msgstr " - Selecciona un autor - "
 
 #~ msgid "Most viewed in 24 hours"
 #~ msgstr "Máis vistas nas últimas 24 horas"
