@@ -209,7 +209,8 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
         $theme = new Theme([
             'uuid' => 'es.openhost.theme.glorp',
             'parameters' => [
-                'parent' => 'es.openhost.theme.mumble'
+                'parent'  => 'es.openhost.theme.mumble',
+                'layouts' => [ 'fubar', 'foobar' ]
             ]
         ]);
 
@@ -219,6 +220,9 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->with($theme);
         $this->template->expects($this->once())->method('addTheme')
             ->with($parent);
+
+        $this->lm->expects($this->once())->method('addLayouts')
+            ->with([ 'fubar', 'foobar' ]);
 
         $this->wl->expects($this->at(0))->method('addTheme')
             ->with($parent);
