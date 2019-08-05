@@ -45,12 +45,14 @@ EOF
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
-        $loader = $this->getContainer()->get('core.loader');
-
         $instanceName = $input->getArgument('instance');
-        $instance     = $loader->loadInstanceFromInternalName($instanceName);
 
-        $loader->init();
+        $this->getContainer()->get('core.loader')
+            ->load($instanceName)
+            ->onlyEnabled()
+            ->init();
+
+        $instance = $this->getContainer()->get('core.instance');
 
         // Set base url from instance information to fix url generation
         $context = $this->getContainer()->get('router')->getContext();

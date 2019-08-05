@@ -43,17 +43,15 @@ EOF
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
-        $loader       = $this->getContainer()->get('core.loader');
         $logger       = $this->getContainer()->get('logger');
         $instanceName = $input->getArgument('instance');
 
-        $instance = $loader->loadInstanceFromInternalName($instanceName);
-        $loader->init();
+        $this->getContainer()->get('core.loader')
+            ->load($instanceName)
+            ->onlyEnabled()
+            ->init();
 
-        if ($instance->activated != '1') {
-            $message = _('Instance not activated');
-            throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
-        }
+        $instance = $this->getContainer()->get('core.instance');
 
         $this->getContainer()->get('core.security')->setInstance($instance);
 

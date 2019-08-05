@@ -53,10 +53,14 @@ EOF
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
-        $instance = $this->getContainer()->get('core.loader')
-            ->loadInstanceFromInternalName($instanceName);
-        $conn     = $this->getContainer()->get('dbal_connection');
-        $conn->selectDatabase($instance->getDatabaseName());
+        $instance = $this->getContainer()
+            ->get('core.loader.instance')
+            ->loadInstanceByName($instanceName)
+            ->getInstance();
+
+        $this->getContainer()->get('core.loader')->configureInstance($instance);
+
+        $conn = $this->getContainer()->get('dbal_connection');
 
         $conn->fetchAssoc('SELECT count(*) FROM contents');
 

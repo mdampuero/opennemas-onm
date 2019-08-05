@@ -65,10 +65,11 @@ class InstanceModuleEditionCommand extends ContainerAwareCommand
         $activate = $input->getOption('activate');
         $remove   = $input->getOption('remove');
 
-        $loader   = $this->getContainer()->get('core.loader');
-        $instance = $loader->loadInstanceFromInternalName($name);
+        $instance = $this->getContainer()->get('core.loader.instance')
+            ->loadInstanceByName($name)
+            ->getInstance();
 
-        $loader->init();
+        $this->getContainer()->get('core.loader')->configureInstance($instance);
 
         $before = count($instance->purchased)
             + count($instance->activated_modules);

@@ -77,13 +77,11 @@ class MigrateCommand extends ContainerAwareCommand
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
-        // Load instance and force ORM and Cache initialization
-        $loader = $this->getContainer()->get('core.loader');
-        $loader->loadInstanceFromInternalName(
-            $this->migration['target']['instance']
-        );
+        $instance = $this->getContainer()->get('core.loader.instance')
+            ->loadInstanceByName($this->migration['target']['instance'])
+            ->getInstance();
 
-        $loader->init();
+        $this->getContainer()->get('core.loader')->configureInstance($instance);
 
         $this->output->writeln("<options=bold>(2/6) Configuring the migration...</>");
 

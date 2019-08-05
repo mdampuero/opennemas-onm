@@ -10,6 +10,7 @@
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,22 +20,31 @@ class ExportContentsCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setDefinition(
-                [
-                    new InputOption('instance', 'i', InputOption::VALUE_REQUIRED, 'Instance to get contents from', '*'),
-                    new InputOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Number of contents to export', '*'),
-                    new InputOption('from', 'f', InputOption::VALUE_OPTIONAL, 'Created Date from when to export', '*'),
-                    new InputOption(
-                        'target-dir',
-                        't',
-                        InputOption::VALUE_REQUIRED,
-                        'The folder where store backups',
-                        './backups'
-                    ),
-                ]
-            )
             ->setName('export:contents')
             ->setDescription('Exports contents from one instance to a given folder path')
+            ->addArgument(
+                'instance',
+                InputArgument::REQUIRED,
+                'Instance to get contents from'
+            )->addOption(
+                'limit',
+                'l',
+                InputOption::VALUE_OPTIONAL,
+                'Number of contents to export',
+                '*'
+            )->addOption(
+                'from',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'Created Date from when to export',
+                '*'
+            )->addOption(
+                'target-dir',
+                't',
+                InputOption::VALUE_REQUIRED,
+                'The folder where store backups',
+                './backups'
+            )
             ->setHelp(
                 <<<EOF
 The <info>%command.name%</info> exports contents from an instance:
@@ -58,73 +68,31 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Get arguments
-        $this->limit     = $input->getOption('limit');
-        $instance        = $input->getOption('instance');
-        $this->from      = $input->getOption('from');
-        $this->targetDir = $input->getOption('target-dir');
-
         $this->input  = $input;
         $this->output = $output;
+
+        // Get arguments
+        $instanceName    = $input->getArgument('instance');
+        $this->limit     = $input->getOption('limit');
+        $this->from      = $input->getOption('from');
+        $this->targetDir = $input->getOption('target-dir');
 
         // Initialize application
         $basePath = APPLICATION_PATH;
 
         chdir($basePath);
 
-        $dbConn = $this->getContainer()->get('orm.manager')->getConnection('instance');
-
-        $rs = $dbConn->fetchAll('SELECT internal_name, settings FROM instances');
-
-        $instances = [];
-        foreach ($rs as $database) {
-            $instances[$database['internal_name']] =
-                unserialize($database['settings']);
-        }
-
-        $instanceNames = array_keys($instances);
-
-        if ($instance == '*') {
-            // Ask password
-            $dialog = $this->getHelperSet()->get('dialog');
-
-            $validator = function ($value) use ($instanceNames) {
-                if (trim($value) == '') {
-                    throw new \Exception('The instance name cannot be empty');
-                }
-
-                if (!in_array($value, $instanceNames)) {
-                    throw new \Exception('Instance name not valid');
-                }
-
-                return $value;
-            };
-
-            $instance = $dialog->ask(
-                $output,
-                'From what instance do you want to create the backup (' . implode(', ', $instanceNames) . '): ',
-                $validator
-            );
-        } elseif (!in_array($instance, $instanceNames)) {
-            throw new \Exception('Instance name not valid');
-        }
-
         // Validate date
         if ($this->from != '*' && !$this->validateDate($this->from)) {
             throw new \Exception('Date format not valid. Required format: Y-m-d H:i:s');
         }
 
-        $output->writeln("Exporting contents from instance $instance");
-        $instanceObject = $this->getContainer()->get('core.loader')->loadInstanceFromInternalName($instance);
+        $this->getContainer()->get('core.loader')
+            ->load($instanceName)
+            ->onlyEnabled()
+            ->init();
 
-        $this->getContainer()->get('dbal_connection')->selectDatabase(
-            $instanceObject->getDatabaseName()
-        );
-        // Initialize internal constants for logger
-        define('INSTANCE_UNIQUE_NAME', $instance);
-
-        // Initialize the template system
-        define('CACHE_PREFIX', '');
+        $output->writeln("Exporting contents from instance $instanceName");
 
         $commonCachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . 'common';
         if (!file_exists($commonCachepath)) {
@@ -134,8 +102,7 @@ EOF
         $this->tpl = $this->getContainer()->get('view')->getBackendTemplate();
 
         // Set media
-        $this->mediaPath = APPLICATION_PATH . DS . 'public' . DS . 'media' . DS . $instance;
-        define('MEDIA_IMG_PATH_WEB', 'media/' . $instance . '/' . 'images');
+        $this->mediaPath = APPLICATION_PATH . DS . 'public' . DS . 'media' . DS . $instanceName;
 
         $this->exportContents();
     }

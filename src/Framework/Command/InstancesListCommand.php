@@ -60,8 +60,11 @@ EOF
         $epp         = $input->getOption('epp');
         $this->field = $this->input->getOption('field');
 
-        $this->getContainer()->get('core.loader')
-            ->loadInstanceFromInternalName('manager');
+        $instance = $this->getContainer()->get('core.loader.instance')
+            ->loadInstanceByName('manager')
+            ->getInstance();
+
+        $this->getContainer()->get('core.loader')->configureInstance($instance);
 
         // Get the total number of instances in the database and
         // the pages required to iterate over them
