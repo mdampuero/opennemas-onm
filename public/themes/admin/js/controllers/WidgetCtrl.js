@@ -171,6 +171,19 @@
           $scope.item.params.splice(index, 1);
         };
 
+        /**
+         * @function resetContent
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Cleans widget content and widget form.
+         */
+        $scope.resetContent = function() {
+          $('.widget-form').empty();
+          $scope.item.content = null;
+          $scope.widgetForm   = null;
+        };
+
         // Gets the form for widget when widget type changes
         $scope.$watch('item.content', function(nv) {
           if (!nv) {
@@ -178,15 +191,6 @@
           }
 
           $scope.getForm(nv);
-        }, true);
-
-        // Resets the widget content when the widget type changes
-        $scope.$watch('item.renderlet', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          $scope.item.content = null;
         }, true);
       }
     ]);

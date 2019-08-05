@@ -49,14 +49,14 @@
               <label class="form-label">
                 {t}Type{/t}
               </label>
-              <div class="radio m-t-5">
-                <input id="renderlet-html" ng-model="item.renderlet" ng-value="'html'" type="radio">
+              <div class="radio m-b-5 m-t-5">
+                <input id="renderlet-html" ng-change="resetContent()" ng-model="item.renderlet" ng-value="'html'" type="radio">
                 <label for="renderlet-html">
                   HTML
                 </label>
               </div>
               <div class="radio m-t-5">
-                <input id="renderlet-intelligent" ng-model="item.renderlet" ng-value="'intelligentwidget'" type="radio">
+                <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.renderlet" ng-value="'intelligentwidget'" type="radio">
                 <label for="renderlet-intelligent">
                   {t}IntelligentWidget{/t}
                 </label>
@@ -69,10 +69,10 @@
                 {t}Content{/t}
               </label>
               <ui-select class="block" name="content" theme="select2" ng-model="item.content">
-                <ui-select-match>
+                <ui-select-match placeholder="{t}Select a type{/t}">
                   [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices position="up" repeat="item.id as item in addEmptyValue(data.extra.types, 'id', 'name', '{t}Select a type{/t}') | filter: { name: $select.search }">
+                <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
@@ -88,7 +88,7 @@
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-        <div id="params" ng-show="!flags.http.formLoading && !widgetForm">
+        <div ng-show="!flags.http.formLoading && !widgetForm">
           <label for="params">{t}Parameters{/t}</label>
           <div class="form-group ng-cloak" ng-repeat="param in item.params track by $index">
             <div class="row">
@@ -99,15 +99,20 @@
                 <input class="form-control" ng-model="param.value" placeholder="{t}Parameter value{/t}" type="text">
               </div>
               <div class="control col-md-1 col-sm-2 col-xs-12">
-                <button type="button" ng-click="removeParameter($index)" class="btn addon del"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-block btn-danger" ng-click="removeParameter($index)" type="button">
+                  <i class="fa fa-trash"></i>
+                </button>
               </div>
             </div>
           </div>
-          <br>
-          <a class="btn btn-default" ng-click="addParameter()">
-            <i class="fa fa-plus"></i>
-            {t}Add parameter{/t}
-          </a>
+          <div class="col-xs-6 p-b-15 p-t-15 col-lg-4 col-lg-offset-4">
+            <button class="btn btn-block btn-default btn-loading" ng-click="addParameter()" type="button">
+              <h5 class="text-uppercase">
+                <i class="fa fa-plus"></i>
+                {t}Add{/t}
+              </h5>
+            </button>
+          </div>
         </div>
         <div class="widget-form" ng-show="!flags.http.formLoading && widgetForm"></div>
       </div>
