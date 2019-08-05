@@ -58,8 +58,9 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getInstance', 'loadInstanceByDomain' ])
-            ->getMock();
+            ->setMethods([
+                'getInstance', 'loadInstanceByDomain', 'loadInstanceByName'
+            ])->getMock();
 
         $this->lm = $this->getMockBuilder('LayoutManager')
             ->setMethods([ 'addLayouts' ])
@@ -266,7 +267,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests load when the instance is found.
      */
-    public function testLoadWhenInstanceFound()
+    public function testLoadWhenInstanceFoundByDomain()
     {
         $loader = $this->getMockBuilder('Common\Core\Component\Loader\CoreLoader')
             ->setConstructorArgs([ $this->container ])
@@ -305,6 +306,47 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests load when the instance is found.
+     */
+    public function testLoadWhenInstanceFoundByName()
+    {
+        $loader = $this->getMockBuilder('Common\Core\Component\Loader\CoreLoader')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([
+                'configureInstance', 'configureLocale', 'configureTheme'
+            ])->getMock();
+
+        $instance = new Instance([
+            'settings' => [ 'TEMPLATE_USER' => 'es.openhost.theme.fubar' ]
+        ]);
+
+        $theme   = new Theme([ 'uuid' => 'es.openhost.theme.norf' ]);
+        $parents = [ new Theme([ 'uuid' => 'es.openhost.theme.norf' ])];
+
+        $this->il->expects($this->once())->method('loadInstanceByName')
+            ->willReturn($this->il);
+        $this->il->expects($this->once())->method('getInstance')
+            ->willReturn($instance);
+
+        $this->tl->expects($this->once())->method('loadThemeByUuid')
+            ->with('es.openhost.theme.fubar')->willReturn($this->tl);
+        $this->tl->expects($this->once())->method('loadThemeParents');
+        $this->tl->expects($this->once())->method('getTheme')
+            ->willReturn($theme);
+        $this->tl->expects($this->once())->method('getThemeParents')
+            ->willReturn($parents);
+
+        $loader->expects($this->once())->method('configureInstance')
+            ->with($instance)->willReturn($loader);
+        $loader->expects($this->once())->method('configureTheme')
+            ->with($theme, $parents)->willReturn($loader);
+        $loader->expects($this->once())->method('configureLocale')
+            ->with($instance)->willReturn($loader);
+
+        $loader->load('thud');
+    }
+
+    /**
      * Tests load when the instance is not found.
      *
      * @expectedException Common\Core\Component\Exception\Instance\InstanceNotFoundException
@@ -315,6 +357,45 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception()));
 
         $this->loader->load('thud.xyzzy', '/fubar');
+    }
+
+    /**
+     * Tests getInstanceByDomain.
+     */
+    public function testGetInstanceByDomain()
+    {
+        $instance = new Instance([ 'internal_name' => 'mumble' ]);
+
+        $method = new \ReflectionMethod($this->loader, 'getInstanceByDomain');
+        $method->setAccessible(true);
+
+        $this->il->expects($this->once())->method('loadInstanceByDomain')
+            ->with('mumble.waldo', '/gorp')->willReturn($this->il);
+        $this->il->expects($this->once())->method('getInstance')
+            ->willReturn($instance);
+
+        $this->assertEquals(
+            $instance,
+            $method->invokeArgs($this->loader, [ 'mumble.waldo', '/gorp' ])
+        );
+    }
+
+    /**
+     * Tests getInstanceByName.
+     */
+    public function testGetInstanceByName()
+    {
+        $instance = new Instance([ 'internal_name' => 'mumble' ]);
+
+        $method = new \ReflectionMethod($this->loader, 'getInstanceByName');
+        $method->setAccessible(true);
+
+        $this->il->expects($this->once())->method('loadInstanceByName')
+            ->with('baz')->willReturn($this->il);
+        $this->il->expects($this->once())->method('getInstance')
+            ->willReturn($instance);
+
+        $this->assertEquals($instance, $method->invokeArgs($this->loader, [ 'baz' ]));
     }
 
     /**

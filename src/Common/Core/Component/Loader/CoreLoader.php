@@ -152,19 +152,27 @@ class CoreLoader
     /**
      * Initializes all the application values for the instance.
      *
+     * @param Instance $instance The instance to init core with.
+     *
      * @return CoreLoader The current CoreLoader.
      *
      * @codeCoverageIgnore
      */
-    public function init() : CoreLoader
+    public function init(?Instance $instance = null) : CoreLoader
     {
-        foreach ($this->instance->settings as $key => $value) {
+        $instance = $instance ?? $this->instance;
+
+        if (empty($instance)) {
+            return $this;
+        }
+
+        foreach ($instance->settings as $key => $value) {
             define($key, str_replace('es.openhost.theme.', '', $value));
         }
 
-        define('INSTANCE_UNIQUE_NAME', $this->instance->internal_name);
+        define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
 
-        $mainDomain = $this->instance->getMainDomain();
+        $mainDomain = $instance->getMainDomain();
         if (!is_null($mainDomain)) {
             define('INSTANCE_MAIN_DOMAIN', 'http://' . $mainDomain);
         }
@@ -238,21 +246,23 @@ class CoreLoader
     }
 
     /**
-     * Loads the application core basing on the request hostname and URI.
+     * Loads the application core basing on the request hostname and URI, if
+     * the URI is not empty, or basing on the instance name, if the URI is
+     * empty.
      *
-     * @param string $host The request hostname.
+     * @param string $host The request hostname or the instance name.
      * @param string $uri  The request URI.
      *
      * @return CoreLoader The current CoreLoader.
      *
      * @throws InstanceNotFoundException When the instance can not be found.
      */
-    public function load(string $host, string $uri) : CoreLoader
+    public function load(string $host, ?string $uri = null) : CoreLoader
     {
         try {
-            $this->instance = $this->container->get('core.loader.instance')
-                ->loadInstanceByDomain($host, $uri)
-                ->getInstance();
+            $this->instance = empty($uri)
+                ? $this->getInstanceByName($host)
+                : $this->getInstanceByDomain($host, $uri);
         } catch (\Exception $e) {
             throw new InstanceNotFoundException();
         }
@@ -270,10 +280,39 @@ class CoreLoader
     }
 
     /**
+     * Returns an instance basing on the request's host and URI.
+     *
+     * @param string $host The requested host.
+     * @param string $uri  The requested URI.
+     *
+     * @return Instance The found instance.
+     */
+    protected function getInstanceByDomain(string $host, string $uri) : Instance
+    {
+        return $this->container->get('core.loader.instance')
+            ->loadInstanceByDomain($host, $uri)
+            ->getInstance();
+    }
+
+    /**
+     * Returns an instance basing on the request's host and URI.
+     *
+     * @param string $name The instance name.
+     *
+     * @return Instance The found instance.
+     */
+    protected function getInstanceByName(string $name) : Instance
+    {
+        return $this->container->get('core.loader.instance')
+            ->loadInstanceByName($name)
+            ->getInstance();
+    }
+
+    /**
      * Adds advertisement positions defined by theme to the advertisement
      * manager.
      *
-     * @param array $positions The list of positions.
+     * @param array  $positions The list of positions.
      * @param string $themeName The theme name.
      */
     protected function loadAdvertisements($positions, $themeName)
