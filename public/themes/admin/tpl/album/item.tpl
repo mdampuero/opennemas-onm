@@ -131,7 +131,7 @@
             <h5 class="text-uppercase">
               <i class="fa fa-plus m-r-5"></i>
               {t}Add{/t}
-            <h5>
+            </h5>
           </button>
         </div>
         <div class="col-lg-3 col-xs-6 p-b-15 p-t-15" ng-if="item.photos && item.photos.length > 0">
@@ -139,7 +139,7 @@
             <h5 class="text-uppercase text-white">
               <i class="fa fa-trash m-r-5"></i>
               {t}Empty{/t}
-            <h5>
+            </h5>
           </button>
         </div>
       </div>
