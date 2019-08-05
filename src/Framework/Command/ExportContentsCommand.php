@@ -294,33 +294,34 @@ EOF
                         $this->albumsCounter . " of " . $this->total . '(id: ' . $content->id . ')'
                     );
 
-                    $photos = $content->_getAttachedPhotos($content->id);
-
                     $content->all_photos = [];
-                    foreach ($photos as $value) {
+                    foreach ($content->photos as $value) {
+                        $photo = $this->er->find('Photo', $value['pk_photo']);
+
                         // Add DateTime with format Y-m-d H:i:s
-                        $value['photo']->created_datetime =
+                        $photo->created_datetime =
                             \DateTime::createFromFormat(
                                 'Y-m-d H:i:s',
-                                $value['photo']->created
-                            );
-                        $value['photo']->updated_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $value['photo']->changed
+                                $photo->created
                             );
 
-                        $value['photo']->img_source =
+                        $photo->updated_datetime =
+                            \DateTime::createFromFormat(
+                                'Y-m-d H:i:s',
+                                $photo->changed
+                            );
+
+                        $photo->img_source =
                             $this->mediaPath . DS . 'images' .
-                            $value['photo']->path_file .
-                            $value['photo']->name;
+                            $photo->path_file .
+                            $photo->name;
 
-                        $content->all_photos[] = $value['photo'];
+                        $content->all_photos[] = $photo;
 
                         $isCopied = $this->copyImage(
-                            $value['photo']->img_source,
-                            $this->targetDir . DS . 'images' . $value['photo']->path_file,
-                            $value['photo']->name
+                            $photo->img_source,
+                            $this->targetDir . DS . 'images' . $photo->path_file,
+                            $photo->name
                         );
 
                         $this->imagesCounter++;
@@ -328,7 +329,7 @@ EOF
                         if (!$isCopied) {
                             $this->imagesCounter--;
                             $this->output->writeln(
-                                "\tImage <info>" . $value['photo']->name .
+                                "\tImage <info>" . $photo->name .
                                 "</info> from album <info>" . $content->id .
                                 "</info> not copied'"
                             );
