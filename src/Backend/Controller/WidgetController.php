@@ -76,7 +76,7 @@ class WidgetController extends BackendController
             'page'        => $page,
             'total'       => $countWidgets,
             'route'       => [
-                'name'   => 'admin_widgets_content_provider',
+                'name'   => 'backend_widgets_content_provider',
                 'params' => [ 'category' => $categoryId ]
             ],
         ]);
