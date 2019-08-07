@@ -27,6 +27,18 @@
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
+         * @memberOf OpinionConfigCtrl
+         *
+         * @description
+         *  The default settings.
+         *
+         * @type {Object}
+         */
+        $scope.settings = {
+          extrafields: {}
+        };
+
+        /**
          * @function init
          * @memberOf OpinionConfiCtrl
          *
@@ -47,7 +59,7 @@
         $scope.list = function() {
           $scope.flags.http.loading = true;
 
-          http.get('api_v1_backend_opinion_config_show').then(function(response) {
+          http.get('api_v1_backend_opinion_get_config').then(function(response) {
             $scope.settings = response.data;
             $scope.disableFlags('http');
           }, function() {
@@ -65,7 +77,7 @@
         $scope.save = function() {
           $scope.flags.http.saving = true;
 
-          http.put('api_v1_backend_opinion_config_save', $scope.settings)
+          http.put('api_v1_backend_opinion_save_config', $scope.settings)
             .then(function(response) {
               $scope.disableFlags('http');
               messenger.post(response.data);
