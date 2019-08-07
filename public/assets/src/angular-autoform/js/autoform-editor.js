@@ -72,7 +72,7 @@
                 '<div class="pull-left">' +
                   '<label class="form-label">&nbsp;</label>' +
                   '<div class="controls">' +
-                    '<button class="btn btn-danger" ng-click="removeField(group.group, field.key, $event)">' +
+                    '<button class="btn btn-danger" ng-click="removeField(group.group, field.key)" type="button">' +
                       '<i class="fa fa-trash-o"></i>' +
                     '</button>' +
                   '</div>' +
@@ -87,7 +87,7 @@
                     '<input class="form-control" name="fieldKeys" ng-model="fieldKeys[group.group]" type="text" placeholder="Internal name for the new fields">' +
                   '</div>' +
                   '<div class="col-md-4">' +
-                    '<button class="btn btn-block btn-success" ng-click="addField(group.group, $event)">' +
+                    '<button class="btn btn-block btn-success" ng-click="addField(group.group)" type="button">' +
                       '<i class="fa fa-plus m-r-5"></i>' +
                       'Add Field' +
                     '</button>' +
@@ -98,7 +98,7 @@
             '</div>' +
             '<div class="row p-b-50 p-t-5">' +
               '<div class="col-md-11">' +
-                '<button class="btn btn-block btn-danger" ng-click="removeGroup(group.group, $event)" type="button">' +
+                '<button class="btn btn-block btn-danger" ng-click="removeGroup(group.group)" type="button">' +
                   '<i class="fa fa-trash-o"></i> Delete Group' +
                 '</button>' +
               '</div>' +
@@ -115,7 +115,7 @@
                 '</div>' +
                 '<div class="col-md-6">' +
                   '<label class="form-label">&nbsp;</label>' +
-                  '<button class="btn btn-block btn-success" ng-click="addGroup($event)">' +
+                  '<button class="btn btn-block btn-success" ng-click="addGroup()" type="button">' +
                     '<i class="fa fa-plus m-r-5"></i>' +
                     'Add Group' +
                   '</button>' +
@@ -137,17 +137,16 @@
               return str.split(' ').join('_').toLowerCase();
             };
 
-            if (!$scope.ngModel || Array.isArray($scope.ngModel) && $scope.ngModel.length === 0) {
-              $scope.ngModel = {};
-            }
-
             /**
              * Change the current language.
              *
              * @param {Object} $event The language value.
              */
-            $scope.addGroup = function($event) {
-              $event.preventDefault();
+            $scope.addGroup = function() {
+              if (!$scope.ngModel) {
+                $scope.ngModel = {};
+              }
+
               if (!$scope.groupKey || $scope.groupKey === '') {
                 $scope.addGroupError = 'You need to add an identifier for the group to be added';
                 return;
@@ -192,8 +191,7 @@
              *
              *  @param {String} group Name for the group where add the field
              */
-            $scope.addField = function(group, $event) {
-              $event.preventDefault();
+            $scope.addField = function(group) {
               if (!$scope.fieldKeys[group] || $scope.fieldKeys[group] === '') {
                 $scope.addFieldErrors[group] = 'You need to add an identifier for the field to be added';
                 return;
@@ -235,11 +233,11 @@
              * @param {String} group internal name for the group where remove the field
              * @param {String} field internal name to remove
              */
-            $scope.removeField = function(group, field, $event) {
-              $event.preventDefault();
+            $scope.removeField = function(group, field) {
               if (!(group in $scope.ngModel) || !(field in $scope.ngModel[group].fields)) {
                 return;
               }
+
               delete $scope.ngModel[group].fields[field];
             };
           }
