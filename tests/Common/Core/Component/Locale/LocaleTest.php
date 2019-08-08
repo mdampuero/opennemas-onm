@@ -156,6 +156,59 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getRequestSlug.
+     */
+    public function testGetRequestSlug()
+    {
+        $this->locale->setRequestLocale(null);
+        $this->assertNotEmpty($this->locale->getRequestSlug());
+
+        $this->locale->setRequestLocale('waldo');
+        $this->assertEquals('waldo', $this->locale->getRequestLocale());
+
+        $this->locale->setRequestLocale('es_ES');
+        $this->assertEquals('es_ES', $this->locale->getRequestSlug());
+
+        $this->locale->configure([ 'frontend' => [
+            'language' => [
+                'selected'  => 'es_ES',
+                'available' => [ 'es_ES', 'en_US' ],
+                'slug'      => [ 'es_ES' => 'es', 'en_US' => 'us' ]
+            ],
+            'timezone' => 'Europe/Madrid'
+        ] ]);
+
+
+        $this->locale->setRequestLocale('en_US');
+        $this->assertEquals('us', $this->locale->getRequestSlug('frontend'));
+    }
+
+    /**
+     * Tests getSlug.
+     */
+    public function testGetSlug()
+    {
+        $this->locale->setLocale('waldo');
+        $this->assertEquals('en_US', $this->locale->getSlug());
+
+        $this->locale->setLocale('es_ES');
+        $this->assertEquals('es_ES', $this->locale->getSlug());
+
+        $this->locale->configure([ 'frontend' => [
+            'language' => [
+                'selected'  => 'es_ES',
+                'available' => [ 'es_ES', 'en_US' ],
+                'slug'      => [ 'es_ES' => 'es', 'en_US' => 'us' ]
+            ],
+            'timezone' => 'Europe/Madrid'
+        ] ]);
+
+
+        $this->locale->setContext('frontend')->setLocale('en_US');
+        $this->assertEquals('us', $this->locale->getSlug('frontend'));
+    }
+
+    /**
      * Tests getTimeZone and setTimeZone methods.
      */
     public function testGetAndSetTimeZone()
