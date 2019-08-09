@@ -108,7 +108,8 @@ class CacheManager
             $class = \classify($config['type']);
             $class = sprintf('Common\\Cache\\%s\\%s', $class, $class);
 
-            $items[$config['name']] = new $class($config);
+            $items[$config['name']] =
+                new $class($config, $this->container->getParameter('environment'));
         }
 
         return $items;
