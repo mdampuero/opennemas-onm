@@ -383,7 +383,10 @@
               instance.on('key', setModelData);
 
               // Initializes the CKEditor with data
-              instance.on('instanceReady', function() {
+              instance.on('instanceReady', function(ev) {
+                // Disable html attribute sorting
+                ev.editor.dataProcessor.writer.sortAttributes = 0;
+
                 // Data from HTML value
                 var data = element[0].innerText;
 
