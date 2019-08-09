@@ -96,7 +96,7 @@ class CacheManager
             return $items;
         }
 
-        foreach ($this->config as $key => $config) {
+        foreach ($this->config as $config) {
             if (!array_key_exists('type', $config)) {
                 $config['type'] = $this->defaults['type'];
             }
