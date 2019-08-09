@@ -85,6 +85,17 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests end.
+     */
+    public function testEnd()
+    {
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with('DROP TABLE IF EXISTS migration_fix_items');
+
+        $this->repository->end();
+    }
+
+    /**
      * Tests next.
      */
     public function testNext()
@@ -126,5 +137,20 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with('CREATE VIEW `baz` SELECT * FROM `xyzzy`');
 
         $this->repository->prepare($sqls);
+    }
+
+    /**
+     * Tests start.
+     */
+    public function testStart()
+    {
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with(
+                'CREATE TABLE IF NOT EXISTS migration_fix_items (PRIMARY KEY (id))'
+                . ' AS SELECT DISTINCT id FROM frog WHERE title LIKE "%foo%"'
+            );
+
+
+        $this->repository->start();
     }
 }
