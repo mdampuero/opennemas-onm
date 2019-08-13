@@ -42,6 +42,7 @@
         <div class="row">
           {acl isAllowed="MASTER"}
             <div class="col-md-6">
+              <h4 class="no-margin">Extra fields</h4>
               <autoform-editor ng-model="settings.extrafields"/>
             </div>
           {/acl}

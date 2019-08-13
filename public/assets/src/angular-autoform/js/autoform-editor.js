@@ -18,9 +18,7 @@
             ngModel: '=',
           },
           template: function() {
-            return '<h4 class="no-margin m-b-15">Extra fields</h4>' +
-          '<p class="m-b-15">This fields will be added during edition of any article.</p>' +
-          '<p class="m-b-15">' +
+            return '<p class="m-b-15">' +
             '<span ng-repeat="error in autoformEditorErrors">[% error %]</span>' +
           '</p>' +
           '<div ng-repeat="(groupIndex, group) in ngModel">' +
@@ -33,6 +31,14 @@
                 '<label class="form-label" for="label-[% group.group %]-title">Title</label>' +
                 '<div class="controls">' +
                   '<input class="form-control" ng-model="group.title" type="text">' +
+                '</div>' +
+              '</div>' +
+              '<div class="form-group col-md-1">' +
+                '<label class="form-label">&nbsp;</label>' +
+                '<div class="controls">' +
+                  '<button class="btn btn-block btn-danger" ng-click="removeGroup(group.group)" type="button">' +
+                    '<i class="fa fa-trash-o"></i>' +
+                  '</button>' +
                 '</div>' +
               '</div>' +
             '</div>' +
@@ -69,38 +75,31 @@
                 '</div>' +
               '</div>' +
               '<div class="form-group col-md-1">' +
-                '<div class="pull-left">' +
-                  '<label class="form-label">&nbsp;</label>' +
-                  '<div class="controls">' +
-                    '<button class="btn btn-danger" ng-click="removeField(group.group, field.key)" type="button">' +
-                      '<i class="fa fa-trash-o"></i>' +
-                    '</button>' +
-                  '</div>' +
+                '<label class="form-label">&nbsp;</label>' +
+                '<div class="controls">' +
+                  '<button class="btn btn-block btn-danger" ng-click="removeField(group.group, field.key)" type="button">' +
+                    '<i class="fa fa-trash-o"></i>' +
+                  '</button>' +
                 '</div>' +
               '</div>' +
             '</div>' +
-            '<div class="row">' +
+            '<div class="row m-b-15">' +
               '<div class="col-md-12">' +
                 '<label class="form-label p-l-15">Internal name</label>' +
                 '<div class="controls row p-l-15">' +
                   '<div class="col-md-7">' +
-                    '<input class="form-control" name="fieldKeys" ng-model="fieldKeys[group.group]" type="text" placeholder="Internal name for the new fields">' +
+                    '<input class="form-control" name="fieldKeys" ng-model="fieldKeys[group.group]" type="text" placeholder="Internal name">' +
                   '</div>' +
                   '<div class="col-md-4">' +
-                    '<button class="btn btn-block btn-success" ng-click="addField(group.group)" type="button">' +
+                    '<button class="btn btn-block btn-default" ng-click="addField(group.group)" type="button">' +
                       '<i class="fa fa-plus m-r-5"></i>' +
                       'Add Field' +
                     '</button>' +
                   '</div>' +
                 '</div>' +
-                '<div class="help text-danger p-l-15 p-t-5">[% addFieldErrors[group.group] ? addFieldErrors[group.group] : \'&nbsp;\' %]</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="row p-b-50 p-t-5">' +
-              '<div class="col-md-11">' +
-                '<button class="btn btn-block btn-danger" ng-click="removeGroup(group.group)" type="button">' +
-                  '<i class="fa fa-trash-o"></i> Delete Group' +
-                '</button>' +
+                '<div class="help text-danger p-l-15 p-t-5">' +
+                  '[% addFieldErrors[group.group] ? addFieldErrors[group.group] : \'&nbsp;\' %]' +
+                '</div>' +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -110,19 +109,19 @@
                 '<div class="col-md-6">' +
                   '<label class="form-label">Group internal name</label>' +
                   '<div class="controls">' +
-                    '<input class="form-control" name="groupKey" ng-model="groupKey" type="text" placeholder="Internal name for the new fields group">' +
+                    '<input class="form-control" name="groupKey" ng-model="groupKey" type="text" placeholder="Internal name">' +
                   '</div>' +
                 '</div>' +
                 '<div class="col-md-6">' +
                   '<label class="form-label">&nbsp;</label>' +
-                  '<button class="btn btn-block btn-success" ng-click="addGroup()" type="button">' +
+                  '<button class="btn btn-block btn-default" ng-click="addGroup()" type="button">' +
                     '<i class="fa fa-plus m-r-5"></i>' +
                     'Add Group' +
                   '</button>' +
                 '</div>' +
               '</div>' +
               '<div class="row">' +
-                '<div class="help text-danger p-t-15">[% addGroupError ? addGroupError : \'&nbsp;\' %]</div>' +
+                '<div class="help text-danger p-t-5" ng-if="addGroupError">[% addGroupError %]</div>' +
               '</div>' +
           '</div>';
           },
@@ -161,7 +160,7 @@
 
               $scope.ngModel[groupKey] = {
                 group:  groupKey,
-                title:  '',
+                title:  groupKey,
                 fields: {}
               };
 
@@ -218,7 +217,7 @@
               }
 
               $scope.ngModel[group].fields[fieldKey] = {
-                title:  '',
+                title:  fieldKey,
                 type:  '',
                 key:   fieldKey
               };
