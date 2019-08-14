@@ -121,27 +121,30 @@ class TagController extends Controller
                 }, $tags['items']);
 
                 $criteria = [
-                    'fk_content_type' => [
-                        [ 'value' => 1 ],
-                        // [ 'value' => 4 ],
-                        // [ 'value' => 7 ],
-                        // [ 'value' => 9 ],
-                        'union' => 'OR'
+                    'join' => [
+                        [
+                            'table' => 'contents_tags',
+                            'type'  => 'inner',
+                            'content_id' => [
+                                [ 'value' => 'pk_content', 'field' => true ]
+                            ],
+                            'tag_id' => [
+                                [ 'value' => $ids, 'operator' => 'in' ]
+                            ]
+                        ]
                     ],
-                    'exists' => 'EXISTS(SELECT 1 FROM contents_tags' .
-                        ' WHERE contents_tags.content_id = contents.pk_content AND' .
-                        ' contents_tags.tag_id IN (' . implode(',', $ids) . '))',
+                    'fk_content_type' => [
+                        [ 'value' => [ 1 ], 'operator' => 'in' ],
+                    ],
                     'content_status'    => [ [ 'value' => 1 ] ],
                     'in_litter'         => [ [ 'value' => 0 ] ],
                     'starttime'         => [
                         'union' => 'OR',
-                        [ 'value' => '0000-00-00 00:00:00' ],
                         [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                         [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
                     ],
                     'endtime'           => [
                         'union' => 'OR',
-                        [ 'value' => '0000-00-00 00:00:00' ],
                         [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                         [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                     ]
@@ -190,6 +193,7 @@ class TagController extends Controller
 
             $this->view->assign([ 'pagination' => $pagination ]);
         }
+
 
         list($positions, $advertisements) = $this->getInnerAds();
 
