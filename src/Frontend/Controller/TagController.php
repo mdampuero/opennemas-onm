@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 /**
  * Displays a list of tags or a list of contents by tag.
  */
-class TagsController extends Controller
+class TagController extends Controller
 {
     /**
      * Displays a list of tags.
