@@ -43,7 +43,7 @@ class OpinionController extends ContentOldController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
-            ->get(\Opinion::EXTRA_INFO_TYPE, []);
+            ->get(\Opinion::EXTRA_INFO_TYPE);
 
         return new JsonResponse([ 'extrafields' => $settings ]);
     }
