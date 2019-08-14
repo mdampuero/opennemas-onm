@@ -134,7 +134,7 @@ class TagController extends Controller
                         ]
                     ],
                     'fk_content_type' => [
-                        [ 'value' => [ 1 ], 'operator' => 'in' ],
+                        [ 'value' => [ 1, 4, 7, 9, 11 ], 'operator' => 'in' ],
                     ],
                     'content_status'    => [ [ 'value' => 1 ] ],
                     'in_litter'         => [ [ 'value' => 0 ] ],
