@@ -189,10 +189,12 @@ class Nitf extends Parser
         $priority = $data->xpath('//head/docdata/urgency');
 
         if (!empty($priority)) {
-            return (integer) $priority[0]->attributes()->{'ed-urg'};
+            return (int) $priority[0]->attributes()->{'ed-urg'};
         }
 
-        return 5;
+        return !empty($this->getFromBag('priority'))
+            ? (int) $this->getFromBag('priority')
+            : 5;
     }
 
     /**
