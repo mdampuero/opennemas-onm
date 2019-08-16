@@ -51,6 +51,12 @@ class NitfEfeTest extends \PHPUnit\Framework\TestCase
             </body>
         </nitf>");
 
+        $this->alt = simplexml_load_string("<nitf>
+            <head>
+                <meta name=\"prioridad\" content=\"3\" />
+            </head>
+        </nitf>");
+
         $this->miss = simplexml_load_string("<nitf>
             <head>
                 <meta name=\"prioridad\" content=\"320\" />
@@ -67,9 +73,8 @@ class NitfEfeTest extends \PHPUnit\Framework\TestCase
     public function testGetPriority()
     {
         $this->assertEquals(5, $this->parser->getPriority($this->invalid));
-
         $this->assertEquals(4, $this->parser->getPriority($this->valid));
-
         $this->assertEquals(5, $this->parser->getPriority($this->miss));
+        $this->assertEquals(3, $this->parser->getPriority($this->alt));
     }
 }
