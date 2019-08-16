@@ -133,7 +133,7 @@ class DatabaseRepository implements Repository
 
         foreach ($this->config['source']['id'] as $id) {
             $where[] = sprintf(
-                '%s = %s',
+                '%s = "%s"',
                 $id,
                 $result[0][$id]
             );

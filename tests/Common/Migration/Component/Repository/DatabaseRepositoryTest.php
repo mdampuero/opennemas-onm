@@ -101,9 +101,14 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testNext()
     {
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT frog.* FROM frog JOIN (SELECT * FROM migration_fix_items LIMIT 1)' .
-                ' fixing ON fixing.id = frog.id')
-            ->willReturn([ [ 'id' => 'grault' ] ]);
+            ->with(
+                'SELECT frog.* FROM frog'
+                . ' JOIN (SELECT * FROM migration_fix_items LIMIT 1)'
+                . ' fixing ON fixing.id = frog.id'
+            )->willReturn([ [ 'id' => 'grault' ] ]);
+
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with('DELETE FROM migration_fix_items WHERE id = "grault"');
 
         $this->assertEquals([ 'id' => 'grault' ], $this->repository->next());
     }
