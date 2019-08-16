@@ -275,11 +275,12 @@ class NewsML extends Parser
      */
     public function parse($data)
     {
-        $this->bag['agency_name']   = $this->getAgencyName($data);
-        $this->bag['category']      = $this->getCategory($data);
-        $this->bag['id']            = $this->getId($data);
-        $this->bag['created_time']  = $this->getCreatedTime($data)
+        $this->bag['agency_name']  = $this->getAgencyName($data);
+        $this->bag['category']     = $this->getCategory($data);
+        $this->bag['created_time'] = $this->getCreatedTime($data)
             ->format('Y-m-d H:i:s');
+        $this->bag['id']           = $this->getId($data);
+        $this->bag['priority']     = $this->getPriority($data);
 
         $items = $data->xpath('/NewsML/NewsItem');
 
