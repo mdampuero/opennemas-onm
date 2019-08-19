@@ -164,6 +164,21 @@
         };
 
         /**
+         * @function parseData
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   description
+         *
+         * @param {Object} data The data to parse.
+         *
+         * @return {Object} Parses data before submit.
+         */
+        $scope.parseData = function(data) {
+          return data;
+        };
+
+        /**
          * @function save
          * @memberOf RestInnerCtrl
          *
