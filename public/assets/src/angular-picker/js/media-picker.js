@@ -889,7 +889,7 @@
               }
 
               $scope.addItem(response);
-              $scope.selected.items.lastSelected = response;
+              $scope.selected.lastSelected = response;
 
               if ($scope.picker.selection.enabled) {
                 $scope.selected.ids.push(response.id);
