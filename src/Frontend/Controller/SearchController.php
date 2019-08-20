@@ -61,12 +61,9 @@ class SearchController extends Controller
      */
     public function internalAction(Request $request)
     {
-        return $this->forward(
-            'Frontend\Controller\TagsController::tagsAction',
-            [
-                'resource' => 'tags',
-                'slug'     => $request->get('tag_name')
-            ]
-        );
+        return $this->forward('Frontend\Controller\TagController::tagsAction', [
+            'resource' => 'tags',
+            'slug'     => $request->get('tag_name')
+        ]);
     }
 }
