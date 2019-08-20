@@ -39,7 +39,11 @@ class CategorySubscriber implements EventSubscriberInterface
     /**
      * Initializes the CategorySubscriber.
      *
-     * @param TemplateCacheManager $tcm The TemplateCacheManager service.
+     * @param Instance            $instance The current instance.
+     * @param TemplateCacheHelper $th       The TemplateCacheHelper service.
+     * @param VarnishHelper       $vh       The VarnishHelper service.
+     * @param AbstractCache       $cache    The old cache connection.
+     * @param CacheManager        $cm       The CacheManager service.
      */
     public function __construct(
         Instance            $instance,
