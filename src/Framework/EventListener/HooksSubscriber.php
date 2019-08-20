@@ -213,18 +213,6 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Resets the PHP Opcode if supported
-     *
-     * @return null
-     */
-    public function cleanOpcode()
-    {
-        if (extension_loaded('Zend Opcache')) {
-            opcache_reset();
-        }
-    }
-
-    /**
      * Mock action for hook events
      *
      * @param Event $event The event to handle.
@@ -299,8 +287,6 @@ class HooksSubscriber implements EventSubscriberInterface
         // Delete frontpage caches
         $this->template->delete('frontpage', 'opinion')
             ->delete('frontpage', 'opinion', sprintf('%06d', $authorId));
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -403,8 +389,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->template
             ->delete('opinion', 'list', $authorId)
             ->delete('blog', 'list', $authorId);
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -424,8 +408,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->template
             ->delete('frontpage', 'author', $id)
             ->delete('frontpage', 'authors');
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -473,8 +455,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('sitemap', 'news')
                 ->delete('sitemap', 'web');
         }
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -509,7 +489,6 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('rss', 'fia');
 
         $this->logger->notice("Cleaning frontpage cache for category: {$category} ($category)");
-        $this->cleanOpcode();
     }
 
     /**
@@ -536,8 +515,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('frontpage', 'blog', $author->id)
                 ->delete('frontpage', 'opinion', $author->id);
         }
-
-        $this->cleanOpcode();
     }
 
     /**
