@@ -617,6 +617,8 @@
          *   Changes the picker to explore mode.
          */
         $scope.explore = function() {
+          $scope.searchLoading = true;
+
           // Add a timeout to fix wrong epp calculation before full rendering
           $timeout(function() {
             var colWidth   = 135;
