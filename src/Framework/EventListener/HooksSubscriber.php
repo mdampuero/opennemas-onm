@@ -50,16 +50,6 @@ class HooksSubscriber implements EventSubscriberInterface
             'advertisement.delete' => [
                 [ 'removeVarnishCacheForAdvertisement', 5 ],
             ],
-            // Comment hooks
-            'comment.create' => [
-                ['mockHookAction', 0],
-            ],
-            'comment.update' => [
-                ['removeObjectCacheForContent', 10],
-            ],
-            'comment.delete' => [
-                ['mockHookAction', 0],
-            ],
             // Content hooks
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 5]
@@ -77,9 +67,6 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.delete' => [
                 ['removeObjectCacheForContent', 10],
                 ['removeObjectCacheContentMeta', 10],
-            ],
-            'content.set_positions' => [
-                ['mockHookAction', 0],
             ],
             'content.createItem' => [
                 ['removeVarnishCacheCurrentInstance', 5],
@@ -101,15 +88,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 10],
                 ['removeObjectCacheContentMeta', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            'content.updateList' => [
-                [ 'mockHookAction', 5 ],
-            ],
-            'content.deleteList' => [
-                [ 'mockHookAction', 5 ],
-            ],
-            'content.patchList' => [
-                [ 'mockHookAction', 5 ],
             ],
             // Frontpage hooks
             'frontpage.save_position' => [
@@ -142,9 +120,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             // Menu hooks
-            'menu.create' => [
-                ['mockHookAction', 0],
-            ],
             'menu.update' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeObjectCacheForContent', 5],
@@ -154,16 +129,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAll', 5],
                 ['removeObjectCacheForContent', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            // Newsletter subscriptor
-            'newsletter_subscriptor.create' => [
-                ['mockHookAction', 0],
-            ],
-            'newsletter_subscriptor.update' => [
-                ['mockHookAction', 0],
-            ],
-            'newsletter_subscriptor.delete' => [
-                ['mockHookAction', 0],
             ],
             // Opinion hooks
             'opinion.update' => [
@@ -192,36 +157,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAuthor', 5],
                 ['removeObjectCacheMultiCacheAllAuthors', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            'user.social.connect' => [
-                ['mockHookAction', 0],
-            ],
-            'user.social.disconnect' => [
-                ['mockHookAction', 0],
-            ],
-            // UserGroup hooks
-            'usergroup.create' => [
-                ['mockHookAction', 0],
-            ],
-            'usergroup.update' => [
-                ['mockHookAction', 0],
-            ],
-            'usergroup.delete' => [
-                ['mockHookAction', 0],
             ]
         ];
-    }
-
-    /**
-     * Mock action for hook events
-     *
-     * @param Event $event The event to handle.
-     *
-     * @return boolean
-     */
-    public function mockHookAction()
-    {
-        return true;
     }
 
     /**
