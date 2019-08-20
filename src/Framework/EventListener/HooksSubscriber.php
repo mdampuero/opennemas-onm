@@ -141,22 +141,6 @@ class HooksSubscriber implements EventSubscriberInterface
             'setting.update' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            // User hooks
-            'user.create' => [
-                ['removeSmartyCacheAuthor', 5],
-            ],
-            'user.update' => [
-                ['removeObjectCacheUser', 10],
-                ['removeSmartyCacheAuthor', 5],
-                ['removeObjectCacheMultiCacheAllAuthors', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            'user.delete' => [
-                ['removeObjectCacheUser', 10],
-                ['removeSmartyCacheAuthor', 5],
-                ['removeObjectCacheMultiCacheAllAuthors', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
             ]
         ];
     }
@@ -187,43 +171,6 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('cache.manager')->getConnection('manager')
             ->remove($instance->domains);
-    }
-
-    /**
-     * Deletes the Smarty cache when an author is updated.
-     *
-     * @param Event $event The event to handle.
-     *
-     * @return null
-     */
-    public function removeObjectCacheMultiCacheAllAuthors(Event $event)
-    {
-        $authorId = $event->getArgument('id');
-
-        // Delete cache for author profile
-        $this->cache->delete('user-' . $authorId);
-
-        // Get the all contents assigned to this author
-        $criteria = [
-            'fk_author'       => [[ 'value' => $authorId ]],
-            'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
-            'content_status'  => [[ 'value' => 1 ]],
-            'in_litter'       => [[ 'value' => 0 ]],
-            'starttime'       => [[
-                'value' => date('Y-m-d H:i:s', strtotime("-1 day")),
-                'operator' => '>='
-            ]],
-        ];
-
-        $contents = $this->container->get('entity_repository')->findBy($criteria);
-
-        foreach ($contents as $content) {
-            $this->template->delete('content', $content->id);
-        }
-
-        // Delete frontpage caches
-        $this->template->delete('frontpage', 'opinion')
-            ->delete('frontpage', 'opinion', sprintf('%06d', $authorId));
     }
 
     /**
@@ -281,27 +228,6 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Deletes the user from cache when he is updated.
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeObjectCacheUser(Event $event)
-    {
-        if (!$event->hasArgument('id')) {
-            return;
-        }
-
-        $id = $event->getArgument('id');
-
-        // TODO: Remove when using only new orm for users
-        $this->container->get('cache.manager')->getConnection('instance')
-            ->remove('user-' . $id);
-
-        $this->cache->delete('user-' . $id);
-        $this->cache->delete('categories_for_user_' . $id);
-    }
-
-    /**
      * Cleans all the smarty cache elements.
      */
     public function removeSmartyCacheAll()
@@ -326,25 +252,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->template
             ->delete('opinion', 'list', $authorId)
             ->delete('blog', 'list', $authorId);
-    }
-
-    /**
-     * Deletes Smarty caches for a give author
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeSmartyCacheAuthor(Event $event)
-    {
-        if (!$event->hasArgument('id')) {
-            return;
-        }
-
-        $id = $event->getArgument('id');
-
-        // Delete caches for opinion frontpage and author frontpages
-        $this->template
-            ->delete('frontpage', 'author', $id)
-            ->delete('frontpage', 'authors');
     }
 
     /**
