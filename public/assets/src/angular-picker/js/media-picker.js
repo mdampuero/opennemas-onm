@@ -492,8 +492,7 @@
                 $scope.loading = false;
                 $scope.picker.params = response.data;
 
-                if ($scope.picker.isModeEnabled('explore') &&
-                    $scope.picker.modes.active === 'explore') {
+                if ($scope.picker.isModeEnabled('explore')) {
                   $scope.explore();
                 }
               });
