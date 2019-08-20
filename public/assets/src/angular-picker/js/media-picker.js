@@ -889,11 +889,11 @@
               }
 
               $scope.addItem(response);
-              $scope.selected.ids.push(response.id);
-              $scope.selected.items.push(response);
+              $scope.selected.items.lastSelected = response;
 
               if ($scope.picker.selection.enabled) {
-                $scope.selected.items.lastSelected = response;
+                $scope.selected.ids.push(response.id);
+                $scope.selected.items.push(response);
               }
             }, 500);
           };
