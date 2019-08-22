@@ -83,6 +83,7 @@ class LocaleHelper
             'default'       => $this->locale->getLocale('frontend'),
             'multilanguage' => $this->hasMultilanguage(),
             'selected'      => $this->getSelectedLocale(),
+            'slugs'         => $this->locale->getSlugs('frontend'),
             'translators'   => $this->getTranslators($this->locale->getLocale('frontend'))
         ];
     }

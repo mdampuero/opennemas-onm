@@ -275,11 +275,9 @@
         $scope.getL10nUrl = function(url) {
           var baseUrl = '';
 
-          if ($scope.data &&
-            $scope.data.extra.locale.multilanguage &&
-            $scope.data.extra.locale.default !== $scope.config.locale.selected
-          ) {
-            baseUrl = '/' + $scope.config.locale.selected;
+          if ($scope.data && $scope.data.extra.locale.multilanguage &&
+              $scope.data.extra.locale.default !== $scope.config.locale.selected) {
+            baseUrl = '/' + $scope.config.locale.slugs[$scope.config.locale.selected];
           }
 
           return baseUrl + url;
