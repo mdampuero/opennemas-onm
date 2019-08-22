@@ -35,9 +35,6 @@
           '<div [attributes][autoscale]>' +
             '<div class="dynamic-image-thumbnail[autoscaleClass]" ng-style="{ \'background-image\': \'url(\' + bg + \')\' }"></div>' +
           '</div>' +
-          '<div class="dynamic-image-loading-overlay" ng-if="loading">' +
-            '<i class="fa fa-circle-o-notch fa-spin fa-2x"></i>' +
-          '</div>' +
           '[dimensions]' +
         '</div>';
 
