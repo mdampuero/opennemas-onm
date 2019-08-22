@@ -10,3 +10,9 @@ services:
         arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager' ]
         tags:
             - { name: kernel.event_subscriber }
+
+    core.subscriber.user:
+        class:     Api\EventSubscriber\UserSubscriber
+        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache' ]
+        tags:
+            - { name: kernel.event_subscriber }

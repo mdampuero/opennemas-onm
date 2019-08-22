@@ -102,7 +102,7 @@ services:
 
     core.helper.template_cache:
         class:     Common\Core\Component\Helper\TemplateCacheHelper
-        arguments: [ '@core.template.cache' ]
+        arguments: [ '@core.template.cache', '@orm.manager' ]
         public:    true
 
     core.helper.url:
