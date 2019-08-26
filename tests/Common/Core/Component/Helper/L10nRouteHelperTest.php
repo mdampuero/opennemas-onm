@@ -109,12 +109,12 @@ class L10nRouteHelperTest extends \PHPUnit\Framework\TestCase
         $property->setAccessible(true);
         $property->setValue($this->helper, [ 'foo_fubar_wibble' ]);
 
+        $this->locale->expects($this->any())->method('getLocale')
+            ->willReturn('es_ES');
         $this->locale->expects($this->any())
-            ->method('getLocale')->willReturn('es');
-        $this->locale->expects($this->any())
-            ->method('getRequestLocale')->willReturn('en');
-        $this->locale->expects($this->any())
-            ->method('getSlugs')->willReturn([ 'en', 'es' ]);
+            ->method('getRequestLocale')->willReturn('en_US');
+        $this->locale->expects($this->any())->method('getSlugs')
+            ->willReturn([ 'es_ES' => 'es', 'en_US' => 'en' ]);
 
         $this->assertEquals(
             '/en/glork/fred',
@@ -183,7 +183,7 @@ class L10nRouteHelperTest extends \PHPUnit\Framework\TestCase
     public function testLocalizeUrlWithUnknownLocale()
     {
         $this->locale->expects($this->any())
-            ->method('getLocale')->willReturn('en');
+            ->method('getLocale')->willReturn('en_US');
         $this->locale->expects($this->any())
             ->method('getRequestLocale')->willReturn('mumble');
         $this->locale->expects($this->any())
