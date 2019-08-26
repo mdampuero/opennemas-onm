@@ -223,23 +223,22 @@ class MenusController extends Controller
      */
     private function getStaticPages()
     {
+        $context = $this->get('core.locale')->getContext();
+        $this->get('core.locale')->setContext('frontend');
+
         $oql = 'content_type_name = "static_page" and in_litter = "0"'
            . ' order by created desc';
 
-        $staticPages = $this->get('orm.manager')
-            ->getRepository('Content')
-            ->findBy($oql);
+        $response = $this->get('api.service.content')->getList($oql);
+        $this->get('core.locale')->setContext($context);
 
-        $statics = [];
-        foreach ($staticPages as $staticPage) {
-            $statics[] = [
-                'title'      => $staticPage->title,
-                'slug'       => $staticPage->slug,
-                'pk_content' => $staticPage->pk_content
+        return array_map(function ($a) {
+            return [
+                'title'      => $a->title,
+                'slug'       => $a->slug,
+                'pk_content' => $a->pk_content
             ];
-        }
-
-        return $statics;
+        }, $response['items']);
     }
 
     /**
