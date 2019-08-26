@@ -34,8 +34,12 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
+        $this->instanceLoader = $this->getMockBuilder('InstanceLoader')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->loader = $this->getMockBuilder('CoreLoader')
-            ->setMethods([ 'getInstance', 'loadInstanceFromInternalName' ])
+            ->setMethods([ 'load' ])
             ->getMock();
 
         $this->repository = $this->getMockBuilder('EntityManager')
@@ -53,7 +57,7 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->loader->expects($this->any())->method('getInstance')
+        $this->instanceLoader->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
     }
 
@@ -75,6 +79,9 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
 
             case 'core.loader':
                 return $this->loader;
+
+            case 'core.loader.instance':
+                return $this->instanceLoader;
 
             case 'core.redirector':
                 return $this->redirector;
@@ -214,10 +221,9 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($filter, 'getTranslation');
         $method->setAccessible(true);
 
-        $this->loader->expects($this->at(0))->method('loadInstanceFromInternalName')
-            ->with('wubble');
-        $this->loader->expects($this->at(1))->method('loadInstanceFromInternalName')
-            ->with('grault');
+        $this->loader->expects($this->at(0))->method('load')->with('wubble');
+        $this->loader->expects($this->at(1))->method('load')->with('grault');
+
         $this->redirector->expects($this->at(0))->method('getUrl')
             ->with('waldo')->willReturn(null);
         $this->redirector->expects($this->at(1))->method('getUrl')
@@ -242,10 +248,9 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($filter, 'getTranslation');
         $method->setAccessible(true);
 
-        $this->loader->expects($this->at(0))->method('loadInstanceFromInternalName')
-            ->with('wubble');
-        $this->loader->expects($this->at(1))->method('loadInstanceFromInternalName')
-            ->with('grault');
+        $this->loader->expects($this->at(0))->method('load')->with('wubble');
+        $this->loader->expects($this->at(1))->method('load')->with('grault');
+
         $this->redirector->expects($this->exactly(2))->method('getUrl')
             ->with('waldo')->willReturn(null);
 

@@ -51,7 +51,7 @@ class ReplaceUrlFilter extends Filter
 
             $url = $this->container->get('core.helper.url_generator')
                 ->setInstance(
-                    $this->container->get('core.loader')->getInstance()
+                    $this->container->get('core.loader.instance')->getInstance()
                 )->generate($content, [
                     'absolute' => $instance !== $foundAt
                 ]);
@@ -83,8 +83,7 @@ class ReplaceUrlFilter extends Filter
         }
 
         foreach ($instances as $instance) {
-            $this->container->get('core.loader')
-                ->loadInstanceFromInternalName($instance);
+            $this->container->get('core.loader')->load($instance);
 
             $url = $this->container->get('core.redirector')
                 ->getUrl($source, $type);
