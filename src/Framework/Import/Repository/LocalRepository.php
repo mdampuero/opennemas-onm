@@ -41,7 +41,9 @@ class LocalRepository
         $this->contents = $this->compiler->getContentsFromCompiles();
 
         usort($this->contents, function ($a, $b) {
-            return $a->created_time < $b->created_time;
+            return $a->priority !== $b->priority
+                ? $a->priority >= $b->priority
+                : $a->created_time < $b->created_time;
         });
     }
 
