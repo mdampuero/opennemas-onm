@@ -40,12 +40,12 @@ class NewsMLComponentTextEfe extends NewsMLComponentText
         $data = $data[0];
 
         // Discard extra elements
-        $data =  simplexml_load_string(
+        $data = simplexml_load_string(
             $data->asXML(),
             null,
             LIBXML_NOERROR | LIBXML_NOWARNING
         );
 
-        return $this->factory->get($data)->parse($data);
+        return $this->factory->get($data, $this)->parse($data);
     }
 }
