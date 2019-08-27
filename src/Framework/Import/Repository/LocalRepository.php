@@ -124,6 +124,10 @@ class LocalRepository
         unset($criteria['type']);
 
         return array_filter($contents, function ($a) use ($criteria) {
+            if (empty($criteria)) {
+                return true;
+            }
+
             foreach ($criteria as $key => $value) {
                 // Force AND between tags in the same filter
                 $pattern = strtolower(trim(preg_replace('/\s*,\s*/', '.*?', $value)));
