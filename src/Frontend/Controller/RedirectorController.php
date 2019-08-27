@@ -58,7 +58,7 @@ class RedirectorController extends Controller
         $content = $this->get('core.redirector')
             ->getContent($translation->target, $translation->content_type);
 
-        if (empty($content) || is_null($content->id)) {
+        if (empty($content)) {
             return $this->redirectNotMigratedContent($type);
         }
 
