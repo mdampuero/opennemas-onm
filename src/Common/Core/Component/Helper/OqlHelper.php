@@ -140,7 +140,11 @@ class OqlHelper
      */
     protected function getOrder()
     {
-        preg_match_all('/order by\s+[a-z0-9_]+\s+(asc|desc)/', $this->oql, $matches);
+        preg_match_all(
+            '/order by(\s+[a-z0-9_]+\s+(asc|desc)(,\s+[a-z0-9_]+\s+(asc|desc))*)+/',
+            $this->oql,
+            $matches
+        );
 
         if (!empty($matches) && !empty($matches[0])) {
             $this->oql = trim(str_replace($matches[0], '', $this->oql));
