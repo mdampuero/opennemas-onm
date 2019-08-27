@@ -153,7 +153,7 @@ class Importer
     {
         $ignored   = 0;
         $imported  = [];
-        $resources = $this->getResources();
+        $resources = array_reverse($this->getResources());
 
         foreach ($resources as $resource) {
             try {
