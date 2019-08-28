@@ -70,7 +70,7 @@
 {/block}
 
 {block name="customColumnsBody" prepend}
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('content')">
     <span class="label label-default" ng-if="item.renderlet !== 'html'">
       <strong>
         [% item.content %]
