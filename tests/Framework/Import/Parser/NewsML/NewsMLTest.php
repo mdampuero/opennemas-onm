@@ -210,7 +210,8 @@ class NewsMLTest extends \PHPUnit\Framework\TestCase
                 'agency_name'  => 'Foobar Agency \'quote\' ',
                 'created_time' => $date->format('Y-m-d H:i:s'),
                 'id'           => '040729054956.xm61wen7',
-                'category'     => 'POL'
+                'category'     => 'POL',
+                'priority'     => 4
             ],
             $this->parser->getBag()
         );

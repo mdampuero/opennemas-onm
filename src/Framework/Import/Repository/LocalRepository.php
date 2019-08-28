@@ -41,7 +41,9 @@ class LocalRepository
         $this->contents = $this->compiler->getContentsFromCompiles();
 
         usort($this->contents, function ($a, $b) {
-            return $a->created_time < $b->created_time;
+            return $a->priority !== $b->priority
+                ? $a->priority >= $b->priority
+                : $a->created_time < $b->created_time;
         });
     }
 
@@ -122,6 +124,10 @@ class LocalRepository
         unset($criteria['type']);
 
         return array_filter($contents, function ($a) use ($criteria) {
+            if (empty($criteria)) {
+                return true;
+            }
+
             foreach ($criteria as $key => $value) {
                 // Force AND between tags in the same filter
                 $pattern = strtolower(trim(preg_replace('/\s*,\s*/', '.*?', $value)));

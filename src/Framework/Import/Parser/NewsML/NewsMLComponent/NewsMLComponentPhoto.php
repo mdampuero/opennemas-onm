@@ -166,8 +166,8 @@ class NewsMLComponentPhoto extends NewsML
                 $h = $file->xpath('/ContentItem/Characteristics/Property[@FormalName="Height"]');
 
                 if (!empty($h) && (string) $h[0]->attributes()->Value >= $height) {
-                    $height   = (string) $h[0]->attributes()->Value;
-                    $index = $i;
+                    $height = (string) $h[0]->attributes()->Value;
+                    $index  = $i;
                 }
             }
 
@@ -221,10 +221,11 @@ class NewsMLComponentPhoto extends NewsML
         $id = $data->xpath('/NewsComponent');
 
         if (is_array($id) && !empty($id)) {
-            $id = (string) $id[0]->attributes()->Duid;
+            $id       = (string) $id[0]->attributes()->Duid;
             $file     = $this->getFile($data);
             $filename = $this->getFilename($file);
-            return md5($filename).iconv(mb_detect_encoding($id), "UTF-8", $id);
+
+            return md5($filename . iconv(mb_detect_encoding($id), "UTF-8", $id));
         }
 
         return $this->getFromBag('id');
@@ -313,18 +314,18 @@ class NewsMLComponentPhoto extends NewsML
 
         $photo = new Resource();
 
-        $photo->agency_name  = $this->bag['agency_name'];
-        $photo->extension    = substr($filename, strrpos($filename, '.') + 1);
-        $photo->file_name    = $filename;
-        $photo->file_path    = $this->getUrl($file);
-        $photo->height       = $this->getHeight($file);
-        $photo->id           = $this->getId($data);
-        $photo->image_type   = 'image/' . $photo->extension;
-        $photo->summary      = $this->getSummary($data);
-        $photo->title        = $this->getTitle($file);
-        $photo->type         = 'photo';
-        $photo->urn          = $this->getUrn($file, 'photo');
-        $photo->width        = $this->getWidth($file);
+        $photo->agency_name = $this->bag['agency_name'];
+        $photo->extension   = substr($filename, strrpos($filename, '.') + 1);
+        $photo->file_name   = $filename;
+        $photo->file_path   = $this->getUrl($file);
+        $photo->height      = $this->getHeight($file);
+        $photo->id          = $this->getId($data);
+        $photo->image_type  = 'image/' . $photo->extension;
+        $photo->summary     = $this->getSummary($data);
+        $photo->title       = $this->getTitle($file);
+        $photo->type        = 'photo';
+        $photo->urn         = $this->getUrn($file, 'photo');
+        $photo->width       = $this->getWidth($file);
 
         $content = $this->getContent($data);
 

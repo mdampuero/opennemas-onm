@@ -71,8 +71,8 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            [ 'fk_author IN (1,2)', 'flob desc', 10, 1 ],
-            $this->helper->getFiltersFromOql('blog = "1" order by flob desc')
+            [ 'fk_author IN (1,2)', 'flob desc, foo asc', 10, 1 ],
+            $this->helper->getFiltersFromOql('blog = "1" order by flob desc, foo asc')
         );
     }
 }
