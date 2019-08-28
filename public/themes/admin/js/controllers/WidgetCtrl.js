@@ -77,6 +77,36 @@
         };
 
         /**
+         * @function addDefaultParameters
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Adds default parameters to item and re-use old parameters if names
+         *   match for the same index in the array of parameters.
+         *
+         * @param {Array} params The list of default parameters.
+         */
+        $scope.addDefaultParameters = function(params) {
+          if (!$scope.item.params || $scope.item.params.length === 0) {
+            $scope.item.params = params;
+            return;
+          }
+
+          var oldParams = $scope.item.params;
+
+          $scope.item.params = [];
+
+          for (var i = 0; i < params.length; i++) {
+            if (i < oldParams.length && params[i].name === oldParams[i].name) {
+              $scope.item.params.push(oldParams[i]);
+              continue;
+            }
+
+            $scope.item.params.push(params[i]);
+          }
+        };
+
+        /**
          * @function addParameter
          * @memberOf WidgetCtrl
          *
