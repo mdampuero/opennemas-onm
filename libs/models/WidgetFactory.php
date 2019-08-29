@@ -103,11 +103,6 @@ class WidgetFactory
      */
     public function parseParams($params)
     {
-        // Unserialize widget params
-        if (!empty($this->content) && is_string($this->content->params)) {
-            $this->content->params = unserialize($this->content->params);
-        }
-
         // Merge parameters if they are a valid array
         if (!empty($this->content) && is_array($this->content->params)) {
             $this->params = array_merge($this->params, $this->content->params);
