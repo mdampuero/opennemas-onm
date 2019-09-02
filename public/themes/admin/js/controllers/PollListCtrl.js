@@ -75,7 +75,8 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria = $scope.criteria;
+          $scope.backup.criteria    = $scope.criteria;
+          $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({
             placeholder: {
