@@ -67,7 +67,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = [ 'author', 'category' ];
+          $scope.app.columns.hidden = [ 'author', 'category', 'tags' ];
 
           oqlEncoder.configure({
             placeholder: {
