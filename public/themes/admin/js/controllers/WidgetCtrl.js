@@ -55,7 +55,6 @@
           title: '',
           params: [],
           categories: [],
-          tags: [],
           external_link: '',
         };
 
