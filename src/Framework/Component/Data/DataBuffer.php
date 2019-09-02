@@ -30,7 +30,7 @@ class DataBuffer extends DataObject
      *
      * @param string $env The current environment.
      */
-    public function __construct($data = [], $env = 'dev')
+    public function __construct($data = [], $env = 'prod')
     {
         $this->env = $env;
 

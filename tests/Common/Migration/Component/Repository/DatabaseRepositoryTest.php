@@ -26,7 +26,7 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'source'     => [
                 'database' => 'foobar',
                 'table'    => 'frog',
-                'id'       => 'id',
+                'id'       => ['id'],
                 'filter'   => 'title LIKE "%foo%"'
             ]
         ];
@@ -55,11 +55,9 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCount()
     {
-        $this->tracker->expects($this->once())->method('count')->willReturn(2);
-
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT COUNT(*) as total FROM frog WHERE title LIKE "%foo%"')
-            ->willReturn([ [ 'total' => 10 ] ]);
+            ->with('SELECT COUNT(*) as total FROM migration_fix_items')
+            ->willReturn([ [ 'total' => 8 ] ]);
 
         $this->assertEquals(8, $this->repository->count());
     }
@@ -87,17 +85,32 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests end.
+     */
+    public function testEnd()
+    {
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with('DROP TABLE IF EXISTS migration_fix_items');
+
+        $this->repository->end();
+    }
+
+    /**
      * Tests next.
      */
     public function testNext()
     {
-        $this->tracker->expects($this->once())->method('count')->willReturn(7);
-
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM frog WHERE title LIKE "%foo%" LIMIT 1 OFFSET 7')
-            ->willReturn([ [ 'gorp' => 'grault' ] ]);
+            ->with(
+                'SELECT frog.* FROM frog'
+                . ' JOIN (SELECT * FROM migration_fix_items LIMIT 1)'
+                . ' fixing ON fixing.id = frog.id'
+            )->willReturn([ [ 'id' => 'grault' ] ]);
 
-        $this->assertEquals([ 'gorp' => 'grault' ], $this->repository->next());
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with('DELETE FROM migration_fix_items WHERE id = "grault"');
+
+        $this->assertEquals([ 'id' => 'grault' ], $this->repository->next());
     }
 
     /**
@@ -105,10 +118,9 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testNextWhenNoMoreResults()
     {
-        $this->tracker->expects($this->once())->method('count')->willReturn(1756);
-
         $this->conn->expects($this->once())->method('fetchAll')
-            ->with('SELECT * FROM frog WHERE title LIKE "%foo%" LIMIT 1 OFFSET 1756')
+            ->with('SELECT frog.* FROM frog JOIN (SELECT * FROM migration_fix_items LIMIT 1)' .
+                ' fixing ON fixing.id = frog.id')
             ->willReturn([]);
 
         $this->assertFalse($this->repository->next());
@@ -130,5 +142,20 @@ class DatabaseRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with('CREATE VIEW `baz` SELECT * FROM `xyzzy`');
 
         $this->repository->prepare($sqls);
+    }
+
+    /**
+     * Tests start.
+     */
+    public function testStart()
+    {
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with(
+                'CREATE TABLE IF NOT EXISTS migration_fix_items (PRIMARY KEY (id))'
+                . ' AS SELECT DISTINCT id FROM frog WHERE title LIKE "%foo%"'
+            );
+
+
+        $this->repository->start();
     }
 }

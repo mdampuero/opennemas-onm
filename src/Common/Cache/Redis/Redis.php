@@ -27,7 +27,7 @@ class Redis extends Cache
     /**
      * Initializes the Redis client.
      */
-    public function __construct($data)
+    public function __construct($data, $env = 'prod')
     {
         if (!array_key_exists('name', $data)
             || !array_key_exists('server', $data)
@@ -36,7 +36,7 @@ class Redis extends Cache
             throw new \InvalidArgumentException();
         }
 
-        parent::__construct($data);
+        parent::__construct($data, $env);
     }
 
     /**
