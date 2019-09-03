@@ -143,17 +143,6 @@
                 </span>
               </div>
             </li>
-            {*<li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="pagination.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search | orderBy: name">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>*}
           </ul>
         </div>
       </div>
@@ -169,22 +158,6 @@
         </h4>
       </div>
       <div>
-        <div class="theme-list-message clearfix ng-cloak" ng-if="!loading && items.length > 0">
-          <div class="p-b-15 text-center">
-            <div ng-if="type == 'available'">
-              <h4>{t}Change the look of your newspaper in just few clicks!{/t}</h4>
-              <h5>{t}All our Themes have been designed by media professionals and they are all Mobile Responsive!{/t}</h5>
-            </div>
-            <div ng-if="type == 'exclusive'">
-              <h4>{t}Add customizations and design to create your own theme based on one of out grids or ask us to develop an exclusive and completely new theme{/t}</h4>
-              <h5>{t}We are open to any solution you prefer!{/t}</h5>
-            </div>
-            <div ng-if="type == 'purchased'">
-              <h4>{t}Find here your purchased themes and decide which one to use today!{/t}</h4>
-              <h5>{t}All purchased Themes are ready for activation{/t}</h5>
-            </div>
-          </div>
-        </div>
         <div class="row clearfix ng-cloak" ng-if="type != 'exclusive' && type != 'addons' && !loading && items.length > 0">
           <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
           </div>
