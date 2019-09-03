@@ -224,7 +224,7 @@
                         <span ng-if="(data.extra.authors | filter : { id: item.fk_author })[0].is_blog == 1">(Blog)</span>
                       </a>
                     </span>
-                    <span ng-if="!item.fk_author || item.fk_author == 0 || item.type_opinion != 0">
+                    <span ng-if="!item.fk_author || item.fk_author == 0">
                       [% item.author %]
                     </span>
                   </td>
@@ -241,7 +241,7 @@
                   </td>
                   <td class="text-center hidden-xs">
                     {acl isAllowed="OPINION_FAVORITE"}
-                    <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" ng-if="item.type_opinion == 0" type="button">
+                    <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.favoriteLoading == 1, 'fa-star text-warning': !item.favoriteLoading && item.favorite == 1, 'fa-star-o': !item.favoriteLoading && item.favorite != 1 }"></i>
                     </button>
                     {/acl}
