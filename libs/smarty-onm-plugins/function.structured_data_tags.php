@@ -25,9 +25,6 @@ function smarty_function_structured_data_tags($params, &$smarty)
         return '';
     }
 
-    // Set content data for tags
-    $title = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
-
     $summary = $content->summary;
     if (empty($summary)) {
         if (empty($content->body)) {
@@ -36,6 +33,10 @@ function smarty_function_structured_data_tags($params, &$smarty)
             $summary = mb_substr($content->body, 0, 120) . "...";
         }
     }
+
+    // Encode content data
+    $title   = htmlspecialchars(html_entity_decode($content->title, ENT_COMPAT, 'UTF-8'));
+    $summary = htmlspecialchars(html_entity_decode($summary, ENT_COMPAT, 'UTF-8'));
 
     // Get author if exists otherwise get agency
     $author = (!is_null($user->name)) ? $user->name : $content->agency;
