@@ -21,7 +21,7 @@
         {t}Author{/t}
       </h5>
       <p class="m-l-15">
-        <a href="https://www.openhost.es">
+        <a href="https://www.openhost.es" target="_blank">
           Openhost, S.L.
         </a>
       </p>
@@ -37,10 +37,10 @@
         {t}Delivery time{/t}
       </h5>
       <p class="m-l-15" ng-if="!template.item.customize">
-      {t}Immediatly{/t}
+      {t}Immediately{/t}
       </p>
       <p class="m-l-15" ng-if="template.item.customize">
-        <a href="{$app.container->getParameter('sales_email')}">
+        <a href="mailto:{$app.container->getParameter('sales_email')}">
           {t}Contact us{/t}
         </a>
       </p>
@@ -51,7 +51,7 @@
         {t}Standard{/t}
       </p>
       <p class="m-l-15" ng-if="template.item.customize">
-        <a href="{$app.container->getParameter('sales_email')}">
+        <a href="mailto:{$app.container->getParameter('sales_email')}">
           {t}Contact us{/t}
         </a>
       </p>
