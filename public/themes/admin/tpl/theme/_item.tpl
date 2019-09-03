@@ -19,7 +19,7 @@
           {t}Demo{/t}
         </h5>
       </a>
-      <a ng-if="type === 'purchased' && item.parameters.guideline_file !== undefined" class="m-t-10 pull-left" ng-href="/themes/forseti/[% item.parameters.guideline_file %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Download the style guide for this theme{/t}">
+      <a ng-if="type === 'purchased' && item.parameters.guideline_file !== undefined" class="m-t-10 pull-left" ng-href="[% item.path %][% item.parameters.guideline_file %]" ng-click="$event.stopPropagation()" target="_blank" title="{t}Download the style guide for this theme{/t}">
         <h5 class="uppercase">
           <i class="fa fa-download"></i>
           {t}Download style guide{/t}
