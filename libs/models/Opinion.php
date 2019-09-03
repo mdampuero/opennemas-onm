@@ -52,14 +52,6 @@ class Opinion extends Content
     public $fk_author_img = null;
 
     /**
-     * The type of the opinion (0,1,2)
-     *
-     * @var int
-     */
-    public $type_opinion = null;
-
-
-    /**
      * The meta property for summary
      *
      * @var int
@@ -110,20 +102,7 @@ class Opinion extends Content
                 return 'Opinion';
             case 'author_object':
                 $ur = getService('user_repository');
-                if ((int) $this->type_opinion == 1) {
-                    $authorObj = $ur->findBy("username='editorial'", 1);
-                    if (is_array($authorObj) && array_key_exists(0, $authorObj)) {
-                        $authorObj = $authorObj[0];
-                    }
-                } elseif ((int) $this->type_opinion == 2) {
-                    $authorObj = $ur->findBy("username='director'", 1);
-                    if (is_array($authorObj) && array_key_exists(0, $authorObj)) {
-                        $authorObj = $authorObj[0];
-                    }
-                } else {
                     $authorObj = $ur->find($this->fk_author);
-                }
-
                 // TODO: Fix this ASAP
                 if (!empty($authorObj) && !empty($authorObj->avatar_img_id)) {
                     $authorObj->photo = getService('entity_repository')
@@ -156,7 +135,6 @@ class Opinion extends Content
             getService('dbal_connection')->insert('opinions', [
                 'pk_opinion'    => $this->id,
                 'fk_author'     => (int) $data['fk_author'],
-                'type_opinion'  => 0,
             ]);
 
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
@@ -200,7 +178,7 @@ class Opinion extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT contents.*, opinions.pk_opinion, opinions.type_opinion, users.name, users.bio, users.url, users.avatar_img_id '
+                'SELECT contents.*, opinions.pk_opinion, users.name, users.bio, users.url, users.avatar_img_id '
                 . 'FROM contents '
                 . 'LEFT JOIN opinions ON pk_content = pk_opinion '
                 . 'LEFT JOIN users ON opinions.fk_author = users.id WHERE pk_content=?',
@@ -216,13 +194,7 @@ class Opinion extends Content
             return false;
         }
 
-        if ((int) $rs['type_opinion'] == 1) {
-            $rs['author'] = 'Editorial';
-        } elseif ((int) $rs['type_opinion'] == 2) {
-            $rs['author'] = 'Director';
-        } else {
             $rs['author'] = $rs['name'];
-        }
 
         $this->load($rs);
 
@@ -245,7 +217,6 @@ class Opinion extends Content
         try {
             getService('dbal_connection')->update('opinions', [
                 'fk_author'     => (int) $data['fk_author'],
-                'type_opinion'  => 0,
             ], [ 'pk_opinion'    => $data['pk_opinion'] ]);
 
             $metaKeys = ['summary', 'img1', 'img2', 'img1_footer', 'img2_footer'];
@@ -315,26 +286,20 @@ class Opinion extends Content
     {
         $tpl = getService('core.template');
 
-        if ((int) $this->type_opinion == 1) {
-            $this->author_name_slug = 'editorial';
-        } elseif ((int) $this->type_opinion == 2) {
-            $this->author_name_slug = 'director';
-        } else {
-            $author = new \User($this->fk_author);
+        $author = new \User($this->fk_author);
 
-            $this->name             = \Onm\StringUtils::getTitle($author->name);
-            $this->author_name_slug = $this->name;
+        $this->name             = \Onm\StringUtils::getTitle($author->name);
+        $this->author_name_slug = $this->name;
 
-            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
-                $params['item'] = $this;
-                $template       = 'frontpage/contents/_blog.tpl';
+        if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+            $params['item'] = $this;
+            $template       = 'frontpage/contents/_blog.tpl';
 
-                if ($params['custom'] == 1) {
-                    $template = $params['tpl'];
-                }
-
-                return $tpl->fetch($template, $params);
+            if ($params['custom'] == 1) {
+                $template = $params['tpl'];
             }
+
+            return $tpl->fetch($template, $params);
         }
 
         $params['item']     = $this;
