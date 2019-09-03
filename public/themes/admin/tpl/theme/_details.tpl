@@ -37,7 +37,7 @@
         {t}Delivery time{/t}
       </h5>
       <p class="m-l-15" ng-if="!template.item.customize">
-      {t}Inmediatly{/t}
+      {t}Immediatly{/t}
       </p>
       <p class="m-l-15" ng-if="template.item.customize">
         <a href="{$app.container->getParameter('sales_email')}">
