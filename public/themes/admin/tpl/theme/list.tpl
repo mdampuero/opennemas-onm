@@ -96,11 +96,20 @@
         </div>
       </div>
     </div>
-    <div class="page-navbar filters-navbar hidden-xs">
+    <div class="page-navbar filters-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="quicklinks module-filter" ng-click="type = 'available'">
+            <li class="m-r-10 input-prepend inside search-input no-boarder">
+              <span class="add-on">
+                <span class="fa fa-search fa-lg"></span>
+              </span>
+              <input class="no-boarder" name="title" ng-model="criteria.name" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by{/t} {t}name{/t}" type="text"/>
+            </li>
+            <li class="hidden-xs quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            <li class="hidden-xs quicklinks module-filter" ng-click="type = 'available'">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'available', 'btn-white': type != 'available' }">
                 <i class="fa fa-check m-r-5"></i>
                 {t}Available{/t}
@@ -109,7 +118,7 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks module-filter no-padding">
+            <li class="hidden-xs quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'exclusive', 'btn-white': type != 'exclusive' }" ng-click="type = 'exclusive'">
                 <i class="fa fa-pencil m-r-5"></i>
                 {t}Exclusive{/t}
@@ -118,30 +127,20 @@
             <li class="quicklinks hidden-xs">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks module-filter no-padding">
+            <li class="hidden-xs quicklinks module-filter no-padding">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'addons', 'btn-white': type != 'addons' }" ng-click="type = 'addons'">
                 <i class="fa fa-plus m-r-5"></i>
                 {t}Addons{/t}
               </button>
             </li>
-            <li class="quicklinks hidden-xs">
+            <li class="hidden-xs quicklinks">
               <span class="h-seperate"></span>
             </li>
-            <li class="quicklinks module-filter">
+            <li class="hidden-xs quicklinks module-filter">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'purchased', 'btn-white': type != 'purchased' }" ng-click="type = 'purchased'">
                 <i class="fa fa-star-o m-r-5"></i>
                 {t}My themes{/t}
               </button>
-            </li>
-          </ul>
-          <ul class="hidden-xs nav quick-section pull-right">
-            <li class="quicklinks">
-              <div class="input-group" style="width: 200px">
-                <input name="name" ng-model="criteria.name" placeholder="{t}Search by name{/t}" type="text"/>
-                <span class="input-group-addon">
-                  <span class="fa fa-search fa-lg"></span>
-                </span>
-              </div>
             </li>
           </ul>
         </div>
@@ -159,15 +158,15 @@
       </div>
       <div>
         <div class="row clearfix ng-cloak" ng-if="type != 'exclusive' && type != 'addons' && !loading && items.length > 0">
-          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-6" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item'">
           </div>
         </div>
         <div class="row clearfix ng-cloak" ng-if="type == 'addons' && !loading && items.length > 0">
-          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item-module'">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-6" ng-repeat="item in items | filter: { name: criteria.name }" ng-include="'item-module'">
           </div>
         </div>
         <div class="row clearfix ng-cloak" ng-if="type == 'exclusive' && !loading && items.length > 0">
-          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="item in items | filter: { name: criteria.name }">
+          <div class="col-vlg-3 col-lg-4 col-md-6 col-sm-6 col-xs-6" ng-repeat="item in items | filter: { name: criteria.name }">
             <div class="item-wrapper" ng-include="'exclusive-item'"></div>
           </div>
         </div>
