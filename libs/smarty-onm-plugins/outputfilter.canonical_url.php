@@ -28,12 +28,9 @@ function smarty_outputfilter_canonical_url($output, $smarty)
     $tpl = '<link rel="canonical" href="%s"/>';
     $url = SITE_URL . substr(strtok($uri, '?'), 1);
 
-    if (array_key_exists('o_content', $smarty->getTemplateVars())) {
+    if ($smarty->hasValue('o_content')) {
         $url = $smarty->getContainer()->get('core.helper.url_generator')
-            ->generate(
-                $smarty->getTemplateVars()['o_content'],
-                [ 'absolute' => true ]
-            );
+            ->generate($smarty->getValue('o_content'), [ 'absolute' => true ]);
     }
 
     return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);

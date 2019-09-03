@@ -40,8 +40,9 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getTemplateVars', '__set', '__get' ])
-            ->getMock();
+            ->setMethods([
+                'getContainer', 'getValue', 'hasValue', '__set', '__get'
+            ])->getMock();
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -113,8 +114,10 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->smarty->expects($this->exactly(2))->method('getTemplateVars')
-            ->willReturn([ 'o_content' => 'grault' ]);
+        $this->smarty->expects($this->once())->method('hasValue')
+            ->with('o_content')->willReturn(true);
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('o_content')->willReturn('grault');
 
         $this->helper->expects($this->once())->method('generate')
             ->with('grault')->willReturn('http://console/grault');
@@ -142,8 +145,8 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->smarty->expects($this->once())->method('getTemplateVars')
-            ->willReturn([]);
+        $this->smarty->expects($this->once())->method('hasValue')
+            ->with('o_content')->willReturn(false);
 
         $this->assertContains(
             'http://console/thud/norf',
@@ -185,8 +188,8 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([]);
+        $this->smarty->expects($this->any())->method('hasValue')
+            ->with('o_content')->willReturn(false);
 
         $this->smarty->source->resource = 'newsletter/newsletter.tpl';
 
