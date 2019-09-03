@@ -221,7 +221,10 @@
 
           if ($scope.forcedLocale && Object.keys(data.locale.available)
             .indexOf($scope.forcedLocale) !== -1) {
-            $scope.config.locale.selected = $scope.forcedLocale;
+            // Force localization
+            $timeout(function() {
+              $scope.config.locale.selected = $scope.forcedLocale;
+            });
           }
         };
 
@@ -312,6 +315,21 @@
             $scope.disableFlags('http');
           });
           return null;
+        };
+
+        /**
+         * @function hasMultilanguage
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Checks if the section managed by this controller has multilanguage
+         *   support.
+         *
+         * @return {Boolean} True if the section supports multilanguage. False
+         *                   otherwise.
+         */
+        $scope.hasMultilanguage = function() {
+          return false;
         };
 
         /**

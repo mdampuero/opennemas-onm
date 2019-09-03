@@ -27,6 +27,14 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return $scope.config && $scope.config.locale &&
+            $scope.config.locale.multilanguage;
+        };
+
+        /**
          * @function sendToTrash
          * @memberOf UserCtrl
          *

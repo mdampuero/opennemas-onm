@@ -1,6 +1,7 @@
 imports:
     - { resource: services/helper.yml }
     - { resource: services/listener.yml }
+    - { resource: services/loader.yml }
     - { resource: services/subscriber.yml }
 parameters:
     core.locale.available: [ 'en_US', 'es_ES', 'ca_ES', 'gl_ES' ]
@@ -77,7 +78,7 @@ services:
 
     core.instance:
         class:     Common\ORM\Entity\Instance
-        factory:   [ '@core.loader', 'getInstance' ]
+        factory:   [ '@core.loader.instance', 'getInstance' ]
         public:    true
 
     core.instance.checker:
@@ -88,11 +89,6 @@ services:
     core.instance.validator:
         class:     Common\Core\Component\Instance\Validator
         arguments: [ '@orm.manager' ]
-        public:    true
-
-    core.loader:
-        class:     Common\Core\Component\Loader\Loader
-        arguments: [ '@service_container' ]
         public:    true
 
     core.locale:
@@ -202,7 +198,7 @@ services:
 
     core.theme:
         class:     Common\ORM\Entity\Extension
-        factory:   [ '@core.loader', 'getTheme' ]
+        factory:   [ '@core.loader.theme', 'getTheme' ]
         public:    true
 
     core.user:

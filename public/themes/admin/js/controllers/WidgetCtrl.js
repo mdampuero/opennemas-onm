@@ -10,17 +10,100 @@
      * @description
      *   Handles actions in widget inner.
      *
+     * @requires $compile
      * @requires $controller
-     * @requires $rootScope
      * @requires $scope
+     * @requires http
      */
     .controller('WidgetCtrl', [
-      '$compile', '$controller', '$http', '$rootScope', '$sce', '$scope', 'routing',
-      function($compile, $controller, $http, $rootScope, $sce, $scope, routing) {
+      '$compile', '$controller', '$scope', 'http',
+      function($compile, $controller, $scope, http) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
-        $scope.form = false;
+        /**
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *  The HTML string with the form for the widget
+         *
+         * @type {String}
+         */
+        $scope.widgetForm = false;
+
+        /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
+         *  The item object.
+         *
+         * @type {Object}
+         */
+        $scope.item = {
+          body: '',
+          content_type_name: 'widget',
+          fk_content_type: 12,
+          content_status: 0,
+          content: null,
+          description: '',
+          favorite: 0,
+          frontpage: 0,
+          created: new Date(),
+          starttime: null,
+          endtime: null,
+          renderlet: 'html',
+          title: '',
+          params: [],
+          categories: [],
+          external_link: '',
+        };
+
+        /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          createItem: 'api_v1_backend_widget_create_item',
+          getItem:    'api_v1_backend_widget_get_item',
+          getForm:    'api_v1_backend_widget_get_form',
+          redirect:   'backend_widget_show',
+          saveItem:   'api_v1_backend_widget_save_item',
+          updateItem: 'api_v1_backend_widget_update_item'
+        };
+
+        /**
+         * @function addDefaultParameters
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Adds default parameters to item and re-use old parameters if names
+         *   match for the same index in the array of parameters.
+         *
+         * @param {Array} params The list of default parameters.
+         */
+        $scope.addDefaultParameters = function(params) {
+          if (!$scope.item.params || $scope.item.params.length === 0) {
+            $scope.item.params = params;
+            return;
+          }
+
+          var oldParams = $scope.item.params;
+
+          $scope.item.params = [];
+
+          for (var i = 0; i < params.length; i++) {
+            if (i < oldParams.length && params[i].name === oldParams[i].name) {
+              $scope.item.params.push(oldParams[i]);
+              continue;
+            }
+
+            $scope.item.params.push(params[i]);
+          }
+        };
 
         /**
          * @function addParameter
@@ -30,7 +113,20 @@
          *   Adds an empty parameter to the parameters list.
          */
         $scope.addParameter = function() {
-          $scope.params.push({ name: '', value: '' });
+          $scope.item.params.push({ name: '', value: '' });
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          var params = [];
+
+          for (var key in $scope.item.params) {
+            params.push({ name: key, value: $scope.item.params[key] });
+          }
+
+          $scope.item.params = params;
         };
 
         /**
@@ -43,58 +139,52 @@
          * @param {String} uuid The widget uuid.
          */
         $scope.getForm = function(uuid) {
-          $scope.formLoading = true;
+          if ($scope.item.renderlet === 'html') {
+            return;
+          }
+
+          $scope.flags.http.formLoading = true;
 
           $('.widget-form').empty();
 
-          var url = routing.generate('backend_ws_widget_get_form', { uuid: uuid });
+          var route = {
+            name: $scope.routes.getForm,
+            params: { uuid: uuid }
+          };
 
-          $http.get(url).then(function(response) {
-            $scope.form        = $sce.trustAsHtml(response.data);
-            $scope.params      = [];
-            $scope.formLoading = false;
+          http.get(route).then(function(response) {
+            $scope.widgetForm = true;
 
-            var e = $compile(response.data)($scope);
+            $('.widget-form').append($compile(response.data)($scope));
 
-            // Add original parameters to form
-            for (var i = 0; i < $scope.params.length; i++) {
-              var item = $scope.originalParams.filter(function(e) {
-                return e.name === $scope.params[i].name;
-              });
-
-              if (item.length > 0) {
-                $scope.params[i].value = item[0].value;
-              }
-            }
-
-            $('.widget-form').append(e);
+            $scope.disableFlags('http');
           }, function() {
-            $scope.form        = false;
-            $scope.params      = angular.copy($scope.originalParams);
-            $scope.formLoading = false;
+            $scope.widgetForm = false;
+            $scope.disableFlags('http');
           });
         };
 
         /**
-         * @function parseParams
-         * @memberOf WidgetCtrl
-         *
-         * @description
-         *   Parse the params from template and initialize the scope properly.
-         *
-         * @param Object params The widget params.
+         * @inheritdoc
          */
-        $scope.parseParams = function(params) {
-          if (params === null) {
-            params = [];
+        $scope.hasMultilanguage = function() {
+          return false;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          var params = {};
+
+          // Convert array of parameters to object
+          for (var i = 0; i < data.params.length; i++) {
+            params[data.params[i].name] = data.params[i].value;
           }
 
-          $scope.params = [];
-          for (var i in params) {
-            $scope.params.push({ name: i, value: params[i] });
-          }
+          data.params = params;
 
-          $scope.originalParams = angular.copy($scope.params);
+          return data;
         };
 
         /**
@@ -107,26 +197,29 @@
          * @param {Integer} The parameter index in the list of parameters.
          */
         $scope.removeParameter = function(index) {
-          $scope.params.splice(index, 1);
+          $scope.item.params.splice(index, 1);
+        };
+
+        /**
+         * @function resetContent
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Cleans widget content and widget form.
+         */
+        $scope.resetContent = function() {
+          $('.widget-form').empty();
+          $scope.item.content = null;
+          $scope.widgetForm   = null;
         };
 
         // Gets the form for widget when widget type changes
-        $scope.$watch('intelligent_type', function(nv) {
-          $scope.getForm(nv);
-        });
-
-        // Updates internal parsedParameters parameter when parameters change
-        $scope.$watch('params', function() {
-          $scope.parsedParams = [];
-
-          for (var i = $scope.params.length - 1; i >= 0; i--) {
-            $scope.parsedParams.push({
-              name:  $scope.params[i].name,
-              value: $scope.params[i].value
-            });
+        $scope.$watch('item.content', function(nv) {
+          if (!nv) {
+            return;
           }
 
-          $scope.parsedParams = JSON.stringify($scope.parsedParams.reverse());
+          $scope.getForm(nv);
         }, true);
       }
     ]);

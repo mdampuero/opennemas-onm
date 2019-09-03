@@ -131,45 +131,4 @@ class WidgetManager extends EntityManager
 
         return $widgets;
     }
-
-    /**
-     * Loads a widget given its name.
-     *
-     * @param string $widgetName The widget name.
-     */
-    public function loadWidget($widgetName)
-    {
-        $widgetName = 'Widget' . str_replace('Widget', '', $widgetName);
-        $filename   = \underscore($widgetName);
-
-        foreach ($this->paths as $path) {
-            if (file_exists($path . DS . $filename . '.class.php')) {
-                include_once $path . DS . $filename . '.class.php';
-                return;
-            }
-
-            if (file_exists($path . DS . $widgetName . '.php')) {
-                include_once $path . DS . $widgetName . '.php';
-                return;
-            }
-        }
-    }
-
-    /**
-     * Parses and returns the widget name.
-     *
-     * @param string $name The widget name.
-     *
-     * @return string The parsed widget name.
-     */
-    protected function parseWidgetName($name)
-    {
-        $name = preg_replace('/(.class)?\.(php|tpl)/', '', $name);
-        $name = preg_replace('/[wW]idget/', '', $name);
-        $name = ucfirst(preg_replace_callback('/_([a-z])/', function ($matches) {
-            return ucfirst($matches[1]);
-        }, $name));
-
-        return $name;
-    }
 }

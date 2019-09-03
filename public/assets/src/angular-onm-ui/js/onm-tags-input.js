@@ -27,6 +27,7 @@
           scope: {
             autoGenerate:  '=?',
             generateFrom:  '=',
+            ignoreLocale:  '=',
             locale:        '=',
             maxTags:       '=',
             maxResults:    '=',
@@ -227,7 +228,8 @@
             page: 1
           };
 
-          if ($scope.locale && $scope.locale.multilanguage) {
+          if (!$scope.ignoreLocale && $scope.locale &&
+              $scope.locale.multilanguage) {
             criteria.locale = $scope.locale.selected;
           }
 
@@ -450,13 +452,18 @@
           var toAdd    = _.difference(nvIds, ovIds);
           var toDelete = _.difference(ovIds, nvIds);
 
-          $scope.tags = $scope.tags
-            .filter(function(e) {
+          if (toDelete.length > 0) {
+            $scope.tags = $scope.tags.filter(function(e) {
               return toDelete.indexOf(e.id) === -1;
-            }).concat(nv.filter(function(e) {
+            });
+          }
+
+          if (toAdd.length > 0) {
+            $scope.tags = $scope.tags.concat(nv.filter(function(e) {
               return toAdd.indexOf(e.id) !== -1 &&
                 $scope.ngModel.indexOf(e.id) === -1;
             }));
+          }
         }, true);
       }
     ]);

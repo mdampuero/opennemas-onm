@@ -24,22 +24,6 @@
          * @memberOf StaticPageCtrl
          *
          * @description
-         *  The list of routes for the controller.
-         *
-         * @type {Object}
-         */
-        $scope.routes = {
-          createItem: 'api_v1_backend_static_page_create_item',
-          getItem:    'api_v1_backend_static_page_get_item',
-          redirect:   'backend_static_page_show',
-          saveItem:   'api_v1_backend_static_page_save_item',
-          updateItem: 'api_v1_backend_static_page_update_item'
-        };
-
-        /**
-         * @memberOf StaticPageCtrl
-         *
-         * @description
          *  The static page object.
          *
          * @type {Object}
@@ -65,20 +49,25 @@
         };
 
         /**
-         * @function parseItem
          * @memberOf StaticPageCtrl
          *
          * @description
-         *   Parses the response and adds information to the scope.
+         *  The list of routes for the controller.
          *
-         * @param {Object} data The data in the response.
+         * @type {Object}
          */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.data.item = angular.extend($scope.item, data.item);
-          }
+        $scope.routes = {
+          createItem: 'api_v1_backend_static_page_create_item',
+          getItem:    'api_v1_backend_static_page_get_item',
+          redirect:   'backend_static_page_show',
+          saveItem:   'api_v1_backend_static_page_save_item',
+          updateItem: 'api_v1_backend_static_page_update_item'
+        };
 
-          $scope.configure(data.extra);
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
         };
       }

@@ -16,12 +16,12 @@
                 {block name="title"}{/block}
               </h4>
             </li>
-            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="hasMultilanguage()">
               <h4>
                 <i class="fa fa-angle-right"></i>
               </h4>
             </li>
-            <li class="hidden-xs ng-cloak quicklinks" ng-if="data.extra.locale.multilanguage && data.extra.locale.available">
+            <li class="hidden-xs ng-cloak quicklinks" ng-if="hasMultilanguage()">
               <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
             </li>
           </ul>

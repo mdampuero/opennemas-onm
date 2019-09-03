@@ -64,6 +64,18 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function(data) {
+          $scope.item.type = Number($scope.item.type);
+
+          if ($scope.item.thumb_url && $scope.item.thumb_url.length > 0) {
+            $scope.item.thumbnail_url = data.extra.KIOSKO_IMG_URL +
+              $scope.item.path + '/' + $scope.item.thumb_url;
+          }
+        };
+
+        /**
          * @function convertBase64ImageToFile
          * @memberOf CoverCtrl
          *
@@ -82,43 +94,6 @@
             [ new Blob([ new Uint8Array(array) ], { type: 'image/jpg' }) ],
             'image.jpg'
           );
-        };
-
-        /**
-         * @function parseItem
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (!data.item) {
-            return;
-          }
-
-          data.item.type = Number(data.item.type);
-          if (data.item.thumb_url && data.item.thumb_url.length > 0) {
-            data.item.thumbnail_url = data.extra.KIOSKO_IMG_URL + data.item.path + '/' + data.item.thumb_url;
-          }
-
-          $scope.item = angular.extend($scope.item, data.item);
-        };
-
-        /**
-         * @function unsetCover
-         * @memberOf CoverCtrl
-         *
-         * @description
-         *  Method to unset the cover information
-         */
-        $scope.unsetCover = function() {
-          $scope.item.name = null;
-          $scope.item.cover = null;
-          $scope.item.thumbnail = null;
-          $scope.item.thumbnail_url = null;
-          $scope.item.thumb_url = null;
         };
 
         /**
@@ -210,6 +185,21 @@
               $scope.save();
             }
           });
+        };
+
+        /**
+         * @function unsetCover
+         * @memberOf CoverCtrl
+         *
+         * @description
+         *  Method to unset the cover information
+         */
+        $scope.unsetCover = function() {
+          $scope.item.name          = null;
+          $scope.item.cover         = null;
+          $scope.item.thumbnail     = null;
+          $scope.item.thumbnail_url = null;
+          $scope.item.thumb_url     = null;
         };
       }
     ]);

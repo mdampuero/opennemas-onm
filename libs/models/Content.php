@@ -596,7 +596,9 @@ class Content implements \JsonSerializable, CsvSerializable
         $categoryId = array_key_exists('category', $data) ?
             (int) $data['category'] : null;
 
-        $tags = $data['tags'] ?? [];
+        $tags = array_key_exists('tags', $data) && !empty($data['tags'])
+            ? $data['tags'] : [];
+
         $data = $this->parseData($data, $this->id);
 
         $this

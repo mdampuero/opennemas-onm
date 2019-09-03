@@ -16,9 +16,12 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <div class="chart-container" style="height: 100%; position: relative; width: 100%;">
+    <div class="chart-container" style="height: 100%; position: relative; width: 100%;" ng-if="item.items && item.items.length > 0">
       <canvas class="chart chart-pie" chart-data="chart.data[$index]" chart-labels="chart.labels[$index]" chart-options="options"></canvas>
     </div>
+    <small class="text-italic" ng-if="!item.items || item.items.length === 0">
+      -
+    </small>
   </td>
 {/block}
 
@@ -153,7 +156,7 @@
   {acl isAllowed="POLL_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
       <i class="fa fa-trash-o m-r-5"></i>
-      {t}Remove{/t}
+      {t}Delete{/t}
     </button>
   {/acl}
 {/block}

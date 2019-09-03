@@ -9,7 +9,7 @@
  */
 namespace Framework\Command;
 
-use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,24 +42,13 @@ EOF
         $internalName = $input->getArgument('internal_name');
 
         // Loads one ONM instance from database
-        $instance = $this->getContainer()->get('core.loader')
-            ->loadInstanceFromInternalName($internalName);
+        $instance = $this->getContainer()->get('core.loader.instance')
+            ->loadInstanceByName($internalName)
+            ->getInstance();
 
-        //If found matching instance initialize its contants and return it
-        if (is_object($instance)) {
-            // If this instance is not activated throw an exception
-            if ($instance->activated != '1') {
-                $message = _('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
-            }
-        } else {
-            throw new InstanceNotFoundException();
+        if (empty($instance->activated)) {
+            throw new InstanceNotActivatedException(_('Instance not activated'));
         }
-
-        $cache = $this->getContainer()->get('cache');
-        $cache->setNamespace($instance->internal_name);
-
-        $urlBase = "http://www.cronicasdelaemigracion.es/seccion/";
 
         $date          = new \DateTime();
         $curly         = [];

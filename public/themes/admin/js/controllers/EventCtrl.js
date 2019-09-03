@@ -70,31 +70,19 @@
         };
 
         /**
-         * @function parseItem
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
+         * @inheritdoc
          */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.data.item = angular.extend($scope.item, data.item);
-          }
-
-          $scope.configure(data.extra);
+        $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
 
-          var coverId = $scope.data.item.related_contents.filter(function(el) {
-            return el.relationship === 'cover';
+          var coverId = $scope.data.item.related_contents.filter(function(e) {
+            return e.relationship === 'cover';
           }).shift();
 
-          if (!coverId) {
-            return;
+          if (coverId) {
+            $scope.cover =
+              $scope.data.extra.related_contents[coverId.pk_content2];
           }
-
-          $scope.cover = data.extra.related_contents[coverId.pk_content2];
         };
 
         // Update slug when title is updated

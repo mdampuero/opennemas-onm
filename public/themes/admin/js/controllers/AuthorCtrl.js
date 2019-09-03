@@ -57,6 +57,27 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          if (!$scope.item.user_groups) {
+            $scope.item.user_groups = {};
+          }
+
+          $scope.item.user_groups[3] = {
+            expires: null,
+            status: 1,
+            user_group_id: 3
+          };
+
+          if ($scope.data.extra.photos &&
+              $scope.data.extra.photos[$scope.item.avatar_img_id]) {
+            $scope.item.avatar_img_id =
+              $scope.data.extra.photos[$scope.item.avatar_img_id];
+          }
+        };
+
+        /**
          * @function getUsername
          * @memberOf AuthorCtrl
          *
@@ -104,37 +125,6 @@
           }
 
           return data;
-        };
-
-        /**
-         * @function parseItem
-         * @memberOf AuthorCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.item = angular.extend($scope.item, data.item);
-          }
-
-          if (!$scope.item.user_groups) {
-            $scope.item.user_groups = {};
-          }
-
-          $scope.item.user_groups[3] = {
-            expires: null,
-            status: 1,
-            user_group_id: 3
-          };
-
-          if (data.extra.photos &&
-            data.extra.photos[$scope.item.avatar_img_id]) {
-            $scope.item.avatar_img_id =
-              data.extra.photos[$scope.item.avatar_img_id];
-          }
         };
       }
     ]);

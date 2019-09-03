@@ -96,7 +96,21 @@
          * @param {String} name The columns name.
          */
         $scope.isColumnEnabled = function(name) {
-          return $scope.app.columns.selected.indexOf(name) !== -1;
+          return !$scope.isColumnHidden(name) &&
+            $scope.app.columns.selected.indexOf(name) !== -1;
+        };
+
+        /**
+         * @function isColumnHidden
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Checks if a columns is hidden for the current list.
+         *
+         * @param {String} name The columns name.
+         */
+        $scope.isColumnHidden = function(name) {
+          return $scope.app.columns.hidden.indexOf(name) !== -1;
         };
 
         /**

@@ -1,0 +1,21 @@
+backend_widget_create:
+    path:     /widgets/new
+    defaults: { _controller: BackendBundle:Widget:create }
+
+backend_widget_show:
+    path:     /widgets/{id}
+    defaults: { _controller: BackendBundle:Widget:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_widgets_content_provider:
+    path:     /widgets/content-provider
+    defaults: { _controller: BackendBundle:Widget:contentProvider }
+
+backend_widgets_list:
+    path:     /widgets
+    defaults: { _controller: BackendBundle:Widget:list }
+    options:
+        expose: true
