@@ -60,7 +60,7 @@ class AssetController extends Controller
                 ->strip()
                 ->apply($transform, $params)
                 ->getContent();
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Exception $e) {
             throw new ResourceNotFoundException();
         }
 
