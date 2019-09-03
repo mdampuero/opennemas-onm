@@ -54,7 +54,7 @@ class ThemeController extends Controller
             $purchased = $this->get('core.instance')->purchased;
         }
 
-        $themes = $em->getRepository('theme', 'file')->findBy();
+        $themes = $em->getRepository('theme', 'file')->findBy("order by name asc");
         $themes = $converter->responsify($themes, true);
 
         $addons = $repository->findBy('enabled=1 and type="theme-addon"');
