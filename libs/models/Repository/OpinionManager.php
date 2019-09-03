@@ -158,13 +158,7 @@ class OpinionManager extends EntityManager
                         }
                     }
                 } elseif ($field == 'author') {
-                    if ($filters[0]['value'] > 0) {
                         $filterSQL[] = 'opinions.fk_author=' . $filters[0]['value'];
-                    } elseif ($filters[0]['value'] == -2) {
-                        $filterSQL[] = 'opinions.type_opinion=2';
-                    } elseif ($filters[0]['value'] == -3) {
-                        $filterSQL[] = 'opinions.type_opinion=1';
-                    }
                 } else {
                     $fieldFilters = [];
                     foreach ($filters as $filter) {
