@@ -9,8 +9,10 @@
  */
 namespace Tests\Common\Core\EventListener;
 
-use Common\ORM\Entity\Instance;
+use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
+use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Common\Core\EventListener\CoreListener;
+use Common\ORM\Entity\Instance;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
@@ -36,8 +38,9 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->loader = $this->getMockBuilder('Loader')
-            ->setMethods([ 'init', 'loadInstanceFromUri' ])
+        $this->loader = $this->getMockBuilder('Common\Core\Component\Loader\CoreLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'init', 'load', 'onlyEnabled' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Monolog')
@@ -85,6 +88,8 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
                 return $this->logger;
             case 'core.helper.url':
                 return $this->uh;
+            case 'core.instance':
+                return $this->instance;
             case 'core.loader':
                 return $this->loader;
             case 'core.security':
@@ -111,9 +116,11 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getRequestUri')
             ->willReturn('/fred');
 
-        $this->loader->expects($this->once())->method('loadInstanceFromUri')
+        $this->loader->expects($this->once())->method('load')
             ->with('qux.glork', '/fred')
-            ->willReturn($this->instance);
+            ->willReturn($this->loader);
+        $this->loader->expects($this->once())->method('onlyEnabled')
+            ->will($this->throwException(new InstanceNotActivatedException()));
 
         $this->listener->onKernelRequest($this->event);
     }
@@ -138,9 +145,11 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
         $this->security->expects($this->once())->method('setInstance')
             ->with($this->instance);
 
-        $this->loader->expects($this->once())->method('loadInstanceFromUri')
+        $this->loader->expects($this->once())->method('load')
             ->with('qux.glork', '/api')
-            ->willReturn($this->instance);
+            ->willReturn($this->loader);
+        $this->loader->expects($this->once())->method('onlyEnabled')
+            ->willReturn($this->loader);
         $this->loader->expects($this->once())->method('init');
 
         $this->assertEmpty($this->listener->onKernelRequest($this->event));
@@ -161,9 +170,11 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->once())->method('getRequest')
             ->willReturn($this->request);
 
-        $this->loader->expects($this->once())->method('loadInstanceFromUri')
+        $this->loader->expects($this->once())->method('load')
             ->with('qux.glork', '/')
-            ->willReturn($this->instance);
+            ->willReturn($this->loader);
+        $this->loader->expects($this->once())->method('onlyEnabled')
+            ->willReturn($this->loader);
         $this->loader->expects($this->once())->method('init');
 
         $this->request->expects($this->any())->method('getHost')
@@ -198,9 +209,11 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->request);
         $this->event->expects($this->once())->method('setResponse');
 
-        $this->loader->expects($this->once())->method('loadInstanceFromUri')
+        $this->loader->expects($this->once())->method('load')
             ->with('qux.glork', '/')
-            ->willReturn($this->instance);
+            ->willReturn($this->loader);
+        $this->loader->expects($this->once())->method('onlyEnabled')
+            ->willReturn($this->loader);
         $this->loader->expects($this->once())->method('init');
 
         $this->logger->expects($this->once())->method('info')
@@ -232,7 +245,7 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \Common\Core\Component\Exception\Instance\InstanceNotFoundException
      */
-    public function testOnKernelRequestWhenInstanceNotExist()
+    public function testOnKernelRequestWhenInstanceNotFound()
     {
         $this->event->expects($this->once())->method('getRequestType')
             ->willReturn(HttpKernelInterface::MASTER_REQUEST);
@@ -244,9 +257,9 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getRequestUri')
             ->willReturn('/fred');
 
-        $this->loader->expects($this->once())->method('loadInstanceFromUri')
+        $this->loader->expects($this->once())->method('load')
             ->with('qux.glork', '/fred')
-            ->will($this->throwException(new \Exception()));
+            ->will($this->throwException(new InstanceNotFoundException()));
 
         $this->listener->onKernelRequest($this->event);
     }

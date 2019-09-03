@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-11 08:51+0000\n"
-"PO-Revision-Date: 2019-07-11 10:50+0200\n"
+"PO-Revision-Date: 2019-08-05 17:01+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -1558,7 +1558,7 @@ msgid "Unable to activate your account"
 msgstr "No se pudo activar tu cuenta"
 
 msgid "Select a country"
-msgstr "Seleccione un país"
+msgstr "Selecciona un país"
 
 msgid "The email address is already in use."
 msgstr "La dirección de correo electrónico que escribiste ya está en uso"
@@ -1621,7 +1621,7 @@ msgid "Client saved successfully"
 msgstr "Cliente guardado con éxito"
 
 msgid "Select an user..."
-msgstr "Seleccione un grupo…"
+msgstr "Selecciona un grupo…"
 
 msgid "Instance deleted successfully"
 msgstr "Instancia eliminada correctamente"
@@ -2557,7 +2557,7 @@ msgid "Widget %s not available"
 msgstr "Widget %s no disponible"
 
 msgid "Select a category..."
-msgstr "Seleccione una categoría…"
+msgstr "Selecciona una categoría…"
 
 msgid "Frontpage mobile version"
 msgstr "Portada: versión móvil"
@@ -3911,7 +3911,7 @@ msgid "Used for all the dates used in your webpage."
 msgstr "Usado en todas las fechas usadas en tu página web."
 
 msgid "Select a timezone..."
-msgstr "Seleccione una zona horaria…"
+msgstr "Selecciona una zona horaria…"
 
 msgid "Automatic translations"
 msgstr "Traducciones automáticas"
@@ -3935,7 +3935,7 @@ msgid "Translate to"
 msgstr "Traducir a"
 
 msgid "Select to language"
-msgstr "Seleccione un idioma"
+msgstr "Selecciona un idioma"
 
 msgid "Required params for Service"
 msgstr "Parámetros requeridos para el servicio"
@@ -3944,7 +3944,7 @@ msgid "Service"
 msgstr "Servicio"
 
 msgid "Select a service..."
-msgstr "Seleccione un servicio…"
+msgstr "Selecciona un servicio…"
 
 msgid "Default translator for \"%1\""
 msgstr "Traductor por omisión para «%1»"
@@ -4365,7 +4365,7 @@ msgid ""
 "Your theme offers multiple skins to slightly change your theme. Select which "
 "one do you want."
 msgstr ""
-"Tu tema ofrece varios skins que lo cambian ligeramente. Seleccione cual "
+"Tu tema ofrece varios skins que lo cambian ligeramente. Selecciona cual "
 "quiere."
 
 msgid "Custom CSS"
@@ -5010,7 +5010,7 @@ msgid "Save positions"
 msgstr "Guardar posiciones"
 
 msgid "Select a category"
-msgstr "Seleccione una categoría"
+msgstr "Selecciona una categoría"
 
 msgid "Slug"
 msgstr "Slug"
@@ -5038,7 +5038,7 @@ msgid "by"
 msgstr "por"
 
 msgid "Choose an author..."
-msgstr "Seleccione un autor..."
+msgstr "Selecciona un autor..."
 
 msgid ""
 "Your articles have been published, check them in the <a href=\"%1\">article "
@@ -5296,13 +5296,13 @@ msgid "Text size for title"
 msgstr "Tamaño del texto para el título"
 
 msgid "Select a size..."
-msgstr "Seleccione un tamaño…"
+msgstr "Selecciona un tamaño…"
 
 msgid "Image position"
 msgstr "Posición de la imagen"
 
 msgid "Select a position..."
-msgstr "Seleccione una posición…"
+msgstr "Selecciona una posición…"
 
 msgid "Settings home frontpage"
 msgstr "Preferencias para la portada principal"
@@ -5700,7 +5700,7 @@ msgid "Empty equals to frontpage"
 msgstr "Vacío es igual a portada"
 
 msgid "Select a content"
-msgstr "Seleccione un contenido"
+msgstr "Selecciona un contenido"
 
 msgid "Examples"
 msgstr "Ejemplos"
@@ -6841,7 +6841,7 @@ msgid ""
 "Choose between those available below:"
 msgstr ""
 "Opennemas le permite seleccionar distintos métodos de envío de sus "
-"boletines. Seleccione entre los disponibles debajo:"
+"boletines. Selecciona entre los disponibles debajo:"
 
 msgid "Maillist"
 msgstr "Lista de correo"
@@ -7059,7 +7059,7 @@ msgid "No image assigned"
 msgstr "Imagen no asignada"
 
 msgid "Select an author"
-msgstr "Seleccione un autor"
+msgstr "Selecciona un autor"
 
 msgid "Add a tag..."
 msgstr "Añadir una etiqueta..."
@@ -7416,7 +7416,7 @@ msgid "State/Province"
 msgstr "Provincia/Estado"
 
 msgid "Select a province"
-msgstr "Seleccione una provincia"
+msgstr "Selecciona una provincia"
 
 msgid "Your account is connected to %1."
 msgstr "Tu cuenta está conectada a %1."
@@ -7942,7 +7942,7 @@ msgid "Icon"
 msgstr "Icono"
 
 msgid "Pick an icon..."
-msgstr "Seleccione un icono…"
+msgstr "Selecciona un icono…"
 
 msgid "No icon"
 msgstr "Sin icono"
@@ -8113,7 +8113,7 @@ msgid "This UUID is invalid"
 msgstr "Este UUID es inválido"
 
 msgid "Select a type"
-msgstr "Seleccione una tipo"
+msgstr "Selecciona un tipo"
 
 msgid "Theme"
 msgstr "Tema"
@@ -8447,7 +8447,7 @@ msgid ""
 "                    <br>Select 'All' for cleaning all the cache/compile "
 "files."
 msgstr ""
-"Seleccione la instancia en la que desea limpiar los ficheros de cache y "
+"Selecciona la instancia en la que desea limpiar los ficheros de cache y "
 "compile.\n"
 "<br>Si selecciona «Todas» se limpiaran todos los ficheros compile y de cache."
 
@@ -8800,7 +8800,7 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 #~ msgstr "Imagen de miniatura"
 
 #~ msgid "Select an author..."
-#~ msgstr "Seleccione un autor…"
+#~ msgstr "Selecciona un autor…"
 
 #~ msgid "Album images"
 #~ msgstr "Imágenes del álbum"
@@ -9256,7 +9256,7 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 #~ msgstr "-- Todas las categorías --"
 
 #~ msgid "- Select a category -"
-#~ msgstr "- Seleccione categoría -"
+#~ msgstr "- Selecciona categoría -"
 
 #~ msgid "Config categories module"
 #~ msgstr "Configurar módulo «Categorías»"
@@ -9342,7 +9342,7 @@ msgstr "Usa la barra lateral derecha para explorar la información disponible."
 #~ msgstr "Crear origen"
 
 #~ msgid "Choose a category..."
-#~ msgstr "Seleccione una categoría..."
+#~ msgstr "Selecciona una categoría..."
 
 #~ msgid "Can't get static page title. Check the title"
 #~ msgstr ""

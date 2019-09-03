@@ -16,19 +16,20 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <i class="fa fa-lg fa-file-o" uib-tooltip="{t}Article{/t}" ng-if="item.content_type_name === 'article'"></i>
-    <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
-    <i class="fa fa-lg fa-calendar" uib-tooltip="{t}Event{/t}" ng-if="item.content_type_name === 'event'"></i>
-    <i class="fa fa-lg fa-pie-chart" uib-tooltip="{t}Poll{/t}" ng-if="item.content_type_name === 'poll'"></i>
-    <i class="fa fa-lg fa-file" uib-tooltip="{t}Static Page{/t}" ng-if="item.content_type_name === 'static_page'"></i>
-    <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
-    <i class="fa fa-lg fa-envelope" uib-tooltip="{t}Letter{/t}" ng-if="item.content_type_name === 'letter'"></i>
-    <i class="fa fa-lg fa-picture-o" uib-tooltip="{t}Image{/t}" ng-if="item.content_type_name === 'image'"></i>
-    <i class="fa fa-lg fa-paperclip" uib-tooltip="{t}File{/t}" ng-if="item.content_type_name === 'attachment'"></i>
-    <i class="fa fa-lg fa-film" uib-tooltip="{t}Video{/t}" ng-if="item.content_type_name === 'video'"></i>
-    <i class="fa fa-lg fa-stack-overflow" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
-    <i class="fa fa-lg fa-newspaper-o" uib-tooltip="{t}NewsStand{/t}" ng-if="item.content_type_name === 'kiosko'"></i>
     <i class="fa fa-lg fa-book" uib-tooltip="{t}Book{/t}" ng-if="item.content_type_name === 'book'"></i>
+    <i class="fa fa-lg fa-calendar" uib-tooltip="{t}Event{/t}" ng-if="item.content_type_name === 'event'"></i>
+    <i class="fa fa-lg fa-envelope" uib-tooltip="{t}Letter{/t}" ng-if="item.content_type_name === 'letter'"></i>
+    <i class="fa fa-lg fa-file" uib-tooltip="{t}Static Page{/t}" ng-if="item.content_type_name === 'static_page'"></i>
+    <i class="fa fa-lg fa-file-o" uib-tooltip="{t}Article{/t}" ng-if="item.content_type_name === 'article'"></i>
+    <i class="fa fa-lg fa-film" uib-tooltip="{t}Video{/t}" ng-if="item.content_type_name === 'video'"></i>
+    <i class="fa fa-lg fa-newspaper-o" uib-tooltip="{t}NewsStand{/t}" ng-if="item.content_type_name === 'kiosko'"></i>
+    <i class="fa fa-lg fa-paperclip" uib-tooltip="{t}File{/t}" ng-if="item.content_type_name === 'attachment'"></i>
+    <i class="fa fa-lg fa-picture-o" uib-tooltip="{t}Image{/t}" ng-if="item.content_type_name === 'image'"></i>
+    <i class="fa fa-lg fa-pie-chart" uib-tooltip="{t}Poll{/t}" ng-if="item.content_type_name === 'poll'"></i>
+    <i class="fa fa-lg fa-puzzle-piece" uib-tooltip="{t}Widget{/t}" ng-if="item.content_type_name === 'widget'"></i>
+    <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
+    <i class="fa fa-lg fa-stack-overflow" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
+    <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
   </td>
 {/block}
 

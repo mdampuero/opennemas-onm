@@ -36,10 +36,17 @@
         </div>
       </div>
     </div>
-    <div class="content panel">
+    <div class="content">
       <div class="grid simple">
         <div class="grid-body">
-          <autoform-editor ng-model="extraFields" />
+          <div class="row">
+            {acl isAllowed="MASTER"}
+              <div class="col-md-6">
+                <h4 class="no-margin">Extra fields</h4>
+                <autoform-editor ng-model="extraFields"/>
+              </div>
+            {/acl}
+          </div>
         </div>
       </div>
     </div>

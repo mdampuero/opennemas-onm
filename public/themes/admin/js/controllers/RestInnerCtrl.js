@@ -9,30 +9,21 @@
      *
      * @requires $controller
      * @requires $scope
+     * @requires $timeout
      * @requires $uibModal
      * @requires $window
      * @requires cleaner
      * @requires http
      * @requires messenger
+     * @requires routing
      *
      * @description
-     *   Provides actions to edit, save and update subscribers.
+     *   Provides generic actions to edit, save and update items.
      */
     .controller('RestInnerCtrl', [
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
-
-        /**
-         * @function generate
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Forces automatic field generation.
-         */
-        $scope.generate = function() {
-          $scope.flags.generate = { slug: true, tags: true };
-        };
 
         /**
          * @memberOf RestInnerCtrl
@@ -53,6 +44,29 @@
          * @type {Boolean}
          */
         $scope.refreshOnUpdate = false;
+
+        /**
+         * @function buildScope
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Updates the scope after assigning the information from the
+         *   response to the scope.
+         */
+        $scope.buildScope = function() {
+          return true;
+        };
+
+        /**
+         * @function generate
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Forces automatic field generation.
+         */
+        $scope.generate = function() {
+          $scope.flags.generate = { slug: true, tags: true };
+        };
 
         /**
          * @function generateTagsFrom
@@ -78,7 +92,7 @@
         $scope.getData = function() {
           var data = angular.extend({}, $scope.item);
 
-          if ($scope.config.locale && $scope.config.locale.multilanguage) {
+          if ($scope.hasMultilanguage()) {
             data = angular.extend({}, $scope.data.item);
           }
 
@@ -114,7 +128,8 @@
             $scope.data.item = angular.extend($scope.item, $scope.data.item);
             $scope.item      = angular.extend({}, response.data.item);
 
-            $scope.parseItem($scope.data);
+            $scope.configure($scope.data.extra);
+            $scope.buildScope();
             $scope.disableFlags('http');
           }, function() {
             $scope.item = null;
@@ -149,17 +164,17 @@
         };
 
         /**
-         * @function parseItem
+         * @function parseData
          * @memberOf RestInnerCtrl
          *
          * @description
-         *   Parses the response and adds information to the scope.
+         *   description
          *
-         * @param {Object} data The data in the response.
+         * @param {Object} data The data to parse.
+         *
+         * @return {Object} Parses data before submit.
          */
-        $scope.parseItem = function(data) {
-          $scope.configure(data.extra);
-
+        $scope.parseData = function(data) {
           return data;
         };
 
@@ -172,7 +187,7 @@
          */
         $scope.save = function() {
           if ($scope.form.$invalid) {
-            messenger.post(window.strings.forms.not_valid, 'error');
+            messenger.post($window.strings.forms.not_valid, 'error');
             $scope.disableFlags('http');
 
             return false;
@@ -183,6 +198,9 @@
 
           var data  = $scope.getData();
           var route = { name: $scope.routes.saveItem };
+
+          // Parses data before save
+          data = $scope.parseData(data);
 
           /**
            * Callback executed when subscriber is saved/updated successfully.

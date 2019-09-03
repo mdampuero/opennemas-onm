@@ -76,24 +76,15 @@
         };
 
         /**
-         * @function parseItem
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
+         * @inheritdoc
          */
-        $scope.parseItem = function(data) {
-          if (!data.item) {
-            return;
-          }
-
-          if (data.item.recipients) {
+        $scope.buildScope = function() {
+          if ($scope.item.recipients) {
             // Force integer values in id property
-            for (var i = 0; i < data.item.recipients.length; i++) {
-              if (data.item.recipients[i].id) {
-                data.item.recipients[i].id = data.item.recipients[i].id.toString();
+            for (var i = 0; i < $scope.item.recipients.length; i++) {
+              if ($scope.item.recipients[i].id) {
+                $scope.item.recipients[i].id =
+                  $scope.item.recipients[i].id.toString();
               }
 
               // TODO: Remove when not subscribers stored in settings in production
@@ -101,8 +92,8 @@
             }
           }
 
-          if (data.item.contents) {
-            data.item.contents.map(function(item) {
+          if ($scope.item.contents) {
+            $scope.item.contents.map(function(item) {
               item.items.map(function(e) {
                 if (e.e_type === 'list' &&
                   (e.criteria.category === '' ||
@@ -126,8 +117,6 @@
               return item;
             });
           }
-
-          $scope.item = angular.extend($scope.item, data.item);
         };
 
         /**

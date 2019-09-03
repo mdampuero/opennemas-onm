@@ -82,9 +82,11 @@ class FixCommand extends ContainerAwareCommand
         $tracker = $this->mm->getTracker();
 
         if ($reset) {
+            $this->mm->getRepository()->end();
             $tracker->end();
         }
 
+        $this->mm->getRepository()->start();
         $tracker->start();
 
         $this->getCounters();
@@ -134,6 +136,7 @@ class FixCommand extends ContainerAwareCommand
         $this->postFix();
 
         if (!$end) {
+            $this->mm->getRepository()->end();
             $tracker->end();
         }
 
@@ -150,13 +153,11 @@ class FixCommand extends ContainerAwareCommand
         // TODO: Remove ASAP
         $this->getContainer()->get('core.security')->setCliUser();
 
-        // Load instance and force ORM and Cache initialization
-        $loader = $this->getContainer()->get('core.loader');
-        $loader->loadInstanceFromInternalName(
-            $this->fix['source']['instance']
-        );
+        $instance = $this->getContainer()->get('core.loader.instance')
+            ->loadInstanceByName($this->fix['source']['instance'])
+            ->getInstance();
 
-        $loader->init();
+        $this->getContainer()->get('core.loader')->configureInstance($instance);
 
         $this->output->writeln("<options=bold>(2/7) Configuring the fix...</>");
 

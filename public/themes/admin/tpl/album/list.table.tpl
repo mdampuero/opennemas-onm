@@ -107,7 +107,7 @@
   {acl isAllowed="ALBUM_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
       <i class="fa fa-trash-o m-r-5"></i>
-      {t}Remove{/t}
+      {t}Delete{/t}
     </button>
   {/acl}
 {/block}

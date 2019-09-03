@@ -52,6 +52,36 @@ class NitfTest extends \PHPUnit\Framework\TestCase
                 </body.content>
             </body>
         </nitf>");
+
+        $this->validAlt = simplexml_load_string("<nitf>
+            <head>
+                <title>Sample title</title>
+                <meta name=\"prioridad\" content=\"U\" />
+                <meta name=\"categoria\" content=\"POL\" />
+                <docdata management-status=\"usable\">
+                    <urgency ed-urg=\"3\" />
+                    <evloc city=\"Budapest\" iso-cc=\"HUN\" />
+                    <doc-id>30257</doc-id>
+                </docdata>
+            </head>
+            <body>
+                <body.head>
+                    <rights.owner>Foobar Agency</rights.owner>
+                    <dateline>
+                        <story.date norm=\"20150921T080200\">
+                            20150921T080200
+                        </story.date>
+                    </dateline>
+                    <abstract>
+                        <p>Sample summary</p>
+                    </abstract>
+                </body.head>
+                <body.content>
+                    Paragraph 1
+                    Paragraph 2
+                </body.content>
+            </body>
+        </nitf>");
     }
 
     public function testCheckFormat()
@@ -86,6 +116,10 @@ class NitfTest extends \PHPUnit\Framework\TestCase
             '<p>Paragraph 1</p><p>Paragraph 2</p>',
             $this->parser->getBody($this->valid)
         );
+
+        $this->assertContains('Paragraph 1', $this->parser->getBody($this->validAlt));
+        $this->assertContains('Paragraph 2', $this->parser->getBody($this->validAlt));
+        $this->assertContains('<br>', $this->parser->getBody($this->validAlt));
     }
 
     public function testGetCategory()
@@ -108,6 +142,7 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $date->setTimezone(new \DateTimeZone('UTC'));
 
         $this->assertEquals($date, $this->parser->getCreatedTime($this->valid));
+        $this->assertEquals($date, $this->parser->getCreatedTime($this->validAlt));
     }
 
     public function testGetId()
@@ -115,13 +150,16 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->parser->getId($this->invalid));
 
         $this->assertEquals('21155709', $this->parser->getId($this->valid));
+        $this->assertEquals('30257', $this->parser->getId($this->validAlt));
     }
 
     public function testGetPriority()
     {
         $this->assertEquals(5, $this->parser->getPriority($this->invalid));
-
         $this->assertEquals(3, $this->parser->getPriority($this->valid));
+
+        $this->parser->setBag([ 'priority' => 2 ]);
+        $this->assertEquals(2, $this->parser->getPriority($this->invalid));
     }
 
     public function testGetSummary()

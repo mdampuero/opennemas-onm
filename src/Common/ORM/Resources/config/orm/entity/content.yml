@@ -4,6 +4,7 @@ orm:
             name: Content
             enum:
                 content_type_name:
+                    - advertisement
                     - album
                     - article
                     - attachment
@@ -17,6 +18,7 @@ orm:
                     - special
                     - static_page
                     - video
+                    - widget
             properties:
                 available:           boolean
                 body:                l10n_string

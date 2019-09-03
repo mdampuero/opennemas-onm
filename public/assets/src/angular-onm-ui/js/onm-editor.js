@@ -345,6 +345,11 @@
                   return;
                 }
 
+                // Prevent double changes when comparing null and ''
+                if (instance.getData() === '' && !ngModel.$viewValue) {
+                  return;
+                }
+
                 if (instance.getData() !== value) {
                   instance.setData(value, { internal: false });
                 }
@@ -368,6 +373,11 @@
 
                 var data = instance.getData();
 
+                // Prevent double changes when comparing null and ''
+                if (data === '' && !ngModel.$viewValue) {
+                  return;
+                }
+
                 if (data !== ngModel.$viewValue) {
                   $timeout(function() {
                     stop = true;
@@ -383,7 +393,10 @@
               instance.on('key', setModelData);
 
               // Initializes the CKEditor with data
-              instance.on('instanceReady', function() {
+              instance.on('instanceReady', function(ev) {
+                // Disable html attribute sorting
+                ev.editor.dataProcessor.writer.sortAttributes = 0;
+
                 // Data from HTML value
                 var data = element[0].innerText;
 

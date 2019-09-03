@@ -54,15 +54,15 @@ class AssetController extends Controller
         $params    = explode(',', $params);
         $transform = array_shift($params);
 
-        if (!file_exists($path) || !is_file($path)) {
+        try {
+            $content = $this->get('core.image.processor')
+                ->open($path)
+                ->strip()
+                ->apply($transform, $params)
+                ->getContent();
+        } catch (\Exception $e) {
             throw new ResourceNotFoundException();
         }
-
-        $content = $this->get('core.image.processor')
-            ->open($path)
-            ->strip()
-            ->apply($transform, $params)
-            ->getContent();
 
         $mimeType = $this->get('core.image.processor')->getMimeType();
 

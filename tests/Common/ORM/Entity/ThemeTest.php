@@ -197,6 +197,21 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tets isMultiRepo for a multirepo and a non-multirepo theme.
+     */
+    public function testIsMultiRepo()
+    {
+        $theme = new Theme([ 'multirepo' => true ]);
+        $this->assertTrue($theme->isMultiRepo());
+
+        $theme = new Theme([]);
+        $this->assertFalse($theme->isMultiRepo());
+
+        $theme = new Theme([ 'multirepo' => false ]);
+        $this->assertFalse($theme->isMultiRepo());
+    }
+
+    /**
      * Tests getDefaultSkin when no skins defined.
      */
     public function testGetDefaultSkinWithNoSkins()

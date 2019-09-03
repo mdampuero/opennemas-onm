@@ -239,6 +239,42 @@ class Locale
     }
 
     /**
+     * Returns the locale slug for the current request..
+     *
+     * @param string $context The context to get request locale for.
+     *
+     * @return string The locale slug for the current request.
+     */
+    public function getRequestSlug($context = null)
+    {
+        $slugs = $this->config[$this->getContext($context)]['language']['slug'];
+
+        if (!array_key_exists($this->getRequestLocale(), $slugs)) {
+            return $this->getRequestLocale();
+        }
+
+        return $slugs[$this->getRequestLocale()];
+    }
+
+    /**
+     * Returns the slugs for the current locale.
+     *
+     * @param string $context The context to get slugs for.
+     *
+     * @return string The slug for the current locale.
+     */
+    public function getSlug($context = null)
+    {
+        $slugs = $this->config[$this->getContext($context)]['language']['slug'];
+
+        if (!array_key_exists($this->getLocale(), $slugs)) {
+            return $this->getLocale();
+        }
+
+        return $slugs[$this->getLocale($context)];
+    }
+
+    /**
      * Returns the list of slugs for the locales.
      *
      * @param string $context The context to get slugs for.

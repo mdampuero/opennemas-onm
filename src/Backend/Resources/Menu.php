@@ -55,7 +55,7 @@ $menuXml = [
                 'id'          => 'widget_manager',
                 'title'       => _('Widgets'),
                 'icon'        => 'fa fa-puzzle-piece',
-                'link'        => url('admin_widgets'),
+                'link'        => url('backend_widgets_list'),
                 'module_name' => 'WIDGET_MANAGER',
                 'privilege'   => 'WIDGET_ADMIN',
             ],

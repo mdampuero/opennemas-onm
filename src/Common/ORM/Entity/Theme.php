@@ -114,6 +114,16 @@ class Theme extends Extension
     }
 
     /**
+     * Checks if the current theme is multirepo.
+     *
+     * @return bool True if the current theme is multirepo. False otherwise.
+     */
+    public function isMultiRepo() : bool
+    {
+        return $this->multirepo === true;
+    }
+
+    /**
      * Returns the default skin for the Theme.
      *
      * @return array The default skin.

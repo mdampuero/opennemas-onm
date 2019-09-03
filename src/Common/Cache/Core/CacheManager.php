@@ -96,7 +96,7 @@ class CacheManager
             return $items;
         }
 
-        foreach ($this->config as $key => $config) {
+        foreach ($this->config as $config) {
             if (!array_key_exists('type', $config)) {
                 $config['type'] = $this->defaults['type'];
             }
@@ -108,7 +108,8 @@ class CacheManager
             $class = \classify($config['type']);
             $class = sprintf('Common\\Cache\\%s\\%s', $class, $class);
 
-            $items[$config['name']] = new $class($config);
+            $items[$config['name']] =
+                new $class($config, $this->container->getParameter('environment'));
         }
 
         return $items;

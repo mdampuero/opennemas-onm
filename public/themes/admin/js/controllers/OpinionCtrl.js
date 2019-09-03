@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', 'http', '$uibModal', '$scope', 'routing', 'cleaner',
-  function($controller, http, $uibModal, $scope, routing, cleaner) {
+  '$controller', '$scope', '$uibModal', 'http', 'routing', 'cleaner',
+  function($controller, $scope, $uibModal, http, routing, cleaner) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -77,32 +77,21 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
-     * @function parseItem
-     * @memberOf RestInnerCtrl
-     *
-     * @description
-     *   Parses the response and adds information to the scope.
-     *
-     * @param {Object} data The data in the response.
+     * @inheritdoc
      */
-    $scope.parseItem = function(data) {
-      if (data.item) {
-        $scope.data.item = angular.extend($scope.item, data.item);
-      }
-
-      $scope.configure(data.extra);
+    $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item', true);
 
-      var img1 = data.extra.related_contents.filter(function(el) {
-        return el.pk_photo === $scope.item.img1;
+      var img1 = $scope.data.extra.related_contents.filter(function(e) {
+        return e.pk_photo === $scope.item.img1;
       }).shift();
 
       if (img1) {
         $scope.photo1 = img1;
       }
 
-      var img2 = data.extra.related_contents.filter(function(el) {
-        return el.pk_photo === $scope.item.img2;
+      var img2 = $scope.data.extra.related_contents.filter(function(e) {
+        return e.pk_photo === $scope.item.img2;
       }).shift();
 
       if (img2) {

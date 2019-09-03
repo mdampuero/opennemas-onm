@@ -60,6 +60,10 @@ class CacheManager
             $this->deleteFile($file);
         }
 
+        if (extension_loaded('Zend Opcache')) {
+            opcache_reset();
+        }
+
         return $this;
     }
 
@@ -71,6 +75,10 @@ class CacheManager
     public function deleteAll()
     {
         $this->template->clearAllCache();
+
+        if (extension_loaded('Zend Opcache')) {
+            opcache_reset();
+        }
 
         return $this;
     }

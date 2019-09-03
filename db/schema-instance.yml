@@ -62,7 +62,7 @@ advertisements:
             options: { default: false, comment: 'Hide Flash events' }
         timeout:
             type: integer
-            options: { default: -1 }
+            options: { unsigned: true, default: null, notnull: false }
     index:
         -
             name: PRIMARY

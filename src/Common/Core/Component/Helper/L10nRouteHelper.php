@@ -61,40 +61,34 @@ class L10nRouteHelper
     /**
      * Returns a localized url.
      *
-     * @param string  $url           The url to localize.
-     * @param array   $routeName     Route name to know if the route should be
-     *                               localized or not.
-     * @param boolean $forceAbsolute Whether the route has to be absolute.
+     * @param string  $url       The url to localize.
+     * @param array   $routeName Route name to know if the route should be
+     *                           localized or not.
      *
      * @return string The generated URI.
      */
     public function localizeUrl($url, $routeName = '')
     {
         $localeService = $this->container->get('core.locale');
-        $requestLocale = $localeService->getRequestLocale();
         $defaultLocale = $localeService->getLocale('frontend');
+        $requestLocale = $localeService->getRequestLocale();
+        $slugs         = $localeService->getSlugs();
         $urlHelper     = $this->container->get('core.helper.url');
 
-        // If no locale or locale is the default locale skip the l10n setting
+        // If locale is the default locale skip the l10n setting
         if ($requestLocale === $defaultLocale
-            || !in_array($requestLocale, $localeService->getSlugs())
+            || !array_key_exists($requestLocale, $slugs)
         ) {
             return $url;
         }
 
-        $routes = [];
-        if (!empty($routeName)) {
-            $routes = $this->getLocalizableRoutes();
-        }
-
-        // Only localize urls if the user comes from a localized site
-        // and if the url can be localized
-        if ((!empty($routeName) && in_array($routeName, $routes))
-            || empty($routeName)
+        // Localize if unknown route or route can be localized
+        if (empty($routeName)
+            || in_array($routeName, $this->getLocalizableRoutes())
         ) {
             $parts = $urlHelper->parse($url);
 
-            $parts['path'] = '/' . $requestLocale
+            $parts['path'] = '/' . $slugs[$requestLocale]
                 . (array_key_exists('path', $parts) ? $parts['path'] : '');
 
             $url = $urlHelper->unparse($parts);

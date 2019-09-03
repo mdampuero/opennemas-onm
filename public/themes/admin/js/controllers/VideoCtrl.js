@@ -13,6 +13,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
+     *  The list of external video properties.
+     *
+     * @type {Array}
+     */
+    $scope.information = {};
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
      *  The item object.
      *
      * @type {Object}
@@ -57,25 +67,9 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
-     * @memberOf VideoCtrl
-     *
-     * @description
-     *  The list of external video properties.
-     *
-     * @type {Array}
+     * @inheritdoc
      */
-    $scope.information = {};
-
-    /**
-     * @function parseItem
-     * @memberOf VideoCtrl
-     *
-     * @description
-     *   Parses the response and adds information to the scope.
-     *
-     * @param {Object} data The data in the response.
-     */
-    $scope.parseItem = function(data) {
+    $scope.buildScope = function() {
       switch ($scope.data.item.author_name) {
         case 'script':
           $scope.setType('script');
@@ -90,23 +84,22 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           break;
 
         default:
-          if (data.item.video_url) {
+          if ($scope.data.item.video_url) {
             $scope.setType('web-source');
           }
           break;
       }
 
+      $scope.localize($scope.data.item, 'item', true);
+
       // Assign the cover image
-      var cover = data.extra.related_contents.filter(function(el) {
-        return el && el.pk_photo == $scope.item.information.thumbnail;
+      var cover = $scope.data.extra.related_contents.filter(function(e) {
+        return e && e.pk_photo === $scope.item.information.thumbnail;
       }).shift();
 
       if (cover) {
         $scope.cover = cover;
       }
-
-      $scope.configure(data.extra);
-      $scope.localize($scope.data.item, 'item', true);
     };
 
     /**
@@ -126,7 +119,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
 
       if (!$scope.item.type) {
-        $scope.item.type = 'html5';
+        $scope.data.item.type = 'html5';
       }
 
       $scope.type               = type;

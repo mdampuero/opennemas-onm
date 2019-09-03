@@ -41,7 +41,7 @@ class LocaleHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getAvailableLocales', 'getLocale' ])
+            ->setMethods([ 'getAvailableLocales', 'getLocale', 'getSlugs' ])
             ->getMock();
 
         $this->query = $this->getMockBuilder('Bag')
@@ -84,6 +84,9 @@ class LocaleHelperTest extends \PHPUnit\Framework\TestCase
             ->with('frontend')->willReturn('flob');
         $this->locale->expects($this->at(2))->method('getLocale')
             ->with('frontend')->willReturn('flob');
+        $this->locale->expects($this->at(3))->method('getSlugs')
+            ->with('frontend')->willReturn('quux');
+
 
         $this->security->expects($this->once())->method('hasExtension')
             ->with('es.openhost.module.translation')->willReturn(false);
@@ -93,7 +96,8 @@ class LocaleHelperTest extends \PHPUnit\Framework\TestCase
             'default'       => 'flob',
             'multilanguage' => true,
             'selected'      => 'flob',
-            'translators'   => [],
+            'slugs'         => 'quux',
+            'translators'   => []
         ], $this->helper->getConfiguration());
     }
 

@@ -41,6 +41,18 @@
         /**
          * @inheritdoc
          */
+        $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true);
+
+          if ($scope.data.item && $scope.data.item.logo_path) {
+            $scope.cover =
+              $scope.data.item.logo_path.replace($window.instanceMedia, '');
+          }
+        };
+
+        /**
+         * @inheritdoc
+         */
         $scope.getItemId = function() {
           return $scope.item.pk_content_category;
         };
@@ -51,18 +63,6 @@
         $scope.itemHasId = function() {
           return $scope.item.pk_content_category &&
             $scope.item.pk_content_category !== null;
-        };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.parseItem = function(data) {
-          if (data.item && data.item.logo_path) {
-            $scope.cover = data.item.logo_path.replace($window.instanceMedia, '');
-          }
-
-          $scope.configure(data.extra);
-          $scope.localize($scope.data.item, 'item', true);
         };
 
         // Updates the logo_path when an image is selected

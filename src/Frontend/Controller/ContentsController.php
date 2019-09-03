@@ -81,51 +81,6 @@ class ContentsController extends Controller
     }
 
     /**
-     * Print an external article
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     */
-    public function extPrintAction(Request $request)
-    {
-        $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-
-        $cm = new \ContentManager;
-
-        // Get sync params
-        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
-        // Resolve article ID
-        $contentID = $cm->getUrlContent($wsUrl . '/ws/contents/resolve/' . $dirtyID, true);
-
-        // Fetch content
-        $content = $cm->getUrlContent($wsUrl . '/ws/contents/read/' . $contentID, true);
-        $content = @unserialize($content);
-
-        if (isset($content->img2) && ($content->img2 != 0)) {
-            $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
-
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('sync', 'content', $contentID, 'print');
-
-        return $this->render('article/article_printer.tpl', [
-            'cache_id'  => $cacheID,
-            'content'   => $content,
-            'article'   => $content,
-            'o_content' => $content,
-            'x-tags'    => 'ext-content-print,' . $contentID
-        ]);
-    }
-
-    /**
      * Shares an content by email
      *
      * @param Request $request the request object

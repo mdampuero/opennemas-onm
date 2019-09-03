@@ -50,16 +50,6 @@ class HooksSubscriber implements EventSubscriberInterface
             'advertisement.delete' => [
                 [ 'removeVarnishCacheForAdvertisement', 5 ],
             ],
-            // Comment hooks
-            'comment.create' => [
-                ['mockHookAction', 0],
-            ],
-            'comment.update' => [
-                ['removeObjectCacheForContent', 10],
-            ],
-            'comment.delete' => [
-                ['mockHookAction', 0],
-            ],
             // Content hooks
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 5]
@@ -77,9 +67,6 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.delete' => [
                 ['removeObjectCacheForContent', 10],
                 ['removeObjectCacheContentMeta', 10],
-            ],
-            'content.set_positions' => [
-                ['mockHookAction', 0],
             ],
             'content.createItem' => [
                 ['removeVarnishCacheCurrentInstance', 5],
@@ -101,15 +88,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 10],
                 ['removeObjectCacheContentMeta', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            'content.updateList' => [
-                [ 'mockHookAction', 5 ],
-            ],
-            'content.deleteList' => [
-                [ 'mockHookAction', 5 ],
-            ],
-            'content.patchList' => [
-                [ 'mockHookAction', 5 ],
             ],
             // Frontpage hooks
             'frontpage.save_position' => [
@@ -142,9 +120,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             // Menu hooks
-            'menu.create' => [
-                ['mockHookAction', 0],
-            ],
             'menu.update' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeObjectCacheForContent', 5],
@@ -154,16 +129,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAll', 5],
                 ['removeObjectCacheForContent', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            // Newsletter subscriptor
-            'newsletter_subscriptor.create' => [
-                ['mockHookAction', 0],
-            ],
-            'newsletter_subscriptor.update' => [
-                ['mockHookAction', 0],
-            ],
-            'newsletter_subscriptor.delete' => [
-                ['mockHookAction', 0],
             ],
             // Opinion hooks
             'opinion.update' => [
@@ -176,64 +141,8 @@ class HooksSubscriber implements EventSubscriberInterface
             'setting.update' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            // User hooks
-            'user.create' => [
-                ['removeSmartyCacheAuthor', 5],
-            ],
-            'user.update' => [
-                ['removeObjectCacheUser', 10],
-                ['removeSmartyCacheAuthor', 5],
-                ['removeObjectCacheMultiCacheAllAuthors', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            'user.delete' => [
-                ['removeObjectCacheUser', 10],
-                ['removeSmartyCacheAuthor', 5],
-                ['removeObjectCacheMultiCacheAllAuthors', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
-            ],
-            'user.social.connect' => [
-                ['mockHookAction', 0],
-            ],
-            'user.social.disconnect' => [
-                ['mockHookAction', 0],
-            ],
-            // UserGroup hooks
-            'usergroup.create' => [
-                ['mockHookAction', 0],
-            ],
-            'usergroup.update' => [
-                ['mockHookAction', 0],
-            ],
-            'usergroup.delete' => [
-                ['mockHookAction', 0],
             ]
         ];
-    }
-
-    /**
-     * Resets the PHP Opcode if supported
-     *
-     * @return null
-     */
-    public function cleanOpcode()
-    {
-        if (extension_loaded('Zend Opcache')) {
-            opcache_reset();
-        }
-    }
-
-    /**
-     * Mock action for hook events
-     *
-     * @param Event $event The event to handle.
-     *
-     * @return boolean
-     */
-    public function mockHookAction()
-    {
-        return true;
     }
 
     /**
@@ -262,45 +171,6 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('cache.manager')->getConnection('manager')
             ->remove($instance->domains);
-    }
-
-    /**
-     * Deletes the Smarty cache when an author is updated.
-     *
-     * @param Event $event The event to handle.
-     *
-     * @return null
-     */
-    public function removeObjectCacheMultiCacheAllAuthors(Event $event)
-    {
-        $authorId = $event->getArgument('id');
-
-        // Delete cache for author profile
-        $this->cache->delete('user-' . $authorId);
-
-        // Get the all contents assigned to this author
-        $criteria = [
-            'fk_author'       => [[ 'value' => $authorId ]],
-            'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
-            'content_status'  => [[ 'value' => 1 ]],
-            'in_litter'       => [[ 'value' => 0 ]],
-            'starttime'       => [[
-                'value' => date('Y-m-d H:i:s', strtotime("-1 day")),
-                'operator' => '>='
-            ]],
-        ];
-
-        $contents = $this->container->get('entity_repository')->findBy($criteria);
-
-        foreach ($contents as $content) {
-            $this->template->delete('content', $content->id);
-        }
-
-        // Delete frontpage caches
-        $this->template->delete('frontpage', 'opinion')
-            ->delete('frontpage', 'opinion', sprintf('%06d', $authorId));
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -358,27 +228,6 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Deletes the user from cache when he is updated.
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeObjectCacheUser(Event $event)
-    {
-        if (!$event->hasArgument('id')) {
-            return;
-        }
-
-        $id = $event->getArgument('id');
-
-        // TODO: Remove when using only new orm for users
-        $this->container->get('cache.manager')->getConnection('instance')
-            ->remove('user-' . $id);
-
-        $this->cache->delete('user-' . $id);
-        $this->cache->delete('categories_for_user_' . $id);
-    }
-
-    /**
      * Cleans all the smarty cache elements.
      */
     public function removeSmartyCacheAll()
@@ -403,29 +252,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->template
             ->delete('opinion', 'list', $authorId)
             ->delete('blog', 'list', $authorId);
-
-        $this->cleanOpcode();
-    }
-
-    /**
-     * Deletes Smarty caches for a give author
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeSmartyCacheAuthor(Event $event)
-    {
-        if (!$event->hasArgument('id')) {
-            return;
-        }
-
-        $id = $event->getArgument('id');
-
-        // Delete caches for opinion frontpage and author frontpages
-        $this->template
-            ->delete('frontpage', 'author', $id)
-            ->delete('frontpage', 'authors');
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -473,8 +299,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('sitemap', 'news')
                 ->delete('sitemap', 'web');
         }
-
-        $this->cleanOpcode();
     }
 
     /**
@@ -509,7 +333,6 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('rss', 'fia');
 
         $this->logger->notice("Cleaning frontpage cache for category: {$category} ($category)");
-        $this->cleanOpcode();
     }
 
     /**
@@ -536,8 +359,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('frontpage', 'blog', $author->id)
                 ->delete('frontpage', 'opinion', $author->id);
         }
-
-        $this->cleanOpcode();
     }
 
     /**
