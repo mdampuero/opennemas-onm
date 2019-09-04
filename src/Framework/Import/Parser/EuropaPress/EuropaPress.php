@@ -53,10 +53,9 @@ class EuropaPress extends Parser
         $content    = (string) $data->CONTENIDO;
         $paragraphs = preg_split('/(\r\n|\n|\r)/', $content);
 
-        $body = '';
-        foreach ($paragraphs as $paragraph) {
-            $body .= !empty($paragraph) ? '<p>' . $paragraph . '</p>' : '';
-        }
+        $body = !empty($content)
+            ? '<p>' . implode('</p><p>', array_filter($paragraphs)) . '</p>'
+            : '';
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
     }
