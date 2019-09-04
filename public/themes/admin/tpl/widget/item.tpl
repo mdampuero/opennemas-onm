@@ -89,7 +89,7 @@
         </div>
       </div>
       <div class="ng-cloak" ng-show="item.renderlet === 'html'">
-        {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="content" rows=5}
+        {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="content" imagepicker=true rows=5}
       </div>
       <div class="ng-cloak" ng-show="item.renderlet !== 'html'">
         <div class="p-b-50 p-t-50 spinner-wrapper" ng-if="flags.http.formLoading">
