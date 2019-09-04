@@ -42,10 +42,7 @@ class WidgetLoader
             ? $this->getWidgetsFromConfig($theme)
             : $this->getWidgetsFromPath($theme->realpath . '/tpl/widgets');
 
-        $this->widgets = array_merge(
-            $this->widgets,
-            array_diff_key($widgets, $this->widgets)
-        );
+        $this->widgets = array_merge($this->widgets, $widgets);
 
         ksort($this->widgets);
 
