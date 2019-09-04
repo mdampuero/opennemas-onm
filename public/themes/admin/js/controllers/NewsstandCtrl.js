@@ -66,11 +66,11 @@
         /**
          * @inheritdoc
          */
-        $scope.buildScope = function(data) {
+        $scope.buildScope = function() {
           $scope.item.type = Number($scope.item.type);
 
           if ($scope.item.thumb_url && $scope.item.thumb_url.length > 0) {
-            $scope.item.thumbnail_url = data.extra.KIOSKO_IMG_URL +
+            $scope.item.thumbnail_url = $scope.data.extra.KIOSKO_IMG_URL +
               $scope.item.path + '/' + $scope.item.thumb_url;
           }
         };
