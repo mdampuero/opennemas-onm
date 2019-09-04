@@ -443,7 +443,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content                    = new \Opinion();
         $content->id                = 252;
         $content->fk_author         = 1;
-        $content->type_opinion      = 0;
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
@@ -469,7 +468,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content->id                = 252;
         $content->fk_author         = 1;
-        $content->type_opinion      = 0;
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
@@ -498,7 +496,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content->id                = 252;
         $content->fk_author         = 1;
-        $content->type_opinion      = 0;
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
@@ -520,54 +517,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * tests getUriForOpinion when the opinion type is director.
-     */
-    public function testGetUriForOpinionWhenDirector()
-    {
-        $content = new \Opinion();
-
-        $content->id                = 252;
-        $content->fk_author         = 0;
-        $content->type_opinion      = 2;
-        $content->author            = 'My author';
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'opinion';
-        $content->slug              = 'opinion-director-slug';
-
-        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
-        $method->setAccessible(true);
-
-        $this->assertEquals(
-            'opinion/director/opinion-director-slug/20150114234940000252.html',
-            $method->invokeArgs($this->urlGenerator, [ $content ])
-        );
-    }
-
-    /**
-     * tests getUriForOpinion when the opinion type is editorial.
-     */
-    public function testGetUriForOpinionWhenEditorial()
-    {
-        $content = new \Opinion();
-
-        $content->id                = 252;
-        $content->fk_author         = 0;
-        $content->type_opinion      = 1;
-        $content->author            = 'My author';
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'opinion';
-        $content->slug              = 'opinion-editorial-slug';
-
-        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
-        $method->setAccessible(true);
-
-        $this->assertEquals(
-            'opinion/editorial/opinion-editorial-slug/20150114234940000252.html',
-            $method->invokeArgs($this->urlGenerator, [ $content ])
-        );
-    }
-
-    /**
      * Tests getUriForOpinion when the opinion has no author.
      */
     public function testGetUriForOpinionWhenNoAuthor()
@@ -576,7 +525,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content->id                = 252;
         $content->fk_author         = 0;
-        $content->type_opinion      = 0;
         $content->author            = 'My author';
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'opinion';
