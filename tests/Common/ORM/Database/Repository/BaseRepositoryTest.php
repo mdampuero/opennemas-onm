@@ -141,9 +141,9 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests find with valid entity.
+     * Tests find with valid entity when the id only includes one column
      */
-    public function testFind()
+    public function testFindWithSimpleKey()
     {
         $this->cache->expects($this->once())->method('get')
             ->with([ 'extension-1' ])
@@ -174,6 +174,7 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'norf'   => [ 3 => [ 'norf_id' => 3, 'foo_id' => 1 ] ]
         ], $entity->getData());
     }
+
 
     /**
      * Tests find for multiple ids when some entity is missing.
@@ -364,5 +365,39 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $method     = new \ReflectionMethod($repository, 'hasCache');
         $method->setAccessible(true);
         $this->assertFalse($method->invokeArgs($repository, []));
+    }
+
+    /**
+     * Tests getOqlForCompositeKey.
+     */
+    public function testGetOqlForCompositeKey()
+    {
+        $method = new \ReflectionMethod($this->repository, 'getOqlForCompositeKey');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            '(foo_id = 1 and bar_id = 6) or (foo_id = 2 and bar_id = 7) or (foo_id = 3 and bar_id = 9)',
+            $method->invokeArgs($this->repository, [ [
+                [ 'foo_id' => 1, 'bar_id' => 6 ],
+                [ 'foo_id' => 2, 'bar_id' => 7 ],
+                [ 'foo_id' => 3, 'bar_id' => 9 ],
+            ] ])
+        );
+    }
+
+    /**
+     * Tests getOqlForSimpleKey.
+     */
+    public function testGetOqlForSimpleKey()
+    {
+        $method = new \ReflectionMethod($this->repository, 'getOqlForSimpleKey');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'foo_id in [1,2,3]',
+            $method->invokeArgs($this->repository, [ [
+                [ 'foo_id' => 1 ], [ 'foo_id' => 2 ], [ 'foo_id' => 3 ]
+            ] ])
+        );
     }
 }
