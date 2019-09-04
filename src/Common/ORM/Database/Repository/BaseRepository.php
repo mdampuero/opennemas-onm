@@ -125,9 +125,9 @@ class BaseRepository extends Repository
 
         $entities = $this->getEntities(!is_array($id) || $isAssociative ? [ $id ] : $id);
 
-        if (!is_array($id)
+        if (($isAssociative || !is_array($id))
             && (empty($entities[0])
-            || $entities[0] === $this->miss)
+                || $entities[0] === $this->miss)
         ) {
             throw new EntityNotFoundException($this->metadata->name, $id);
         }
@@ -202,11 +202,9 @@ class BaseRepository extends Repository
             return [];
         }
 
-        if (!is_array($ids[0])) {
-            $ids = array_map(function ($id) {
-                return $this->metadata->normalizeId($id);
-            }, $ids);
-        }
+        $ids = array_map(function ($id) {
+            return $this->metadata->normalizeId($id);
+        }, $ids);
 
         // Prefix ids
         $prefixedIds = array_map(function ($a) {
