@@ -130,7 +130,7 @@ class CoreLoader
         }
 
         // Load advertisements, layouts and menus for parents and current theme
-        $themes = array_merge($parents, [ $theme ]);
+        $themes = array_merge(array_reverse($parents), [ $theme ]);
 
         foreach ($themes as $t) {
             $wl->addTheme($t);
