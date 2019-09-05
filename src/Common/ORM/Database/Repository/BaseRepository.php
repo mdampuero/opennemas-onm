@@ -380,7 +380,7 @@ class BaseRepository extends Repository
 
                 $returnMap[$value[$rid]][$name][] = !is_array($relation['return_fields'])
                     ? $value[$relation['return_fields']]
-                    : array_intersect_key($value, $relation['return_fields']);
+                    : array_intersect_key($value, array_flip($relation['return_fields']));
             }
         }
 

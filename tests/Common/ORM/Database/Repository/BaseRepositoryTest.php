@@ -175,6 +175,30 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         ], $entity->getData());
     }
 
+    /**
+     * Tests find with valid entity when the id only includes one column
+     */
+    public function testFindWithCompositeKey()
+    {
+        $this->metadata->mapping['database']['index'][0]['columns'][] = 'bar';
+        unset($this->metadata->mapping['database']['metas']);
+
+        $this->cache->expects($this->once())->method('get')
+            ->with([ 'extension-1-2' ])
+            ->willReturn([]);
+
+        $this->cache->expects($this->once())->method('set')
+            ->with('extension-1-2');
+
+        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
+            [ 'foo' => 1, 'bar' => 2 ]
+        ]);
+
+        $entity = $this->repository->find([ 'foo' => 1, 'bar' => 2 ]);
+
+        $this->assertNotEmpty($entity);
+        $this->assertEquals([ 'foo' => 1, 'bar' => 2 ], $entity->getData());
+    }
 
     /**
      * Tests find for multiple ids when some entity is missing.
@@ -350,6 +374,77 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $entity = $this->repository->findOneBy('limit 1');
 
         $this->assertNotEmpty($entity);
+    }
+
+    /**
+     * Tests getRelations when there are not return fields defined in the
+     * relation.
+     */
+    public function testGetRelationsWithoutReturnFields()
+    {
+        $method = new \ReflectionMethod($this->repository, 'getRelations');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ],
+                [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ]
+            ]);
+
+        $this->assertEquals([
+            1 => [ 'norf' => [ [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ] ] ],
+            2 => [ 'norf' => [ [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ] ] ]
+        ], $method->invokeArgs($this->repository, [ [ 1, 2 ] ]));
+    }
+
+    /**
+     * Tests getRelations when there is a single return fields defined in the
+     * relation.
+     */
+    public function testGetRelationsWithSingleReturnField()
+    {
+        $this->metadata->mapping['database']['relations']['norf']['return_fields'] = 'norf_id';
+
+        $method = new \ReflectionMethod($this->repository, 'getRelations');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ],
+                [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ]
+            ]);
+
+        $this->assertEquals([
+            1 => [ 'norf' => [ 22762 ] ],
+            2 => [ 'norf' => [ 29134 ] ]
+        ], $method->invokeArgs($this->repository, [ [ 1, 2 ] ]));
+    }
+
+    /**
+     * Tests getRelations when there is a list of  return fields defined in the
+     * relation.
+     */
+    public function testGetRelationsWithMultipleReturnFields()
+    {
+        $this->metadata->mapping['database']['relations']['norf']['return_fields'] =
+            [ 'extension_id', 'norf_id' ];
+
+        $method = new \ReflectionMethod($this->repository, 'getRelations');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ],
+                [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ]
+            ]);
+
+        $this->assertEquals([
+            1 => [ 'norf' => [ [ 'extension_id' => 24310, 'norf_id' => 22762 ] ] ],
+            2 => [ 'norf' => [ [ 'extension_id' => 32702, 'norf_id' => 29134 ] ] ]
+        ], $method->invokeArgs($this->repository, [ [ 1, 2 ] ]));
     }
 
     /**
