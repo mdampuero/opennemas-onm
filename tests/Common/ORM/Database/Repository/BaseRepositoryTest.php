@@ -368,6 +368,25 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests isCompositeKey.
+     */
+    public function testIsCompositeKey()
+    {
+        $method = new \ReflectionMethod($this->repository, 'isCompositeKey');
+        $method->setAccessible(true);
+        $this->assertTrue(
+            $method->invokeArgs($this->repository, [
+                [ 'foo_id' => 1, 'bar_id' => 6, 'baz_id' => 9 ]
+            ])
+        );
+
+        $this->assertFalse(
+            $method->invokeArgs($this->repository, [ 0 => 1, 5 => 6, 8 => 9 ])
+        );
+    }
+
+
+    /**
      * Tests getOqlForCompositeKey.
      */
     public function testGetOqlForCompositeKey()

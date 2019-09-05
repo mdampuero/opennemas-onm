@@ -120,19 +120,18 @@ class BaseRepository extends Repository
             throw new \InvalidArgumentException();
         }
 
-        $isAssociative = is_array($id)
-            && array_keys($id) !== range(0, count($id) - 1);
+        $isComposited = $this->isCompositeKey($id);
 
-        $entities = $this->getEntities(!is_array($id) || $isAssociative ? [ $id ] : $id);
+        $entities = $this->getEntities(!is_array($id) || $isComposited ? [ $id ] : $id);
 
-        if (($isAssociative || !is_array($id))
+        if (($isComposited || !is_array($id))
             && (empty($entities[0])
                 || $entities[0] === $this->miss)
         ) {
             throw new EntityNotFoundException($this->metadata->name, $id);
         }
 
-        return is_array($id) && !$isAssociative
+        return is_array($id) && !$isComposited
             ? $entities
             : array_pop($entities);
     }
@@ -397,6 +396,28 @@ class BaseRepository extends Repository
     protected function hasCache()
     {
         return !empty($this->cache);
+    }
+
+    /**
+     * Checks if the provided id is composited.
+     *
+     * @param array $id The id to check.
+     *
+     * @return True if the id is composited. False otherwise.
+     */
+    protected function isCompositeKey($id)
+    {
+        if (!is_array($id)) {
+            return false;
+        }
+
+        foreach (array_keys($id) as $key) {
+            if (!is_numeric($key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
