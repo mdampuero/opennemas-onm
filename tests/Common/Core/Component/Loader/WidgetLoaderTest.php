@@ -41,20 +41,39 @@ class WidgetLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getWidgetsFromConfig', 'getWidgetsFromPath' ])
             ->getMock();
 
-        $loader->expects($this->once())->method('getWidgetsFromPath')
-            ->with('/qux/frog/wubble/tpl/widgets');
-
-        $loader->addTheme(new Theme([ 'realpath' => '/qux/frog/wubble' ]));
-
-        $theme = new Theme([
+        $multiTheme = new Theme([
             'multirepo' => true,
-            'realpath'  => '/qux/frog/wubble'
+            'realpath'  => '/qux/frog/multi'
+        ]);
+
+        $monoTheme = new Theme([
+            'multirepo' => false,
+            'realpath'  => '/qux/frog/mono'
         ]);
 
         $loader->expects($this->once())->method('getWidgetsFromConfig')
-            ->with($theme);
+            ->with($multiTheme)->willReturn([
+                'norf'  => '/qux/frog/multi/norf.php',
+                'glorp' => '/qux/frog/multi/glorp.php',
+            ]);
 
-        $loader->addTheme($theme);
+        $loader->expects($this->once())->method('getWidgetsFromPath')
+            ->with('/qux/frog/mono/tpl/widgets')->willReturn([
+                'glorp'  => '/qux/frog/mono/gorp.php',
+                'wubble' => '/qux/frog/mono/xyzzy.php',
+            ]);
+
+        $loader->addTheme($multiTheme);
+        $loader->addTheme($monoTheme);
+
+        $property = new \ReflectionProperty($loader, 'widgets');
+        $property->setAccessible(true);
+
+        $widgets = $property->getValue($loader);
+
+        $this->assertEquals('/qux/frog/multi/norf.php', $widgets['norf']);
+        $this->assertEquals('/qux/frog/mono/gorp.php', $widgets['glorp']);
+        $this->assertEquals('/qux/frog/mono/xyzzy.php', $widgets['wubble']);
     }
 
     /**
