@@ -50,12 +50,14 @@ class EuropaPress extends Parser
      */
     public function getBody($data)
     {
-        $content    = (string) $data->CONTENIDO;
-        $paragraphs = preg_split('/(\r\n|\n|\r)/', $content);
+        $content = (string) $data->CONTENIDO;
 
-        $body = !empty($content)
-            ? '<p>' . implode('</p><p>', array_filter($paragraphs)) . '</p>'
-            : '';
+        if (empty($content)) {
+            return '';
+        }
+
+        $text = preg_split('/(\r\n|\n|\r)/', $content);
+        $body = '<p>' . implode('</p><p>', array_filter($text)) . '</p>';
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
     }
