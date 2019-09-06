@@ -210,14 +210,14 @@ class Redirector
             ->find($contentType, $id);
     }
 
-        /**
-     * Returns an event by id.
+    /**
+     * Returns an content by id
      *
-     * @param integer $id The event id.
+     * @param integer $id The content id.
      *
-     * @return Content The event.
+     * @return Content The content.
      */
-    protected function getEvent(int $id)
+    public function getContentFromApi(int $id)
     {
         try {
             return $this->container->get('api.service.content')->getItem($id);
@@ -226,7 +226,19 @@ class Redirector
         }
     }
 
-        /**
+    /**
+     * Returns an event by id.
+     *
+     * @param integer $id The event id.
+     *
+     * @return Content The event.
+     */
+    protected function getEvent(int $id)
+    {
+        return $this->getContentFromApi($id);
+    }
+
+    /**
      * Returns an static page by id.
      *
      * @param integer $id The static page id.
@@ -235,11 +247,7 @@ class Redirector
      */
     protected function getStaticPage(int $id)
     {
-        try {
-            return $this->container->get('api.service.content')->getItem($id);
-        } catch (\Exception $e) {
-            return null;
-        }
+        return $this->getContentFromApi($id);
     }
 
     /**
