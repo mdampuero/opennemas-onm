@@ -9,6 +9,10 @@
  */
 function smarty_outputfilter_browser_update($output, $smarty)
 {
+    if ($smarty->getContainer()->getParameter('environment') === 'dev') {
+        return $output;
+    };
+
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
 
     if (empty($request)) {
