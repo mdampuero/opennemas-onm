@@ -61,7 +61,7 @@
         {t}Parameters{/t}
       </div>
       {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" iField="agency" iTitle="{t}Agency{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" title="{t}Agency{/t}"}
     </div>
   </div>
 {/block}
