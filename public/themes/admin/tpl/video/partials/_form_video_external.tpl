@@ -1,4 +1,4 @@
-{include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
+{include file="ui/component/content-editor/input-text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}"}
 {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
 
 <div class="form-group">

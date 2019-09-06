@@ -91,8 +91,8 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
-      {include file="ui/component/content-editor/input-text.tpl" title="{t}Pretitle{/t}" field="pretitle" counter=true}
+      {include file="ui/component/content-editor/input-text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}"}
+      {include file="ui/component/content-editor/input-text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}"}
       {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
     </div>
   </div>

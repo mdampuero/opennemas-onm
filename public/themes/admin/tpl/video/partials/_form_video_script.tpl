@@ -1,4 +1,4 @@
-{include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true}
+{include file="ui/component/content-editor/input-text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}"}
 
 {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
 
