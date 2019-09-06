@@ -210,23 +210,23 @@ class Redirector
             ->find($contentType, $id);
     }
 
-    /**
-     * Returns an user by id.
+        /**
+     * Returns an event by id.
      *
-     * @param integer $id The tag id.
+     * @param integer $id The event id.
      *
-     * @return Tag The tag.
+     * @return Content The event.
      */
-    protected function getTag(int $id)
+    protected function getEvent(int $id)
     {
         try {
-            return $this->container->get('api.service.tag')->getItem($id);
+            return $this->container->get('api.service.content')->getItem($id);
         } catch (\Exception $e) {
             return null;
         }
     }
 
-    /**
+        /**
      * Returns an static page by id.
      *
      * @param integer $id The static page id.
@@ -243,16 +243,16 @@ class Redirector
     }
 
     /**
-     * Returns an event by id.
+     * Returns an user by id.
      *
-     * @param integer $id The event id.
+     * @param integer $id The tag id.
      *
-     * @return Content The event.
+     * @return Tag The tag.
      */
-    protected function getEvent(int $id)
+    protected function getTag(int $id)
     {
         try {
-            return $this->container->get('api.service.content')->getItem($id);
+            return $this->container->get('api.service.tag')->getItem($id);
         } catch (\Exception $e) {
             return null;
         }
