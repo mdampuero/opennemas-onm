@@ -76,14 +76,17 @@
               <label class="form-label">
                 {t}Content{/t}
               </label>
-              <ui-select class="block" name="content" theme="select2" ng-model="item.content">
-                <ui-select-match placeholder="{t}Select a type{/t}">
-                  [% $select.selected.name %]
-                </ui-select-match>
-                <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
-                  <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
+              <div class="controls controls-validation">
+                <ui-select class="form-control" name="content" theme="select2" ng-model="item.content" required>
+                  <ui-select-match placeholder="{t}Select a type{/t}">
+                    [% $select.selected.name %]
+                  </ui-select-match>
+                  <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </ui-select-choices>
+                </ui-select>
+                {include file="ui/component/content-editor/status.tpl" iField="content" iValidation=true}
+              </div>
             </div>
           </div>
         </div>
