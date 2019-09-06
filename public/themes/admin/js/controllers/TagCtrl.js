@@ -33,11 +33,12 @@
          * @inheritdoc
          */
         $scope.routes = {
-          createItem: 'api_v1_backend_tag_create_item',
-          getItem:    'api_v1_backend_tag_get_item',
-          redirect:   'backend_tag_show',
-          saveItem:   'api_v1_backend_tag_save_item',
-          updateItem: 'api_v1_backend_tag_update_item'
+          createItem:   'api_v1_backend_tag_create_item',
+          getItem:      'api_v1_backend_tag_get_item',
+          redirect:     'backend_tag_show',
+          saveItem:     'api_v1_backend_tag_save_item',
+          updateItem:   'api_v1_backend_tag_update_item',
+          validateItem: 'api_v1_backend_tag_validate_item'
         };
 
         /**
@@ -69,7 +70,7 @@
           $scope.flags.http.validating = true;
 
           var route = {
-            name:   'api_v1_backend_tags_validate',
+            name:   $scope.routes.validateItem,
             params: { name: $scope.item.name, locale: $scope.item.locale }
           };
 
