@@ -1,7 +1,7 @@
 <?php
 function smarty_function_uservoice_widget($params, &$smarty)
 {
-    if ($smarty->getContainer()->getParameter('environment') === 'development') {
+    if ($smarty->getContainer()->getParameter('environment') === 'dev') {
         return $output;
     };
 
