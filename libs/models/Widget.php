@@ -234,13 +234,13 @@ class Widget extends Content
      */
     private function renderletIntelligentWidget($params = null)
     {
-        $class = $this->factoryWidget($params);
+        $widget = $this->factoryWidget($params);
 
-        if (is_null($class)) {
-            return sprintf(_("Widget %s not available"), $this->content);
+        if (is_null($widget)) {
+            return sprintf(_('Widget %s not available'), $this->content);
         }
 
-        return $class->render($params);
+        return $widget->render($params);
     }
 
     /**
@@ -252,6 +252,10 @@ class Widget extends Content
      */
     public function factoryWidget($params = null)
     {
+        if (empty($this->content)) {
+            return null;
+        }
+
         getService('core.loader.widget')->loadWidget($this->content);
 
         $class = 'Widget' . $this->content;
