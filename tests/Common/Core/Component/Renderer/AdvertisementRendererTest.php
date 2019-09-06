@@ -659,7 +659,7 @@ class AdvertisementRendererTest extends TestCase
             </script>';
 
         $this->router->expects($this->any())->method('generate')
-            ->with('frontend_ad_show', [ 'id' => $ad->id ])
+            ->with('api_v1_advertisement_show', [ 'id' => $ad->id ])
             ->willReturn($url);
 
         $this->templateAdmin->expects($this->any())->method('fetch')
