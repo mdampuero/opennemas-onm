@@ -48,7 +48,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/content-editor/input-text.tpl" iField="title" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
+      {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=4}
       <div class="controls">
         <div class="row">

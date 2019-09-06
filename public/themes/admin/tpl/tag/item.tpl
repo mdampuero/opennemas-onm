@@ -65,41 +65,10 @@
               <div class="grid-body">
                 <div class="row">
                   <div class="col-md-6 form-group">
-                    <label class="form-label" for="name">
-                      {t}Name{/t}
-                    </label>
-                    <div class="controls input-with-icon right">
-                      <input class="form-control" id="name" name="name" ng-blur="generate()" ng-change="isValid()" ng-model="item.name" required type="text">
-                      <span class="icon right ng-cloak">
-                        <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.validating"></span>
-                        <span class="fa fa-check text-success" ng-if="!flags.http.validating && form.name.$dirty && form.name.$valid"></span>
-                        <span class="fa fa-info-circle text-info" ng-if="!flags.http.validating && !form.name.$dirty && form.name.$invalid" tooltip-class="tooltip-info" uib-tooltip="{t}This field is required{/t}"></span>
-                        <span class="fa fa-times text-error" ng-if="!flags.http.validating && form.name.$dirty && form.name.$invalid" tooltip-class="tooltip-danger" uib-tooltip="{t}The tag already exist or is invalid{/t}"></span>
-                      </span>
-                    </div>
+                    {include file="ui/component/input/text.tpl" iField="name" iFlag="validating" iNgActions="ng-blur=\"generate()\" ng-change=\"isValid()\"" iRequired="true" iTitle="{t}Name{/t}" iValidation=true}
                   </div>
-                  <div class="col-md-6 form-group">
-                    <label for="slug" class="form-label">
-                      {t}Slug{/t}
-                    </label>
-                    <div class="controls">
-                      <div class="input-group">
-                        <span class="input-group-btn">
-                          <button class="btn btn-default" ng-click="flags.block.slug = !flags.block.slug" type="button">
-                            <i class="fa" ng-class="{ 'fa-lock': flags.block.slug, 'fa-unlock-alt': !flags.block || !flags.block.slug }"></i>
-                          </button>
-                        </span>
-                        <div class="input-with-icon right">
-                          <input class="form-control" id="slug" name="slug" ng-disabled="flags.block.slug" ng-model="item.slug" required type="text">
-                          <span class="icon right ng-cloak" ng-if="!flags.http.loading">
-                            <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.slug"></span>
-                            <span class="fa fa-check text-success" ng-if="!flags.http.slug && form.slug.$dirty && form.slug.$valid"></span>
-                            <span class="fa fa-info-circle text-info" ng-if="!flags.http.slug && !form.slug.$dirty && form.slug.$invalid" tooltip-class="tooltip-info" uib-tooltip="{t}This field is required{/t}"></span>
-                            <span class="fa fa-times text-error" ng-if="!flags.http.slug && form.slug.$dirty && form.slug.$invalid" tooltip-class="tooltip-danger" uib-tooltip="{t}This field is invalid{/t}"></span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="col-md-6">
+                    {include file="ui/component/input/slug.tpl" iField="slug" iFlag="slug" iRequired="true" iTitle="{t}Slug{/t}" iValidation=true}
                   </div>
                 </div>
                 <div class="row">
