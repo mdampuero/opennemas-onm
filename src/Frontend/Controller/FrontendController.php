@@ -14,6 +14,7 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class FrontendController extends Controller
@@ -273,6 +274,36 @@ class FrontendController extends Controller
     }
 
     /**
+     * Returns the canonical URL for the action basing on the current
+     * parameters.
+     *
+     * @param string $action The current action.
+     * @param array  $params The list of parameters.
+     *
+     * @return string The canonical URL for the action.
+     */
+    protected function getCanonicalUrl($action, $params)
+    {
+        if (array_key_exists('o_content', $params)) {
+            $url = $this->get('core.helper.url_generator')
+                ->generate($params['o_content'], [ 'absolute' => true ]);
+
+            return $this->get('core.helper.l10n_route')->localizeUrl($url);
+        }
+
+        $params = $this->getKnownParameters($action, $params);
+        $route  = $this->getRoute($action, $params);
+
+        $url = $this->get('router')->generate(
+            $route,
+            $params,
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        return $this->get('core.helper.l10n_route')->localizeUrl($url);
+    }
+
+    /**
      * Returns the category basing on the name included in the request URI.
      *
      * @param string $name The category name.
@@ -299,21 +330,21 @@ class FrontendController extends Controller
      */
     protected function getExpectedUri($action, $params = [])
     {
-        if ($action === 'list') {
-            $route = $this->getRoute($action, $params);
-
-            // Do not support page=1 in query string
-            if (array_key_exists('page', $params) && $params['page'] == 1) {
-                unset($params['page']);
-            }
-
-            $expected = $this->get('router')->generate($route, $params);
+        if (array_key_exists('item', $params)) {
+            $expected = $this->get('core.helper.url_generator')
+                ->generate($params['item']);
 
             return $this->get('core.helper.l10n_route')->localizeUrl($expected);
         }
 
-        $expected = $this->get('core.helper.url_generator')
-            ->generate($params['item']);
+        $route = $this->getRoute($action, $params);
+
+        // Do not support page=1 in query string
+        if (array_key_exists('page', $params) && $params['page'] == 1) {
+            unset($params['page']);
+        }
+
+        $expected = $this->get('router')->generate($route, $params);
 
         return $this->get('core.helper.l10n_route')->localizeUrl($expected);
     }
@@ -379,16 +410,22 @@ class FrontendController extends Controller
      */
     protected function getParameters($request, $item = null)
     {
+        $action = $this->get('core.globals')->getAction();
         $params = array_merge($request->query->all(), [
             'o_category' => null,
+            'o_token'    => null,
             'x-tags'     => [
                 $this->get('core.globals')->getExtension(),
-                $this->get('core.globals')->getAction()
+                $action
             ]
         ]);
 
         if (!empty($item)) {
-            $params['o_token'] = $this->get('core.helper.subscription')
+            $params['content']     = $item;
+            $params['contentId']   = $item->id;
+            $params['o_content']   = $item;
+            $params['x-cacheable'] = empty($params['o_token']);
+            $params['o_token']     = $this->get('core.helper.subscription')
                 ->getToken($item);
 
             $params['x-tags'][] = $item->id;
@@ -396,35 +433,27 @@ class FrontendController extends Controller
             // Ensure that all templates are using params['content'] and
             // then remove the line below
             $params[$item->content_type_name] = $item;
-
-            $params['content']     = $item;
-            $params['contentId']   = $item->id;
-            $params['o_content']   = $item;
-            $params['x-cacheable'] = empty($params['o_token']);
         }
 
         if (array_key_exists('category_name', $params)) {
             $params['o_category'] = $this->getCategory($params['category_name']);
-            $params['category']   = $this->getCategory($params['category_name']);
+            $params['category']   = $params['o_category'];
             $params['categories'] = [];
         }
 
-        if ($this->get('core.globals')->getAction() == 'showamp') {
-            $params['render_params'] = ['ads-format' => 'amp'];
+        if ($action == 'showamp') {
+            $params['render_params'] = [ 'ads-format' => 'amp' ];
         }
-
-        $params['x-tags']  = implode(',', $params['x-tags']);
-        $params['o_token'] = array_key_exists('o_token', $params)
-            ? $params['o_token']
-            : null;
 
         list($positions, $advertisements) =
             $this->getAdvertisements($params['o_category'], $params['o_token']);
 
         return array_merge($this->params, $params, [
-            'cache_id'       => $this->getCacheId($params),
             'ads_positions'  => $positions,
-            'advertisements' => $advertisements
+            'advertisements' => $advertisements,
+            'cache_id'       => $this->getCacheId($params),
+            'o_canonical'    => $this->getCanonicalUrl($action, $params),
+            'x-tags'         => implode(',', $params['x-tags'])
         ]);
     }
 
