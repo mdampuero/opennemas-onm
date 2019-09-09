@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Onm;
+namespace Common\Core\Component\Helper;
 
 use Onm\Cache\CacheInterface;
 use Repository\EntityManager;
