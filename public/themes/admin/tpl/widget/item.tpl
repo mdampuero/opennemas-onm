@@ -85,7 +85,7 @@
                     <div ng-bind-html="item.name | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
-                {include file="ui/component/content-editor/status.tpl" iField="content" iValidation=true}
+                {include file="ui/component/icon/status.tpl" iField="content" iValidation=true}
               </div>
             </div>
           </div>
