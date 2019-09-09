@@ -299,7 +299,7 @@ class ArticlesController extends Controller
 
         if (!empty($article->category)) {
             // Machine suggested contents code
-            $params['suggested'] = $this->get('automatic_contents')
+            $params['suggested'] = $this->get('core.helper.content')
                 ->getSuggested(
                     'article',
                     "category_name= '" . $article->category_name

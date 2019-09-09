@@ -669,7 +669,7 @@ class FrontendController extends Controller
     {
         $query = sprintf('pk_content <> %s', $content->id);
 
-        return $this->get('automatic_contents')
+        return $this->get('core.helper.content')
             ->getSuggested($content->content_type_name, $query);
     }
 

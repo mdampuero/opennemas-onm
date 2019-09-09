@@ -221,7 +221,7 @@ class ArticleController extends FrontendController
             $article->id
         );
 
-        return $this->get('automatic_contents')
+        return $this->get('core.helper.content')
             ->getSuggested('article', $query);
     }
 }

@@ -99,7 +99,7 @@ class Articles
         $article->relatedContents = $relatedContents;
 
         // Retrieve the related contents for the given
-        $article->suggested = getService('automatic_contents')->getSuggested(
+        $article->suggested = getService('core.helper.content')->getSuggested(
             'article',
             "category_name= '" . $article->category_name . "' AND pk_content <>" . $article->id,
             4

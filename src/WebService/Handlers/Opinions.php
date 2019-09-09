@@ -404,7 +404,7 @@ class Opinions
         // Load opinion
         $opinion = $or->find('Opinion', $id);
 
-        $machineSuggestedContents = getService('automatic_contents')->getSuggested(
+        $machineSuggestedContents = getService('core.helper.content')->getSuggested(
             'opinion',
             " pk_content <>".$opinion->id,
             4

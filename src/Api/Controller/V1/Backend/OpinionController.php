@@ -134,7 +134,7 @@ class OpinionController extends ContentOldController
         } catch (\Exception $e) {
         }
 
-        $machineSuggestedContents = $this->get('automatic_contents')
+        $machineSuggestedContents = $this->get('core.helper.content')
             ->getSuggested('opinion', "pk_content <> $opinion->id", 4);
 
         // Get author slug for suggested opinions
