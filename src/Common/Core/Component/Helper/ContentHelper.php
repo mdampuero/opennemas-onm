@@ -17,10 +17,10 @@ use Repository\EntityManager;
 /**
 * Perform searches in Database related with one content
 */
-class MachineSearcher
+class ContentHelper
 {
     /**
-     * Initializes the MachineSearcher.
+     * Initializes the ContentHelper.
      *
      * @param Connection     $databaseConnection The database connection.
      * @param EntityManager  $entityManager      The entity manager.
