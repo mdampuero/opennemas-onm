@@ -222,6 +222,6 @@ class ArticleController extends FrontendController
         );
 
         return $this->get('automatic_contents')
-            ->searchSuggestedContents('article', $query);
+            ->getSuggested('article', $query);
     }
 }

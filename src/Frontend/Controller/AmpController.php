@@ -293,6 +293,6 @@ class AmpController extends Controller
         );
 
         return $this->get('automatic_contents')
-            ->searchSuggestedContents('article', $query);
+            ->getSuggested('article', $query);
     }
 }

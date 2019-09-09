@@ -135,7 +135,7 @@ class OpinionController extends ContentOldController
         }
 
         $machineSuggestedContents = $this->get('automatic_contents')
-            ->searchSuggestedContents('opinion', "pk_content <> $opinion->id", 4);
+            ->getSuggested('opinion', "pk_content <> $opinion->id", 4);
 
         // Get author slug for suggested opinions
         foreach ($machineSuggestedContents as &$suggest) {
