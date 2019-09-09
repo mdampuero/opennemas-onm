@@ -612,11 +612,9 @@ class AdvertisementRendererTest extends TestCase
         $ad->params      = [ 'openx_zone_id' => 123456 ];
 
         $output = '<script>
-            <!--// <![CDATA[
             var OA_zones = {
                 \'zone_123\' : 123456,
             };
-            // ]]> -->
         </script>
         <script src="https://revive.com/www/delivery/spcjs.php?cat_name=foo"></script>
         ';
@@ -653,13 +651,11 @@ class AdvertisementRendererTest extends TestCase
         $url         = '/ads/get/123';
         $returnValue = '<iframe src="' . $url . '"></iframe>
             <script data-id="{$id}">
-                <!--// <![CDATA[
                 OA_show(\'zone_' . $ad->id . '\');
-                // ]]> -->
             </script>';
 
         $this->router->expects($this->any())->method('generate')
-            ->with('frontend_ad_show', [ 'id' => $ad->id ])
+            ->with('api_v1_advertisement_show', [ 'id' => $ad->id ])
             ->willReturn($url);
 
         $this->templateAdmin->expects($this->any())->method('fetch')
