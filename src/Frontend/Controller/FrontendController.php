@@ -512,19 +512,9 @@ class FrontendController extends Controller
      */
     protected function hydrateShowAmp(array &$params = []) : void
     {
-        // RenderColorMenu
-        $siteColor   = '#005689';
-        $configColor = $this->get('orm.manager')
+        $siteColor = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('site_color');
-
-        if (!empty($configColor)) {
-            if (!preg_match('@^#@', $configColor)) {
-                $siteColor = '#' . $configColor;
-            } else {
-                $siteColor = $configColor;
-            }
-        }
+            ->get('site_color', '#005689');
 
         $this->view->assign('site_color', $siteColor);
 
@@ -538,7 +528,9 @@ class FrontendController extends Controller
             $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
             $logoFilePath = SITE_PATH . $logoPath;
 
-            $logoSize = (file_exists($logoFilePath)) ? @getimagesize($logoFilePath) : null;
+            $logoSize = file_exists($logoFilePath)
+                ? @getimagesize($logoFilePath)
+                : null;
 
             if (is_array($logoSize)) {
                 $this->view->assign([
