@@ -1,23 +1,12 @@
 frontend_video_frontpage:
-    path: /video
-    defaults: { _controller: FrontendBundle:Video:list}
-    requirements:
-        page: '([0-9]+)?'
-    options:
-        l10n: true
-
-# Route to redirect to frontend_video_frontpage and to remove in the future
-frontend_video_frontpage_with_page:
-    path: /video/{page}
-    defaults: { _controller: FrontendBundle:Video:list, page: 1 }
-    requirements:
-        page: '([0-9]+)?'
+    path:     /video
+    defaults: { _controller: FrontendBundle:Video:list }
     options:
         l10n: true
 
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_category:
-    path: /video/{category_name}
+    path:     /video/{category_name}
     defaults: { _controller: FrontendBundle:Video:list }
     requirements:
         category_name: '[^/]+'
@@ -25,26 +14,24 @@ frontend_video_frontpage_category:
         l10n: true
 
 frontend_video_show:
-    path: /video/{category_name}/{slug}/{created}{id}.html
+    path:     /video/{category_name}/{slug}/{created}{id}.html
     defaults: { _controller: FrontendBundle:Video:show }
     requirements:
         category_name: '[^/]+'
-        slug         : '[^/]+'
-        video_id     : '([0-9]+)'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
+        slug:          '[^/]+'
     options:
         l10n: true
         expose: true
 
 frontend_video_show_amp:
-    path: /video/{category_name}/{slug}/{created}{id}.amp.html
+    path:     /video/{category_name}/{slug}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Video:showAmp, _format: amp }
     requirements:
-        author_name   : '[^/]+'
-        opinion_title : '[^/]+'
-        opinion_id    : '[^/]+'
+        category_name: '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
+        slug:          '[^/]+'
     options:
         l10n: true
