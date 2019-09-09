@@ -141,9 +141,9 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests find with valid entity.
+     * Tests find with valid entity when the id only includes one column
      */
-    public function testFind()
+    public function testFindWithSimpleKey()
     {
         $this->cache->expects($this->once())->method('get')
             ->with([ 'extension-1' ])
@@ -173,6 +173,31 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             'wibble' => 'qux',
             'norf'   => [ 3 => [ 'norf_id' => 3, 'foo_id' => 1 ] ]
         ], $entity->getData());
+    }
+
+    /**
+     * Tests find with valid entity when the id only includes one column
+     */
+    public function testFindWithCompositeKey()
+    {
+        $this->metadata->mapping['database']['index'][0]['columns'][] = 'bar';
+        unset($this->metadata->mapping['database']['metas']);
+
+        $this->cache->expects($this->once())->method('get')
+            ->with([ 'extension-1-2' ])
+            ->willReturn([]);
+
+        $this->cache->expects($this->once())->method('set')
+            ->with('extension-1-2');
+
+        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
+            [ 'foo' => 1, 'bar' => 2 ]
+        ]);
+
+        $entity = $this->repository->find([ 'foo' => 1, 'bar' => 2 ]);
+
+        $this->assertNotEmpty($entity);
+        $this->assertEquals([ 'foo' => 1, 'bar' => 2 ], $entity->getData());
     }
 
     /**
@@ -352,6 +377,77 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getRelations when there are not return fields defined in the
+     * relation.
+     */
+    public function testGetRelationsWithoutReturnFields()
+    {
+        $method = new \ReflectionMethod($this->repository, 'getRelations');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ],
+                [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ]
+            ]);
+
+        $this->assertEquals([
+            1 => [ 'norf' => [ [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ] ] ],
+            2 => [ 'norf' => [ [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ] ] ]
+        ], $method->invokeArgs($this->repository, [ [ 1, 2 ] ]));
+    }
+
+    /**
+     * Tests getRelations when there is a single return fields defined in the
+     * relation.
+     */
+    public function testGetRelationsWithSingleReturnField()
+    {
+        $this->metadata->mapping['database']['relations']['norf']['return_fields'] = 'norf_id';
+
+        $method = new \ReflectionMethod($this->repository, 'getRelations');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ],
+                [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ]
+            ]);
+
+        $this->assertEquals([
+            1 => [ 'norf' => [ 22762 ] ],
+            2 => [ 'norf' => [ 29134 ] ]
+        ], $method->invokeArgs($this->repository, [ [ 1, 2 ] ]));
+    }
+
+    /**
+     * Tests getRelations when there is a list of  return fields defined in the
+     * relation.
+     */
+    public function testGetRelationsWithMultipleReturnFields()
+    {
+        $this->metadata->mapping['database']['relations']['norf']['return_fields'] =
+            [ 'extension_id', 'norf_id' ];
+
+        $method = new \ReflectionMethod($this->repository, 'getRelations');
+        $method->setAccessible(true);
+
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with('select * from extension_norf where foo_id in (1,2)')
+            ->willReturn([
+                [ 'foo_id' => 1, 'extension_id' => 24310, 'norf_id' => 22762 ],
+                [ 'foo_id' => 2, 'extension_id' => 32702, 'norf_id' => 29134 ]
+            ]);
+
+        $this->assertEquals([
+            1 => [ 'norf' => [ [ 'extension_id' => 24310, 'norf_id' => 22762 ] ] ],
+            2 => [ 'norf' => [ [ 'extension_id' => 32702, 'norf_id' => 29134 ] ] ]
+        ], $method->invokeArgs($this->repository, [ [ 1, 2 ] ]));
+    }
+
+    /**
      * Tests hasCache method for repositories with and without cache.
      */
     public function testHasCache()
@@ -364,5 +460,58 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $method     = new \ReflectionMethod($repository, 'hasCache');
         $method->setAccessible(true);
         $this->assertFalse($method->invokeArgs($repository, []));
+    }
+
+    /**
+     * Tests isCompositeKey.
+     */
+    public function testIsCompositeKey()
+    {
+        $method = new \ReflectionMethod($this->repository, 'isCompositeKey');
+        $method->setAccessible(true);
+        $this->assertTrue(
+            $method->invokeArgs($this->repository, [
+                [ 'foo_id' => 1, 'bar_id' => 6, 'baz_id' => 9 ]
+            ])
+        );
+
+        $this->assertFalse(
+            $method->invokeArgs($this->repository, [ 0 => 1, 5 => 6, 8 => 9 ])
+        );
+    }
+
+
+    /**
+     * Tests getOqlForCompositeKey.
+     */
+    public function testGetOqlForCompositeKey()
+    {
+        $method = new \ReflectionMethod($this->repository, 'getOqlForCompositeKey');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            '(foo_id = 1 and bar_id = 6) or (foo_id = 2 and bar_id = 7) or (foo_id = 3 and bar_id = 9)',
+            $method->invokeArgs($this->repository, [ [
+                [ 'foo_id' => 1, 'bar_id' => 6 ],
+                [ 'foo_id' => 2, 'bar_id' => 7 ],
+                [ 'foo_id' => 3, 'bar_id' => 9 ],
+            ] ])
+        );
+    }
+
+    /**
+     * Tests getOqlForSimpleKey.
+     */
+    public function testGetOqlForSimpleKey()
+    {
+        $method = new \ReflectionMethod($this->repository, 'getOqlForSimpleKey');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'foo_id in [1,2,3]',
+            $method->invokeArgs($this->repository, [ [
+                [ 'foo_id' => 1 ], [ 'foo_id' => 2 ], [ 'foo_id' => 3 ]
+            ] ])
+        );
     }
 }

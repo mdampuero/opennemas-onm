@@ -496,5 +496,13 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals([ 'id' => 1 ], $this->metadata->normalizeId(1));
         $this->assertEquals([ 'id' => 1 ], $this->metadata->normalizeId([ 'id' => 1 ]));
+
+        $this->metadata->mapping['database']['index'][0]['columns'][] = 'norf';
+
+        $normalized = $this->metadata->normalizeId([ 'id' => 1, 'norf' => 2 ]);
+        $this->assertEquals([ 'id' => 1, 'norf' => 2 ], $normalized);
+
+        $this->assertEquals('id', array_keys($normalized)[0]);
+        $this->assertEquals('norf', array_keys($normalized)[1]);
     }
 }

@@ -120,16 +120,20 @@ class BaseRepository extends Repository
             throw new \InvalidArgumentException();
         }
 
-        $entities = $this->getEntities(is_array($id) ? $id : [ $id ]);
+        $isComposited = $this->isCompositeKey($id);
 
-        if (!is_array($id)
+        $entities = $this->getEntities(!is_array($id) || $isComposited ? [ $id ] : $id);
+
+        if (($isComposited || !is_array($id))
             && (empty($entities[0])
-            || $entities[0] === $this->miss)
+                || $entities[0] === $this->miss)
         ) {
             throw new EntityNotFoundException($this->metadata->name, $id);
         }
 
-        return is_array($id) ? $entities : array_pop($entities);
+        return is_array($id) && !$isComposited
+            ? $entities
+            : array_pop($entities);
     }
 
     /**
@@ -197,11 +201,9 @@ class BaseRepository extends Repository
             return [];
         }
 
-        if (!is_array($ids[0])) {
-            $ids = array_map(function ($id) {
-                return $this->metadata->normalizeId($id);
-            }, $ids);
-        }
+        $ids = array_map(function ($id) {
+            return $this->metadata->normalizeId($id);
+        }, $ids);
 
         // Prefix ids
         $prefixedIds = array_map(function ($a) {
@@ -276,17 +278,67 @@ class BaseRepository extends Repository
     }
 
     /**
-     * Refreshes data from database for the given ids.
+     * Returns an array of metas grouped by entity id.
      *
-     * @param array $ids The ids of the entities to refresh.
+     * @param array $ids The entity ids.
      *
-     * @return array The array of entities.
+     * @return array The array of metas.
      */
-    protected function refresh($ids)
+    protected function getMetas($ids)
     {
-        $oql    = [];
-        $filter = [];
+        $metas     = [];
+        $metaKeys  = $this->metadata->getMetaKeys();
+        $metaKey   = $this->metadata->getMetaKeyName();
+        $metaValue = $this->metadata->getMetaValueName();
+        $metaId    = array_pop($metaKeys);
 
+        $sql = 'select * from ' . $this->metadata->getMetaTable()
+            . ' where ' . $metaId . ' in (' . implode(',', $ids) . ')';
+
+        $rs = $this->conn->fetchAll($sql);
+
+        foreach ($rs as $value) {
+            $metas[$value[$metaId]][$value[$metaKey]] = $value[$metaValue];
+        }
+
+        return $metas;
+    }
+
+    /**
+     * Returns the OQL to find contents by primary key when the primary key is
+     * composited.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return string The OQL.
+     */
+    protected function getOqlForCompositeKey($ids)
+    {
+        $oql = [];
+
+        foreach ($ids as $id) {
+            $filters = [];
+
+            foreach ($id as $key => $value) {
+                $filters[] = "$key = $value";
+            }
+
+            $oql[] = "(" . implode(' and ', $filters) . ")";
+        }
+
+        return implode(' or ', $oql);
+    }
+
+    /**
+     * Returns the OQL to find contents by primary key when the primary key is
+     * simple.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return string The OQL.
+     */
+    protected function getOqlForSimpleKey($ids)
+    {
         foreach ($ids as $id) {
             foreach ($id as $key => $value) {
                 $filter[$key][] = $value;
@@ -297,7 +349,89 @@ class BaseRepository extends Repository
             $oql[] = $key . ' in [' . implode(',', $value) . ']';
         }
 
-        $oql = implode(' or ', $oql);
+        return implode(' or ', $oql);
+    }
+
+    /**
+     * Returns an array of data for all relations by entity id.
+     *
+     * @param array $ids The entity ids.
+     *
+     * @return type Description
+     */
+    protected function getRelations($ids)
+    {
+        $relations = $this->metadata->getRelations();
+        $returnMap = [];
+
+        foreach ($relations as $name => $relation) {
+            $table = $relation['table'];
+            $rid   = $relation['target_key'];
+            $sql   = 'select * from ' . $table
+                . ' where ' . $rid . ' in (' . implode(',', $ids) . ')';
+
+            $rs = $this->conn->fetchAll($sql);
+
+            foreach ($rs as $value) {
+                if (!array_key_exists('return_fields', $relation)) {
+                    $returnMap[$value[$rid]][$name][] = $value;
+                    continue;
+                }
+
+                $returnMap[$value[$rid]][$name][] = !is_array($relation['return_fields'])
+                    ? $value[$relation['return_fields']]
+                    : array_intersect_key($value, array_flip($relation['return_fields']));
+            }
+        }
+
+        return $returnMap;
+    }
+
+    /**
+     * Checks if the current repository has cache.
+     *
+     * @return boolean True if the repository has cache. Otherwise, returns
+     *                 false.
+     */
+    protected function hasCache()
+    {
+        return !empty($this->cache);
+    }
+
+    /**
+     * Checks if the provided id is composited.
+     *
+     * @param array $id The id to check.
+     *
+     * @return True if the id is composited. False otherwise.
+     */
+    protected function isCompositeKey($id)
+    {
+        if (!is_array($id)) {
+            return false;
+        }
+
+        foreach (array_keys($id) as $key) {
+            if (!is_numeric($key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Refreshes data from database for the given ids.
+     *
+     * @param array $ids The ids of the entities to refresh.
+     *
+     * @return array The array of entities.
+     */
+    protected function refresh($ids)
+    {
+        $oql = count($ids[0]) > 1
+            ? $this->getOqlForCompositeKey($ids)
+            : $this->getOqlForSimpleKey($ids);
 
         list($tables, $filter, $params, $types) =
             $this->translator->translate(trim($oql));
@@ -361,78 +495,5 @@ class BaseRepository extends Repository
         }
 
         return $entities;
-    }
-
-    /**
-     * Returns an array of metas grouped by entity id.
-     *
-     * @param array $ids The entity ids.
-     *
-     * @return array The array of metas.
-     */
-    protected function getMetas($ids)
-    {
-        $metas     = [];
-        $metaKeys  = $this->metadata->getMetaKeys();
-        $metaKey   = $this->metadata->getMetaKeyName();
-        $metaValue = $this->metadata->getMetaValueName();
-        $metaId    = array_pop($metaKeys);
-
-        $sql = 'select * from ' . $this->metadata->getMetaTable()
-            . ' where ' . $metaId . ' in (' . implode(',', $ids) . ')';
-
-        $rs = $this->conn->fetchAll($sql);
-
-        foreach ($rs as $value) {
-            $metas[$value[$metaId]][$value[$metaKey]] = $value[$metaValue];
-        }
-
-        return $metas;
-    }
-
-    /**
-     * Returns an array of data for all relations by entity id.
-     *
-     * @param array $ids The entity ids.
-     *
-     * @return type Description
-     */
-    protected function getRelations($ids)
-    {
-        $relations = $this->metadata->getRelations();
-        $returnMap = [];
-
-        foreach ($relations as $name => $relation) {
-            $table = $relation['table'];
-            $rid   = $relation['target_key'];
-            $sql   = 'select * from ' . $table
-                . ' where ' . $rid . ' in (' . implode(',', $ids) . ')';
-
-            $rs = $this->conn->fetchAll($sql);
-
-            foreach ($rs as $value) {
-                if (!array_key_exists('return_fields', $relation)) {
-                    $returnMap[$value[$rid]][$name][] = $value;
-                    continue;
-                }
-
-                $returnMap[$value[$rid]][$name][] = !is_array($relation['return_fields'])
-                    ? $value[$relation['return_fields']]
-                    : array_intersect_key($value, $relation['return_fields']);
-            }
-        }
-
-        return $returnMap;
-    }
-
-    /**
-     * Checks if the current repository has cache.
-     *
-     * @return boolean True if the repository has cache. Otherwise, returns
-     *                 false.
-     */
-    protected function hasCache()
-    {
-        return !empty($this->cache);
     }
 }

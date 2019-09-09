@@ -445,9 +445,12 @@ class Metadata extends DataObject implements Validable
      */
     public function normalizeId($id)
     {
-        $keys = !is_array($id) ? $this->getIdKeys() : array_keys($id);
+        $definedKeys = $this->getIdKeys();
+
+        $keys = !is_array($id) ? $definedKeys : array_keys($id);
         $id   = !is_array($id) ? [ $id ] : $id;
 
-        return array_combine($keys, $id);
+        // Keep order defined in metadata
+        return array_merge(array_flip($definedKeys), array_combine($keys, $id));
     }
 }
