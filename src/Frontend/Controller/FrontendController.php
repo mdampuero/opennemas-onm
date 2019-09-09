@@ -602,12 +602,8 @@ class FrontendController extends Controller
             ? array_intersect_key($params, array_flip($this->queries[$action]))
             : [];
 
-        if (array_key_exists('page', $params)) {
-            $params['page'] = (int) $params['page'];
-
-            if ($params['page'] < 2) {
-                unset($params['page']);
-            }
+        if (array_key_exists('page', $params) && (int) $params['page'] === 1) {
+            unset($params['page']);
         }
 
         return $params;
