@@ -9,6 +9,8 @@
  */
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
 /**
  * Displays an video frontpage and video inner.
  */
@@ -80,24 +82,25 @@ class VideoController extends FrontendController
 
     /**
      * {@inheritdoc}
-     *
-     * Action specific for the frontpage
      */
     protected function hydrateList(array &$params = []): void
     {
         $category = $params['o_category'];
-        $page     = $params['page'] ?? 1;
         $date     = date('Y-m-d H:i:s');
+        $page     = array_key_exists('page', $params)
+            ? (int) $params['page']
+            : 1;
 
-        // Fetch video settings
-        $settings = $this->get('orm.manager')->getDataSet('Settings')
-            ->get('video_settings');
-        $epp      = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        $epp = (int) $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $epp = $settings['total_front_more'] ?? $epp;
-
-        $categoryOQL = ($category)
+        $categoryOQL = !empty($category)
             ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
             : '';
 
@@ -112,6 +115,11 @@ class VideoController extends FrontendController
             $epp,
             $epp * ($page - 1)
         ));
+
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
+            throw new ResourceNotFoundException();
+        }
 
         $params = array_merge($params, [
             'videos' => $response['items'],

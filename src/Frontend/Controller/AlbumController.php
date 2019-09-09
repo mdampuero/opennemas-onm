@@ -9,6 +9,8 @@
  */
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
 /**
  * Displays an album or a list of albums.
  */
@@ -98,8 +100,15 @@ class AlbumController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $category = $params['o_category'];
-        $page     = $params['page'] ?? 1;
         $date     = date('Y-m-d H:i:s');
+        $page     = array_key_exists('page', $params)
+            ? (int) $params['page']
+            : 1;
+
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
 
         $epp = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -121,6 +130,11 @@ class AlbumController extends FrontendController
             $epp * ($page - 1)
         ));
 
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
+            throw new ResourceNotFoundException();
+        }
+
         $params = array_merge($params, [
             'albums'     => $response['items'],
             'pagination' => $this->get('paginator')->get([
@@ -134,9 +148,9 @@ class AlbumController extends FrontendController
                     'name'   => empty($category)
                         ? 'frontend_album_frontpage'
                         : 'frontend_album_frontpage_category',
-                    'params' => empty($category)
-                        ? []
-                        : [ 'category_name' => $category->name ],
+                    'params' => !empty($category)
+                        ? [ 'category_name' => $category->name ]
+                        : []
                 ]
             ])
         ]);
