@@ -13,25 +13,20 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         ->get('request_stack')
         ->getCurrentRequest();
 
-    if (empty($request)) {
-        return $output;
-    }
-
-    $uri = $request->getRequestUri();
-
-    if (preg_match('/newsletter/', $smarty->source->resource)
-        || preg_match('/\/rss/', $uri)
+    if (empty($request)
+        || preg_match('/newsletter/', $smarty->source->resource)
+        || preg_match('/\/rss/', $request->getRequestUri())
     ) {
         return $output;
     }
 
-    $tpl = '<link rel="canonical" href="%s"/>';
-    $url = SITE_URL . substr(strtok($uri, '?'), 1);
+    $url = preg_replace('/\?.*/', '', $request->getUri());
 
-    if ($smarty->hasValue('o_content')) {
-        $url = $smarty->getContainer()->get('core.helper.url_generator')
-            ->generate($smarty->getValue('o_content'), [ 'absolute' => true ]);
+    if ($smarty->hasValue('o_canonical')) {
+        $url = $smarty->getValue('o_canonical');
     }
+
+    $tpl = '<link rel="canonical" href="%s"/>';
 
     return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
 }
