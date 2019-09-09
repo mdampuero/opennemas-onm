@@ -51,9 +51,15 @@ class EuropaPress extends Parser
     public function getBody($data)
     {
         $body = (string) $data->CONTENIDO;
-        $body = nl2br($body);
 
-        return iconv(mb_detect_encoding($body), "UTF-8", $body);
+        if (empty($body)) {
+            return '';
+        }
+
+        $body = preg_split('/(\r\n|\n|\r)/', $body);
+        $body = '<p>' . implode('</p><p>', array_filter($body)) . '</p>';
+
+        return iconv(mb_detect_encoding($body), 'UTF-8', $body);
     }
 
     /**
@@ -192,8 +198,8 @@ class EuropaPress extends Parser
         $resource = strtolower($classname);
         $agency   = 'europapress';
 
-        $date     = $this->getCreatedTime($data);
-        $id       = $this->getId($data);
+        $date = $this->getCreatedTime($data);
+        $id   = $this->getId($data);
 
         if (!empty($date)) {
             $date = $date->format('YmdHis');

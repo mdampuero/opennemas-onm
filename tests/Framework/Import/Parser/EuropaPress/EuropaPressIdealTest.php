@@ -99,7 +99,7 @@ class EuropaPressIdealTest extends \PHPUnit\Framework\TestCase
         $this->text = new Resource();
 
         $this->text->agency_name  = 'Grupo Idealgallego';
-        $this->text->body         = 'Sample body';
+        $this->text->body         = '<p>Sample body</p>';
         $this->text->category     = 'POL';
         $this->text->created_time = \DateTime::createFromFormat(
             'd/m/Y H:i:s',
