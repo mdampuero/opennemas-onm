@@ -83,29 +83,36 @@ class ContentHelper
 
                 $contents = $this->er->findMulti($contentProps);
 
-                // TODO: nasty hack to convert content objects to the old array way
-                $result = [];
+                $result_contents = [];
+                $count = 0;
                 foreach ($contents as $content) {
-                    $content->uri = $content->uri;
-
-                    // We have to call jsonSerialize to get all protected properties
-                    $vars      = $content->jsonSerialize();
-                    $result [] = $vars;
+                    $result_contents[$count] = $content;
+                    $count++;
                 }
             } catch (Exception $e) {
                 return [];
             }
 
             $cm     = new \ContentManager();
-            $result = $cm->getInTime($result);
+            $result_contents = $cm->getInTime($result_contents);
 
+            $result_photos = [];
+            $count = 0;
             $er = getService('entity_repository');
-            foreach ($result as &$content) {
-                if (array_key_exists('img2', $content) && $content['img2'] != '0') {
-                    $content['image'] = $er->find('Photo', $content['img2']);
-                } elseif (array_key_exists('img1', $content) && $content['img1'] != '0') {
-                    $content['image'] = $er->find('Photo', $content['img1']);
+            foreach ($result_contents as &$content) {
+                if($content->img2 != '0')
+                {
+                    $result_photos[$count] = $er->find('Photo', $content->img2);
                 }
+                else if($content->img1 != '0')
+                {
+                    $result_photos[$count] = $er->find('Photo', $content->img1);
+                }
+                else
+                {
+                    $result_photos[$count] = null;
+                }
+                $count++;
             }
 
             $this->cache->save($cacheKey, $result, 300);
