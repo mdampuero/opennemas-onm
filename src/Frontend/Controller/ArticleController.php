@@ -204,24 +204,4 @@ class ArticleController extends FrontendController
 
         return $related;
     }
-
-    /**
-     * Returns the list of suggested contents for an article.
-     *
-     * @param Article  $article  The current article.
-     * @param Category $category The article category.
-     *
-     * @return array The list of suggested contents.
-     */
-    protected function getSuggested($article, $category = null)
-    {
-        $query = sprintf(
-            'category_name = "%s" AND pk_content <> %s',
-            $category->name,
-            $article->id
-        );
-
-        return $this->get('core.helper.content')
-            ->getSuggested('article', $query);
-    }
 }
