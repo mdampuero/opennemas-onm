@@ -8,11 +8,6 @@ imports:
     - { resource: services/templating.yml }
 
 services:
-    automatic_contents:
-        class: Onm\MachineSearcher
-        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', '%cache_prefix%' ]
-        public: true
-
     acl_checker:
         class: Onm\Security\Acl
         public: true
