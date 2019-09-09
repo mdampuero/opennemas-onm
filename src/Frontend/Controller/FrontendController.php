@@ -74,7 +74,7 @@ class FrontendController extends Controller
 
         $expected = $this->getExpectedUri($action, $params);
 
-        if (strpos($request->getRequestUri(), $expected) === false) {
+        if ($request->getRequestUri() !== $expected) {
             return new RedirectResponse($expected, 301);
         }
 
@@ -262,13 +262,12 @@ class FrontendController extends Controller
             ];
         }
 
-        $cacheParams = array_merge(
-            $cacheParams,
-            array_values($this->getQueryParameters(
+        $cacheParams = array_merge($cacheParams, array_values(
+            $this->getKnownParameters(
                 $this->get('core.globals')->getAction(),
                 $params
-            ))
-        );
+            )
+        ));
 
         return $this->view->getCacheId($cacheParams);
     }
@@ -440,11 +439,10 @@ class FrontendController extends Controller
      */
     protected function getQueryParameters(string $action, array $params)
     {
-        return array_key_exists($action, $this->queries)
-            ? array_intersect_key(
-                $params,
-                array_flip($this->queries[$action])
-            ) : [];
+        return array_merge(
+            $this->getKnownParameters($action, $params),
+            $this->getUnknownParameters($action, $params)
+        );
     }
 
     /**
@@ -599,23 +597,43 @@ class FrontendController extends Controller
     }
 
     /**
-     * Parses all query parameters.
+     * Parses and returns the list of known parameters for the action.
      *
-     * @param array $query The list of query parameters.
+     * @param string $action The action to get known parameters for.
+     * @param array  $params The list of query parameters.
      *
-     * @return array The parsed query parameters
+     * @return array The list of known parameters for the action.
      */
-    protected function parseQuery($query)
+    protected function getKnownParameters($action, $params)
     {
-        if (array_key_exists('page', $query)) {
-            $query['page'] = (int) $query['page'];
+        $params = array_key_exists($action, $this->queries)
+            ? array_intersect_key($params, array_flip($this->queries[$action]))
+            : [];
 
-            if ($query['page'] < 2) {
-                unset($query['page']);
+        if (array_key_exists('page', $params)) {
+            $params['page'] = (int) $params['page'];
+
+            if ($params['page'] < 2) {
+                unset($params['page']);
             }
         }
 
-        return $query;
+        return $params;
+    }
+
+    /**
+     * Parses and returns the list of unknown parameters for the action.
+     *
+     * @param string $action The action to get unknown parameters for.
+     * @param array  $params The list of query parameters.
+     *
+     * @return array The list of unknown parameters for the action.
+     */
+    protected function getUnknownParameters($action, $params)
+    {
+        return array_key_exists($action, $this->queries)
+            ? array_diff_key($params, array_flip($this->queries[$action]))
+            : $params;
     }
 
     /**
@@ -674,13 +692,13 @@ class FrontendController extends Controller
     }
 
     /**
-     * Returns the list of tags from a list of contents
+     * Returns the list of tags from a list of contents.
      *
-     * @param array $contents The list of contents to fetch tags from
+     * @param array $contents The list of contents to fetch tags from.
      *
-     * @return array
+     * @return array The list of tags.
      */
-    public function getTags($contents)
+    protected function getTags($contents)
     {
         if (!is_array($contents)) {
             $contents = [ $contents ];
