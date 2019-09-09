@@ -217,7 +217,7 @@ class Redirector
      *
      * @return Content The content.
      */
-    public function getContentFromApi(int $id)
+    protected function getContentFromApi(int $id)
     {
         try {
             return $this->container->get('api.service.content')->getItem($id);
