@@ -394,7 +394,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getContentFromApi when a content is and is not found
+     * Tests getContentFromApi when a content is and is not found.
      */
     public function testGetContentFromApi()
     {
@@ -413,7 +413,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getEvent when a event is and is not found
+     * Tests getEvent when a event is and is not found.
      */
     public function testGetEvent()
     {

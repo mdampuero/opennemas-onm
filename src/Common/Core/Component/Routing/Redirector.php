@@ -211,7 +211,7 @@ class Redirector
     }
 
     /**
-     * Returns an content by id
+     * Returns an content by id.
      *
      * @param integer $id The content id.
      *
