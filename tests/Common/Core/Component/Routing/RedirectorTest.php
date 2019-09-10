@@ -427,12 +427,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->redirector, 'getEvent');
         $method->setAccessible(true);
 
-        $redirector->expects($this->at(0))->method('getContentFromApi')
-            ->with(2341)->willReturn(null);
-        $redirector->expects($this->at(1))->method('getContentFromApi')
+        $redirector->expects($this->once())->method('getContentFromApi')
             ->with(1467)->willReturn($event);
 
-        $this->assertEmpty($method->invokeArgs($redirector, [ 2341 ]));
         $this->assertEquals($event, $method->invokeArgs($redirector, [ 1467 ]));
     }
 
@@ -451,12 +448,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->redirector, 'getStaticPage');
         $method->setAccessible(true);
 
-        $redirector->expects($this->at(0))->method('getContentFromApi')
-            ->with(2341)->willReturn(null);
-        $redirector->expects($this->at(1))->method('getContentFromApi')
+        $redirector->expects($this->once())->method('getContentFromApi')
             ->with(1467)->willReturn($static_page);
 
-        $this->assertEmpty($method->invokeArgs($redirector, [ 2341 ]));
         $this->assertEquals($static_page, $method->invokeArgs($redirector, [ 1467 ]));
     }
 
