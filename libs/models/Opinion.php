@@ -102,7 +102,7 @@ class Opinion extends Content
                 return 'Opinion';
             case 'author_object':
                 $ur = getService('user_repository');
-                    $authorObj = $ur->find($this->fk_author);
+                $authorObj = $ur->find($this->fk_author);
                 // TODO: Fix this ASAP
                 if (!empty($authorObj) && !empty($authorObj->avatar_img_id)) {
                     $authorObj->photo = getService('entity_repository')
@@ -194,7 +194,7 @@ class Opinion extends Content
             return false;
         }
 
-            $rs['author'] = $rs['name'];
+        $rs['author'] = $rs['name'];
 
         $this->load($rs);
 
