@@ -104,8 +104,6 @@ class ContentHelper
                     $result_photos[$count] = $er->find('Photo', $content->img2);
                 } elseif ($content->img1 != '0') {
                     $result_photos[$count] = $er->find('Photo', $content->img1);
-                } else {
-                    $result_photos[$count] = null;
                 }
                 $count++;
             }
