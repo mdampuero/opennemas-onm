@@ -20,10 +20,9 @@ class VideoController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list'       => 'video',
-        'listauthor' => 'video',
-        'show'       => 'video-inner',
-        'showamp'    => 'video-inner',
+        'list'    => 'video',
+        'show'    => 'video-inner',
+        'showamp' => 'video-inner',
     ];
 
     /**
@@ -35,10 +34,9 @@ class VideoController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'showamp'    => 'amp_inner',
-        'list'       => 'video_frontpage',
-        'listauthor' => 'video_frontpage',
-        'show'       => 'video_inner',
+        'showamp' => 'amp_inner',
+        'list'    => 'video_frontpage',
+        'show'    => 'video_inner',
     ];
 
     /**
