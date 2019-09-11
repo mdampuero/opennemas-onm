@@ -55,7 +55,7 @@ class OpinionController extends FrontendController
      */
     protected $queries = [
         'list'       => [ 'page' ],
-        'listauthor' => [ 'author_id', 'page' ],
+        'listauthor' => [ 'author_id', 'author_slug', 'page' ],
         'showamp'    => [ '_format' ],
     ];
 
