@@ -658,22 +658,6 @@ class FrontendController extends Controller
     }
 
     /**
-     * Returns the list of suggested contents for a content.
-     *
-     * @param Content  $content  The content to skip while fetching suggestions.
-     * @param Category $category The category to filter from.
-     *
-     * @return array The list of suggested contents.
-     */
-    protected function getSuggested($content, $category = null)
-    {
-        $query = sprintf('pk_content <> %s', $content->id);
-
-        return $this->get('core.helper.content')
-            ->getSuggested($content->content_type_name, $query);
-    }
-
-    /**
      * Returns the list of tags from a list of contents
      *
      * @param array $contents The list of contents to fetch tags from
