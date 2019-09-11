@@ -48,7 +48,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/content-editor/input-text.tpl" title="{t}Name{/t}" field="title" required=true}
+      {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=4}
       <div class="controls">
         <div class="row">
@@ -76,14 +76,17 @@
               <label class="form-label">
                 {t}Content{/t}
               </label>
-              <ui-select class="block" name="content" theme="select2" ng-model="item.content">
-                <ui-select-match placeholder="{t}Select a type{/t}">
-                  [% $select.selected.name %]
-                </ui-select-match>
-                <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
-                  <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
+              <div class="controls controls-validation">
+                <ui-select class="form-control" name="content" theme="select2" ng-model="item.content" required>
+                  <ui-select-match placeholder="{t}Select a type{/t}">
+                    [% $select.selected.name %]
+                  </ui-select-match>
+                  <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
+                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                  </ui-select-choices>
+                </ui-select>
+                {include file="ui/component/icon/status.tpl" iField="content" iValidation=true}
+              </div>
             </div>
           </div>
         </div>
@@ -91,7 +94,7 @@
       <div class="ng-cloak" ng-show="item.renderlet === 'html'">
         {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="content" imagepicker=true rows=5}
       </div>
-      <div class="ng-cloak" ng-show="item.renderlet !== 'html'">
+      <div class="ng-cloak" ng-show="item.renderlet !== 'html' && item.content">
         <div class="p-b-50 p-t-50 spinner-wrapper" ng-if="flags.http.formLoading">
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>

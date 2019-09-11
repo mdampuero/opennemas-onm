@@ -45,6 +45,7 @@ select.form-control {
   border-color: @error-color;
 }
 
+.form-status,
 .input-group-status {
   padding: 8px;
   position: absolute;
@@ -53,25 +54,53 @@ select.form-control {
   z-index: 10;
 }
 
+.form-status-item {
+  display: inline-block;
+  min-width: 30px;
+  position: relative;
+  text-align: center;
+
+  .fa {
+    font-size: 18px;
+    vertical-align: middle;
+  }
+
+  .tooltip {
+    font-weight: bold;
+  }
+}
+
+.controls-counter .form-control,
+.controls-validation .form-control {
+  padding-right: 50px !important;
+}
+
+.controls-counter-validation .form-control {
+  padding-right: 80px !important;
+}
+
 .input-with-icon {
   .icon {
     bottom: 0;
     color: @default-color;
     display: block;
-    font-size: 16px;
     height: auto;
     left: 0;
-    margin: 11px 2px 4px 10px;
+    margin: 7px 10px;
     position: absolute;
     text-align: center;
     top: 0;
-    width: 16px;
+    width: 30px;
     z-index: 100;
 
     &.right {
       left: auto;
-      margin: 7px 10px;
       right: 0;
+    }
+
+    .fa {
+      font-size: 18px;
+      margin-top: 2px;
     }
   }
 }
@@ -105,6 +134,38 @@ select.form-control {
 
   .tooltip .tooltip-inner {
     background-color: @error-color;
+  }
+}
+
+.has-info {
+  .input-with-icon i {
+    color: @info-color;
+  }
+
+  .form-control,
+  .form-control:active,
+  .form-control:focus {
+    border-color: @info-color;
+  }
+
+  .tooltip.bottom .tooltip-arrow {
+    border-bottom-color: @info-color;
+  }
+
+  .tooltip.left .tooltip-arrow {
+    border-left-color: @info-color;
+  }
+
+  .tooltip.right .tooltip-arrow {
+    border-right-color: @info-color;
+  }
+
+  .tooltip.top .tooltip-arrow {
+    border-top-color: @info-color;
+  }
+
+  .tooltip .tooltip-inner {
+    background-color: @info-color;
   }
 }
 

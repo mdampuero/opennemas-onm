@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="col-lg-8">
-          {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
+          {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
           {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Description{/t}" field="description" rows=5}
         </div>
       </div>

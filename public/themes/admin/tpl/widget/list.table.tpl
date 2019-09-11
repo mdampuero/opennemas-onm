@@ -71,11 +71,14 @@
 
 {block name="customColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('content')">
-    <span class="label label-default" ng-if="item.renderlet !== 'html'">
+    <span class="label label-default" ng-if="item.renderlet !== 'html' && item.content">
       <strong>
         [% item.content %]
       </strong>
     </span>
+    <small class="text-italic" ng-if="item.renderlet !== 'html' && !item.content">
+      &lt;{t}Not selected{/t}&gt;
+    </small>
     <span ng-if="item.renderlet === 'html'">
       -
     </span>

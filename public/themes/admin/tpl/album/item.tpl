@@ -61,7 +61,7 @@
         {t}Parameters{/t}
       </div>
       {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Cover image{/t}" field="cover"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Agency{/t}" field="agency"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" title="{t}Agency{/t}"}
     </div>
   </div>
 {/block}
@@ -69,7 +69,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/content-editor/input-text.tpl" title="{t}Title{/t}" field="title" required=true counter=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
     </div>
   </div>
