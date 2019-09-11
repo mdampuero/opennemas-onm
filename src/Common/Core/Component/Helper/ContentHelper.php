@@ -84,7 +84,7 @@ class ContentHelper
                 $contents = $this->er->findMulti($contentProps);
 
                 $result_contents = [];
-                $count = 0;
+                $count           = 0;
                 foreach ($contents as $content) {
                     $result_contents[$count] = $content;
                     $count++;
@@ -93,12 +93,11 @@ class ContentHelper
                 return [];
             }
 
-            $cm     = new \ContentManager();
+            $cm              = new \ContentManager();
             $result_contents = $cm->getInTime($result_contents);
-
-            $result_photos = [];
-            $count = 0;
-            $er = getService('entity_repository');
+            $result_photos   = [];
+            $count           = 0;
+            $er              = getService('entity_repository');
             foreach ($result_contents as &$content) {
                 if ($content->img2 != '0') {
                     $result_photos[$count] = $er->find('Photo', $content->img2);
@@ -107,6 +106,10 @@ class ContentHelper
                 }
                 $count++;
             }
+
+            $result    = [];
+            $result[0] = $result_contents;
+            $result[1] = $result_photos;
 
             $this->cache->save($cacheKey, $result, 300);
         }
