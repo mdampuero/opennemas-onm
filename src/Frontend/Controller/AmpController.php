@@ -62,6 +62,13 @@ class AmpController extends Controller
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
 
+        $query =
+        sprintf(
+            'category_name = "%s" AND pk_article <> "%s"',
+            $categoryName,
+            $article->pk_article
+        );
+
         if (empty($article)) {
             throw new ResourceNotFoundException();
         }
@@ -122,7 +129,7 @@ class AmpController extends Controller
 
             $this->view->assign([
                 'relationed' => $this->getRelated($article),
-                'suggested'  => $this->getSuggested($article, $category)
+                'suggested'  => $this->get('core.helper.content')->getSuggested('article', $query)
             ]);
 
             $patterns = [
