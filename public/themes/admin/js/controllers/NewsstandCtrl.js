@@ -9,19 +9,13 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $uibModal
-     * @requires $window
-     * @requires cleaner
-     * @requires http
-     * @requires messenger
-     *
-     * @description
-     *   Check billing information when saving user.
+     * @requires $timeout
+     * @requires routing
      */
     .controller('NewsstandCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner', 'linker', 'localizer', '$timeout',
-      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner, linker, localizer, $timeout) {
-        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+      '$controller', '$scope', '$timeout', 'routing',
+      function($controller, $scope, $timeout, routing) {
+        $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
          * @memberOf CoverCtrl
@@ -56,11 +50,12 @@
          * @type {Object}
          */
         $scope.routes = {
-          createItem: 'api_v1_backend_newsstand_create',
-          getItem:    'api_v1_backend_newsstand_show',
+          createItem: 'api_v1_backend_newsstand_create_item',
+          getItem:    'api_v1_backend_newsstand_get_item',
+          public:     'frontend_newsstand_show',
           redirect:   'backend_newsstand_show',
-          saveItem:   'api_v1_backend_newsstand_save',
-          updateItem: 'api_v1_backend_newsstand_update'
+          saveItem:   'api_v1_backend_newsstand_save_item',
+          updateItem: 'api_v1_backend_newsstand_update_item'
         };
 
         /**
@@ -161,6 +156,30 @@
           };
 
           fileReader.readAsArrayBuffer(file);
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf NewsstandCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param  {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          var date = item.created;
+          var formattedDate = window.moment(date).format('YYYYMMDDHHmmss');
+
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id:            item.pk_content,
+              created:       formattedDate,
+              category_name: item.category_name
+            })
+          );
         };
 
         /**
