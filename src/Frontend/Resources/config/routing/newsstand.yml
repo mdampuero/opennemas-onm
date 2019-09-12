@@ -1,0 +1,27 @@
+frontend_newsstand_frontpage:
+    path:     /portadas-papel
+    defaults: { _controller: FrontendBundle:NewStand:frontpage }
+    options:
+        l10n: true
+
+frontend_newsstand_frontpage_date:
+    path:     /portadas-papel/{year}/{month}/{day}
+    defaults: { _controller: FrontendBundle:NewStand:frontpage, month: 0, day: 1 }
+    requirements:
+        year:  '[0-9]{4}'
+        month: '[0-9]{1,2}'
+        day:   '[0-3][0-9]'
+    options:
+        l10n: true
+
+frontend_newsstand_show:
+    path:     /portadas-papel/{category_name}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:NewStand:show }
+    requirements:
+        category_name: '[^/]+'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
