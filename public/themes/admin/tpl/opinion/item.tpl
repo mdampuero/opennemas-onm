@@ -91,7 +91,7 @@
             </div>
             {include file="ui/component/content-editor/accordion/author.tpl" required=true blog=true}
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getFrontendUrl(item) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
             {include file="ui/component/content-editor/accordion/scheduling.tpl"}
           </div>
         </div>

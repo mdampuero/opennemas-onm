@@ -78,7 +78,7 @@
             {/acl}
 
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug })) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug })) %]"}
           </div>
         </div>
       </div>
