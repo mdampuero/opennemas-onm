@@ -16,6 +16,10 @@ select.form-control {
   }
 }
 
+.select2-dropdown-open .select2-choice .select2-arrow b {
+  margin-top: 2px;
+}
+
 .form-control:focus {
   border-color: #faf5f7;
 }
@@ -45,7 +49,7 @@ select.form-control {
   border-color: @error-color;
 }
 
-.form-status,
+.form-status-absolute,
 .input-group-status {
   padding: 8px;
   position: absolute;
@@ -70,13 +74,25 @@ select.form-control {
   }
 }
 
-.controls-counter .form-control,
-.controls-validation .form-control {
-  padding-right: 50px !important;
+.controls-counter,
+.controls-validation {
+  .form-control {
+    padding-right: 50px !important;
+  }
+
+  .select2-arrow {
+    margin-right: 30px;
+  }
 }
 
-.controls-counter-validation .form-control {
-  padding-right: 80px !important;
+.controls-counter-validation {
+  .form-control {
+    padding-right: 80px !important;
+  }
+
+  .select2-arrow {
+    margin-right: 60px;
+  }
 }
 
 .input-with-icon {
