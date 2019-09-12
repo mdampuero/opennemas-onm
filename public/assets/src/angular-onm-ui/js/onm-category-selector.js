@@ -278,6 +278,12 @@
                 return;
               }
 
+              // Mark field in form as dirty
+              if ($scope.$parent && $scope.$parent.form &&
+                  $scope.$parent.form.category) {
+                $scope.$parent.form.category.$setDirty(true);
+              }
+
               $scope.ngModel = newValue;
             };
 
@@ -326,12 +332,6 @@
 
             // Updates external model when internal model changes
             $scope.$watch('exportModel', function() {
-              // Mark field in form as dirty
-              if ($scope.$parent && $scope.$parent.form &&
-                  $scope.$parent.form.category) {
-                $scope.$parent.form.category.$setDirty(true);
-              }
-
               $scope.updateNgModel();
             }, true);
 
