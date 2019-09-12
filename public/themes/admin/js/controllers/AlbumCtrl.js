@@ -130,10 +130,11 @@
          * @memberOf AlbumCtrl
          *
          * @description
-         * Returns the frontend url for the content given its object
+         *   Generates the public URL basing on the item.
          *
-         * @param  {String} item  The object item to generate the url from.
-         * @return {String}
+         * @param  {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
           var date = item.date;
