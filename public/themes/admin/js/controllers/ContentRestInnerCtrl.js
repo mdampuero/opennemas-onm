@@ -78,23 +78,27 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return true;
     };
 
-    // Update slug when title is updated
-    $scope.$watch('item.title', function(nv, ov) {
-      if (!nv) {
+    // Generates slug when flag changes
+    $scope.$watch('flags.generate.slug', function(nv) {
+      if ($scope.item.slug || !nv || !$scope.item.title) {
+        $scope.flags.generate.slug = false;
+
         return;
       }
 
-      if (!$scope.item.slug || $scope.item.slug === '') {
-        if ($scope.tm) {
-          $timeout.cancel($scope.tm);
-        }
-
-        $scope.tm = $timeout(function() {
-          $scope.getSlug(nv, function(response) {
-            $scope.item.slug = response.data.slug;
-          });
-        }, 2500);
+      if ($scope.tm) {
+        $timeout.cancel($scope.tm);
       }
+
+      $scope.tm = $timeout(function() {
+        $scope.getSlug($scope.item.title, function(response) {
+          $scope.item.slug           = response.data.slug;
+          $scope.flags.generate.slug = false;
+          $scope.flags.block.slug    = true;
+
+          $scope.form.name.$setDirty(true);
+        });
+      }, 250);
     }, true);
   }
 ]);
