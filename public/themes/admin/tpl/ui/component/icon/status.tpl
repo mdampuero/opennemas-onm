@@ -1,4 +1,4 @@
-<span class="form-status">
+<span class="form-status {$iClass}">
   {if $iCounter}
     <span class="form-status-item">
       <span class="ng-cloak badge badge-default" ng-class="{ 'badge-warning': item.{$iField}.length >= 50 &amp;&amp; item.{$iField}.length < 80, 'badge-danger': item.{$iField}.length >= 80 }">
