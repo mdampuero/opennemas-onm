@@ -96,7 +96,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.flags.generate.slug = false;
           $scope.flags.block.slug    = true;
 
-          $scope.form.name.$setDirty(true);
+          $scope.form.slug.$setDirty(true);
         });
       }, 250);
     }, true);
