@@ -10,13 +10,10 @@
      * @requires $controller
      * @requires $scope
      * @requires oqlEncoder
-     *
-     * @description
-     *   Handles all actions in user groups list.
      */
     .controller('NewsstandListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'linker', 'localizer',
-      function($controller, $scope, oqlEncoder, linker, localizer) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -29,8 +26,17 @@
           content_type_name: 'kiosko',
           epp: 10,
           in_litter: 0,
-          orderBy: { starttime:  'desc' },
+          orderBy: { created:  'desc' },
           page: 1
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
         };
 
         /**
@@ -42,11 +48,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          deleteItem: 'api_v1_backend_newsstand_delete',
-          deleteList: 'api_v1_backend_newsstands_delete',
-          getList:    'api_v1_backend_newsstands_list',
-          patchItem:  'api_v1_backend_newsstand_patch',
-          patchList:  'api_v1_backend_newsstands_patch'
+          deleteItem: 'api_v1_backend_newsstand_delete_item',
+          deleteList: 'api_v1_backend_newsstand_delete_list',
+          getList:    'api_v1_backend_newsstand_get_list',
+          patchItem:  'api_v1_backend_newsstand_patch_item',
+          patchList:  'api_v1_backend_newsstand_patch_list'
         };
 
         /**
