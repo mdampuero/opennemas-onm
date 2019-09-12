@@ -9,75 +9,37 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for handling the pdf covers
- *
- * @package Backend_Controllers
- */
-class NewsstandsController extends Controller
+class NewsstandController extends BackendController
 {
     /**
-     * Shows the list of the
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_ADMIN')")
+     * {@inheritdoc}
      */
-    public function listAction()
-    {
-        return $this->render('newsstand/list.tpl', [
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-        ]);
-    }
+    protected $extension = 'KIOSKO_MANAGER';
 
     /**
-     * Show the list of the kiosko with favorite flag enabled
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_ADMIN')")
+     * {@inheritdoc}
      */
-    public function widgetAction()
-    {
-        return $this->render('newsstand/list.tpl', [
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-        ]);
-    }
+    protected $permissions = [
+        'create' => 'KIOSKO_CREATE',
+        'update' => 'KIOSKO_UPDATE',
+        'list'   => 'KIOSKO_ADMIN',
+        'show'   => 'KIOSKO_UPDATE',
+    ];
 
     /**
-     * List the form for create or load contents in a newsletter.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return $this->render('newsstand/item.tpl');
-    }
+    protected $groups = [
+        'preview' => 'album_inner'
+    ];
 
     /**
-     * Shows the newsletter template information given its id
-     *
-     * @param integer $id The user id.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_UPDATE')")
+     * {@inheritdoc}
      */
-    public function showAction($id)
-    {
-        return $this->render('newsstand/item.tpl', [ 'id' => $id ]);
-    }
+    protected $resource = 'newsstand';
 
     /**
      * Handles the configuration of the kiosko module
