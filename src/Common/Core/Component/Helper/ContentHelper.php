@@ -99,10 +99,8 @@ class ContentHelper
             $count           = 0;
             $er              = getService('entity_repository');
             foreach ($result_contents as &$content) {
-                if ($content->img2 != '0') {
-                    $result_photos[$count] = $er->find('Photo', $content->img2);
-                } elseif ($content->img1 != '0') {
-                    $result_photos[$count] = $er->find('Photo', $content->img1);
+                if ($content->img1 != 0) {
+                    $result_photos[ $content->img1 ] = $er->find('Photo', $content->img1);
                 }
                 $count++;
             }
