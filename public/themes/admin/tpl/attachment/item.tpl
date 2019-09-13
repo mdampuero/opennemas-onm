@@ -35,15 +35,8 @@
             {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
           {/acl}
         </div>
-        <div class="m-t-5">
-          {acl isAllowed="ATTACHMENT_HOME"}
-            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Home{/t}" field="in_home"}
-          {/acl}
-        </div>
       </div>
-      {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/category.tpl" field="item.category"}
-      {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>
@@ -56,11 +49,8 @@
         <div class="col-lg-4 m-b-30">
           <div class="p-l-30 p-r-30 p-t-15">
             <div class="text-center">
-              <div>
-                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
-                  <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
-                </span>
-              </div>
+              <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
+              <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
               <p class="m-t-15 text-center">
                 <strong ng-if="item.path">
                   [% getFileName() %]
