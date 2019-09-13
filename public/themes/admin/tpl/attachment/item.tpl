@@ -46,35 +46,39 @@
   <div class="grid simple">
     <div class="grid-body">
       <div class="row">
-        <div class="col-lg-4 m-b-30">
-          <div class="p-l-30 p-r-30 p-t-15">
-            <div class="text-center">
-              <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
-              <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
-              <p class="m-t-15 text-center">
-                <strong ng-if="item.path">
-                  [% getFileName() %]
-                </strong>
-                <strong ng-if="!item.path">
-                  {t}No file selected{/t}
-                </strong>
-              </p>
+        <div class="col-lg-4">
+          <div class="row">
+            <div class="col-lg-12 col-lg-offset-0 col-sm-6 col-sm-offset-3">
+              <div class="p-b-30 p-l-30 p-r-30 p-t-35">
+                <div class="text-center">
+                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
+                  <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
+                  <p class="m-t-15 text-center">
+                    <strong ng-if="item.path" title="[% getFileName() %]">
+                      [% getFileName() %]
+                    </strong>
+                    <strong ng-if="!item.path">
+                      {t}No file selected{/t}
+                    </strong>
+                  </p>
+                </div>
+                <label class="btn btn-default btn-block m-t-15" for="file">
+                  <input class="hidden" id="file" name="file" file-model="item.path" type="file"/>
+                  <span ng-if="!item.path">
+                    <i class="fa fa-plus m-r-5"></i>
+                    {t}Add{/t}
+                  </span>
+                  <span ng-if="item.path">
+                    <i class="fa fa-edit m-r-5"></i>
+                    {t}Change{/t}
+                  </span>
+                </label>
+                <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.paths.attachment +  item.path %]" target="_blank">
+                  <i class="fa fa-download m-r-5"></i>
+                  {t}Download{/t}
+                </a>
+              </div>
             </div>
-            <label class="btn btn-default btn-block m-t-15" for="file">
-              <input class="hidden" id="file" name="file" file-model="item.path" type="file"/>
-              <span ng-if="!item.path">
-                <i class="fa fa-plus m-r-5"></i>
-                {t}Add{/t}
-              </span>
-              <span ng-if="item.path">
-                <i class="fa fa-edit m-r-5"></i>
-                {t}Change{/t}
-              </span>
-            </label>
-            <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.paths.attachment +  item.path %]" target="_blank">
-              <i class="fa fa-download m-r-5"></i>
-              {t}Download{/t}
-            </a>
           </div>
         </div>
         <div class="col-lg-8">
