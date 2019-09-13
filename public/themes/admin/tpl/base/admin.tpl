@@ -522,12 +522,12 @@
     {/javascripts}
     {javascripts src="
       @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
-      @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
       @Common/components/angular-file-model/angular-file-model.js,
+      @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
       @Common/components/angular-filter/dist/angular-filter.min.js,
       @Common/components/angular-ui-sortable/sortable.min.js,
-      @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angular-ui-tab-scroll/angular-ui-tab-scroll.js,
+      @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
       @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
@@ -536,6 +536,8 @@
       @Common/components/jquery-ui/jquery-ui.min.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
+      @Common/components/pdfjs-dist/build/pdf.min.js,
+      @Common/components/pdfjs-dist/build/pdf.worker.min.js,
       @Common/components/tinycon-angularjs/dist/angular-tinycon.min.js,
       @Common/js/jquery/jquery.multiselect.js,
       @Common/js/jquery/localization/messages_es.js,

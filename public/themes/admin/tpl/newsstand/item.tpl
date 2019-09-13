@@ -69,44 +69,51 @@
   <div class="grid simple">
     <div class="grid-body">
       <div class="row">
-        <div class="col-md-4">
-          <div class="thumbnail-wrapper">
-            <div>
-              <div class="fileinput" ng-class="{ 'fileinput-exists': item.name, 'fileinput-new': !item.name }" data-trigger="fileinput" style="width:80%; margin:0 auto; display:block">
-                <div class="thumbnail no-margin" style="width:100%;">
-                  <div class="fileinput-new text-center" style="padding: 60px; background: #eee;" >
-                    <i class="fa fa-picture-o fa-3x"></i>
-                  </div>
-
-                  <div class="text-center p-b-15 p-t-15" ng-show="thumbnailLoading">
-                    <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
-                    <h3 class="spinner-text">{t}Generating thumbnail{/t}...</h3>
-                  </div>
-
-                  <img id="thumbnail" ng-src="[% item.thumbnail_url %]" ng-show="!thumbnailLoading && item.thumbnail_url" style="max-width:100%">
+        <div class="col-lg-4">
+          <div class="row">
+            <div class="col-lg-12 col-lg-offset-0 col-sm-6 col-sm-offset-3">
+              <input accept="application/pdf" class="hidden" id="file" name="file" file-model="item.path" type="file"/>
+              <input class="hidden" id="thumbnail" name="thumbnail" file-model="item.thumbnail" type="file"/>
+              <div class="overlay overlay-white open p-t-50 text-center" ng-if="flags.generate.preview">
+                <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
+                <p class="m-t-15 text-center">
+                <strong>
+                  {t}Generating thumbnail{/t}...
+                </strong>
+                </p>
+              </div>
+              <div class="p-b-30 p-l-30 p-r-30 p-t-35">
+                <div class="text-center">
+                  <img class="img-thumbnail" ng-src="[% preview %]" ng-show="preview" style="max-height: 180px;">
+                  <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
+                  <p class="m-t-15 text-center nowrap">
+                    <strong ng-if="item.path" title="[% getFileName() %]">
+                      [% getFileName() %]
+                    </strong>
+                    <strong ng-if="!item.path">
+                      {t}No file selected{/t}
+                    </strong>
+                  </p>
                 </div>
-                <div>
-                  <span class="btn btn-white btn-file btn-block m-b-15 m-t-15">
-                    <i class="fa fa-newspaper-o"></i>
-                    <span class="fileinput-new">{t}Add{/t} PDF</span>
-                    <span class="fileinput-exists">{t}Change{/t}</span>
-                    <input type="file" accept="application/pdf" id="cover-file-input" name="cover" onchange="angular.element(this).scope().generateThumbnailFromPDF()"/>
-                    <input type="file" class="hidden" name="thumbnail" ng-model="item.cover_thumbnail">
+                <label class="btn btn-default btn-block m-t-15" for="file">
+                  <span ng-if="!item.path">
+                    <i class="fa fa-plus m-r-5"></i>
+                    {t}Add{/t}
                   </span>
-                  <a class="btn btn-danger btn-block fileinput-exists delete no-margin m-b-15" data-dismiss="fileinput" href="#" ng-click="unsetCover()">
-                    <i class="fa fa-trash-o"></i>
-                    {t}Remove{/t}
-                  </a>
-                  <a class="btn btn-default btn-block fileinput-exists no-margin" ng-show="item.name" ng-href="[% '{$app.instance->getNewsstandShortPath()}' + item.path +  item.name %]" target="_blank">
-                    <span class="fa fa-download"></span>
-                    {t}Download{/t}
-                  </a>
-                </div>
+                  <span ng-if="item.path">
+                    <i class="fa fa-edit m-r-5"></i>
+                    {t}Change{/t}
+                  </span>
+                </label>
+                <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="[% data.extra.paths.newsstand +  '/' + item.path + item.name %]" target="_blank">
+                  <i class="fa fa-download m-r-5"></i>
+                  {t}Download{/t}
+                </a>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-lg-8">
           {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
           {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Description{/t}" field="description" rows=5}
         </div>
@@ -114,23 +121,3 @@
     </div>
   </div>
 {/block}
-
-{block name="footer-js" append}
-  {javascripts}
-    <script>
-      $(document).ready(function($) {
-        $('.fileinput').fileinput({
-          name: 'cover',
-          uploadtype: 'image'
-        });
-      });
-    </script>
-  {/javascripts}
-
-  {javascripts src="
-    @Common/components/pdfjs-dist/build/pdf.min.js,
-    @Common/components/pdfjs-dist/build/pdf.worker.min.js" output="covers"}
-  {/javascripts}
-{/block}
-
-
