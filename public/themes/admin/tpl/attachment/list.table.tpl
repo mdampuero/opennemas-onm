@@ -2,12 +2,6 @@
 
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-home" checklist-model="app.columns.selected" checklist-value="'home'" type="checkbox">
-    <label for="checkbox-home">
-      {t}Home{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-favorite" checklist-model="app.columns.selected" checklist-value="'favorite'" type="checkbox">
     <label for="checkbox-favorite">
       {t}Favorite{/t}
@@ -16,13 +10,6 @@
 {/block}
 
 {block name="customColumnsHeader"}
-  {acl isAllowed="ATTACHMENT_HOME"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('home')" width="150">
-      <span class="m-l-5">
-        {t}Home{/t}
-      </span>
-    </th>
-  {/acl}
   {acl isAllowed="ATTACHMENT_FAVORITE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')" width="150">
       <span class="m-l-5">
@@ -40,14 +27,6 @@
 {/block}
 
 {block name="customColumnsBody"}
-  {acl isAllowed="ATTACHMENT_HOME"}
-    <td class="text-center v-align-middle" ng-if="isColumnEnabled('home')">
-      <button class="btn btn-white" ng-click="patch(item, 'in_home', item.in_home != 1 ? 1 : 0)" type="button">
-        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_homeLoading == 1, 'fa-home text-info': item.in_homeLoading !== 1 && item.in_home == 1, 'fa-home': !item.in_homeLoading == 1 && item.in_home == 0 }"></i>
-        <i class="fa fa-times fa-sub text-danger" ng-if="item.in_homeLoading !== 1 && item.in_home == 0"></i>
-      </button>
-    </td>
-  {/acl}
   {acl isAllowed="ATTACHMENT_FAVORITE"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')">
       <button class="btn btn-white" ng-click="patch(item, 'favorite', item.favorite != 1 ? 1 : 0)" type="button">
