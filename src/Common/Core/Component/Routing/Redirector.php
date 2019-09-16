@@ -199,6 +199,7 @@ class Redirector
     public function getContent($id, $contentType)
     {
         $contentType = \classify($contentType);
+
         $method      = 'get' . $contentType;
 
         if (method_exists($this, $method)) {
@@ -207,6 +208,46 @@ class Redirector
 
         return $this->container->get('entity_repository')
             ->find($contentType, $id);
+    }
+
+    /**
+     * Returns an content by id.
+     *
+     * @param integer $id The content id.
+     *
+     * @return Content The content.
+     */
+    protected function getContentFromApi(int $id)
+    {
+        try {
+            return $this->container->get('api.service.content')->getItem($id);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns an event by id.
+     *
+     * @param integer $id The event id.
+     *
+     * @return Content The event.
+     */
+    protected function getEvent(int $id)
+    {
+        return $this->getContentFromApi($id);
+    }
+
+    /**
+     * Returns an static page by id.
+     *
+     * @param integer $id The static page id.
+     *
+     * @return Content The static page.
+     */
+    protected function getStaticPage(int $id)
+    {
+        return $this->getContentFromApi($id);
     }
 
     /**

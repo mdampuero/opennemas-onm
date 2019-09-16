@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
 use Common\ORM\Entity\Category;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Tag;
 use Common\ORM\Entity\Url;
 use Common\ORM\Entity\User;
@@ -85,7 +86,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\OrmService')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getItemBy', 'getList' ])
+            ->setMethods([ 'getItem','getItemBy', 'getList' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('TagService')
@@ -125,6 +126,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.content':
+                return $this->service;
+
             case 'api.service.tag':
                 return $this->ts;
 
@@ -387,6 +391,67 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 2341 ]));
         $this->assertEquals('plugh', $method->invokeArgs($this->redirector, [ 1467 ]));
+    }
+
+    /**
+     * Tests getContentFromApi when a content is and is not found.
+     */
+    public function testGetContentFromApi()
+    {
+        $content = new Content([ 'slug' => 'glork' ]);
+
+        $method = new \ReflectionMethod($this->redirector, 'getContentFromApi');
+        $method->setAccessible(true);
+
+        $this->service->expects($this->at(0))->method('getItem')
+            ->with(2341)->will($this->throwException(new \Exception()));
+        $this->service->expects($this->at(1))->method('getItem')
+            ->with(1467)->willReturn($content);
+
+        $this->assertEmpty($method->invokeArgs($this->redirector, [ 2341 ]));
+        $this->assertEquals($content, $method->invokeArgs($this->redirector, [ 1467 ]));
+    }
+
+    /**
+     * Tests getEvent when a event is and is not found.
+     */
+    public function testGetEvent()
+    {
+        $event = new Content([ 'slug' => 'glork']);
+
+        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
+            ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
+            ->setMethods([ 'getContentFromApi' ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($this->redirector, 'getEvent');
+        $method->setAccessible(true);
+
+        $redirector->expects($this->once())->method('getContentFromApi')
+            ->with(1467)->willReturn($event);
+
+        $this->assertEquals($event, $method->invokeArgs($redirector, [ 1467 ]));
+    }
+
+     /**
+      * Tests getStaticPage when a event is and is not found
+      */
+    public function testGetStaticPage()
+    {
+        $static_page = new Content([ 'slug' => 'glork']);
+
+        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
+            ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
+            ->setMethods([ 'getContentFromApi' ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($this->redirector, 'getStaticPage');
+        $method->setAccessible(true);
+
+        $redirector->expects($this->once())->method('getContentFromApi')
+            ->with(1467)->willReturn($static_page);
+
+        $this->assertEquals($static_page, $method->invokeArgs($redirector, [ 1467 ]));
     }
 
     /**
