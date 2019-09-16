@@ -32,7 +32,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
-            ->setMethods([ 'getRequestUri' ])
+            ->setMethods([ 'getRequestUri', 'getUri' ])
             ->getMock();
 
         $this->rs = $this->getMockBuilder('RequestStack')
@@ -101,10 +101,29 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_outputfilter_canonical_url where there is a content
-     * assigned to the template.
+     * Tests smarty_outputfilter_canonical_url when rendering a newsletter.
      */
-    public function testCanonicalUrlWhenContentInTemplate()
+    public function testCanonicalUrlForNewsletter()
+    {
+        $this->smarty->source->resource = 'newsletter/newsletter.tpl';
+
+        $output = '<html><head></head><body></body></html>';
+
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->assertEquals($output, smarty_outputfilter_canonical_url(
+            $output,
+            $this->smarty
+        ));
+    }
+
+
+    /**
+     * Tests smarty_outputfilter_canonical_url when the canonical URL is already
+     * generated and assigned to Smarty.
+     */
+    public function testCanonicalUrlWhenCanonical()
     {
         $output = '<html><head></head><body></body></html>';
 
@@ -115,15 +134,12 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->request);
 
         $this->smarty->expects($this->once())->method('hasValue')
-            ->with('o_content')->willReturn(true);
+            ->with('o_canonical')->willReturn(true);
         $this->smarty->expects($this->once())->method('getValue')
-            ->with('o_content')->willReturn('grault');
-
-        $this->helper->expects($this->once())->method('generate')
-            ->with('grault')->willReturn('http://console/grault');
+            ->with('o_canonical')->willReturn('http://grault.corge');
 
         $this->assertContains(
-            'http://console/grault',
+            'http://grault.corge',
             smarty_outputfilter_canonical_url(
                 $output,
                 $this->smarty
@@ -132,10 +148,10 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_outputfilter_canonical_url where there is no content
-     * assigned to the template.
+     * Tests smarty_outputfilter_canonical_url whene there is no canonical URL
+     * generated nor assigned to Smarty.
      */
-    public function testCanonicalUrlWhenNoContentInTemplate()
+    public function testCanonicalUrlWhenNoCanonical()
     {
         $output = '<html><head></head><body></body></html>';
 
@@ -145,11 +161,14 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('http://console/thud/norf?page=1');
+
         $this->smarty->expects($this->once())->method('hasValue')
-            ->with('o_content')->willReturn(false);
+            ->with('o_canonical')->willReturn(false);
 
         $this->assertContains(
-            'http://console/thud/norf',
+            '"http://console/thud/norf"',
             smarty_outputfilter_canonical_url(
                 $output,
                 $this->smarty
@@ -167,31 +186,6 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn(null);
-
-        $this->assertEquals($output, smarty_outputfilter_canonical_url(
-            $output,
-            $this->smarty
-        ));
-    }
-
-    /**
-     * Tests smarty_outputfilter_canonical_url where there is no request in
-     * progress.
-     */
-    public function testCanonicalUrlWhenRenderingNewsletter()
-    {
-        $output = '<html><head></head><body></body></html>';
-
-        $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/thud/nor');
-
-        $this->rs->expects($this->any())->method('getCurrentRequest')
-            ->willReturn($this->request);
-
-        $this->smarty->expects($this->any())->method('hasValue')
-            ->with('o_content')->willReturn(false);
-
-        $this->smarty->source->resource = 'newsletter/newsletter.tpl';
 
         $this->assertEquals($output, smarty_outputfilter_canonical_url(
             $output,

@@ -270,6 +270,7 @@ class CategoryController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
+        $action = $this->get('core.globals')->getAction();
         $params = array_merge($request->query->all(), [
             'category'   => $item,
             'time'       => time(),
@@ -292,9 +293,10 @@ class CategoryController extends FrontendController
         list($positions, $advertisements) = $this->getAdvertisements($item);
 
         return array_merge($this->params, $params, [
-            'cache_id'       => $this->getCacheId($params),
             'ads_positions'  => $positions,
-            'advertisements' => $advertisements
+            'advertisements' => $advertisements,
+            'cache_id'       => $this->getCacheId($params),
+            'o_canonical'    => $this->getCanonicalUrl($action, $params)
         ]);
     }
 
