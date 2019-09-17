@@ -88,7 +88,7 @@ class Kiosko extends Content
     public function load($properties)
     {
         if (array_key_exists('name', $properties)) {
-            $properties['thumb_url'] =
+            $properties['thumbnail'] =
                 str_replace('.pdf', '.jpg', $properties['name']);
         }
 
@@ -260,7 +260,7 @@ class Kiosko extends Content
     public function removeFiles()
     {
         $coverFile  = $this->kiosko_path . $this->path . $this->name;
-        $coverThumb = $this->kiosko_path . $this->path . $this->thumb_url;
+        $coverThumb = $this->kiosko_path . $this->path . $this->thumbnail;
 
         // Remove old files if fileinput changed
         if (file_exists($coverFile) && is_file($coverFile)) {
