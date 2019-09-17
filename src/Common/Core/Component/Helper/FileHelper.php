@@ -93,7 +93,7 @@ abstract class FileHelper
     public function getRelativePath(string $path) : string
     {
         return str_replace(preg_replace('/\/+/', '/', sprintf(
-            '%s/%s',
+            '%s/%s/',
             $this->publicDir,
             $this->getPathForFile()
         )), '', $path);

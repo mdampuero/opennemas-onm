@@ -81,7 +81,7 @@ class AttachmentHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetRelativePath()
     {
         $this->assertEquals(
-            '/2010/01/01/xyzzy.gorp',
+            '2010/01/01/xyzzy.gorp',
             $this->helper->getRelativePath('/waldo/grault/media/bar/files/2010/01/01/xyzzy.gorp')
         );
     }
