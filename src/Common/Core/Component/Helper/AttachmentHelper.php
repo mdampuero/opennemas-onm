@@ -9,130 +9,13 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\ORM\Entity\Instance;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Filesystem\Filesystem;
-
-class AttachmentHelper
+class AttachmentHelper extends FileHelper
 {
     /**
-     * The Filesystem component.
-     *
-     * @var Filesystem
+     * {@inheritdoc}
      */
-    protected $fs;
-
-    /**
-     * The current instance.
-     *
-     * @var instance
-     */
-    protected $instance;
-
-    /**
-     * The server public directory.
-     *
-     * @var string
-     */
-    protected $publicDir;
-
-    /**
-     * Initalializes the ImageHelper.
-     *
-     * @param Instance  $instance  The current instance.
-     * @param string    $publicDir The server public directory.
-     */
-    public function __construct(Instance $instance, string $publicDir)
+    protected function getPathForFile()
     {
-        $this->fs        = new Filesystem();
-        $this->instance  = $instance;
-        $this->publicDir = $publicDir;
-    }
-
-    /**
-     * Checks if a file exists.
-     *
-     * @param string $path The path to file.
-     *
-     * @return bool True if the file exists. False otherwise.
-     */
-    public function exists(string $path) : bool
-    {
-        return $this->fs->exists($path);
-    }
-
-    /**
-     * Returns the path where the file should be moved.
-     *
-     * @param File   $file The file to generate path to.
-     * @param string $date The date to generate the path from.
-     *
-     * @return string The path where the file should be moved.
-     */
-    public function generatePath(File $file, ?string $date = null) : string
-    {
-        $date = new \Datetime($date);
-
-        return preg_replace('/\/+/', '/', sprintf(
-            '%s/%s/%s/%s',
-            $this->publicDir,
-            $this->instance->getFilesShortPath(),
-            $date->format('Y/m/d'),
-            $file->getClientOriginalName()
-        ));
-    }
-
-    /**
-     * Returns the relative path for the file ready to use in data model.
-     *
-     * @param File   $file The file to generate path to.
-     * @param string $date The date to generate the path from.
-     *
-     * @return string The relative path ready to use in data model.
-     */
-    public function generateRelativePath(File $file, ?string $date = null) : string
-    {
-        return str_replace(preg_replace('/\/+/', '/', sprintf(
-            '%s/%s',
-            $this->publicDir,
-            $this->instance->getFilesShortPath()
-        )), '', $this->generatePath($file, $date));
-    }
-
-    /**
-     * Moves the file to the target path.
-     *
-     * @param File   $file   The file to move.
-     * @param string $target The path where file will be moved.
-     *
-     * @return string The target path.
-     */
-    public function move(File $file, string $target) : void
-    {
-        $name      = basename($target);
-        $directory = str_replace($name, '', $target);
-
-        $file->move($directory, $name);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * Removes a file basing on the path.
-     *
-     * @param string $path The path to the file to remove.
-     */
-    public function remove(string $path) : void
-    {
-        $path = preg_replace('/\/+/', '/', sprintf(
-            '%s/%s%s',
-            $this->publicDir,
-            $this->instance->getFilesShortPath(),
-            $path
-        ));
-
-        if ($this->fs->exists($path) && is_file($path)) {
-            $this->fs->remove($path);
-        }
+        return $this->instance->getFilesShortPath();
     }
 }

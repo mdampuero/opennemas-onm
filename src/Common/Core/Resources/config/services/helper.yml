@@ -48,7 +48,7 @@ services:
 
     core.helper.image:
         class:     Common\Core\Component\Helper\ImageHelper
-        arguments: [ '@core.instance', '@core.image.processor', '%core.paths.public%' ]
+        arguments: [ '@core.instance', '%core.paths.public%', '@core.image.processor' ]
         public:    true
 
     core.helper.instance_sync:
