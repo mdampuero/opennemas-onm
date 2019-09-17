@@ -16,7 +16,7 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <img class="no-margin img-thumbnail" ng-src="[% data.extra.paths.newsstand + '/' + item.path + '/' + item.thumbnail %]">
+    <img class="no-margin img-thumbnail" ng-src="[% data.extra.paths.newsstand + '/' + item.thumbnail %]">
   </td>
 {/block}
 
@@ -97,4 +97,8 @@
       <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
     </button>
   {/acl}
+  <a class="btn btn-white btn-small" href="[% data.extra.paths.newsstand + '/' + item.path %]" target="_blank">
+    <i class="fa fa-download m-r-5"></i>
+    {t}Download{/t}
+  </a>
 {/block}
