@@ -63,7 +63,7 @@
         $scope.buildScope = function() {
           if ($scope.item.thumbnail) {
             $scope.preview = $scope.data.extra.paths.newsstand + '/' +
-              $scope.item.path + '/' + $scope.item.thumbnail;
+              $scope.item.thumbnail;
           }
         };
 
