@@ -7,19 +7,16 @@
      * @ngdoc controller
      * @name  PollCtrl
      *
-     * @description
-     *   Handles actions for poll inner
-     *
      * @requires $controller
      * @requires $scope
+     * @requires $window
      * @requires linker
      * @requires localizer
-     * @requires messenger
      * @requires routing
      */
     .controller('PollCtrl', [
-      '$controller', '$scope', 'linker', 'localizer', 'messenger', 'routing',
-      function($controller, $scope, linker, localizer, messenger, routing) {
+      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing',
+      function($controller, $scope, $window, linker, localizer, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -101,7 +98,7 @@
 
         /**
          * @function getFrontendUrl
-         * @memberOf AlbumCtrl
+         * @memberOf PollCtrl
          *
          * @description
          * Returns the frontend url for the content given its object
@@ -110,14 +107,10 @@
          * @return {String}
          */
         $scope.getFrontendUrl = function(item) {
-          var date = item.date;
-
-          var formattedDate = window.moment(date).format('YYYYMMDDHHmmss');
-
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content,
-              created: formattedDate,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
               category_name: item.category_name
             })

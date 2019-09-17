@@ -108,8 +108,13 @@
             </td>
             {block name="commonColumnsBody"}
               <td class="v-align-middle" ng-if="isColumnEnabled('title')">
-                <div class="table-text" title="[% item.title %]">
-                  [% item.title %]
+                <div class="table-text">
+                  <a ng-href="[% getFrontendUrl(item) %]" ng-if="routes.public" target="_blank" title="[% item.title %]">
+                    [% item.title %]
+                  </a>
+                  <span ng-if="!routes || !routes.public">
+                    [% item.title %]
+                  </span>
                 </div>
                 <div class="listing-inline-actions m-t-10">
                   {block name="itemActions"}{/block}

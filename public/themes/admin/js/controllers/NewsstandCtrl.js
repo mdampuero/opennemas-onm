@@ -170,18 +170,15 @@
          * @description
          *   Generates the public URL basing on the item.
          *
-         * @param  {String} item  The item to generate route for.
+         * @param {String} item  The item to generate route for.
          *
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          var date = item.created;
-          var formattedDate = window.moment(date).format('YYYYMMDDHHmmss');
-
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
-              id:            item.pk_content,
-              created:       formattedDate,
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               category_name: item.category_name
             })
           );

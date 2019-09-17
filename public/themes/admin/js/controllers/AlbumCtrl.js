@@ -10,14 +10,15 @@
      * @requires $controller
      * @requires $scope
      * @requires $uibModal
+     * @requires $window
      * @requires linker
      * @requires localizer
      * @requires messenger
      * @requires routing
      */
     .controller('AlbumCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', 'linker', 'localizer', 'messenger', 'routing',
-      function($controller, $scope, $timeout, $uibModal, linker, localizer, messenger, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'linker', 'localizer', 'messenger', 'routing',
+      function($controller, $scope, $timeout, $uibModal, $window, linker, localizer, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -65,6 +66,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_album_create_item',
           getItem:    'api_v1_backend_album_get_item',
+          public:     'frontend_album_show',
           redirect:   'backend_album_show',
           saveItem:   'api_v1_backend_album_save_item',
           updateItem: 'api_v1_backend_album_update_item'
@@ -132,19 +134,15 @@
          * @description
          *   Generates the public URL basing on the item.
          *
-         * @param  {String} item  The item to generate route for.
+         * @param {String} item  The item to generate route for.
          *
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          var date = item.date;
-
-          var formattedDate = window.moment(date).format('YYYYMMDDHHmmss');
-
           return $scope.getL10nUrl(
-            routing.generate('frontend_album_show', {
+            routing.generate($scope.routes.public, {
               id: item.pk_content,
-              created: formattedDate,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
               category_name: item.category_name
             })

@@ -15,8 +15,8 @@
      *   Controller for poll list.
      */
     .controller('PollListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
+      function($controller, $scope, $window, oqlEncoder, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -40,7 +40,8 @@
           deleteList: 'api_v1_backend_poll_delete_list',
           getList:    'api_v1_backend_poll_get_list',
           patchItem:  'api_v1_backend_poll_patch_item',
-          patchList:  'api_v1_backend_poll_patch_list'
+          patchList:  'api_v1_backend_poll_patch_list',
+          public:     'frontend_poll_show',
         };
 
         /**
@@ -65,6 +66,27 @@
               return e.item;
             }));
           }
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf PollCtrl
+         *
+         * @description
+         * Returns the frontend url for the content given its object
+         *
+         * @param  {String} item  The object item to generate the url from.
+         * @return {String}
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              slug: item.slug,
+              category_name: item.category_name
+            })
+          );
         };
 
         /**

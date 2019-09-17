@@ -10,10 +10,11 @@
      * @requires $controller
      * @requires $scope
      * @requires oqlEncoder
+     * @requires routing
      */
     .controller('NewsstandListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
+      function($controller, $scope, $window, oqlEncoder, routing) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -31,15 +32,6 @@
         };
 
         /**
-         * @inheritdoc
-         */
-        $scope.parseList = function(data) {
-          $scope.configure(data.extra);
-          $scope.localize($scope.data.items, 'items');
-          $scope.localize($scope.data.extra.categories, 'categories');
-        };
-
-        /**
          * @memberOf SubscriptionListCtrl
          *
          * @description
@@ -52,7 +44,29 @@
           deleteList: 'api_v1_backend_newsstand_delete_list',
           getList:    'api_v1_backend_newsstand_get_list',
           patchItem:  'api_v1_backend_newsstand_patch_item',
-          patchList:  'api_v1_backend_newsstand_patch_list'
+          patchList:  'api_v1_backend_newsstand_patch_list',
+          public:     'frontend_newsstand_show',
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf NewsstandListCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              category_name: item.category_name
+            })
+          );
         };
 
         /**
@@ -68,6 +82,15 @@
 
           oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
           $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
         };
       }
     ]);
