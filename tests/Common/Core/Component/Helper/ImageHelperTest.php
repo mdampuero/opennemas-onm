@@ -35,7 +35,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
-            ->setConstructorArgs([ $this->instance, $this->processor, '/waldo/grault' ])
+            ->setConstructorArgs([ $this->instance, '/waldo/grault', $this->processor ])
             ->setMethods([ 'getExtension' ])
             ->getMock();
 
