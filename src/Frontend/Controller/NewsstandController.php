@@ -9,221 +9,121 @@
  */
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Common\Core\Controller\Controller;
-
 /**
- * Handles the actions for kiosko content type
- *
- * @package Frontend_Controllers
+ * Displays a newsstand or a list of newsstands.
  */
-class NewsstandController extends Controller
+class NewsstandController extends FrontendController
 {
     /**
-     * Common code for all the actions
+     * {@inheritdoc}
      */
-    public function init()
-    {
-        $this->cm            = new \ContentManager();
-        $this->category_name = $this->get('request_stack')
-            ->getCurrentRequest()
-            ->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-    }
+    protected $caches = [
+        'list'    => 'kiosko',
+        'show'    => 'kiosko',
+        'showamp' => 'kiosko',
+    ];
 
     /**
-     * Renders the newstand frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * {@inheritdoc}
      */
-    public function frontpageAction(Request $request)
+    protected $extension = 'KIOSKO_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'list'    => 'frontpage',
+        'show'    => 'frontpage',
+        'showamp' => 'amp_inner',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'album_frontpage' => [ 103, 105 ],
+        'album_inner'     => [ 103, 105 ],
+    ];
+
+    /**
+     * The list of valid query parameters per action.
+     *
+     * @var array
+     */
+    protected $queries = [
+        'list'    => [ 'page', 'year', 'month' ],
+        'showamp' => [ '_format' ],
+    ];
+
+    /**
+     * The list of routes per action.
+     *
+     * @var array
+     */
+    protected $routes = [
+        'list' => 'frontend_newsstand_frontpage'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.newsstand';
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'list'    => 'newsstand/list.tpl',
+        'show'    => 'newsstand/item.tpl',
+        'showamp' => 'amp/content.tpl',
+    ];
+
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateList(array &$params = []) : void
     {
-        $month = $request->query->getDigits('month', date('m'));
-        $year  = $request->query->getDigits('year', date('Y'));
-        $day   = $request->query->getDigits('day', '01');
+        $page = $params['page'] ?? 1;
+        $date = date('Y-m-d H:i:s');
 
-        if (empty($this->category_name)) {
-            $this->category_name = 'home';
-        }
-
-        // Get settings for frontpage rendering
-        $configurations = $this->get('orm.manager')
+        $epp = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('kiosko_settings');
-        $order          = $configurations['orderFrontpage'];
+            ->get('items_per_page', 10);
 
-        // Setup templating cache layer
-        $this->view->setConfig('kiosko');
-        $cacheID = $this->view->getCacheId(
-            'frontpage',
-            'kiosko',
-            $this->category_name,
-            $order . $year . $month . $day
-        );
+        $epp = 1;
 
-        if (($this->view->getCaching() === 0)
-            || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
-        ) {
-            $kioskos = [];
+        $response = $this->get('api.service.content_old')->getList(sprintf(
+            'content_type_name="kiosko" and content_status=1 and in_litter=0 '
+            . 'and (starttime IS NULL or starttime < "%s") '
+            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'order by starttime desc limit %d offset %d',
+            $date,
+            $date,
+            $epp,
+            $epp * ($page - 1)
+        ));
 
-            if ($order == 'grouped') {
-                $categories = $this->get('api.service.category')->getList();
-
-                $where = "";
-                $limit = "LIMIT 48";
-                $month = $request->query->getDigits('month');
-                $year  = $request->query->getDigits('year');
-
-                if (!empty($month)) {
-                    $where .= " AND MONTH(`kioskos`.date)='{$month}' ";
-                    $limit  = "";
-                }
-
-                if (!empty($year)) {
-                    $where .= " AND YEAR(`kioskos`.date)='{$year}' ";
-                    $limit  = "";
-                }
-
-                foreach ($categories['items'] as $category) {
-                    $portadas = $this->cm->find_by_category(
-                        'Kiosko',
-                        $category->pk_content_category,
-                        ' `contents`.`content_status`=1 ' . $where,
-                        "ORDER BY `kioskos`.date DESC {$limit}"
-                    );
-
-                    if (!empty($portadas)) {
-                        $kioskos[] = [
-                            'category' => $category->title,
-                            'portadas' => $portadas
-                        ];
-                    }
-                }
-            } elseif ($order == 'sections') {
-                $date     = "$year-$month-$day";
-                $portadas = $this->cm->findAll(
-                    'Kiosko',
-                    ' `contents`.`content_status`=1 AND  `kioskos`.date ="' . $date . '"',
-                    'ORDER BY `kioskos`.date DESC '
-                );
-
-                if (!empty($portadas)) {
-                    $kioskos[] = [ 'portadas' => $portadas ];
-                }
-            } else {
-                $categories = $this->get('api.service.category')->getList();
-
-                foreach ($categories['items'] as $category) {
-                    $portadas = $this->cm->find_by_category(
-                        'Kiosko',
-                        $category->pk_content_category,
-                        ' `contents`.`content_status`=1   ' .
-                        'AND MONTH(`kioskos`.date)=' . $month . ' AND' .
-                        ' YEAR(`kioskos`.date)=' . $year,
-                        'ORDER BY `kioskos`.date DESC '
-                    );
-
-                    if (!empty($portadas)) {
-                        $kioskos[] = [
-                            'category' => $category->title,
-                            'portadas' => $portadas
-                        ];
-                    }
-                }
-            }
-
-            $this->view->assign('kiosko', $kioskos);
-        }
-
-        list($positions, $advertisements) = $this->getAds();
-
-        return $this->render('newsstand/newsstand.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheID,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-            'selected_date'  => '1-' . $month . '-' . $year,
-            'MONTH'          => $month,
-            'YEAR'           => $year,
-            'year'           => $year,
-            'month'          => $month,
-            'order'          => $order,
-            'x-tags'         => 'newsstand-frontpage'
+        $params = array_merge($params, [
+            'items'      => $response['items'],
+            'pagination' => $this->get('paginator')->get([
+                'boundary'    => false,
+                'directional' => true,
+                'maxLinks'    => 0,
+                'epp'         => $epp,
+                'page'        => $page,
+                'total'       => $response['total'],
+                'route'       => [
+                    'name'   => empty($category)
+                        ? 'frontend_newsstand_frontpage'
+                        : 'frontend_newsstand_frontpage_category',
+                    'params' => empty($category)
+                        ? []
+                        : [ 'category_name' => $category->name ],
+                ]
+            ])
         ]);
-    }
-
-    /**
-     * Renders a particular cover given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     */
-    public function showAction(Request $request)
-    {
-        $dirtyID = $request->get('id', null);
-
-        $content = $this->get('content_url_matcher')
-            ->matchContentUrl('kiosko', $dirtyID, null, $this->category_name);
-
-        if (empty($content)) {
-            throw new ResourceNotFoundException();
-        }
-
-        // Setup templating cache layer
-        $this->view->setConfig('kiosko');
-        $cacheID = $this->view->getCacheId('content', $content->id);
-
-        if (($this->view->getCaching() === 0)
-            || (!$this->view->isCached('newsstand/newsstand.tpl', $cacheID))
-        ) {
-            $date  = strtotime($content->date);
-            $month = date('m', $date);
-            $year  = date('Y', $date);
-
-            $this->view->assign([
-                'date'   => '1-' . $month . '-' . $year,
-                'YEAR'   => $year,
-            ]);
-        }
-
-        list($positions, $advertisements) = $this->getAds();
-
-        return $this->render('newsstand/newsstand.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'epaper'         => $content,
-            'content'        => $content,
-            'cache_id'       => $cacheID,
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-            'o_content'      => $content,
-            'x-tags'         => 'newsstand,' . $content->pk_content,
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($content->tags)['items']
-        ]);
-    }
-
-    /**
-     * Fetches the advertisement
-     *
-     * @return array of advertisements
-     */
-    private function getAds()
-    {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
-
-        // Get news_stand positions
-        $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup(
-            'frontpage',
-            [103, 105]
-        );
-        $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
-
-        return [ $positions, $advertisements ];
     }
 }
