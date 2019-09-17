@@ -16,7 +16,7 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <img class="no-margin thumbnail" ng-src="{$KIOSKO_IMG_URL}[% item.path%][% item.thumb_url %]" style="max-width: 80px"/>
+    <img class="no-margin img-thumbnail" ng-src="[% data.extra.paths.newsstand + '/' + item.path + '/' + item.thumbnail %]">
   </td>
 {/block}
 
@@ -27,13 +27,6 @@
       {t}Date{/t}
     </label>
   </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-price" checklist-model="app.columns.selected" checklist-value="'price'" type="checkbox">
-    <label for="checkbox-price">
-      {t}Price{/t}
-    </label>
-  </div>
-
   {acl isAllowed="KIOSKO_FAVORITE"}
     <div class="checkbox column-filters-checkbox">
       <input id="checkbox-favorite" checklist-model="app.columns.selected" checklist-value="'favorite'" type="checkbox">
@@ -56,9 +49,6 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('date')" width="150">
     {t}Date{/t}
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('price')" width="150">
-    {t}Price{/t}
-  </th>
   {acl isAllowed="KIOSKO_FAVORITE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')" width="150">
       <span class="m-l-5">
@@ -79,9 +69,6 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('date')">
     <i class="fa fa-calendar"></i>
     [% item.date %]
-  </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('price')">
-    [% item.price | number : 2 %] €
   </td>
   {acl isAllowed="KIOSKO_AVAILABLE"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('favorite')">
