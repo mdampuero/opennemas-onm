@@ -34,8 +34,7 @@ class AttachmentService extends ContentOldService
                 throw new FileAlreadyExistsException();
             }
 
-            $data['path'] =
-                $fh->generateRelativePath($file, $data['created'] ?? null);
+            $data['path'] = $fh->getRelativePath($path);
 
             $fh->move($file, $path);
 
@@ -74,8 +73,7 @@ class AttachmentService extends ContentOldService
                     throw new FileAlreadyExistsException();
                 }
 
-                $data['path'] =
-                    $fh->generateRelativePath($file, $data['created'] ?? null);
+                $data['path'] = $fh->getRelativePath($path);
 
                 $fh->remove($item->getRelativePath());
                 $fh->move($file, $path);

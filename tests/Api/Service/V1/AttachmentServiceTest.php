@@ -40,7 +40,7 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AttachmentHelper')
             ->setConstructorArgs([ $this->instance, '/wibble/flob' ])
-            ->setMethods([ 'generatePath', 'generateRelativePath', 'move', 'remove' ])
+            ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
