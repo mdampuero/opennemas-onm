@@ -9,369 +9,80 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for handling the newstand
- *
- * @package Backend_Controllers
- */
-class NewsstandController extends Controller
+class NewsstandController extends ContentOldController
 {
     /**
-     * Returns the data to create a new newsletter.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
+    protected $extension = 'KIOSKO_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $getItemRoute = 'api_v1_backend_newsstand_get_item';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.newsstand';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveItemAction(Request $request)
     {
-        return new JsonResponse();
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
+        $msg       = $this->get('core.messenger');
+        $data      = $request->request->all();
+        $file      = $request->files->get('path');
+        $thumbnail = $request->files->get('thumbnail');
+
+        $item = $this->get($this->service)->createItem($data, $file, $thumbnail);
+
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                [ 'id' => $this->getItemId($item) ]
+            ));
+        }
+
+        return $response;
     }
 
     /**
-     * Displays the kiosko information form
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_UPDATE')")
+     * {@inheritdoc}
      */
-    public function showAction(Request $request)
+    public function updateItemAction(Request $request, $id)
     {
-        $id      = $request->query->getDigits('id', null);
-        $content = $this->get('entity_repository')->find('Kiosko', $id);
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
 
-        if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-            && !$content->isOwner($this->getUser()->id)
-        ) {
-            return new JsonResponse(
-                _("You can't modify this cover because you don't have enough privileges."),
-                400
-            );
-        }
+        $msg       = $this->get('core.messenger');
+        $data      = $request->request->all();
+        $file      = $request->files->get('path');
+        $thumbnail = $request->files->get('thumbnail');
 
-        if (is_null($content->id)) {
-            return new JsonResponse(
-                sprintf(_('Unable to find the article with the id "%d"'), $id),
-                400
-            );
-        }
+        $this->get($this->service)->updateItem($id, $data, $file, $thumbnail);
 
-        $extra = [ 'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR ];
-
-        return new JsonResponse([ 'item' => $content, 'extra' => $extra ]);
-    }
-
-    /**
-     * Handles the creation of new covers
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_CREATE')")
-     */
-    public function saveAction(Request $request)
-    {
-        $msg      = $this->get('core.messenger');
-        $postInfo = $request->request;
-        $dateTime = new \DateTime();
-
-        $data = [
-            'title'          => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
-            'description'    => $postInfo->filter('description', '', FILTER_SANITIZE_STRING),
-            'type'           => (int) $postInfo->getDigits('type', 0),
-            'category'       => (int) $postInfo->getDigits('category', 0),
-            'content_status' => (int) $postInfo->getDigits('content_status', 1),
-            'favorite'       => (int) $postInfo->getDigits('favorite', 1),
-            'date'           => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
-            'price'          => $postInfo->filter('price', 0.0, FILTER_SANITIZE_NUMBER_FLOAT),
-            'fk_publisher'   => (int) $this->getUser()->id,
-            'tags'           => $request->request->get('tags', ''),
-            'name'           => '',
-            'path'           => $dateTime->format('Y/m/d') . '/',
-        ];
-
-        $content = new \Kiosko();
-
-        try {
-            $cover     = $request->files->get('cover');
-            $thumbnail = $request->files->get('thumbnail');
-
-            // Handle new file
-            if ($cover && $thumbnail) {
-                $data['name'] = $dateTime->format('YmdHis') . '.pdf';
-
-                $uploadStatus = $content->saveFiles($data['path'], $data['name'], $cover, $thumbnail);
-
-                if (!$uploadStatus) {
-                    throw new \Exception(
-                        sprintf(
-                            _('Unable to upload the file. Try to upload a file smaller than %d MB'),
-                            (int) ini_get('upload_max_filesize')
-                        )
-                    );
-                }
-            }
-
-            if (!$content->create($data)) {
-                throw new \Exception(_('Unable to create the cover. Try again'));
-            }
-
-            $msg->add(_('Item saved successfully'), 'success', 201);
-
-            $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-            $response->headers->set(
-                'Location',
-                $this->generateUrl(
-                    'api_v1_backend_newsstand_show',
-                    [ 'id' => $content->id ]
-                )
-            );
-
-            return $response;
-        } catch (\Exception $e) {
-            $msg->add($e->getMessage(), 'error');
-        }
+        $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**
-     * Updates the kiosko information provided by POST request
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_UPDATE')")
+     * {@inheritDoc}
      */
-    public function updateAction(Request $request)
+    protected function getExtraData($items = null)
     {
-        $msg = $this->get('core.messenger');
-
-        $id = $request->query->getDigits('id');
-
-        try {
-            $content = new \Kiosko($id);
-
-            if ($content->id == null) {
-                throw new \Exception(_('Cover id not valid.'));
-            }
-
-            if (!$this->get('core.security')->hasPermission('CONTENT_OTHER_UPDATE')
-                && !$content->isOwner($this->getUser()->id)
-            ) {
-                throw new \Exception(_("You can't modify this cover because you don't have enough privileges."));
-            }
-
-            $postReq = $request->request;
-
-            $data = [
-                'id'             => $postReq->getDigits('id', 0),
-                'title'          => $postReq->filter('title', '', FILTER_SANITIZE_STRING),
-                'description'    => $postReq->filter('description', '', FILTER_SANITIZE_STRING),
-                'date'           => $postReq->filter('date', '', FILTER_SANITIZE_STRING),
-                'cover'          => $postReq->filter('cover', '', FILTER_SANITIZE_STRING),
-                'price'          => (float) $postReq
-                    ->filter('price', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-                'content_status' => $postReq->getDigits('content_status', 0),
-                'type'           => $postReq->getDigits('type', 0),
-                'favorite'       => $postReq->getDigits('favorite', 0),
-                'category'       => $postReq->getDigits('category', 0),
-                'name'           => $content->name,
-                'thumb_url'      => $content->thumb_url,
-                'fk_user_last_editor' => $this->getUser()->id,
-                'tags'           => $request->request->get('tags', '')
-            ];
-
-            $cover     = $request->files->get('cover');
-            $thumbnail = $request->files->get('thumbnail');
-
-            // If the user doesnt send a new cover and unsets the old,
-            // then remove the old file
-            if ((!$cover && empty($request->request->get('name')))) {
-                $content->removeFiles();
-
-                $data['name']      = '';
-                $data['thumb_url'] = '';
-            }
-
-            // If the user uploads a new cover and a thumbnail
-            // then save them
-            if ($cover && $thumbnail) {
-                $dateTime = new \DateTime();
-
-                $data['name'] = $dateTime->format('Ymdhis') . '.pdf';
-
-                $uploadStatus = $content->saveFiles($content->path, $data['name'], $cover, $thumbnail);
-
-                if (!$uploadStatus) {
-                    throw new \Exception(
-                        sprintf(
-                            _('Unable to upload the file. Try to upload a file smaller than %d MB'),
-                            (int) ini_get('upload_max_filesize')
-                        )
-                    );
-                }
-            }
-
-            $content->update($data);
-
-            $msg->add(_('Item saved successfully'), 'success');
-        } catch (\Exception $e) {
-            $msg->add($e->getMessage(), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Deletes a video given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')
-     *     and hasPermission('KIOSKO_DELETE')")
-     */
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        $msg = $this->get('core.messenger');
-
-        $content = new \Kiosko($id);
-        if (empty($content->id)) {
-            $msg->add(_('Content not found'), 'error');
-
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        if ($content->delete($id, $this->getUser()->id)) {
-            $msg->add(_('Item sent to trash successfully'), 'success');
-        } else {
-            $msg->add(_('Unable to send to trash the content'), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param Request $request     The request object.
-     * @param string  $contentType Content type name.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasPermission('KIOSKO_ADMIN')")
-     */
-    public function listAction(Request $request)
-    {
-        $oql = $request->query->get('oql', '');
-
-        list($criteria, $order, $epp, $page) =
-            $this->get('core.helper.oql')->getFiltersFromOql($oql);
-
-        $em      = $this->get('entity_repository');
-        $total   = true;
-        $results = $em->findBy($criteria, $order, $epp, $page, 0, $total);
-
-        $results = \Onm\StringUtils::convertToUtf8($results);
-
-        return new JsonResponse([
-            'KIOSKO_IMG_URL' => INSTANCE_MEDIA . KIOSKO_DIR,
-            'items'          => $results,
-            'total'          => $total,
+        return array_merge(parent::getExtraData($items), [
+            'categories' => $this->getCategories($items),
         ]);
-    }
-
-    /**
-     * Updates some properties for an user.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')")
-     */
-    public function patchAction(Request $request, $id)
-    {
-        $msg = $this->get('core.messenger');
-
-        $content = new \Kiosko($id);
-        if (empty($content->id)) {
-            $msg->add(_('Content not valid'), 'error');
-
-            return new JsonResponse($msg->getMessages(), $msg->getCode());
-        }
-
-        if ($content->patch($request->request->all())) {
-            $msg->add(_('Item saved successfully'), 'success');
-        } else {
-            $msg->add(_('Unable to update the content'), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Updates some user group properties.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     *
-     * @Security("hasExtension('KIOSKO_MANAGER')")
-     */
-    public function patchSelectedAction(Request $request)
-    {
-        $params = $request->request->all();
-        $ids    = $params['ids'];
-        $msg    = $this->get('core.messenger');
-
-        unset($params['ids']);
-
-        $updated = 0;
-        foreach ($ids as $id) {
-            $content = new \Kiosko($id);
-            if (empty($content->id)) {
-                $msg->add(_('Content not valid'), 'error');
-
-                return new JsonResponse($msg->getMessages(), $msg->getCode());
-            }
-
-            if ($content->patch($params)) {
-                $updated++;
-            }
-        }
-
-        if ($updated > 0) {
-            $msg->add(
-                sprintf(_('%s items updated successfully'), $updated),
-                'success'
-            );
-        }
-
-        if ($updated !== count($ids)) {
-            $msg->add(sprintf(
-                _('%s items could not be updated successfully'),
-                count($ids) - $updated
-            ), 'error');
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }
