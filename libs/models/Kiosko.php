@@ -180,16 +180,13 @@ class Kiosko extends Content
         try {
             parent::update($data);
 
-            $conn->update(
-                'kioskos',
-                [
-                    'name'      => $data['name'],
-                    'date'      => $data['date'],
-                    'price'     => $data['price'],
-                    'type'      => $data['type']
-                ],
-                [ 'pk_kiosko' => (int) $data['id'] ]
-            );
+            $conn->update('kioskos', [
+                'name'      => $data['name'] ?? null,
+                'date'      => $data['date'],
+                'path'      => $data['path'],
+                'price'     => $data['price'] ?? 0,
+                'type'      => $data['type'] ?? 0
+            ], [ 'pk_kiosko' => (int) $data['id'] ]);
 
             $conn->commit();
 
