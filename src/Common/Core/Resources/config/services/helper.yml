@@ -85,6 +85,11 @@ services:
             - '%mailer_no_reply_address%'
         public: true
 
+    core.helper.newsstand:
+        class:     Common\Core\Component\Helper\NewsstandHelper
+        arguments: [ '@core.instance', '%core.paths.public%' ]
+        public:    true
+
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
