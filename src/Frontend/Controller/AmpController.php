@@ -69,6 +69,11 @@ class AmpController extends Controller
             $article->pk_article
         );
 
+        $suggested = $this->get('core.helper.content')->getSuggested(
+            'article',
+            $query
+        );
+
         if (empty($article)) {
             throw new ResourceNotFoundException();
         }
@@ -129,7 +134,8 @@ class AmpController extends Controller
 
             $this->view->assign([
                 'relationed' => $this->getRelated($article),
-                'suggested'  => $this->get('core.helper.content')->getSuggested('article', $query)
+                'suggested'  => $suggested[0],
+                'images'     => $suggested[1]
             ]);
 
             $patterns = [
