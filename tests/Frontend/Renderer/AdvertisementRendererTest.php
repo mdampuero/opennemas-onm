@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Core\Component\Renderer;
+namespace Tests\Frontend\Renderer;
 
 use PHPUnit\Framework\TestCase;
-use Common\Core\Component\Renderer\AdvertisementRenderer;
+use Frontend\Renderer\AdvertisementRenderer;
 
 /**
  * Defines test cases for AdvertisementRenderer class.
@@ -94,7 +94,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::__construct
+     * @covers \Frontend\Renderer\AdvertisementRenderer::__construct
      */
     public function testConstruct()
     {
@@ -104,7 +104,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getDeviceCSSClasses
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceCSSClasses
      */
     public function testGetDeviceCSSClasses()
     {
@@ -134,7 +134,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getMark
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
      */
     public function testGetMark()
     {
@@ -153,7 +153,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getMark
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
      */
     public function testGetMarkWithCustomDefaultMark()
     {
@@ -168,14 +168,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInline
      */
     public function testRenderInlineWithImage()
     {
         $ad       = new \Advertisement();
         $ad->path = '123';
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderInlineImage', 'getImage' ])
             ->getMock();
@@ -193,7 +193,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInline
      */
     public function testRenderInlineWithEmptyImage()
     {
@@ -203,13 +203,13 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInline
      */
     public function testRenderInlineWithHtml()
     {
         $ad = new \Advertisement();
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'getHtml' ])
             ->getMock();
@@ -222,13 +222,13 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInline
      */
     public function testRenderInlineWithRevive()
     {
         $ad = new \Advertisement();
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderInlineReviveSlot' ])
             ->getMock();
@@ -241,13 +241,13 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInline
      */
     public function testRenderInlineWithDFP()
     {
         $ad = new \Advertisement();
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderInlineDFPSlot' ])
             ->getMock();
@@ -260,14 +260,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInline
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInline
      */
     public function testRenderInlineWithSmart()
     {
         $ad     = new \Advertisement();
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderInlineSmartSlot' ])
             ->getMock();
@@ -280,7 +280,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::render
+     * @covers \Frontend\Renderer\AdvertisementRenderer::render
      */
     public function testRenderWithSafeFrameMode()
     {
@@ -304,7 +304,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::render
+     * @covers \Frontend\Renderer\AdvertisementRenderer::render
      */
     public function testRenderWithInlineMode()
     {
@@ -328,7 +328,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineDFPHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineDFPHeader
      */
     public function testRenderInlineDFPHeaderWithNoAd()
     {
@@ -337,7 +337,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineDFPHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineDFPHeader
      */
     public function testRenderInlineDFPHeaderWithNoAdAfterFilter()
     {
@@ -349,7 +349,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineDFPHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineDFPHeader
      */
     public function testRenderInlineDFPHeader()
     {
@@ -420,7 +420,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineDFPSlot
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineDFPSlot
      */
     public function testRenderInlineDFPSlot()
     {
@@ -447,7 +447,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineImage
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineImage
      */
     public function testRenderInlineImage()
     {
@@ -488,7 +488,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineImage
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineImage
      */
     public function testRenderInlineImageWithFlash()
     {
@@ -535,7 +535,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineImage
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineImage
      */
     public function testRenderInlineImageWithAmp()
     {
@@ -580,7 +580,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineReviveHeader
      */
     public function testRenderInlineReviveHeaderWithNoAd()
     {
@@ -589,7 +589,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineReviveHeader
      */
     public function testRenderInlineReviveHeaderWithNoAdAfterFilter()
     {
@@ -601,7 +601,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineReviveHeader
      */
     public function testRenderInlineReviveHeader()
     {
@@ -639,7 +639,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineReviveSlot
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineReviveSlot
      */
     public function testRenderInlineReviveSlot()
     {
@@ -670,7 +670,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineSmartHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineSmartHeader
      */
     public function testRenderInlineSmartHeader()
     {
@@ -742,7 +742,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineSmartHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineSmartHeader
      */
     public function testRenderInlineSmartHeaderWithEmptyAds()
     {
@@ -750,7 +750,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineSmartHeader
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineSmartHeader
      */
     public function testRenderInlineSmartHeaderWithEmptyAdsFilter()
     {
@@ -764,7 +764,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineSmartSlot
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineSmartSlot
      */
     public function testRenderInlineSmartSlot()
     {
@@ -815,7 +815,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitial()
     {
@@ -865,7 +865,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitialWithEmptySizes()
     {
@@ -882,7 +882,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
@@ -906,7 +906,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrameSlot
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrameSlot
      */
     public function testRenderSafeFrameSlot()
     {
@@ -939,7 +939,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithImage()
     {
@@ -948,7 +948,7 @@ class AdvertisementRendererTest extends TestCase
 
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderSafeFrameImage', 'getImage' ])
             ->getMock();
@@ -966,7 +966,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithEmptyImage()
     {
@@ -977,14 +977,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithFlash()
     {
         $ad     = new \Advertisement();
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderSafeFrameFlash', 'getImage' ])
             ->getMock();
@@ -1003,14 +1003,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithHtml()
     {
         $ad     = new \Advertisement();
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderSafeFrameHtml' ])
             ->getMock();
@@ -1023,14 +1023,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithRevive()
     {
         $ad     = new \Advertisement();
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderSafeFrameRevive' ])
             ->getMock();
@@ -1043,14 +1043,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithDFP()
     {
         $ad     = new \Advertisement();
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderSafeFrameDFP' ])
             ->getMock();
@@ -1063,14 +1063,14 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrame
      */
     public function testRenderSafeFrameWithSmart()
     {
         $ad     = new \Advertisement();
         $params = [];
 
-        $renderer = $this->getMockBuilder('Common\Core\Component\Renderer\AdvertisementRenderer')
+        $renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderSafeFrameSmart' ])
             ->getMock();
@@ -1083,7 +1083,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::RenderSafeFrameRevive
+     * @covers \Frontend\Renderer\AdvertisementRenderer::RenderSafeFrameRevive
      */
     public function testRenderSafeFrameRevive()
     {
@@ -1154,7 +1154,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::RenderSafeFrameDFP
+     * @covers \Frontend\Renderer\AdvertisementRenderer::RenderSafeFrameDFP
      */
     public function testRenderSafeFrameDFP()
     {
@@ -1244,7 +1244,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::RenderSafeFrameSmart
+     * @covers \Frontend\Renderer\AdvertisementRenderer::RenderSafeFrameSmart
      */
     public function testRenderSafeFrameSmart()
     {
@@ -1320,7 +1320,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::RenderSafeFrameFlash
+     * @covers \Frontend\Renderer\AdvertisementRenderer::RenderSafeFrameFlash
      */
     public function testRenderSafeFrameFlash()
     {
@@ -1398,7 +1398,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::RenderSafeFrameHtml
+     * @covers \Frontend\Renderer\AdvertisementRenderer::RenderSafeFrameHtml
      */
     public function testRenderSafeFrameHtml()
     {
@@ -1420,7 +1420,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::RenderSafeFrameImage
+     * @covers \Frontend\Renderer\AdvertisementRenderer::RenderSafeFrameImage
      */
     public function testRenderSafeFrameImage()
     {
@@ -1486,7 +1486,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getHtml
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getHtml
      */
     public function testGetHtml()
     {
@@ -1506,7 +1506,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getImage
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getImage
      */
     public function testGetImage()
     {
@@ -1539,7 +1539,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getDFPCustomCode
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getDFPCustomCode
      */
     public function testGetDFPCustomCode()
     {
@@ -1566,7 +1566,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getDFPTargeting
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getDFPTargeting
      */
     public function testGetDFPTargeting()
     {
@@ -1601,7 +1601,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getSmartCustomCode
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getSmartCustomCode
      */
     public function testGetSmartCustomCode()
     {
@@ -1628,7 +1628,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Renderer\AdvertisementRenderer::getSmartTargeting
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getSmartTargeting
      */
     public function testGetSmartTargeting()
     {

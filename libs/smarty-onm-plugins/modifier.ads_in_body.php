@@ -46,7 +46,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     sort($slots);
 
     $safeFrame = getService('core.helper.advertisement')->isSafeFrameEnabled();
-    $renderer  = getService('core.renderer.advertisement');
+    $renderer  = getService('frontend.renderer.advertisement');
     $html      = '<div class="ad-slot oat" data-type="%s"></div>';
 
     foreach ($slots as $key => $slotId) {

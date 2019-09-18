@@ -44,7 +44,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
 
     if (!$safeFrameEnabled) {
-        $adsRenderer = getService('core.renderer.advertisement');
+        $adsRenderer = getService('frontend.renderer.advertisement');
         $xtags       = $smarty->smarty->tpl_vars['x-tags']->value;
 
         $ads = array_filter($ads, function ($a) {

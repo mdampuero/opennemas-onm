@@ -78,7 +78,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
-            case 'core.renderer.advertisement':
+            case 'frontend.renderer.advertisement':
                 return $this->renderer;
 
             case 'orm.manager':

@@ -60,7 +60,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.advertisement':
                 return $this->helper;
 
-            case 'core.renderer.advertisement':
+            case 'frontend.renderer.advertisement':
                 return $this->renderer;
         }
 

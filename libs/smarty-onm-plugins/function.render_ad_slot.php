@@ -73,7 +73,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
         'content'            => $smarty->getValue('content')
     ];
 
-    $renderer    = $smarty->getContainer()->get('core.renderer.advertisement');
+    $renderer    = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $adOutput    = $renderer->renderInline($ad, $format, $targetingParams);
     $orientation = empty($ad->params['orientation']) ? 'top' : $ad->params['orientation'];
 

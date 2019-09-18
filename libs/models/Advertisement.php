@@ -465,7 +465,7 @@ class Advertisement extends Content
         // any more so I'm telling the renderer that this is a floating banner
         $params['floating'] = true;
 
-        $adsRenderer = getService('core.renderer.advertisement');
+        $adsRenderer = getService('frontend.renderer.advertisement');
 
         return $adsRenderer->render($this, $params);
     }
