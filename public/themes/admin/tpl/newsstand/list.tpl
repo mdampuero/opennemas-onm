@@ -19,25 +19,10 @@
 {block name="primaryActions"}
   {acl isAllowed="KIOSKO_CREATE"}
     <li class="quicklinks">
-      <div class="btn-group">
-        <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_newsstand_create}">
-          <i class="fa fa-plus m-r-5"></i>
-          {t}Create{/t}
-        </a>
-        {acl isAllowed="KIOSKO_ADMIN"}
-          <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu no-padding pull-right">
-            <li>
-              <a href="{url name=backend_newsstands_config}">
-                <i class="fa fa-cog"></i>
-                {t}Settings{/t}
-              </a>
-            </li>
-          </ul>
-        {/acl}
-      </div>
+      <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_newsstand_create}">
+        <i class="fa fa-plus m-r-5"></i>
+        {t}Create{/t}
+      </a>
     </li>
   {/acl}
 {/block}
