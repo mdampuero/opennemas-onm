@@ -57,8 +57,17 @@
       {t}Delete{/t}
     </button>
   {/acl}
-  <a class="btn btn-white btn-small" href="[% data.extra.paths.attachment + item.path %]" target="_blank">
-    <i class="fa fa-download m-r-5"></i>
-    {t}Download{/t}
-  </a>
+  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
+    <button class="btn btn-small btn-white dropdown-toggle p-l-5 p-r-5" data-toggle="dropdown" type="button">
+      <i class="fa fa-ellipsis-h"></i>
+    </button>
+    <ul class="dropdown-menu no-padding">
+      <li>
+        <a href="[% data.extra.paths.attachment + item.path %]" target="_blank">
+          <i class="fa fa-download m-r-5"></i>
+          {t}Download{/t}
+        </a>
+      </li>
+    </ul>
+  </div>
 {/block}
