@@ -49,12 +49,12 @@ class NewsstandHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/kiosko\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/[0-9]{19}.pdf/',
-            $this->helper->generatePath($file)
+            $this->helper->generatePath($file, new \DateTime())
         );
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/kiosko\/2010\/01\/01\/20100101152045[0-9]{5}.pdf/',
-            $this->helper->generatePath($file, '2010-01-01 15:20:45')
+            $this->helper->generatePath($file, new \DateTime('2010-01-01 15:20:45'))
         );
     }
 

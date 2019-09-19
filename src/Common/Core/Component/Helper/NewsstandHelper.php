@@ -16,15 +16,13 @@ class NewsstandHelper extends FileHelper
     /**
      * Returns the path where the file should be moved.
      *
-     * @param File   $file The file to generate path to.
-     * @param string $date The date to generate the path from.
+     * @param File     $file The file to generate path to.
+     * @param DateTime $date The date to generate the path from.
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath(File $file, ?string $date = null) : string
+    public function generatePath(File $file, \DateTime $date) : string
     {
-        $date = new \Datetime($date);
-
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s%s.%s',
             $this->publicDir,
