@@ -28,7 +28,7 @@ class AttachmentService extends ContentOldService
             $item = new $this->class;
 
             $fh   = $this->container->get('core.helper.attachment');
-            $path = $fh->generatePath($file, $data['created'] ?? null);
+            $path = $fh->generatePath($file, new \DateTime($data['created'] ?? null));
 
             if ($fh->exists($path)) {
                 throw new FileAlreadyExistsException();
@@ -67,7 +67,7 @@ class AttachmentService extends ContentOldService
 
             if (!empty($file)) {
                 $fh   = $this->container->get('core.helper.attachment');
-                $path = $fh->generatePath($file, $data['created'] ?? null);
+                $path = $fh->generatePath($file, new \DateTime($data['created'] ?? null));
 
                 if ($fh->exists($path)) {
                     throw new FileAlreadyExistsException();
