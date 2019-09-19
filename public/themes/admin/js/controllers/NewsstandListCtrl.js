@@ -15,7 +15,7 @@
     .controller('NewsstandListCtrl', [
       '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
       function($controller, $scope, $window, oqlEncoder, routing) {
-        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
          * The criteria to search.
