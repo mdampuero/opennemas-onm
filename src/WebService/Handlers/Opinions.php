@@ -66,80 +66,6 @@ class Opinions
     }
 
     /*
-    * @url GET /opinions/editorialinhome/
-    */
-    public function editorialInHome()
-    {
-        $or = getService('opinion_repository');
-
-        $filters = array(
-            'in_home'        => array(array('value' => 1)),
-            'type_opinion'   => array(array('value' => 1)),
-            'content_status' => array(array('value' => 1)),
-        );
-
-        $order = array(
-            'starttime' => 'DESC'
-        );
-        // Fetch last opinions from editorial
-        $editorial = $or->findBy($filters, $order, 2);
-
-        $ur = getService('user_repository');
-        foreach ($editorial as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
-            $opinion->author = $ur->find(1);
-            if (!is_null($opinion->author)) {
-                $opinion->author->uri = 'ext'.\Uri::generate(
-                    'opinion_author_frontpage',
-                    array(
-                        'slug' => 'editorial',
-                        'id' => 1
-                    )
-                );
-            }
-        }
-
-        return $editorial;
-    }
-
-    /*
-    * @url GET /opinions/directorinhome/
-    */
-    public function directorInHome()
-    {
-        $or = getService('opinion_repository');
-
-        $filters = array(
-            'in_home'        => array(array('value' => 1)),
-            'type_opinion'   => array(array('value' => 2)),
-            'content_status' => array(array('value' => 1)),
-        );
-
-        $order = array(
-            'starttime' => 'DESC'
-        );
-        // Fetch last opinions from editorial
-        $director = $or->findBy($filters, $order, 2);
-
-        $ur = getService('user_repository');
-        foreach ($director as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
-            $opinion->author = $ur->find(2);
-            if (!is_null($opinion->author)) {
-                $opinion->author->uri = 'ext'.\Uri::generate(
-                    'opinion_author_frontpage',
-                    array(
-                        'slug' => 'director',
-                        'id' => 2
-                    )
-                );
-            }
-        }
-
-        return $director;
-    }
-
-    /*
     * @url GET /opinions/authorsinhome/
     */
     public function authorsInHome()
@@ -148,7 +74,6 @@ class Opinions
 
         $filters = array(
             'in_home'        => array(array('value' => 1)),
-            'type_opinion'   => array(array('value' => 0)),
             'content_status' => array(array('value' => 1)),
         );
 
@@ -175,7 +100,6 @@ class Opinions
 
         $filters = array(
             'in_home'        => array(array('value' => 0)),
-            'type_opinion'   => array(array('value' => 0)),
             'content_status' => array(array('value' => 1)),
         );
 
@@ -204,7 +128,6 @@ class Opinions
 
         $filters = array(
             'in_home'        => array(array('value' => 0)),
-            'type_opinion'   => array(array('value' => 0)),
             'content_status' => array(array('value' => 1)),
         );
 
@@ -234,50 +157,8 @@ class Opinions
 
         // Get the list articles for this author
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.type_opinion=0 AND opinions.fk_author='.$id.
+            'opinions.fk_author='.$id.
             ' AND contents.content_status=1',
-            'ORDER BY created DESC '.$limit
-        );
-
-        return $opinions;
-    }
-
-    /*
-    * @url GET /opinions/allopinionseditorial/:page
-    */
-    public function allOpinionsEditorial($page = null)
-    {
-        $this->validateInt($page);
-
-        $cm = new \ContentManager();
-
-        $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
-
-        // Get the list articles for this author
-        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.type_opinion=1'
-            .' AND contents.content_status=1',
-            'ORDER BY created DESC '.$limit
-        );
-
-        return $opinions;
-    }
-
-    /*
-    * @url GET /opinions/allopinionsdirector/:page
-    */
-    public function allOpinionsDirector($page = null)
-    {
-        $this->validateInt($page);
-
-        $cm = new \ContentManager();
-
-        $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
-
-        // Get the list articles for this author
-        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.type_opinion=2'
-            .' AND contents.content_status=1',
             'ORDER BY created DESC '.$limit
         );
 
@@ -293,7 +174,6 @@ class Opinions
 
         $filters = array(
             'in_home'        => array(array('value' => 0)),
-            'type_opinion'   => array(array('value' => 0)),
             'content_status' => array(array('value' => 1)),
         );
 
@@ -321,39 +201,6 @@ class Opinions
     }
 
     /*
-    * @url GET /opinions/countauthorsnotinhome/
-    */
-    public function countEditorialOpinions()
-    {
-        $or = getService('opinion_repository');
-
-        $filters = array(
-            'type_opinion'   => array(array('value' => 1)),
-            'content_status' => array(array('value' => 1)),
-        );
-
-        $numOpinions = $or->countBy($filters);
-
-        return $numOpinions;
-    }
-
-    /*
-    * @url GET /opinions/countauthorsnotinhome/
-    */
-    public function countDirectorOpinions()
-    {
-        $or = getService('opinion_repository');
-
-        $filters = array(
-            'type_opinion'   => array(array('value' => 2)),
-            'content_status' => array(array('value' => 1)),
-        );
-
-        $numOpinions = $or->countBy($filters);
-        return $numOpinions;
-    }
-
-    /*
     * @url GET /opinions/others/:id
     */
     public function others($id = null)
@@ -364,16 +211,10 @@ class Opinions
         $opinion = $or->find('Opinion', $id);
 
         $filters = array();
-        if ($opinion->type_opinion == 1) {
-            $filters['type_opinion'] = array(array('value' => 1));
-        } elseif ($opinion->type_opinion == 2) {
-            $filters['type_opinion'] = array(array('value' => 2));
-        } else {
-            $filters['type_opinion'] = array(array('value' => 0));
-            $filters['opinions`.`fk_author'] = array(
-                array('value' => $opinion->fk_author)
-            );
-        }
+        $filters['opinions`.`fk_author'] = array(
+            array('value' => $opinion->fk_author)
+        );
+
 
         $filters['pk_opinion']     = array(array('value' => $id, 'operator' => '<>'));
         $filters['content_status'] = array(array('value' => 1));

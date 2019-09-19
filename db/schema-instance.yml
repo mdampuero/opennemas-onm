@@ -1081,21 +1081,12 @@ opinions:
         fk_author_img:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
-        type_opinion:
-            type: string
-            options: { length: 150, default: null, notnull: false }
     index:
         -
             name: PRIMARY
             columns: [pk_opinion]
             primary: true
             unique: true
-            flags: {  }
-        -
-            name: type_opinion
-            columns: [type_opinion]
-            primary: false
-            unique: false
             flags: {  }
         -
             name: fk_author
