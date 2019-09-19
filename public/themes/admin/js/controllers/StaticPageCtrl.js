@@ -30,22 +30,21 @@
          */
         $scope.item = {
           body: '',
-          content_type_name: 'static_page',
-          fk_content_type: 13,
+          categories: [],
           content_status: 0,
-          description: '',
-          favorite: 0,
-          frontpage: 0,
+          content_type_name: 'static_page',
           created: new Date(),
-          starttime: null,
+          description: '',
           endtime: null,
-          thumbnail: null,
+          favorite: 0,
+          fk_content_type: 13,
+          frontpage: 0,
+          related_contents: [],
+          starttime: null,
+          tags: [],
           title: '',
           type: 0,
           with_comments: 0,
-          categories: [],
-          related_contents: [],
-          tags: [],
         };
 
         /**
