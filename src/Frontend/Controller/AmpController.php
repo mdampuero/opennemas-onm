@@ -62,16 +62,10 @@ class AmpController extends Controller
         $article = $this->get('content_url_matcher')
             ->matchContentUrl('article', $dirtyID, $urlSlug, $categoryName);
 
-        $query =
-        sprintf(
-            'category_name = "%s" AND pk_article <> "%s"',
+        $suggested = $this->getSuggested(
+            'article',
             $categoryName,
             $article->pk_article
-        );
-
-        $suggested = $this->get('core.helper.content')->getSuggested(
-            'article',
-            $query
         );
 
         if (empty($article)) {
@@ -135,7 +129,7 @@ class AmpController extends Controller
             $this->view->assign([
                 'relationed' => $this->getRelated($article),
                 'suggested'  => $suggested[0],
-                'images'     => $suggested[1]
+                'photos'     => $suggested[1]
             ]);
 
             $patterns = [
