@@ -88,7 +88,7 @@
               }
 
               // TODO: Remove when not subscribers stored in settings in production
-              delete data.item.recipients[i].subscribers;
+              delete $scope.data.item.recipients[i].subscribers;
             }
           }
 
