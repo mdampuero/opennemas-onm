@@ -27,17 +27,19 @@
          * @type {Object}
          */
         $scope.item = {
-          category: null,
+          categories: [ null ],
           content_status: 0,
-          cover: null,
+          content_type_name: 'kiosko',
+          created: new Date(),
           date: '',
+          endtime: null,
           favorite: 0,
-          file: '',
-          price: 0,
+          fk_content_type: 14,
+          path: null,
+          starttime: null,
           tags: [],
           thumbnail: null,
           title: '',
-          type: 0,
         };
 
         /**
@@ -182,6 +184,18 @@
               category_name: item.category_name
             })
           );
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.validate = function() {
+          if (!$('[name=form]')[0].checkValidity() || !$scope.item.path) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          return true;
         };
 
         // Generates thumbnail when file changes
