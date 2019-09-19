@@ -88,12 +88,12 @@
 
 {block name="itemActions"}
   {acl isAllowed="KIOSKO_UPDATE"}
-    <a class="btn btn-small" href="[% routing.generate('backend_newsstand_show', { id: item.id }) %]">
+    <a class="btn btn-small" href="[% routing.generate('backend_newsstand_show', { id: getItemId(item) }) %]">
       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
     </a>
   {/acl}
   {acl isAllowed="KIOSKO_DELETE"}
-    <button class="btn btn-danger btn-small" ng-click="delete(item.pk_kiosko)" type="button">
+    <button class="btn btn-danger btn-small" ng-click="delete(getItemId(item))" type="button">
       <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
     </button>
   {/acl}
