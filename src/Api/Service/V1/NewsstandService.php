@@ -13,7 +13,7 @@ use Api\Exception\CreateItemException;
 use Api\Exception\FileAlreadyExistsException;
 use Api\Exception\UpdateItemException;
 
-class NewsstandService extends ContentOldService
+class NewsstandService extends ContentService
 {
     /**
      * {@inheritdoc}
@@ -25,24 +25,29 @@ class NewsstandService extends ContentOldService
         }
 
         try {
-            $item = new $this->class;
+            $data = $this->em->getConverter($this->entity)
+                ->objectify(array_merge($this->defaults, $data));
+
+            $item = new $this->class($data);
 
             $nh            = $this->container->get('core.helper.newsstand');
-            $filePath      = $nh->generatePath($file, $data['created'] ?? null);
+            $filePath      = $nh->generatePath($file, $item->created);
             $thumbnailPath = str_replace('pdf', 'jpg', $filePath);
 
             if ($nh->exists($filePath) || $nh->exists($thumbnailPath)) {
                 throw new FileAlreadyExistsException();
             }
 
-            $data['path'] = $nh->getRelativePath($filePath);
+            $item->path      = $nh->getRelativePath($filePath);
+            $item->thumbnail = str_replace('pdf', 'jpg', $item->path);
 
             $nh->move($file, $filePath);
             $nh->move($thumbnail, $thumbnailPath);
 
-            if (!$id = $item->create($data)) {
-                throw new \Exception();
-            }
+            $this->validate($item);
+            $this->em->persist($item, $this->getOrigin());
+
+            $id = $this->em->getMetadata($item)->getId($item);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
                 'id'   => $id,
@@ -65,11 +70,15 @@ class NewsstandService extends ContentOldService
         }
 
         try {
+            $data = $this->em->getConverter($this->entity)
+                ->objectify(array_merge($this->defaults, $data));
+
             $item = $this->getItem($id);
+            $item->setData($data);
 
             if (!empty($file)) {
                 $nh            = $this->container->get('core.helper.newsstand');
-                $filePath      = $nh->generatePath($file, $data['created'] ?? null);
+                $filePath      = $nh->generatePath($file, $item->created);
                 $thumbnailPath = str_replace('pdf', 'jpg', $filePath);
 
                 if ($nh->exists($filePath) || $nh->exists($thumbnailPath)) {
@@ -84,9 +93,8 @@ class NewsstandService extends ContentOldService
                 $nh->move($thumbnail, $thumbnailPath);
             }
 
-            if (!$item->update($data)) {
-                throw new \Exception();
-            }
+            $this->validate($item);
+            $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
                 'id'   => $id,

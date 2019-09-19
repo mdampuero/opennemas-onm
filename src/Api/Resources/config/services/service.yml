@@ -56,7 +56,7 @@ services:
 
     api.service.newsstand:
         class:     Api\Service\V1\NewsstandService
-        arguments: [ '@service_container', '\Kiosko' ]
+        arguments: [ '@service_container', 'Common\ORM\Entity\Content' ]
         public:    true
 
     api.service.opinion:

@@ -11,6 +11,7 @@ namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\NewsstandService;
 use Common\Core\Component\Helper\NewsstandHelper;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Instance;
 
 /**
@@ -29,13 +30,17 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->converter = $this->getMockBuilder('Converter' . uniqid())
+            ->setMethods([ 'objectify', 'responsify' ])
+            ->getMock();
+
         $this->dispatcher = $this->getMockBuilder('Common\Core\Component\EventDispatcher\EventDispatcher')
             ->disableOriginalConstructor()
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('EntityRepository')
-            ->setMethods([ 'find' ])
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'find', 'getConverter', 'getMetadata' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -50,8 +55,11 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
+        $this->em->expects($this->any())->method('getConverter')
+            ->with('Content')->willReturn($this->converter);
+
         $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
-            ->setConstructorArgs([ $this->container, '\Kiosko' ])
+            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])
             ->setMethods([ 'getItem' ])
             ->getMock();
     }
@@ -66,13 +74,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'dbal_connection':
-                return $this->conn;
-
             case 'core.dispatcher':
                 return $this->dispatcher;
 
-            case 'entity_repository':
+            case 'orm.manager':
                 return $this->em;
 
             case 'core.helper.newsstand':
@@ -90,9 +95,14 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateItemWhenErrorWithFile()
     {
+        $data = [ 'created' => new \DateTime(), 'title' => 'waldo' ];
+
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->converter->expects($this->once())->method('objectify')
+            ->willReturn($data);
 
         $this->nh->expects($this->once())->method('move')
             ->will($this->throwException(new \Exception()));
@@ -107,9 +117,14 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateItemWhenFileExists()
     {
+        $data = [ 'created' => new \DateTime(), 'title' => 'waldo' ];
+
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->converter->expects($this->once())->method('objectify')
+            ->willReturn($data);
 
         $this->nh->expects($this->once())->method('exists')
             ->willReturn(true);
@@ -134,15 +149,20 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItemWhenErrorWithFile()
     {
-        $item = new \Kiosko();
+        $data = [ 'created' => new \DateTime(), 'title' => 'waldo' ];
 
-        $item->created = '2010-01-01 00:00:00';
-        $item->path    = '/2010/01/01/plugh.mumble';
+        $item = new Content([
+            'created' => '2010-01-01 00:00:00',
+            'path'    => '/2010/01/01/plugh.mumble'
+        ]);
 
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
+
+        $this->converter->expects($this->once())->method('objectify')
+            ->willReturn($data);
 
         $this->service->expects($this->once())->method('getItem')
             ->willReturn($item);
