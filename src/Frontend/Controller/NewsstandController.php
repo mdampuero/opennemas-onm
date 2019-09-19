@@ -41,8 +41,8 @@ class NewsstandController extends FrontendController
      * {@inheritdoc}
      */
     protected $positions = [
-        'album_frontpage' => [ 103, 105 ],
-        'album_inner'     => [ 103, 105 ],
+        'newsstand_frontpage' => [ 103, 105 ],
+        'newsstand_inner'     => [ 103, 105 ],
     ];
 
     /**
@@ -67,7 +67,7 @@ class NewsstandController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.newsstand';
+    protected $service = 'api.service.content';
 
     /**
      * The list of templates per action.
@@ -80,6 +80,17 @@ class NewsstandController extends FrontendController
         'showamp' => 'amp/content.tpl',
     ];
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRoute($action, $params = [])
+    {
+        if ($action == 'list' && array_key_exists('year', $params)) {
+            return 'frontend_newsstand_frontpage_date';
+        }
+
+        return parent::getRoute($action, $params);
+    }
 
     /**
      * {@inheritdoc}
@@ -87,24 +98,42 @@ class NewsstandController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $page = $params['page'] ?? 1;
-        $date = date('Y-m-d H:i:s');
-
-        $epp = (int) $this->get('orm.manager')
+        $now  = date('Y-m-d H:i:s');
+        $epp  = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $epp = 1;
-
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $oql = sprintf(
             'content_type_name="kiosko" and content_status=1 and in_litter=0 '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
-            $date,
-            $date,
+            $now,
+            $now,
             $epp,
             $epp * ($page - 1)
-        ));
+        );
+
+        if (array_key_exists('year', $params)) {
+            $start = sprintf('%02d-%02d-01', $params['year'], $params['month']);
+            $end   = date("Y-m-d", strtotime("+1 month", strtotime($start)));
+
+            $oql = sprintf(
+                'content_type_name="kiosko" and content_status=1 and in_litter=0 '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'and date >= "%s" and date < "%s" '
+                . 'order by starttime desc limit %d offset %d',
+                $now,
+                $now,
+                $start,
+                $end,
+                $epp,
+                $epp * ($page - 1)
+            );
+        }
+
+        $response = $this->get($this->service)->getList($oql);
 
         $params = array_merge($params, [
             'items'      => $response['items'],
@@ -116,12 +145,16 @@ class NewsstandController extends FrontendController
                 'page'        => $page,
                 'total'       => $response['total'],
                 'route'       => [
-                    'name'   => empty($category)
+                    'name'   => empty($params['year'])
                         ? 'frontend_newsstand_frontpage'
-                        : 'frontend_newsstand_frontpage_category',
-                    'params' => empty($category)
+                        : 'frontend_newsstand_frontpage_date',
+                    'params' => empty($params['year'])
                         ? []
-                        : [ 'category_name' => $category->name ],
+                        : [
+                            'day' => $params['day'],
+                            'month' => $params['month'],
+                            'year' => $params['year']
+                        ],
                 ]
             ])
         ]);
