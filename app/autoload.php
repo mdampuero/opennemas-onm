@@ -54,8 +54,6 @@ define('SITE_URL', $protocol . SITE . BASE_URL);
 
 define('IMG_DIR', 'images');
 define('FILE_DIR', 'files');
-define('KIOSKO_DIR', 'kiosko' . DS);
-
 define('ITEMS_PAGE', '20'); // TODO: delete from application
 
 define('STATIC_PAGE_PATH', 'estaticas');
