@@ -160,7 +160,7 @@
     </button>
   {/acl}
   <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
-    <button class="btn btn-small btn-white dropdown-toggle p-l-5 p-r-5" data-toggle="dropdown" type="button">
+    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
       <i class="fa fa-ellipsis-h"></i>
     </button>
     <ul class="dropdown-menu no-padding">
