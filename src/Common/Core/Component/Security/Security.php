@@ -95,29 +95,6 @@ class Security
     }
 
     /**
-     * Checks if the category is allowed.
-     *
-     * @param string $category The category to check.
-     *
-     * @return boolean True if the category is allowed. False otherwise.
-     */
-    public function hasCategory($category)
-    {
-        if (empty($category)) {
-            return true;
-        }
-
-        if ($this->hasPermission('MASTER') || $this->hasPermission('ADMIN')) {
-            return true;
-        }
-
-        if (empty($this->categories)) {
-            return true;
-        }
-
-        return in_array($category, $this->categories);
-    }
-    /**
      * Checks if the extension is enabled.
      *
      * @param string $uuid The extension to check.

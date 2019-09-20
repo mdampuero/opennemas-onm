@@ -17,47 +17,7 @@ class UserRepository extends BaseRepository
     protected function refresh($ids)
     {
         $entities   = parent::refresh($ids);
-        $categories = $this->getCategories($ids);
-
-        foreach ($entities as $key => &$value) {
-            $value->categories = [];
-
-            if (array_key_exists($key, $categories)) {
-                $value->categories = $categories[$key];
-            }
-
-            $value->refresh();
-        }
 
         return $entities;
-    }
-
-    /**
-     * Returns an array of categories grouped by entity id.
-     *
-     * @param array $ids The entity ids.
-     *
-     * @return array The array of categories.
-     */
-    protected function getCategories($ids)
-    {
-        $filters = [];
-
-        foreach ($ids as $id) {
-            $filters[] = 'pk_fk_user=' . $id['id'];
-        }
-
-        $sql = 'select * from users_content_categories where '
-            . implode(' or ', $filters);
-
-        $rs = $this->conn->fetchAll($sql);
-
-        $categories = [];
-        foreach ($rs as $value) {
-            $categories[$value['pk_fk_user']][] =
-                (int) $value['pk_fk_content_category'];
-        }
-
-        return $categories;
     }
 }

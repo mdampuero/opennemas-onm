@@ -82,7 +82,6 @@ class UserController extends ApiController
         );
 
         return [
-            'categories'  => $this->getCategories(),
             'client'      => $this->getClient(),
             'countries'   => $this->get('core.geo')->getCountries(),
             'languages'   => $languages,
@@ -90,17 +89,6 @@ class UserController extends ApiController
             'taxes'       => $this->get('vat')->getTaxes(),
             'user_groups' => $this->getUserGroups()
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getCategories($items = null)
-    {
-        return $this->get('api.service.category')->responsify(
-            $this->get('api.service.category')
-                ->getList()['items']
-        );
     }
 
     /**
