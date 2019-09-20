@@ -93,6 +93,23 @@ class TemplateCacheHelper
     }
 
     /**
+     * Deletes cache files for a list of newsstands.
+     *
+     * @param array $categories The list of categories to delete cache for.
+     */
+    public function deleteNewsstands(array $newsstands) : void
+    {
+        $this->cache->delete('newsstand', 'list');
+
+        foreach ($newsstands as $newsstand) {
+            $this->cache->delete(
+                'content',
+                $newsstand->pk_content
+            );
+        }
+    }
+
+    /**
      * Deletes cache files for a list of users.
      *
      * @param array $users The list of users to delete cache for.
