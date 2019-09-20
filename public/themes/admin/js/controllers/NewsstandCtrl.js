@@ -63,6 +63,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true);
+
           if ($scope.item.thumbnail) {
             $scope.preview = $scope.data.extra.paths.newsstand + '/' +
               $scope.item.thumbnail;
