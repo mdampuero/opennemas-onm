@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\VarnishHelper;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Instance;
 
 /**
@@ -53,6 +54,33 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
             ->with('req.url ~ /norf/flob.garply');
 
         $this->helper->deleteFiles([ $itemA, $itemB ]);
+    }
+
+    /**
+     * Tests deleteNewsstands.
+     */
+    public function testDeletNewsstands()
+    {
+        $itemA = new Content([
+            'pk_content' => 10605,
+            'path'       => 'plugh/norf.wubble'
+        ]);
+
+        $itemB = new Content([
+            'pk_content' => 10883,
+            'path'       => 'norf/flob.garply'
+        ]);
+
+        $this->varnish->expects($this->at(0))->method('addBanMessage')
+            ->with('obj.http.x-tags ~ 10605');
+        $this->varnish->expects($this->at(1))->method('addBanMessage')
+            ->with('req.url ~ plugh/norf.wubble');
+        $this->varnish->expects($this->at(2))->method('addBanMessage')
+            ->with('obj.http.x-tags ~ 10883');
+        $this->varnish->expects($this->at(3))->method('addBanMessage')
+            ->with('req.url ~ norf/flob.garply');
+
+        $this->helper->deleteNewsstands([ $itemA, $itemB ]);
     }
 
     /**

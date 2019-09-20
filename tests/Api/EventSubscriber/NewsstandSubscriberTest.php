@@ -34,7 +34,7 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteFiles' ])
+            ->setMethods([ 'deleteNewsstands' ])
             ->getMock();
 
         $this->subscriber = new NewsstandSubscriber($this->th, $this->vh);
@@ -92,7 +92,7 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
 
 
         $this->th->expects($this->once())->method('deleteNewsstands')->with([ $item ]);
-        $this->vh->expects($this->once())->method('deleteFiles')->with([ $item ]);
+        $this->vh->expects($this->once())->method('deleteNewsstands')->with([ $item ]);
 
         $this->subscriber->onNewsstandUpdate($this->event);
     }

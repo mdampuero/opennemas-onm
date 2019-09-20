@@ -79,6 +79,6 @@ class NewsstandSubscriber implements EventSubscriberInterface
         });
 
         $this->th->deleteNewsstands($items);
-        $this->vh->deleteFiles($items);
+        $this->vh->deleteNewsstands($items);
     }
 }
