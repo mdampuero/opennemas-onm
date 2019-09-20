@@ -860,40 +860,6 @@ frontpage_versions:
             target_table: frontpages
             target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-kioskos:
-    columns:
-        pk_kiosko:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        name:
-            type: string
-            options: { length: 100, notnull: true }
-        path:
-            type: string
-            options: { lenght: 200, notnull: true }
-        date:
-            type: date
-            options: { default: null, notnull: true }
-        type:
-            type: boolean
-            options: { default: 0, comment: '0 item - 1 subscription' }
-        price:
-            type: decimal
-            options: { scale: 2, default: 0 }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_kiosko]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: kioskos_id_contents_id
-            source_field: [ pk_kiosko ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 letters:
     columns:
         pk_letter:
