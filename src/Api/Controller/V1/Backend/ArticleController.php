@@ -137,7 +137,6 @@ class ArticleController extends Controller
     {
         $extra = [ 'tags' => [] ];
 
-        $security   = $this->get('core.security');
         $categories = $this->get('api.service.category')->getList()['items'];
 
         $extra['categories'] = $this->get('api.service.category')
