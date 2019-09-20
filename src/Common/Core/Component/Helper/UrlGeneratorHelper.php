@@ -227,8 +227,12 @@ class UrlGeneratorHelper
         }
 
         try {
+            $categoryId = !empty($content->categories)
+                ? $content->categories[0]
+                : $content->pk_fk_content_category;
+
             $category = $this->container->get('api.service.category')
-                ->getItem($content->pk_fk_content_category);
+                ->getItem($categoryId);
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
