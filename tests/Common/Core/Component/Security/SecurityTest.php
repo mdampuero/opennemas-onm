@@ -64,30 +64,6 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests hasCategory for normal, admin and master users.
-     */
-    public function testHasCategory()
-    {
-        $this->assertTrue($this->security->hasCategory(null));
-
-        $this->security->setPermissions([ 'MASTER' ]);
-        $this->assertTrue($this->security->hasCategory('wobble'));
-
-        $this->security->setPermissions([ 'ADMIN' ]);
-        $this->assertTrue($this->security->hasCategory('wobble'));
-
-        $this->security->setPermissions([]);
-        $this->assertTrue($this->security->hasCategory('frog'));
-        $this->assertFalse($this->security->hasCategory('wobble'));
-
-        $security = new Security();
-        $security->setUser($this->user);
-        $security->setInstance($this->instance);
-
-        $this->assertTrue($security->hasCategory('fubar'));
-    }
-
-    /**
      * Tests hasExtension for normal, admin and master users.
      */
     public function testHasExtension()

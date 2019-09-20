@@ -71,10 +71,6 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
             [ 'id' => 1, 'name' => 'glork' ],
             [ 'id' => 2, 'name' => 'thud' ]
         ]);
-        $this->conn->expects($this->at(1))->method('fetchAll')->willReturn([
-            [ 'pk_fk_user' => 1, 'pk_fk_content_category' => '1' ],
-            [ 'pk_fk_user' => 2, 'pk_fk_content_category' => '2' ]
-        ]);
 
         $method = new \ReflectionMethod($this->repository, 'refresh');
         $method->setAccessible(true);
@@ -82,12 +78,12 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
         $users = $method->invokeArgs($this->repository, [ [ [ 'id' => 1 ] , [ 'id' => 2 ] ] ]);
 
         $this->assertEquals(
-            [ 'id' => 1, 'name' => 'glork', 'categories' => [ 1 ] ],
+            [ 'id' => 1, 'name' => 'glork' ],
             $users[1]->getData()
         );
 
         $this->assertEquals(
-            [ 'id' => 2, 'name' => 'thud', 'categories' => [ 2 ] ],
+            [ 'id' => 2, 'name' => 'thud' ],
             $users[2]->getData()
         );
     }
