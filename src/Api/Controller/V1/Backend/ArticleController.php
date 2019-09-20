@@ -135,8 +135,7 @@ class ArticleController extends Controller
      */
     protected function getExtraData($all = true)
     {
-        $extra = [ 'tags' => [] ];
-
+        $extra      = [ 'tags' => [] ];
         $categories = $this->get('api.service.category')->getList()['items'];
 
         $extra['categories'] = $this->get('api.service.category')
