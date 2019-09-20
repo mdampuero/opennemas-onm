@@ -23,7 +23,7 @@ class NewsstandSubscriber implements EventSubscriberInterface
     {
         return [
             'content.deleteItem' => [ [ 'onNewsstandDelete', 5 ] ],
-            'content.patchItem'  => [ [ 'onNewsstandPacth',  5 ] ],
+            'content.patchItem'  => [ [ 'onNewsstandPatch',  5 ] ],
             'content.updateItem' => [ [ 'onNewsstandUpdate', 5 ] ]
         ];
     }
