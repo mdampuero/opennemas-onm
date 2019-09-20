@@ -95,7 +95,7 @@ class TemplateCacheHelper
     /**
      * Deletes cache files for a list of newsstands.
      *
-     * @param array $categories The list of categories to delete cache for.
+     * @param array $newsstands The list of newsstands to delete cache for.
      */
     public function deleteNewsstands(array $newsstands) : void
     {
