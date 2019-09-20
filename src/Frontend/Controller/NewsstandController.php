@@ -9,6 +9,8 @@
  */
 namespace Frontend\Controller;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
 /**
  * Displays a newsstand or a list of newsstands.
  */
@@ -97,8 +99,16 @@ class NewsstandController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $page = $params['page'] ?? 1;
         $now  = date('Y-m-d H:i:s');
+        $page = array_key_exists('page', $params)
+            ? (int) $params['page']
+            : 1;
+
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
         $epp  = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
@@ -134,6 +144,11 @@ class NewsstandController extends FrontendController
         }
 
         $response = $this->get($this->service)->getList($oql);
+
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
+            throw new ResourceNotFoundException();
+        }
 
         $params = array_merge($params, [
             'items'      => $response['items'],
