@@ -11,9 +11,10 @@ orm:
                 posmenu:             integer
                 internal_category:   integer
                 fk_content_category: integer
-                params:              array
                 logo_path:           string
                 color:               string
+                enabled:             integer
+                archived:            integer
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
