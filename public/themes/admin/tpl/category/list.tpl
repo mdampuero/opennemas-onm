@@ -79,6 +79,14 @@
             </li>
             {acl isAllowed="CATEGORY_AVAILABLE"}
               <li class="quicklinks">
+                <button class="btn btn-link" ng-click="patchSelected('archived', 1)" uib-tooltip="{t}Archive contents{/t}" tooltip-placement="bottom">
+                  <i class="fa fa-archive fa-lg"></i>
+                </button>
+              </li>
+              <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
+                <span class="h-seperate"></span>
+              </li>
+              <li class="quicklinks">
                 <button class="btn btn-link" ng-click="patchSelected('inmenu', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
@@ -167,6 +175,7 @@
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-paint-brush"></i></th>
                   <th class="hidden-xs" width="100">{t}Contents{/t}</th>
                   <th class="hidden-xs text-center" width="50">{t}RSS{/t}</th>
+                  <th class="text-center" width="50">{t}Archive{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -234,6 +243,11 @@
                   <td class="hidden-xs text-center v-align-middle">
                     <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-feed text-success' : !item.enabledLoading && item.enabled == '1', 'fa-feed text-error': !item.enabledLoading && item.enabled == '0' }"></i>
+                    </button>
+                  </td>
+                  <td class="text-center v-align-middle">
+                    <button class="btn btn-white" ng-click="patch(item, 'archived', item.archived != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.archivedLoading, 'fa-archive text-success' : !item.archivedLoading && item.archived == '1', 'fa-archive text-error': !item.archivedLoading && item.archived == '0' }"></i>
                     </button>
                   </td>
                   <td class="text-center v-align-middle">
