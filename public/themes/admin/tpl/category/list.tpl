@@ -232,8 +232,8 @@
                     </span>
                   </td>
                   <td class="hidden-xs text-center v-align-middle">
-                    <button class="btn btn-white" ng-click="patchRss(item, item.params.inrss != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.inrssLoading, 'fa-feed text-success' : !item.inrssLoading && item.params.inrss == '1', 'fa-feed text-error': !item.inrssLoading && (!item.params || !item.params.inrss || item.params.inrss == '0') }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-feed text-success' : !item.enabledLoading && item.enabled == '1', 'fa-feed text-error': !item.enabledLoading && item.enabled == '0' }"></i>
                     </button>
                   </td>
                   <td class="text-center v-align-middle">
