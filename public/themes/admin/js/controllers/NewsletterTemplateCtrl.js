@@ -80,11 +80,11 @@
          */
         $scope.buildScope = function() {
           if ($scope.item.recipients) {
-            // Force integer values in id property
+            // Force integer values in users property
             for (var i = 0; i < $scope.item.recipients.length; i++) {
               if ($scope.item.recipients[i].id) {
-                $scope.item.recipients[i].id =
-                  $scope.item.recipients[i].id.toString();
+                $scope.item.recipients[i].users =
+                  parseInt($scope.item.recipients[i].users);
               }
 
               // TODO: Remove when not subscribers stored in settings in production
