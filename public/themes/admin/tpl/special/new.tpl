@@ -98,7 +98,7 @@
               <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
-                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="special.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
+                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" hide-archived="true" locale="config.locale.selected" ng-model="special.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                 </div>
               </div>
               <div class="form-group">
