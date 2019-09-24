@@ -25,18 +25,15 @@ class ContentHelper
      * @param Connection     $databaseConnection The database connection.
      * @param EntityManager  $entityManager      The entity manager.
      * @param CacheInterface $cacheHandler       The cache service.
-     * @param string         $cachePrefix        The cache prefix.
      */
     public function __construct(
         $databaseConnection,
         EntityManager $entityManager,
-        CacheInterface $cacheHandler,
-        $cachePrefix
+        CacheInterface $cacheHandler
     ) {
-        $this->cache       = $cacheHandler;
-        $this->dbConn      = $databaseConnection;
-        $this->cachePrefix = $cachePrefix;
-        $this->er          = $entityManager;
+        $this->cache  = $cacheHandler;
+        $this->dbConn = $databaseConnection;
+        $this->er     = $entityManager;
     }
 
     /**
