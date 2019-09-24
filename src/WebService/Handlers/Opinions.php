@@ -41,9 +41,6 @@ class Opinions
         // Get author name slug
         $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
-        // Get machine related contents
-        $opinion->machineRelated = $this->machineRelated($opinion->id);
-
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);
 
