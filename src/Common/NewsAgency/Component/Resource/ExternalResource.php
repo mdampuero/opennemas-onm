@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Resource;
+namespace Common\NewsAgency\Component\Resource;
 
 /**
  * Represents a content ready to be imported.
  */
-class Resource
+class ExternalResource
 {
     /**
      * The agency name.
