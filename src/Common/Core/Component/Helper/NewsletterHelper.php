@@ -146,14 +146,11 @@ class NewsletterHelper
             })
         );
 
-        $stats = $this->service->getStats($subscriptions);
-
-        return array_map(function ($a) use ($stats) {
+        return array_map(function ($a) {
             return [
                 'id'    => (string) $a->pk_user_group,
                 'name'  => $a->name,
                 'type'  => 'list',
-                'users' => $stats[$a->pk_user_group] ?? 0
             ];
         }, $subscriptions);
     }
