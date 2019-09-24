@@ -668,7 +668,7 @@ class FrontendController extends Controller
     protected function getSuggested($content_type_name, $category = null, $content)
     {
         $query = sprintf(
-            'content_type_name = "%s" AND category_name = "%s" AND pk_content <> "%s"',
+            'content_type_name = "%s" AND pk_fk_content_category = "%s" AND pk_content <> "%s"',
             $content_type_name,
             $category,
             $content

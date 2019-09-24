@@ -150,7 +150,7 @@ class ArticleController extends FrontendController
     {
         $suggested = $this->getSuggested(
             'article',
-            $params['o_category']->name,
+            $params['o_category']->pk_content_category,
             $params['content']->pk_content
         );
 

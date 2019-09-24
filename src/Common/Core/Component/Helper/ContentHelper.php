@@ -53,17 +53,14 @@ class ContentHelper
         if (!is_array($result)) {
             $filter = (empty($filter) ? "" : " AND " . $filter);
 
-            // Generate where clause for filtering fk_content_type
-            $selectedContentTypesSQL = $contentTypeName;
-
             $numberOfElements = (int) $numberOfElements;
             if ($numberOfElements < 1) {
                 $numberOfElements = 4;
             }
 
-            $sql = "SELECT content_type_name, pk_content FROM contents"
+            $sql = "SELECT content_type_name, pk_content FROM contents INNER JOIN"
+                    . " contents_categories ON pk_content = pk_fk_content"
                     . " WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
-                    . $selectedContentTypesSQL
                     . $filter
                     . " ORDER BY created DESC LIMIT " . $numberOfElements;
 
