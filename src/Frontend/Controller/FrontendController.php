@@ -675,7 +675,7 @@ class FrontendController extends Controller
         );
 
         return $this->get('core.helper.content')
-            ->getSuggested($content_type_name, $content, $query);
+            ->getSuggested($content_type_name, $query, 4);
     }
 
     /**
