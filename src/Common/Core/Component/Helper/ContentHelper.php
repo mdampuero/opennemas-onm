@@ -54,7 +54,7 @@ class ContentHelper
             $filter = (empty($filter) ? "" : " AND " . $filter);
 
             // Generate where clause for filtering fk_content_type
-            $selectedContentTypesSQL = $this->parseTypes($contentTypeName);
+            $selectedContentTypesSQL = $contentTypeName;
 
             $numberOfElements = (int) $numberOfElements;
             if ($numberOfElements < 1) {
@@ -104,31 +104,5 @@ class ContentHelper
         }
 
         return $result;
-    }
-
-    /**
-     * Parses a string of content types and returns it as SQL statement.
-     *
-     * @param string $szSource String to parse.
-     *
-     * @return array List of types to search.
-     */
-    private function parseTypes($szSource)
-    {
-        $szSource = trim($szSource);
-        if (($szSource == '') || ($szSource == null) || ($szSource == ' ')) {
-            return 'TRUE';
-        }
-
-        $contentTypeNames = explode(',', $szSource);
-
-        $contentTypesSQL = [];
-        foreach ($contentTypeNames as $contentTypeName) {
-            $contentTypesSQL [] = "`content_type_name` = '" . trim($contentTypeName) . "'";
-        }
-
-        $contentTypesSQL = " AND (" . implode(' OR ', $contentTypesSQL) . ") ";
-
-        return $contentTypesSQL;
     }
 }
