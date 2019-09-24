@@ -46,6 +46,7 @@ class AppKernel extends Kernel
             new Common\Cache\CacheBundle(),
             new Common\Core\CoreBundle(),
             new Common\Data\DataBundle(),
+            new Common\NewsAgency\NewsAgencyBundle(),
             new Common\Migration\MigrationBundle(),
             new Common\ORM\OrmBundle(),
             new Common\External\ActOn\ActOnBundle(),
