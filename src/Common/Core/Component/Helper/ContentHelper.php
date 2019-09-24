@@ -45,9 +45,9 @@ class ContentHelper
      *
      * @return array Array with the content properties of each content.
      */
-    public function getSuggested($contentTypeName, $filter = '', $numberOfElements = 4)
+    public function getSuggested( $filter = '', $numberOfElements = 4)
     {
-        $cacheKey = '_suggested_contents_' . md5(implode(',', func_get_args()));
+        $cacheKey = 'suggested_contents_' . md5(implode(',', func_get_args()));
         $result   = $this->cache->fetch($cacheKey);
 
         if (!is_array($result)) {
