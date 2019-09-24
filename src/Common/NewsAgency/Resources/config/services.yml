@@ -1,0 +1,4 @@
+services:
+    news_agency.factory.parser:
+        class:  Common\NewsAgency\Component\Factory\ParserFactory
+        public: true
