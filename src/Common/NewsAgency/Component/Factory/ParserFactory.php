@@ -13,7 +13,8 @@ use Common\NewsAgency\Component\Parser\Parser;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Initializes a Parser to proccess a XML file.
+ * The ParserFactory class returns a parser to parse an XML file basing on the
+ * XML content.
  */
 class ParserFactory
 {
