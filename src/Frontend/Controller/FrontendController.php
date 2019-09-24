@@ -665,17 +665,20 @@ class FrontendController extends Controller
      *
      * @return array The list of suggested contents.
      */
-    protected function getSuggested($content_type_name, $category = null, $content)
+    protected function getSuggested($content_type_name, $category, $content)
     {
         $query = sprintf(
-            'content_type_name = "%s" AND pk_fk_content_category = "%s" AND pk_content <> "%s"',
+            'content_type_name = "%s" AND pk_content <> "%s"',
             $content_type_name,
-            $category,
             $content
         );
 
+        if (!empty($category)) {
+            $query = $query . sprintf(' AND pk_fk_content_category = "%s"', $category);
+        }
+
         return $this->get('core.helper.content')
-            ->getSuggested($content_type_name, $query, 4);
+            ->getSuggested($query, 4);
     }
 
     /**
