@@ -36,6 +36,7 @@
             defaultValueText: '@',
             exclude: '=?',
             exportModel: '=?',
+            hideArchived: '@',
             labelText: '@',
             locale: '=',
             multiple: '@',
@@ -103,7 +104,13 @@
                 });
             }
 
-            http.get('api_v1_backend_category_get_list').then(function(response) {
+            var route = { name: 'api_v1_backend_category_get_list' };
+
+            if ($scope.hideArchived) {
+              route.params = { oql: 'archived = 0' };
+            }
+
+            http.get(route).then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
                 return !$scope.exclude || $scope.exclude.length === 0 ||
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
