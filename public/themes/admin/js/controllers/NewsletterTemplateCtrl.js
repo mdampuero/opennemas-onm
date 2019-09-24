@@ -79,18 +79,16 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          if ($scope.item.recipients) {
-            // Force integer values in users property
-            for (var i = 0; i < $scope.item.recipients.length; i++) {
-              if ($scope.item.recipients[i].id) {
-                $scope.item.recipients[i].users =
-                  parseInt($scope.item.recipients[i].users);
-              }
+          // Remove old format recipient object
+          var recipients = [];
 
-              // TODO: Remove when not subscribers stored in settings in production
-              delete $scope.data.item.recipients[i].subscribers;
+          for (var i = 0; i < $scope.item.recipients.length; i++) {
+            if (!$scope.item.recipients[i].users) {
+              recipients.push($scope.item.recipients[i]);
             }
           }
+
+          $scope.item.recipients = angular.copy(recipients);
 
           if ($scope.item.contents) {
             $scope.item.contents.map(function(item) {
