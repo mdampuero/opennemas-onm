@@ -34,9 +34,9 @@ class RssController extends Controller
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            // Get categories with inrss = 1
+            // Get categories with enabled = 1
             $categories = $this->get('api.service.category')
-                ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
+                ->getList('enabled = 1');
 
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
@@ -77,7 +77,7 @@ class RssController extends Controller
             if (!empty($categoryName)) {
                 try {
                     $oql = sprintf(
-                        'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
+                        'enabled = 1 '
                         . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
                         $categoryName
                     );
@@ -158,7 +158,7 @@ class RssController extends Controller
             if (!empty($slug)) {
                 try {
                     $oql = sprintf(
-                        'params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*" '
+                        'enabled = 1 '
                         . 'and name regexp "(.*\"|^)%s(\".*|$)"',
                         $slug
                     );
@@ -392,9 +392,9 @@ class RssController extends Controller
             ]
         ];
 
-        // Get categories with inrss = 1
+        // Get categories with enabled = 1
         $categories = $this->get('api.service.category')
-            ->getList('params regexp ".*\"inrss\";(s:1:\"1\"|i:1);.*"');
+            ->getList('enabled = 1');
 
         $ids = array_map(function ($a) {
             return $a->pk_content_category;
