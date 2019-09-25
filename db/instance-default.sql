@@ -330,9 +330,10 @@ CREATE TABLE `content_categories` (
   `posmenu` int(10) unsigned DEFAULT '1',
   `internal_category` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Equal content_type & global=0 ',
   `fk_content_category` bigint(20) unsigned DEFAULT NULL,
-  `params` text,
   `logo_path` varchar(200) DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
+  `enabled` tinyint(1) unsigned DEFAULT '0',
+  `archived` tinyint(1) unsigned DEFAULT '0',
   PRIMARY KEY (`pk_content_category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -343,7 +344,7 @@ CREATE TABLE `content_categories` (
 
 LOCK TABLES `content_categories` WRITE;
 /*!40000 ALTER TABLE `content_categories` DISABLE KEYS */;
-INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,1,0,1,NULL,'a:1:{s:5:\"inrss\";i:0;}',NULL,NULL),(22,'Deportes','deportes',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(25,'Cultura','cultura',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(26,'Sociedad','sociedad',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,10,9,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,10,7,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,10,14,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(34,'Actualidad','actualidad',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(35,'Internacional','internacional',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL);
+INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,1,0,1,NULL,NULL,NULL,1,0),(22,'Deportes','deportes',NULL,1,10,1,NULL,NULL,NULL,1,0),(23,'EconomÃ­a','economia',NULL,1,10,1,NULL,NULL,NULL,1,0),(24,'PolÃ­tica','politica',NULL,1,10,1,NULL,NULL,NULL,1,0),(25,'Cultura','cultura',NULL,1,10,1,NULL,NULL,NULL,1,0),(26,'Sociedad','sociedad',NULL,1,10,1,NULL,NULL,NULL,1,0),(30,'Curiosidades','curiosidades',NULL,1,10,9,NULL,NULL,NULL,1,0),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,10,7,NULL,NULL,NULL,1,0),(32,'Portadas','portadas',NULL,1,10,14,NULL,NULL,NULL,1,0),(33,'Ciencia','ciencia',NULL,1,10,1,NULL,NULL,NULL,1,0),(34,'Actualidad','actualidad',NULL,1,10,1,NULL,NULL,NULL,1,0),(35,'Internacional','internacional',NULL,1,10,1,NULL,NULL,NULL,1,0),(36,'TecnologÃ­a','tecnologia',NULL,1,10,1,NULL,NULL,NULL,1,0);
 /*!40000 ALTER TABLE `content_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
