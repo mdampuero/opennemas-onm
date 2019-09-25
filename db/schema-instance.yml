@@ -423,15 +423,18 @@ content_categories:
         fk_content_category:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
-        params:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
         logo_path:
             type: string
             options: { length: 200, default: null, notnull: false }
         color:
             type: string
             options: { length: 10, default: null, notnull: false }
+        enabled:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
+        archived:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
     index:
         -
             name: PRIMARY
