@@ -79,16 +79,15 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          // Remove old format recipient object
-          var recipients = [];
-
-          for (var i = 0; i < $scope.item.recipients.length; i++) {
-            if (!$scope.item.recipients[i].users) {
-              recipients.push($scope.item.recipients[i]);
+          // Remove recipients that are not in data.extra
+          $scope.item.recipients = $scope.item.recipients.filter(function(e) {
+            for (var i = 0; i < $scope.data.extra.recipients.length; i++) {
+              if (JSON.stringify(e) === JSON.stringify($scope.data.extra.recipients[i])) {
+                return true;
+              }
             }
-          }
-
-          $scope.item.recipients = angular.copy(recipients);
+            return false;
+          });
 
           if ($scope.item.contents) {
             $scope.item.contents.map(function(item) {
