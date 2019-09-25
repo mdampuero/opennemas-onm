@@ -148,9 +148,9 @@ class NewsletterHelper
 
         return array_map(function ($a) {
             return [
-                'id'    => (string) $a->pk_user_group,
-                'name'  => $a->name,
-                'type'  => 'list',
+                'id'   => (string) $a->pk_user_group,
+                'name' => $a->name,
+                'type' => 'list',
             ];
         }, $subscriptions);
     }
