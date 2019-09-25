@@ -165,7 +165,7 @@ var newsletterTemplateTranslations = {
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="recipient in data.extra.recipients | filter: { type: 'list' }">
                   <div class="checkbox">
-                    <input id="checkbox-lists-[% $index %]" data-checklist-model="item.recipients" data-checklist-value="recipient" type="checkbox">
+                    <input id="checkbox-lists-[% $index %]" checklist-model="item.recipients" checklist-value="recipient" type="checkbox">
                     <label for="checkbox-lists-[% $index %]">
                       <strong>[% recipient.name %]</strong>
                       <span class="text-lowercase">
