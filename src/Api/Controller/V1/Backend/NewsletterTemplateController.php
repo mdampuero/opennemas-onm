@@ -183,6 +183,15 @@ class NewsletterTemplateController extends Controller
     private function getExtraData()
     {
         $nh = $this->get('core.helper.newsletter');
+        $ss = $this->get('api.service.subscription');
+
+        // Get subscriptions with the newsletter privilege enabled.
+        $response      = $ss->getList();
+        $subscriptions = array_values(
+            array_filter($response['items'], function ($a) {
+                return in_array(224, $a->privileges);
+            })
+        );
 
         $extra = [
             'content_types' => $nh->getContentTypes(),
@@ -196,6 +205,7 @@ class NewsletterTemplateController extends Controller
                 [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
                 [ 'value' => 'most_viewed', 'title' => _('Most viewed') ],
             ],
+            'users'              => $ss->getStats($subscriptions),
             'hours'              => [],
             'newsletter_handler' => $nh->getSubscriptionType(),
             'recipients'         => $nh->getRecipients(),
