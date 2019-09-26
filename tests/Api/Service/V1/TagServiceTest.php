@@ -169,15 +169,28 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
     {
         $tags = [ new Tag([ 'slug' => 'wobble' ]) ];
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('slug in ["wobble"] and locale = "es_ES"')
+        $this->repository->expects($this->at(0))->method('findBy')
+            ->with('slug in ["wobble"] and (locale is null or locale = "es_ES")')
             ->willReturn($tags);
 
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('slug in ["wobble"] and locale = "es_ES"')
+        $this->repository->expects($this->at(1))->method('countBy')
+            ->with('slug in ["wobble"] and (locale is null or locale = "es_ES")')
+            ->willReturn(1);
+
+        $this->repository->expects($this->at(2))->method('findBy')
+            ->with('slug in ["wobble"] and locale is null')
+            ->willReturn($tags);
+
+        $this->repository->expects($this->at(3))->method('countBy')
+            ->with('slug in ["wobble"] and locale is null')
             ->willReturn(1);
 
         $response = $this->service->getListBySlugs([ 'wobble' ], 'es_ES');
+
+        $this->assertEquals($tags, $response['items']);
+        $this->assertEquals(1, $response['total']);
+
+        $response = $this->service->getListBySlugs([ 'wobble' ]);
 
         $this->assertEquals($tags, $response['items']);
         $this->assertEquals(1, $response['total']);
@@ -227,11 +240,12 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'wobble', 'norf' ]);
 
         $this->repository->expects($this->once())->method('findBy')
-            ->with('slug in ["wobble","norf"]')
+            ->with('slug in ["wobble","norf"] and locale is null')
             ->willReturn($tags);
 
         $this->repository->expects($this->once())->method('countBy')
-            ->with('slug in ["wobble","norf"]')->willReturn(1);
+            ->with('slug in ["wobble","norf"] and locale is null')
+            ->willReturn(1);
 
         $response = $this->service->getListByString('wobble norf');
 
