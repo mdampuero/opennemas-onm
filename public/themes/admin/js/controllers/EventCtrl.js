@@ -41,7 +41,7 @@
           thumbnail: null,
           title: '',
           type: 0,
-          with_comments: 0,
+          with_comment: 0,
           categories: [ null ],
           related_contents: [],
           tags: [],
@@ -74,6 +74,11 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+
+          // Check if item is new (created) or existing for use default value or not
+          if ($scope.data.item.title.length === 0) {
+            $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+          }
 
           var coverId = $scope.data.item.related_contents.filter(function(e) {
             return e.relationship === 'cover';
