@@ -80,7 +80,6 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
     {
         $entity = new User([
             'name'        => 'xyzzy',
-            'categories'  => [ 1, 2 ],
             'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
         ]);
 
@@ -102,16 +101,6 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
         $this->conn->expects($this->at(6))->method('commit');
-        $this->conn->expects($this->at(7))->method('executeQuery')->with(
-            'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
-            [ 1, [ 1, 2 ] ],
-            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
-        $this->conn->expects($this->at(8))->method('executeQuery')->with(
-            'replace into users_content_categories values (?,?),(?,?)',
-            [ 1, 1, 1, 2 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
-        );
 
         $this->persister->create($entity);
         $this->assertEquals(1, $entity->id);
@@ -149,7 +138,6 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
         $entity = new User([
             'id'          => 1,
             'name'        => 'garply',
-            'categories'  => [ 1 ],
             'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
         ]);
 
@@ -171,17 +159,6 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
         $this->conn->expects($this->at(5))->method('commit');
-
-        $this->conn->expects($this->at(6))->method('executeQuery')->with(
-            'delete from users_content_categories where pk_fk_user = ? and pk_fk_content_category not in (?)',
-            [ 1, [ 1 ] ],
-            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
-        $this->conn->expects($this->at(7))->method('executeQuery')->with(
-            'replace into users_content_categories values (?,?)',
-            [ 1, 1 ],
-            [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
-        );
 
         $this->persister->update($entity);
     }
@@ -220,7 +197,6 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
         $entity = new User([
             'id'         => 1,
             'name'       => 'garply',
-            'categories' => [ 1 ],
         ]);
 
         $entity->refresh();
@@ -230,27 +206,9 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
             [ 'id' => 1 ]
         );
 
-        $this->conn->expects($this->once())->method('executeQuery')->with(
-            'delete from users_content_categories where pk_fk_user = ?',
-            [ 1 ]
-        );
-
         $this->cache->expects($this->exactly(2))->method('remove');
 
         $this->persister->remove($entity);
-
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * Tests save categories with no categories.
-     */
-    public function testSaveCategories()
-    {
-        $method = new \ReflectionMethod($this->persister, 'saveCategories');
-        $method->setAccessible(true);
-
-        $method->invokeArgs($this->persister, [ 1, [] ]);
 
         $this->addToAssertionCount(1);
     }
