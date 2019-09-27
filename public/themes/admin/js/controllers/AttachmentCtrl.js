@@ -88,12 +88,7 @@
         /**
          * @inheritdoc
          */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.data.item = angular.extend($scope.item, data.item);
-          }
-
-          $scope.configure(data.extra);
+        $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
         };
 
