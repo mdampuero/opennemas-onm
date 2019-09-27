@@ -1307,29 +1307,6 @@ INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','',
 UNLOCK TABLES;
 
 --
--- Table structure for table `users_content_categories`
---
-
-DROP TABLE IF EXISTS `users_content_categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users_content_categories` (
-  `pk_fk_user` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `pk_fk_content_category` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`pk_fk_user`,`pk_fk_content_category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_content_categories`
---
-
-LOCK TABLES `users_content_categories` WRITE;
-/*!40000 ALTER TABLE `users_content_categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users_content_categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `videos`
 --
 
