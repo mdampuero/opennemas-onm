@@ -127,7 +127,7 @@
           }
 
           $scope.data.item.path = nv;
-        }, true);
+        });
       }
     ]);
 })();
