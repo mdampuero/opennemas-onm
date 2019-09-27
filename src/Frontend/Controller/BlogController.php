@@ -294,6 +294,7 @@ class BlogController extends FrontendController
         $filters = [
             'contents`.`fk_author'         => [['value' => $author->id ]],
             'content_status'    => [['value' => 1]],
+            'in_litter'         => [['value' => 0]],
             'content_type_name' => [['value' => 'opinion']],
             'starttime' => [
                 'union' => 'OR',
