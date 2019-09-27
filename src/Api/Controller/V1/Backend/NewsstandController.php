@@ -77,6 +77,35 @@ class NewsstandController extends ContentOldController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getCategories($items = null)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = [];
+
+        foreach ($items as $item) {
+            $ids = array_merge($ids, $item->categories);
+        }
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        return $this->get('api.service.category')->responsify(
+            $this->get('api.service.category')
+                ->getListByIds($ids)['items']
+        );
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getExtraData($items = null)
