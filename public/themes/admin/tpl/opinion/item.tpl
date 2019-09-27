@@ -122,7 +122,7 @@
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
           <div class="grid-body">
-            {include file="ui/component/input/text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+            {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="summary" rows=5 imagepicker=true}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 imagepicker=true}
           </div>

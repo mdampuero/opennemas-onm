@@ -1,4 +1,4 @@
-{include file="ui/component/input/text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+{include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
 {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
 
 <div class="form-group">
