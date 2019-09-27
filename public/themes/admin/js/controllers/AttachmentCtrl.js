@@ -94,7 +94,7 @@
           }
 
           $scope.configure(data.extra);
-          $scope.localize($scope.data.item, 'item', true);
+          $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
         };
 
         /**
@@ -119,6 +119,15 @@
 
           return true;
         };
+
+        // Update file in data when multilanguage enabled
+        $scope.$watch('item.path', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+
+          $scope.data.item.path = nv;
+        }, true);
       }
     ]);
 })();
