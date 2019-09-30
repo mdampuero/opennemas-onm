@@ -18,7 +18,7 @@ function smarty_function_get_url($params, &$smarty)
 
     $routeParams = [
         'absolute' => $absolute,
-        '_format'  => (($isAmp) ? 'amp' : null)
+        '_format'  => $isAmp ? 'amp' : null
     ];
 
     $url = $container->get('core.helper.url_generator')
