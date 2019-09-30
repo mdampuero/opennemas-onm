@@ -561,9 +561,20 @@ class FrontendController extends Controller
             $this->view->assign('videoInt', $videoInt);
         }
 
+        //Get suggested contents
+        $suggested_contents = $this->getSuggested(
+            $params['content']->content_type_name,
+            $params['o_category']->pk_content_category,
+            $params['content']->pk_content
+        );
+
+        $suggested = $suggested_contents[0];
+        $photos    = $suggested_contents[1];
+
         $this->view->assign([
-            'related_contents'   => $this->getRelated($params['content']),
-            'suggested_contents' => $this->getSuggested($params['content'], $params['o_category'])
+            'related'   => $this->getRelated($params['content']),
+            'suggested' => $suggested,
+            'photos'    => $photos
         ]);
     }
 
