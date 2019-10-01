@@ -88,8 +88,14 @@ class ContentHelper
             $er       = getService('entity_repository');
 
             foreach ($contents as &$content) {
-                if ($content->img1 != 0) {
-                    $photos[ $content->img1 ] = $er->find('Photo', $content->img1);
+                if (empty($content->img1)) {
+                    continue;
+                }
+
+                $photo = $er->find('Photo', $content->img1);
+
+                if (!empty($photo)) {
+                    $photos[$content->img1] = $photo;
                 }
             }
 
