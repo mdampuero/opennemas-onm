@@ -237,7 +237,7 @@ class CategoryController extends FrontendController
         $em = $this->get('entity_repository');
 
         $now      = date('Y-m-d H:i:s');
-        $order    = [ 'starttime' => 'DESC','pk_content' => 'DESC' ];
+        $order    = [ 'starttime' => 'DESC', 'pk_content' => 'DESC' ];
         $criteria = [
             'pk_fk_content_category' => [
                 [ 'value' => $params['category']->pk_content_category ]
