@@ -44,7 +44,7 @@
           endtime: null,
           title: '',
           type: 0,
-          with_comments: 0,
+          with_comment: 0,
           categories: [],
           tags: [],
           agency: '',
@@ -90,6 +90,11 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'items' ]);
+
+          // Check if item is new (created) or existing for use default value or not
+          if (!$scope.data.item.pk_content) {
+            $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+          }
 
           $scope.item.items = [];
 

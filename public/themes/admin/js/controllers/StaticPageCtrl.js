@@ -42,7 +42,7 @@
           thumbnail: null,
           title: '',
           type: 0,
-          with_comments: 0,
+          with_comment: 0,
           categories: [],
           related_contents: [],
           tags: [],

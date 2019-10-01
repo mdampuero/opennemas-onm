@@ -41,7 +41,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       thumbnail: null,
       title: '',
       type: 0,
-      with_comments: 0,
+      with_comment: 0,
       categories: [],
       related_contents: [],
       tags: [],
@@ -92,6 +92,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       $scope.localize($scope.data.item, 'item', true);
 
+      // Check if item is new (created) or existing for use default value or not
+      if (!$scope.data.item.pk_content) {
+        $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+      }
+
       // Assign the cover image
       var cover = $scope.data.extra.related_contents.filter(function(e) {
         return e && e.pk_photo === $scope.item.information.thumbnail;
@@ -115,11 +120,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
 
       if (type === 'external' || type === 'script') {
-        $scope.data.item.author_name = type;
+        $scope.item.author_name = type;
       }
 
       if (!$scope.item.type) {
-        $scope.data.item.type = 'html5';
+        $scope.item.type = 'html5';
       }
 
       $scope.type               = type;
