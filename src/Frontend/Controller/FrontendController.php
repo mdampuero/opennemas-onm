@@ -562,14 +562,14 @@ class FrontendController extends Controller
         }
 
         //Get suggested contents
-        $suggested_contents = $this->getSuggested(
+        $suggestedContents = $this->getSuggested(
             $params['content']->content_type_name,
             $params['o_category']->pk_content_category,
             $params['content']->pk_content
         );
 
-        $suggested = $suggested_contents[0];
-        $photos    = $suggested_contents[1];
+        $suggested = $suggestedContents[0];
+        $photos    = $suggestedContents[1];
 
         $this->view->assign([
             'related'   => $this->getRelated($params['content']),
