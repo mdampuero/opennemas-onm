@@ -260,6 +260,7 @@ class OpinionController extends FrontendController
         $date    = date('Y-m-d H:i:s');
         $filters = [
             'content_status'       => [['value' => 1]],
+            'in_litter'            => [['value' => 0]],
             'content_type_name'    => [['value' => 'opinion']],
             'opinions`.`fk_author' => [['value' => $author->id]],
             'starttime' => [
