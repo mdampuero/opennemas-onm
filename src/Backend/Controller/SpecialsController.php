@@ -28,31 +28,6 @@ class SpecialsController extends Controller
     }
 
     /**
-     * List all the specials selected for the widget
-     *
-     * @Security("hasExtension('SPECIAL_MANAGER')
-     *     and hasPermission('SPECIAL_ADMIN')")
-     */
-    public function widgetAction()
-    {
-        $numFavorites = 1;
-        $settings     = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get([ 'special_settings' ]);
-
-        if (isset($settings['total_widget'])
-            && !empty($settings['total_widget'])
-        ) {
-            $numFavorites = $settings['total_widget'];
-        }
-
-        return $this->render('special/list.tpl', [
-            'total_elements_widget' => $numFavorites,
-            'category'              => 'widget',
-        ]);
-    }
-
-    /**
      * Handles the form for create new specials
      *
      * @param Request $request the request object
@@ -263,48 +238,6 @@ class SpecialsController extends Controller
         } else {
             return new Response('Ok', 200);
         }
-    }
-
-    /**
-     * Saves the widget specials content positions
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('SPECIAL_MANAGER')
-     *     and hasPermission('SPECIAL_ADMIN')")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $positions = $request->get('positions');
-
-        $result = true;
-        if (isset($positions)
-            && is_array($positions)
-            && count($positions) > 0
-        ) {
-            $pos = 1;
-            foreach ($positions as $id) {
-                $special = new \Special($id);
-                $result  = $result && $special->setPosition($pos);
-
-                $pos++;
-            }
-
-            // TODO: remove cache cleaning actions
-            $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty($this->get('core.template'));
-            $cacheManager->delete('home|0');
-        }
-
-        if (!empty($result) && $result == true) {
-            $output = _("Positions saved successfully.");
-        } else {
-            $output = _("Unable to save positions for the specials widget.");
-        }
-
-        return new Response($output);
     }
 
     /**

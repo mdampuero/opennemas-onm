@@ -144,12 +144,6 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="position" class="form-label">{t}Position{/t}</label>
-                <div class="controls">
-                  <input type="number" id="position" name="position" value="{$book->position}">
-                </div>
-              </div>
-              <div class="form-group">
                 <label for="editorial" class="form-label">{t}Editorial{/t}</label>
                 <div class="controls">
                   <input type="text" id="editorial" name="editorial" value="{$book->editorial|default:""}" required class="form-control"/>
