@@ -38,7 +38,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $directory = dirname($class->getFileName());
         $directory = str_replace('tests', 'fixtures', $directory);
 
-        $finder->in($directory)->files()->name('/^' . $fixture . '$/');
+        $finder->in($directory)->files()->depth(0)
+            ->name('/^' . $fixture . '$/');
 
         if ($finder->hasResults()) {
             foreach ($finder as $file) {

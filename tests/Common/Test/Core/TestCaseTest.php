@@ -22,8 +22,9 @@ class TestCaseTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->finder = $this->getMockBuilder('Symfony\Component\Finder\Finder')
-            ->setMethods([ 'files', 'getIterator', 'hasResults', 'in', 'name' ])
-            ->getMock();
+            ->setMethods([
+                'depth', 'files', 'getIterator', 'hasResults', 'in', 'name'
+            ])->getMock();
 
         $this->testCase = $this->getMockBuilder('Common\Test\Core\TestCase')
             ->setMethods([ 'getFinder' ])
@@ -68,6 +69,8 @@ class TestCaseTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->finder);
         $this->finder->expects($this->once())->method('files')
             ->willReturn($this->finder);
+        $this->finder->expects($this->once())->method('depth')
+            ->willReturn($this->finder);
         $this->finder->expects($this->once())->method('hasResults')
             ->willReturn(true);
         $this->finder->expects($this->once())->method('getIterator')
@@ -95,6 +98,8 @@ class TestCaseTest extends \PHPUnit\Framework\TestCase
         $this->finder->expects($this->once())->method('name')
             ->willReturn($this->finder);
         $this->finder->expects($this->once())->method('files')
+            ->willReturn($this->finder);
+        $this->finder->expects($this->once())->method('depth')
             ->willReturn($this->finder);
         $this->finder->expects($this->once())->method('hasResults')
             ->willReturn(false);
