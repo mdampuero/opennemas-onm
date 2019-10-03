@@ -11,11 +11,12 @@ namespace Tests\Common\NewsAgency\Component\Parser\NewsML\EuropaPress;
 
 use Common\NewsAgency\Component\Parser\NewsML\EuropaPress\NewsMLEuropaPress;
 use Common\NewsAgency\Component\Resource\ExternalResource;
+use Common\Test\Core\TestCase;
 
 /**
  * Defines test cases for class class.
  */
-class NewsMLEuropaPressTest extends \PHPUnit\Framework\TestCase
+class NewsMLEuropaPressTest extends TestCase
 {
     /**
      * Configures the testing environment.
@@ -27,13 +28,8 @@ class NewsMLEuropaPressTest extends \PHPUnit\Framework\TestCase
         $this->factory = $this->getMockBuilder('Common\NewsAgency\Component\Factory\ParserFactory')
             ->getMock();
 
-        $this->invalid = simplexml_load_string(
-            file_get_contents($fixturesDir . '/invalid.xml')
-        );
-
-        $this->valid = simplexml_load_string(
-            file_get_contents($fixturesDir . '/valid.xml')
-        );
+        $this->invalid = simplexml_load_string($this->loadFixture('invalid.xml'));
+        $this->valid   = simplexml_load_string($this->loadFixture('valid.xml'));
 
         $this->parser = $this->getMockBuilder('Common\NewsAgency\Component\Parser\NewsML\EuropaPress\NewsMLEuropaPress')
             ->setConstructorArgs([ $this->factory, [

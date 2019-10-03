@@ -11,19 +11,20 @@ namespace Framework\Tests\Import\Parser\EuropaPress;
 
 use Common\NewsAgency\Component\Parser\EuropaPress\EuropaPressIdeal;
 use Common\NewsAgency\Component\Resource\ExternalResource;
+use Common\Test\Core\TestCase;
 
-class EuropaPressIdealTest extends \PHPUnit\Framework\TestCase
+class EuropaPressIdealTest extends TestCase
 {
     public function setUp()
     {
         $fixturesDir = str_replace('tests', 'fixtures', __DIR__);
 
         $this->invalid = simplexml_load_string(
-            file_get_contents($fixturesDir . '/ideal-invalid.xml')
+            $this->loadFixture('invalid.xml')
         );
 
         $this->valid = simplexml_load_string(
-            file_get_contents($fixturesDir . '/ideal-valid.xml')
+            $this->loadFixture('ideal-valid.xml')
         );
 
         $factory = $this->getMockBuilder('Common\NewsAgency\Component\ParserFactory')
@@ -79,7 +80,6 @@ class EuropaPressIdealTest extends \PHPUnit\Framework\TestCase
 
         $this->assertCount(3, $resources);
         $this->assertEquals('Grupo Idealgallego', $resources[0]->agency_name);
-        $this->assertEquals('Grupo Idealgallego', $resources[0]->agency_name);
         $this->assertEquals('<p>Sample body</p>', $resources[0]->body);
 
         foreach ($resources as $resource) {
@@ -87,6 +87,11 @@ class EuropaPressIdealTest extends \PHPUnit\Framework\TestCase
                 'Common\NewsAgency\Component\Resource\ExternalResource',
                 $resource
             );
+
+            $this->assertEquals(1, preg_match(
+                '/urn:europapressideal:europapress:\d{14}:/',
+                $resource->urn
+            ));
         }
     }
 }
