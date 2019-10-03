@@ -16,7 +16,6 @@ use Common\NewsAgency\Component\Resource\ExternalResource;
  */
 class EuropaPressIdeal extends EuropaPress
 {
-
     /**
      * {@inheritdoc}
      */
@@ -34,8 +33,6 @@ class EuropaPressIdeal extends EuropaPress
 
         return false;
     }
-
-
 
     /**
      * Returns the title from the parsed data.
