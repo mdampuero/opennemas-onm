@@ -20,14 +20,6 @@ class EuropaPress extends Parser
     /**
      * {@inheritdoc}
      */
-    public function __construct($factory)
-    {
-        parent::__construct($factory);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function checkFormat($data)
     {
         if (is_object($data) &&
