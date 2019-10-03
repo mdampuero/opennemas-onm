@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Import\Parser\EuropaPress;
+namespace Tests\Common\NewsAgency\Component\Parser\EuropaPress;
 
 use Common\NewsAgency\Component\Parser\EuropaPress\EuropaPressIdeal;
 use Common\NewsAgency\Component\Resource\ExternalResource;

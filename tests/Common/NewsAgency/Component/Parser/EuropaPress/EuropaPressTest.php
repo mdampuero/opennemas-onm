@@ -9,9 +9,9 @@
  */
 namespace Tests\Common\NewsAgency\Component\Parser\EuropaPress;
 
-use Common\Test\Core\TestCase;
 use Common\NewsAgency\Component\Parser\EuropaPress\EuropaPress;
 use Common\NewsAgency\Component\Resource\ExternalResource;
+use Common\Test\Core\TestCase;
 
 class EuropaPressTest extends TestCase
 {
