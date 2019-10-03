@@ -411,15 +411,6 @@ content_categories:
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        inmenu:
-            type: integer
-            options: { unsigned: true, default: 0, notnull: false }
-        posmenu:
-            type: integer
-            options: { unsigned: true, default: 1, notnull: false }
-        internal_category:
-            type: smallint
-            options: { length: 1, unsigned: true, default: 0, comment: 'Equal content_type & global=0 ' }
         fk_content_category:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
