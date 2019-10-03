@@ -7,26 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Import\Parser\NewsML;
+namespace Tests\Common\NewsAgency\Component\Parser\NewsML\NewsMLComponent;
 
 use Common\NewsAgency\Component\Parser\NewsML\NewsMLComponent\NewsMLComponentList;
 use Common\NewsAgency\Component\Resource\ExternalResource;
+use Common\Test\Core\TestCase;
 
-class NewsMLComponentListTest extends \PHPUnit\Framework\TestCase
+class NewsMLComponentListTest extends TestCase
 {
     public function setUp()
     {
         $this->invalid = simplexml_load_string('<foo></foo>');
-        $this->valid   = simplexml_load_string("<NewsComponent>
-            <NewsComponent>
-                <NewsComponent>
-                </NewsComponent>
-            </NewsComponent>
-            <NewsComponent>
-                <NewsComponent>
-                </NewsComponent>
-            </NewsComponent>
-        </NewsComponent>");
+        $this->valid   = simplexml_load_string($this->loadFixture('list.xml'));
 
         $factory = $this->getMockBuilder('Common\NewsAgency\Component\ParserFactory')
             ->disableOriginalConstructor()
@@ -38,31 +30,33 @@ class NewsMLComponentListTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'checkFormat', 'getBag', 'parse' ])
             ->getMock();
 
-        $parser->method('getBag')->willReturn([]);
+        $factory->expects($this->any())->method('get')
+            ->willReturn($parser);
 
-        $photo = new ExternalResource();
-
-        $photo->id   = 'photo1';
-        $photo->type = 'photo';
-
+        $parser->expects($this->any())->method('getBag')
+            ->willReturn([]);
         $parser->method('parse')->will(
-            $this->onConsecutiveCalls(
-                new ExternalResource(),
-                [ $photo ]
-            )
+            $this->onConsecutiveCalls(new ExternalResource(), [
+                new ExternalResource([ 'id' => 'photo1', 'type' => 'photo' ])
+            ])
         );
-
-        $factory->method('get')->willReturn($parser);
 
         $this->parser = new NewsMLComponentList($factory);
     }
 
+    /**
+     * Tests checkFormat with valid and invalid XML.
+     */
     public function testCheckFormat()
     {
+        $this->assertFalse($this->parser->checkFormat(null));
         $this->assertFalse($this->parser->checkFormat($this->invalid));
         $this->assertTrue($this->parser->checkFormat($this->valid));
     }
 
+    /**
+     * Tests parse with valid and invalid XML.
+     */
     public function testParse()
     {
         $this->assertEmpty($this->parser->parse($this->invalid));
