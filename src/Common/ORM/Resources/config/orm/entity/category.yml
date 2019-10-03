@@ -7,14 +7,11 @@ orm:
                 title:               l10n_string
                 description:         l10n_string
                 name:                l10n_string
-                inmenu:              boolean
-                posmenu:             integer
-                internal_category:   integer
                 fk_content_category: integer
                 logo_path:           string
                 color:               string
-                enabled:             integer
-                archived:            integer
+                enabled:             boolean
+                archived:            boolean
             converters:
                 default:
                     class:     Common\ORM\Database\Data\Converter\BaseConverter
@@ -43,15 +40,6 @@ orm:
                         description:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
-                        inmenu:
-                            type: integer
-                            options: { default: '0', notnull: false }
-                        posmenu:
-                            type: integer
-                            options: { default: '10', notnull: false }
-                        internal_category:
-                            type: smallint
-                            options: { default: '0', comment: 'equal content_type & global=0 ' }
                         fk_content_category:
                             type: integer
                             options: { default: null, notnull: false }
