@@ -180,40 +180,31 @@ class MonographsController extends Controller
 
             $er = $this->get('entity_repository');
             if (!empty($contents)) {
-                if ((count($contents) == 1)
-                    && (($contents[0]['type_content'] == 'Attachment')
-                    || ($contents[0]['type_content'] == '3'))
-                ) {
-                    $content = \Content::get($contents[0]['fk_content']);
+                foreach ($contents as $item) {
+                    $content = \Content::get($item['fk_content']);
 
-                    $special->pdf_path = $content->path;
-                } else {
-                    foreach ($contents as $item) {
-                        $content = \Content::get($item['fk_content']);
-
-                        if (!empty($content->img1)) {
-                            $photo              = $er->find('Photo', $content->img1);
-                            $content->img1_path = $photo->path_file . $photo->name;
-                            $content->img1      = $photo;
-                        }
-
-                        if (!empty($content->fk_video)) {
-                            $video              = $er->find('Video', $content->fk_video);
-                            $content->obj_video = $video;
-                        }
-
-                        if (($item['position'] % 2) == 0) {
-                            $content->placeholder = 'placeholder_0_1';
-                        } else {
-                            $content->placeholder = 'placeholder_1_1';
-                        }
-
-                         // Load attached and related contents from array
-                        $content->loadAttachedVideo()
-                            ->loadRelatedContents($this->categoryName);
-
-                        $columns[] = $content;
+                    if (!empty($content->img1)) {
+                        $photo              = $er->find('Photo', $content->img1);
+                        $content->img1_path = $photo->path_file . $photo->name;
+                        $content->img1      = $photo;
                     }
+
+                    if (!empty($content->fk_video)) {
+                        $video              = $er->find('Video', $content->fk_video);
+                        $content->obj_video = $video;
+                    }
+
+                    if (($item['position'] % 2) == 0) {
+                        $content->placeholder = 'placeholder_0_1';
+                    } else {
+                        $content->placeholder = 'placeholder_1_1';
+                    }
+
+                        // Load attached and related contents from array
+                    $content->loadAttachedVideo()
+                        ->loadRelatedContents($this->categoryName);
+
+                    $columns[] = $content;
                 }
             }
 

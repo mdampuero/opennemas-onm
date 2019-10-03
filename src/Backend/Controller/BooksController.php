@@ -71,6 +71,7 @@ class BooksController extends Controller
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'content_status' => $request->request->getInt('content_status', 0),
+            'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
@@ -197,6 +198,7 @@ class BooksController extends Controller
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
             'content_status' => $request->request->getInt('content_status', 0),
+            'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 

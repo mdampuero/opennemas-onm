@@ -110,8 +110,14 @@
             <div class="grid-body">
               <div class="form-group">
                 <div class="checkbox">
-                <input {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl} type="checkbox" value="1" id="content_status" name="content_status" {if !isset($book) || $book->content_status eq 1}checked="checked"{/if}>
+                <input {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl} type="checkbox" value="1" id="content_status" name="content_status" {if !isset($book) || $book->content_status == 1}checked="checked"{/if}>
                   <label for="content_status">{t}Published{/t}</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox">
+                <input {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl} type="checkbox" value="1" id="in_home" name="in_home" {if !isset($book) || $book->in_home == 1}checked="checked"{/if}>
+                  <label for="in_home">{t}Home{/t}</label>
                 </div>
               </div>
               <div class="form-group">

@@ -80,6 +80,22 @@
                 </div>
               </div>
               <div class="form-group">
+                <div class="checkbox">
+                  <input type="checkbox" name="in_home" id="in_home" value="1" {if $special->in_home eq 1} checked="checked"{/if}>
+                  <label for="in_home" class="form-label">
+                    {t}Home{/t}
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox">
+                  <input type="checkbox" name="favorite" id="favorite" value="1" {if $special->favorite eq 1} checked="checked"{/if}>
+                  <label for="favorite" class="form-label">
+                    {t}Favorite{/t}
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
                   <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="special.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
