@@ -73,26 +73,14 @@
               <div class="grid-body no-padding">
                 <div class="grid-collapse-title">
                   <div class="checkbox">
-                    <input type="checkbox" id="inmenu" ng-model="item.inmenu" ng-true-value="1">
-                    <label for="inmenu" class="form-label">{t}Enabled{/t}</label>
+                    <input type="checkbox" id="enabled" ng-model="item.enabled" ng-true-value="1">
+                    <label for="enabled" class="form-label">{t}Enabled{/t}</label>
                   </div>
                 </div>
                 <div class="grid-collapse-title">
                   <div class="checkbox">
                     <input type="checkbox" id="archived" ng-model="item.archived" ng-true-value="1">
                     <label for="archived" class="form-label">{t}Archive{/t}</label>
-                  </div>
-                </div>
-                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.rss }" ng-click="expanded.rss = !expanded.rss">
-                  <i class="fa fa-feed m-r-10"></i>{t}RSS{/t}
-                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.rss }"></i>
-                </div>
-                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.rss }">
-                  <div class="form-group no-margin">
-                    <div class="checkbox">
-                      <input type="checkbox" id="enabled" name="enabled" ng-false-value="'0'" ng-model="item.enabled" ng-true-value="'1'">
-                      <label for="enabled" class="form-label">{t}Show in RSS{/t}</label>
-                    </div>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">

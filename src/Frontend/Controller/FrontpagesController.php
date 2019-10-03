@@ -43,7 +43,7 @@ class FrontpagesController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            if (!$category->inmenu) {
+            if (!$category->enabled) {
                 throw new ResourceNotFoundException();
             }
 

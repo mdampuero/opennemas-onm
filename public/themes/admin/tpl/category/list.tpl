@@ -87,12 +87,12 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('inmenu', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('inmenu', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-check fa-lg"></i>
                 </button>
               </li>
@@ -125,7 +125,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
-              <ui-select name="activated" theme="select2" ng-model="criteria.inmenu">
+              <ui-select name="activated" theme="select2" ng-model="criteria.enabled">
                 <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -174,8 +174,7 @@
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-paint-brush"></i></th>
                   <th class="hidden-xs" width="100">{t}Contents{/t}</th>
-                  <th class="hidden-xs text-center" width="50">{t}RSS{/t}</th>
-                  <th class="text-center" width="50">{t}Archive{/t}</th>
+                  <th class="hidden-xs text-center" width="50">{t}Archive{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -240,19 +239,14 @@
                       </strong>
                     </span>
                   </td>
-                  <td class="hidden-xs text-center v-align-middle">
-                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-feed text-success' : !item.enabledLoading && item.enabled == '1', 'fa-feed text-error': !item.enabledLoading && item.enabled == '0' }"></i>
-                    </button>
-                  </td>
                   <td class="text-center v-align-middle">
                     <button class="btn btn-white" ng-click="patch(item, 'archived', item.archived != 1 ? 1 : 0)" type="button">
                       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.archivedLoading, 'fa-archive text-success' : !item.archivedLoading && item.archived == '1', 'fa-archive text-error': !item.archivedLoading && item.archived == '0' }"></i>
                     </button>
                   </td>
                   <td class="text-center v-align-middle">
-                    <button class="btn btn-white" ng-click="patch(item, 'inmenu', item.inmenu != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.inmenuLoading, 'fa-check text-success' : !item.inmenuLoading && item.inmenu == '1', 'fa-times text-error': !item.inmenuLoading && item.inmenu == '0' }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
                     </button>
                   </td>
                 </tr>
