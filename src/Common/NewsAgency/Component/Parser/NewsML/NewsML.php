@@ -190,18 +190,18 @@ class NewsML extends Parser
     }
 
     /**
-     * Returns the type from the parsed data.
+     * Returns the list of tags from teh parsed data.
      *
      * @param SimpleXMLObject The parsed data.
      *
-     * @return string The type.
+     * @return string The tag list.
      */
-    public function getType($data)
+    public function getTags($data)
     {
-        $type = $data->xpath("//MediaType");
+        $tags = $data->xpath('//DescriptiveMetadata/OfInterestTo');
 
-        if (is_array($type) && count($type) > 0) {
-            return (string) $type[0]->attributes()->FormalName;
+        if (is_array($tags) && count($tags) > 0) {
+            return (string) $tags[0]->attributes()->FormalName;
         }
 
         return '';
@@ -221,6 +221,24 @@ class NewsML extends Parser
         if (is_array($title) && count($title) > 0) {
             $title = (string) $title[0];
             return iconv(mb_detect_encoding($title), "UTF-8", $title);
+        }
+
+        return '';
+    }
+
+    /**
+     * Returns the type from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The type.
+     */
+    public function getType($data)
+    {
+        $type = $data->xpath("//MediaType");
+
+        if (is_array($type) && count($type) > 0) {
+            return (string) $type[0]->attributes()->FormalName;
         }
 
         return '';
@@ -250,24 +268,6 @@ class NewsML extends Parser
         }
 
         return "urn:$resource:$agency:$date:$type:$id";
-    }
-
-    /**
-     * Returns the list of tags from teh parsed data.
-     *
-     * @param SimpleXMLObject The parsed data.
-     *
-     * @return string The tag list.
-     */
-    public function getTags($data)
-    {
-        $tags = $data->xpath('//DescriptiveMetadata/OfInterestTo');
-
-        if (is_array($tags) && count($tags) > 0) {
-            return (string) $tags[0]->attributes()->FormalName;
-        }
-
-        return '';
     }
 
     /**
