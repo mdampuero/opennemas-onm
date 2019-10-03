@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewsML Version="1.2">
+  <!--NewsML documentation and last changes: http://www.efe.com/documentosefe/efenewsml/EfeNewsML.htm.
+Documentacion NewsML y últimos cambios: http://www.efe.com/documentosefe/efenewsml/EfeNewsML.htm-->
+  <NewsEnvelope>
+    <SentFrom>
+      <Party FormalName="EFE">
+        <Property FormalName="Organization" Value="Agencia EFE" />
+      </Party>
+    </SentFrom>
+    <DateAndTime>20191003T150145+0000</DateAndTime>
+    <NewsProduct FormalName="Servicio Texto" />
+  </NewsEnvelope>
+  <!--** SUGGESTION FOR DEVS: Use 'Duid' attribute to help you on XPath navigation.-->
+  <NewsItem Duid="text_26267435">
+    <Comment FormalName="EfeNewsMLVersion">1.0.1</Comment>
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>texto.efeservicios.com</ProviderId>
+        <DateId>20191003T150000+0000</DateId>
+        <!--Id of the news for THIS format.-->
+        <NewsItemId>26267435</NewsItemId>
+        <RevisionId PreviousRevision="0" Update="N">1</RevisionId>
+        <!--Usefull to check changes between versions on same news item. See NewsML documentation.-->
+        <PublicIdentifier>urn:newsml:texto.efeservicios.com:20191003T150000+0000:26267435:1</PublicIdentifier>
+      </NewsIdentifier>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News" />
+      <!--Creation date.-->
+      <FirstCreated>20191003T150000+0000</FirstCreated>
+      <!--Last modification date.-->
+      <ThisRevisionCreated>20191003T150000+0000</ThisRevisionCreated>
+      <Status FormalName="Usable" />
+      <Urgency FormalName="5" />
+    </NewsManagement>
+    <NewsComponent Duid="text_26267435.text">
+      <Role FormalName="Main" />
+      <NewsLines>
+        <!--Title-->
+        <HeadLine>Mañana, tiempo estable y precipitaciones débiles en el Cantábrico</HeadLine>
+        <SubHeadLine>EL TIEMPO</SubHeadLine>
+        <CopyrightLine>© EFE 2019. Está expresamente prohibida la redistribución y la redifusión de todo o parte de los contenidos de los servicios de Efe, sin previo y expreso consentimiento de la Agencia EFE S.A.</CopyrightLine>
+      </NewsLines>
+      <AdministrativeMetadata>
+        <Provider>
+          <Party FormalName="Agencia EFE" />
+        </Provider>
+        <Creator>
+          <Party FormalName="rgd/icn" />
+        </Creator>
+      </AdministrativeMetadata>
+      <DescriptiveMetadata>
+        <Language FormalName="es-ES" />
+        <Location HowPresent="Event">
+          <Property FormalName="Country" Value="ESP" />
+        </Location>
+        <SubjectCode>
+          <!--Meteorología-->
+          <Subject FormalName="17000000" Scheme="IptcSubjectCodes" />
+        </SubjectCode>
+        <SubjectCode>
+          <!--Meteorología ; Pronósticos-->
+          <SubjectMatter FormalName="17001000" Scheme="IptcSubjectCodes" />
+        </SubjectCode>
+        <Property FormalName="Tesauro" Value="CYT:CIENCIA-TECNOLOGIA,METEOROLOGIA" />
+        <Property FormalName="EfePais" Value="ESP" />
+        <Property FormalName="EfeRegional" Value="" />
+        <Property FormalName="EfeComplemento" Value="" />
+      </DescriptiveMetadata>
+      <ContentItem>
+        <MediaType FormalName="Text" />
+        <Format FormalName="NITF" />
+        <MimeType FormalName="text/vnd.IPTC.NITF" />
+        <DataContent>
+          <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+            <head>
+              <title>Mañana, tiempo estable y precipitaciones débiles en el Cantábrico</title>
+              <meta name="prioridad" content="R" />
+              <meta name="categoria" content="MET" />
+              <meta name="tabulacion" content="BX" />
+              <meta name="tabuladores" content="NO" />
+              <meta name="regional" content="" />
+              <meta name="complemento" content="" />
+              <tobject tobject.type="News">
+                <!--Meteorología-->
+                <tobject.subject tobject.subject.ipr="IPTC" tobject.subject.refnum="17000000" tobject.subject.type="Meteorología" />
+                <!--Meteorología;Pronósticos-->
+                <tobject.subject tobject.subject.ipr="IPTC" tobject.subject.refnum="17001000" tobject.subject.type="Meteorología" tobject.subject.matter="Pronósticos" />
+                <!--CYT:CIENCIA-TECNOLOGIA;METEOROLOGIA-->
+                <tobject.subject tobject.subject.ipr="EFE" tobject.subject.refnum="F05004000" tobject.subject.type="CYT:CIENCIA-TECNOLOGIA" tobject.subject.matter="METEOROLOGIA" />
+              </tobject>
+              <docdata management-status="usable">
+                <evloc city="Madrid" iso-cc="ESP" />
+                <doc-id id-string="26267435" />
+                <urgency ed-urg="5" />
+                <date.issue norm="20191003T150000+0000" />
+                <key-list>
+                  <keyword key="EL TIEMPO" />
+                </key-list>
+              </docdata>
+              <pubdata date.publication="20191003T150000+0000" edition.area="PMU NAT 360" item-length="01108" unit-of-measure="word" id="EX4233" />
+            </head>
+            <body>
+              <body.head>
+                <hedline>
+                  <hl1>Mañana, tiempo estable y precipitaciones débiles en el Cantábrico</hl1>
+                  <hl2>EL TIEMPO</hl2>
+                </hedline>
+                <rights>
+                  <rights.owner>Agencia EFE</rights.owner>
+                </rights>
+                <byline>rgd/icn</byline>
+                <distributor>Agencia EFE</distributor>
+                <dateline>
+                  <!--Creation date.-->
+                  <!--ATTENTION: Use "norm" attribute as datetime. The datetime inside tag "story.date" is a mistake but we maintain it to avoid errors in our customers.
+ATENCION: Use el atributo "norm" como fecha y hora. La fecha y hora presente en la etiqueta "story.date" es un error pero seguimos incluyéndolo para evitar errores en nuestros clientes.-->
+                  <story.date norm="20191003T150000+0000">20191003T150000+0000</story.date>
+                </dateline>
+                <abstract>
+                  <p>Madrid, 3 oct (EFE).- La Agencia Estatal de Meteorología (Aemet) prevé para mañana, viernes, una jornada soleada en la mayor parte del país, precipitaciones débiles y ocasionales en el Cantábrico, y una subida del mercurio en la mitad oriental y en Baleares.,Las lluvias podrían extenderse de forma dispersa al interior de Galicia y de las comunidades cantábricas, sin que se descarten en puntos del Pirineo y de la cabecera del Ebro. En el resto de España, se espera un tiempo estable y soleado, con</p>
+                </abstract>
+              </body.head>
+              <body.content>
+                <p>Madrid, 3 oct (EFE).- La Agencia Estatal de Meteorología (Aemet) prevé para mañana, viernes, una jornada soleada en la mayor parte del país, precipitaciones débiles y ocasionales en el Cantábrico, y una subida del mercurio en la mitad oriental y en Baleares.</p>
+                <p>Las lluvias podrían extenderse de forma dispersa al interior de Galicia y de las comunidades cantábricas, sin que se descarten en puntos del Pirineo y de la cabecera del Ebro. En el resto de España, se espera un tiempo estable y soleado, con nubes bajas y bancos de niebla matinales, que serán más probables en la meseta norte. </p>
+                <p>Las temperaturas diurnas descenderán en Canarias, Galicia y en el Cantábrico, y subirán en la mitad oriental peninsular y en Baleares. Los valores nocturnos aumentarán en el interior de la Península.</p>
+                <p>Habrá alisios en Canarias y vientos de componente este en el litoral norte peninsular y en el litoral andaluz, y de componente sur en el resto del litoral mediterráneo. Flojos en el resto. </p>
+                <p>Predicción por comunidades autónomas:</p>
+                <p>------------------------------------------------------</p>
+                <p>GALICIA: nuboso con nubes bajas, con tendencia a partir del mediodía a intervalos nubosos, y en el tercio sureste a poco nuboso. Al final del día, aumentará nuevamente a nuboso o cubierto por el noroeste sin descartar lluvias débiles en el litoral de La Coruña. Brumas matinales, menos probables en el extremo norte. Temperaturas mínimas en descenso y máximas sin cambios significativos. En el litoral, viento del norte al sur de Fisterra y del oeste y suroeste al norte, donde arreciará por la tarde. En el interior, viento flojo de dirección variable, con predominio del noroeste por la tarde.</p>
+                <p>ASTURIAS: nuboso con nubes bajas, con tendencia por la tarde a intervalos nubosos o a poco nuboso en las zonas de mayor relieve. No se descarta alguna precipitación débil y dispersa en el extremo este al final de la jornada. Brumas y bancos de niebla a primeras y últimas horas del día en zonas altas de la Cordillera y Picos. Temperaturas mínimas en descenso y máximas sin cambios significativos. Viento flojo variable, con cierto predominio del noroeste por la tarde.</p>
+                <p>CANTABRIA: nuboso sin descartar alguna precipitación débil y dispersa de madrugada, hasta disminuir a intervalos nubosos. Probables brumas y bancos de niebla matinales en el sur. Temperaturas con pocos cambios. Viento flojo variable, con predominio de la componente norte por la tarde.</p>
+                <p>PAÍS VASCO: nuboso en el norte, con probables lluvias débiles y dispersas en el noreste, y con tendencia a intervalos nubosos por la tarde. En el sur, intervalos nubosos con tendencia a poco nuboso. Probables brumas y bancos de niebla matinales. Temperaturas mínimas con pocos cambios, y máximas en descenso en Álava y sin cambios en el resto. Viento flojo variable, con predominio del noroeste por la mañana y de la componente norte por la tarde.</p>
+                <p>CASTILLA Y LEÓN: en el norte montañoso, intervalos nubosos. En el resto, poco nuboso sin descartar brumas y bancos de niebla matinales dispersos. Temperaturas mínimas en ligero descenso en el oeste y sin cambios en el resto, y máximas sin cambios. Vientos del norte y noreste en el tercio norte, y del oeste en el resto, flojos.</p>
+                <p>NAVARRA: en el norte montañoso, intervalos nubosos. En el resto, poco nuboso sin descartar brumas y bancos de niebla matinales dispersas. Temperaturas mínimas en ligero descenso en el oeste y sin cambios en el resto, y máximas sin cambios. Vientos del norte y noreste en el tercio norte, y del oeste en el resto, flojos.</p>
+                <p>LA RIOJA: cielo nuboso, con tendencia a partir de media mañana a poco nuboso. No se descartan brumas y bancos de niebla matinales. Temperaturas mínimas sin cambios, y máximas en descenso. Vientos del norte y noroeste, flojos.</p>
+                <p>ARAGÓN: cielo nuboso, con tendencia a partir de media mañana a poco nuboso. No se descartan brumas y bancos de niebla matinales. Temperaturas mínimas sin cambios, y máximas en descenso. Vientos del norte y noroeste, flojos.</p>
+                <p>CATALUÑA: en la mitad este, cielo entre nuboso y cubierto con precipitaciones, que pueden tener una mayor intensidad en el litoral y prelitoral central. En el resto, cielo poco nuboso. Temperaturas mínimas localmente en ascenso y máximas en descenso en la mitad este. Viento del noroeste moderado en el Ampurdán y en Tarragona, y variable flojo en el resto, con tendencia a componente sur flojo, con intervalos de sureste moderado en el litoral.</p>
+                <p>EXTREMADURA: poco nuboso o despejado. Temperaturas en ligero descenso o sin cambios. Vientos de componente oeste, flojos.</p>
+                <p>MADRID: poco nuboso o despejado, con algún intervalo de nubes altas al final de la jornada. Temperaturas mínimas con aumentos ligeros y máximas sin cambios. Viento flojo variable.</p>
+                <p>CASTILLA-LA MANCHA: poco nuboso o despejado, con algún intervalo de nubes bajas en zonas altas del norte y este de Guadalajara en la primera mitad del día, e intervalos de nubes altas al final de la jornada. Temperaturas mínimas en ligero aumento y máximas sin cambios. Vientos flojos variables.</p>
+                <p>COMUNIDAD VALENCIANA: cielo poco nuboso o despejado. Temperaturas sin cambios importantes, salvo ascensos de las máximas en el norte de Castellón. Viento variable flojo, con intervalos de noroeste moderado por la mañana en el norte de Castellón.</p>
+                <p>MURCIA: cielos poco nubosos o despejados. Temperaturas con pocos cambios o mínimas en ascenso en el interior. Vientos variables flojos, con brisas.</p>
+                <p>BALEARES: intervalos nubosos, con baja probabilidad de alguna precipitación aislada y ocasional en Mallorca y en Menorca. Temperaturas nocturnas en ascenso y diurnas con pocos cambios. Vientos del suroeste, con tendencia a este y noreste por la mañana.</p>
+                <p>ANDALUCÍA: cielos poco nubosos con intervalos de nubes altas. Intervalos de nubes bajas y brumas matinales en Cádiz y en el Bajo Guadalquivir, sin descartar nieblas. Temperaturas mínimas en descenso en el extremo oriental y en ascenso en el resto; máximas en descenso en el tercio occidental, en ascenso en la vertiente mediterránea y sin cambios en el resto. Vientos de componente oeste, más intensos en el litoral mediterráneo occidental.</p>
+                <p>CANARIAS: en el norte de las islas de mayor relieve, cielos nubosos a primeras horas del día con baja probabilidad de lluvias débiles, ocasionales y dispersas, hasta abrirse amplios claros en las horas centrales del día y con tendencia a intervalos nubosos al final del día. En el resto de zonas, poco nuboso o despejado. En Lanzarote y Fuerteventura, predominio de los cielos poco nubosos o despejados, con algunos intervalos nubosos a primeras y últimas horas del día. Baja probabilidad de calima, principalmente en altura, que afectará a las islas más orientales. Temperaturas en ligero descenso, que podrá ser moderado en las máximas de medianías y en zonas altas de las islas de mayor relieve. Viento del noreste con intervalos de fuerte.EFE</p>
+              </body.content>
+            </body>
+          </nitf>
+        </DataContent>
+      </ContentItem>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>
