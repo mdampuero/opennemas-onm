@@ -43,36 +43,6 @@ class NitfOpennemas extends Nitf
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getTags($data)
-    {
-        $tags = $data->xpath('//head/docdata/key-list/keyword');
-
-        if (!empty($tags)) {
-            return (string) $tags[0]->attributes()->{'key'};
-        }
-
-        return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse($data)
-    {
-        $resource = parent::parse($data);
-
-        $author = $this->getAuthor($data);
-
-        if (is_array($author)) {
-            $resource->author = $author;
-        }
-
-        return $resource;
-    }
-
-    /**
      * Returns the body from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -97,6 +67,35 @@ class NitfOpennemas extends Nitf
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags($data)
+    {
+        $tags = $data->xpath('//head/docdata/key-list/keyword');
+
+        if (!empty($tags)) {
+            return (string) $tags[0]->attributes()->{'key'};
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parse($data)
+    {
+        $resource = parent::parse($data);
+        $author   = $this->getAuthor($data);
+
+        if (is_array($author)) {
+            $resource->author = $author;
+        }
+
+        return $resource;
     }
 
     /**
