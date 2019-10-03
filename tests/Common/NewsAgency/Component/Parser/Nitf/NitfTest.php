@@ -7,12 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Import\Parser\Nitf;
+namespace Tests\Common\NewsAgency\Component\Parser\Nitf;
 
 use Common\NewsAgency\Component\Parser\Nitf\Nitf;
 use Common\NewsAgency\Component\Resource\ExternalResource;
+use Common\Test\Core\TestCase;
 
-class NitfTest extends \PHPUnit\Framework\TestCase
+class NitfTest extends TestCase
 {
     public function setUp()
     {
@@ -22,75 +23,25 @@ class NitfTest extends \PHPUnit\Framework\TestCase
 
         $this->parser = new Nitf($factory);
 
-        $this->invalid = simplexml_load_string('<foo><nitf></nitf></foo>');
-        $this->valid   = simplexml_load_string("<nitf>
-            <head>
-                <title>Sample title</title>
-                <meta name=\"prioridad\" content=\"U\" />
-                <meta name=\"categoria\" content=\"POL\" />
-                <docdata management-status=\"usable\">
-                    <urgency ed-urg=\"3\" />
-                    <evloc city=\"Budapest\" iso-cc=\"HUN\" />
-                    <doc-id id-string=\"21155709\" />
-                </docdata>
-            </head>
-            <body>
-                <body.head>
-                    <rights.owner>Foobar Agency</rights.owner>
-                    <dateline>
-                        <story.date norm=\"20150921T080200+0000\">
-                            20150921T080200+0000
-                        </story.date>
-                    </dateline>
-                    <abstract>
-                        <p>Sample summary</p>
-                    </abstract>
-                </body.head>
-                <body.content>
-                    <p>Paragraph 1</p>
-                    <p>Paragraph 2</p>
-                </body.content>
-            </body>
-        </nitf>");
-
-        $this->validAlt = simplexml_load_string("<nitf>
-            <head>
-                <title>Sample title</title>
-                <meta name=\"prioridad\" content=\"U\" />
-                <meta name=\"categoria\" content=\"POL\" />
-                <docdata management-status=\"usable\">
-                    <urgency ed-urg=\"3\" />
-                    <evloc city=\"Budapest\" iso-cc=\"HUN\" />
-                    <doc-id>30257</doc-id>
-                </docdata>
-            </head>
-            <body>
-                <body.head>
-                    <rights.owner>Foobar Agency</rights.owner>
-                    <dateline>
-                        <story.date norm=\"20150921T080200\">
-                            20150921T080200
-                        </story.date>
-                    </dateline>
-                    <abstract>
-                        <p>Sample summary</p>
-                    </abstract>
-                </body.head>
-                <body.content>
-                    Paragraph 1
-                    Paragraph 2
-                </body.content>
-            </body>
-        </nitf>");
+        $this->invalid  = simplexml_load_string('<foo><nitf></nitf></foo>');
+        $this->valid    = simplexml_load_string($this->loadFixture('valid.xml'));
+        $this->validAlt = simplexml_load_string($this->loadFixture('valid-alternative-id.xml'));
     }
 
+    /**
+     * Tests checkFormat with valid and invalid XML.
+     */
     public function testCheckFormat()
     {
+        $this->assertFalse($this->parser->checkFormat(null));
         $this->assertFalse($this->parser->checkFormat($this->invalid));
         $this->assertTrue($this->parser->checkFormat($this->valid));
     }
 
-    public function testclean()
+    /**
+     * Tests clean.
+     */
+    public function testClean()
     {
         $cleaned = $this->parser->clean($this->invalid);
         $index   = strpos($cleaned->asXML(), "<?xml version=\"1.0\"?>\n<nitf");
@@ -98,16 +49,21 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $index);
     }
 
+    /**
+     * Tests getAgencyName.
+     */
     public function testGetAgencyName()
     {
         $this->assertEmpty($this->parser->getAgencyName($this->invalid));
-
         $this->assertEquals(
             'Foobar Agency',
             $this->parser->getAgencyName($this->valid)
         );
     }
 
+    /**
+     * Tests getBody with valid and invalid XML.
+     */
     public function testGetBody()
     {
         $this->assertEmpty($this->parser->getBody($this->invalid));
@@ -122,6 +78,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('<br>', $this->parser->getBody($this->validAlt));
     }
 
+    /**
+     * Tests getCategory with valid and invalid XML.
+     */
     public function testGetCategory()
     {
         $this->assertEmpty($this->parser->getCategory($this->invalid));
@@ -132,6 +91,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Tests getCreatedTime with valid and invalid XML.
+     */
     public function testGetCreatedTime()
     {
         $date = new \DateTime('now');
@@ -145,6 +107,10 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($date, $this->parser->getCreatedTime($this->validAlt));
     }
 
+    /**
+     * Tests getId with valid and invalid XML and when id is provided as
+     * attribute or as content.
+     */
     public function testGetId()
     {
         $this->assertEmpty($this->parser->getId($this->invalid));
@@ -153,6 +119,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('30257', $this->parser->getId($this->validAlt));
     }
 
+    /**
+     * Tests getPriority with valid and invalid XML.
+     */
     public function testGetPriority()
     {
         $this->assertEquals(5, $this->parser->getPriority($this->invalid));
@@ -162,6 +131,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $this->parser->getPriority($this->invalid));
     }
 
+    /**
+     * Tests getSummary with valid and invalid XML.
+     */
     public function testGetSummary()
     {
         $this->assertEmpty($this->parser->getSummary($this->invalid));
@@ -172,6 +144,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Tests getTitle with valid and invalid XML.
+     */
     public function testGetTitle()
     {
         $this->assertEmpty($this->parser->getTitle($this->invalid));
@@ -182,6 +157,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Tests getUrn with valid and invalid XML.
+     */
     public function testGetUrn()
     {
         $this->assertEquals(1, preg_match(
@@ -195,6 +173,9 @@ class NitfTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Tests parse with valid and invalid XML.
+     */
     public function testParse()
     {
         $parsed = $this->parser->parse($this->invalid);
@@ -205,25 +186,17 @@ class NitfTest extends \PHPUnit\Framework\TestCase
             $parsed->urn
         ));
 
-        $resource = new ExternalResource();
+        $resource = $this->parser->parse($this->valid);
 
-        $resource->agency_name = 'Foobar Agency';
-        $resource->body        = '<p>Paragraph 1</p><p>Paragraph 2</p>';
+        $this->assertInstanceOf(
+            'Common\NewsAgency\Component\Resource\ExternalResource',
+            $resource
+        );
 
-        $resource->created_time =
-            \DateTime::createFromFormat('Ymd\THisP', '20150921T080200+0000');
-        $resource->created_time->setTimezone(new \DateTimeZone('UTC'));
-
-        $resource->created_time = $resource->created_time->format('Y-m-d H:i:s');
-
-        $resource->id       = '21155709';
-        $resource->priority = 3;
-        $resource->category = 'POL';
-        $resource->summary  = '<p>Sample summary</p>';
-        $resource->title    = 'Sample title';
-        $resource->type     = 'text';
-        $resource->urn      = 'urn:nitf:foobar_agency:20150921080200:text:21155709';
-
-        $this->assertEquals($resource, $this->parser->parse($this->valid));
+        $this->assertEquals(3, $resource->priority);
+        $this->assertEquals('21155709', $resource->id);
+        $this->assertEquals('POL', $resource->category);
+        $this->assertEquals('Sample title', $resource->title);
+        $this->assertEquals('urn:nitf:foobar_agency:20150921080200:text:21155709', $resource->urn);
     }
 }
