@@ -31,7 +31,8 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         'category'           => $app['section'],
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
-        'content'            => $smarty->getValue('content')
+        'content'            => $smarty->getValue('content'),
+        'format'             => $contentType,
     ];
 
     $slots = [];
@@ -53,7 +54,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         $ad  = sprintf($html, $slotId);
         $pos = $slotId - $id;
 
-        if (!$safeFrame) {
+        if (!$safeFrame || $contentType === 'amp') {
             $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
                 return in_array($slotId, $a->positions);
             });
