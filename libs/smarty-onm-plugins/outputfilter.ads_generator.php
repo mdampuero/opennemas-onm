@@ -41,13 +41,12 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings');
 
-    $safeFrameEnabled = getService('core.helper.advertisement')->isSafeFrameEnabled();
+    $safeFrameEnabled = $smarty->getContainer()
+        ->get('core.helper.advertisement')->isSafeFrameEnabled();
 
     if (!$safeFrameEnabled) {
-        $adsRenderer = getService('frontend.renderer.advertisement');
-        $xtags       = $smarty->smarty->tpl_vars['x-tags']->value;
-
-        $ads = array_filter($ads, function ($a) {
+        $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
+        $ads         = array_filter($ads, function ($a) {
             return $a->isInTime();
         });
 
@@ -56,21 +55,17 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'extension'          => $app['extension'],
             'advertisementGroup' => $app['advertisementGroup'],
             'content'            => $content,
-            'x-tags'             => $xtags,
+            'x-tags'             => $smarty->smarty->tpl_vars['x-tags']->value,
         ];
 
-        $reviveOutput = $adsRenderer->renderInlineReviveHeader($ads);
-        $dfpOutput    = $adsRenderer->renderInlineDFPHeader($ads, $params);
-        $smartOutput  = $adsRenderer->renderInlineSmartHeader($ads, $params);
+        $adsOutput    = $adsRenderer->renderInlineHeaders($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
         $devices      = getService('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
 
         $devices = "\n" . str_replace("\n", ' ', $devices);
 
-        $output = str_replace('</head>', $reviveOutput . '</head>', $output);
-        $output = str_replace('</head>', $dfpOutput . '</head>', $output);
-        $output = str_replace('</head>', $smartOutput . '</head>', $output);
+        $output = str_replace('</head>', $adsOutput . '</head>', $output);
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
     } else {
