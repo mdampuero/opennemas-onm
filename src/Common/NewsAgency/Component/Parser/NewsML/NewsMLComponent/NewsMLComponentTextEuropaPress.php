@@ -9,7 +9,6 @@
  */
 namespace Common\NewsAgency\Component\Parser\NewsML\NewsMLComponent;
 
-
 /**
  * Parses NewsComponent of text type from NewsML custom format for EFE.
  */

@@ -7,36 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\Import\Parser\NewsML;
+namespace Tests\Common\NewsAgency\Component\Parser\NewsML;
 
 use Common\NewsAgency\Component\Parser\NewsML\NewsMLComponent\NewsMLComponentTextEuropaPress;
+use Common\Test\Core\TestCase;
 
-class NewsMLComponentTextEuropaPressTest extends \PHPUnit\Framework\TestCase
+class NewsMLComponentTextEuropaPressTest extends TestCase
 {
     public function setUp()
     {
         $this->invalid = simplexml_load_string('<foo></foo>');
-        $this->valid   = simplexml_load_string("<NewsComponent>
-            <NewsLines>
-                <HeadLine>Headline</HeadLine>
-                <ByLine />
-                <DateLine></DateLine>
-                <CreditLine>Europa Press</CreditLine>
-                <CopyrightLine></CopyrightLine>
-                  <NewsLine>
-                     <NewsLineType FormalName=\"Caption\" />
-                     <NewsLineText>Foobar baz</NewsLineText>
-                  </NewsLine>
-            </NewsLines>
-            <ContentItem>
-              <MediaType FormalName=\"Text\"/>
-              <Format FormalName=\"bcNITF2.5\"/>
-              <NewsItemId>040729054956.xm61wen7</NewsItemId>
-              <DataContent>
-                <p>Paragraph 1</p>
-              </DataContent>
-            </ContentItem>
-        </NewsComponent> ");
+        $this->valid   = simplexml_load_string($this->loadFixture('text-europa-press.xml'));
 
         $factory = $this->getMockBuilder('Common\NewsAgency\Component\ParserFactory')
             ->disableOriginalConstructor()
@@ -46,12 +27,23 @@ class NewsMLComponentTextEuropaPressTest extends \PHPUnit\Framework\TestCase
         $this->parser = new NewsMLComponentTextEuropaPress($factory);
     }
 
+    /**
+     * Tests checkFormat with valid and invalid XML.
+     */
     public function testCheckFormat()
     {
+        $this->assertFalse($this->parser->checkFormat(null));
         $this->assertFalse($this->parser->checkFormat($this->invalid));
+        $this->assertFalse($this->parser->checkFormat(
+            simplexml_load_string($this->loadFixture('text-europa-press-invalid.xml'))
+        ));
+
         $this->assertTrue($this->parser->checkFormat($this->valid));
     }
 
+    /**
+     * Tests getAgencyName with valid and invalid XML.
+     */
     public function testGetAgencyName()
     {
         $this->assertEmpty($this->parser->getAgencyName($this->invalid));
