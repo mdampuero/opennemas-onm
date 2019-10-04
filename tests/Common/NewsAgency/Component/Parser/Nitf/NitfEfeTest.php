@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\NewsAgency\Component\Parser\Nitf;
+namespace Tests\Common\NewsAgency\Component\Parser\Nitf;
 
 use Common\NewsAgency\Component\Parser\Nitf\NitfEfe;
 use Common\Test\Core\TestCase;
