@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\NewsAgency\DependencyInjection;
+namespace Common\Test\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

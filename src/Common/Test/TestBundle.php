@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\NewsAgency;
+namespace Common\Test;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

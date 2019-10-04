@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\NewsAgency\DependencyInjection;
+namespace Common\Test\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -26,7 +26,5 @@ class TestExtension extends Extension
             $container,
             new FileLocator(__DIR__ . '/../Resources/config')
         );
-
-        $loader->load('services.yml');
     }
 }
