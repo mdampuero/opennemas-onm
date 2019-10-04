@@ -62,10 +62,13 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
     public function getSummary($data)
     {
         $title = $data->xpath('/NewsComponent/NewsLines/HeadLine');
+
         if (empty($title)) {
             return $this->getFromBag('summary');
         }
+
         $title = (string) $title[0];
+
         return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
 }
