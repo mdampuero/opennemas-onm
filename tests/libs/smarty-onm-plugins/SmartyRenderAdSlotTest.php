@@ -43,7 +43,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'getDeviceCssClasses', 'renderInline', 'getMark' ])
+            ->setMethods([ 'render' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
@@ -103,26 +103,57 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests smarty_function_render_ad_slot when not array.
+     */
+    public function testRenderAdSlotWhenNotArray()
+    {
+        $ad = new \Advertisement();
+
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('advertisements')
+            ->willReturn($ad);
+
+        $this->assertEmpty(
+            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_function_render_ad_slot when no ads.
+     */
+    public function testRenderAdSlotWhenNoAds()
+    {
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('ads_positions')
+            ->willReturn(123);
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([]);
+
+        $this->assertEmpty(
+            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
+        );
+    }
+
+    /**
      * Tests smarty_function_render_ad_slot when safeframe is enabled.
      */
-    public function testRenderAdSlotWhenSafeFrameInSettings()
+    public function testRenderAdSlotWhenSafeFrame()
     {
         $ad                     = new \Advertisement();
         $ad->positions          = [ 123 ];
         $ad->type_advertisement = [ 123 ];
         $ad->starttime          = '2000-01-01 00:00:00';
         $ad->endtime            = null;
-        $ad->params             = [ 'orientation' => 'left' ];
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
             ->willReturn(123);
 
         $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('render_params')
-            ->willReturn([ 'ads-format' => 'safeframe' ]);
-
-        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
@@ -136,168 +167,74 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_render_ad_slot when safeframe is disabled and no
-     * advertisements in list.
+     * Tests smarty_function_render_ad_slot mode consume is enabled.
      */
-    public function testRenderAdSlotWhenInlineAndEmpty()
+    public function testRenderAdSlotWhenModeConsume()
     {
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
-            ->willReturn(123);
+        $ad            = new \Advertisement();
+        $ad->starttime = '2000-01-01 00:00:00';
+        $ad->positions = [ 123 ];
 
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('render_params')
-            ->willReturn([ 'ads-format' => 'inline' ]);
-
-        $this->smarty->expects($this->at(3))->method('getValue')
-            ->with('advertisements')
-            ->willReturn(null);
-
-        $this->ds->expects($this->once())->method('get')->with('ads_settings')
-            ->willReturn([ 'safe_frame' => 0 ]);
-
-        $this->assertEmpty(smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty));
-    }
-
-    /**
-     * Tests smarty_function_render_ad_slot when safeframe is disabled and no
-     * enabled advertisements in list.
-     */
-    public function testRenderAdSlotWhenInlineAndNoEnabledAdvertisement()
-    {
-        $ad = new \Advertisement();
+        $params = [
+            'position' => 123,
+            'mode'     => 'consume',
+        ];
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
             ->willReturn(123);
 
         $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('render_params')
-            ->willReturn([ 'ads-format' => 'inline' ]);
-
-        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->ds->expects($this->once())->method('get')->with('ads_settings')
-            ->willReturn([ 'safe_frame' => 0 ]);
-
-        $this->assertEmpty(smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty));
-    }
-
-    /**
-     * Tests smarty_function_render_ad_slot when safeframe is enabled but inline is
-     * forced in template and enabled advertisements in list.
-     */
-    public function testRenderBannerWhenInlineForced()
-    {
-        $ad                     = new \Advertisement();
-        $ad->positions          = [ 123 ];
-        $ad->type_advertisement = [ 123 ];
-        $ad->starttime          = '2000-01-01 00:00:00';
-        $ad->endtime            = null;
-        $ad->params             = [ 'orientation' => 'left' ];
-
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
-            ->willReturn(123);
-
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('render_params')
-            ->willReturn([ 'ads-format' => 'inline' ]);
-
-        $this->smarty->expects($this->at(3))->method('getValue')
-            ->with('advertisements')
-            ->willReturn([ $ad ]);
-
-        $this->smarty->expects($this->at(4))->method('setValue')
-            ->with('advertisements', []);
-
-        $this->smarty->expects($this->at(5))->method('getValue')
-            ->with('app')
-            ->willReturn([
-                'extension' => 'foo',
-                'advertisementGroup' => 'bar'
-            ]);
-
-        $this->smarty->expects($this->at(6))->method('getValue')
-            ->with('actual_category')
-            ->willReturn([ 'baz' ]);
-
-        $this->smarty->expects($this->at(7))->method('getValue')
-            ->with('content')
-            ->willReturn(new \StdClass());
-
-        $this->renderer->expects($this->once())->method('renderInline')
-            ->with($ad)->willReturn('foo garply');
-        $this->renderer->expects($this->once())->method('getDeviceCSSClasses')
-            ->with($ad)->willReturn('corge');
-        $this->renderer->expects($this->once())->method('getMarK')
-            ->with($ad)->willReturn('Advertisement');
-        $this->ds->expects($this->once())->method('get')->with('ads_settings')
-            ->willReturn([ 'safe_frame' => 1 ]);
-
-        $this->assertEquals(
-            '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Advertisement">foo garply</div>',
-            smarty_function_render_ad_slot(
-                [ 'format' => 'inline', 'position' => 123, 'mode' => 'consume' ],
-                $this->smarty
-            )
+        $this->assertEmpty(
+            smarty_function_render_ad_slot($params, $this->smarty)
         );
     }
 
     /**
-     * Tests smarty_function_render_ad_slot when safeframe is enabled but inline is
-     * forced in template and enabled advertisements in list.
+     * Tests smarty_function_render_ad_slot when safeframe is not enabled.
      */
-    public function testRenderAdSlotWhenInlineForcedWithCustomMark()
+    public function testRenderAdSlotWhenNoSafeFrame()
     {
-        $ad                     = new \Advertisement();
-        $ad->positions          = [ 123 ];
-        $ad->type_advertisement = [ 123 ];
-        $ad->starttime          = '2000-01-01 00:00:00';
-        $ad->endtime            = null;
-        $ad->params             = [ 'orientation' => 'left' ];
+        $ad            = new \Advertisement();
+        $ad->positions = [ 123 ];
+        $ad->starttime = '2000-01-01 00:00:00';
+        $ad->endtime   = null;
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
             ->willReturn(123);
 
         $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('render_params')
-            ->willReturn([ 'ads-format' => 'inline' ]);
-
-        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('app')
             ->willReturn([
-                'extension' => 'foo',
-                'advertisementGroup' => 'bar'
+                'extension'          => 'foobar',
+                'advertisementGroup' => 'gulp'
             ]);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('getValue')
             ->with('actual_category')
-            ->willReturn([ 'baz' ]);
+            ->willReturn('gorp');
 
-        $this->smarty->expects($this->at(6))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('content')
-            ->willReturn(new \StdClass());
+            ->willReturn('wubble');
 
-        $this->renderer->expects($this->once())->method('renderInline')
-            ->with($ad)->willReturn('foo garply');
-        $this->renderer->expects($this->once())->method('getDeviceCSSClasses')
-            ->with($ad)->willReturn('corge');
-        $this->renderer->expects($this->once())->method('getMarK')
-            ->with($ad)->willReturn('Sponsor');
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
-            ->willReturn([ 'safe_frame' => 1 ]);
+            ->willReturn([ 'safe_frame' => 0 ]);
+
+        $this->renderer->expects($this->any())->method('render')
+            ->willReturn('Ad output');
 
         $this->assertEquals(
-            '<div class="ad-slot oat oat-visible oat-left corge" data-mark="Sponsor">foo garply</div>',
-            smarty_function_render_ad_slot([ 'format' => 'inline', 'position' => 123 ], $this->smarty)
+            'Ad output',
+            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
         );
     }
 }
