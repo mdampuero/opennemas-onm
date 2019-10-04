@@ -73,11 +73,25 @@ class NewsMLComponentPhoto extends NewsML
     /**
      * {@inheritdoc}
      */
+    public function getAgencyName($data)
+    {
+        $agency = $data->xpath('/NewsComponent/AdministrativeMetadata/Provider/Party');
+
+        if (is_array($agency) && count($agency) > 0) {
+            return (string) $agency[0]->attributes()->FormalName;
+        }
+
+        return $this->getFromBag('agency_name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getBody($data)
     {
         $bodies = $data->xpath('//ContentItem');
+        $body   = '';
 
-        $body = '';
         if (is_array($bodies)
             && !empty($bodies)
             && !empty($bodies[0]->DataContent)
@@ -89,20 +103,6 @@ class NewsMLComponentPhoto extends NewsML
         }
 
         return $body;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAgencyName($data)
-    {
-        $agency = $data->xpath('/NewsComponent/AdministrativeMetadata/Provider/Party');
-
-        if (is_array($agency) && count($agency) > 0) {
-            return (string) $agency[0]->attributes()->FormalName;
-        }
-
-        return $this->getFromBag('agency_name');
     }
 
     /**
@@ -336,30 +336,5 @@ class NewsMLComponentPhoto extends NewsML
         $photo->merge($this->bag);
 
         return $photo;
-    }
-
-    /**
-     * Checks possible photo xpaths.
-     *
-     * @param SimpleXMLObject The data to search in.
-     *
-     * @return string The photo xpath.
-     */
-    protected function getPhotoPath($data)
-    {
-        // Check order
-        $queries = [
-            '//Role[@FormalName="Preview"]',
-            '//Role[@FormalName="Quicklook"]',
-            '//Role[@FormalName="Thumbnail"]'
-        ];
-
-        foreach ($queries as $q) {
-            $file = $data->xpath($q);
-
-            if (!empty($file)) {
-                return $q;
-            }
-        }
     }
 }
