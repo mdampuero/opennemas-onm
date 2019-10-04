@@ -89,7 +89,7 @@ class AdvertisementController extends Controller
         ];
 
         $contents = $this->get('frontend.renderer.advertisement')
-            ->renderSafeFrame($ad, [
+            ->render($ad, [
                 'category'           => $category,
                 'extension'          => $module,
                 'advertisementGroup' => $advertisementGroup,
