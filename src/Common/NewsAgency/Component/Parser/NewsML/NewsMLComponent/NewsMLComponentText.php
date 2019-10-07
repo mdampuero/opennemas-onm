@@ -26,12 +26,6 @@ class NewsMLComponentText extends NewsML
             return false;
         }
 
-        $node = $data->xpath('/NewsComponent');
-
-        if (!is_array($node) || count($node) == 0) {
-            return false;
-        }
-
         $node = $data->xpath('/NewsComponent/ContentItem/MediaType[@FormalName="Text"]');
 
         if (empty($node)) {
