@@ -342,7 +342,7 @@ class MenusController extends Controller
             $pages[] = [
                 'title' => _('News Stand'),
                 'link'  => trim(
-                    $this->get('router')->generate('frontend_newstand_frontpage'),
+                    $this->get('router')->generate('frontend_newsstand_frontpage'),
                     '/'
                 )
             ];
