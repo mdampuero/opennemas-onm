@@ -91,7 +91,7 @@ class ImageRenderer extends AdvertisementRenderer
      *
      * @return string The HTML code for a flash-based advertisement.
      */
-    private function renderSafeFrameFlash($ad, $img)
+    protected function renderSafeFrameFlash($ad, $img)
     {
         $publicId = date('YmdHis', strtotime($ad->created)) .
             sprintf('%06d', $ad->id);
@@ -117,7 +117,7 @@ class ImageRenderer extends AdvertisementRenderer
      *
      * @return string The HTML code for the image-based advertisement.
      */
-    private function renderSafeFrameImage($ad, $img)
+    protected function renderSafeFrameImage($ad, $img)
     {
         $publicId = date('YmdHis', strtotime($ad->created)) .
             sprintf('%06d', $ad->id);
@@ -144,7 +144,7 @@ class ImageRenderer extends AdvertisementRenderer
      *
      * @return \Photo The image for the advertisement.
      */
-    private function getImage($ad)
+    protected function getImage($ad)
     {
         if (empty($ad->path)) {
             $this->container->get('application.log')->info(

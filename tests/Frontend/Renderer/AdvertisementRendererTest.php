@@ -65,7 +65,6 @@ class AdvertisementRendererTest extends TestCase
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'getRendererClass' ])
             ->getMock();
-
     }
 
     public function serviceContainerCallback($name)
@@ -292,7 +291,6 @@ class AdvertisementRendererTest extends TestCase
             'foo',
             $this->renderer->renderInlineHeaders([ $ad ], [])
         );
-
     }
 
     /**
@@ -320,7 +318,6 @@ class AdvertisementRendererTest extends TestCase
             'foo',
             $this->renderer->renderInlineHeaders([ $ad ], [])
         );
-
     }
 
     /**
