@@ -159,4 +159,17 @@
       {t}Delete{/t}
     </button>
   {/acl}
+  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
+    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
+      <i class="fa fa-ellipsis-h"></i>
+    </button>
+    <ul class="dropdown-menu no-padding">
+      <li>
+        <a href="[% getFrontendUrl(item) %]" target="_blank">
+          <i class="fa fa-external-link m-r-5"></i>
+          {t}Link{/t}
+        </a>
+      </li>
+    </ul>
+  </div>
 {/block}

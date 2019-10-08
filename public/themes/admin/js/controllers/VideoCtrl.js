@@ -2,8 +2,8 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', 'http', 'routing', 'messenger',
-  function($controller, $scope, $timeout, http, routing, messenger) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger',
+  function($controller, $scope, $timeout, $window, http, routing, messenger) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -61,6 +61,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.routes = {
       createItem: 'api_v1_backend_video_create_item',
       getItem:    'api_v1_backend_video_get_item',
+      public:     'frontend_video_show',
       redirect:   'backend_video_show',
       saveItem:   'api_v1_backend_video_save_item',
       updateItem: 'api_v1_backend_video_update_item'
@@ -176,20 +177,17 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
-     * Returns the frontend url for the content given its object
+     *   Generates the public URL basing on the item.
      *
-     * @param  {String} item  The object item to generate the url from.
-     * @return {String}
+     * @param {String} item  The item to generate route for.
+     *
+     * @return {String} The URL for the content.
      */
     $scope.getFrontendUrl = function(item) {
-      var date = item.date;
-
-      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
-
       return $scope.getL10nUrl(
-        routing.generate('frontend_video_show', {
+        routing.generate($scope.routes.public, {
           id: item.pk_content,
-          created: formattedDate,
+          created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
           slug: item.slug,
           category_name: item.category_name
         })

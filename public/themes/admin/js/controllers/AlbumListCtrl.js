@@ -15,8 +15,8 @@
      *   Controller for album list.
      */
     .controller('AlbumListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
+      function($controller, $scope, $window, oqlEncoder, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -47,7 +47,30 @@
           deleteList: 'api_v1_backend_album_delete_list',
           getList:    'api_v1_backend_album_get_list',
           patchItem:  'api_v1_backend_album_patch_item',
-          patchList:  'api_v1_backend_album_patch_list'
+          patchList:  'api_v1_backend_album_patch_list',
+          public:     'frontend_album_show'
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf AlbumListCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              slug: item.slug,
+              category_name: item.category_name
+            })
+          );
         };
 
         /**

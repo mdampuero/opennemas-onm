@@ -66,36 +66,23 @@ class AttachmentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/files\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/xyzzy.gorp/',
-            $this->helper->generatePath($file)
+            $this->helper->generatePath($file, new \DateTime())
         );
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/files\/2010\/01\/01\/xyzzy.gorp/',
-            $this->helper->generatePath($file, '2010-01-01 15:20:45')
+            $this->helper->generatePath($file, new \DateTime('2010-01-01 15:20:45'))
         );
     }
 
     /**
-     * Tests generateRelativePath.
+     * Tests getRelativePath.
      */
-    public function testGenerateRelativePath()
+    public function testGetRelativePath()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
-
-        $file->expects($this->any())->method('getClientOriginalName')
-            ->willReturn('xyzzy.gorp');
-
-        $this->assertRegexp(
-            '/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/xyzzy.gorp/',
-            $this->helper->generateRelativePath($file)
-        );
-
         $this->assertEquals(
-            '/2010/01/01/xyzzy.gorp',
-            $this->helper->generateRelativePath($file, '2010-01-01 15:20:45')
+            '2010/01/01/xyzzy.gorp',
+            $this->helper->getRelativePath('/waldo/grault/media/bar/files/2010/01/01/xyzzy.gorp')
         );
     }
 

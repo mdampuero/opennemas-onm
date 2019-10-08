@@ -6,7 +6,8 @@
     "globals": {
         "ActiveXObject": true,
         "_": true,
-        "angular": true
+        "angular": true,
+        "Uint8Array": true
     },
     "rules": {
         // Errors

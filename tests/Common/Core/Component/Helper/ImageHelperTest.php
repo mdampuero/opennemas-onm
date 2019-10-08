@@ -35,7 +35,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
-            ->setConstructorArgs([ $this->instance, $this->processor, '/waldo/grault' ])
+            ->setConstructorArgs([ $this->instance, '/waldo/grault', $this->processor ])
             ->setMethods([ 'getExtension' ])
             ->getMock();
 
@@ -59,12 +59,12 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/images\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/[0-9]{19}.jpg/',
-            $this->helper->generatePath($file)
+            $this->helper->generatePath($file, new \DateTime())
         );
 
         $this->assertRegexp(
             '/\/waldo\/grault\/media\/bar\/images\/2010\/01\/01\/20100101152045[0-9]{5}.jpg/',
-            $this->helper->generatePath($file, '2010-01-01 15:20:45')
+            $this->helper->generatePath($file, new \DateTime('2010-01-01 15:20:45'))
         );
     }
 

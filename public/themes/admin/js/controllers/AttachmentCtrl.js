@@ -89,7 +89,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.localize($scope.data.item, 'item', true);
+          $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
         };
 
         /**
@@ -114,6 +114,13 @@
 
           return true;
         };
+
+        // Update path in original item when localized item changes
+        $scope.$watch('item.path', function(nv) {
+          if ($scope.data && $scope.data.item) {
+            $scope.data.item.path = nv;
+          }
+        });
       }
     ]);
 })();

@@ -76,7 +76,7 @@ class Instance extends Entity
     }
 
     /**
-     * Returns the relative path for the instance media files.
+     * Returns the relative path for instance attachment files.
      *
      * @return string The relative path for the instance media files.
      */
@@ -86,9 +86,9 @@ class Instance extends Entity
     }
 
     /**
-     * Returns the relative path for the instance media files.
+     * Returns the relative path for instance photo files.
      *
-     * @return string The relative path for the instance media files.
+     * @return string The relative path for photos.
      */
     public function getImagesShortPath()
     {
@@ -96,13 +96,23 @@ class Instance extends Entity
     }
 
     /**
-     * Returns the relative path for the instance media files.
+     * Returns the relative path for instance media files.
      *
-     * @return string The relative path for the instance media files.
+     * @return string The relative path for attachments.
      */
     public function getMediaShortPath()
     {
         return "/media/{$this->internal_name}";
+    }
+
+    /**
+     * Returns the relative path for instance newsstand files.
+     *
+     * @return string The relative path for newsstands.
+     */
+    public function getNewsstandShortPath()
+    {
+        return $this->getMediaShortPath() . '/kiosko';
     }
 
     /**

@@ -67,8 +67,8 @@ frontend_monograph:
 frontend_newsletter:
     resource: '@FrontendBundle/Resources/config/routing/newsletter.yml'
 
-frontend_newstand:
-    resource: '@FrontendBundle/Resources/config/routing/newstand.yml'
+frontend_newsstand:
+    resource: '@FrontendBundle/Resources/config/routing/newsstand.yml'
 
 frontend_opinion:
     resource: '@FrontendBundle/Resources/config/routing/opinion.yml'

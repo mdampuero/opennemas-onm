@@ -21,8 +21,9 @@ class AttachmentSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'content.updateItem' => [ [ 'onAttachmentUpdate', 5 ] ],
-            'content.deleteItem' => [ [ 'onAttachmentDelete', 5 ] ],
+            'attachment.deleteItem' => [ [ 'onAttachmentDelete', 5 ] ],
+            'attachment.patchItem'  => [ [ 'onAttachmentUpdate', 5 ] ],
+            'attachment.updateItem' => [ [ 'onAttachmentUpdate', 5 ] ]
         ];
     }
 

@@ -50,7 +50,7 @@
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/category.tpl" field="item.category"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
-      {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getFrontendUrl(item) %]"}
+      {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>
@@ -69,7 +69,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
     </div>
   </div>

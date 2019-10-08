@@ -12,6 +12,7 @@ namespace Tests\Common\Core\Component\Helper;
 use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Data\Core\FilterManager;
 use Common\ORM\Entity\Category;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Tag;
 use Common\ORM\Entity\User;
 
@@ -347,6 +348,36 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content->created                = $date;
         $content->content_type_name      = 'video';
         $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+
+        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
+        $method->setAccessible(true);
+
+        $this->cs->expects($this->once())->method('getItem')
+            ->with(6458)->willReturn(new Category([ 'name' => 'actualidad' ]));
+
+        $this->assertEquals(
+            'video/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/' .
+                $date->format('YmdHis') . '000252.html',
+            $method->invokeArgs($this->urlGenerator, [ $content ])
+        );
+    }
+
+    /**
+     * Tests getUriForContent when the content uses the new ORM and categories
+     * are defined as an array of ids.
+     */
+    public function testGetUriForContentWhenCategoriesAsArray()
+    {
+        $date = new \DateTime();
+
+        $content = new Content([
+            'pk_content'        => 252,
+            'category_name'     => 'actualidad',
+            'categories'        => [ 6458 ],
+            'created'           => $date,
+            'content_type_name' => 'video',
+            'slug'              => 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena'
+        ]);
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);

@@ -251,6 +251,7 @@ class SqlTranslator
 
         // Push join condition
         $keys = $this->metadata->getMetaKeys();
+
         foreach ($keys as $tableId => $metaId) {
             $this->sqls[] = sprintf(
                 '%s.%s = %s.%s',
@@ -262,9 +263,12 @@ class SqlTranslator
         }
 
         // Push meta-based filters
-        $this->sqls[]   = "and meta_key = ? and meta_value";
         $this->params[] = $str;
         $this->types[]  = \PDO::PARAM_STR;
+        $this->sqls[]   = sprintf(
+            "and %s = ? and meta_value",
+            $this->metadata->getMetaKeyName()
+        );
     }
 
     /**

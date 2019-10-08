@@ -9,14 +9,15 @@
  */
 namespace Tests\Api\Service\V1;
 
-use Api\Service\V1\AttachmentService;
-use Common\Core\Component\Helper\AttachmentHelper;
+use Api\Service\V1\NewsstandService;
+use Common\Core\Component\Helper\NewsstandHelper;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Instance;
 
 /**
- * Defines test cases for AttachmentService class.
+ * Defines test cases for NewsstandService class.
  */
-class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
+class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -29,25 +30,36 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->converter = $this->getMockBuilder('Converter' . uniqid())
+            ->setMethods([ 'objectify', 'responsify' ])
+            ->getMock();
+
         $this->dispatcher = $this->getMockBuilder('Common\Core\Component\EventDispatcher\EventDispatcher')
             ->disableOriginalConstructor()
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('EntityRepository')
-            ->setMethods([ 'find' ])
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'find', 'getConverter', 'getMetadata' ])
             ->getMock();
 
-        $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AttachmentHelper')
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->nh = $this->getMockBuilder('Common\Core\Component\Helper\NewsstandHelper')
             ->setConstructorArgs([ $this->instance, '/wibble/flob' ])
-            ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove' ])
+            ->setMethods([ 'exists', 'generatePath', 'getRelativePath', 'move', 'remove' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
-        $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
-            ->setConstructorArgs([ $this->container, '\Attachment' ])
+        $this->em->expects($this->any())->method('getConverter')
+            ->with('Content')->willReturn($this->converter);
+
+        $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
+            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])
             ->setMethods([ 'getItem' ])
             ->getMock();
     }
@@ -65,15 +77,59 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
-            case 'entity_repository':
+            case 'orm.manager':
                 return $this->em;
 
-            case 'core.helper.attachment':
-                return $this->ah;
+            case 'core.helper.newsstand':
+                return $this->nh;
 
             default:
                 return null;
         }
+    }
+
+    /**
+     * Tests createItem when an error while moving the file is thrown.
+     *
+     * @expectedException Api\Exception\CreateItemException
+     */
+    public function testCreateItemWhenErrorWithFile()
+    {
+        $data = [ 'created' => new \DateTime(), 'title' => 'waldo' ];
+
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->converter->expects($this->once())->method('objectify')
+            ->willReturn($data);
+
+        $this->nh->expects($this->once())->method('move')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->createItem([ 'title' => 'waldo' ], $file);
+    }
+
+    /**
+     * Tests createItem when the provided file already exists.
+     *
+     * @expectedException Api\Exception\CreateItemException
+     */
+    public function testCreateItemWhenFileExists()
+    {
+        $data = [ 'created' => new \DateTime(), 'title' => 'waldo' ];
+
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->converter->expects($this->once())->method('objectify')
+            ->willReturn($data);
+
+        $this->nh->expects($this->once())->method('exists')
+            ->willReturn(true);
+
+        $this->service->createItem([ 'title' => 'waldo' ], $file);
     }
 
     /**
@@ -87,47 +143,31 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests createItem when an error while moving the file is thrown.
-     *
-     * @expectedException Api\Exception\CreateItemException
-     */
-    public function testCreateItemWhenErrorWithFile()
-    {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
-
-        $file->expects($this->any())->method('getClientOriginalName')
-            ->willReturn('xyzzy.glorp');
-
-        $this->ah->expects($this->once())->method('move')
-            ->will($this->throwException(new \Exception()));
-
-        $this->service->createItem([ 'title' => 'waldo' ], $file);
-    }
-
-    /**
      * Tests updateItem when an error while moving the file is thrown.
      *
      * @expectedException Api\Exception\UpdateItemException
      */
     public function testUpdateItemWhenErrorWithFile()
     {
-        $item = new \Attachment();
+        $data = [ 'created' => new \DateTime(), 'title' => 'waldo' ];
 
-        $item->created = '2010-01-01 00:00:00';
-        $item->path    = '/2010/01/01/plugh.mumble';
+        $item = new Content([
+            'created' => '2010-01-01 00:00:00',
+            'path'    => '/2010/01/01/plugh.mumble'
+        ]);
 
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
+        $this->converter->expects($this->once())->method('objectify')
+            ->willReturn($data);
+
         $this->service->expects($this->once())->method('getItem')
             ->willReturn($item);
 
-        $this->ah->expects($this->once())->method('generatePath')
+        $this->nh->expects($this->once())->method('generatePath')
             ->will($this->throwException(new \Exception()));
 
         $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
