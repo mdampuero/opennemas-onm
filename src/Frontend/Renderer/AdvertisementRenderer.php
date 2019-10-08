@@ -110,15 +110,15 @@ class AdvertisementRenderer
         // Get renderer class
         $renderer = $this->getRendererClass($ad->with_script);
 
-        // Check for safeframe
+        // Check for safeframe and advertisement format
+        $adsFormat   = $params['ads_format'] ?? null;
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
-        if ($isSafeFrame) {
+        if ($isSafeFrame && !in_array($adsFormat, ['amp', 'inline'])) {
             return array_key_exists('floating', $params)
                 && $params['floating'] === true
                     ? $this->renderSafeFrameSlot($ad)
                     : $renderer->renderSafeFrame($ad, $params);
         }
-
 
         // Inline render
         $tpl           = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
@@ -244,6 +244,9 @@ class AdvertisementRenderer
 
         $size = array_shift($sizes);
 
+        // Get renderer class
+        $renderer = $this->getRendererClass($ad->with_script);
+
         return sprintf(
             $tpl,
             $size['width'] . 'px',
@@ -252,7 +255,7 @@ class AdvertisementRenderer
             $ad->pk_advertisement,
             empty($ad->timeout) ? 5 : $ad->timeout,
             implode(',', $ad->positions),
-            $this->render($ad, $params)
+            $renderer->renderInline($ad, $params)
         );
     }
 
@@ -263,10 +266,10 @@ class AdvertisementRenderer
      *
      * @return string the HTML generated
      */
-    private function renderSafeFrameSlot(\Advertisement $ad)
+    protected function renderSafeFrameSlot(\Advertisement $ad)
     {
         $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
-        $id   = $ad->pk_content;
+        $id   = $ad->id;
         $type = 37; // Floating banner type
 
         return sprintf($html, $id, $type);
@@ -280,7 +283,7 @@ class AdvertisementRenderer
      *
      * @return \AdvertisementRenderer the advertisement renderer object
      */
-    private function getRendererClass($scriptType)
+    protected function getRendererClass($scriptType)
     {
         $class     = $this->types[$scriptType] . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Advertisement\\' . $class;

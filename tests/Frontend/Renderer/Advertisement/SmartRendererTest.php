@@ -1,0 +1,317 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Frontend\Renderer\Advertisement;
+
+use PHPUnit\Framework\TestCase;
+use Frontend\Renderer\Advertisement\SmartRenderer;
+
+/**
+ * Defines test cases for SmartRenderer class.
+ */
+class SmartRendererTest extends TestCase
+{
+    /**
+     * @var SmartRenderer
+     */
+    protected $renderer;
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $this->container = $this->getMockForAbstractClass(
+            'Symfony\Component\DependencyInjection\ContainerInterface'
+        );
+
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet', 'find' ])
+            ->getMock();
+
+        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->renderer = new SmartRenderer($this->container);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.template.admin':
+                return $this->templateAdmin;
+
+            case 'orm.manager':
+                return $this->em;
+
+            case 'entity_repository':
+                return $this->em;
+        }
+
+        return null;
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     */
+    public function testRenderInline()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'smart_format_id' => 321 ];
+
+        $content     = new \stdClass();
+        $content->id = 123;
+
+        $params = [
+            'advertisementGroup' => 'foo',
+            'category'           => '',
+            'extension'          => '',
+            'content'            => $content
+
+        ];
+
+        $output = '<div id="sas_{$id}"></div>
+            <script type="application/javascript">
+            sas.cmd.push(function() {
+                sas.render("{$id}");
+            });
+            </script>';
+
+        $config = [
+            'domain'      => 'https://example.com',
+            'network_id'  => 0000,
+            'site_id'     => 1234,
+            'page_id'     => [ 'foo' => 111 ],
+            'tags_format' => 'onecall_async'
+        ];
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('smart_ad_server')
+            ->willReturn($config);
+
+        // Avoid template params due to untestable rand() function
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/inline/smart.slot.onecall_async.tpl')
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderInline($ad, $params)
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderSafeFrame
+     */
+    public function testRenderSafeFrame()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'smart_format_id' => 321 ];
+
+        $params = [ 'advertisementGroup' => 'foo' ];
+        $output = '<html>
+        <head>
+          <style>
+            body {
+              display: table;
+              margin: 0;
+              overflow: hidden;
+              padding: 0;
+              text-align: center;
+            }
+
+            img {
+              height: auto;
+              max-width: 100%;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="content">
+            <script type="application/javascript" src="//ced.sascdn.com/tag/0000/smart.js" async></script>
+            <div id="sas_321"></div>
+            <script type="application/javascript">
+              var sas = sas || {};
+              sas.cmd = sas.cmd || [];
+              sas.cmd.push(
+                function () {
+                  sas.call(
+                    { siteId: 1234, pageId: 111, formatId: 321, tagId: "sas_321" },
+                    { networ7kId: 0000, domain: "https://example.com" /*, onNoad: function() {} */ }
+                  );
+                }
+              );
+            </script>
+          </div>
+        </body>
+      </html>';
+
+        $config = [
+            'domain'     => 'https://example.com',
+            'network_id' => 0000,
+            'site_id'    => 1234,
+            'page_id'    => [ 'foo' => 111 ]
+        ];
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('smart_ad_server')
+            ->willReturn($config);
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/safeframe/smart.tpl', [
+                'config'    => $config,
+                'page_id'   => 111,
+                'format_id' => 321
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderSafeFrame($ad, $params)
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInlineHeader
+     */
+    public function testRenderInlineHeader()
+    {
+        $ad              = new \Advertisement();
+        $ad->id          = 1;
+        $ad->created     = '2019-03-28 18:40:32';
+        $ad->params      = [ 'smart_format_id' => 321 ];
+        $ad->with_script = 4;
+
+        $content     = new \stdClass();
+        $content->id = 123;
+
+        $params = [
+            'advertisementGroup' => 'foo',
+            'category'           => '',
+            'extension'          => '',
+            'content'            => $content
+
+        ];
+
+        $output = '<script type="application/javascript" src="//ced.sascdn.com/tag/0000/smart.js" async></script>
+        <script type="application/javascript">
+            var sas = sas || {};
+            sas.cmd = sas.cmd || [];
+            sas.cmd.push(function() {
+                sas.setup({ networkid: 0000, domain: "https://example.com", async: true });
+            });
+        </script>';
+
+        $config = [
+            'domain'      => 'https://example.com',
+            'network_id'  => 0000,
+            'site_id'     => 1234,
+            'page_id'     => [ 'foo' => 111 ],
+            'tags_format' => 'ajax_async'
+        ];
+
+        $zones[] = [
+            'id'        => 1,
+            'format_id' => 321
+        ];
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('smart_ad_server')
+            ->willReturn($config);
+
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('smart_custom_code')
+            ->willReturn('');
+
+        $this->ds->expects($this->at(2))->method('get')
+            ->with('smart_ad_server')
+            ->willReturn($config);
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/inline/smart.header.ajax_async.tpl', [
+                'config'        => $config,
+                'page_id'       => 111,
+                'zones'         => $zones,
+                'customCode'    => '',
+                'targetingCode' => ''
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderInlineHeader([ $ad ], $params)
+        );
+    }
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getSmartCustomCode
+     */
+    public function testGetSmartCustomCode()
+    {
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('smart_custom_code')
+            ->willReturn(base64_encode('sas_custom_code'));
+
+        $method = new \ReflectionMethod($this->renderer, 'getSmartCustomCode');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            'sas_custom_code',
+            $method->invokeArgs($this->renderer, [])
+        );
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('smart_custom_code')
+            ->willReturn(null);
+
+        $this->assertEquals(
+            '',
+            $method->invokeArgs($this->renderer, [])
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getSmartTargeting
+     */
+    public function testGetSmartTargeting()
+    {
+        $this->ds->expects($this->any())->method('get')
+            ->with('smart_ad_server')
+            ->willReturn([
+                'category_targeting' => 'cat',
+                'module_targeting'   => 'mod',
+                'url_targeting'      => 'url'
+            ]);
+
+        $targetingCode = 'cat=foo;mod=bar;url=baz;';
+
+        $method = new \ReflectionMethod($this->renderer, 'getSmartTargeting');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            $targetingCode,
+            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
+        );
+    }
+}
