@@ -60,6 +60,14 @@
         /**
          * @inheritdoc
          */
+        $scope.hasMultilanguage = function() {
+          return $scope.config && $scope.config.locale &&
+            $scope.config.locale.multilanguage;
+        };
+
+        /**
+         * @inheritdoc
+         */
         $scope.itemHasId = function() {
           return $scope.item.pk_content_category &&
             $scope.item.pk_content_category !== null;
