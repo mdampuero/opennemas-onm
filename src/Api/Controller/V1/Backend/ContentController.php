@@ -28,7 +28,7 @@ class ContentController extends ApiController
         return [
             'authors'          => $this->getAuthors(),
             'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
-            'keys'             => $this->getL10nKeys(),
+            'keys'             => array_merge([ 'name' ], $this->getL10nKeys()),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'paths'            => [
                 'photo'      => $this->get('core.instance')->getImagesShortPath(),
