@@ -187,9 +187,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_name: $scope.selectedCategories.filter(function(e) {
-                return e.pk_content_category === item.categories[0];
-              })[0].name
+              category_name: $scope.selectedCategories[0].name
             })
           );
         };

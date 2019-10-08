@@ -179,12 +179,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @return {String} The URL for the content.
      */
     $scope.getFrontendUrl = function(item) {
+      if (!$scope.selectedCategories || !$scope.selectedCategories.length) {
+        return '';
+      }
+
       return $scope.getL10nUrl(
         routing.generate($scope.routes.public, {
           id: item.pk_content,
           created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
           slug: item.slug,
-          category_name: item.category_name
+          category_name: $scope.selectedCategories[0].name
         })
       );
     };
@@ -195,13 +199,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('cover', function(nv, ov) {
+    $scope.$watch('cover', function(nv) {
       if (!angular.isObject($scope.item.information)) {
         $scope.item.information = {};
       }
 
       if (angular.isObject(nv)) {
-        $scope.item.information['thumbnail'] = nv.pk_photo;
+        $scope.item.information.thumbnail = nv.pk_photo;
       } else {
         $scope.item.information.thumbnail = {};
       }
