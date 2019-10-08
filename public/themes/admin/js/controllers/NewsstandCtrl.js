@@ -64,7 +64,6 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
-          $scope.localize($scope.data.extra.categories, 'categories');
 
           if ($scope.item.thumbnail) {
             $scope.preview = $scope.data.extra.paths.newsstand + '/' +
@@ -180,7 +179,7 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.categories) {
+          if (!$scope.selectedCategories || !$scope.selectedCategories.length) {
             return '';
           }
 
@@ -188,7 +187,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_name: $scope.categories.filter(function(e) {
+              category_name: $scope.selectedCategories.filter(function(e) {
                 return e.pk_content_category === item.categories[0];
               })[0].name
             })
