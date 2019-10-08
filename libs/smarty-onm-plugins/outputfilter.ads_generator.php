@@ -20,31 +20,22 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     }
 
     // Do not render the ads headers for AMP pages.
-    $formatFromTemplateVar = (
-            array_key_exists('render_params', $smarty->tpl_vars)
-            && array_key_exists('ads-format', $smarty->tpl_vars['render_params']->value)
-            && $smarty->tpl_vars['render_params']->value['ads-format']
-        ) ? $smarty->tpl_vars['render_params']->value['ads-format']
-        : null;
-
-    if ($formatFromTemplateVar == 'amp') {
+    $adsFormat = $smarty->getValue('ads_format');
+    if ($adsFormat === 'amp') {
         return $output;
     }
 
-    $content = $smarty->hasValue('content')
-        ? $smarty->getValue('content')
-        : null;
-
-    $positions = [];
-    $settings  = $smarty->getContainer()
+    $content  = $smarty->getValue('content');
+    $settings = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings');
 
-    $safeFrameEnabled = $smarty->getContainer()
+    $isSafeFrame = $smarty->getContainer()
         ->get('core.helper.advertisement')->isSafeFrameEnabled();
 
-    if (!$safeFrameEnabled) {
+    $adsPositions = $smarty->getValue('ads_positions') ?? [];
+    if (!$isSafeFrame) {
         $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
         $ads         = array_filter($ads, function ($a) {
             return $a->isInTime();
@@ -55,12 +46,12 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'extension'          => $app['extension'],
             'advertisementGroup' => $app['advertisementGroup'],
             'content'            => $content,
-            'x-tags'             => $smarty->smarty->tpl_vars['x-tags']->value,
+            'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
         $adsOutput    = $adsRenderer->renderInlineHeaders($ads, $params);
         $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
-        $devices      = getService('core.template.admin')
+        $devices      = $smarty->getContainer()->get('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
 
         $devices = "\n" . str_replace("\n", ' ', $devices);
@@ -68,19 +59,9 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $output = str_replace('</head>', $adsOutput . '</head>', $output);
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
-    } else {
-        // No advertisements
-        if (!array_key_exists('ads_positions', $smarty->parent->tpl_vars)
-            || !is_array($smarty->parent->tpl_vars['ads_positions']->value)
-        ) {
-            return $output;
-        }
-
-        $positions = is_object($smarty->parent->tpl_vars['ads_positions']) ?
-            $smarty->parent->tpl_vars['ads_positions']->value : [];
     }
 
-    $content = getService('core.template.admin')
+    $content = $smarty->getContainer()->get('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
             'debug'              => $app['environment'] === 'dev' ? 'true' : 'false',
             'category'           => $app['section'],
@@ -88,8 +69,8 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'advertisementGroup' => $app['advertisementGroup'],
             'contentId'          => $content->id ?? null,
             'lifetime'           => $settings['lifetime_cookie'],
-            'positions'          => implode(',', $positions),
-            'url'                => getService('router')
+            'positions'          => $isSafeFrame ? implode(',', $adsPositions) : '',
+            'url'                => $smarty->getContainer()->get('router')
                 ->generate('api_v1_advertisements_list')
         ]);
 
