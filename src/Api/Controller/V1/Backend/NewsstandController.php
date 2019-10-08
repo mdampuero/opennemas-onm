@@ -114,4 +114,12 @@ class NewsstandController extends ContentOldController
             'categories' => $this->getCategories($items),
         ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getL10nKeys()
+    {
+        return array_merge(parent::getL10nKeys(), [ 'name' ]);
+    }
 }
