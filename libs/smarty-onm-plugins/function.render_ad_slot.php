@@ -44,8 +44,8 @@ function smarty_function_render_ad_slot($params, &$smarty)
         $smarty->setValue('advertisements', $ads);
     }
 
-    $isAmp = $position > 1050 && $position < 1070;
-    if ($safeframeEnabled && !$isAmp) {
+    $adsFormat = $smarty->getValue('ads_format');
+    if ($safeframeEnabled && !in_array($adsFormat, ['amp', 'inline'])) {
         return sprintf($tpl, $class, '');
     }
 
@@ -56,7 +56,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
         'content'            => $smarty->getValue('content'),
-        'format'             => $isAmp ? 'amp' : 'web',
+        'ads_format'         => $adsFormat ?? null,
     ];
 
     return $smarty->getContainer()->get('frontend.renderer.advertisement')

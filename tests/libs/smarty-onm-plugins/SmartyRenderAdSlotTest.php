@@ -211,20 +211,12 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('getValue')
             ->with('app')
             ->willReturn([
                 'extension'          => 'foobar',
                 'advertisementGroup' => 'gulp'
             ]);
-
-        $this->smarty->expects($this->at(4))->method('getValue')
-            ->with('actual_category')
-            ->willReturn('gorp');
-
-        $this->smarty->expects($this->at(5))->method('getValue')
-            ->with('content')
-            ->willReturn('wubble');
 
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
