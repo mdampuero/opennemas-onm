@@ -32,7 +32,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
         'content'            => $smarty->getValue('content'),
-        'format'             => $contentType,
+        'ads_format'         => $contentType === 'amp' ? $contentType : null,
     ];
 
     $slots = [];

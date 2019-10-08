@@ -442,7 +442,7 @@ class FrontendController extends Controller
         }
 
         if ($action == 'showamp') {
-            $params['render_params'] = [ 'ads-format' => 'amp' ];
+            $params['ads_format'] = 'amp';
         }
 
         list($positions, $advertisements) =

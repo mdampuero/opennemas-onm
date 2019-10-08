@@ -116,17 +116,7 @@ class NewsletterRenderer
         $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
         $this->tpl->assign('advertisements', $ads);
 
-        // Format and assign the current date.
-        // CRAP!
-        $days   = [
-            'Domingo', 'Lunes', 'Martes', 'Miércoles',
-            'Jueves', 'Viernes', 'Sábado'
-        ];
-        $months = [
-            '', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        ];
-
+        // Assign the current date.
         $time = new \DateTime();
         $this->tpl->assign('current_date', $time);
 
@@ -144,7 +134,7 @@ class NewsletterRenderer
             'newsletter_subscriptionType',
         ]);
         $this->tpl->assign('conf', $configurations);
-        $this->tpl->assign('render_params', ['ads-format' => 'inline']);
+        $this->tpl->assign('ads_format', 'inline');
 
         return $this->tpl->fetch('newsletter/newsletter.tpl');
     }
