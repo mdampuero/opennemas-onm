@@ -60,7 +60,15 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.data || !$scope.data.extra) {
+          if (!$scope.categories) {
+            return '';
+          }
+
+          var categories = $scope.categories.filter(function(e) {
+            return e.pk_content_category === item.pk_fk_content_category;
+          });
+
+          if (categories.length === 0) {
             return '';
           }
 
@@ -68,9 +76,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_name: $scope.categories.filter(function(e) {
-                return e.pk_content_category === item.categories[0];
-              })[0].name
+              category_name: categories[0].name
             })
           );
         };
