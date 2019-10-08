@@ -36,8 +36,8 @@ class PollController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'list'    => 'poll_frontpage',
-        'show'    => 'poll_inner',
+        'list'    => 'polls_frontpage',
+        'show'    => 'polls_inner',
         'showamp' => 'amp_inner',
     ];
 
@@ -45,8 +45,8 @@ class PollController extends FrontendController
      * {@inheritdoc}
      */
     protected $positions = [
-        'poll_frontpage' => [ 7, 9 ],
-        'poll_inner'     => [ 7 ],
+        'polls_frontpage' => [ 7, 9 ],
+        'polls_inner'     => [ 7 ],
     ];
 
     /**
