@@ -394,14 +394,6 @@ class Importer
             }
         }
 
-        if ($target === 'Opinion') {
-            $data['type_opinion'] = 0;
-
-            if ($author == 1 || $author == 2) {
-                $data['type_opinion'] = $author;
-            }
-        }
-
         if ($this->importRelated() && !empty($resource->related)) {
             $data = array_merge($data, $this->getRelatedData($resource, $target));
         }

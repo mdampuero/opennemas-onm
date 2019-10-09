@@ -41,7 +41,7 @@
     </div>
   </div>
   <div class="ng-cloak" ng-show="item.information.service && !flags.http.fetch_video_info">
-    {include file="ui/component/input/text.tpl" iCounter=true iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+    {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
     {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
     <label for="preview" class="form-label">
       {t}Video preview{/t}

@@ -51,7 +51,7 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
         $this->service = $this->getMockBuilder('Api\Service\Service')
             ->setMethods([
                 'createItem', 'delete', 'deleteItem', 'deleteList', 'getItem',
-                'getList', 'getStats', 'patchItem', 'patchList', 'updateItem',
+                'getList', 'patchItem', 'patchList', 'updateItem',
             ])->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -218,21 +218,16 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
                 'total' => 1
             ]);
 
-        $this->service->expects($this->at(1))->method('getStats')
-            ->willReturn([ 2 => 4356 ]);
-
         $this->assertEquals([
             [
                 'id'    => '2',
                 'name'  => 'glork',
-                'type'  => 'list',
-                'users' => 4356
+                'type'  => 'list'
             ],
             [
                 'id'    => '3',
                 'name'  => 'plugh',
-                'type'  => 'list',
-                'users' => 0
+                'type'  => 'list'
             ]
         ], $method->invokeArgs($this->helper, []));
     }

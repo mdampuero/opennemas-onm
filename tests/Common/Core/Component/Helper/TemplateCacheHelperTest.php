@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\ORM\Entity\Category;
+use Common\ORM\Entity\Content;
 use Common\ORM\Entity\User;
 
 /**
@@ -103,6 +104,24 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->with('css', 'global');
 
         $this->helper->deleteDynamicCss();
+    }
+
+   /**
+     * Tests deleteNewsstands.
+     */
+    public function testDeleteNewsstands()
+    {
+        $this->cache->expects($this->at(0))->method('delete')
+            ->with('newsstand', 'list');
+        $this->cache->expects($this->at(1))->method('delete')
+            ->with('content', 2866);
+        $this->cache->expects($this->at(2))->method('delete')
+            ->with('content', 18701);
+
+        $this->helper->deleteNewsstands([
+            new Content([ 'pk_content' => 2866 ]),
+            new Content([ 'pk_content' => 18701 ])
+        ]);
     }
 
     public function testDeleteUsers()

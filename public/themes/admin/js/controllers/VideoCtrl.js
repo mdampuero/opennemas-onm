@@ -2,8 +2,8 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', 'http', 'routing', 'messenger',
-  function($controller, $scope, $timeout, http, routing, messenger) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger',
+  function($controller, $scope, $timeout, $window, http, routing, messenger) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -41,7 +41,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       thumbnail: null,
       title: '',
       type: 0,
-      with_comments: 0,
+      with_comment: 0,
       categories: [],
       related_contents: [],
       tags: [],
@@ -61,6 +61,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.routes = {
       createItem: 'api_v1_backend_video_create_item',
       getItem:    'api_v1_backend_video_get_item',
+      public:     'frontend_video_show',
       redirect:   'backend_video_show',
       saveItem:   'api_v1_backend_video_save_item',
       updateItem: 'api_v1_backend_video_update_item'
@@ -92,6 +93,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       $scope.localize($scope.data.item, 'item', true);
 
+      // Check if item is new (created) or existing for use default value or not
+      if (!$scope.data.item.pk_content) {
+        $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+      }
+
       // Assign the cover image
       var cover = $scope.data.extra.related_contents.filter(function(e) {
         return e && e.pk_photo === $scope.item.information.thumbnail;
@@ -115,11 +121,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
 
       if (type === 'external' || type === 'script') {
-        $scope.data.item.author_name = type;
+        $scope.item.author_name = type;
       }
 
       if (!$scope.item.type) {
-        $scope.data.item.type = 'html5';
+        $scope.item.type = 'html5';
       }
 
       $scope.type               = type;
@@ -171,22 +177,23 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
-     * Returns the frontend url for the content given its object
+     *   Generates the public URL basing on the item.
      *
-     * @param  {String} item  The object item to generate the url from.
-     * @return {String}
+     * @param {String} item  The item to generate route for.
+     *
+     * @return {String} The URL for the content.
      */
     $scope.getFrontendUrl = function(item) {
-      var date = item.date;
-
-      var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+      if (!$scope.selectedCategories || !$scope.selectedCategories.length) {
+        return '';
+      }
 
       return $scope.getL10nUrl(
-        routing.generate('frontend_video_show', {
+        routing.generate($scope.routes.public, {
           id: item.pk_content,
-          created: formattedDate,
+          created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
           slug: item.slug,
-          category_name: item.category_name
+          category_name: $scope.selectedCategories[0].name
         })
       );
     };
@@ -197,13 +204,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('cover', function(nv, ov) {
+    $scope.$watch('cover', function(nv) {
       if (!angular.isObject($scope.item.information)) {
         $scope.item.information = {};
       }
 
       if (angular.isObject(nv)) {
-        $scope.item.information['thumbnail'] = nv.pk_photo;
+        $scope.item.information.thumbnail = nv.pk_photo;
       } else {
         $scope.item.information.thumbnail = {};
       }

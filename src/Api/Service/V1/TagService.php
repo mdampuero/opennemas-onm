@@ -65,9 +65,9 @@ class TagService extends OrmService
 
         $oql = sprintf('slug in ["%s"]', implode('","', $slugs));
 
-        if (!empty($locale)) {
-            $oql .= sprintf(' and locale = "%s"', $locale);
-        }
+        $oql .= !empty($locale)
+            ? sprintf(' and (locale is null or locale = "%s")', $locale)
+            : ' and locale is null';
 
         return $this->getList($oql);
     }

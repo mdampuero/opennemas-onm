@@ -59,13 +59,6 @@ class Kiosko extends Content
     public $type = 0;
 
     /**
-     * The path to the kiosko
-     *
-     * @var string
-     */
-    public $kiosko_path = null;
-
-    /**
       * Initializes the Kiosko.
       *
       * @param integer $id The kiosko id.
@@ -75,7 +68,6 @@ class Kiosko extends Content
         $this->content_type_l10n_name = _('Kiosko');
         $this->content_type           = 14;
         $this->content_type_name      = 'kiosko';
-        $this->kiosko_path            = INSTANCE_MEDIA_PATH . 'kiosko' . DS;
 
         parent::__construct($id);
     }
@@ -87,10 +79,8 @@ class Kiosko extends Content
      */
     public function load($properties)
     {
-        if (array_key_exists('name', $properties)) {
-            $properties['thumb_url'] =
-                str_replace('.pdf', '.jpg', $properties['name']);
-        }
+        $properties['thumbnail'] =
+            str_replace('.pdf', '.jpg', $properties['path']);
 
         parent::load($properties);
     }
@@ -151,17 +141,14 @@ class Kiosko extends Content
         try {
             parent::create($data);
 
-            $conn->insert(
-                'kioskos',
-                [
-                    'pk_kiosko' => (int) $this->id,
-                    'name'      => $data['name'],
-                    'path'      => $data['path'],
-                    'date'      => $data['date'],
-                    'price'     => $data['price'],
-                    'type'      => $data['type']
-                ]
-            );
+            $conn->insert('kioskos', [
+                'pk_kiosko' => (int) $this->id,
+                'name'      => $data['name'] ?? null,
+                'path'      => $data['path'],
+                'date'      => $data['date'],
+                'price'     => $data['price'],
+                'type'      => $data['type']
+            ]);
 
             $conn->commit();
 
@@ -193,20 +180,17 @@ class Kiosko extends Content
         try {
             parent::update($data);
 
-            $conn->update(
-                'kioskos',
-                [
-                    'name'      => $data['name'],
-                    'date'      => $data['date'],
-                    'price'     => $data['price'],
-                    'type'      => $data['type']
-                ],
-                [ 'pk_kiosko' => (int) $data['id'] ]
-            );
+            $conn->update('kioskos', [
+                'name'      => $data['name'] ?? null,
+                'date'      => $data['date'],
+                'path'      => $data['path'],
+                'price'     => $data['price'] ?? 0,
+                'type'      => $data['type'] ?? 0
+            ], [ 'pk_kiosko' => (int) $data['id'] ]);
 
             $conn->commit();
 
-            return $this;
+            return true;
         } catch (\Exception $e) {
             $conn->rollback();
 
@@ -216,86 +200,6 @@ class Kiosko extends Content
 
             return false;
         }
-    }
-
-    /**
-     * Removes permanently the kiosko and its files.
-     *
-     * @param integer $id The kiosko id.
-     *
-     * @return boolean True if the kiosko was removed.
-     */
-    public function remove($id)
-    {
-        $conn = getService('dbal_connection');
-
-        try {
-            $conn->beginTransaction();
-
-            parent::remove($this->id);
-
-            $conn->delete('kioskos', [ 'pk_kiosko' => $id ]);
-
-            $conn->commit();
-
-            $this->removeFiles();
-
-            return true;
-        } catch (\Exception $e) {
-            $conn->rollback();
-
-            getService('error.log')->error(
-                'Error while removing Kiosko: ' . $e->getMessage()
-            );
-
-            return false;
-        }
-    }
-
-    /**
-     * Removes the files assigned to the newsstand
-     *
-     * @return void
-     **/
-    public function removeFiles()
-    {
-        $coverFile  = $this->kiosko_path . $this->path . $this->name;
-        $coverThumb = $this->kiosko_path . $this->path . $this->thumb_url;
-
-        // Remove old files if fileinput changed
-        if (file_exists($coverFile) && is_file($coverFile)) {
-            unlink($coverFile);
-        }
-
-        if (file_exists($coverThumb) && is_file($coverThumb)) {
-            unlink($coverThumb);
-        }
-
-        return;
-    }
-
-    /**
-     * Saves a  the PDF thumbnail for the kiosko.
-     *
-     * @param string $file_pdf The filename to the pdf file.
-     * @param string $path     The path to the pdf file.
-     */
-    public function saveFiles($targetPath, $targetFileName, $cover, $thumbnail)
-    {
-        $absolutePath      = $this->kiosko_path . $targetPath;
-        $thumbnailFileName = basename($targetFileName, '.pdf') . '.jpg';
-
-        // Create folder if it doesn't exist
-        if (!file_exists($absolutePath)) {
-            \Onm\FilesManager::createDirectory($absolutePath);
-        }
-
-        $uploadStatus = (
-            $cover->isValid() && $cover->move($absolutePath, $targetFileName)
-            && $thumbnail->isValid() && $thumbnail->move($absolutePath, $thumbnailFileName)
-        );
-
-        return $uploadStatus;
     }
 
     /**

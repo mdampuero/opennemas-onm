@@ -169,7 +169,7 @@ var newsletterTemplateTranslations = {
                     <label for="checkbox-lists-[% $index %]">
                       <strong>[% recipient.name %]</strong>
                       <span class="text-lowercase">
-                        - [% recipient.users %] {t}Subscribers{/t}
+                        - [% data.extra.users[recipient.id] || 0 %] {t}Subscribers{/t}
                       </span>
                     </label>
                   </div>

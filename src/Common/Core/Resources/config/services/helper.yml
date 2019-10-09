@@ -48,7 +48,7 @@ services:
 
     core.helper.image:
         class:     Common\Core\Component\Helper\ImageHelper
-        arguments: [ '@core.instance', '@core.image.processor', '%core.paths.public%' ]
+        arguments: [ '@core.instance', '%core.paths.public%', '@core.image.processor' ]
         public:    true
 
     core.helper.instance_sync:
@@ -84,6 +84,11 @@ services:
             - '@api.service.newsletter'
             - '%mailer_no_reply_address%'
         public: true
+
+    core.helper.newsstand:
+        class:     Common\Core\Component\Helper\NewsstandHelper
+        arguments: [ '@core.instance', '%core.paths.public%' ]
+        public:    true
 
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper

@@ -45,7 +45,7 @@
             selectedText: '@'
           },
           template: function() {
-            return '<ui-select class="[% cssClass %]" ng-required="required" name="category" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
+            return '<ui-select class="[% cssClass %]" ng-required="required" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
               '<ui-select-match placeholder="[% $parent.placeholder %]">' +
               '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
               '</ui-select-match>' +
@@ -276,6 +276,12 @@
               if (!newValue && !$scope.ngModel ||
                   angular.equals($scope.ngModel, newValue)) {
                 return;
+              }
+
+              // Mark field in form as dirty
+              if ($scope.$parent && $scope.$parent.form &&
+                  $scope.$parent.form.category) {
+                $scope.$parent.form.category.$setDirty(true);
               }
 
               $scope.ngModel = newValue;

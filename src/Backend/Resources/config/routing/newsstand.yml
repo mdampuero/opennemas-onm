@@ -1,34 +1,21 @@
-# Newsstands controller routes
-backend_newsstands:
-    path:     /newsstands
-    defaults: { _controller  : BackendBundle:Newsstands:list }
-
 backend_newsstand_create:
-    path:     /newsstands/create
-    defaults: { _controller  : BackendBundle:Newsstands:create }
+    path:     /newsstands/new
+    defaults: { _controller: BackendBundle:Newsstand:create }
 
 backend_newsstand_show:
-    path:     /newsstands/{id}/show
-    defaults: { _controller  : BackendBundle:Newsstands:show }
+    path:     /newsstands/{id}
+    defaults: { _controller: BackendBundle:Newsstand:show }
+    requirements:
+        id: \d+
     options:
         expose: true
 
-backend_newsstand_update:
-    path:     /newsstand/{id}/update
-    defaults: { _controller  : BackendBundle:Newsstands:update }
-
-backend_newsstands_savepositions:
-    path:     /newsstands/save-positions
-    defaults: { _controller  : BackendBundle:Newsstands:savePositions }
-
-backend_newsstand_delete:
-    path:     /newsstand/{id}/delete
-    defaults: { _controller  : BackendBundle:Newsstands:delete }
-
-backend_newsstands_widget:
-    path:     /newsstand/widget
-    defaults: { _controller  : BackendBundle:Newsstands:widget }
+backend_newsstands_list:
+    path:     /newsstands
+    defaults: { _controller: BackendBundle:Newsstand:list }
+    options:
+        expose: true
 
 backend_newsstands_config:
     path:     /newsstands/config
-    defaults: { _controller  : BackendBundle:Newsstands:config }
+    defaults: { _controller: BackendBundle:Newsstand:config }

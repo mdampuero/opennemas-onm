@@ -78,14 +78,14 @@
             {/acl}
 
             {include file="ui/component/content-editor/accordion/tags.tpl"}
-            {include file="ui/component/content-editor/accordion/slug.tpl" route="[% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug })) %]"}
+            {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getL10nUrl(routing.generate('frontend_static_page', { slug: item.slug })) %]"}
           </div>
         </div>
       </div>
       <div class="col-md-8 col-md-pull-4">
         <div class="grid simple">
           <div class="grid-body">
-            {include file="ui/component/input/text.tpl" iCounter=true iField="title" iRequired=true iValidation=true iTitle="{t}Title{/t}"}
+            {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iValidation=true iTitle="{t}Title{/t}"}
             {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true}
           </div>
         </div>

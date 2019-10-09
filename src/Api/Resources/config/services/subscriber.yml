@@ -11,8 +11,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    core.subscriber.newsstand:
+        class:     Api\EventSubscriber\NewsstandSubscriber
+        arguments: [ '@core.helper.template_cache', '@core.helper.varnish' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
     core.subscriber.user:
         class:     Api\EventSubscriber\UserSubscriber
         arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache' ]
         tags:
             - { name: kernel.event_subscriber }
+

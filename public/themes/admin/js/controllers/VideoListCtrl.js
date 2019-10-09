@@ -10,13 +10,14 @@
      * @requires $controller
      * @requires $scope
      * @requires oqlEncoder
+     * @requires routing
      *
      * @description
      *   Controller for video list.
      */
     .controller('VideoListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
+      function($controller, $scope, $window, oqlEncoder, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -35,7 +36,7 @@
         };
 
         /**
-         * @memberOf SubscriptionListCtrl
+         * @memberOf VideoListCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -47,7 +48,42 @@
           deleteList: 'api_v1_backend_video_delete_list',
           getList:    'api_v1_backend_video_get_list',
           patchItem:  'api_v1_backend_video_patch_item',
-          patchList:  'api_v1_backend_video_patch_list'
+          patchList:  'api_v1_backend_video_patch_list',
+          public:     'frontend_video_show'
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf VideoListCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          if (!$scope.categories) {
+            return '';
+          }
+
+          var categories = $scope.categories.filter(function(e) {
+            return e.pk_content_category === item.pk_fk_content_category;
+          });
+
+          if (categories.length === 0) {
+            return '';
+          }
+
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              slug: item.slug,
+              category_name: categories[0].name
+            })
+          );
         };
 
         /**

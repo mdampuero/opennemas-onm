@@ -79,18 +79,15 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          if ($scope.item.recipients) {
-            // Force integer values in id property
-            for (var i = 0; i < $scope.item.recipients.length; i++) {
-              if ($scope.item.recipients[i].id) {
-                $scope.item.recipients[i].id =
-                  $scope.item.recipients[i].id.toString();
+          // Remove recipients that are not in data.extra
+          $scope.item.recipients = $scope.item.recipients.filter(function(e) {
+            for (var i = 0; i < $scope.data.extra.recipients.length; i++) {
+              if (angular.equals(e, $scope.data.extra.recipients[i])) {
+                return true;
               }
-
-              // TODO: Remove when not subscribers stored in settings in production
-              delete data.item.recipients[i].subscribers;
             }
-          }
+            return false;
+          });
 
           if ($scope.item.contents) {
             $scope.item.contents.map(function(item) {

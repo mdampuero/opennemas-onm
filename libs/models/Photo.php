@@ -197,7 +197,7 @@ class Photo extends Content
         $date = new \DateTime($data['created'] ?? null);
 
         $file     = new File($path);
-        $path     = $ih->generatePath($file, $date->format('Y-m-d H:i:s'));
+        $path     = $ih->generatePath($file, $date);
         $filename = basename($path);
 
         $ih->move($file, $path, $copy);

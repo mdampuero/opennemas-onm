@@ -5,47 +5,42 @@
 
     /**
      * @ngdoc controller
-     * @name  CoverCtrl
+     * @name  NewsstandCtrl
      *
      * @requires $controller
      * @requires $scope
-     * @requires $uibModal
+     * @requires $timeout
      * @requires $window
-     * @requires cleaner
-     * @requires http
-     * @requires messenger
-     *
-     * @description
-     *   Check billing information when saving user.
+     * @requires routing
      */
     .controller('NewsstandCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'oqlDecoder', 'messenger', 'cleaner', 'linker', 'localizer', '$timeout',
-      function($controller, $scope, oqlEncoder, oqlDecoder, messenger, cleaner, linker, localizer, $timeout) {
-        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+      '$controller', '$scope', '$timeout', '$window', 'routing',
+      function($controller, $scope, $timeout, $window, routing) {
+        $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf CoverCtrl
+         * @memberOf NewsstandCtrl
          *
          * @description
-         *  The cover object.
+         *   The item.
          *
          * @type {Object}
          */
         $scope.item = {
-          category: null,
+          categories: [ null ],
           content_status: 0,
-          cover: null,
+          content_type_name: 'kiosko',
+          created: new Date(),
           date: '',
+          endtime: null,
           favorite: 0,
-          file: '',
-          price: 0,
+          fk_content_type: 14,
+          path: null,
+          starttime: null,
           tags: [],
           thumbnail: null,
           title: '',
-          type: 0,
         };
-
-        $scope.files = [];
 
         /**
          * @memberOf CoverCtrl
@@ -56,151 +51,167 @@
          * @type {Object}
          */
         $scope.routes = {
-          createItem: 'api_v1_backend_newsstand_create',
-          getItem:    'api_v1_backend_newsstand_show',
+          createItem: 'api_v1_backend_newsstand_create_item',
+          getItem:    'api_v1_backend_newsstand_get_item',
+          public:     'frontend_newsstand_show',
           redirect:   'backend_newsstand_show',
-          saveItem:   'api_v1_backend_newsstand_save',
-          updateItem: 'api_v1_backend_newsstand_update'
+          saveItem:   'api_v1_backend_newsstand_save_item',
+          updateItem: 'api_v1_backend_newsstand_update_item'
         };
 
         /**
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.item.type = Number($scope.item.type);
+          $scope.localize($scope.data.item, 'item', true);
 
-          if ($scope.item.thumb_url && $scope.item.thumb_url.length > 0) {
-            $scope.item.thumbnail_url = $scope.data.extra.KIOSKO_IMG_URL +
-              $scope.item.path + '/' + $scope.item.thumb_url;
+          if ($scope.item.thumbnail) {
+            $scope.preview = $scope.data.extra.paths.newsstand + '/' +
+              $scope.item.thumbnail;
           }
         };
 
         /**
-         * @function convertBase64ImageToFile
-         * @memberOf CoverCtrl
+         * @function convertToFile
+         * @memberOf NewsstandCtrl
          *
          * @description
-         *  Method to method to convert a base64 encoded image to a File object
+         *   Convert an image as a base64 string to a File.
+         *
+         * @param {String} url The image as base64 string.
+         *
+         * @return {File} The image as a File object.
          */
-        var convertBase64ImageToFile = function(dataUrl) {
-          var blobBin = atob(dataUrl.split(',')[1]);
-          var array = [];
+        $scope.convertToFile = function(url) {
+          var blobBin = atob(url.split(',')[1]);
+          var data    = [];
 
           for (var i = 0; i < blobBin.length; i++) {
-            array.push(blobBin.charCodeAt(i));
+            data.push(blobBin.charCodeAt(i));
           }
 
           return new File(
-            [ new Blob([ new Uint8Array(array) ], { type: 'image/jpg' }) ],
+            [ new Blob([ new Uint8Array(data) ], { type: 'image/jpg' }) ],
             'image.jpg'
           );
         };
 
         /**
-         * @function generateThumbnailFromPDF
-         * @memberOf CoverCtrl
+         * @function generateThumbnail
+         * @memberOf NewsstandCtrl
          *
          * @description
-         *  Method to generate a thumbnail from a pdf
+         *   Generates a thumbnail from a PDF file and assigns it to the scope.
+         *
+         * @param {File} file The PDF file.
          */
-        $scope.generateThumbnailFromPDF = function() {
-          var file = document.getElementById('cover-file-input').files[0];
+        $scope.generateThumbnail = function(file) {
+          $scope.flags.generate.preview = true;
 
-          $scope.item.cover = file;
+          var reader = new FileReader();
 
-          if (!file) {
-            document.getElementById('thumbnail').src = null;
-            $scope.item.thumbnail = null;
+          reader.onload = function() {
+            $window.pdfjsLib.disableWorker = true;
 
-            return;
-          }
-
-          $scope.thumbnailLoading = true;
-
-          var fileReader = new FileReader();
-
-          fileReader.onload = function() {
-            pdfjsLib.disableWorker = true;
-
-            var typedarray = new Uint8Array(this.result);
-
-            pdfjsLib.getDocument(typedarray)
+            $window.pdfjsLib.getDocument(new Uint8Array(this.result))
               .then(function(pdf) {
                 pdf.getPage(1).then(function(page) {
-                  var canvas = document.createElement('canvas');
+                  var canvas   = document.createElement('canvas');
                   var viewport = page.getViewport(1.0);
-                  var context = canvas.getContext('2d');
+                  var context  = canvas.getContext('2d');
 
                   // Limit the size of the thumbnail
                   viewport = page.getViewport(650 / viewport.width);
 
                   canvas.height = viewport.height;
-                  canvas.width = viewport.width;
+                  canvas.width  = viewport.width;
 
                   page.render({
                     canvasContext: context,
                     viewport: viewport
                   }).then(function() {
-                    var dataUrl = canvas.toDataURL('image/jpeg', 0.65);
-
-                    $scope.item.thumbnail = convertBase64ImageToFile(dataUrl);
-                    $scope.item.thumbnail_url = dataUrl;
-                    $scope.item.name = null;
-                    $scope.$apply();
+                    $scope.preview        = canvas.toDataURL('image/jpeg', 0.65);
+                    $scope.item.thumbnail = $scope.convertToFile($scope.preview);
 
                     $timeout(function() {
-                      $scope.thumbnailLoading = false;
-                      $scope.$apply();
+                      $scope.disableFlags('generate');
                     }, 100);
                   });
                 });
-              })
-              .catch(function() {
-                $scope.thumbnailLoading = false;
+              }).catch(function() {
+                $scope.disableFlags('generate');
               });
           };
 
-          fileReader.readAsArrayBuffer(file);
+          reader.readAsArrayBuffer(file);
         };
 
         /**
-         * @function submit
+         * @function getFileName
          * @memberOf NewsstandCtrl
          *
          * @description
-         *   Saves tags and, then, saves the item.
+         *   Returns the filename for a File or a string.
+         *
+         * @return {String} The filename.
          */
-        $scope.submit = function() {
-          if (!$('[name=form]')[0].checkValidity()) {
-            $('[name=form]')[0].reportValidity();
-            return;
+        $scope.getFileName = function() {
+          if (!$scope.item.path) {
+            return '';
           }
 
-          $scope.flags.http.saving = true;
+          if (angular.isObject($scope.item.path)) {
+            return $scope.item.path.name;
+          }
 
-          $scope.$broadcast('onmTagsInput.save', {
-            onError: $scope.errorCb,
-            onSuccess: function(ids) {
-              $scope.item.tags = ids;
-              $scope.save();
-            }
-          });
+          return $scope.item.name;
         };
 
         /**
-         * @function unsetCover
-         * @memberOf CoverCtrl
+         * @function getFrontendUrl
+         * @memberOf NewsstandCtrl
          *
          * @description
-         *  Method to unset the cover information
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
          */
-        $scope.unsetCover = function() {
-          $scope.item.name          = null;
-          $scope.item.cover         = null;
-          $scope.item.thumbnail     = null;
-          $scope.item.thumbnail_url = null;
-          $scope.item.thumb_url     = null;
+        $scope.getFrontendUrl = function(item) {
+          if (!$scope.selectedCategories || !$scope.selectedCategories.length) {
+            return '';
+          }
+
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              category_name: $scope.selectedCategories[0].name
+            })
+          );
         };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.validate = function() {
+          if (!$('[name=form]')[0].checkValidity() || !$scope.item.path) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          return true;
+        };
+
+        // Generates thumbnail when file changes
+        $scope.$watch('item.path', function(nv) {
+          if (!nv || !angular.isObject(nv)) {
+            return;
+          }
+
+          $scope.generateThumbnail(nv);
+        });
       }
     ]);
 })();

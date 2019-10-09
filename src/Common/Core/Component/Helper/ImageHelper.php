@@ -15,22 +15,8 @@ use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 
-class ImageHelper
+class ImageHelper extends FileHelper
 {
-    /**
-     * The Filesystem component.
-     *
-     * @var Filesystem
-     */
-    protected $fs;
-
-    /**
-     * The current instance.
-     *
-     * @var instance
-     */
-    protected $instance;
-
     /**
      * The image processor service.
      *
@@ -39,20 +25,13 @@ class ImageHelper
     protected $processor;
 
     /**
-     * The server public directory.
-     *
-     * @var string
-     */
-    protected $publicDir;
-
-    /**
      * Initalializes the ImageHelper.
      *
      * @param Instance  $instance  The current instance.
-     * @param Processor $processor The image processor service.
      * @param string    $publicDir The server public directory.
+     * @param Processor $processor The image processor service.
      */
-    public function __construct(Instance $instance, Processor $processor, string $publicDir)
+    public function __construct(Instance $instance, string $publicDir, Processor $processor)
     {
         $this->fs        = new Filesystem();
         $this->instance  = $instance;
@@ -63,19 +42,17 @@ class ImageHelper
     /**
      * Returns the path where the file should be moved.
      *
-     * @param File   $file The file to generate path to.
-     * @param string $date The date to generate the path from.
+     * @param File     $file The file to generate path to.
+     * @param DateTime $date The date to generate the path from.
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath(File $file, ?string $date = null) : string
+    public function generatePath(File $file, \DateTime $date) : string
     {
-        $date = new \Datetime($date);
-
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s%s.%s',
             $this->publicDir,
-            $this->instance->getImagesShortPath(),
+            $this->getPathForFile(),
             $date->format('Y/m/d'),
             $date->format('YmdHis'),
             substr(gettimeofday()['usec'], 0, 5),
@@ -137,28 +114,6 @@ class ImageHelper
     }
 
     /**
-     * Moves the file to the target path.
-     *
-     * @param File   $file   The file to move.
-     * @param string $target The path where file will be moved.
-     * @param bool   $copy   Whether to copy the file.
-     *
-     * @return string The target path.
-     */
-    public function move(File $file, string $target, bool $copy = false) : void
-    {
-        $name      = basename($target);
-        $directory = str_replace($name, '', $target);
-
-        if ($copy) {
-            $this->fs->copy($file->getRealPath(), $target);
-            return;
-        }
-
-        $file->move($directory, $name);
-    }
-
-    /**
      * Optimizes the file in the provided path.
      *
      * @param string $path The path to the file to optimize.
@@ -166,5 +121,13 @@ class ImageHelper
     public function optimize(string $path) : void
     {
         $this->processor->open($path)->optimize()->save($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPathForFile()
+    {
+        return $this->instance->getImagesShortPath();
     }
 }

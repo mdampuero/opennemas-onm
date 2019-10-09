@@ -55,6 +55,24 @@ class VarnishHelper
     }
 
     /**
+     * Delete a list of newsstands from varnish cache.
+     *
+     * @param array $newsstands The list of files to delete from varnish cache.
+     */
+    public function deleteNewsstands(array $newsstands)
+    {
+        foreach ($newsstands as $newsstand) {
+            $this->varnish->addBanMessage(
+                sprintf('obj.http.x-tags ~ %s', $newsstand->pk_content)
+            );
+
+            $this->varnish->addBanMessage(
+                sprintf('req.url ~ %s', $newsstand->path)
+            );
+        }
+    }
+
+    /**
      * Deletes the varnish cache for the current instance.
      *
      * @param Instance $instance The instance to delete varnish for.

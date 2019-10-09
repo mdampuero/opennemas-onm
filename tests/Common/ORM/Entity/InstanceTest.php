@@ -112,6 +112,16 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getNewsstandShortPath.
+     */
+    public function testGetNewsstandShortPath()
+    {
+        $instance = new Instance([ 'internal_name' => 'garply' ]);
+
+        $this->assertEquals('/media/garply/kiosko', $instance->getNewsstandShortPath());
+    }
+
+    /**
      * Tests hasMultilanguage when instance has module enabled and disabled.
      */
     public function testHasMultilanguage()

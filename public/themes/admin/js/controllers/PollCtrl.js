@@ -7,19 +7,16 @@
      * @ngdoc controller
      * @name  PollCtrl
      *
-     * @description
-     *   Handles actions for poll inner
-     *
      * @requires $controller
      * @requires $scope
+     * @requires $window
      * @requires linker
      * @requires localizer
-     * @requires messenger
      * @requires routing
      */
     .controller('PollCtrl', [
-      '$controller', '$scope', 'linker', 'localizer', 'messenger', 'routing',
-      function($controller, $scope, linker, localizer, messenger, routing) {
+      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing',
+      function($controller, $scope, $window, linker, localizer, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -44,7 +41,7 @@
           endtime: null,
           title: '',
           type: 0,
-          with_comments: 0,
+          with_comment: 0,
           categories: [],
           tags: [],
           agency: '',
@@ -91,6 +88,11 @@
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'items' ]);
 
+          // Check if item is new (created) or existing for use default value or not
+          if (!$scope.data.item.pk_content) {
+            $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+          }
+
           $scope.item.items = [];
 
           for (var i = 0; i < $scope.data.item.items.length; i++) {
@@ -101,7 +103,7 @@
 
         /**
          * @function getFrontendUrl
-         * @memberOf AlbumCtrl
+         * @memberOf PollCtrl
          *
          * @description
          * Returns the frontend url for the content given its object
@@ -110,16 +112,16 @@
          * @return {String}
          */
         $scope.getFrontendUrl = function(item) {
-          var date = item.date;
-
-          var formattedDate = window.moment(date).format('YYYYMMDDHHmmss');
+          if (!$scope.selectedCategories || !$scope.selectedCategories.length) {
+            return '';
+          }
 
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content,
-              created: formattedDate,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              category_name: item.category_name
+              category_name: $scope.selectedCategories[0].name
             })
           );
         };

@@ -25,8 +25,8 @@
      *   URLs basing on Symfony routes.
      */
     .service('http', [
-      '$http', 'routing',
-      function($http, routing) {
+      '$http', '$window', 'routing',
+      function($http, $window, routing) {
         /**
          * @function convertToFormData
          * @memberOf http
@@ -52,12 +52,22 @@
             }
           }
 
-          // First call or Array/Object values
           if (value instanceof HTMLCanvasElement) {
-            var blob = this.dataURItoBlob(value.toDataURL('image/jpeg', 0.65));
+            var blob = this.dataURItoBlob(value.toDataURL('image/jpeg'));
 
             formData.append(key, new File([ blob ], key));
-          } else if (value instanceof Object && !(value instanceof File)) {
+
+            return formData;
+          }
+
+          if (value instanceof Date) {
+            formData.append(key, $window.moment(value)
+              .format('YYYY-MM-DD HH:mm:ss'));
+
+            return formData;
+          }
+
+          if (value instanceof Object && !(value instanceof File)) {
             for (var i in value) {
               var k = i;
 

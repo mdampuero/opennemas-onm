@@ -219,7 +219,7 @@ $menuXml = [
                 'id'          => 'newsstand_manager',
                 'title'       => _('News Stand'),
                 'icon'        => 'fa fa-newspaper-o',
-                'link'        => url('backend_newsstands'),
+                'link'        => url('backend_newsstands_list'),
                 'module_name' => 'KIOSKO_MANAGER',
                 'privilege'   => 'KIOSKO_ADMIN',
             ],

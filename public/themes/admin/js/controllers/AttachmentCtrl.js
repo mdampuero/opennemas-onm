@@ -42,7 +42,7 @@
           endtime: null,
           title: '',
           type: 0,
-          with_comments: 0,
+          with_comment: 0,
           categories: [],
           tags: [],
           agency: ''
@@ -88,13 +88,8 @@
         /**
          * @inheritdoc
          */
-        $scope.parseItem = function(data) {
-          if (data.item) {
-            $scope.data.item = angular.extend($scope.item, data.item);
-          }
-
-          $scope.configure(data.extra);
-          $scope.localize($scope.data.item, 'item', true);
+        $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
         };
 
         /**
@@ -119,6 +114,13 @@
 
           return true;
         };
+
+        // Update path in original item when localized item changes
+        $scope.$watch('item.path', function(nv) {
+          if ($scope.data && $scope.data.item) {
+            $scope.data.item.path = nv;
+          }
+        });
       }
     ]);
 })();

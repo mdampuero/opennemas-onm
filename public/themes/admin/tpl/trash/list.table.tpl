@@ -40,20 +40,12 @@
 {/block}
 
 {block name="itemActions"}
-  <a class="btn btn-default btn-small" ng-if="['article', 'special', 'letter', 'photo', 'book' ].indexOf(item.content_type_name) < 0" ng-href="[% routing.generate('backend_' + item.content_type_name + '_show', { id: item.pk_content }) %]">
-    <i class="fa fa-pencil m-r-5"></i>
-    {t}Edit{/t}
-  </a>
-  <a class="btn btn-default btn-small" ng-if="['article', 'special', 'letter', 'photo', 'book' ].indexOf(item.content_type_name) >= 0" ng-href="[% routing.generate('admin_' + item.content_type_name + '_show', { id: item.pk_content }) %]">
-    <i class="fa fa-pencil m-r-5"></i>
-    {t}Edit{/t}
+  <a class="btn btn-success btn-small" ng-click="restore(item.pk_content)" type="button">
+    <i class="fa fa-retweet m-r-5"></i>
+    {t}Restore{/t}
   </a>
   <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
     <i class="fa fa-trash-o m-r-5"></i>
     {t}Delete{/t}
   </button>
-  <a class="btn btn-success btn-small" ng-click="restore(item.pk_content)" type="button">
-    <i class="fa fa-retweet m-r-5"></i>
-    {t}Restore{/t}
-  </a>
 {/block}

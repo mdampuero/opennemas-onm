@@ -227,8 +227,12 @@ class UrlGeneratorHelper
         }
 
         try {
+            $categoryId = !empty($content->categories)
+                ? $content->categories[0]
+                : $content->pk_fk_content_category;
+
             $category = $this->container->get('api.service.category')
-                ->getItem($content->pk_fk_content_category);
+                ->getItem($categoryId);
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
@@ -288,8 +292,7 @@ class UrlGeneratorHelper
 
         // If the opinion is not for editorial or director
         // and the author is a blog
-        if (!in_array($content->type_opinion, [ 1, 2 ])
-            && is_object($author)
+        if (is_object($author)
             && isset($author->is_blog)
             && $author->is_blog == 1
         ) {
@@ -412,14 +415,6 @@ class UrlGeneratorHelper
      */
     protected function getAuthorName($opinion, $author)
     {
-        if ((int) $opinion->type_opinion == 1) {
-            return 'editorial';
-        }
-
-        if ((int) $opinion->type_opinion == 2) {
-            return 'director';
-        }
-
         if (!empty($author)) {
             return $this->container->get('data.manager.filter')
                 ->set($author->name)
