@@ -51,7 +51,7 @@ class NewsletterHelperTest extends \PHPUnit\Framework\TestCase
         $this->service = $this->getMockBuilder('Api\Service\Service')
             ->setMethods([
                 'createItem', 'delete', 'deleteItem', 'deleteList', 'getItem',
-                'getList', 'patchItem', 'patchList', 'updateItem',
+                'getList', 'patchItem', 'patchList', 'responsify', 'updateItem',
             ])->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')

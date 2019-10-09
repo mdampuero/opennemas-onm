@@ -394,12 +394,7 @@ class OrmService implements Service
     }
 
     /**
-     * Converts an item or a list of items to a structure returnable in a
-     * Response.
-     *
-     * @param mixed $item The item or the list of items.
-     *
-     * @return mixed The converted item or list of items.
+     * {@inheritdoc}
      */
     public function responsify($item)
     {

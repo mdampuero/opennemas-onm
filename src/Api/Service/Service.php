@@ -81,6 +81,16 @@ interface Service
     public function patchList($ids, $data);
 
     /**
+     * Converts an item or a list of items to a structure returnable in a
+     * Response.
+     *
+     * @param mixed $item The item or the list of items.
+     *
+     * @return mixed The converted item or list of items.
+     */
+    public function responsify($item);
+
+    /**
      * Updates an item.
      *
      * @param integer $id   The item id.
