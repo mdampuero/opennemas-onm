@@ -396,6 +396,7 @@ class AdvertisementsController extends Controller
                     'comment'           => $formValues->getDigits('smart_ad_server_page_id_comment'),
                     'other'             => $formValues->getDigits('smart_ad_server_page_id_other'),
                 ],
+                'header_bidding'     => empty($formValues->get('smart_ad_server_header_bidding')) ? 0 : 1,
                 'category_targeting' =>
                     $formValues->filter('smart_ad_server_category_targeting', '', FILTER_SANITIZE_STRING),
                 'module_targeting'   =>

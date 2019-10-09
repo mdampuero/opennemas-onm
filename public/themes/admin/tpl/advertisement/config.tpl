@@ -227,6 +227,17 @@
                   <div class="help">{t}The ad server pages ID{/t}</div>
                 </div>
                 <div class="form-group">
+                  <label for="smart_ad_server_header_bidding" class="form-label">{t}Header Bidding{/t}</label>
+                </div>
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input {if $configs['smart_ad_server']['header_bidding'] eq 1}checked{/if} id="header-bidding" name="smart_ad_server_header_bidding" type="checkbox">
+                      <label for="header-bidding">{t}Use header bidding{/t} ({t}Managed Holistic+{/t})</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label for="smart_ad_server_targeting" class="form-label">{t}Targeting{/t}</label>
                 </div>
                 <div class="form-group">
