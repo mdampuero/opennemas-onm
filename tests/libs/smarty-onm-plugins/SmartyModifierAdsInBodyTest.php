@@ -47,6 +47,9 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->container);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->smarty->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
 
         $GLOBALS['kernel'] = $this->kernel;
     }
