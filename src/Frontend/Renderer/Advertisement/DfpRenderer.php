@@ -46,8 +46,8 @@ class DfpRenderer extends AdvertisementRenderer
             'id'            => $ad->id,
             'dfpId'         => $ad->params['googledfp_unit_id'],
             'sizes'         => $ad->getSizes($ad->normalizeSizes($ad->params)),
-            'customCode'    => $this->getDFPCustomCode(),
-            'targetingCode' => $this->getDFPTargeting(
+            'customCode'    => $this->getCustomCode(),
+            'targetingCode' => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
                 $params['contentId']
@@ -76,14 +76,14 @@ class DfpRenderer extends AdvertisementRenderer
             ];
         }
 
-        $targetingCode = $this->getDFPTargeting(
+        $targetingCode = $this->getTargeting(
             $params['category'],
             $params['extension'],
             $params['content']->id
         );
 
         $options    = $this->ds->get('dfp_options');
-        $customCode = $this->getDFPCustomCode();
+        $customCode = $this->getCustomCode();
 
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
             'category'      => $params['category'],
@@ -100,7 +100,7 @@ class DfpRenderer extends AdvertisementRenderer
      *
      * @return string The custom code for Google DFP.
      */
-    protected function getDFPCustomCode()
+    protected function getCustomCode()
     {
         $code = $this->ds->get('dfp_custom_code');
 
@@ -120,7 +120,7 @@ class DfpRenderer extends AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getDFPTargeting($category, $module, $contentId)
+    protected function getTargeting($category, $module, $contentId)
     {
         $options = $this->ds->get('dfp_options');
 
@@ -128,7 +128,7 @@ class DfpRenderer extends AdvertisementRenderer
             return '';
         }
 
-        $module = ($module == 'frontpages') ? 'home' : $module;
+        $module = $module === 'frontpages' ? 'home' : $module;
 
         $targetingCode = '';
         if (array_key_exists('target', $options) && !empty($options['target'])) {

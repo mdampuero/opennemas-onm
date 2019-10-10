@@ -255,15 +255,15 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getDFPCustomCode
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getCustomCode
      */
-    public function testGetDFPCustomCode()
+    public function testGetCustomCode()
     {
         $this->ds->expects($this->at(0))->method('get')
             ->with('dfp_custom_code')
             ->willReturn(base64_encode('dfp_custom_code'));
 
-        $method = new \ReflectionMethod($this->renderer, 'getDFPCustomCode');
+        $method = new \ReflectionMethod($this->renderer, 'getCustomCode');
         $method->setAccessible(true);
 
         $this->assertEquals(
@@ -282,9 +282,9 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getDFPTargeting
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getTargeting
      */
-    public function testGetDFPTargeting()
+    public function testGetTargeting()
     {
         $this->ds->expects($this->at(0))->method('get')
             ->with('dfp_options')
@@ -294,7 +294,7 @@ class DfpRendererTest extends TestCase
                 'content_id' => 'id'
             ]);
 
-        $method = new \ReflectionMethod($this->renderer, 'getDFPTargeting');
+        $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
         $output = "googletag.pubads().setTargeting('cat', ['foo']);\n"

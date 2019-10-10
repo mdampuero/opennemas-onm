@@ -42,7 +42,7 @@ class SmartRenderer extends AdvertisementRenderer
                 'id'            => $ad->params['smart_format_id'],
                 'page_id'       => $config['page_id'][$params['advertisementGroup']],
                 'rand'          => rand(),
-                'targetingCode' => $this->getSmartTargeting(
+                'targetingCode' => $this->getTargeting(
                     $params['category'],
                     $params['extension'],
                     $params['content']->id
@@ -102,8 +102,8 @@ class SmartRenderer extends AdvertisementRenderer
                 'config'        => $config,
                 'page_id'       => $config['page_id'][$params['advertisementGroup']],
                 'zones'         => $zones,
-                'customCode'    => $this->getSmartCustomCode(),
-                'targetingCode' => $this->getSmartTargeting(
+                'customCode'    => $this->getCustomCode(),
+                'targetingCode' => $this->getTargeting(
                     $params['category'],
                     $params['extension'],
                     $params['content']->id ?? null
@@ -116,7 +116,7 @@ class SmartRenderer extends AdvertisementRenderer
      *
      * @return string The custom code for Google DFP.
      */
-    protected function getSmartCustomCode()
+    protected function getCustomCode()
     {
         $code = $this->ds->get('smart_custom_code');
 
@@ -136,7 +136,7 @@ class SmartRenderer extends AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getSmartTargeting($category, $module, $contentId)
+    protected function getTargeting($category, $module, $contentId)
     {
         $config = $this->ds->get('smart_ad_server');
 

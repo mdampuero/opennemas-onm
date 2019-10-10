@@ -265,15 +265,15 @@ class SmartRendererTest extends TestCase
         );
     }
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getSmartCustomCode
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getCustomCode
      */
-    public function testGetSmartCustomCode()
+    public function testGetCustomCode()
     {
         $this->ds->expects($this->at(0))->method('get')
             ->with('smart_custom_code')
             ->willReturn(base64_encode('sas_custom_code'));
 
-        $method = new \ReflectionMethod($this->renderer, 'getSmartCustomCode');
+        $method = new \ReflectionMethod($this->renderer, 'getCustomCode');
         $method->setAccessible(true);
 
         $this->assertEquals(
@@ -292,9 +292,9 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getSmartTargeting
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getTargeting
      */
-    public function testGetSmartTargeting()
+    public function testGetTargeting()
     {
         $this->ds->expects($this->any())->method('get')
             ->with('smart_ad_server')
@@ -306,7 +306,7 @@ class SmartRendererTest extends TestCase
 
         $targetingCode = 'cat=foo;mod=bar;url=baz;';
 
-        $method = new \ReflectionMethod($this->renderer, 'getSmartTargeting');
+        $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
         $this->assertEquals(
