@@ -48,6 +48,11 @@ class ImageRendererTest extends TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
         $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
             ->setMethods([ 'fetch' ])
             ->getMock();
@@ -82,6 +87,9 @@ class ImageRendererTest extends TestCase
             case 'core.template.admin':
                 return $this->templateAdmin;
 
+            case 'core.helper.url_generator':
+                return $this->ugh;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -114,13 +122,9 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo                = new \Photo();
-        $photo->category_name = 'foo';
-        $photo->width         = 300;
-        $photo->height        = 300;
-        $photo->path_file     = '/path/';
-        $photo->name          = 'foo.png';
-        $photo->url           = '/ads/get/123';
+        $photo         = new \Photo();
+        $photo->width  = 300;
+        $photo->height = 300;
 
         $output = '<a target="_blank" href="/ads/get/123" rel="nofollow">
             <img src="thud.opennemas.com/media/opennemas/images/path/foo.png" width="300" height="300" />
@@ -138,12 +142,15 @@ class ImageRendererTest extends TestCase
             ->with('frontend_ad_redirect', [ 'id' => '20190328184032000000' ])
             ->willReturn('/ads/get/123');
 
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)
+            ->willReturn('/media/opennemas/images/path/foo.png');
+
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/image.tpl', [
-                'mediaUrl' => '/path/',
                 'width'    => 300,
                 'height'   => 300,
-                'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
+                'src'      => '/media/opennemas/images/path/foo.png',
                 'url'      => 'thud.opennemas.com/ads/get/123'
             ])
             ->willReturn($output);
@@ -163,14 +170,10 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo                = new \Photo();
-        $photo->category_name = 'foo';
-        $photo->width         = 300;
-        $photo->height        = 300;
-        $photo->path_file     = '/path/';
-        $photo->name          = 'foo.png';
-        $photo->url           = '/ads/get/123';
-        $photo->type_img      = 'swf';
+        $photo           = new \Photo();
+        $photo->width    = 300;
+        $photo->height   = 300;
+        $photo->type_img = 'swf';
 
         $output = '<object width="300" height="300">
             <param name="wmode" value="transparent" />
@@ -193,12 +196,15 @@ class ImageRendererTest extends TestCase
             ->with('frontend_ad_redirect', [ 'id' => '20190328184032000000' ])
             ->willReturn('/ads/get/123');
 
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)
+            ->willReturn('/media/opennemas/images/path/foo.png');
+
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/flash.tpl', [
-                'mediaUrl' => '/path/',
                 'width'    => 300,
                 'height'   => 300,
-                'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
+                'src'      => '/media/opennemas/images/path/foo.png',
                 'url'      => 'thud.opennemas.com/ads/get/123'
             ])
             ->willReturn($output);
@@ -218,13 +224,9 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo                = new \Photo();
-        $photo->category_name = 'foo';
-        $photo->width         = 300;
-        $photo->height        = 300;
-        $photo->path_file     = '/path/';
-        $photo->name          = 'foo.png';
-        $photo->url           = '/ads/get/123';
+        $photo         = new \Photo();
+        $photo->width  = 300;
+        $photo->height = 300;
 
         $output = '<a target="_blank" href="/ads/get/123" rel="nofollow">
             <amp-img
@@ -246,12 +248,15 @@ class ImageRendererTest extends TestCase
             ->with('frontend_ad_redirect', [ 'id' => '20190328184032000000' ])
             ->willReturn('/ads/get/123');
 
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)
+            ->willReturn('/media/opennemas/images/path/foo.png');
+
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/image.amp.tpl', [
-                'mediaUrl' => '/path/',
                 'width'    => 300,
                 'height'   => 300,
-                'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
+                'src'      => '/media/opennemas/images/path/foo.png',
                 'url'      => 'thud.opennemas.com/ads/get/123'
             ])
             ->willReturn($output);
@@ -297,46 +302,18 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderSafeFrame
+     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::RenderSafeFrameImage
      */
-    public function testRenderSafeFrameWithFlash()
-    {
-        $ad     = new \Advertisement();
-        $params = [];
-
-        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ImageRenderer')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderSafeFrameFlash', 'getImage' ])
-            ->getMock();
-
-        $img           = new \Photo();
-        $img->type_img = 'swf';
-
-        $renderer->expects($this->once())->method('getImage')
-            ->willReturn($img);
-
-        $renderer->expects($this->once())->method('renderSafeFrameFlash')
-            ->willReturn('foo');
-
-        $this->assertEquals('foo', $renderer->renderSafeFrame($ad, $params));
-    }
-
-    /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::RenderSafeFrameFlash
-     */
-    public function testRenderSafeFrameFlash()
+    public function testRenderSafeFrameImageWithFlash()
     {
         $ad          = new \Advertisement();
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo                = new \Photo();
-        $photo->category_name = 'foo';
-        $photo->width         = 300;
-        $photo->height        = 300;
-        $photo->path_file     = '/path/';
-        $photo->name          = 'foo.png';
-        $photo->url           = '/ads/get/123';
+        $photo           = new \Photo();
+        $photo->width    = 300;
+        $photo->height   = 300;
+        $photo->type_img = 'swf';
 
         $output = '<html>
         <head>
@@ -368,7 +345,7 @@ class ImageRendererTest extends TestCase
                   <param name="movie" value="/ads/get/123" />
                   <param name="width" value="300" />
                   <param name="height" value="300" />
-                  <embed src="http://console/media/opennemas/images/path/foo.png"'
+                  <embed src="/media/opennemas/images/path/foo.swf"'
                   . ' width="300" height="300" SCALE="exactfit" wmode="transparent"></embed>
                 </object>
               </div>
@@ -381,16 +358,20 @@ class ImageRendererTest extends TestCase
             ->with('frontend_ad_redirect', [ 'id' => '20190328184032000001' ])
             ->willReturn('/ads/get/123');
 
-        $this->templateAdmin->expects($this->any())->method('fetch')
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)
+            ->willReturn('/media/opennemas/images/path/foo.swf');
+
+        $this->templateAdmin->expects($this->once())->method('fetch')
             ->with('advertisement/helpers/safeframe/flash.tpl', [
                 'width'    => 300,
                 'height'   => 300,
-                'src'      => 'http://console/media/opennemas/images/path/foo.png',
+                'src'      => '/media/opennemas/images/path/foo.swf',
                 'url'      => '/ads/get/123'
             ])
             ->willReturn($output);
 
-        $method = new \ReflectionMethod($this->renderer, 'renderSafeFrameFlash');
+        $method = new \ReflectionMethod($this->renderer, 'renderSafeFrameImage');
         $method->setAccessible(true);
 
         $this->assertEquals(
@@ -408,13 +389,9 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo                = new \Photo();
-        $photo->category_name = 'foo';
-        $photo->width         = 300;
-        $photo->height        = 300;
-        $photo->path_file     = '/path/';
-        $photo->name          = 'foo.png';
-        $photo->url           = '/ads/get/123';
+        $photo         = new \Photo();
+        $photo->width  = 300;
+        $photo->height = 300;
 
         $output = '<html>
         <head>
@@ -436,7 +413,7 @@ class ImageRendererTest extends TestCase
         <body>
           <div class="content">
             <a target="_blank" href="/ads/get/123" rel="nofollow">
-              <img alt="foo" src="thud.opennemas.com/media/opennemas/images/path/foo.png" width="300" height="300"/>
+              <img alt="foo" src="/media/opennemas/images/path/foo.png" width="300" height="300"/>
             </a>
           </div>
         </body>
@@ -446,12 +423,15 @@ class ImageRendererTest extends TestCase
             ->with('frontend_ad_redirect', [ 'id' => '20190328184032000001' ])
             ->willReturn('/ads/get/123');
 
-        $this->templateAdmin->expects($this->any())->method('fetch')
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)
+            ->willReturn('/media/opennemas/images/path/foo.png');
+
+        $this->templateAdmin->expects($this->once())->method('fetch')
             ->with('advertisement/helpers/safeframe/image.tpl', [
-                'category' => 'foo',
                 'width'    => 300,
                 'height'   => 300,
-                'src'      => 'thud.opennemas.com/media/opennemas/images/path/foo.png',
+                'src'      => '/media/opennemas/images/path/foo.png',
                 'url'      => '/ads/get/123'
             ])
             ->willReturn($output);

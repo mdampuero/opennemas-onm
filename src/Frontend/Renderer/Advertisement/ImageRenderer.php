@@ -46,13 +46,11 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         return $this->tpl->fetch($template, [
-            'width'    => $img->width,
-            'height'   => $img->height,
-            'mediaUrl' => $img->path_img . $img->path_file,
-            'src'      => $this->instance->getBaseUrl()
-                . '/media/' . INSTANCE_UNIQUE_NAME
-                . '/images' . $img->path_file . $img->name,
-            'url'      => $this->instance->getBaseUrl()
+            'width'  => $img->width,
+            'height' => $img->height,
+            'src'    => $this->container->get('core.helper.url_generator')
+                ->generate($img),
+            'url'    => $this->instance->getBaseUrl()
                 . $this->router->generate(
                     'frontend_ad_redirect',
                     [ 'id' => $publicId ]
@@ -76,37 +74,7 @@ class ImageRenderer extends AdvertisementRenderer
             return '';
         }
 
-        if (strtolower($img->type_img) == 'swf') {
-            return $this->renderSafeFrameFlash($ad, $img);
-        }
-
         return $this->renderSafeFrameImage($ad, $img);
-    }
-
-    /**
-     * Returns the HTML code for a flash-based advertisement.
-     *
-     * @param \Advertisement $ad  The advertisement object.
-     * @param \Photo         $img The flash object.
-     *
-     * @return string The HTML code for a flash-based advertisement.
-     */
-    protected function renderSafeFrameFlash($ad, $img)
-    {
-        $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->id);
-
-        $params = [
-            'width'  => $img->width,
-            'height' => $img->height,
-            'src'    => SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images'
-                . $img->path_file . $img->name,
-            'url'    => $this->router->generate('frontend_ad_redirect', [
-                'id' => $publicId
-            ])
-        ];
-
-        return $this->tpl->fetch('advertisement/helpers/safeframe/flash.tpl', $params);
     }
 
     /**
@@ -123,18 +91,22 @@ class ImageRenderer extends AdvertisementRenderer
             sprintf('%06d', $ad->id);
 
         $params = [
-            'category' => $img->category_name,
             'width'    => $img->width,
             'height'   => $img->height,
-            'src'      => $this->instance->getBaseUrl() . '/media/' . INSTANCE_UNIQUE_NAME
-                . '/images' . $img->path_file . $img->name,
+            'src'    => $this->container->get('core.helper.url_generator')
+                ->generate($img),
             'url'      => $this->router->generate(
                 'frontend_ad_redirect',
                 [ 'id' => $publicId ]
             ),
         ];
 
-        return $this->tpl->fetch('advertisement/helpers/safeframe/image.tpl', $params);
+        $template = 'advertisement/helpers/safeframe/image.tpl';
+        if (strtolower($img->type_img) == 'swf') {
+            $template = 'advertisement/helpers/safeframe/flash.tpl';
+        }
+
+        return $this->tpl->fetch($template, $params);
     }
 
     /**
