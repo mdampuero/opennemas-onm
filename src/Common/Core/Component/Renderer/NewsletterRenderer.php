@@ -104,39 +104,33 @@ class NewsletterRenderer
             $index++;
         }
 
-        $this->tpl->assign('newsletterContent', $newsletterContent);
-
-        // Fetch and assign the frontpage menu
         $menu = new \Menu();
         $menu = $menu->getMenu('frontpage');
-        $this->tpl->assign('menuFrontpage', $menu->items);
 
-        // Fetch and assign newsletter ads
         $positions = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
         $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
-        $this->tpl->assign('advertisements', $ads);
 
-        // Assign the current date.
-        $time = new \DateTime();
-        $this->tpl->assign('current_date', $time);
-
-        // Process and assign public URL for images and links
+        // Process public URL for images and links
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
             $this->instance->getMainDomain()
         );
-        $this->tpl->assign('URL_PUBLIC', 'http://' . $publicUrl);
 
-        // Fetch and assign settings
         $configurations = $this->ds->get([
             'newsletter_maillist',
             'newsletter_subscriptionType',
         ]);
-        $this->tpl->assign('conf', $configurations);
-        $this->tpl->assign('ads_format', 'inline');
 
-        return $this->tpl->fetch('newsletter/newsletter.tpl');
+        return $this->tpl->fetch('newsletter/newsletter.tpl', [
+            'newsletterContent' => $newsletterContent,
+            'menuFrontpage'     => $menu->items,
+            'advertisements'    => $ads,
+            'ads_format'        => 'inline',
+            'current_date'      => new \DateTime(),
+            'conf'              => $configurations,
+            'URL_PUBLIC'        => 'http://' . $publicUrl,
+        ]);
     }
 
     /**
@@ -196,16 +190,12 @@ class NewsletterRenderer
     public function getContents($criteria)
     {
         $contents = [];
-
         if (!is_object($criteria)) {
             return $contents;
         }
 
         $total   = ($criteria->epp > 0) ? $criteria->epp : 5;
         $orderBy = [ 'starttime' => 'desc' ];
-
-        // Calculate the SQL to fetch contents
-        // Criteria has: content_type, category, filter, epp and sortBy elements
 
         $searchCriteria = [
             'content_status'    => [ [ 'value' => 1 ] ],
