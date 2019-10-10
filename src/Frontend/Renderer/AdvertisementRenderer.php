@@ -145,43 +145,13 @@ class AdvertisementRenderer
             return '';
         }
 
-        $headersHtml = '';
-
-        // Filter ads by Adserver
-        $reviveAds = array_filter($ads, function ($a) {
-            return $a->with_script == 2
-                && array_key_exists('openx_zone_id', $a->params)
-                && !empty($a->params['openx_zone_id']);
-        });
-
-        if (!empty($reviveAds)) {
-            $renderer     = $this->getRendererClass(2);
-            $headersHtml .= $renderer->renderInlineHeader($reviveAds, $params);
+        $headers = '';
+        foreach (array_slice($this->types, -3) as $type) {
+            $method   = 'render' . $type . 'Headers';
+            $headers .= $this->{$method}($ads, $params);
         }
 
-        $dfpAds = array_filter($ads, function ($a) {
-            return $a->with_script == 3
-                && array_key_exists('googledfp_unit_id', $a->params)
-                && !empty($a->params['googledfp_unit_id']);
-        });
-
-        if (!empty($dfpAds)) {
-            $renderer     = $this->getRendererClass(3);
-            $headersHtml .= $renderer->renderInlineHeader($dfpAds, $params);
-        }
-
-        $smartAds = array_filter($ads, function ($a) {
-            return $a->with_script == 4
-                && array_key_exists('smart_format_id', $a->params)
-                && !empty($a->params['smart_format_id']);
-        });
-
-        if (!empty($smartAds)) {
-            $renderer     = $this->getRendererClass(4);
-            $headersHtml .= $renderer->renderInlineHeader($smartAds, $params);
-        }
-
-        return $headersHtml;
+        return $headers;
     }
 
     /**
@@ -289,5 +259,68 @@ class AdvertisementRenderer
         $classPath = __NAMESPACE__ . '\\Advertisement\\' . $class;
 
         return new $classPath($this->container);
+    }
+
+    /**
+     * Returns the HTML header section for the Revive ads.
+     *
+     * @param array $ads    The list of advertisements.
+     * @param array $params The list of parameters to render the ad header.
+     *
+     * @return string HTML for the Revive header.
+     */
+    protected function renderReviveHeaders($ads, $params)
+    {
+        $ads = array_filter($ads, function ($a) {
+            return $a->with_script == 2
+                && array_key_exists('openx_zone_id', $a->params)
+                && !empty($a->params['openx_zone_id']);
+        });
+
+        return !empty($ads)
+            ? $this->getRendererClass(2)->renderInlineHeader($ads, $params)
+            : '';
+    }
+
+    /**
+     * Returns the HTML header section for the DFP ads.
+     *
+     * @param array $ads    The list of advertisements.
+     * @param array $params The list of parameters to render the ad header.
+     *
+     * @return string HTML for the DFP header.
+     */
+    protected function renderDfpHeaders($ads, $params)
+    {
+        $ads = array_filter($ads, function ($a) {
+            return $a->with_script == 3
+                && array_key_exists('googledfp_unit_id', $a->params)
+                && !empty($a->params['googledfp_unit_id']);
+        });
+
+        return !empty($ads)
+            ? $this->getRendererClass(3)->renderInlineHeader($ads, $params)
+            : '';
+    }
+
+    /**
+     * Returns the HTML header section for the Smart ads.
+     *
+     * @param array $ads    The list of advertisements.
+     * @param array $params The list of parameters to render the ad header.
+     *
+     * @return string HTML for the Smart header.
+     */
+    protected function renderSmartHeaders($ads, $params)
+    {
+        $ads = array_filter($ads, function ($a) {
+            return $a->with_script == 4
+                && array_key_exists('smart_format_id', $a->params)
+                && !empty($a->params['smart_format_id']);
+        });
+
+        return !empty($ads)
+            ? $this->getRendererClass(4)->renderInlineHeader($ads, $params)
+            : '';
     }
 }

@@ -242,8 +242,49 @@ class AdvertisementRendererTest extends TestCase
     /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
      */
-    public function testRenderInlineHeadersDFP()
+    public function testRenderInlineHeaders()
     {
+        $ad = new \Advertisement();
+
+        $rendererDfp = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderDfpHeaders' ])
+            ->getMock();
+
+        $rendererDfp->expects($this->any())->method('renderDfpHeaders')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $rendererDfp->renderInlineHeaders([ $ad ], []));
+
+        $rendererRevive = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderReviveHeaders' ])
+            ->getMock();
+
+        $rendererRevive->expects($this->any())->method('renderReviveHeaders')
+            ->willReturn('bar');
+
+        $this->assertEquals('bar', $rendererRevive->renderInlineHeaders([ $ad ], []));
+
+        $rendererSmart = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderSmartHeaders' ])
+            ->getMock();
+
+        $rendererSmart->expects($this->any())->method('renderSmartHeaders')
+            ->willReturn('baz');
+
+        $this->assertEquals('baz', $rendererSmart->renderInlineHeaders([ $ad ], []));
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderDfpHeaders
+     */
+    public function testRenderDfpHeaders()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'renderDfpHeaders');
+        $method->setAccessible(true);
+
         $ad              = new \Advertisement();
         $ad->params      = [ 'googledfp_unit_id' => 321 ];
         $ad->with_script = 3;
@@ -262,15 +303,18 @@ class AdvertisementRendererTest extends TestCase
 
         $this->assertEquals(
             'foo',
-            $this->renderer->renderInlineHeaders([ $ad ], [])
+            $method->invokeArgs($this->renderer, [ [ $ad ], [] ])
         );
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderReviveHeaders
      */
-    public function testRenderInlineHeadersRevive()
+    public function testRenderReviveHeaders()
     {
+        $method = new \ReflectionMethod($this->renderer, 'renderReviveHeaders');
+        $method->setAccessible(true);
+
         $ad              = new \Advertisement();
         $ad->params      = [ 'openx_zone_id' => 321 ];
         $ad->with_script = 2;
@@ -289,15 +333,18 @@ class AdvertisementRendererTest extends TestCase
 
         $this->assertEquals(
             'foo',
-            $this->renderer->renderInlineHeaders([ $ad ], [])
+            $method->invokeArgs($this->renderer, [ [ $ad ], [] ])
         );
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSmartHeaders
      */
-    public function testRenderInlineHeadersSmart()
+    public function testRenderSmartHeaders()
     {
+        $method = new \ReflectionMethod($this->renderer, 'renderSmartHeaders');
+        $method->setAccessible(true);
+
         $ad              = new \Advertisement();
         $ad->params      = [ 'smart_format_id' => 321 ];
         $ad->with_script = 4;
@@ -316,7 +363,7 @@ class AdvertisementRendererTest extends TestCase
 
         $this->assertEquals(
             'foo',
-            $this->renderer->renderInlineHeaders([ $ad ], [])
+            $method->invokeArgs($this->renderer, [ [ $ad ], [] ])
         );
     }
 
