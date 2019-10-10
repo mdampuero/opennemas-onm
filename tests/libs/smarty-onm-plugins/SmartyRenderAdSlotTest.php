@@ -111,10 +111,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
-            ->willReturn(123);
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
-            ->willReturn($ad);
+            ->willReturn(null);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
@@ -128,10 +125,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     {
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
-            ->willReturn(123);
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
-            ->willReturn([]);
+            ->willReturn(null);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
@@ -151,7 +145,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
-            ->willReturn(123);
+            ->willReturn([ 123 ]);
 
         $this->smarty->expects($this->at(2))->method('getValue')
             ->with('advertisements')
@@ -182,7 +176,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
-            ->willReturn(123);
+            ->willReturn([ 123 ]);
 
         $this->smarty->expects($this->at(2))->method('getValue')
             ->with('advertisements')
@@ -205,7 +199,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
-            ->willReturn(123);
+            ->willReturn([ 123 ]);
 
         $this->smarty->expects($this->at(2))->method('getValue')
             ->with('advertisements')
