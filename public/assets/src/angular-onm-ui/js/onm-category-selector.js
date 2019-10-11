@@ -40,6 +40,7 @@
             labelText: '@',
             locale: '=',
             multiple: '@',
+            name: '@',
             ngModel: '=',
             placeholder: '@',
             position: '@',
