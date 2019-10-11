@@ -326,11 +326,11 @@ CREATE TABLE `content_categories` (
   `title` text NOT NULL,
   `name` text,
   `description` text,
+  `archived` tinyint(1) unsigned DEFAULT '0',
+  `enabled` tinyint(1) unsigned DEFAULT '0',
   `fk_content_category` bigint(20) unsigned DEFAULT NULL,
   `logo_path` varchar(200) DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
-  `enabled` tinyint(1) unsigned DEFAULT '0',
-  `archived` tinyint(1) unsigned DEFAULT '0',
   PRIMARY KEY (`pk_content_category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
