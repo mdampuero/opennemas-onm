@@ -30,6 +30,10 @@ api_v1_backend_newsletter_templates:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter_template.yml'
     prefix:   /backend
 
+api_v1_backend_news_agency_server:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/news_agency_server.yml'
+    prefix:   /backend
+
 api_v1_backend_newsstand:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
     prefix:   /backend
