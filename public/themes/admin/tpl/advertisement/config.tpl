@@ -60,7 +60,7 @@
         </div>
         <div class="form-group">
           <div class="checkbox">
-            <input{if $configs['ads_settings']['no_generics'] eq "0"} checked{/if} id="ads_settings_no_generics" name="ads_settings_no_generics" type="checkbox" value="0">
+            <input{if $configs['ads_settings']['no_generics'] == "0"} checked{/if} id="ads_settings_no_generics" name="ads_settings_no_generics" type="checkbox" value="0">
             <label for="ads_settings_no_generics" class="form-label">{t}Allow generic advertisement{/t}</label>
             <div class="help m-t-5">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
           </div>
@@ -68,7 +68,7 @@
         {acl isAllowed="MASTER"}
           <div class="form-group">
             <div class="checkbox">
-              <input {if $configs['ads_settings']['safe_frame'] eq 1}checked{/if} id="safe-frame" name="safe_frame" type="checkbox">
+              <input {if $configs['ads_settings']['safe_frame'] == 1}checked{/if} id="safe-frame" name="safe_frame" type="checkbox">
               <label for="safe-frame">{t}SafeFrame by default{/t} ({t}Recommended{/t})</label>
             </div>
             <div class="help m-t-5">{t}This feature displays advertisements inside iframes. It improves the user experience and has a better performance.{/t}</div>
@@ -232,8 +232,10 @@
                 <div class="form-group">
                   <div class="controls">
                     <div class="checkbox">
-                      <input {if $configs['smart_ad_server']['header_bidding'] eq 1}checked{/if} id="header-bidding" name="smart_ad_server_header_bidding" type="checkbox">
-                      <label for="header-bidding">{t}Use header bidding{/t} ({t}Managed Holistic+{/t})</label>
+                      <input {if $configs['smart_ad_server']['header_bidding'] == 1}checked{/if} id="header-bidding" name="smart_ad_server_header_bidding" type="checkbox">
+                      <label for="header-bidding">
+                        {t}Use header bidding{/t} ({t}Managed Holistic+{/t})
+                      </label>
                     </div>
                   </div>
                 </div>
