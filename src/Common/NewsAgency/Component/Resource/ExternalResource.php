@@ -71,6 +71,11 @@ class ExternalResource
     public $related = [];
 
     /**
+     * The source id.
+     */
+    public $source = null;
+
+    /**
      * The resource summary.
      *
      * @var string
