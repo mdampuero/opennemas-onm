@@ -168,24 +168,6 @@ class AdvertisementRenderer
             return '';
         }
 
-        $tpl = '<div class="interstitial">'
-            . '<div class="interstitial-wrapper" style="width: %s;">'
-                . '<div class="interstitial-header">'
-                    . '<span class="interstitial-header-title">'
-                        . _('Entering on the requested page')
-                    . '</span>'
-                    . '<a class="interstitial-close-button" href="#" title="'
-                        . _('Skip advertisement') . '">'
-                        . '<span>' . _('Skip advertisement') . '</span>'
-                    . '</a>'
-                . '</div>'
-                . '<div class="interstitial-content" style="height: %s;">'
-                    . '<div class="ad-slot oat oat-visible oat-%s" data-id="%s"'
-                        . ' data-timeout="%s" data-type="%s">%s</div>'
-                . '</div>'
-            . '</div>'
-        . '</div>';
-
         $interstitials = array_filter($ads, function ($a) {
             $hasInterstitial = array_filter($a->positions, function ($pos) {
                 return ($pos + 50) % 100 == 0;
@@ -200,8 +182,8 @@ class AdvertisementRenderer
 
         $ad = $interstitials[array_rand($interstitials)];
 
-        $orientation = empty($ad->params['orientation']) ?
-            'top' : $ad->params['orientation'];
+        $orientation = empty($ad->params['orientation'])
+            ? 'top' : $ad->params['orientation'];
 
         $sizes = $ad->normalizeSizes($ad->params);
         $size  = array_filter($sizes, function ($a) {
@@ -217,15 +199,14 @@ class AdvertisementRenderer
         // Get renderer class
         $renderer = $this->getRendererClass($ad->with_script);
 
-        return sprintf(
-            $tpl,
-            $size['width'] . 'px',
-            empty($size['height']) ? 'auto' : $size['height'] . 'px',
-            $orientation,
-            $ad->pk_advertisement,
-            empty($ad->timeout) ? 5 : $ad->timeout,
-            implode(',', $ad->positions),
-            $renderer->renderInline($ad, $params)
+        return $this->tpl->fetch(
+            'advertisement/helpers/inline/interstitial.tpl',
+            [
+                'size'        => $size,
+                'orientation' => $orientation,
+                'ad'          => $ad,
+                'content'     => $renderer->renderInline($ad, $params)
+            ]
         );
     }
 

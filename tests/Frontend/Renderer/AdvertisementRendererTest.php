@@ -398,20 +398,6 @@ class AdvertisementRendererTest extends TestCase
             'desktop' => 1
         ];
 
-        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderInline' ])
-            ->getMock();
-
-        $renderer->expects($this->any())->method('renderInline')
-            ->willReturn('foo');
-
-        $this->renderer->expects($this->once())->method('getRendererClass')
-            ->with(3)
-            ->willReturn($renderer);
-
-        $ads = [ $ad ];
-
         $output = '<div class="interstitial">'
             . '<div class="interstitial-wrapper" style="width: 980px;">'
                 . '<div class="interstitial-header">'
@@ -430,9 +416,31 @@ class AdvertisementRendererTest extends TestCase
             . '</div>'
         . '</div>';
 
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderInline' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderInline')
+            ->willReturn('foo');
+
+        $this->renderer->expects($this->once())->method('getRendererClass')
+            ->with(3)
+            ->willReturn($renderer);
+
+        $this->templateAdmin->expects($this->once())->method('fetch')
+            ->with('advertisement/helpers/inline/interstitial.tpl', [
+                'size'        => $ad->params['sizes']['0'],
+                'orientation' => 'top',
+                'ad'          => $ad,
+                'content'     => 'foo',
+            ])
+            ->willReturn($output);
+
+
         $this->assertEquals(
             $output,
-            $this->renderer->renderInlineInterstitial($ads, [])
+            $this->renderer->renderInlineInterstitial([ $ad ], [])
         );
     }
 
