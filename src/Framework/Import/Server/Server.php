@@ -8,7 +8,7 @@
  */
 namespace Framework\Import\Server;
 
-use Framework\Import\ParserFactory;
+use Common\NewsAgency\Component\Factory\ParserFactory;
 
 /**
  * Handles all the common methods in the servers
@@ -112,8 +112,9 @@ abstract class Server
         $ch = curl_init();
 
         $auth = $this->params['username'] . ':' . $this->params['password'];
-        $httpCode = 0;
-        $maxRedirects = 0;
+
+        $httpCode            = 0;
+        $maxRedirects        = 0;
         $maxRedirectsAllowed = 3;
 
         do {
@@ -129,8 +130,9 @@ abstract class Server
                 ]
             );
 
-            $content = curl_exec($ch);
+            $content  = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
             if ($httpCode == 301 || $httpCode == 302) {
                 $url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);
 

@@ -10,7 +10,7 @@
 namespace Framework\Import\Synchronizer;
 
 use Framework\Import\Compiler\Compiler;
-use Framework\Import\ParserFactory;
+use Common\NewsAgency\Component\Factory\ParserFactory;
 use Framework\Import\ServerFactory;
 
 /**
@@ -62,7 +62,7 @@ class Synchronizer
      */
     public function __construct($path, $tpl, $logger)
     {
-        $this->syncPath     = $path . DS .'importers';
+        $this->syncPath     = $path . DS . 'importers';
         $this->syncFilePath = $this->syncPath . DS . '.sync';
         $this->lockFilePath = $this->syncPath . DS . '.lock';
 
