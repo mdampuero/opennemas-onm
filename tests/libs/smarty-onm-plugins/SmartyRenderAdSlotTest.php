@@ -107,10 +107,15 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenNotArray()
     {
-        $ad = new \Advertisement();
+        $ad            = new \Advertisement();
+        $ad->positions = [ 123 ];
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
+            ->willReturn([ 123 ]);
+
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('advertisements')
             ->willReturn(null);
 
         $this->assertEmpty(
@@ -123,9 +128,16 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenNoAds()
     {
+        $ad            = new \Advertisement();
+        $ad->positions = [ 111 ];
+
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
-            ->willReturn(null);
+            ->willReturn([ 123 ]);
+
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('advertisements')
+            ->willReturn([ $ad ]);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
