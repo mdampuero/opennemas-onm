@@ -227,9 +227,9 @@
                   <div class="help">{t}The ad server pages ID{/t}</div>
                 </div>
                 <div class="form-group">
-                  <label for="smart_ad_server_header_bidding" class="form-label">{t}Header Bidding{/t}</label>
-                </div>
-                <div class="form-group">
+                  <label for="smart_ad_server_header_bidding" class="form-label">
+                    {t}Header Bidding{/t}
+                  </label>
                   <div class="controls">
                     <div class="checkbox">
                       <input {if $configs['smart_ad_server']['header_bidding'] == 1}checked{/if} id="header-bidding" name="smart_ad_server_header_bidding" type="checkbox">
