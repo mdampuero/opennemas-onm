@@ -275,14 +275,7 @@ class OrmService implements Service
     }
 
     /**
-     * Returns a list of items basing on a list of ids.
-     *
-     * @param array $ids The list of ids.
-     *
-     * @return array The list of items.
-     *
-     * @throws GetListException If no ids provided or if there was a problem to
-     *                          find items.
+     * {@inheritdoc}
      */
     public function getListByIds($ids)
     {
