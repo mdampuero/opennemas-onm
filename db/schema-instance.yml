@@ -411,6 +411,12 @@ content_categories:
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
+        archived:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
+        enabled:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
         fk_content_category:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
@@ -420,12 +426,6 @@ content_categories:
         color:
             type: string
             options: { length: 10, default: null, notnull: false }
-        enabled:
-            type: integer
-            options: { unsigned: true, default: 0, notnull: false }
-        archived:
-            type: integer
-            options: { unsigned: true, default: 0, notnull: false }
     index:
         -
             name: PRIMARY
