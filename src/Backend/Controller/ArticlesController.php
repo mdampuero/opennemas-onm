@@ -301,7 +301,6 @@ class ArticlesController extends Controller
             // Machine suggested contents code
             $suggested = $this->get('core.helper.content')
                 ->getSuggested(
-                    'article',
                     "category_name= '" . $article->category_name
                     . "' AND pk_content <>" . $article->id,
                     4
