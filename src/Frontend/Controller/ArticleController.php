@@ -148,12 +148,16 @@ class ArticleController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
+        $suggested = $this->getSuggested(
+            'article',
+            $params['o_category']->pk_content_category,
+            $params['content']->pk_content
+        );
+
         $params['tags']       = $this->getTags($params['content']);
         $params['relationed'] = $this->getRelated($params['content']);
-        $params['suggested']  = $this->getSuggested(
-            $params['content'],
-            $params['o_category']
-        );
+        $params['suggested']  = $suggested[0];
+        $params['photos']     = $suggested[1];
 
         $em = $this->get('entity_repository');
 
@@ -203,25 +207,5 @@ class ArticleController extends FrontendController
         }
 
         return $related;
-    }
-
-    /**
-     * Returns the list of suggested contents for an article.
-     *
-     * @param Article  $article  The current article.
-     * @param Category $category The article category.
-     *
-     * @return array The list of suggested contents.
-     */
-    protected function getSuggested($article, $category = null)
-    {
-        $query = sprintf(
-            'category_name = "%s" AND pk_content <> %s',
-            $category->name,
-            $article->id
-        );
-
-        return $this->get('automatic_contents')
-            ->searchSuggestedContents('article', $query);
     }
 }

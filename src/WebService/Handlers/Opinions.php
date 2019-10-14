@@ -41,9 +41,6 @@ class Opinions
         // Get author name slug
         $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
 
-        // Get machine related contents
-        $opinion->machineRelated = $this->machineRelated($opinion->id);
-
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);
 
@@ -231,48 +228,6 @@ class Opinions
         }
 
         return $otherOpinions;
-    }
-
-    /*
-    * @url GET /opinions/machinerelated/:id
-    */
-    public function machineRelated($id = null)
-    {
-        $this->validateInt($id);
-
-        $or = getService('opinion_repository');
-
-        // Load opinion
-        $opinion = $or->find('Opinion', $id);
-
-        $machineSuggestedContents = getService('automatic_contents')->searchSuggestedContents(
-            'opinion',
-            " pk_content <>".$opinion->id,
-            4
-        );
-
-        foreach ($machineSuggestedContents as &$element) {
-            $origElem = $element;
-            // Load opinion
-            $element = $or->find('Opinion', $origElem['pk_content']);
-            if (!empty($element->author)) {
-                $origElem['author_name'] = $element->author;
-                $origElem['author_name_slug'] = \Onm\StringUtils::getTitle($element->author);
-            } else {
-                $origElem['author_name_slug'] = "author";
-            }
-            $origElem['uri'] = 'ext'.\Uri::generate(
-                'opinion',
-                array(
-                    'id'       => $origElem['pk_content'],
-                    'date'     => date('YmdHis', strtotime($origElem['created'])),
-                    'category' => $origElem['author_name_slug'],
-                    'slug'     => urlencode(\Onm\StringUtils::generateSlug($origElem['title'])),
-                )
-            );
-        }
-
-        return $machineSuggestedContents;
     }
 
     private function validateInt($number)

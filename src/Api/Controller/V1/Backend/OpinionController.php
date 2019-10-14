@@ -134,23 +134,6 @@ class OpinionController extends ContentOldController
         } catch (\Exception $e) {
         }
 
-        $machineSuggestedContents = $this->get('automatic_contents')
-            ->searchSuggestedContents('opinion', "pk_content <> $opinion->id", 4);
-
-        // Get author slug for suggested opinions
-        foreach ($machineSuggestedContents as &$suggest) {
-            $element = new \Opinion($suggest['pk_content']);
-
-            $suggest['author_name_slug'] = "author";
-            $suggest['uri']              = $element->uri;
-
-            if (!empty($element->author)) {
-                $suggest['author_name']      = $element->author;
-                $suggest['author_name_slug'] =
-                    \Onm\StringUtils::getTitle($element->author);
-            }
-        }
-
         // Associated media code --------------------------------------
         $photo = '';
         if (isset($opinion->img2) && ($opinion->img2 > 0)) {
@@ -180,7 +163,6 @@ class OpinionController extends ContentOldController
             'author'         => $opinion->author,
             'contentId'      => $opinion->id,
             'photo'          => $photo,
-            'suggested'      => $machineSuggestedContents,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($opinion->tags)['items']
         ];

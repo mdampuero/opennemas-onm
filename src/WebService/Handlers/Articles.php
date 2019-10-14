@@ -98,23 +98,6 @@ class Articles
         }
         $article->relatedContents = $relatedContents;
 
-        // Retrieve the related contents for the given
-        $article->suggested = getService('automatic_contents')->searchSuggestedContents(
-            'article',
-            "category_name= '" . $article->category_name . "' AND pk_content <>" . $article->id,
-            4
-        );
-
-        // Generate external url for suggested
-        foreach ($article->suggested as &$element) {
-            $element['uri'] = 'ext' . \Uri::generate('article', [
-                'id'       => $element['pk_content'],
-                'date'     => date('YmdHis', strtotime($element['created'])),
-                'category' => $element['category_name'],
-                'slug'     => urlencode(\Onm\StringUtils::generateSlug($element['title'])),
-            ]);
-        }
-
         return serialize($article);
     }
 

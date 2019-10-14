@@ -581,9 +581,20 @@ class FrontendController extends Controller
             $this->view->assign('videoInt', $videoInt);
         }
 
+        //Get suggested contents
+        $suggestedContents = $this->getSuggested(
+            $params['content']->content_type_name,
+            $params['o_category']->pk_content_category,
+            $params['content']->pk_content
+        );
+
+        $suggested = $suggestedContents[0];
+        $photos    = $suggestedContents[1];
+
         $this->view->assign([
-            'related_contents'   => $this->getRelated($params['content']),
-            'suggested_contents' => $this->getSuggested($params['content'], $params['o_category'])
+            'related'   => $this->getRelated($params['content']),
+            'suggested' => $suggested,
+            'photos'    => $photos
         ]);
     }
 
@@ -701,12 +712,20 @@ class FrontendController extends Controller
      *
      * @return array The list of suggested contents.
      */
-    protected function getSuggested($content, $category = null)
+    protected function getSuggested($content_type_name, $category, $content)
     {
-        $query = sprintf('pk_content <> %s', $content->id);
+        $query = sprintf(
+            'content_type_name = "%s" AND pk_content <> "%s"',
+            $content_type_name,
+            $content
+        );
 
-        return $this->get('automatic_contents')
-            ->searchSuggestedContents($content->content_type_name, $query);
+        if (!empty($category)) {
+            $query = $query . sprintf(' AND pk_fk_content_category = "%s"', $category);
+        }
+
+        return $this->get('core.helper.content')
+            ->getSuggested($query, 4);
     }
 
     /**
