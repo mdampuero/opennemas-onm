@@ -209,9 +209,14 @@ class Album extends Content
         $tpl = getService('core.template');
 
         $params['item'] = $this;
+        $template       = 'frontpage/contents/_album.tpl';
+
+        if ($params['custom'] == 1) {
+            $template = $params['tpl'];
+        }
 
         try {
-            $html = $tpl->fetch('frontpage/contents/_album.tpl', $params);
+            $html = $tpl->fetch($template, $params);
         } catch (\Exception $e) {
             $html = _('Album not available');
         }
