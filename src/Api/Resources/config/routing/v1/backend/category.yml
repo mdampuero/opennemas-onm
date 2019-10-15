@@ -69,7 +69,6 @@ api_v1_backend_category_move_list:
     options:
         expose: true
 
-
 api_v1_backend_category_patch_item:
     path:     /categories/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Category:patchItem }
