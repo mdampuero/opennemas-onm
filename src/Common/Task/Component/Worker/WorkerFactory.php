@@ -11,7 +11,6 @@ namespace Common\Task\Component\Worker;
 
 use Common\Task\Component\Exception\UnknownTaskException;
 use Common\Task\Component\Task\Task;
-use Symfony\Component\DependecyInjection\ContainerInterface;
 
 class WorkerFactory
 {
@@ -34,7 +33,7 @@ class WorkerFactory
      *
      * @param ContainerInterface $container The service container.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
         $this->container = $container;
     }
