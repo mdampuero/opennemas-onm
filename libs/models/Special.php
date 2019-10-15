@@ -24,13 +24,6 @@ class Special extends Content
     public $pretitle = null;
 
     /**
-     * Path for get a pdf file
-     *
-     * @var string
-     */
-    public $pdf_path = null;
-
-    /**
      * The id of the image that is the cover for this album
      *
      * @var int
@@ -137,7 +130,6 @@ class Special extends Content
         $this->id         = $properties['pk_special'];
         $this->pk_special = $properties['pk_special'];
         $this->img1       = $properties['img1'];
-        $this->pdf_path   = $properties['pdf_path'];
     }
 
     /**
@@ -156,17 +148,12 @@ class Special extends Content
 
             $data['id'] = $this->id;
 
-            if (!array_key_exists('pdf_path', $data)) {
-                $data['pdf_path'] = '';
-            }
-
             getService('dbal_connection')->insert(
                 'specials',
                 [
                     'pk_special' => $this->id,
                     'pretitle'   => $data['pretitle'],
                     'img1'       => (int) $data['img1'],
-                    'pdf_path'   => $data['pdf_path']
                 ]
             );
 
@@ -195,16 +182,11 @@ class Special extends Content
                 return false;
             }
 
-            if (!array_key_exists('pdf_path', $data)) {
-                $data['pdf_path'] = '';
-            }
-
             getService('dbal_connection')->update(
                 'specials',
                 [
                     'pretitle' => $data['pretitle'],
                     'img1'     => (int) $data['img1'],
-                    'pdf_path' => $data['pdf_path'],
                 ],
                 [ 'pk_special' => intval($data['id']) ]
             );
