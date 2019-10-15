@@ -45,11 +45,11 @@ class AdvertisementRenderer
     }
 
     /**
-     * Returns the list of CSS classes according to device restrictions
+     * Returns the list of CSS classes according to device restrictions.
      *
-     * @param \Advertisement $ad The advertisement to get restrictions from
+     * @param \Advertisement $ad The advertisement to get restrictions from.
      *
-     * @return string The css classes to apply
+     * @return string The css classes to apply.
      */
     public function getDeviceCSSClasses(\Advertisement $ad)
     {
@@ -68,11 +68,11 @@ class AdvertisementRenderer
     }
 
     /**
-     * Returns the string that depicts the default mark shown alongside ads
+     * Returns the string that depicts the default mark shown alongside ads.
      *
-     * @param \Advertisement $ad the advertisement object where to search for the mark
+     * @param \Advertisement $ad The advertisement object where to search for the mark.
      *
-     * @return string The default mark for the advertisements
+     * @return string The default mark for the advertisements.
      */
     public function getMark(\Advertisement $ad = null)
     {
@@ -101,9 +101,9 @@ class AdvertisementRenderer
      * Renders an advertisement given the advertisement and parameters.
      *
      * @param \Advertisement $ad     The advertisement to render.
-     * @param array          $params Array of parameters to render the ad
+     * @param array          $params Array of parameters to render the ad.
      *
-     * @return string the HTML content for the advertisement
+     * @return string The HTML content for the advertisement.
      */
     public function render(\Advertisement $ad, $params)
     {
@@ -135,9 +135,9 @@ class AdvertisementRenderer
      * Returns the generic headers HTML for inline Adservers advertisements.
      *
      * @param array $ads    Array of advertisements.
-     * @param array $params Array of parameters to render the ad header
+     * @param array $params Array of parameters to render the ad header.
      *
-     * @return string the HTML content for the header advertisement
+     * @return string The HTML content for the header advertisement.
      */
     public function renderInlineHeaders($ads, $params)
     {
@@ -158,9 +158,9 @@ class AdvertisementRenderer
      * Selects and renders an interstitial from a list of advertisements.
      *
      * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters to render the ad header
+     * @param array $params The list of parameters to render the ad header.
      *
-     * @return string The HTML code for
+     * @return string The HTML code for Interstitial .
      */
     public function renderInlineInterstitial($ads, $params)
     {
@@ -213,10 +213,10 @@ class AdvertisementRenderer
     /**
      * Returns the HTML for a safe frame ad slot
      *
-     * @param int $type The ad script type
-     * 0 -> Image, 1 -> Html, 2 -> Revive, 3 -> DFP, 4 -> Smart
+     * @param int $type The ad script type.
+     * 0 -> Image, 1 -> Html, 2 -> Revive, 3 -> DFP, 4 -> Smart.
      *
-     * @return \AdvertisementRenderer the advertisement renderer object
+     * @return \AdvertisementRenderer The advertisement renderer object.
      */
     protected function getRendererClass($scriptType)
     {
@@ -269,11 +269,11 @@ class AdvertisementRenderer
     }
 
     /**
-     * Returns the HTML for a safe frame ad slot
+     * Returns the HTML for a safe frame ad slot.
      *
      * @param \Advertisement $ad The ad to render.
      *
-     * @return string the HTML generated
+     * @return string The HTML generated.
      */
     protected function renderSafeFrameSlot(\Advertisement $ad)
     {
