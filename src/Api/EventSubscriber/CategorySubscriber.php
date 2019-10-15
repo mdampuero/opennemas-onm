@@ -46,7 +46,7 @@ class CategorySubscriber implements EventSubscriberInterface
      * @param CacheManager        $cm       The CacheManager service.
      */
     public function __construct(
-        Instance            $instance,
+        ?Instance           $instance,
         TemplateCacheHelper $th,
         VarnishHelper       $vh,
         AbstractCache       $cache,

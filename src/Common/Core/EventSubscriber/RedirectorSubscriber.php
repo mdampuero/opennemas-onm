@@ -44,7 +44,7 @@ class RedirectorSubscriber implements EventSubscriberInterface
      * @param Cache    $cache    The cache connection.
      * @param Instance $instance The current instance.
      */
-    public function __construct(Cache $cache, Instance $instance, MessageExchanger $varnish)
+    public function __construct(Cache $cache, ?Instance $instance, MessageExchanger $varnish)
     {
         $this->cache    = $cache;
         $this->instance = $instance;

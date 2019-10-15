@@ -41,7 +41,7 @@ class UserSubscriber implements EventSubscriberInterface
      * @param AbstractCache       $cache    The old cache connection.
      */
     public function __construct(
-        Instance            $instance,
+        ?Instance           $instance,
         TemplateCacheHelper $th,
         VarnishHelper       $vh,
         AbstractCache       $cache
