@@ -23,7 +23,7 @@ class Tokenizer
      * @var array
      */
     protected $steps = [
-        [ 'T_STRING' ],
+        [ 'T_DATETIME', 'T_STRING' ],
         [
             'COMMA', 'C_AND', 'C_OR', 'G_CPARENTHESIS', 'G_CBRACKET',
             'G_OBRACKET', 'G_OPARENTHESIS', 'M_ASC', 'M_DESC', 'M_LENGTH',
@@ -33,7 +33,7 @@ class Tokenizer
             'O_LESS', 'O_LIKE', 'O_REGEXP',
         ],
         [
-            'T_BOOL', 'T_DATETIME', 'T_NULL', 'T_FLOAT', 'T_INTEGER', 'T_FIELD',
+            'T_BOOL', 'T_NULL', 'T_FLOAT', 'T_INTEGER', 'T_FIELD',
         ]
     ];
 
