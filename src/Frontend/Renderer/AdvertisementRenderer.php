@@ -213,22 +213,6 @@ class AdvertisementRenderer
     /**
      * Returns the HTML for a safe frame ad slot
      *
-     * @param \Advertisement $ad The ad to render.
-     *
-     * @return string the HTML generated
-     */
-    protected function renderSafeFrameSlot(\Advertisement $ad)
-    {
-        $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
-        $id   = $ad->id;
-        $type = 37; // Floating banner type
-
-        return sprintf($html, $id, $type);
-    }
-
-    /**
-     * Returns the HTML for a safe frame ad slot
-     *
      * @param int $type The ad script type
      * 0 -> Image, 1 -> Html, 2 -> Revive, 3 -> DFP, 4 -> Smart
      *
@@ -240,6 +224,27 @@ class AdvertisementRenderer
         $classPath = __NAMESPACE__ . '\\Advertisement\\' . $class;
 
         return new $classPath($this->container);
+    }
+
+    /**
+     * Returns the HTML header section for the DFP ads.
+     *
+     * @param array $ads    The list of advertisements.
+     * @param array $params The list of parameters to render the ad header.
+     *
+     * @return string HTML for the DFP header.
+     */
+    protected function renderDfpHeaders($ads, $params)
+    {
+        $ads = array_filter($ads, function ($a) {
+            return $a->with_script == 3
+                && array_key_exists('googledfp_unit_id', $a->params)
+                && !empty($a->params['googledfp_unit_id']);
+        });
+
+        return !empty($ads)
+            ? $this->getRendererClass(3)->renderInlineHeader($ads, $params)
+            : '';
     }
 
     /**
@@ -264,24 +269,19 @@ class AdvertisementRenderer
     }
 
     /**
-     * Returns the HTML header section for the DFP ads.
+     * Returns the HTML for a safe frame ad slot
      *
-     * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters to render the ad header.
+     * @param \Advertisement $ad The ad to render.
      *
-     * @return string HTML for the DFP header.
+     * @return string the HTML generated
      */
-    protected function renderDfpHeaders($ads, $params)
+    protected function renderSafeFrameSlot(\Advertisement $ad)
     {
-        $ads = array_filter($ads, function ($a) {
-            return $a->with_script == 3
-                && array_key_exists('googledfp_unit_id', $a->params)
-                && !empty($a->params['googledfp_unit_id']);
-        });
+        $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
+        $id   = $ad->id;
+        $type = 37; // Floating banner type
 
-        return !empty($ads)
-            ? $this->getRendererClass(3)->renderInlineHeader($ads, $params)
-            : '';
+        return sprintf($html, $id, $type);
     }
 
     /**
