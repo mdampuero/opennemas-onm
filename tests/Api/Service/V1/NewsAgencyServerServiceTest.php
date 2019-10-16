@@ -10,6 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\NewsAgencyServerService;
+use Common\ORM\Entity\Instance;
 
 /**
  * Defines test cases for NewsAgencyServerService class.
@@ -22,7 +23,7 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get' ])
+            ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
         $this->dataset = $this->getMockBuilder('Common\ORM\Core\DataSet')
@@ -38,8 +39,16 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
+        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+            ->setMethods([ 'push' ])
+            ->getMock();
+
+        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->container->expects($this->any())->method('getParameter')
+            ->with('core.paths.cache')->willReturn('/thud/fred');
 
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->dataset);
@@ -63,8 +72,14 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
+            case 'core.instance':
+                return $this->instance;
+
             case 'orm.manager':
                 return $this->em;
+
+            case 'task.service.queue':
+                return $this->queue;
 
             default:
                 return null;
@@ -183,6 +198,45 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
     public function testDeleteListWhenInvalidIds()
     {
         $this->service->deleteList(22360);
+    }
+
+    /**
+     * Tests emptyItem.
+     */
+    public function testEmptyItem()
+    {
+        $config = [ 'foo' => 'quux' ];
+
+        $property = new \ReflectionProperty($this->service, 'config');
+        $property->setAccessible(true);
+        $property->setValue($this->service, [ $config ]);
+
+        $this->queue->expects($this->once())->method('push');
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('news_agency.server.emptyItem', [
+                'id' => 1
+            ]);
+
+        $this->service->emptyItem(1);
+    }
+
+    /**
+     * Tests emptyItem when there is an error while saving.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testEmptyItemWhenError()
+    {
+        $config = [ 'foo' => 'quux' ];
+
+        $property = new \ReflectionProperty($this->service, 'config');
+        $property->setAccessible(true);
+        $property->setValue($this->service, [ $config ]);
+
+        $this->queue->expects($this->once())->method('push')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->emptyItem(1);
     }
 
     /**
@@ -454,6 +508,45 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
         $item = [ 'xyzzy' => 'foobar' ];
 
         $this->assertEquals($item, $this->service->responsify($item));
+    }
+
+    /**
+     * Tests synchronizeItem.
+     */
+    public function testSynchronizeItem()
+    {
+        $config = [ 'foo' => 'quux' ];
+
+        $property = new \ReflectionProperty($this->service, 'config');
+        $property->setAccessible(true);
+        $property->setValue($this->service, [ $config ]);
+
+        $this->queue->expects($this->once())->method('push');
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('news_agency.server.synchronizeItem', [
+                'id' => 1
+            ]);
+
+        $this->service->synchronizeItem(1);
+    }
+
+    /**
+     * Tests updateItem when there is an error while saving.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testSynchronizeItemWhenError()
+    {
+        $config = [ 'foo' => 'quux' ];
+
+        $property = new \ReflectionProperty($this->service, 'config');
+        $property->setAccessible(true);
+        $property->setValue($this->service, [ $config ]);
+
+        $this->queue->expects($this->once())->method('push')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->synchronizeItem(1);
     }
 
     /**

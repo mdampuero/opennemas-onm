@@ -9,6 +9,7 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\ApiException;
 use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
@@ -19,6 +20,7 @@ use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
 use Common\ORM\Core\EntityManager;
+use Common\Task\Component\Task\ServiceTask;
 
 class NewsAgencyServerService implements Service
 {
@@ -28,6 +30,13 @@ class NewsAgencyServerService implements Service
      * @var array
      */
     protected $config = [];
+
+    /**
+     * The service container.
+     *
+     * @var Container
+     */
+    protected $container;
 
     /**
      * The dataset service to save settings.
@@ -46,11 +55,12 @@ class NewsAgencyServerService implements Service
     /**
      * Initializes the NewsAgencyServerService.
      *
-     * @param EntityManager $em The EntityManager service.
+     * @param Container $container The service container.
      */
     public function __construct($container)
     {
-        $this->dataset = $container->get('orm.manager')
+        $this->container = $container;
+        $this->dataset   = $container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
 
         $this->dispatcher = $container->get('core.dispatcher');
@@ -131,6 +141,30 @@ class NewsAgencyServerService implements Service
         ]);
 
         return count($deleted);
+    }
+
+    /**
+     * Deletes all downloaded files for the server.
+     *
+     * @param integer $id The server id.
+     */
+    public function emptyItem($id)
+    {
+        try {
+            $item = $this->getItem($id);
+
+            $this->container->get('task.service.queue')->push(new ServiceTask(
+                'news_agency.service.synchronizer',
+                'empty',
+                [ $item ]
+            ));
+
+            $this->dispatcher->dispatch($this->getEventName('emptyItem'), [
+                'id' => $id
+            ]);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
     }
 
     /**
@@ -285,6 +319,30 @@ class NewsAgencyServerService implements Service
     public function responsify($item)
     {
         return $item;
+    }
+
+    /**
+     * Synchronizes files for the provided server.
+     *
+     * @param integer $id The server id.
+     */
+    public function synchronizeItem($id)
+    {
+        try {
+            $item = $this->getItem($id);
+
+            $this->container->get('task.service.queue')->push(new ServiceTask(
+                'news_agency.service.synchronizer',
+                'synchronize',
+                [ $item ]
+            ));
+
+            $this->dispatcher->dispatch($this->getEventName('synchronizeItem'), [
+                'id' => $id
+            ]);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
     }
 
     /**
