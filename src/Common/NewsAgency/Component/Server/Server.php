@@ -8,8 +8,6 @@
  */
 namespace Common\NewsAgency\Component\Server;
 
-use Common\NewsAgency\Component\Factory\ParserFactory;
-
 /**
  * Handles all the common methods in the servers
  */
@@ -64,9 +62,8 @@ abstract class Server
             throw new \Exception('Invalid parameters for server');
         }
 
-        $this->tpl     = $tpl;
-        $this->params  = $params;
-        $this->factory = new ParserFactory();
+        $this->tpl    = $tpl;
+        $this->params = $params;
 
         if (array_key_exists('path', $this->params)) {
             $this->localFiles = glob($this->params['path'] . DS . '*.xml');
