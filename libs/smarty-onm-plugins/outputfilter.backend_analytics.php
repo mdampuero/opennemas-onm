@@ -10,7 +10,12 @@
 function smarty_outputfilter_backend_analytics($output, $smarty)
 {
     $request = getService('request_stack')->getCurrentRequest();
-    $uri     = $request->getUri();
+
+    if (empty($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
 
     if (!preg_match('/newsletter/', $smarty->source->resource)
         && preg_match('/\/admin/', $uri)
