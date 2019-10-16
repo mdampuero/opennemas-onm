@@ -62,7 +62,7 @@ class ServerFactory
         foreach ($this->servers as $class) {
             $server = new $class($params, $this->tpl);
 
-            if ($server->checkParameters($params)) {
+            if ($server->checkParameters()) {
                 return $server;
             }
         }
