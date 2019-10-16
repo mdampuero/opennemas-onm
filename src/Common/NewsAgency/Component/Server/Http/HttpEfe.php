@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server\Http;
+namespace Common\NewsAgency\Component\Server\Http;
 
 /**
- * Synchronize local folders with an HTTP opennemas server.
+ * Synchronize local folders with an external XML-based source server.
  */
-class HttpOpennemas extends Http
+class HttpEfe extends Http
 {
     /**
      * {@inheritdoc}
@@ -20,7 +20,7 @@ class HttpOpennemas extends Http
     public function checkParameters($params)
     {
         if (array_key_exists('url', $params)
-            && preg_match('@http(s)?://(.*)/ws/agency@', $params['url']) === 1
+            && preg_match('@efeservicios@', $params['url'])
         ) {
             return true;
         }
@@ -29,18 +29,27 @@ class HttpOpennemas extends Http
     }
 
     /**
-     * Gets and returns the list of remote files.
-     *
-     * @return array The list of remote files.
-     *
-     * @throws \Exception
+     * {@inheritdoc}
+     */
+    public function getContentFromUrl($url)
+    {
+        $auth = '';
+
+        if (array_key_exists('username', $this->params)) {
+            $this->params['username'] . ':' . $this->params['password'];
+        }
+
+        $url = str_replace('http://', 'http://' . $auth . '@', $url);
+
+        return @file_get_contents($url);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getRemoteFiles()
     {
-        $url = $this->params['url'] . '/export.xml?until='
-            . $this->params['sync_from'];
-
-        $content = $this->getContentFromUrl($url);
+        $content = $this->getContentFromUrl($this->params['url']);
 
         if (!$content) {
             throw new \Exception(sprintf(
@@ -49,14 +58,9 @@ class HttpOpennemas extends Http
             ));
         }
 
-        $xml = @simplexml_load_string($content);
+        $xml   = simplexml_load_string($content);
+        $files = $xml->xpath('//elemento');
 
-        // Avoid errors when the content is not xml-parseable
-        if (!is_object($xml)) {
-            return [];
-        }
-
-        $files = $xml->xpath('//content');
         foreach ($files as $value) {
             $this->remoteFiles[] = [
                 'filename' => (string) $value->attributes()->id . '.xml',

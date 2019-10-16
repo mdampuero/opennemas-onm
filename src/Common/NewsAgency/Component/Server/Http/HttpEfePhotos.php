@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server\Http;
+namespace Common\NewsAgency\Component\Server\Http;
 
 /**
  * Synchronize local folders with an external XML-based source server.
@@ -29,11 +29,7 @@ class HttpEfePhotos extends HttpEfe
     }
 
     /**
-     * Gets and returns the list of remote files.
-     *
-     * @return array The list of remote files.
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function getRemoteFiles()
     {

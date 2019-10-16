@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server\Http;
+namespace Common\NewsAgency\Component\Server\Http;
 
 /**
- * Synchronize local folders with an external XML-based source server.
+ * Synchronize local folders with an HTTP opennemas server.
  */
-class HttpEfe extends Http
+class HttpOpennemas extends Http
 {
     /**
      * {@inheritdoc}
@@ -20,7 +20,7 @@ class HttpEfe extends Http
     public function checkParameters($params)
     {
         if (array_key_exists('url', $params)
-            && preg_match('@efeservicios@', $params['url'])
+            && preg_match('@http(s)?://(.*)/ws/agency@', $params['url']) === 1
         ) {
             return true;
         }
@@ -31,24 +31,12 @@ class HttpEfe extends Http
     /**
      * {@inheritdoc}
      */
-    public function getContentFromUrl($url)
-    {
-        $auth = $this->params['username'] . ':' . $this->params['password'];
-        $url  = str_replace('http://', 'http://' . $auth . '@', $url);
-
-        return @file_get_contents($url);
-    }
-
-    /**
-     * Gets and returns the list of remote files.
-     *
-     * @return array The list of remote files.
-     *
-     * @throws \Exception
-     */
     public function getRemoteFiles()
     {
-        $content = $this->getContentFromUrl($this->params['url']);
+        $url = $this->params['url'] . '/export.xml?until='
+            . $this->params['sync_from'];
+
+        $content = $this->getContentFromUrl($url);
 
         if (!$content) {
             throw new \Exception(sprintf(
@@ -57,9 +45,14 @@ class HttpEfe extends Http
             ));
         }
 
-        $xml   = simplexml_load_string($content);
-        $files = $xml->xpath('//elemento');
+        $xml = @simplexml_load_string($content);
 
+        // Avoid errors when the content is not xml-parseable
+        if (!is_object($xml)) {
+            return [];
+        }
+
+        $files = $xml->xpath('//content');
         foreach ($files as $value) {
             $this->remoteFiles[] = [
                 'filename' => (string) $value->attributes()->id . '.xml',

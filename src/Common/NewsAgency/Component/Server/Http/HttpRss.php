@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server\Http;
+namespace Common\NewsAgency\Component\Server\Http;
 
 /**
  * Synchronize local folders with an external RSS-based source server.
@@ -35,23 +35,20 @@ class HttpRss extends Http
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles($files = null)
+    public function downloadFiles($path, $files = null)
     {
         if (empty($files)) {
             $files = $this->remoteFiles;
         }
 
-        if (!is_writable($this->params['path'])) {
+        if (!is_writable($path)) {
             throw new \Exception(
-                sprintf(
-                    _('Directory %s is not writable.'),
-                    $this->params['path']
-                )
+                sprintf(_('Directory %s is not writable.'), $path)
             );
         }
 
         foreach ($files as $file) {
-            $localFile = $this->params['path'] . DS . $file['filename'];
+            $localFile = $path . DS . $file['filename'];
 
             if (!file_exists($localFile)) {
                 $this->buildContentAndSave($localFile, $file['content']);
@@ -63,11 +60,7 @@ class HttpRss extends Http
     }
 
     /**
-     * Gets and returns the list of remote files.
-     *
-     * @return array The list of remote files.
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function getRemoteFiles()
     {
@@ -86,6 +79,7 @@ class HttpRss extends Http
         }
 
         $xml = simplexml_load_string($content);
+
         if (!is_object($xml)) {
             return $this->remoteFiles;
         }

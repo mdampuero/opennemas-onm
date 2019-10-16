@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server;
+namespace Common\NewsAgency\Component\Server;
 
 use Common\NewsAgency\Component\Factory\ParserFactory;
 
@@ -34,14 +34,14 @@ abstract class Server
      *
      * @var array
      */
-    public $localFiles = [];
+    protected $localFiles = [];
 
     /**
      * Files in server.
      *
      * @var array
      */
-    public $remoteFiles = [];
+    protected $remoteFiles = [];
 
     /**
      * The template service.
@@ -109,26 +109,26 @@ abstract class Server
      */
     public function getContentFromUrl($url)
     {
-        $ch = curl_init();
+        $ch   = curl_init();
+        $auth = null;
 
-        $auth = $this->params['username'] . ':' . $this->params['password'];
+        if (array_key_exists('username', $this->params)) {
+            $auth = $this->params['username'] . ':' . $this->params['password'];
+        }
 
         $httpCode            = 0;
         $maxRedirects        = 0;
         $maxRedirectsAllowed = 3;
 
         do {
-            curl_setopt_array(
-                $ch,
-                [
-                    CURLOPT_URL => $url,
-                    CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-                    CURLOPT_USERPWD => $auth,
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_SSL_VERIFYHOST => 0,
-                    CURLOPT_SSL_VERIFYPEER => 0,
-                ]
-            );
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $url,
+                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD => $auth,
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0,
+            ]);
 
             $content  = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -147,6 +147,16 @@ abstract class Server
         curl_close($ch);
 
         return $body;
+    }
+
+    /**
+     * Returns the list of downloaded files.
+     *
+     * @return array The list of downloaded files.
+     */
+    public function getFiles()
+    {
+        return $this->localFiles;
     }
 
     /**
@@ -191,11 +201,19 @@ abstract class Server
     abstract public function checkParameters($params);
 
     /**
+     * Gets and returns the list of remote files.
+     *
+     * @return array The list of remote files.
+     */
+    abstract public function getRemoteFiles();
+
+    /**
      * Downloads the main files from server.
      *
-     * @param array $files The list of missing files.
+     * @param string $path  The path to directory to download files to.
+     * @param array  $files The list of missing files.
      *
      * @throws \Exception If the target directory is not writable.
      */
-    abstract public function downloadFiles($files = null);
+    abstract public function downloadFiles($path, $files = null);
 }

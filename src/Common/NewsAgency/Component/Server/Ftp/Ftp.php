@@ -6,9 +6,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Server\Ftp;
+namespace Common\NewsAgency\Component\Server\Ftp;
 
-use Framework\Import\Server\Server;
+use Common\NewsAgency\Component\Server\Server;
 
 /**
  * Synchronize local folders with an external FTP folder.
@@ -69,7 +69,7 @@ class Ftp extends Server
                         sprintf(
                             _(
                                 "Directory '%s' in the server '%s' doesn't exists or "
-                                . "you don't have enought permissions to access it"
+                                . "you don't have enough permissions to access it"
                             ),
                             $url['path'],
                             $url['host']
@@ -97,24 +97,20 @@ class Ftp extends Server
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles($files = null)
+    public function downloadFiles($path, $files = null)
     {
         if (empty($files)) {
             $files = $this->getRemoteFiles();
         }
 
-        if (!is_writable($this->params['path'])) {
+        if (!is_writable($path)) {
             throw new \Exception(
-                sprintf(
-                    _('Directory %s is not writable.'),
-                    $this->params['path']
-                )
+                sprintf(_('Directory %s is not writable.'), $path)
             );
         }
 
         foreach ($this->remoteFiles as $file) {
-            $localFile = $this->params['path'] . DS
-                . basename($file['filename']);
+            $localFile = $path . '/' . basename($file['filename']);
 
             if (!preg_match('/index\.xml$/', $localFile) &&
                 !file_exists($localFile)
@@ -132,9 +128,7 @@ class Ftp extends Server
     }
 
     /**
-     * Gets and returns the list of remote files.
-     *
-     * @return array The list of remote files.
+     * {@inheritdoc}
      */
     public function getRemoteFiles()
     {
