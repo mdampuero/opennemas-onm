@@ -17,10 +17,10 @@ class HttpEfe extends Http
     /**
      * {@inheritdoc}
      */
-    public function checkParameters($params)
+    public function checkParameters() : bool
     {
-        if (array_key_exists('url', $params)
-            && preg_match('@efeservicios@', $params['url'])
+        if (array_key_exists('url', $this->params)
+            && preg_match('@efeservicios@', $this->params['url'])
         ) {
             return true;
         }
@@ -31,7 +31,7 @@ class HttpEfe extends Http
     /**
      * {@inheritdoc}
      */
-    public function getContentFromUrl($url)
+    protected function getContentFromUrl(string $url) : string
     {
         $auth = '';
 
@@ -47,7 +47,7 @@ class HttpEfe extends Http
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles()
+    public function getRemoteFiles() : array
     {
         $content = $this->getContentFromUrl($this->params['url']);
 

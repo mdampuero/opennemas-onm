@@ -17,12 +17,12 @@ class HttpRss extends Http
     /**
      * {@inheritdoc}
      */
-    public function checkParameters($params)
+    public function checkParameters() : bool
     {
-        if (array_key_exists('url', $params)
-            && preg_match('@rss|feed|xml@', $params['url'])
+        if (array_key_exists('url', $this->params)
+            && preg_match('@rss|feed|xml@', $this->params['url'])
             && strpos(
-                @file_get_contents($params['url']),
+                @file_get_contents($this->params['url']),
                 'application/atom+xml'
             ) === false
         ) {
@@ -35,7 +35,7 @@ class HttpRss extends Http
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles($path, $files = null)
+    public function downloadFiles(string $path, ?array $files = null) : void
     {
         if (empty($files)) {
             $files = $this->remoteFiles;
@@ -62,7 +62,7 @@ class HttpRss extends Http
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles()
+    public function getRemoteFiles() : array
     {
         $content = $this->getContentFromUrl($this->params['url']);
 
@@ -99,10 +99,10 @@ class HttpRss extends Http
     /**
      * Saves a new NewsML files from a string.
      *
-     * @param string $path    The path to the NewsML file.
-     * @param string $content The NewsML file content.
+     * @param string           $path    The path to the NewsML file.
+     * @param SimpleXMLElement $content The NewsML file content.
      */
-    protected function buildContentAndSave($path, $content)
+    protected function buildContentAndSave(string $path, \SimpleXMLElement $content) : void
     {
         $article = new \Article();
 
@@ -116,14 +116,11 @@ class HttpRss extends Http
         $article->updated_datetime = new \DateTime($content->pubDate);
         $article->category_name    = (string) $content->category;
 
-        $newsMLString = $this->tpl->fetch(
-            'news_agency/newsml_templates/base.tpl',
-            [
-                'article' => $article,
-                'tags'    => getService('api.service.tag')
-                    ->getListByIdsKeyMapped($article->tags)['items']
-            ]
-        );
+        $newsMLString = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
+            'article' => $article,
+            'tags'    => getService('api.service.tag')
+                ->getListByIdsKeyMapped($article->tags)['items']
+        ]);
 
         file_put_contents($path, $newsMLString);
 

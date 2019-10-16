@@ -34,7 +34,7 @@ abstract class Http extends Server
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles($path, $files = null)
+    public function downloadFiles(string $path, ?array $files = null) : void
     {
         if (empty($files)) {
             $files = $this->remoteFiles;

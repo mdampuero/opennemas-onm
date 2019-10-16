@@ -17,10 +17,10 @@ class HttpOpennemas extends Http
     /**
      * {@inheritdoc}
      */
-    public function checkParameters($params)
+    public function checkParameters() : bool
     {
-        if (array_key_exists('url', $params)
-            && preg_match('@http(s)?://(.*)/ws/agency@', $params['url']) === 1
+        if (array_key_exists('url', $this->params)
+            && preg_match('@http(s)?://(.*)/ws/agency@', $this->params['url']) === 1
         ) {
             return true;
         }
@@ -31,7 +31,7 @@ class HttpOpennemas extends Http
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles()
+    public function getRemoteFiles() : array
     {
         $url = $this->params['url'] . '/export.xml?until='
             . $this->params['sync_from'];

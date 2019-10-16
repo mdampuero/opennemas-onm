@@ -17,10 +17,10 @@ class HttpEfePhotos extends HttpEfe
     /**
      * {@inheritdoc}
      */
-    public function checkParameters($params)
+    public function checkParameters() : bool
     {
-        if (array_key_exists('url', $params)
-            && preg_match('@efeservicios.*?fotos@i', $params['url'])
+        if (array_key_exists('url', $this->params)
+            && preg_match('@efeservicios.*?fotos@i', $this->params['url'])
         ) {
             return true;
         }
@@ -31,7 +31,7 @@ class HttpEfePhotos extends HttpEfe
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles()
+    public function getRemoteFiles() : array
     {
         $content = $this->getContentFromUrl($this->params['url']);
 

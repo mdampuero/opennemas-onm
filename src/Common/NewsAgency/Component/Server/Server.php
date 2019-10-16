@@ -53,58 +53,31 @@ abstract class Server
      *
      * @param array         $params The server parameters.
      * @param TemplateAdmin $tpl    The template service.
-     *
-     * @throws \Exception If the server parameters are not valid.
      */
     public function __construct($params, $tpl)
     {
-        if (!$this->checkParameters($params)) {
-            throw new \Exception('Invalid parameters for server');
-        }
-
         $this->tpl    = $tpl;
         $this->params = $params;
-
-        if (array_key_exists('path', $this->params)) {
-            $this->localFiles = glob($this->params['path'] . DS . '*.xml');
-
-            $this->cleanFiles();
-        }
     }
 
     /**
-     * Clean local files that are not present in server.
+     * Returns the list of downloaded files.
+     *
+     * @return array The list of downloaded files.
      */
-    public function cleanFiles()
+    public function getFiles()
     {
-        $deleted = [];
-        $files   = glob($this->params['path'] . DS . '*');
-
-        if ($this->params['sync_from'] !== 'no_limits') {
-            foreach ($files as $file) {
-                $modTime = filemtime($file);
-                $limit   = time() - $this->params['sync_from'];
-
-                if (filesize($file) < 2 || $modTime < $limit) {
-                    unlink($file);
-                    $deleted[] = $file;
-                }
-            }
-        }
-
-        $this->deleted += count($deleted);
-
-        $this->localFiles = array_diff($this->localFiles, $deleted);
+        return $this->localFiles;
     }
 
     /**
      * Gets a content from a given url.
      *
-     * @param $url The http server URL.
+     * @param string $url The http server URL.
      *
-     * @return $content The content from this url.
+     * @return strin The content from this URL.
      */
-    public function getContentFromUrl($url)
+    protected function getContentFromUrl(string $url) : string
     {
         $ch   = curl_init();
         $auth = null;
@@ -147,62 +120,18 @@ abstract class Server
     }
 
     /**
-     * Returns the list of downloaded files.
-     *
-     * @return array The list of downloaded files.
-     */
-    public function getFiles()
-    {
-        return $this->localFiles;
-    }
-
-    /**
-     * Filters files by its creation time.
-     *
-     * @param array   $files  The list of files to filter.
-     * @param integer $maxAge The timestamp of the max age allowed.
-     *
-     * @return array The list of files.
-     */
-    protected function filterOldFiles($files, $maxAge)
-    {
-        if (empty($maxAge) || $maxAge == 'no_limits') {
-            return $files;
-        }
-
-        $files = array_filter(
-            $files,
-            function ($item) use ($maxAge) {
-                if (!($item['date'] instanceof \DateTime) ||
-                    $item['filename'] == '..' ||
-                    $item['filename'] == '.'
-                ) {
-                    return false;
-                }
-
-                return (time() - $maxAge) < $item['date']->getTimestamp();
-            }
-        );
-
-        return $files;
-    }
-
-    /**
      * Checks if the current server parameter.
      *
-     * @param array $params Server parameters.
-     *
-     * @return boolean True if the parameters are valid. Otherwise, returns
-     *                 false.
+     * @return bool True if the parameters are valid. False otherwise.
      */
-    abstract public function checkParameters($params);
+    abstract public function checkParameters() : bool;
 
     /**
      * Gets and returns the list of remote files.
      *
      * @return array The list of remote files.
      */
-    abstract public function getRemoteFiles();
+    abstract public function getRemoteFiles() : array;
 
     /**
      * Downloads the main files from server.
@@ -212,5 +141,5 @@ abstract class Server
      *
      * @throws \Exception If the target directory is not writable.
      */
-    abstract public function downloadFiles($path, $files = null);
+    abstract public function downloadFiles(string $path, ?array $files = null) : void;
 }

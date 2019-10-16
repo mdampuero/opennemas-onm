@@ -83,10 +83,10 @@ class Ftp extends Server
     /**
      * {@inheritdoc}
      */
-    public function checkParameters($params)
+    public function checkParameters() : bool
     {
-        if (array_key_exists('url', $params)
-            && preg_match('@ftp://@', $params['url'])
+        if (array_key_exists('url', $this->params)
+            && preg_match('@ftp://@', $this->params['url'])
         ) {
             return true;
         }
@@ -97,7 +97,7 @@ class Ftp extends Server
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles($path, $files = null)
+    public function downloadFiles(string $path, ?array $files = null) : void
     {
         if (empty($files)) {
             $files = $this->getRemoteFiles();
@@ -130,7 +130,7 @@ class Ftp extends Server
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles()
+    public function getRemoteFiles() : array
     {
         @ftp_pasv($this->conn, true);
 
@@ -147,13 +147,14 @@ class Ftp extends Server
     /**
      * Converts a byte based file size to a human readable string.
      *
-     * @param  integer $bytes The filesize in bytes.
+     * @param int $bytes The filesize in bytes.
      *
      * @return string The human readable filesize.
      */
-    protected function byteConvert($bytes)
+    protected function byteConvert(int $bytes) : string
     {
         $symbol = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
         if ($bytes > 0) {
             $exp = floor(log($bytes) / log(1024));
         } else {
@@ -166,11 +167,11 @@ class Ftp extends Server
     /**
      * Converts a chmod string to a numeric based file permissions.
      *
-     * @param  string  $chmod The chmod string-based file permissions.
+     * @param string $chmod The chmod string-based file permissions.
      *
-     * @return integer The numeric based file permissions.
+     * @return int The numeric based file permissions.
      */
-    protected function chmodNum($chmod)
+    protected function chmodNum(string $chmod) : int
     {
         $trans = ['-' => '0', 'r' => '4', 'w' => '2', 'x' => '1'];
         $chmod = substr(strtr($chmod, $trans), 1);
@@ -182,11 +183,44 @@ class Ftp extends Server
     }
 
     /**
-     * Converts a raw file list from a FTP conn to a formatted array list
+     * Filters files by its creation time.
      *
-     * @return array list of files with its properties
+     * @param array  $files  The list of files to filter.
+     * @param string $maxAge The timestamp of the max age allowed.
+     *
+     * @return array The list of files.
      */
-    protected function formatFtpFileList($raw = [])
+    protected function filterOldFiles(array $files, string $maxAge) : array
+    {
+        if (empty($maxAge) || $maxAge == 'no_limits') {
+            return $files;
+        }
+
+        $files = array_filter(
+            $files,
+            function ($item) use ($maxAge) {
+                if (!($item['date'] instanceof \DateTime) ||
+                    $item['filename'] == '..' ||
+                    $item['filename'] == '.'
+                ) {
+                    return false;
+                }
+
+                return (time() - $maxAge) < $item['date']->getTimestamp();
+            }
+        );
+
+        return $files;
+    }
+
+    /**
+     * Converts a raw file list from a FTP conn to a formatted array list.
+     *
+     * @param array $raw The list of files to format.
+     *
+     * @return array list of files with its properties.
+     */
+    protected function formatFtpFileList(array $raw) : array
     {
         if (!is_array($raw) || empty($raw)) {
             return [];
@@ -227,13 +261,13 @@ class Ftp extends Server
 
     /**
      * Returns an array of information extracted from the Windows FTP Server
-     * raw list element
+     * raw list element.
      *
-     * @param string $rawfile the FTP rawfile info
+     * @param string $rawfile the FTP rawfile info.
      *
-     * @return array the properties extracted for the element
+     * @return array The properties extracted for the element.
      */
-    private function getFileInfoWindows($rawfile)
+    protected function getFileInfoWindows(string $rawfile) : array
     {
         $lineRegexp = "@([0-9]{2})-([0-9]{2})-([0-9]{2}) "
             . "+([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)@";
@@ -256,13 +290,13 @@ class Ftp extends Server
 
     /**
      * Returns an array of information extracted from the Linux FTP servers
-     * raw list element
+     * raw list element.
      *
-     * @param string $rawfile the FTP rawfile info
+     * @param string $rawfile the FTP rawfile info.
      *
      * @return array the properties extracted for the element
      */
-    private function getFileInfoLinux($rawfile)
+    protected function getFileInfoLinux(string $rawfile) : array
     {
         $info = preg_split("/[\s]+/", $rawfile, 9);
 
