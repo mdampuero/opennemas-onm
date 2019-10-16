@@ -50,6 +50,13 @@ class ExternalResource
     public $id = '';
 
     /**
+     * The file name for media resources.
+     *
+     * @var string
+     */
+    public $file_name = null;
+
+    /**
      * The resource pretitle.
      *
      * @var string
