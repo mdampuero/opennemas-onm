@@ -10,7 +10,6 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
-use Framework\Import\ServerFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -30,14 +29,16 @@ class NewsAgencyServerController extends ApiController
      * {@inheritdoc}
      */
     protected $permissions = [
-        'check'  => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'create' => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'delete' => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'list'   => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'patch'  => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'save'   => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'show'   => 'IMPORT_NEWS_AGENCY_CONFIG',
-        'update' => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'check'       => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'create'      => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'delete'      => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'empty'       => 'MASTER',
+        'list'        => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'patch'       => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'save'        => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'show'        => 'IMPORT_NEWS_AGENCY_CONFIG',
+        'synchronize' => 'MASTER',
+        'update'      => 'IMPORT_NEWS_AGENCY_CONFIG',
     ];
 
     /**
@@ -63,13 +64,59 @@ class NewsAgencyServerController extends ApiController
         ];
 
         $msg = $this->get('core.messenger');
-        $sf  = new ServerFactory($this->get('view')->getBackendTemplate());
+        $sf  = $this->get('news_agency.factory.server');
 
         try {
             $sf->get($server);
             $msg->add(_('Server connection success!'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to connect to the server'), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Tries to connect to the server with the provided parameters.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function emptyItemAction($id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('empty'));
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get($this->service)->emptyItem($id);
+            $msg->add(_('Running cleanup in background'), 'info');
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error', $e->getCode());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Tries to connect to the server with the provided parameters.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function synchronizeItemAction($id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('synchronize'));
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get($this->service)->synchronizeItem($id);
+            $msg->add(_('Running syncronization in background'), 'info');
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error', $e->getCode());
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
