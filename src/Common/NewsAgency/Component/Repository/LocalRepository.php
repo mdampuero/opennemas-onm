@@ -7,44 +7,49 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Import\Repository;
+namespace Common\NewsAgency\Component\Repository;
 
-use Framework\Import\Compiler\Compiler;
+use Common\Data\Serialize\Serializer\PhpSerializer;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
-/**
- * Searches in the list of compilled contents.
- */
 class LocalRepository
 {
     /**
-     * The contents in repository.
+     * The list of contents in repository.
      *
      * @var array
      */
-    public $contents = [];
+    protected $contents = [];
 
     /**
-     * The synchronization path.
+     * The Finder service.
+     *
+     * @var Finder
+     */
+    protected $finder;
+
+    /**
+     * The Filesystem service
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * The path to load contents from.
      *
      * @var string
      */
-    public $syncPath = '';
+    protected $path;
 
     /**
-     * Initializes the LocalRepository.
+     * Initializes the Repository.
      */
     public function __construct()
     {
-        $this->syncPath = CACHE_PATH . DS . 'importers';
-        $this->compiler = new Compiler($this->syncPath);
-
-        $this->contents = $this->compiler->getContentsFromCompiles();
-
-        usort($this->contents, function ($a, $b) {
-            return $a->priority !== $b->priority
-                ? $a->priority >= $b->priority
-                : $a->created_time < $b->created_time;
-        });
+        $this->finder = new Finder();
+        $this->fs     = new Filesystem();
     }
 
     /**
@@ -102,6 +107,84 @@ class LocalRepository
         }
 
         return array_slice($files, $epp * ($page - 1), $epp);
+    }
+
+    /**
+     * Reads contents from files found in path.
+     *
+     * @param string $path The path to read contents from.
+     *
+     * @return LocalRepository The current repository.
+     */
+    public function read(string $path) : LocalRepository
+    {
+        $files = $this->finder->in($path)->name('/sync.*.*.php/')->files();
+
+        foreach ($files as $file) {
+            $this->contents = array_merge(
+                $this->contents,
+                PhpSerializer::unserialize($file->getContents())
+            );
+        }
+
+        usort($this->contents, function ($a, $b) {
+            return $a->priority !== $b->priority
+                ? $a->priority >= $b->priority
+                : $a->created_time < $b->created_time;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Removes the file specified by the path.
+     *
+     * @param string $path The path to the file to remove.
+     *
+     * @return LocalRepository The current repository.
+     */
+    public function remove(string $path) : LocalRepository
+    {
+        $directory = pathinfo($path)['dirname'];
+        $pattern   = preg_replace('/\d+.php/', '*.php', basename($path));
+
+        $files = $this->finder->in($directory)
+            ->name('/' . $pattern . '/')
+            ->files();
+
+        foreach ($files as $file) {
+            $this->fs->remove($file);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the list of contents in the current repository.
+     *
+     * @param array $contents The list of contents.
+     *
+     * @return LocalRepository The current repository.
+     */
+    public function setContents(array $contents) : LocalRepository
+    {
+        $this->contents = $contents;
+
+        return $this;
+    }
+
+    /**
+     * Writes a list of contents to file.
+     *
+     * @param string $path The path to the file to write contents to.
+     *
+     * @return LocalRepository The current repository.
+     */
+    public function write(string $path) : LocalRepository
+    {
+        $this->fs->dumpFile($path, PhpSerializer::serialize($this->contents));
+
+        return $this;
     }
 
     /**

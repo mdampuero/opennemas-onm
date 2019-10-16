@@ -11,9 +11,9 @@ namespace Common\NewsAgency\Component\Synchronizer;
 
 use Common\NewsAgency\Component\Factory\ParserFactory;
 use Common\NewsAgency\Component\Factory\ServerFactory;
+use Common\NewsAgency\Component\Repository\LocalRepository;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
-use Framework\Import\Repository\LocalRepository;
 
 /**
  * Synchronizes contents from an external server and makes them ready-to-import.
