@@ -1,6 +1,41 @@
 <div class="grid simple">
 {extends file="common/extension/list.table.tpl"}
 
+{block name="commonColumns"}
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'name'" disabled type="checkbox">
+    <label for="checkbox-title">
+      {t}Name{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-synchronization" checklist-model="app.columns.selected" checklist-value="'synchronization'" type="checkbox">
+    <label for="checkbox-synchronization">
+      {t}Synchronization{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-color" checklist-model="app.columns.selected" checklist-value="'color'" type="checkbox">
+    <label for="checkbox-color">
+      {t}Color{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-automatic" checklist-model="app.columns.selected" checklist-value="'automatic'" type="checkbox">
+    <label for="checkbox-automatic">
+      {t}Automatic{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-enabled" checklist-model="app.columns.selected" checklist-value="'enabled'" type="checkbox">
+    <label for="checkbox-enabled">
+      {t}Enabled{/t}
+    </label>
+  </div>
+{/block}
+
+{block name="customColumns"}{/block}
+
 {block name="commonColumnsHeader"}
   <th class="v-align-middle" width="20">
     #
@@ -8,17 +43,17 @@
   <th class="v-align-middle" width="400">
     {t}Name{/t}
   </th>
-  <th class="text-center v-align-middle" width="150">
+  <th class="text-center v-align-middle" width="150" ng-if="isColumnEnabled('synchronization')">
     {t}Synchronization{/t}
   </th>
-  <th class="text-center v-align-middle" width="50">
+  <th class="text-center v-align-middle" width="50" ng-if="isColumnEnabled('color')">
     <i class="fa fa-paint-brush"></i>
   </th>
-  <th class="text-center v-align-middle" width="110">
+  <th class="text-center v-align-middle" width="110" ng-if="isColumnEnabled('automatic')">
     {t}Automatic{/t}
   </th>
-  <th class="text-center v-align-middle" width="50">
-    {t}Activated{/t}
+  <th class="text-center v-align-middle" width="80" ng-if="isColumnEnabled('enabled')">
+    {t}Enabled{/t}
   </th>
 {/block}
 
@@ -44,15 +79,15 @@
           </button>
           <ul class="dropdown-menu no-padding">
             <li>
-              <a href="#" ng-click="clean(item)">
-                <i class="fa fa-fire m-r-5"></i>
-                {t}Clean files{/t}
+              <a href="#" ng-click="synchronizeItem(getItemId(item))">
+                <i class="fa fa-retweet m-r-5"></i>
+                {t}Sync{/t}
               </a>
             </li>
             <li>
-              <a href="#" ng-click="sync(item)">
-                <i class="fa fa-retweet m-r-5"></i>
-                {t}Sync{/t}
+              <a href="#" ng-click="emptyItem(getItemId(item))">
+                <i class="fa fa-fire m-r-5"></i>
+                {t}Delete contents{/t}
               </a>
             </li>
           </ul>
@@ -60,20 +95,20 @@
       {/acl}
     </div>
   </td>
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('synchronization')">
     <span class="badge badge-default text-bold text-uppercase">
       [% data.extra.sync_from[item.sync_from] %]
     </span>
   </td>
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('color')">
     <span class="badge badge-default" ng-style="{ 'background-color': item.color }" ng-show="item.color">
       &nbsp;&nbsp;
     </span>
   </td>
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('automatic')">
     <i class="fa" ng-class="{ 'fa-check text-success': item.auto_import == 1, 'fa-times text-danger': !item.auto_import || item.auto_import == 0 }"></i>
   </td>
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('enabled')">
     <button class="btn btn-white" ng-click="patch(item, 'activated', item.activated != 1 ? 1 : 0)" type="button">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == 1, 'fa-times text-danger': !item.activatedLoading && !item.activated || item.activated == 0 }"></i>
     </button>

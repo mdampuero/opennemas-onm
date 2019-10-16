@@ -1,7 +1,7 @@
 {extends file="common/extension/list.tpl"}
 
 {block name="metaTitle"}
-  > {t}News Agency{/t} > {t}Sources{/t}
+  > {t}News Agency{/t} > {t}Servers{/t}
 {/block}
 
 {block name="ngInit"}
@@ -13,7 +13,9 @@
 {/block}
 
 {block name="title"}
-  {t}News Agency{/t}
+  <a class="no-padding" href="{url name=backend_news_agency_list}">
+    {t}News Agency{/t}
+  </a>
 {/block}
 
 {block name="extraTitle"}

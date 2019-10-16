@@ -1,7 +1,7 @@
 {extends file="common/extension/item.tpl"}
 
 {block name="metaTitle"}
-  > {t}News Agency{/t} > {t}Sources{/t} >
+  > {t}News Agency{/t} > {t}Servers{/t} >
   {if empty($id)}
     {t}Create{/t}
   {else}
