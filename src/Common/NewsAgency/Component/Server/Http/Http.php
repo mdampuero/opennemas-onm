@@ -17,24 +17,9 @@ use Common\NewsAgency\Component\Server\Server;
 abstract class Http extends Server
 {
     /**
-     * Opens an HTTP connection basing on the server parameters.
-     *
-     * @param array         $params The server parameters.
-     * @param TemplateAdmin $tpl    The template service.
-     *
-     * @throws \Exception If the server parameters are not valid.
-     */
-    public function __construct($params, $tpl)
-    {
-        parent::__construct($params, $tpl);
-
-        $this->getRemoteFiles();
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function downloadFiles(string $path, ?array $files = null) : void
+    public function downloadFiles(string $path, ?array $files = null) : Server
     {
         if (empty($files)) {
             $files = $this->remoteFiles;
@@ -58,5 +43,7 @@ abstract class Http extends Server
                 $this->downloaded++;
             }
         }
+
+        return $this;
     }
 }

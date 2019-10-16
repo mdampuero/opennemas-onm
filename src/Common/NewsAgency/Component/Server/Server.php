@@ -65,7 +65,7 @@ abstract class Server
      *
      * @return array The list of downloaded files.
      */
-    public function getFiles()
+    public function getFiles() : array
     {
         return $this->localFiles;
     }
@@ -129,9 +129,9 @@ abstract class Server
     /**
      * Gets and returns the list of remote files.
      *
-     * @return array The list of remote files.
+     * @return Server The current server.
      */
-    abstract public function getRemoteFiles() : array;
+    abstract public function getRemoteFiles() : Server;
 
     /**
      * Downloads the main files from server.
@@ -139,7 +139,9 @@ abstract class Server
      * @param string $path  The path to directory to download files to.
      * @param array  $files The list of missing files.
      *
+     * @return Server The current server.
+     *
      * @throws \Exception If the target directory is not writable.
      */
-    abstract public function downloadFiles(string $path, ?array $files = null) : void;
+    abstract public function downloadFiles(string $path, ?array $files = null) : Server;
 }

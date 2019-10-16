@@ -9,6 +9,8 @@
  */
 namespace Common\NewsAgency\Component\Server\Http;
 
+use Common\NewsAgency\Component\Server\Server;
+
 /**
  * Synchronize local folders with an external RSS-based source server.
  */
@@ -35,7 +37,7 @@ class HttpRss extends Http
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles(string $path, ?array $files = null) : void
+    public function downloadFiles(string $path, ?array $files = null) : Server
     {
         if (empty($files)) {
             $files = $this->remoteFiles;
@@ -57,12 +59,14 @@ class HttpRss extends Http
                 $this->downloaded++;
             }
         }
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles() : array
+    public function getRemoteFiles() : Server
     {
         $content = $this->getContentFromUrl($this->params['url']);
 
@@ -93,7 +97,7 @@ class HttpRss extends Http
             ];
         }
 
-        return $this->remoteFiles;
+        return $this;
     }
 
     /**

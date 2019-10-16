@@ -16,71 +16,6 @@ use Common\NewsAgency\Component\Server\Server;
 class Ftp extends Server
 {
     /**
-     * Initializes a new FTP server and opens a conn.
-     *
-     * @param array         $params The server parameters.
-     * @param TemplateAdmin $tpl    The template service.
-     *
-     * @throws \Exception If the server parameters are not valid.
-     */
-    public function __construct($params, $tpl)
-    {
-        parent::__construct($params, $tpl);
-
-        $url = parse_url($this->params['url']);
-
-        $this->conn = @ftp_connect($url['host']);
-
-        // Test FTP conn
-        if (!$this->conn) {
-            throw new \Exception(
-                sprintf(
-                    _(
-                        'Can\'t connect to server %s. Please check your'
-                        . ' conn details.'
-                    ),
-                    $this->params['name']
-                )
-            );
-        }
-
-        ftp_pasv($this->conn, true);
-
-        // if there is a ftp login configuration use it
-        if (array_key_exists('username', $this->params)) {
-            $logged = @ftp_login(
-                $this->conn,
-                $this->params['username'],
-                $this->params['password']
-            );
-
-            if (!$logged) {
-                throw new \Exception(
-                    sprintf(
-                        _('Can\'t login into server %s'),
-                        $this->params['name']
-                    )
-                );
-            }
-
-            if (isset($url['path'])) {
-                if (!@ftp_chdir($this->conn, $url['path'])) {
-                    throw new \Exception(
-                        sprintf(
-                            _(
-                                "Directory '%s' in the server '%s' doesn't exists or "
-                                . "you don't have enough permissions to access it"
-                            ),
-                            $url['path'],
-                            $url['host']
-                        )
-                    );
-                }
-            }
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function checkParameters() : bool
@@ -97,10 +32,10 @@ class Ftp extends Server
     /**
      * {@inheritdoc}
      */
-    public function downloadFiles(string $path, ?array $files = null) : void
+    public function downloadFiles(string $path, ?array $files = null) : Server
     {
         if (empty($files)) {
-            $files = $this->getRemoteFiles();
+            $files = $this->remoteFiles;
         }
 
         if (!is_writable($path)) {
@@ -125,13 +60,17 @@ class Ftp extends Server
                 $this->downloaded++;
             }
         }
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles() : array
+    public function getRemoteFiles() : Server
     {
+        $this->connect();
+
         @ftp_pasv($this->conn, true);
 
         $files = @ftp_rawlist($this->conn, ftp_pwd($this->conn), true);
@@ -141,7 +80,7 @@ class Ftp extends Server
             $this->params['sync_from']
         );
 
-        return $this->remoteFiles;
+        return $this;
     }
 
     /**
@@ -180,6 +119,54 @@ class Ftp extends Server
         return array_sum(str_split($array[0]))
             . array_sum(str_split($array[1]))
             . array_sum(str_split($array[2]));
+    }
+
+    /**
+     * Opens a new FTP connection
+     *
+     * @return Server The current server.
+     *
+     * @throws \Exception If the server parameters are not valid.
+     */
+    protected function connect() : Server
+    {
+        $url = parse_url($this->params['url']);
+
+        $this->conn = @ftp_connect($url['host']);
+
+        // Test FTP conn
+        if (!$this->conn) {
+            throw new \Exception(sprintf(_(
+                'Can\'t connect to server %s. Please check your conn details.'
+            ), $this->params['name']));
+        }
+
+        ftp_pasv($this->conn, true);
+
+        // if there is a ftp login configuration use it
+        if (array_key_exists('username', $this->params)) {
+            $logged = @ftp_login(
+                $this->conn,
+                $this->params['username'],
+                $this->params['password']
+            );
+
+            if (!$logged) {
+                throw new \Exception(sprintf(
+                    _('Can\'t login into server %s'),
+                    $this->params['name']
+                ));
+            }
+
+            if (isset($url['path']) && !@ftp_chdir($this->conn, $url['path'])) {
+                throw new \Exception(sprintf(_(
+                    "Directory '%s' in the server '%s' doesn't exists or "
+                    . "you don't have enough permissions to access it"
+                ), $url['path'], $url['host']));
+            }
+        }
+
+        return $this;
     }
 
     /**

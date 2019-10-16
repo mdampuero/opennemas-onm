@@ -9,6 +9,8 @@
  */
 namespace Common\NewsAgency\Component\Server\Http;
 
+use Common\NewsAgency\Component\Server\Server;
+
 /**
  * Synchronize local folders with an HTTP opennemas server.
  */
@@ -31,7 +33,7 @@ class HttpOpennemas extends Http
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles() : array
+    public function getRemoteFiles() : Server
     {
         $url = $this->params['url'] . '/export.xml?until='
             . $this->params['sync_from'];
@@ -60,6 +62,6 @@ class HttpOpennemas extends Http
             ];
         }
 
-        return $this->remoteFiles;
+        return $this;
     }
 }

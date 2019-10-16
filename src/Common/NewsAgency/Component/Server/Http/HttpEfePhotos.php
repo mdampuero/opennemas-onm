@@ -9,6 +9,8 @@
  */
 namespace Common\NewsAgency\Component\Server\Http;
 
+use Common\NewsAgency\Component\Server\Server;
+
 /**
  * Synchronize local folders with an external XML-based source server.
  */
@@ -31,7 +33,7 @@ class HttpEfePhotos extends HttpEfe
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles() : array
+    public function getRemoteFiles() : Server
     {
         $content = $this->getContentFromUrl($this->params['url']);
 
@@ -52,6 +54,6 @@ class HttpEfePhotos extends HttpEfe
             ];
         }
 
-        return $this->remoteFiles;
+        return $this;
     }
 }

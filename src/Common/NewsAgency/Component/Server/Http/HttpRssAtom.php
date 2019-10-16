@@ -9,6 +9,8 @@
  */
 namespace Common\NewsAgency\Component\Server\Http;
 
+use Common\NewsAgency\Component\Server\Server;
+
 /**
  * Synchronize local folders with an external RSS-Atom-based source server.
  */
@@ -35,7 +37,7 @@ class HttpRssAtom extends HttpRss
     /**
      * {@inheritdoc}
      */
-    public function getRemoteFiles() : array
+    public function getRemoteFiles() : Server
     {
         $content = $this->getContentFromUrl($this->params['url']);
 
@@ -59,7 +61,7 @@ class HttpRssAtom extends HttpRss
             ];
         }
 
-        return $this->remoteFiles;
+        return $this;
     }
 
     /**
