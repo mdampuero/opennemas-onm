@@ -1,7 +1,5 @@
-backend_news_agency:
+backend_news_agency_list:
     path:     /news-agency
     defaults: { _controller: BackendBundle:NewsAgency:list }
-
-backend_news_agency_sync:
-    path:     /news-agency/sync
-    defaults: { _controller: BackendBundle:NewsAgency:sync }
+    options:
+        expose: true
