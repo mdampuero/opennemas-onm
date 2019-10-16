@@ -1,4 +1,18 @@
 services:
     news_agency.factory.parser:
-        class:  Common\NewsAgency\Component\Factory\ParserFactory
-        public: true
+        class:     Common\NewsAgency\Component\Factory\ParserFactory
+        public:    true
+
+    news_agency.factory.server:
+        class:     Common\NewsAgency\Component\Factory\ServerFactory
+        arguments: [ '@core.template.admin' ]
+        public:    true
+
+    news_agency.helper.server:
+        class:     Common\NewsAgency\Component\Factory\ParserFactory
+        public:    true
+
+    news_agency.service.synchronizer:
+        class:     Common\NewsAgency\Component\Synchronizer\Synchronizer
+        arguments: [ '@service_container' ]
+        public:    true
