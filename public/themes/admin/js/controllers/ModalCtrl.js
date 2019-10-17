@@ -33,9 +33,18 @@ angular.module('BackendApp.controllers').controller('modalCtrl', [
       if (success && getType.toString.call(success) === '[object Function]') {
         success($uibModalInstance, $scope.template).then(function(response) {
           $scope.loading = 0;
-          $uibModalInstance.close({ data: response.data, success: true });
+          $uibModalInstance.close({
+            data: response.data,
+            status: response.status,
+            success: true
+          });
         }, function(response) {
-          $uibModalInstance.close({ data: response.data, success: false });
+          $scope.loading = 0;
+          $uibModalInstance.close({
+            data: response.data,
+            status: response.status,
+            success: false
+          });
         });
       } else {
         $uibModalInstance.close(true);
