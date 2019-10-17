@@ -29,10 +29,6 @@ backend_ws_menus:
     resource: '@BackendWebServiceBundle/Resources/config/routing/menus.yml'
     prefix:   /
 
-backend_ws_news_agency:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/news_agency.yml'
-    prefix:   /
-
 backend_ws_opinions:
     resource: '@BackendWebServiceBundle/Resources/config/routing/opinions.yml'
     prefix:   /

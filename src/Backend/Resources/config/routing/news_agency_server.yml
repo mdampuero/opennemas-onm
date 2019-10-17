@@ -12,7 +12,7 @@ backend_news_agency_server_show:
     requirements:
         id: \d+
 
-backend_news_agency_servers_list:
+backend_news_agency_server_list:
     path:     /news-agency/servers
     defaults: { _controller: BackendBundle:NewsAgencyServer:list }
     options:

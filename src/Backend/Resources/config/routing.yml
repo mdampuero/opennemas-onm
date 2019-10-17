@@ -405,9 +405,9 @@ backend_newsstand:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsstand.yml'
 
-backend_news_agency:
+backend_news_agency_resource:
     prefix:   /
-    resource: '@BackendBundle/Resources/config/routing/news_agency.yml'
+    resource: '@BackendBundle/Resources/config/routing/news_agency_resource.yml'
 
 backend_news_agency_server:
     prefix:   /
