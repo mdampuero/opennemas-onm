@@ -173,6 +173,33 @@ class AdvertisementRendererTest extends TestCase
     /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::render
      */
+    public function testRenderWithFia()
+    {
+        $ad              = new \Advertisement();
+        $ad->params      = [ 'ads_format' => 'fia' ];
+        $ad->with_script = 3;
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->renderer->expects($this->once())->method('getRendererClass')
+            ->with(3)
+            ->willReturn($renderer);
+
+        $this->assertEquals(
+            'foo',
+            $this->renderer->render($ad, $ad->params)
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     */
     public function testRenderWithSafeFrameMode()
     {
         $ad             = new \Advertisement();
@@ -454,13 +481,8 @@ class AdvertisementRendererTest extends TestCase
         $ad->params['sizes']  = [];
         $ad->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
-        $ads = [ $ad ];
-
-        $output = '';
-
-        $this->assertEquals(
-            $output,
-            $this->renderer->renderInlineInterstitial($ads, [])
+        $this->assertEmpty(
+            $this->renderer->renderInlineInterstitial([ $ad ], [])
         );
     }
 
@@ -485,6 +507,39 @@ class AdvertisementRendererTest extends TestCase
         $this->assertEquals(
             $returnValue,
             $this->renderer->renderInlineInterstitial($ads, [])
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceAdvertisementSize
+     */
+    public function testGetDeviceAdvertisementSize()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getDeviceAdvertisementSize');
+        $method->setAccessible(true);
+
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
+
+        $this->assertEquals(
+            [ 'width' => 320, 'height' => 100, 'device' => 'phone' ],
+            $method->invokeArgs($this->renderer, [ $ad, 'phone' ])
         );
     }
 

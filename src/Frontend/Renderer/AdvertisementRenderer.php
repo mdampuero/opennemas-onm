@@ -107,11 +107,15 @@ class AdvertisementRenderer
      */
     public function render(\Advertisement $ad, $params)
     {
-        // Get renderer class
-        $renderer = $this->getRendererClass($ad->with_script);
+        // Get renderer class and ad format
+        $renderer  = $this->getRendererClass($ad->with_script);
+        $adsFormat = $params['ads_format'] ?? null;
 
-        // Check for safeframe and advertisement format
-        $adsFormat   = $params['ads_format'] ?? null;
+        if ($adsFormat === 'fia') {
+            return $renderer->renderFia($ad, $params);
+        }
+
+        // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
         if ($isSafeFrame && !in_array($adsFormat, ['amp', 'inline'])) {
             return array_key_exists('floating', $params)
@@ -185,18 +189,11 @@ class AdvertisementRenderer
         $orientation = empty($ad->params['orientation'])
             ? 'top' : $ad->params['orientation'];
 
-        $sizes = $ad->normalizeSizes($ad->params);
-        $size  = array_filter($sizes, function ($a) {
-            return $a['device'] === 'desktop';
-        });
-
-        if (empty($sizes)) {
+        $size = $this->getDeviceAdvertisementSize($ad, 'desktop');
+        if (empty($size)) {
             return '';
         }
 
-        $size = array_shift($sizes);
-
-        // Get renderer class
         $renderer = $this->getRendererClass($ad->with_script);
 
         return $this->tpl->fetch(
@@ -208,6 +205,27 @@ class AdvertisementRenderer
                 'content'     => $renderer->renderInline($ad, $params)
             ]
         );
+    }
+
+    /**
+     * Returns the advertisement width and height for a specific device.
+     *
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param string         $device The device to get sizes from.
+     *
+     * @return array Array with advertisement width and height.
+     */
+    protected function getDeviceAdvertisementSize($ad, $device)
+    {
+        $nomalizedSizes = $ad->normalizeSizes($ad->params);
+
+        $sizes = array_filter($nomalizedSizes, function ($a) use ($device) {
+            return $a['device'] === $device;
+        });
+
+        $size = array_shift($sizes);
+
+        return $size;
     }
 
     /**
