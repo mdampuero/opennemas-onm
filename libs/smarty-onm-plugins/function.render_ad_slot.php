@@ -18,7 +18,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
 
     // Filter advertisement by position
     $adsPositions = $smarty->getValue('ads_positions');
-    if (empty($adsPositions) || !in_array($params['position'], $adsPositions)) {
+    if (empty($adsPositions) || !in_array($position, $adsPositions)) {
         return '';
     }
 
@@ -45,7 +45,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
     }
 
     $adsFormat = $smarty->getValue('ads_format');
-    if ($safeframeEnabled && !in_array($adsFormat, ['amp', 'inline'])) {
+    if ($safeframeEnabled && !in_array($adsFormat, ['amp', 'fia', 'inline'])) {
         return sprintf($tpl, $class, '');
     }
 
@@ -57,6 +57,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
         'advertisementGroup' => $app['advertisementGroup'],
         'content'            => $smarty->getValue('content'),
         'ads_format'         => $adsFormat ?? null,
+        'current_position'   => $position,
     ];
 
     return $smarty->getContainer()->get('frontend.renderer.advertisement')
