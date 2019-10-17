@@ -18,10 +18,31 @@ use Frontend\Renderer\AdvertisementRenderer;
 class DfpRenderer extends AdvertisementRenderer
 {
     /**
-     * Renders a DFP advertisement slot.
+     * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
-     * @param array          $params The list of parameters
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderFia($ad, $params)
+    {
+        $size = $this->getDeviceAdvertisementSize($ad, 'phone');
+
+        return $this->tpl->fetch('advertisement/helpers/fia/dfp.tpl', [
+            'id'      => $ad->id,
+            'dfpId'   => $ad->params['googledfp_unit_id'],
+            'sizes'   => $ad->getSizes($ad->normalizeSizes($ad->params)),
+            'width'   => $size['width'],
+            'height'  => $size['height'],
+            'default' => $params['current_position'] === 1075 ? true : false,
+        ]);
+    }
+
+    /**
+     * Renders a DFP advertisement slot.
+     *
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param array          $params The list of parameters.
      *
      * @return string The HTML for the slot.
      */
@@ -33,12 +54,12 @@ class DfpRenderer extends AdvertisementRenderer
     }
 
     /**
-     * Renders a SafeFrame document for a DFP advertisement
+     * Renders a SafeFrame document for a DFP advertisement.
      *
      * @param \Advertisement $ad     The ad to render.
-     * @param array          $params The list of parameters
+     * @param array          $params The list of parameters.
      *
-     * @return string the HTML generated
+     * @return string The generated HTML.
      */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
@@ -61,7 +82,7 @@ class DfpRenderer extends AdvertisementRenderer
      * Generates the HTML header section for the DFP ads.
      *
      * @param array  $ads    The list of advertisements to generate the header from.
-     * @param array  $params The list of parameters
+     * @param array  $params The list of parameters.
      *
      * @return string the HTML content for the DFP slot.
      */

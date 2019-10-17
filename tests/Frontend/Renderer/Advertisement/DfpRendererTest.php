@@ -70,6 +70,66 @@ class DfpRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'googledfp_unit_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $params = [ 'current_position' => 1075 ];
+        $output = '<figure class="op-ad op-ad-default">
+            <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
+                <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+                <script>
+                var googletag = googletag || {};
+                googletag.cmd = googletag.cmd || [];
+                </script>
+                <script>
+                googletag.cmd.push(function() {
+                    googletag.defineSlot(\'321\', [ [ 300, 300 ] ],'
+                    . ' \'zone_1\').addService(googletag.pubads());
+                    googletag.pubads().enableSingleRequest();
+                    googletag.pubads().collapseEmptyDivs();
+                    googletag.enableServices();
+                });
+                </script>
+                <div id="zone_1">
+                <script>
+                    googletag.cmd.push(function() { googletag.display(\'zone_1\'); });
+                </script>
+                </div>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/dfp.tpl', [
+                'id'      => 1,
+                'dfpId'   => 321,
+                'sizes'   => '[ [ 300, 300 ] ]',
+                'width'   => 300,
+                'height'  => 300,
+                'default' => true,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
      */
     public function testRenderInline()
