@@ -65,31 +65,20 @@ class HttpRssAtom extends HttpRss
     }
 
     /**
-     * Saves a new NewsML files from a string.
-     *
-     * @param string           $path    The path to the NewsML file.
-     * @param SimpleXMLElement $content The NewsML file content.
+     * {@inheritdoc}
      */
-    protected function buildContentAndSave(string $path, \SimpleXMLElement $content) : void
+    protected function parseXml(string $path, \SimpleXMLElement $content) : \StdClass
     {
-        $article = new \Article();
+        $article = new \StdClass();
 
         $article->id               = md5($path);
         $article->title            = (string) $content->title;
         $article->body             = (string) $content->content;
-        $article->summary          = (string) $content->summary;
         $article->created_datetime = new \DateTime($content->published);
         $article->updated_datetime = new \DateTime($content->updated);
+        $article->summary          = (string) $content->summary;
+        $article->tags             = [];
 
-        $newsMLString = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
-            'article' => $article,
-            'tags'    => getService('api.service.tag')
-                ->getListByIdsKeyMapped($article->tags)['items']
-        ]);
-
-        file_put_contents($path, $newsMLString);
-
-        $time = $article->created_datetime->getTimestamp();
-        touch($path, $time);
+        return $article;
     }
 }

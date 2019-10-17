@@ -53,7 +53,7 @@ class HttpRss extends Http
             $localFile = $path . DS . $file['filename'];
 
             if (!file_exists($localFile)) {
-                $this->buildContentAndSave($localFile, $file['content']);
+                $this->generateNewsML($localFile, $file['content']);
 
                 $this->localFiles[] = $localFile;
                 $this->downloaded++;
@@ -106,29 +106,45 @@ class HttpRss extends Http
      * @param string           $path    The path to the NewsML file.
      * @param SimpleXMLElement $content The NewsML file content.
      */
-    protected function buildContentAndSave(string $path, \SimpleXMLElement $content) : void
+    protected function generateNewsML(string $path, \SimpleXMLElement $xml) : void
     {
-        $article = new \Article();
+        $content = $this->parseXml($path, $xml);
 
-        $fullBody = (string) htmlentities($content->description) . '<br>'
+        $newsML = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
+            'article' => $content,
+            'tags'    => []
+        ]);
+
+        file_put_contents($path, $newsML);
+
+        $time = $content->created_datetime->getTimestamp();
+
+        touch($path, $time);
+    }
+
+    /**
+     * Parses the XML and returns an object with the content information.
+     *
+     * @param string            $path    The path to the XML file.
+     * @param \SimpleXMLElement $content The content as XML.
+     *
+     * @return \StdClass The content.
+     */
+    protected function parseXml(string $path, \SimpleXMLElement $content) : \StdClass
+    {
+        $article = new \StdClass();
+
+        $body = (string) htmlentities($content->description) . '<br>'
             . htmlentities($content->children('content', true));
 
         $article->id               = md5($path);
         $article->title            = (string) $content->title;
-        $article->body             = $fullBody;
+        $article->body             = (string) $body;
         $article->created_datetime = new \DateTime($content->pubDate);
         $article->updated_datetime = new \DateTime($content->pubDate);
         $article->category_name    = (string) $content->category;
+        $article->tags             = [];
 
-        $newsMLString = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
-            'article' => $article,
-            'tags'    => getService('api.service.tag')
-                ->getListByIdsKeyMapped($article->tags)['items']
-        ]);
-
-        file_put_contents($path, $newsMLString);
-
-        $time = $article->created_datetime->getTimestamp();
-        touch($path, $time);
+        return $article;
     }
 }
