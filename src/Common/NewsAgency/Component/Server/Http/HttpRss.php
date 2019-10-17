@@ -54,10 +54,10 @@ class HttpRss extends Http
 
             if (!file_exists($localFile)) {
                 $this->generateNewsML($localFile, $file['content']);
-
-                $this->localFiles[] = $localFile;
                 $this->downloaded++;
             }
+
+            $this->localFiles[] = $localFile;
         }
 
         return $this;
@@ -87,6 +87,7 @@ class HttpRss extends Http
         if (!is_object($xml)) {
             return $this->remoteFiles;
         }
+
         $files = $xml->xpath('//channel/item');
 
         foreach ($files as $value) {
