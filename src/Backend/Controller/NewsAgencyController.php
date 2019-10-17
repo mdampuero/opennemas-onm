@@ -26,5 +26,5 @@ class NewsAgencyController extends BackendController
     /**
      * {@inheritdoc}
      */
-    protected $resource = 'news_agency';
+    protected $resource = 'news_agency/resource';
 }
