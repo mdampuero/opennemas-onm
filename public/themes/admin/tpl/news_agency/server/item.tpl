@@ -18,7 +18,7 @@
 {/block}
 
 {block name="title"}
-  <a class="no-padding" href="{url name=backend_news_agency_list}">
+  <a class="no-padding" href="{url name=backend_news_agency_resource_list}">
     {t}News Agency{/t}
   </a>
 {/block}
@@ -31,7 +31,7 @@
   </li>
   <li class="hidden-xs quicklinks">
     <h4>
-      <a class="no-padding" href="{url name=backend_news_agency_servers_list}">
+      <a class="no-padding" href="{url name=backend_news_agency_server_list}">
         {t}Servers{/t}
       </a>
     </h4>

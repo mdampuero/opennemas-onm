@@ -1,4 +1,3 @@
-<div class="grid simple">
 {extends file="common/extension/list.table.tpl"}
 
 {block name="commonColumns"}
