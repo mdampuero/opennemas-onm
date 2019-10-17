@@ -312,6 +312,7 @@ class Synchronizer
     protected function parseFiles(array $files, string $source) : array
     {
         $contents = [];
+
         foreach ($files as $file) {
             try {
                 $xml = simplexml_load_file($file);
@@ -350,9 +351,11 @@ class Synchronizer
     {
         $valid = [];
 
-        foreach ($contents as &$content) {
+        foreach ($contents as $content) {
             if ($content->type !== 'photo') {
                 $valid[] = $content;
+
+                continue;
             }
 
             $filePath = $path . '/' . $content->file_name;
