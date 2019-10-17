@@ -18,10 +18,29 @@ use Frontend\Renderer\AdvertisementRenderer;
 class ImageRenderer extends AdvertisementRenderer
 {
     /**
+     * Returns the HTML for instant articles advertisements.
+     *
+     * @param \Advertisement $ad The advertisement to render.
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderFia($ad, $params)
+    {
+        $size = $this->getDeviceAdvertisementSize($ad, 'phone');
+
+        return $this->tpl->fetch('advertisement/helpers/fia/image.tpl', [
+            'content' => $this->renderInline($ad, $params),
+            'width'   => $size['width'],
+            'height'  => $size['height'],
+            'default' => $params['current_position'] === 1075 ? true : false,
+        ]);
+    }
+
+    /**
      * Renders an image based advertisement.
      *
      * @param \Advertisement $ad     The advertisement to render.
-     * @param array          $params The list of parameters
+     * @param array          $params The list of parameters.
      *
      * @return string The HTML for the slot.
      */
@@ -50,21 +69,20 @@ class ImageRenderer extends AdvertisementRenderer
             'height' => $img->height,
             'src'    => $this->container->get('core.helper.url_generator')
                 ->generate($img),
-            'url'    => $this->instance->getBaseUrl()
-                . $this->router->generate(
-                    'frontend_ad_redirect',
-                    [ 'id' => $publicId ]
-                ),
+            'url'    => $this->instance->getBaseUrl() . $this->router->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ]
+            ),
         ]);
     }
 
     /**
-     * Renders a SafeFrame document for an advertisement
+     * Renders a SafeFrame document for an advertisement.
      *
      * @param \Advertisement $ad     The ad to render.
-     * @param array          $params The list of parameters
+     * @param array          $params The list of parameters.
      *
-     * @return string the HTML generated
+     * @return string The generated HTML.
      */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
@@ -75,6 +93,33 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         return $this->renderSafeFrameImage($ad, $img);
+    }
+
+    /**
+     * Returns the image object for the advertisement.
+     *
+     * @param \Advertisement $ad The advertisement object.
+     *
+     * @return \Photo The image for the advertisement.
+     */
+    protected function getImage($ad)
+    {
+        if (empty($ad->path)) {
+            $this->container->get('application.log')->info(
+                'The advertisement photo for the ad (' . $ad->id . ') is empty'
+            );
+
+            return null;
+        }
+
+        try {
+            return $this->container->get('entity_repository')
+                ->find('Photo', $ad->path);
+        } catch (\Exception $e) {
+            $this->container->get('error.log')->error($e->getMessage());
+        }
+
+        return null;
     }
 
     /**
@@ -107,32 +152,5 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         return $this->tpl->fetch($template, $params);
-    }
-
-    /**
-     * Returns the image object for the advertisement.
-     *
-     * @param \Advertisement $ad The advertisement object.
-     *
-     * @return \Photo The image for the advertisement.
-     */
-    protected function getImage($ad)
-    {
-        if (empty($ad->path)) {
-            $this->container->get('application.log')->info(
-                'The advertisement photo for the ad (' . $ad->id . ') is empty'
-            );
-
-            return null;
-        }
-
-        try {
-            return $this->container->get('entity_repository')
-                ->find('Photo', $ad->path);
-        } catch (\Exception $e) {
-            $this->container->get('error.log')->error($e->getMessage());
-        }
-
-        return null;
     }
 }

@@ -104,6 +104,64 @@ class ImageRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 123;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->script  = '<script>foo bar baz</script>';
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $photo         = new \Photo();
+        $photo->width  = 300;
+        $photo->height = 300;
+
+        $content = '<a target="_blank" href="/ads/get/123" rel="nofollow">
+            <img src="thud.opennemas.com/media/opennemas/images/path/foo.png" width="300" height="300" />
+        </a>';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ImageRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderInline' ])
+            ->getMock();
+
+        $renderer->expects($this->once())->method('renderInline')
+            ->willReturn($content);
+
+        $params = [ 'current_position' => 1075 ];
+        $output = '<figure class="op-ad op-ad-default">
+            <iframe height="300" width="300">
+                <a target="_blank" href="/ads/get/123" rel="nofollow">
+                    <img src="thud.opennemas.com/media/opennemas/images/path/foo.png" width="300" height="300" />
+                </a>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/image.tpl', [
+                'content' => $content,
+                'width'   => 300,
+                'height'  => 300,
+                'default' => true,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderInline
      */
     public function testRenderInlineWithNoImage()
