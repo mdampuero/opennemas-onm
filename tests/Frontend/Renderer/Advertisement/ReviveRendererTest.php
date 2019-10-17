@@ -96,6 +96,64 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'openx_zone_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('revive_ad_server')
+            ->willReturn([ 'url' => 'https://revive.com' ]);
+
+        $params = [
+            'current_position' => 1076,
+            'category'         => 'gorp',
+        ];
+        $output = '<figure class="op-ad">
+            <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
+                <script>
+                    var OA_zones = {
+                    \'zone_1\': 321
+                    };
+                </script>
+                <script src="https://revive.com/www/delivery/spcjs.php?cat_name=gorp"></script>
+                <script>
+                    OA_show(\'zone_1\');
+                </script>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/openx.tpl', [
+                'id'       => $ad->id,
+                'category' => $params['category'],
+                'openXId'  => $ad->params['openx_zone_id'],
+                'url'      => 'https://revive.com',
+                'width'    => 300,
+                'height'   => 300,
+                'default'  => false,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
      */
     public function testRenderInline()
