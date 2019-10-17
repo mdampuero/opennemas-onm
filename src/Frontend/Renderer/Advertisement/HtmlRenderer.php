@@ -18,10 +18,29 @@ use Frontend\Renderer\AdvertisementRenderer;
 class HtmlRenderer extends AdvertisementRenderer
 {
     /**
-     * Renders an inline HTML/JS advertisement.
+     * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
-     * @param array          $params The list of parameters
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderFia($ad, $params)
+    {
+        $size = $this->getDeviceAdvertisementSize($ad, 'phone');
+
+        return $this->tpl->fetch('advertisement/helpers/fia/html.tpl', [
+            'content' => $this->getHtml($ad),
+            'width'   => $size['width'],
+            'height'  => $size['height'],
+            'iframe'  => strpos($ad->script, '<iframe') !== false ? true : false,
+            'default' => $params['current_position'] === 1075 ? true : false,
+        ]);
+    }
+    /**
+     * Renders an inline HTML/JS advertisement.
+     *
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param array          $params The list of parameters.
      *
      * @return string The HTML for the slot.
      */
@@ -31,12 +50,12 @@ class HtmlRenderer extends AdvertisementRenderer
     }
 
     /**
-     * Renders a SafeFrame document for an HTML/JS advertisement
+     * Renders a SafeFrame document for an HTML/JS advertisement.
      *
-     * @param \Advertisement $ad The advertisement to render.
-     * @param array          $params The list of parameters
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param array          $params The list of parameters.
      *
-     * @return string the HTML generated
+     * @return string The generated HTML.
      */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {

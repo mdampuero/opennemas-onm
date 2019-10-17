@@ -77,6 +77,47 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->script  = '<script>foo bar baz</script>';
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $params = [ 'current_position' => 1075 ];
+        $output = '<figure class="op-ad op-ad-default">
+            <iframe height="300" width="300">
+                <script>foo bar baz</script>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/html.tpl', [
+                'content' => $ad->script,
+                'iframe'  => false,
+                'width'   => 300,
+                'height'  => 300,
+                'default' => true,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
      */
     public function testRenderInline()
