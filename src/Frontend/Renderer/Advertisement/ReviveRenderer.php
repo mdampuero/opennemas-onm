@@ -28,7 +28,7 @@ class ReviveRenderer extends AdvertisementRenderer
     {
         $size = $this->getDeviceAdvertisementSize($ad, 'phone');
 
-        return $this->tpl->fetch('advertisement/helpers/fia/openx.tpl', [
+        return $this->tpl->fetch('advertisement/helpers/fia/revive.tpl', [
             'id'       => $ad->id,
             'category' => $params['category'],
             'openXId'  => $ad->params['openx_zone_id'],
@@ -81,7 +81,7 @@ class ReviveRenderer extends AdvertisementRenderer
             'url'       => $this->ds->get('revive_ad_server')['url']
         ];
 
-        return $this->tpl->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/revive.tpl', $params);
     }
 
     /**

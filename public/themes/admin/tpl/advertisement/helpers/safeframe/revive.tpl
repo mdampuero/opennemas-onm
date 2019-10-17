@@ -16,7 +16,7 @@
     </style>
     <script>
       var OA_zones = {
-        'zone_{{$id}}': {{$openXId}}
+        'zone_{{$id}}': {{$reviveId}}
       };
     </script>
   </head>

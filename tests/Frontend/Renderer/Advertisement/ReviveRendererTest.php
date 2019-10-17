@@ -136,7 +136,7 @@ class ReviveRendererTest extends TestCase
         </figure>';
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('advertisement/helpers/fia/openx.tpl', [
+            ->with('advertisement/helpers/fia/revive.tpl', [
                 'id'       => $ad->id,
                 'category' => $params['category'],
                 'openXId'  => $ad->params['openx_zone_id'],
@@ -235,7 +235,7 @@ class ReviveRendererTest extends TestCase
       </html>';
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('advertisement/helpers/safeframe/openx.tpl', [
+            ->with('advertisement/helpers/safeframe/revive.tpl', [
                 'id'            => 1,
                 'category'      => 'foo',
                 'extension'     => 'bar',
