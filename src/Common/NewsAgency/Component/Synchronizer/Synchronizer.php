@@ -251,7 +251,7 @@ class Synchronizer
                 'filename' => $a->file_name,
                 'url'      => $a->file_path
             ];
-        }, array_filter($contents, function ($a) use ($fs) {
+        }, array_filter($contents, function ($a) use ($fs, $path) {
             return ($a->type === 'photo' || $a->type === 'video')
                 && !$fs->exists($path . '/' . $a->file_name);
         }));
