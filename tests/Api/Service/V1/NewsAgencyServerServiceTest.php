@@ -152,22 +152,25 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteList()
     {
-        $data = [ 'id' => 1, 'xyzzy' => 'foobar' ];
+        $data = [
+            [ 'id' => 1, 'xyzzy' => 'foobar' ],
+            [ 'id' => 2, 'xyzzy' => 'baz' ]
+        ];
 
         $property = new \ReflectionProperty($this->service, 'config');
         $property->setAccessible(true);
-        $property->setValue($this->service, [ $data ]);
+        $property->setValue($this->service, $data);
 
         $this->dataset->expects($this->once())->method('set')
             ->with('news_agency_config', []);
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('news_agency.server.deleteList', [
-                'ids'   => [ 1 ],
-                'items' => [ $data ]
+                'ids'   => [ 1, 2 ],
+                'items' => $data
             ]);
 
-        $this->service->deleteList([ 1 ]);
+        $this->service->deleteList([ 1, 2 ]);
     }
 
     /**

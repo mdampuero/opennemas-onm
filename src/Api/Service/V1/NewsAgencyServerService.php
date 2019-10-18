@@ -122,17 +122,17 @@ class NewsAgencyServerService implements Service
         $items   = [];
 
         foreach ($ids as $id) {
-            try {
-                $items[]   = $this->config[$id - 1];
-                $deleted[] = $id;
+            $items[]   = $this->config[$id - 1];
+            $deleted[] = $id;
 
-                unset($this->config[$id - 1]);
+            unset($this->config[$id - 1]);
+        }
 
-                $this->config = array_values($this->config);
-                $this->dataset->set('news_agency_config', $this->config);
-            } catch (\Exception $e) {
-                throw new DeleteListException($e->getMessage(), $e->getCode());
-            }
+        try {
+            $this->config = array_values($this->config);
+            $this->dataset->set('news_agency_config', $this->config);
+        } catch (\Exception $e) {
+            throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
