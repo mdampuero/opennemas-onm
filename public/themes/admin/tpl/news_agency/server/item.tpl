@@ -323,7 +323,7 @@
                   <span class="input-group-addon">
                     <i class="fa fa-user"></i>
                   </span>
-                  <input class="form-control" id="username" name="username" ng-model="username" type="text">
+                  <input class="form-control" id="username" name="username" ng-model="item.username" type="text">
                 </div>
               </div>
             </div>
