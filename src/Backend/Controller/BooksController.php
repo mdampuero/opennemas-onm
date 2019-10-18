@@ -26,19 +26,6 @@ class BooksController extends Controller
      */
     public function listAction()
     {
-        $configurations = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('book_settings');
-
-        if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
-            );
-        }
-
         return $this->render('book/list.tpl');
     }
 
