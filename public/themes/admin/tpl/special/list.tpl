@@ -19,14 +19,6 @@
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              {acl isAllowed="SPECIAL_SETTINGS"}
-                <li class="quicklinks">
-                  <a class="btn btn-link" href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
-                    <span class="fa fa-cog fa-lg"></span>
-                  </a>
-                </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-              {/acl}
               {acl isAllowed="SPECIAL_CREATE"}
                 <li class="quicklinks">
                   <a class="btn btn-loading btn-success text-uppercase" href="{url name=admin_special_create}">

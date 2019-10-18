@@ -243,44 +243,4 @@ class SpecialsController extends Controller
             return new Response('Ok', 200);
         }
     }
-
-    /**
-     * Handles the configuration for the specials module
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('SPECIAL_MANAGER')
-     *     and hasPermission('SPECIAL_SETTINGS')")
-     */
-    public function configAction(Request $request)
-    {
-        $sm = $this->get('orm.manager')->getDataSet('Settings', 'instance');
-
-        if ('POST' == $request->getMethod()) {
-            $settingsRAW = $request->request->get('special_settings');
-            $data        = [
-                'special_settings' => [
-                    'total_widget' => $settingsRAW['total_widget'] ?: 0,
-                    'time_last'    => $settingsRAW['time_last'] ?: 0,
-                ]
-            ];
-
-            foreach ($data as $key => $value) {
-                $sm->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_specials_config'));
-        }
-
-        $settings = $sm->get([ 'special_settings' ]);
-
-        return $this->render('special/config.tpl', [ 'configs' => $settings ]);
-    }
 }

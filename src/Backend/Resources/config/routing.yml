@@ -108,10 +108,6 @@ admin_special_update:
     path:     /specials/{id}/update
     defaults: { _controller: BackendBundle:Specials:update }
 
-admin_specials_config:
-    path:     /specials/config
-    defaults: { _controller: BackendBundle:Specials:config }
-
 # Letter manager routes
 admin_letters:
     path:     /letters
