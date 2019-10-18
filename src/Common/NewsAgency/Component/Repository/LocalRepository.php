@@ -65,28 +65,24 @@ class LocalRepository
     }
 
     /**
-     * Finds a Resource from a source given its id.
+     * Returns a resource or a list of resources.
      *
-     * @param string $source The source id.
-     * @param string $id     The resource id.
+     * @param string $id The resource id or a list of resource ids.
      *
-     * @return Resource The found resource.
+     * @return mixed A resource or a list of resources.
      */
-    public function find($source, $id)
+    public function find($id)
     {
-        $files = array_filter($this->contents, function ($a) use ($source, $id) {
-            if ($a->source == $source && $a->id == $id) {
-                return true;
-            }
-
-            return false;
+        $ids   = is_array($id) ? $id : [ $id ];
+        $files = array_filter($this->contents, function ($a) use ($ids) {
+            return in_array($a->id, $ids);
         });
 
         if (empty($files)) {
-            return null;
+            return is_array($id) ? [] : null;
         }
 
-        return array_pop($files);
+        return is_array($id) ? $files : array_pop($files);
     }
 
     /**
