@@ -400,7 +400,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-update-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -450,7 +450,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-remove-permanently',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -489,7 +489,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -523,7 +523,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -556,7 +556,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-remove-config',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {};
@@ -582,7 +582,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-batch-remove-permanently',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -620,7 +620,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -659,7 +659,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {

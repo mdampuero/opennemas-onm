@@ -110,7 +110,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-empty',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {};
@@ -150,7 +150,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-empty',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
@@ -236,7 +236,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-move',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
@@ -279,7 +279,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-move',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {

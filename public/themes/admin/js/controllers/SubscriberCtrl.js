@@ -118,7 +118,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-convert',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {

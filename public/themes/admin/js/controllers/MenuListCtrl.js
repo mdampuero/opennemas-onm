@@ -77,7 +77,7 @@ angular.module('BackendApp.controllers')
         var modal = $uibModal.open({
           templateUrl: 'modal-batch-remove-permanently',
           backdrop: 'static',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() {
               return {
@@ -112,7 +112,7 @@ angular.module('BackendApp.controllers')
         var modal = $uibModal.open({
           templateUrl: 'modal-remove-permanently',
           backdrop: 'static',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() {
               return {

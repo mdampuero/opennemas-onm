@@ -270,7 +270,7 @@
           var modal = $uibModal.open({
             templateUrl: item.type === 'theme-addon' ? 'module-modal-details' : 'modal-details',
             windowClass: item.type === 'theme-addon' ? 'modal-details' : 'modal-details-theme',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {

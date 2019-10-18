@@ -16,7 +16,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-cache-remove',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -54,7 +54,7 @@ angular.module('BackendApp.controllers').controller('CacheManagerCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-cache-batch-remove',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {

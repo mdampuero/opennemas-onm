@@ -392,7 +392,7 @@
             $uibModal.open({
               templateUrl: 'modal-preview',
               windowClass: 'modal-fullscreen',
-              controller: 'modalCtrl',
+              controller: 'ModalCtrl',
               resolve: {
                 template: function() {
                   return {

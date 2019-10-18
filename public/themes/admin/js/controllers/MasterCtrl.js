@@ -459,7 +459,7 @@
           $uibModal.open({
             templateUrl: name,
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
