@@ -101,7 +101,7 @@
         <tbody>
           <tr data-id="[% getItemId(item) %]" ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items">
             <td class="text-center v-align-middle">
-              <div class="checkbox check-default">
+              <div class="checkbox check-default" ng-if="isSelectable(item)">
                 <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getItemId(item)" type="checkbox">
                 <label for="checkbox[%$index%]"></label>
               </div>

@@ -56,8 +56,12 @@
          * @return {Boolean} True if all items are selected. False otherwise.
          */
         $scope.areAllSelected = function() {
+          var selectable = $scope.items.filter(function(e) {
+            return $scope.isSelectable(e);
+          });
+
           return $scope.items &&
-            $scope.selected.items.length === $scope.items.length;
+            $scope.selected.items.length === selectable.length;
         };
 
         /**
