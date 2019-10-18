@@ -1752,7 +1752,7 @@ class Content implements \JsonSerializable, CsvSerializable
             && !empty($this->fk_video)
         ) {
             $video = getService('entity_repository')
-                ->find('Video', $content->fk_video);
+                ->find('Video', $this->fk_video);
 
             $this->video     = $video;
             $this->obj_video = $video;
