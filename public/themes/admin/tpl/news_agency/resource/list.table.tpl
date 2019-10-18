@@ -53,26 +53,34 @@
 
 {block name="commonColumnsBody"}
   <td class="v-align-middle" ng-if="isColumnEnabled('title')">
-    <div class="pointer p-b-10" ng-click="expanded[$index] = !expanded[$index]">
-      <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': expanded[$index], 'fa-caret-right': !expanded[$index] }" ng-if="item.related.length > 0" style="width: 8px;"></i>
+    <div class="pointer" ng-click="expanded[$index] = !expanded[$index]">
       <div class="table-text">
+        <i class="fa fa-caret-right m-r-5" ng-class="{ 'fa-caret-down': expanded[$index], 'fa-caret-right': !expanded[$index] }" ng-if="item.related.length > 0"></i>
         [% item.title %]
       </div>
     </div>
-    <div ng-show="!expanded[$index]" >
-      <span ng-repeat="id in item.related">
-        <img class="img-thumbnail" ng-class="{ 'selected': item.import && item.import.indexOf(id) !== -1 }" ng-if="extra.related[id].type === 'photo'" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" style="height: 48px;" />
-      </span>
+    <div class="m-b-10" ng-show="!expanded[$index] && item.related.length > 0">
+      <small class="m-t-10" ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related">
+        [% data.extra.related[id].title %]
+      </small>
+      <img class="img-thumbnail m-r-10 m-t-10" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related" ng-src="[% routing.generate(routes.getContent, { id: id }) %]" style="height: 48px;">
     </div>
-    <div class="related clearfix p-b-10" ng-show="expanded[$index] && item.related.length > 0">
-      <div class="p-b-10" ng-class="{ 'col-xs-4': extra.related[id].type !== 'text' }" ng-repeat="id in item.related">
-        <div class="checkbox check-default" ng-class="{ 'selected': item.import && item.import.indexOf(id) !== -1 }">
-          <input id="checkbox-related-[% item.id %]-related-[% $index %]" checklist-model="item.import" checklist-value="id" ng-disabled="!isSelected(item.id) || (item.import.length > 1 && item.import.indexOf(id) === -1)" type="checkbox">
-          <label for="checkbox-related-[% item.id %]-related-[% $index %]" ng-class="{ 'p-t-7 p-l-7': extra.related[id].type !== 'text' }">
+    <div class="row m-b-10 m-l-30" ng-show="expanded[$index] && item.related.length > 0">
+      <div class="m-t-10" ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related">
+        <div class="checkbox check-default" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }">
+          <input id="checkbox-related-[% item.id %]-related-[% $index %]" checklist-model="selected.related" checklist-value="id" ng-disabled="!isSelected(item.id)" type="checkbox">
+          <label for="checkbox-related-[% item.id %]-related-[% $index %]">
             <i class="fa m-l-30 m-r-5 fa-file-text-o" ng-show="extra.related[id].type === 'text'"></i>
             <span ng-if="extra.related[id].type === 'text'">[% extra.related[id].title %]</span>
+          </label>
+        </div>
+      </div>
+      <div class="col-xs-4 m-t-10" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related">
+        <div class="checkbox check-default" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }">
+          <input id="checkbox-related-[% item.id %]-related-[% $index %]" checklist-model="selected.related" checklist-value="id" ng-disabled="!isSelected(item.id)" type="checkbox">
+          <label for="checkbox-related-[% item.id %]-related-[% $index %]" ng-class="{ 'p-t-7 p-l-7': extra.related[id].type !== 'text' }">
             <div class="img-thumbnail-wrapper">
-              <img class="img-thumbnail" ng-class="{ 'selected': item.import && item.import.indexOf(id) !== -1 }" ng-src="[% routing.generate('backend_ws_news_agency_show_image', { source: extra.related[id].source, id: extra.related[id].id }) %]" />
+              <img class="img-thumbnail" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }" ng-src="[% routing.generate(routes.getContent, { id: id }) %]" />
               <span class="badge badge-success no-animate" ng-if="imported.indexOf(item.urn) !== -1">{t}Imported{/t}</span>
             </div>
           </label>

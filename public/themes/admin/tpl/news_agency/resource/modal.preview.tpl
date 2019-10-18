@@ -36,9 +36,9 @@
     <div ng-bind-html="template.item.body" ng-if="template.item.type === 'text'"></div>
     <img ng-src="[% template.getImage(template.item.id) %]" ng-if="template.item.type === 'photo'"/>
   </div>
-  <div class="content-related-wrapper" ng-if="template.related.length > 0 && template.item.type == 'text'">
-    <div class="content-related" ng-if="template.item.type == 'text'">
-      <img class="img-thumbnail" ng-if="related.type === 'photo'" ng-repeat="related in template.related" ng-src="[% template.routing.generate('backend_ws_news_agency_show_image', { source: related.source, id: related.id }) %]" />
+  <div class="content-related-wrapper" ng-if="template.item.related && template.item.related.length > 0">
+    <div class="content-related">
+      <img class="img-thumbnail" ng-repeat="id in template.item.related" ng-src="[% routing.generate(template.routes.getContent, { id: id }) %]" />
     </div>
   </div>
 </div>

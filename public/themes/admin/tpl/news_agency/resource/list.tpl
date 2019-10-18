@@ -19,6 +19,10 @@
   {t}News Agency{/t}
 {/block}
 
+{block name="selectedItems"}
+  [% getSelected() %]
+{/block}
+
 {block name="primaryActions"}
   {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
     <li class="quicklinks">
