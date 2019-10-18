@@ -75,7 +75,9 @@ class AuthenticationListener implements EventSubscriberInterface
             new Cookie('__onm_user', json_encode([
                 'name'           => $user->name,
                 'language'       => $user->user_language,
-                'user_groups'    => array_keys($user->user_groups),
+                'user_groups'    => array_map(function ($a) {
+                    return $a['user_group_id'];
+                }, $user->user_groups),
                 'advertisements' => $this->container
                     ->get('core.helper.subscription')
                     ->hasAdvertisements()
