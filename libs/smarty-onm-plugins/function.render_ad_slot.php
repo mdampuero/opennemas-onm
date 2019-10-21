@@ -49,17 +49,16 @@ function smarty_function_render_ad_slot($params, &$smarty)
         return sprintf($tpl, $class, '');
     }
 
-    // Get targeting parameters for smart ajax format
-    $app             = $smarty->getValue('app');
-    $targetingParams = [
+    // Get targeting parameters for advertising renderers
+    $app    = $smarty->getValue('app');
+    $params = array_merge($params, [
         'category'           => $smarty->getValue('actual_category'),
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
         'content'            => $smarty->getValue('content'),
         'ads_format'         => $adsFormat ?? null,
-        'current_position'   => $position,
-    ];
+    ]);
 
     return $smarty->getContainer()->get('frontend.renderer.advertisement')
-        ->render($ad, $targetingParams);
+        ->render($ad, $params);
 }
