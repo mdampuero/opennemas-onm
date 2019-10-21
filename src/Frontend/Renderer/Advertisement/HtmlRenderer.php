@@ -33,7 +33,7 @@ class HtmlRenderer extends AdvertisementRenderer
             'width'   => $size['width'],
             'height'  => $size['height'],
             'iframe'  => strpos($ad->script, '<iframe') !== false ? true : false,
-            'default' => $params['current_position'] === 1075 ? true : false,
+            'default' => $params['op-ad-default'] ?? null,
         ]);
     }
     /**

@@ -35,7 +35,7 @@ class ReviveRenderer extends AdvertisementRenderer
             'url'      => $this->ds->get('revive_ad_server')['url'],
             'width'    => $size['width'],
             'height'   => $size['height'],
-            'default'  => $params['current_position'] === 1075 ? true : false,
+            'default'  => $params['op-ad-default'] ?? null,
         ]);
     }
 

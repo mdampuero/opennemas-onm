@@ -32,7 +32,7 @@ class ImageRenderer extends AdvertisementRenderer
             'content' => $this->renderInline($ad, $params),
             'width'   => $size['width'],
             'height'  => $size['height'],
-            'default' => $params['current_position'] === 1075 ? true : false,
+            'default' => $params['op-ad-default'] ?? null,
         ]);
     }
 

@@ -35,7 +35,7 @@ class SmartRenderer extends AdvertisementRenderer
             'format_id' => (int) $ad->params['smart_format_id'],
             'width'     => $size['width'],
             'height'    => $size['height'],
-            'default'   => $params['current_position'] === 1075 ? true : false,
+            'default'   => $params['op-ad-default'] ?? null,
         ]);
     }
 

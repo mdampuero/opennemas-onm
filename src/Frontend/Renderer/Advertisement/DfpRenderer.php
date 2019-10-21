@@ -34,7 +34,7 @@ class DfpRenderer extends AdvertisementRenderer
             'sizes'   => $ad->getSizes($ad->normalizeSizes($ad->params)),
             'width'   => $size['width'],
             'height'  => $size['height'],
-            'default' => $params['current_position'] === 1075 ? true : false,
+            'default' => $params['op-ad-default'] ?? null,
         ]);
     }
 

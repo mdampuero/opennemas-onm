@@ -94,7 +94,7 @@ class HtmlRendererTest extends TestCase
             ],
         ];
 
-        $params = [ 'current_position' => 1075 ];
+        $params = [ 'op-ad-default' => true ];
         $output = '<figure class="op-ad op-ad-default">
             <iframe height="300" width="300">
                 <script>foo bar baz</script>

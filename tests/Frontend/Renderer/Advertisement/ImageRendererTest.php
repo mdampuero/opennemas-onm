@@ -137,7 +137,7 @@ class ImageRendererTest extends TestCase
         $renderer->expects($this->once())->method('renderInline')
             ->willReturn($content);
 
-        $params = [ 'current_position' => 1075 ];
+        $params = [ 'op-ad-default' => true ];
         $output = '<figure class="op-ad op-ad-default">
             <iframe height="300" width="300">
                 <a target="_blank" href="/ads/get/123" rel="nofollow">

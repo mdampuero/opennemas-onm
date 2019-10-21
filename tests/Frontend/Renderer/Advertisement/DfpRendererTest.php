@@ -87,7 +87,7 @@ class DfpRendererTest extends TestCase
             ],
         ];
 
-        $params = [ 'current_position' => 1075 ];
+        $params = [ 'op-ad-default' => true ];
         $output = '<figure class="op-ad op-ad-default">
             <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
                 <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
