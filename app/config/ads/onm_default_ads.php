@@ -1020,6 +1020,33 @@ return array_map(function ($ad) use (&$i, $default) {
             ],
         ],
     ],
+    1075 => [
+        'positions' => [ 1075 ],
+        'fk_content_categories' => [ 0 ],
+        'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Onm-300x250 - Medium Rectangle - #1 -->
+            <ins class="adsbygoogle"
+                style="display:inline-block;width:300px;height:250px"
+                data-ad-client="ca-pub-7694073983816204"
+                data-ad-slot="9055006270"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>',
+        'params' => [
+            'sizes' => [
+                '0' => [
+                    'width' => 300,
+                    'height' => 250,
+                    'device' => 'phone'
+                ],
+            ],
+            'devices' => [
+                'desktop' => 0,
+                'tablet' => 0,
+                'phone' => 1
+            ],
+        ],
+    ],
     1211 => [
         'positions' => [ 1211 ],
         'fk_content_categories' => [ 0 ],
