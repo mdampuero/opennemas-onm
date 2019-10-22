@@ -73,6 +73,7 @@
               $scope.loading = 0;
               $uibModalInstance.close({
                 data: response.data,
+                headers: response.headers,
                 status: response.status,
                 success: true
               });
@@ -80,6 +81,7 @@
               $scope.loading = 0;
               $uibModalInstance.close({
                 data: response.data,
+                headers: response.headers,
                 status: response.status,
                 success: false
               });
