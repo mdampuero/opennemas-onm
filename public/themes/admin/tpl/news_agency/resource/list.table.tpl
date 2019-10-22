@@ -81,7 +81,10 @@
           <label for="checkbox-related-[% item.id %]-related-[% $index %]" ng-class="{ 'p-t-7 p-l-7': extra.related[id].type !== 'text' }">
             <div class="img-thumbnail-wrapper">
               <img class="img-thumbnail" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }" ng-src="[% routing.generate(routes.getContent, { id: id }) %]" />
-              <span class="badge badge-success no-animate" ng-if="imported.indexOf(item.urn) !== -1">{t}Imported{/t}</span>
+              <span class="badge badge-success" ng-if="isImported(item)">
+                <i class="fa fa-check"></i>
+                {t}Imported{/t}
+              </span>
             </div>
           </label>
         </div>
@@ -100,8 +103,11 @@
         <i class="fa fa-eye m-r-5"></i>
         {t}Preview{/t}
       </a>
-      <span class="btn btn-success btn-small" ng-if="imported.indexOf(item.urn) !== -1">{t}Imported{/t}</span>
-      <button class="btn btn-info btn-small" ng-click="import(item)" ng-if="imported.indexOf(item.urn) === -1">
+      <span class="btn btn-success btn-small" ng-if="isImported(item)">
+        <i class="fa fa-check m-r-5"></i>
+        {t}Imported{/t}
+      </span>
+      <button class="btn btn-info btn-small" ng-click="importItem(item)" ng-if="!isImported(item)">
         <span class="fa fa-cloud-download m-r-5"></span>
         {t}Import{/t}
       </button>
