@@ -62,6 +62,17 @@
         };
 
         /**
+         * @function countSelectedItems
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Returns the number of selected items.
+         */
+        $scope.countSelectedItems = function() {
+          return $scope.selected.items ? $scope.selected.items.length : 0;
+        };
+
+        /**
          * @function deselectAll
          * @memberOf ListCtrl
          *

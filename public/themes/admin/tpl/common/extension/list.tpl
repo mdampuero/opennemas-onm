@@ -48,9 +48,7 @@
             </li>
             <li class="quicklinks">
               <h4>
-                {block name="selectedItems"}
-                  [% selected.items.length %]
-                {/block}
+                [% countSelectedItems() %]
                 <span class="hidden-xs">{t}items selected{/t}</span>
               </h4>
             </li>
