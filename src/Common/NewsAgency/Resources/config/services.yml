@@ -12,6 +12,11 @@ services:
         class:     Common\NewsAgency\Component\Factory\ParserFactory
         public:    true
 
+    news_agency.service.importer:
+        class:     Common\NewsAgency\Component\Importer\Importer
+        arguments: [ '@service_container' ]
+        public:    true
+
     news_agency.service.synchronizer:
         class:     Common\NewsAgency\Component\Synchronizer\Synchronizer
         arguments: [ '@service_container' ]
