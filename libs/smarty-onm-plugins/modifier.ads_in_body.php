@@ -31,7 +31,8 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         'category'           => $app['section'],
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
-        'content'            => $smarty->getValue('content')
+        'content'            => $smarty->getValue('content'),
+        'ads_format'         => $contentType === 'amp' ? $contentType : null,
     ];
 
     $slots = [];
@@ -45,15 +46,16 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
 
     sort($slots);
 
-    $safeFrame = getService('core.helper.advertisement')->isSafeFrameEnabled();
-    $renderer  = getService('core.renderer.advertisement');
     $html      = '<div class="ad-slot oat" data-type="%s"></div>';
+    $renderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    $safeFrame = $smarty->getContainer()->get('core.helper.advertisement')
+        ->isSafeFrameEnabled();
 
     foreach ($slots as $key => $slotId) {
         $ad  = sprintf($html, $slotId);
         $pos = $slotId - $id;
 
-        if (!$safeFrame) {
+        if (!$safeFrame || $contentType === 'amp') {
             $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
                 return in_array($slotId, $a->positions);
             });

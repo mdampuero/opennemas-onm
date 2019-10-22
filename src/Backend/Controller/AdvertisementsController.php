@@ -442,7 +442,7 @@ class AdvertisementsController extends Controller
     public function getExtraParameters()
     {
         $adsPositions = $this->container->get('core.helper.advertisement');
-        $renderer     = $this->container->get('core.renderer.advertisement');
+        $renderer     = $this->container->get('frontend.renderer.advertisement');
         $settings     = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get([ 'revive_ad_server', 'smart_ad_server' ]);

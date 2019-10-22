@@ -178,7 +178,7 @@
 
     item.src += 'category=' + this.config.category +
       '&module=' + this.config.extension +
-      '&advertisementGroup =' + this.config.advertisementGroup +
+      '&advertisementGroup=' + this.config.advertisementGroup +
       '&contentId=' + this.config.contentId;
 
     // Dispatch event when iframe loaded

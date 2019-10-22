@@ -88,8 +88,8 @@ class AdvertisementController extends Controller
             'x-tags'      => $this->getItemTags($ad),
         ];
 
-        $contents = $this->get('core.renderer.advertisement')
-            ->renderSafeFrame($ad, [
+        $contents = $this->get('frontend.renderer.advertisement')
+            ->render($ad, [
                 'category'           => $category,
                 'extension'          => $module,
                 'advertisementGroup' => $advertisementGroup,
@@ -303,7 +303,7 @@ class AdvertisementController extends Controller
         $object->orientation = array_key_exists('orientation', $element->params) ?
             $element->params['orientation'] : 'top';
 
-        $object->mark = $this->get('core.renderer.advertisement')->getMark($element);
+        $object->mark = $this->get('frontend.renderer.advertisement')->getMark($element);
 
         $object->target_url = ($object->format == 'image') ? $element->url : '';
 

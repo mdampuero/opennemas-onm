@@ -463,9 +463,10 @@ class Advertisement extends Content
 
         // With multiple positions we cannot rely on the type_advertisement=37
         // any more so I'm telling the renderer that this is a floating banner
-        $params['floating'] = true;
+        // Also for smart we need advertisementGroup param
+        $params = [ 'floating' => true, 'advertisementGroup' => 'frontpage' ];
 
-        $adsRenderer = getService('core.renderer.advertisement');
+        $adsRenderer = getService('frontend.renderer.advertisement');
 
         return $adsRenderer->render($this, $params);
     }

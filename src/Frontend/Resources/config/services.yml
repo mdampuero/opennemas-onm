@@ -12,3 +12,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 98 }
         public: true
+    frontend.renderer.advertisement:
+        class:     Frontend\Renderer\AdvertisementRenderer
+        arguments: [ '@service_container' ]
+        public:    true

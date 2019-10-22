@@ -96,11 +96,6 @@ services:
         arguments: [ '%core.locale.available%', '%core.locale.path%' ]
         public:    true
 
-    core.renderer.advertisement:
-        class:     Common\Core\Component\Renderer\AdvertisementRenderer
-        arguments: [ '@service_container' ]
-        public:    true
-
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
         arguments:
