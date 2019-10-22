@@ -181,8 +181,7 @@ class ApiController extends Controller
 
         unset($params['ids']);
 
-        $updated = $this->get($this->service)
-            ->patchList($ids, $params);
+        $updated = $this->get($this->service)->patchList($ids, $params);
 
         if ($updated > 0) {
             $msg->add(
