@@ -1,33 +1,33 @@
 api_v1_backend_news_agency_resource_get_content:
-    path:     /news-agency/resource/{id}/content
+    path:     /news-agency/resources/{id}/content
     defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyResource:getContent }
     methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_news_agency_resource_get_item:
-    path:     /news-agency/resource/{id}
+    path:     /news-agency/resources/{id}
     defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyResource:getItem }
     methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_news_agency_resource_get_list:
-    path:     /news-agency/resource
+    path:     /news-agency/resources
     defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyResource:getList, format: '.json' }
     methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_news_agency_resource_import_item:
-    path:     /news-agency/resource/{id}
+    path:     /news-agency/resources/{id}
     defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyResource:importItem }
     methods:  [ PUT ]
     options:
         expose: true
 
 api_v1_backend_news_agency_resource_import_list:
-    path:     /news-agency/resource
+    path:     /news-agency/resources
     defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyResource:importList }
     methods:  [ POST ]
     options:
