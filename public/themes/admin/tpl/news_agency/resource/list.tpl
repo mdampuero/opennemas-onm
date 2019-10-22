@@ -31,11 +31,8 @@
 
 {block name="selectedActions"}
   <li class="quicklinks">
-    <a href="#" class="btn btn-link" ng-click="importSelected()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom">
+    <a href="#" class="btn btn-link" ng-click="importList()" uib-tooltip="{t}Import{/t}" tooltip-placement="left">
       <i class="fa fa-cloud-download"></i>
-      <span class="hidden-xs hidden-sm" id="import-button">
-        {t}Import{/t}
-      </span>
     </a>
   </li>
 {/block}
