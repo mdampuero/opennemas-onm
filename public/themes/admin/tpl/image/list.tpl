@@ -240,19 +240,21 @@
           <div class="dynamic-image-placeholder no-margin" ng-click="select(content);xsOnly($event, toggle, content)">
             <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">
               <div class="hidden-select" ng-click="toggle(content)"></div>
-              <div class="thumbnail-actions ng-cloak">
+              <div class="thumbnail-actions thumbnail-actions-3x ng-cloak">
+                {acl isAllowed="PHOTO_UPDATE"}
+                  <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" uib-tooltip="{t}Edit{/t}">
+                    <i class="fa fa-pencil fa-2x text-default"></i>
+                  </a>
+                {/acl}
                 {acl isAllowed="PHOTO_DELETE"}
-                  <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
-                    <i class="fa fa-trash-o fa-2x"></i>
+                  <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)" uib-tooltip="{t}Delete{/t}" tooltip-class="tooltip-danger">
+                    <i class="fa fa-trash-o fa-2x text-danger"></i>
                   </div>
                 {/acl}
                 {acl isAllowed="PHOTO_UPDATE"}
-                  <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
-                    <i class="fa fa-pencil fa-2x"></i>
-                  </a>
                   {is_module_activated name="es.openhost.module.imageEditor"}
-                    <a class="thumbnail-action" ng-click="launchPhotoEditor(content)" >
-                      <i class="fa fa-sliders fa-2x"></i>
+                    <a class="thumbnail-action" ng-click="launchPhotoEditor(content)" uib-tooltip="{t}Enhance{/t}" tooltip-class="tooltip-info">
+                      <i class="fa fa-sliders fa-2x text-info"></i>
                     </a>
                   {/is_module_activated}
                 {/acl}
