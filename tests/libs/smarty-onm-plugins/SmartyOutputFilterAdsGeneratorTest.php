@@ -48,7 +48,10 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'renderInlineHeaders', 'renderInlineInterstitial' ])
+            ->setMethods([
+                'renderInlineHeaders', 'renderInlineInterstitial',
+                'getInlineFormats'
+            ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -145,6 +148,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with('ads_format')
             ->willReturn('amp');
 
+        $this->renderer->expects($this->once())->method('getInlineFormats')
+            ->willReturn([ 'amp', 'fia', 'inline' ]);
+
         $this->assertEquals($output, smarty_outputfilter_ads_generator(
             $output,
             $this->smarty
@@ -180,7 +186,10 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->renderer->expects($this->at(0))->method('getInlineFormats')
+            ->willReturn([ 'amp', 'fia', 'inline' ]);
+
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('content')
             ->willReturn($content);
 
@@ -191,10 +200,10 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())->method('isSafeFrameEnabled')
             ->willReturn(false);
 
-        $this->renderer->expects($this->at(0))->method('renderInlineHeaders')
+        $this->renderer->expects($this->at(1))->method('renderInlineHeaders')
             ->willReturn('<script>AdsHeaders</script>');
 
-        $this->renderer->expects($this->at(1))->method('renderInlineInterstitial')
+        $this->renderer->expects($this->at(2))->method('renderInlineInterstitial')
             ->willReturn('<script>Intersticial</script>');
 
         $this->router->expects($this->once())->method('generate')
@@ -254,11 +263,14 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $content     = new \stdClass();
         $content->id = 123;
 
+        $this->renderer->expects($this->once())->method('getInlineFormats')
+            ->willReturn([ 'amp', 'fia', 'inline' ]);
+
         $this->smarty->expects($this->at(3))->method('getValue')
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('content')
             ->willReturn($content);
 
@@ -325,7 +337,10 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->renderer->expects($this->at(0))->method('getInlineFormats')
+            ->willReturn([ 'amp', 'fia', 'inline' ]);
+
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('content')
             ->willReturn($content);
 
