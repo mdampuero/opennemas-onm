@@ -37,10 +37,10 @@
   <th class="v-align-middle" width="400" ng-if="isColumnEnabled('title')">
     {t}Title{/t}
   </th>
-  <th class="text-center v-align-middle" width="140" ng-if="isColumnEnabled('server')">
+  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('server')">
     {t}Server{/t}
   </th>
-  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('created')">
+  <th class="text-center v-align-middle" width="110" ng-if="isColumnEnabled('created')">
     {t}Date{/t}
   </th>
   <th class="text-center v-align-middle" width="140" ng-if="isColumnEnabled('category')">
