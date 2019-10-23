@@ -210,7 +210,9 @@
          *                   Otherwise, returns false.
          */
         $scope.isEditable = function(template) {
-          return angular.isDefined(template.id);
+          return angular.isDefined(template.id) &&
+            template.items.length === 1 &&
+            template.items[0].type === 'text';
         };
 
         /**
