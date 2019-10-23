@@ -1,97 +1,30 @@
-@import '../../../assets/src/opennemas-webarch/less/helpers/_variables.less';
-
 .modal-news-agency-preview {
   img {
     max-width: 100%;
   }
 
-  .modal-body {
-    bottom: 0;
-    position: absolute;
-    top: 50px;
-    width: 100%;
-  }
-
-  .modal-content {
-    bottom: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-
-  .modal-dialog {
-    bottom: 0;
-    left: 0;
-    margin: 15px 25%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: auto;
-  }
-
-  .modal-footer {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-  }
-
-  .content-body {
-    bottom: 0;
-    height: auto;
-    left: 0;
-    overflow: auto;
-    padding: 15px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: auto;
-  }
-
-  .content-body-related {
-    bottom: 150px;
-  }
-
-  .content-related-wrapper {
-    bottom: 0;
-    border-top: 1px solid @border-color;
-    height: 150px;
-    left: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 15px;
-    position: absolute;
-    right: 0;
-  }
-
   .content-related {
+    overflow: auto;
     white-space: nowrap;
 
     .img-thumbnail {
       display: inline-block;
       height: 120px;
-      margin-right: 15px;
+      margin-left: 15px;
+
+      &:first-child {
+        margin-left: 0;
+      }
     }
   }
 }
 
 .related {
-  .checkbox input[type=checkbox][disabled] + label {
-    opacity: 1;
-  }
-
   .img-thumbnail-wrapper {
     .badge {
       bottom: 10px;
       position: absolute;
       right: 10px;
-    }
-  }
-}
-
-@media (max-width: (@tablet-width - 1px)){
-  .modal-news-agency-preview {
-    .modal-dialog {
-      margin: 15px;
     }
   }
 }

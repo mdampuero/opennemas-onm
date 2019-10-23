@@ -65,7 +65,7 @@
       </small>
       <img class="img-thumbnail m-r-10 m-t-10" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related" ng-src="[% routing.generate(routes.getContent, { id: id }) %]" style="height: 48px;">
     </div>
-    <div class="row m-b-10 m-l-30" ng-show="expanded[$index] && item.related.length > 0">
+    <div class="related row m-b-10 m-l-30" ng-show="expanded[$index] && item.related.length > 0">
       <div class="m-t-10" ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related">
         <div class="checkbox check-default" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }">
           <input id="checkbox-related-[% item.id %]-related-[% $index %]" checklist-model="selected.related" checklist-value="id" ng-disabled="!isSelected(item.id)" type="checkbox">
