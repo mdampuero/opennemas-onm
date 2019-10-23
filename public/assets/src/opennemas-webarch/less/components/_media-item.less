@@ -60,30 +60,3 @@
     opacity: .2;
   }
 }
-
-@media (max-width: (@phone-width - 1px)) {
-  .media-item {
-    &.selectable {
-      &:before {
-        right: 24px;
-        transition: opacity .2s ease-in-out;
-        top: 8px;
-        width: 24px;
-        z-index: 10;
-      }
-
-      &.selected {
-        &:after {
-          right: 27px;
-          top: 7px;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: (@tablet-width - 1px)) {
-  .media-item {
-    cursor: pointer;
-  }
-}
