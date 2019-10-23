@@ -29,7 +29,7 @@ class ImageRenderer extends AdvertisementRenderer
         $size = $this->getDeviceAdvertisementSize($ad, 'phone');
 
         return $this->tpl->fetch('advertisement/helpers/fia/image.tpl', [
-            'content' => $this->renderInline($ad, $params),
+            'content' => $this->getImageHtml($ad),
             'width'   => $size['width'],
             'height'  => $size['height'],
             'default' => $params['op-ad-default'] ?? null,
@@ -46,34 +46,11 @@ class ImageRenderer extends AdvertisementRenderer
      */
     public function renderInline(\Advertisement $ad, $params)
     {
-        $img = $this->getImage($ad);
+        $format = $params['ads_format'] ?? null;
 
-        if (empty($img)) {
-            return '';
-        }
-
-        $publicId = date('YmdHis', strtotime($ad->created)) .
-            sprintf('%06d', $ad->pk_advertisement);
-        $template = 'advertisement/helpers/inline/image.tpl';
-
-        if ($img->type_img === 'swf') {
-            $template = 'advertisement/helpers/inline/flash.tpl';
-        }
-
-        if (array_key_exists('format', $params) && $params['format'] == 'amp') {
-            $template = 'advertisement/helpers/inline/image.amp.tpl';
-        }
-
-        return $this->tpl->fetch($template, [
-            'width'  => $img->width,
-            'height' => $img->height,
-            'src'    => $this->container->get('core.helper.url_generator')
-                ->generate($img),
-            'url'    => $this->instance->getBaseUrl() . $this->router->generate(
-                'frontend_ad_redirect',
-                [ 'id' => $publicId ]
-            ),
-        ]);
+        return $format === 'fia'
+            ? $this->renderFia($ad, $params)
+            : $this->getSlot($ad, $this->getImageHtml($ad, $format));
     }
 
     /**
@@ -120,6 +97,45 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         return null;
+    }
+
+    /**
+     * Returns the HTML code for rendering an image based advertisement.
+     *
+     * @param \Advertisement $ad     The advertisement object.
+     * @param string         $format The advertisement format.
+     *
+     * @return string The HTML for the image advertisement.
+     */
+    protected function getImageHtml($ad, $format = null)
+    {
+        $img = $this->getImage($ad);
+        if (empty($img)) {
+            return '';
+        }
+
+        $publicId = date('YmdHis', strtotime($ad->created))
+            . sprintf('%06d', $ad->pk_advertisement);
+
+        $template = 'advertisement/helpers/inline/image.tpl';
+        if ($img->type_img === 'swf') {
+            $template = 'advertisement/helpers/inline/flash.tpl';
+        }
+
+        if ($format === 'amp') {
+            $template = 'advertisement/helpers/inline/image.amp.tpl';
+        }
+
+        return $this->tpl->fetch($template, [
+            'width'  => $img->width,
+            'height' => $img->height,
+            'src'    => $this->container->get('core.helper.url_generator')
+                ->generate($img),
+            'url'    => $this->instance->getBaseUrl() . $this->router->generate(
+                'frontend_ad_redirect',
+                [ 'id' => $publicId ]
+            ),
+        ]);
     }
 
     /**

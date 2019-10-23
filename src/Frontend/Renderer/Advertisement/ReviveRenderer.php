@@ -49,18 +49,27 @@ class ReviveRenderer extends AdvertisementRenderer
      */
     public function renderInline(\Advertisement $ad, $params)
     {
+        $format = $params['ads_format'] ?? null;
+        if ($format === 'fia') {
+            return $this->renderFia($ad, $params);
+        }
+
         $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
         $url    = $this->container->get('router')->generate(
             'api_v1_advertisement_show',
             [ 'id' => $ad->id ]
         );
 
-        return $this->tpl
-            ->fetch('advertisement/helpers/inline/revive.slot.tpl', [
+        $content = $this->tpl->fetch(
+            'advertisement/helpers/inline/revive.slot.tpl',
+            [
                 'id'     => $ad->id,
                 'iframe' => $iframe,
                 'url'    => $url,
-            ]);
+            ]
+        );
+
+        return $this->getSlot($ad, $content);
     }
 
     /**

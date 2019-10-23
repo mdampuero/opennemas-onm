@@ -49,6 +49,11 @@ class SmartRenderer extends AdvertisementRenderer
      */
     public function renderInline(\Advertisement $ad, $params)
     {
+        $format = $params['ads_format'] ?? null;
+        if ($format === 'fia') {
+            return $this->renderFia($ad, $params);
+        }
+
         $config = $this->ds->get('smart_ad_server');
 
         $template = 'smart.slot.onecall_async.tpl';
@@ -58,7 +63,7 @@ class SmartRenderer extends AdvertisementRenderer
             $template = 'smart.slot.' . $config['tags_format'] . '.tpl';
         }
 
-        return $this->tpl
+        $content = $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
                 'config'        => $config,
                 'id'            => $ad->params['smart_format_id'],
@@ -70,6 +75,8 @@ class SmartRenderer extends AdvertisementRenderer
                     $params['content']->id
                 )
             ]);
+
+        return $this->getSlot($ad, $content);
     }
 
     /**

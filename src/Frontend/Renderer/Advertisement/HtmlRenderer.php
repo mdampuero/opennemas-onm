@@ -46,7 +46,11 @@ class HtmlRenderer extends AdvertisementRenderer
      */
     public function renderInline(\Advertisement $ad, $params)
     {
-        return $this->getHtml($ad);
+        $format = $params['ads_format'] ?? null;
+
+        return $format === 'fia'
+            ? $this->renderFia($ad, $params)
+            : $this->getSlot($ad, $this->getHtml($ad));
     }
 
     /**

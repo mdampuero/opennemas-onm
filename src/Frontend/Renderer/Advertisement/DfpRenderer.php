@@ -48,9 +48,16 @@ class DfpRenderer extends AdvertisementRenderer
      */
     public function renderInline(\Advertisement $ad, $params)
     {
-        return $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
+        $format = $params['ads_format'] ?? null;
+        if ($format === 'fia') {
+            return $this->renderFia($ad, $params);
+        }
+
+        $content = $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
             'id' => $ad->id
         ]);
+
+        return $this->getSlot($ad, $content);
     }
 
     /**

@@ -107,6 +107,17 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getInlineFormats
+     */
+    public function testGetInlineFormats()
+    {
+        $this->assertEquals(
+            [ 'amp', 'fia', 'inline' ],
+            $this->renderer->getInlineFormats()
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceCSSClasses
      */
     public function testGetDeviceCSSClasses()
@@ -171,29 +182,27 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
      */
-    public function testRenderWithFia()
+    public function testGetSlot()
     {
-        $ad              = new \Advertisement();
-        $ad->params      = [ 'ads_format' => 'fia' ];
-        $ad->with_script = 3;
+        $method = new \ReflectionMethod($this->renderer, 'getSlot');
+        $method->setAccessible(true);
 
-        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderFia' ])
-            ->getMock();
+        $ad             = new \Advertisement();
+        $ad->pk_content = 123;
+        $ad->id         = 123;
+        $ad->positions  = [ 37 ];
+        $ad->params     = [ 'width' => 300, 'floating' => true ];
 
-        $renderer->expects($this->any())->method('renderFia')
-            ->willReturn('foo');
+        $output = '<div class="ad-slot oat oat-visible oat-top "'
+            . ' data-mark="Advertisement">foo</div>';
 
-        $this->renderer->expects($this->once())->method('getRendererClass')
-            ->with(3)
-            ->willReturn($renderer);
+        $content = 'foo';
 
         $this->assertEquals(
-            'foo',
-            $this->renderer->render($ad, $ad->params)
+            $output,
+            $method->invokeArgs($this->renderer, [ $ad, $content ])
         );
     }
 
@@ -233,9 +242,6 @@ class AdvertisementRendererTest extends TestCase
         $ad->params      = [ 'width' => 300, 'floating' => true ];
         $ad->with_script = 3;
 
-        $output = '<div class="ad-slot oat oat-visible oat-top "'
-            . ' data-mark="Advertisement">foo</div>';
-
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
@@ -253,7 +259,7 @@ class AdvertisementRendererTest extends TestCase
             ->willReturn($renderer);
 
         $this->assertEquals(
-            $output,
+            'foo',
             $this->renderer->render($ad, $ad->params)
         );
     }

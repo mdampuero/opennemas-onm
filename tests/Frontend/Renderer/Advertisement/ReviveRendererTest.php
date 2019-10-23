@@ -117,10 +117,7 @@ class ReviveRendererTest extends TestCase
             ->with('revive_ad_server')
             ->willReturn([ 'url' => 'https://revive.com' ]);
 
-        $params = [
-            'current_position' => 1076,
-            'category'         => 'gorp',
-        ];
+        $params = [ 'category'   => 'gorp' ];
         $output = '<figure class="op-ad">
             <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
                 <script>
@@ -163,8 +160,8 @@ class ReviveRendererTest extends TestCase
         $ad->positions = [ 50 ];
         $ad->params    = [];
 
-        $url         = '/ads/get/123';
-        $returnValue = '<iframe src="' . $url . '"></iframe>
+        $url    = '/ads/get/123';
+        $output = '<iframe src="' . $url . '"></iframe>
             <script data-id="{$id}">
                 OA_show(\'zone_' . $ad->id . '\');
             </script>';
@@ -179,12 +176,37 @@ class ReviveRendererTest extends TestCase
                 'iframe' => false,
                 'url'    => $url,
             ])
-            ->willReturn($returnValue);
+            ->willReturn($output);
+
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . $output . '</div>';
 
         $this->assertEquals(
-            $returnValue,
+            $output,
             $this->renderer->renderInline($ad, [])
         );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ReviveRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**

@@ -23,6 +23,13 @@ class AdvertisementRenderer
     protected $container;
 
     /**
+     * The available inline formats.
+     *
+     * @var array
+     */
+    protected $inlineFormats = [ 'amp', 'fia', 'inline' ];
+
+    /**
      * The available advertisement types.
      *
      * @var array
@@ -65,6 +72,16 @@ class AdvertisementRenderer
         }
 
         return implode(' ', $cssClasses);
+    }
+
+    /**
+     * Returns the list of inline render formats.
+     *
+     * @return array The array of inline formats.
+     */
+    public function getInlineFormats()
+    {
+        return $this->inlineFormats;
     }
 
     /**
@@ -111,28 +128,16 @@ class AdvertisementRenderer
         $renderer  = $this->getRendererClass($ad->with_script);
         $adsFormat = $params['ads_format'] ?? null;
 
-        if ($adsFormat === 'fia') {
-            return $renderer->renderFia($ad, $params);
-        }
-
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
-        if ($isSafeFrame && !in_array($adsFormat, ['amp', 'inline'])) {
+        if ($isSafeFrame && !in_array($adsFormat, $this->inlineFormats)) {
             return array_key_exists('floating', $params)
                 && $params['floating'] === true
                     ? $this->renderSafeFrameSlot($ad)
                     : $renderer->renderSafeFrame($ad, $params);
         }
 
-        // Inline render
-        $tpl           = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
-        $content       = $renderer->renderInline($ad, $params);
-        $mark          = $this->getMark($ad);
-        $deviceClasses = $this->getDeviceCSSClasses($ad);
-        $orientation   = empty($ad->params['orientation']) ?
-            'top' : $ad->params['orientation'];
-
-        return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
+        return $renderer->renderInline($ad, $params);
     }
 
     /**
@@ -242,6 +247,26 @@ class AdvertisementRenderer
         $classPath = __NAMESPACE__ . '\\Advertisement\\' . $class;
 
         return new $classPath($this->container);
+    }
+
+    /**
+     * Wraps an advertisement rendered content in ad-slot template.
+     *
+     * @param \Advertisement $ad      The advertisement to render.
+     * @param string         $content The advertisement rendered content.
+     *
+     * @return string The advertisement rendered content wrapped in ad-slot template.
+     */
+    protected function getSlot($ad, $content)
+    {
+        $tpl  = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
+        $mark = $this->getMark($ad);
+
+        $deviceClasses = $this->getDeviceCSSClasses($ad);
+        $orientation   = empty($ad->params['orientation']) ?
+            'top' : $ad->params['orientation'];
+
+        return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
     }
 
     /**

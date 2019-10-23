@@ -95,7 +95,7 @@ class SmartRendererTest extends TestCase
             'page_id'    => [ 'article_inner' => 111 ]
         ];
 
-        $this->ds->expects($this->any())->method('get')
+        $this->ds->expects($this->once())->method('get')
             ->with('smart_ad_server')
             ->willReturn($config);
 
@@ -171,19 +171,46 @@ class SmartRendererTest extends TestCase
             'tags_format' => 'onecall_async'
         ];
 
-        $this->ds->expects($this->any())->method('get')
+        $this->ds->expects($this->at(0))->method('get')
             ->with('smart_ad_server')
             ->willReturn($config);
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('smart_ad_server')
+            ->willReturn([]);
 
         // Avoid template params due to untestable rand() function
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/smart.slot.onecall_async.tpl')
             ->willReturn($output);
 
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . $output . '</div>';
         $this->assertEquals(
             $output,
             $this->renderer->renderInline($ad, $params)
         );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\SmartRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**

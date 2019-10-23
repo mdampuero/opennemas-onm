@@ -150,10 +150,35 @@ class DfpRendererTest extends TestCase
             ])
             ->willReturn($output);
 
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . $output . '</div>';
+
         $this->assertEquals(
             $output,
             $this->renderer->renderInline($ad, [])
         );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**

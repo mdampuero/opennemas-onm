@@ -132,10 +132,31 @@ class HtmlRendererTest extends TestCase
         $renderer->expects($this->once())->method('getHtml')
             ->willReturn('<script>foo bar baz</script>');
 
-        $this->assertEquals(
-            '<script>foo bar baz</script>',
-            $renderer->renderInline($ad, [])
-        );
+
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . '<script>foo bar baz</script></div>';
+
+        $this->assertEquals($output, $renderer->renderInline($ad, []));
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad = new \Advertisement();
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\HtmlRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->once())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**
