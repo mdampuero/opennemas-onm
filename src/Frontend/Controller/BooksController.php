@@ -43,7 +43,7 @@ class BooksController extends Controller
                         'Book',
                         $category->pk_content_category,
                         'content_status=1',
-                        'ORDER BY position ASC, created DESC LIMIT 5'
+                        'ORDER BY starttime DESC, pk_content DESC LIMIT 5'
                     );
 
                 foreach ($books[$category->pk_content_category] as $book) {
@@ -101,7 +101,7 @@ class BooksController extends Controller
                 'Book',
                 $content->category,
                 'content_status=1 and pk_content != ' . $content->pk_content,
-                'ORDER BY position ASC, created DESC LIMIT 5'
+                'ORDER BY starttime DESC, pk_content DESC LIMIT 5'
             );
 
             foreach ($books as &$book) {

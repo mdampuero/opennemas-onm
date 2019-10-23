@@ -16,55 +16,9 @@
                 {t}Specials{/t}
               </h4>
             </li>
-            <li class="quicklinks hidden-xs m-l-5 m-r-5">
-              <h4>
-                <i class="fa fa-angle-right"></i>
-              </h4>
-            </li>
-            <li class="quicklinks dropdown hidden-xs">
-              <div data-toggle="dropdown">
-                {if $category == 'widget'}
-                  {t}Widget Home{/t}
-                {else}
-                  {t}Listing{/t}
-                {/if}
-                <span class="caret"></span>
-              </div>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="{url name=admin_specials_widget}" {if $category =='widget'}class="active"{/if}>
-                    {t}Widget Home{/t}
-                  </a>
-                </li>
-                <li>
-                  <a href="{url name=admin_specials}" {if $category !=='widget'}class="active"{/if}>
-                    {t}Listing{/t}
-                  </a>
-                </li>
-              </ul>
-            </li>
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
-              {acl isAllowed="SPECIAL_SETTINGS"}
-                <li class="quicklinks">
-                  <a class="btn btn-link" href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
-                    <span class="fa fa-cog fa-lg"></span>
-                  </a>
-                </li>
-                <li class="quicklinks"><span class="h-seperate"></span></li>
-              {/acl}
-              {acl isAllowed="SPECIAL_WIDGET"}
-                {if $category eq 'widget'}
-                  <li class="quicklinks">
-                    <button class="btn btn-white" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
-                      <span class="fa fa-save"></span>
-                      {t}Save positions{/t}
-                    </button>
-                  </li>
-                  <li class="quicklinks"><span class="h-seperate"></span></li>
-                {/if}
-              {/acl}
               {acl isAllowed="SPECIAL_CREATE"}
                 <li class="quicklinks">
                   <a class="btn btn-loading btn-success text-uppercase" href="{url name=admin_special_create}">
@@ -133,11 +87,7 @@
         </div>
       </div>
     </div>
-    {if $category == 'widget' }
-      {include file="special/partials/_special_list_home.tpl"}
-    {else}
-      {include file="special/partials/_special_list.tpl"}
-    {/if}
+    {include file="special/partials/_special_list.tpl"}
     <script type="text/ng-template" id="modal-delete">
       {include file="common/modals/_modalDelete.tpl"}
     </script>

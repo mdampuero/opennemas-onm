@@ -28,31 +28,6 @@ class SpecialsController extends Controller
     }
 
     /**
-     * List all the specials selected for the widget
-     *
-     * @Security("hasExtension('SPECIAL_MANAGER')
-     *     and hasPermission('SPECIAL_ADMIN')")
-     */
-    public function widgetAction()
-    {
-        $numFavorites = 1;
-        $settings     = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get([ 'special_settings' ]);
-
-        if (isset($settings['total_widget'])
-            && !empty($settings['total_widget'])
-        ) {
-            $numFavorites = $settings['total_widget'];
-        }
-
-        return $this->render('special/list.tpl', [
-            'total_elements_widget' => $numFavorites,
-            'category'              => 'widget',
-        ]);
-    }
-
-    /**
      * Handles the form for create new specials
      *
      * @param Request $request the request object
@@ -82,6 +57,8 @@ class SpecialsController extends Controller
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+            'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
+            'favorite'       => $request->request->filter('favorite', 0, FILTER_SANITIZE_STRING),
             'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
             'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
             'noticias_right' => json_decode($request->request->get('noticias_right_input')),
@@ -199,6 +176,8 @@ class SpecialsController extends Controller
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
                 'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
+                'favorite'       => $request->request->filter('favorite', 0, FILTER_SANITIZE_STRING),
                 'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
                 'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
@@ -263,87 +242,5 @@ class SpecialsController extends Controller
         } else {
             return new Response('Ok', 200);
         }
-    }
-
-    /**
-     * Saves the widget specials content positions
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('SPECIAL_MANAGER')
-     *     and hasPermission('SPECIAL_ADMIN')")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $positions = $request->get('positions');
-
-        $result = true;
-        if (isset($positions)
-            && is_array($positions)
-            && count($positions) > 0
-        ) {
-            $pos = 1;
-            foreach ($positions as $id) {
-                $special = new \Special($id);
-                $result  = $result && $special->setPosition($pos);
-
-                $pos++;
-            }
-
-            // TODO: remove cache cleaning actions
-            $cacheManager = $this->get('template_cache_manager');
-            $cacheManager->setSmarty($this->get('core.template'));
-            $cacheManager->delete('home|0');
-        }
-
-        if (!empty($result) && $result == true) {
-            $output = _("Positions saved successfully.");
-        } else {
-            $output = _("Unable to save positions for the specials widget.");
-        }
-
-        return new Response($output);
-    }
-
-    /**
-     * Handles the configuration for the specials module
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('SPECIAL_MANAGER')
-     *     and hasPermission('SPECIAL_SETTINGS')")
-     */
-    public function configAction(Request $request)
-    {
-        $sm = $this->get('orm.manager')->getDataSet('Settings', 'instance');
-
-        if ('POST' == $request->getMethod()) {
-            $settingsRAW = $request->request->get('special_settings');
-            $data        = [
-                'special_settings' => [
-                    'total_widget' => $settingsRAW['total_widget'] ?: 0,
-                    'time_last'    => $settingsRAW['time_last'] ?: 0,
-                ]
-            ];
-
-            foreach ($data as $key => $value) {
-                $sm->set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_specials_config'));
-        }
-
-        $settings = $sm->get([ 'special_settings' ]);
-
-        return $this->render('special/config.tpl', [ 'configs' => $settings ]);
     }
 }

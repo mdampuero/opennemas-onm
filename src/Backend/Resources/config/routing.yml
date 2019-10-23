@@ -94,10 +94,6 @@ admin_specials:
     path:     /specials
     defaults: { _controller: BackendBundle:Specials:list }
 
-admin_specials_widget:
-    path:     /specials/widget
-    defaults: { _controller: BackendBundle:Specials:widget }
-
 admin_special_create:
     path:     /specials/create
     defaults: { _controller: BackendBundle:Specials:create }
@@ -111,14 +107,6 @@ admin_special_show:
 admin_special_update:
     path:     /specials/{id}/update
     defaults: { _controller: BackendBundle:Specials:update }
-
-admin_special_widget_save_positions:
-    path:     /specials/widget/save-positions
-    defaults: { _controller: BackendBundle:Specials:savePositions }
-
-admin_specials_config:
-    path:     /specials/config
-    defaults: { _controller: BackendBundle:Specials:config }
 
 # Letter manager routes
 admin_letters:
@@ -173,10 +161,6 @@ admin_books:
     path:     /books
     defaults: { _controller: BackendBundle:Books:list }
 
-admin_books_widget:
-    path:     /books/widget
-    defaults: { _controller: BackendBundle:Books:widget, category  : widget }
-
 admin_books_create:
     path:     /books/create
     defaults: { _controller: BackendBundle:Books:create }
@@ -190,10 +174,6 @@ admin_book_show:
 admin_books_update:
     path:     /books/{id}/update
     defaults: { _controller: BackendBundle:Books:update }
-
-admin_books_save_positions:
-    path:     /books/save-positions
-    defaults: { _controller: BackendBundle:Books:savePositions }
 
 # Search controller routes
 admin_search:

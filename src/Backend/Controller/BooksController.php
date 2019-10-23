@@ -26,46 +26,7 @@ class BooksController extends Controller
      */
     public function listAction()
     {
-        $configurations = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('book_settings');
-
-        if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
-            );
-        }
-
         return $this->render('book/list.tpl');
-    }
-
-    /**
-     * List books favorites for widget
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('BOOK_MANAGER')
-     *     and hasPermission('BOOK_ADMIN')")
-     */
-    public function widgetAction()
-    {
-        $configurations = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('book_settings');
-
-        if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])
-        ) {
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget'])
-            );
-        }
-
-        return $this->render('book/list.tpl', [ 'category' => 'widget' ]);
     }
 
     /**
@@ -96,8 +57,8 @@ class BooksController extends Controller
             'description'    => $request->request->filter('description', ''),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
-            'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
+            'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
@@ -105,8 +66,6 @@ class BooksController extends Controller
         $id   = $book->create($data);
 
         if (!empty($id)) {
-            $book->setPosition($data['position']);
-
             $request->getSession()->getFlashBag()->add(
                 'success',
                 _('Book created successfully.')
@@ -225,13 +184,12 @@ class BooksController extends Controller
             'description'    => $request->request->filter('description', ''),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
             'category'       => $request->request->getInt('category', 0),
-            'position'       => $request->request->getInt('position', 1),
             'content_status' => $request->request->getInt('content_status', 0),
+            'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)
         ];
 
         if ($book->update($data)) {
-            $book->setPosition($data['position']);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Book updated succesfully.')
@@ -273,45 +231,5 @@ class BooksController extends Controller
         );
 
         return $this->redirect($this->generateUrl('admin_books'));
-    }
-
-    /**
-     * Save positions for widget
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('BOOK_MANAGER')
-     *     and hasPermission('BOOK_ADMIN')")
-     */
-    public function savePositionsAction(Request $request)
-    {
-        $positions = $request->request->get('positions');
-
-        $result = true;
-        if (isset($positions)
-            && is_array($positions)
-            && count($positions) > 0
-        ) {
-            $pos = 1;
-            foreach ($positions as $id) {
-                $book   = new \Book($id);
-                $result = $result && $book->setPosition($pos);
-                $pos++;
-            }
-        }
-
-        if ($result) {
-            $msg = "<div class='alert alert-success'>"
-                . _("Positions saved successfully.")
-                . '<button data-dismiss="alert" class="close">×</button></div>';
-        } else {
-            $msg = "<div class='alert alert-error'>"
-                . _("Unable to save the new positions. Please contact with your system administrator.")
-                . '<button data-dismiss="alert" class="close">×</button></div>';
-        }
-
-        return new Response($msg);
     }
 }
