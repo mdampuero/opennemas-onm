@@ -561,11 +561,11 @@
 
         // Update style for actions-navbar on window scroll
         $(window).bind('scroll', function() {
-          $('.actions-navbar').removeClass('scrolled');
+          $('.page-navbar').last().removeClass('scrolled');
           $('.content-sidebar').removeClass('scrolled');
 
           if ($(window).scrollTop() > 0) {
-            $('.actions-navbar').addClass('scrolled');
+            $('.page-navbar').last().addClass('scrolled');
           }
 
           if ($('.content-sidebar').length > 0) {
