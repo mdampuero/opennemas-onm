@@ -58,7 +58,7 @@ class ContentHelper
                 $numberOfElements = 4;
             }
 
-            $sql = "SELECT content_type_name, pk_content FROM contents INNER JOIN"
+            $sql = "SELECT content_type_name, pk_content FROM contents STRAIGHT_JOIN"
                     . " contents_categories ON pk_content = pk_fk_content"
                     . " WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
                     . $filter
