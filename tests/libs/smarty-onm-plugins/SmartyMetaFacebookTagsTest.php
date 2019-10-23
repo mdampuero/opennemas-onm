@@ -22,7 +22,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/function.meta_facebook_tags.php';
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+            ->setMethods([ 'getContainer', 'getValue' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -64,11 +64,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->ds->expects($this->any())
-            ->method('get')
-            ->with('site_name')
-            ->willReturn('Site Name');
-
         $this->request->expects($this->any())
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
@@ -102,8 +97,28 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenNoContent()
     {
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn(null);
+
+        $this->ds->expects($this->at(0))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(1))->method('get')->with('site_description')
+            ->willReturn('Site description');
+        $this->ds->expects($this->at(2))->method('get')->with('site_name')
+            ->willReturn('Site Name');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
+
+        $output = "<meta property=\"og:type\" content=\"website\" />\n"
+            . "<meta property=\"og:title\" content=\"Site title\" />\n"
+            . "<meta property=\"og:description\" content=\"Site description\" />\n"
+            . "<meta property=\"og:url\" content=\"http://route/to/content.html\" />\n"
+            . "<meta property=\"og:site_name\" content=\"Site Name\" />";
+
         $this->assertEquals(
-            '',
+            $output,
             smarty_function_meta_facebook_tags(null, $this->smarty)
         );
     }
@@ -113,26 +128,24 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenContent()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'article',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content          = new \Content();
+        $content->title   = 'This is the title';
+        $content->summary = 'This is the summary';
+        $content->body    = 'This is the body';
 
-        $this->helper->expects($this->once())->method('getContentMediaObject');
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(0))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(1))->method('get')->with('site_description')
+            ->willReturn('Site description');
+        $this->ds->expects($this->at(2))->method('get')->with('site_name')
+            ->willReturn('Site Name');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
@@ -151,26 +164,23 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenContentNoSummary()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => '',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'article',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content        = new \Content();
+        $content->title = 'This is the title';
+        $content->body  = 'This is the body';
 
-        $this->helper->expects($this->once())->method('getContentMediaObject');
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(0))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(1))->method('get')->with('site_description')
+            ->willReturn('Site description');
+        $this->ds->expects($this->at(2))->method('get')->with('site_name')
+            ->willReturn('Site Name');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
@@ -189,27 +199,25 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenContentIsVideo()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'description'       => 'This is the description',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'video',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content               = new \Content();
+        $content->content_type = 9;
+        $content->title        = 'This is the title';
+        $content->summary      = 'This is the summary';
+        $content->description  = 'This is the description';
 
-        $this->helper->expects($this->once())->method('getContentMediaObject');
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(0))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(1))->method('get')->with('site_description')
+            ->willReturn('Site description');
+        $this->ds->expects($this->at(2))->method('get')->with('site_name')
+            ->willReturn('Site Name');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
@@ -228,36 +236,36 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenContentAndImage()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'description'       => 'This is the description',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'video',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content          = new \Content();
+        $content->title   = 'This is the title';
+        $content->summary = 'This is the summary';
+        $content->body    = 'This is the body';
+
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(0))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(1))->method('get')->with('site_description')
+            ->willReturn('Site description');
+        $this->ds->expects($this->at(2))->method('get')->with('site_name')
+            ->willReturn('Site Name');
+
+        // Photo object
+        $photo            = new \Photo();
+        $photo->url       = 'http://route/to/file.name';
+        $photo->path_file = '/route/to/';
+        $photo->name      = 'file.name';
+        $photo->width     = 600;
+        $photo->height    = 400;
 
         $this->helper->expects($this->once())->method('getContentMediaObject')
-            ->willReturn(json_decode(json_encode([
-                'url' => 'http://route/to/file.name',
-                'width' => 600,
-                'height' => 400,
-            ]), false));
+            ->willReturn($photo);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
-            . "<meta property=\"og:description\" content=\"This is the description\" />\n"
+            . "<meta property=\"og:description\" content=\"This is the summary\" />\n"
             . "<meta property=\"og:url\" content=\"http://route/to/content.html\" />\n"
             . "<meta property=\"og:site_name\" content=\"Site Name\" />\n"
             . "<meta property=\"og:image\" content=\"http://route/to/file.name\" />\n"

@@ -39,6 +39,7 @@ class SettingController extends Controller
         'facebook_id',
         'facebook_page',
         'favico',
+        'sn_default_img',
         'google_analytics',
         'google_analytics_others',
         'google_custom_search_api_key',
@@ -328,16 +329,42 @@ class SettingController extends Controller
         }
 
         foreach ($files as $key => $file) {
-            list(, $width) = getimagesize($file);
+            list($height, $width) = getimagesize($file);
 
-            if ($width > 120) {
-                $msg->add(
-                    _('The maximum height for the "Site Logo" is 120px. Please adjust your image size.'),
-                    'error',
-                    400
-                );
-
-                continue;
+            if ($key != 'sn_default_img') {
+                if ($width > 120) {
+                    $msg->add(
+                        sprintf(
+                            _('The maximum width for the %s is 120px. Please adjust your image size.'),
+                            $key
+                        ),
+                        'error',
+                        400
+                    );
+                    continue;
+                }
+            } else {
+                if ($width < 200) {
+                    $msg->add(
+                        sprintf(
+                            _('The minimun width for the %s is 200px. Please adjust your image size.'),
+                            $key
+                        ),
+                        'error',
+                        400
+                    );
+                    continue;
+                } elseif ($height < 200) {
+                    $msg->add(
+                        sprintf(
+                            _('The minimun height for the %s is 200px. Please adjust your image size.'),
+                            $key
+                        ),
+                        'error',
+                        400
+                    );
+                    continue;
+                }
             }
 
             $name = $file->getClientOriginalName();

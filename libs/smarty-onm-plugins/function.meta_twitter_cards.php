@@ -4,12 +4,6 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
 {
     $output = [];
 
-    // Only generate cards if is a content page
-    if (!array_key_exists('content', $smarty->tpl_vars)) {
-        return '';
-    }
-
-    // Check if the twitter user is not empty
     $ds = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
@@ -22,27 +16,32 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     }
 
     // Set content data for facebook tags twitter card
-    $content = $smarty->tpl_vars['content']->value;
+    $content = $smarty->getValue('content');
     $url     = $smarty->getContainer()->get('request_stack')
         ->getCurrentRequest()
         ->getUri();
 
-    $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
-    if (empty($summary)) {
-        $summary = mb_substr(
-            trim(\Onm\StringUtils::htmlAttribute($content->body)),
-            0,
-            80
-        ) . "...";
-    }
+    $title   = $ds->get('site_title');
+    $summary = $ds->get('site_description');
 
-    $title = htmlspecialchars(
-        html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
-    );
+    if (!empty($content)) {
+        $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
+        if (empty($summary)) {
+            $summary = mb_substr(
+                trim(\Onm\StringUtils::htmlAttribute($content->body)),
+                0,
+                80
+            ) . "...";
+        }
 
-    // Change summary for videos
-    if ($content->content_type_name == 'video') {
-        $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
+        $title = htmlspecialchars(
+            html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
+        );
+
+        // Change summary for videos
+        if ($content->content_type == 9) {
+            $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
+        }
     }
 
     // Writing Twitter card info
@@ -52,9 +51,10 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     $output[] = '<meta name="twitter:site" content="@' . $twitterUser . '">';
     $output[] = '<meta name="twitter:domain" content="' . $url . '">';
 
-    // Populate the media element if exists
     $image = $smarty->getContainer()->get('core.helper.content_media')
         ->getContentMediaObject($content, $params);
+
+    // Populate the media element if exists
     if (is_object($image)
         && isset($image->url)
         && !empty($image->url)

@@ -349,6 +349,50 @@
                             </div>
                           </div>
                         </div>
+                        <div class="form-group col-md-12" ng-if="settings.logo_enabled">
+                          <label class="form-label" for="sn_default_img">{t}Social network default imgage{/t}</label>
+                          <div class="controls">
+                            <input class="hidden" id="sn_default_img" name="sn_default_img" file-model="settings.sn_default_img" type="file"/>
+                            <div class="thumbnail-wrapper">
+                              <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.sn_default_img }"></div>
+                              <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.sn_default_img }">
+                                <p>{t}Are you sure?{/t}</p>
+                                <div class="confirm-actions">
+                                  <button class="btn btn-link" ng-click="toggleOverlay('sn_default_img')" type="button">
+                                    <i class="fa fa-times fa-lg"></i>
+                                    {t}No{/t}
+                                  </button>
+                                  <button class="btn btn-link" ng-click="removeFile('sn_default_img'); toggleOverlay('sn_default_img')" type="button">
+                                    <i class="fa fa-check fa-lg"></i>
+                                    {t}Yes{/t}
+                                  </button>
+                                </div>
+                              </div>
+                              <label for="sn_default_img" ng-if="!settings.sn_default_img">
+                                <div class="thumbnail-placeholder">
+                                  <div class="img-thumbnail">
+                                    <div class="thumbnail-empty">
+                                      <i class="fa fa-picture-o fa-3x block"></i>
+                                      <h5>{t}Pick an image{/t}</h5>
+                                    </div>
+                                  </div>
+                                </div>
+                              </label>
+                              <div class="img-thumbnail text-center img-thumbnail-center no-animate" ng-if="settings.sn_default_img" style="max-width: 200%; height: 200%">
+                                <div class="text-center" ng-if="settings.sn_default_img" ng-preview="settings.sn_default_img">
+                                  <div class="thumbnail-actions ng-cloak" ng-if="settings.sn_default_img">
+                                    <div class="thumbnail-action remove-action" ng-click="toggleOverlay('sn_default_img')">
+                                      <i class="fa fa-trash-o fa-2x"></i>
+                                    </div>
+                                    <label class="thumbnail-action" for="sn_default_img">
+                                      <i class="fa fa-camera fa-2x"></i>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -322,26 +322,27 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultMediaObject()
     {
-        $mediaObject             = new \StdClass();
-        $params['default_image'] = 'http://default/image.jpg';
+        $mediaObject = new \StdClass();
 
-        $this->ds->expects($this->at(0))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
+            ->willReturn('default.jpg');
+        $this->ds->expects($this->at(1))->method('get')->with('sn_default_img')
+            ->willReturn(null);
+        $this->ds->expects($this->at(2))->method('get')->with('mobile_logo')
             ->willReturn('mobile_logo.jpg');
-        $this->ds->expects($this->at(1))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(3))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(2))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(4))->method('get')->with('mobile_logo')
+            ->willReturn(null);
+        $this->ds->expects($this->at(5))->method('get')->with('site_logo')
             ->willReturn('site_logo.jpg');
-        $this->ds->expects($this->at(3))->method('get')->with('mobile_logo')
-            ->willReturn(null);
-        $this->ds->expects($this->at(4))->method('get')->with('site_logo')
-            ->willReturn(null);
 
         $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
         $method->setAccessible(true);
 
-        $default = $method->invokeArgs($this->helper, [ $params, $mediaObject ]);
+        $default = $method->invokeArgs($this->helper, [ null, $mediaObject ]);
         $this->assertEquals(
-            'http://default/image.jpg',
+            SITE_URL . 'media/' . MEDIA_DIR . '/sections/default.jpg',
             $default->url
         );
 

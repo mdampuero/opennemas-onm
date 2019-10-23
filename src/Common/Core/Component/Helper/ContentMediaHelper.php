@@ -172,9 +172,9 @@ class ContentMediaHelper
     protected function getDefaultMediaObject($params, $mediaObject)
     {
         $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
-        if (!is_null($params) && array_key_exists('default_image', $params)) {
+        if ($snLogo = $this->ds->get('sn_default_img')) {
             // Default on template
-            $mediaObject->url = $params['default_image'];
+            $mediaObject->url = $baseUrl . $snLogo;
         } elseif ($mobileLogo = $this->ds->get('mobile_logo')) {
             // Mobile logo
             $mediaObject->url = $baseUrl . $mobileLogo;
