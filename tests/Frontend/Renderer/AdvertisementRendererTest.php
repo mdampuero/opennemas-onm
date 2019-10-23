@@ -112,7 +112,7 @@ class AdvertisementRendererTest extends TestCase
     public function testGetInlineFormats()
     {
         $this->assertEquals(
-            [ 'amp', 'fia', 'inline' ],
+            [ 'amp', 'fia', 'newsletter' ],
             $this->renderer->getInlineFormats()
         );
     }

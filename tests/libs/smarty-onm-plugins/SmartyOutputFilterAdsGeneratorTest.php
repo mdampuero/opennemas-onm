@@ -149,7 +149,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('amp');
 
         $this->renderer->expects($this->once())->method('getInlineFormats')
-            ->willReturn([ 'amp', 'fia', 'inline' ]);
+            ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->assertEquals($output, smarty_outputfilter_ads_generator(
             $output,
@@ -187,7 +187,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->renderer->expects($this->at(0))->method('getInlineFormats')
-            ->willReturn([ 'amp', 'fia', 'inline' ]);
+            ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->smarty->expects($this->at(5))->method('getValue')
             ->with('content')
@@ -264,7 +264,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $content->id = 123;
 
         $this->renderer->expects($this->once())->method('getInlineFormats')
-            ->willReturn([ 'amp', 'fia', 'inline' ]);
+            ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->smarty->expects($this->at(3))->method('getValue')
             ->with('ads_format')
@@ -338,7 +338,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(null);
 
         $this->renderer->expects($this->at(0))->method('getInlineFormats')
-            ->willReturn([ 'amp', 'fia', 'inline' ]);
+            ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->smarty->expects($this->at(5))->method('getValue')
             ->with('content')

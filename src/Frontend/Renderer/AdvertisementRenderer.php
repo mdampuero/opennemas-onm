@@ -27,7 +27,7 @@ class AdvertisementRenderer
      *
      * @var array
      */
-    protected $inlineFormats = [ 'amp', 'fia', 'inline' ];
+    protected $inlineFormats = [ 'amp', 'fia', 'newsletter' ];
 
     /**
      * The available advertisement types.
