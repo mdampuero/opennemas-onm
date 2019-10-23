@@ -44,8 +44,9 @@ function smarty_function_render_ad_slot($params, &$smarty)
         $smarty->setValue('advertisements', $ads);
     }
 
+    $renderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $adsFormat = $smarty->getValue('ads_format');
-    if ($safeframeEnabled && !in_array($adsFormat, ['amp', 'fia', 'inline'])) {
+    if ($safeframeEnabled && !in_array($adsFormat, $renderer->getInlineFormats())) {
         return sprintf($tpl, $class, '');
     }
 
@@ -59,6 +60,5 @@ function smarty_function_render_ad_slot($params, &$smarty)
         'ads_format'         => $adsFormat ?? null,
     ]);
 
-    return $smarty->getContainer()->get('frontend.renderer.advertisement')
-        ->render($ad, $params);
+    return $renderer->render($ad, $params);
 }
