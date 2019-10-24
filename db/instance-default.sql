@@ -329,6 +329,7 @@ CREATE TABLE `content_categories` (
   `archived` tinyint(1) unsigned DEFAULT '0',
   `enabled` tinyint(1) unsigned DEFAULT '0',
   `fk_content_category` bigint(20) unsigned DEFAULT NULL,
+  `params` text,
   `logo_path` varchar(200) DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`pk_content_category`)
@@ -341,7 +342,7 @@ CREATE TABLE `content_categories` (
 
 LOCK TABLES `content_categories` WRITE;
 /*!40000 ALTER TABLE `content_categories` DISABLE KEYS */;
-INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria',1,NULL,NULL,NULL,1,0),(22,'Deportes','deportes',NULL,NULL,NULL,NULL,1,0),(23,'EconomÃ­a','economia',1,NULL,NULL,NULL,1,0),(24,'PolÃ­tica','politica',1,NULL,NULL,NULL,1,0),(25,'Cultura','cultura',1,NULL,NULL,NULL,1,0),(26,'Sociedad','sociedad',1,NULL,NULL,NULL,1,0),(30,'Curiosidades','curiosidades',9,NULL,NULL,NULL,1,0),(31,'Fotos de Hoy','fotos-de-hoy',7,NULL,NULL,NULL,1,0),(32,'Portadas','portadas',14,NULL,NULL,NULL,1,0),(33,'Ciencia','ciencia',1,NULL,NULL,NULL,1,0),(34,'Actualidad','actualidad',1,NULL,NULL,NULL,1,0),(35,'Internacional','internacional',1,NULL,NULL,NULL,1,0),(36,'TecnologÃ­a','tecnologia',1,NULL,NULL,NULL,1,0);
+INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria', NULL, 1,NULL,NULL,NULL,1,0),(22,'Deportes','deportes',NULL,NULL,NULL,NULL,1,0),(23,'EconomÃ­a','economia',1,NULL,NULL,NULL,1,0),(24,'PolÃ­tica','politica',1,NULL,NULL,NULL,1,0),(25,'Cultura','cultura',1,NULL,NULL,NULL,1,0),(26,'Sociedad','sociedad',1,NULL,NULL,NULL,1,0),(30,'Curiosidades','curiosidades',9,NULL,NULL,NULL,1,0),(31,'Fotos de Hoy','fotos-de-hoy',7,NULL,NULL,NULL,1,0),(32,'Portadas','portadas',14,NULL,NULL,NULL,1,0),(33,'Ciencia','ciencia',1,NULL,NULL,NULL,1,0),(34,'Actualidad','actualidad',1,NULL,NULL,NULL,1,0),(35,'Internacional','internacional',1,NULL,NULL,NULL,1,0),(36,'TecnologÃ­a','tecnologia',1,NULL,NULL,NULL,1,0);
 /*!40000 ALTER TABLE `content_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
