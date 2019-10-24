@@ -35,13 +35,6 @@ class FrontpagesController extends Controller
         $versionId  = $request->query->filter('version', null, FILTER_SANITIZE_NUMBER_INT);
         $versionId  = $versionId == null ? $versionId : intval($versionId);
 
-        // Check if the user can access a frontpage from other category
-        if ((int) $categoryId !== 0
-            && !$this->get('core.security')->hasCategory($categoryId)
-        ) {
-            throw new AccessDeniedException();
-        }
-
         $fs  = $this->get('api.service.frontpage');
         $fvs = $this->get('api.service.frontpage_version');
 
