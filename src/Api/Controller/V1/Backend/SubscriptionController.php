@@ -49,7 +49,9 @@ class SubscriptionController extends ApiController
      */
     protected function getExtraData($items = null)
     {
-        return [ 'modules' => \Privilege::getPrivilegesByModules() ];
+        return [
+            'modules' => $this->get('core.helper.permission')->getByModule()
+        ];
     }
 
     /**
