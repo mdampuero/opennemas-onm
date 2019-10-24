@@ -10,6 +10,7 @@ orm:
                 archived:            boolean
                 enabled:             boolean
                 fk_content_category: integer
+                params:              array
                 logo_path:           string
                 color:               string
             converters:
