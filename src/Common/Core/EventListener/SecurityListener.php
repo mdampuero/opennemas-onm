@@ -165,6 +165,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         $ugs    = $this->container->get('api.service.user_group');
+        $ph     = $this->container->get('core.helper.permission');
         $origin = $ugs->getOrigin();
 
         $userGroups = $ugs->setOrigin($user->getOrigin())
@@ -179,7 +180,7 @@ class SecurityListener implements EventSubscriberInterface
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 
-        return array_merge($user->getRoles(), \Privilege::getNames($permissions));
+        return array_merge($user->getRoles(), $ph->getNames($permissions));
     }
 
     /**
