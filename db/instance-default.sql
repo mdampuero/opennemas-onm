@@ -342,7 +342,7 @@ CREATE TABLE `content_categories` (
 
 LOCK TABLES `content_categories` WRITE;
 /*!40000 ALTER TABLE `content_categories` DISABLE KEYS */;
-INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria', NULL, 1,NULL,NULL,NULL,1,0),(22,'Deportes','deportes',NULL,NULL,NULL,NULL,1,0),(23,'EconomÃ­a','economia',1,NULL,NULL,NULL,1,0),(24,'PolÃ­tica','politica',1,NULL,NULL,NULL,1,0),(25,'Cultura','cultura',1,NULL,NULL,NULL,1,0),(26,'Sociedad','sociedad',1,NULL,NULL,NULL,1,0),(30,'Curiosidades','curiosidades',9,NULL,NULL,NULL,1,0),(31,'Fotos de Hoy','fotos-de-hoy',7,NULL,NULL,NULL,1,0),(32,'Portadas','portadas',14,NULL,NULL,NULL,1,0),(33,'Ciencia','ciencia',1,NULL,NULL,NULL,1,0),(34,'Actualidad','actualidad',1,NULL,NULL,NULL,1,0),(35,'Internacional','internacional',1,NULL,NULL,NULL,1,0),(36,'TecnologÃ­a','tecnologia',1,NULL,NULL,NULL,1,0);
+INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria', NULL, 1,1,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,0,1,NULL,NULL,NULL, NULL),(23,'EconomÃ­a','economia',NULL,0,1,NULL,NULL,NULL, NULL),(24,'PolÃ­tica','politica',NULL,0,1,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,0,1,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,0,1,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,0,1,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,0,1,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,0,1,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,0,1,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,0,1,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,0,1,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,0,1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `content_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
