@@ -12,6 +12,13 @@ namespace Common\Core\Component\Helper;
 class SubscriptionHelper
 {
     /**
+     * The Permission helper
+     *
+     * @var PermissionHelper
+     */
+    protected $ph;
+
+    /**
      * The Security service.
      *
      * @var Security
@@ -60,11 +67,13 @@ class SubscriptionHelper
     /**
      * Initializes the SubscriptionHelper.
      *
+     * @param PermissionHelper    $ph       The Permission helper.
      * @param Security            $security The Security service.
      * @param SubscriptionService $ss       The subscription API service.
      */
-    public function __construct($security, $ss)
+    public function __construct($ph, $security, $ss)
     {
+        $this->ph       = $ph;
         $this->security = $security;
         $this->ss       = $ss;
     }
@@ -261,7 +270,7 @@ class SubscriptionHelper
         foreach ($response['items'] as $subscription) {
             $permissions = array_merge(
                 $permissions,
-                \Privilege::getNames($subscription->privileges)
+                $this->ph->getNames($subscription->privileges)
             );
         }
 

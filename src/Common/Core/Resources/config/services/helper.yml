@@ -112,7 +112,7 @@ services:
 
     core.helper.subscription:
         class:     Common\Core\Component\Helper\SubscriptionHelper
-        arguments: [ '@core.security', '@api.service.subscription' ]
+        arguments: [ '@core.helper.permission', '@core.security', '@api.service.subscription' ]
         public:    true
 
     core.helper.template_cache:
