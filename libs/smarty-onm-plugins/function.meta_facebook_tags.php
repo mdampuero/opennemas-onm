@@ -32,7 +32,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         );
 
         // Change summary for videos
-        if ($content->content_type == 9) {
+        if ($content->content_type_name == 'video') {
             $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
         }
     }

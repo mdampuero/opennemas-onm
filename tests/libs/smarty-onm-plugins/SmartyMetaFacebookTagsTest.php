@@ -9,6 +9,8 @@
  */
 namespace Tests\Libs\Smarty;
 
+use Common\ORM\Entity\Instance;
+
 /**
  * Defines test cases for SmartyMetaFacebookTagsTest class.
  */
@@ -20,6 +22,8 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         include_once './libs/smarty-onm-plugins/function.meta_facebook_tags.php';
+
+        $this->instance = new Instance([ 'activated_modules' => [] ]);
 
         $this->smarty = $this->getMockBuilder('Smarty')
             ->setMethods([ 'getContainer', 'getValue' ])
@@ -33,8 +37,16 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->fm = $this->getMockBuilder('FilterManager')
+            ->setMethods([ 'get', 'filter', 'set' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
             ->getMock();
 
         $this->requestStack = $this->getMockBuilder('RequestStack')
@@ -49,8 +61,16 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContentMediaObject' ])
             ->getMock();
 
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
+
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
 
         $this->smarty->expects($this->any())
             ->method('getContainer')
@@ -67,6 +87,8 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
+
+        $GLOBALS['kernel'] = $this->kernel;
     }
 
     /**
@@ -81,6 +103,12 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.helper.content_media':
                 return $this->helper;
+
+            case 'core.instance':
+                return $this->instance;
+
+            case 'data.manager.filter':
+                return $this->fm;
 
             case 'orm.manager':
                 return $this->em;
@@ -199,11 +227,12 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenContentIsVideo()
     {
-        $content               = new \Content();
-        $content->content_type = 9;
-        $content->title        = 'This is the title';
-        $content->summary      = 'This is the summary';
-        $content->description  = 'This is the description';
+        $content                    = new \Content();
+        $content->content_type      = 9;
+        $content->content_type_name = 'video';
+        $content->title             = 'This is the title';
+        $content->summary           = 'This is the summary';
+        $content->description       = 'This is the description';
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('content')
@@ -215,6 +244,11 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Site description');
         $this->ds->expects($this->at(2))->method('get')->with('site_name')
             ->willReturn('Site Name');
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('This is the title');
+        $this->fm->expects($this->at(5))->method('get')
+            ->willReturn('This is the description');
 
         $this->helper->expects($this->once())->method('getContentMediaObject')
             ->willReturn(null);
