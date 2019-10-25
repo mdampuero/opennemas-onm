@@ -69,7 +69,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
-       $this->kernel->expects($this->any())->method('getContainer')
+        $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
         $this->smarty->expects($this->any())
@@ -88,8 +88,8 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
 
-            $GLOBALS['kernel'] = $this->kernel;
-        }
+        $GLOBALS['kernel'] = $this->kernel;
+    }
 
     /**
      * Return a mock basing on the service name.
@@ -265,10 +265,10 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaTwitterWhenContentAndImage()
     {
-        $content                    = new \Content();
-        $content->title             = 'This is the title';
-        $content->summary           = 'This is the summary';
-        $content->body              = 'This is the body';
+        $content          = new \Content();
+        $content->title   = 'This is the title';
+        $content->summary = 'This is the summary';
+        $content->body    = 'This is the body';
 
         $this->ds->expects($this->at(0))
             ->method('get')
