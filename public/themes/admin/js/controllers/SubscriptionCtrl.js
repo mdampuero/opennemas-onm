@@ -77,7 +77,7 @@
             });
 
           return privileges.length ?
-            parseInt(privileges[0].pk_privilege) : null;
+            parseInt(privileges[0].id) : null;
         };
       }
     ]);

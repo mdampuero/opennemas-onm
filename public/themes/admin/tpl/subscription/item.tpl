@@ -325,7 +325,7 @@
                     <label class="form-label">{t}Hide information{/t}</label>
                     <div class="form-group no-margin">
                       <div class="checkbox m-b-5" ng-repeat="permission in data.extra.modules.FRONTEND | filter: { name: 'NON_MEMBER_HIDE' }">
-                        <input checklist-model="item.privileges" checklist-value="permission.pk_privilege" id="non-member-[% $index %]" ng-checked="item.privileges.indexOf(permission.pk_privilege) !== -1 || item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" ng-disabled="{is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}true ||{/is_module_activated}item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" type="checkbox">
+                        <input checklist-model="item.privileges" checklist-value="permission.id" id="non-member-[% $index %]" ng-checked="item.privileges.indexOf(permission.id) !== -1 || item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" ng-disabled="{is_module_activated deactivated="1" name="es.openhost.module.advancedSubscription"}true ||{/is_module_activated}item.privileges.indexOf(getPermissionId('NON_MEMBER_BLOCK_ACCESS')) !== -1" type="checkbox">
                         <label for="non-member-[% $index %]">[% permission.description %]</label>
                       </div>
                       <div class="help m-l-3" ng-show="isHelpEnabled()">
