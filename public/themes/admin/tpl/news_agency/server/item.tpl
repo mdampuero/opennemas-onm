@@ -124,6 +124,30 @@
       </div>
       <div ng-if="item.auto_import">
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.author }" ng-click="flags.expanded.author = !flags.expanded.author">
+          <i class="fa fa-cloud-download m-r-10"></i>
+          {t}Import{/t} {t}as{/t}
+          <span ng-if="!flags.expanded.author">
+            {include file="ui/component/icon/status.tpl" iField="target" iRequired=true iValidation=true}
+          </span>
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.author }"></i>
+          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.author && item.target">
+            <span ng-if="item.target === 'article'">{t}Article{/t}</span>
+            <span ng-if="item.target === 'opinion'">{t}Opinion{/t}</span>
+          </span>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.author }">
+          <div class="form-group">
+            <div class="controls controls-validation">
+              <select class="block" name="target" ng-model="item.target" required>
+                <option value="">{t}Select a type{/t}…</option>
+                <option value="article">{t}Article{/t}</option>
+                <option value="opinion">{t}Opinion{/t}</option>
+              </select>
+              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="target" iRequired=true iValidation=true}
+            </div>
+          </div>
+        </div>
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.author }" ng-click="flags.expanded.author = !flags.expanded.author">
           <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
           <span ng-if="!flags.expanded.author">
             {include file="ui/component/icon/status.tpl" iField="author" iRequired=true iValidation=true}
