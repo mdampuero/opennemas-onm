@@ -84,7 +84,7 @@
                   </div>
                   <div class="help m-l-3" ng-if="isHelpEnabled()">
                     <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}If enabled, categories aren't shown in the selector of categories. In order to not add more articles to an old category.{/t}
+                      {t}If enabled, category isn't shown in the selector of categories. In order to not add more articles to an old category.{/t}
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
