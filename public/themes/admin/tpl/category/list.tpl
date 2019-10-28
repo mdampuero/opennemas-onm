@@ -174,7 +174,7 @@
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-paint-brush"></i></th>
                   <th class="hidden-xs" width="100">{t}Contents{/t}</th>
-                  <th class="hidden-xs text-center" width="50">{t}Archive{/t}</th>
+                  <th class="hidden-xs text-center" width="50">{t}Archived{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -241,7 +241,7 @@
                   </td>
                   <td class="text-center v-align-middle">
                     <button class="btn btn-white" ng-click="patch(item, 'archived', item.archived != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.archivedLoading, 'fa-archive text-success' : !item.archivedLoading && item.archived == '1', 'fa-archive text-error': !item.archivedLoading && item.archived == '0' }"></i>
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.archivedLoading, 'fa-check text-success' : !item.archivedLoading && item.archived == '1', 'fa-times text-error': !item.archivedLoading && item.archived == '0' }"></i>
                     </button>
                   </td>
                   <td class="text-center v-align-middle">
