@@ -41,18 +41,56 @@
             totalItems: '='
           },
           link: function($scope, $element) {
-            var paginationTpl = '<span class="pagination-status">' +
-              '[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems %]' +
-            '</span>' +
-            '<div class="pagination-controls">' +
-              '<button class="btn btn-white" ng-click="previous()" ng-disabled="isFirstPage()" type="button">' +
-                '<i class="fa fa-chevron-left"></i>' +
-              '</button>' +
-              '<input min="1" max="[% totalPages %]" ng-keypress="updatePage($event)" ng-model="page" type="number">' +
-              '<button class="btn btn-white" ng-click="next()" ng-disabled="isLastPage()" type="button">' +
-                '<i class="fa fa-chevron-right"></i>' +
-              '</button>' +
-            '</div>';
+            var paginationTpl = '<span class="pagination">' +
+              '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="bottom">' +
+                '[% totalItems %]' +
+              '</span>' +
+              '<span class="pagination-epp">' +
+                '<span data-toggle="dropdown">' +
+                  '<i class="fa fa-eye"></i>' +
+                  '<span class="pagination-epp-number">' +
+                    '[% itemsPerPage %]' +
+                  '</span>' +
+                  '<i class="fa fa-caret-down"></i>' +
+                '</span>' +
+                '<ul class="dropdown-menu">' +
+                  '<li ng-class="{ \'active\': itemsPerPage === 10 }" ng-click="itemsPerPage = 10">' +
+                    '<a href="#">' +
+                       '10' +
+                    '</a>' +
+                  '</li>' +
+                  '<li ng-class="{ \'active\': itemsPerPage === 25 }" ng-click="itemsPerPage = 25">' +
+                    '<a href="#">' +
+                       '25' +
+                    '</a>' +
+                  '</li>' +
+                  '<li ng-class="{ \'active\': itemsPerPage === 50 }" ng-click="itemsPerPage = 50">' +
+                    '<a href="#">' +
+                       '50' +
+                    '</a>' +
+                  '</li>' +
+                  '<li ng-class="{ \'active\': itemsPerPage === 100 }" ng-click="itemsPerPage = 100">' +
+                    '<a href="#">' +
+                       '100' +
+                    '</a>' +
+                  '</li>' +
+                '</ul>' +
+              '</span>' +
+              '<span class="pagination-controls">' +
+                '<button class="pagination-button" ng-click="previous()" ng-disabled="isFirstPage()" type="button">' +
+                  '<i class="fa fa-chevron-left"></i>' +
+                '</button>' +
+                '<span class="pagination-placeholder">' +
+                  '<button class="pagination-fake-input" ng-click="setEdit(true)" ng-show="!edit" type="button">' +
+                    '[% page %] / [% totalPages %]' +
+                  '</button>' +
+                  '<input class="pagination-input" min="1" max="[% totalPages %]" ng-blur="setEdit(false)" ng-keypress="updatePage($event)" ng-show="edit" ng-model="page" type="number">' +
+                '</span>' +
+                '<button class="pagination-button" ng-click="next()" ng-disabled="isLastPage()" type="button">' +
+                  '<i class="fa fa-chevron-right"></i>' +
+                '</button>' +
+              '</span>' +
+            '</span>';
 
             var e = $compile(paginationTpl)($scope);
 
@@ -72,8 +110,18 @@
      * @requires $scope
      */
     .controller('PaginationCtrl', [
-      '$scope',
-      function($scope) {
+      '$scope', '$timeout',
+      function($scope, $timeout) {
+        /**
+         * @memberOf PaginationCtrl
+         *
+         * @description
+         *  Whether to page edition is enabled.
+         *
+         * @type {Boolean}
+         */
+        $scope.edit = true;
+
         /**
          * @memberof PaginationCtrl
          *
@@ -138,6 +186,23 @@
           }
         };
 
+        $scope.setEdit = function(value) {
+          if ($('.page').is(':focus')) {
+            return;
+          }
+
+          $scope.edit = value;
+
+          if ($scope.edit) {
+            $('.pagination-input').width(
+              $('.pagination-fake-input').outerWidth());
+
+            $timeout(function() {
+              $('.pagination-input')[0].focus();
+            }, 0);
+          }
+        };
+
         /**
          * @function updatePage
          * @memberOf PaginationCtrl
@@ -148,8 +213,11 @@
          * @param {Object} e The event object.
          */
         $scope.updatePage = function(e) {
-          if (e.keyCode === 13 && $scope.page > 0 &&
-              $scope.page <= $scope.totalPages) {
+          if (e.keyCode !== 13) {
+            return;
+          }
+
+          if ($scope.page > 0 && $scope.page <= $scope.totalPages) {
             $scope.ngModel = $scope.page;
           }
         };
@@ -169,6 +237,7 @@
           }
 
           $scope.page = $scope.ngModel;
+          $scope.setEdit(false);
         });
       }
     ]);

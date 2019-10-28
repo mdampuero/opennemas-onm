@@ -1,48 +1,91 @@
-.pagination-controls {
-  float: left;
+.pagination {
+  margin: 0;
+  padding: 0 10px;
+}
 
-  button {
-    float: left;
-    height: @pagination-height;
+.pagination-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  height: @pagination-height;
 
-    &:first-child {
-      border-radius: @radius 0 0 @radius;
-      border-right: 0;
-    }
-
-    &:last-child {
-      border-radius: 0 @radius @radius 0;
-      border-left: 0;
-    }
-
-    .fa {
-      color: @default-color;
-    }
+  &:disabled {
+    color: #ececec;
   }
 
-  input[type=number] {
-    border-radius: 0;
-    float: left;
-    height: @pagination-height;
-    min-height: @pagination-height;
-    padding: 0 !important;
+  &:first-child {
+    margin-right: 5px;
+  }
+
+  &:last-child {
+    margin-left: 5px;
+  }
+}
+
+.pagination-epp {
+  cursor: pointer;
+  margin: 0 10px;
+  position: relative;
+
+  & .dropdown-menu {
+    min-width: 60px;
+    padding: 4px;
     text-align: center;
-    transition: all .25s;
-    width: @pagination-width;
-    -moz-appearance: textfield;
-    -webkit-appearance: none;
+  }
+
+  @media (max-width: 569px) {
+    display:none !important;
+  }
+}
+
+.pagination-epp-number {
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+}
+
+.pagination-fake-input {
+  background: none;
+  border: none;
+  cursor: text;
+  height: @pagination-height - 8px;
+}
+
+.pagination-input[type=number] {
+  border: none !important;
+  border-radius: 0;
+  display: inline-block;
+  height: @pagination-height - 8px;
+  min-height: @pagination-height - 8px;
+  font-size: 1em;
+  padding: 0 !important;
+  text-align: center;
+  transition: all .25s;
+  width: @pagination-width;
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
-  }
 }
 
+.pagination-placeholder {
+  display: inline-block;
+  line-height: @pagination-height - 8px;
+  padding: 4px 0;
+}
 
 .pagination-status {
+  background: #d1dade;
+  border-radius: 12px;
   color: @default-color;
-  float: left;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 8px;
   margin-right: 8px;
-  padding: 9px 0 8px;
+  padding: 8px;
 }
