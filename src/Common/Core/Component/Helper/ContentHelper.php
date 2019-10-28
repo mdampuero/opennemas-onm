@@ -62,7 +62,7 @@ class ContentHelper
                     . " contents_categories ON pk_content = pk_fk_content"
                     . " WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
                     . $filter
-                    . " ORDER BY created DESC LIMIT " . $numberOfElements;
+                    . " ORDER BY starttime DESC LIMIT " . $numberOfElements;
 
             try {
                 $rs           = $this->dbConn->fetchAll($sql);
@@ -79,8 +79,6 @@ class ContentHelper
             } catch (Exception $e) {
                 return [];
             }
-
-            $contents = $this->er->findMulti($contentProps);
 
             $cm       = new \ContentManager();
             $contents = $cm->getInTime($contents);
