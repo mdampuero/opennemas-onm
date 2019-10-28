@@ -107,6 +107,17 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getInlineFormats
+     */
+    public function testGetInlineFormats()
+    {
+        $this->assertEquals(
+            [ 'amp', 'fia', 'newsletter' ],
+            $this->renderer->getInlineFormats()
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceCSSClasses
      */
     public function testGetDeviceCSSClasses()
@@ -171,6 +182,31 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
+     */
+    public function testGetSlot()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getSlot');
+        $method->setAccessible(true);
+
+        $ad             = new \Advertisement();
+        $ad->pk_content = 123;
+        $ad->id         = 123;
+        $ad->positions  = [ 37 ];
+        $ad->params     = [ 'width' => 300, 'floating' => true ];
+
+        $output = '<div class="ad-slot oat oat-visible oat-top "'
+            . ' data-mark="Advertisement">foo</div>';
+
+        $content = 'foo';
+
+        $this->assertEquals(
+            $output,
+            $method->invokeArgs($this->renderer, [ $ad, $content ])
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::render
      */
     public function testRenderWithSafeFrameMode()
@@ -206,9 +242,6 @@ class AdvertisementRendererTest extends TestCase
         $ad->params      = [ 'width' => 300, 'floating' => true ];
         $ad->with_script = 3;
 
-        $output = '<div class="ad-slot oat oat-visible oat-top "'
-            . ' data-mark="Advertisement">foo</div>';
-
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
@@ -226,7 +259,7 @@ class AdvertisementRendererTest extends TestCase
             ->willReturn($renderer);
 
         $this->assertEquals(
-            $output,
+            'foo',
             $this->renderer->render($ad, $ad->params)
         );
     }
@@ -454,13 +487,8 @@ class AdvertisementRendererTest extends TestCase
         $ad->params['sizes']  = [];
         $ad->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
-        $ads = [ $ad ];
-
-        $output = '';
-
-        $this->assertEquals(
-            $output,
-            $this->renderer->renderInlineInterstitial($ads, [])
+        $this->assertEmpty(
+            $this->renderer->renderInlineInterstitial([ $ad ], [])
         );
     }
 
@@ -485,6 +513,39 @@ class AdvertisementRendererTest extends TestCase
         $this->assertEquals(
             $returnValue,
             $this->renderer->renderInlineInterstitial($ads, [])
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceAdvertisementSize
+     */
+    public function testGetDeviceAdvertisementSize()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getDeviceAdvertisementSize');
+        $method->setAccessible(true);
+
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
+
+        $this->assertEquals(
+            [ 'width' => 320, 'height' => 100, 'device' => 'phone' ],
+            $method->invokeArgs($this->renderer, [ $ad, 'phone' ])
         );
     }
 

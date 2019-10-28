@@ -77,6 +77,47 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->script  = '<script>foo bar baz</script>';
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $params = [ 'op-ad-default' => true ];
+        $output = '<figure class="op-ad op-ad-default">
+            <iframe height="300" width="300">
+                <script>foo bar baz</script>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/html.tpl', [
+                'content' => $ad->script,
+                'iframe'  => false,
+                'width'   => 300,
+                'height'  => 300,
+                'default' => true,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
      */
     public function testRenderInline()
@@ -91,10 +132,31 @@ class HtmlRendererTest extends TestCase
         $renderer->expects($this->once())->method('getHtml')
             ->willReturn('<script>foo bar baz</script>');
 
-        $this->assertEquals(
-            '<script>foo bar baz</script>',
-            $renderer->renderInline($ad, [])
-        );
+
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . '<script>foo bar baz</script></div>';
+
+        $this->assertEquals($output, $renderer->renderInline($ad, []));
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad = new \Advertisement();
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\HtmlRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->once())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**

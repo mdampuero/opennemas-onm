@@ -18,36 +18,67 @@ use Frontend\Renderer\AdvertisementRenderer;
 class ReviveRenderer extends AdvertisementRenderer
 {
     /**
-     * Renders an inline Revive advertisement.
+     * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
-     * @param array          $params The list of parameters
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderFia($ad, $params)
+    {
+        $size = $this->getDeviceAdvertisementSize($ad, 'phone');
+
+        return $this->tpl->fetch('advertisement/helpers/fia/revive.tpl', [
+            'id'       => $ad->id,
+            'category' => $params['category'],
+            'openXId'  => $ad->params['openx_zone_id'],
+            'url'      => $this->ds->get('revive_ad_server')['url'],
+            'width'    => $size['width'],
+            'height'   => $size['height'],
+            'default'  => $params['op-ad-default'] ?? null,
+        ]);
+    }
+
+    /**
+     * Renders an inline Revive advertisement.
+     *
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param array          $params The list of parameters.
      *
      * @return string The HTML for the slot.
      */
     public function renderInline(\Advertisement $ad, $params)
     {
+        $format = $params['ads_format'] ?? null;
+        if ($format === 'fia') {
+            return $this->renderFia($ad, $params);
+        }
+
         $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
         $url    = $this->container->get('router')->generate(
             'api_v1_advertisement_show',
             [ 'id' => $ad->id ]
         );
 
-        return $this->tpl
-            ->fetch('advertisement/helpers/inline/revive.slot.tpl', [
+        $content = $this->tpl->fetch(
+            'advertisement/helpers/inline/revive.slot.tpl',
+            [
                 'id'     => $ad->id,
                 'iframe' => $iframe,
                 'url'    => $url,
-            ]);
+            ]
+        );
+
+        return $this->getSlot($ad, $content);
     }
 
     /**
-     * Renders a SafeFrame document for a Revive advertisement
+     * Renders a SafeFrame document for a Revive advertisement.
      *
      * @param \Advertisement $ad     The ad to render.
-     * @param array          $params The list of parameters
+     * @param array          $params The list of parameters.
      *
-     * @return string the HTML generated
+     * @return string The generated HTML.
      */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
@@ -59,14 +90,14 @@ class ReviveRenderer extends AdvertisementRenderer
             'url'       => $this->ds->get('revive_ad_server')['url']
         ];
 
-        return $this->tpl->fetch('advertisement/helpers/safeframe/openx.tpl', $params);
+        return $this->tpl->fetch('advertisement/helpers/safeframe/revive.tpl', $params);
     }
 
     /**
      * Generates the HTML code to include in header for Revive advertisements.
      *
      * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters
+     * @param array $params The list of parameters.
      *
      * @return string The HTML code to include in header.
      */

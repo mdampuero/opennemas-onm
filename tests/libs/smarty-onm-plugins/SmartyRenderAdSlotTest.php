@@ -43,7 +43,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'render' ])
+            ->setMethods([ 'render', 'getInlineFormats' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
@@ -163,8 +163,15 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
+        $this->smarty->expects($this->at(4))->method('getValue')
+            ->with('ads_format')
+            ->willReturn('baz');
+
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
+
+        $this->renderer->expects($this->at(0))->method('getInlineFormats')
+            ->willReturn([ 'foo', 'gorp', 'wibble' ]);
 
         $this->assertEquals(
             '<div class="ad-slot oat" data-position="123"></div>',
@@ -217,7 +224,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('app')
             ->willReturn([
                 'extension'          => 'foobar',

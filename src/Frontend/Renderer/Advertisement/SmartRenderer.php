@@ -18,15 +18,42 @@ use Frontend\Renderer\AdvertisementRenderer;
 class SmartRenderer extends AdvertisementRenderer
 {
     /**
-     * Renders an advertisement.
+     * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
-     * @param array          $params The list of parameters
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderFia($ad, $params)
+    {
+        $size   = $this->getDeviceAdvertisementSize($ad, 'phone');
+        $config = $this->ds->get('smart_ad_server');
+
+        return $this->tpl->fetch('advertisement/helpers/fia/smart.tpl', [
+            'config'    => $config,
+            'page_id'   => $config['page_id']['article_inner'],
+            'format_id' => (int) $ad->params['smart_format_id'],
+            'width'     => $size['width'],
+            'height'    => $size['height'],
+            'default'   => $params['op-ad-default'] ?? null,
+        ]);
+    }
+
+    /**
+     * Renders an advertisement.
+     *
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param array          $params The list of parameters.
      *
      * @return string The HTML for the slot.
      */
     public function renderInline(\Advertisement $ad, $params)
     {
+        $format = $params['ads_format'] ?? null;
+        if ($format === 'fia') {
+            return $this->renderFia($ad, $params);
+        }
+
         $config = $this->ds->get('smart_ad_server');
 
         $template = 'smart.slot.onecall_async.tpl';
@@ -36,7 +63,7 @@ class SmartRenderer extends AdvertisementRenderer
             $template = 'smart.slot.' . $config['tags_format'] . '.tpl';
         }
 
-        return $this->tpl
+        $content = $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
                 'config'        => $config,
                 'id'            => $ad->params['smart_format_id'],
@@ -48,15 +75,17 @@ class SmartRenderer extends AdvertisementRenderer
                     $params['content']->id
                 )
             ]);
+
+        return $this->getSlot($ad, $content);
     }
 
     /**
-     * Renders a SafeFrame document for a Smart advertisement
+     * Renders a SafeFrame document for a Smart advertisement.
      *
      * @param \Advertisement $ad     The ad to render.
-     * @param array          $params The list of parameters
+     * @param array          $params The list of parameters.
      *
-     * @return string the HTML generated
+     * @return string The generated HTML.
      */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
@@ -74,7 +103,7 @@ class SmartRenderer extends AdvertisementRenderer
      * Generates the HTML code to include in header for Smart advertisements.
      *
      * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters
+     * @param array $params The list of parameters.
      *
      * @return string The HTML code to include in header.
      */
@@ -130,7 +159,7 @@ class SmartRenderer extends AdvertisementRenderer
     /**
      * Returns the targeting-related JS code for google DFP.
      *
-     * @param string  $category The current category.
+     * @param string  $category  The current category.
      * @param string  $module    The current module.
      * @param integer $contentId The id of the content current.
      *

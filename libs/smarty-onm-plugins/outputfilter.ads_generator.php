@@ -20,8 +20,9 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     }
 
     // Do not render the ads headers for AMP pages.
-    $adsFormat = $smarty->getValue('ads_format');
-    if ($adsFormat === 'amp') {
+    $adsFormat   = $smarty->getValue('ads_format');
+    $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    if (in_array($adsFormat, $adsRenderer->getInlineFormats())) {
         return $output;
     }
 
@@ -36,8 +37,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
     $adsPositions = $smarty->getValue('ads_positions') ?? [];
     if (!$isSafeFrame) {
-        $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-        $ads         = array_filter($ads, function ($a) {
+        $ads = array_filter($ads, function ($a) {
             return $a->isInTime();
         });
 

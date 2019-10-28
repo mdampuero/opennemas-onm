@@ -70,6 +70,72 @@ class SmartRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'smart_format_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $params = [ 'current_position' => 1076 ];
+        $config = [
+            'domain'     => 'https://example.com',
+            'network_id' => 0000,
+            'site_id'    => 1234,
+            'page_id'    => [ 'article_inner' => 111 ]
+        ];
+
+        $this->ds->expects($this->once())->method('get')
+            ->with('smart_ad_server')
+            ->willReturn($config);
+
+        $output = '<figure class="op-ad">
+            <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
+            <script type="application/javascript" src="//ced.sascdn.com/tag/0000/smart.js" async></script>
+            <div id="sas_321"></div>
+            <script type="application/javascript">
+                var sas = sas || {};
+                sas.cmd = sas.cmd || [];
+                sas.cmd.push(
+                function () {
+                    sas.call(
+                    { siteId: 1234, pageId: 111, formatId: 321, tagId: "sas_321" },
+                    { networkId: 0000, domain: "https://example.com" }
+                    );
+                }
+                );
+            </script>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/smart.tpl', [
+                'config'    => $config,
+                'page_id'   => $config['page_id']['article_inner'],
+                'format_id' => (int) $ad->params['smart_format_id'],
+                'width'     => 300,
+                'height'    => 300,
+                'default'   => false,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
      */
     public function testRenderInline()
@@ -105,19 +171,46 @@ class SmartRendererTest extends TestCase
             'tags_format' => 'onecall_async'
         ];
 
-        $this->ds->expects($this->any())->method('get')
+        $this->ds->expects($this->at(0))->method('get')
             ->with('smart_ad_server')
             ->willReturn($config);
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('smart_ad_server')
+            ->willReturn([]);
 
         // Avoid template params due to untestable rand() function
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/smart.slot.onecall_async.tpl')
             ->willReturn($output);
 
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . $output . '</div>';
         $this->assertEquals(
             $output,
             $this->renderer->renderInline($ad, $params)
         );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\SmartRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**

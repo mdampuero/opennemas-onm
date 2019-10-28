@@ -94,7 +94,7 @@ class RssController extends Controller
 
             list($contentPositions, $contents, , ) =
                 $this->get('api.service.frontpage')
-                    ->getCurrentVersionForCategory($id);
+                ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -292,7 +292,7 @@ class RssController extends Controller
             $contents = $this->getLatestContents('article', null, 50);
 
             // Fetch photo for each article
-            $er = getService('entity_repository');
+            $er = $this->get('entity_repository');
             foreach ($contents as $key => $content) {
                 // Fetch photo for each content
                 if (isset($content->img1) && !empty($content->img1)) {
@@ -343,11 +343,14 @@ class RssController extends Controller
             $this->view->assign('contents', $contents);
         }
 
-        $this->view->assign('advertisements', $this->getAds());
+        list($adsPositions, $advertisements) = $this->getAds();
 
         $response = $this->render('rss/fb_instant_articles.tpl', [
-            'cache_id' => $cacheID,
-            'x-tags'   => 'rss,instant-articles'
+            'advertisements' => $advertisements,
+            'ads_positions'  => $adsPositions,
+            'ads_format'     => 'fia',
+            'cache_id'       => $cacheID,
+            'x-tags'         => 'rss,instant-articles'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -425,15 +428,17 @@ class RssController extends Controller
      *
      * @return array The list of advertisements for this page.
      */
-    public static function getAds($category = 'home')
+    protected function getAds($category = 'home')
     {
         $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
-        $positions = getService('core.helper.advertisement')
+        $positions = $this->get('core.helper.advertisement')
             ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
 
-        return getService('advertisement_repository')
+        $advertisements = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
+
+        return [ $positions, $advertisements ];
     }
 
     /**
@@ -540,7 +545,7 @@ class RssController extends Controller
                 unset($contents[$key]);
             }
 
-            $relations = getService('related_contents')
+            $relations = $this->get('related_contents')
                 ->getRelations($content->id, 'inner', $limit);
             if (count($relations) > 0) {
                 $relatedContents = [];

@@ -96,6 +96,61 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderFia
+     */
+    public function testRenderFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'openx_zone_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('revive_ad_server')
+            ->willReturn([ 'url' => 'https://revive.com' ]);
+
+        $params = [ 'category'   => 'gorp' ];
+        $output = '<figure class="op-ad">
+            <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
+                <script>
+                    var OA_zones = {
+                    \'zone_1\': 321
+                    };
+                </script>
+                <script src="https://revive.com/www/delivery/spcjs.php?cat_name=gorp"></script>
+                <script>
+                    OA_show(\'zone_1\');
+                </script>
+            </iframe>
+        </figure>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/fia/revive.tpl', [
+                'id'       => $ad->id,
+                'category' => $params['category'],
+                'openXId'  => $ad->params['openx_zone_id'],
+                'url'      => 'https://revive.com',
+                'width'    => 300,
+                'height'   => 300,
+                'default'  => false,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderFia($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
      */
     public function testRenderInline()
@@ -105,8 +160,8 @@ class ReviveRendererTest extends TestCase
         $ad->positions = [ 50 ];
         $ad->params    = [];
 
-        $url         = '/ads/get/123';
-        $returnValue = '<iframe src="' . $url . '"></iframe>
+        $url    = '/ads/get/123';
+        $output = '<iframe src="' . $url . '"></iframe>
             <script data-id="{$id}">
                 OA_show(\'zone_' . $ad->id . '\');
             </script>';
@@ -121,12 +176,37 @@ class ReviveRendererTest extends TestCase
                 'iframe' => false,
                 'url'    => $url,
             ])
-            ->willReturn($returnValue);
+            ->willReturn($output);
+
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . $output . '</div>';
 
         $this->assertEquals(
-            $returnValue,
+            $output,
             $this->renderer->renderInline($ad, [])
         );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     */
+    public function testRenderInlineWithFia()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ReviveRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderFia' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderFia')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'fia'
+        ]));
     }
 
     /**
@@ -177,7 +257,7 @@ class ReviveRendererTest extends TestCase
       </html>';
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('advertisement/helpers/safeframe/openx.tpl', [
+            ->with('advertisement/helpers/safeframe/revive.tpl', [
                 'id'            => 1,
                 'category'      => 'foo',
                 'extension'     => 'bar',

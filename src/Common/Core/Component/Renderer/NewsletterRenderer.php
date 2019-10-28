@@ -126,7 +126,7 @@ class NewsletterRenderer
             'newsletterContent' => $newsletterContent,
             'menuFrontpage'     => $menu->items,
             'advertisements'    => $ads,
-            'ads_format'        => 'inline',
+            'ads_format'        => 'newsletter',
             'current_date'      => new \DateTime(),
             'conf'              => $configurations,
             'URL_PUBLIC'        => 'http://' . $publicUrl,
