@@ -116,30 +116,37 @@
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
               });
 
-              if (!$scope.multiple && angular.isArray(response.data.items) &&
-                  response.data.items.length > 0 &&
-                  response.data.items[0].pk_content_category !== null) {
-                response.data.items.unshift({
-                  pk_content_category: null,
-                  title: $scope.defaultValueText
+              if ($scope.multiple) {
+                $scope.localize(response.data.items, response.data.extra);
+                return;
+              }
+
+              var items = response.data.items;
+              var extra = response.data.extra;
+
+              if ($scope.ngModel) {
+                var category = response.data.items.filter(function(e) {
+                  return e.pk_content_category === $scope.ngModel;
                 });
+
+                if (category.length === 0) {
+                  var route = {
+                    name: 'api_v1_backend_category_get_item',
+                    params: { id: $scope.ngModel }
+                  };
+
+                  http.get(route).then(function(response) {
+                    items.unshift(response.data.item);
+                    $scope.addDefaultValue(items);
+                    $scope.localize(items, extra);
+                  });
+
+                  return;
+                }
               }
 
-              var lz = localizer.get(response.data.extra.locale);
-
-              // Localize items
-              $scope.categories = lz.localize(response.data.items,
-                response.data.extra.keys, response.data.extra.locale);
-
-              // Initialize linker
-              if (!$scope.linker) {
-                $scope.linker = linker.get(response.data.extra.keys,
-                  response.data.extra.locale.default, $scope);
-              }
-
-              // Link original and localized items
-              $scope.linker.setKey($scope.locale);
-              $scope.linker.link(response.data.items, $scope.categories);
+              $scope.localize(items, extra);
+              $scope.addDefaultValue(items);
             });
 
             // Updates the selected item when model or categories change
@@ -168,6 +175,25 @@
               $scope.linker.setKey(nv);
               $scope.linker.update();
             }, true);
+
+            /**
+             * @function addDefaultValue
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Adds a default value at the beginning of the list of items.
+             *
+             * @param {Array} items The list of items.
+             */
+            $scope.addDefaultValue = function(items) {
+              if (angular.isArray(items) && items.length > 0 &&
+                  items[0].pk_content_category !== null) {
+                items.unshift({
+                  pk_content_category: null,
+                  title: $scope.defaultValueText
+                });
+              }
+            };
 
             /**
              * @function groupCategories
@@ -215,6 +241,33 @@
               return $scope.ngModel.indexOf(item.pk_content_category) !== -1 ||
                 $scope.ngModel.indexOf(
                   item.pk_content_category.toString()) !== -1;
+            };
+
+            /**
+             * @function localize
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Localizes the list of items based on the information included
+             *   in extra parameter.
+             *
+             * @param {Array}  items The list of items to localize.
+             * @param {Object} extra The information used during localization.
+             */
+            $scope.localize = function(items, extra) {
+              var lz = localizer.get(extra.locale);
+
+              // Localize items
+              $scope.categories = lz.localize(items, extra.keys, extra.locale);
+
+              // Initialize linker
+              if (!$scope.linker) {
+                $scope.linker = linker.get(extra.keys, extra.locale.default, $scope);
+              }
+
+              // Link original and localized items
+              $scope.linker.setKey($scope.locale);
+              $scope.linker.link(items, $scope.categories);
             };
 
             /**
