@@ -119,16 +119,25 @@
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
               });
 
-              if ($scope.multiple) {
-                $scope.localize(response.data.items, response.data.extra);
+              $scope.data = response.data;
+
+              if (!$scope.multiple) {
+                $scope.addDefaultValue($scope.data.items);
+              }
+
+              $scope.localize($scope.data.items, $scope.data.extra);
+            });
+
+            // Updates the selected item when model or categories change
+            $scope.$watch('[ categories, ngModel ]', function(nv, ov) {
+              if (!$scope.ngModel || !$scope.categories) {
+                $scope.selected = null;
                 return;
               }
 
-              var items = response.data.items;
-              var extra = response.data.extra;
-
-              if ($scope.ngModel) {
-                var category = response.data.items.filter(function(e) {
+              // Add missing category on initialization
+              if (!ov[1] && nv[1]) {
+                var category = $scope.data.items.filter(function(e) {
                   return e.pk_content_category === $scope.ngModel;
                 });
 
@@ -139,24 +148,12 @@
                   };
 
                   http.get(route).then(function(response) {
-                    items.unshift(response.data.item);
-                    $scope.addDefaultValue(items);
-                    $scope.localize(items, extra);
+                    $scope.addMissingItem(response.data.item);
+                    $scope.localize($scope.data.items, $scope.data.extra);
                   });
 
                   return;
                 }
-              }
-
-              $scope.localize(items, extra);
-              $scope.addDefaultValue(items);
-            });
-
-            // Updates the selected item when model or categories change
-            $scope.$watch('[ categories, ngModel ]', function() {
-              if (!$scope.ngModel || !$scope.categories) {
-                $scope.selected = null;
-                return;
               }
 
               if ($scope.multiple && $scope.ngModel &&
@@ -196,6 +193,25 @@
                   title: $scope.defaultValueText
                 });
               }
+            };
+
+            /**
+             * @function addMissingItem
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Adds missing item to the list keeping default value as first
+             *   item in the list.
+             *
+             * @param {Object} item The item to add.
+             */
+            $scope.addMissingItem = function(item) {
+              if ($scope.data.items[0].pk_content_category !== null) {
+                $scope.items.unshift(item);
+                return;
+              }
+
+              $scope.data.items.splice(1, 0, item);
             };
 
             /**
