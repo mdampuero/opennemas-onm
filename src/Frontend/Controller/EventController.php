@@ -107,7 +107,7 @@ class EventController extends FrontendController
     protected function getItems($params)
     {
         $date   = date('Y-m-d H:i:s');
-        $offset = ($params['page'] <= 2) ? 0 : ($params['page'] - 1) * $params['epp'];
+        $offset = ($params['page'] <= 1) ? 0 : ($params['page'] - 1) * $params['epp'];
 
         $eventIds = $this->get('orm.manager')->getConnection('instance')
             ->fetchAll(
