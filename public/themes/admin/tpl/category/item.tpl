@@ -72,19 +72,21 @@
             <div class="grid simple">
               <div class="grid-body no-padding">
                 <div class="grid-collapse-title">
-                  <div class="checkbox">
-                    <input type="checkbox" id="enabled" ng-model="item.enabled" ng-true-value="1">
-                    <label for="enabled" class="form-label">{t}Enabled{/t}</label>
+                  <div class="form-group no-margin">
+                    <div class="checkbox">
+                      <input type="checkbox" id="enabled" ng-model="item.enabled" ng-true-value="1">
+                      <label for="enabled" class="form-label">{t}Enabled{/t}</label>
+                    </div>
                   </div>
-                </div>
-                <div class="grid-collapse-title">
-                  <div class="checkbox">
-                    <input type="checkbox" id="archived" ng-model="item.archived" ng-true-value="1">
-                    <label for="archived" class="form-label">{t}Archive{/t}</label>
-                  </div>
-                  <div class="help m-l-3" ng-if="isHelpEnabled()">
-                    <i class="fa fa-info-circle m-r-5 text-info"></i>
-                      {t}If enabled, category isn't shown in the selector of categories. In order to not add more articles to an old category.{/t}
+                  <div class="form-group no-margin">
+                    <div class="checkbox m-t-5">
+                      <input type="checkbox" id="archived" ng-model="item.archived" ng-true-value="1">
+                      <label for="archived" class="form-label">{t}Archived{/t}</label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, category will not be included in category selectors nor RSS feeds{/t}
+                    </span>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
