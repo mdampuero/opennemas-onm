@@ -98,7 +98,6 @@
                     <span>[% (source.items|filter:{ type: 'list' }).length %]</span>
                   </span>
                 </div>
-
                 <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'lists' }">
                   <div class="form-group">
                     <div class="help">
@@ -108,7 +107,7 @@
                       <div class="checkbox">
                         <input id="checkbox-left-[% item.uuid %]" checklist-model="source.selected" checklist-value="item" type="checkbox">
                         <label for="checkbox-left-[% item.uuid %]">
-                          <strong>[% item.name %]</strong> - {t 1="[% item.subscribers %]"}%1 subscriptors{/t}
+                          <strong>[% item.name %]</strong> - {t 1="[% extra.users[item.id] %]"}%1 subscriptors{/t}
                         </label>
                       </div>
                     </div>

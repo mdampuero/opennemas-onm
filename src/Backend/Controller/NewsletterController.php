@@ -364,71 +364,24 @@ class NewsletterController extends Controller
      */
     public function pickRecipientsAction(Request $request)
     {
-        $id         = $request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
+        $nh = $this->get('core.helper.newsletter');
+        $ss = $this->get('api.service.subscription');
+
         $newsletter = $this->get('api.service.newsletter')->getItem($id);
-        $recipients = [];
 
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get([
-                'newsletter_maillist',
-                'newsletter_subscriptionType',
-                'actOn.marketingLists',
-            ]);
-
-        $ss       = $this->get('api.service.subscription');
-        $ssb      = $this->get('api.service.subscriber');
-        $oql      = $request->query->get('oql', '');
-        $response = $ss->getList($oql);
-
-        $lists = array_filter($response['items'], function ($list) {
-            return in_array(224, $list->privileges);
+        $response      = $ss->getList();
+        $subscriptions = array_filter($response['items'], function ($a) {
+            return in_array(224, $a->privileges);
         });
-
-        $recipients = [];
-        foreach ($lists as $list) {
-            $recipients[] = [
-                'uuid' => uniqid(),
-                'type' => 'list',
-                'name' => $list->name,
-                'id'   => $list->pk_user_group,
-                'subscribers' => $ssb->getList(
-                    '(user_group_id = "' . $list->pk_user_group
-                    . '" and status != 0)'
-                )['total']
-            ];
-        }
-
-        if (!empty($settings['newsletter_maillist'])
-            && array_key_exists('email', $settings['newsletter_maillist'])
-        ) {
-            $recipients[] = [
-                'uuid'  => uniqid(),
-                'type'  => 'external',
-                'name'  => $settings['newsletter_maillist']['email'],
-                'email' => $settings['newsletter_maillist']['email'],
-            ];
-        }
-
-        if (empty($settings['actOn.marketingLists'])) {
-            $settings['actOn.marketingLists'] = [];
-        }
-
-        foreach ($settings['actOn.marketingLists'] as $list) {
-            $recipients[] = [
-                'uuid' => uniqid(),
-                'type' => 'acton',
-                'name' => $list['name'],
-                'id'   => $list['id'],
-            ];
-        }
 
         return $this->render('newsletter/steps/3-pick-recipients.tpl', [
             'id'      => $id,
             'content' => $newsletter,
             'extra'   => [
-                'newsletter_handler' => $settings['newsletter_subscriptionType'],
-                'recipients'         => $recipients,
+                'users'              => $ss->getStats($subscriptions),
+                'newsletter_handler' => $nh->getSubscriptionType(),
+                'recipients'         => $nh->getRecipients(),
             ]
         ]);
     }
