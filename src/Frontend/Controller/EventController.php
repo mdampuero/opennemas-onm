@@ -110,7 +110,7 @@ class EventController extends FrontendController
         $offset = ($params['page'] <= 2) ? 0 : ($params['page'] - 1) * $params['epp'];
 
         $eventIds = $this->get('orm.manager')->getConnection('instance')
-            ->executeQuery(
+            ->fetchAll(
                 "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
                 . "FROM contents join contentmeta "
                 . "ON contentmeta.meta_name = 'event_start_date' "
@@ -120,12 +120,13 @@ class EventController extends FrontendController
                 . "AND (endtime IS NULL OR endtime > ?) "
                 . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
                 [ $date, $date, $params['epp'], $offset ]
-            )
-            ->fetchAll();
+            );
 
         $sql = 'SELECT FOUND_ROWS()';
 
-        $total = $this->get('dbal_connection')->fetchAssoc($sql);
+        $total = $this->get('orm.manager')->getConnection('instance')
+            ->fetchAssoc($sql);
+
         $total = array_pop($total);
 
         $contents = $this->get('api.service.content')
@@ -135,7 +136,7 @@ class EventController extends FrontendController
 
         return [
             $contents['items'],
-            $contents['total']
+            $total
         ];
     }
 
