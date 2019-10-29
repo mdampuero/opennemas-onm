@@ -49,13 +49,10 @@ class UserGroupController extends ApiController
      *
      * @return array The list of extensions.
      */
-    protected function getExtensions() : array
+    protected function getExtensions($uuids) : array
     {
         $locale = $this->get('core.locale')->getLocaleShort();
-        $oql    = sprintf(
-            "uuid in ['%s']",
-            implode("','", array_keys(\Privilege::getPrivilegesByModules()))
-        );
+        $oql    = sprintf("uuid in ['%s']", implode("','", $uuids));
 
         $extensions = $this->get('orm.manager')
             ->getRepository('Extension')
@@ -76,9 +73,11 @@ class UserGroupController extends ApiController
      */
     protected function getExtraData($items = null)
     {
+        $permissions = $this->get('core.helper.permission')->getByModule();
+
         return [
-            'extensions' => $this->getExtensions(),
-            'modules'    => \Privilege::getPrivilegesByModules()
+            'extensions' => $this->getExtensions(array_keys($permissions)),
+            'modules'    => $permissions
         ];
     }
 

@@ -139,6 +139,7 @@ class AuthenticationListener implements EventSubscriberInterface
             $permissions = array_merge($permissions, $userGroup->privileges);
         }
 
-        return \Privilege::getNames($permissions);
+        return $this->container->get('core.helper.permission')
+            ->getNames($permissions);
     }
 }

@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\Core\EventListener;
 
+use Common\Core\Component\Helper\PermissionHelper;
 use Common\Core\EventListener\SecurityListener;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Entity\Instance;
@@ -87,6 +88,7 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->request->headers = $this->headers;
 
+        $this->ph                = new PermissionHelper($this->security);
         $this->user->categories  = [ 'flob', 'grault' ];
         $this->user->id          = 1234;
         $this->user->user_groups = [
@@ -137,6 +139,8 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.user_group':
                 return $this->ugs;
+            case 'core.helper.permission':
+                return $this->ph;
             case 'core.security':
                 return $this->security;
             case 'orm.manager':

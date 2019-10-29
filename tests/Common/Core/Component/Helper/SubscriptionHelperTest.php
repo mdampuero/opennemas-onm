@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Helper;
 
+use Common\Core\Component\Helper\PermissionHelper;
 use Common\Core\Component\Helper\SubscriptionHelper;
 use Common\ORM\Entity\User;
 use Common\ORM\Entity\UserGroup;
@@ -32,9 +33,10 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->content = new \Content();
+        $this->ph      = new PermissionHelper($this->security);
         $this->user    = new User([ 'user_groups' => [] ]);
 
-        $this->helper = new SubscriptionHelper($this->security, $this->ss);
+        $this->helper = new SubscriptionHelper($this->ph, $this->security, $this->ss);
     }
 
     /**
@@ -154,7 +156,7 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
     public function testHasAdvertisementsWithHidden()
     {
         $helper = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
-            ->setConstructorArgs([ $this->security, $this->ss ])
+            ->setConstructorArgs([ $this->ph, $this->security, $this->ss ])
             ->setMethods([ 'isHidden' ])
             ->getMock();
 

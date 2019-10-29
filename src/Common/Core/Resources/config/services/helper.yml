@@ -100,6 +100,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.permission:
+        class:     Common\Core\Component\Helper\PermissionHelper
+        arguments: [ '@core.security' ]
+        public:    true
+
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@core.instance', '@orm.manager', '@api.service.tag' ]
@@ -107,7 +112,7 @@ services:
 
     core.helper.subscription:
         class:     Common\Core\Component\Helper\SubscriptionHelper
-        arguments: [ '@core.security', '@api.service.subscription' ]
+        arguments: [ '@core.helper.permission', '@core.security', '@api.service.subscription' ]
         public:    true
 
     core.helper.template_cache:

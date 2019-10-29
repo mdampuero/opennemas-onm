@@ -268,7 +268,7 @@
               $scope.privileges.push(module[i].id);
               $scope.modules[name].push(module[i].id);
 
-              if ($scope.user_group.privileges.indexOf(module[i].pk_privilege) === -1) {
+              if ($scope.user_group.privileges.indexOf(module[i].id) === -1) {
                 $scope.selected.all[name] = false;
               }
             }
