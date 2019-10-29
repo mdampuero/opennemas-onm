@@ -36,7 +36,7 @@
             defaultValueText: '@',
             exclude: '=?',
             exportModel: '=?',
-            hideArchived: '@',
+            showArchived: '@',
             labelText: '@',
             locale: '=',
             multiple: '@',
@@ -104,10 +104,13 @@
                 });
             }
 
-            var route = { name: 'api_v1_backend_category_get_list' };
+            var route = {
+              name: 'api_v1_backend_category_get_list',
+              params: { oql: 'archived = 0' }
+            };
 
-            if ($scope.hideArchived) {
-              route.params = { oql: 'archived = 0' };
+            if ($scope.showArchived) {
+              delete route.params;
             }
 
             http.get(route).then(function(response) {

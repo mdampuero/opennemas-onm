@@ -17,7 +17,7 @@
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
   <div class="form-group no-margin">
     <div class="controls controls-validation">
-      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" hide-archived="true" locale="config.locale.selected" name="category" ng-model="{$field}" placeholder="{t}Select a category{/t}…" required selected="selectedCategories"></onm-category-selector>
+      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" name="category" ng-model="{$field}" placeholder="{t}Select a category{/t}…" required selected="selectedCategories"></onm-category-selector>
       {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="category" iRequired=true iValidation=true}
     </div>
   </div>
