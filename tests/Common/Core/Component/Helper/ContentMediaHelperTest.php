@@ -46,6 +46,10 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             define('MEDIA_DIR', 'test');
         }
 
+        if (!defined('MEDIA_PATH')) {
+            define('MEDIA_PATH', '/home/opennemas/current/public/media/opennemas');
+        }
+
         $this->helper = new ContentMediaHelper($this->orm, $this->em);
     }
 

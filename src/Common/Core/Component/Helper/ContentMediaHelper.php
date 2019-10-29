@@ -174,13 +174,19 @@ class ContentMediaHelper
         $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
         if ($snLogo = $this->ds->get('sn_default_img')) {
             // Default on template
-            $mediaObject->url = $baseUrl . $snLogo;
+            $mediaObject->url   = $baseUrl . $snLogo;
+            list($mediaObject->width, $mediaObject->height)
+                = @getimagesize(MEDIA_PATH . '/sections/' . $snLogo);
         } elseif ($mobileLogo = $this->ds->get('mobile_logo')) {
             // Mobile logo
             $mediaObject->url = $baseUrl . $mobileLogo;
+            list($mediaObject->width, $mediaObject->height)
+                = @getimagesize(MEDIA_PATH . '/sections/' . $mobileLogo);
         } elseif ($siteLogo = $this->ds->get('site_logo')) {
             // Logo
             $mediaObject->url = $baseUrl . $siteLogo;
+            list($mediaObject->width, $mediaObject->height)
+                = @getimagesize(MEDIA_PATH . '/sections/' . $siteLogo);
         }
 
         return $mediaObject;
