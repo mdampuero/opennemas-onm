@@ -129,14 +129,14 @@
             });
 
             // Updates the selected item when model or categories change
-            $scope.$watch('[ categories, ngModel ]', function(nv, ov) {
+            $scope.$watch('[ categories, ngModel ]', function(nv) {
               if (!$scope.ngModel || !$scope.categories) {
                 $scope.selected = null;
                 return;
               }
 
               // Add missing category on initialization
-              if (!ov[1] && nv[1]) {
+              if (nv[1]) {
                 var category = $scope.data.items.filter(function(e) {
                   return e.pk_content_category === $scope.ngModel;
                 });
