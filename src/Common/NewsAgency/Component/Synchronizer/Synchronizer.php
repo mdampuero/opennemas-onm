@@ -197,7 +197,6 @@ class Synchronizer
         foreach ($servers as $server) {
             if ($server['activated'] == '1') {
                 $this->updateServer($server);
-                $this->cleanServer($server);
             }
         }
 
@@ -342,6 +341,10 @@ class Synchronizer
         $contents = [];
 
         foreach ($files as $file) {
+            if (!file_exists($file)) {
+                continue;
+            }
+
             try {
                 $xml = simplexml_load_file($file);
 
@@ -437,6 +440,7 @@ class Synchronizer
         $source = $this->sf->get($server);
 
         $source->getRemoteFiles()->downloadFiles($path);
+        $this->cleanServer($server);
 
         $contents = $this->parseFiles($source->getFiles(), $server['id']);
         $missing  = $this->getMissingFiles($contents, $path);
