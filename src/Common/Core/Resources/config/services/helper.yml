@@ -84,7 +84,7 @@ services:
             - '@application.log'
             - '@core.instance'
             - '@mailer'
-            - '@api.service.subscriber'
+            - '@api.service.subscription'
             - '@external.act_on.factory'
             - '@api.service.newsletter'
             - '%mailer_no_reply_address%'
