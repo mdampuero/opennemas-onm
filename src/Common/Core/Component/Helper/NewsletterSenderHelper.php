@@ -257,7 +257,7 @@ class NewsletterSenderHelper
     public function sendList($newsletter, $list)
     {
         $sentEmails = 0;
-        $list       = $this->ss->getItem($list->id);
+        $list       = $this->ss->getItem($list['id']);
         $users      = $this->ss->getEmails($list);
 
         if (empty($users)) {
