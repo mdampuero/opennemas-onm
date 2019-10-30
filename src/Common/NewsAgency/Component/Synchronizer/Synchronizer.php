@@ -53,7 +53,7 @@ class Synchronizer
      *
      * @var array
      */
-    protected $stats = [ 'contents' => 0, 'deleted' => 0, 'downloaded' => 0 ];
+    protected $stats = [];
 
     /**
      * The path where to save the downloaded files
@@ -83,6 +83,8 @@ class Synchronizer
 
         $this->syncFilePath = $this->syncPath . '/.sync';
         $this->lockFilePath = $this->syncPath . '/.lock';
+
+        $this->resetStats();
     }
 
     /**
@@ -108,6 +110,16 @@ class Synchronizer
 
         $this->updateSyncFile();
         $this->unlockSync();
+    }
+
+    /**
+     * Returns the statistics.
+     *
+     * @return array The statistics.
+     */
+    public function getStats() : array
+    {
+        return $this->stats;
     }
 
     /**
@@ -146,18 +158,31 @@ class Synchronizer
 
     /**
      * Resets the synchronizer statistics.
+     *
+     * @return Synchronizer The current synchronizer.
      */
-    public function resetStats() : void
+    public function resetStats() : Synchronizer
     {
-        $this->stats = [ 'contents' => 0, 'deleted' => 0, 'downloaded' => 0 ];
+        $this->stats = [
+            'contents'   => 0,
+            'deleted'    => 0,
+            'downloaded' => 0,
+            'parsed'     => 0,
+            'invalid'    => 0,
+            'valid'      => 0,
+        ];
+
+        return $this;
     }
 
     /**
      * Synchronizes contents for a list of servers.
      *
      * @param array $servers A server or a list of servers.
+     *
+     * @return Synchronizer The current synchronizer.
      */
-    public function synchronize(array $servers) : void
+    public function synchronize(array $servers) : Synchronizer
     {
         if (!$this->isSyncEnvironmetReady()) {
             $this->setupSyncEnvironment();
@@ -178,6 +203,8 @@ class Synchronizer
 
         $this->updateSyncFile();
         $this->unlockSync();
+
+        return $this;
     }
 
     /**
@@ -200,6 +227,7 @@ class Synchronizer
 
         foreach ($files as $file) {
             $this->fs->remove($file);
+            $this->stats['deleted']++;
         }
 
         $files = $this->finder->in($this->syncPath)
@@ -330,9 +358,14 @@ class Synchronizer
                 }
 
                 $contents = array_merge($contents, $parsed);
+
+                $this->stats['valid']++;
             } catch (\Exception $e) {
+                $this->stats['invalid']++;
                 $this->logger->error('Cannot parse XML: ' . $file);
             }
+
+            $this->stats['parsed']++;
         }
 
         return $contents;
@@ -426,7 +459,6 @@ class Synchronizer
             ->write($filePath);
 
         $this->stats['contents']   += count($contents);
-        $this->stats['deleted']    += $source->deleted;
         $this->stats['downloaded'] += $source->downloaded;
     }
 
