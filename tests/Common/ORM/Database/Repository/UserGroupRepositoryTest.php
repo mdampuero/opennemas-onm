@@ -117,6 +117,62 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests findUsers when the list of provided ids is an array.
+     */
+    public function testFindUsersWhenArray()
+    {
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with(
+                'SELECT id, name, email FROM users'
+                . ' LEFT JOIN user_user_group ON user_id = id'
+                . ' WHERE user_group_id IN (?)',
+                [ [ 1, 2 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn([
+                [ 'id' => 1, 'name' => 'gorp', 'email' => 'gorp@flob.org' ],
+                [ 'id' => 2, 'name' => 'grault', 'email' => 'grault@flob.org' ],
+            ]);
+
+        $this->assertEquals([
+            [ 'id' => 1, 'name' => 'gorp', 'email' => 'gorp@flob.org' ],
+            [ 'id' => 2, 'name' => 'grault', 'email' => 'grault@flob.org' ],
+        ], $this->repository->findUsers([ 1, 2 ]));
+    }
+
+    /**
+     * Tests findUsers when the list of provided ids is empty.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFindUsersWhenEmptyIds()
+    {
+        $this->repository->findUsers([]);
+    }
+
+    /**
+     * Tests findUsers when the list of provided ids is an integer.
+     */
+    public function testFindUsersWhenNotArray()
+    {
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with(
+                'SELECT id, name, email FROM users'
+                . ' LEFT JOIN user_user_group ON user_id = id'
+                . ' WHERE user_group_id IN (?)',
+                [ [ 1 ] ],
+                [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+            )->willReturn([
+                [ 'id' => 1, 'name' => 'gorp', 'email' => 'gorp@flob.org' ],
+            ]);
+
+        $this->assertEquals([
+            [ 'id' => 1, 'name' => 'gorp', 'email' => 'gorp@flob.org' ],
+        ], $this->repository->findUsers(1));
+    }
+
+
+
+    /**
      * Tests refresh and getPrivileges.
      */
     public function testRefresh()
