@@ -118,7 +118,7 @@ class NewsletterSenderHelper
         // Fix encoding of the html
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $recipients = json_decode(json_encode($recipients), false);
+        $recipients = json_decode(json_encode($recipients), true);
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -127,11 +127,11 @@ class NewsletterSenderHelper
             }
 
             try {
-                if ($mailbox->type == 'acton') {
+                if ($mailbox['type'] == 'acton') {
                     list($errors, $sentEmails) = $this->sendActon($newsletter, $mailbox);
 
                     $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
-                } elseif ($mailbox->type == 'list') {
+                } elseif ($mailbox['type'] == 'list') {
                     list($errors, $sentEmailsList) = $this->sendList($newsletter, $mailbox);
 
                     $sentEmails   += $sentEmailsList;
@@ -222,7 +222,7 @@ class NewsletterSenderHelper
                 'senderemail'           => $settings['newsletter_maillist']['sender'],
                 'subject'               => $newsletter->title,
                 'when'                  => time(),
-                'sendtoids'             => $marketingList->id,
+                'sendtoids'             => $marketingList['id'],
                 'createcrmmsgsentnotes' => 'N',
             ];
 
@@ -234,7 +234,7 @@ class NewsletterSenderHelper
                 $sendingParams['footerid'] = $settings['actOn.footerId'];
             }
 
-            $result = $endpoint->sendMessage($id, $sendingParams);
+            $endpoint->sendMessage($id, $sendingParams);
 
             $sentEmails += 1;
         } catch (\Exception $e) {
