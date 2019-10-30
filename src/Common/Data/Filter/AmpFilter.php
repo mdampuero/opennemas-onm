@@ -52,11 +52,11 @@ class AmpFilter extends Filter
             '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
             '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
             '@<blockquote.*?class="instagram-media"(?s).*?href=".*?'
-            . '(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>@',
+                . '(\.com|\.am)\/p\/(.*?)\/"[^>]+>(?s).*?<\/blockquote>@',
             '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
 
             '@<(table|tbody|blockquote|th|tr|td|ul|li|ol|dl|p|strong|br|span'
-            . '|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
+                . '|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
 
             '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
         ];
@@ -74,12 +74,12 @@ class AmpFilter extends Filter
 
             // Transformed tags
             '<amp-video layout="responsive" width="518" height="291" controls>${2}'
-            . '<div fallback><p>This browser does not support the video element.</p></div></amp-video>',
+                . '<div fallback><p>This browser does not support the video element.</p></div></amp-video>',
             '<amp-iframe width=518 height=291'
-            . ' sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"'
-            . ' layout="responsive" frameborder="0" src="https:${1}"></amp-iframe>',
+                . ' sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"'
+                . ' layout="responsive" frameborder="0" src="https:${1}"></amp-iframe>',
             '<amp-facebook width=486 height=657 layout="responsive" '
-            . 'data-embed-as="${1}" data-href="${2}"></amp-facebook>',
+                . 'data-embed-as="${1}" data-href="${2}"></amp-facebook>',
             '<amp-instagram data-shortcode="${2}" width="400" height="400" layout="responsive"></amp-instagram>',
             '<amp-twitter width=486 height=657 layout="responsive" data-tweetid="${2}"></amp-twitter>',
             '<${1}${2}>',
