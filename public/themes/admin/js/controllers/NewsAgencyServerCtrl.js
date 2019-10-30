@@ -175,11 +175,21 @@
         };
 
         // Updates the URL for Opennemas News Agency when instance changes
-        $scope.$watch('instance', function(nv) {
+        $scope.$watch('data.extra.instance', function(nv) {
           if (nv) {
-            $scope.item.url = 'https://' + $scope.instance +
-              '.opennemas.com/ws/agency';
+            $scope.item.url = 'https://' + nv + '.opennemas.com/ws/agency';
           }
+        }, true);
+
+        // Updates the URL for Opennemas News Agency when instance changes
+        $scope.$watch('item.url', function(nv) {
+          if (!$scope.data || !$scope.data.extra) {
+            return;
+          }
+
+          $scope.data.extra.instance = /https:\/\/.*\.opennemas\.com\/ws\/agency/
+            .test(nv) ? nv.replace('https://', '')
+              .replace('.opennemas.com/ws/agency', '') : null;
         }, true);
 
         // Resets url and instance when type changes
@@ -188,9 +198,10 @@
             return;
           }
 
-          $scope.item.url = null;
-          $scope.instance = null;
-          $scope.form.url.$setPristine(true);
+          if (nv && $scope.data && $scope.data.extra &&
+              !$scope.data.extra.instance) {
+            $scope.item.url = null;
+          }
         }, true);
       }
     ]);

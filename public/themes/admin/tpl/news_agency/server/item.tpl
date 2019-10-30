@@ -330,7 +330,7 @@
                 <span class="input-group-addon">
                   https://
                 </span>
-                <input class="form-control no-animate" name="instance" ng-disabled="item.type == 0" ng-model="instance" required type="text">
+                <input class="form-control no-animate" name="instance" ng-disabled="item.type == 0" ng-model="data.extra.instance" required type="text">
                 <span class="input-group-addon">
                   .opennemas.com/ws/agency
                 </span>
