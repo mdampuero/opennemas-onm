@@ -359,6 +359,8 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn('media/test');
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('http://console/');
+        $this->container->expects($this->any())->method('getParameter')
+            ->willReturn('http://console/');
 
         $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
             ->willReturn('sn_default_img.jpg');
