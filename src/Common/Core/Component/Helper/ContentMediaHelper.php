@@ -172,8 +172,8 @@ class ContentMediaHelper
      */
     protected function getDefaultMediaObject($params, $mediaObject)
     {
-        $ih        = $this->container->get('core.helper.image');
-        $instance  = $this->container->get('core.instance');
+        $ih       = $this->container->get('core.helper.image');
+        $instance = $this->container->get('core.instance');
 
         $mediapath = $instance->getMediaShortPath() . '/sections/';
         $baseUrl   = $instance->getBaseUrl() . $mediapath;
@@ -193,7 +193,7 @@ class ContentMediaHelper
             $filepath         = $filepath . $siteLogo;
         }
 
-        $information = $ih->getInformation($filepath);
+        $information         = $ih->getInformation($filepath);
         $mediaObject->width  = $information['width'];
         $mediaObject->height = $information['height'];
 
