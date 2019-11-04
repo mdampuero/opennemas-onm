@@ -9,8 +9,6 @@
  */
 namespace Common\Core\Component\Helper;
 
-use MicrosoftAzure\Storage\Blob\Models\GetContainerAclResult;
-
 class ContentMediaHelper
 {
     /**
