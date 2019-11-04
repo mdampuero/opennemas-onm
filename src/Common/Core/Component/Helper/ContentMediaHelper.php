@@ -179,7 +179,7 @@ class ContentMediaHelper
 
         $mediapath = $instance->getMediaShortPath() . '/sections/';
         $baseUrl   = $instance->getBaseUrl() . $mediapath;
-        $filepath  = SITE_PATH . $mediapath;
+        $filepath  = $this->container->getParameter('core.paths.public') . $mediapath;
 
         if ($snLogo = $this->ds->get('sn_default_img')) {
             // Default image for social networks

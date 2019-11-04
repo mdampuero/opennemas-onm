@@ -24,7 +24,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get' ])
+            ->setMethods([ 'get' , 'getParameter'])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
