@@ -9,6 +9,8 @@
  */
 namespace Common\Core\Component\Helper;
 
+use MicrosoftAzure\Storage\Blob\Models\GetContainerAclResult;
+
 class ContentMediaHelper
 {
     /**
@@ -17,11 +19,12 @@ class ContentMediaHelper
      * @param EntityManager $em The entity manager.
      * @param EntityManager $er The entity repository service.
      */
-    public function __construct($em, $er)
+    public function __construct($container, $em, $er)
     {
-        $this->ds       = $em->getDataSet('Settings', 'instance');
-        $this->er       = $er;
-        $this->mediaUrl = MEDIA_IMG_ABSOLUTE_URL;
+        $this->container = $container;
+        $this->ds        = $em->getDataSet('Settings', 'instance');
+        $this->er        = $er;
+        $this->mediaUrl  = MEDIA_IMG_ABSOLUTE_URL;
     }
 
     /**
@@ -171,23 +174,30 @@ class ContentMediaHelper
      */
     protected function getDefaultMediaObject($params, $mediaObject)
     {
-        $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
+        $ih        = $this->container->get('core.helper.image');
+        $instance  = $this->container->get('core.instance');
+
+        $mediapath = $instance->getMediaShortPath() . '/sections/';
+        $baseUrl   = $instance->getBaseUrl() . $mediapath;
+        $filepath  = SITE_PATH . $mediapath;
+
         if ($snLogo = $this->ds->get('sn_default_img')) {
-            // Default on template
-            $mediaObject->url   = $baseUrl . $snLogo;
-            list($mediaObject->width, $mediaObject->height)
-                = @getimagesize(MEDIA_PATH . '/sections/' . $snLogo);
+            // Default image for social networks
+            $mediaObject->url = $baseUrl . $snLogo;
+            $filepath         = $filepath . $snLogo;
         } elseif ($mobileLogo = $this->ds->get('mobile_logo')) {
             // Mobile logo
             $mediaObject->url = $baseUrl . $mobileLogo;
-            list($mediaObject->width, $mediaObject->height)
-                = @getimagesize(MEDIA_PATH . '/sections/' . $mobileLogo);
+            $filepath         = $filepath . $mobileLogo;
         } elseif ($siteLogo = $this->ds->get('site_logo')) {
             // Logo
             $mediaObject->url = $baseUrl . $siteLogo;
-            list($mediaObject->width, $mediaObject->height)
-                = @getimagesize(MEDIA_PATH . '/sections/' . $siteLogo);
+            $filepath         = $filepath . $siteLogo;
         }
+
+        $information = $ih->getInformation($filepath);
+        $mediaObject->width  = $information['width'];
+        $mediaObject->height = $information['height'];
 
         return $mediaObject;
     }
