@@ -121,10 +121,10 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       var emailsToSend = 0;
 
       $scope.recipients.items.forEach(function(el) {
-        if (el.type == 'list') {
-          emailsToSend += el.subscribers;
+        if (el.type === 'list') {
+          emailsToSend += $scope.extra.users[el.id];
         } else {
-          ++emailsToSend;
+          emailsToSend++;
         }
       });
 
