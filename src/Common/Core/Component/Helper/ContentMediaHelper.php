@@ -47,7 +47,7 @@ class ContentMediaHelper
         $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
 
         if (!isset($mediaObject->url)) {
-            $mediaObject = $this->getDefaultMediaObject($params, $mediaObject);
+            $mediaObject = $this->getDefaultMediaObject($mediaObject);
         }
 
         // Overload object image size
