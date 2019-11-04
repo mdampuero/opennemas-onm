@@ -165,12 +165,11 @@ class ContentMediaHelper
     /**
      * Returns default media object for content
      *
-     * @param array $params An array with the image url passed from template.
      * @param object $mediaObject The media object.
      *
      * @return object  $mediaObject The media object.
      */
-    protected function getDefaultMediaObject($params, $mediaObject)
+    protected function getDefaultMediaObject($mediaObject)
     {
         $ih       = $this->container->get('core.helper.image');
         $instance = $this->container->get('core.instance');

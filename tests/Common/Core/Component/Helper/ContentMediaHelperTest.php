@@ -378,26 +378,26 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
         $method->setAccessible(true);
 
-        $sndefault = $method->invokeArgs($this->helper, [ null, $mediaObject ]);
+        $sndefault = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/sn_default_img.jpg',
             $sndefault->url
         );
 
-        $mobileLogo = $method->invokeArgs($this->helper, [ null, $mediaObject ]);
+        $mobileLogo = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/mobile_logo.jpg',
             $mobileLogo->url
         );
 
-        $siteLogo = $method->invokeArgs($this->helper, [  null, $mediaObject ]);
+        $siteLogo = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/site_logo.jpg',
             $siteLogo->url
         );
 
         $this->assertEquals(
-            $method->invokeArgs($this->helper, [ null, $mediaObject ]),
+            $method->invokeArgs($this->helper, [ $mediaObject ]),
             $mediaObject
         );
     }
