@@ -19,7 +19,11 @@ class Importer
      *
      * @var array
      */
-    protected $defaults = [ 'with_comment' => 1 ];
+    protected $defaults = [
+        'content_status'    => 1,
+        'content_type_name' => 'article',
+        'with_comment'      => 1
+    ];
 
     /**
      * The importer configuration.
@@ -76,6 +80,39 @@ class Importer
     }
 
     /**
+     * Imports all resources from the configured source.
+     *
+     * @return array The array of ids.
+     */
+    public function autoImport()
+    {
+        $ignored   = 0;
+        $invalid   = 0;
+        $imported  = 0;
+        $resources = array_reverse($this->getResources());
+
+        foreach ($resources as $resource) {
+            try {
+                if ($this->isImported($resource)) {
+                    $ignored++;
+                    continue;
+                }
+
+                $this->import($resource);
+                $imported++;
+            } catch (\Exception $e) {
+                $invalid++;
+            }
+        }
+
+        return [
+            'ignored'  => $ignored,
+            'imported' => $imported,
+            'invalid'  => $invalid
+        ];
+    }
+
+    /**
      * Configures the Importer.
      *
      * @param array $config The importer configuration.
@@ -93,18 +130,6 @@ class Importer
         }
 
         return $this;
-    }
-
-    /**
-     * Check if auto-import mode is enabled.
-     *
-     * @return boolean True if the auto-import mode is enabled. Otherwise,
-     *                 returns false.
-     */
-    public function autoImport()
-    {
-        return array_key_exists('auto_import', $this->config)
-            && $this->config['auto_import'];
     }
 
     /**
@@ -146,29 +171,15 @@ class Importer
     }
 
     /**
-     * Imports all resources from the configured source.
+     * Check if auto-import mode is enabled.
      *
-     * @return array The array of ids.
+     * @return boolean True if the auto-import mode is enabled. Otherwise,
+     *                 returns false.
      */
-    public function importAll()
+    public function isAutoImportEnabled()
     {
-        $ignored   = 0;
-        $imported  = [];
-        $resources = array_reverse($this->getResources());
-
-        foreach ($resources as $resource) {
-            try {
-                $id = $this->import($resource);
-
-                if (!empty($id)) {
-                    $imported[] = $id;
-                }
-            } catch (\Exception $e) {
-                $ignored++;
-            }
-        }
-
-        return [ $imported, $ignored ];
+        return array_key_exists('auto_import', $this->config)
+            && $this->config['auto_import'];
     }
 
     /**
@@ -232,7 +243,7 @@ class Importer
             return (int) $data['fk_author'];
         }
 
-        if ($this->autoImport()) {
+        if ($this->isAutoImportEnabled()) {
             if (array_key_exists('authors_map', $this->config)) {
                 $authors = array_filter(
                     $this->config['authors_map'],
@@ -271,7 +282,7 @@ class Importer
             return (int) $data['fk_content_category'];
         }
 
-        if ($this->autoImport()) {
+        if ($this->isAutoImportEnabled()) {
             if (array_key_exists('categories_map', $this->config)) {
                 $categories = array_filter(
                     $this->config['categories_map'],
@@ -301,6 +312,13 @@ class Importer
      */
     protected function getData(ExternalResource $resource, array $data) : array
     {
+        if (!array_key_exists('content_type_name', $data)
+            && array_key_exists('target', $this->config)
+        ) {
+            $data['content_type_name'] = $this->config['target'];
+        }
+
+        // Force content_type_name for photos
         if ($resource->type === 'photo') {
             $data['content_type_name'] = 'photo';
         }
