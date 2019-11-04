@@ -48,7 +48,6 @@ class AmpFilter extends Filter
             '@<(link|meta|input)[^>]+>@',
 
             // Transformed tags
-            '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
             '@<video([^>]+>)(?s)(.*?)<\/video>@',
             '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
             '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
@@ -58,6 +57,8 @@ class AmpFilter extends Filter
 
             '@<(table|tbody|blockquote|th|tr|td|ul|li|ol|dl|p|strong|br|span'
                 . '|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
+
+            '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
         ];
 
         $replacements = [
@@ -72,7 +73,6 @@ class AmpFilter extends Filter
             '',
 
             // Transformed tags
-            '<amp-img layout="responsive" width="518" height="291" src="${1}"></amp-img>',
             '<amp-video layout="responsive" width="518" height="291" controls>${2}'
                 . '<div fallback><p>This browser does not support the video element.</p></div></amp-video>',
             '<amp-iframe width=518 height=291'
@@ -83,6 +83,7 @@ class AmpFilter extends Filter
             '<amp-instagram data-shortcode="${2}" width="400" height="400" layout="responsive"></amp-instagram>',
             '<amp-twitter width=486 height=657 layout="responsive" data-tweetid="${2}"></amp-twitter>',
             '<${1}${2}>',
+            '<div class="fixed-container"><amp-img  class="cover" layout="fill" src="${1}"></amp-img></div>',
         ];
 
         return preg_replace($patterns, $replacements, $str);

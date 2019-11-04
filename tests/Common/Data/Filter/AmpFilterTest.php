@@ -84,8 +84,8 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
     {
         // String with img
         $str      = '<p>The string</p><img src="/mumble/" /><p>to</p><p>parse</p>';
-        $expected = '<p>The string</p><amp-img layout="responsive" width="518" height="291"'
-            . ' src="/mumble/"></amp-img><p>to</p><p>parse</p>';
+        $expected = '<p>The string</p><div class="fixed-container"><amp-img  class="cover" layout="fill"'
+            . ' src="/mumble/"></amp-img></div><p>to</p><p>parse</p>';
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
