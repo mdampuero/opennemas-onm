@@ -98,7 +98,6 @@
                     <span>[% (source.items|filter:{ type: 'list' }).length %]</span>
                   </span>
                 </div>
-
                 <div class="grid-collapse-body clearfix ng-cloak" ng-class="{ 'expanded': expanded == 'lists' }">
                   <div class="form-group">
                     <div class="help">
@@ -108,7 +107,7 @@
                       <div class="checkbox">
                         <input id="checkbox-left-[% item.uuid %]" checklist-model="source.selected" checklist-value="item" type="checkbox">
                         <label for="checkbox-left-[% item.uuid %]">
-                          <strong>[% item.name %]</strong> - {t 1="[% item.subscribers %]"}%1 subscriptors{/t}
+                          <strong>[% item.name %]</strong> - {t 1="[% extra.users[item.id] %]"}%1 subscribers{/t}
                         </label>
                       </div>
                     </div>
@@ -200,22 +199,10 @@
                     <span ng-if="item.type == 'list'"><i class="fa fa-address-book" uib-tooltip="{t}Subscription list{/t}"></i> </span>
                     <span ng-if="item.type == 'email'"><i class="fa fa-envelope" uib-tooltip="{t}Email address{/t}"></i> </span>
                     [% item.name %]
-                    <span class="badge badge-default m-l-5" ng-if="item.type == 'list'">{t 1="[% item.subscribers %]"}%1 subscriptors{/t}</span>
+                    <span class="badge badge-default m-l-5" ng-if="item.type == 'list'">{t 1="[% extra.users[item.id] %]"}%1 subscribers{/t}</span>
                   </label>
                 </div>
               </div>
-
-              {* <div class="clearfix ng-hide">
-                <hr>
-                <div class="checkbox checkbox-default pull-left">
-                  <input id="select-all" ng-model="recipients.all" type="checkbox" ng-change="toggleAllRecipients()">
-                  <label for="select-all">{t}Toggle all{/t}</label>
-                </div>
-                <button class="btn btn-danger btn-mini pull-right" ng-click="removeRecipients()" ng-disabled="recipients.selected.length == 0" type="button" ng-show="recipients.selected.length > 0">
-                  <i class="fa fa-trash fa-lg"></i>
-                  {t}Remove selected{/t}
-                </button>
-              </div> *}
             </div>
           </div>
         </div>

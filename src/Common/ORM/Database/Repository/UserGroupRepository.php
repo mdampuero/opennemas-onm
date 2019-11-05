@@ -51,6 +51,34 @@ class UserGroupRepository extends BaseRepository
     }
 
     /**
+     * description
+     *
+     * @param type variable Description
+     *
+     * @return type Description
+     */
+    public function findUsers($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT id, name, email FROM users'
+            . ' LEFT JOIN user_user_group ON user_id = id'
+            . ' WHERE user_group_id IN (?)';
+
+        return $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function refresh($ids)

@@ -26,8 +26,9 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * Initialize list of mail accounts
      */
     $scope.initPickRecipients = function(newsletter, extra) {
-      $scope.newsletter = newsletter;
-      $scope.source.items = extra.recipients;
+      $scope.extra              = extra;
+      $scope.newsletter         = newsletter;
+      $scope.source.items       = extra.recipients;
       $scope.newsletter_handler = extra.newsletter_handler;
 
       if ($scope.newsletter_handler === 'create_subscriptor') {
@@ -120,10 +121,10 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       var emailsToSend = 0;
 
       $scope.recipients.items.forEach(function(el) {
-        if (el.type == 'list') {
-          emailsToSend += el.subscribers;
+        if (el.type === 'list') {
+          emailsToSend += $scope.extra.users[el.id];
         } else {
-          ++emailsToSend;
+          emailsToSend++;
         }
       });
 

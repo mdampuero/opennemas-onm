@@ -38,8 +38,9 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'countUsers', 'findBy', 'findOneBy'])
-            ->getMock();
+            ->setMethods([
+                'countBy', 'countUsers', 'findBy', 'findOneBy', 'findUsers'
+            ])->getMock();
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -103,6 +104,52 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception));
 
         $this->service->getItem(1);
+    }
+
+    /**
+     * Tests getEmails when the list of provided items is empty.
+     */
+    public function testGetEmailsWhenEmptyItems()
+    {
+        $this->assertEquals([], $this->service->getEmails(null));
+        $this->assertEquals([], $this->service->getEmails([]));
+    }
+
+    /**
+     * Tests getEmails when an error is thrown.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testGetEmailsWhenError()
+    {
+        $this->repository->expects($this->once())->method('findUsers')
+            ->with([ 32725 ])
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->getEmails(json_decode(json_encode([
+            'pk_user_group' => 32725,
+            'name'          => 'foobar'
+        ])));
+    }
+
+    /**
+     * Tests getEmails when the provided items is only an single item.
+     */
+    public function testGetEmailsWhenSingleItem()
+    {
+        $this->repository->expects($this->once())->method('findUsers')
+            ->with([ 32725 ])
+            ->willReturn([
+                [ 'id' => 32725, 'name' => 'mumble', 'email' => 'mumble@flob.org' ]
+            ]);
+
+        $this->assertEquals(
+            [[ 'id' => 32725, 'name' => 'mumble', 'email' => 'mumble@flob.org' ]],
+            $this->service->getEmails(json_decode(json_encode([
+                'pk_user_group' => 32725,
+                'name'          => 'foobar'
+            ])))
+        );
     }
 
     /**

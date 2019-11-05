@@ -48,23 +48,22 @@
         <div class="newsletter-report-list">
         {foreach $send_report['report'] as $item}
           <div class="p-r-15 p-b-15 p-t-15 p-l-15" style="border-bottom: 1px solid #ccc">
-            {if $item[0]->type == 'external'}
+            {if $item[0]['type'] == 'external'}
               <i class="fa fa-external-link m-r-5" uib-tooltip="{t}External service{/t}"></i>
             {/if}
-            {if $item[0]->type == 'list'}
+            {if $item[0]['type'] == 'list'}
               <i class="fa fa-address-book m-r-5" uib-tooltip="{t}Subscription list{/t}"></i>
             {/if}
-            {if $item[0]->type == 'email'}
+            {if $item[0]['type'] == 'email'}
               <i class="fa fa-envelope m-r-5" uib-tooltip="{t}Email address{/t}"></i>
             {/if}
-
-            {$item[0]->name}
+            {$item[0]['name']}
             {if $item[1]}
-            <i class="fa fa-check text-success"></i>
-            <span class="text-success">{$item[2]}</span>
+              <i class="fa fa-check text-success"></i>
+              <span class="text-success">{$item[2]}</span>
             {else}
-            <i class="fa fa-times text-danger"></i>
-            <span class="text-danger">{$item[2]}</span>
+              <i class="fa fa-times text-danger"></i>
+              <span class="text-danger">{$item[2]}</span>
             {/if}
           </div>
         {/foreach}

@@ -45,7 +45,39 @@ class UserGroupService extends OrmService
      * Returns the number of users associated to a user group in a list of user
      * groups.
      *
-     * @param array The list of user groups.
+     * @param array $items The list of user groups.
+     *
+     * @return array A list where the key is a user groups id and the value is
+     *               the number of users associated to the user group.
+     */
+    public function getEmails($items)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = array_map(function ($a) {
+            return $a->pk_user_group;
+        }, $items);
+
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findUsers($ids);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Returns the number of users associated to a user group in a list of user
+     * groups.
+     *
+     * @param array $items The list of user groups.
      *
      * @return array A list where the key is a user groups id and the value is
      *               the number of users associated to the user group.

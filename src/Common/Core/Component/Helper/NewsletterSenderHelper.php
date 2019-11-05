@@ -47,11 +47,11 @@ class NewsletterSenderHelper
     protected $mailer;
 
     /**
-     * The subscriptors service.
+     * The subscription service.
      *
-     * @var SubscriptorService
+     * @var SubscriptionService
      */
-    protected $ssb;
+    protected $ss;
 
     /**
      * The no-reply address parameter.
@@ -73,7 +73,7 @@ class NewsletterSenderHelper
         $appLog,
         $instance,
         $mailer,
-        $ssb,
+        $ss,
         $actOnFactory,
         $newsletterService,
         $noReplyAddress
@@ -84,7 +84,7 @@ class NewsletterSenderHelper
         $this->noReplyAddress       = $noReplyAddress;
         $this->instanceInternalName = $instance->internal_name;
         $this->mailer               = $mailer;
-        $this->ssb                  = $ssb;
+        $this->ss                   = $ss;
         $this->actOnFactory         = $actOnFactory;
         $this->ns                   = $newsletterService;
         $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
@@ -118,7 +118,7 @@ class NewsletterSenderHelper
         // Fix encoding of the html
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $recipients = json_decode(json_encode($recipients), false);
+        $recipients = json_decode(json_encode($recipients), true);
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -127,11 +127,11 @@ class NewsletterSenderHelper
             }
 
             try {
-                if ($mailbox->type == 'acton') {
+                if ($mailbox['type'] == 'acton') {
                     list($errors, $sentEmails) = $this->sendActon($newsletter, $mailbox);
 
                     $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
-                } elseif ($mailbox->type == 'list') {
+                } elseif ($mailbox['type'] == 'list') {
                     list($errors, $sentEmailsList) = $this->sendList($newsletter, $mailbox);
 
                     $sentEmails   += $sentEmailsList;
@@ -222,7 +222,7 @@ class NewsletterSenderHelper
                 'senderemail'           => $settings['newsletter_maillist']['sender'],
                 'subject'               => $newsletter->title,
                 'when'                  => time(),
-                'sendtoids'             => $marketingList->id,
+                'sendtoids'             => $marketingList['id'],
                 'createcrmmsgsentnotes' => 'N',
             ];
 
@@ -234,7 +234,7 @@ class NewsletterSenderHelper
                 $sendingParams['footerid'] = $settings['actOn.footerId'];
             }
 
-            $result = $endpoint->sendMessage($id, $sendingParams);
+            $endpoint->sendMessage($id, $sendingParams);
 
             $sentEmails += 1;
         } catch (\Exception $e) {
@@ -257,21 +257,19 @@ class NewsletterSenderHelper
     public function sendList($newsletter, $list)
     {
         $sentEmails = 0;
-        $users      = $this->ssb->getList(
-            '(user_group_id = "' . $list->id
-            . '" and status != 0)'
-        );
+        $list       = $this->ss->getItem($list['id']);
+        $users      = $this->ss->getEmails($list);
 
-        if ($users['total'] == 0) {
+        if (empty($users)) {
             return [ [], $sentEmails ];
         }
 
         $errors = [];
-        foreach ($users['items'] as $user) {
+        foreach ($users as $user) {
             try {
                 $sentEmails += $this->sendEmail($newsletter, $user);
             } catch (\Swift_RfcComplianceException $e) {
-                $errors[] = sprintf(_('Email not valid: %s'), $user->email);
+                $errors[] = sprintf(_('Email not valid: %s'), $user['email']);
             } catch (\Exception $e) {
                 $errors[] = _('Unable to deliver your email');
             }
@@ -297,7 +295,7 @@ class NewsletterSenderHelper
             ->setBody($newsletter->html, 'text/html')
             ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
             ->setSender($this->noReplyAddress)
-            ->setTo([ $mailbox->email => $mailbox->name ]);
+            ->setTo([ $mailbox['email'] => $mailbox['name']]);
 
         $headers = $message->getHeaders();
         $headers->addParameterizedHeader(
@@ -306,7 +304,7 @@ class NewsletterSenderHelper
         );
 
         $this->appLog->notice(
-            "Email sent. Backend newsletter sent (to: " . $mailbox->email . ")"
+            "Email sent. Backend newsletter sent (to: " . $mailbox['email'] . ")"
         );
 
         // Send it
