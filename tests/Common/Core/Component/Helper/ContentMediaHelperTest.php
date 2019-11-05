@@ -362,24 +362,32 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('getParameter')
             ->willReturn('http://console/');
 
-        $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
-            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(0))->method('get')->with('logo_enabled')
+            ->willReturn('1');
         $this->ds->expects($this->at(1))->method('get')->with('sn_default_img')
             ->willReturn('sn_default_img.jpg');
         $this->ds->expects($this->at(2))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(3))->method('get')->with('logo_enabled')
+            ->willReturn('1');
+        $this->ds->expects($this->at(4))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(3))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(5))->method('get')->with('mobile_logo')
             ->willReturn('mobile_logo.jpg');
-        $this->ds->expects($this->at(4))->method('get')->with('mobile_logo')
-            ->willReturn('mobile_logo.jpg');
-        $this->ds->expects($this->at(5))->method('get')->with('sn_default_img')
-            ->willReturn(null);
         $this->ds->expects($this->at(6))->method('get')->with('mobile_logo')
+            ->willReturn('mobile_logo.jpg');
+        $this->ds->expects($this->at(7))->method('get')->with('logo_enabled')
+            ->willReturn('1');
+        $this->ds->expects($this->at(8))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(7))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(9))->method('get')->with('mobile_logo')
+            ->willReturn(null);
+        $this->ds->expects($this->at(10))->method('get')->with('site_logo')
             ->willReturn('site_logo.jpg');
-        $this->ds->expects($this->at(8))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(11))->method('get')->with('site_logo')
             ->willReturn('site_logo.jpg');
+        $this->ds->expects($this->at(12))->method('get')->with('logo_enabled')
+            ->willReturn('0');
 
         $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
         $method->setAccessible(true);

@@ -180,12 +180,14 @@ class ContentMediaHelper
 
         // Default image for social networks
         $defaultLogo = '';
-        if ($this->ds->get('sn_default_img')) {
-            $defaultLogo = $this->ds->get('sn_default_img');
-        } elseif ($this->ds->get('mobile_logo')) {
-            $defaultLogo = $this->ds->get('mobile_logo');
-        } elseif ($siteLogo = $this->ds->get('site_logo')) {
-            $defaultLogo = $this->ds->get('site_logo');
+        if ($this->ds->get('logo_enabled') == '1') {
+            if ($this->ds->get('sn_default_img')) {
+                $defaultLogo = $this->ds->get('sn_default_img');
+            } elseif ($this->ds->get('mobile_logo')) {
+                $defaultLogo = $this->ds->get('mobile_logo');
+            } elseif ($siteLogo = $this->ds->get('site_logo')) {
+                $defaultLogo = $this->ds->get('site_logo');
+            }
         }
 
         if (!empty($defaultLogo)) {
