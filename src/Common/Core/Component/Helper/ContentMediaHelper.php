@@ -46,7 +46,7 @@ class ContentMediaHelper
         // The content does not have associated media so return empty object.
         $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
 
-        if (!isset($mediaObject->url)) {
+        if (!isset($mediaObject->url) && $this->ds->get('logo_enabled')) {
             $mediaObject = $this->getDefaultMediaObject($mediaObject);
         }
 
@@ -180,14 +180,12 @@ class ContentMediaHelper
 
         // Default image for social networks
         $defaultLogo = '';
-        if ($this->ds->get('logo_enabled') == '1') {
-            if ($this->ds->get('sn_default_img')) {
-                $defaultLogo = $this->ds->get('sn_default_img');
-            } elseif ($this->ds->get('mobile_logo')) {
-                $defaultLogo = $this->ds->get('mobile_logo');
-            } elseif ($siteLogo = $this->ds->get('site_logo')) {
-                $defaultLogo = $this->ds->get('site_logo');
-            }
+        if ($this->ds->get('sn_default_img')) {
+            $defaultLogo = $this->ds->get('sn_default_img');
+        } elseif ($this->ds->get('mobile_logo')) {
+            $defaultLogo = $this->ds->get('mobile_logo');
+        } elseif ($siteLogo = $this->ds->get('site_logo')) {
+            $defaultLogo = $this->ds->get('site_logo');
         }
 
         if (!empty($defaultLogo)) {
