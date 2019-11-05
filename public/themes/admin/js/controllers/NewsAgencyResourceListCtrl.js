@@ -235,13 +235,6 @@
         /**
          * @inheritdoc
          */
-        $scope.isModeSupported = function() {
-          return true;
-        };
-
-        /**
-         * @inheritdoc
-         */
         $scope.isSelectable = function(item) {
           return !$scope.isImported(item);
         };
