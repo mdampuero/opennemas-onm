@@ -52,9 +52,6 @@
     <div class="grid-body no-padding">
       <div class="grid-collapse-title">
         {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Enabled{/t}" field="activated"}
-        <div class="m-t-5">
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Automatic import{/t}" field="auto_import"}
-        </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.color }" ng-click="flags.expanded.color = !flags.expanded.color">
         <i class="fa fa-paint-brush m-r-10"></i>{t}Color{/t}
@@ -121,6 +118,17 @@
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.agency }">
         {include file="ui/component/input/text.tpl" iClass="no-margin" iHelp="{t}When importing elements this will be the signature{/t}" iField="agency_string"}
+      </div>
+    </div>
+  </div>
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        <i class="fa fa-cog m-r-10"></i>
+        {t}Parameters{/t}
+      </div>
+      <div class="grid-collapse-title">
+        {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Automatic import{/t}" field="auto_import"}
       </div>
       <div ng-if="item.auto_import">
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.import }" ng-click="flags.expanded.import = !flags.expanded.import">
@@ -290,6 +298,7 @@
       </div>
     </div>
   </div>
+
 {/block}
 
 {block name="leftColumn"}
