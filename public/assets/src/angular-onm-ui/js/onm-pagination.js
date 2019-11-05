@@ -82,7 +82,7 @@
                 '</button>' +
                 '<span class="pagination-placeholder">' +
                   '<button class="pagination-fake-input" ng-click="setEdit(true)" ng-show="!edit" type="button">' +
-                    '[% page %] / [% totalPages %]' +
+                    '[% ngModel %] / [% totalPages %]' +
                   '</button>' +
                   '<input class="pagination-input" min="1" max="[% totalPages %]" ng-blur="setEdit(false)" ng-keypress="updatePage($event)" ng-show="edit" ng-model="page" type="number">' +
                 '</span>' +
@@ -226,6 +226,7 @@
         $scope.$watch('[ ngModel, itemsPerPage, totalItems ]', function() {
           $scope.from = 1;
           $scope.to   = $scope.totalItems;
+
           $scope.totalPages = Math.ceil($scope.totalItems / $scope.itemsPerPage);
 
           if (($scope.ngModel - 1) * $scope.itemsPerPage > 0) {
