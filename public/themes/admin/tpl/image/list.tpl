@@ -64,27 +64,28 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+          <li class="m-r-15 quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
             <button class="btn btn-link" ng-click="setMode('list')">
-              <i class="fa fa-lg fa-list"></i>
+              <i class="fa fa-lg fa-list m-l-5 m-r-5"></i>
             </button>
           </li>
-          <li class="quicklinks ng-cloak" ng-if="mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+          <li class="m-r-15 ng-cloak quicklinks" ng-if="mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
             <button class="btn btn-link" ng-click="setMode('grid')">
-              <i class="fa fa-lg fa-th"></i>
+              <i class="fa fa-lg fa-th m-l-5 m-r-5"></i>
             </button>
           </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
+          <li class="m-r-10 quicklinks">
+            <div class="input-group input-group-animated">
+              <span class="input-group-addon">
+                <i class="fa fa-search fa-lg"></i>
+              </span>
+              <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.title }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+              <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('title')" ng-show="criteria.title">
+                <i class="fa fa-times"></i>
+              </span>
+            </div>
           </li>
-          <li class="m-r-10 input-prepend inside search-input no-boarder">
-            <span class="add-on">
-              <span class="fa fa-search fa-lg"></span>
-            </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by description or metadata{/t}" type="text"/>
-            <input type="hidden" name="in_home" ng-model="criteria.in_home">
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak">
+          <li class="hidden-xs ng-cloak quicklinks">
             <select name="month" ng-model="criteria.month">
               <option value="">{t}All months{/t}</option>
               <optgroup label="[% year.name %]" ng-repeat="year in years">
@@ -95,7 +96,7 @@
             </select>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak">
+        <ul class="nav quick-section quick-section-fixed ng-cloak">
           <li class="quicklinks hidden-xs" ng-if="mode === 'list' && contents.length > 0">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>

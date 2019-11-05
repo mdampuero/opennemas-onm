@@ -19,7 +19,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               {acl isAllowed="BOOK_CREATE"}
-                <li>
+                <li class="quicklinks">
                   <a class="btn btn-loading btn-success text-uppercase" href="{url name=admin_books_create}">
                     <i class="fa fa-plus m-r-5"></i>
                     {t}Create{/t}

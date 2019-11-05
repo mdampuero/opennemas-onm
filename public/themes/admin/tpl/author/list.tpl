@@ -72,14 +72,19 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="title" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text"/>
+            <li class="m-r-10 quicklinks">
+              <div class="input-group input-group-animated">
+                <span class="input-group-addon">
+                  <i class="fa fa-search fa-lg"></i>
+                </span>
+                <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+                <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
+                  <i class="fa fa-times"></i>
+                </span>
+              </div>
             </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
+          <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">
               <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>

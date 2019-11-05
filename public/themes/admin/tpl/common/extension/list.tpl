@@ -64,9 +64,19 @@
         <div class="navbar navbar-inverse">
           <div class="navbar-inner">
             <ul class="nav quick-section">
+              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'grid'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="setMode('list')">
+                  <i class="fa fa-lg fa-th"></i>
+                </button>
+              </li>
+              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'list'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="setMode('grid')">
+                  <i class="fa fa-lg fa-list"></i>
+                </button>
+              </li>
               {block name="leftFilters"}{/block}
             </ul>
-            <ul class="nav quick-section pull-right ng-cloak" ng-if="data.items.length > 0 && (!isModeSupported() || app.mode === 'list')">
+            <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="data.items.length > 0 && (!isModeSupported() || app.mode === 'list')">
               {block name="rightFilters"}
                 <li class="quicklinks">
                   <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>

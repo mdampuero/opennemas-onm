@@ -60,15 +60,20 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="m-r-10 input-prepend inside search-input no-boarder">
-            <span class="add-on">
-              <span class="fa fa-search fa-lg"></span>
-            </span>
-            <input class="no-boarder" type="text" name="title" ng-model="criteria.pclave" ng-keyup="searchByKeypress($event)" placeholder="{t}Search{/t}" />
+          <li class="m-r-10 quicklinks">
+            <div class="input-group input-group-animated">
+              <span class="input-group-addon">
+                <i class="fa fa-search fa-lg"></i>
+              </span>
+              <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.pclave }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.pclave" placeholder="{t}Search{/t}" type="text">
+              <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('pclave')" ng-show="criteria.pclave">
+                <i class="fa fa-times"></i>
+              </span>
+            </div>
           </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-          <li class="quicklinks hidden-xs">
+        <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="contents.length > 0">
+          <li class="quicklinks">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>

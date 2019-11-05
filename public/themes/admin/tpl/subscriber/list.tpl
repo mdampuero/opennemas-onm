@@ -97,19 +97,24 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="title" ng-model="criteria.name" placeholder="{t}Search by title{/t}" type="text"/>
+            <li class="m-r-10 quicklinks">
+              <div class="input-group input-group-animated">
+                <span class="input-group-addon">
+                  <i class="fa fa-search fa-lg"></i>
+                </span>
+                <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+                <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
+                  <i class="fa fa-times"></i>
+                </span>
+              </div>
             </li>
-            <li class="quicklinks text-left hidden-xs ng-cloak">
+            <li class="hidden-xs ng-cloak quicklinks text-left">
               <div class="checkbox p-t-7">
                 <input id="status" ng-false-value="null" ng-model="criteria.status" ng-true-value="2" type="checkbox">
                 <label for="status"><strong>{t}Requests only{/t}</strong></label>
               </div>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak">
+            <li class="hidden-xs m-r-10 ng-cloak quicklinks">
               <ui-select name="group" theme="select2" ng-model="criteria.user_group_id">
                 <ui-select-match>
                   <strong>{t}Lists{/t}:</strong> [% $select.selected.name %]
@@ -119,7 +124,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+            <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
               <ui-select name="activated" theme="select2" ng-model="criteria.activated">
                 <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -130,8 +135,8 @@
               </ui-select>
             </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
-            <li class="quicklinks hidden-xs">
+          <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="items.length > 0">
+            <li class="quicklinks">
               <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
