@@ -61,6 +61,19 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
+     * @function clear
+     * @memberOf ContentListCtrl
+     *
+     * @description
+     *   Deletes a value from criteria.
+     *
+     * @param {String} property The property name.
+     */
+    $scope.clear = function(property) {
+      delete $scope.criteria[property];
+    };
+
+    /**
      * Goes to content edit page.
      *
      * @param int    id    Content id.
