@@ -83,7 +83,7 @@
             <select class="form-control" name="sync_from" ng-model="item.sync_from" required>
               <option value="[% key %]" ng-repeat="(key, value) in data.extra.sync_from">[% value %]</option>
             </select>
-            <div class="help m-l-3 m-t-5">
+            <div class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
               <i class="fa fa-info-circle m-r-5 text-info"></i>
               {t}Less time means faster synchronizations{/t}
             </div>
@@ -103,7 +103,7 @@
           <div class="controls">
             <input class="form-control" id="external-link" name="external_link" ng-model="item.external_link" type="text">
           </div>
-          <div class="help m-l-3 m-t-5">
+          <div class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
             <i class="fa fa-info-circle m-r-5 text-info"></i>
             {t}When importing assign an external link to the elements{/t}
           </div>
@@ -268,16 +268,24 @@
         </div>
         <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.filter }">
           <div class="form-group">
-            <div class="help m-l-3 m-t-5">
+            <div class="help m-l-3" ng-if="isHelpEnabled()">
               <i class="fa fa-info-circle m-r-5 text-info"></i>
-              {t}Filter contents that matches one or more list of words{/t}
+              {t}To be automatically imported, contents have to{/t}:
+              <ul>
+                <li>
+                  {t}Include all words in a list in the title, the body and/or the list of tags{/t}.
+                </li>
+                <li>
+                  {t}Match one or more lists of words{/t}.
+                </li>
+              </ul>
             </div>
             <div class="row m-t-15" ng-repeat="filter in item.filters track by $index">
               <div class="col-sm-10 col-xs-9 m-b-15 text-center" ng-if="$index">
                 {t}or{/t}
               </div>
               <div class="col-lg-10 col-md-9 col-sm-10 col-xs-8">
-                <input class="form-control" name="filters-[% $index %]" ng-model="item.filters[$index]" placeholder="{t}Comma-separated list of words to match{/t}" required type="text">
+                <input class="form-control" name="filters-[% $index %]" ng-model="item.filters[$index]" placeholder="{t}Comma-separated list of words{/t}" required type="text">
               </div>
               <div class="col-lg-2 col-md-3 col-sm-2 col-xs-4">
                 <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFilter($index)" type="button">
