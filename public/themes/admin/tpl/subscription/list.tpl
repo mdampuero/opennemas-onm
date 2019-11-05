@@ -87,9 +87,6 @@
               </span>
               <input class="no-boarder" name="title" ng-model="criteria.name" placeholder="{t}Search by title{/t}" type="text"/>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-init="enabled = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
               <ui-select name="enabled" theme="select2" ng-model="criteria.enabled">
                 <ui-select-match>
@@ -117,16 +114,6 @@
                 </ui-select-match>
                 <ui-select-choices repeat="item.value as item in request | filter: $select.search">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </li>
@@ -217,11 +204,6 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

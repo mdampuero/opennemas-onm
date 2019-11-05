@@ -95,9 +95,6 @@
               </span>
               <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks hidden-xs ng-cloak">
               <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
             </li>
@@ -249,11 +246,6 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

@@ -48,7 +48,7 @@
     <span class="add-on">
       <span class="fa fa-search fa-lg"></span>
     </span>
-    <input class="no-boarder" type="text" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name{/t}" />
+    <input class="no-boarder" type="text" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search{/t}" />
   </li>
   <li class="quicklinks hidden-xs">
     <select id="content_type_name" ng-model="criteria.content_type_name" data-label="<strong>{t}Content Type{/t}</strong>" class="select2">
@@ -126,9 +126,6 @@
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-    {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
   </li>
   <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
     <span class="h-seperate"></span>

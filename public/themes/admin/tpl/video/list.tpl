@@ -92,23 +92,17 @@
   <li class="quicklinks">
     <span class="h-seperate"></span>
   </li>
-  <li class="input-prepend inside ng-cloak search-input no-boarder">
+  <li class="input-prepend inside ng-cloak m-r-10 search-input no-boarder">
     <span class="add-on">
       <span class="fa fa-search fa-lg"></span>
     </span>
     <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
-  </li>
-  <li class="quicklinks hidden-xs">
-    <span class="h-seperate"></span>
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
     <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="app.mode === 'list'">
-    {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
   </li>
   <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
     <span class="h-seperate"></span>

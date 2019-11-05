@@ -28,7 +28,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.contents.length == 0 }">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -57,7 +56,6 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -66,20 +64,7 @@
             <span class="add-on">
               <span class="fa fa-search fa-lg"></span>
             </span>
-            <input class="no-boarder" type="text" name="title" ng-model="criteria.pclave" ng-keyup="searchByKeypress($event)" placeholder="{t}Filter by name{/t}" />
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="criteria.epp">
-              <ui-select-match>
-                <strong>{t}View{/t}:</strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
+            <input class="no-boarder" type="text" name="title" ng-model="criteria.pclave" ng-keyup="searchByKeypress($event)" placeholder="{t}Search{/t}" />
           </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
@@ -90,7 +75,6 @@
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="grid simple">
       <div class="grid-body no-padding">
@@ -141,7 +125,6 @@
                     </span>
                     [% content.value %]
                   </p>
-
                   <div class="listing-inline-actions">
                     <a class="link" href="[% edit(content.id, 'admin_keyword_show') %]" title="{t}Edit this content{/t}">
                       <i class="fa fa-pencil"></i>
@@ -170,11 +153,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-        <div class="pull-right pagination-wrapper">
-          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>

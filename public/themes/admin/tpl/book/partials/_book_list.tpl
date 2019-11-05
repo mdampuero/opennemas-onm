@@ -41,7 +41,6 @@
     </div>
   </div>
 </div>
-
 <div class="page-navbar filters-navbar">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -51,9 +50,6 @@
             <span class="fa fa-search fa-lg"></span>
           </span>
           <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
-        </li>
-        <li class="quicklinks hidden-xs">
-          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
           <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
@@ -68,16 +64,6 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="criteria.epp">
-            <ui-select-match>
-              <strong>{t}View{/t}:</strong> [% $select.selected %]
-            </ui-select-match>
-            <ui-select-choices repeat="item in views  | filter: $select.search">
-              <div ng-bind-html="item | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
-        </li>
       </ul>
       <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
         <li class="quicklinks hidden-xs">
@@ -87,7 +73,6 @@
     </div>
   </div>
 </div>
-
 <div class="content" ng-init="init('book', 'backend_ws_contents_list')">
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -180,15 +165,12 @@
       <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
     </div>
   </div>
-
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>

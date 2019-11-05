@@ -69,23 +69,17 @@
 {/block}
 
 {block name="leftFilters"}
-  <li class="m-r-10 input-prepend inside search-input no-boarder">
+  <li class="m-r-10 input-prepend inside m-r-10 search-input no-boarder">
     <span class="add-on">
       <span class="fa fa-search fa-lg"></span>
     </span>
     <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
-  </li>
-  <li class="quicklinks hidden-xs">
-    <span class="h-seperate"></span>
   </li>
   <li class="quicklinks hidden-xs ng-cloak"  ng-init="categories = {json_encode($categories)|clear_json}">
     <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-    {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
   </li>
   <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
     <span class="h-seperate"></span>

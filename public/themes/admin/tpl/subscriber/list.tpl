@@ -103,9 +103,6 @@
               </span>
               <input class="no-boarder" name="title" ng-model="criteria.name" placeholder="{t}Search by title{/t}" type="text"/>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks text-left hidden-xs ng-cloak">
               <div class="checkbox p-t-7">
                 <input id="status" ng-false-value="null" ng-model="criteria.status" ng-true-value="2" type="checkbox">
@@ -129,16 +126,6 @@
                 </ui-select-match>
                 <ui-select-choices repeat="item.value as item in activated  | filter: $select.search">
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views | filter: $select.search">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </li>
@@ -251,11 +238,6 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

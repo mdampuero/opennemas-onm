@@ -80,9 +80,6 @@
               </span>
               <input class="no-boarder" name="name" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="config.locale.multilanguage">
               <ui-select name="language" theme="select2" ng-model="criteria.locale">
                 <ui-select-match>
@@ -90,16 +87,6 @@
                 </ui-select-match>
                 <ui-select-choices repeat="locale.id as locale in config.locale.available | filter: { name: $select.search }">
                   <div ng-bind-html="locale.name"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views | filter: $select.search">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </li>
@@ -178,11 +165,6 @@
                 </tbody>
               </table>
             </form>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="items.length !== 0">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

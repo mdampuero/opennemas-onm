@@ -42,10 +42,7 @@
     <span class="add-on">
       <span class="fa fa-search fa-lg"></span>
     </span>
-    <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="search"/>
-  </li>
-  <li class="quicklinks hidden-xs">
-    <span class="h-seperate"></span>
+    <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search{/t}" type="search"/>
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
     <ui-select name="source" theme="select2" ng-model="criteria.source">

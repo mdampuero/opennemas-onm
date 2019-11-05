@@ -123,9 +123,6 @@
             </span>
             <input class="no-boarder" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by title{/t}" type="text"/>
           </li>
-          <li class="quicklinks hidden-xs">
-            <span class="h-seperate"></span>
-          </li>
           <li class="quicklinks dropdown hidden-xs ng-cloak">
             <onm-category-selector class="block" default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
           </li>
@@ -134,9 +131,6 @@
           </li>
           <li class="quicklinks hidden-xs hidden-sm ng-cloak">
             {include file="ui/component/select/author.tpl" label="true" ngModel="criteria.fk_author"}
-          </li>
-          <li class="quicklinks hidden-sm hidden-xs ng-cloak">
-            {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
           </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
@@ -243,11 +237,6 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="!loading && items.length > 0">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

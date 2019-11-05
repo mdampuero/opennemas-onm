@@ -59,9 +59,6 @@
     </span>
     <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
   </li>
-  <li class="quicklinks hidden-xs">
-    <span class="h-seperate"></span>
-  </li>
   <li class="quicklinks hidden-xs ng-cloak" ng-init="type = [ { id: null, name: '{t}Any{/t}' }, { id: 'intelligentwidget', name: '{t}IntelligentWidget{/t}' }, { id: 'html', name: '{t}HTML{/t}' }]">
     <ui-select name="renderlet" theme="select2" ng-model="criteria.renderlet">
       <ui-select-match>
@@ -84,9 +81,6 @@
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-    {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
   </li>
   <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
     <span class="h-seperate"></span>

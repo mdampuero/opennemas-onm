@@ -84,9 +84,6 @@
             <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by description or metadata{/t}" type="text"/>
             <input type="hidden" name="in_home" ng-model="criteria.in_home">
           </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
           <li class="quicklinks hidden-xs ng-cloak">
             <select name="month" ng-model="criteria.month">
               <option value="">{t}All months{/t}</option>
@@ -96,16 +93,6 @@
                 </option>
               </optgroup>
             </select>
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
-            <ui-select name="view" theme="select2" ng-model="criteria.epp">
-              <ui-select-match>
-                <strong>{t}View{/t}:</strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
           </li>
         </ul>
         <ul class="nav quick-section pull-right ng-cloak">
@@ -216,11 +203,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-        <div class="pull-right">
-          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </div>
       </div>
     </div>
