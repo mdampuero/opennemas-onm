@@ -24,12 +24,16 @@
     .input-group-addon {
       border-color: transparent;
       background-color: transparent;
+
+      .fa {
+        vertical-align: 0;
+      }
     }
 
     .input-group-addon-inside {
       position: absolute;
       right: 8px;
-      top: 3px;
+      top: 1px;
     }
 
     &.input-group-animated {
@@ -68,21 +72,6 @@
       }
     }
   }
-  .simple-pagination {
-    .info {
-      font-weight:normal !important;
-    }
-
-    .pagination-links .btn {
-      background-color: #ffffff;
-      border: 1px solid #dddddd;
-
-      &:hover {
-        background-color:rgba(0, 0, 0, 0);
-        border: 1px solid #999;
-      }
-    }
-  }
 
   &.page-navbar .quick-section {
     margin-bottom: 0;
@@ -117,7 +106,15 @@
   margin: 6px;
 }
 
+.filters-navbar .quick-section-fixed {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 5%);
+  position: fixed;
+  padding: 0 15px;
+  right: 0;
+}
+
 .filters-navbar .quick-section:first-child {
+  display: flex;
   margin-left: 0;
 }
 
@@ -140,8 +137,6 @@
 
 .filters-navbar .pagination {
   background: #fff;
-  position: fixed;
-  right: 15px;
 }
 
 .page-navbar .search-input input {
