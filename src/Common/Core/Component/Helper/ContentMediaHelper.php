@@ -178,23 +178,22 @@ class ContentMediaHelper
         $baseUrl   = $instance->getBaseUrl() . $mediapath;
         $filepath  = $this->container->getParameter('core.paths.public') . $mediapath;
 
-        if ($snLogo = $this->ds->get('sn_default_img')) {
-            // Default image for social networks
-            $mediaObject->url = $baseUrl . $snLogo;
-            $filepath         = $filepath . $snLogo;
-        } elseif ($mobileLogo = $this->ds->get('mobile_logo')) {
-            // Mobile logo
-            $mediaObject->url = $baseUrl . $mobileLogo;
-            $filepath         = $filepath . $mobileLogo;
+        // Default image for social networks
+        $defaultLogo = '';
+        if ($this->ds->get('sn_default_img')) {
+            $defaultLogo = $this->ds->get('sn_default_img');
+        } elseif ($this->ds->get('mobile_logo')) {
+            $defaultLogo = $this->ds->get('mobile_logo');
         } elseif ($siteLogo = $this->ds->get('site_logo')) {
-            // Logo
-            $mediaObject->url = $baseUrl . $siteLogo;
-            $filepath         = $filepath . $siteLogo;
+            $defaultLogo = $this->ds->get('site_logo');
         }
 
-        $information         = $ih->getInformation($filepath);
-        $mediaObject->width  = $information['width'];
-        $mediaObject->height = $information['height'];
+        if (!empty($defaultLogo)) {
+            $information         = $ih->getInformation($filepath . $defaultLogo);
+            $mediaObject->url    = $baseUrl . $defaultLogo;
+            $mediaObject->width  = $information['width'];
+            $mediaObject->height = $information['height'];
+        }
 
         return $mediaObject;
     }

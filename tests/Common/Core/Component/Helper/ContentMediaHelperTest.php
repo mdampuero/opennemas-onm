@@ -365,14 +365,20 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
             ->willReturn('sn_default_img.jpg');
         $this->ds->expects($this->at(1))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(2))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(2))->method('get')->with('mobile_logo')
+        $this->ds->expects($this->at(3))->method('get')->with('mobile_logo')
             ->willReturn('mobile_logo.jpg');
-        $this->ds->expects($this->at(3))->method('get')->with('sn_default_img')
-            ->willReturn(null);
         $this->ds->expects($this->at(4))->method('get')->with('mobile_logo')
+            ->willReturn('mobile_logo.jpg');
+        $this->ds->expects($this->at(5))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(5))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(6))->method('get')->with('mobile_logo')
+            ->willReturn(null);
+        $this->ds->expects($this->at(7))->method('get')->with('site_logo')
+            ->willReturn('site_logo.jpg');
+        $this->ds->expects($this->at(8))->method('get')->with('site_logo')
             ->willReturn('site_logo.jpg');
 
         $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
