@@ -108,16 +108,6 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
           </ul>
           <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
             <li class="quicklinks hidden-xs">

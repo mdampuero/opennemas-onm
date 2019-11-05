@@ -79,13 +79,6 @@
         $scope.sidebar = Sidebar.init();
 
         /**
-         * The available elements per page
-         *
-         * @type {Array}
-         */
-        $scope.views = [ 10, 25, 50, 100 ];
-
-        /**
          * @function disableForced
          * @memberOf MasterCtrl
          *

@@ -54,13 +54,6 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       },
     };
 
-    /**
-     * The available elements per page
-     *
-     * @type {Array}
-     */
-    $scope.views = [ 10, 25, 50, 100 ];
-
     $scope.deselectAll = function() {
       $scope.selected.all          = 0;
       $scope.selected.contents     = [];
