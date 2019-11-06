@@ -329,13 +329,13 @@ class SettingController extends Controller
         }
 
         foreach ($files as $key => $file) {
-            list($height, $width) = getimagesize($file);
+            list($width, $height) = getimagesize($file);
 
             if ($key != 'sn_default_img') {
-                if ($width > 120) {
+                if ($height > 120) {
                     $msg->add(
                         sprintf(
-                            _('The maximum width for the %s is 120px. Please adjust your image size.'),
+                            _('The maximum height for the %s is 120px. Please adjust your image size.'),
                             $key
                         ),
                         'error',
@@ -344,20 +344,10 @@ class SettingController extends Controller
                     continue;
                 }
             } else {
-                if ($width < 200) {
+                if ($width < 200 || $height < 200) {
                     $msg->add(
                         sprintf(
-                            _('The minimun width for the %s is 200px. Please adjust your image size.'),
-                            $key
-                        ),
-                        'error',
-                        400
-                    );
-                    continue;
-                } elseif ($height < 200) {
-                    $msg->add(
-                        sprintf(
-                            _('The minimun height for the %s is 200px. Please adjust your image size.'),
+                            _('The minimun size for the %s is 200x200. Please adjust your image size.'),
                             $key
                         ),
                         'error',

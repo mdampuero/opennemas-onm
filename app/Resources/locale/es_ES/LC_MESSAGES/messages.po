@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-06 09:29+0000\n"
-"PO-Revision-Date: 2019-11-06 10:25+0100\n"
+"POT-Creation-Date: 2019-11-18 11:47+0000\n"
+"PO-Revision-Date: 2019-11-18 12:58+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -309,54 +309,6 @@ msgstr "Archivar"
 
 msgid "Without position"
 msgstr "Sin posición"
-
-#, php-format
-msgid "%d hour"
-msgstr "%d hora"
-
-#, php-format
-msgid "%d hours"
-msgstr "%d horas"
-
-msgid "1 day"
-msgstr "1 día"
-
-#, php-format
-msgid "%d days"
-msgstr "%d días"
-
-#, php-format
-msgid "%d week"
-msgstr "%d semana"
-
-#, php-format
-msgid "%d weeks"
-msgstr "%d semanas"
-
-msgid "No limit"
-msgstr "Sin límite"
-
-msgid ""
-"Please provide your source server configuration to start to use your "
-"Importer module"
-msgstr ""
-"Debes completar la configuración del servidor de origen para empezar a usar "
-"tu módulo de importación"
-
-msgid "News agency server added."
-msgstr "Servidor de agencia de noticias añadido."
-
-msgid "Unable to save the news agency server."
-msgstr "No se pudo guardar el servidor de agencia de noticias."
-
-#, php-format
-msgid "Unable to find the news agency source with the id \"%d\""
-msgstr ""
-"No se pudo encontrar el origen de agencia de noticias con el identificador "
-"«%d»"
-
-msgid "News agency server updated."
-msgstr "Servidor de agencia de noticias actualizado."
 
 msgid "Y-m-d"
 msgstr "d-m-Y"
@@ -809,42 +761,6 @@ msgstr "No se pudo eliminar el dominio «%s»"
 msgid "Purchase completed!"
 msgstr "!Compra completada!"
 
-#, php-format
-msgid "%d contents imported successfully"
-msgstr "%d elemento(s) importado(s) correctamente."
-
-#, php-format
-msgid "Last sync was %d minutes ago."
-msgstr "La última sincronización se llevó a cabo hace %d minuto/s."
-
-msgid "Text"
-msgstr "Texto"
-
-msgid "Photo"
-msgstr "Foto"
-
-msgid "Unable to connect to the server"
-msgstr "No se pudo crear el nuevo servidor"
-
-msgid "Server connection success!"
-msgstr "Servidor actualizado correctamente."
-
-#, php-format
-msgid "Source identifier \"%d\" not valid"
-msgstr "Identificador de origen «%d» no válido"
-
-msgid "Files for server deleted successfully."
-msgstr "Ficheros del servidor eliminados correctamente."
-
-msgid "Server updated successfully"
-msgstr "Servidor actualizado correctamente."
-
-msgid "Unable to save the server."
-msgstr "No se pudo guardar el servidor."
-
-msgid "News agency server deleted."
-msgstr "Servidor de agencia de noticias eliminado."
-
 msgid "Notification marked as read successfully"
 msgstr "Notificación marcada como leída correctamente"
 
@@ -1003,12 +919,6 @@ msgstr "¡Algo está mal!"
 
 msgid "Something unexpected happened!"
 msgstr "¡Ha pasado algo inesperado!"
-
-msgid "The XML could not be parsed"
-msgstr "No se puede procesar el archivo XML"
-
-msgid "Unable to create a server"
-msgstr "No se pudo crear el nuevo servidor"
 
 #, php-format
 msgid ""
@@ -1462,12 +1372,64 @@ msgstr "Siguiente"
 msgid "Previous"
 msgstr "Anterior"
 
-msgid "Content already imported"
-msgstr "Contenido ya importado"
-
 #, php-format
 msgid "Unable to find the article with the id \"%d\""
 msgstr "No se pudo encontrar un artículo con el identificador «%d»"
+
+msgid "Item imported successfully"
+msgstr "Elemento importado correctamente"
+
+#, php-format
+msgid "%s items imported successfully"
+msgstr "%s elementos importado correctamente"
+
+#, php-format
+msgid "%s items could not be imported successfully"
+msgstr "%s elementos no se han podido importar correctamente"
+
+msgid "Text"
+msgstr "Texto"
+
+msgid "Photo"
+msgstr "Foto"
+
+msgid "Server connection success!"
+msgstr "Servidor actualizado correctamente."
+
+msgid "Unable to connect to the server"
+msgstr "No se pudo crear el nuevo servidor"
+
+msgid "Running cleanup in background"
+msgstr "Ejecutando limpieza en segundo plano"
+
+msgid "Running syncronization in background"
+msgstr "Ejecutando sincronizacion en segundo plano"
+
+#, php-format
+msgid "%d hour"
+msgstr "%d hora"
+
+#, php-format
+msgid "%d hours"
+msgstr "%d horas"
+
+msgid "1 day"
+msgstr "1 día"
+
+#, php-format
+msgid "%d days"
+msgstr "%d días"
+
+#, php-format
+msgid "%d week"
+msgstr "%d semana"
+
+#, php-format
+msgid "%d weeks"
+msgstr "%d semanas"
+
+msgid "No limit"
+msgstr "Sin límite"
 
 msgid "Monday"
 msgstr "Lunes"
@@ -1508,12 +1470,13 @@ msgstr "En las últimas 24 horas"
 msgid "Most viewed"
 msgstr "Más vistos"
 
-msgid ""
-"The maximum height for the \"Site Logo\" is 120px. Please adjust your image "
-"size."
-msgstr ""
-"El alto máximo para el «Logo del sitio» es 120px. Por favor ajusta la imagen "
-"al tamaño."
+#, php-format
+msgid "The maximum height for the %s is 120px. Please adjust your image size."
+msgstr "El alto máximo para el %s es 120px. Por favor ajusta el tamaño de la imagen."
+
+#, php-format
+msgid "The minimun size for the %s is 200x200. Please adjust your image size."
+msgstr "El tamaño mínimo para el %s es 200x200. Por favor ajusta el tamaño de la imagen."
 
 msgid "Activated"
 msgstr "Activado"
@@ -1824,6 +1787,9 @@ msgstr "La etiqueta contiene palabras no válidas"
 msgid "Your tag is too short"
 msgstr "La etiqueta es demasiado corta"
 
+msgid "Unable to create a server"
+msgstr "No se pudo crear el nuevo servidor"
+
 #, php-format
 msgid "Unable to create a %s"
 msgstr "No se pudo crear un %s"
@@ -1966,32 +1932,6 @@ msgstr "La propiedad «%s» del tipo %s tiene un valor no válido de «%s»"
 msgid "The fields '%s' are missing for entity of class '%s'"
 msgstr "Faltan los campos «%s» para la entidade de clase «%s»"
 
-#, php-format
-msgid "Can't connect to server %s. Please check your conn details."
-msgstr ""
-"No se pudo conectar al servidor %s. Compruebe los detalles de su conexión."
-
-#, php-format
-msgid "Can't login into server %s"
-msgstr "No se pudo iniciar seesión en el servidor %s"
-
-#, php-format
-msgid ""
-"Directory '%s' in the server '%s' doesn't exists or you don't have enought "
-"permissions to access it"
-msgstr ""
-"El directorio «%s» en el servidor «%s» no existe o no tiene permisos "
-"suficientes para acceder a el."
-
-#, php-format
-msgid "Directory %s is not writable."
-msgstr "No se puede escribir en el directorio %s."
-
-#, php-format
-msgid "Can't connect to server %s. Please check your connection details."
-msgstr ""
-"No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
-
 msgid "Instance is blocked"
 msgstr "Instancia bloqueada"
 
@@ -2020,6 +1960,32 @@ msgstr "Llave de la API"
 
 msgid "Translator"
 msgstr "Traductor"
+
+#, php-format
+msgid "Directory %s is not writable."
+msgstr "No se puede escribir en el directorio %s."
+
+#, php-format
+msgid "Can't connect to server %s. Please check your conn details."
+msgstr ""
+"No se pudo conectar al servidor %s. Compruebe los detalles de su conexión."
+
+#, php-format
+msgid "Can't login into server %s"
+msgstr "No se pudo iniciar seesión en el servidor %s"
+
+#, php-format
+msgid ""
+"Directory '%s' in the server '%s' does not exist or you don't have enough "
+"permissions to access it"
+msgstr ""
+"El directorio '%s' en el servidor '%s' no existe o no tiene permisos "
+"suficientes para acceder a él."
+
+#, php-format
+msgid "Can't connect to server %s. Please check your connection details."
+msgstr ""
+"No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
 
 msgid "Album"
 msgstr "Álbum"
@@ -2201,8 +2167,8 @@ msgstr "Despublicar"
 msgid "Publish"
 msgstr "Publicar"
 
-msgid "Search by title"
-msgstr "Buscar por título"
+msgid "Search"
+msgstr "Buscar"
 
 msgid "Published"
 msgstr "Publicado"
@@ -2212,9 +2178,6 @@ msgstr "No publicado"
 
 msgid "Status"
 msgstr "Estado"
-
-msgid "View"
-msgstr "Vistas"
 
 msgid "Loading"
 msgstr "Cargando"
@@ -2319,12 +2282,6 @@ msgstr "Tu carrito de compra está vacío"
 msgid "Checkout"
 msgstr "Comprar"
 
-msgid "Search by"
-msgstr "Buscar por"
-
-msgid "name"
-msgstr "nombre"
-
 msgid "Addons"
 msgstr "Añadidos"
 
@@ -2346,9 +2303,6 @@ msgstr ""
 
 msgid "Global search"
 msgstr "Búsqueda global"
-
-msgid "Filter by title"
-msgstr "Filtrar por título"
 
 msgid "Type"
 msgstr "Tipo"
@@ -3098,9 +3052,6 @@ msgstr "No está disponible ningún dato IPTC."
 msgid "Mosaic"
 msgstr "Mosaico"
 
-msgid "Search by description or metadata"
-msgstr "Buscar por descrición o metadatos"
-
 msgid "Unable to find any image that matches your search."
 msgstr "No se pudieron encontrar imágenes que coincidan con tu búsqueda."
 
@@ -3238,6 +3189,9 @@ msgstr "Logotipo pequeño"
 
 msgid "Favico"
 msgstr "Favico"
+
+msgid "Social network default image"
+msgstr "Imagen por defecto para redes sociales"
 
 msgid "Cookies agreement"
 msgstr "Aceptación de cookies"
@@ -4022,9 +3976,6 @@ msgstr "Disqus no está configurado"
 msgid "Config comments module"
 msgstr "Configurar módulo de comentarios"
 
-msgid "Search by body"
-msgstr "Buscar en el contenido"
-
 msgid "Unable to find any comment that matches your search."
 msgstr "No se pudo encontrar ningún comentario que coincida con tu búsqueda."
 
@@ -4385,53 +4336,38 @@ msgstr "Slug"
 msgid "Image for Special"
 msgstr "Imagen para el especial"
 
-msgid "Import items"
-msgstr "Importar elementos"
+msgid "Server"
+msgstr "Servidor"
 
-msgid "Are you sure you want to import %1 elements?"
-msgstr "¿Estás seguro de que quieres importar %1 elemento(s)?"
+msgid "Priority"
+msgstr "Prioridad"
+
+msgid "Imported"
+msgstr "Importado"
+
+msgid "View"
+msgstr "Vistas"
 
 msgid "Import"
 msgstr "Importar"
 
+msgid "Do you want to import the item?"
+msgstr "¿Quieres importar el elemento?"
+
+msgid "Do you want to import the selected items?"
+msgstr "¿Quieres importar los elementos seleccionados?"
+
 msgid "as"
 msgstr "como"
-
-msgid "in"
-msgstr "en"
 
 msgid "by"
 msgstr "por"
 
-msgid "Choose an author..."
-msgstr "Selecciona un autor..."
+msgid "Select an author"
+msgstr "Selecciona un autor"
 
-msgid ""
-"Your articles have been published, check them in the <a href=\"%1\">article "
-"list</a> or you can add them to one of your <a href=\"%2\">frontpages</a>"
-msgstr ""
-"Se han publicado tus artículos, puedes verlos en el <a href=\"%1\">listado "
-"de artículos</a> o puedes añadirlos a una de tus <a href=\"%2\">portadas</a>"
-
-msgid ""
-"Your opinions have been published, check them in the <a href=\"%1\">opinions "
-"list</a>or you can add them to one of your <a href=\"%2\">frontpages</a>"
-msgstr ""
-"Se han publicado tus opiniones, puedes verlas en el <a href=\"%1\">listado "
-"de artículos</a> o puedes añadirlas a una de tus <a href=\"%2\">portadas</a>"
-
-msgid ""
-"Your photos have been published, check them in the <a href=\"%1\">photo "
-"list</a>"
-msgstr ""
-"Se han publicado tus fotos, puedes verlas en el <a href=\"%1\">listado de "
-"fotos</a>"
-
-msgid "Saving..."
-msgstr "Guardando…"
-
-msgid "Yes, import them"
-msgstr "Si, importarlos"
+msgid "in"
+msgstr "en"
 
 msgid "Yes, import and publish"
 msgstr "Si, importar y publicar"
@@ -4439,159 +4375,29 @@ msgstr "Si, importar y publicar"
 msgid "Yes, import and edit"
 msgstr "Si, importar y editar"
 
-msgid "Syncing from sources"
-msgstr "Sincronizando con los orígenes"
+msgid "Source"
+msgstr "Origen"
 
-msgid "Downloading articles from news agencies, please wait..."
-msgstr ""
-"Descargando artículos desde las agencias de noticias, espera un momento…"
+msgid "Synchronization"
+msgstr "Sincronización"
 
-msgid "Stop sync"
-msgstr "Detener sincronización"
-
-msgid "Content preview"
-msgstr "Previsualización de contenido"
-
-msgid "Priority"
-msgstr "Prioridad"
-
-msgid "Urgent"
-msgstr "Urgente"
-
-msgid "Important"
-msgstr "Importante"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Basic"
-msgstr "Básica"
-
-msgid "Remove the server configuration"
-msgstr "Eliminar la configuración del servidor"
-
-msgid "Are you sure that you want to delete the selected server configuration?"
-msgstr ""
-"¿Estás seguro que quieres eliminar la configuración del servidor "
-"seleccionado?"
-
-msgid "Yes, delete it"
-msgstr "Si, eliminar"
+msgid "Automatic"
+msgstr "Automática"
 
 msgid "Sync"
 msgstr "Sincronizar"
 
-msgid "Source"
-msgstr "Origen"
+msgid "Delete contents"
+msgstr "Eliminar contenidos"
 
-msgid "There is no elements to import"
-msgstr "No hay ningún elemento para poder importarlo"
-
-msgid ""
-"Try syncing from server by click over the \"Sync with server\" button above."
-msgstr ""
-"Actualiza esta lista con el servidor pulsando el botón «Sincronizar con "
-"servidor» desde la barra de herramientas superior."
-
-msgid "Origin"
-msgstr "Origen"
-
-msgid "Imported"
-msgstr "Importado"
-
-msgid "View content"
-msgstr "Ver contenido"
-
-msgid "Agency"
-msgstr "Agencia"
-
-msgid "Pretitle:"
-msgstr "Antetítulo:"
-
-msgid "Priority:"
-msgstr "Prioridad:"
-
-msgid "Summary:"
-msgstr "Resumen:"
-
-msgid "Attachments"
-msgstr "Adjuntos"
-
-msgid ""
-"This agency element has some attachments that could be imported with it."
-msgstr ""
-"Este elemento de agencia tiene anexos que pueden ser importados con él."
-
-msgid "Photos"
-msgstr "Fotos"
-
-msgid "Files:"
-msgstr "Archivos:"
-
-msgid "Documentary modules:"
-msgstr "Módulos documentales:"
-
-msgid "Sources"
-msgstr "Orígenes"
-
-msgid "Add server"
-msgstr "Añadir servidor"
-
-msgid "No servers available"
-msgstr "No hay servidores disponibles"
-
-msgid "Source name"
-msgstr "Nome del origen"
-
-msgid "Sync from"
-msgstr "Sincronizar desde"
-
-msgid "Clean files"
-msgstr "Limpiar ficheros"
-
-msgid "Color to distinguish between other agencies"
-msgstr "Color para distinguir entre otras agencias"
-
-msgid "Connection"
-msgstr "Conexión"
-
-msgid "External agency"
-msgstr "Agencia externa"
-
-msgid "Url"
-msgstr "Url"
-
-msgid "The server url for this source. Example: ftp://server.com/path"
-msgstr ""
-"La url del servidor para esta origen. Por ejemplo. ftp://servidor.com/ruta"
-
-msgid "Test"
-msgstr "Probar"
-
-msgid "Sync parameters"
-msgstr "Parámetros de sincronización"
-
-msgid "When importing elements this will be the signature"
-msgstr "Al importar elementos esta será la firma"
+msgid "Servers"
+msgstr "Servidores"
 
 msgid "Sync elements newer than"
 msgstr "Sincronizar elementos más actuales que"
 
-msgid ""
-"Set this to you preferences to fetch elements since a fixed date.<br>Less "
-"time means faster synchronizations."
-msgstr ""
-"Establezca esta preferenca para obtener los elementos desde una fecha fija."
-"<br>Menos tiempo implica sincronizaciones más rápidas."
-
-msgid "Import authors"
-msgstr "Importar autores"
-
-msgid ""
-"Activate this if you want to import the author of the elements if available"
-msgstr ""
-"Active esta opción si desea importar el autor de los elementos, si está "
-"disponible"
+msgid "Less time means faster synchronizations"
+msgstr "Menos tiempo significa sincronizaciones más rápidas"
 
 msgid "External link"
 msgstr "Enlace externo"
@@ -4599,48 +4405,67 @@ msgstr "Enlace externo"
 msgid "When importing assign an external link to the elements"
 msgstr "Al importar asignar un enlace externo a los elementos"
 
-msgid "Link to source"
-msgstr "Enlazar al origen"
+msgid "Agency"
+msgstr "Agencia"
 
-msgid ""
-"Activate this if you want to add the link to the source at the end of the "
-"body"
-msgstr ""
-"Active esta opción si desea añadir el enlace al origen al final de cuerpo."
+msgid "When importing elements this will be the signature"
+msgstr "Al importar elementos esta será la firma"
 
 msgid "Automatic import"
 msgstr "Importación automática"
 
-msgid "Default category to import"
-msgstr "Categoría por defecto para importar"
+msgid "Default author"
+msgstr "Autor por defecto"
 
-msgid "Category mapping"
-msgstr "Mapeo de categorias"
+msgid "Author mapping"
+msgstr "Mapeo de autores"
 
 msgid "Target"
 msgstr "Destino"
 
+msgid "Author name from source"
+msgstr "Nombre del autor en origen"
+
+msgid "Default category"
+msgstr "Categoría por defecto"
+
+msgid "Category mapping"
+msgstr "Mapeo de categorias"
+
 msgid "Category name from source"
 msgstr "Nombre de la categoría en origen"
 
-msgid "Author to import to"
-msgstr "Autor en el que importar"
+msgid "Filter"
+msgstr "Filtro"
 
-msgid "Import related contents"
-msgstr "Importar contenidos relacionados"
+msgid "filters"
+msgstr "Filtros"
 
-msgid "If possible, import all related contents for each content"
+msgid "To be automatically imported, contents have to"
+msgstr "Para ser importados automáticamente, los contenidos tienen que"
+
+msgid ""
+"Include all words in a list in the title, the body and/or the list of tags"
 msgstr ""
-"Si es posible, importar todos los contenidos relacionados para cada contenido"
+"Incluir todas las palabras de una lista en el título, el cuerpo y/o la lista de etiquetas"
 
-msgid "Filtering"
-msgstr "Filtrado"
+msgid "Match one or more lists of words"
+msgstr "Coincidir una o más listas de palabras"
 
-msgid "Filter contents that matches one or more list of words"
-msgstr "Filtrar contenidos que coincidan una o más de las palabras de la lista"
+msgid "or"
+msgstr "o"
 
-msgid "Comma-separated list of words to match"
-msgstr "Lista de palabras separadas por comas con las que coincidir"
+msgid "Comma-separated list of words"
+msgstr "Lista de palabras separadas por comas"
+
+msgid "Source name"
+msgstr "Nome del origen"
+
+msgid "External agency"
+msgstr "Agencia externa"
+
+msgid "Url"
+msgstr "Url"
 
 msgid "There is a new version of this content that was saved as a draft."
 msgstr ""
@@ -5024,11 +4849,11 @@ msgstr "Mi selección"
 msgid "No items available to purchase"
 msgstr "No hay elementos disponibles para comprar"
 
-msgid "Search"
-msgstr "Buscar"
-
 msgid "Content type"
 msgstr "Tipo de contenido"
+
+msgid "Test"
+msgstr "Probar"
 
 msgid "Regex"
 msgstr "Regex"
@@ -6193,9 +6018,6 @@ msgstr "Añadir contenidos dinámicos"
 msgid "None"
 msgstr "Ninguno"
 
-msgid "Filter"
-msgstr "Filtro"
-
 msgid "Unable to find setting for newsletters."
 msgstr "No se han encontrado las configuraciones de boletines."
 
@@ -6374,9 +6196,6 @@ msgstr "Editorial"
 msgid "Move contents"
 msgstr "Mover contenidos"
 
-msgid "Delete contents"
-msgstr "Eliminar contenidos"
-
 msgid "Archived"
 msgstr "Archivado"
 
@@ -6426,9 +6245,6 @@ msgstr "Sin autor"
 
 msgid "No image assigned"
 msgstr "Imagen no asignada"
-
-msgid "Select an author"
-msgstr "Selecciona un autor"
 
 msgid "Add a tag..."
 msgstr "Añadir una etiqueta..."
@@ -6845,9 +6661,6 @@ msgstr ""
 
 msgid "Manual"
 msgstr "Manual"
-
-msgid "Automatic"
-msgstr "Automática"
 
 msgid "Requests"
 msgstr "Solicitudes"
@@ -7438,9 +7251,6 @@ msgstr "Precio"
 msgid "Subtotal"
 msgstr "Subtotal"
 
-msgid "Search by UUID"
-msgstr "Buscar por UUID"
-
 msgid "UUID"
 msgstr "UUID"
 
@@ -7516,8 +7326,14 @@ msgstr "Última actividad"
 msgid "Database"
 msgstr "Base de datos"
 
+msgid "Photos"
+msgstr "Fotos"
+
 msgid "Static pages"
 msgstr "Páginas estáticas"
+
+msgid "Attachments"
+msgstr "Adjuntos"
 
 msgid "Emails"
 msgstr "Emails"
@@ -7914,9 +7730,6 @@ msgstr "Partner que puede ver esta información del cliente"
 msgid "View on"
 msgstr "Ver en"
 
-msgid "Search by name or username"
-msgstr "Buscar por nombre o correo"
-
 msgid "Do you want to delete the user?"
 msgstr "¿Estás seguro de que quieres eliminar el usuario?"
 
@@ -7955,6 +7768,266 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#, fuzzy
+#~ msgid ""
+#~ "The minimun height for the %s is 200px. Please adjust your image size."
+#~ msgstr ""
+#~ "El alto máximo para el «Logo del sitio» es 120px. Por favor ajusta la "
+#~ "imagen al tamaño."
+
+#~ msgid ""
+#~ "Please provide your source server configuration to start to use your "
+#~ "Importer module"
+#~ msgstr ""
+#~ "Debes completar la configuración del servidor de origen para empezar a "
+#~ "usar tu módulo de importación"
+
+#~ msgid "News agency server added."
+#~ msgstr "Servidor de agencia de noticias añadido."
+
+#~ msgid "Unable to save the news agency server."
+#~ msgstr "No se pudo guardar el servidor de agencia de noticias."
+
+#~ msgid "Unable to find the news agency source with the id \"%d\""
+#~ msgstr ""
+#~ "No se pudo encontrar el origen de agencia de noticias con el "
+#~ "identificador «%d»"
+
+#~ msgid "News agency server updated."
+#~ msgstr "Servidor de agencia de noticias actualizado."
+
+#~ msgid "%d contents imported successfully"
+#~ msgstr "%d elemento(s) importado(s) correctamente."
+
+#~ msgid "Last sync was %d minutes ago."
+#~ msgstr "La última sincronización se llevó a cabo hace %d minuto/s."
+
+#~ msgid "Source identifier \"%d\" not valid"
+#~ msgstr "Identificador de origen «%d» no válido"
+
+#~ msgid "Files for server deleted successfully."
+#~ msgstr "Ficheros del servidor eliminados correctamente."
+
+#~ msgid "Server updated successfully"
+#~ msgstr "Servidor actualizado correctamente."
+
+#~ msgid "Unable to save the server."
+#~ msgstr "No se pudo guardar el servidor."
+
+#~ msgid "News agency server deleted."
+#~ msgstr "Servidor de agencia de noticias eliminado."
+
+#~ msgid "The XML could not be parsed"
+#~ msgstr "No se puede procesar el archivo XML"
+
+#~ msgid "Content already imported"
+#~ msgstr "Contenido ya importado"
+
+#~ msgid "Search by title"
+#~ msgstr "Buscar por título"
+
+#~ msgid "Search by"
+#~ msgstr "Buscar por"
+
+#~ msgid "name"
+#~ msgstr "nombre"
+
+#~ msgid "Filter by title"
+#~ msgstr "Filtrar por título"
+
+#~ msgid "Search by description or metadata"
+#~ msgstr "Buscar por descrición o metadatos"
+
+#~ msgid "Search by body"
+#~ msgstr "Buscar en el contenido"
+
+#~ msgid "Import items"
+#~ msgstr "Importar elementos"
+
+#~ msgid "Are you sure you want to import %1 elements?"
+#~ msgstr "¿Estás seguro de que quieres importar %1 elemento(s)?"
+
+#~ msgid "Choose an author..."
+#~ msgstr "Selecciona un autor..."
+
+#~ msgid ""
+#~ "Your articles have been published, check them in the <a href="
+#~ "\"%1\">article list</a> or you can add them to one of your <a href="
+#~ "\"%2\">frontpages</a>"
+#~ msgstr ""
+#~ "Se han publicado tus artículos, puedes verlos en el <a href="
+#~ "\"%1\">listado de artículos</a> o puedes añadirlos a una de tus <a href="
+#~ "\"%2\">portadas</a>"
+
+#~ msgid ""
+#~ "Your opinions have been published, check them in the <a href="
+#~ "\"%1\">opinions list</a>or you can add them to one of your <a href="
+#~ "\"%2\">frontpages</a>"
+#~ msgstr ""
+#~ "Se han publicado tus opiniones, puedes verlas en el <a href="
+#~ "\"%1\">listado de artículos</a> o puedes añadirlas a una de tus <a href="
+#~ "\"%2\">portadas</a>"
+
+#~ msgid ""
+#~ "Your photos have been published, check them in the <a href=\"%1\">photo "
+#~ "list</a>"
+#~ msgstr ""
+#~ "Se han publicado tus fotos, puedes verlas en el <a href=\"%1\">listado de "
+#~ "fotos</a>"
+
+#~ msgid "Saving..."
+#~ msgstr "Guardando…"
+
+#~ msgid "Yes, import them"
+#~ msgstr "Si, importarlos"
+
+#~ msgid "Syncing from sources"
+#~ msgstr "Sincronizando con los orígenes"
+
+#~ msgid "Downloading articles from news agencies, please wait..."
+#~ msgstr ""
+#~ "Descargando artículos desde las agencias de noticias, espera un momento…"
+
+#~ msgid "Stop sync"
+#~ msgstr "Detener sincronización"
+
+#~ msgid "Content preview"
+#~ msgstr "Previsualización de contenido"
+
+#~ msgid "Urgent"
+#~ msgstr "Urgente"
+
+#~ msgid "Important"
+#~ msgstr "Importante"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Basic"
+#~ msgstr "Básica"
+
+#~ msgid "Remove the server configuration"
+#~ msgstr "Eliminar la configuración del servidor"
+
+#~ msgid ""
+#~ "Are you sure that you want to delete the selected server configuration?"
+#~ msgstr ""
+#~ "¿Estás seguro que quieres eliminar la configuración del servidor "
+#~ "seleccionado?"
+
+#~ msgid "Yes, delete it"
+#~ msgstr "Si, eliminar"
+
+#~ msgid "There is no elements to import"
+#~ msgstr "No hay ningún elemento para poder importarlo"
+
+#~ msgid ""
+#~ "Try syncing from server by click over the \"Sync with server\" button "
+#~ "above."
+#~ msgstr ""
+#~ "Actualiza esta lista con el servidor pulsando el botón «Sincronizar con "
+#~ "servidor» desde la barra de herramientas superior."
+
+#~ msgid "Origin"
+#~ msgstr "Origen"
+
+#~ msgid "View content"
+#~ msgstr "Ver contenido"
+
+#~ msgid "Pretitle:"
+#~ msgstr "Antetítulo:"
+
+#~ msgid "Priority:"
+#~ msgstr "Prioridad:"
+
+#~ msgid "Summary:"
+#~ msgstr "Resumen:"
+
+#~ msgid ""
+#~ "This agency element has some attachments that could be imported with it."
+#~ msgstr ""
+#~ "Este elemento de agencia tiene anexos que pueden ser importados con él."
+
+#~ msgid "Files:"
+#~ msgstr "Archivos:"
+
+#~ msgid "Documentary modules:"
+#~ msgstr "Módulos documentales:"
+
+#~ msgid "Sources"
+#~ msgstr "Orígenes"
+
+#~ msgid "Add server"
+#~ msgstr "Añadir servidor"
+
+#~ msgid "No servers available"
+#~ msgstr "No hay servidores disponibles"
+
+#~ msgid "Sync from"
+#~ msgstr "Sincronizar desde"
+
+#~ msgid "Clean files"
+#~ msgstr "Limpiar ficheros"
+
+#~ msgid "Color to distinguish between other agencies"
+#~ msgstr "Color para distinguir entre otras agencias"
+
+#~ msgid "Connection"
+#~ msgstr "Conexión"
+
+#~ msgid "The server url for this source. Example: ftp://server.com/path"
+#~ msgstr ""
+#~ "La url del servidor para esta origen. Por ejemplo. ftp://servidor.com/ruta"
+
+#~ msgid "Sync parameters"
+#~ msgstr "Parámetros de sincronización"
+
+#~ msgid ""
+#~ "Set this to you preferences to fetch elements since a fixed date.<br>Less "
+#~ "time means faster synchronizations."
+#~ msgstr ""
+#~ "Establezca esta preferenca para obtener los elementos desde una fecha "
+#~ "fija.<br>Menos tiempo implica sincronizaciones más rápidas."
+
+#~ msgid "Import authors"
+#~ msgstr "Importar autores"
+
+#~ msgid ""
+#~ "Activate this if you want to import the author of the elements if "
+#~ "available"
+#~ msgstr ""
+#~ "Active esta opción si desea importar el autor de los elementos, si está "
+#~ "disponible"
+
+#~ msgid "Link to source"
+#~ msgstr "Enlazar al origen"
+
+#~ msgid ""
+#~ "Activate this if you want to add the link to the source at the end of the "
+#~ "body"
+#~ msgstr ""
+#~ "Active esta opción si desea añadir el enlace al origen al final de cuerpo."
+
+#~ msgid "Author to import to"
+#~ msgstr "Autor en el que importar"
+
+#~ msgid "Import related contents"
+#~ msgstr "Importar contenidos relacionados"
+
+#~ msgid "If possible, import all related contents for each content"
+#~ msgstr ""
+#~ "Si es posible, importar todos los contenidos relacionados para cada "
+#~ "contenido"
+
+#~ msgid "Filtering"
+#~ msgstr "Filtrado"
+
+#~ msgid "Search by UUID"
+#~ msgstr "Buscar por UUID"
+
+#~ msgid "Search by name or username"
+#~ msgstr "Buscar por nombre o correo"
 
 #, fuzzy
 #~ msgid "Archive contents"

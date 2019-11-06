@@ -350,7 +350,7 @@
                           </div>
                         </div>
                         <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                          <label class="form-label" for="sn_default_img">{t}Social network default imgage{/t}</label>
+                          <label class="form-label" for="sn_default_img">{t}Social network default image{/t}</label>
                           <div class="controls">
                             <input class="hidden" id="sn_default_img" name="sn_default_img" file-model="settings.sn_default_img" type="file"/>
                             <div class="thumbnail-wrapper">
