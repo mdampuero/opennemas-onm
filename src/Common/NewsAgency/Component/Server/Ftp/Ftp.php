@@ -160,7 +160,7 @@ class Ftp extends Server
 
             if (isset($url['path']) && !@ftp_chdir($this->conn, $url['path'])) {
                 throw new \Exception(sprintf(_(
-                    "Directory '%s' in the server '%s' doesn't exists or "
+                    "Directory '%s' in the server '%s' does not exist or "
                     . "you don't have enough permissions to access it"
                 ), $url['path'], $url['host']));
             }
