@@ -78,11 +78,6 @@
               <span class="h-seperate"></span>
             </li>
             {acl isAllowed="CATEGORY_AVAILABLE"}
-              <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('archived', 1)" uib-tooltip="{t}Archive contents{/t}" tooltip-placement="bottom">
-                  <i class="fa fa-archive fa-lg"></i>
-                </button>
-              </li>
               <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
                 <span class="h-seperate"></span>
               </li>
