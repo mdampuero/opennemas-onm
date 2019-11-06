@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-06 09:20+0000\n"
+"POT-Creation-Date: 2019-11-06 09:29+0000\n"
 "PO-Revision-Date: 2019-11-06 10:25+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
@@ -6377,10 +6377,6 @@ msgstr "Mover contenidos"
 msgid "Delete contents"
 msgstr "Eliminar contenidos"
 
-#, fuzzy
-msgid "Archive contents"
-msgstr "Mover contenidos"
-
 msgid "Archived"
 msgstr "Archivado"
 
@@ -7959,6 +7955,10 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#, fuzzy
+#~ msgid "Archive contents"
+#~ msgstr "Mover contenidos"
 
 #~ msgid "Access to all categories"
 #~ msgstr "Acceso a todas las categorías"
