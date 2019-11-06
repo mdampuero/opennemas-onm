@@ -45,6 +45,10 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
+        $this->logger = $this->getMockBuilder('Logger' . uniqid())
+            ->setMethods([ 'error' ])
+            ->getMock();
+
         if (!defined('MEDIA_IMG_ABSOLUTE_URL')) {
             define('MEDIA_IMG_ABSOLUTE_URL', 'http://test.com/media/test/images');
         }
@@ -74,6 +78,9 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.image':
                 return $this->ih;
+
+            case 'error.log':
+                return $this->logger;
         }
 
         return null;
@@ -407,6 +414,39 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $method->invokeArgs($this->helper, [ $mediaObject ]),
             $mediaObject
+        );
+    }
+
+    /**
+     * Tests getDefaultMediaObject
+     */
+    public function testGetDefaultMediaObjectException()
+    {
+        $mediaObject = new \StdClass();
+
+        $this->instance->expects($this->any())
+            ->method('getMediaShortPath')
+            ->willReturn('media/test');
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://console/');
+        $this->container->expects($this->any())->method('getParameter')
+            ->willReturn('http://console/');
+
+        $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(1))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+
+        $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
+        $method->setAccessible(true);
+
+        $this->ih->expects($this->any())
+            ->method('getInformation')
+            ->will($this->throwException(new \Exception('xyzzy')));
+
+        $this->assertEquals(
+            $mediaObject,
+            $method->invokeArgs($this->helper, [ $mediaObject ])
         );
     }
 

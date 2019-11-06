@@ -184,15 +184,22 @@ class ContentMediaHelper
             $defaultLogo = $this->ds->get('sn_default_img');
         } elseif ($this->ds->get('mobile_logo')) {
             $defaultLogo = $this->ds->get('mobile_logo');
-        } elseif ($siteLogo = $this->ds->get('site_logo')) {
+        } elseif ($this->ds->get('site_logo')) {
             $defaultLogo = $this->ds->get('site_logo');
         }
 
         if (!empty($defaultLogo)) {
-            $information         = $ih->getInformation($filepath . $defaultLogo);
-            $mediaObject->url    = $baseUrl . $defaultLogo;
-            $mediaObject->width  = $information['width'];
-            $mediaObject->height = $information['height'];
+            try {
+                $information         = $ih->getInformation($filepath . $defaultLogo);
+                $mediaObject->url    = $baseUrl . $defaultLogo;
+                $mediaObject->width  = $information['width'];
+                $mediaObject->height = $information['height'];
+            } catch (\Exception $e) {
+                $this->container->get('error.log')->error(sprintf(
+                    'Error trying to get image information: %s',
+                    $e->getMessage()
+                ));
+            }
         }
 
         return $mediaObject;
