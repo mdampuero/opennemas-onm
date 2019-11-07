@@ -160,7 +160,7 @@
                 <tr>
                   <th class="text-center v-align-middle" width="50">
                     <div class="checkbox checkbox-default">
-                      <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
+                      <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
                       <label for="select-all"></label>
                     </div>
                   </th>
