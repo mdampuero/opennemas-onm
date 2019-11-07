@@ -459,6 +459,15 @@
             }
           }
 
+          if (data.settings.sn_default_img) {
+            data.settings.sn_default_img = $scope.settings.sn_default_img;
+
+            if (!(data.settings.sn_default_img instanceof File)) {
+              data.settings.sn_default_img = data.settings.sn_default_img
+                .replace($scope.extra.prefix, '');
+            }
+          }
+
           return data;
         };
 
@@ -476,7 +485,8 @@
             mobile_logo:          $scope.settings.mobile_logo,
             site_color:           $scope.settings.site_color,
             site_color_secondary: $scope.settings.site_color_secondary,
-            site_logo:            $scope.settings.site_logo
+            site_logo:            $scope.settings.site_logo,
+            sn_default_img:       $scope.settings.sn_default_img
           };
 
           if ($scope.settings.site_logo) {
@@ -492,6 +502,11 @@
           if ($scope.settings.favico) {
             $scope.settings.favico =
               $scope.extra.prefix + $scope.settings.favico;
+          }
+
+          if ($scope.settings.sn_default_img) {
+            $scope.settings.sn_default_img =
+              $scope.extra.prefix + $scope.settings.sn_default_img;
           }
 
           if (!$scope.settings.locale.frontend.language.slug) {

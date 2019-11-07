@@ -10,6 +10,8 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\ContentMediaHelper;
+use Common\Core\Component\Helper\ImageHelper;
+use Common\ORM\Entity\Instance;
 
 /**
  * Defines test cases for ContentMediaHelper class.
@@ -21,6 +23,18 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' , 'getParameter'])
+            ->getMock();
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getMediaShortPath', 'getBaseUrl' ])
+            ->getMock();
+
+        $this->ih = $this->getMockBuilder('ImageHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getExtension', 'getInformation' ])
+            ->getMock();
         $this->ds = $this->getMockBuilder('DataSet')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
@@ -31,12 +45,9 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
-        $this->orm = $this->getMockBuilder('OrmEntityManager')
-            ->setMethods([ 'getDataSet' ])
+        $this->logger = $this->getMockBuilder('Logger' . uniqid())
+            ->setMethods([ 'error' ])
             ->getMock();
-
-        $this->orm->expects($this->any())->method('getDataSet')
-            ->with('Settings', 'instance')->willReturn($this->ds);
 
         if (!defined('MEDIA_IMG_ABSOLUTE_URL')) {
             define('MEDIA_IMG_ABSOLUTE_URL', 'http://test.com/media/test/images');
@@ -46,7 +57,33 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             define('MEDIA_DIR', 'test');
         }
 
-        $this->helper = new ContentMediaHelper($this->orm, $this->em);
+        $this->orm = $this->getMockBuilder('OrmEntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->orm->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->helper = new ContentMediaHelper($this->container, $this->orm, $this->em);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.instance':
+                return $this->instance;
+
+            case 'core.helper.image':
+                return $this->ih;
+
+            case 'error.log':
+                return $this->logger;
+        }
+
+        return null;
     }
 
     /**
@@ -62,7 +99,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
                 'getMediaObjectForAlbum',
                 'getMediaObjectForVideo'
             ])
-            ->setConstructorArgs([ $this->orm, $this->em ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
             ->getMock();
 
         $mediaObject->expects($this->once())->method('getMediaObjectForArticle')
@@ -93,7 +130,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
                 'getMediaObjectForAlbum',
                 'getMediaObjectForVideo'
             ])
-            ->setConstructorArgs([ $this->orm, $this->em ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
             ->getMock();
 
         $mediaObject->expects($this->once())->method('getMediaObjectForArticle')
@@ -124,12 +161,14 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
                 'getMediaObjectForArticle',
                 'getDefaultMediaObject'
             ])
-            ->setConstructorArgs([ $this->orm, $this->em ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
             ->getMock();
 
         $mediaObject->expects($this->once())->method('getMediaObjectForArticle')
             ->willReturn(null);
 
+        $this->ds->expects($this->at(0))->method('get')->with('logo_enabled')
+            ->willReturn('1');
         $mediaObject->expects($this->once())->method('getDefaultMediaObject')
             ->willReturn(json_decode(json_encode([
                 'url' => MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
@@ -322,44 +361,92 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultMediaObject()
     {
-        $mediaObject             = new \StdClass();
-        $params['default_image'] = 'http://default/image.jpg';
+        $mediaObject = new \StdClass();
 
-        $this->ds->expects($this->at(0))->method('get')->with('mobile_logo')
-            ->willReturn('mobile_logo.jpg');
-        $this->ds->expects($this->at(1))->method('get')->with('mobile_logo')
+        $this->instance->expects($this->any())
+            ->method('getMediaShortPath')
+            ->willReturn('media/test');
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://console/');
+        $this->container->expects($this->any())->method('getParameter')
+            ->willReturn('http://console/');
+
+        $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(1))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(2))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(2))->method('get')->with('site_logo')
-            ->willReturn('site_logo.jpg');
         $this->ds->expects($this->at(3))->method('get')->with('mobile_logo')
+            ->willReturn('mobile_logo.jpg');
+        $this->ds->expects($this->at(4))->method('get')->with('mobile_logo')
+            ->willReturn('mobile_logo.jpg');
+        $this->ds->expects($this->at(5))->method('get')->with('sn_default_img')
             ->willReturn(null);
-        $this->ds->expects($this->at(4))->method('get')->with('site_logo')
+        $this->ds->expects($this->at(6))->method('get')->with('mobile_logo')
             ->willReturn(null);
+        $this->ds->expects($this->at(7))->method('get')->with('site_logo')
+            ->willReturn('site_logo.jpg');
+        $this->ds->expects($this->at(8))->method('get')->with('site_logo')
+            ->willReturn('site_logo.jpg');
 
         $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
         $method->setAccessible(true);
 
-        $default = $method->invokeArgs($this->helper, [ $params, $mediaObject ]);
+        $sndefault = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
-            'http://default/image.jpg',
-            $default->url
+            SITE_URL . 'media/' . MEDIA_DIR . '/sections/sn_default_img.jpg',
+            $sndefault->url
         );
 
-        $mobileLogo = $method->invokeArgs($this->helper, [ null, $mediaObject ]);
+        $mobileLogo = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/mobile_logo.jpg',
             $mobileLogo->url
         );
 
-        $siteLogo = $method->invokeArgs($this->helper, [  null, $mediaObject ]);
+        $siteLogo = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/site_logo.jpg',
             $siteLogo->url
         );
 
         $this->assertEquals(
-            $method->invokeArgs($this->helper, [ null, $mediaObject ]),
+            $method->invokeArgs($this->helper, [ $mediaObject ]),
             $mediaObject
+        );
+    }
+
+    /**
+     * Tests getDefaultMediaObject
+     */
+    public function testGetDefaultMediaObjectException()
+    {
+        $mediaObject = new \StdClass();
+
+        $this->instance->expects($this->any())
+            ->method('getMediaShortPath')
+            ->willReturn('media/test');
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://console/');
+        $this->container->expects($this->any())->method('getParameter')
+            ->willReturn('http://console/');
+
+        $this->ds->expects($this->at(0))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+        $this->ds->expects($this->at(1))->method('get')->with('sn_default_img')
+            ->willReturn('sn_default_img.jpg');
+
+        $method = new \ReflectionMethod($this->helper, 'getDefaultMediaObject');
+        $method->setAccessible(true);
+
+        $this->ih->expects($this->any())
+            ->method('getInformation')
+            ->will($this->throwException(new \Exception('xyzzy')));
+
+        $this->assertEquals(
+            $mediaObject,
+            $method->invokeArgs($this->helper, [ $mediaObject ])
         );
     }
 

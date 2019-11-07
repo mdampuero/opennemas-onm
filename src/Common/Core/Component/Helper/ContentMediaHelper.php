@@ -17,11 +17,12 @@ class ContentMediaHelper
      * @param EntityManager $em The entity manager.
      * @param EntityManager $er The entity repository service.
      */
-    public function __construct($em, $er)
+    public function __construct($container, $em, $er)
     {
-        $this->ds       = $em->getDataSet('Settings', 'instance');
-        $this->er       = $er;
-        $this->mediaUrl = MEDIA_IMG_ABSOLUTE_URL;
+        $this->container = $container;
+        $this->ds        = $em->getDataSet('Settings', 'instance');
+        $this->er        = $er;
+        $this->mediaUrl  = MEDIA_IMG_ABSOLUTE_URL;
     }
 
     /**
@@ -45,8 +46,8 @@ class ContentMediaHelper
         // The content does not have associated media so return empty object.
         $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
 
-        if (!isset($mediaObject->url)) {
-            $mediaObject = $this->getDefaultMediaObject($params, $mediaObject);
+        if (!isset($mediaObject->url) && $this->ds->get('logo_enabled')) {
+            $mediaObject = $this->getDefaultMediaObject($mediaObject);
         }
 
         // Overload object image size
@@ -164,23 +165,41 @@ class ContentMediaHelper
     /**
      * Returns default media object for content
      *
-     * @param array $params An array with the image url passed from template.
      * @param object $mediaObject The media object.
      *
      * @return object  $mediaObject The media object.
      */
-    protected function getDefaultMediaObject($params, $mediaObject)
+    protected function getDefaultMediaObject($mediaObject)
     {
-        $baseUrl = SITE_URL . 'media/' . MEDIA_DIR . '/sections/';
-        if (!is_null($params) && array_key_exists('default_image', $params)) {
-            // Default on template
-            $mediaObject->url = $params['default_image'];
-        } elseif ($mobileLogo = $this->ds->get('mobile_logo')) {
-            // Mobile logo
-            $mediaObject->url = $baseUrl . $mobileLogo;
-        } elseif ($siteLogo = $this->ds->get('site_logo')) {
-            // Logo
-            $mediaObject->url = $baseUrl . $siteLogo;
+        $ih       = $this->container->get('core.helper.image');
+        $instance = $this->container->get('core.instance');
+
+        $mediapath = $instance->getMediaShortPath() . '/sections/';
+        $baseUrl   = $instance->getBaseUrl() . $mediapath;
+        $filepath  = $this->container->getParameter('core.paths.public') . $mediapath;
+
+        // Default image for social networks
+        $defaultLogo = '';
+        if ($this->ds->get('sn_default_img')) {
+            $defaultLogo = $this->ds->get('sn_default_img');
+        } elseif ($this->ds->get('mobile_logo')) {
+            $defaultLogo = $this->ds->get('mobile_logo');
+        } elseif ($this->ds->get('site_logo')) {
+            $defaultLogo = $this->ds->get('site_logo');
+        }
+
+        if (!empty($defaultLogo)) {
+            try {
+                $information         = $ih->getInformation($filepath . $defaultLogo);
+                $mediaObject->url    = $baseUrl . $defaultLogo;
+                $mediaObject->width  = $information['width'];
+                $mediaObject->height = $information['height'];
+            } catch (\Exception $e) {
+                $this->container->get('error.log')->error(sprintf(
+                    'Error trying to get image information: %s',
+                    $e->getMessage()
+                ));
+            }
         }
 
         return $mediaObject;

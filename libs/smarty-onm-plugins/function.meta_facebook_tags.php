@@ -1,38 +1,40 @@
 <?php
+
 function smarty_function_meta_facebook_tags($params, &$smarty)
 {
     $output = [];
 
-    // Only generate tags if is a content page
-    if (!array_key_exists('content', $smarty->tpl_vars)) {
-        return '';
-    }
-
-    // Set content data for facebook tags
-    $content = $smarty->tpl_vars['content']->value;
-    $ds      = $smarty->getContainer()
+    $ds = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
+
+    // Set content data for facebook tags
+    $content = $smarty->getValue('content');
     $url     = $smarty->getContainer()->get('request_stack')
         ->getCurrentRequest()
         ->getUri();
 
-    $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
-    if (empty($summary)) {
-        $summary = mb_substr(
-            trim(\Onm\StringUtils::htmlAttribute($content->body)),
-            0,
-            80
-        ) . "...";
-    }
+    $title   = $ds->get('site_title');
+    $summary = $ds->get('site_description');
 
-    $title = htmlspecialchars(
-        html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
-    );
+    if (!empty($content)) {
+        $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
+        if (empty($summary)) {
+            $summary = mb_substr(
+                trim(\Onm\StringUtils::htmlAttribute($content->body)),
+                0,
+                80
+            ) . "...";
+        }
 
-    // Change summary for videos
-    if ($content->content_type_name == 'video') {
-        $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
+        $title = htmlspecialchars(
+            html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
+        );
+
+        // Change summary for videos
+        if ($content->content_type_name == 'video') {
+            $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
+        }
     }
 
     // Generate tags
@@ -42,11 +44,11 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:url" content="' . $url . '" />';
     $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
-    // Populate the media element if exists
     $image = $smarty->getContainer()->get('core.helper.content_media')
         ->getContentMediaObject($content, $params);
+
+    // Populate the media element if exists
     if (is_object($image)
-        && isset($image->url)
         && !empty($image->url)
     ) {
         $output[] = '<meta property="og:image" content="' . $image->url . '" />';

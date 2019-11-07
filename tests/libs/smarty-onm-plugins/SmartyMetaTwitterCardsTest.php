@@ -9,6 +9,8 @@
  */
 namespace Tests\Libs\Smarty;
 
+use Common\ORM\Entity\Instance;
+
 /**
  * Defines test cases for SmartyMetaTwitterCardsTest class.
  */
@@ -21,8 +23,10 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
     {
         include_once './libs/smarty-onm-plugins/function.meta_twitter_cards.php';
 
+        $this->instance = new Instance([ 'activated_modules' => [] ]);
+
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer' ])
+            ->setMethods([ 'getContainer', 'getValue' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -33,8 +37,16 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->fm = $this->getMockBuilder('FilterManager')
+            ->setMethods([ 'get', 'filter', 'set' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
             ->getMock();
 
         $this->requestStack = $this->getMockBuilder('RequestStack')
@@ -49,6 +61,17 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContentMediaObject' ])
             ->getMock();
 
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
         $this->smarty->expects($this->any())
             ->method('getContainer')
             ->willReturn($this->container);
@@ -61,12 +84,11 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->em->expects($this->any())->method('getDataSet')
-            ->with('Settings', 'instance')->willReturn($this->ds);
-
         $this->request->expects($this->any())
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
+
+        $GLOBALS['kernel'] = $this->kernel;
     }
 
     /**
@@ -82,6 +104,12 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.content_media':
                 return $this->helper;
 
+            case 'core.instance':
+                return $this->instance;
+
+            case 'data.manager.filter':
+                return $this->fm;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -93,40 +121,10 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test smarty_function_meta_twitter_cards when no content
-     */
-    public function testMetaTwitterWhenNoContent()
-    {
-        $this->assertEquals(
-            '',
-            smarty_function_meta_twitter_cards(null, $this->smarty)
-        );
-    }
-
-    /**
      * Test smarty_function_meta_twitter_cards when no User
      */
     public function testMetaTwitterWhenContentNoUser()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'article',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
-
         $this->ds->expects($this->once())
             ->method('get')
             ->with('twitter_page')
@@ -143,31 +141,27 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaTwitterWhenContent()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'article',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content          = new \Content();
+        $content->title   = 'This is the title';
+        $content->summary = 'This is the summary';
+        $content->body    = 'This is the body';
 
-        $this->ds->expects($this->once())
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject');
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(1))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(2))->method('get')->with('site_description')
+            ->willReturn('Site description');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
@@ -186,31 +180,27 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaTwitterWhenContentNoSummary()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => '',
-                        'body'              => 'This is the body',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'article',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content          = new \Content();
+        $content->title   = 'This is the title';
+        $content->summary = '';
+        $content->body    = 'This is the body';
 
-        $this->ds->expects($this->once())
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject');
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(1))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(2))->method('get')->with('site_description')
+            ->willReturn('Site description');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
@@ -229,32 +219,34 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaTwitterWhenContentIsVideo()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'description'       => 'This is the description',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'video',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content                    = new \Content();
+        $content->content_type      = 9;
+        $content->content_type_name = 'video';
+        $content->title             = 'This is the title';
+        $content->summary           = 'This is the summary';
+        $content->description       = 'This is the description';
 
-        $this->ds->expects($this->once())
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject');
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(1))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(2))->method('get')->with('site_description')
+            ->willReturn('Site description');
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('This is the title');
+        $this->fm->expects($this->at(5))->method('get')
+            ->willReturn('This is the description');
+
+        $this->helper->expects($this->once())->method('getContentMediaObject')
+            ->willReturn(null);
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
@@ -273,39 +265,39 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaTwitterWhenContentAndImage()
     {
-        $this->smarty->tpl_vars = [ 'content' => json_decode(
-            json_encode([
-                'value' => json_decode(
-                    json_encode([
-                        'pk_content'        => 145,
-                        'title'             => 'This is the title',
-                        'summary'           => 'This is the summary',
-                        'body'              => 'This is the body',
-                        'description'       => 'This is the description',
-                        'category_name'     => 'gorp',
-                        'slug'              => 'foobar-thud',
-                        'content_type_name' => 'video',
-                        'created'           => '1999-12-31 23:59:59',
-                    ]),
-                    false
-                )
-            ]),
-            false
-        )];
+        $content          = new \Content();
+        $content->title   = 'This is the title';
+        $content->summary = 'This is the summary';
+        $content->body    = 'This is the body';
 
-        $this->ds->expects($this->once())
+        $this->ds->expects($this->at(0))
             ->method('get')
             ->with('twitter_page')
             ->willReturn('https://twitter.com/twtuser');
 
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->ds->expects($this->at(1))->method('get')->with('site_title')
+            ->willReturn('Site title');
+        $this->ds->expects($this->at(2))->method('get')->with('site_description')
+            ->willReturn('Site description');
+
+        // Photo object
+        $photo            = new \Photo();
+        $photo->url       = 'http://route/to/file.name';
+        $photo->path_file = '/route/to/';
+        $photo->name      = 'file.name';
+        $photo->width     = 600;
+        $photo->height    = 400;
+
         $this->helper->expects($this->once())->method('getContentMediaObject')
-            ->willReturn(json_decode(json_encode([
-                'url' => 'http://route/to/file.name',
-            ]), false));
+            ->willReturn($photo);
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
-            . "<meta name=\"twitter:description\" content=\"This is the description\">\n"
+            . "<meta name=\"twitter:description\" content=\"This is the summary\">\n"
             . "<meta name=\"twitter:site\" content=\"@twtuser\">\n"
             . "<meta name=\"twitter:domain\" content=\"http://route/to/content.html\">\n"
             . "<meta name=\"twitter:image\" content=\"http://route/to/file.name\">";

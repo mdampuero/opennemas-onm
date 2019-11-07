@@ -255,9 +255,6 @@ class Content implements \JsonSerializable, CsvSerializable
             case 'comments':
                 return 0;
 
-            case 'content_type_name':
-                return $this->getContentTypeName();
-
             case 'fk_user':
                 return $this->fk_author;
 

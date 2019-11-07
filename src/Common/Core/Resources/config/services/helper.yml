@@ -35,7 +35,7 @@ services:
 
     core.helper.content_media:
         class:     Common\Core\Component\Helper\ContentMediaHelper
-        arguments: [ '@orm.manager', '@entity_repository' ]
+        arguments: [ '@service_container', '@orm.manager', '@entity_repository' ]
         public:    true
 
     core.helper.csv:
