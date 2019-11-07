@@ -156,14 +156,15 @@ class InstanceLoader
      * Note: This is only needed to prevent errors while loading instance from
      *       cache.
      *
-     * @param Instance $instance The instance to check.
-     * @param string   $domain   The domain.
+     * @param mixed  $instance The instance to check.
+     * @param string $domain   The domain.
      *
      * @return boolean true if the instance is valid
      */
-    protected function isValid(?Instance $instance, string $domain) : bool
+    protected function isValid($instance, string $domain) : bool
     {
-        return $instance instanceof Instance
+        return !empty($instance)
+            && $instance instanceof Instance
             && in_array($domain, $instance->domains);
     }
 }

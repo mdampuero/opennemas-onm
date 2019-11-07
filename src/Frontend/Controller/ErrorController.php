@@ -49,12 +49,20 @@ class ErrorController extends Controller
 
                 return $this->getAccessDeniedResponse();
 
+            case 'FatalThrowableError':
+            case 'SmartyException':
+                $this->get('error.log')->error(
+                    'failure: ' . $error->getMessage()
+                );
+
+                return $this->getFatalErrorResponse();
+
             case 'ConnectionException':
                 $this->get('error.log')->error(
                     'database.connection.failure: ' . $error->getMessage()
                 );
 
-                return $this->getConnectionExceptionResponse();
+                return $this->getFatalErrorResponse();
 
             case 'ResourceNotFoundException':
                 $url = $this->container->get('core.redirector')
@@ -99,24 +107,6 @@ class ErrorController extends Controller
     }
 
     /**
-     * Generates a response when the error is caused by a broken database
-     * connection.
-     *
-     * If database connection fails the rendered template has to grant that no
-     * other connection attempts will be executed. Because of this, the template
-     * engine used has to be configured with backend theme.
-     *
-     * @return Response The response object.
-     */
-    protected function getConnectionExceptionResponse()
-    {
-        return new Response(
-            $this->get('core.template.admin')->fetch('error/500.tpl'),
-            500
-        );
-    }
-
-    /**
      * Generates a response when an unknown error happens.
      *
      * @return Response The response object.
@@ -124,6 +114,23 @@ class ErrorController extends Controller
     protected function getErrorResponse()
     {
         return new Response($this->renderView('static_pages/statics.tpl'), 500);
+    }
+
+    /**
+     * Generates a response when the error can not be handled properly.
+     *
+     * This will return a 500 error page without any information about the
+     * error. It should be used only when the error can not be reported to
+     * the user from some reason.
+     *
+     * @return Response The response object.
+     */
+    protected function getFatalErrorResponse()
+    {
+        return new Response(
+            $this->get('core.template.admin')->fetch('error/500.tpl'),
+            500
+        );
     }
 
     /**
