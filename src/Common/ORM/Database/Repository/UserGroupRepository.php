@@ -32,7 +32,8 @@ class UserGroupRepository extends BaseRepository
 
         $sql = 'SELECT user_group_id AS "id", COUNT(1) AS "users" '
             . 'FROM user_user_group '
-            . 'WHERE user_group_id IN (?) '
+            . 'LEFT JOIN users ON user_id = id '
+            . 'WHERE user_group_id IN (?) AND activated = 1 '
             . 'GROUP BY user_group_id';
 
         $data = $this->conn->fetchAll(
@@ -51,11 +52,12 @@ class UserGroupRepository extends BaseRepository
     }
 
     /**
-     * description
+     * Returns a list of activated users assigned to a user group id or a list
+     * of user group ids.
      *
-     * @param type variable Description
+     * @param mixed $ids A user group id or a list of user group ids.
      *
-     * @return type Description
+     * @return array The list of activated users.
      */
     public function findUsers($ids)
     {
@@ -69,7 +71,7 @@ class UserGroupRepository extends BaseRepository
 
         $sql = 'SELECT id, name, email FROM users'
             . ' LEFT JOIN user_user_group ON user_id = id'
-            . ' WHERE user_group_id IN (?)';
+            . ' WHERE user_group_id IN (?) AND activated = 1';
 
         return $this->conn->fetchAll(
             $sql,

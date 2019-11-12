@@ -70,7 +70,9 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(
                 'SELECT user_group_id AS "id", COUNT(1) AS "users" '
-                . 'FROM user_user_group WHERE user_group_id IN (?) '
+                . 'FROM user_user_group '
+                . 'LEFT JOIN users ON user_id = id '
+                . 'WHERE user_group_id IN (?) AND activated = 1 '
                 . 'GROUP BY user_group_id',
                 [ [ 1, 2 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
@@ -103,7 +105,9 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(
                 'SELECT user_group_id AS "id", COUNT(1) AS "users" '
-                . 'FROM user_user_group WHERE user_group_id IN (?) '
+                . 'FROM user_user_group '
+                . 'LEFT JOIN users ON user_id = id '
+                . 'WHERE user_group_id IN (?) AND activated = 1 '
                 . 'GROUP BY user_group_id',
                 [ [ 1 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
@@ -125,7 +129,7 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'SELECT id, name, email FROM users'
                 . ' LEFT JOIN user_user_group ON user_id = id'
-                . ' WHERE user_group_id IN (?)',
+                . ' WHERE user_group_id IN (?) AND activated = 1',
                 [ [ 1, 2 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([
@@ -158,7 +162,7 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'SELECT id, name, email FROM users'
                 . ' LEFT JOIN user_user_group ON user_id = id'
-                . ' WHERE user_group_id IN (?)',
+                . ' WHERE user_group_id IN (?) AND activated = 1',
                 [ [ 1 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([
