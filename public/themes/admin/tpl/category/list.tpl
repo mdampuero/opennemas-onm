@@ -78,13 +78,16 @@
               <span class="h-seperate"></span>
             </li>
             {acl isAllowed="CATEGORY_AVAILABLE"}
+              <li class="quicklinks hidden-xs" ng-if="selected.items.length < items.length && areSelectedNotEmpty()">
+                <span class="h-seperate"></span>
+              </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('inmenu', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-times fa-lg"></i>
                 </button>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-link" ng-click="patchSelected('inmenu', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="patchSelected('enabled', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
                   <i class="fa fa-check fa-lg"></i>
                 </button>
               </li>
@@ -117,7 +120,7 @@
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
-              <ui-select name="activated" theme="select2" ng-model="criteria.inmenu">
+              <ui-select name="activated" theme="select2" ng-model="criteria.enabled">
                 <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
                 </ui-select-match>
@@ -157,7 +160,7 @@
                 <tr>
                   <th class="text-center v-align-middle" width="50">
                     <div class="checkbox checkbox-default">
-                      <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
+                      <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
                       <label for="select-all"></label>
                     </div>
                   </th>
@@ -166,7 +169,7 @@
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-picture-o"></i></th>
                   <th class="hidden-sm hidden-xs text-center" width="80"><i class="fa fa-paint-brush"></i></th>
                   <th class="hidden-xs" width="100">{t}Contents{/t}</th>
-                  <th class="hidden-xs text-center" width="50">{t}RSS{/t}</th>
+                  <th class="hidden-xs text-center" width="50">{t}Archived{/t}</th>
                   <th class="text-center" width="50">{t}Enabled{/t}</th>
                 </tr>
               </thead>
@@ -231,14 +234,14 @@
                       </strong>
                     </span>
                   </td>
-                  <td class="hidden-xs text-center v-align-middle">
-                    <button class="btn btn-white" ng-click="patchRss(item, item.params.inrss != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.inrssLoading, 'fa-feed text-success' : !item.inrssLoading && item.params.inrss == '1', 'fa-feed text-error': !item.inrssLoading && (!item.params || !item.params.inrss || item.params.inrss == '0') }"></i>
+                  <td class="text-center v-align-middle">
+                    <button class="btn btn-white" ng-click="patch(item, 'archived', item.archived != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.archivedLoading, 'fa-check text-success' : !item.archivedLoading && item.archived == '1', 'fa-times text-error': !item.archivedLoading && item.archived == '0' }"></i>
                     </button>
                   </td>
                   <td class="text-center v-align-middle">
-                    <button class="btn btn-white" ng-click="patch(item, 'inmenu', item.inmenu != 1 ? 1 : 0)" type="button">
-                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.inmenuLoading, 'fa-check text-success' : !item.inmenuLoading && item.inmenu == '1', 'fa-times text-error': !item.inmenuLoading && item.inmenu == '0' }"></i>
+                    <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
+                      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
                     </button>
                   </td>
                 </tr>

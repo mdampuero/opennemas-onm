@@ -105,33 +105,6 @@ class SecurityListener implements EventSubscriberInterface
     }
 
     /**
-     * Returns the list of categories for the user.
-     *
-     * @param UserInterface $user The current user.
-     *
-     * @return array The list of categories.
-     */
-    protected function getCategories(UserInterface $user)
-    {
-        if (empty($user->categories)) {
-            return [];
-        }
-
-        $oql = sprintf(
-            'pk_content_category in ["%s"]',
-            implode('", "', $user->categories)
-        );
-
-        $categories = $this->container->get('orm.manager')
-            ->getRepository('Category')
-            ->findBy($oql);
-
-        return array_map(function ($a) {
-            return $a->name;
-        }, $categories);
-    }
-
-    /**
      * Returns the list of instances this user owns.
      *
      * @param UserInterface $user The current user.

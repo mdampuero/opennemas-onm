@@ -36,6 +36,7 @@
             defaultValueText: '@',
             exclude: '=?',
             exportModel: '=?',
+            showArchived: '@',
             labelText: '@',
             locale: '=',
             multiple: '@',
@@ -103,43 +104,56 @@
                 });
             }
 
-            http.get('api_v1_backend_category_get_list').then(function(response) {
+            var route = {
+              name: 'api_v1_backend_category_get_list',
+              params: { oql: 'archived = 0' }
+            };
+
+            if ($scope.showArchived) {
+              delete route.params;
+            }
+
+            http.get(route).then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
                 return !$scope.exclude || $scope.exclude.length === 0 ||
                   $scope.exclude.indexOf(e.pk_content_category) === -1;
               });
 
-              if (!$scope.multiple && angular.isArray(response.data.items) &&
-                  response.data.items.length > 0 &&
-                  response.data.items[0].pk_content_category !== null) {
-                response.data.items.unshift({
-                  pk_content_category: null,
-                  title: $scope.defaultValueText
-                });
+              $scope.data = response.data;
+
+              if (!$scope.multiple) {
+                $scope.addDefaultValue($scope.data.items);
               }
 
-              var lz = localizer.get(response.data.extra.locale);
-
-              // Localize items
-              $scope.categories = lz.localize(response.data.items,
-                response.data.extra.keys, response.data.extra.locale);
-
-              // Initialize linker
-              if (!$scope.linker) {
-                $scope.linker = linker.get(response.data.extra.keys,
-                  response.data.extra.locale.default, $scope);
-              }
-
-              // Link original and localized items
-              $scope.linker.setKey($scope.locale);
-              $scope.linker.link(response.data.items, $scope.categories);
+              $scope.localize($scope.data.items, $scope.data.extra);
             });
 
             // Updates the selected item when model or categories change
-            $scope.$watch('[ categories, ngModel ]', function() {
+            $scope.$watch('[ categories, ngModel ]', function(nv) {
               if (!$scope.ngModel || !$scope.categories) {
                 $scope.selected = null;
                 return;
+              }
+
+              // Add missing category on initialization
+              if (nv[1]) {
+                var category = $scope.data.items.filter(function(e) {
+                  return e.pk_content_category === $scope.ngModel;
+                });
+
+                if (category.length === 0) {
+                  var route = {
+                    name: 'api_v1_backend_category_get_item',
+                    params: { id: $scope.ngModel }
+                  };
+
+                  http.get(route).then(function(response) {
+                    $scope.addMissingItem(response.data.item);
+                    $scope.localize($scope.data.items, $scope.data.extra);
+                  });
+
+                  return;
+                }
               }
 
               if ($scope.multiple && $scope.ngModel &&
@@ -161,6 +175,44 @@
               $scope.linker.setKey(nv);
               $scope.linker.update();
             }, true);
+
+            /**
+             * @function addDefaultValue
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Adds a default value at the beginning of the list of items.
+             *
+             * @param {Array} items The list of items.
+             */
+            $scope.addDefaultValue = function(items) {
+              if (angular.isArray(items) && items.length > 0 &&
+                  items[0].pk_content_category !== null) {
+                items.unshift({
+                  pk_content_category: null,
+                  title: $scope.defaultValueText
+                });
+              }
+            };
+
+            /**
+             * @function addMissingItem
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Adds missing item to the list keeping default value as first
+             *   item in the list.
+             *
+             * @param {Object} item The item to add.
+             */
+            $scope.addMissingItem = function(item) {
+              if ($scope.data.items[0].pk_content_category !== null) {
+                $scope.items.unshift(item);
+                return;
+              }
+
+              $scope.data.items.splice(1, 0, item);
+            };
 
             /**
              * @function groupCategories
@@ -208,6 +260,33 @@
               return $scope.ngModel.indexOf(item.pk_content_category) !== -1 ||
                 $scope.ngModel.indexOf(
                   item.pk_content_category.toString()) !== -1;
+            };
+
+            /**
+             * @function localize
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Localizes the list of items based on the information included
+             *   in extra parameter.
+             *
+             * @param {Array}  items The list of items to localize.
+             * @param {Object} extra The information used during localization.
+             */
+            $scope.localize = function(items, extra) {
+              var lz = localizer.get(extra.locale);
+
+              // Localize items
+              $scope.categories = lz.localize(items, extra.keys, extra.locale);
+
+              // Initialize linker
+              if (!$scope.linker) {
+                $scope.linker = linker.get(extra.keys, extra.locale.default, $scope);
+              }
+
+              // Link original and localized items
+              $scope.linker.setKey($scope.locale);
+              $scope.linker.link(items, $scope.categories);
             };
 
             /**

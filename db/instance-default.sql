@@ -326,9 +326,8 @@ CREATE TABLE `content_categories` (
   `title` text NOT NULL,
   `name` text,
   `description` text,
-  `inmenu` int(10) unsigned DEFAULT '0',
-  `posmenu` int(10) unsigned DEFAULT '1',
-  `internal_category` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Equal content_type & global=0 ',
+  `archived` tinyint(1) unsigned DEFAULT '0',
+  `enabled` tinyint(1) unsigned DEFAULT '0',
   `fk_content_category` bigint(20) unsigned DEFAULT NULL,
   `params` text,
   `logo_path` varchar(200) DEFAULT NULL,
@@ -343,7 +342,7 @@ CREATE TABLE `content_categories` (
 
 LOCK TABLES `content_categories` WRITE;
 /*!40000 ALTER TABLE `content_categories` DISABLE KEYS */;
-INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,1,0,1,NULL,'a:1:{s:5:\"inrss\";i:0;}',NULL,NULL),(22,'Deportes','deportes',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(25,'Cultura','cultura',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(26,'Sociedad','sociedad',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,10,9,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,10,7,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,10,14,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(34,'Actualidad','actualidad',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(35,'Internacional','internacional',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,10,1,NULL,'a:1:{s:5:\"inrss\";i:1;}',NULL,NULL);
+INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria', NULL, 1,1,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,0,1,NULL,NULL,NULL, NULL),(23,'EconomÃ­a','economia',NULL,0,1,NULL,NULL,NULL, NULL),(24,'PolÃ­tica','politica',NULL,0,1,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,0,1,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,0,1,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,0,1,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,0,1,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,0,1,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,0,1,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,0,1,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,0,1,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,0,1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `content_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1303,29 +1302,6 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'editorial@opennemas.com','Editorial',0,NULL,0),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'director@opennemas.com','Director',0,NULL,0),(8,'xabier.r.blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',636,'xabi.blanco@opennemas.com','Xabier R. Blanco',0,NULL,0),(9,'jose.luis.gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',641,'joseluis@opennemas.com','Jose Luis Gomez',0,NULL,0),(10,'joaquin.vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',643,'jvidal@estrelladigital.es','JoaquÃ­n Vidal',0,NULL,0),(11,'alberto.j.rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',642,'alberto.rey@opennemas.com','Alberto J. Rey',0,NULL,0),(12,'javier-fumero',NULL,' ','La EspaÃ±a Profunda',652,'javier.fumero@openhost.es','Javier Fumero',0,NULL,0),(13,'juan-mendez',NULL,' ',' ',661,'juan-mendez@openhost.es','Juan MÃ©ndez',0,NULL,0),(14,'lorenzo-sentenac',NULL,' ',' ',739,'lorenzo.sentenac@openhost.es','Lorenzo Sentenac',0,NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users_content_categories`
---
-
-DROP TABLE IF EXISTS `users_content_categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users_content_categories` (
-  `pk_fk_user` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `pk_fk_content_category` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`pk_fk_user`,`pk_fk_content_category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_content_categories`
---
-
-LOCK TABLES `users_content_categories` WRITE;
-/*!40000 ALTER TABLE `users_content_categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users_content_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

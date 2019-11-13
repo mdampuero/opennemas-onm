@@ -135,14 +135,8 @@ class ArticleController extends Controller
      */
     protected function getExtraData($all = true)
     {
-        $extra = [ 'tags' => [] ];
-
-        $security   = $this->get('core.security');
-        $categories = $this->get('api.service.category')->getList();
-
-        $categories = array_filter($categories['items'], function ($a) use ($security) {
-            return $security->hasCategory($a->pk_content_category);
-        });
+        $extra      = [ 'tags' => [] ];
+        $categories = $this->get('api.service.category')->getList()['items'];
 
         $extra['categories'] = $this->get('api.service.category')
             ->responsify($categories);
@@ -232,7 +226,7 @@ class ArticleController extends Controller
 
             if ($key === 'home'
                 && !$this->get('core.security')
-                    ->hasExtension('CRONICAS_MODULES')
+                ->hasExtension('CRONICAS_MODULES')
             ) {
                 continue;
             }

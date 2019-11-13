@@ -302,27 +302,6 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getCategories.
-     */
-    public function testGetCategories()
-    {
-        $listener = new SecurityListener($this->container);
-        $method   = new \ReflectionMethod($listener, 'getCategories');
-
-        $method->setAccessible(true);
-
-        $this->repository->expects($this->once())->method('findBy')
-            ->with('pk_content_category in ["flob", "grault"]')
-            ->willReturn([ json_decode(json_encode([ 'name' => 'gorp' ])) ]);
-
-        $this->assertEquals([ 'gorp' ], $method->invokeArgs($listener, [ $this->user ]));
-
-        $this->user->categories = [];
-
-        $this->assertEmpty($method->invokeArgs($listener, [ $this->user ]));
-    }
-
-    /**
      * Tests getInstances.
      */
     public function testGetInstances()

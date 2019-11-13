@@ -87,7 +87,7 @@ class SecurityAnnotationListener
         );
 
         $value = preg_replace(
-            '/(hasCategory|hasExtension|hasPermission|hasRole)/',
+            '/(hasExtension|hasPermission|hasRole)/',
             '$this->security->$1',
             $value
         );

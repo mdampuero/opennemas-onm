@@ -64,7 +64,6 @@ DELETE FROM `special_contents` WHERE `fk_special` NOT IN (SELECT `pk_special` FR
 DELETE FROM `special_contents` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `translation_ids` WHERE `pk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `usermeta` WHERE `user_id` NOT IN (SELECT id FROM users);
-DELETE FROM `users_content_categories` WHERE `pk_fk_user` NOT IN (SELECT `id` FROM `users`);
 DELETE FROM `user_groups_privileges` WHERE `pk_fk_user_group` NOT IN (SELECT `pk_user_group` FROM `user_groups`);
 DELETE FROM `videos` WHERE `pk_video` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `widgets` WHERE `pk_widget` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -127,6 +126,5 @@ CREATE INDEX pk_content ON translation_ids (pk_content);
 CREATE INDEX pk_fk_user_group ON user_groups_privileges (pk_fk_user_group);
 ALTER TABLE usermeta CHANGE user_id user_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE users CHANGE id id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
-ALTER TABLE users_content_categories CHANGE pk_fk_user pk_fk_user INT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE user_notification ADD read_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE votes CHANGE pk_vote pk_vote BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;

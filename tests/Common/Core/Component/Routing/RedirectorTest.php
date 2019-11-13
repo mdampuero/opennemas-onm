@@ -1255,13 +1255,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($method->invokeArgs($this->redirector, [
             $this->request,
             new Url(),
-            new Category([ 'inmenu' => 1 ])
+            new Category([ 'enabled' => 1 ])
         ]));
 
         $this->assertFalse($method->invokeArgs($this->redirector, [
             $this->request,
             new Url(),
-            new Category([ 'inmenu' => 0 ])
+            new Category([ 'enabled' => 0 ])
         ]));
 
         $this->assertTrue($method->invokeArgs($this->redirector, [

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 13:48+0000\n"
-"PO-Revision-Date: 2019-10-30 14:48+0100\n"
+"POT-Creation-Date: 2019-11-06 09:29+0000\n"
+"PO-Revision-Date: 2019-11-06 10:25+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -6377,6 +6377,9 @@ msgstr "Mover contenidos"
 msgid "Delete contents"
 msgstr "Eliminar contenidos"
 
+msgid "Archived"
+msgstr "Archivado"
+
 msgid "Only empty categories can be deleted"
 msgstr "Solo se pueden eliminar categorías sin contenidos"
 
@@ -6394,6 +6397,12 @@ msgstr "¿Quieres mover los cotenidos en la categoría?"
 
 msgid "Do you want to move contents in selected categories?"
 msgstr "¿Quieres mover los contenidos en las categorías seleccionadas?"
+
+msgid ""
+"If enabled, category will not be included in category selectors nor RSS feeds"
+msgstr ""
+"Si está activado, la categoría no se mostrará en los selectores de categoría "
+"ni en los RSS"
 
 msgid "Subsection of"
 msgstr "Subsección de"
@@ -6813,13 +6822,6 @@ msgstr "Entiendo y acepto los costes de la operación."
 
 msgid "User Groups"
 msgstr "Grupos de usuarios"
-
-msgid "Access to all categories"
-msgstr "Acceso a todas las categorías"
-
-msgid "The user can assign contents to the selected categories only"
-msgstr ""
-"El usuario solo puede asignar contenidos a las categorías seleccionadas"
 
 msgid "Used for interface, messages and units in the control panel"
 msgstr ""
@@ -7953,6 +7955,17 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#, fuzzy
+#~ msgid "Archive contents"
+#~ msgstr "Mover contenidos"
+
+#~ msgid "Access to all categories"
+#~ msgstr "Acceso a todas las categorías"
+
+#~ msgid "The user can assign contents to the selected categories only"
+#~ msgstr ""
+#~ "El usuario solo puede asignar contenidos a las categorías seleccionadas"
 
 #~ msgid "You must put %d books in the HOME widget"
 #~ msgstr "Debes tener %d libros en el widget de portada"

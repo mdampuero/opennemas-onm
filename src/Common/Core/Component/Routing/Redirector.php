@@ -199,7 +199,6 @@ class Redirector
     public function getContent($id, $contentType)
     {
         $contentType = \classify($contentType);
-
         $method      = 'get' . $contentType;
 
         if (method_exists($this, $method)) {
@@ -558,7 +557,7 @@ class Redirector
             }
 
             if ($target instanceof Category) {
-                return !empty($target->inmenu);
+                return !empty($target->enabled);
             }
 
             return true;

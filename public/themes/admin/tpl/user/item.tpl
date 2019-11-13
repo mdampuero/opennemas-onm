@@ -112,38 +112,6 @@
                     </div>
                   {/acl}
                 </div>
-                <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.category = !expanded.category">
-                  <input name="categories" ng-value="categories" type="hidden">
-                  <i class="fa fa-bookmark m-r-10"></i>{t}Categories{/t}
-                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
-                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category">
-                    <span ng-show="item.categories.length === 0 || flags.categories.none">{t}All{/t}</span>
-                    <span ng-show="item.categories.length != 0 && !flags.categories.none">
-                      <strong>[% item.categories.length %]</strong> {t}selected{/t}
-                    </span>
-                  </span>
-                </div>
-                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category, 'no-animate': flags.categories.none }">
-                  <div class="checkbox">
-                    <input id="category-all" name="category-all" ng-model="flags.categories.none" ng-true-value="true" ng-false-value="false" type="checkbox">
-                    <label class="form-label" for="category-all">
-                      {t}Access to all categories{/t}
-                    </label>
-                  </div>
-                  <div class="m-t-10" ng-show="!flags.categories.none">
-                    <div class="m-b-10" ng-show="isHelpEnabled()">
-                      <small class="help m-l-3">
-                        <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t}The user can assign contents to the selected categories only{/t}
-                      </small>
-                    </div>
-                    <div class="form-group no-margin">
-                      <div class="controls">
-                        <onm-category-selector class="block" default-value-text="{t}All{/t}/{t}None{/t}" locale="config.locale.selected" multiple="true" ng-model="item.categories" placeholder="{t}Select a category{/t}…" selected-text="{t}selected{/t}"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.settings }" ng-click="expanded.language = !expanded.language">
                   <i class="fa fa-globe m-r-10"></i>{t}Language & time{/t}
                   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.language }"></i>

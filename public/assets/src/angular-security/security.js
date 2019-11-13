@@ -100,21 +100,6 @@
         };
 
         /**
-         * @function hasCategory
-         * @memberOf security
-         *
-         * @description
-         *   Checks if the category is allowed.
-         *
-         * @param {Integer} category The category id.
-         *
-         * @return {Boolean} True if the category is allowed. False otherwise.
-         */
-        this.hasCategory = function(category) {
-          return this.categories.indexOf(category) !== -1;
-        };
-
-        /**
          * @function hasExtension
          * @memberOf security
          *

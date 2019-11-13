@@ -72,21 +72,21 @@
             <div class="grid simple">
               <div class="grid-body no-padding">
                 <div class="grid-collapse-title">
-                  <div class="checkbox">
-                    <input type="checkbox" id="inmenu" ng-model="item.inmenu" ng-true-value="1">
-                    <label for="inmenu" class="form-label">{t}Enabled{/t}</label>
-                  </div>
-                </div>
-                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.rss }" ng-click="expanded.rss = !expanded.rss">
-                  <i class="fa fa-feed m-r-10"></i>{t}RSS{/t}
-                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.rss }"></i>
-                </div>
-                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.rss }">
                   <div class="form-group no-margin">
                     <div class="checkbox">
-                      <input type="checkbox" id="inrss" name="inrss" ng-false-value="'0'" ng-model="item.params.inrss" ng-true-value="'1'">
-                      <label for="inrss" class="form-label">{t}Show in RSS{/t}</label>
+                      <input type="checkbox" id="enabled" ng-model="item.enabled" ng-true-value="1">
+                      <label for="enabled" class="form-label">{t}Enabled{/t}</label>
                     </div>
+                  </div>
+                  <div class="form-group no-margin">
+                    <div class="checkbox m-t-5">
+                      <input type="checkbox" id="archived" ng-model="item.archived" ng-true-value="1">
+                      <label for="archived" class="form-label">{t}Archived{/t}</label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, category will not be included in category selectors nor RSS feeds{/t}
+                    </span>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
@@ -102,7 +102,7 @@
                 </div>
                 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
                   <div class="form-group no-margin">
-                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" exclude="[ item.pk_content_category ]" locale="config.locale.selected" ng-model="item.fk_content_category" selected="selectedCategories" placeholder="{t}Select a category{/t}…"></onm-category-selector>
+                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" exclude="[ item.pk_content_category ]" show-archived="true" locale="config.locale.selected" ng-model="item.fk_content_category" selected="selectedCategories" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                   </div>
                 </div>
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.color }" ng-click="expanded.color = !expanded.color">

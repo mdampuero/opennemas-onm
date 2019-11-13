@@ -411,21 +411,18 @@ content_categories:
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        inmenu:
+        archived:
             type: integer
             options: { unsigned: true, default: 0, notnull: false }
-        posmenu:
+        enabled:
             type: integer
-            options: { unsigned: true, default: 1, notnull: false }
-        internal_category:
-            type: smallint
-            options: { length: 1, unsigned: true, default: 0, comment: 'Equal content_type & global=0 ' }
+            options: { unsigned: true, default: 0, notnull: false }
         fk_content_category:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         params:
             type: text
-            options: { length: 65532, default: null, notnull: false }
+            options: {length: 65532, default: null, notnull: false}
         logo_path:
             type: string
             options: { length: 200, default: null, notnull: false }
@@ -1725,21 +1722,6 @@ user_user_group:
             target_table: user_groups
             target_field: [ pk_user_group ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-users_content_categories:
-    columns:
-        pk_fk_user:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        pk_fk_content_category:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_fk_user, pk_fk_content_category]
-            primary: true
-            unique: true
-            flags: {  }
 videos:
     columns:
         pk_video:

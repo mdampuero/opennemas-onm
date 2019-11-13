@@ -218,7 +218,7 @@ class CategoryController extends FrontendController
     {
         $item = $this->getCategory($request->get('category_name'));
 
-        if (!$item->inmenu) {
+        if (!$item->enabled) {
             throw new ResourceNotFoundException();
         }
 

@@ -1,4 +1,3 @@
-# Galician translations for PACKAGE package.
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ONM Developers <developers@opennemas.com>, 2017.
@@ -8,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 13:48+0000\n"
-"PO-Revision-Date: 2019-10-30 14:48+0100\n"
+"POT-Creation-Date: 2019-11-06 09:29+0000\n"
+"PO-Revision-Date: 2019-11-06 10:25+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -6342,6 +6341,9 @@ msgstr "Mover contidos"
 msgid "Delete contents"
 msgstr "Eliminar contidos"
 
+msgid "Archived"
+msgstr "Arquivado"
+
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
 
@@ -6359,6 +6361,12 @@ msgstr "¿Queres mover os contidos na categoría?"
 
 msgid "Do you want to move contents in selected categories?"
 msgstr "¿Queres mover os contidos nas categorías seleccionadas?"
+
+msgid ""
+"If enabled, category will not be included in category selectors nor RSS feeds"
+msgstr ""
+"Se está activado, a categoría non se mostrará nos selectores de categoría "
+"nin nos RSS"
 
 msgid "Subsection of"
 msgstr "Subsección de"
@@ -6773,12 +6781,6 @@ msgstr "Entendo e acepto os custos da operación."
 
 msgid "User Groups"
 msgstr "Grupos de usuarios"
-
-msgid "Access to all categories"
-msgstr "Acceso a todas as categorías"
-
-msgid "The user can assign contents to the selected categories only"
-msgstr "O usuario só pode asignar contidos ás categorías seleccionadas"
 
 msgid "Used for interface, messages and units in the control panel"
 msgstr ""
@@ -7896,6 +7898,16 @@ msgstr "Benvido ao Xestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
+
+#, fuzzy
+#~ msgid "Archive contents"
+#~ msgstr "Mover contidos"
+
+#~ msgid "Access to all categories"
+#~ msgstr "Acceso a todas as categorías"
+
+#~ msgid "The user can assign contents to the selected categories only"
+#~ msgstr "O usuario só pode asignar contidos ás categorías seleccionadas"
 
 #~ msgid "You must put %d books in the HOME widget"
 #~ msgstr "Débense ter %d libros para o Widget de portada"
