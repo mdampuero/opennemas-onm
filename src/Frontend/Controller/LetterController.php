@@ -282,7 +282,7 @@ class LetterController extends Controller
                     ->setSubject($subject)
                     ->setBody($data['body'], 'text/html')
                     ->setTo([ $recipient => $recipient ])
-                    ->setFrom([ $email => $name ])
+                    ->setFrom([ $mailSender => $settings['site_name'] ])
                     ->setSender([ $mailSender => $settings['site_name'] ]);
 
                 $headers = $text->getHeaders();
@@ -295,11 +295,11 @@ class LetterController extends Controller
                     $this->get('mailer')->send($text);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Frontend letter (sender:" . $email . ", to: " . $recipient . ")"
+                        "Email sent. Frontend letter (sender:" . $mailSender . ", to: " . $recipient . ")"
                     );
                 } catch (\Exception $e) {
                     $this->get('application.log')->notice(
-                        "Email NOT sent. Frontend letter (sender:" . $email . ", to: " . $recipient . "):"
+                        "Email NOT sent. Frontend letter (sender:" . $mailSender . ", to: " . $recipient . "):"
                         . $e->getMessage()
                     );
                 }
