@@ -16,7 +16,7 @@ use Common\Core\Controller\Controller;
 class ErrorController extends Controller
 {
     /**
-     * Displays an error page basing on the current error.
+     * Displays an error page based on the current error.
      *
      * @param Request $request The request object.
      *
@@ -24,12 +24,22 @@ class ErrorController extends Controller
      */
     public function defaultAction(Request $request)
     {
-        $error = $request->attributes->get('exception');
-        $class = new \ReflectionClass($error->getClass());
+        $exception = $request->attributes->get('exception');
+        $class     = new \ReflectionClass($exception->getClass());
 
         $this->view = $this->get('onm_templating')->getBackendTemplate();
 
         switch ($class->getShortName()) {
+            case 'AccessDeniedException':
+                return $this->getAccessDeniedResponse();
+
+            case 'FatalThrowableError':
+            case 'RuntimeException':
+                return $this->getFatalErrorResponse(
+                    $class->getShortName(),
+                    $exception->getMessage()
+                );
+
             case 'InstanceNotFoundException':
                 return $this->getInstanceNotFoundResponse();
 
@@ -38,13 +48,10 @@ class ErrorController extends Controller
 
             case 'ResourceNotFoundException':
             case 'NotFoundHttpException':
-                return $this->getNotFoundResponse();
-
-            case 'AccessDeniedException':
-                return $this->getAccessDeniedResponse();
+                return $this->getNotFoundResponse($request);
 
             default:
-                return $this->getErrorResponse();
+                return $this->getErrorResponse($exception);
         }
     }
 
@@ -74,27 +81,59 @@ class ErrorController extends Controller
     /**
      * Generates a response when an unknown error happens.
      *
+     * @param Exception $exception The thrown exception.
+     *
      * @return Response The response object.
      */
-    protected function getErrorResponse()
+    protected function getErrorResponse($exception)
     {
         $request = $this->get('request_stack')->getCurrentRequest();
         $content = _('Oups! Seems that we had an unknown problem while trying to run your request.');
-        $error   = $request->attributes->get('exception');
 
         $this->get('error.log')->error(
-            $error->getMessage() . ' ' . json_encode($error->getTrace())
+            $exception->getMessage() . ' ' . json_encode($exception->getTrace())
         );
 
         if (!$request->isXmlHttpRequest()) {
             $content = $this->renderView('error/404.tpl', [
                 'environment' => $this->get('kernel')->getEnvironment(),
-                'error'       => $error,
+                'error'       => $exception,
                 'message'     => $content
             ]);
         }
 
         return new Response($content, 500);
+    }
+
+    /**
+     * Generates a response when the error can not be handled properly.
+     *
+     * This will return a 500 error page without any information about the
+     * error. It should be used only when the error can not be reported to
+     * the user from some reason.
+     *
+     * @param string $class   The short class name.
+     * @param string $message The error message.
+     *
+     * @return Response The response object.
+     */
+    protected function getFatalErrorResponse($class, $message)
+    {
+        $message = 'failure: ' . $message;
+
+        if ($class === 'ConnectionException') {
+            $message = 'database.connection.' . $message;
+        }
+
+        $this->get('error.log')->error($message);
+
+        // Remove assets from bag from a previous run
+        $this->get('core.service.assetic.asset_bag')->reset();
+
+        return new Response(
+            $this->get('core.template.admin')->fetch('error/500.tpl'),
+            500
+        );
     }
 
     /**
@@ -155,6 +194,8 @@ class ErrorController extends Controller
 
     /**
      * Generates a response when the requested resource was not found.
+     *
+     * @param Request
      *
      * @return Response The response object.
      */

@@ -31,7 +31,7 @@ class ErrorController extends Controller
     ];
 
     /**
-     * Displays an error page basing on the current error.
+     * Displays an error page based on the current error.
      *
      * @param Request $request The request object.
      *
@@ -39,30 +39,20 @@ class ErrorController extends Controller
      */
     public function defaultAction(Request $request)
     {
-        $error = $request->attributes->get('exception');
-        $class = new \ReflectionClass($error->getClass());
+        $exception = $request->attributes->get('exception');
+        $class = new \ReflectionClass($exception->getClass());
 
         switch ($class->getShortName()) {
             case 'AccessDeniedException':
-                $this->get('application.log')
-                    ->info('security.authorization.failure');
-
                 return $this->getAccessDeniedResponse();
 
+            case 'ConnectionException':
             case 'FatalThrowableError':
             case 'SmartyException':
-                $this->get('error.log')->error(
-                    'failure: ' . $error->getMessage()
+                return $this->getFatalErrorResponse(
+                    $class->getShortName(),
+                    $exception->getMessage()
                 );
-
-                return $this->getFatalErrorResponse();
-
-            case 'ConnectionException':
-                $this->get('error.log')->error(
-                    'database.connection.failure: ' . $error->getMessage()
-                );
-
-                return $this->getFatalErrorResponse();
 
             case 'ResourceNotFoundException':
                 $url = $this->container->get('core.redirector')
@@ -73,20 +63,17 @@ class ErrorController extends Controller
                         ->getResponse($request, $url);
                 }
 
-                return $this->getNotFoundResponse();
+                // no break
 
             case 'ContentNotMigratedException':
             case 'NotFoundHttpException':
-                $this->get('application.log')->info($class->getShortName());
-
-                return $this->getNotFoundResponse();
+                return $this->getNotFoundResponse($class->getShortName());
 
             default:
-                $this->get('error.log')->error(
-                    $class->getShortName() . ': ' . $error->getMessage()
+                return $this->getErrorResponse(
+                    $class->getShortName(),
+                    $exception->getMessage()
                 );
-
-                return $this->getErrorResponse();
         }
     }
 
@@ -98,6 +85,8 @@ class ErrorController extends Controller
      */
     protected function getAccessDeniedResponse()
     {
+        $this->get('application.log')->info('security.authorization.failure');
+
         list($positions, $advertisements) = $this->getAdvertisements();
 
         return new Response($this->renderView('static_pages/403.tpl', [
@@ -109,10 +98,15 @@ class ErrorController extends Controller
     /**
      * Generates a response when an unknown error happens.
      *
+     * @param string $class The short class name.
+     * @param string $error The error message.
+     *
      * @return Response The response object.
      */
-    protected function getErrorResponse()
+    protected function getErrorResponse($class, $message)
     {
+        $this->get('error.log')->error($class . ': ' . $message);
+
         return new Response($this->renderView('static_pages/statics.tpl'), 500);
     }
 
@@ -123,10 +117,24 @@ class ErrorController extends Controller
      * error. It should be used only when the error can not be reported to
      * the user from some reason.
      *
+     * @param string $class   The short class name.
+     * @param string $message The error message.
+     *
      * @return Response The response object.
      */
-    protected function getFatalErrorResponse()
+    protected function getFatalErrorResponse($class, $message)
     {
+        $message = 'failure: ' . $message;
+
+        if ($class === 'ConnectionException') {
+            $message = 'database.connection.' . $message;
+        }
+
+        $this->get('error.log')->error($message);
+
+        // Remove assets from bag from a previous run
+        $this->get('core.service.assetic.asset_bag')->reset();
+
         return new Response(
             $this->get('core.template.admin')->fetch('error/500.tpl'),
             500
@@ -137,10 +145,14 @@ class ErrorController extends Controller
      * Generates a response when the error is caused by a resource that could
      * not be found.
      *
+     * @param string $class The short class name.
+     *
      * @return Response The response object.
      */
-    protected function getNotFoundResponse()
+    protected function getNotFoundResponse($class)
     {
+        $this->get('application.log')->info($class);
+
         list($positions, $advertisements) = $this->getAdvertisements();
 
         $this->view->setConfig('articles');
