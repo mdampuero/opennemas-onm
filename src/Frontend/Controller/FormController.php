@@ -149,7 +149,7 @@ class FormController extends Controller
                     $mailer->send($text);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Frontend form (sender: " . $mailSender . ", to: "
+                        "Email sent. Frontend form (From: " . $email . ", to: "
                         . $settings['contact_email']
                     );
 

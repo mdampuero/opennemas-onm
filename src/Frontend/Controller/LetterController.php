@@ -295,11 +295,11 @@ class LetterController extends Controller
                     $this->get('mailer')->send($text);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Frontend letter (sender:" . $mailSender . ", to: " . $recipient . ")"
+                        "Email sent. Frontend letter (From:" . $email . ", to: " . $recipient . ")"
                     );
                 } catch (\Exception $e) {
                     $this->get('application.log')->notice(
-                        "Email NOT sent. Frontend letter (sender:" . $mailSender . ", to: " . $recipient . "):"
+                        "Email NOT sent. Frontend letter (From:" . $email . ", to: " . $recipient . "):"
                         . $e->getMessage()
                     );
                 }
