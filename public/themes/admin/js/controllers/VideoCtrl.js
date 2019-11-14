@@ -100,7 +100,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       // Assign the cover image
       var cover = $scope.data.extra.related_contents.filter(function(e) {
-        return e && e.pk_photo === $scope.item.information.thumbnail;
+        return e && e.pk_photo === parseInt($scope.item.information.thumbnail);
       }).shift();
 
       if (cover) {
