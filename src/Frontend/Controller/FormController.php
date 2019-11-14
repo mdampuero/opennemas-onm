@@ -157,6 +157,11 @@ class FormController extends Controller
                     $message = _('The information has been sent');
                 } catch (\Exception $e) {
                     $message = _('Sorry, we were unable to complete your request');
+                    $this->get('application.log')->notice(
+                        "Email NOT sent. Frontend form (From:" . $email
+                        . ", to: " . $settings['contact_email'] . "):"
+                        . $e->getMessage()
+                    );
                 }
             } else {
                 $message = _('Sorry, we were unable to complete your request');
