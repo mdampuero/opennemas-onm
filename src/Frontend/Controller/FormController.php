@@ -90,10 +90,7 @@ class FormController extends Controller
         if (!empty($email) && $isValid) {
             // Check data form is correcty and serialize form
             $body       = '';
-            $notAllowed = [
-                'name', 'cx', 'g-recaptcha-response', 'recipient',
-                'security_code', 'subject',
-            ];
+            $notAllowed = [ 'cx', 'g-recaptcha-response', 'recipient', 'security_code', 'subject' ];
 
             foreach ($request->request as $key => $value) {
                 if (!in_array($key, $notAllowed)) {
@@ -101,7 +98,6 @@ class FormController extends Controller
                 }
             }
 
-            $name     = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
             $subject  = $request->request->filter('subject', null, FILTER_SANITIZE_STRING);
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -116,7 +112,7 @@ class FormController extends Controller
                     ->setSubject($subject)
                     ->setBody($body, 'text/html')
                     ->setTo([ $settings['contact_email'] => $settings['contact_email'] ])
-                    ->setFrom([ $email => $name ])
+                    ->setFrom([ $mailSender => $settings['site_name'] ])
                     ->setSender([ $mailSender => $settings['site_name'] ]);
 
                 $headers = $text->getHeaders();
@@ -153,7 +149,7 @@ class FormController extends Controller
                     $mailer->send($text);
 
                     $this->get('application.log')->notice(
-                        "Email sent. Frontend form (sender: " . $email . ", to: "
+                        "Email sent. Frontend form (From: " . $email . ", to: "
                         . $settings['contact_email']
                     );
 
@@ -161,6 +157,11 @@ class FormController extends Controller
                     $message = _('The information has been sent');
                 } catch (\Exception $e) {
                     $message = _('Sorry, we were unable to complete your request');
+                    $this->get('application.log')->notice(
+                        "Email NOT sent. Frontend form (From:" . $email
+                        . ", to: " . $settings['contact_email'] . "):"
+                        . $e->getMessage()
+                    );
                 }
             } else {
                 $message = _('Sorry, we were unable to complete your request');
