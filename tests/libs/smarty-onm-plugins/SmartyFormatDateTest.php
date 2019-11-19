@@ -94,6 +94,22 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests smarty_function_format_date when the provided date is invalid and
+     * the DateTime object could not be created.
+     */
+    public function testFormatDateWhenInvalidDate()
+    {
+        $this->locale->expects($this->once())->method('getLocale')
+            ->with('frontend')->willReturn('es_ES');
+        $this->locale->expects($this->once())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('Europe/Madrid'));
+
+        $this->assertEmpty(smarty_function_format_date([
+            'date' => '2010-2010-10-10'
+        ], $this->smarty));
+    }
+
+    /**
      * Tests smarty_function_format_date when no expection thrown by the
      * FilterManager.
      */
