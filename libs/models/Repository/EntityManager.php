@@ -394,7 +394,7 @@ class EntityManager extends BaseManager
     protected function parseCategory(string &$filters)
     {
         $pattern = '/pk_fk_content_category\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
-            . '|pk_fk_content_category\s*(in|IN)\s*\("([0-9, ]+)\)"/';
+            . '|pk_fk_content_category\s*(in|IN)\s*\([\'"0-9, ]+\)/';
 
         preg_match_all($pattern, $filters, $matches);
 
