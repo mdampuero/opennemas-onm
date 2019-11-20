@@ -154,14 +154,12 @@ class EntityManager extends BaseManager
      * @param integer $elementsPerPage The max number of elements.
      * @param integer $page            The current page.
      * @param integer $offset          The offset to start with.
-     * @param integer $count           Number of results for the query
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $sql = 'SELECT ' . ($count ? 'SQL_CALC_FOUND_ROWS ' : '') . 'content_type_name, pk_content'
-            . ' FROM contents ';
+        $sql = 'SELECT content_type_name, pk_content FROM contents ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -189,21 +187,14 @@ class EntityManager extends BaseManager
 
         $sql .= " ORDER BY $orderBySQL $limitSQL";
 
-        $rs = $this->dbConn->fetchAll($sql);
-
-        if ($count) {
-            $count = $this->getSqlCount();
-        }
-
+        $rs  = $this->dbConn->fetchAll($sql);
         $ids = [];
+
         foreach ($rs as $item) {
-            $ids[$item['pk_content']] =
-                [ $item['content_type_name'], $item['pk_content']];
+            $ids[] = [ $item['content_type_name'], $item['pk_content'] ];
         }
 
-        $contents = $this->findMulti(array_values($ids));
-
-        return $contents;
+        return $this->findMulti($ids);
     }
 
     /**
