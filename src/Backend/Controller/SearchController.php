@@ -109,9 +109,9 @@ class SearchController extends Controller
                 . ' AND ' . $search;
 
             $order = [ 'starttime' => 'desc' ];
-            $total = true;
 
-            $results = $er->findBy($criteria, $order, 8, $page, 0, $total);
+            $results = $er->findBy($criteria, $order, 8, $page);
+            $total   = $er->countBy($criteria);
 
             foreach ($results as $content) {
                 $content->content_partial_path =

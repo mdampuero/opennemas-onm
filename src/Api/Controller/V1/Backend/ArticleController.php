@@ -44,8 +44,8 @@ class ArticleController extends Controller
             $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
         $em      = $this->get('entity_repository');
-        $total   = true;
-        $results = $em->findBy($criteria, $order, $epp, $page, 0, $total);
+        $results = $em->findBy($criteria, $order, $epp, $page);
+        $total   = $em->countBy($criteria);
 
         $results = \Onm\StringUtils::convertToUtf8($results);
 
@@ -225,8 +225,7 @@ class ArticleController extends Controller
             $name = 'related' . ucfirst(str_replace('page', '', $key));
 
             if ($key === 'home'
-                && !$this->get('core.security')
-                ->hasExtension('CRONICAS_MODULES')
+                && !$this->get('core.security')->hasExtension('CRONICAS_MODULES')
             ) {
                 continue;
             }

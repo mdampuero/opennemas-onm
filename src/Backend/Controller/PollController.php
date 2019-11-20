@@ -74,8 +74,8 @@ class PollController extends BackendController
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $count = true;
-        $polls = $em->findBy($filters, $order, $epp, $page, 0, $count);
+        $polls = $em->findBy($filters, $order, $epp, $page);
+        $total = $em->countBy($filters);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -85,7 +85,7 @@ class PollController extends BackendController
             'directional' => true,
             'epp'         => $epp,
             'page'        => $page,
-            'total'       => $count,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'backend_polls_content_provider',
                 'params' => [ 'category' => $categoryId ]

@@ -204,15 +204,15 @@ class LettersController extends Controller
             'pk_content'        => [ ['value' => $ids, 'operator' => 'NOT IN'] ]
         ];
 
-        $countLetters = true;
-        $letters      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countLetters);
+        $letters = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
+        $total   = $em->countBy($filters);
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'boundary'    => true,
             'epp'         => $itemsPerPage,
             'page'        => $page,
-            'total'       => $countLetters,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'admin_letters_content_provider',
                 'params' => [ 'category' => $categoryId ]
