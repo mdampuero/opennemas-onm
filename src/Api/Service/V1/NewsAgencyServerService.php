@@ -64,7 +64,10 @@ class NewsAgencyServerService implements Service
             ->getDataSet('Settings', 'instance');
 
         $this->dispatcher = $container->get('core.dispatcher');
-        $this->config     = $this->dataset->get('news_agency_config', []);
+
+        $this->config = array_values(
+            $this->dataset->get('news_agency_config', [])
+        );
     }
 
     /**
@@ -177,7 +180,7 @@ class NewsAgencyServerService implements Service
                 throw new \InvalidArgumentException();
             }
 
-            $item = array_merge([ 'id' => $id ], $this->config[$id - 1]);
+            $item = array_merge($this->config[$id - 1], [ 'id' => $id ]);
 
             $this->dispatcher->dispatch($this->getEventName('getItem'), [
                 'id'   => $id,
@@ -200,7 +203,7 @@ class NewsAgencyServerService implements Service
             $items = [];
 
             foreach ($this->config as $item) {
-                $items[] = array_merge([ 'id' => $i++ ], $item);
+                $items[] = array_merge($item, [ 'id' => $i++ ]);
             }
 
             $this->dispatcher->dispatch($this->getEventName('getList'), [
