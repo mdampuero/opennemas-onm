@@ -78,8 +78,8 @@ class OpinionController extends BackendController
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $countOpinions = true;
-        $opinions      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countOpinions);
+        $opinions = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
+        $total    = $em->countBy($filters);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -88,7 +88,7 @@ class OpinionController extends BackendController
             'directional' => true,
             'epp'         => $itemsPerPage,
             'page'        => $page,
-            'total'       => $countOpinions,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'backend_opinions_content_provider',
                 'params' => [ 'category' => $categoryId ]

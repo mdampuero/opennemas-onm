@@ -65,8 +65,8 @@ class WidgetController extends BackendController
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $countWidgets = true;
-        $widgets      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countWidgets);
+        $widgets = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
+        $total   = $em->countBy($filters);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([
@@ -74,7 +74,7 @@ class WidgetController extends BackendController
             'directional' => true,
             'epp'         => $itemsPerPage,
             'page'        => $page,
-            'total'       => $countWidgets,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'backend_widgets_content_provider',
                 'params' => [ 'category' => $categoryId ]

@@ -154,14 +154,12 @@ class EntityManager extends BaseManager
      * @param integer $elementsPerPage The max number of elements.
      * @param integer $page            The current page.
      * @param integer $offset          The offset to start with.
-     * @param integer $count           Number of results for the query
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        $sql = 'SELECT ' . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '') . 'content_type_name, pk_content'
-            . ' FROM contents ';
+        $sql = 'SELECT content_type_name, pk_content FROM contents ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -169,47 +167,34 @@ class EntityManager extends BaseManager
             $sql .= $this->getJoinSQL($join);
         }
 
-        $criteriaAux = $this->getFilterSQL($criteria);
+        $filters = $this->getFilterSQL($criteria);
 
-        $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
-
-        if ($haveContentCategory) {
-            $sql .= ' LEFT JOIN contents_categories'
-            . ' ON contents.pk_content = contents_categories.pk_fk_content ';
+        if (strpos($filters, 'content_type_name') !== false) {
+            $this->parseContentTypeName($filters);
         }
 
-        if (strpos($criteriaAux, 'content_type_name') !== false) {
-            $this->removeContentTypeNameFromCriteria($criteriaAux);
+        if ($this->hasCategoryFilter($filters)) {
+            $this->parseCategory($filters);
         }
 
-        $sql .= " WHERE " . $criteriaAux;
-
-        $orderBySQL = '`pk_content` ASC';
-        if (!empty($order)) {
-            $orderBySQL = $this->getOrderBySQL($order);
-        }
+        $sql .= " WHERE " . $filters;
 
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
 
-        if ($haveContentCategory) {
-            $sql .= " GROUP BY `pk_content`";
-        }
+        $orderBySQL = empty($order)
+            ? '`pk_content` ASC'
+            : $this->getOrderBySQL($order);
+
         $sql .= " ORDER BY $orderBySQL $limitSQL";
 
-        $rs = $this->dbConn->fetchAll($sql);
-        if ($count) {
-            $count = $this->getSqlCount();
-        }
-
+        $rs  = $this->dbConn->fetchAll($sql);
         $ids = [];
+
         foreach ($rs as $item) {
-            $ids[$item['pk_content']] =
-                [ $item['content_type_name'], $item['pk_content']];
+            $ids[] = [ $item['content_type_name'], $item['pk_content'] ];
         }
 
-        $contents = $this->findMulti(array_values($ids));
-
-        return $contents;
+        return $this->findMulti($ids);
     }
 
     /**
@@ -228,8 +213,7 @@ class EntityManager extends BaseManager
             unset($criteria['tables']);
         }
 
-        $sql = 'SELECT COUNT(DISTINCT content_type_name, pk_content)'
-            . ' FROM ' . $fromSQL . ' ';
+        $sql = 'SELECT COUNT(*) FROM ' . $fromSQL . ' ';
 
         if (is_array($criteria) && array_key_exists('join', $criteria)) {
             $join = $criteria['join'];
@@ -237,20 +221,17 @@ class EntityManager extends BaseManager
             $sql .= $this->getJoinSQL($join);
         }
 
-        $criteriaAux = $this->getFilterSQL($criteria);
+        $filters = $this->getFilterSQL($criteria);
 
-        if (strpos($criteriaAux, 'content_type_name') !== false) {
-            $this->removeContentTypeNameFromCriteria($criteriaAux);
+        if (strpos($filters, 'content_type_name') !== false) {
+            $this->parseContentTypeName($filters);
         }
 
-        $haveContentCategory = strpos($criteriaAux, 'pk_fk_content_category') !== false;
-
-        if ($haveContentCategory) {
-            $sql .= ' LEFT JOIN contents_categories'
-            . ' ON contents.pk_content = contents_categories.pk_fk_content ';
+        if ($this->hasCategoryFilter($filters)) {
+            $this->parseCategory($filters);
         }
 
-        $sql .= " WHERE " . $this->getFilterSQL($criteria);
+        $sql .= " WHERE " . $filters;
 
         $rs = $this->dbConn->fetchArray($sql);
 
@@ -380,11 +361,48 @@ class EntityManager extends BaseManager
     }
 
     /**
+     * Checks if there is a category condition in filters
+     *
+     * @param string $filters The filters.
+     *
+     * @return bool True if there is a category condition. False otherwise.
+     */
+    protected function hasCategoryFilter($filters)
+    {
+        return strpos($filters, 'pk_fk_content_category') !== false;
+    }
+
+    /**
+     * Parse category condition and transforms it in a condition with a subquery
+     * in the contents_categories table.
+     *
+     * @param string $filters The filters to parse.
+     */
+    protected function parseCategory(string &$filters)
+    {
+        $pattern = '/pk_fk_content_category\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
+            . '|pk_fk_content_category\s*(in|IN)\s*\([\'"0-9, ]+\)/';
+
+        preg_match_all($pattern, $filters, $matches);
+
+        foreach ($matches[0] as $match) {
+            $filters = str_replace(
+                $match,
+                sprintf(
+                    'pk_content IN (SELECT pk_fk_content FROM contents_categories WHERE %s)',
+                    $match
+                ),
+                $filters
+            );
+        }
+    }
+
+    /**
      *  Replace criterias with content_type_name for fk_content_type
      *
      *   @param String $criterias The criteria used to search.
      */
-    protected function removeContentTypeNameFromCriteria(&$criterias)
+    protected function parseContentTypeName(&$criterias)
     {
         preg_match_all(
             "/content_type_name\s*=\s*'{1}([A-Za-z0-9 ]*)'{1}|content_type_name\s*=\s*\"{1}([A-Za-z0-9 ]*)\"{1}/",

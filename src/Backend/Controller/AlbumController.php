@@ -72,8 +72,8 @@ class AlbumController extends BackendController
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $countAlbums = true;
-        $albums      = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page, 0, $countAlbums);
+        $albums = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
+        $total  = $em->countBy($filters);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -83,7 +83,7 @@ class AlbumController extends BackendController
             'directional' => true,
             'epp'         => $itemsPerPage,
             'page'        => $page,
-            'total'       => $countAlbums,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'backend_albums_content_provider',
                 'params' => ['category' => $categoryId]

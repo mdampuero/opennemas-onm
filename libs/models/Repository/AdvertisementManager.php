@@ -53,42 +53,33 @@ class AdvertisementManager extends EntityManager
      * @param  integer      $elementsPerPage The max number of elements.
      * @param  integer      $page            The current page.
      * @param  integer      $offset          The offset to start with.
-     * @param  integer      $count           Whether if fetch the total number of elements
      *
-     * @return array                         The matched elements.
+     * @return array The matched elements.
      */
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0, &$count = null)
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null, $offset = 0)
     {
-        // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page, $offset);
         $orderBySQL = '`pk_content` DESC';
 
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
 
-        $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
-
         // Executing the SQL
-        $sql = "SELECT " . (($count) ? "SQL_CALC_FOUND_ROWS  " : "") .
-            " content_type_name, pk_content FROM `contents`, `advertisements`
-            WHERE $filterSQL AND pk_content=pk_advertisement
-            ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT content_type_name, pk_content"
+            . " FROM `contents`, `advertisements`"
+            . " WHERE $filterSQL AND pk_content=pk_advertisement"
+            . " ORDER BY $orderBySQL $limitSQL";
 
-        $rs = $this->dbConn->fetchAll($sql);
+        $rs  = $this->dbConn->fetchAll($sql);
+        $ids = [];
 
-        if ($count) {
-            $count = $this->getSqlCount();
+        foreach ($rs as $item) {
+            $ids[] = [ $item['content_type_name'], $item['pk_content'] ];
         }
 
-        $contentIdentifiers = [];
-        foreach ($rs as $resultElement) {
-            $contentIdentifiers[] = [ $resultElement['content_type_name'], $resultElement['pk_content'] ];
-        }
-
-        $contents = $this->findMulti($contentIdentifiers);
-
-        return $contents;
+        return $this->findMulti($ids);
     }
 
     /**

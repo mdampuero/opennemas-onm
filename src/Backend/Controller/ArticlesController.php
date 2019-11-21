@@ -129,8 +129,8 @@ class ArticlesController extends Controller
             'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
         ];
 
-        $countArticles = true;
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
+        $articles = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
+        $total    = $em->countBy($filters);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -140,7 +140,7 @@ class ArticlesController extends Controller
             'epp'         => 8,
             'maxLinks'    => 5,
             'page'        => $page,
-            'total'       => $countArticles,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'admin_articles_content_provider_suggested',
                 'params' => ['category' => $category]
@@ -186,8 +186,8 @@ class ArticlesController extends Controller
             $filters['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
         }
 
-        $countArticles = true;
-        $articles      = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page, 0, $countArticles);
+        $articles = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
+        $total    = $em->countBy($filters);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -197,7 +197,7 @@ class ArticlesController extends Controller
             'epp'         => 8,
             'maxLinks'    => 5,
             'page'        => $page,
-            'total'       => $countArticles,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'admin_articles_content_provider_category',
                 'params' => [

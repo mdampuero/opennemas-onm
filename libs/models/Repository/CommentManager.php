@@ -84,30 +84,25 @@ class CommentManager extends BaseManager
      *
      * @return array The matched elements.
      */
-    public function findBy($criteria, $order, $elementsPerPage = null, $page = null, &$count = null)
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
-        // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
         $orderBySQL = '`id` DESC';
 
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
 
-        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
+        $sql = "SELECT id FROM `comments`"
+            . " WHERE $filterSQL"
+            . " ORDER BY $orderBySQL $limitSQL";
 
-        // Executing the SQL
-        $sql = "SELECT " . (($count) ? 'SQL_CALC_FOUND_ROWS  ' : '')
-            . " id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
         $rs  = $this->dbConn->fetchAll($sql);
-
-        if ($count) {
-            $count = $this->getSqlCount();
-        }
-
         $ids = [];
-        foreach ($rs as $resultElement) {
-            $ids[] = $resultElement['id'];
+
+        foreach ($rs as $item) {
+            $ids[] = $item['id'];
         }
 
         return $this->findMulti($ids);
