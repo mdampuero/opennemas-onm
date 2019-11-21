@@ -43,8 +43,10 @@ class ContentHelper
     public function getSuggested($contentId, $contentTypeName, $categoryId = null, $epp = 4)
     {
         $epp     = (int) $epp < 1 ? 5 : (int) $epp + 1;
-        $cacheId = 'suggested_contents_' . md5(implode(',', func_get_args()));
-        $items   = $this->cache->get($cacheId);
+        $cacheId = 'suggested_contents_'
+            . md5(implode(',', [ $contentTypeName, $categoryId, $epp ]));
+
+        $items = $this->cache->get($cacheId);
 
         if (!empty($items) && !empty($items[0])) {
             return $this->ignoreCurrent($contentId, $items);
