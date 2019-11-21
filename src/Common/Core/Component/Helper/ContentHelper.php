@@ -11,7 +11,7 @@
 
 namespace Common\Core\Component\Helper;
 
-use Onm\Cache\CacheInterface;
+use Common\Cache\Core\Cache;
 use Repository\EntityManager;
 
 /**
@@ -22,18 +22,13 @@ class ContentHelper
     /**
      * Initializes the ContentHelper.
      *
-     * @param Connection     $databaseConnection The database connection.
-     * @param EntityManager  $entityManager      The entity manager.
-     * @param CacheInterface $cacheHandler       The cache service.
+     * @param EntityManager  $em    The entity manager.
+     * @param Cache          $cache The cache service.
      */
-    public function __construct(
-        $databaseConnection,
-        EntityManager $entityManager,
-        CacheInterface $cacheHandler
-    ) {
-        $this->cache  = $cacheHandler;
-        $this->dbConn = $databaseConnection;
-        $this->er     = $entityManager;
+    public function __construct(EntityManager $em, Cache $cache)
+    {
+        $this->cache = $cache;
+        $this->em    = $em;
     }
 
     /**
@@ -45,65 +40,88 @@ class ContentHelper
      *
      * @return array Array with the content properties of each content.
      */
-    public function getSuggested($filter = '', $numberOfElements = 4)
+    public function getSuggested($contentId, $contentTypeName, $categoryId = null, $epp = 4)
     {
-        $cacheKey = 'suggested_contents_' . md5(implode(',', func_get_args()));
-        $result   = $this->cache->fetch($cacheKey);
+        $epp     = (int) $epp < 1 ? 5 : (int) $epp + 1;
+        $cacheId = 'suggested_contents_' . md5(implode(',', func_get_args()));
+        $items   = $this->cache->get($cacheId);
 
-        if (!is_array($result)) {
-            $filter = (empty($filter) ? "" : " AND " . $filter);
+        if (!empty($items) && !empty($items[0])) {
+            return $this->ignoreCurrent($contentId, $items);
+        }
 
-            $numberOfElements = (int) $numberOfElements;
-            if ($numberOfElements < 1) {
-                $numberOfElements = 4;
-            }
+        $criteria = [
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 0 ] ],
+            'content_type_name' => [ [ 'value' => $contentTypeName ] ],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
 
-            $sql = "SELECT content_type_name, pk_content FROM contents STRAIGHT_JOIN"
-                    . " contents_categories ON pk_content = pk_fk_content"
-                    . " WHERE `contents`.`content_status` = 1 AND `contents`.`in_litter` = 0 "
-                    . $filter
-                    . " ORDER BY starttime DESC LIMIT " . $numberOfElements;
+        if (!empty($categoryId)) {
+            $criteria['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
+        }
 
-            try {
-                $rs           = $this->dbConn->fetchAll($sql);
-                $contentProps = [];
-                foreach ($rs as $content) {
-                    $contentProps [] = [$content['content_type_name'], $content['pk_content']];
-                }
-
-                if (count($contentProps) < 1) {
-                    return [];
-                }
-
-                $contents = $this->er->findMulti($contentProps);
-            } catch (Exception $e) {
-                return [];
-            }
-
-            $cm       = new \ContentManager();
-            $contents = $cm->getInTime($contents);
-            $photos   = [];
-            $er       = getService('entity_repository');
+        try {
+            $contents = $this->em->findBy($criteria, [ 'starttime' => 'desc' ], $epp, 1);
 
             foreach ($contents as &$content) {
                 if (empty($content->img1)) {
                     continue;
                 }
 
-                $photo = $er->find('Photo', $content->img1);
+                $photo = $this->em->find('Photo', $content->img1);
 
                 if (!empty($photo)) {
                     $photos[$content->img1] = $photo;
                 }
             }
 
-            $result    = [];
-            $result[0] = $contents;
-            $result[1] = $photos;
+            $items = [ $contents, $photos ];
 
-            $this->cache->save($cacheKey, $result, 300);
+            $this->cache->set($cacheId, $items, 900);
+        } catch (\Exception $e) {
+            return [];
         }
 
-        return $result;
+        return $this->ignoreCurrent($contentId, $items);
+    }
+
+    /**
+     * Removes the current content and its photo from the list of suggested
+     * contents.
+     *
+     * @param int   $contentId The current content id.
+     * @param array $items     The list of suggested contents and photos for a
+     *                         category.
+     *
+     * @return array The list of suggested contents and their photos without
+     *               the current content.
+     */
+    protected function ignoreCurrent($contentId, $items)
+    {
+        $current = array_filter($items[0], function ($a) use ($contentId) {
+            return $a->pk_content == $contentId;
+        });
+
+        $items[0] = array_filter($items[0], function ($a) use ($contentId) {
+            return $a->pk_content != $contentId;
+        });
+
+        if (!empty($current)) {
+            if (!empty($current[0]->img1)) {
+                unset($items[1][$current[0]->img1]);
+            }
+        }
+
+        return $items;
     }
 }
