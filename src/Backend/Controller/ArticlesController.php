@@ -247,17 +247,9 @@ class ArticlesController extends Controller
             $article->{$key} = $value;
         }
 
-        if (!empty($article->tags)) {
-            foreach ($article->tags as $tag) {
-                if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
-                    continue;
-                }
-
-                $tags[$tag['id']] = $tag;
-            }
-
-            $article->tags = array_keys($tags);
-        }
+        $tags = !empty($article->tags)
+            ? $this->get('api.service.tag')->getListByIdsKeyMapped($article->tags)
+            : [];
 
         $params = [
             'contentId' => $article->id,
