@@ -139,6 +139,12 @@ albums:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: cover_id
+            source_field: [ cover_id ]
+            target_table: photos
+            target_field: [ pk_photo ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 albums_photos:
     columns:
         pk_album:
@@ -1688,6 +1694,12 @@ users:
             primary: false
             unique: false
             flags: {  }
+    foreign_keys:
+        -   name: avatar_img_id
+            source_fields: [avatar_img_id]
+            target_table: photos
+            target_fields: pk_photo
+            restrictions: { onUpdate: 'SET NULL', onDelete: CASCADE }
 user_user_group:
     columns:
         user_id:
