@@ -290,13 +290,11 @@ class ArticlesController extends Controller
         }
 
         if (!empty($article->category)) {
-            // Machine suggested contents code
-            $suggested = $this->get('core.helper.content')
-                ->getSuggested(
-                    "category_name= '" . $article->category_name
-                    . "' AND pk_content <>" . $article->id,
-                    4
-                );
+            $suggested = $this->get('core.helper.content')->getSuggested(
+                $article->pk_content,
+                'article',
+                $params['category']->pk_content_category
+            );
 
             $params['suggested'] = $suggested[0];
             $params['photos']    = $suggested[1];
