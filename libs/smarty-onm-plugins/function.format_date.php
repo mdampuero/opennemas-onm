@@ -32,13 +32,13 @@ function smarty_function_format_date($params, &$smarty)
         'type'     => 'long|short'
     ];
 
-    if (!$date instanceof \DateTime) {
-        $date = new \DateTime($date);
-    }
-
     $params = array_merge($defaults, $params);
 
     try {
+        if (!$date instanceof \DateTime) {
+            $date = new \DateTime($date);
+        }
+
         return $smarty->getContainer()->get('data.manager.filter')
             ->set($date)
             ->filter('format_date', $params)
