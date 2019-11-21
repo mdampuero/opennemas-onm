@@ -145,36 +145,11 @@ class VideoController extends FrontendController
      */
     protected function hydrateShow(array &$params = []):void
     {
-        $author = $this->get('user_repository')->find((int) $params['content']->fk_author);
-
-        $params['content']->author = $author;
-
-        // Get other_videos for widget video most
-        $order   = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'pk_content'             => [[ 'value' => $params['content']->id, 'operator' => '<>' ]],
-            'pk_fk_content_category' => [[ 'value' => $params['o_category']->pk_content_category ]],
-            'content_type_name'      => [[ 'value' => 'video' ]],
-            'content_status'         => [[ 'value' => 1 ]],
-            'in_litter'              => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'       => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
-        $otherVideos = $this->get('entity_repository')->findBy($filters, $order, 4, 1);
+        $params['content']->author = $this->get('user_repository')->find(
+            (int) $params['content']->fk_author
+        );
 
         $params = array_merge($params, [
-            'others_videos' => $otherVideos,
             'tags' => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($params['content']->tags)['items']
         ]);
