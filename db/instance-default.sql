@@ -116,7 +116,9 @@ CREATE TABLE `albums` (
   `agency` varchar(250) DEFAULT NULL,
   `cover_id` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`pk_album`),
-  CONSTRAINT `album_id_contents_id` FOREIGN KEY (`pk_album`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `cover_id` (`cover_id`),
+  CONSTRAINT `album_id_contents_id` FOREIGN KEY (`pk_album`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cover_id` FOREIGN KEY (`cover_id`) REFERENCES `photos` (`pk_photo`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=821 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1290,7 +1292,9 @@ CREATE TABLE `users` (
   `activated` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '1 activated - 0 deactivated',
   PRIMARY KEY (`id`),
   KEY `user_username` (`username`),
-  KEY `user_email` (`email`)
+  KEY `user_email` (`email`),
+  KEY `avatar_img_id` (`avatar_img_id`),
+  CONSTRAINT `avatar_img_id` FOREIGN KEY (`avatar_img_id`) REFERENCES `photos` (`pk_photo`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
