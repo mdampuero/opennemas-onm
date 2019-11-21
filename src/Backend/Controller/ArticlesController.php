@@ -120,7 +120,6 @@ class ArticlesController extends Controller
         $ids = $this->get('api.service.frontpage_version')
             ->getContentIds($category, $frontpageVersionId, 'Article');
 
-
         $filters = [
             'content_type_name' => [ [ 'value' => 'article' ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -247,9 +246,13 @@ class ArticlesController extends Controller
             $article->{$key} = $value;
         }
 
-        $tags = !empty($article->tags)
-            ? $this->get('api.service.tag')->getListByIdsKeyMapped($article->tags)
-            : [];
+        $article->tags = array_filter($article->tags, function ($a) {
+            return is_numeric($a);
+        });
+
+        $tags = empty($article->tags)
+            ? []
+            : $this->get('api.service.tag')->getListByIdsKeyMapped($article->tags)['items'];
 
         $params = [
             'contentId' => $article->id,
