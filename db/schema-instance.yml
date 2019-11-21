@@ -1047,9 +1047,6 @@ opinions:
         fk_author:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
-        fk_author_img:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
     index:
         -
             name: PRIMARY

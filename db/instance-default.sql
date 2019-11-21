@@ -744,7 +744,6 @@ CREATE TABLE `opinions` (
   `pk_opinion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content_categories` int(10) unsigned DEFAULT '7',
   `fk_author` bigint(20) unsigned DEFAULT NULL,
-  `fk_author_img` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`pk_opinion`),
   KEY `fk_author` (`fk_author`),
   CONSTRAINT `opinions_id_contents_id` FOREIGN KEY (`pk_opinion`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE

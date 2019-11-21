@@ -45,13 +45,6 @@ class Opinion extends Content
     public $fk_author = null;
 
     /**
-     * The author img id
-     *
-     * @var int
-     */
-    public $fk_author_img = null;
-
-    /**
      * The meta property for summary
      *
      * @var int
@@ -101,7 +94,7 @@ class Opinion extends Content
             case 'content_type_name':
                 return 'Opinion';
             case 'author_object':
-                $ur = getService('user_repository');
+                $ur        = getService('user_repository');
                 $authorObj = $ur->find($this->fk_author);
                 // TODO: Fix this ASAP
                 if (!empty($authorObj) && !empty($authorObj->avatar_img_id)) {
