@@ -582,10 +582,10 @@ class FrontendController extends Controller
         }
 
         //Get suggested contents
-        $suggestedContents = $this->getSuggested(
+        $suggestedContents = $this->get('core.helper.content')->getSuggested(
+            $params['content']->pk_content,
             $params['content']->content_type_name,
-            $params['o_category']->pk_content_category,
-            $params['content']->pk_content
+            $params['o_category']->pk_content_category
         );
 
         $suggested = $suggestedContents[0];
@@ -702,30 +702,6 @@ class FrontendController extends Controller
         }
 
         return $related;
-    }
-
-    /**
-     * Returns the list of suggested contents for a content.
-     *
-     * @param Content  $content  The content to skip while fetching suggestions.
-     * @param Category $category The category to filter from.
-     *
-     * @return array The list of suggested contents.
-     */
-    protected function getSuggested($content_type_name, $category, $content)
-    {
-        $query = sprintf(
-            'content_type_name = "%s" AND pk_content <> "%s"',
-            $content_type_name,
-            $content
-        );
-
-        if (!empty($category)) {
-            $query = $query . sprintf(' AND pk_fk_content_category = "%s"', $category);
-        }
-
-        return $this->get('core.helper.content')
-            ->getSuggested($query, 4);
     }
 
     /**

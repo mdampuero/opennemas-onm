@@ -247,17 +247,9 @@ class ArticlesController extends Controller
             $article->{$key} = $value;
         }
 
-        if (!empty($article->tags)) {
-            foreach ($article->tags as $tag) {
-                if (!array_key_exists('id', $tag) || !is_numeric($tag['id'])) {
-                    continue;
-                }
-
-                $tags[$tag['id']] = $tag;
-            }
-
-            $article->tags = array_keys($tags);
-        }
+        $tags = !empty($article->tags)
+            ? $this->get('api.service.tag')->getListByIdsKeyMapped($article->tags)
+            : [];
 
         $params = [
             'contentId' => $article->id,
@@ -298,13 +290,11 @@ class ArticlesController extends Controller
         }
 
         if (!empty($article->category)) {
-            // Machine suggested contents code
-            $suggested = $this->get('core.helper.content')
-                ->getSuggested(
-                    "category_name= '" . $article->category_name
-                    . "' AND pk_content <>" . $article->id,
-                    4
-                );
+            $suggested = $this->get('core.helper.content')->getSuggested(
+                $article->pk_content,
+                'article',
+                $params['category']->pk_content_category
+            );
 
             $params['suggested'] = $suggested[0];
             $params['photos']    = $suggested[1];

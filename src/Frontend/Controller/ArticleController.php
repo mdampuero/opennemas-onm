@@ -148,10 +148,10 @@ class ArticleController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $suggested = $this->getSuggested(
+        $suggested = $this->get('core.helper.content')->getSuggested(
+            $params['content']->pk_content,
             'article',
-            $params['o_category']->pk_content_category,
-            $params['content']->pk_content
+            $params['o_category']->pk_content_category
         );
 
         $params['tags']       = $this->getTags($params['content']);
