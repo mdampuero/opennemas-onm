@@ -71,7 +71,7 @@ class StructuredData
             "width": ' . $data['image']->width . ',
             "datePublished": "' . $data['created'] . '",
             "caption": "' . strip_tags($data['image']->description) . '",
-            "name": "' . $data['title'] . '"
+            "name": "' . strip_tags(htmlspecialchars(html_entity_decode($data['title'], ENT_COMPAT, 'UTF-8'))) . '"
         }';
 
         return $code;
@@ -96,7 +96,7 @@ class StructuredData
             "@id": "' . $data['url'] . '",
             "uploadDate": "' . $data['video']->created . '",
             "thumbnailUrl": "' . $data['video']->thumb . '",
-            "keywords": "' . $keywords . '",
+            "keywords": "' . strip_tags(htmlspecialchars(html_entity_decode($keywords, ENT_COMPAT, 'UTF-8'))) . '",
             "publisher" : {
                 "@type" : "Organization",
                 "name" : "' . $this->ds->get("site_name") . '",
@@ -127,14 +127,14 @@ class StructuredData
             "@context":"http://schema.org",
             "@type":"ImageGallery",
             "description": "' . strip_tags($data['summary']) . '",
-            "keywords": "' . $keywords . '",
+            "keywords": "' . strip_tags(htmlspecialchars(html_entity_decode($keywords, ENT_COMPAT, 'UTF-8'))) . '",
             "datePublished" : "' . $data['created'] . '",
             "dateModified": "' . $data['changed'] . '",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "' . $data['url'] . '"
             },
-            "headline": "' . $data['title'] . '",
+            "headline": "' . strip_tags(htmlspecialchars(html_entity_decode($data['title'], ENT_COMPAT, 'UTF-8'))) . '",
             "url": "' . $data['url'] . '",
             "author" : {
                 "@type" : "Person",
