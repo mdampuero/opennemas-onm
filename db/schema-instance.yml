@@ -132,6 +132,12 @@ albums:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: cover_id
+            columns: [cover_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: album_id_contents_id
@@ -1691,12 +1697,19 @@ users:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: avatar_img_id
+            columns: [avatar_img_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
-        -   name: avatar_img_id
-            source_field: [avatar_img_id]
+        -
+            name: avatar_img_id
+            source_field: [ avatar_img_id ]
             target_table: photos
-            target_field: [pk_photo]
-            restrictions: { onUpdate: 'SET NULL', onDelete: CASCADE }
+            target_field: [ pk_photo ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 user_user_group:
     columns:
         user_id:
