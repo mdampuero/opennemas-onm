@@ -206,7 +206,7 @@ class StructuredData
             "datePublished" : "' . $data['created'] . '",
             "dateModified": "' . $data['changed'] . '",
             "articleSection" : "' . $data['category']->title . '",
-            "keywords": "' . $keywords . '",
+            "keywords": "' . strip_tags(htmlspecialchars(html_entity_decode($keywords, ENT_COMPAT, 'UTF-8'))) . '",
             "url": "' . $data['url'] . '",
             "wordCount": ' . str_word_count($data['content']->body) . ',
             "description": "' . strip_tags($data['summary']) . '",
