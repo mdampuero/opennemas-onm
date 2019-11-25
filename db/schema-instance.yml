@@ -1695,7 +1695,7 @@ users:
         -   name: avatar_img_id
             source_field: [avatar_img_id]
             target_table: photos
-            target_field: pk_photo
+            target_field: [pk_photo]
             restrictions: { onUpdate: 'SET NULL', onDelete: CASCADE }
 user_user_group:
     columns:
