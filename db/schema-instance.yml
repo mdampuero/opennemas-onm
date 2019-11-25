@@ -424,10 +424,10 @@ content_categories:
             type: text
             options: { default: null, length: 65532, notnull: false }
         archived:
-            type: integer
+            type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         enabled:
-            type: integer
+            type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         fk_content_category:
             type: bigint
