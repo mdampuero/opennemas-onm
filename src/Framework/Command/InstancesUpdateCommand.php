@@ -48,12 +48,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
                 'If set, the command will gather content, users, sent emails info.'
             )
             ->addOption(
-                'alexa',
-                'a',
-                InputOption::VALUE_NONE,
-                'If set, the command will gathe the domain rank in alexa.'
-            )
-            ->addOption(
                 'views',
                 'p',
                 InputOption::VALUE_NONE,
@@ -93,7 +87,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         $options = [
             'instance_stats'  => $input->getOption('instance-stats'),
-            'alexa'           => $input->getOption('alexa'),
             'views'           => $input->getOption('views'),
             'media_size'      => $input->getOption('media-size'),
             'created'         => $input->getOption('created'),
@@ -104,14 +97,13 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         $this->output = $output;
 
         if (!$options['instance_stats']
-            && !$options['alexa']
             && !$options['views']
             && !$options['media_size']
             && !$options['created']
         ) {
             $this->output->writeln(
-                '<error>Please provide --instance-stats '
-                    . '--alexa, --views, --media-size or --created</error>'
+                '<error>Please provide --instance-stats,'
+                    . ' --views, --media-size or --created</error>'
             );
 
             return 1;
@@ -165,7 +157,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
      * Gets the instance information.
      *
      * @param  Instance $i       The instance.
-     * @param  array    $options Whether to get the Alexa's rank.
+     * @param  array    $options The list of command options.
      *
      * @return boolean
      */
@@ -229,19 +221,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         $conn->close();
-
-        // Check domain's rank in Alexa
-        if ($options['alexa'] && !empty($i->domains)) {
-            if ($this->output->isVeryVerbose()) {
-                $this->output->write("\t- Getting rank from alexa ");
-            }
-
-            $i->alexa = $this->getAlexa($i->getMainDomain());
-
-            if ($this->output->isVeryVerbose()) {
-                $this->output->writeln("<fg=green>DONE</>");
-            }
-        }
 
         // Get media size
         if ($options['media_size']) {
@@ -393,34 +372,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
         }
 
         $i->media_size = $size / 1024;
-    }
-
-    /**
-     * Gets the Alexa's rank for the given domain.
-     *
-     * @param  string  $domain The domain to check in Alexa.
-     * @return integer         The Alexa's rank for the domain.
-     */
-    private function getAlexa($domain)
-    {
-        $rank = 100000000;
-        $url  = "http://data.alexa.com/data?cli=10&dat=snbamz&url=" . $domain;
-
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $resp = curl_exec($ch);
-        curl_close($ch);
-
-        preg_match('/<POPULARITY .* TEXT="(\\d+)"/', $resp, $matches);
-
-        if (count($matches) > 0) {
-            $rank = $matches[1];
-        }
-
-        return (int) $rank;
     }
 
     /**
