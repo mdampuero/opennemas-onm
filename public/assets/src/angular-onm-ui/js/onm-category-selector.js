@@ -42,6 +42,7 @@
             multiple: '@',
             ngModel: '=',
             placeholder: '@',
+            position: '@',
             selected: '=?',
             selectedText: '@'
           },
@@ -50,11 +51,11 @@
               '<ui-select-match placeholder="[% $parent.placeholder %]">' +
               '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
               '</ui-select-match>' +
-              '<ui-select-choices group-by="groupCategories" repeat="item in (categories | filter: { title: $select.search })">' +
+              '<ui-select-choices group-by="groupCategories" position="[% $parent.$parent.position %]" repeat="item in (categories | filter: { title: $select.search })">' +
               '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
               '</ui-select-choices>' +
             '</ui-select>' +
-            '<div class="[% cssClass %] ui-select-container select2 select2-container" ng-if="multiple">' +
+            '<div class="[% cssClass %] ui-select-container select2 select2-container direction-[% position %]" ng-if="multiple">' +
               '<a class="select2-choice ui-select-match" data-toggle="dropdown">' +
                 '<span class="select2-chosen">' +
                   '<strong ng-if="labelText">[% labelText %]:</strong>' +
@@ -92,6 +93,7 @@
           link: function($scope, elem, $attrs) {
             $scope.cssClass     = $attrs.class ? $attrs.class : '';
             $scope.multiple     = $attrs.multiple;
+            $scope.position     = $scope.position ? $scope.position : 'down';
             $scope.required     = $attrs.required ? $attrs.required : false;
             $scope.selectedText = $scope.selectedText || 'selected';
 
