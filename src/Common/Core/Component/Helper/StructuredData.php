@@ -55,6 +55,37 @@ class StructuredData
         $this->ts       = $ts;
     }
 
+
+    public function stripHtmlFromData($data)
+    {
+        if (!empty($data['video'])) {
+            $data['video']->title       =
+            strip_tags(htmlspecialchars(html_entity_decode(
+                $data['video']->title,
+                ENT_COMPAT,
+                'UTF-8'
+            )));
+            $data['video']->description =
+            strip_tags(htmlspecialchars(html_entity_decode(
+                $data['video']->description,
+                ENT_COMPAT,
+                'UTF-8'
+            )));
+            $data['video']->tags        = empty($data['video']->tags) ?
+                                          '' : $this->getTags($data['video']->tags);
+            $data['video']->tags        =
+            strip_tags(htmlspecialchars(html_entity_decode(
+                $data['video']->tags,
+                ENT_COMPAT,
+                'UTF-8'
+            )));
+        }
+
+        $data['summary'] = strip_tags($data['summary']);
+
+        return $data;
+    }
+
     /**
      * Generates json-ld for Images
      *
@@ -70,8 +101,13 @@ class StructuredData
             "height": ' . $data['image']->height . ',
             "width": ' . $data['image']->width . ',
             "datePublished": "' . $data['created'] . '",
-            "caption": "' . strip_tags($data['image']->description) . '",
-            "name": "' . strip_tags(htmlspecialchars(html_entity_decode($data['title'], ENT_COMPAT, 'UTF-8'))) . '"
+            "caption": "' .
+                            strip_tags(htmlspecialchars(html_entity_decode(
+                                $data['image']->description,
+                                ENT_COMPAT,
+                                'UTF-8'
+                            ))) . '",
+            "name": "' . $data['title'] . '"
         }';
 
         return $code;
@@ -84,19 +120,16 @@ class StructuredData
      */
     public function generateVideoJsonLDCode($data)
     {
-        $keywords = empty($data['video']->tags) ?
-            '' : $this->getTags($data['video']->tags);
-
-        $code = '{
+        $code = ',{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
             "author": "' . $data['author'] . '",
             "name": "' . $data['video']->title . '",
-            "description": "' . strip_tags($data['video']->description) . '",
+            "description": "' . $data['video']->description . '",
             "@id": "' . $data['url'] . '",
             "uploadDate": "' . $data['video']->created . '",
             "thumbnailUrl": "' . $data['video']->thumb . '",
-            "keywords": "' . strip_tags(htmlspecialchars(html_entity_decode($keywords, ENT_COMPAT, 'UTF-8'))) . '",
+            "keywords": "' . $data['video']->tags . '",
             "publisher" : {
                 "@type" : "Organization",
                 "name" : "' . $this->ds->get("site_name") . '",
@@ -121,20 +154,25 @@ class StructuredData
     public function generateImageGalleryJsonLDCode($data)
     {
         $keywords = empty($data['content']->tags) ?
-            '' : $this->getTags($data['content']->tags);
+                    '' : $this->getTags($data['content']->tags);
+        $keywords = strip_tags(htmlspecialchars(html_entity_decode(
+            $keywords,
+            ENT_COMPAT,
+            'UTF-8'
+        )));
 
         $code = '{
             "@context":"http://schema.org",
             "@type":"ImageGallery",
-            "description": "' . strip_tags($data['summary']) . '",
-            "keywords": "' . strip_tags(htmlspecialchars(html_entity_decode($keywords, ENT_COMPAT, 'UTF-8'))) . '",
+            "description": "' . $data['summary'] . '",
+            "keywords": "' . $keywords . '",
             "datePublished" : "' . $data['created'] . '",
             "dateModified": "' . $data['changed'] . '",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "' . $data['url'] . '"
             },
-            "headline": "' . strip_tags(htmlspecialchars(html_entity_decode($data['title'], ENT_COMPAT, 'UTF-8'))) . '",
+            "headline": "' . $data['title'] . '",
             "url": "' . $data['url'] . '",
             "author" : {
                 "@type" : "Person",
@@ -189,7 +227,12 @@ class StructuredData
     public function generateNewsArticleJsonLDCode($data)
     {
         $keywords = empty($data['content']->tags) ?
-            '' : $this->getTags($data['content']->tags);
+                    '' : $this->getTags($data['content']->tags);
+        $keywords = strip_tags(htmlspecialchars(html_entity_decode(
+            $keywords,
+            ENT_COMPAT,
+            'UTF-8'
+        )));
 
         $code = '{
             "@context" : "http://schema.org",
@@ -209,7 +252,7 @@ class StructuredData
             "keywords": "' . strip_tags(htmlspecialchars(html_entity_decode($keywords, ENT_COMPAT, 'UTF-8'))) . '",
             "url": "' . $data['url'] . '",
             "wordCount": ' . str_word_count($data['content']->body) . ',
-            "description": "' . strip_tags($data['summary']) . '",
+            "description": "' . $data['summary'] . '",
             "publisher" : {
                 "@type" : "Organization",
                 "name" : "' . $this->ds->get("site_name") . '",

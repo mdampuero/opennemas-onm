@@ -100,7 +100,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->data['video']->description = "<p>Video description</p>";
         $this->data['video']->created     = "2016-10-13 11:40:32";
         $this->data['video']->thumb       = "http://video-thumb.com";
-        $this->data['video']->tags        = [1,2,3,4,5];
+        $this->data['video']->tags        = "keywords,video,json,linking,data";
 
         $this->data['category']->title = "Mundo";
 
@@ -152,12 +152,12 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateVideoJsonLDCode()
     {
-        $videoJson = '{
+        $videoJson = ',{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
             "author": "John Doe",
             "name": "This is the video title",
-            "description": "Video description",
+            "description": "<p>Video description</p>",
             "@id": "http://onm.com/20161013114032000674.html",
             "uploadDate": "2016-10-13 11:40:32",
             "thumbnailUrl": "http://video-thumb.com",
@@ -177,16 +177,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->once())->method('get')
             ->willReturn('Site Name');
-        $this->ts->expects($this->once())->method('getListByIds')
-            ->willReturn([
-                'items' => [
-                    new Tag([ 'name' => 'keywords' ]),
-                    new Tag([ 'name' => 'video' ]),
-                    new Tag([ 'name' => 'json' ]),
-                    new Tag([ 'name' => 'linking' ]),
-                    new Tag([ 'name' => 'data' ]),
-                ]
-            ]);
 
         $this->assertEquals($videoJson, $this->object->generateVideoJsonLDCode($this->data));
     }
@@ -199,7 +189,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $galleryJson = '{
             "@context":"http://schema.org",
             "@type":"ImageGallery",
-            "description": "This is the summary",
+            "description": "<p>This is the summary</p>",
             "keywords": "keywords,object,json,linking,data",
             "datePublished" : "2016-10-13 11:40:32",
             "dateModified": "2016-10-13 11:40:32",
@@ -344,7 +334,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             "keywords": "",
             "url": "http://onm.com/20161013114032000674.html",
             "wordCount": 5,
-            "description": "This is the summary",
+            "description": "<p>This is the summary</p>",
             "publisher" : {
                 "@type" : "Organization",
                 "name" : "Site Name",
