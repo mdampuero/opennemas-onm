@@ -120,8 +120,8 @@ class VideoController extends FrontendController
         }
 
         $params = array_merge($params, [
-            'videos' => $response['items'],
-            'pager'  => $this->get('paginator')->get([
+            'videos'      => $response['items'],
+            'pagination'  => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
