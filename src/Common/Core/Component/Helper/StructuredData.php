@@ -120,7 +120,7 @@ class StructuredData
      */
     public function generateVideoJsonLDCode($data)
     {
-        $code = ',{
+        $code = '{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
             "author": "' . $data['author'] . '",

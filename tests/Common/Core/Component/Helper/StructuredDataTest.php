@@ -152,7 +152,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateVideoJsonLDCode()
     {
-        $videoJson = ',{
+        $videoJson = '{
             "@context": "http://schema.org/",
             "@type": "VideoObject",
             "author": "John Doe",

@@ -80,7 +80,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
     ];
 
     // Complete array of Data
-    $data  = [
+    $data = [
         'content'  => $content,
         'url'      => $url,
         'title'    => $title,
@@ -99,17 +99,15 @@ function smarty_function_structured_data_tags($params, &$smarty)
     $output = '<script type="application/ld+json">[';
     if ($content->content_type_name == 'album') {
         $data['photos'] = $smarty->getValue('photos');
-        $output .= $structData->generateImageGalleryJsonLDCode($data);
+        $output        .= $structData->generateImageGalleryJsonLDCode($data);
+    } elseif (!empty($data['video'])) {
+        $output .= $structData->generateVideoJsonLDCode($data);
     } else {
         $output .= $structData->generateNewsArticleJsonLDCode($data);
     }
 
     if (!empty($data['image'])) {
         $output .= $structData->generateImageJsonLDCode($data);
-    }
-
-    if (!empty($data['video'])) {
-        $output .= $structData->generateVideoJsonLDCode($data);
     }
 
     $output .= ']</script>';
