@@ -72,8 +72,9 @@ parameters:
     opennemas.backend_force_ssl:                false
     opennemas.base_domain:                      .dev.opennemas.com
     opennemas.redirect_frontend:                false
-    piwik.url:                                  http://piwik.openhost.es
-    piwik.token:                                long_alphanum_token
+    opennemas.piwik:
+        url:   http://piwik.openhost.es
+        token: long_alphanum_token
     sales_email:                                developers@opennemas.com
 
     # Cache
