@@ -134,11 +134,7 @@ class NewsAgencyResourceController extends ApiController
      */
     protected function getExtraData($items = [])
     {
-        $servers = $this->get('api.service.news_agency.server')->getList();
-        $servers = array_filter($servers['items'], function ($a) {
-            return !empty($a['activated']);
-        });
-
+        $servers = $this->get('api.service.news_agency.server')->getList()['items'];
         $urns    = [];
         $related = [];
 
