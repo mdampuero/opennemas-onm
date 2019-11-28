@@ -157,7 +157,7 @@ class SynchronizeCommand extends Command
 
                 $output->writeln(sprintf(
                     '<fg=green;options=bold>DONE</> <fg=blue;options=bold>'
-                        . '(% 3d imported, % 3d ignored, % 3d invalid)</>',
+                        . '(% 3d imported,   % 3d ignored, % 3d invalid)</>',
                     $stats['imported'],
                     $stats['ignored'],
                     $stats['invalid']
