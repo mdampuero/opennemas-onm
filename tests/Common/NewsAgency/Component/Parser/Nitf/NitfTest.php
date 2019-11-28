@@ -142,6 +142,11 @@ class NitfTest extends TestCase
             '<p>Sample summary</p>',
             $this->parser->getSummary($this->valid)
         );
+
+        $this->assertEquals(
+            'Sample summary',
+            $this->parser->getSummary($this->validAlt)
+        );
     }
 
     /**

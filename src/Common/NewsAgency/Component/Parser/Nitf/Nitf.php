@@ -207,17 +207,25 @@ class Nitf extends Parser
     public function getSummary($data)
     {
         $summaries = $data->xpath('//body/body.head/abstract');
+        $summary   = '';
 
         if (empty($summaries)) {
-            return '';
+            return $summary;
         }
 
-        $summary = "";
         foreach ($summaries[0]->children() as $child) {
-            $summary .= "<p>" . sprintf("%s", $child) . "</p>";
+            $summary .= '<p>' . (string) $child . '</p>';
         }
 
-        return iconv(mb_detect_encoding($summary), "UTF-8", $summary);
+        if (empty($summary) && !empty((string) $summaries[0])) {
+            $summary = str_replace(
+                "\n",
+                '<br>',
+                html_entity_decode((string) $summaries[0])
+            );
+        }
+
+        return iconv(mb_detect_encoding($summary), 'UTF-8', $summary);
     }
 
     /**
