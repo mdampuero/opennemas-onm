@@ -296,7 +296,7 @@
           };
 
           var data = {
-            fk_author: template.author ? template.author : null,
+            fk_author: template.fk_author ? template.fk_author : null,
             fk_content_category: template.fk_content_category ?
               template.fk_content_category : null,
             content_status: template.content_status,
