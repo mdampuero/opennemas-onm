@@ -321,6 +321,7 @@ class NewsMLComponentPhoto extends NewsML
         $photo->height      = $this->getHeight($file);
         $photo->id          = $this->getId($data);
         $photo->image_type  = 'image/' . $photo->extension;
+        $photo->body        = $this->getBody($data);
         $photo->summary     = $this->getSummary($data);
         $photo->title       = $this->getTitle($file);
         $photo->type        = 'photo';

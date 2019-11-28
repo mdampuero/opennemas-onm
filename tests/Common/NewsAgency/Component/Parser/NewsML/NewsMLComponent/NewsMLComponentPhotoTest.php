@@ -282,6 +282,7 @@ class NewsMLComponentPhotoTest extends TestCase
 
         $this->assertEquals('image/jpg', $resource->image_type);
         $this->assertEquals('wibble', $resource->title);
+        $this->assertContains('Vartan et Guevork Tarloyan', $resource->body);
         $this->assertEquals('photo', $resource->type);
         $this->assertEquals(
             'SGE.SDI86.050701102222.photo00.default-384x256.jpg',
