@@ -9,10 +9,12 @@
  */
 namespace Common\NewsAgency\Component\Synchronizer;
 
+use Common\Data\Serialize\Serializer\PhpSerializer;
 use Common\NewsAgency\Component\Factory\ParserFactory;
 use Common\NewsAgency\Component\Factory\ServerFactory;
 use Common\NewsAgency\Component\Repository\LocalRepository;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -63,13 +65,19 @@ class Synchronizer
     protected $syncPath = '';
 
     /**
+     * The syncronization statistics.
+     *
+     * @var array
+     */
+    protected $serverStats = [];
+
+    /**
      * Initializes the Synchronizer.
      *
      * @param Container $container The service container.
      */
     public function __construct($container)
     {
-        $this->finder = new Finder();
         $this->fs     = new Filesystem();
         $this->pf     = $container->get('news_agency.factory.parser');
         $this->sf     = $container->get('news_agency.factory.server');
@@ -84,6 +92,8 @@ class Synchronizer
         $this->syncFilePath = $this->syncPath . '/.sync';
         $this->lockFilePath = $this->syncPath . '/.lock';
 
+        $this->serverStats = $this->getServerStats();
+
         $this->resetStats();
     }
 
@@ -94,7 +104,7 @@ class Synchronizer
      */
     public function empty(array $servers) : void
     {
-        if (!$this->isSyncEnvironmetReady()) {
+        if (!$this->isSyncEnvironmentReady()) {
             return;
         }
 
@@ -108,7 +118,6 @@ class Synchronizer
             $this->emptyServer($server);
         }
 
-        $this->updateSyncFile();
         $this->unlockSync();
     }
 
@@ -117,7 +126,7 @@ class Synchronizer
      *
      * @return array The statistics.
      */
-    public function getStats() : array
+    public function getResourceStats() : array
     {
         return $this->stats;
     }
@@ -127,33 +136,21 @@ class Synchronizer
      *
      * @return array The last synchronization statistics.
      */
-    public function getSyncParams() : array
+    public function getServerStats() : array
     {
-        $params = null;
+        $stats = null;
 
-        if (file_exists($this->syncFilePath)) {
-            $params = unserialize(file_get_contents($this->syncFilePath));
+        if ($this->fs->exists($this->syncFilePath)) {
+            $stats = PhpSerializer::unserialize(
+                $this->getFile($this->syncFilePath)->getContents()
+            );
         }
 
-        if (empty($params)) {
-            return [ 'last_import' => '' ];
+        if (empty($stats)) {
+            return [];
         }
 
-        return $params;
-    }
-
-    /**
-     * Returns the number of minutes since last synchronization.
-     *
-     * @return int The number of minutes since last synchronization.
-     */
-    public function minutesFromLastSync() : int
-    {
-        $params = $this->getSyncParams();
-
-        $interval = abs(strtotime($params['last_import']) - time());
-
-        return round($interval / 60);
+        return $stats;
     }
 
     /**
@@ -184,7 +181,7 @@ class Synchronizer
      */
     public function synchronize(array $servers) : Synchronizer
     {
-        if (!$this->isSyncEnvironmetReady()) {
+        if (!$this->isSyncEnvironmentReady()) {
             $this->setupSyncEnvironment();
         }
 
@@ -207,9 +204,9 @@ class Synchronizer
     }
 
     /**
-     * Removes files for the provided item.
+     * Removes files for the provided server.
      *
-     * @param array $item The item information.
+     * @param array $server The server information.
      */
     protected function cleanServer($server) : void
     {
@@ -220,7 +217,7 @@ class Synchronizer
         $date = sprintf('< now - %s seconds', $server['sync_from']);
 
         $path  = $this->syncPath . '/' . $server['id'];
-        $files = $this->finder->in($path)
+        $files = $this->getFinder()->in($path)
             ->date($date)
             ->files();
 
@@ -229,7 +226,7 @@ class Synchronizer
             $this->stats['deleted']++;
         }
 
-        $files = $this->finder->in($this->syncPath)
+        $files = $this->getFinder()->in($this->syncPath)
             ->name('/sync.' . $server['id'] . '.*.php/')
             ->files();
 
@@ -239,26 +236,67 @@ class Synchronizer
     }
 
     /**
-     * Removes files for the provided item.
+     * Removes files for the provided server.
      *
-     * @param array $item The item information.
+     * @param array $server The server.
      */
-    protected function emptyServer($server) : void
+    protected function emptyServer(array $server) : void
     {
         $path  = $this->syncPath . '/' . $server['id'];
-        $files = $this->finder->in($path)->files();
+        $files = $this->getFinder()->in($path)->files();
 
-        foreach ($files as $file) {
-            $this->fs->remove($file);
-        }
+        $this->fs->remove($files);
 
-        $files = $this->finder->in($this->syncPath)
+        $files = $this->getFinder()->in($this->syncPath)
             ->name('/sync.' . $server['id'] . '.*.php/')
             ->files();
 
+        $this->fs->remove($files);
+    }
+
+    /**
+     * Returns a File object from a path.
+     *
+     * @param string $path The path to the file.
+     *
+     * @return SplFileInfo The file.
+     */
+    protected function getFile(string $path) : SplFileInfo
+    {
+        return new SplFileInfo($path, $path, $path);
+    }
+
+    /**
+     * Returns the list of files for the server.
+     *
+     * @param array $server The server.
+     *
+     * @return array The list of files.
+     */
+    protected function getFiles(array $server) : array
+    {
+        $path  = $this->syncPath . '/' . $server['id'];
+        $paths = [];
+
+        $files = $this->getFinder()->in($path)
+            ->name('/.*\.xml/')
+            ->files();
+
         foreach ($files as $file) {
-            $this->fs->remove($file);
+            $paths[] = $file->getRealPath();
         }
+
+        return $paths;
+    }
+
+    /**
+     * Returns a new Finder.
+     *
+     * @return Finder The finder.
+     */
+    protected function getFinder()
+    {
+        return new Finder();
     }
 
     /**
@@ -288,13 +326,13 @@ class Synchronizer
      * Returns the path for the provided server and creates the directory if it
      * does not exist.
      *
-     * @param array $item The server information
+     * @param array $server The server information
      *
      * @return string The path for the server.
      */
-    protected function getPath(array $item) : string
+    protected function getPath(array $server) : string
     {
-        $path = $this->syncPath . '/' . $item['id'];
+        $path = $this->syncPath . '/' . $server['id'];
 
         if (!$this->fs->exists($path) || !is_dir($path)) {
             $this->fs->mkdir($path);
@@ -309,9 +347,9 @@ class Synchronizer
      * @return bool True if syncPath is present and writable. Otherwise,
      *              return false.
      */
-    protected function isSyncEnvironmetReady() : bool
+    protected function isSyncEnvironmentReady() : bool
     {
-        return file_exists($this->syncFilePath)
+        return $this->fs->exists($this->syncPath)
             && is_writable($this->syncPath)
             && is_writable($this->syncFilePath);
     }
@@ -321,11 +359,7 @@ class Synchronizer
      */
     protected function lockSync()
     {
-        try {
-            touch($this->lockFilePath);
-        } catch (\Exception $e) {
-            return;
-        }
+        $this->fs->touch($this->lockFilePath);
     }
 
     /**
@@ -341,7 +375,7 @@ class Synchronizer
         $contents = [];
 
         foreach ($files as $file) {
-            if (!file_exists($file)) {
+            if (!$this->fs->exists($file)) {
                 continue;
             }
 
@@ -410,22 +444,18 @@ class Synchronizer
      */
     protected function setupSyncEnvironment() : void
     {
-        if (!file_exists($this->syncPath)) {
-            mkdir($this->syncPath);
-        }
-
-        if (!file_exists($this->syncFilePath)) {
-            touch($this->syncFilePath);
+        if (!$this->fs->exists($this->syncPath)) {
+            $this->fs->mkdir($this->syncPath);
         }
     }
 
     /**
      * Deletes the lock file.
      */
-    public function unlockSync() : void
+    protected function unlockSync() : void
     {
-        if (file_exists($this->lockFilePath)) {
-            unlink($this->lockFilePath);
+        if ($this->fs->exists($this->lockFilePath)) {
+            $this->fs->remove($this->lockFilePath);
         }
     }
 
@@ -436,13 +466,20 @@ class Synchronizer
      */
     protected function updateServer(array $server) : void
     {
+        $date = new \DateTime();
+
+        $date->setTimeZone(new \DateTimeZone('UTC'));
+        $this->serverStats[$server['id']] = $date->format('Y-m-d H:i:s');
+
         $path   = $this->getPath($server);
         $source = $this->sf->get($server);
 
         $source->getRemoteFiles()->downloadFiles($path);
         $this->cleanServer($server);
 
-        $contents = $this->parseFiles($source->getFiles(), $server['id']);
+        $files = $this->getFiles($server);
+
+        $contents = $this->parseFiles($files, $server['id']);
         $missing  = $this->getMissingFiles($contents, $path);
 
         if (!empty($missing)) {
@@ -471,8 +508,9 @@ class Synchronizer
      */
     protected function updateSyncFile() : void
     {
-        $params = [ 'last_import' => date('c') ];
-
-        file_put_contents($this->syncFilePath, serialize($params));
+        $this->fs->dumpFile(
+            $this->syncFilePath,
+            PhpSerializer::serialize($this->serverStats)
+        );
     }
 }

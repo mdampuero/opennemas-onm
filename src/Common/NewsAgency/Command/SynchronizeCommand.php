@@ -130,7 +130,7 @@ class SynchronizeCommand extends Command
                     ->get('news_agency.service.synchronizer')
                     ->resetStats()
                     ->synchronize($server)
-                    ->getStats();
+                    ->getResourceStats();
 
                 $output->writeln(sprintf(
                     '<fg=green;options=bold>DONE</> <fg=blue;options=bold>'
