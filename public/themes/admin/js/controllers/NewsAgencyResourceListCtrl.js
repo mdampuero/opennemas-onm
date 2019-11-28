@@ -46,6 +46,13 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.isModeSupported = function() {
+          return $scope.criteria.type === 'photo';
+        };
+
+        /**
          * @function hasTexts
          * @memberOf NewsAgencyResourceListCtrl
          *
