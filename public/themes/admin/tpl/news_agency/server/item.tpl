@@ -217,7 +217,7 @@
             [% defaultCategory.title %]
           </span>
         </div>
-        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.category }">
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.category }" ng-if="item.target === 'article'">
           <div class="form-group">
             <label class="form-label" for="category">
               {t}Default category{/t}
