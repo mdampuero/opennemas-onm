@@ -214,7 +214,7 @@
           </span>
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.category }"></i>
           <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.category && item.category">
-            [% defaultCategory.title %]
+            [% data.extra.defaultCategory.title %]
           </span>
         </div>
         <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.category }" ng-if="item.target === 'article'">
@@ -223,7 +223,7 @@
               {t}Default category{/t}
             </label>
             <div class="controls controls-validation">
-              <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="defaultCategory" name="category" ng-model="item.category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
+              <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.defaultCategory" name="category" ng-model="item.category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
               {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="category" iRequired=true iValidation=true}
             </div>
           </div>
