@@ -3,8 +3,8 @@
     <i class="fa fa-times"></i>
   </button>
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
-  <h4 class="p-b-30 text-center" ng-if="isEditable(template)">{t}Do you want to import the item?{/t}</h4>
-  <h4 class="p-b-30 text-center" ng-if="!isEditable(template)">{t}Do you want to import the selected items?{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="template.isEditable(template)">{t}Do you want to import the item?{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="!template.isEditable(template)">{t}Do you want to import the selected items?{/t}</h4>
   <div class="imported-items" style="max-height: 200px; overflow: auto;">
     <div class="p-l-30 p-r-30 m-t-10 nowrap" ng-repeat="item in template.items">
       <strong>
@@ -67,7 +67,7 @@
     </button>
   </div>
   <div class="m-t-15" ng-class="{ 'col-sm-5': template.isEditable(template), 'col-sm-6': !template.isEditable(template) }">
-    <button class="btn btn-block" ng-class="{ 'btn-success': !template.isEditable(template), 'btn-white': template.isEditable(template) }" ng-click="template.content_status = 1; confirm()" ng-disabled="(template.content_type_name === 'article' && !template.fk_content_category) || !template.fk_author || loading" type="button">
+    <button class="btn btn-block" ng-class="{ 'btn-success': !template.isEditable(template), 'btn-white': template.isEditable(template) }" ng-click="template.content_status = 1; confirm()" ng-disabled="template.hasTexts(template.items) && (!template.fk_author || (template.content_type_name === 'article' && !template.fk_content_category)) || loading" type="button">
       <h5 class="text-bold text-uppercase" ng-class="{ 'text-white': !template.isEditable(template) }">
         <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': loading && !template.content_status }"></i>
         {t}Yes, import and publish{/t}
@@ -75,7 +75,7 @@
     </button>
   </div>
   <div class="col-sm-5 m-t-15" ng-if="template.isEditable(template)">
-    <button class="btn btn-block btn-loading btn-success" ng-click="template.content_status = 0; confirm()" ng-disabled="(template.content_type_name === 'article' && !template.fk_content_category) || !template.fk_author || loading" type="button">
+    <button class="btn btn-block btn-loading btn-success" ng-click="template.content_status = 0; confirm()" ng-disabled="!template.fk_author || (template.content_type_name === 'article' && !template.fk_content_category) || loading" type="button">
       <h5 class="text-bold text-uppercase text-white">
         <i class="fa fa-edit m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': loading && template.content_status }"></i>
         {t}Yes, import and edit{/t}
