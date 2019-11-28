@@ -128,6 +128,8 @@ class NewsAgencyServerController extends ApiController
     protected function getExtraData($items = null)
     {
         return [
+            'stats'     => $this->get('news_agency.service.synchronizer')
+                ->getServerStats(),
             'sync_from' => $this->getSyncFrom()
         ];
     }

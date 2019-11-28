@@ -14,6 +14,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-synchronized" checklist-model="app.columns.selected" checklist-value="'synchronized'" type="checkbox">
+    <label for="checkbox-synchronized">
+      {t}Synchronized{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-color" checklist-model="app.columns.selected" checklist-value="'color'" type="checkbox">
     <label for="checkbox-color">
       {t}Color{/t}
@@ -44,6 +50,9 @@
   </th>
   <th class="text-center v-align-middle" width="150" ng-if="isColumnEnabled('synchronization')">
     {t}Synchronization{/t}
+  </th>
+  <th class="text-center v-align-middle" width="150" ng-if="isColumnEnabled('synchronized')">
+    {t}Synchronized{/t}
   </th>
   <th class="text-center v-align-middle" width="50" ng-if="isColumnEnabled('color')">
     <i class="fa fa-paint-brush"></i>
@@ -98,6 +107,20 @@
     <span class="badge badge-default text-bold text-uppercase">
       [% data.extra.sync_from[item.sync_from] %]
     </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('synchronized')">
+    <span class="text-bold" ng-if="!data.extra.stats[item.id]">
+      ∞
+    </span>
+    <div ng-if="data.extra.stats[item.id]">
+
+      <i class="fa fa-calendar"></i>
+      [% data.extra.stats[item.id] | moment : 'YYYY-MM-DD': null : '{$app.locale->getTimeZone()->getName()}' %]
+    </div>
+    <small class="text-bold" ng-if="data.extra.stats[item.id]">
+      <i class="fa fa-clock-o"></i>
+      [% data.extra.stats[item.id] | moment : 'HH:mm:ss' : null : '{$app.locale->getTimeZone()->getName()}' %]
+    </small>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('color')">
     <span class="badge badge-default" ng-style="{ 'background-color': item.color }" ng-show="item.color">
