@@ -23,7 +23,14 @@ use Symfony\Component\Filesystem\Filesystem;
 class Synchronizer
 {
     /**
-     * File path used for locking purposes.
+     * The Filesystem component.
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * The path to the file used to lock synchronization.
      *
      * @var string
      */
@@ -44,6 +51,13 @@ class Synchronizer
     protected $pf;
 
     /**
+     * The repository component.
+     *
+     * @var LocalRepository
+     */
+    protected $repository;
+
+    /**
      * The server factory.
      *
      * @var ServerFactory
@@ -56,6 +70,13 @@ class Synchronizer
      * @var array
      */
     protected $stats = [];
+
+    /**
+     * The path to the file used to save synchronization statistics.
+     *
+     * @var string
+     */
+    protected $syncFilePath = '';
 
     /**
      * The path where to save the downloaded files
@@ -78,10 +99,12 @@ class Synchronizer
      */
     public function __construct($container)
     {
-        $this->fs     = new Filesystem();
+        $this->fs         = new Filesystem();
+        $this->repository = new LocalRepository();
+
+        $this->logger = $container->get('error.log');
         $this->pf     = $container->get('news_agency.factory.parser');
         $this->sf     = $container->get('news_agency.factory.server');
-        $this->logger = $container->get('error.log');
 
         $this->syncPath = sprintf(
             '%s/%s/importers',
@@ -230,9 +253,7 @@ class Synchronizer
             ->name('/sync.' . $server['id'] . '.*.php/')
             ->files();
 
-        foreach ($files as $file) {
-            $this->fs->remove($file);
-        }
+        $this->fs->remove($files);
     }
 
     /**
@@ -311,7 +332,7 @@ class Synchronizer
     {
         $fs = $this->fs;
 
-        return array_map(function ($a) {
+        return array_values(array_map(function ($a) {
             return [
                 'filename' => $a->file_name,
                 'url'      => $a->file_path
@@ -319,7 +340,7 @@ class Synchronizer
         }, array_filter($contents, function ($a) use ($fs, $path) {
             return ($a->type === 'photo' || $a->type === 'video')
                 && !$fs->exists($path . '/' . $a->file_name);
-        }));
+        })));
     }
 
     /**
@@ -330,11 +351,11 @@ class Synchronizer
      *
      * @return string The path for the server.
      */
-    protected function getPath(array $server) : string
+    protected function getServerPath(array $server) : string
     {
         $path = $this->syncPath . '/' . $server['id'];
 
-        if (!$this->fs->exists($path) || !is_dir($path)) {
+        if (!$this->fs->exists($path)) {
             $this->fs->mkdir($path);
         }
 
@@ -352,6 +373,20 @@ class Synchronizer
         return $this->fs->exists($this->syncPath)
             && is_writable($this->syncPath)
             && is_writable($this->syncFilePath);
+    }
+
+    /**
+     * Returns a XML object from a file.
+     *
+     * @param string $path The path to the file.
+     *
+     * @return \SimpleXMLElement The XML object.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function loadXmlFile(string $path) : \SimpleXMLElement
+    {
+        return simplexml_load_file($path);
     }
 
     /**
@@ -380,7 +415,7 @@ class Synchronizer
             }
 
             try {
-                $xml = simplexml_load_file($file);
+                $xml = $this->loadXmlFile($file);
 
                 $parser = $this->pf->get($xml);
                 $parsed = $parser->parse($xml, $file);
@@ -416,6 +451,8 @@ class Synchronizer
      * @param string $path     The path to search media in.
      *
      * @return array The list of valid contents.
+     *
+     * @codeCoverageIgnore
      */
     protected function removeInvalidContents(array $contents, string $path) : array
     {
@@ -430,7 +467,7 @@ class Synchronizer
 
             $filePath = $path . '/' . $content->file_name;
 
-            if (file_exists($filePath)) {
+            if ($this->fs->exists($filePath)) {
                 $content->size = sprintf('%.2f', filesize($filePath) / 1024);
                 $valid[]       = $content;
             }
@@ -471,7 +508,7 @@ class Synchronizer
         $date->setTimeZone(new \DateTimeZone('UTC'));
         $this->serverStats[$server['id']] = $date->format('Y-m-d H:i:s');
 
-        $path   = $this->getPath($server);
+        $path   = $this->getServerPath($server);
         $source = $this->sf->get($server);
 
         $source->getRemoteFiles()->downloadFiles($path);
@@ -494,8 +531,7 @@ class Synchronizer
             time()
         );
 
-        $repository = new LocalRepository();
-        $repository->remove($filePath)
+        $this->repository->remove($filePath)
             ->setContents($contents)
             ->write($filePath);
 
