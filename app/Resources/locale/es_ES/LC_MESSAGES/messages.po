@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 11:47+0000\n"
-"PO-Revision-Date: 2019-11-18 12:58+0100\n"
+"POT-Creation-Date: 2019-11-29 15:39+0000\n"
+"PO-Revision-Date: 2019-11-29 16:40+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: es\n"
@@ -1472,11 +1472,14 @@ msgstr "Más vistos"
 
 #, php-format
 msgid "The maximum height for the %s is 120px. Please adjust your image size."
-msgstr "El alto máximo para el %s es 120px. Por favor ajusta el tamaño de la imagen."
+msgstr ""
+"El alto máximo para el %s es 120px. Por favor ajusta el tamaño de la imagen."
 
 #, php-format
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
-msgstr "El tamaño mínimo para el %s es 200x200. Por favor ajusta el tamaño de la imagen."
+msgstr ""
+"El tamaño mínimo para el %s es 200x200. Por favor ajusta el tamaño de la "
+"imagen."
 
 msgid "Activated"
 msgstr "Activado"
@@ -4381,10 +4384,13 @@ msgstr "Origen"
 msgid "Synchronization"
 msgstr "Sincronización"
 
+msgid "Synchronized"
+msgstr "Sincronizado"
+
 msgid "Automatic"
 msgstr "Automática"
 
-msgid "Sync"
+msgid "Synchronize"
 msgstr "Sincronizar"
 
 msgid "Delete contents"
@@ -4447,7 +4453,8 @@ msgstr "Para ser importados automáticamente, los contenidos tienen que"
 msgid ""
 "Include all words in a list in the title, the body and/or the list of tags"
 msgstr ""
-"Incluir todas las palabras de una lista en el título, el cuerpo y/o la lista de etiquetas"
+"Incluir todas las palabras de una lista en el título, el cuerpo y/o la lista "
+"de etiquetas"
 
 msgid "Match one or more lists of words"
 msgstr "Coincidir una o más listas de palabras"
@@ -7768,6 +7775,9 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "Sync"
+#~ msgstr "Sincronizar"
 
 #, fuzzy
 #~ msgid ""

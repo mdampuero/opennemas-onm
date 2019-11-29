@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 11:54+0000\n"
-"PO-Revision-Date: 2019-11-18 12:59+0100\n"
+"POT-Creation-Date: 2019-11-29 15:39+0000\n"
+"PO-Revision-Date: 2019-11-29 16:40+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1469,7 +1469,8 @@ msgstr "O alto máximo para o %s é 120px. Por favor axusta o tamaño da imaxe."
 
 #, php-format
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
-msgstr "O tamaño mínimo para o %s é 200x200. Por favor axusta o tamaño da imaxe."
+msgstr ""
+"O tamaño mínimo para o %s é 200x200. Por favor axusta o tamaño da imaxe."
 
 msgid "Activated"
 msgstr "Activado"
@@ -4361,10 +4362,13 @@ msgstr "Orixe"
 msgid "Synchronization"
 msgstr "Sincronización"
 
+msgid "Synchronized"
+msgstr "Sincronizado"
+
 msgid "Automatic"
 msgstr "Automática"
 
-msgid "Sync"
+msgid "Synchronize"
 msgstr "Sincronizar"
 
 msgid "Delete contents"
@@ -4427,7 +4431,8 @@ msgstr "Para ser importados automaticamente, os contidos teñen que"
 msgid ""
 "Include all words in a list in the title, the body and/or the list of tags"
 msgstr ""
-"Incluir todas as palabras dunha lista no título, o corpo e/ou na lista de etiquetas"
+"Incluir todas as palabras dunha lista no título, o corpo e/ou na lista de "
+"etiquetas"
 
 msgid "Match one or more lists of words"
 msgstr "Coincidir unha ou máis palabras da lista"
@@ -7718,6 +7723,9 @@ msgstr "Benvido ao Xestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
+
+#~ msgid "Sync"
+#~ msgstr "Sincronizar"
 
 #, fuzzy
 #~ msgid ""
