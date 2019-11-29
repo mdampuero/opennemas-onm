@@ -34,6 +34,11 @@ class SynchronizeCommand extends Command
             ->setName('news-agency:synchronize')
             ->setDescription('Syncronizes news agency resources')
             ->addOption(
+                'clean',
+                'c',
+                InputOption::VALUE_NONE,
+                'Whether to clean files for disabled servers'
+            )->addOption(
                 'instances',
                 'i',
                 InputOption::VALUE_REQUIRED,
@@ -123,6 +128,24 @@ class SynchronizeCommand extends Command
                     count($servers),
                     $server['name']
                 ), 50, '.'));
+
+                if (empty($server['activated'])) {
+                    $output->write(str_pad('- Removing resources', 50, '.'));
+
+                    if ($input->getOption('clean')) {
+                        $this->getContainer()
+                            ->get('news_agency.service.synchronizer')
+                            ->empty($server);
+
+                        $output->writeln('<fg=green;options=bold>DONE</>');
+
+                        continue;
+                    }
+
+                    $output->writeln('<fg=yellow;options=bold>SKIP</>');
+
+                    continue;
+                }
 
                 $output->write(str_pad('- Downloading resources', 50, '.'));
 
@@ -237,12 +260,9 @@ class SynchronizeCommand extends Command
     protected function getServers(?array $servers) : array
     {
         $service = $this->getContainer()->get('api.service.news_agency.server');
-        $servers = empty($servers)
+
+        return empty($servers)
             ? $service->getList()['items']
             : $service->getListByIds($servers)['items'];
-
-        return array_filter($servers, function ($a) {
-            return !empty($a['activated']);
-        });
     }
 }
