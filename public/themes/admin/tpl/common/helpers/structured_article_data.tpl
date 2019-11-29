@@ -34,8 +34,14 @@
       "url": "{$siteurl}"
     }
     {if !empty($image)}
-    ,"image":
-        {include file='./structured_image_data.tpl'}
+    ,
+    "image":
+      {
+        "@type": "ImageObject",
+        "url": "{get_url item=$image absolute=true}",
+        "height": {$image->height},
+        "width": {$image->width}
+      }
+    },{include file='./structured_image_data.tpl'}
     {/if}
-  }
 ]</script>
