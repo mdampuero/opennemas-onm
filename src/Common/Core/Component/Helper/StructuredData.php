@@ -42,244 +42,72 @@ class StructuredData
     protected $ts;
 
     /**
+     * The template service
+     *
+     * @var Template
+     */
+    protected $tpl;
+
+    /**
      * Initializes StructuredData
      *
      * @param Instance      $instance The current instance.
      * @param EntityManager $em       The entity manager.
      * @param TagService    $ts       The tag service.
+     * @param Template      $tpl       The template service.
      */
-    public function __construct(Instance $instance, EntityManager $em, TagService $ts)
+    public function __construct(Instance $instance, EntityManager $em, TagService $ts, $tpl)
     {
         $this->instance = $instance;
         $this->ds       = $em->getDataSet('Settings', 'instance');
         $this->ts       = $ts;
+        $this->tpl      = $tpl;
     }
 
 
-    public function stripHtmlFromData($data)
+    /**
+     * Transform tags from array of ids to String and add some data to the array
+     *
+     * @param array $data The array of data
+     *
+     * @return array The array with Strings of tags and more data
+     */
+    public function extractParamsFromData($data)
     {
+        $data['keywords'] = empty($data['content']->tags) ? '' : $this->getTags($data['content']->tags);
+
         if (!empty($data['video'])) {
-            $data['video']->title       =
-            strip_tags(htmlspecialchars(html_entity_decode(
-                $data['video']->title,
-                ENT_COMPAT,
-                'UTF-8'
-            )));
-            $data['video']->description =
-            strip_tags(htmlspecialchars(html_entity_decode(
-                $data['video']->description,
-                ENT_COMPAT,
-                'UTF-8'
-            )));
-            $data['video']->tags        = empty($data['video']->tags) ?
-                                          '' : $this->getTags($data['video']->tags);
-            $data['video']->tags        =
-            strip_tags(htmlspecialchars(html_entity_decode(
-                $data['video']->tags,
-                ENT_COMPAT,
-                'UTF-8'
-            )));
+            $data['videokeywords'] = empty($data['video']->tags) ? '' : $this->getTags($data['video']->tags);
         }
 
-        $data['summary'] = strip_tags($data['summary']);
+        $data['wordCount'] = str_word_count($data['content']->body);
+        $data['sitename']  = $this->ds->get("site_name");
+        $data['siteurl']   = SITE_URL;
 
         return $data;
     }
 
     /**
-     * Generates json-ld for Images
+     * Generate specific JSON code based on the type of content: album, video or article.
      *
-     * @return String the generated json-ld code
-     */
-    public function generateImageJsonLDCode($data)
-    {
-        $code = ',{
-            "@context": "http://schema.org",
-            "@type": "ImageObject",
-            "author": "' . $data['author'] . '",
-            "contentUrl": "' . $data['image']->url . '",
-            "height": ' . $data['image']->height . ',
-            "width": ' . $data['image']->width . ',
-            "datePublished": "' . $data['created'] . '",
-            "caption": "' .
-                            strip_tags(htmlspecialchars(html_entity_decode(
-                                $data['image']->description,
-                                ENT_COMPAT,
-                                'UTF-8'
-                            ))) . '",
-            "name": "' . $data['title'] . '"
-        }';
-
-        return $code;
-    }
-
-    /**
-     * Generates json-ld for Images
+     * @param array $data The array of data
      *
-     * @return String the generated json-ld code
+     * @return string $output The JSON code specific for the data
      */
-    public function generateVideoJsonLDCode($data)
+    public function generateJsonLDCode($data)
     {
-        $code = '{
-            "@context": "http://schema.org/",
-            "@type": "VideoObject",
-            "author": "' . $data['author'] . '",
-            "name": "' . $data['video']->title . '",
-            "description": "' . $data['video']->description . '",
-            "@id": "' . $data['url'] . '",
-            "uploadDate": "' . $data['video']->created . '",
-            "thumbnailUrl": "' . $data['video']->thumb . '",
-            "keywords": "' . $data['video']->tags . '",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "' . $this->ds->get("site_name") . '",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "' . $data['logo']['url'] . '",
-                    "width": ' . $data['logo']['width'] . ',
-                    "height": ' . $data['logo']['height'] . '
-                },
-                "url": "' . SITE_URL . '"
-            }
-        }';
+        $params = $this->extractParamsFromData($data);
 
-        return $code;
-    }
-
-    /**
-     * Generates json-ld for Image galleries
-     *
-     * @return String the generated json-ld code
-     */
-    public function generateImageGalleryJsonLDCode($data)
-    {
-        $keywords = empty($data['content']->tags) ?
-                    '' : $this->getTags($data['content']->tags);
-        $keywords = strip_tags(htmlspecialchars(html_entity_decode(
-            $keywords,
-            ENT_COMPAT,
-            'UTF-8'
-        )));
-
-        $code = '{
-            "@context":"http://schema.org",
-            "@type":"ImageGallery",
-            "description": "' . $data['summary'] . '",
-            "keywords": "' . $keywords . '",
-            "datePublished" : "' . $data['created'] . '",
-            "dateModified": "' . $data['changed'] . '",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "' . $data['url'] . '"
-            },
-            "headline": "' . $data['title'] . '",
-            "url": "' . $data['url'] . '",
-            "author" : {
-                "@type" : "Person",
-                "name" : "' . $data['author'] . '"
-            },
-            "primaryImageOfPage": {
-                "url": "' . $data['image']->url . '",
-                "height": ' . $data['image']->height . ',
-                "width": ' . $data['image']->width . '
-            }';
-
-        $imgObjects = '';
-        if (!empty($data['content']->photos) && !empty($data['photos'])) {
-            $code .= ',"associatedMedia":[';
-
-            foreach ($data['content']->photos as $photo) {
-                $data['photos'][$photo['pk_photo']]->url =
-                    $this->instance->getBaseUrl()
-                    . $this->instance->getImagesShortPath()
-                    . $data['photos'][$photo['pk_photo']]->path_file
-                    . $data['photos'][$photo['pk_photo']]->name;
-
-                $code .= sprintf(
-                    '{ "url": "%s", "height": %s, "width": %s },',
-                    $data['photos'][$photo['pk_photo']]->url,
-                    $data['photos'][$photo['pk_photo']]->height,
-                    $data['photos'][$photo['pk_photo']]->width
-                );
-
-                $data['image'] = $data['photos'][$photo['pk_photo']];
-                $imgObjects   .= $this->generateImageJsonLDCode($data);
-            }
-
-            $code  = rtrim($code, ',');
-            $code .= ']';
+        if ($data['content']->content_type_name == 'album') {
+            $output = $this->tpl->fetch('common/helpers/structured_gallery_data.tpl', $params);
+        } elseif (!empty($data['video'])) {
+            $output = $this->tpl->fetch('common/helpers/structured_video_data.tpl', $params);
+        } else {
+            $output = $this->tpl->fetch('common/helpers/structured_article_data.tpl', $params);
         }
 
-        $code .= '}';
-
-        if (!empty($imgObjects)) {
-            $code .= $imgObjects;
-        }
-
-        return $code;
+        return $output;
     }
-
-    /**
-     * Generates json-ld for NewsArticles
-     *
-     * @return String the generated json-ld code
-     */
-    public function generateNewsArticleJsonLDCode($data)
-    {
-        $keywords = empty($data['content']->tags) ?
-                    '' : $this->getTags($data['content']->tags);
-        $keywords = strip_tags(htmlspecialchars(html_entity_decode(
-            $keywords,
-            ENT_COMPAT,
-            'UTF-8'
-        )));
-
-        $code = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "' . $data['url'] . '"
-            },
-            "headline": "' . $data['title'] . '",
-            "author" : {
-                "@type" : "Person",
-                "name" : "' . $data['author'] . '"
-            },
-            "datePublished" : "' . $data['created'] . '",
-            "dateModified": "' . $data['changed'] . '",
-            "articleSection" : "' . $data['category']->title . '",
-            "keywords": "' . $keywords . '",
-            "url": "' . $data['url'] . '",
-            "wordCount": ' . str_word_count($data['content']->body) . ',
-            "description": "' . $data['summary'] . '",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "' . $this->ds->get("site_name") . '",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "' . $data['logo']['url'] . '",
-                    "width": ' . $data['logo']['width'] . ',
-                    "height": ' . $data['logo']['height'] . '
-                },
-                "url": "' . SITE_URL . '"
-            }';
-
-        if (!empty($data['image'])) {
-            $code .= '
-                ,"image": {
-                    "@type": "ImageObject",
-                    "url": "' . $data['image']->url . '",
-                    "height": ' . $data['image']->height . ',
-                    "width": ' . $data['image']->width . '
-                }';
-        }
-
-        $code .= '}';
-
-        return $code;
-    }
-
     /**
      *  Method to retrieve the tags for a list of tag ids
      *

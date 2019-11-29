@@ -93,24 +93,12 @@ function smarty_function_structured_data_tags($params, &$smarty)
         'image'    => $media['image'],
         'video'    => $media['video']
     ];
-    $data = $structData->stripHtmlFromData($data);
 
-    // Generate NewsArticle tags
-    $output = '<script type="application/ld+json">[';
     if ($content->content_type_name == 'album') {
         $data['photos'] = $smarty->getValue('photos');
-        $output        .= $structData->generateImageGalleryJsonLDCode($data);
-    } elseif (!empty($data['video'])) {
-        $output .= $structData->generateVideoJsonLDCode($data);
-    } else {
-        $output .= $structData->generateNewsArticleJsonLDCode($data);
     }
 
-    if (!empty($data['image'])) {
-        $output .= $structData->generateImageJsonLDCode($data);
-    }
+    $output = $structData->generateJsonLDCode($data);
 
-    $output .= ']</script>';
-
-    return preg_replace(["/[\r]/", "[\n]", "/\s{2,}/"], [" ", " ", " "], $output);
+    return $output;
 }
