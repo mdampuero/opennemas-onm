@@ -17,8 +17,8 @@
       {
           "@type": "ImageObject",
           "url": "{$logo['url']}",
-          "width": "{$logo['width']}",
-          "height": "{$logo['height']}"
+          "width": {$logo['width']},
+          "height": {$logo['height']}
       },
       "url": "{$siteurl}"
   }
