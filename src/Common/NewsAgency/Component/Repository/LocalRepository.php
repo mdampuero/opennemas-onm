@@ -23,13 +23,6 @@ class LocalRepository
     protected $contents = [];
 
     /**
-     * The Finder service.
-     *
-     * @var Finder
-     */
-    protected $finder;
-
-    /**
      * The Filesystem service
      *
      * @var Filesystem
@@ -48,8 +41,7 @@ class LocalRepository
      */
     public function __construct()
     {
-        $this->finder = new Finder();
-        $this->fs     = new Filesystem();
+        $this->fs = new Filesystem();
     }
 
     /**
@@ -114,7 +106,7 @@ class LocalRepository
      */
     public function read(string $path) : LocalRepository
     {
-        $files = $this->finder->in($path)->name('/sync.*.*.php/')->files();
+        $files = $this->getFinder()->in($path)->name('/sync.*.*.php/')->files();
 
         foreach ($files as $file) {
             $this->contents = array_merge(
@@ -144,7 +136,7 @@ class LocalRepository
         $directory = pathinfo($path)['dirname'];
         $pattern   = preg_replace('/\d+.php/', '*.php', basename($path));
 
-        $files = $this->finder->in($directory)
+        $files = $this->getFinder()->in($directory)
             ->name('/' . $pattern . '/')
             ->files();
 
@@ -223,5 +215,15 @@ class LocalRepository
 
             return false;
         });
+    }
+
+    /**
+     * Returns a new Finder.
+     *
+     * @return Finder The finder.
+     */
+    protected function getFinder()
+    {
+        return new Finder();
     }
 }
