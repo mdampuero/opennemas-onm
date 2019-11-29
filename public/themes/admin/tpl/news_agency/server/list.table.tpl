@@ -86,10 +86,10 @@
             <i class="fa fa-ellipsis-h"></i>
           </button>
           <ul class="dropdown-menu no-padding">
-            <li>
+            <li ng-if="item.activated == 1">
               <a href="#" ng-click="synchronizeItem(getItemId(item))">
                 <i class="fa fa-retweet m-r-5"></i>
-                {t}Sync{/t}
+                {t}Synchronize{/t}
               </a>
             </li>
             <li>
