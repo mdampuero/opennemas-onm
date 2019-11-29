@@ -44,4 +44,7 @@
       }
     },{include file='./structured_image_data.tpl'}
     {/if}
+    {if empty($image)}
+      }
+    {/if}
 ]</script>
