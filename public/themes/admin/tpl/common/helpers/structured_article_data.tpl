@@ -18,7 +18,7 @@
     "articleSection" : "{$category->title|escape:'html'}",
     "keywords": "{$keywords|escape:'html'}",
     "url": "{$url}",
-    "wordCount": "{$wordCount}",
+    "wordCount": {$wordCount},
     "description": "{$summary}",
     "publisher" :
     {
