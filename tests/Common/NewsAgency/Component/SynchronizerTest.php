@@ -38,8 +38,9 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
-            ->setMethods([ 'dumpFile', 'exists', 'mkdir', 'remove', 'touch' ])
-            ->getMock();
+            ->setMethods([
+                'chown', 'dumpFile', 'exists', 'mkdir', 'remove', 'touch'
+            ])->getMock();
 
         $this->logger = $this->getMockBuilder('Monolog')
             ->setMethods([ 'error' ])
@@ -649,9 +650,17 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
                 'parseFiles', 'removeInvalidContents'
             ])->getMock();
 
+        $property = new \ReflectionProperty($synchronizer, 'fs');
+        $property->setAccessible(true);
+        $property->setValue($synchronizer, $this->fs);
+
         $property = new \ReflectionProperty($synchronizer, 'repository');
         $property->setAccessible(true);
         $property->setValue($synchronizer, $this->repository);
+
+        $this->fs->expects($this->at(0))->method('chown')
+            ->with('/plugh/corge/qux/importers/14535');
+        $this->fs->expects($this->at(1))->method('chown');
 
         $this->server->expects($this->at(0))->method('getRemoteFiles')
             ->willReturn($this->server);
@@ -667,6 +676,8 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer->expects($this->once())->method('getMissingFiles')
             ->with([ 'garply' ], '/plugh/corge/qux/importers/14535')
             ->willReturn([ 'frog' ]);
+        $synchronizer->expects($this->once())->method('removeInvalidContents')
+            ->with([ 'garply' ], '/plugh/corge/qux/importers/14535');
 
         $method = new \ReflectionMethod($synchronizer, 'updateServer');
         $method->setAccessible(true);

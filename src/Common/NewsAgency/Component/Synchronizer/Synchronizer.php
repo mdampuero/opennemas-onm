@@ -370,9 +370,7 @@ class Synchronizer
      */
     protected function isSyncEnvironmentReady() : bool
     {
-        return $this->fs->exists($this->syncPath)
-            && is_writable($this->syncPath)
-            && is_writable($this->syncFilePath);
+        return $this->fs->exists($this->syncPath);
     }
 
     /**
@@ -523,6 +521,8 @@ class Synchronizer
             $source->downloadFiles($path, $missing);
         }
 
+        $this->fs->chown($path, 'www-data', true);
+
         $contents = $this->removeInvalidContents($contents, $path);
         $filePath = sprintf(
             '%s/sync.%s.%s.php',
@@ -534,6 +534,8 @@ class Synchronizer
         $this->repository->remove($filePath)
             ->setContents($contents)
             ->write($filePath);
+
+        $this->fs->chown($filePath, 'www-data', true);
 
         $this->stats['contents']   += count($contents);
         $this->stats['downloaded'] += $source->downloaded;
@@ -548,5 +550,7 @@ class Synchronizer
             $this->syncFilePath,
             PhpSerializer::serialize($this->serverStats)
         );
+
+        $this->fs->chown($this->syncFilePath, 'www-data', true);
     }
 }
