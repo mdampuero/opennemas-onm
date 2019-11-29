@@ -263,10 +263,9 @@ class Synchronizer
      */
     protected function emptyServer(array $server) : void
     {
-        $path  = $this->syncPath . '/' . $server['id'];
-        $files = $this->getFinder()->in($path)->files();
+        $path = $this->syncPath . '/' . $server['id'];
 
-        $this->fs->remove($files);
+        $this->fs->remove($path);
 
         $files = $this->getFinder()->in($this->syncPath)
             ->name('/sync.' . $server['id'] . '.*.php/')

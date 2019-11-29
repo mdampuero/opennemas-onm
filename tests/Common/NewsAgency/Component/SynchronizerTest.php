@@ -364,22 +364,16 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->synchronizer, 'emptyServer');
         $method->setAccessible(true);
 
-        $this->finder->expects($this->at(0))->method('in')
-            ->with('/plugh/corge/qux/importers/24474')
-            ->willReturn($this->finder);
-        $this->finder->expects($this->at(1))->method('files')
-            ->willReturn([ 'fubar' ]);
-
         $this->fs->expects($this->at(0))->method('remove')
-            ->with([ 'fubar' ]);
+            ->with('/plugh/corge/qux/importers/24474');
 
-        $this->finder->expects($this->at(2))->method('in')
+        $this->finder->expects($this->at(0))->method('in')
             ->with('/plugh/corge/qux/importers')
             ->willReturn($this->finder);
-        $this->finder->expects($this->at(3))->method('name')
+        $this->finder->expects($this->at(1))->method('name')
             ->with('/sync.24474.*.php/')
             ->willReturn($this->finder);
-        $this->finder->expects($this->at(4))->method('files')
+        $this->finder->expects($this->at(2))->method('files')
             ->willReturn([ 'sync.24474.15714.php' ]);
 
         $this->fs->expects($this->at(1))->method('remove')
