@@ -96,8 +96,10 @@ class Album extends Content
             $this->cover_image = getService('entity_repository')
                 ->find('Photo', $this->cover_id);
 
-            $this->cover = $this->cover_image->path_file
-                . $this->cover_image->name;
+            if (!empty($this->cover_image)) {
+                $this->cover = $this->cover_image->path_file
+                    . $this->cover_image->name;
+            }
         }
 
         return $this;

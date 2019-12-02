@@ -2,7 +2,7 @@
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.22-log
+-- Server version	5.7.23-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -116,7 +116,9 @@ CREATE TABLE `albums` (
   `agency` varchar(250) DEFAULT NULL,
   `cover_id` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`pk_album`),
-  CONSTRAINT `album_id_contents_id` FOREIGN KEY (`pk_album`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `cover_id` (`cover_id`),
+  CONSTRAINT `album_id_contents_id` FOREIGN KEY (`pk_album`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cover_id` FOREIGN KEY (`cover_id`) REFERENCES `photos` (`pk_photo`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=821 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -342,7 +344,7 @@ CREATE TABLE `content_categories` (
 
 LOCK TABLES `content_categories` WRITE;
 /*!40000 ALTER TABLE `content_categories` DISABLE KEYS */;
-INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria', NULL, 1,1,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,0,1,NULL,NULL,NULL, NULL),(23,'EconomÃ­a','economia',NULL,0,1,NULL,NULL,NULL, NULL),(24,'PolÃ­tica','politica',NULL,0,1,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,0,1,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,0,1,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,0,1,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,0,1,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,0,1,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,0,1,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,0,1,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,0,1,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,0,1,NULL,NULL,NULL,NULL);
+INSERT INTO `content_categories` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,1,1,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,0,1,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,0,1,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,0,1,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,0,1,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,0,1,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,0,1,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,0,1,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,0,1,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,0,1,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,0,1,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,0,1,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,0,1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `content_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -742,7 +744,6 @@ CREATE TABLE `opinions` (
   `pk_opinion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content_categories` int(10) unsigned DEFAULT '7',
   `fk_author` bigint(20) unsigned DEFAULT NULL,
-  `fk_author_img` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`pk_opinion`),
   KEY `fk_author` (`fk_author`),
   CONSTRAINT `opinions_id_contents_id` FOREIGN KEY (`pk_opinion`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -755,7 +756,7 @@ CREATE TABLE `opinions` (
 
 LOCK TABLES `opinions` WRITE;
 /*!40000 ALTER TABLE `opinions` DISABLE KEYS */;
-INSERT INTO `opinions` VALUES (595,7,9,0),(596,7,9,0),(598,7,10,0),(599,7,10,0),(601,7,11,0),(637,7,8,0),(638,7,8,0),(639,7,8,0),(640,7,8,0),(654,7,12,0),(658,7,12,0),(659,7,12,0),(660,7,12,0),(662,7,13,0),(663,7,13,0),(664,7,13,0),(732,7,9,0),(734,7,9,0),(736,7,9,0),(738,7,9,0),(740,7,14,0),(741,7,14,0),(742,7,14,0),(743,7,14,0);
+INSERT INTO `opinions` VALUES (595,7,9),(596,7,9),(598,7,10),(599,7,10),(601,7,11),(637,7,8),(638,7,8),(639,7,8),(640,7,8),(654,7,12),(658,7,12),(659,7,12),(660,7,12),(662,7,13),(663,7,13),(664,7,13),(732,7,9),(734,7,9),(736,7,9),(738,7,9),(740,7,14),(741,7,14),(742,7,14),(743,7,14);
 /*!40000 ALTER TABLE `opinions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1290,7 +1291,9 @@ CREATE TABLE `users` (
   `activated` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '1 activated - 0 deactivated',
   PRIMARY KEY (`id`),
   KEY `user_username` (`username`),
-  KEY `user_email` (`email`)
+  KEY `user_email` (`email`),
+  KEY `avatar_img_id` (`avatar_img_id`),
+  CONSTRAINT `avatar_img_id` FOREIGN KEY (`avatar_img_id`) REFERENCES `photos` (`pk_photo`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1393,4 +1396,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-20 12:59:01
+-- Dump completed on 2019-11-25 15:14:47
