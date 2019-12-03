@@ -96,7 +96,9 @@ class LocalRepository
 
         $files = $this->filter($criteria);
 
-        $this->sort($files, $order);
+        if (!empty($order)) {
+            $this->sort($files, $order);
+        }
 
         if (empty($epp)) {
             return $files;
