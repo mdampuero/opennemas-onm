@@ -137,7 +137,7 @@
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('priority')">
-    <span class="badge text-bold" ng-class="{ 'badge-danger': item.priority == 1, 'badge-warning': item.prority == 2, 'badge-info': item.priority == 3 }">
+    <span class="badge text-bold" ng-class="{ 'badge-danger': item.priority == 1, 'badge-warning': item.priority == 2, 'badge-info': item.priority == 3 }">
       [% item.priority %]
     </span>
   </td>

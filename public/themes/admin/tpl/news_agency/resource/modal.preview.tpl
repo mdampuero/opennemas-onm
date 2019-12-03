@@ -20,7 +20,7 @@
     </div>
     <div class="col-sm-6">
       <strong>{t}Priority{/t}:</strong>
-      <span class="badge text-bold" ng-class="{ 'badge-danger': template.item.priority == 1, 'badge-warning': template.item.prority == 2, 'badge-info': template.item.priority == 3 }">
+      <span class="badge text-bold" ng-class="{ 'badge-danger': template.item.priority == 1, 'badge-warning': template.item.priority == 2, 'badge-info': template.item.priority == 3 }">
         [% template.item.priority %]
       </span>
     </div>
