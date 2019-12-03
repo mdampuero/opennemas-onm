@@ -139,11 +139,13 @@ class SynchronizeCommand extends Command
 
                         $output->writeln('<fg=green;options=bold>DONE</>');
 
+                        $j++;
                         continue;
                     }
 
                     $output->writeln('<fg=yellow;options=bold>SKIP</>');
 
+                    $j++;
                     continue;
                 }
 
@@ -185,6 +187,8 @@ class SynchronizeCommand extends Command
                     $stats['ignored'],
                     $stats['invalid']
                 ));
+
+                $j++;
             }
         }
 
