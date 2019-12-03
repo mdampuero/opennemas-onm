@@ -41,6 +41,14 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getBody' ])
             ->getMock();
 
+        $this->cp->expects($this->any())->method('getConfiguration')
+            ->willReturn([
+                'username'      => 'fred',
+                'password'      => 'qux',
+                'client_id'     => 'quxglorkwibble',
+                'client_secret' => 'plughglorkcorge'
+            ]);
+
         $this->auth = new Authentication($this->cp, $this->tp, $this->client, 'norf');
     }
 

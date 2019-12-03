@@ -162,16 +162,18 @@ class Nitf extends Parser
      */
     public function getId($data)
     {
-        $id = $data->xpath('//doc-id');
+        $id    = $data->xpath('//doc-id');
 
         if (empty($id)) {
             return '';
         }
 
-        $value = (string) $id[0]->attributes()->{'id-string'}[0];
+        $value = (string) $id[0];
 
-        if (empty($value)) {
-            $value = (string) $id[0];
+        if (!empty($id[0]->attributes())
+            && !empty($id[0]->attributes()->{'id-string'})
+        ) {
+            $value = (string) $id[0]->attributes()->{'id-string'}[0];
         }
 
         return $value;

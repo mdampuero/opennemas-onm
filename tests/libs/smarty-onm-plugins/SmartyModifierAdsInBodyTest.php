@@ -85,6 +85,14 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad1, $ad2 ]);
 
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('app')
+            ->willReturn([
+                'advertisementGroup' => 'waldo',
+                'extension'          => 'plugh',
+                'section'            => 'bar',
+            ]);
+
         $this->helper->expects($this->at(0))->method('isSafeFrameEnabled')
             ->willReturn(false);
 
