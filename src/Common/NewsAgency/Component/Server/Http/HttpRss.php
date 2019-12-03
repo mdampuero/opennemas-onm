@@ -22,6 +22,7 @@ class HttpRss extends Http
     public function checkParameters() : bool
     {
         if (array_key_exists('url', $this->params)
+            && !preg_match('@efeservicios@', $this->params['url'])
             && preg_match('@rss|feed|xml@', $this->params['url'])
             && strpos(
                 @file_get_contents($this->params['url']),
