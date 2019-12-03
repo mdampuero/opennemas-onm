@@ -52,7 +52,7 @@
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     <ui-select name="source" theme="select2" ng-model="criteria.source">
       <ui-select-match>
-        <strong>{t}Source{/t}:</strong> [% $select.selected.name %]
+        <strong>{t}Server{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
       <ui-select-choices repeat="item.id as item in addEmptyValue(data.extra.servers, 'id', 'name') | filter: $select.search">
         <div ng-bind-html="item.name | highlight: $select.search"></div>
