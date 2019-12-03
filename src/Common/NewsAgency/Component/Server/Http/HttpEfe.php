@@ -38,10 +38,9 @@ class HttpEfe extends Http
         $auth = '';
 
         if (array_key_exists('username', $this->params)) {
-            $this->params['username'] . ':' . $this->params['password'];
+            $auth = $this->params['username'] . ':' . $this->params['password'];
+            $url  = str_replace('http://', 'http://' . $auth . '@', $url);
         }
-
-        $url = str_replace('http://', 'http://' . $auth . '@', $url);
 
         return @file_get_contents($url);
     }
