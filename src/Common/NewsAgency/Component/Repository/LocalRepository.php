@@ -81,14 +81,22 @@ class LocalRepository
      * Finds a list of resources given a criteria.
      *
      * @param array   $criteria The criteria.
+     * @param string  $order    The order criteria.
      * @param integer $epp      The elements per page.
      * @param integer $page     The page.
      *
      * @return array The list of resources.
      */
-    public function findBy($criteria = [], $epp = null, $page = 1)
+    public function findBy($criteria = [], $order = null, $epp = null, $page = 1)
     {
+        if (!empty($order)) {
+            $order = preg_split('/\s+/', $order);
+            $order = [ $order[0] => $order[1] ];
+        }
+
         $files = $this->filter($criteria);
+
+        $this->sort($files, $order);
 
         if (empty($epp)) {
             return $files;
@@ -115,11 +123,7 @@ class LocalRepository
             );
         }
 
-        usort($this->contents, function ($a, $b) {
-            return $a->priority !== $b->priority
-                ? $a->priority >= $b->priority
-                : $a->created_time < $b->created_time;
-        });
+        $this->sort($this->contents, [ 'priority' => 'desc' ]);
 
         return $this;
     }
@@ -179,10 +183,11 @@ class LocalRepository
      * Filters the list of contents given a criteria.
      *
      * @param array $criteria The criteria.
+     * @param array $order    The order criteria.
      *
      * @return array The list of contents that match the criteria.
      */
-    protected function filter($criteria)
+    protected function filter($criteria, $order = null)
     {
         $contents = array_filter($this->contents, function ($a) use ($criteria) {
             return preg_match('@^' . $criteria['source'] . '$@', $a->source)
@@ -225,5 +230,39 @@ class LocalRepository
     protected function getFinder()
     {
         return new Finder();
+    }
+
+    /**
+     * Sorts contents in the array based on the order criteria.
+     *
+     * When the order includes the property 'priority', values 'asc' and 'desc'
+     * swap their meaning. Sorting contents by ascending priority means that a
+     * content will have a priority value greater than or equal to the next
+     * content in the list.
+     *
+     * @param array $contents The list of contents to sort.
+     * @param array $order    The order criteria.
+     */
+    protected function sort(array &$contents, array $order)
+    {
+        $property  = 'created_time';
+        $direction = 'desc';
+
+        if (!empty($order)) {
+            $property  = array_keys($order)[0];
+            $direction = array_values($order)[0];
+        }
+
+        usort($contents, function ($a, $b) use ($property, $direction) {
+            if ($property === 'priority') {
+                return $direction === 'desc'
+                    ? $b->{$property} <= $a->{$property}
+                    : $b->{$property} > $a->{$property};
+            }
+
+            return $direction === 'asc'
+                ? $b->{$property} <= $a->{$property}
+                : $b->{$property} > $a->{$property};
+        });
     }
 }
