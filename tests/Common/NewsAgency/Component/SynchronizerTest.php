@@ -43,7 +43,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->logger = $this->getMockBuilder('Monolog')
-            ->setMethods([ 'error' ])
+            ->setMethods([ 'notice' ])
             ->getMock();
 
         $this->parser = $this->getMockBuilder('Common\NewsAgency\Component\Parser\Parser')
@@ -109,7 +109,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             case 'core.paths.cache':
                 return '/plugh/corge';
 
-            case 'error.log':
+            case 'application.log':
                 return $this->logger;
 
             case 'news_agency.factory.parser':
@@ -552,7 +552,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $this->synchronizer->expects($this->once())->method('loadXmlFile')
             ->will($this->throwException(new \Exception()));
 
-        $this->logger->expects($this->once())->method('error')
+        $this->logger->expects($this->once())->method('notice')
             ->with('Cannot parse XML: glork');
 
         $method->invokeArgs($this->synchronizer, [ [ 'glork' ], 1 ]);

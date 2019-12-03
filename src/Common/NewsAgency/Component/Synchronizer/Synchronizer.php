@@ -102,7 +102,7 @@ class Synchronizer
         $this->fs         = new Filesystem();
         $this->repository = new LocalRepository();
 
-        $this->logger = $container->get('error.log');
+        $this->logger = $container->get('application.log');
         $this->pf     = $container->get('news_agency.factory.parser');
         $this->sf     = $container->get('news_agency.factory.server');
 
@@ -431,7 +431,7 @@ class Synchronizer
                 $this->stats['valid']++;
             } catch (\Exception $e) {
                 $this->stats['invalid']++;
-                $this->logger->error('Cannot parse XML: ' . $file);
+                $this->logger->notice('Cannot parse XML: ' . $file);
             }
 
             $this->stats['parsed']++;
