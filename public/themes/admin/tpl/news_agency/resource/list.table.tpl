@@ -40,14 +40,16 @@
   <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('server')">
     {t}Server{/t}
   </th>
-  <th class="text-center v-align-middle" width="110" ng-if="isColumnEnabled('created')">
+  <th class="text-center v-align-middle pointer" width="110" ng-click="sort('created_time')" ng-if="isColumnEnabled('created')">
     {t}Date{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created_time') == 'asc', 'fa fa-caret-down': isOrderedBy('created_time') == 'desc' }"></i>
   </th>
   <th class="text-center v-align-middle" width="140" ng-if="isColumnEnabled('category')">
     {t}Category{/t}
   </th>
-  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('priority')">
+  <th class="text-center v-align-middle pointer" width="100" ng-click="sort('priority')" ng-if="isColumnEnabled('priority')">
     {t}Priority{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('priority') == 'asc', 'fa fa-caret-down': isOrderedBy('priority') == 'desc' }"></i>
   </th>
 {/block}
 

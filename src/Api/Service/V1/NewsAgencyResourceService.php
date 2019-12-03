@@ -165,10 +165,10 @@ class NewsAgencyResourceService implements Service
     public function getList($oql = '')
     {
         try {
-            list($criteria,, $epp, $page) = $this->getCriteriaFromOql($oql);
+            list($criteria, $order, $epp, $page) = $this->getCriteriaFromOql($oql);
 
             $total = $this->repository->countBy($criteria);
-            $items = $this->repository->findBy($criteria, $epp, $page);
+            $items = $this->repository->findBy($criteria, $order, $epp, $page);
 
             $this->dispatcher->dispatch($this->getEventName('getList'), [
                 'items' => $items,

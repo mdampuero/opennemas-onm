@@ -189,9 +189,10 @@
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
 
-          $scope.selected.related = [];
-          $scope.criteria.type    = 'text';
-          $scope.criteria.orderBy = { priority: 'desc' };
+          $scope.selected.related   = [];
+          $scope.criteria.type      = 'text';
+          $scope.criteria.orderBy   = { priority: 'desc' };
+          $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "[value]"',
@@ -339,6 +340,22 @@
           };
 
           return http.post($scope.routes.importList, data);
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.sort = function(name) {
+          if (!$scope.criteria.orderBy) {
+            $scope.criteria.orderBy = {};
+          }
+
+          var direction = !$scope.criteria.orderBy[name] ||
+              $scope.criteria.orderBy[name] === 'desc' ? 'asc' : 'desc';
+
+          $scope.criteria.orderBy       = {};
+          $scope.criteria.orderBy[name] = direction;
+          $scope.criteria.page          = 1;
         };
 
         // Update epp when mode changes
