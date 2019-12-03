@@ -35,7 +35,7 @@
   {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
     <li class="quicklinks">
       <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_news_agency_server_create}">
-        <i class="fa fa-plus"></i>
+        <i class="fa fa-plus m-r-5"></i>
         {t}Create{/t}
       </a>
     </li>
@@ -65,8 +65,19 @@
   {/acl}
 {/block}
 
+{block name="leftFilters"}
+  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
+    <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': flags.http.loading }"></i>
+    </button>
+  </li>
+{/block}
 
-{block name="filters"}{/block}
+{block name="rightFilters"}
+  <li class="quicklinks">
+    <onm-pagination ng-model="criteria.page" total-items="data.total"></onm-pagination>
+  </li>
+{/block}
 
 {block name="list"}
   {include file="news_agency/server/list.table.tpl"}
