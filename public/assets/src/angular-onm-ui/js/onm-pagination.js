@@ -45,7 +45,7 @@
               '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="bottom">' +
                 '[% totalItems %]' +
               '</span>' +
-              '<span class="pagination-epp" ng-if="itemsPerPage">' +
+              '<span class="pagination-epp" ng-show="itemsPerPage">' +
                 '<span data-toggle="dropdown">' +
                   '<i class="fa fa-eye"></i>' +
                   '<span class="pagination-epp-number">' +
@@ -76,7 +76,7 @@
                   '</li>' +
                 '</ul>' +
               '</span>' +
-              '<span class="pagination-controls" ng-if="page && itemsPerPage">' +
+              '<span class="pagination-controls" ng-show="page && itemsPerPage">' +
                 '<button class="pagination-button" ng-click="previous()" ng-disabled="isFirstPage()" type="button">' +
                   '<i class="fa fa-chevron-left"></i>' +
                 '</button>' +
