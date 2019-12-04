@@ -51,17 +51,14 @@ class StructuredData
     /**
      * Initializes StructuredData
      *
-     * @param Instance      $instance The current instance.
-     * @param EntityManager $em       The entity manager.
-     * @param TagService    $ts       The tag service.
-     * @param Template      $tpl       The template service.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct(Instance $instance, EntityManager $em, TagService $ts, $tpl)
+    public function __construct($container)
     {
-        $this->instance = $instance;
-        $this->ds       = $em->getDataSet('Settings', 'instance');
-        $this->ts       = $ts;
-        $this->tpl      = $tpl;
+        $this->container = $container;
+        $this->tpl       = $this->container->get('core.template.admin');
+        $this->ds        = $this->container->get('orm.manager');
+        $this->ts        = $this->container->get('api.service.tag');
     }
 
 
@@ -81,7 +78,7 @@ class StructuredData
         }
 
         $data['wordCount'] = str_word_count($data['content']->body);
-        $data['sitename']  = $this->ds->get("site_name");
+        $data['sitename']  = $this->ds->get('site_name');
         $data['siteurl']   = SITE_URL;
 
         return $data;
