@@ -8,6 +8,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-url" checklist-model="app.columns.selected" checklist-value="'url'" type="checkbox">
+    <label for="checkbox-url">
+      {t}URL{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-synchronization" checklist-model="app.columns.selected" checklist-value="'synchronization'" type="checkbox">
     <label for="checkbox-synchronization">
       {t}Synchronization{/t}
@@ -48,6 +54,9 @@
   <th class="v-align-middle" width="400">
     {t}Name{/t}
   </th>
+  <th class="v-align-middle" width="400" ng-if="isColumnEnabled('url')">
+    {t}URL{/t}
+  </th>
   <th class="text-center v-align-middle" width="150" ng-if="isColumnEnabled('synchronization')">
     {t}Synchronization{/t}
   </th>
@@ -70,7 +79,9 @@
     [% getItemId(item) %]
   </td>
   <td class="v-align-middle">
-    [% item.name %]
+    <div class="table-text">
+      [% item.name %]
+    </div>
     <div class="listing-inline-actions m-t-10">
       <a class="btn btn-default btn-small" href="[% routing.generate(routes.redirect, { id: getItemId(item) }) %]">
         <i class="fa fa-pencil"></i>
@@ -103,6 +114,13 @@
       {/acl}
     </div>
   </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('url')">
+    <div class="table-text">
+      <a href="[% item.url %]" target="_blank">
+        [% item.url %]
+      </a>
+    </div>
+  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('synchronization')">
     <span class="badge badge-default text-bold text-uppercase">
       [% data.extra.sync_from[item.sync_from] %]
@@ -113,7 +131,6 @@
       ∞
     </span>
     <div ng-if="data.extra.stats[item.id]">
-
       <i class="fa fa-calendar"></i>
       [% data.extra.stats[item.id] | moment : 'YYYY-MM-DD': null : '{$app.locale->getTimeZone()->getName()}' %]
     </div>
