@@ -16,36 +16,33 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get', 'hasParameter' ])
-            ->getMock();
+        $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getDataSet' ])
-            ->getMock();
-
-        $this->tpl = $this->getMockBuilder('Common\Core\Component\Template\Template')
-            ->disableOriginalConstructor()
-            ->setMethods(['fetch'])->getMock();
-
-        $this->kernel = $this->getMockBuilder('Kernel')
-            ->setMethods([ 'getContainer' ])
-            ->getMock();
-
-        $this->object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getTags' ])
-            ->getMock();
 
         $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->tpl = $this->getMockBuilder('TemplateAdmin')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
             ->disableOriginalConstructor()
             ->setMethods([ 'getListByIds' ])
             ->getMock();
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('site_name')
+            ->willReturn('site name');
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -57,159 +54,174 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->container);
 
         $GLOBALS['kernel'] = $this->kernel;
+
+        $this->object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags' ])
+            ->getMock();
     }
 
     public function serviceContainerCallback($name)
     {
-        if ($name === 'data.manager.filter') {
-            return $this->fm;
-        }
-
-        if ($name === 'core.locale') {
-            return $this->locale;
-        }
-
-        if ($name === 'core.instance') {
-            return $this->instance;
+        switch ($name) {
+            case 'core.template.admin':
+                return $this->tpl;
+            case 'orm.manager':
+                return $this->em;
+            case 'api.service.tag':
+                return $this->ts;
         }
 
         return null;
     }
 
-    // /**
-    //  * @covers \Common\Core\Component\Helper\StructuredData::__construct
-    //  */
-    // public function testConstruct()
-    // {
-    //     $this->assertEquals($this->tpl, $this->object->tpl);
-    //     $this->assertEquals($this->ds, $this->object->ds);
-    //     $this->assertEquals($this->ts, $this->object->ts);
-    // }
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::__construct
+     */
+    public function testConstruct()
+    {
+        $this->assertEquals($this->tpl, $this->object->tpl);
+        $this->assertEquals($this->ts, $this->object->ts);
+        $this->assertEquals($this->ds, $this->object->ds);
+    }
 
-    // /**
-    //  * This method tests extractParamsFromData method with tags in both video and content
-    //  */
-    // public function testExtractParamsFromData()
-    // {
-    //     $data                  = [];
-    //     $data['content']       = new \Content();
-    //     $data['content']->tags = [1,2,3,4];
-    //     $data['content']->body = 'Body';
-    //     $data['video']         = new \Video();
-    //     $data['video']->tags   = [1,2,3,4,5];
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * with tags in both: content and video
+     */
+    public function testExtractParamsFromData()
+    {
+        $data                  = [];
+        $data['content']       = new \Content();
+        $data['content']->body = 'This is a test body';
+        $data['content']->tags = [1,2,3,4];
+        $data['video']         = new \Video();
+        $data['video']->tags   = [1,2,3,4,5];
 
-    //     $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
-    //         ->disableOriginalConstructor()
-    //         ->setMethods([ 'getTags' ])
-    //         ->getMock();
+        $output                  = [];
+        $output['content']       = new \Content();
+        $output['video']         = new \Video();
+        $output['content']->tags = [1,2,3,4];
+        $output['video']->tags   = [1,2,3,4,5];
+        $output['videokeywords'] = 'keywords,object,json,linking,data';
+        $output['keywords']      = 'keywords,object,json,linking';
+        $output['sitename']      = 'site name';
+        $output['siteurl']       = 'http://console/';
+        $output['content']->body = 'This is a test body';
+        $output['wordCount']     = 5;
 
-    //     $object->expects($this->exactly(2))->method('getTags')
-    //         ->with($this->logicalOr($data['content']->tags, $data['video']->tags))
-    //         ->will($this->returnCallback(function ($arg) use ($data) {
-    //             if ($arg == $data['content']->tags) {
-    //                 return 'keywords,object,json,linking';
-    //             } else {
-    //                 return 'keywords,object,json,linking,data';
-    //             }
-    //         }));
+        $this->object->expects($this->exactly(2))->method('getTags')
+            ->with($this->logicalOr($data['content']->tags, $data['video']->tags))
+            ->will($this->returnCallback(function ($arg) use ($data) {
+                if ($arg == $data['content']->tags) {
+                    return 'keywords,object,json,linking';
+                } else {
+                    return 'keywords,object,json,linking,data';
+                }
+            }));
 
-    //     $this->ds->expects($this->any())->method('get')
-    //         ->with('site_name')
-    //         ->willReturn('Site name');
+        $this->ds->expects($this->once())->method('get');
 
-    //     $output                  = [];
-    //     $output['keywords']      = "keywords,object,json,linking";
-    //     $output['videokeywords'] = "keywords,object,json,linking,data";
-    //     $output['sitename']      = "Site name";
-    //     $output['wordCount']     = 4;
-    //     $output['siteurl']       = 'http://console/';
+        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+    }
 
-    //     $output = array_merge($output, $data);
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * without video tags
+     */
+    public function testExtractParamsFromDataWithoutVideoTags()
+    {
+        $data                  = [];
+        $data['content']       = new \Content();
+        $data['content']->body = 'This is a test body';
+        $data['content']->tags = [1,2,3,4];
+        $data['video']         = new \Video();
+        $data['video']->tags   = [];
 
-    //     $this->assertEquals($output, $this->object->extractParamsFromData($data));
-    // }
+        $output                  = [];
+        $output['content']       = new \Content();
+        $output['video']         = new \Video();
+        $output['content']->tags = [1,2,3,4];
+        $output['video']->tags   = [];
+        $output['videokeywords'] = '';
+        $output['keywords']      = 'keywords,object,json,linking';
+        $output['sitename']      = 'site name';
+        $output['siteurl']       = 'http://console/';
+        $output['content']->body = 'This is a test body';
+        $output['wordCount']     = 5;
 
-    // /**
-    //  * This method tests extractParamsFromData method without video tags
-    //  */
-    // public function testExtractParamsFromDataWithoutVideoTags()
-    // {
-    //     $this->data['content']->tags = [1,2,3,4];
-    //     $this->data['video']->tags   = null;
-    //     $this->data['keywords']      = "keywords,object,json,linking";
-    //     $this->data['videokeywords'] = "";
-    //     $this->data['sitename']      = "Site name";
-    //     $this->data['wordCount']     = 5;
-    //     $this->data['siteurl']       = 'http://console/';
+        $this->object->expects($this->once())->method('getTags')
+            ->with($data['content']->tags)
+            ->willReturn('keywords,object,json,linking');
 
-    //     $this->ts->expects($this->once())->method('getListByIds')
-    //         ->with($this->data['content']->tags)
-    //         ->willReturn([
-    //             'items' => [
-    //                 new Tag([ 'name' => 'keywords' ]),
-    //                 new Tag([ 'name' => 'object' ]),
-    //                 new Tag([ 'name' => 'json' ]),
-    //                 new Tag([ 'name' => 'linking' ]),
-    //             ]
-    //             ]);
+        $this->ds->expects($this->once())->method('get');
 
-    //     $this->ds->expects($this->once())->method('get')
-    //         ->with("site_name")
-    //         ->willReturn("Site name");
+        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+    }
 
-    //     $this->assertEquals($this->data, $this->object->extractParamsFromData($this->data));
-    // }
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * without content tags
+     */
+    public function testExtractParamsFromDataWithoutContentTags()
+    {
+        $data                  = [];
+        $data['content']       = new \Content();
+        $data['content']->body = 'This is a test body';
+        $data['content']->tags = [];
+        $data['video']         = new \Video();
+        $data['video']->tags   = [1,2,3,4,5];
 
-    // /**
-    //  * This method tests extractParamsFromData method without content tags
-    //  */
-    // public function testExtractParamsFromDataWithoutContentTags()
-    // {
-    //     $this->data['content']->tags = null;
-    //     $this->data['keywords']      = "";
-    //     $this->data['videokeywords'] = "keywords,object,json,linking,data";
-    //     $this->data['sitename']      = "Site name";
-    //     $this->data['wordCount']     = 5;
-    //     $this->data['siteurl']       = 'http://console/';
+        $output                  = [];
+        $output['content']       = new \Content();
+        $output['video']         = new \Video();
+        $output['content']->tags = [];
+        $output['video']->tags   = [1,2,3,4,5];
+        $output['videokeywords'] = 'keywords,object,json,linking,data';
+        $output['keywords']      = '';
+        $output['sitename']      = 'site name';
+        $output['siteurl']       = 'http://console/';
+        $output['content']->body = 'This is a test body';
+        $output['wordCount']     = 5;
 
-    //     $this->ts->expects($this->once())->method('getListByIds')
-    //         ->with($this->data['video']->tags)
-    //         ->willReturn([
-    //             'items' => [
-    //                 new Tag([ 'name' => 'keywords' ]),
-    //                 new Tag([ 'name' => 'object' ]),
-    //                 new Tag([ 'name' => 'json' ]),
-    //                 new Tag([ 'name' => 'linking' ]),
-    //                 new Tag([ 'name' => 'data' ]),
-    //             ]
-    //             ]);
+        $this->object->expects($this->once())->method('getTags')
+            ->with($data['video']->tags)
+            ->willReturn('keywords,object,json,linking,data');
 
-    //     $this->ds->expects($this->once())->method('get')
-    //         ->with("site_name")
-    //         ->willReturn("Site name");
+        $this->ds->expects($this->once())->method('get');
 
-    //     $this->assertEquals($this->data, $this->object->extractParamsFromData($this->data));
-    // }
+        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+    }
 
-    // /**
-    //  * This method tests extractParamsFromData method without tags
-    //  */
-    // public function testExtractParamsFromDataWithoutTags()
-    // {
-    //     $this->data['content']->tags = null;
-    //     $this->data['video']->tags   = null;
-    //     $this->data['keywords']      = "";
-    //     $this->data['videokeywords'] = "";
-    //     $this->data['sitename']      = "Site name";
-    //     $this->data['wordCount']     = 5;
-    //     $this->data['siteurl']       = 'http://console/';
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * without tags
+     */
+    public function testExtractParamsFromDataWithoutTags()
+    {
+        $data                  = [];
+        $data['content']       = new \Content();
+        $data['content']->body = 'This is a test body';
+        $data['content']->tags = [];
+        $data['video']         = new \Video();
+        $data['video']->tags   = [];
 
-    //     $this->ts->expects($this->never())->method('getListByIds');
+        $output                  = [];
+        $output['content']       = new \Content();
+        $output['video']         = new \Video();
+        $output['content']->tags = [];
+        $output['video']->tags   = [];
+        $output['videokeywords'] = '';
+        $output['keywords']      = '';
+        $output['sitename']      = 'site name';
+        $output['siteurl']       = 'http://console/';
+        $output['content']->body = 'This is a test body';
+        $output['wordCount']     = 5;
 
-    //     $this->ds->expects($this->once())->method('get')
-    //         ->with("site_name")
-    //         ->willReturn("Site name");
+        $this->object->expects($this->never())->method('getTags');
 
-    //     $this->assertEquals($this->data, $this->object->extractParamsFromData($this->data));
-    // }
+        $this->ds->expects($this->once())->method('get');
+
+        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+    }
 }

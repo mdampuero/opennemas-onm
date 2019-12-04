@@ -21,32 +21,11 @@ use Api\Service\V1\TagService;
 class StructuredData
 {
     /**
-     * The current instance.
+     * The service container.
      *
-     * @var Instance
+     * @var ServiceContainer
      */
-    protected $instance;
-
-    /**
-     * The dataset service.
-     *
-     * @var DataSet
-     */
-    protected $ds;
-
-    /**
-     * The tag service.
-     *
-     * @var TagService
-     */
-    protected $ts;
-
-    /**
-     * The template service
-     *
-     * @var Template
-     */
-    protected $tpl;
+    protected $container;
 
     /**
      * Initializes StructuredData
@@ -57,8 +36,9 @@ class StructuredData
     {
         $this->container = $container;
         $this->tpl       = $this->container->get('core.template.admin');
-        $this->ds        = $this->container->get('orm.manager');
         $this->ts        = $this->container->get('api.service.tag');
+        $this->ds        = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
     }
 
 
