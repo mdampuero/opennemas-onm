@@ -22,7 +22,7 @@ class HttpEfe extends Http
     public function checkParameters() : bool
     {
         if (array_key_exists('url', $this->params)
-            && preg_match('@efeservicios@', $this->params['url'])
+            && preg_match('@efeservicios@', $this->getUrl())
         ) {
             return true;
         }
@@ -50,7 +50,7 @@ class HttpEfe extends Http
      */
     public function getRemoteFiles() : Server
     {
-        $content = $this->getContentFromUrl($this->params['url']);
+        $content = $this->getContentFromUrl($this->getUrl());
 
         if (!$content) {
             throw new \Exception(sprintf(

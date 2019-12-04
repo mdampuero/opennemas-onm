@@ -61,8 +61,10 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
 
         $this->server = $this->getMockBuilder('Common\NewsAgency\Component\Server\Server')
             ->disableOriginalConstructor()
-            ->setMethods([ 'checkParameters', 'downloadFiles', 'getRemoteFiles' ])
-            ->getMock();
+            ->setMethods([
+                'checkConnection', 'checkParameters', 'downloadFiles',
+                'getRemoteFiles'
+            ])->getMock();
 
         $this->sf = $this->getMockBuilder('Common\NewsAgency\Component\Factory\ServerFactory')
             ->disableOriginalConstructor()

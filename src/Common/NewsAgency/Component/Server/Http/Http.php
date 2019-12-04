@@ -19,6 +19,14 @@ abstract class Http extends Server
     /**
      * {@inheritdoc}
      */
+    public function checkConnection() : bool
+    {
+        return !empty($this->getContentFromUrl($this->getUrl()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function downloadFiles(string $path, ?array $files = null) : Server
     {
         if (empty($files)) {

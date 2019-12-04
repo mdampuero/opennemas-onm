@@ -67,7 +67,12 @@ class NewsAgencyServerController extends ApiController
         $sf  = $this->get('news_agency.factory.server');
 
         try {
-            $sf->get($server);
+            $server = $sf->get($server);
+
+            if (!$server->checkConnection()) {
+                throw new \Exception();
+            }
+
             $msg->add(_('Server connection success!'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to connect to the server'), 'error', 400);

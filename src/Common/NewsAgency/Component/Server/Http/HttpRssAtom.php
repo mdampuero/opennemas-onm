@@ -19,19 +19,12 @@ class HttpRssAtom extends HttpRss
     /**
      * {@inheritdoc}
      */
-    public function checkParameters() : bool
+    public function checkConnection() : bool
     {
-        if (array_key_exists('url', $this->params)
-            && preg_match('@rss|feed|xml@', $this->params['url'])
-            && strpos(
-                @file_get_contents($this->params['url']),
-                'application/atom+xml'
-            ) !== false
-        ) {
-            return true;
-        }
+        $content = $this->getContentFromUrl($this->getUrl());
 
-        return false;
+        return !empty($content)
+            && strpos($content, 'application/atom+xml') !== false;
     }
 
     /**
@@ -39,7 +32,7 @@ class HttpRssAtom extends HttpRss
      */
     public function getRemoteFiles() : Server
     {
-        $content = $this->getContentFromUrl($this->params['url']);
+        $content = $this->getContentFromUrl($this->getUrl());
 
         if (!$content) {
             throw new \Exception(sprintf(

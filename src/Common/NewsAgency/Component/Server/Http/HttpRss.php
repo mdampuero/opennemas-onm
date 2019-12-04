@@ -19,15 +19,23 @@ class HttpRss extends Http
     /**
      * {@inheritdoc}
      */
+    public function checkConnection() : bool
+    {
+        $content = $this->getContentFromUrl($this->getUrl());
+
+        return !empty($content)
+            && strpos($content, 'application/rss+xml') !== false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkParameters() : bool
     {
-        if (array_key_exists('url', $this->params)
-            && !preg_match('@efeservicios@', $this->params['url'])
-            && preg_match('@rss|feed|xml@', $this->params['url'])
-            && strpos(
-                @file_get_contents($this->params['url']),
-                'application/atom+xml'
-            ) === false
+        if (!empty($this->getUrl())
+            && !preg_match('@efeservicios@', $this->getUrl())
+            && preg_match('@rss|feed|xml@', $this->getUrl())
+            && $this->checkConnection()
         ) {
             return true;
         }
@@ -69,7 +77,7 @@ class HttpRss extends Http
      */
     public function getRemoteFiles() : Server
     {
-        $content = $this->getContentFromUrl($this->params['url']);
+        $content = $this->getContentFromUrl($this->getUrl());
 
         if (!$content) {
             throw new \Exception(

@@ -92,9 +92,9 @@ abstract class Server
 
         do {
             curl_setopt_array($ch, [
-                CURLOPT_URL => $url,
-                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD => $auth,
+                CURLOPT_URL            => $url,
+                CURLOPT_HTTPAUTH       => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD        => $auth,
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0,
@@ -118,6 +118,25 @@ abstract class Server
 
         return $body;
     }
+
+    /**
+     * Returns the URL for the current server based on the server configuration.
+     *
+     * @return string The server URL.
+     */
+    protected function getUrl()
+    {
+        return array_key_exists('url', $this->params)
+            ? $this->params['url']
+            : '';
+    }
+
+    /**
+     * Checks if the application can connect to server.
+     *
+     * @return bool True if application can connect to server. False otherwise.
+     */
+    abstract public function checkConnection() : bool;
 
     /**
      * Checks if the current server parameter.

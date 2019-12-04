@@ -18,6 +18,20 @@ class Ftp extends Server
     /**
      * {@inheritdoc}
      */
+    public function checkConnection() : bool
+    {
+        try {
+            $this->connect();
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkParameters() : bool
     {
         if (array_key_exists('url', $this->params)
@@ -50,7 +64,7 @@ class Ftp extends Server
             if (!preg_match('/index\.xml$/', $localFile) &&
                 !file_exists($localFile)
             ) {
-                ftp_pasv($this->conn, true);
+                @ftp_pasv($this->conn, true);
                 @ftp_get($this->conn, $localFile, $file['filename'], FTP_BINARY);
 
                 if (preg_match('/\.xml$/', $localFile)) {

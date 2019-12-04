@@ -22,7 +22,7 @@ class HttpEfePhotos extends HttpEfe
     public function checkParameters() : bool
     {
         if (array_key_exists('url', $this->params)
-            && preg_match('@efeservicios.*?fotos@i', $this->params['url'])
+            && preg_match('@efeservicios.*?fotos@i', $this->getUrl())
         ) {
             return true;
         }
@@ -35,7 +35,7 @@ class HttpEfePhotos extends HttpEfe
      */
     public function getRemoteFiles() : Server
     {
-        $content = $this->getContentFromUrl($this->params['url']);
+        $content = $this->getContentFromUrl($this->getUrl());
 
         if (!$content) {
             throw new \Exception(sprintf(

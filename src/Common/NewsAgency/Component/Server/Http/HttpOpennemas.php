@@ -19,10 +19,21 @@ class HttpOpennemas extends Http
     /**
      * {@inheritdoc}
      */
+    public function checkConnection() : bool
+    {
+        $content = $this->getContentFromUrl($this->getUrl());
+
+        return !empty($content)
+            && strpos($content, '<?xml') !== false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkParameters() : bool
     {
         if (array_key_exists('url', $this->params)
-            && preg_match('@http(s)?://(.*)/ws/agency@', $this->params['url']) === 1
+            && preg_match('@http(s)?://(.*)/ws/agency@', $this->getUrl())
         ) {
             return true;
         }
@@ -35,10 +46,7 @@ class HttpOpennemas extends Http
      */
     public function getRemoteFiles() : Server
     {
-        $url = $this->params['url'] . '/export.xml?until='
-            . $this->params['sync_from'];
-
-        $content = $this->getContentFromUrl($url);
+        $content = $this->getContentFromUrl($this->getUrl());
 
         if (!$content) {
             throw new \Exception(sprintf(
@@ -63,5 +71,19 @@ class HttpOpennemas extends Http
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getUrl()
+    {
+        $url = $this->params['url'] . '/export.xml';
+
+        if (array_key_exists('sync_from', $this->params)) {
+            $url .= "?until=$this->params['sync_from']";
+        }
+
+        return $url;
     }
 }
