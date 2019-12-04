@@ -6,20 +6,22 @@
   <h4 class="p-b-30 text-center" ng-if="template.isEditable(template)">{t}Do you want to import the item?{/t}</h4>
   <h4 class="p-b-30 text-center" ng-if="!template.isEditable(template)">{t}Do you want to import the selected items?{/t}</h4>
   <div class="imported-items" style="max-height: 200px; overflow: auto;">
-    <div class="p-l-30 p-r-30 m-t-10 nowrap" ng-repeat="item in template.items">
-      <strong>
-        [% item.title %]
-      </strong>
-      <ul class="no-style">
-        <li class="nowrap" ng-repeat="id in item.related" ng-if="template.related[id]">
-          <small>
-            &angrt;
-            <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': template.related[id].type === 'text', 'fa-picture-o': template.related[id].type === 'photo', 'fa-film': template.related[id].type === 'video' }"></i>
-            [% template.related[id].title %]
-          </small>
-        </li>
-      </ul>
-    </div>
+    <ol>
+      <li class="m-t-10 p-r-30" ng-repeat="item in template.items">
+        <strong class="block nowrap">
+          [% item.title %]
+        </strong>
+        <ul class="no-style">
+          <li class="nowrap" ng-repeat="id in item.related" ng-if="template.related[id]">
+            <small>
+              &angrt;
+              <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': template.related[id].type === 'text', 'fa-picture-o': template.related[id].type === 'photo', 'fa-film': template.related[id].type === 'video' }"></i>
+              [% template.related[id].title %]
+            </small>
+          </li>
+        </ul>
+      </li>
+    </ol>
   </div>
   <div class="row p-t-30" ng-show="template.hasTexts(template.items)">
     <div class="col-sm-6 col-sm-offset-3 form-group text-center">
