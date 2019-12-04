@@ -520,7 +520,7 @@ class Synchronizer
             $source->downloadFiles($path, $missing);
         }
 
-        $this->fs->chown($path, 'www-data', true);
+        $this->fs->chgrp($path, 'www-data', true);
 
         $contents = $this->removeInvalidContents($contents, $path);
         $filePath = sprintf(
@@ -534,7 +534,7 @@ class Synchronizer
             ->setContents($contents)
             ->write($filePath);
 
-        $this->fs->chown($filePath, 'www-data', true);
+        $this->fs->chgrp($filePath, 'www-data', true);
 
         $this->stats['contents']   += count($contents);
         $this->stats['downloaded'] += $source->downloaded;
@@ -550,6 +550,6 @@ class Synchronizer
             PhpSerializer::serialize($this->serverStats)
         );
 
-        $this->fs->chown($this->syncFilePath, 'www-data', true);
+        $this->fs->chgrp($this->syncFilePath, 'www-data', true);
     }
 }

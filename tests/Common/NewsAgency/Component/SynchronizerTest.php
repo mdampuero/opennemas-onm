@@ -39,7 +39,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
 
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->setMethods([
-                'chown', 'dumpFile', 'exists', 'mkdir', 'remove', 'touch'
+                'chgrp', 'dumpFile', 'exists', 'mkdir', 'remove', 'touch'
             ])->getMock();
 
         $this->logger = $this->getMockBuilder('Monolog')
@@ -652,9 +652,9 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $property->setAccessible(true);
         $property->setValue($synchronizer, $this->repository);
 
-        $this->fs->expects($this->at(0))->method('chown')
+        $this->fs->expects($this->at(0))->method('chgrp')
             ->with('/plugh/corge/qux/importers/14535');
-        $this->fs->expects($this->at(1))->method('chown');
+        $this->fs->expects($this->at(1))->method('chgrp');
 
         $this->server->expects($this->at(0))->method('getRemoteFiles')
             ->willReturn($this->server);
