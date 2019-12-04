@@ -23,6 +23,18 @@
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
+         * The criteria to search.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = {
+          type: 'text',
+          orderBy: { priority: 'desc' },
+          epp: 10,
+          page: 1
+        };
+
+        /**
          * @memberOf NewsAgencyResourceListCtrl
          *
          * @description
@@ -190,8 +202,6 @@
           $scope.backup.criteria = $scope.criteria;
 
           $scope.selected.related   = [];
-          $scope.criteria.type      = 'text';
-          $scope.criteria.orderBy   = { priority: 'desc' };
           $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({ placeholder: {
@@ -366,12 +376,16 @@
             return;
           }
 
-          var epp = $scope.getEppInGrid();
+          if (nv === 'grid') {
+            var epp = $scope.getEppInGrid();
 
-          if (epp !== $scope.criteria.epp) {
-            $scope.flags.http.loading = true;
-            $scope.criteria.epp = nv === 'grid' ? epp : 10;
+            if (epp !== $scope.criteria.epp) {
+              $scope.criteria.epp = epp;
+              return;
+            }
           }
+
+          $scope.criteria.epp = 10;
         }, true);
 
         // Updates the list mode when criteria changes.
@@ -382,8 +396,10 @@
 
           if (nv === 'photo') {
             $scope.setMode('grid');
+            $scope.flags.http.loading = true;
           } else {
             $scope.setMode('list');
+            $scope.flags.http.loading = true;
           }
         });
 
