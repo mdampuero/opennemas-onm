@@ -152,10 +152,10 @@
     </span>
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-    <small class="text-italic" ng-if="!item.tags || item.tags.split('/\s*,\s*/').length === 0">
+    <small class="text-italic" ng-if="!item.tags || item.tags.split(',').length === 0">
       &lt;{t}No tags{/t}&gt;
     </small>
-    <div class="inline m-r-5 m-t-5" ng-if="item.tags" ng-repeat="tag in item.tags.split('/\s*,\s*/')">
+    <div class="inline m-r-5 m-t-5" ng-if="item.tags" ng-repeat="tag in item.tags.split(',')">
       <span class="label label-defaul label-info text-bold">
         [% tag %]
       </span>

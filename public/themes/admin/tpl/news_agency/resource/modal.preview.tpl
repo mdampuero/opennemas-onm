@@ -34,12 +34,12 @@
         </span>
       </div>
     </div>
-    <div class="form-group no-margin" ng-if="template.item.related && template.item.related.length > 0">
+    <div class="form-group no-margin" ng-if="template.item.tags && template.item.tags.split(',').length > 0">
       <label class="control-label col-sm-3 text-bold">
         {t}Tags{/t}
       </label>
       <div class="col-sm-9 col-sm-offset-0 col-xs-offset-1 form-control-static">
-        <span class="label label-info m-r-5 text-bold" ng-if="template.item.tags && template.item.tags.split('/\s*,\s*/').length > 0" ng-repeat="tag in template.item.tags.split('/\s*,\s*/')">
+        <span class="label label-info m-r-5 text-bold" ng-if="template.item.tags && template.item.tags.split(',').length > 0" ng-repeat="tag in template.item.tags.split(',')">
           [% tag %]
         </span>
       </div>
