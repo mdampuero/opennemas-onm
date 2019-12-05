@@ -40,12 +40,12 @@
             ngModel: '=',
             totalItems: '='
           },
-          link: function($scope, $element) {
+          link: function($scope, $element, $attrs) {
             var paginationTpl = '<span class="pagination">' +
               '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="bottom">' +
                 '[% totalItems %]' +
               '</span>' +
-              '<span class="pagination-epp" ng-show="itemsPerPage">' +
+              '<span class="pagination-epp" ng-hide="readOnly">' +
                 '<span data-toggle="dropdown">' +
                   '<i class="fa fa-eye"></i>' +
                   '<span class="pagination-epp-number">' +
@@ -76,7 +76,7 @@
                   '</li>' +
                 '</ul>' +
               '</span>' +
-              '<span class="pagination-controls" ng-show="page && itemsPerPage">' +
+              '<span class="pagination-controls" ng-hide="readOnly">' +
                 '<button class="pagination-button" ng-click="previous()" ng-disabled="isFirstPage()" type="button">' +
                   '<i class="fa fa-chevron-left"></i>' +
                 '</button>' +
@@ -93,6 +93,8 @@
             '</span>';
 
             var e = $compile(paginationTpl)($scope);
+
+            $scope.readOnly = angular.isDefined($attrs.readonly);
 
             $element.replaceWith(e);
           }

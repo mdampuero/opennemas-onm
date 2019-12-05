@@ -75,7 +75,7 @@
 
 {block name="rightFilters"}
   <li class="quicklinks">
-    <onm-pagination ng-model="criteria.page" total-items="data.total"></onm-pagination>
+    <onm-pagination ng-model="criteria.page" readonly total-items="data.total"></onm-pagination>
   </li>
 {/block}
 
