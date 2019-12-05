@@ -201,7 +201,6 @@ class NewsletterTemplateController extends Controller
             ],
             'filters' => [
                 [ 'value' => '', 'title' => _('No filter') ],
-                [ 'value' => 'blogs', 'title' => _('Blogs') ],
                 [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
                 [ 'value' => 'most_viewed', 'title' => _('Most viewed') ],
             ],
