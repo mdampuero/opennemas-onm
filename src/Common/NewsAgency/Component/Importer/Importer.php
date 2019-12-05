@@ -396,28 +396,28 @@ class Importer
             if ($content->content_type_name === 'photo') {
                 if (!array_key_exists('img1', $data)) {
                     $data['img1']        = $content->pk_content;
-                    $data['img1_footer'] = $content->body;
+                    $data['img1_footer'] = strip_tags($content->body);
                 }
 
                 if (!array_key_exists('img2', $data)
                     || $data['img1'] == $data['img2']
                 ) {
                     $data['img2']        = $content->pk_content;
-                    $data['img2_footer'] = $content->body;
+                    $data['img2_footer'] = strip_tags($content->body);
                 }
             }
 
             if ($content->content_type_name === 'video') {
                 if (!array_key_exists('fk_video', $data)) {
                     $data['fk_video']     = $content->pk_content;
-                    $data['footer_video'] = $content->description;
+                    $data['footer_video'] = strip_tags($content->body);
                 }
 
                 if (!array_key_exists('fk_video2', $data)
                     || $data['fk_video'] == $data['fk_video2']
                 ) {
                     $data['fk_video2']     = $content->pk_content;
-                    $data['footer_video2'] = $content->description;
+                    $data['footer_video2'] = strip_tags($content->body);
                 }
             }
         }
