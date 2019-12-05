@@ -81,7 +81,7 @@ class HttpOpennemas extends Http
         $url = $this->params['url'] . '/export.xml';
 
         if (array_key_exists('sync_from', $this->params)) {
-            $url .= "?until=$this->params['sync_from']";
+            $url .= "?until={$this->params['sync_from']}";
         }
 
         return $url;
