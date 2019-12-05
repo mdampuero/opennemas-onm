@@ -247,7 +247,7 @@ class Importer
             if (array_key_exists('authors_map', $this->config)) {
                 $authors = array_filter(
                     $this->config['authors_map'],
-                    function ($a) {
+                    function ($a) use ($resource) {
                         return $a['slug'] == $resource->author;
                     }
                 );
