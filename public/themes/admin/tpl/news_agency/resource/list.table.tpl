@@ -43,7 +43,7 @@
   <th class="v-align-middle" width="400" ng-if="isColumnEnabled('title')">
     {t}Title{/t}
   </th>
-  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('server')">
+  <th class="text-center v-align-middle" width="140" ng-if="isColumnEnabled('server')">
     {t}Server{/t}
   </th>
   <th class="text-center v-align-middle pointer" width="110" ng-click="sort('created_time')" ng-if="isColumnEnabled('created')">
@@ -129,8 +129,10 @@
     </div>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('server')">
-    <a class="badge badge-default block nowrap text-bold" ng-href="[% routing.generate('backend_news_agency_server_show', { id: item.source }) %]" style="background-color:[% data.extra.servers[item.source].color %];">
-      [% data.extra.servers[item.source].name %]
+    <a class="badge badge-default m-w-100 text-bold" ng-href="[% routing.generate('backend_news_agency_server_show', { id: item.source }) %]" ng-style="{ 'background-color' : data.extra.servers[item.source].color }">
+      <div class="nowrap">
+        [% data.extra.servers[item.source].name %]
+      </div>
     </a>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('created')">
