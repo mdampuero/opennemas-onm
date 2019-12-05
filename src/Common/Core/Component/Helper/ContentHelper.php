@@ -73,6 +73,7 @@ class ContentHelper
         }
 
         try {
+            $photos   = [];
             $contents = $this->em->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
