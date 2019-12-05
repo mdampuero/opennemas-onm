@@ -93,7 +93,7 @@ class ContentHelper
 
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
-            return [];
+            return [ [], [] ];
         }
 
         return $this->ignoreCurrent($contentId, $items, $epp);
