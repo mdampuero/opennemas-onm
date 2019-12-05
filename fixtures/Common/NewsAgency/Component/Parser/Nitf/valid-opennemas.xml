@@ -2,7 +2,7 @@
   <head>
     <title>Sample title</title>
     <docdata management-status="usable">
-      <doc.rights provider="Opennemas"/>
+      <doc.rights agent="Opennemas"/>
       <doc-id id-string="21155709" />
       <key-list>
         <keyword key="foo,bar,baz,foobar"/>
@@ -16,6 +16,7 @@
         <hl2>Headline2</hl2>
       </hedline>
       <rights>
+        <rights.agent>Opennemas</rights.agent>
         <rights.owner>Editorial</rights.owner>
         <rights.owner.photo>author.png</rights.owner.photo>
       </rights>

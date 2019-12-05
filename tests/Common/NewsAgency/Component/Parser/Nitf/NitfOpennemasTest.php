@@ -88,10 +88,8 @@ class NitfOpennemasTest extends TestCase
 
         $resource = $this->parser->parse($this->valid);
 
-        $this->assertEquals([
-            'name'  => 'Editorial',
-            'photo' => 'author.png'
-        ], $resource->author);
+        $this->assertEquals('Editorial', $resource->author);
+        $this->assertEquals('author.png', $resource->author_photo);
     }
 
     /**
@@ -103,16 +101,11 @@ class NitfOpennemasTest extends TestCase
         $method     = $reflection->getMethod('getAuthor');
         $method->setAccessible(true);
 
-        $author = [
-            'name'  => 'Editorial',
-            'photo' => 'author.png'
-        ];
-
-        $criteria = $method->invokeArgs($this->parser, [ $this->invalid ]);
-        $this->assertEmpty($criteria);
-
-        $criteria = $method->invokeArgs($this->parser, [ $this->valid ]);
-        $this->assertEquals($author, $criteria);
+        $this->assertEmpty($method->invokeArgs($this->parser, [ $this->invalid ]));
+        $this->assertEquals(
+            'Editorial',
+            $method->invokeArgs($this->parser, [ $this->valid ])
+        );
     }
 
     /**
@@ -124,10 +117,24 @@ class NitfOpennemasTest extends TestCase
         $method     = $reflection->getMethod('getAuthorPhoto');
         $method->setAccessible(true);
 
-        $criteria = $method->invokeArgs($this->parser, [ $this->invalid ]);
-        $this->assertEmpty($criteria);
+        $this->assertEmpty($method->invokeArgs($this->parser, [ $this->invalid ]));
 
-        $criteria = $method->invokeArgs($this->parser, [ $this->valid ]);
-        $this->assertEquals('author.png', $criteria);
+        $this->assertEquals(
+            'author.png',
+            $method->invokeArgs($this->parser, [ $this->valid ])
+        );
+    }
+
+    /**
+     * Tests isOpennemasNitf for valid and invalid Opennemas NITF values.
+     */
+    public function testIsOpennemasNitf()
+    {
+        $reflection = new \ReflectionClass('Common\NewsAgency\Component\Parser\Nitf\NitfOpennemas');
+        $method     = $reflection->getMethod('isOpennemasNitf');
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invokeArgs($this->parser, [ $this->invalid ]));
+        $this->assertTrue($method->invokeArgs($this->parser, [ $this->valid ]));
     }
 }
