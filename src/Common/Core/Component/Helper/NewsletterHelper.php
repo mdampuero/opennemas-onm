@@ -49,8 +49,8 @@ class NewsletterHelper
         $types        = [];
         $contentTypes = \ContentManager::getContentTypesFiltered();
         $ignored      = [
-            'comment', 'frontpage', 'schedule', 'photo', 'event',
-            'advertisement', 'widget'
+            'advertisement', 'book', 'comment', 'event', 'frontpage',
+            'schedule', 'special', 'photo', 'widget'
         ];
 
         foreach ($contentTypes as $key => $value) {
