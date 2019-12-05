@@ -239,7 +239,7 @@ var newsletterTemplateTranslations = {
                       </a>
                     </div>
                     <div class="col-xs-4">
-                      <button type="button" class="btn btn-primary btn-block" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video,special">
+                      <button type="button" class="btn btn-primary btn-block" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video">
                         <i class="fa fa-hand-o-up"></i>
                         {t}Pick contents{/t}
                       </button>
@@ -281,7 +281,15 @@ var newsletterTemplateTranslations = {
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
-            <onm-category-selector multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected="selectedCategories" selected-text="{t}selected{/t}"></onm-category-selector>
+            <ui-select name="extra_type" theme="select2" ng-model="content.criteria.extra_type" ng-if="content.criteria.content_type === 'opinion'">
+              <ui-select-match>
+                <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.value as item in data.extra.extra_types | filter: { title: $select.search }" position='down'>
+                <div ng-bind-html="item.title | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+            <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected="selectedCategories" selected-text="{t}selected{/t}"></onm-category-selector>
           </div>
 
           <div class="limit clearfix">
