@@ -71,7 +71,11 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteContentsByUsers()
     {
+        $user = new User([ 'id' => 1355 ]);
+        $user->setOrigin('manager');
+
         $this->helper->deleteContentsByUsers([]);
+        $this->helper->deleteContentsByUsers([ $user ]);
 
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(

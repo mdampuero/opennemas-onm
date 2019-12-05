@@ -68,7 +68,13 @@ class TemplateCacheHelper
 
         $ids = array_map(function ($a) {
             return $a->id;
-        }, $users);
+        }, array_filter($users, function ($a) {
+            return $a->getOrigin() !== 'manager';
+        }));
+
+        if (empty($ids)) {
+            return;
+        }
 
         $sql = 'SELECT pk_content FROM contents WHERE fk_author IN (?)'
             . ' AND content_status = 1 AND in_litter = 0 and starttime >= ?';
