@@ -129,7 +129,7 @@
     </div>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('server')">
-    <a class="badge badge-default text-bold" ng-href="[% routing.generate('backend_news_agency_server_show', { id: item.source }) %]" style="background-color:[% data.extra.servers[item.source].color %];">
+    <a class="badge badge-default block nowrap text-bold" ng-href="[% routing.generate('backend_news_agency_server_show', { id: item.source }) %]" style="background-color:[% data.extra.servers[item.source].color %];">
       [% data.extra.servers[item.source].name %]
     </a>
   </td>
