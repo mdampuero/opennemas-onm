@@ -392,6 +392,7 @@ class Synchronizer
     protected function lockSync()
     {
         $this->fs->touch($this->lockFilePath);
+        $this->fs->chgrp($this->lockFilePath, 'www-data', true);
     }
 
     /**

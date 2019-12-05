@@ -534,6 +534,10 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             ->with('/plugh/corge/qux/importers/.lock')
             ->willReturn(true);
 
+        $this->fs->expects($this->once())->method('chgrp')
+            ->with('/plugh/corge/qux/importers/.lock', 'www-data', true)
+            ->willReturn(true);
+
         $method = new \ReflectionMethod($this->synchronizer, 'lockSync');
         $method->setAccessible(true);
 
