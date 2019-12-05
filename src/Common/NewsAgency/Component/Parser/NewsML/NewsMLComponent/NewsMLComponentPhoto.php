@@ -102,7 +102,7 @@ class NewsMLComponentPhoto extends NewsML
             }
         }
 
-        return $body;
+        return trim($body);
     }
 
     /**

@@ -98,11 +98,11 @@ class Nitf extends Parser
         }
 
         if (empty($body) && !empty((string) $bodies[0])) {
-            $body = str_replace(
+            $body = trim(trim(str_replace(
                 "\n",
                 '<br>',
                 html_entity_decode((string) $bodies[0])
-            );
+            ), '<br>'));
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
@@ -220,11 +220,11 @@ class Nitf extends Parser
         }
 
         if (empty($summary) && !empty((string) $summaries[0])) {
-            $summary = str_replace(
+            $summary = trim(trim(str_replace(
                 "\n",
                 '<br>',
                 html_entity_decode((string) $summaries[0])
-            );
+            ), '<br>'));
         }
 
         return iconv(mb_detect_encoding($summary), 'UTF-8', $summary);
