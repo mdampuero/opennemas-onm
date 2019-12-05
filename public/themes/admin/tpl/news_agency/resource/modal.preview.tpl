@@ -34,6 +34,14 @@
         </span>
       </div>
     </div>
+    <div class="form-group no-margin">
+      <label class="control-label col-sm-3 text-bold">
+        {t}Author{/t}
+      </label>
+      <div class="col-sm-9 col-sm-offset-0 col-xs-offset-1 form-control-static">
+        [% template.item.author %]
+      </div>
+    </div>
     <div class="form-group no-margin" ng-if="template.item.tags && template.item.tags.split(',').length > 0">
       <label class="control-label col-sm-3 text-bold">
         {t}Tags{/t}

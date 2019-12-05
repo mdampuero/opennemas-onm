@@ -31,6 +31,12 @@
       {t}Tags{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('author')">
+    <input id="checkbox-author" checklist-model="app.columns.selected" checklist-value="'author'" type="checkbox">
+    <label for="checkbox-author">
+      {t}Author{/t}
+    </label>
+  </div>
   <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('priority')">
     <input id="checkbox-priority" checklist-model="app.columns.selected" checklist-value="'priority'" type="checkbox">
     <label for="checkbox-priority">
@@ -55,6 +61,9 @@
   </th>
   <th class="v-align-middle" ng-if="isColumnEnabled('tags')" width="200">
     {t}Tags{/t}
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('author')" width="200">
+    {t}Author{/t}
   </th>
   <th class="text-center v-align-middle pointer" width="100" ng-click="sort('priority')" ng-if="isColumnEnabled('priority')">
     {t}Priority{/t}
@@ -162,6 +171,12 @@
         [% tag %]
       </span>
     </div>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('author')">
+    <small class="text-italic" ng-if="!item.author">
+      &lt;{t}No author{/t}&gt;
+    </small>
+    [% item.author %]
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('priority')">
     <span class="badge text-bold" ng-class="{ 'badge-danger': item.priority == 1, 'badge-warning': item.priority == 2, 'badge-info': item.priority == 3 }">
