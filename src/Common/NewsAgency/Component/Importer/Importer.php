@@ -396,14 +396,14 @@ class Importer
             if ($content->content_type_name === 'photo') {
                 if (!array_key_exists('img1', $data)) {
                     $data['img1']        = $content->pk_content;
-                    $data['img1_footer'] = $content->description;
+                    $data['img1_footer'] = $content->body;
                 }
 
                 if (!array_key_exists('img2', $data)
                     || $data['img1'] == $data['img2']
                 ) {
                     $data['img2']        = $content->pk_content;
-                    $data['img2_footer'] = $content->description;
+                    $data['img2_footer'] = $content->body;
                 }
             }
 
