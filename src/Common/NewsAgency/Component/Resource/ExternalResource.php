@@ -22,6 +22,13 @@ class ExternalResource
     public $agency_name = '';
 
     /**
+     * The author name.
+     *
+     * @var string
+     */
+    public $author = null;
+
+    /**
      * The resource body.
      *
      * @var string
