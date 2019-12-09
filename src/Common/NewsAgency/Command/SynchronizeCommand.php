@@ -85,25 +85,25 @@ class SynchronizeCommand extends Command
 
         $this->start();
         $output->writeln(sprintf(
-            str_pad('(1/3) Starting command', 50, '.')
+            str_pad('<options=bold>(1/3) Starting command', 50, '.')
                 . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</>',
+                . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s', $this->started)
         ));
 
-        list($servers, $instances) = $this->getParameters($input);
+        list($ids, $instances) = $this->getParameters($input);
 
         $output->writeln(sprintf(
-            str_pad('(2/3) Processing instances', 43, '.')
+            str_pad('<options=bold>(2/3) Processing instances', 43, '.')
                 . '<fg=yellow;options=bold>IN PROGRESS</> '
-                . '<fg=blue;options=bold>(%s instances)</>',
+                . '<fg=blue;options=bold>(%s instances)</></>',
             count($instances)
         ));
 
         $i = 1;
         foreach ($instances as $instance) {
             $output->write(sprintf(
-                '==> (%s/%s) Processing instance %s ',
+                '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
                 $i,
                 count($instances),
                 $instance->internal_name
@@ -112,7 +112,7 @@ class SynchronizeCommand extends Command
             $this->getContainer()->get('core.loader')->load($instance->internal_name);
             $this->getContainer()->get('core.security')->setInstance($instance);
 
-            $servers = $this->getServers($servers);
+            $servers = $this->getServers($ids);
 
             $output->writeln(sprintf(
                 '<fg=blue;options=bold>(%s servers)</> ',
@@ -123,7 +123,7 @@ class SynchronizeCommand extends Command
 
             foreach ($servers as $server) {
                 $output->writeln(str_pad(sprintf(
-                    '====> (%s/%s) Synchronizing %s',
+                    '<fg=yellow;options=bold>====></><options=bold> (%s/%s) Synchronizing %s</>',
                     $j,
                     count($servers),
                     $server['name']
@@ -135,6 +135,7 @@ class SynchronizeCommand extends Command
                     if ($input->getOption('clean')) {
                         $this->getContainer()
                             ->get('news_agency.service.synchronizer')
+                            ->setInstance($instance)
                             ->empty($server);
 
                         $output->writeln('<fg=green;options=bold>DONE</>');
@@ -153,6 +154,7 @@ class SynchronizeCommand extends Command
 
                 $stats = $this->getContainer()
                     ->get('news_agency.service.synchronizer')
+                    ->setInstance($instance)
                     ->resetStats()
                     ->synchronize($server)
                     ->getResourceStats();
@@ -266,7 +268,7 @@ class SynchronizeCommand extends Command
         $service = $this->getContainer()->get('api.service.news_agency.server');
 
         return empty($servers)
-            ? $service->getList()['items']
-            : $service->getListByIds($servers)['items'];
+            ? $service->init()->getList()['items']
+            : $service->init()->getListByIds($servers)['items'];
     }
 }
