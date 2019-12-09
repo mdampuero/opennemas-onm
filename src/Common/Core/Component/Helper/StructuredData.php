@@ -57,9 +57,12 @@ class StructuredData
             $data['videokeywords'] = empty($data['video']->tags) ? '' : $this->getTags($data['video']->tags);
         }
 
-        $data['wordCount'] = str_word_count($data['content']->body);
-        $data['sitename']  = $this->ds->get('site_name');
-        $data['siteurl']   = SITE_URL;
+        if (!empty($data['content']->body)) {
+            $data['wordCount'] = str_word_count($data['content']->body);
+        }
+
+        $data['sitename'] = $this->ds->get('site_name');
+        $data['siteurl']  = SITE_URL;
 
         return $data;
     }
