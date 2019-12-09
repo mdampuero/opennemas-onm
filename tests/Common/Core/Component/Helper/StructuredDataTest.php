@@ -224,4 +224,102 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($output, $this->object->extractParamsFromData($data));
     }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
+     * for content of type album
+     */
+    public function testGenerateJsonLDCodeWithAlbum()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'album';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->once())->method('fetch')
+            ->with('common/helpers/structured_gallery_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
+     * for content of type video
+     */
+    public function testGenerateJsonLDCodeWithVideo()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'article';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+        $data['video']                      = new \Video();
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->once())->method('fetch')
+            ->with('common/helpers/structured_video_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
+     * for content of type article
+     */
+    public function testGenerateJsonLDCodeWithArticle()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'article';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->once())->method('fetch')
+            ->with('common/helpers/structured_article_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
 }
