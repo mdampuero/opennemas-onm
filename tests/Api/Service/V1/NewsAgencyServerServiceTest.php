@@ -27,7 +27,7 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->dataset = $this->getMockBuilder('Common\ORM\Core\DataSet')
-            ->setMethods([ 'delete', 'get', 'set' ])
+            ->setMethods([ 'delete', 'get', 'init', 'set' ])
             ->getMock();
 
         $this->dispatcher = $this->getMockBuilder('Common\Core\Component\Event\EventDispatcher')
@@ -50,11 +50,14 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('getParameter')
             ->with('core.paths.cache')->willReturn('/thud/fred');
 
+        $this->dataset->expects($this->any())->method('init')
+            ->willReturn($this->dataset);
+
+        $this->dataset->expects($this->any())->method('get')
+            ->with('news_agency_config')->willReturn([]);
+
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->dataset);
-
-        $this->dataset->expects($this->at(0))->method('get')
-            ->with('news_agency_config')->willReturn([]);
 
         $this->service = new NewsAgencyServerService($this->container);
     }

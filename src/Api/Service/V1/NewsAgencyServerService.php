@@ -59,15 +59,13 @@ class NewsAgencyServerService implements Service
      */
     public function __construct($container)
     {
-        $this->container = $container;
-        $this->dataset   = $container->get('orm.manager')
-            ->getDataSet('Settings', 'instance');
-
+        $this->container  = $container;
         $this->dispatcher = $container->get('core.dispatcher');
 
-        $this->config = array_values(
-            $this->dataset->get('news_agency_config', [])
-        );
+        $this->dataset = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
+
+        $this->init();
     }
 
     /**
@@ -253,6 +251,20 @@ class NewsAgencyServerService implements Service
         } catch (\Exception $e) {
             throw new GetListException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * Initializes the service.
+     *
+     * @return NewsAgencyServerService The current service.
+     */
+    public function init()
+    {
+        $this->config = array_values(
+            $this->dataset->init()->get('news_agency_config', [])
+        );
+
+        return $this;
     }
 
     /**
