@@ -13,15 +13,18 @@ use Common\Data\Serialize\Serializer\PhpSerializer;
 use Common\NewsAgency\Component\Factory\ParserFactory;
 use Common\NewsAgency\Component\Factory\ServerFactory;
 use Common\NewsAgency\Component\Repository\LocalRepository;
+use Common\ORM\Entity\Instance;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Synchronizes contents from an external server and makes them ready-to-import.
  */
 class Synchronizer
 {
+    protected $cachePath;
+
     /**
      * The Filesystem component.
      *
@@ -102,20 +105,10 @@ class Synchronizer
         $this->fs         = new Filesystem();
         $this->repository = new LocalRepository();
 
-        $this->logger = $container->get('application.log');
-        $this->pf     = $container->get('news_agency.factory.parser');
-        $this->sf     = $container->get('news_agency.factory.server');
-
-        $this->syncPath = sprintf(
-            '%s/%s/importers',
-            $container->getParameter('core.paths.cache'),
-            $container->get('core.instance')->internal_name
-        );
-
-        $this->syncFilePath = $this->syncPath . '/.sync';
-        $this->lockFilePath = $this->syncPath . '/.lock';
-
-        $this->serverStats = $this->getServerStats();
+        $this->cachePath = $container->getParameter('core.paths.cache');
+        $this->logger    = $container->get('application.log');
+        $this->pf        = $container->get('news_agency.factory.parser');
+        $this->sf        = $container->get('news_agency.factory.server');
 
         $this->resetStats();
     }
@@ -472,6 +465,29 @@ class Synchronizer
         }
 
         return $valid;
+    }
+
+    /**
+     * Configures the Synchronizer for the provided instance.
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return Synchronizer The current Synchronizer.
+     */
+    public function setInstance(Instance $instance) : Synchronizer
+    {
+        $this->syncPath = sprintf(
+            '%s/%s/importers',
+            $this->cachePath,
+            $instance->internal_name
+        );
+
+        $this->syncFilePath = $this->syncPath . '/.sync';
+        $this->lockFilePath = $this->syncPath . '/.lock';
+
+        $this->serverStats = $this->getServerStats();
+
+        return $this;
     }
 
     /**

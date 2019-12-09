@@ -93,6 +93,8 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $property = new \ReflectionProperty($this->synchronizer, 'fs');
         $property->setAccessible(true);
         $property->setValue($this->synchronizer, $this->fs);
+
+        $this->synchronizer->setInstance($this->instance);
     }
 
     /**
@@ -601,6 +603,17 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             ->with('glork')->willReturn(false);
 
         $this->assertEmpty($method->invokeArgs($this->synchronizer, [ [ 'glork' ], 1 ]));
+    }
+
+    /**
+     * Tests setInstance.
+     */
+    public function testSetInstance()
+    {
+        $this->assertEquals(
+            $this->synchronizer,
+            $this->synchronizer->setInstance($this->instance)
+        );
     }
 
     /**
