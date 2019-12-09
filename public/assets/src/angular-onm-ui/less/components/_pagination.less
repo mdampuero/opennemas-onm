@@ -10,6 +10,7 @@
   cursor: pointer;
   display: inline-block;
   height: @pagination-height;
+  position: relative;
 
   &:hover {
     border-color: #d1dade;
@@ -30,18 +31,10 @@
 }
 
 .pagination-epp {
-  border: 1px solid transparent;
-  border-radius: 4px;
-  cursor: pointer;
   margin-right: 5px;
-  padding: 8px;
   position: relative;
 
-  &:hover {
-    border-color: #d1dade;
-  }
-
-  & .dropdown-menu {
+  .dropdown-menu {
     min-width: 60px;
     padding: 4px;
     text-align: center;

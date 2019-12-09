@@ -46,13 +46,13 @@
                 '[% totalItems %]' +
               '</span>' +
               '<span class="pagination-epp" ng-hide="readOnly">' +
-                '<span data-toggle="dropdown">' +
+                '<button class="pagination-button" data-toggle="dropdown" type="button">' +
                   '<i class="fa fa-eye"></i>' +
                   '<span class="pagination-epp-number">' +
                     '[% itemsPerPage %]' +
                   '</span>' +
                   '<i class="fa fa-caret-down"></i>' +
-                '</span>' +
+                '</button>' +
                 '<ul class="dropdown-menu">' +
                   '<li ng-class="{ \'active\': itemsPerPage === 10 }" ng-click="itemsPerPage = 10">' +
                     '<a href="#">' +
