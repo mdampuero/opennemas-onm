@@ -58,7 +58,23 @@ class BaseDataSet extends DataSet
         $this->conn     = $conn;
         $this->metadata = $metadata;
 
+        $this->init();
+    }
+
+    /**
+     * Initializes the dataset.
+     */
+    public function init()
+    {
+        $this->data = [];
+
+        if ($this->hasCache()) {
+            $this->cache->init();
+        }
+
         $this->autoload();
+
+        return $this;
     }
 
     /**
