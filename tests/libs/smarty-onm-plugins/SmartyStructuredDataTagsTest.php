@@ -85,12 +85,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('getContainer')
             ->willReturn($this->container);
 
-        $this->structuredData = $this
-            ->getMockBuilder('Common\Core\Component\Helper\StructuredData')
-            ->setMethods(['generateJsonLDCode', 'extractParamsFromData'])
-            ->setConstructorArgs([ $this->instance, $this->em, $this->ts ])
-            ->getMock();
-
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')
             ->willReturn($this->request);
@@ -132,9 +126,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.content_media':
                 return $this->helper;
 
-            case 'core.helper.structured_data':
-                return $this->structuredData;
-
             case 'core.instance':
                 return $this->instance;
 
@@ -152,5 +143,35 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         }
 
         return null;
+    }
+
+        /**
+     * Test smarty_function_structured_data_tags when no content provided to the
+     * template.
+     */
+    public function testStructuredDataWhenContentNotProvided()
+    {
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([]);
+
+        $this->assertEquals(
+            '',
+            smarty_function_structured_data_tags(null, $this->smarty)
+        );
+    }
+
+    /**
+     * Test smarty_function_structured_data_tags when a content is provided to
+     * the template but it is unrecognized.
+     */
+    public function testStructuredDataWhenContentNotValid()
+    {
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'content' => new Category([]) ]);
+
+        $this->assertEmpty(
+            '',
+            smarty_function_structured_data_tags(null, $this->smarty)
+        );
     }
 }
