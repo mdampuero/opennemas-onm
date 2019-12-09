@@ -174,4 +174,42 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             smarty_function_structured_data_tags(null, $this->smarty)
         );
     }
+
+    /**
+     * Test smarty_function_structured_data_tags when the category assigned to
+     * the content can not be found.
+     */
+    public function testStructuredDataWhenContentNoCategory()
+    {
+        $content = new \Content();
+
+        $content->pk_content             = 145;
+        $content->title                  = 'This is the title';
+        $content->summary                = '';
+        $content->body                   = 'This is the body';
+        $content->category_name          = 'gorp';
+        $content->pk_fk_content_category = 10633;
+        $content->fk_author              = 4;
+        $content->slug                   = 'foobar-thud';
+        $content->agency                 = 'Onm Agency';
+        $content->tags                   = [ 1, 2, 3, 4 ];
+        $content->content_type_name      = 'video';
+        $content->created                = '2016-10-13 11:40:32';
+        $content->changed                = '2016-10-13 11:40:32';
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'content' => $content ]);
+
+        $this->um->expects($this->once())
+            ->method('find')
+            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+
+        $this->cs->expects($this->once())->method('getItem')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals(
+            '',
+            smarty_function_structured_data_tags(null, $this->smarty)
+        );
+    }
 }
