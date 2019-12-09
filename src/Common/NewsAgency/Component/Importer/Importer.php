@@ -89,7 +89,7 @@ class Importer
         $ignored   = 0;
         $invalid   = 0;
         $imported  = 0;
-        $resources = array_reverse($this->getResources());
+        $resources = $this->getResources();
 
         foreach ($resources as $resource) {
             try {
@@ -540,7 +540,7 @@ class Importer
         if (!array_key_exists('filters', $this->config)
             || empty($this->config['filters'])
         ) {
-            return $this->repository->findBy($criteria);
+            return $this->repository->findBy($criteria, 'priority asc');
         }
 
         $resources = [];
@@ -550,7 +550,7 @@ class Importer
                 [ 'tags' => $filter, 'title' => $filter, 'body' => $filter ]
             );
 
-            $items     = $this->repository->findBy($criteria);
+            $items     = $this->repository->findBy($criteria, 'priority asc');
             $resources = array_merge($resources, $items);
         }
 
