@@ -234,6 +234,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->title                  = 'This is the title';
         $content->summary                = '';
         $content->body                   = 'This is the body';
+        $content->description            = 'This is a description';
         $content->category_name          = 'gorp';
         $content->pk_fk_content_category = 10633;
         $content->fk_author              = 4;
@@ -256,6 +257,10 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->with('site_logo')
             ->willReturn('logo.png');
 
+        $this->helper->expects($this->once())
+            ->method('getContentMediaObject')
+            ->willReturn(new \Video());
+
         $this->structuredData->expects($this->once())->method('generateJsonLDCode');
 
         smarty_function_structured_data_tags(null, $this->smarty);
@@ -273,6 +278,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->title                  = 'This is the title';
         $content->summary                = '';
         $content->body                   = '';
+        $content->description            = 'This is a test description';
         $content->category_name          = 'gorp';
         $content->pk_fk_content_category = 10633;
         $content->fk_author              = 4;
@@ -434,5 +440,47 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         smarty_function_structured_data_tags(null, $this->smarty);
     }
 
+    /**
+     * Test smarty_function_structured_data_tags when content
+     * Uses generateJsonLDCode
+     */
+    public function testStructuredDataWhenAlbum()
+    {
+        $content = new \Content();
 
+        $content->pk_content             = 145;
+        $content->title                  = 'This is the title';
+        $content->summary                = 'This is the summary';
+        $content->body                   = 'This is the body';
+        $content->category_name          = 'gorp';
+        $content->pk_fk_content_category = 10633;
+        $content->fk_author              = 4;
+        $content->slug                   = 'foobar-thud';
+        $content->agency                 = 'Onm Agency';
+        $content->tags                   = [ 1, 2, 3, 4 ];
+        $content->content_type_name      = 'album';
+        $content->created                = '2016-10-13 11:40:32';
+        $content->changed                = '2016-10-13 11:40:32';
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'content' => $content ]);
+
+
+        $this->um->expects($this->once())
+            ->method('find')
+            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('site_logo')
+            ->willReturn('logo.png');
+
+        $this->smarty->expects($this->once())
+            ->method('getValue')
+            ->with('photos');
+
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
+
+        smarty_function_structured_data_tags(null, $this->smarty);
+    }
 }
