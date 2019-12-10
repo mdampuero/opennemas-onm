@@ -57,7 +57,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getTags' ])
             ->getMock();
     }
 
@@ -110,7 +109,12 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['content']->body = 'This is a test body';
         $output['wordCount']     = 5;
 
-        $this->object->expects($this->exactly(2))->method('getTags')
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags' ])
+            ->getMock();
+
+        $object->expects($this->exactly(2))->method('getTags')
             ->with($this->logicalOr($data['content']->tags, $data['video']->tags))
             ->will($this->returnCallback(function ($arg) use ($data) {
                 if ($arg == $data['content']->tags) {
@@ -122,7 +126,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->once())->method('get');
 
-        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+        $this->assertEquals($output, $object->extractParamsFromData($data));
     }
 
     /**
@@ -150,13 +154,18 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['content']->body = 'This is a test body';
         $output['wordCount']     = 5;
 
-        $this->object->expects($this->once())->method('getTags')
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('getTags')
             ->with($data['content']->tags)
             ->willReturn('keywords,object,json,linking');
 
         $this->ds->expects($this->once())->method('get');
 
-        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+        $this->assertEquals($output, $object->extractParamsFromData($data));
     }
 
     /**
@@ -184,13 +193,18 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['content']->body = 'This is a test body';
         $output['wordCount']     = 5;
 
-        $this->object->expects($this->once())->method('getTags')
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('getTags')
             ->with($data['video']->tags)
             ->willReturn('keywords,object,json,linking,data');
 
         $this->ds->expects($this->once())->method('get');
 
-        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+        $this->assertEquals($output, $object->extractParamsFromData($data));
     }
 
     /**
@@ -218,11 +232,16 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['content']->body = 'This is a test body';
         $output['wordCount']     = 5;
 
-        $this->object->expects($this->never())->method('getTags');
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags' ])
+            ->getMock();
+
+        $object->expects($this->never())->method('getTags');
 
         $this->ds->expects($this->once())->method('get');
 
-        $this->assertEquals($output, $this->object->extractParamsFromData($data));
+        $this->assertEquals($output, $object->extractParamsFromData($data));
     }
 
     /**
@@ -321,5 +340,24 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with('common/helpers/structured_article_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getTags
+     */
+    public function testGetTags()
+    {
+        $method = new \ReflectionMethod($this->object, 'getTags');
+        $method->setAccessible(true);
+
+        $ids = [1];
+
+        $tag       = new \Content();
+        $tag->name = 'keywords';
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->willReturn([ 'items' => [ $tag ]]);
+
+        $method->invokeArgs($this->object, [ $ids ]);
     }
 }
