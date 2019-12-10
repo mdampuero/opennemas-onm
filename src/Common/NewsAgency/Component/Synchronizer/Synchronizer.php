@@ -386,7 +386,13 @@ class Synchronizer
      */
     protected function loadXmlFile(string $path) : \SimpleXMLElement
     {
-        return simplexml_load_file($path);
+        $xml = simplexml_load_file($path, 'SimpleXMLElement', LIBXML_NOERROR);
+
+        if (empty($xml)) {
+            throw new \InvalidArgumentException();
+        }
+
+        return $xml;
     }
 
     /**
