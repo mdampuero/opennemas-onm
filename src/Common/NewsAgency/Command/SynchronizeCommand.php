@@ -104,7 +104,7 @@ class SynchronizeCommand extends Command
         foreach ($instances as $instance) {
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
-                $i,
+                $i++,
                 count($instances),
                 $instance->internal_name
             ));
@@ -196,10 +196,10 @@ class SynchronizeCommand extends Command
 
         $this->end();
         $output->writeln(sprintf(
-            str_pad('(3/3) Ending command', 50, '.')
+            str_pad('<options=bold>(3/3) Ending command', 50, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</>'
-                . ' <fg=yellow;options=bold>(%s)</>',
+                . ' <fg=yellow;options=bold>(%s)</></>',
             date('Y-m-d H:i:s', $this->ended),
             $this->getDuration()
         ));
