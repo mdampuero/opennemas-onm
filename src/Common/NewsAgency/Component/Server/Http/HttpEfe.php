@@ -33,16 +33,49 @@ class HttpEfe extends Http
     /**
      * {@inheritdoc}
      */
-    protected function getContentFromUrl(string $url) : string
+    protected function getContentFromUrl(string $url) : ?string
     {
-        $auth = '';
-
         if (array_key_exists('username', $this->params)) {
             $auth = $this->params['username'] . ':' . $this->params['password'];
             $url  = str_replace('http://', 'http://' . $auth . '@', $url);
         }
 
-        return @file_get_contents($url);
+        $ch   = curl_init();
+        $auth = '';
+
+        $httpCode            = 0;
+        $maxRedirects        = 0;
+        $maxRedirectsAllowed = 3;
+
+        do {
+            curl_setopt_array($ch, [
+                CURLOPT_URL            => $url,
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0,
+            ]);
+
+            $content  = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($httpCode == 301 || $httpCode == 302) {
+                $url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);
+
+                continue;
+            }
+
+            if ($httpCode == 401 || $httpCode == 403) {
+                return null;
+            }
+
+            $body = $content;
+
+            $maxRedirects++;
+        } while ($httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
+
+        curl_close($ch);
+
+        return $body;
     }
 
     /**

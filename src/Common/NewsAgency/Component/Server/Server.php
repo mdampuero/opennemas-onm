@@ -77,7 +77,7 @@ abstract class Server
      *
      * @return strin The content from this URL.
      */
-    protected function getContentFromUrl(string $url) : string
+    protected function getContentFromUrl(string $url) : ?string
     {
         $ch   = curl_init();
         $auth = null;
@@ -107,6 +107,10 @@ abstract class Server
                 $url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);
 
                 continue;
+            }
+
+            if ($httpCode == 401 || $httpCode == 403) {
+                return null;
             }
 
             $body = $content;
