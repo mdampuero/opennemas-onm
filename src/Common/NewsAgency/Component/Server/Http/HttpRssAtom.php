@@ -41,7 +41,11 @@ class HttpRssAtom extends HttpRss
             ));
         }
 
-        $xml = simplexml_load_string($content);
+        $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOERROR);
+
+        if (empty($xml)) {
+            return $this;
+        }
 
         $xml->registerXPathNamespace('f', 'http://www.w3.org/2005/Atom');
         $files = $xml->xpath('/f:feed/f:entry');

@@ -44,7 +44,12 @@ class HttpEfePhotos extends HttpEfe
             ));
         }
 
-        $xml   = simplexml_load_string($content);
+        $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOERROR);
+
+        if (empty($xml)) {
+            return $this;
+        }
+
         $files = $xml->xpath('//foto');
 
         foreach ($files as $value) {

@@ -91,10 +91,10 @@ class HttpRss extends Http
             );
         }
 
-        $xml = simplexml_load_string($content);
+        $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOERROR);
 
-        if (!is_object($xml)) {
-            return $this->remoteFiles;
+        if (empty($xml)) {
+            return $this;
         }
 
         $files = $xml->xpath('//channel/item');

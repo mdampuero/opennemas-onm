@@ -55,11 +55,10 @@ class HttpOpennemas extends Http
             ));
         }
 
-        $xml = @simplexml_load_string($content);
+        $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOERROR);
 
-        // Avoid errors when the content is not xml-parseable
-        if (!is_object($xml)) {
-            return [];
+        if (empty($xml)) {
+            return $this;
         }
 
         $files = $xml->xpath('//content');

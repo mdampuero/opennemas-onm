@@ -92,7 +92,12 @@ class HttpEfe extends Http
             ));
         }
 
-        $xml   = simplexml_load_string($content);
+        $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOERROR);
+
+        if (empty($xml)) {
+            return $this;
+        }
+
         $files = $xml->xpath('//elemento');
 
         foreach ($files as $value) {
