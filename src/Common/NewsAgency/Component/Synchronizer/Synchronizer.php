@@ -121,22 +121,18 @@ class Synchronizer
      */
     public function empty(array $servers) : void
     {
-        try {
-            if (!$this->isSyncEnvironmentReady()) {
-                return;
-            }
+        if (!$this->isSyncEnvironmentReady()) {
+            return;
+        }
 
-            $this->lockSync();
+        $this->lockSync();
 
-            if (array_key_exists('id', $servers)) {
-                $servers = [ $servers ];
-            }
+        if (array_key_exists('id', $servers)) {
+            $servers = [ $servers ];
+        }
 
-            foreach ($servers as $server) {
-                $this->emptyServer($server);
-            }
-        } catch (\Exception $e) {
-            $this->logger->notice($e->getMessage());
+        foreach ($servers as $server) {
+            $this->emptyServer($server);
         }
 
         $this->unlockSync();
@@ -202,28 +198,23 @@ class Synchronizer
      */
     public function synchronize(array $servers) : Synchronizer
     {
-        try {
-            if (!$this->isSyncEnvironmentReady()) {
-                $this->setupSyncEnvironment();
-            }
-
-            $this->lockSync();
-
-            if (array_key_exists('id', $servers)) {
-                $servers = [ $servers ];
-            }
-
-            foreach ($servers as $server) {
-                if ($server['activated'] == '1') {
-                    $this->updateServer($server);
-                }
-            }
-
-            $this->updateSyncFile();
-        } catch (\Exception $e) {
-            $this->logger->notice($e->getMessage());
+        if (!$this->isSyncEnvironmentReady()) {
+            $this->setupSyncEnvironment();
         }
 
+        $this->lockSync();
+
+        if (array_key_exists('id', $servers)) {
+            $servers = [ $servers ];
+        }
+
+        foreach ($servers as $server) {
+            if ($server['activated'] == '1') {
+                $this->updateServer($server);
+            }
+        }
+
+        $this->updateSyncFile();
         $this->unlockSync();
 
         return $this;

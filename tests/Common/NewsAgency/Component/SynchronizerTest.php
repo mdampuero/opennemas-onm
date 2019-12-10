@@ -306,31 +306,6 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests synchronize when an error is thown.
-     */
-    public function testSynchronizeWhenError()
-    {
-        $this->logger->expects($this->once())->method('notice');
-
-        $serverA = [ 'id' => 19660, 'activated' => 0 ];
-        $serverB = [ 'id' => 20601, 'activated' => 1 ];
-
-        $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([
-                'isSyncEnvironmentReady', 'lockSync', 'unlockSync',
-                'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
-            ])->getMock();
-
-        $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
-            ->will($this->throwException(new \Exception()));
-
-        $synchronizer->expects($this->once())->method('unlockSync');
-
-        $synchronizer->synchronize([ $serverA, $serverB ]);
-    }
-
-    /**
      * Tests cleanServer when the server is configured with limits so the server
      * only has to include files in the limit.
      */
@@ -409,30 +384,6 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty(
             $method->invokeArgs($this->synchronizer, [ [ 'id' => 24474 ] ])
         );
-    }
-
-    /**
-     * Tests empty when an error is thown.
-     */
-    public function testEmptyWhenError()
-    {
-        $this->logger->expects($this->once())->method('notice');
-
-        $server = [ 'id' => 19660, 'activated' => 0 ];
-
-        $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([
-                'isSyncEnvironmentReady', 'lockSync', 'unlockSync',
-                'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
-            ])->getMock();
-
-        $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
-            ->will($this->throwException(new \Exception()));
-
-        $synchronizer->expects($this->once())->method('unlockSync');
-
-        $synchronizer->empty([ $server ]);
     }
 
     /**
