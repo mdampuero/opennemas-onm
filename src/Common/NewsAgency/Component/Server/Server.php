@@ -86,9 +86,9 @@ abstract class Server
             $auth = $this->params['username'] . ':' . $this->params['password'];
         }
 
-        $httpCode            = 0;
-        $maxRedirects        = 0;
-        $maxRedirectsAllowed = 3;
+        $httpCode     = 0;
+        $redirects    = 0;
+        $maxRedirects = 3;
 
         do {
             curl_setopt_array($ch, [
@@ -109,18 +109,14 @@ abstract class Server
                 continue;
             }
 
-            if ($httpCode == 401 || $httpCode == 403) {
-                return null;
+            if ($httpCode === 200) {
+                return $content;
             }
 
-            $body = $content;
+            $redirects++;
+        } while ($httpCode === 302 || $httpCode === 301 || $redirects < $maxRedirects);
 
-            $maxRedirects++;
-        } while ($httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
-
-        curl_close($ch);
-
-        return $body;
+        return null;
     }
 
     /**
