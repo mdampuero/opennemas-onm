@@ -187,7 +187,7 @@
             return;
           }
 
-          $scope.data.extra.instance = /https:\/\/.*\.opennemas\.com\/ws\/agency/
+          $scope.data.extra.instance = /^https:\/\/.*\.opennemas\.com\/ws\/agency$/
             .test(nv) ? nv.replace('https://', '')
               .replace('.opennemas.com/ws/agency', '') : null;
         }, true);
