@@ -110,6 +110,7 @@ class Synchronizer
         $this->pf        = $container->get('news_agency.factory.parser');
         $this->sf        = $container->get('news_agency.factory.server');
 
+        $this->setInstance($container->get('core.instance'));
         $this->resetStats();
     }
 

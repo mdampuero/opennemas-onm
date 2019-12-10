@@ -93,8 +93,6 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $property = new \ReflectionProperty($this->synchronizer, 'fs');
         $property->setAccessible(true);
         $property->setValue($this->synchronizer, $this->fs);
-
-        $this->synchronizer->setInstance($this->instance);
     }
 
     /**
