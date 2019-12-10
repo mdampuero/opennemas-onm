@@ -109,15 +109,24 @@ class SynchronizeCommand extends Command
                 $instance->internal_name
             ));
 
-            $this->getContainer()->get('core.loader')->load($instance->internal_name);
-            $this->getContainer()->get('core.security')->setInstance($instance);
+            try {
+                $this->getContainer()->get('core.loader')->load($instance->internal_name);
+                $this->getContainer()->get('core.security')->setInstance($instance);
 
-            $servers = $this->getServers($ids);
+                $servers = $this->getServers($ids);
 
-            $output->writeln(sprintf(
-                '<fg=blue;options=bold>(%s servers)</> ',
-                count($servers)
-            ));
+                $output->writeln(sprintf(
+                    '<fg=blue;options=bold>(%s servers)</> ',
+                    count($servers)
+                ));
+            } catch (\Exception $e) {
+                $output->writeln(sprintf(
+                    '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
+                    $e->getMessage()
+                ));
+
+                continue;
+            }
 
             $j = 1;
 
@@ -133,10 +142,20 @@ class SynchronizeCommand extends Command
                     $output->write(str_pad('- Removing resources', 50, '.'));
 
                     if ($input->getOption('clean')) {
-                        $this->getContainer()
-                            ->get('news_agency.service.synchronizer')
-                            ->setInstance($instance)
-                            ->empty($server);
+                        try {
+                            $this->getContainer()
+                                ->get('news_agency.service.synchronizer')
+                                ->setInstance($instance)
+                                ->empty($server);
+                        } catch (\Exception $e) {
+                            $output->writeln(sprintf(
+                                '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
+                                $e->getMessage()
+                            ));
+
+                            $j++;
+                            continue;
+                        }
 
                         $output->writeln('<fg=green;options=bold>DONE</>');
 
@@ -152,22 +171,32 @@ class SynchronizeCommand extends Command
 
                 $output->write(str_pad('- Downloading resources', 50, '.'));
 
-                $stats = $this->getContainer()
-                    ->get('news_agency.service.synchronizer')
-                    ->setInstance($instance)
-                    ->resetStats()
-                    ->synchronize($server)
-                    ->getResourceStats();
+                try {
+                    $stats = $this->getContainer()
+                        ->get('news_agency.service.synchronizer')
+                        ->setInstance($instance)
+                        ->resetStats()
+                        ->synchronize($server)
+                        ->getResourceStats();
 
-                $output->writeln(sprintf(
-                    '<fg=green;options=bold>DONE</> <fg=blue;options=bold>'
-                        . '(% 3d downloaded, % 3d deleted, % 3d parsed, % 3d valid, % 3d invalid)</>',
-                    $stats['downloaded'],
-                    $stats['deleted'],
-                    $stats['parsed'],
-                    $stats['valid'],
-                    $stats['invalid']
-                ));
+                    $output->writeln(sprintf(
+                        '<fg=green;options=bold>DONE</> <fg=blue;options=bold>'
+                            . '(% 3d downloaded, % 3d deleted, % 3d parsed, % 3d valid, % 3d invalid)</>',
+                        $stats['downloaded'],
+                        $stats['deleted'],
+                        $stats['parsed'],
+                        $stats['valid'],
+                        $stats['invalid']
+                    ));
+                } catch (\Exception $e) {
+                    $output->writeln(sprintf(
+                        '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
+                        $e->getMessage()
+                    ));
+
+                    $j++;
+                    continue;
+                }
 
                 if (!array_key_exists('auto_import', $server)
                     || empty($server['auto_import'])
@@ -178,9 +207,19 @@ class SynchronizeCommand extends Command
 
                 $output->write(str_pad('- Importing resources', 50, '.'));
 
-                $stats = $this->getContainer()->get('news_agency.service.importer')
-                    ->configure($server)
-                    ->autoImport();
+                try {
+                    $stats = $this->getContainer()->get('news_agency.service.importer')
+                        ->configure($server)
+                        ->autoImport();
+                } catch (\Exception $e) {
+                    $output->writeln(sprintf(
+                        '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
+                        $e->getMessage()
+                    ));
+
+                    $j++;
+                    continue;
+                }
 
                 $output->writeln(sprintf(
                     '<fg=green;options=bold>DONE</> <fg=blue;options=bold>'
