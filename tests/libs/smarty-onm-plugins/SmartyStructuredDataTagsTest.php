@@ -241,12 +241,19 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
         $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'video';
+        $content->content_type_name      = 'article';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
 
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([ 'content' => $content ]);
+
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn('This is the body');
 
         $this->um->expects($this->once())
             ->method('find')
@@ -285,7 +292,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
         $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'video';
+        $content->content_type_name      = 'article';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
 
