@@ -50,6 +50,26 @@ class ConnectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getConnection simulating a wait timeout.
+     */
+    public function testGetConnectionOnTimeout()
+    {
+        $conn = $this->getMockBuilder('\Doctrine\DBAL\Connection')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'ping' ])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->conn, 'conn');
+        $property->setAccessible(true);
+        $property->setValue($this->conn, $conn);
+
+        $conn->expects($this->once())->method('ping')
+            ->willReturn(false);
+
+        $this->conn->getConnection();
+    }
+
+    /**
      * Tests resetConnection with empty and non-empty connection.
      */
     public function testResetConnection()
