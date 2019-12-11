@@ -20,13 +20,13 @@
         </ul>
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
-            <li>
+            <li class="quicklinks">
               <a href="{url name=admin_ads}" class="btn btn-link" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                 <span class="fa fa-reply"></span>
               </a>
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li>
+            <li class="quicklinks">
               <button type="submit" class="btn btn-primary">
                 <span class="fa fa-save"></span> {t}Save{/t}
               </button>
