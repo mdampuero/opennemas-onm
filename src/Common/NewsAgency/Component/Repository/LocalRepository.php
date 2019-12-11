@@ -116,6 +116,10 @@ class LocalRepository
      */
     public function read(string $path) : LocalRepository
     {
+        if (!$this->fs->exists($path)) {
+            return $this;
+        }
+
         $files = $this->getFinder()->in($path)->name('/sync.*.*.php/')->files();
 
         foreach ($files as $file) {
