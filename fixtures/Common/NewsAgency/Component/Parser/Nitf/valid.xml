@@ -1,0 +1,29 @@
+<nitf>
+  <head>
+    <title>Sample title</title>
+    <meta name="prioridad" content="U" />
+    <meta name="categoria" content="POL" />
+    <docdata management-status="usable">
+      <urgency ed-urg="3" />
+      <evloc city="Budapest" iso-cc="HUN" />
+      <doc-id id-string="21155709" />
+    </docdata>
+  </head>
+  <body>
+    <body.head>
+      <rights.owner>Foobar Agency</rights.owner>
+      <dateline>
+        <story.date norm="20150921T080200+0000">
+          20150921T080200+0000
+        </story.date>
+      </dateline>
+      <abstract>
+        <p>Sample summary</p>
+      </abstract>
+    </body.head>
+    <body.content>
+      <p>Paragraph 1</p>
+      <p>Paragraph 2</p>
+    </body.content>
+  </body>
+</nitf>

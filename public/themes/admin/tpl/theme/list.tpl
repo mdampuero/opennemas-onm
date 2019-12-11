@@ -100,14 +100,16 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="title" ng-model="criteria.name" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by{/t} {t}name{/t}" type="text"/>
-            </li>
-            <li class="hidden-xs quicklinks">
-              <span class="h-seperate"></span>
+            <li class="m-r-10 quicklinks">
+              <div class="input-group input-group-animated">
+                <span class="input-group-addon">
+                  <i class="fa fa-search fa-lg"></i>
+                </span>
+                <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+                <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
+                  <i class="fa fa-times"></i>
+                </span>
+              </div>
             </li>
             <li class="hidden-xs quicklinks module-filter" ng-click="type = 'available'">
               <button class="btn btn-block" ng-class="{ 'btn-success': type == 'available', 'btn-white': type != 'available' }">

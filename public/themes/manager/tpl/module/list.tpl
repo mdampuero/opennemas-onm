@@ -69,45 +69,29 @@
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="quicklinks">
+        <li class="m-r-10 quicklinks">
           <div class="input-group input-group-animated">
             <span class="input-group-addon">
               <i class="fa fa-search fa-lg"></i>
             </span>
-            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.uuid }" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by UUID{/t}" ng-model="criteria.uuid" type="text">
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.uuid }" ng-keyup="searchByKeypress($event)" placeholder="{t}Search{/t}" ng-model="criteria.uuid" type="text">
             <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="clear('uuid')" ng-show="criteria.uuid">
               <i class="fa fa-times"></i>
             </span>
           </div>
         </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="criteria.epp">
-            <ui-select-match>
-              <strong>{t}View{/t}:</strong> [% $select.selected %]
-            </ui-select-match>
-            <ui-select-choices repeat="item in views | filter: $select.search">
-              <div ng-bind-html="item | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
-        </li>
-        <li class="quicklinks">
+        <li class="m-r-10 quicklinks">
           <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom" type="button">
-            <i class="fa fa-fire fa-lg"></i>
+            <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
           </button>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
           <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-            <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': loading }"></i>
+            <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
       </ul>
-      <ul class="nav quick-section pull-right">
+      <ul class="nav quick-section pull-right" ng-show="items && items.length > 0">
         <li class="quicklinks form-inline pagination-links">
           <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
@@ -335,11 +319,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-    <div class="grid-footer clearfix">
-      <div class="pull-right">
-        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

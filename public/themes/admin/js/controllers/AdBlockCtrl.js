@@ -26,7 +26,7 @@
         $uibModal.open({
           templateUrl: 'modal-adblock',
           backdrop: 'static',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() { return null; },
             success: function() { return null; }

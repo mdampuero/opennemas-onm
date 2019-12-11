@@ -93,6 +93,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderAdSlotWhenTypeIsNotInAdsPosition()
     {
+        $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
+            ->willReturn([ 'safe_frame' => 0 ]);
+
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
             ->willReturn([ 111, 222, 333 ]);
@@ -109,6 +112,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     {
         $ad            = new \Advertisement();
         $ad->positions = [ 123 ];
+
+        $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
+            ->willReturn([ 'safe_frame' => 0 ]);
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
@@ -130,6 +136,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     {
         $ad            = new \Advertisement();
         $ad->positions = [ 111 ];
+
+        $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
+            ->willReturn([ 'safe_frame' => 0 ]);
 
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
@@ -193,6 +202,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             'mode'     => 'consume',
         ];
 
+        $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
+            ->willReturn([ 'safe_frame' => 0 ]);
+
         $this->smarty->expects($this->at(1))->method('getValue')
             ->with('ads_positions')
             ->willReturn([ 123 ]);
@@ -200,6 +212,13 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->at(2))->method('getValue')
             ->with('advertisements')
             ->willReturn([ $ad ]);
+
+        $this->smarty->expects($this->at(6))->method('getValue')
+            ->with('app')
+            ->willReturn([
+                'extension'          => 'foobar',
+                'advertisementGroup' => 'gulp'
+            ]);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot($params, $this->smarty)

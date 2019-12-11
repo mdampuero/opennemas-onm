@@ -9,14 +9,17 @@
      *
      * @requires $controller
      * @requires $scope
+     * @requires $uibModal
+     * @requires http
+     * @requires messenger
      * @requires oqlEncoder
      *
      * @description
      *   Handles all actions in category list.
      */
     .controller('CategoryListCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $scope, $timeout, $uibModal, http, messenger, oqlEncoder) {
+      '$controller', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder',
+      function($controller, $scope, $uibModal, http, messenger, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -107,7 +110,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-empty',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {};
@@ -147,7 +150,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-empty',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
@@ -233,7 +236,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-move',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
@@ -276,7 +279,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-move',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {

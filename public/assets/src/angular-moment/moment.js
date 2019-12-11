@@ -15,7 +15,9 @@
          * @param  string input    The date to format.
          * @param  string format   Format for the date.
          * @param  string language Language used while formating.
-         * @return string          The formated date.
+         * @param  string timezone The timezone name.
+         *
+         * @return string The formated date.
          */
         return function(input, format, language, timezone) {
           var fmt  = 'MMMM Do, YYYY, HH:mm';
@@ -45,6 +47,5 @@
           return date.format(fmt);
         };
       }
-    ]
-  );
+    ]);
 })();

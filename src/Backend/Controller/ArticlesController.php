@@ -246,13 +246,16 @@ class ArticlesController extends Controller
             $article->{$key} = $value;
         }
 
-        $article->tags = array_filter($article->tags, function ($a) {
-            return is_numeric($a);
-        });
+        $tags = [];
 
-        $tags = empty($article->tags)
-            ? []
-            : $this->get('api.service.tag')->getListByIdsKeyMapped($article->tags)['items'];
+        if (!empty($article->tags)) {
+            $article->tags = array_filter($article->tags, function ($a) {
+                return is_numeric($a);
+            });
+
+            $tags = $this->get('api.service.tag')
+                ->getListByIdsKeyMapped($article->tags)['items'];
+        }
 
         $params = [
             'contentId' => $article->id,

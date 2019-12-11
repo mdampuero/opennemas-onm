@@ -214,7 +214,7 @@
           if (pattern.test(str)) {
             var modal = $uibModal.open({
               templateUrl: 'modal-dfp-detected',
-              controller: 'modalCtrl',
+              controller: 'ModalCtrl',
               resolve: {
                 template: function() {
                   return {

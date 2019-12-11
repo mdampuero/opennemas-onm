@@ -59,8 +59,25 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'remove', 'get', 'set' ])
+            ->setMethods([ 'remove', 'get', 'init', 'set' ])
             ->getMock();
+    }
+
+    /**
+     * Tests init method.
+     */
+    public function testInit()
+    {
+        $this->cache->expects($this->exactly(2))->method('init');
+
+        $dataset = $this->getMockBuilder('Common\ORM\Database\DataSet\BaseDataSet')
+            ->setConstructorArgs([ $this->conn, $this->metadata, $this->cache ])
+            ->setMethods([ 'autoload' ])
+            ->getMock();
+
+        $dataset->expects($this->once())->method('autoload');
+
+        $dataset->init();
     }
 
     /**
@@ -68,12 +85,14 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
      */
     public function testDelete()
     {
-        $this->cache->expects($this->once())->method('get')
+        $this->cache->expects($this->at(0))->method('init');
+
+        $this->cache->expects($this->at(1))->method('get')
             ->willReturn([ 'foo' => 'bar', 'wibble' => 'glorp' ]);
 
-        $this->cache->expects($this->at(1))->method('set')
-            ->with('foobar', [ 'foo' => 'bar' ]);
         $this->cache->expects($this->at(2))->method('set')
+            ->with('foobar', [ 'foo' => 'bar' ]);
+        $this->cache->expects($this->at(3))->method('set')
             ->with('foobar', []);
 
         $this->conn->expects($this->at(0))->method('executeQuery')->with(
@@ -180,7 +199,6 @@ class BaseDataSetTest extends \PHPUnit\Framework\TestCase
                 [ [ 'baz' ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
-
 
         $dataset = new BaseDataSet($this->conn, $this->metadata, $this->cache);
 

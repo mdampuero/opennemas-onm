@@ -55,13 +55,6 @@
         $scope.security = security;
 
         /**
-         * The available elements per page
-         *
-         * @type {Array}
-         */
-        $scope.views = [ 10, 25, 50, 100 ];
-
-        /**
          * @function addEmptyValue
          * @memberOf MasterCtrl
          *

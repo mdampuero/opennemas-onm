@@ -16,6 +16,7 @@
                 {block name="title"}{/block}
               </h4>
             </li>
+            {block name="extraTitle"}{/block}
             <li class="quicklinks m-l-5 m-r-5 ng-cloak" ng-if="hasMultilanguage()">
               <h4>
                 <i class="fa fa-angle-right"></i>
@@ -47,7 +48,8 @@
             </li>
             <li class="quicklinks">
               <h4>
-                [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+                [% countSelectedItems() %]
+                <span class="hidden-xs">{t}items selected{/t}</span>
               </h4>
             </li>
           </ul>
@@ -57,22 +59,34 @@
         </div>
       </div>
     </div>
-    <div class="page-navbar filters-navbar">
-      <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-          <ul class="nav quick-section">
-            {block name="leftFilters"}{/block}
-          </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="data.items.length > 0 && (!isModeSupported() || app.mode === 'list')">
-            {block name="rightFilters"}
-              <li class="quicklinks hidden-xs">
-                <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
+    {block name="filters"}
+      <div class="page-navbar filters-navbar">
+        <div class="navbar navbar-inverse">
+          <div class="navbar-inner">
+            <ul class="nav quick-section">
+              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'grid'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="setMode('list')">
+                  <i class="fa fa-lg fa-th"></i>
+                </button>
               </li>
-            {/block}
-          </ul>
+              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'list'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="setMode('grid')">
+                  <i class="fa fa-lg fa-list"></i>
+                </button>
+              </li>
+              {block name="leftFilters"}{/block}
+            </ul>
+            <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="data.items.length > 0 && (!isModeSupported() || app.mode === 'list')">
+              {block name="rightFilters"}
+                <li class="quicklinks">
+                  <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
+                </li>
+              {/block}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    {/block}
     <div class="content">
       <div class="listing-no-contents" ng-hide="!flags.http.loading">
         <div class="text-center p-b-15 p-t-15">

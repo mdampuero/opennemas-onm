@@ -81,16 +81,18 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="title" ng-model="criteria.name" placeholder="{t}Search by title{/t}" type="text"/>
+            <li class="m-r-10 quicklinks">
+              <div class="input-group input-group-animated">
+                <span class="input-group-addon">
+                  <i class="fa fa-search fa-lg"></i>
+                </span>
+                <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+                <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
+                  <i class="fa fa-times"></i>
+                </span>
+              </div>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
-            </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="enabled = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+            <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="enabled = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
               <ui-select name="enabled" theme="select2" ng-model="criteria.enabled">
                 <ui-select-match>
                   <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -100,7 +102,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="private = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Private{/t}', value: 1}, { name: '{t}Public{/t}', value: 0 } ]">
+            <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="private = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Private{/t}', value: 1}, { name: '{t}Public{/t}', value: 0 } ]">
               <ui-select name="private" theme="select2" ng-model="criteria.private">
                 <ui-select-match>
                   <strong>{t}Visibility{/t}:</strong> [% $select.selected.name %]
@@ -110,7 +112,7 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak" ng-init="request = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Manual{/t}', value: 1}, { name: '{t}Automatic{/t}', value: 0 } ]">
+            <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="request = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Manual{/t}', value: 1}, { name: '{t}Automatic{/t}', value: 0 } ]">
               <ui-select name="request" theme="select2" ng-model="criteria.request">
                 <ui-select-match>
                   <strong>{t}Requests{/t}:</strong> [% $select.selected.name %]
@@ -120,19 +122,9 @@
                 </ui-select-choices>
               </ui-select>
             </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
           </ul>
-          <ul class="nav quick-section pull-right ng-cloak" ng-if="items.length > 0">
-            <li class="quicklinks hidden-xs">
+          <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="items.length > 0">
+            <li class="quicklinks">
               <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
             </li>
           </ul>
@@ -217,11 +209,6 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

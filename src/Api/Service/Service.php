@@ -61,6 +61,18 @@ interface Service
     public function getList($oql = '');
 
     /**
+     * Returns a list of items basing on a list of ids.
+     *
+     * @param array $ids The list of ids.
+     *
+     * @return array The list of items.
+     *
+     * @throws \Api\Exception\GetListException If no ids provided or if there
+     *                                         was a problem to find items.
+     */
+    public function getListByIds($ids);
+
+    /**
      * Updates some item properties.
      *
      * @param integer $id   The item id.
@@ -79,6 +91,16 @@ interface Service
      * @return integer The number of successfully updated items.
      */
     public function patchList($ids, $data);
+
+    /**
+     * Converts an item or a list of items to a structure returnable in a
+     * Response.
+     *
+     * @param mixed $item The item or the list of items.
+     *
+     * @return mixed The converted item or list of items.
+     */
+    public function responsify($item);
 
     /**
      * Updates an item.

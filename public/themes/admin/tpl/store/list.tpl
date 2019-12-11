@@ -162,17 +162,6 @@
                 </span>
               </div>
             </li>
-            {*<li class="quicklinks"><span class="h-seperate"></span></li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="pagination.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views  | filter: $select.search | orderBy: name">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>*}
           </ul>
         </div>
       </div>

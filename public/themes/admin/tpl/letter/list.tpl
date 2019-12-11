@@ -70,21 +70,22 @@
       </div>
     </div>
   </div>
-
   <div class="page-navbar filters-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="m-r-10 input-prepend inside search-input no-boarder">
-            <span class="add-on">
-              <span class="fa fa-search fa-lg"></span>
-            </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
+          <li class="m-r-10 quicklinks">
+            <div class="input-group input-group-animated">
+              <span class="input-group-addon">
+                <i class="fa fa-search fa-lg"></i>
+              </span>
+              <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.title }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+              <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('title')" ng-show="criteria.title">
+                <i class="fa fa-times"></i>
+              </span>
+            </div>
           </li>
-          <li class="quicklinks hidden-xs">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 }, { name: '{t}Rejected{/t}', value: 2 }]">
+          <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 }, { name: '{t}Rejected{/t}', value: 2 }]">
             <ui-select name="status" theme="select2" ng-model="criteria.content_status">
               <ui-select-match>
                 <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
@@ -94,26 +95,15 @@
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak">
-            <ui-select name="view" theme="select2" ng-model="criteria.epp">
-              <ui-select-match>
-                <strong>{t}View{/t}:</strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-          </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak" ng-if="contents.length > 0">
-          <li class="quicklinks hidden-xs">
+        <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="contents.length > 0">
+          <li class="quicklinks">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
         </ul>
       </div>
     </div>
   </div>
-
   <div class="content">
     <div class="grid simple">
       <div class="grid-body no-padding">
@@ -198,25 +188,16 @@
           </table>
         </div>
       </div>
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-        <div class="pull-right">
-          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
-        </div>
-      </div>
     </div>
   </div>
-
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-delete-selected">
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
-
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
-
 </div>
 {/block}

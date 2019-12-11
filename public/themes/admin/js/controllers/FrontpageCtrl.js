@@ -113,7 +113,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-drop-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -154,7 +154,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-archive-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -241,7 +241,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() {
               return {
@@ -514,7 +514,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         var modal = $uibModal.open({
           templateUrl: 'modal-new-version',
           backdrop: 'static',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() {
               return {
@@ -605,7 +605,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       $uibModal.open({
         templateUrl: 'modal-layout',
         backdrop: true,
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {

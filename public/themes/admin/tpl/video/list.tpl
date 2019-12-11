@@ -79,43 +79,26 @@
 {/block}
 
 {block name="leftFilters"}
-  <li class="quicklinks ng-cloak" ng-if="app.mode === 'grid'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
-    <button class="btn btn-link" ng-click="setMode('list')">
-      <i class="fa fa-lg fa-th"></i>
-    </button>
+  <li class="m-r-10 quicklinks">
+    <div class="input-group input-group-animated">
+      <span class="input-group-addon">
+        <i class="fa fa-search fa-lg"></i>
+      </span>
+      <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.title }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+      <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('title')" ng-show="criteria.title">
+        <i class="fa fa-times"></i>
+      </span>
+    </div>
   </li>
-  <li class="quicklinks ng-cloak" ng-if="app.mode === 'list'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
-    <button class="btn btn-link" ng-click="setMode('grid')">
-      <i class="fa fa-lg fa-list"></i>
-    </button>
-  </li>
-  <li class="quicklinks">
-    <span class="h-seperate"></span>
-  </li>
-  <li class="input-prepend inside ng-cloak search-input no-boarder">
-    <span class="add-on">
-      <span class="fa fa-search fa-lg"></span>
-    </span>
-    <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by title{/t}" type="text"/>
-  </li>
-  <li class="quicklinks hidden-xs">
-    <span class="h-seperate"></span>
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
   </li>
-  <li class="quicklinks hidden-xs ng-cloak">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="app.mode === 'list'">
-    {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-    <span class="h-seperate"></span>
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-show="!isModeSupported() || app.mode === 'list'">
     <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-      <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': flags.http.loading }"></i>
+      <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': flags.http.loading }"></i>
     </button>
   </li>
 {/block}

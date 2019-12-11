@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE NewsML PUBLIC "urn:newsml:iptc.org:20001006:NewsMLv1.0:1" "http://www.afp.com/dtd/NewsMLv1.0.dtd" [
+<!ENTITY % nitf SYSTEM "http://www.afp.com/dtd/nitf-2-5.dtd"> %nitf; ]>
+<NewsML>
+  <Catalog Href="http://www.afp.com/dtd/AFPCatalog.xml"/>
+  <NewsEnvelope>
+    <DateAndTime>20010705T123552Z</DateAndTime>
+  </NewsEnvelope>
+  <NewsItem>
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>afp.com</ProviderId>
+        <DateId>20010705</DateId>
+        <NewsItemId>010705102423.s27th00q</NewsItemId>
+        <RevisionId PreviousRevision="0" Update="N">1</RevisionId>
+        <PublicIdentifier>urn:NewsML:afp.com:20010705:010705102423.s27th00q:1</PublicIdentifier>
+      </NewsIdentifier>
+      <NameLabel>MODE</NameLabel>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News"/>
+      <FirstCreated>20010705T102425Z</FirstCreated>
+      <ThisRevisionCreated>20010705T102425Z</ThisRevisionCreated>
+      <Status FormalName="Usable"/>
+    </NewsManagement>
+    <NewsComponent>
+      <NewsLines>
+        <HeadLine>Mode: la haute couture défile à Paris la semaine prochaine</HeadLine>
+        <DateLine>FRANCE (AFP)</DateLine>
+        <CopyrightLine>© 2001 AFP</CopyrightLine>
+      </NewsLines>
+      <AdministrativeMetadata>
+        <Provider>
+          <Party FormalName="AFP"/>
+        </Provider>
+        <Creator>
+          <Party FormalName="JEAN-PIERRE MULLER"/>
+        </Creator>
+      </AdministrativeMetadata>
+      <NewsComponent>
+        <Role FormalName="Preview"/>
+        <ContentItem Href="SGE.SDI86.050701102222.photo00.default-384x256.jpg">
+          <MediaType FormalName="Photo"/>
+          <Characteristics>
+            <Property FormalName="Width" Value="384"/>
+            <Property FormalName="Height" Value="256"/>
+          </Characteristics>
+        </ContentItem>
+      </NewsComponent>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>

@@ -37,6 +37,11 @@ class TrackerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAdd()
     {
+        $property = new \ReflectionProperty($this->tracker, 'count');
+        $property->setAccessible(true);
+
+        $property->setValue($this->tracker, 4);
+
         $this->conn->expects($this->once())->method('insert')
             ->with('migration_fix', [ 'foo' => 1 ]);
 

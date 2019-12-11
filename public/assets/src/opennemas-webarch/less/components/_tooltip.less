@@ -1,3 +1,7 @@
+.tooltip {
+  font-weight: bold;
+}
+
 .tooltip.in {
   opacity: 1;
 }
@@ -56,4 +60,32 @@
 
 .tooltip-info.top .tooltip-arrow {
   border-top-color: @info-color;
+}
+
+.tooltip-success {
+  font-weight: bold;
+
+  .tooltip-inner {
+    background-color: @success-color;
+  }
+
+  .tooltip-arrow {
+    border-top-color: @success-color;
+  }
+}
+
+.tooltip-success.bottom .tooltip-arrow {
+  border-bottom-color: @success-color;
+}
+
+.tooltip-success.left .tooltip-arrow {
+  border-left-color: @success-color;
+}
+
+.tooltip-success.right .tooltip-arrow {
+  border-right-color: @success-color;
+}
+
+.tooltip-success.top .tooltip-arrow {
+  border-top-color: @success-color;
 }

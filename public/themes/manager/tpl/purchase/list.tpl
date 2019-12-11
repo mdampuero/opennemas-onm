@@ -72,11 +72,10 @@
   </div>
 </div>
 <div class="page-navbar filters-navbar">
-  <form name="filterForm">
   <div class="navbar navbar-inverse">
     <div class="navbar-inner">
       <ul class="nav quick-section">
-        <li class="quicklinks">
+        <li class="m-r-10 quicklinks">
           <div class="input-group input-group-animated">
             <span class="input-group-addon">
               <span class="fa fa-search fa-lg"></span>
@@ -87,10 +86,7 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks hidden-xs">
+        <li class="m-r-10 quicklinks hidden-xs">
           <div class="input-group input-group-animated">
             <span class="input-group-addon cursor-pointer" ng-click="pickerFrom.toggle()">
               <i class="fa fa-calendar m-r-5"></i>
@@ -102,10 +98,7 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks hidden-xs">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks hidden-xs">
+        <li class="m-r-10 quicklinks hidden-xs">
           <div class="input-group input-group-animated">
             <span class="input-group-addon cursor-pointer" ng-click="pickerTo.toggle()">
               <i class="fa fa-calendar m-r-5"></i>
@@ -117,10 +110,7 @@
             </span>
           </div>
         </li>
-        <li class="quicklinks hidden-xs">
-          <span class="h-seperate"></span>
-        </li>
-        <li class="quicklinks">
+        <li class="m-r-10 quicklinks">
           <ui-select name="step" theme="select2" ng-model="criteria.step">
             <ui-select-match>
               <strong>{t}Step{/t}:</strong> [% $select.selected.name %]
@@ -130,38 +120,24 @@
             </ui-select-choices>
           </ui-select>
         </li>
-        <li class="quicklinks hidden-xs ng-cloak">
-          <ui-select name="view" theme="select2" ng-model="criteria.epp">
-            <ui-select-match>
-              <strong>{t}View{/t}:</strong> [% $select.selected %]
-            </ui-select-match>
-            <ui-select-choices repeat="item in views | filter: $select.search">
-              <div ng-bind-html="item | highlight: $select.search"></div>
-            </ui-select-choices>
-          </ui-select>
-        </li>
-        <li class="quicklinks">
+        <li class="m-r-10 quicklinks">
           <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
-            <i class="fa fa-fire fa-lg"></i>
+            <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
           </button>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
         </li>
         <li class="quicklinks">
           <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-            <i class="fa fa-refresh fa-lg" ng-class="{ 'fa-spin': loading }"></i>
+            <i class="fa fa-refresh fa-lg m-l-5 m-r-5" ng-class="{ 'fa-spin': loading }"></i>
           </button>
         </li>
       </ul>
-      <ul class="nav quick-section pull-right">
+      <ul class="nav quick-section pull-right" ng-show="items && items.length > 0">
         <li class="quicklinks form-inline pagination-links">
           <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
         </li>
       </ul>
     </div>
   </div>
-  </form>
 </div>
 <div class="content ng-hide" ng-show="items">
   <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
@@ -378,11 +354,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-    <div class="grid-footer clearfix">
-      <div class="pull-right">
-        <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
       </div>
     </div>
   </div>

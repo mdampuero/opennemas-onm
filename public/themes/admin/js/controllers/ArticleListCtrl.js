@@ -232,7 +232,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-update-selected',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
@@ -280,7 +280,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-delete',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
@@ -323,7 +323,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-delete-selected',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {
