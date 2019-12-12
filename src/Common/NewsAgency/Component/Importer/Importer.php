@@ -115,7 +115,7 @@ class Importer
      */
     public function configure(array $config) : Importer
     {
-        $this->config = array_merge($this->config, $config);
+        $this->config = $config;
 
         $config = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
