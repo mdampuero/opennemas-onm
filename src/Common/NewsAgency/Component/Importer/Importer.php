@@ -11,6 +11,7 @@ namespace Common\NewsAgency\Component\Importer;
 
 use Common\NewsAgency\Component\Repository\LocalRepository;
 use Common\NewsAgency\Component\Resource\ExternalResource;
+use Common\ORM\Entity\Instance;
 
 class Importer
 {
@@ -69,14 +70,9 @@ class Importer
     {
         $this->container  = $container;
         $this->repository = new LocalRepository();
-        $this->path       = sprintf(
-            '%s/%s/importers',
-            $container->getParameter('core.paths.cache'),
-            $container->get('core.instance')->internal_name
-        );
 
         $this->configure($config);
-        $this->repository->read($this->path);
+        $this->setInstance($container->get('core.instance'));
     }
 
     /**
@@ -123,6 +119,7 @@ class Importer
 
         $config = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
+            ->init()
             ->get('comments_config');
 
         if (!empty($config) && array_key_exists('with_comments', $config)) {
@@ -210,6 +207,26 @@ class Importer
             ->countBy($criteria, []);
 
         return $imported > 0;
+    }
+
+    /**
+     * Configures the Importer for the provided instance.
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return Importer The current Importer.
+     */
+    public function setInstance(Instance $instance) : Importer
+    {
+        $this->path = sprintf(
+            '%s/%s/importers',
+            $this->container->getParameter('core.paths.cache'),
+            $instance->internal_name
+        );
+
+        $this->repository->read($this->path);
+
+        return $this;
     }
 
     /**
