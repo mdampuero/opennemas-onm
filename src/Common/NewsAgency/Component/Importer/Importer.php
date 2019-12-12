@@ -119,6 +119,7 @@ class Importer
 
         $config = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
+            ->init()
             ->get('comments_config');
 
         if (!empty($config) && array_key_exists('with_comments', $config)) {
