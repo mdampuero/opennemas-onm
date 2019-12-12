@@ -116,6 +116,8 @@ class LocalRepository
      */
     public function read(string $path) : LocalRepository
     {
+        $this->contents = [];
+
         if (!$this->fs->exists($path)) {
             return $this;
         }
