@@ -209,6 +209,7 @@ class SynchronizeCommand extends Command
 
                 try {
                     $stats = $this->getContainer()->get('news_agency.service.importer')
+                        ->setInstance($instance)
                         ->configure($server)
                         ->autoImport();
                 } catch (\Exception $e) {
