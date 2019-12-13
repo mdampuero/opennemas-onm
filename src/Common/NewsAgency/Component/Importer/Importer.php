@@ -409,6 +409,8 @@ class Importer
                 return $this->setPropagation(false)->import($a, $data);
             }, $resources);
 
+        $this->setPropagation(true);
+
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
                 if (!array_key_exists('img1', $data)) {
@@ -472,6 +474,8 @@ class Importer
             : array_map(function ($a) use ($data) {
                 return $this->setPropagation(false)->import($a, $data);
             }, $resources);
+
+        $this->setPropagation(true);
 
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
