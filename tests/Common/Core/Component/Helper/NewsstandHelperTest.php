@@ -29,7 +29,15 @@ class NewsstandHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'exists', 'remove' ])
             ->getMock();
 
-        $this->helper = new NewsstandHelper($this->instance, '/waldo/grault');
+        $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
+        $this->il->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
+
+        $this->helper = new NewsstandHelper($this->il, '/waldo/grault');
 
         $property = new \ReflectionProperty($this->helper, 'fs');
         $property->setAccessible(true);

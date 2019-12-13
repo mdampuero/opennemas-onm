@@ -38,13 +38,21 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
+        $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AttachmentHelper')
-            ->setConstructorArgs([ $this->instance, '/wibble/flob' ])
+            ->setConstructorArgs([ $this->il, '/wibble/flob' ])
             ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
+
+        $this->il->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
             ->setConstructorArgs([ $this->container, '\Attachment' ])

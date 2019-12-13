@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\ORM\Entity\Instance;
+use Common\Core\Component\Loader\InstanceLoader;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -23,11 +23,11 @@ abstract class FileHelper
     protected $fs;
 
     /**
-     * The current instance.
+     * The InstanceLoader service.
      *
-     * @var instance
+     * @var InstanceLoader
      */
-    protected $instance;
+    protected $loader;
 
     /**
      * The server public directory.
@@ -39,17 +39,17 @@ abstract class FileHelper
     /**
      * Initalializes the FileHelper.
      *
-     * @param Instance  $instance  The current instance.
-     * @param string    $publicDir The server public directory.
+     * @param InstanceLoader $loader    The InstanceLoader service.
+     * @param string         $publicDir The server public directory.
      */
-    public function __construct(Instance $instance, string $publicDir)
+    public function __construct(InstanceLoader $loader, string $publicDir)
     {
         $this->fs        = new Filesystem();
-        $this->instance  = $instance;
+        $this->loader    = $loader;
         $this->publicDir = $publicDir;
     }
 
-    /**
+   /**
      * Checks if a file exists.
      *
      * @param string $path The path to file.
