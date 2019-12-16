@@ -9,10 +9,6 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\ORM\Core\EntityManager;
-use Common\ORM\Entity\Instance;
-use Api\Service\V1\TagService;
-
 /**
  * Generates json-ld code for different type of Objects
  * See more: https://schema.org/
