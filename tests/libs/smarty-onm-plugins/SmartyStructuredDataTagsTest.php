@@ -85,17 +85,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('getContainer')
             ->willReturn($this->container);
 
-        $this->structuredData = $this
-            ->getMockBuilder('Common\Core\Component\Helper\StructuredData')
-            ->setMethods([
-                'generateImageGalleryJsonLDCode',
-                'generateVideoJsonLDCode',
-                'generateNewsArticleJsonLDCode',
-                'generateImageJsonLDCode'
-            ])
-            ->setConstructorArgs([ $this->instance, $this->em, $this->ts ])
-            ->getMock();
-
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')
             ->willReturn($this->request);
@@ -118,6 +107,11 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->method('getUri')
             ->willReturn('http://route/to/content.html');
 
+        $this->structuredData = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData', 'generateJsonLDCode' ])
+            ->getMock();
+
         $GLOBALS['kernel'] = $this->kernel;
     }
 
@@ -137,9 +131,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.content_media':
                 return $this->helper;
 
-            case 'core.helper.structured_data':
-                return $this->structuredData;
-
             case 'core.instance':
                 return $this->instance;
 
@@ -154,6 +145,9 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
 
             case 'user_repository':
                 return $this->um;
+
+            case 'core.helper.structured_data':
+                return $this->structuredData;
         }
 
         return null;
@@ -185,177 +179,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty(
             '',
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
-    }
-
-
-    /**
-     * Test smarty_function_structured_data_tags when content
-     * Uses generateImageGalleryJsonLDCode
-     */
-    public function testStructuredDataWhenContent()
-    {
-        $content = new \Content();
-
-        $content->pk_content             = 145;
-        $content->title                  = 'This is the title';
-        $content->summary                = 'This is the summary';
-        $content->body                   = 'This is the body';
-        $content->category_name          = 'gorp';
-        $content->pk_fk_content_category = 10633;
-        $content->fk_author              = 4;
-        $content->slug                   = 'foobar-thud';
-        $content->agency                 = 'Onm Agency';
-        $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'album';
-        $content->created                = '2016-10-13 11:40:32';
-        $content->changed                = '2016-10-13 11:40:32';
-
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'content' => $content ]);
-
-        $this->um->expects($this->once())
-            ->method('find')
-            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
-
-        $this->ds->expects($this->once())
-            ->method('get')
-            ->with('site_logo')
-            ->willReturn('logo.png');
-
-        $galleryJson = '{
-            "@context":"http://schema.org",
-            "@type":"ImageGallery",
-            "description": "This is the summary",
-            "keywords": "foo, bar, baz, thud",
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://route/to/content.html"
-            },
-            "headline": "This is the title",
-            "url": "http://route/to/content.html",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "primaryImageOfPage": {
-                "url": "http://image-url.com",
-                "height": 450,
-                "width": 700
-            }
-        }';
-
-        $galleryJson = preg_replace(
-            ["/[\r]/", "[\n]", "/\s{2,}/"],
-            [" ", " ", " "],
-            $galleryJson
-        );
-
-        $this->structuredData->expects($this->once())->method('generateImageGalleryJsonLDCode')
-            ->willReturn($galleryJson);
-
-        $output = '<script type="application/ld+json">[' . $galleryJson . ']</script>';
-
-        $this->assertEquals(
-            $output,
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
-    }
-
-    /**
-     * Test smarty_function_structured_data_tags when content
-     * Uses generateNewsArticleJsonLDCode and getImageMediaObject
-     */
-    public function testStructuredDataWhenContentWithImage()
-    {
-        $content = new \Content();
-
-        $content->pk_content             = 145;
-        $content->title                  = 'This is the title';
-        $content->summary                = 'This is the summary';
-        $content->body                   = 'This is the body';
-        $content->category_name          = 'gorp';
-        $content->pk_fk_content_category = 10633;
-        $content->fk_author              = 4;
-        $content->slug                   = 'foobar-thud';
-        $content->agency                 = 'Onm Agency';
-        $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'article';
-        $content->created                = '2016-10-13 11:40:32';
-        $content->changed                = '2016-10-13 11:40:32';
-
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'content' => $content ]);
-
-
-        $this->um->expects($this->once())
-            ->method('find')
-            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
-
-        $this->ds->expects($this->once())
-            ->method('get')
-            ->with('site_logo')
-            ->willReturn('logo.png');
-
-        $articleJson = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://onm.com/20161013114032000674.html"
-            },
-            "headline": "This is the object title",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "articleSection" : "Mundo",
-            "keywords": "keywords,content,json,linking,data",
-            "url": "http://onm.com/20161013114032000674.html",
-            "wordCount": 5,
-            "description": "This is the body...",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }';
-
-        $articleJson = preg_replace(["/[\r]/", "[\n]", "/\s{2,}/"], [" ", " ", " "], $articleJson);
-        $this->structuredData->expects($this->at(0))->method('generateNewsArticleJsonLDCode')
-            ->willReturn($articleJson);
-
-        // Article with image
-        $this->helper->expects($this->once())
-            ->method('getContentMediaObject')
-            ->willReturn(new \Photo());
-
-        $imageJson = '
-                ,"image": {
-                    "@type": "ImageObject",
-                    "url": "http://image-url.com",
-                    "height": 450,
-                    "width": 700
-                }}';
-
-        $imageJson = preg_replace(["/[\r]/", "[\n]", "/\s{2,}/"], [" ", " ", " "], $imageJson);
-        $this->structuredData->expects($this->at(1))->method('generateImageJsonLDCode')
-            ->willReturn($imageJson);
-
-        $output = '<script type="application/ld+json">[' . $articleJson . $imageJson . ']</script>';
-
-        $this->assertEquals(
-            $output,
             smarty_function_structured_data_tags(null, $this->smarty)
         );
     }
@@ -398,9 +221,145 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+
     /**
      * Test smarty_function_structured_data_tags when content without summary but body
-     * Uses generateNewsArticleJsonLDCode
+     * Uses generateJsonLDCode
+     */
+    public function testStructuredDataWhenContentNoSummaryWithBody()
+    {
+        $content = new \Content();
+
+        $content->pk_content             = 145;
+        $content->title                  = 'This is the title';
+        $content->summary                = '';
+        $content->body                   = 'This is the body';
+        $content->description            = 'This is a description';
+        $content->category_name          = 'gorp';
+        $content->pk_fk_content_category = 10633;
+        $content->fk_author              = 4;
+        $content->slug                   = 'foobar-thud';
+        $content->agency                 = 'Onm Agency';
+        $content->tags                   = [ 1, 2, 3, 4 ];
+        $content->content_type_name      = 'article';
+        $content->created                = '2016-10-13 11:40:32';
+        $content->changed                = '2016-10-13 11:40:32';
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'content' => $content ]);
+
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn('This is the body');
+
+        $this->um->expects($this->once())
+            ->method('find')
+            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('site_logo')
+            ->willReturn('logo.png');
+
+        $this->helper->expects($this->once())
+            ->method('getContentMediaObject')
+            ->willReturn(new \Video());
+
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
+
+        smarty_function_structured_data_tags(null, $this->smarty);
+    }
+
+      /**
+     * Test smarty_function_structured_data_tags when content without summary/body
+     * Uses generateJsonLDCode
+     */
+    public function testStructuredDataWhenContentNoSummaryNoBody()
+    {
+        $content = new \Content();
+
+        $content->pk_content             = 145;
+        $content->title                  = 'This is the title';
+        $content->summary                = '';
+        $content->body                   = '';
+        $content->description            = 'This is a test description';
+        $content->category_name          = 'gorp';
+        $content->pk_fk_content_category = 10633;
+        $content->fk_author              = 4;
+        $content->slug                   = 'foobar-thud';
+        $content->agency                 = 'Onm Agency';
+        $content->tags                   = [ 1, 2, 3, 4 ];
+        $content->content_type_name      = 'article';
+        $content->created                = '2016-10-13 11:40:32';
+        $content->changed                = '2016-10-13 11:40:32';
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'content' => $content ]);
+
+        $this->um->expects($this->once())
+            ->method('find')
+            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('site_logo')
+            ->willReturn('logo.png');
+
+        $this->helper->expects($this->once())
+            ->method('getContentMediaObject')
+            ->willReturn(new \Video());
+
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
+
+        smarty_function_structured_data_tags(null, $this->smarty);
+    }
+
+
+    /**
+     * Test smarty_function_structured_data_tags when content without summary but body
+     * Uses generateJsonLDCode
+     */
+    public function testStructuredDataWhenContentNoLogo()
+    {
+        $content = new \Content();
+
+        $content->pk_content             = 145;
+        $content->title                  = 'This is the title';
+        $content->summary                = 'This is the summary';
+        $content->body                   = 'This is the body';
+        $content->category_name          = 'gorp';
+        $content->pk_fk_content_category = 10633;
+        $content->fk_author              = 4;
+        $content->slug                   = 'foobar-thud';
+        $content->agency                 = 'Onm Agency';
+        $content->tags                   = [ 1, 2, 3, 4 ];
+        $content->content_type_name      = 'video';
+        $content->created                = '2016-10-13 11:40:32';
+        $content->changed                = '2016-10-13 11:40:32';
+
+        $this->smarty->expects($this->any())->method('getTemplateVars')
+            ->willReturn([ 'content' => $content ]);
+
+        $this->um->expects($this->once())
+            ->method('find')
+            ->willReturn(new \User());
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('site_logo')
+            ->willReturn(null);
+
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
+
+        smarty_function_structured_data_tags(null, $this->smarty);
+    }
+
+    /**
+     * Test smarty_function_structured_data_tags when content without summary but body
+     * Uses generateJsonLDCode
      */
     public function testStructuredDataWhenContentNoUser()
     {
@@ -437,59 +396,17 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->with('site_logo')
             ->willReturn('logo.png');
 
-        $articleJson = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://onm.com/20161013114032000674.html"
-            },
-            "headline": "This is the object title",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "articleSection" : "Mundo",
-            "keywords": "keywords,content,json,linking,data",
-            "url": "http://onm.com/20161013114032000674.html",
-            "wordCount": 5,
-            "description": "This is the body...",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }';
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
 
-        $articleJson = preg_replace(
-            ["/[\r]/", "[\n]", "/\s{2,}/"],
-            [" ", " ", " "],
-            $articleJson
-        );
-
-        $this->structuredData->expects($this->once())->method('generateNewsArticleJsonLDCode')
-            ->willReturn($articleJson);
-
-        $output = '<script type="application/ld+json">[' . $articleJson . ']</script>';
-
-        $this->assertEquals(
-            $output,
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
+        smarty_function_structured_data_tags(null, $this->smarty);
     }
 
+
     /**
-     * Test smarty_function_structured_data_tags when content without summary but body
-     * Uses generateNewsArticleJsonLDCode
+     * Test smarty_function_structured_data_tags when content
+     * Uses generateJsonLDCode and getImageMediaObject
      */
-    public function testStructuredDataWhenContentNoLogo()
+    public function testStructuredDataWhenContentWithImage()
     {
         $content = new \Content();
 
@@ -503,81 +420,44 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
         $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'video';
+        $content->content_type_name      = 'article';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
 
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([ 'content' => $content ]);
 
+
         $this->um->expects($this->once())
             ->method('find')
-            ->willReturn(new \User());
+            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
 
         $this->ds->expects($this->once())
             ->method('get')
             ->with('site_logo')
-            ->willReturn(null);
+            ->willReturn('logo.png');
 
-        $articleJson = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://onm.com/20161013114032000674.html"
-            },
-            "headline": "This is the object title",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "articleSection" : "Mundo",
-            "keywords": "keywords,content,json,linking,data",
-            "url": "http://onm.com/20161013114032000674.html",
-            "wordCount": 5,
-            "description": "This is the body...",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }';
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
 
-        $articleJson = preg_replace(
-            ["/[\r]/", "[\n]", "/\s{2,}/"],
-            [" ", " ", " "],
-            $articleJson
-        );
+        // Article with image
+        $this->helper->expects($this->once())
+            ->method('getContentMediaObject')
+            ->willReturn(new \Photo());
 
-        $this->structuredData->expects($this->once())->method('generateNewsArticleJsonLDCode')
-            ->willReturn($articleJson);
-
-        $output = '<script type="application/ld+json">[' . $articleJson . ']</script>';
-
-        $this->assertEquals(
-            $output,
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
+        smarty_function_structured_data_tags(null, $this->smarty);
     }
 
     /**
-     * Test smarty_function_structured_data_tags when content without summary but body
-     * Uses generateNewsArticleJsonLDCode
+     * Test smarty_function_structured_data_tags when content
+     * Uses generateJsonLDCode
      */
-    public function testStructuredDataWhenContentNoSummaryWithBody()
+    public function testStructuredDataWhenAlbum()
     {
         $content = new \Content();
 
         $content->pk_content             = 145;
         $content->title                  = 'This is the title';
-        $content->summary                = '';
+        $content->summary                = 'This is the summary';
         $content->body                   = 'This is the body';
         $content->category_name          = 'gorp';
         $content->pk_fk_content_category = 10633;
@@ -585,12 +465,13 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->slug                   = 'foobar-thud';
         $content->agency                 = 'Onm Agency';
         $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'video';
+        $content->content_type_name      = 'album';
         $content->created                = '2016-10-13 11:40:32';
         $content->changed                = '2016-10-13 11:40:32';
 
         $this->smarty->expects($this->any())->method('getTemplateVars')
             ->willReturn([ 'content' => $content ]);
+
 
         $this->um->expects($this->once())
             ->method('find')
@@ -601,129 +482,12 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->with('site_logo')
             ->willReturn('logo.png');
 
-        $articleJson = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://onm.com/20161013114032000674.html"
-            },
-            "headline": "This is the object title",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "articleSection" : "Mundo",
-            "keywords": "keywords,content,json,linking,data",
-            "url": "http://onm.com/20161013114032000674.html",
-            "wordCount": 5,
-            "description": "This is the body...",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }';
+        $this->smarty->expects($this->once())
+            ->method('getValue')
+            ->with('photos');
 
-        $articleJson = preg_replace(
-            ["/[\r]/", "[\n]", "/\s{2,}/"],
-            [" ", " ", " "],
-            $articleJson
-        );
+        $this->structuredData->expects($this->once())->method('generateJsonLDCode');
 
-        $this->structuredData->expects($this->once())->method('generateNewsArticleJsonLDCode')
-            ->willReturn($articleJson);
-
-        $output = '<script type="application/ld+json">[' . $articleJson . ']</script>';
-
-        $this->assertEquals(
-            $output,
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
-    }
-
-    /**
-     * Test smarty_function_structured_data_tags when content without summary/body
-     * Uses generateVideoJsonLDCode
-     */
-    public function testStructuredDataWhenContentNoSummaryNoBody()
-    {
-        $content = new \Content();
-
-        $content->pk_content             = 145;
-        $content->title                  = 'This is the title';
-        $content->summary                = '';
-        $content->body                   = '';
-        $content->category_name          = 'gorp';
-        $content->pk_fk_content_category = 10633;
-        $content->fk_author              = 4;
-        $content->slug                   = 'foobar-thud';
-        $content->agency                 = 'Onm Agency';
-        $content->tags                   = [ 1, 2, 3, 4 ];
-        $content->content_type_name      = 'video';
-        $content->created                = '2016-10-13 11:40:32';
-        $content->changed                = '2016-10-13 11:40:32';
-
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'content' => $content ]);
-
-        $this->um->expects($this->once())
-            ->method('find')
-            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
-
-        $this->ds->expects($this->once())
-            ->method('get')
-            ->with('site_logo')
-            ->willReturn('logo.png');
-
-        $this->helper->expects($this->once())
-            ->method('getContentMediaObject')
-            ->willReturn(new \Video());
-
-        $videoJson = '{
-            "@context": "http://schema.org/",
-            "@type": "VideoObject",
-            "author": "John Doe",
-            "name": "This is the title",
-            "description": "This is the description...",
-            "@id": "http://onm.com/20161013114032000674.html",
-            "uploadDate": "2016-10-13 11:40:32",
-            "thumbnailUrl": "http://video-thumb.com",
-            "keywords": "keywords,video,json,linking,data",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }
-        }';
-
-        $videoJson = preg_replace(
-            ["/[\r]/", "[\n]", "/\s{2,}/"],
-            [" ", " ", " "],
-            $videoJson
-        );
-
-        $this->structuredData->expects($this->once())->method('generateVideoJsonLDCode')
-            ->willReturn($videoJson);
-
-        $output = '<script type="application/ld+json">[' . $videoJson . ']</script>';
-
-        $this->assertEquals(
-            $output,
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
+        smarty_function_structured_data_tags(null, $this->smarty);
     }
 }

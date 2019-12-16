@@ -107,7 +107,7 @@ services:
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
-        arguments: [ '@core.instance', '@orm.manager', '@api.service.tag' ]
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.subscription:
