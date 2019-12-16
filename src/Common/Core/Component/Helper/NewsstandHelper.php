@@ -39,6 +39,6 @@ class NewsstandHelper extends FileHelper
      */
     protected function getPathForFile()
     {
-        return $this->instance->getNewsstandShortPath();
+        return $this->loader->getInstance()->getNewsstandShortPath();
     }
 }

@@ -24,6 +24,11 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'bar' ]);
 
+        $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
             ->setMethods([ 'copy' ])
@@ -34,8 +39,11 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
                 'getDescription', 'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
             ])->getMock();
 
+        $this->il->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
+
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
-            ->setConstructorArgs([ $this->instance, '/waldo/grault', $this->processor ])
+            ->setConstructorArgs([ $this->il, '/waldo/grault', $this->processor ])
             ->setMethods([ 'getExtension' ])
             ->getMock();
 

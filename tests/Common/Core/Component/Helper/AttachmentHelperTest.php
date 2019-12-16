@@ -24,12 +24,20 @@ class AttachmentHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'bar' ]);
 
+        $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
             ->setMethods([ 'exists', 'remove' ])
             ->getMock();
 
-        $this->helper = new AttachmentHelper($this->instance, '/waldo/grault');
+        $this->il->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
+
+        $this->helper = new AttachmentHelper($this->il, '/waldo/grault');
 
         $property = new \ReflectionProperty($this->helper, 'fs');
         $property->setAccessible(true);
