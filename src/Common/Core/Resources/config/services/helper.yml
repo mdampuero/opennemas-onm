@@ -92,7 +92,7 @@ services:
 
     core.helper.newsstand:
         class:     Common\Core\Component\Helper\NewsstandHelper
-        arguments: [ '@core.instance', '%core.paths.public%' ]
+        arguments: [ '@core.loader.instance', '%core.paths.public%' ]
         public:    true
 
     core.helper.oql:
