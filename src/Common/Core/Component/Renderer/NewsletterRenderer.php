@@ -252,6 +252,7 @@ class NewsletterRenderer
         $searchCriteria['fk_content_type'] = [
             [ 'value' => [ 1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]
         ];
+
         if (!empty($criteria->content_type)) {
             $searchCriteria['fk_content_type'] = [
                 [ 'value' => (int) \ContentManager::getContentTypeIdFromName($criteria->content_type) ]
