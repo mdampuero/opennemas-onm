@@ -281,11 +281,11 @@ var newsletterTemplateTranslations = {
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
-            <ui-select name="extra_type" theme="select2" ng-model="content.criteria.extra_type" ng-if="content.criteria.content_type === 'opinion'">
+            <ui-select name="opinion_type" theme="select2" ng-model="content.criteria.opinion_type" ng-if="content.criteria.content_type === 'opinion'">
               <ui-select-match>
-                <strong>{t}Category{/t}: </strong> [% $select.selected.title %]
+                <strong>{t}Opinion type{/t}: </strong> [% $select.selected.title %]
               </ui-select-match>
-              <ui-select-choices repeat="item.value as item in data.extra.extra_types | filter: { title: $select.search }" position='down'>
+              <ui-select-choices repeat="item.value as item in data.extra.opinion_types | filter: { title: $select.search }" position='down'>
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>

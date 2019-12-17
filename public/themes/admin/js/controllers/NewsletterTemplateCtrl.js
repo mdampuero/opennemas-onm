@@ -192,7 +192,7 @@
             criteria: {
               content_type: 'article',
               category: [],
-              extra_type: '',
+              opinion_type: '',
               epp: 5,
               in_litter: 0,
               filter: '',
