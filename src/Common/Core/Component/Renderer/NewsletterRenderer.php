@@ -275,9 +275,11 @@ class NewsletterRenderer
 
             $operator = $criteria->extra_type === 'blog' ? 'IN' : 'NOT IN';
 
-            $searchCriteria['contents.fk_author'] = [
-                [ 'value' => $bloggersId, 'operator' => $operator ]
-            ];
+            if (!empty($bloggersId)) {
+                $searchCriteria['contents.fk_author'] = [
+                    [ 'value' => $bloggersId, 'operator' => $operator ]
+                ];
+            }
         }
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
