@@ -1,0 +1,70 @@
+api_v1_backend_photo_create_item:
+    path:     /photos/new
+    defaults: { _controller: ApiBundle:V1/Backend/photo:createItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_photo_delete_item:
+    path:     /photos/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/photo:deleteItem }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_photo_delete_list:
+    path:     /photos
+    defaults: { _controller: ApiBundle:V1/Backend/photo:deleteList }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_photo_get_item:
+    path:     /photos/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:getItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_photo_get_list:
+    path:     /photos
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_photo_patch_item:
+    path:     /photos/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_photo_patch_list:
+    path:     /photos
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_photo_save_item:
+    path:     /photos
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_photo_update_item:
+    path:     /photos/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:updateItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+

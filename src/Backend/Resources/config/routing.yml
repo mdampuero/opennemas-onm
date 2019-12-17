@@ -425,6 +425,10 @@ backend_password:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/password.yml'
 
+backend_photo:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/photo.yml'
+
 backend_poll:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/poll.yml'

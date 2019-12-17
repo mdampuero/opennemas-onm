@@ -74,6 +74,11 @@ services:
         arguments: [ '@service_container', '\Opinion' ]
         public:    true
 
+    api.service.photo:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Photo' ]
+        public:    true
+
     api.service.poll:
         class:     Api\Service\V1\ContentOldService
         arguments: [ '@service_container', '\Poll' ]

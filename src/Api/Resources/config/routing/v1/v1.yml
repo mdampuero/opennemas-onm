@@ -46,6 +46,10 @@ api_v1_backend_opinion:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/opinion.yml'
     prefix:   /backend
 
+api_v1_backend_photo:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/photo.yml'
+    prefix:   /backend
+
 api_v1_backend_poll:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/poll.yml'
     prefix:   /backend
