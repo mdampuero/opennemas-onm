@@ -15,8 +15,8 @@
      *   Controller for album list.
      */
     .controller('PhotoListCtrl', [
-      '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
-      function($controller, $scope, $window, oqlEncoder, routing) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -86,8 +86,6 @@
          */
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
-          $scope.localize($scope.data.items, 'items');
-          $scope.localize($scope.data.extra.categories, 'categories');
         };
 
         // Update epp when mode changes
