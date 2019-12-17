@@ -70,6 +70,7 @@
               </div>
             </th>
             {block name="commonColumnsHeader"}
+              {block name="customMediaHeader"}{/block}
               <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
                 {t}Title{/t}
               </th>

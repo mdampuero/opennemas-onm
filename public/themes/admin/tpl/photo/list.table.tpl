@@ -13,6 +13,12 @@
       {t}Resolution{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-media" checklist-model="app.columns.selected" checklist-value="'media'" type="checkbox">
+    <label for="checkbox-media">
+      {t}Media{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="customColumnsHeader"}
@@ -30,6 +36,26 @@
       </span>
     </th>
   {/acl}
+{/block}
+
+{block name="customMediaHeader"}
+  {acl isAllowed="PHOTO_MEDIA"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="150">
+      <span class="m-l-5">
+        {t}Media{/t}
+      </span>
+    </th>
+  {/acl}
+{/block}
+
+{block name="customMediaColumn"}
+    {acl isAllowed="PHOTO_MEDIA"}
+    <td class="hidden-xs" ng-if="isColumnEnabled('media')">
+      <div class="dynamic-image-placeholder">
+        <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
+      </div>
+    </td>
+    {/acl}
 {/block}
 
 {block name="customColumnsBody"}
