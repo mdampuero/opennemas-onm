@@ -1,7 +1,7 @@
 /**
  * Handle actions for image inner.
  */
-angular.module('BackendApp.controllers').controller('ImageCtrl', [
+angular.module('BackendApp.controllers').controller('PhotoCtrl', [
   '$controller', '$rootScope', '$scope',
   function($controller, $rootScope, $scope) {
     'use strict';

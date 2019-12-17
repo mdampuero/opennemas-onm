@@ -14,7 +14,7 @@
      * @description
      *   Controller for album list.
      */
-    .controller('ImageListCtrl', [
+    .controller('PhotoListCtrl', [
       '$controller', '$scope', '$window', 'oqlEncoder', 'routing',
       function($controller, $scope, $window, oqlEncoder, routing) {
         // Initialize the super class and extend it.
