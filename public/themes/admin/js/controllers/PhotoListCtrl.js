@@ -5,14 +5,14 @@
 
     /**
      * @ngdoc controller
-     * @name  ImageListCtrl
+     * @name  PhotoListCtrl
      *
      * @requires $controller
      * @requires $scope
      * @requires oqlEncoder
      *
      * @description
-     *   Controller for album list.
+     *   Controller for photo list.
      */
     .controller('PhotoListCtrl', [
       '$controller', '$scope', 'oqlEncoder',
@@ -35,7 +35,7 @@
         };
 
         /**
-         * @memberOf AlbumListCtrl
+         * @memberOf PhotoListCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -59,7 +59,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = [];
+          $scope.app.columns.hidden = ['author', 'tags', 'changed', 'category', 'starttime', 'endtime' ];
 
           oqlEncoder.configure({
             placeholder: {
@@ -86,6 +86,7 @@
          */
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
         };
 
         // Update epp when mode changes
