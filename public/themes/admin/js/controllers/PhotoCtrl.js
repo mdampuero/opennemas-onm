@@ -10,6 +10,22 @@ angular.module('BackendApp.controllers').controller('ImageCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
+     * @memberOf PhotoCtrl
+     *
+     * @description
+     *  The list of routes for the controller.
+     *
+     * @type {Object}
+     */
+    $scope.routes = {
+      createItem: 'api_v1_backend_photo_create_item',
+      getItem:    'api_v1_backend_photo_get_item',
+      redirect:   'backend_photo_show',
+      saveItem:   'api_v1_backend_photo_save_item',
+      updateItem: 'api_v1_backend_photo_update_item'
+    };
+
+    /**
      * @function init
      * @memberOf ImageCtrl
      *
