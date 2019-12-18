@@ -267,13 +267,13 @@ class NewsletterRenderer
             ];
         }
 
-        if ($criteria->content_type === 'opinion' && !empty($criteria->extra_type)) {
+        if ($criteria->content_type === 'opinion' && !empty($criteria->opinion_type)) {
             $bloggers   = $this->as->getList('is_blog=1')['items'];
             $bloggersId = array_map(function ($item) {
                 return $item->id;
             }, $bloggers);
 
-            $operator = $criteria->extra_type === 'blog' ? 'IN' : 'NOT IN';
+            $operator = $criteria->opinion_type === 'blog' ? 'IN' : 'NOT IN';
 
             if (!empty($bloggersId)) {
                 $searchCriteria['contents.fk_author'] = [
