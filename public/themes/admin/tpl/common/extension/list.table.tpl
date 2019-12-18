@@ -108,7 +108,6 @@
               </div>
             </td>
             {block name="commonColumnsBody"}
-              {block name="customMediaColumn"}{/block}
               <td class="v-align-middle" ng-if="isColumnEnabled('title')">
                 <div class="table-text">
                   [% item.title %]
