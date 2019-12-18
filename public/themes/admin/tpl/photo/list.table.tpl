@@ -21,6 +21,17 @@
   </div>
 {/block}
 
+{block name="commonColumnsHeader" prepend}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+  </th>
+{/block}
+
+{block name="commonColumnsBody" prepend}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" transform="zoomcrop,220,220"></dynamic-image>
+  </td>
+{/block}
+
 {block name="customColumnsHeader"}
   {acl isAllowed="PHOTO_SIZE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('resolution')" width="150">
@@ -36,26 +47,6 @@
       </span>
     </th>
   {/acl}
-{/block}
-
-{block name="customMediaHeader"}
-  {acl isAllowed="PHOTO_MEDIA"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="150">
-      <span class="m-l-5">
-        {t}Media{/t}
-      </span>
-    </th>
-  {/acl}
-{/block}
-
-{block name="customMediaColumn"}
-    {acl isAllowed="PHOTO_MEDIA"}
-    <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="150">
-      <div style="height: 120px; width: 120px; margin: auto;">
-        <dynamic-image class="dynamic-img-thumbnail-wrapper img-thumbnail"  instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
-      </div>
-    </td>
-    {/acl}
 {/block}
 
 {block name="customColumnsBody"}
