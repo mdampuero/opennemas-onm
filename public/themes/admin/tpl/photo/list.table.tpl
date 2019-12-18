@@ -61,3 +61,37 @@
     </td>
   {/acl}
 {/block}
+
+{block name="itemActions"}
+  {acl isAllowed="PHOTO_UPDATE"}
+    <a class="btn btn-default btn-small" href="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+      <i class="fa fa-pencil m-r-5"></i>
+      {t}Edit{/t}
+    </a>
+    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+  {/acl}
+  {acl isAllowed="PHOTO_DELETE"}
+    <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
+      <i class="fa fa-trash-o m-r-5"></i>
+      {t}Delete{/t}
+    </button>
+  {/acl}
+  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
+    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
+      <i class="fa fa-ellipsis-h"></i>
+    </button>
+    <ul class="dropdown-menu no-padding">
+      <li>
+        <a href="{$smarty.const.INSTANCE_MEDIA}images[% extra.paths.photo + item.path_img %]" target="_blank">
+          <i class="fa fa-external-link m-r-5"></i>
+          {t}Link{/t}
+        </a>
+      </li>
+      <li>
+        <a class="btn btn-link" ng-click="launchPhotoEditor(content)" type="button" >
+          <i class="fa fa-sliders m-r-5"></i>{t}Enhance{/t}
+        </a>
+      </li>
+    </ul>
+  </div>
+{/block}
