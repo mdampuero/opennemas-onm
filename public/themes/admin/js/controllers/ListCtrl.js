@@ -344,8 +344,20 @@
             nv.page = 1;
           }
 
+          var changes = [];
+
+          // Get which values change ignoring page
+          for (var key in $scope.criteria) {
+            if (key !== 'page' && !angular.equals(nv[key], ov[key])) {
+              changes.push(key);
+            }
+          }
+
+          // Reset the list if search changes
+          var reset = changes.length > 0 && $scope.app.mode === 'grid';
+
           $scope.tm = $timeout(function() {
-            $scope.list();
+            $scope.list(reset);
           }, 500);
         }, true);
       }
