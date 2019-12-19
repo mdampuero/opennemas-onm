@@ -1,13 +1,13 @@
 api_v1_backend_photo_create_item:
     path:     /photos/new
-    defaults: { _controller: ApiBundle:V1/Backend/photo:createItem }
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:createItem }
     methods:  [ GET ]
     options:
         expose: true
 
 api_v1_backend_photo_delete_item:
     path:     /photos/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/photo:deleteItem }
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:deleteItem }
     methods:  [ DELETE ]
     options:
         expose: true
@@ -16,7 +16,7 @@ api_v1_backend_photo_delete_item:
 
 api_v1_backend_photo_delete_list:
     path:     /photos
-    defaults: { _controller: ApiBundle:V1/Backend/photo:deleteList }
+    defaults: { _controller: ApiBundle:V1/Backend/Photo:deleteList }
     methods:  [ DELETE ]
     options:
         expose: true
