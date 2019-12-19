@@ -257,19 +257,21 @@ class Photo extends Content
      */
     public function remove($id)
     {
-        //$path = getService('service_container')->getParameter('core.paths.public')
-            //. getService('core.instance')->getImagesShortPath()
-            //. $this->getRelativePath();
+        if (!empty($this->getRelativePath())) {
+            $path = getService('service_container')->getParameter('core.paths.public')
+            . getService('core.instance')->getImagesShortPath()
+            . $this->getRelativePath();
 
-        //$fs = new Filesystem();
+            $fs = new Filesystem();
 
-        //if ($fs->exists($path)) {
-            //$fs->remove($path);
-        //}
+            if ($fs->exists($path)) {
+                $fs->remove($path);
+            }
 
-        parent::remove($id);
+            parent::remove($id);
 
-        getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
+            getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
+        }
     }
 
     /**
