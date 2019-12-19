@@ -70,3 +70,9 @@
   {include file="photo/list.table.tpl"}
   {include file="photo/list.grid.tpl"}
 {/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/extension/modal.delete.tpl"}
+  </script>
+{/block}

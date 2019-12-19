@@ -91,7 +91,7 @@
         </a>
       </li>
       <li>
-        <a class="btn btn-link" ng-click="launchPhotoEditor(content)" type="button" >
+        <a class="btn btn-link" ng-click="launchPhotoEditor(item)" type="button" >
           <i class="fa fa-sliders m-r-5"></i>{t}Enhance{/t}
         </a>
       </li>
