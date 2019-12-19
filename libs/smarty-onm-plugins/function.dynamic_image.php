@@ -9,6 +9,11 @@
  */
 function smarty_function_dynamic_image($params, &$smarty)
 {
+    if (array_key_exists('id', $params) && !empty($params['id'])) {
+        $photo         = getService('entity_repository')->find('Photo', $params['id']);
+        $params['src'] = $photo->path_img;
+    }
+
     if (empty($params['src'])) {
         return;
     }
