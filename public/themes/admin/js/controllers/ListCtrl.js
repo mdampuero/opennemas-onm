@@ -238,6 +238,10 @@
           }
         };
 
+        $scope.select = function(item) {
+          $scope.selected.lastSelected = item;
+        };
+
         /**
          * @function sort
          * @memberOf InstanceListCtrl
@@ -353,7 +357,7 @@
             }
           }
 
-          // Reset the list if search changes
+          // Reset the list if search changes and mode is grid
           var reset = changes.length > 0 && $scope.app.mode === 'grid';
 
           $scope.tm = $timeout(function() {
