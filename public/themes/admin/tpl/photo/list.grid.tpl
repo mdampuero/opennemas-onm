@@ -1,5 +1,9 @@
 {extends file="common/extension/list.grid.tpl"}
 
+{block name="begin-wrapper"}
+  <div class="content-wrapper">
+{/block}
+
 {block name="item"}
   <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" transform="zoomcrop,400,400">
     <div class="hidden-select" ng-click="select(item);toggleItem(item); xsOnly($event, toggle, item)"></div>
@@ -73,5 +77,9 @@
         </li>
       </ul>
     </div>
+  </div>
+{/block}
+
+{block name="end-wrapper"}
   </div>
 {/block}
