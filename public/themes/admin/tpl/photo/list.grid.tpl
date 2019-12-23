@@ -62,7 +62,7 @@
           </a>
         </li>
         {/is_module_activated}
-        <li>[% selected.lastSelected.created | moment %]</li>
+        <li>[% selected.lastSelected.created %]</li>
         <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %] ([% selected.lastSelected.size %] KB)</li>
         <li>
           <div class="form-group">
