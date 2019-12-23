@@ -264,14 +264,13 @@ class Photo extends Content
 
             $fs = new Filesystem();
 
-            if ($fs->exists($path)) {
+            if ($fs->exists($path) && !$fs->is_dir($path)) {
                 $fs->remove($path);
             }
-
-            parent::remove($id);
-
-            getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
         }
+
+        parent::remove($id);
+        getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
     }
 
     /**
