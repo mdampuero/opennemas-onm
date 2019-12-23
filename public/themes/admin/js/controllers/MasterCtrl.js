@@ -555,19 +555,9 @@
         // Update style for actions-navbar on window scroll
         $(window).bind('scroll', function() {
           $('.page-navbar').last().removeClass('scrolled');
-          $('.content-sidebar').removeClass('scrolled');
 
           if ($(window).scrollTop() > 0) {
             $('.page-navbar').last().addClass('scrolled');
-          }
-
-          if ($('.content-sidebar').length > 0) {
-            var scroll = $(window).scrollTop();
-            var offset = $('.content-sidebar').offset().top;
-
-            if (offset - scroll < 85) {
-              $('.content-sidebar').addClass('scrolled');
-            }
           }
         });
 
