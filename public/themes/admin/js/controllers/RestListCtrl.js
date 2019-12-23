@@ -72,7 +72,14 @@
             messenger.post(response.data);
 
             if (response.success) {
-              $scope.list();
+              if ($scope.app.mode !== 'grid') {
+                $scope.list();
+              } else {
+                var position = $scope.data.items.findIndex(photo => photo.pk_photo === id);
+
+                $scope.data.items.splice(position, 1);
+                $scope.items.splice(position, 1);
+              }
             }
           });
         };
