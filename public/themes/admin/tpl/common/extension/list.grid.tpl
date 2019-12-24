@@ -6,7 +6,6 @@
     </div>
   </div>
 </div>
-{block name="sidebar"}{/block}
 <div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll()" ng-if="!flags.http.loading && data.total != data.items.length && isModeSupported() && app.mode === 'grid'">
   <h5>
     <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="flags.http.loadingMore"></i>
@@ -15,3 +14,4 @@
   </h5>
 </div>
 {block name="end-wrapper"}{/block}
+{block name="sidebar"}{/block}

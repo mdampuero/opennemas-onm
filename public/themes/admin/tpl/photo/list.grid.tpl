@@ -27,6 +27,10 @@
   </dynamic-image>
 {/block}
 
+{block name="end-wrapper"}
+  </div>
+{/block}
+
 {block name="sidebar"}
   <div class="content-sidebar hidden-sm ng-cloak" ng-if="app.mode === 'grid'">
     <div class="center p-t-15" ng-if="!selected.lastSelected">
@@ -77,9 +81,5 @@
         </li>
       </ul>
     </div>
-  </div>
-{/block}
-
-{block name="end-wrapper"}
   </div>
 {/block}
