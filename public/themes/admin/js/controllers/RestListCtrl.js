@@ -79,6 +79,8 @@
 
                 $scope.data.items.splice(position, 1);
                 $scope.items.splice(position, 1);
+
+                $scope.data.total = $scope.data.total - 1;
               }
             }
           });
