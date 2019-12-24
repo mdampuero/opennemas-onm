@@ -29,13 +29,6 @@
 {/block}
 
 {block name="end-clearfix"}</div>{/block}
-{block name="scroll"}
-<div class="p-t-15 p-b-15 pointer text-center ng-scope" ng-click="scroll('backend_ws_contents_list')" ng-if="!flags.http.loading && mode == 'grid' && data.total != items.length"> 
-  <h5> 
-    <span ng-if="!flags.http.loadingMore" class="ng-scope">{t}Load more{/t}</span>
-  </h5> 
-</div>
-{/block}
 
 {block name="sidebar"}
   <div class="content-sidebar hidden-sm ng-cloak" ng-if="app.mode === 'grid'">
