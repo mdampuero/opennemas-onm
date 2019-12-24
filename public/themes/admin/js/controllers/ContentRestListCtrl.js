@@ -141,8 +141,7 @@
 
           if (!$scope.flags.http.loadingMore && $(document).height() <=
               $(window).height() + $(window).scrollTop()) {
-                $scope.criteria.page++;
-                $scope.$apply();
+                $scope.scroll();
           }
         });
       }
