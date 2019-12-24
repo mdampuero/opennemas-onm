@@ -1,54 +1,45 @@
 <?php
 /**
- * Renders a dynamic image given some parameters (base_url, real_path, transform)
+ * Renders an <img> tag based on the provided parameters. It supports a path to
+ * an image or an image id.
  *
- * @param array $params The list of parameters passed to the block.
- * @param \Smarty $smarty The instance of smarty.
+ * @param array   $params The list of parameters.
+ * @param \Smarty $smarty The Smarty service.
  *
- * @return null|string
+ * @return string The HTML string.
  */
 function smarty_function_dynamic_image($params, &$smarty)
 {
     if (array_key_exists('id', $params) && !empty($params['id'])) {
-        $photo         = getService('entity_repository')->find('Photo', $params['id']);
-        $params['src'] = $photo->path_img;
+        $photo = $smarty->getContainer()->get('entity_repository')
+            ->find('Photo', $params['id']);
+
+        $params['src'] = $photo->getRelativePath();
     }
 
-    if (empty($params['src'])) {
-        return;
+    if (empty($params['src']) || preg_match('@^http(s)?://@', $params['src'])) {
+        return '';
     }
 
-    $src = $params['src'];
+    $baseUrl = array_key_exists('base_url', $params)
+        ? $params['base_url'] . DS
+        : INSTANCE_MEDIA . 'images';
 
-    $baseUrl = $params['base_url'] . DS;
-    if (preg_match('@http(s)?://@', $src)) {
-        $baseUrl = '';
-    } elseif (!array_key_exists('base_url', $params)) {
-        $baseUrl = INSTANCE_MEDIA . 'images';
-    }
-
-    $resource = $baseUrl . $src;
+    $resource = $baseUrl . $params['src'];
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    $resource = $baseUrl . $src;
     if (array_key_exists('transform', $params)) {
-        getService('router');
-
-        $urlParams = [
-            'path'   => $baseUrl . $src,
-            'params' => urlencode($params['transform']),
-        ];
-
         try {
-            $generator = getService('router');
-            $resource  = $generator->generate('asset_image', $urlParams);
+            $resource = $smarty->getContainer()->get('router')
+                ->generate('asset_image', [
+                    'path'   => $resource,
+                    'params' => urlencode($params['transform']),
+                ]);
         } catch (\Exception $e) {
             $resource = '#failed';
-            trigger_error($e->getMessage());
+            $smarty->getContainer()->get('error.log')->error($e->getMessage());
         }
     }
-
-    $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
     if (array_key_exists('site_url', $params)) {
         $resource = $params['site_url'] . $resource;
@@ -64,18 +55,19 @@ function smarty_function_dynamic_image($params, &$smarty)
     unset($params['data-src']);
 
     if ($lazyload) {
-        $params['class'] = "lazy " . (array_key_exists('class', $params) ? $params['class'] : '');
+        $params['class'] = 'lazy ' .
+            (array_key_exists('class', $params) ? $params['class'] : '');
     }
 
     $properties = '';
+
     foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $output = "<img src=\"{$resource}\" {$properties}>";
-    if ($lazyload) {
-        $output = "<img src=\"/assets/images/lazy-bg.png\" data-src=\"{$resource}\" {$properties}>";
-    }
+    $html = $lazyload
+        ? '<img src="/assets/images/lazy-bg.png" data-src="%s" %s>'
+        : '<img src="%s" %s>';
 
-    return $output;
+    return sprintf($html, $resource, $properties);
 }
