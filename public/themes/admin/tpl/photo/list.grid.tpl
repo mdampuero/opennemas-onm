@@ -2,7 +2,6 @@
 
 {block name="begin-wrapper"}
   <div class="content-wrapper">
-    <div class="clearfix row ng-scope">
 {/block}
 
 {block name="item"}
@@ -28,7 +27,11 @@
   </dynamic-image>
 {/block}
 
-{block name="end-clearfix"}</div>{/block}
+{block name="master-row"}
+<div class="row master-row ng-cloak">
+  <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item"> </div>
+</div>
+{/block}
 
 {block name="sidebar"}
   <div class="content-sidebar hidden-sm ng-cloak" ng-if="app.mode === 'grid'">
