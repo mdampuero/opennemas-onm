@@ -11,10 +11,18 @@
 function smarty_function_dynamic_image($params, &$smarty)
 {
     if (array_key_exists('id', $params) && !empty($params['id'])) {
-        $photo = $smarty->getContainer()->get('entity_repository')
-            ->find('Photo', $params['id']);
+        try {
+            $photo = $smarty->getContainer()->get('entity_repository')
+                ->find('Photo', $params['id']);
 
-        $params['src'] = $photo->getRelativePath();
+            if (empty($photo)) {
+                return '';
+            }
+
+            $params['src'] = $photo->getRelativePath();
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     if (empty($params['src']) || preg_match('@^http(s)?://@', $params['src'])) {
