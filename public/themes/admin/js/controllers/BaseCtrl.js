@@ -96,7 +96,7 @@
           var maxHeight = $(window).height() - $('.header').height() -
             $('.actions-navbar').height();
           var maxWidth  = $(window).width() - $('.sidebar').width();
-          var padding   = 40;
+          var padding   = 15;
 
           if ($('.content-wrapper').length > 0) {
             maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
