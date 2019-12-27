@@ -55,14 +55,14 @@
           <strong>[% selected.lastSelected.name %]</strong>
         </li>
         <li>
-          <a class="btn btn-primary ng-isolate-scope" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.id}) %]">
+          <a class="btn btn-default ng-isolate-scope" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.id}) %]">
               <i class="fa fa-edit ng-isolate-scope"></i>
               {t}Edit{/t}
           </a>
         </li>
         {is_module_activated name="es.openhost.module.imageEditor"}
         <li>
-          <a class="btn btn-primary ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
+          <a class="btn btn-default ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
               <i class="fa fa-sliders"></i>
               {t}Enhance{/t}
           </a>
