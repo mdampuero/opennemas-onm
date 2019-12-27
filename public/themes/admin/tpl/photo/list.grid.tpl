@@ -62,7 +62,7 @@
         </li>
         {is_module_activated name="es.openhost.module.imageEditor"}
         <li>
-          <a class="btn btn-default ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
+          <a class="btn btn-white ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
               <i class="fa fa-sliders"></i>
               {t}Enhance{/t}
           </a>
