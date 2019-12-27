@@ -75,4 +75,21 @@
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
   </script>
+
+  <script type="text/ng-template" id="modal-image">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+      <h4 class="modal-title">{t}Image preview{/t}</h4>
+    </div>
+    <div class="modal-body">
+      <div class="resource">
+        <span ng-if="template.selected.type_img == 'swf'">
+          <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$smarty.const.INSTANCE_MEDIA}/images[% template.selected.path_file %][% template.selected.name %]" swf-width="570"></swf-object>
+        </span>
+        <span ng-if="template.selected.type_img !== 'swf'">
+          <img class="img-responsive" ng-src="{$smarty.const.INSTANCE_MEDIA}/images{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
+        </span>
+      </div>
+    </div>
+  </script>
 {/block}
