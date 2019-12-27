@@ -102,6 +102,10 @@
             if ($scope.isModeSupported() && !reset && $scope.app.mode === 'grid') {
               $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
 
+              if (response.data.items < $scope.criteria.epp) {
+                $scope.endReached = true;
+              }
+
               // Merge items
               response.data.items = [].concat($scope.data.items, response.data.items);
 
@@ -135,7 +139,7 @@
         // Change page when scrolling in grid mode
         $(window).scroll(function() {
           if (!$scope.isModeSupported() || $scope.app.mode === 'list' ||
-              $scope.items.length === $scope.data.total) {
+              $scope.endReached) {
             return;
           }
 

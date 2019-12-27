@@ -34,6 +34,8 @@
           page: 1
         };
 
+        $scope.endReached = false;
+
         /**
          * @memberOf PhotoListCtrl
          *
