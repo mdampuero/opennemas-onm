@@ -15,8 +15,8 @@
      *   Controller for photo list.
      */
     .controller('PhotoListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'http', '$timeout', 'oqlEncoder',
+      function($controller, $scope, http, $timeout, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -61,7 +61,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = ['author', 'tags', 'category', 'starttime', 'endtime' ];
+          $scope.app.columns.hidden = [ 'author', 'tags', 'category', 'starttime', 'endtime' ];
 
           oqlEncoder.configure({
             placeholder: {
@@ -89,6 +89,43 @@
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
+        };
+
+        /**
+         * Saves the last selected item description.
+         */
+        $scope.saveDescription = function() {
+          $scope.saving = true;
+
+          var data = { description: $scope.selected.lastSelected.description };
+
+          var route = {
+            name: 'backend_ws_picker_save_description',
+            params:  {
+              id: $scope.selected.lastSelected.id
+            }
+          };
+
+          http.post(route, data).then(function() {
+            $scope.saving = false;
+            $scope.saved = true;
+
+            $timeout(function() {
+              $scope.saved = false;
+            }, 2000);
+
+            return true;
+          }, function() {
+            $scope.saving = false;
+            $scope.saved = false;
+            $scope.error = true;
+
+            $timeout(function() {
+              $scope.error = false;
+            }, 2000);
+
+            return false;
+          });
         };
 
         // Update epp when mode changes
