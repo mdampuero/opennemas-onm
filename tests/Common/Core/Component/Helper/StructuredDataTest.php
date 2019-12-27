@@ -109,32 +109,32 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testExtractParamsFromData()
     {
-        $data                         = [];
-        $data['content']              = new \Content();
-        $data['content']->description = 'This is a test description';
-        $data['content']->tags        = [1,2,3,4];
-        $data['video']                = new \Video();
-        $data['video']->tags          = [1,2,3,4,5];
+        $data                   = [];
+        $data['content']        = new \Content();
+        $data['content']->tags  = [1,2,3,4];
+        $data['content']->title = 'This is the title';
+        $data['video']          = new \Video();
+        $data['video']->tags    = [1,2,3,4,5];
 
-        $output                         = [];
-        $output['content']              = new \Content();
-        $output['video']                = new \Video();
-        $output['content']->tags        = [1,2,3,4];
-        $output['video']->tags          = [1,2,3,4,5];
-        $output['videokeywords']        = 'keywords,object,json,linking,data';
-        $output['keywords']             = 'keywords,object,json,linking';
-        $output['sitename']             = 'site name';
-        $output['siteurl']              = 'http://console/';
-        $output['title']                = '';
-        $output['content']->body        = '';
-        $output['content']->description = 'This is a test description';
-        $output['summary']              = 'This is a test description...';
-        $output['wordCount']            = 5;
-        $output['logo']                 = 'logo';
-        $output['author']               = 'author';
-        $output['image']                = null;
-        $output['created']              = null;
-        $output['changed']              = null;
+        $output                   = [];
+        $output['content']        = new \Content();
+        $output['video']          = new \Video();
+        $output['content']->tags  = [1,2,3,4];
+        $output['video']->tags    = [1,2,3,4,5];
+        $output['videokeywords']  = 'keywords,object,json,linking,data';
+        $output['keywords']       = 'keywords,object,json,linking';
+        $output['sitename']       = 'site name';
+        $output['siteurl']        = 'http://console/';
+        $output['content']->body  = '';
+        $output['content']->title = 'This is the title';
+        $output['title']          = 'This is the title';
+        $output['summary']        = 'This is the title';
+        $output['wordCount']      = 4;
+        $output['logo']           = 'logo';
+        $output['author']         = 'author';
+        $output['image']          = null;
+        $output['created']        = null;
+        $output['changed']        = null;
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')

@@ -4,7 +4,7 @@
   "@type": "VideoObject",
   "author": "{$author}",
   "name": "{$video->title|escape:'html'}",
-  "description": "{$video->description|escape:'html'}",
+  "description": "{$summary}",
   "@id": "{$url}",
   "uploadDate": "{$video->created}",
   "thumbnailUrl": "{$video->thumb}",

@@ -47,12 +47,15 @@ class StructuredData
      */
     public function extractParamsFromData($data)
     {
-        // Get content summary, body or description.
+        // Get content summary, body or description. Otherwise use content title.
         $data['summary'] = $data['content']->summary;
         if (empty($data['summary'])) {
             $data['summary'] = mb_substr($data['content']->body, 0, 120) . "...";
             if (empty($data['content']->body)) {
                 $data['summary'] = mb_substr($data['content']->description, 0, 120) . "...";
+                if (empty($data['content']->description)) {
+                    $data['summary'] = $data['content']->title;
+                }
             }
         }
 
