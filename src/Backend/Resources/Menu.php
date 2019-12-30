@@ -184,10 +184,10 @@ $menuXml = [
         'icon'    => 'fa fa-image',
         'submenu' => [
             [
-                'id'          => 'image_manager',
-                'title'       => _('Images'),
+                'id'          => 'photo_manager',
+                'title'       => _('Photos'),
                 'icon'        => 'fa fa-picture-o',
-                'link'        => url('admin_images'),
+                'link'        => url('backend_photos_list'),
                 'module_name' => 'IMAGE_MANAGER',
                 'privilege'   => 'PHOTO_ADMIN',
             ],
