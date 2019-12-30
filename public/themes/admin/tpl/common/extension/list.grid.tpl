@@ -6,13 +6,6 @@
     </div>
   </div>
 </div>
-<div class="ng-cloak p-t-15 p-b-15 pointer text-center" ng-click="scroll()" ng-if="!flags.http.loading && endReached === false && isModeSupported() && app.mode === 'grid'">
-  <h5>
-    <i class="fa fa-circle-o-notch fa-spin fa-lg" ng-if="flags.http.loadingMore"></i>
-    <span ng-if="!flags.http.loadingMore">{t}Load more{/t}</span>
-    <span ng-if="flags.http.loadingMore">{t}Loading{/t}</span>
-  </h5>
-</div>
 {block name="master-row"}{/block}
 {block name="end-wrapper"}{/block}
 {block name="sidebar"}{/block}

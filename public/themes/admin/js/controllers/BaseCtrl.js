@@ -94,7 +94,7 @@
          */
         $scope.getEppInGrid = function() {
           var maxHeight = $(window).height() - $('.header').height() -
-            $('.actions-navbar').height();
+            $('.actions-navbar').height() - $('.actions-navbar').height();
           var maxWidth  = $(window).width() - $('.sidebar').width();
           var padding   = 15;
 
@@ -112,7 +112,7 @@
           var height = containerSize + padding;
           var width = containerSize + padding;
 
-          var rows = Math.ceil(maxHeight / height);
+          var rows = Math.floor(maxHeight / height);
           var cols = Math.floor(maxWidth / width);
 
           if (rows === 0) {
