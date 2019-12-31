@@ -21,13 +21,44 @@
   </a>
 {/block}
 
-{block name="leftColumn"}
+{block name="title"}
+  <a class="no-padding" href="{url name=backend_photos_list}">
+    {t}Photos{/t}
+  </a>
+{/block}
+
+{block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
+      {include file="ui/component/content-editor/accordion/tags.tpl"}
+    </div>
+  </div>
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
+        <i class="fa fa-cog m-r-10"></i>
+        {t}Parameters{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
+      </div>
+    </div>
+    <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.when }">
       <div class="row">
-        <div class="col-md-1">
+        <div style="margin-top: 10px" class="photo-information">
+          <div class="col-sm-6">
+            <strong>{t}Size{/t}</strong> [% item.size %] KB
+          </div>
+          <div class="col-sm-6">
+            <strong>{t}Resolution{/t}</strong> [% item.width %] X [% item.height %]
+          </div>
         </div>
-        <div class="col-md-10">
+      </div>
+  </div>
+</div>
+{/block}
+
+{block name="leftColumn"}
+ <div class="grid simple">
+    <div class="grid-body">
           <div class="thumbnail-wrapper">
             <div class="form-group">
               <div class="thumbnail-placeholder">
@@ -37,23 +68,9 @@
                 </div>
               </div>
             </div>
+          {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
           {include file="ui/component/content-editor/textarea.tpl"  title="{t}Description{/t}" field="description" rows=20}
         </div>
-        <div class="col-md-1">
-        </div>
-      </div>
-    </div>
-  </div>
-{/block}
-
-{block name="rightColumn"}
-  <div class="grid simple">
-    <div class="grid-body no-padding">
-      {include file="ui/component/content-editor/accordion/tags.tpl"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Title{/t}" field="title"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Size{/t}" field="size"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Width{/t}" field="width"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" title="{t}Height{/t}" field="height"}
     </div>
   </div>
 {/block}

@@ -1,7 +1,7 @@
 {extends file="common/extension/list.tpl"}
 
 {block name="metaTitle"}
-  > {t}Images{/t}
+  > {t}Photos{/t}
 {/block}
 
 {block name="ngInit"}
@@ -16,7 +16,7 @@
 {/block}
 
 {block name="title"}
-  {t}Images{/t}
+  {t}Photos{/t}
 {/block}
 
 {block name="primaryActions"}
