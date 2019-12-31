@@ -213,8 +213,8 @@ class CoreLoader
         define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
         define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
 
-        if (file_exists($this->theme->realpath . '.deploy.themes.php')) {
-            include_once $this->theme->realpath . '.deploy.themes.php';
+        if (file_exists($this->theme->realpath . '/.deploy.themes.php')) {
+            include_once $this->theme->realpath . '/.deploy.themes.php';
         }
 
         if (!defined('THEMES_DEPLOYED_AT')) {

@@ -395,7 +395,7 @@ class BaseRepository extends Repository
                 $entity = new $class($this->converter->objectify($config));
 
                 $entity->path     = substr($path, strpos($path, '/public') + 7);
-                $entity->realpath = $path;
+                $entity->realpath = rtrim($path, '/');
 
                 $this->entities[] = $entity;
             }
