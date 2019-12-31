@@ -329,7 +329,7 @@ class CoreLoader
      */
     protected function loadLayouts($layouts)
     {
-        $this->container->get('core.manager.layout')
+        $this->container->get('core.template.layout')
             ->addLayouts($layouts);
     }
 
