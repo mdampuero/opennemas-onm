@@ -55,7 +55,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
-            case 'core.manager.layout':
+            case 'core.template.layout':
                 return $this->lm;
 
             case 'orm.manager':
@@ -81,13 +81,19 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ])->setConstructorArgs([ $this->container, [] ])
             ->getMock();
 
-        $template->expects($this->once())->method('setTemplateVars');
-        $template->expects($this->once())->method('setupCompiles')->with('wubble');
-        $template->expects($this->once())->method('setupPlugins')->with('wubble');
-        $template->expects($this->once())->method('setupLayouts')->with('wubble');
-        $template->expects($this->once())->method('addTheme')->with('wubble');
+        $theme = new Theme([
+            'parameters' => [ 'layouts' => [] ],
+            'realpath'   => '/themes/foobar',
+            'uuid'       => 'es.openhost.theme.foobar'
+        ]);
 
-        $template->addActiveTheme('wubble');
+        $template->expects($this->once())->method('setTemplateVars');
+        $template->expects($this->once())->method('setupCompiles')->with($theme);
+        $template->expects($this->once())->method('setupPlugins')->with($theme);
+        $template->expects($this->once())->method('setupLayouts')->with($theme);
+        $template->expects($this->once())->method('addTheme')->with($theme);
+
+        $template->addActiveTheme($theme);
     }
 
     /**
@@ -546,8 +552,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $theme = new Theme([
-            'uuid'     => 'es.openhost.theme.foobar',
-            'realpath' => '/themes/foobar'
+            'realpath'   => '/themes/foobar',
+            'uuid'       => 'es.openhost.theme.foobar'
         ]);
 
         $this->lm->expects($this->once())->method('setPath')
