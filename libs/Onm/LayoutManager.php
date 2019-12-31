@@ -155,7 +155,9 @@ class LayoutManager
 
         $path = $this->path . '/' . $name . '.xml';
 
-        $this->layoutDoc = simplexml_load_file($path);
+        if (file_exists($path)) {
+            $this->layoutDoc = simplexml_load_file($path);
+        }
     }
 
     /**
