@@ -1,0 +1,80 @@
+parameters:
+    core.template.frontend.filters:
+        output:
+            - meta_amphtml
+            - noindex
+            - canonical_url
+            - ads_generator
+            - ads_scripts
+            - adsense_validator
+            - browser_update
+            - comscore
+            - chartbeat
+            - cmp_script
+            - google_tags_manager
+            - css_includes
+            - generate_fb_admin_tag
+            - generate_fb_pages_tag
+            - google_analytics
+            - js_includes
+            - ojd
+            - piwik
+    core.template.admin.filters:
+        output:
+            - css_includes
+            - js_includes
+            - backend_analytics
+            - browser_update
+            - trimwhitespace
+        ignore_cli:
+            - backend_analytics
+    core.template.manager.filters:
+        output:
+            - css_includes
+            - js_includes
+            - browser_update
+services:
+    core.template:
+        alias:     core.template.frontend
+        public:    true
+
+    core.template.admin:
+        class:     Common\Core\Component\Template\Template
+        factory:   [ '@core.template.factory', 'get' ]
+        arguments: [ 'admin' ]
+        public:    true
+
+    core.template.cache:
+        class:     Common\Core\Component\Template\Cache\CacheManager
+        arguments: [ '@view' ]
+        public:    true
+
+    core.template.factory:
+        class:     Common\Core\Component\Template\TemplateFactory
+        arguments: [ '@service_container', '@debug.stopwatch' ]
+        public:    true
+
+    core.template.frontend:
+        class:     Common\Core\Component\Template\Template
+        factory:   [ '@core.template.factory', 'get' ]
+        arguments: [ 'frontend' ]
+        public:    true
+
+    core.template.layout:
+        class:     Common\Core\Component\Template\Layout\LayoutManager
+        arguments: [ '@view' ]
+        public:    true
+
+    core.template.manager:
+        class:     Common\Core\Component\Template\Template
+        factory:   [ '@core.template.factory', 'get' ]
+        arguments: [ 'manager' ]
+        public:    true
+
+    template_cache_config_manager:
+        class:     Onm\Templating\Cache\Config
+        public:    true
+
+    view:
+        alias:     core.template.factory
+        public:    true
