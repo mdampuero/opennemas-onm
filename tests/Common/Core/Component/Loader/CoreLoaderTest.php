@@ -139,7 +139,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
-            case 'core.manager.layout':
+            case 'core.template.layout':
                 return $this->lm;
 
             case 'core.manager.menu':
