@@ -137,8 +137,13 @@ class Template extends \Smarty
      */
     public function addTheme($theme)
     {
-        $path = $theme->realpath . '/tpl';
-        $this->addTemplateDir($path);
+        $paths = $theme->multirepo
+            ? [ 'src/tpl', 'components/baseline/src/tpl' ]
+            : [ 'tpl' ];
+
+        foreach ($paths as $path) {
+            $this->addTemplateDir($theme->realpath . '/' . $path);
+        }
 
         if (!empty($theme->text_domain)) {
             $path = $theme->realpath . '/locale';

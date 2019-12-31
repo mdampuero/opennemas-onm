@@ -125,9 +125,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests addTheme.
+     * Tests addTheme when the theme to add is monorepo.
      */
-    public function testAddTheme()
+    public function testAddThemeForMonoRepo()
     {
         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->setMethods([ 'addTemplateDir', 'setupCache' ])
@@ -141,6 +141,32 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template->expects($this->once())->method('addTemplateDir')
             ->with('/glorp/waldo/tpl');
+        $this->locale->expects($this->once())->method('addTextDomain')
+            ->with('wubble', '/glorp/waldo/locale');
+
+        $template->addTheme($theme);
+    }
+
+    /**
+     * Tests addTheme when the theme to add is multirepo.
+     */
+    public function testAddThemeForMultiRepo()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setMethods([ 'addTemplateDir', 'setupCache' ])
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $theme = new Theme([
+            'multirepo'   => true,
+            'realpath'    => '/glorp/waldo',
+            'text_domain' => 'wubble'
+        ]);
+
+        $template->expects($this->at(0))->method('addTemplateDir')
+            ->with('/glorp/waldo/src/tpl');
+        $template->expects($this->at(1))->method('addTemplateDir')
+            ->with('/glorp/waldo/components/baseline/src/tpl');
         $this->locale->expects($this->once())->method('addTextDomain')
             ->with('wubble', '/glorp/waldo/locale');
 
