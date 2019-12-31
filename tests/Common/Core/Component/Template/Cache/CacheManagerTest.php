@@ -26,7 +26,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'clearAllCache', 'getCacheDir', 'getCacheId' ])
             ->getMock();
 
-        $this->templating = $this->getMockBuilder('Onm\Templating\Templating')
+        $this->templating = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
             ->disableOriginalConstructor()
             ->setMethods([ 'getBundleName', 'getTemplate' ])
             ->getMock();
@@ -53,7 +53,10 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
         $template->setAccessible(true);
 
-        $this->assertInstanceOf('Onm\Templating\Templating', $template->getValue($manager));
+        $this->assertInstanceOf(
+            'Common\Core\Component\Template\TemplateFactory',
+            $template->getValue($manager)
+        );
     }
 
     /**

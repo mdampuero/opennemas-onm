@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Template\Cache;
 
-use Onm\Templating\Templating;
+use Common\Core\Component\Template\TemplateFactory;
 
 class CacheManager
 {
@@ -23,9 +23,9 @@ class CacheManager
     /**
      * Initializes the current CacheManager.
      *
-     * @param Templating $template The Templating service.
+     * @param TemplateFactory $template The TemplateFactory service.
      */
-    public function __construct(Templating $template)
+    public function __construct(TemplateFactory $template)
     {
         $this->template = $template;
     }
