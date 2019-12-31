@@ -51,7 +51,7 @@ class Template extends \Smarty
      *
      * @var Instance
      */
-    protected $instance = null;
+    protected $instance;
 
     /**
      * Whether to include locale in the cache id.
@@ -102,9 +102,14 @@ class Template extends \Smarty
         $this->setTemplateVars();
         $this->setupCompiles($theme);
         $this->setupPlugins($theme);
-        $this->setupLayouts($theme);
 
         $this->addTheme($theme);
+
+        if (!empty($theme->parameters)
+            && array_key_exists('layouts', $theme->parameters)
+        ) {
+            $this->setupLayouts($theme);
+        }
     }
 
     /**
@@ -469,7 +474,7 @@ class Template extends \Smarty
     {
         $path = $theme->multirepo ? 'src/layouts' : 'layouts';
 
-        $this->container->get('core.manager.layout')
+        $this->container->get('core.template.layout')
             ->setPath($theme->realpath . '/' . $path);
     }
 
