@@ -5,7 +5,6 @@ imports:
     - { resource: services/orm_repositories.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
-    - { resource: services/templating.yml }
 
 services:
     acl_checker:
