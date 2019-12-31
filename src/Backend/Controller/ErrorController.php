@@ -27,7 +27,7 @@ class ErrorController extends Controller
         $exception = $request->attributes->get('exception');
         $class     = new \ReflectionClass($exception->getClass());
 
-        $this->view = $this->get('onm_templating')->getBackendTemplate();
+        $this->view = $this->get('view')->get('backend');
 
         switch ($class->getShortName()) {
             case 'AccessDeniedException':
