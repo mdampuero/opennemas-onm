@@ -102,6 +102,7 @@ class Template extends \Smarty
         $this->setTemplateVars();
         $this->setupCompiles($theme);
         $this->setupPlugins($theme);
+        $this->setupLayouts($theme);
 
         $this->addTheme($theme);
     }
@@ -457,6 +458,19 @@ class Template extends \Smarty
         }
 
         $this->setCompileDir($path);
+    }
+
+    /**
+     * Configures the path for the layout manager.
+     *
+     * @param Theme $theme The current theme.
+     */
+    protected function setupLayouts($theme)
+    {
+        $path = $theme->multirepo ? 'src/layouts' : 'layouts';
+
+        $this->container->get('core.manager.layout')
+            ->setPath($theme->realpath . '/' . $path);
     }
 
     /**

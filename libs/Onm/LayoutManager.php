@@ -39,9 +39,18 @@ class LayoutManager
     protected $layouts = [];
 
     /**
-     * The template service.
+     * The path to load layouts from.
+     *
+     * @var ?string
      */
-    protected $tpl;
+    protected $path = null;
+
+    /**
+     * The template service.
+     *
+     * @var Templating
+     */
+    protected $templating;
 
     /**
      * Initializes the LayoutManager.
@@ -50,7 +59,7 @@ class LayoutManager
      */
     public function __construct($templating)
     {
-        $this->tpl = $templating->getBackendTemplate();
+        $this->templating = $templating;
     }
 
     /**
@@ -91,6 +100,7 @@ class LayoutManager
         if (!array_key_exists($name, $this->layouts)) {
             return false;
         }
+
         return $this->layouts[$name];
     }
 
@@ -105,14 +115,130 @@ class LayoutManager
     }
 
     /**
-     * Loads a layout file.
+     * Renders the frontpage layout.
      *
-     * @param string $file The path to the file to load.
+     * @param array $params the list of params to pass to the template
+     *
+     * @param array $params the params for rendering the layout
+     *
+     * @return string
      */
-    public function load($file)
+    public function render($params = [])
     {
-        if (file_exists($file)) {
-            $this->layoutDoc = simplexml_load_file($file);
+        if (isset($params['contents'])) {
+            $this->contents             = $params['contents'];
+            $this->contentPositionByPos = $params['contentPositionByPos'];
+            unset($params['contents']);
+            unset($params['contentPositionByPos']);
+        }
+
+        $this->params = $params;
+
+        $output = [];
+        foreach ($this->layoutDoc as $element => $value) {
+            $output[] = $this->renderElement($element, $value, false);
+        }
+
+        return implode("\n", $output);
+    }
+
+    /**
+     * Selects and loads a layout.
+     *
+     * @param string $name The layout name.
+     */
+    public function selectLayout($name)
+    {
+        if (!array_key_exists($name, $this->layouts)) {
+            $name = 'default';
+        }
+
+        $path = $this->path . '/' . $name . '.xml';
+
+        $this->layoutDoc = simplexml_load_file($path);
+    }
+
+    /**
+     * Changes the path to the layouts directory.
+     *
+     * @param string $path The path to load layouts from.
+     */
+    public function setPath(string $path) : void
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * Sorts contents by one of its properties
+     *
+     * @param array  $contents the array of objects to sort
+     * @param string $order the sort method
+     *
+     * @return array the sorted array of contents
+     */
+    protected function orderContents(&$contents, $order)
+    {
+        if ($order == 'date DESC') {
+            $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
+            $contents = array_reverse($contents);
+        } elseif ($order == 'date') {
+            $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Returns the html for a given content
+     *
+     * @param Content $content the content instance to render
+     *
+     * @return string the html for the content
+     */
+    protected function renderContent($content)
+    {
+        $tpl = $this->templating->getBackendTemplate();
+
+        $tpl->assign('content', $content);
+        $tpl->assign('params', $this->params);
+
+        try {
+            $contentName = strtolower($content->content_type_name);
+
+            return $tpl->fetch(
+                $contentName . '/content-provider/' . $contentName . '.tpl'
+            );
+        } catch (\Exception $e) {
+            error_log('Error in LayoutManager::renderContent: ' . $e->getMessage());
+            return '';
+        }
+    }
+
+    /**
+     * Returns the html for a given placeholder
+     *
+     * @param string $placeholderName the name of the placeholder
+     * @param string $order           the order to sort the rendered contents
+     *
+     * @return string the final HTML for the rendered contents
+     */
+    protected function renderContentsForPlaceholder($placeholderName, $order)
+    {
+        if (isset($this->contentPositionByPos) &&
+            array_key_exists((string) $placeholderName, $this->contentPositionByPos)
+        ) {
+            $contentPositionsOrder = $this->orderContents(
+                $this->contentPositionByPos[(string) $placeholderName],
+                (string) $order
+            );
+            $output                = '';
+            foreach ($contentPositionsOrder as $contentPosition) {
+                $output .= $this->renderContent(
+                    $this->contents[$contentPosition->pk_fk_content]
+                );
+            }
+
+            return $output;
         }
     }
 
@@ -125,7 +251,7 @@ class LayoutManager
      *
      * @return string the HTML generated for a static placeholder
      */
-    public function renderElement($element, $value, $last)
+    protected function renderElement($element, $value, $last)
     {
         $output = [];
         switch ($element) {
@@ -146,35 +272,6 @@ class LayoutManager
     }
 
     /**
-     * Renders a placeholder wrapper
-     *
-     * @param string  $elementType the kind of element
-     * @param array   $innerValues the properties for this wrapper
-     * @param boolean $isLast      true if this element will be last in a column
-     *
-     * @return string the HTML generated for a static placeholder
-     */
-    public function renderWrapper($elementType, $innerValues, $isLast)
-    {
-        $output   = [];
-        $last     = ($isLast) ? ' last' : '';
-        $output[] = '<div class="wrapper clearfix span-' .
-            $innerValues['width'] . $last . '">';
-
-        $total    = count($innerValues->children());
-        $position = 0;
-        $last     = false;
-        foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner) {
-            $position++;
-            $last     = ($total == $position);
-            $output[] = $this->renderElement($elementTypeInner, $innerValuesInner, $last);
-        }
-        $output[] = '</div><!-- end wrapper -->';
-
-        return implode("\n", $output);
-    }
-
-    /**
      * Renders a placeholder
      *
      * @param string  $elementType the kind of element
@@ -183,7 +280,7 @@ class LayoutManager
      *
      * @return string the HTML generated for a static placeholder
      */
-    public function renderPlaceholder($elementType, $innerValues, $isLast)
+    protected function renderPlaceholder($elementType, $innerValues, $isLast)
     {
         $last        = ($isLast) ? ' last' : '';
         $description = '';
@@ -219,7 +316,7 @@ class LayoutManager
      *
      * @return string the HTML generated for a static placeholder
      */
-    public function renderStatic($elementType, $innerValues, $isLast)
+    protected function renderStatic($elementType, $innerValues, $isLast)
     {
         $last        = ($isLast) ? ' last' : '';
         $description = '';
@@ -238,100 +335,30 @@ class LayoutManager
     }
 
     /**
-     * Returns the html for a given placeholder
+     * Renders a placeholder wrapper
      *
-     * @param string $placeholderName the name of the placeholder
-     * @param string $order           the order to sort the rendered contents
+     * @param string  $elementType the kind of element
+     * @param array   $innerValues the properties for this wrapper
+     * @param boolean $isLast      true if this element will be last in a column
      *
-     * @return string the final HTML for the rendered contents
+     * @return string the HTML generated for a static placeholder
      */
-    public function renderContentsForPlaceholder($placeholderName, $order)
+    protected function renderWrapper($elementType, $innerValues, $isLast)
     {
-        if (isset($this->contentPositionByPos) &&
-            array_key_exists((string) $placeholderName, $this->contentPositionByPos)
-        ) {
-            $contentPositionsOrder = $this->orderContents(
-                $this->contentPositionByPos[(string) $placeholderName],
-                (string) $order
-            );
-            $output                = '';
-            foreach ($contentPositionsOrder as $contentPosition) {
-                $output .= $this->renderContent(
-                    $this->contents[$contentPosition->pk_fk_content]
-                );
-            }
+        $output   = [];
+        $last     = ($isLast) ? ' last' : '';
+        $output[] = '<div class="wrapper clearfix span-' .
+            $innerValues['width'] . $last . '">';
 
-            return $output;
+        $total    = count($innerValues->children());
+        $position = 0;
+        $last     = false;
+        foreach ($innerValues->children() as $elementTypeInner => $innerValuesInner) {
+            $position++;
+            $last     = ($total == $position);
+            $output[] = $this->renderElement($elementTypeInner, $innerValuesInner, $last);
         }
-    }
-
-    /**
-     * Sorts contents by one of its properties
-     *
-     * @param array  $contents the array of objects to sort
-     * @param string $order the sort method
-     *
-     * @return array the sorted array of contents
-     */
-    public static function orderContents(&$contents, $order)
-    {
-        if ($order == 'date DESC') {
-            $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
-            $contents = array_reverse($contents);
-        } elseif ($order == 'date') {
-            $contents = \ContentManager::sortArrayofObjectsByProperty($contents, 'starttime');
-        }
-
-        return $contents;
-    }
-
-    /**
-     * Returns the html for a given content
-     *
-     * @param Content $content the content instance to render
-     *
-     * @return string the html for the content
-     */
-    private function renderContent($content)
-    {
-        $this->tpl->assign('content', $content);
-        $this->tpl->assign('params', $this->params);
-        try {
-            $contentName = strtolower($content->content_type_name);
-
-            return $this->tpl->fetch(
-                $contentName . '/content-provider/' . $contentName . '.tpl'
-            );
-        } catch (\Exception $e) {
-            error_log('Error in LayoutManager::renderContent: ' . $e->getMessage());
-            return '';
-        }
-    }
-
-    /**
-     * Renders the frontpage layout.
-     *
-     * @param array $params the list of params to pass to the template
-     *
-     * @param array $params the params for rendering the layout
-     *
-     * @return string
-     */
-    public function render($params = [])
-    {
-        if (isset($params['contents'])) {
-            $this->contents             = $params['contents'];
-            $this->contentPositionByPos = $params['contentPositionByPos'];
-            unset($params['contents']);
-            unset($params['contentPositionByPos']);
-        }
-
-        $this->params = $params;
-
-        $output = [];
-        foreach ($this->layoutDoc as $element => $value) {
-            $output[] = $this->renderElement($element, $value, false);
-        }
+        $output[] = '</div><!-- end wrapper -->';
 
         return implode("\n", $output);
     }

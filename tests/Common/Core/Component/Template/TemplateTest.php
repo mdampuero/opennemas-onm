@@ -21,6 +21,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'getParameter', 'hasParameter' ])
             ->getMock();
 
+        $this->lm = $this->getMockBuilder('\Onm\LayoutManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'setPath' ])
+            ->getMock();
+
         $this->locale = $this->getMockBuilder('Locale')
             ->setMethods([ 'addTextDomain', 'getRequestLocale' ])
             ->getMock();
@@ -47,11 +52,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'orm.manager':
-                return $this->ormManager;
-
             case 'core.locale':
                 return $this->locale;
+
+            case 'core.manager.layout':
+                return $this->lm;
+
+            case 'orm.manager':
+                return $this->ormManager;
 
             case 'request_stack':
                 return $this->rs;
@@ -67,13 +75,16 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testAddActiveTheme()
     {
         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
-            ->setMethods([ 'addTheme', 'setTemplateVars', 'setupCompiles', 'setupPlugins' ])
-            ->setConstructorArgs([ $this->container, [] ])
+            ->setMethods([
+                'addTheme', 'setTemplateVars', 'setupCompiles', 'setupLayouts',
+                'setupPlugins'
+            ])->setConstructorArgs([ $this->container, [] ])
             ->getMock();
 
         $template->expects($this->once())->method('setTemplateVars');
         $template->expects($this->once())->method('setupCompiles')->with('wubble');
         $template->expects($this->once())->method('setupPlugins')->with('wubble');
+        $template->expects($this->once())->method('setupLayouts')->with('wubble');
         $template->expects($this->once())->method('addTheme')->with('wubble');
 
         $template->addActiveTheme('wubble');
@@ -135,7 +146,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $theme = new Theme([
-            'realpath' => '/glorp/waldo',
+            'realpath'    => '/glorp/waldo',
             'text_domain' => 'wubble'
         ]);
 
@@ -520,6 +531,29 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $method->invokeArgs($template, []);
+    }
+
+    /**
+     * Tests setupLayouts.
+     */
+    public function testSetupLayouts()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($template, 'setupLayouts');
+        $method->setAccessible(true);
+
+        $theme = new Theme([
+            'uuid'     => 'es.openhost.theme.foobar',
+            'realpath' => '/themes/foobar'
+        ]);
+
+        $this->lm->expects($this->once())->method('setPath')
+            ->with('/themes/foobar/layouts');
+
+        $method->invokeArgs($template, [ $theme ]);
     }
 
     /**
