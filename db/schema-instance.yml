@@ -1183,9 +1183,6 @@ photos:
         height:
             type: integer
             options: { unsigned: true, default: null, notnull: false }
-        nameCat: # TODO: remove?
-            type: string
-            options: { length: 250, default: '1', notnull: false }
         author_name:
             type: string
             options: { length: 200, default: null, notnull: false}
