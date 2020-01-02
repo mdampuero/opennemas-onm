@@ -5,7 +5,7 @@
 {/block}
 
 {block name="item"}
-  <div ng-click="select(item)">
+  <div class="pointer" ng-click="select(item)">
     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" transform="zoomcrop,400,400">
       <div class="hidden-select" ng-click="select(item);toggleItem(item); xsOnly($event, toggle, item)"></div>
       <div class="thumbnail-actions thumbnail-actions-3x ng-cloak">

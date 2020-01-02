@@ -31,7 +31,7 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <div ng-model="item" ng-click="open('modal-image', item)">
+    <div class="pointer" ng-model="item" ng-click="open('modal-image', item)">
       <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" transform="zoomcrop,220,220"></dynamic-image>
     </div>
   </td>
