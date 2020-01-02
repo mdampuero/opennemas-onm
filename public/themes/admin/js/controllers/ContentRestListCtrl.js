@@ -79,6 +79,15 @@
         };
 
         /**
+         * Reloads the image list on media picker close event.
+         */
+        $scope.$on('MediaPicker.close', function() {
+          if ($scope.criteria.content_type_name === 'photo') {
+            $scope.list($scope.route, true);
+          }
+        });
+
+        /**
          * Updates the array of contents.
          *
          * @param {Boolean} reset Whether to reset the list.
