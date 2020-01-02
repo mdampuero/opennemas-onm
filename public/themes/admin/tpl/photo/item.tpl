@@ -57,7 +57,7 @@
         <label style="margin-top:10px" for="author_name" class="form-label">{t}Copyright{/t}</label>
         <div class="controls">
           <div class="input-group">
-            <input class="form-control" type="text" id="author_name" name="author_name" value='{$photo->author_name|clearslash}'/>
+            <input class="form-control" type="text" id="author_name" name="author_name" ng-model="item.author_name"/>
             <span class="input-group-addon add-on">
               <span class="fa fa-copyright"></span>
             </span>
