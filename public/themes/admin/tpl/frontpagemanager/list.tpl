@@ -39,7 +39,6 @@
 
 {block name="content"}
 <form action="#" method="get" name="frontpageForm" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanager-wrapper">
-  <div>
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -249,7 +248,6 @@
       <span class="fa fa-plus"></span>
       <span class='btn-add-new-contents-title'>{t}Add contents{/t}</span>
     </a>
-  </div>
 
   <div class="content ng-cloak">
     <div id="warnings-validation"></div>
