@@ -83,6 +83,8 @@ abstract class Cache extends DataBuffer
     {
         $this->addToBuffer('removeByPattern', [ 'pattern' => $pattern ]);
 
+        $pattern = $this->getNamespacedId($pattern);
+
         $this->deleteByPattern($pattern);
     }
 
@@ -211,11 +213,9 @@ abstract class Cache extends DataBuffer
     protected function getNamespacedId($id)
     {
         if (is_array($id)) {
-            foreach ($id as &$i) {
-                $i = $this->getNamespacedId($i);
-            }
-
-            return $id;
+            return array_map(function ($a) {
+                return $this->getNamespacedId($a);
+            }, $id);
         }
 
         $namespace = $this->getPrefix() . $this->namespace . '_';
