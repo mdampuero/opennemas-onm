@@ -36,6 +36,7 @@ class TemplateFactory
      * Initializes the TemplateFactory.
      *
      * @param Container $container The service container.
+     * @param Stopwatch $watcher   The Stopwatch service.
      */
     public function __construct($container, $watcher)
     {
@@ -56,17 +57,15 @@ class TemplateFactory
      */
     public function __call($method, $params)
     {
-        $bundleName = $this->getBundleName();
-
         if ($method === 'fetch' && !empty($this->watcher)) {
-            $this->watcher->start("template ({$bundleName} {$params[0]})");
+            $this->watcher->start("template ({$params[0]})");
         }
 
         $template = $this->get();
         $response = call_user_func_array([ $template, $method ], $params);
 
         if ($method === 'fetch' && !empty($this->watcher)) {
-            $this->watcher->stop("template ({$bundleName} {$params[0]})");
+            $this->watcher->stop("template ({$params[0]})");
         }
 
         return $response;
@@ -119,9 +118,9 @@ class TemplateFactory
      */
     protected function getInternalName(?string $name) : string
     {
-        $name = !empty($name) ? $name : $this->getBundleName();
+        $name = !empty($name) ? strtolower($name) : $this->getBundleName();
 
-        if (empty($name) || $name === 'Frontend' || $name === 'frontend') {
+        if (empty($name) || $name === 'frontend') {
             return 'frontend';
         }
 
@@ -142,11 +141,9 @@ class TemplateFactory
      */
     protected function getTemplate($name) : Template
     {
-        $filters = 'core.template.' . $name . '.filters';
-
-        $uuid = $name === 'frontend'
-            ? $this->container->get('core.instance')->settings['TEMPLATE_USER']
-            : 'es.openhost.theme.' . $name;
+        $filters  = 'core.template.' . $name . '.filters';
+        $uuid     = 'es.openhost.theme.' . $name;
+        $instance = $this->container->get('core.instance');
 
         $filters = $this->container->hasParameter($filters)
             ? $this->container->getParameter($filters)
@@ -154,7 +151,12 @@ class TemplateFactory
 
         $template = new Template($this->container, $filters);
 
-        $template->addInstance($this->container->get('core.instance'));
+        // Use instance theme for frontend only
+        if ($name === 'frontend' && !empty($instance)) {
+            $uuid = $instance->settings['TEMPLATE_USER'];
+
+            $template->addInstance($instance);
+        }
 
         try {
             $theme = $this->container->get('orm.manager')
@@ -163,7 +165,7 @@ class TemplateFactory
 
             $template->addActiveTheme($theme);
         } catch (\Exception $e) {
-            // Prevents notices for Symfony profiler requests
+            // Prevent notices for Symfony profiler requests
         }
 
         $this->templates[$name] = $template;
