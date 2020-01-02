@@ -134,6 +134,12 @@ class ApiController extends Controller
         $us  = $this->get($this->service);
         $oql = $request->query->get('oql', '');
 
+        $oql = preg_replace(
+            '/month\s*=\s*"([0-9-]+)"/',
+            '(DATE_FORMAT(created, "%Y-%m") = "$1")',
+            $oql
+        );
+
         $response = $us->getList($oql);
 
         return [

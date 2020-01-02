@@ -35,4 +35,33 @@ class PhotoController extends ContentOldController
     {
         return $this->get($this->service)->getL10nKeys('photo');
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        $years   = [];
+        $conn    = $this->get('orm.manager')->getConnection('instance');
+        $results = $conn->fetchAll(
+
+            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
+            WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
+        );
+
+        foreach ($results as $value) {
+            $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
+            $fmt  = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+
+            if (!is_null($fmt)) {
+                $years[$date->format('Y')]['name']     = $date->format('Y');
+                $years[$date->format('Y')]['months'][] = [
+                    'name'  => ucfirst($fmt->format($date)),
+                    'value' => $value['date_month']
+                ];
+            }
+        }
+
+        return array_merge(parent::getExtraData($items), [ 'years' => array_values($years) ]);
+    }
 }

@@ -57,7 +57,7 @@
   <li class="hidden-xs ng-cloak quicklinks">
     <select name="month" ng-model="criteria.month">
       <option value="">{t}All months{/t}</option>
-      <optgroup label="[% year.name %]" ng-repeat="year in years">
+      <optgroup label="[% year.name %]" ng-repeat="year in data.extra.years">
         <option value="[% month.value %]" ng-repeat="month in year.months">
           [% month.name %] ([% year.name %])
         </option>

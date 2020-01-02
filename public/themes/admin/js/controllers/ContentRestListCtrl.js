@@ -109,7 +109,6 @@
 
           return http.get(route).then(function(response) {
             $scope.data = response.data;
-
             $scope.parseList(response.data);
             $scope.disableFlags('http');
           }, function(response) {
