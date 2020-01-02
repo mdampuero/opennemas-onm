@@ -79,6 +79,11 @@ services:
         arguments: [ '@service_container', '\Poll' ]
         public:    true
 
+    api.service.redis:
+        class:     Api\Service\V1\RedisService
+        arguments: [ '@service_container' ]
+        public:    true
+
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
         arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
