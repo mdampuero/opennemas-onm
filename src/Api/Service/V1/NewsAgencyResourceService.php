@@ -20,7 +20,6 @@ use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
 use Common\NewsAgency\Component\Repository\LocalRepository;
-use Common\Task\Component\Task\ServiceTask;
 use Symfony\Component\Finder\Finder;
 
 class NewsAgencyResourceService implements Service
