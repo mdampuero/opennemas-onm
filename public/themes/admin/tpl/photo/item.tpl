@@ -40,11 +40,11 @@
         {t}Parameters{/t}
       </div>
     </div>
-    <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.resolution = !expanded.resolution">
-      <i class="fa fa-picture-o m-r-10"></i>{t}Resolution{/t}
-      <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.resolution }"></i>
+    <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.information = !expanded.information">
+      <i class="fa fa-info-circle m-r-10"></i>{t}Information{/t}
+      <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.information }"></i>
     </div>
-    <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.resolution }">
+    <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.information }">
       <div class="row">
         <div class="col-sm-6">
           <strong>{t}Resolution{/t}</strong> [% item.width %]px X [% item.height %]px
@@ -53,38 +53,19 @@
           <strong>{t}Size{/t}</strong> [% item.size %] KB
         </div>
       </div>
-    </div>
-    <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.copyright = !expanded.copyright">
-      <i class="fa fa-users m-r-10"></i>{t}Copyright{/t}
-      <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.copyright }"></i>
-    </div>
-    <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.copyright }">
-      <div class="controls">
-        <div class="input-group">
-          <input class="form-control" type="text" id="author_name" name="author_name" ng-model="item.author_name"/>
-          <span class="input-group-addon add-on">
-            <span class="fa fa-copyright"></span>
-          </span>
+      <div class="form-group">
+        <label style="margin-top:10px" for="author_name" class="form-label">{t}Copyright{/t}</label>
+        <div class="controls">
+          <div class="input-group">
+            <input class="form-control" type="text" id="author_name" name="author_name" value='{$photo->author_name|clearslash}'/>
+            <span class="input-group-addon add-on">
+              <span class="fa fa-copyright"></span>
+            </span>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.location = !expanded.location">
-      <i class="fa fa-map-marker m-r-10"></i>{t}Location{/t}
-      <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.location }"></i>
-    </div>
-    <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.location }">
-      <div class="controls">
-        <div class="input-group">
-          <input class="form-control photo_address" type="text" id="address" name="address" ng-model="item.address"/>
-          <span class="input-group-btn">
-            <button class="locate btn btn-default" data-image-id="{$photo->id}" data-toggle="modal" href="#modal-image-location" type="button">
-              <i class="fa fa-map-marker"></i>
-            </button>
-          </span>
-        </div>
-      </div>
     </div>
   </div>
+</div>
 {/block}
 
 {block name="leftColumn"}
