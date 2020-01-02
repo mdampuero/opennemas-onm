@@ -264,7 +264,7 @@ class Photo extends Content
 
             $fs = new Filesystem();
 
-            if ($fs->exists($path) && is_dir($path)) {
+            if ($fs->exists($path) && !is_dir($path)) {
                 $fs->remove($path);
             }
         }

@@ -156,7 +156,7 @@ class ContentOldService implements Service
             try {
                 $id = $item->pk_content;
 
-                $item->remove();
+                $item->remove($item->pk_content);
 
                 $deleted[] = $id;
                 $items[]   = $item;
