@@ -118,7 +118,7 @@
                       '</div>' +
                       '<ul class="media-information">' +
                         '<li>' +
-                          '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.id}) %]" target="_blank">' +
+                          '<a ng-href="[% routing.generate(\'backend_photo_show\', { id: selected.lastSelected.id}) %]">' +
                             '<strong>' +
                               '[% selected.lastSelected.name %]' +
                               '<i class="fa fa-edit"></i>' +
