@@ -76,6 +76,43 @@
         </div>
       </div>
     {/block}
-    {block name="modals"}{/block}
+    {block name="modals"}
+    <div class="modal fade" id="modal-image-location">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">{t}Pick a location for the image{/t}</h4>
+        </div>
+        <div class="modal-body">
+          <div id="geolocation" class="has-map">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" class="form-control address_search_input noentersubmit">
+                <span class="input-group-btn">
+                  <button class="geolocate_user_button btn btn-default" rel="tooltip" data-placement="left" data-original-title="{t}Geolocate photo with my position{/t}">
+                    <i class="fa fa-location-arrow"></i>
+                  </button>
+                  <button class="btn btn-default" class="geocode_button"/>
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+              <input type="hidden" class="final_address" value="">
+            </div>
+            <div class="map">
+              <div id="map_canvas"></div>
+            </div>
+           </div><!-- /geolocation -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary accept" href="#" type="button">
+            {t}Assign location{/t}
+          </a>
+        </div>
+      </div>
+    </div>
+    </div>
+    {/block}
   </form>
 {/block}
