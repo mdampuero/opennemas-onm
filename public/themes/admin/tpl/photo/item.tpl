@@ -61,8 +61,52 @@
             <span class="input-group-addon add-on">
               <span class="fa fa-copyright"></span>
             </span>
-          </div>
         </div>
+      </div>
+      <div class="iptc-exif">
+        <h5 class="toggler toggler" ng-click="info = !info">
+        {t escape=off}View advanced data{/t}
+        <span>
+          <i class="fa" ng-class="{ 'fa-plus-square-o': !info, 'fa-minus-square-o': info }"></i>
+        </span>
+        </h5>
+      </div>
+      <div class="info ng-cloak" ng-if="info">
+        {if is_null($photo->exif) neq true}
+          <h6>{t}EXIF Data{/t}</h6>
+          <div id="exif" class="photo-static-info">
+            {foreach $photo->exif as $name => $value}
+              {foreach $value as $d => $dato}
+              <p>
+                <strong>{$d}</strong> : {$dato}
+              </p>
+              {/foreach}
+            {/foreach}
+          </div>
+        {else}
+          <div id="exif" class="photo-static-info">
+            {t}No available EXIF data.{/t}
+          </div>
+        {/if}
+
+        {if isset($photo->myiptc)}
+          <h6>{t}IPTC Data{/t}</h6>
+          <div id="iptc" class="photo-static-info">
+            {foreach $photo->myiptc as $name => $value}
+            {if $name}
+            <p>
+              <strong>{$name}</strong> : {$value}
+            </p>
+            {/if}
+            {/foreach}
+            <br />
+          </div>
+        {else}
+          <div id="iptc" class="photo-static-info">
+            {t}No available IPTC data.{/t}
+          </div>
+        {/if}
+      </div><!-- /additional-info -->
     </div>
   </div>
 </div>
