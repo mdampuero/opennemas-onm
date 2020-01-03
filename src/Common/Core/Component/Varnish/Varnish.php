@@ -83,7 +83,7 @@ class Varnish
     protected function parseResponse(string $response) : string
     {
         if (!preg_match('@(Ban not allowed|Ban added|No Ban specified)@i', $response)) {
-            return 'Not valid response from varnish.';
+            return 'Unknown response';
         }
 
         return $response;
