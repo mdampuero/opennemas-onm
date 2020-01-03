@@ -11,7 +11,8 @@ namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\ORM\Entity\Instance;
-use Onm\Varnish\MessageExchanger;
+use Common\Task\Component\Queue\Queue;
+use Common\Task\Component\Task\ServiceTask;
 
 class VarnishHelper
 {
@@ -23,21 +24,22 @@ class VarnishHelper
     protected $uh;
 
     /**
-     * The varnish service.
+     * The task queue service.
      *
-     * @var MessageExchanger
+     * @var Queue
      */
-    protected $varnish;
+    protected $queue;
 
     /**
      * Initializes the VarnishCacheHelper.
      *
-     * @param MesasgeExchanger $varnish The varnish MessageExchanger service.
+     * @param UrlGeneratorHelper $uh    The URL generator helper.
+     * @param Queue              $queue The task queue service.
      */
-    public function __construct(UrlGeneratorHelper $uh, MessageExchanger $varnish)
+    public function __construct(UrlGeneratorHelper $uh, Queue $queue)
     {
-        $this->uh      = $uh;
-        $this->varnish = $varnish;
+        $this->uh    = $uh;
+        $this->queue = $queue;
     }
 
     /**
@@ -48,9 +50,9 @@ class VarnishHelper
     public function deleteFiles(array $files)
     {
         foreach ($files as $file) {
-            $this->varnish->addBanMessage(
+            $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
                 sprintf('req.url ~ %s', $this->uh->generate($file))
-            );
+            ]));
         }
     }
 
@@ -62,13 +64,13 @@ class VarnishHelper
     public function deleteNewsstands(array $newsstands)
     {
         foreach ($newsstands as $newsstand) {
-            $this->varnish->addBanMessage(
+            $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
                 sprintf('obj.http.x-tags ~ %s', $newsstand->pk_content)
-            );
+            ]));
 
-            $this->varnish->addBanMessage(
+            $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
                 sprintf('req.url ~ %s', $newsstand->path)
-            );
+            ]));
         }
     }
 
@@ -79,8 +81,8 @@ class VarnishHelper
      */
     public function deleteInstance(Instance $instance)
     {
-        $this->varnish->addBanMessage(
+        $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
             sprintf('obj.http.x-tags ~ instance-%s', $instance->internal_name)
-        );
+        ]));
     }
 }
