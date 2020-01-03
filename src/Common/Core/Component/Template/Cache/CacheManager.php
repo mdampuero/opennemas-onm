@@ -234,26 +234,6 @@ class CacheManager
     }
 
     /**
-     * Saves the Smarty configuration to the configuration file.
-     *
-     * @param array $config The configuration to save.
-     */
-    public function save(array $config = [])
-    {
-        $path    = $this->path . '/cache.conf';
-        $config  = empty($config) ? $this->defaults : $config;
-        $content = '';
-
-        foreach ($config as $section => $entry) {
-            $content .= '[' . $section . ']' . "\n"
-                . 'caching = ' . $entry['caching'] . "\n"
-                . 'cache_lifetime = ' . $entry['cache_lifetime'] . "\n\n";
-        }
-
-        $this->fs->dumpFile($path, $content);
-    }
-
-    /**
      * Changes the path to directory where *.ini file is stored.
      *
      * @param string $path The path to the configuration directory.
@@ -265,6 +245,26 @@ class CacheManager
         $this->path = $path;
 
         return $this;
+    }
+
+    /**
+     * Saves the Smarty configuration to the configuration file.
+     *
+     * @param array $config The configuration to save.
+     */
+    public function write(array $config = [])
+    {
+        $path    = $this->path . '/cache.conf';
+        $config  = array_merge_recursive($this->defaults, $config);
+        $content = '';
+
+        foreach ($config as $section => $entry) {
+            $content .= '[' . $section . ']' . "\n"
+                . 'caching = ' . $entry['caching'] . "\n"
+                . 'cache_lifetime = ' . $entry['cache_lifetime'] . "\n\n";
+        }
+
+        $this->fs->dumpFile($path, $content);
     }
 
     /**

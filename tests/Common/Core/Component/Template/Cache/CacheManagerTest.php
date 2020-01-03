@@ -129,22 +129,6 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests save.
-     */
-    public function testSave()
-    {
-        $this->fs->expects($this->once())->method('dumpFile')
-            ->with('/cache.conf', "[flob]\ncaching = 0\ncache_lifetime = 16405\n\n");
-
-        $this->manager->save([
-            'flob' => [
-                'cache_lifetime' => 16405,
-                'caching'        => 0,
-            ]
-        ]);
-    }
-
-    /**
      * Tests setPath.
      */
     public function testSetPath()
@@ -154,6 +138,20 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($this->manager, $this->manager->setPath('flob'));
         $this->assertEquals('flob', $property->getValue($this->manager));
+    }
+
+    /**
+     * Tests write.
+     */
+    public function testWrite()
+    {
+        $this->fs->expects($this->once())->method('dumpFile')
+            ->with('/cache.conf');
+
+        $this->manager->write([ 'flob' => [
+            'cache_lifetime' => 16405,
+            'caching'        => 0,
+        ] ]);
     }
 
     /**
