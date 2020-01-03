@@ -160,12 +160,18 @@ class RedisServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests deleteList.
-     *
-     * @expectedException Api\Exception\DeleteListException
      */
     public function testDeleteList()
     {
-        $this->service->deleteList([ 16373 ]);
+        $service = $this->getMockBuilder('Api\Service\V1\RedisService')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'deleteItemByPattern' ])
+            ->getMock();
+
+        $service->expects($this->once())->method('deleteItemByPattern')
+            ->with('*');
+
+        $service->deleteList([]);
     }
 
     /**

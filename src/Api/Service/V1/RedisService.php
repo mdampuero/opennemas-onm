@@ -94,7 +94,7 @@ class RedisService implements Service
      */
     public function deleteList($ids)
     {
-        throw new DeleteListException('Action not implemented', 400);
+        return $this->deleteItemByPattern('*');
     }
 
     /**
