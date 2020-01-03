@@ -9,21 +9,14 @@
  */
 namespace Common\Core\EventSubscriber;
 
-use Common\Cache\Core\Cache;
 use Common\Core\Component\EventDispatcher\Event;
 use Common\ORM\Entity\Instance;
+use Common\Task\Component\Queue\Queue;
+use Common\Task\Component\Task\ServiceTask;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Onm\Varnish\MessageExchanger;
 
 class RedirectorSubscriber implements EventSubscriberInterface
 {
-    /**
-     * The cache connection.
-     *
-     * @var Cache
-     */
-    protected $cache;
-
     /**
      * The current instance.
      *
@@ -32,23 +25,22 @@ class RedirectorSubscriber implements EventSubscriberInterface
     protected $instance;
 
     /**
-     * The Varnish message exchanger service.
+     * The task queue service.
      *
-     * @var MessageExchanger
+     * @var Queue
      */
-    protected $varnish;
+    protected $queue;
 
     /**
      * Initializes the RedirectorSubscriber.
      *
-     * @param Cache    $cache    The cache connection.
-     * @param Instance $instance The current instance.
+     * @param Instance  $instance The current instance.
+     * @param TaskQueue $tq       The task queue service.
      */
-    public function __construct(Cache $cache, ?Instance $instance, MessageExchanger $varnish)
+    public function __construct(?Instance $instance, Queue $queue)
     {
-        $this->cache    = $cache;
         $this->instance = $instance;
-        $this->varnish  = $varnish;
+        $this->queue    = $queue;
     }
 
     /**
@@ -94,7 +86,11 @@ class RedirectorSubscriber implements EventSubscriberInterface
     {
         $pattern = '*' . $this->instance->internal_name . '_redirector*';
 
-        $this->cache->removeByPattern($pattern);
+        $this->queue->push(new ServiceTask(
+            'cache.connection.instance',
+            'removeByPattern',
+            [ $pattern ]
+        ));
     }
 
     /**
@@ -117,8 +113,12 @@ class RedirectorSubscriber implements EventSubscriberInterface
             }, $event->getArgument('ids')));
         }
 
-        $this->varnish->addBanMessage(
-            sprintf('obj.http.x-tags ~ %s', implode('|', $ids))
-        );
+        $request = sprintf('obj.http.x-tags ~ %s', implode('|', $ids));
+
+        $this->queue->push(new ServiceTask(
+            'varnish_cleaner',
+            'ban',
+            [ $request ]
+        ));
     }
 }
