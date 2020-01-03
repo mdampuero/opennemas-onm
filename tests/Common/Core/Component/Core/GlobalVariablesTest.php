@@ -22,11 +22,78 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->ah = $this->getMockBuilder('Core\Component\Helper\AdvertisementHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getGroup' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
+        $this->cs = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->rs = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
+        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->getMock();
+
+        $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getValue', 'hasValue' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->rs->expects($this->once())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
         $this->globals = new GlobalVariables($this->container);
+    }
+
+    /**
+     * Returns a mocked service based on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'api.service.category':
+                return $this->cs;
+
+            case 'core.helper.advertisement':
+                return $this->ah;
+
+            case 'core.helper.subscription':
+                return 'waldo';
+
+            case 'core.security':
+                return 'grault';
+
+            case 'core.template':
+                return $this->template;
+
+            case 'core.theme':
+                return 'wobble';
+
+            case 'core.user':
+                return 'bar';
+
+            case 'request_stack':
+                return $this->rs;
+
+            default:
+                return null;
+        }
     }
 
     /**
@@ -34,16 +101,8 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAdvertisementGroup()
     {
-        $helper = $this->getMockBuilder('Core\Component\Helper\AdvertisementHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getGroup' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getGroup')
+        $this->ah->expects($this->once())->method('getGroup')
             ->willReturn('wobble');
-
-        $this->container->expects($this->once())->method('get')
-            ->with('core.helper.advertisement')->willReturn($helper);
 
         $this->assertEquals('wobble', $this->globals->getAdvertisementGroup());
     }
@@ -53,14 +112,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategories()
     {
-        $service = $this->getMockBuilder('Api\Service\V1\CategoryService')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->container->expects($this->once())->method('get')
-            ->with('api.service.category')->willReturn($service);
-
-        $this->assertEquals($service, $this->globals->getCategories());
+        $this->assertEquals($this->cs, $this->globals->getCategories());
     }
 
     /**
@@ -109,24 +161,13 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSectionWithCategory()
     {
-        $category       = new Category();
-        $category->name = 'foo';
-
-        $smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getValue', 'hasValue' ])
-            ->getMock();
-
-        $this->container->expects($this->once())->method('get')
-            ->with('core.template')
-            ->willReturn($smarty);
-
-        $smarty->expects($this->at(0))->method('hasValue')
+        $this->template->expects($this->at(0))->method('hasValue')
             ->with('o_category')
             ->willReturn(true);
 
-        $smarty->expects($this->at(1))->method('getValue')
+        $this->template->expects($this->at(1))->method('getValue')
             ->with('o_category')
-            ->willReturn($category);
+            ->willReturn(new Category([ 'name' => 'foo' ]));
 
         $this->assertEquals('foo', $this->globals->getSection());
     }
@@ -136,15 +177,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSectionWithoutCategory()
     {
-        $smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'hasValue' ])
-            ->getMock();
-
-        $this->container->expects($this->once())->method('get')
-            ->with('core.template')
-            ->willReturn($smarty);
-
-        $smarty->expects($this->once())->method('hasValue')
+        $this->template->expects($this->once())->method('hasValue')
             ->willReturn(false);
 
         $this->assertEquals('home', $this->globals->getSection());
@@ -155,10 +188,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSecurity()
     {
-        $this->container->expects($this->once())->method('get')
-            ->with('core.security');
-
-        $this->globals->getSecurity();
+        $this->assertEquals('grault', $this->globals->getSecurity());
     }
 
     /**
@@ -166,9 +196,6 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSubscription()
     {
-        $this->container->expects($this->once())->method('get')
-            ->with('core.helper.subscription')->willReturn('waldo');
-
         $this->assertEquals('waldo', $this->globals->getSubscription());
     }
 
@@ -177,9 +204,6 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTheme()
     {
-        $this->container->expects($this->once())->method('get')
-            ->with('core.theme')->willReturn('wobble');
-
         $this->assertEquals('wobble', $this->globals->getTheme());
     }
 
@@ -188,10 +212,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUser()
     {
-        $this->container->expects($this->once())->method('get')
-            ->with('core.user');
-
-        $this->globals->getUser();
+        $this->assertEquals('bar', $this->globals->getUser());
     }
 
     /**
@@ -208,9 +229,6 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testOffsetGet()
     {
-        $this->container->expects($this->once())->method('get')
-            ->with('core.user')->willReturn('bar');
-
         $this->assertEquals('bar', $this->globals['user']);
         $this->assertEmpty($this->globals['plugh']);
     }

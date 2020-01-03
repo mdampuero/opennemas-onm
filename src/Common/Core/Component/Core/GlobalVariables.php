@@ -47,6 +47,13 @@ class GlobalVariables implements \ArrayAccess
     protected $section;
 
     /**
+     * The current request.
+     *
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * The route name.
      *
      * @var string
@@ -61,6 +68,7 @@ class GlobalVariables implements \ArrayAccess
     public function __construct($container)
     {
         $this->container = $container;
+        $this->request   = $container->get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -154,6 +162,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Returns the current request.
+     *
+     * @return Request The current request.
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
      * Returns the route name.
      *
      * @return string The route name.
@@ -171,6 +189,7 @@ class GlobalVariables implements \ArrayAccess
     public function getSection()
     {
         $template = $this->container->get('core.template');
+
         if ($template->hasValue('o_category')) {
             return $template->getValue('o_category')->name;
         }
