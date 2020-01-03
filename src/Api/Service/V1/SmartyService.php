@@ -100,6 +100,26 @@ class SmartyService implements Service
     }
 
     /**
+     * Returns the Smarty configuration.
+     *
+     * @return array The Smarty configuration.
+     */
+    public function getConfig() : array
+    {
+        $items = [];
+        $path  = $this->container->get('core.template.frontend')->config_dir[0];
+
+        $manager = $this->container->get('core.template.cache');
+        $config  = $manager->setPath($path)->read();
+
+        foreach ($config as $key => $value) {
+            $items[] = array_merge([ 'id' => $key ], $value);
+        }
+
+        return $items;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getItem($id)

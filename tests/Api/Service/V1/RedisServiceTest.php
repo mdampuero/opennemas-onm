@@ -175,6 +175,16 @@ class RedisServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getConfig.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testGetConfig()
+    {
+        $this->service->getConfig();
+    }
+
+    /**
      * Tests getItem when a error is thrown.
      *
      * @expectedException Api\Exception\GetItemException

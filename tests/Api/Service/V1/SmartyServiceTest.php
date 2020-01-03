@@ -10,6 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\SmartyService;
+use Common\Core\Component\Template\Template;
 
 /**
  * Defines test cases for SmartyService class.
@@ -23,7 +24,7 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->cache = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete', 'deleteCompiles' ])
+            ->setMethods([ 'delete', 'deleteCompiles', 'read', 'setPath' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -35,12 +36,16 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
+        $this->template = new Template($this->container, []);
+        $this->template->setConfigDir('/foobar/fred');
+
         $this->tq = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
 
         $this->service = new SmartyService($this->container);
     }
@@ -60,6 +65,9 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'core.template.cache':
                 return $this->cache;
+
+            case 'core.template.frontend':
+                return $this->template;
 
             case 'task.service.queue':
                 return $this->tq;
@@ -142,6 +150,23 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
         $this->tq->expects($this->once())->method('push');
 
         $this->service->deleteList([]);
+    }
+
+    /**
+     * Returns the Varnish configuration.
+     *
+     * @return array The Varnish configuration.
+     */
+    public function testGetConfig()
+    {
+        $this->cache->expects($this->once())->method('setPath')
+            ->with('/foobar/fred/')->willReturn($this->cache);
+        $this->cache->expects($this->once())->method('read')
+            ->willReturn([ 'grault' => [ 'caching' => 0 ] ]);
+
+        $this->assertEquals([
+            [ 'id' => 'grault', 'caching' => 0 ]
+        ], $this->service->getConfig());
     }
 
     /**

@@ -140,6 +140,16 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getConfig.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testGetConfig()
+    {
+        $this->service->getConfig();
+    }
+
+    /**
      * Tests getItem.
      *
      * @expectedException Api\Exception\GetItemException

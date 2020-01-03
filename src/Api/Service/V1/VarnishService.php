@@ -9,6 +9,7 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\ApiException;
 use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
@@ -84,6 +85,16 @@ class VarnishService implements Service
         } catch (\Exception $e) {
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * Returns the Varnish configuration.
+     *
+     * @return array The Varnish configuration.
+     */
+    public function getConfig()
+    {
+        throw new ApiException('Action not implemented', 400);
     }
 
     /**

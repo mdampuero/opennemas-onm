@@ -9,6 +9,7 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\ApiException;
 use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
@@ -95,6 +96,16 @@ class RedisService implements Service
     public function deleteList($ids)
     {
         return $this->deleteItemByPattern('*');
+    }
+
+    /**
+     * Returns the Redis configuration.
+     *
+     * @return array The Redis configuration.
+     */
+    public function getConfig()
+    {
+        throw new ApiException('Action not implemented', 400);
     }
 
     /**
