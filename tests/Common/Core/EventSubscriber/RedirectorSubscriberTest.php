@@ -33,10 +33,6 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->varnish = $this->getMockBuilder('Onm\Varnish\MessageExchanger')
-            ->setMethods([ 'addBanMessage' ])
-            ->getMock();
-
         $this->subscriber = new RedirectorSubscriber($this->instance, $this->queue);
     }
 
