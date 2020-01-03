@@ -151,3 +151,8 @@ services:
         class:      Common\Core\Component\Validator\Validator
         arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
         public:    true
+
+    core.varnish:
+        class:     Common\Core\Component\Varnish\Varnish
+        arguments: [ '@application.log', '%varnish%' ]
+        public:    true

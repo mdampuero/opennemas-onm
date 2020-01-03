@@ -79,7 +79,7 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
             ->with('ids')->willReturn(false);
 
         $this->queue->expects($this->once())->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ url-456'
             ]));
 
@@ -100,7 +100,7 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
             ->with('ids')->willReturn([ 456, 234 ]);
 
         $this->queue->expects($this->once())->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ url-456|url-234'
             ]));
 

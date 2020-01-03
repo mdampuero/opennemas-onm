@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Varnish;
+namespace Common\Core\Component\Varnish;
 
 use GuzzleHttp\Client;
 use Symfony\Bridge\Monolog\Logger;
 
-class BanMessagePusher
+class Varnish
 {
     /**
      * The HTTP client.

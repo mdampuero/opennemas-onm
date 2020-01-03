@@ -116,7 +116,7 @@ class RedirectorSubscriber implements EventSubscriberInterface
         $request = sprintf('obj.http.x-tags ~ %s', implode('|', $ids));
 
         $this->queue->push(new ServiceTask(
-            'varnish_cleaner',
+            'core.varnish',
             'ban',
             [ $request ]
         ));

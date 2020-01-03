@@ -50,12 +50,12 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
             ->with($itemB)->willReturn('/norf/flob.garply');
 
         $this->queue->expects($this->at(0))->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'req.url ~ /plugh/norf.wubble'
             ]));
 
         $this->queue->expects($this->at(1))->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'req.url ~ /norf/flob.garply'
             ]));
 
@@ -78,22 +78,22 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->queue->expects($this->at(0))->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ 10605'
             ]));
 
         $this->queue->expects($this->at(1))->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'req.url ~ plugh/norf.wubble'
             ]));
 
         $this->queue->expects($this->at(2))->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ 10883'
             ]));
 
         $this->queue->expects($this->at(3))->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'req.url ~ norf/flob.garply'
             ]));
 
@@ -106,7 +106,7 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
     public function testDeleteInstance()
     {
         $this->queue->expects($this->once())->method('push')
-            ->with(new ServiceTask('varnish_cleaner', 'ban', [
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ instance-qux'
             ]));
 

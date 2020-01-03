@@ -50,7 +50,7 @@ class VarnishHelper
     public function deleteFiles(array $files)
     {
         foreach ($files as $file) {
-            $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf('req.url ~ %s', $this->uh->generate($file))
             ]));
         }
@@ -64,11 +64,11 @@ class VarnishHelper
     public function deleteNewsstands(array $newsstands)
     {
         foreach ($newsstands as $newsstand) {
-            $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ %s', $newsstand->pk_content)
             ]));
 
-            $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf('req.url ~ %s', $newsstand->path)
             ]));
         }
@@ -81,7 +81,7 @@ class VarnishHelper
      */
     public function deleteInstance(Instance $instance)
     {
-        $this->queue->push(new ServiceTask('varnish_cleaner', 'ban', [
+        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
             sprintf('obj.http.x-tags ~ instance-%s', $instance->internal_name)
         ]));
     }

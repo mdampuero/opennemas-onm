@@ -397,7 +397,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $ad = $event->getArgument('advertisement');
 
         $this->container->get('task.service.queue')->push(
-            new ServiceTask('varnish_cleaner', 'ban', [
+            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id)
             ])
         );
@@ -408,7 +408,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         foreach ($ad->positions as $position) {
             $this->container->get('task.service.queue')->push(
-                new ServiceTask('varnish_cleaner', 'ban', [
+                new ServiceTask('core.varnish', 'ban', [
                     sprintf('obj.http.x-tags ~ .*position-%s.*', $position)
                 ])
             );
@@ -416,7 +416,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         if (!empty($ad->old_position)) {
             $this->container->get('task.service.queue')->push(
-                new ServiceTask('varnish_cleaner', 'ban', [
+                new ServiceTask('core.varnish', 'ban', [
                     sprintf('obj.http.x-tags ~ .*position-%s.*', $ad->old_position)
                 ])
             );
@@ -437,7 +437,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('task.service.queue')->push(
-            new ServiceTask('varnish_cleaner', 'ban', [
+            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s', $instanceName)
             ])
         );
@@ -457,11 +457,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('task.service.queue')->push(
-            new ServiceTask('varnish_cleaner', 'ban', [
+            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName)
             ])
         )->push(
-            new ServiceTask('varnish_cleaner', 'ban', [
+            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName)
             ])
         );
@@ -481,7 +481,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('task.service.queue')->push(
-            new ServiceTask('varnish_cleaner', 'ban', [
+            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName)
             ])
         );
@@ -501,7 +501,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $instanceName = $event->getArgument('instance')->internal_name;
 
         $this->container->get('task.service.queue')->push(
-            new ServiceTask('varnish_cleaner', 'ban', [
+            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName)
             ])
         );

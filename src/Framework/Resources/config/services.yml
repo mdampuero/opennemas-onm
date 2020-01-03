@@ -11,11 +11,6 @@ services:
         class: Onm\Security\Acl
         public: true
 
-    varnish_cleaner:
-        class: Onm\Varnish\BanMessagePusher
-        arguments: [ '%varnish%' ]
-        public: true
-
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ '@entity_repository' ]
