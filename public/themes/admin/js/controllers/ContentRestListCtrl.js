@@ -89,11 +89,9 @@
 
         /**
          * Updates the array of contents.
-         *
-         * @param {Boolean} reset Whether to reset the list.
          */
-        $scope.list = function(reset) {
-          if (!$scope.isModeSupported() || reset || $scope.app.mode === 'list') {
+        $scope.list = function() {
+          if (!$scope.isModeSupported() || $scope.app.mode === 'list') {
             $scope.flags.http.loading = 1;
           } else {
             $scope.flags.http.loadingMore = 1;
