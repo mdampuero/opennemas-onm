@@ -175,6 +175,14 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests isPattern.
+     */
+    public function testIsPattern()
+    {
+        $this->assertFalse($this->service->isPattern('baz'));
+    }
+
+    /**
      * Tests patchItem.
      *
      * @expectedException Api\Exception\PatchItemException

@@ -124,6 +124,18 @@ class SmartyService implements Service
     }
 
     /**
+     * Checks if the provided id is a specific key or a pattern.
+     *
+     * @param string $id The id to check.
+     *
+     * @return bool True if the provided id is a pattern. False otherwise.
+     */
+    public function isPattern(string $id) : bool
+    {
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function patchItem($id, $data)
