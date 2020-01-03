@@ -427,9 +427,9 @@ class Template extends \Smarty
 
         // Copy default cache configuration if it doesnt exists
         if (!file_exists($path . '/cache.conf')) {
-            $cm = $this->container->get('template_cache_config_manager');
-            $cm->setConfigDir($path);
-            $cm->saveDefault();
+            $cm = $this->container->get('core.template.cache');
+            $cm->setPath($path);
+            $cm->save();
         }
 
         $this->setConfigDir($path);

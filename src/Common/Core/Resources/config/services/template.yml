@@ -46,7 +46,7 @@ services:
 
     core.template.cache:
         class:     Common\Core\Component\Template\Cache\CacheManager
-        arguments: [ '@view' ]
+        arguments: [ '@core.template.frontend' ]
         public:    true
 
     core.template.factory:
@@ -69,10 +69,6 @@ services:
         class:     Common\Core\Component\Template\Template
         factory:   [ '@core.template.factory', 'get' ]
         arguments: [ 'manager' ]
-        public:    true
-
-    template_cache_config_manager:
-        class:     Onm\Templating\Cache\Config
         public:    true
 
     view:
