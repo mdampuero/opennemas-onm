@@ -43,7 +43,7 @@ class OnmFormatter
         $record['extra']['user']     = $this->getUser();
         $record['extra']['url']      = null;
 
-        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $request = $this->container->get('core.globals')->getRequest();
 
         // Check if request (maybe it is a console command)
         if (empty($request)) {

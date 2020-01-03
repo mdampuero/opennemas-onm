@@ -34,8 +34,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientIps', 'getUri'])
             ->getMock();
 
-        $this->rs = $this->getMockBuilder('RequestStack')
-            ->setMethods([ 'getCurrentRequest'])
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRequest'])
             ->getMock();
 
         $this->token = $this->getMockBuilder('Token')
@@ -66,11 +67,11 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.globals':
+                return $this->globals;
+
             case 'core.instance':
                 return $this->instance;
-
-            case 'request_stack':
-                return $this->rs;
 
             case 'security.token_storage':
                 return $this->ts;
@@ -90,7 +91,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ '143.53.0.1', '128.0.134.43' ]);
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://norf.org/qux');
-        $this->rs->expects($this->any())->method('getCurrentRequest')
+        $this->globals->expects($this->any())->method('getRequest')
             ->willReturn($this->request);
 
         $record = $this->formatter->processRecord([]);
@@ -107,7 +108,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessRecordWhenNoRequest()
     {
-        $this->rs->expects($this->any())->method('getCurrentRequest')
+        $this->globals->expects($this->any())->method('getRequest')
             ->willReturn(null);
 
         $record = $this->formatter->processRecord([]);
