@@ -30,8 +30,8 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     public function testQueue()
     {
-        $this->queue->push(new Task([ 'xyzzy' ], 3));
-        $this->queue->push(new Task([ 'foobar' ], 6));
+        $this->assertEquals($this->queue, $this->queue->push(new Task([ 'xyzzy' ], 3)));
+        $this->assertEquals($this->queue, $this->queue->push(new Task([ 'foobar' ], 6)));
 
         $this->assertEquals(2, $this->queue->count());
 

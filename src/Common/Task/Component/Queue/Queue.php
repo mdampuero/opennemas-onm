@@ -44,9 +44,13 @@ class Queue
      * Adds a new task to the queue.
      *
      * @param Task $task The task to add.
+     *
+     * @return Queue The current queue.
      */
-    public function push(Task $task) : void
+    public function push(Task $task) : Queue
     {
         $this->tasks[] = $task;
+
+        return $this;
     }
 }
