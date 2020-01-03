@@ -24,8 +24,9 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->cache = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete', 'deleteCompiles', 'read', 'setPath' ])
-            ->getMock();
+            ->setMethods([
+                'delete', 'deleteCompiles', 'read', 'setPath', 'write'
+            ])->getMock();
 
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
@@ -153,9 +154,9 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Returns the Varnish configuration.
+     * Returns the Smarty configuration.
      *
-     * @return array The Varnish configuration.
+     * @return array The Smarty configuration.
      */
     public function testGetConfig()
     {
@@ -233,6 +234,23 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
     public function testResponsify()
     {
         $this->assertEquals('fubar', $this->service->responsify('fubar'));
+    }
+
+    /**
+     * Update the Smarty configuration.
+     *
+     * @return array The Smarty configuration.
+     */
+    public function testUpdateConfig()
+    {
+        $this->cache->expects($this->once())->method('setPath')
+            ->with('/foobar/fred/')->willReturn($this->cache);
+        $this->cache->expects($this->once())->method('write')
+            ->willReturn([ 'grault' => [ 'caching' => 0 ] ]);
+
+        $this->service->updateConfig([
+            [ 'id' => 'grault', 'caching' => 0, 'cache_lifetime' => 6077 ]
+        ]);
     }
 
     /**

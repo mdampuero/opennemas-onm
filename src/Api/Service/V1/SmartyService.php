@@ -9,6 +9,7 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\ApiException;
 use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
@@ -177,6 +178,32 @@ class SmartyService implements Service
     public function responsify($item)
     {
         return $item;
+    }
+
+    /**
+     * Updates the Smarty configuration.
+     *
+     * @param array $config The new configuration.
+     */
+    public function updateConfig($config)
+    {
+        try {
+            $items = [];
+
+            foreach ($config as $value) {
+                $items[$value['id']] = [
+                    'cache_lifetime' => $value['cache_lifetime'],
+                    'caching'        => $value['caching']
+                ];
+            }
+
+            $path    = $this->container->get('core.template.frontend')->config_dir[0];
+            $manager = $this->container->get('core.template.cache');
+
+            $manager->setPath($path)->write($config);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
     }
 
     /**

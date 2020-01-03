@@ -216,6 +216,16 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests updateConfig.
+     *
+     * @expectedException Api\Exception\ApiException
+     */
+    public function testUpdateConfig()
+    {
+        $this->service->updateConfig([]);
+    }
+
+    /**
      * Tests updateItem.
      *
      * @expectedException Api\Exception\UpdateItemException

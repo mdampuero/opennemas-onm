@@ -158,6 +158,16 @@ class VarnishService implements Service
     }
 
     /**
+     * Updates the Varnish configuration.
+     *
+     * @param array $config The new configuration.
+     */
+    public function updateConfig($data)
+    {
+        throw new ApiException('Action not implemented', 400);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function updateItem($id, $data)
