@@ -23,22 +23,16 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'clearAllCache', 'getCacheDir', 'getCacheId' ])
-            ->getMock();
-
-        $this->templating = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getBundleName', 'getTemplate' ])
-            ->getMock();
+            ->setMethods([
+                'clearAllCache', 'clearCompiledTemplate', 'getCacheDir',
+                'getCacheId'
+            ])->getMock();
 
         $this->smarty->expects($this->any())->method('getCacheDir')
             ->willReturn('/glork/quux/corge');
 
-        $this->templating->expects($this->any())->method('getTemplate')
-            ->willReturn($this->smarty);
-
         $this->manager = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
-            ->setConstructorArgs([ $this->templating ])
+            ->setConstructorArgs([ $this->smarty ])
             ->setMethods([ 'deleteFile', 'getFiles' ])
             ->getMock();
     }
@@ -48,13 +42,13 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $manager  = new CacheManager($this->templating);
+        $manager  = new CacheManager($this->smarty);
         $template = new \ReflectionProperty($manager, 'template');
 
         $template->setAccessible(true);
 
         $this->assertInstanceOf(
-            'Common\Core\Component\Template\TemplateFactory',
+            'Common\Core\Component\Template\Template',
             $template->getValue($manager)
         );
     }
@@ -85,5 +79,15 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->once())->method('clearAllCache');
 
         $this->manager->deleteAll();
+    }
+
+    /**
+     * Tests deleteCompiles.
+     */
+    public function testDeleteCompiles()
+    {
+        $this->smarty->expects($this->once())->method('clearCompiledTemplate');
+
+        $this->manager->deleteCompiles();
     }
 }

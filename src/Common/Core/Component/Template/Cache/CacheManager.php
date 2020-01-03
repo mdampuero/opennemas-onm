@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Template\Cache;
 
-use Common\Core\Component\Template\TemplateFactory;
+use Common\Core\Component\Template\Template;
 
 class CacheManager
 {
@@ -23,9 +23,9 @@ class CacheManager
     /**
      * Initializes the current CacheManager.
      *
-     * @param TemplateFactory $template The TemplateFactory service.
+     * @param Template $template The TemplateFactory service.
      */
-    public function __construct(TemplateFactory $template)
+    public function __construct(Template $template)
     {
         $this->template = $template;
     }
@@ -75,6 +75,22 @@ class CacheManager
     public function deleteAll()
     {
         $this->template->clearAllCache();
+
+        if (extension_loaded('Zend Opcache')) {
+            opcache_reset();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Deletes all the cache files.
+     *
+     * @return CacheManager The current CacheManager.
+     */
+    public function deleteCompiles()
+    {
+        $this->template->clearCompiledTemplate();
 
         if (extension_loaded('Zend Opcache')) {
             opcache_reset();
