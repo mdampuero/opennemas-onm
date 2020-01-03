@@ -89,6 +89,10 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    api.service.varnish:
+        class:     Api\Service\V1\VarnishService
+        arguments: [ '@service_container' ]
+        public:    true
 
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
