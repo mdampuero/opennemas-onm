@@ -1,114 +1,91 @@
 <?php
-
 /**
  * This file is part of the Onm package.
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
+ * (c) Openhost, S.L. <developers@opennemas.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Onm\Varnish;
 
-/**
- * Class that allows to send Varnish ban/purge commands
- */
+use GuzzleHttp\Client;
+use Symfony\Bridge\Monolog\Logger;
+
 class BanMessagePusher
 {
     /**
+     * The HTTP client.
+     *
+     * @var Client
+     */
+    protected $client;
+
+    /**
+     * The varnish configuration.
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * The logger service.
+     *
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * Initializes the object with the server configuration.
      *
-     * @param array $serverConfiguration Varnish configuration.
+     * @param Logger $logger The application log.
+     * @param array  $config The varnish configuration.
      */
-    public function __construct($serverConfiguration)
+    public function __construct(Logger $logger, array $config)
     {
-        $this->headerName = $serverConfiguration['header_name'];
-
-        $this->servers = $serverConfiguration['servers'];
-
-        return $this;
+        $this->client = new Client();
+        $this->config = $config;
+        $this->logger = $logger;
     }
 
     /**
      * Sends a ban command.
      *
      * @param string $banRequest
-     *
-     * @return array
      */
-    public function ban($banRequest)
+    public function ban($request)
     {
-        $response = array();
-        foreach ($this->servers as $serverName => $serverConf) {
-            $banHeader = $this->headerName . ': '.$banRequest;
+        foreach ($this->config['servers'] as $name => $config) {
+            $url = sprintf('http://%s:%s', $config['host'], $config['port']);
 
-            $return = $this->doHttpRequest(
-                $serverConf['host'],
-                $serverConf['port'],
-                'BAN',
-                $banHeader,
-                ''
-            );
+            $response = $this->client->request('BAN', $url, [
+                'headers' => [ $this->config['header_name'] => $request ],
+                'timeout' => 2
+            ]);
 
-            // Do not register long return messages as we only expect some
-            // prebuild messages from Varnish
-            if (!preg_match('@(Ban not allowed|Ban added|No Ban specified)@i', $return)) {
-                $return = 'Not valid response from varnish.';
-            }
-
-            $response[] = sprintf(
-                "BAN queued - %s (%s:%s) - %s || Return: %s",
-                $serverName,
-                $serverConf['host'],
-                $serverConf['port'],
-                $banHeader,
-                $return
-            );
+            $this->logger->info(json_encode([
+                'server'   => $name,
+                'url'      => $config['host'] . ':' . $config['port'],
+                'request'  => $request,
+                'status'   => $response->getStatusCode(),
+                'response' => $this->parseResponse($response->getReasonPhrase())
+            ]));
         }
-
-        return $response;
     }
 
     /**
-     * Performs a CURL.
+     * Parses the varnish response to show specific messages.
      *
-     * @param string $server  The server name.
-     * @param string $port    The server port.
-     * @param string $method  The method to use.
-     * @param string $headers The headers to include in the request.
-     * @param string $body    The body of the request.
+     * @param string The response to parse.
      *
-     * @return string The CURL response.
+     * @return string The parsed response.
      */
-    private function doHttpRequest($server, $port, $method, $headers = '', $body = '')
+    protected function parseResponse(string $response) : string
     {
-        $curlHandler = curl_init();
-
-        $url = "http://{$server}:{$port}/";
-
-        $options = array(
-            CURLOPT_URL            => $url,
-            CURLOPT_CUSTOMREQUEST  => $method,
-            CURLOPT_POSTFIELDS     => $body,
-            // CURLOPT_HEADER         => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 2
-        );
-
-        if (!empty($headers)) {
-            if (!is_array($headers)) {
-                $headers = array($headers);
-            }
-            $options[CURLOPT_HTTPHEADER] = $headers;
+        if (!preg_match('@(Ban not allowed|Ban added|No Ban specified)@i', $response)) {
+            return 'Not valid response from varnish.';
         }
 
-        curl_setopt_array($curlHandler, $options);
-
-        $return = curl_exec($curlHandler);
-
-        curl_close($curlHandler);
-
-        return $return;
+        return $response;
     }
 }
