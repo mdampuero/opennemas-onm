@@ -16,10 +16,6 @@ services:
         arguments: [ '%varnish%' ]
         public: true
 
-    varnish_ban_message_exchanger:
-        class: Onm\Varnish\MessageExchanger
-        public: true
-
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
         arguments: [ '@entity_repository' ]
