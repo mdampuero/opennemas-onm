@@ -10,7 +10,6 @@
 namespace Common\Core\Component\Renderer;
 
 use Repository\EntityManager;
-use Repository\CategoryManager;
 use Api\Service\V1\AuthorService;
 
 /**
@@ -80,8 +79,7 @@ class NewsletterRenderer
             }
 
             foreach ($container->items as $index => &$item) {
-                // if current item do not fullfill the required format
-                // then skip it
+                // If current item do not fullfill the required format then skip it
                 if ($item->content_type === 'label') {
                     continue;
                 } elseif ($item->content_type === 'list') {
@@ -136,18 +134,17 @@ class NewsletterRenderer
     /**
      * Completes the content information from an object from repository
      *
-     * @param Content $item the item to complete
-     * @param Content $content the content from the repository
+     * @param Content $item    The item to complete
+     * @param Content $content The content from the repository
      *
-     * @return Content the item completed
+     * @return Content The complete item
      */
     public function hydrateContent($content)
     {
         $content->cat    = $content->category_name;
         $content->name   = (isset($content->name)) ? $content->name : '';
         $content->image  = (isset($content->cover)) ? $content->cover : '';
-        $content->agency = is_array($content->params) && array_key_exists('agencyBulletin', $content->params)
-            ? $content->params['agencyBulletin'] : '';
+        $content->agency = $content->params['agencyBulletin'] ?? '';
         $content->date   = date(
             'Y-m-d',
             strtotime(str_replace('/', '-', substr($content->created, 6)))
@@ -214,7 +211,6 @@ class NewsletterRenderer
             ]
         ];
 
-        // Implementation for: in_las_day filter
         if ($criteria->filter === 'in_last_day') {
             $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
             $yesterday->sub(new \DateInterval('P1D'));
@@ -229,7 +225,6 @@ class NewsletterRenderer
             $orderBy = [ 'starttime' => 'desc' ];
         }
 
-        // Implementation for: most_viewed
         if ($criteria->filter === 'most_viewed') {
             $threeDaysAgo = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
             $threeDaysAgo->sub(new \DateInterval('P3D'));
@@ -239,7 +234,9 @@ class NewsletterRenderer
                     [
                         'type'       => 'INNER',
                         'table'      => 'content_views',
-                        'contents.pk_content' => [ [ 'value' => 'content_views.pk_fk_content', 'field' => true ] ]
+                        'contents.pk_content' => [
+                            [ 'value' => 'content_views.pk_fk_content', 'field' => true ]
+                        ]
                     ]
                 ],
                 'starttime' => [
@@ -251,30 +248,38 @@ class NewsletterRenderer
             $orderBy = [ 'views' => 'desc', 'starttime' => 'desc' ];
         }
 
-        // Implementation for: blogs in 24hours filter
-        if ($criteria->filter === 'blogs') {
-            $users      = $this->as->getList('is_blog=1')['items'];
-            $userBlogID = array_map(function ($el) {
-                return $el->id;
-            }, $users);
-
-            $searchCriteria = array_merge($searchCriteria, [
-                'contents.fk_author' => [[ 'value' => $userBlogID, 'operator' => 'IN' ]],
-                'contents.in_home'   => [[ 'value' => 1 ]],
-            ]);
-        }
+        // article, attachment, opinion, album, video, poll, static_page, kiosko, letter
+        $searchCriteria['fk_content_type'] = [
+            [ 'value' => [ 1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]
+        ];
 
         if (!empty($criteria->content_type)) {
-            $contentTypeId                     = \ContentManager::getContentTypeIdFromName($criteria->content_type);
-            $searchCriteria['fk_content_type'] = [ ['value' => (int) $contentTypeId ] ];
-        } else {
-            // ['frontpage', 'schedule', 'photo', 'event', 'advertisement', 'widget'];
-            $excludedTypes                     = [18, 16, 8, 5, 2, 12];
-            $searchCriteria['fk_content_type'] = [ [ 'value' => $excludedTypes, 'operator' => 'NOT IN' ] ];
+            $searchCriteria['fk_content_type'] = [
+                [ 'value' => (int) \ContentManager::getContentTypeIdFromName($criteria->content_type) ]
+            ];
         }
 
-        if (!empty($criteria->category)) {
-            $searchCriteria['pk_fk_content_category'] = [[ 'value' => $criteria->category, 'operator' => 'IN' ]];
+        if (!empty($criteria->category)
+            && !in_array($criteria->content_type, [ 'opinion', 'letter', 'static_page' ])
+        ) {
+            $searchCriteria['pk_fk_content_category'] = [
+                [ 'value' => $criteria->category, 'operator' => 'IN' ]
+            ];
+        }
+
+        if ($criteria->content_type === 'opinion' && !empty($criteria->extra_type)) {
+            $bloggers   = $this->as->getList('is_blog=1')['items'];
+            $bloggersId = array_map(function ($item) {
+                return $item->id;
+            }, $bloggers);
+
+            $operator = $criteria->extra_type === 'blog' ? 'IN' : 'NOT IN';
+
+            if (!empty($bloggersId)) {
+                $searchCriteria['contents.fk_author'] = [
+                    [ 'value' => $bloggersId, 'operator' => $operator ]
+                ];
+            }
         }
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
