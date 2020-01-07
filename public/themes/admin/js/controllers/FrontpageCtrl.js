@@ -23,7 +23,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       lastSaved:           null,
       publish_date:        new Date(),
       checkNewVersion:     true,
-      originalVersionName: null
+      originalVersionName: null,
+      flag: true
     };
 
     $scope.init = function(frontpages, versions, categoryId, versionId, time,
@@ -330,6 +331,14 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.save = function() {
+      if ($scope.frontpageInfo.flag === false && $scope.version.id === 0) {
+        return false;
+      }
+
+      if ($scope.getContentsInFrontpage().length !== 0) {
+        $scope.frontpageInfo.flag = false;
+      }
+
       if ($scope.frontpageInfo.publish_date === '') {
         $scope.saveWithoutCheckPD();
         return null;
