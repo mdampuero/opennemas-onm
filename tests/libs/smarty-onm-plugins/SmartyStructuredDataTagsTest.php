@@ -24,7 +24,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/function.structured_data_tags.php';
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getTemplateVars', 'getValue' ])
+            ->setMethods([ 'getContainer', 'getValue', 'hasValue' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -107,8 +107,8 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentNotProvided()
     {
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([]);
+        $this->smarty->expects($this->any())->method('hasValue')
+            ->willReturn(false);
 
         $this->assertEquals(
             '',
@@ -122,7 +122,9 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testStructuredDataWhenContentNotValid()
     {
-        $this->smarty->expects($this->any())->method('getTemplateVars')
+        $this->smarty->expects($this->any())->method('hasValue')
+            ->willReturn(true);
+        $this->smarty->expects($this->any())->method('getValue')
             ->willReturn([ 'content' => new Category([]) ]);
 
         $this->assertEmpty(
@@ -139,8 +141,10 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
 
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'content' => $content ]);
+        $this->smarty->expects($this->any())->method('hasValue')
+            ->willReturn(true);
+        $this->smarty->expects($this->any())->method('getValue')
+            ->willReturn($content);
 
         $this->cs->expects($this->once())->method('getItem')
             ->will($this->throwException(new \Exception()));
@@ -162,11 +166,11 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $content->pk_fk_content_category = 10633;
         $content->content_type_name      = 'album';
 
-        $this->smarty->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'content' => $content ]);
-
-        $this->smarty->expects($this->once())
-            ->method('getValue')
+        $this->smarty->expects($this->at(0))->method('hasValue')
+            ->willReturn(true);
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->willReturn($content);
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('photos');
 
         $this->assertEquals(
