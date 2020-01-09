@@ -43,13 +43,14 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
         $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
             ->disableOriginalConstructor()
             ->setMethods([ 'getListByIds' ])
-            ->getMock();
-
-        $this->um = $this->getMockBuilder('UserManager')
-            ->setMethods([ 'find' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -80,8 +81,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             case 'orm.manager':
                 return $this->em;
 
-            case 'user_repository':
-                return $this->um;
+            case 'api.service.author':
+                return $this->as;
 
             case 'api.service.tag':
                 return $this->ts;
@@ -128,13 +129,11 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['content']->body  = '';
         $output['content']->title = 'This is the title';
         $output['title']          = 'This is the title';
-        $output['summary']        = 'This is the title';
+        $output['description']    = 'This is the title';
         $output['wordCount']      = 4;
         $output['logo']           = 'logo';
         $output['author']         = 'author';
         $output['image']          = null;
-        $output['created']        = null;
-        $output['changed']        = null;
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
@@ -240,8 +239,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Content();
 
-        $this->um->expects($this->once())
-            ->method('find')
+        $this->as->expects($this->once())
+            ->method('getItem')
             ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
 
         $method->invokeArgs($this->object, [ $content ]);
@@ -257,8 +256,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Content();
 
-        $this->um->expects($this->once())
-            ->method('find')
+        $this->as->expects($this->once())
+            ->method('getItem')
             ->willReturn(null);
 
         $this->ds->expects($this->once())->method('get')

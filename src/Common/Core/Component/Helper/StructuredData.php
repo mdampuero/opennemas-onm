@@ -47,28 +47,17 @@ class StructuredData
      */
     public function extractParamsFromData($data)
     {
+        $data['title'] = $data['content']->title;
         // Get content summary, body or description. Otherwise use content title.
-        $data['summary'] = $data['content']->summary;
-        if (empty($data['summary'])) {
-            $data['summary'] = mb_substr($data['content']->body, 0, 120) . "...";
-            if (empty($data['content']->body)) {
-                $data['summary'] = mb_substr($data['content']->description, 0, 120) . "...";
-                if (empty($data['content']->description)) {
-                    $data['summary'] = $data['content']->title;
-                }
-            }
-        }
+        $data['description'] = strip_tags(current(array_filter([
+            $data['content']->summary,
+            mb_substr($data['content']->body, 0, 250),
+            $data['content']->description,
+            $data['content']->title
+        ])));
 
         // Count description data words
-        $data['wordCount'] = str_word_count($data['summary']);
-
-        // Encode content data
-        $data['title']   = htmlspecialchars(
-            html_entity_decode($data['content']->title, ENT_COMPAT, 'UTF-8')
-        );
-        $data['summary'] = htmlspecialchars(
-            html_entity_decode($data['summary'], ENT_COMPAT, 'UTF-8')
-        );
+        $data['wordCount'] = str_word_count($data['description']);
 
         // Logo, author and media information
         $data['logo']   = $this->getLogoData();
@@ -76,12 +65,6 @@ class StructuredData
         $media          = $this->getMediaData($data['content']);
         $data['image']  = $media['image'];
         $data['video']  = $media['video'];
-
-        // Get datetime values
-        $data['created'] = $data['content']->created instanceof \DateTime ?
-            $data['content']->created->format('Y-m-d H:i:s') : $data['content']->created;
-        $data['changed'] = $data['content']->changed instanceof \DateTime ?
-            $data['content']->changed->format('Y-m-d H:i:s') : $data['content']->changed;
 
         // Content keywords
         $data['keywords'] = empty($data['content']->tags) ? ''
@@ -130,10 +113,14 @@ class StructuredData
     protected function getAuthorData($content)
     {
         // Get author if exists or agency. Otherwise get site name.
-        $user = $this->container->get('user_repository')
-            ->find($content->fk_author);
+        $author = '';
+        try {
+            $user   = $this->container->get('api.service.author')->getItem($content->fk_author);
+            $author = $user->name;
+        } catch (\Exception $e) {
+            $author = $content->agency;
+        }
 
-        $author = !is_null($user) ? $user->name : $content->agency;
         if (empty($author)) {
             $author = $this->ds->get('site_name');
         }
