@@ -331,16 +331,15 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.save = function() {
-      if ($scope.version.id === 0) {
-        if ($scope.frontpageInfo.flag === true && $scope.getContentsInFrontpage().length !== 0) {
-          $('#btn-save').attr("disabled", true);
-        } else {
-          return false;
-        }
+      $scope.flags.http.saving = true;
+      if ($scope.frontpageInfo.flag === false && $scope.version.id === 0) {
+        return false;
       }
 
       if ($scope.getContentsInFrontpage().length !== 0) {
         $scope.frontpageInfo.flag = false;
+      } else {
+        $scope.flags.http.saving = false;
       }
 
       if ($scope.frontpageInfo.publish_date === '') {
@@ -458,6 +457,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
           }
+          $scope.flags.http.saving = false;
           return null;
         }, function(response) {
           $scope.showMessage(response.data.message, 'error', 5);

@@ -121,11 +121,11 @@
               {/is_module_activated}
               <li class="quicklinks">
                 <div class="btn-group">
-                  <button id="btn-save" class="btn btn-primary" type="button" ng-click="save()">
+                  <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="flags.http.saving">
                     <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                     {t}Save{/t}
                   </button>
-                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button">
+                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" ng-disabled="flags.http.saving">
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu no-padding pull-right">
