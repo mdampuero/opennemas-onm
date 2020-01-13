@@ -12,10 +12,6 @@ function smarty_function_structured_data_tags($params, &$smarty)
     $url        = $container->get('request_stack')->getCurrentRequest()->getUri();
     $structData = $container->get('core.helper.structured_data');
 
-    if (!$content instanceof Content) {
-        return '';
-    }
-
     try {
         $category = $container->get('api.service.category')
             ->getItem($content->pk_fk_content_category);
