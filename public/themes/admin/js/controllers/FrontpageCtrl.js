@@ -410,6 +410,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       if (numberOfContents > 100) {
         var message = frontpage_messages.frontpage_too_long.replace('%number%', 100);
 
+        $scope.flags.http.saving = false;
+
         messenger.post(message);
       } else {
         var version = JSON.parse(JSON.stringify($scope.version));
