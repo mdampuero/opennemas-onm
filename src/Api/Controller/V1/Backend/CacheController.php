@@ -81,6 +81,18 @@ class CacheController extends ApiController
     /**
      * {@inheritdoc}
      */
+    public function getConfigAction($service)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+
+        $items = $this->get($this->services[$service])->getConfig();
+
+        return new JsonResponse([ 'items' => $items ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItemAction($id, $service = null)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
@@ -89,5 +101,22 @@ class CacheController extends ApiController
         $item = !is_object($item) ? $item : PhpSerializer::serialize($item);
 
         return new JsonResponse([ 'item' => json_encode($item) ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateConfigAction(Request $request, $service)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->services[$service])
+            ->updateConfig($request->request->all());
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }
