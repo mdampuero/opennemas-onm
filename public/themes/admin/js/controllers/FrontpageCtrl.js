@@ -330,6 +330,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.save = function() {
+      $scope.flags.http.saving = true;
+
       if ($scope.frontpageInfo.publish_date === '') {
         $scope.saveWithoutCheckPD();
         return null;
@@ -398,6 +400,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       if (numberOfContents > 100) {
         var message = frontpage_messages.frontpage_too_long.replace('%number%', 100);
 
+        $scope.disableFlags('http');
         $scope.showMessage(message, 'error');
       } else {
         var version = JSON.parse(JSON.stringify($scope.version));
@@ -420,6 +423,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           version:            version,
           category:           $scope.categoryId
         }).then(function(response) {
+          $scope.disableFlags('http');
+
           if (!response.data.frontpage_last_saved) {
             return false;
           }
@@ -445,8 +450,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
           }
+
           return null;
         }, function(response) {
+          $scope.disableFlags('http');
           $scope.showMessage(response.data.message, 'error', 5);
           return null;
         });
