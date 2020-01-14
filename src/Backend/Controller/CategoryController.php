@@ -9,8 +9,6 @@
  */
 namespace Backend\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class CategoryController extends BackendController
 {
     /**
