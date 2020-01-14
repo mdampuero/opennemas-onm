@@ -121,7 +121,7 @@
               {/is_module_activated}
               <li class="quicklinks">
                 <div class="btn-group">
-                  <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="flags.http.saving">
+                  <button class="btn btn-loading btn-primary" type="button" ng-click="save()" ng-disabled="flags.http.saving">
                     <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                     {t}Save{/t}
                   </button>
