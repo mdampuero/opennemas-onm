@@ -21,6 +21,11 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->factory = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
             ->setMethods([ 'dumpFile', 'exists' ])
@@ -33,11 +38,14 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
                 'getCacheId'
             ])->getMock();
 
+        $this->factory->expects($this->any())->method('get')
+            ->with('frontend')->willReturn($this->smarty);
+
         $this->smarty->expects($this->any())->method('getCacheDir')
             ->willReturn('/glork/quux/corge');
 
         $this->manager = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
-            ->setConstructorArgs([ $this->smarty ])
+            ->setConstructorArgs([ $this->factory ])
             ->setMethods([ 'deleteFile', 'getFile', 'getFiles' ])
             ->getMock();
 
@@ -51,14 +59,14 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $manager  = new CacheManager($this->smarty);
-        $template = new \ReflectionProperty($manager, 'template');
+        $manager = new CacheManager($this->factory);
+        $factory = new \ReflectionProperty($manager, 'factory');
 
-        $template->setAccessible(true);
+        $factory->setAccessible(true);
 
         $this->assertInstanceOf(
-            'Common\Core\Component\Template\Template',
-            $template->getValue($manager)
+            'Common\Core\Component\Template\TemplateFactory',
+            $factory->getValue($manager)
         );
     }
 
@@ -151,6 +159,9 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->manager->write([ 'flob' => [
             'cache_lifetime' => 16405,
             'caching'        => 0,
+        ],  'frontpages' => [
+            'cache_lifetime' => 19179,
+            'caching'        => 1,
         ] ]);
     }
 
@@ -159,7 +170,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFile()
     {
-        $manager = new CacheManager($this->smarty);
+        $manager = new CacheManager($this->factory);
 
         $method = new \ReflectionMethod($manager, 'getFile');
         $method->setAccessible(true);

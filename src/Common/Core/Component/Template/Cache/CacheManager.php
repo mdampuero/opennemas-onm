@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Template\Cache;
 
-use Common\Core\Component\Template\Template;
+use Common\Core\Component\Template\TemplateFactory;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -20,7 +20,14 @@ class CacheManager
      *
      * @var array
      */
-    protected $defaults = [];
+    protected $defaults;
+
+    /**
+     * The TemplateFactory service.
+     *
+     * @var TemplateFactory
+     */
+    protected $factory = null;
 
     /**
      * The path to the configuration directory.
@@ -30,21 +37,14 @@ class CacheManager
     protected $path;
 
     /**
-     * The Template service.
-     *
-     * @var Template
-     */
-    protected $template = null;
-
-    /**
      * Initializes the current CacheManager.
      *
-     * @param Template $template The TemplateFactory service.
+     * @param TemplateFactory $factory The TemplateFactory service.
      */
-    public function __construct(Template $template)
+    public function __construct(TemplateFactory $factory)
     {
-        $this->fs       = new Filesystem();
-        $this->template = $template;
+        $this->fs      = new Filesystem();
+        $this->factory = $factory;
 
         $this->defaults = [
             'frontpages' => [
@@ -148,15 +148,15 @@ class CacheManager
     public function delete()
     {
         // Do not add locale to the cache id
-        $this->template->setLocale(false);
+        $this->factory->get('frontend')->setLocale(false);
 
         // Get cache id basing on function arguments
         $cacheId = call_user_func_array(
-            [ $this->template, 'getCacheId' ],
+            [ $this->factory->get('frontend'), 'getCacheId' ],
             func_get_args()
         );
 
-        $this->template->setLocale(true);
+        $this->factory->get('frontend')->setLocale(true);
 
         // Template converts "|" to "^"
         $cacheId = str_replace('|', '^', $cacheId);
@@ -184,7 +184,7 @@ class CacheManager
      */
     public function deleteAll()
     {
-        $this->template->clearAllCache();
+        $this->factory->get('frontend')->clearAllCache();
 
         if (extension_loaded('Zend Opcache')) {
             opcache_reset();
@@ -200,7 +200,7 @@ class CacheManager
      */
     public function deleteCompiles()
     {
-        $this->template->clearCompiledTemplate();
+        $this->factory->get('frontend')->clearCompiledTemplate();
 
         if (extension_loaded('Zend Opcache')) {
             opcache_reset();
@@ -223,11 +223,13 @@ class CacheManager
             $config = parse_ini_string($this->getFile($path)->getContents(), true);
         }
 
-        $config = array_merge_recursive($this->defaults, $config);
+        foreach ($this->defaults as $key => $value) {
+            $config[$key] = array_key_exists($key, $config)
+                ? array_merge($value, $config[$key])
+                : $value;
 
-        foreach ($config as &$value) {
-            $value['caching']        = (int) $value['caching'];
-            $value['cache_lifetime'] = (int) $value['cache_lifetime'];
+            $config[$key]['caching']        = (int) $config[$key]['caching'];
+            $config[$key]['cache_lifetime'] = (int) $config[$key]['cache_lifetime'];
         }
 
         return $config;
@@ -255,10 +257,15 @@ class CacheManager
     public function write(array $config = [])
     {
         $path    = $this->path . '/cache.conf';
-        $config  = array_merge_recursive($this->defaults, $config);
         $content = '';
 
         foreach ($config as $section => $entry) {
+            if (!array_key_exists($section, $this->defaults)) {
+                continue;
+            }
+
+            $entry = array_merge($this->defaults[$section], $entry);
+
             $content .= '[' . $section . ']' . "\n"
                 . 'caching = ' . $entry['caching'] . "\n"
                 . 'cache_lifetime = ' . $entry['cache_lifetime'] . "\n\n";
@@ -311,7 +318,7 @@ class CacheManager
     protected function getFiles($pattern = null)
     {
         $caches = [];
-        $files  = new \DirectoryIterator($this->template->getCacheDir());
+        $files  = new \DirectoryIterator($this->factory->get('frontend')->getCacheDir());
 
         foreach ($files as $file) {
             if ($files->isDot()) {

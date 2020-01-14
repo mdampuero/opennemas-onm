@@ -46,7 +46,7 @@ services:
 
     core.template.cache:
         class:     Common\Core\Component\Template\Cache\CacheManager
-        arguments: [ '@core.template.frontend' ]
+        arguments: [ '@core.template.factory' ]
         public:    true
 
     core.template.factory:
