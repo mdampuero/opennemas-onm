@@ -24,7 +24,7 @@
       <div class="grid simple">
         <div class="grid-title">
           <h4>
-            <img src="">
+            <img class="m-r-5" src="/themes/admin/images/redis.png" width="20">
             Redis
           </h4>
         </div>
@@ -81,7 +81,7 @@
         </a>
         <div class="grid-title">
           <h4>
-            <img src="">
+            <img class="m-r-5" src="/themes/admin/images/smarty.png" width="20">
             Smarty
           </h4>
         </div>
@@ -135,7 +135,7 @@
       <div class="grid simple">
         <div class="grid-title">
           <h4>
-            <img src="">
+            <img class="m-r-5" src="/themes/admin/images/varnish.png" width="20">
             Varnish
           </h4>
         </div>
