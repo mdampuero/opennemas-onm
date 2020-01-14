@@ -23,8 +23,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       lastSaved:           null,
       publish_date:        new Date(),
       checkNewVersion:     true,
-      originalVersionName: null,
-      flag: true
+      originalVersionName: null
     };
 
     $scope.init = function(frontpages, versions, categoryId, versionId, time,
@@ -332,15 +331,6 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
     $scope.save = function() {
       $scope.flags.http.saving = true;
-      if ($scope.frontpageInfo.flag === false && $scope.version.id === 0) {
-        return false;
-      }
-
-      if ($scope.getContentsInFrontpage().length !== 0) {
-        $scope.frontpageInfo.flag = false;
-      } else {
-        $scope.flags.http.saving = false;
-      }
 
       if ($scope.frontpageInfo.publish_date === '') {
         $scope.saveWithoutCheckPD();
@@ -410,8 +400,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       if (numberOfContents > 100) {
         var message = frontpage_messages.frontpage_too_long.replace('%number%', 100);
 
-        $scope.flags.http.saving = false;
-
+        $scope.disableFlags('http');
         messenger.post(message);
       } else {
         var version = JSON.parse(JSON.stringify($scope.version));
@@ -434,6 +423,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           version:            version,
           category:           $scope.categoryId
         }).then(function(response) {
+          $scope.disableFlags('http');
+
           if (!response.data.frontpage_last_saved) {
             return false;
           }
@@ -459,9 +450,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
           }
-          $scope.flags.http.saving = false;
+
           return null;
         }, function(response) {
+          $scope.disableFlags('http');
           $scope.showMessage(response.data.message, 'error', 5);
           return null;
         });
