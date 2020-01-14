@@ -429,7 +429,7 @@ class Template extends \Smarty
         if (!file_exists($path . '/cache.conf')) {
             $cm = $this->container->get('core.template.cache');
             $cm->setPath($path);
-            $cm->save();
+            $cm->write();
         }
 
         $this->setConfigDir($path);
