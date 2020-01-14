@@ -401,7 +401,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         var message = frontpage_messages.frontpage_too_long.replace('%number%', 100);
 
         $scope.disableFlags('http');
-        messenger.post(message);
+        $scope.showMessage(message, 'error');
       } else {
         var version = JSON.parse(JSON.stringify($scope.version));
 
