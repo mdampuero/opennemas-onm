@@ -49,12 +49,14 @@ class StructuredData
     {
         $data['title'] = $data['content']->title;
         // Get content summary, body or description. Otherwise use content title.
-        $data['description'] = strip_tags(current(array_filter([
-            $data['content']->summary,
-            mb_substr($data['content']->body, 0, 250),
-            $data['content']->description,
-            $data['content']->title
-        ])));
+        $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
+            current(array_filter([
+                $data['content']->summary,
+                mb_substr($data['content']->body, 0, 250),
+                $data['content']->description,
+                $data['content']->title
+            ]))
+        ))));
 
         // Count description data words
         $data['wordCount'] = str_word_count($data['description']);
