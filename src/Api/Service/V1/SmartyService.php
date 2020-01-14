@@ -200,7 +200,7 @@ class SmartyService implements Service
             $path    = $this->container->get('core.template.frontend')->config_dir[0];
             $manager = $this->container->get('core.template.cache');
 
-            $manager->setPath($path)->write($config);
+            $manager->setPath($path)->write($items);
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
         }
