@@ -115,7 +115,7 @@ class RedisService implements Service
     {
         try {
             if (empty($id) || $this->isPattern($id)) {
-                throw new \InvalidArgumentException('', 400);
+                throw new \InvalidArgumentException('No pattern allowed', 400);
             }
 
             $item = $this->cache->get($id);
