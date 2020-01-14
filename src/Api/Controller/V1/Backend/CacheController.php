@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Common\Data\Serialize\Serializer\PhpSerializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -85,6 +86,7 @@ class CacheController extends ApiController
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
 
         $item = $this->get($this->services[$service])->getItem($id);
+        $item = !is_object($item) ? $item : PhpSerializer::serialize($item);
 
         return new JsonResponse([ 'item' => json_encode($item) ]);
     }
