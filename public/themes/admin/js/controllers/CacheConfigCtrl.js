@@ -1,52 +1,90 @@
-/**
- * Handle actions for cache config form.
- */
-angular.module('BackendApp.controllers').controller('CacheConfigCtrl', [
-  '$controller', '$rootScope', '$scope',
-  function($controller, $rootScope, $scope) {
-    'use strict';
+(function() {
+  'use strict';
 
-    // Initialize the super class and extend it.
-    $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+  angular.module('BackendApp.controllers')
 
     /**
-     * The list of selected elements.
+     * @ngdoc controller
+     * @name  CacheConfigCtrl
      *
-     * @type array
+     * @requires $controller
+     * @requires $scope
+     * @requires http
+     *
+     * @description
+     *   description
      */
-    $scope.selected = {
-      all: false,
-      contents: []
-    };
+    .controller('CacheConfigCtrl', [
+      '$controller', '$scope', 'cleaner', 'http', 'messenger',
+      function($controller, $scope, cleaner, http, messenger) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
-    /**
-     * Initialize $scope from view and populate selected contents
-     *
-     * @type array
-     */
-    $scope.init = function(config) {
-        $scope.config = config;
-        // Populate selected contents
-        angular.forEach($scope.config, function(value, key) {
-          if(value.caching == 1) {
-            this.push(key);
-          }
-        }, $scope.selected.contents);
-        // Check selectAll if all items are selected
-        if ($scope.selected.contents.length == Object.keys($scope.config).length) {
-          $scope.selected.all = true;
+        /**
+         * @memberOf CacheConfigCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          updateConfig: 'api_v1_backend_cache_update_config',
+          getConfig:    'api_v1_backend_cache_get_config'
         };
-    }
 
-    /**
-     * Selects/unselects all instances.
-     */
-    $scope.selectAll = function() {
-      if ($scope.selected.all) {
-        $scope.selected.contents = Object.keys($scope.config);
-      } else {
-        $scope.selected.contents = [];
+        /**
+         * @function getConfig
+         * @memberOf CacheConfigCtrl
+         *
+         * @description
+         *   Gets the service configuration.
+         */
+        $scope.getConfig = function() {
+          var route = {
+            name: $scope.routes.getConfig,
+            params: { service: 'smarty' }
+          };
+
+          http.get(route).then(function(response) {
+            $scope.disableFlags('http');
+            $scope.items = response.data.items;
+          }, function(response) {
+            $scope.disableFlags('http');
+            messenger.post(response.data);
+          });
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.isSelectable = function() {
+          return false;
+        };
+
+        /**
+         * @function updateConfig
+         * @memberOf CacheConfigCtrl
+         *
+         * @description
+         *   Updates the service configuration.
+         */
+        $scope.updateConfig = function() {
+          $scope.flags.http.saving = true;
+
+          var route = {
+            name: $scope.routes.getConfig,
+            params: { service: 'smarty' }
+          };
+
+          http.put(route, cleaner.clean($scope.items)).then(function(response) {
+            $scope.disableFlags('http');
+            messenger.post(response.data);
+          }, function(response) {
+            $scope.disableFlags('http');
+            messenger.post(response.data);
+          });
+        };
       }
-    };
-  }
-]);
+    ]);
+})();
