@@ -9,8 +9,6 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class PhotoController extends ContentOldController
 {
     /**
