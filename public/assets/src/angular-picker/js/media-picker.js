@@ -1102,7 +1102,7 @@
             return;
           }
 
-          var route = { name: 'backend_photo_create' };
+          var route = { name: 'api_v1_backend_photo_create_item' };
           var body  = [];
 
           body[$scope.selected.lastSelected.name] = image;
