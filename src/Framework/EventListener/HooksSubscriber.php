@@ -155,8 +155,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheCountries()
     {
-        $this->container->get('cache.manager')->getConnection('manager')
-            ->removeByPattern('*countries*');
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('cache.connection.manager', 'removeByPattern', [
+                '*countries*'
+            ])
+        );
     }
 
     /**
