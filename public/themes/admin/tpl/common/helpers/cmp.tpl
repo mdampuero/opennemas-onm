@@ -2,7 +2,7 @@
 <script async=true>
 /* eslint-disable */
   var elem = document.createElement('script');
-  elem.src = 'https://quantcast.mgr.consensu.org/v13/cmp.js';
+  elem.src = 'https://quantcast.mgr.consensu.org/v27/cmp.js';
   elem.async = true;
   var scpt = document.getElementsByTagName('script')[0];
   scpt.parentNode.insertBefore(elem, scpt);
