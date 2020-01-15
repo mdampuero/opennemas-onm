@@ -81,7 +81,7 @@
             {is_module_activated name="IMAGE_MANAGER"}
             {acl isAllowed="PHOTO_CREATE"}
             <div class="button">
-              <a href="{url name=backend_photo_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
+              <a media-picker media-picker-mode="explore,upload" media-picker-mode-active="upload" media-picker-type="photo" id="upload-button" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-image"></i>{t}Upload images{/t}
               </a>
             </div>
