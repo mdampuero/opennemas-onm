@@ -26,7 +26,7 @@ class TagPersisterTest extends \PHPUnit\Framework\TestCase
     {
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'remove', 'removeByPattern' ])
+            ->setMethods([ 'remove' ])
             ->getMock();
 
         $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
@@ -78,8 +78,8 @@ class TagPersisterTest extends \PHPUnit\Framework\TestCase
     {
         $tag = new Tag([ 'slug' => 'mumble' ]);
 
-        $this->cache->expects($this->once())->method('removeByPattern')
-            ->with('*plugh_article-123');
+        $this->cache->expects($this->at(0))->method('remove')
+            ->with('article-123');
 
         $this->conn->expects($this->once())->method('fetchAll')
             ->willReturn([
