@@ -134,12 +134,6 @@ class ApiController extends Controller
         $us  = $this->get($this->service);
         $oql = $request->query->get('oql', '');
 
-        $oql = preg_replace(
-            '/month\s*=\s*"([0-9-]+)"/',
-            '(DATE_FORMAT(created, "%Y-%m") = "$1")',
-            $oql
-        );
-
         $response = $us->getList($oql);
 
         return [
@@ -263,7 +257,7 @@ class ApiController extends Controller
      *
      * @return array The list of authors.
      */
-    protected function getAuthors($items = null)
+    protected function getAuthors()
     {
         return $this->get('api.service.author')->responsify(
             $this->get('api.service.author')
@@ -312,7 +306,7 @@ class ApiController extends Controller
      *
      * @return array The extra data.
      */
-    protected function getExtraData($items = null)
+    protected function getExtraData()
     {
         return [];
     }
