@@ -826,7 +826,7 @@
 
           $scope.uploader = new FileUploader({
             autoUpload: true,
-            url:        routing.generate('admin_image_create')
+            url:        routing.generate('api_v1_backend_photo_create_item')
           });
 
           // Filter files by extension
@@ -1102,7 +1102,7 @@
             return;
           }
 
-          var route = { name: 'admin_image_create' };
+          var route = { name: 'backend_photo_create' };
           var body  = [];
 
           body[$scope.selected.lastSelected.name] = image;

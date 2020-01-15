@@ -510,7 +510,7 @@
             return null;
           }
 
-          var route = { name: 'admin_image_create' };
+          var route = { name: 'api_v1_backend_photo_create_item' };
           var body  = {};
 
           body[imgData.name] = image;
