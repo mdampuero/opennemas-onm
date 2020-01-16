@@ -57,11 +57,6 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // Check for paywall
-        if (!is_null($content)) {
-            $this->paywallHook($content);
-        }
-
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
             $this->view->assign('photoInt', $photoInt);
@@ -115,52 +110,6 @@ class ContentsController extends Controller
         }
 
         return new Response($content, $httpCode);
-    }
-
-    /**
-     * Alteres the article given the paywall module status
-     */
-    public function paywallHook(&$content)
-    {
-        $paywallActivated         = $this->get('core.security')->hasExtension('PAYWALL');
-        $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
-
-        if ($paywallActivated && $onlyAvailableSubscribers) {
-            $newContent = $this->renderView(
-                'paywall/partials/content_only_for_subscribers.tpl',
-                ['id' => $content->id]
-            );
-
-            $user = $this->getUser();
-            if (!empty($user) && is_object($user)) {
-                if (!empty($user->meta)
-                    && array_key_exists('paywall_time_limit', $user->meta)
-                ) {
-                    $userSubscriptionDateString = $user->meta['paywall_time_limit'];
-                } else {
-                    $userSubscriptionDateString = '';
-                }
-                $userSubscriptionDate = \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $userSubscriptionDateString,
-                    new \DateTimeZone('UTC')
-                );
-
-                $now = new \DateTime('now', new \DateTimeZone('UTC'));
-
-                $hasSubscription = $userSubscriptionDate > $now;
-
-                if (!$hasSubscription) {
-                    $newContent    = $this->renderView(
-                        'paywall/partials/content_only_for_subscribers.tpl',
-                        [ 'id'     => $content->id ]
-                    );
-                    $content->body = $newContent;
-                }
-            } else {
-                $content->body = $newContent;
-            }
-        }
     }
 
     /**
