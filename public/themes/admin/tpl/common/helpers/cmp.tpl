@@ -7,7 +7,8 @@
   var scpt = document.getElementsByTagName('script')[0];
   scpt.parentNode.insertBefore(elem, scpt);
   (function() {
-    var gdprAppliesGlobally = true;
+    var gdprAppliesGlobally = false;
+
     function addFrame() {
       if (!window.frames['__cmpLocator']) {
         if (document.body) {
