@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Handles the actions for letters
@@ -322,14 +323,14 @@ class LetterController extends Controller
     public function saveImage(Request $request)
     {
         $file = $request->files->get('image');
-        $ps   = getService('api.service.photo');
+        $ps   = $this->get('api.service.photo');
 
         if (empty($file)) {
             return null;
         }
 
         try {
-            return $ps->createItem($file->getRealPath());
+            return $ps->createItem($file);
         } catch (\Exception $e) {
             $this->get('error.log')->error('Unable to save letter image: ' . $e->getMessage());
             return null;

@@ -150,12 +150,12 @@ class Importer
         $data = $this->getData($resource, $data);
 
         if ($resource->type === 'photo') {
-            $ps   = getService('api.service.photo');
-            $path = $data['path'];
+            $ps   = $this->container->get('api.service.photo');
+            $file = new \SplFileInfo($data['path']);
 
             unset($data['path']);
 
-            $id = $ps->createItem($path, $data, true);
+            $id = $ps->createItem($file, $data, true);
 
             return new \Photo($id);
         }
