@@ -44,7 +44,7 @@ class PhotoController extends ContentOldController
             $item = $this->get($this->service)->createItem($file);
         }
 
-        return new JsonResponse($item, 200);
+        return new JsonResponse($item, 201);
     }
 
     /**
