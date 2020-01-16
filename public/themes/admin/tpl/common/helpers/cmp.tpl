@@ -83,6 +83,7 @@
     'Publisher Purpose IDs': [ 1, 2, 3, 4, 5 ],
     'No Option': false,
     'Display Persistent Consent Link': false,
+    'Consent Scope': 'service',
     'Default Value for Toggles': 'on',
     'UI Layout': 'banner',
     'Initial Screen Title Text': '{t}We value your privacy{/t}',
