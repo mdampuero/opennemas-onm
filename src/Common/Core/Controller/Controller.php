@@ -138,37 +138,7 @@ class Controller extends SymfonyController
     }
 
     /**
-     * Returns a rendered template.
-     *
-     * @param string $template   The template name.
-     * @param array  $parameters An array of parameters to use in template.
-     *
-     * @return string The rendered template.
-     */
-    public function renderView($template, array $parameters = [])
-    {
-        $cacheId = null;
-
-        if (array_key_exists('cache_id', $parameters)) {
-            $cacheId = $parameters['cache_id'];
-            unset($parameters['cache_id']);
-        }
-
-        if (!empty($parameters)) {
-            $this->view->assign($parameters);
-        }
-
-        return $this->view->fetch($template, $cacheId);
-    }
-
-    /**
-     * Renders a template.
-     *
-     * @param string   $view       The view name.
-     * @param array    $parameters An array of parameters to use in template.
-     * @param Response $response   A response object.
-     *
-     * @return Response A Response object.
+     * {@inheritdoc}
      */
     public function render($view, array $parameters = [], Response $response = null)
     {
@@ -176,7 +146,7 @@ class Controller extends SymfonyController
             $response = new Response();
         }
 
-        $content = $this->renderView($view, $parameters);
+        $content = $this->view->render($view, $parameters);
         $response->setContent($content);
 
         return $response;
