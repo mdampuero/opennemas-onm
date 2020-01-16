@@ -108,6 +108,12 @@ class NewsletterRenderer
         $positions = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
         $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
 
+        $this->tpl->assign([
+            'advertisements' => $ads,
+            'ads_positions'  => $positions,
+            'ads_format'     => 'newsletter',
+        ]);
+
         // Process public URL for images and links
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
@@ -123,8 +129,6 @@ class NewsletterRenderer
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'newsletterContent' => $newsletterContent,
             'menuFrontpage'     => $menu->items,
-            'advertisements'    => $ads,
-            'ads_format'        => 'newsletter',
             'current_date'      => new \DateTime(),
             'conf'              => $configurations,
             'URL_PUBLIC'        => 'http://' . $publicUrl,
