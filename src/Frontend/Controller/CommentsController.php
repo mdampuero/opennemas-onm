@@ -102,20 +102,20 @@ class CommentsController extends Controller
             list($positions, $advertisements) = $this->getAds();
         }
 
-        $contents = $this->renderView('comments/partials/comment_element.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'total'          => $total,
-            'comments'       => $comments,
-            'contentId'      => $content->id,
-            'elems_per_page' => $epp,
-            'offset'         => $offset,
-        ]);
+        $contents = $this->get('core.template.frontend')
+            ->render('comments/partials/comment_element.tpl', [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+                'total'          => $total,
+                'comments'       => $comments,
+                'contentId'      => $content->id,
+                'elems_per_page' => $epp,
+                'offset'         => $offset,
+            ]);
 
-        $more = ($total - 1 < ($epp * $offset)) ? false : true;
         return new Response(json_encode([
             'contents' => $contents,
-            'more'     => $more,
+            'more'     => $total < ($epp * $offset),
         ]), 200);
     }
 
