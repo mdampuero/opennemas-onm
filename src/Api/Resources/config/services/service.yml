@@ -75,7 +75,7 @@ services:
         public:    true
 
     api.service.photo:
-        class:     Api\Service\V1\ContentOldService
+        class:     Api\Service\V1\PhotoService
         arguments: [ '@service_container', '\Photo' ]
         public:    true
 

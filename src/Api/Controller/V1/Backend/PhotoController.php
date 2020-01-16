@@ -9,6 +9,9 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class PhotoController extends ContentOldController
 {
     /**
@@ -25,6 +28,24 @@ class PhotoController extends ContentOldController
      * {@inheritdoc}
      */
     protected $service = 'api.service.photo';
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saveItemAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+        $files = $request->files->all();
+
+        $item = new \Photo();
+
+        foreach ($files as $file) {
+            $item = $this->get($this->service)->createItem($file);
+        }
+
+        return new JsonResponse($item, 200);
+    }
 
     /**
      * {@inheritDoc}
