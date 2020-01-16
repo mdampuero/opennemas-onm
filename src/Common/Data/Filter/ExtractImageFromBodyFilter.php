@@ -55,7 +55,7 @@ class ExtractImageFromBodyFilter extends Filter
         $basename = $this->getParameter('basename', true);
         $ids[0]   = null;
         $created  = new \Datetime($created);
-        $ps       = getService('api.service.photo');
+        $ps       = $this->container->get('api.service.photo');
 
         foreach ($files as $key => $file) {
             $filepath = $basename ? $path . basename($file) : $path . $file;
