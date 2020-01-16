@@ -20,8 +20,9 @@ class PhotoService extends ContentOldService
     /**
      *{@inheritdoc}
      */
-    public function createItem($file = null, $data = [], bool $copy = false)
+    public function createItem($path = null, $data = [], bool $copy = false)
     {
+        $file = new File($path);
         if (empty($file)) {
             throw new CreateItemException('No file provided');
         }
