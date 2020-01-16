@@ -52,8 +52,10 @@
       if (!b.length) {
         return __cmp.a;
       } else if (b[0] === 'ping') {
-        b[2]({ 'gdprAppliesGlobally': gdprAppliesGlobally,
-          'cmpLoaded': false }, true);
+        b[2]({
+          'gdprAppliesGlobally': gdprAppliesGlobally,
+          'cmpLoaded': false
+        }, true);
       } else if (c == '__cmp') {
         return false;
       } else {
@@ -67,8 +69,7 @@
     window.__cmp.msgHandler = cmpMsgHandler;
     if (window.addEventListener) {
       window.addEventListener('message', cmpMsgHandler, false);
-    }
-    else {
+    } else {
       window.attachEvent('onmessage', cmpMsgHandler);
     }
   })();
