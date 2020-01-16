@@ -403,14 +403,15 @@ class UserController extends Controller
         $subject = sprintf(_('New user account in %s'), $ds->get('site_title'));
 
         $this->view->setCaching(0);
-        $body = $this->renderView('user/emails/register.tpl', [
-            'name' => $data['name'],
-            'url'  => $this->get('router')->generate(
-                'frontend_user_activate',
-                [ 'token' => $data['token'] ],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ),
-        ]);
+        $body = $this->get('core.template.frontend')
+            ->render('user/emails/register.tpl', [
+                'name' => $data['name'],
+                'url'  => $this->get('router')->generate(
+                    'frontend_user_activate',
+                    [ 'token' => $data['token'] ],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+            ]);
 
         $message = \Swift_Message::newInstance();
         $message
@@ -440,10 +441,11 @@ class UserController extends Controller
         $ds = $this->get('orm.manager')->getDataSet('Settings');
 
         $subject = sprintf(_('Welcome to %s'), $ds->get('site_name'));
-        $body    = $this->renderView('user/emails/welcome.tpl', [
-            'name' => $user->name,
-            'url'  => $this->generateUrl('frontend_paywall_showcase', [], true),
-        ]);
+        $body    = $this->get('core.template.frontend')
+            ->render('user/emails/welcome.tpl', [
+                'name' => $user->name,
+                'url'  => $this->generateUrl('frontend_paywall_showcase', [], true),
+            ]);
 
         $message = \Swift_Message::newInstance();
         $message

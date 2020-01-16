@@ -237,7 +237,7 @@ class WebServiceController extends Controller
             ->setSender($companyMail['sender_mail'], "Opennemas")
             ->setSubject(_("A new opennemas instance has been created"))
             ->setBody(
-                $this->renderView(
+                $this->get('core.template.manager')->render(
                     'instance/emails/newInstanceToCompany.tpl',
                     [
                         'data'        => $data,
@@ -272,7 +272,7 @@ class WebServiceController extends Controller
             ->setSender($companyMail['sender_mail'], "Opennemas")
             ->setSubject(sprintf(_("Your newspaper is now live"), $data['name']))
             ->setBody(
-                $this->renderView(
+                $this->get('core.template.manager')->render(
                     'instance/emails/newInstanceToUser.tpl',
                     [
                         'data'              => $data,
@@ -304,7 +304,7 @@ class WebServiceController extends Controller
             ->setSender($emails['sender_mail'], "Opennemas")
             ->setSubject(_("Error when creating a new instance"))
             ->setBody(
-                $this->renderView(
+                $this->get('core.template.manager')->render(
                     'instance/emails/instanceCreationError.tpl',
                     [
                         'instance'  => $instance,
