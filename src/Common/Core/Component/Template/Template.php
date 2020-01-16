@@ -288,6 +288,30 @@ class Template extends \Smarty
     }
 
     /**
+     * Assigns parameters to template and returns the generated HTML.
+     *
+     * @param string $template The template name.
+     * @param array  $params   The list of parameters.
+     *
+     * @return string The generated HTML.
+     */
+    public function render($template = null, $params = [])
+    {
+        $cacheId = null;
+
+        if (array_key_exists('cache_id', $params)) {
+            $cacheId = $params['cache_id'];
+            unset($params['cache_id']);
+        }
+
+        if (!empty($params)) {
+            $this->assign($params);
+        }
+
+        return $this->fetch($template, $cacheId);
+    }
+
+    /**
      * Configures the Smarty cache for the section.
      *
      * @param string $section The section.

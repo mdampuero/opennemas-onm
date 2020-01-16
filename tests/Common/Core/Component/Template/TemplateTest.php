@@ -398,29 +398,51 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests render.
+     */
+    public function testRender()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'assign', 'fetch' ])
+            ->getMock();
+
+        $template->expects($this->once())->method('assign')
+            ->with([ 'foobar' => 'plugh' ]);
+        $template->expects($this->once())->method('fetch')
+            ->with('wobble.tpl', 'flob')
+            ->willReturn('<qux></qux>');
+
+        $this->assertEquals('<qux></qux>', $template->render('wobble.tpl', [
+            'cache_id' => 'flob',
+            'foobar'   => 'plugh'
+        ]));
+    }
+
+    /**
      * Tests setConfig with cache enabled.
      */
     public function testSetConfigWithCacheEnabled()
     {
-         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
-             ->disableOriginalConstructor()
-             ->setMethods([
-                 'configLoad', 'getConfigVars', 'setCaching', 'setCacheLifetime'
-             ])->getMock();
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'configLoad', 'getConfigVars', 'setCaching', 'setCacheLifetime'
+            ])->getMock();
 
-         $template->expects($this->once())->method('configLoad')
-             ->willReturn(true);
+        $template->expects($this->once())->method('configLoad')
+            ->willReturn(true);
 
-         $template->expects($this->once())->method('getConfigVars')
-             ->willReturn([ 'caching' => true ]);
+        $template->expects($this->once())->method('getConfigVars')
+            ->willReturn([ 'caching' => true ]);
 
-         $template->expects($this->once())->method('setCaching')
-             ->willReturn(true);
+        $template->expects($this->once())->method('setCaching')
+            ->willReturn(true);
 
-         $template->expects($this->once())->method('setCacheLifetime')
-             ->with(86400)->willReturn(true);
+        $template->expects($this->once())->method('setCacheLifetime')
+            ->with(86400)->willReturn(true);
 
-         $this->assertEquals(null, $template->setConfig('frontpage'));
+        $this->assertEquals(null, $template->setConfig('frontpage'));
     }
 
     /**
