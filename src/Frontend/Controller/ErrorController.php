@@ -40,7 +40,7 @@ class ErrorController extends Controller
     public function defaultAction(Request $request)
     {
         $exception = $request->attributes->get('exception');
-        $class = new \ReflectionClass($exception->getClass());
+        $class     = new \ReflectionClass($exception->getClass());
 
         switch ($class->getShortName()) {
             case 'AccessDeniedException':
@@ -89,10 +89,11 @@ class ErrorController extends Controller
 
         list($positions, $advertisements) = $this->getAdvertisements();
 
-        return new Response($this->renderView('static_pages/403.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-        ]), 403);
+        return new Response($this->get('core.template.frontend')
+            ->render('static_pages/403.tpl', [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+            ]), 403);
     }
 
     /**
@@ -107,7 +108,8 @@ class ErrorController extends Controller
     {
         $this->get('error.log')->error($class . ': ' . $message);
 
-        return new Response($this->renderView('static_pages/statics.tpl'), 500);
+        return new Response($this->get('core.template.frontend')
+            ->render('static_pages/statics.tpl'), 500);
     }
 
     /**
@@ -157,11 +159,12 @@ class ErrorController extends Controller
 
         $this->view->setConfig('articles');
 
-        $content = $this->renderView('static_pages/404.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $this->view->getCacheId('error', 404),
-        ]);
+        $content = $this->get('core.template.frontend')
+            ->render('static_pages/404.tpl', [
+                'ads_positions'  => $positions,
+                'advertisements' => $advertisements,
+                'cache_id'       => $this->view->getCacheId('error', 404),
+            ]);
 
         return new Response($content, 404, [
             'x-cache-for' => '+1 day',

@@ -69,7 +69,7 @@ class ErrorController extends Controller
         $this->get('application.log')->info('security.authorization.failure');
 
         if (!$request->isXmlHttpRequest()) {
-            $content = $this->renderView('error/404.tpl', [
+            $content = $this->get('core.template.admin')->render('error/404.tpl', [
                 'error'   => $request->attributes->get('exception'),
                 'message' => $content,
             ]);
@@ -95,7 +95,7 @@ class ErrorController extends Controller
         );
 
         if (!$request->isXmlHttpRequest()) {
-            $content = $this->renderView('error/404.tpl', [
+            $content = $this->get('core.template.admin')->render('error/404.tpl', [
                 'environment' => $this->get('kernel')->getEnvironment(),
                 'error'       => $exception,
                 'message'     => $content
@@ -150,11 +150,12 @@ class ErrorController extends Controller
         $this->get('application.log')->info($content);
 
         if (!$request->isXmlHttpRequest()) {
-            $content = $this->renderView('error/instance_not_activated.tpl', [
-                'environment' => $this->get('kernel')->getEnvironment(),
-                'error'       => $request->attributes->get('exception'),
-                'host'        => $request->getHost()
-            ]);
+            $content = $this->get('core.template.admin')
+                ->render('error/instance_not_activated.tpl', [
+                    'environment' => $this->get('kernel')->getEnvironment(),
+                    'error'       => $request->attributes->get('exception'),
+                    'host'        => $request->getHost()
+                ]);
         }
 
         $response = new Response($content, 404);
@@ -178,11 +179,12 @@ class ErrorController extends Controller
         $this->get('application.log')->info($content);
 
         if (!$request->isXmlHttpRequest()) {
-            $content = $this->renderView('error/instance_not_found.tpl', [
-                'environment' => $this->get('kernel')->getEnvironment(),
-                'error'       => $request->attributes->get('exception'),
-                'host'        => $request->getHost()
-            ]);
+            $content = $this->get('core.template.admin')
+                ->render('error/instance_not_found.tpl', [
+                    'environment' => $this->get('kernel')->getEnvironment(),
+                    'error'       => $request->attributes->get('exception'),
+                    'host'        => $request->getHost()
+                ]);
         }
 
         $response = new Response($content, 404);
@@ -210,7 +212,7 @@ class ErrorController extends Controller
         $this->get('application.log')->info('Page not found');
 
         if (!$request->isXmlHttpRequest()) {
-            $content = $this->renderView('error/404.tpl', [
+            $content = $this->get('core.template.admin')->render('error/404.tpl', [
                 'environment' => $this->get('kernel')->getEnvironment(),
                 'error'       => $request->attributes->get('exception'),
                 'message'     => $content
