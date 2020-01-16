@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
 
 class Photo extends Content
 {
@@ -180,42 +179,6 @@ class Photo extends Content
         ]);
 
         return $this->id;
-    }
-
-    /**
-     * Creates a photo basing on a file and optional photo information.
-     *
-     * @param string $path The path to the file.
-     * @param array  $data The photo information.
-     * @param bool   $copy Whether to move or copy the file.
-     *
-     * @return int The photo id.
-     */
-    public function createFromLocalFile(string $path, array $data = [], bool $copy = false) : int
-    {
-        $ih   = getService('core.helper.image');
-        $date = new \DateTime($data['created'] ?? null);
-
-        $file     = new File($path);
-        $path     = $ih->generatePath($file, $date);
-        $filename = basename($path);
-
-        $ih->move($file, $path, $copy);
-
-        if ($ih->isOptimizable($path)) {
-            $ih->optimize($path);
-        }
-
-        $data = array_merge([
-            'changed'        => $date->format('Y-m-d H:i:s'),
-            'content_status' => 1,
-            'created'        => $date->format('Y-m-d H:i:s'),
-            'name'           => $filename,
-            'path_file'      => $date->format('/Y/m/d/'),
-            'title'          => $filename,
-        ], $data, $ih->getInformation($path));
-
-        return $this->create($data);
     }
 
     /**

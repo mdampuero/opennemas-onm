@@ -40,6 +40,18 @@ class ImageHelper extends FileHelper
     }
 
     /**
+     * Checks if a file exists.
+     *
+     * @param string $path The path to file.
+     *
+     * @return bool True if the file exists. False otherwise.
+     */
+    public function exists(string $path) : bool
+    {
+        return $this->fs->exists($path);
+    }
+
+    /**
      * Returns the path where the file should be moved.
      *
      * @param File     $file The file to generate path to.
