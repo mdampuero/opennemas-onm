@@ -114,14 +114,15 @@ class Locale
         foreach ($configs as $context => $config) {
             // Convert a timezone id to a timezone name
             if (array_key_exists('timezone', $config)) {
-                $config['timezone'] =
+                $this->config[$context]['timezone'] =
                     $this->getTimeZoneName($config['timezone']);
             }
 
-            $this->config[$context] = array_replace_recursive(
-                $this->config[$context],
-                $config
-            );
+            foreach ($this->config[$context]['language'] as $key => &$value) {
+                if (array_key_exists($key, $config['language'])) {
+                    $value = $config['language'][$key];
+                }
+            }
         }
 
         return $this;
@@ -136,10 +137,6 @@ class Locale
      */
     public function getAvailableLocales($context = null)
     {
-        if (empty($this->config[$this->getContext($context)]['language']['available'])) {
-            return [];
-        }
-
         $locales = [];
 
         foreach ($this->config[$this->getContext($context)]['language']['available'] as $locale) {
