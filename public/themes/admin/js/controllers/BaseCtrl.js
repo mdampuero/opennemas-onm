@@ -510,10 +510,10 @@
             return null;
           }
 
-          var route = { name: 'api_v1_backend_photo_create_item' };
+          var route = { name: 'api_v1_backend_photo_save_item' };
           var body  = {};
 
-          body[imgData.name] = image;
+          body['imgData.name'] = image;
           http.post(route, body).success(function() {
             if (typeof $scope.list === 'function') {
               $scope.list($scope.route, true);
