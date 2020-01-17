@@ -18,7 +18,6 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      * @type {Object}
      */
     $scope.routes = {
-      createItem: 'api_v1_backend_photo_create_item',
       getItem:    'api_v1_backend_photo_get_item',
       public:     'frontend_photo_show',
       redirect:   'backend_photo_show',
