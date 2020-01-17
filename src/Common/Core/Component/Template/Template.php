@@ -144,7 +144,7 @@ class Template extends \Smarty
     public function addTheme($theme)
     {
         $paths = $theme->multirepo
-            ? [ 'src/tpl', 'components/baseline/src/tpl' ]
+            ? [ 'src/tpl', 'vendor/baseline/src/tpl' ]
             : [ 'tpl' ];
 
         foreach ($paths as $path) {

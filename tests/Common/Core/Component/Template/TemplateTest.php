@@ -183,7 +183,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $template->expects($this->at(0))->method('addTemplateDir')
             ->with('/glorp/waldo/src/tpl');
         $template->expects($this->at(1))->method('addTemplateDir')
-            ->with('/glorp/waldo/components/baseline/src/tpl');
+            ->with('/glorp/waldo/vendor/baseline/src/tpl');
         $this->locale->expects($this->once())->method('addTextDomain')
             ->with('wubble', '/glorp/waldo/locale');
 
