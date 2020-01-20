@@ -240,7 +240,6 @@
 }
 .qc-cmp-ui-content {
   overflow-y: initial !important;
-  padding: 30px !important;
 }
 .qc-cmp-consent-content,
 .qc-cmp-purposes-page-content {
@@ -249,9 +248,7 @@
   margin: 0 auto;
 }
 .qc-cmp-ui-container {
-  background: initial !important;
   overflow-y: auto !important;
-  bottom: auto !important;
 }
 .qc-cmp-ui-showing {
   overflow: auto !important;
@@ -294,7 +291,6 @@
 }
 .qc-cmp-ui {
   background-color: #f5f5f5 !important;
-  min-height: auto !important;
   overflow-y: initial !important;
 }
 .qc-cmp-ui,
@@ -335,35 +331,6 @@
   font-family: Helvetica,Arial,sans-serif !important;
 }
 @media (max-width: 479px) {
-  .qc-cmp-button,
-  .qc-cmp-main-messaging,
-  .qc-cmp-messaging,
-  .qc-cmp-purpose-list,
-  .qc-cmp-tab,
-  .qc-cmp-vendor-list {
-    font-size: 10px !important;
-  }
-  .qc-cmp-title,
-  .qc-cmp-sub-title {
-    font-size: 15px !important;
-  }
-  .qc-cmp-ui-content {
-      padding: 5px 5px 15px 5px !important;
-  }
-  .qc-cmp-ui-container {
-    bottom: 0 !important;
-    top: auto !important;
-  }
-  .qc-cmp-main-messaging {
-    padding: 5px !important;
-  }
-  .qc-cmp-button {
-    height: 35px !important;
-    max-width: 200px !important;
-  }
-  .qc-cmp-alt-buttons {
-    padding-bottom: 15px !important;
-  }
   .qc-cmp-alt-action {
     font-size: 12px !important;
   }
