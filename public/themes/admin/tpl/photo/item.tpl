@@ -69,19 +69,19 @@
 {/block}
 
 {block name="leftColumn"}
- <div class="grid simple">
+  <div class="grid simple">
     <div class="grid-body">
-          <div class="thumbnail-wrapper">
-            <div class="form-group">
-              <div class="thumbnail-placeholder">
-                <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
-                  <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="true">
-                  </dynamic-image>
-                </div>
-              </div>
+      <div class="thumbnail-wrapper">
+        <div class="form-group">
+          <div class="thumbnail-placeholder">
+            <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
+              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="true">
+              </dynamic-image>
             </div>
-          {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-          {include file="ui/component/content-editor/textarea.tpl"  title="{t}Description{/t}" field="description" rows=20}
+          </div>
+        </div>
+        {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+        {include file="ui/component/content-editor/textarea.tpl"  title="{t}Description{/t}" field="description" rows=20}
         </div>
     </div>
   </div>
