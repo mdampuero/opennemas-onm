@@ -69,7 +69,7 @@ abstract class FileHelper
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath(File $file, \DateTime $date) : string
+    public function generatePath(\SplFileInfo $file, \DateTime $date) : string
     {
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s',
@@ -106,7 +106,7 @@ abstract class FileHelper
      *
      * @return string The target path.
      */
-    public function move(File $file, string $target, bool $copy = false) : void
+    public function move(\SplFileInfo $file, string $target, bool $copy = false) : void
     {
         $name      = basename($target);
         $directory = str_replace($name, '', $target);

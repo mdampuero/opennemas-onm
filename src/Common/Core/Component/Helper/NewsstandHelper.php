@@ -21,7 +21,7 @@ class NewsstandHelper extends FileHelper
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath(File $file, \DateTime $date) : string
+    public function generatePath(\SplFileInfo $file, \DateTime $date) : string
     {
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s%s.%s',

@@ -59,7 +59,7 @@ class ImageHelper extends FileHelper
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath(File $file, \DateTime $date) : string
+    public function generatePath(\SplFileInfo $file, \DateTime $date) : string
     {
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s%s.%s',
@@ -81,7 +81,7 @@ class ImageHelper extends FileHelper
      *
      * @return string The file extension.
      */
-    public function getExtension(File $file) : string
+    public function getExtension(\SplFileInfo $file) : string
     {
         return MimeTypeTool::getExtension($file);
     }
