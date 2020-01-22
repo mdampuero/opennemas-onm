@@ -8,9 +8,6 @@
  * file that was distributed with this source code.
  */
 namespace Common\Data\Filter;
-
-use Symfony\Component\HttpFoundation\File\File;
-
 class ExtractImageFromBodyFilter extends Filter
 {
     /**
