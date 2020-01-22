@@ -13,7 +13,6 @@ use Common\Core\Component\Image\Processor;
 use Common\Core\Component\Loader\InstanceLoader;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
 
 class ImageHelper extends FileHelper
 {
@@ -54,7 +53,7 @@ class ImageHelper extends FileHelper
     /**
      * Returns the path where the file should be moved.
      *
-     * @param File     $file The file to generate path to.
+     * @param \SplFileInfo     $file The file to generate path to.
      * @param DateTime $date The date to generate the path from.
      *
      * @return string The path where the file should be moved.
@@ -77,7 +76,7 @@ class ImageHelper extends FileHelper
      *
      * Returns the extension for a file.
      *
-     * @param File $file The file to return extension for.
+     * @param \SplFileInfo $file The file to return extension for.
      *
      * @return string The file extension.
      */
