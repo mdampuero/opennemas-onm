@@ -68,60 +68,25 @@
                   <span ng-if="item.manual" class="fa fa-newspaper-o"></span>
                   <span ng-bind-html="item.name | highlight: $select.search"></span>
                 </div>
-              </li>
-              <li class="quicklinks hidden-sm">
-                <span class="h-seperate"></span>
-              </li>
-              {/is_module_activated}
-              <li class="quicklinks">
-                <div class="btn-group">
-                  <button class="btn btn-loading btn-primary" type="button" ng-click="save()" ng-disabled="flags.http.saving">
-                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-                    {t}Save{/t}
-                  </button>
-                  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" ng-disabled="flags.http.saving">
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu no-padding pull-right">
-                    <li>
-                      <a href="#" ng-click="preview()">
-                        <i class="fa fa-eye"></i>
-                        {t}Preview{/t}
-                      </a>
-                    </li>
-                  {is_module_activated name="es.openhost.module.scheduleFrontpage"}
-                    <li class="divider"></li>
-                    <li>
-                      <a href="#" ng-click="saveVersion()">
-                        <i class="fa fa-files-o"></i>
-                        {t}Save this version{/t}
-                      </a>
-                    </li>
-                    <li class="divider visible-md visible-sm"></li>
-                    <li class="visible-md visible-sm">
-                      <a href="#" ng-click="saveLiveNow()">
-                        <i class="fa fa-toggle-off"></i>
-                        {t}Live now{/t}
-                      </a>
-                    </li>
-                    <li class="divider visible-sm"></li>
-                    <li class="visible-sm">
-                      <a href="#" ng-click="deleteVersion($event)">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                        {t}Delete{/t}
-                      </a>
-                    </li>
-                  {/is_module_activated}
-                  {is_module_activated name="FRONTPAGES_LAYOUT"}
-                    <li class="divider visible-sm"></li>
-                    <li class="visible-sm">
-                      <a href="#" ng-click="openLayoutModal()">
-                        <i class="fa fa-cog"></i>
-                        {t}Settings{/t}
-                      </a>
-                    </li>
-                  {/is_module_activated}
-                  </ul>
+              </ui-select-choices>
+            </ui-select>
+          </li>
+        {is_module_activated name="es.openhost.module.scheduleFrontpage"}
+          <li class="quicklinks hidden-xs m-l-5 m-r-5 ng-cloak">
+            <h4>
+              <i class="fa fa-angle-right"></i>
+            </h4>
+          </li>
+          <li class="quicklinks version ng-cloak">
+            <ui-select name="versions" theme="select2" ng-model="versionId" ng-change=changeVersion($select.selected.id) search-enabled="false">
+              <ui-select-match>
+                [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices  repeat="item.id as item in versions">
+                <div class="versionNotScheduled" ng-if="scheduledFFuture.indexOf(item.id) === -1 && item.id !== publishVersionId">
+                  <span class="notScheduled"></span>
+                  <span ng-bind-html="item.name | highlight: $select.search"></span>
+                  <span class="btn btn-link" ng-click="deleteVersion($event, item.id)"><span class="fa fa-trash-o text-danger"></span></span>
                 </div>
                 <div class="versionScheduled" ng-if="scheduledFFuture.indexOf(item.id) !== -1 && item.id !== publishVersionId">
                   <span class="fa fa-calendar-check-o p-5"></span>
@@ -155,11 +120,11 @@
             {/is_module_activated}
             <li class="quicklinks">
               <div class="btn-group">
-                <button class="btn btn-primary" type="button" ng-click="save()">
+                <button class="btn btn-loading btn-primary" type="button" ng-click="save()" ng-disabled="flags.http.saving">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
                 </button>
-                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button">
+                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" ng-disabled="flags.http.saving">
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu no-padding pull-right">
