@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  */
 namespace Common\Data\Filter;
+
 class ExtractImageFromBodyFilter extends Filter
 {
     /**
