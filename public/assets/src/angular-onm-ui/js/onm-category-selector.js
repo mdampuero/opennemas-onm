@@ -150,6 +150,10 @@
                     params: { id: $scope.ngModel }
                   };
 
+                  if ($scope.ngModel.length > 1) {
+                    route.params.id = $scope.ngModel[$scope.ngModel.length - 1];
+                  }
+
                   http.get(route).then(function(response) {
                     $scope.addMissingItem(response.data.item);
                     $scope.localize($scope.data.items, $scope.data.extra);
