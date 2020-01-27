@@ -177,6 +177,8 @@ class EntityManager extends BaseManager
             $this->parseCategory($filters);
         }
 
+        $filters = str_replace('AND ()', '', $filters);
+
         $sql .= " WHERE " . $filters;
 
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
@@ -381,19 +383,36 @@ class EntityManager extends BaseManager
     protected function parseCategory(string &$filters)
     {
         $pattern = '/pk_fk_content_category\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
-            . '|pk_fk_content_category\s*(in|IN)\s*\([\'"0-9, ]+\)/';
+            . '|pk_fk_content_category\s*=\s*[\'"]{0,1}[a-z]+[\'"]{0,1}'
+            . '|pk_fk_content_category\s*(in|IN)\s*\([\'"a-z, ]+\)'
+            . '|pk_fk_content_category\s*(not in|NOT IN)\s*\([\'"a-z, ]+\)'
+            . '|pk_fk_content_category\s*(in|IN)\s*\([\'"0-9, ]+\)'
+            . '|pk_fk_content_category\s*(not in|NOT IN)\s*\([\'"0-9, ]+\)/';
 
         preg_match_all($pattern, $filters, $matches);
 
         foreach ($matches[0] as $match) {
-            $filters = str_replace(
-                $match,
-                sprintf(
-                    'pk_content IN (SELECT pk_fk_content FROM contents_categories WHERE %s)',
-                    $match
-                ),
-                $filters
-            );
+            $categoryFilter = str_replace('\'', '', $match);
+            $categoryFilter = str_replace(',', '', $categoryFilter);
+            if (is_numeric(substr($categoryFilter, strpos($categoryFilter, '=') + 1))
+                || is_numeric(substr($categoryFilter, strpos($categoryFilter, 'in') + 1))
+                || is_numeric(substr($categoryFilter, strpos($categoryFilter, 'IN') + 1))
+            ) {
+                $filters = str_replace(
+                    $match,
+                    sprintf(
+                        'pk_content IN (SELECT pk_fk_content FROM contents_categories WHERE %s)',
+                        $match
+                    ),
+                    $filters
+                );
+            } else {
+                $filters = str_replace(
+                    $match,
+                    '',
+                    $filters
+                );
+            }
         }
     }
 
