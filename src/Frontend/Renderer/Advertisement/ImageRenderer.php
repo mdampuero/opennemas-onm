@@ -130,7 +130,7 @@ class ImageRenderer extends AdvertisementRenderer
             'width'  => $img->width,
             'height' => $img->height,
             'src'    => $this->container->get('core.helper.url_generator')
-                ->generate($img),
+                ->generate($img, ['absolute' => true]),
             'url'    => $this->instance->getBaseUrl() . $this->router->generate(
                 'frontend_ad_redirect',
                 [ 'id' => $publicId ]
