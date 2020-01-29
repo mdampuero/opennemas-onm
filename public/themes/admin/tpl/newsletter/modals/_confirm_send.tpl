@@ -9,6 +9,6 @@
     <button type="button" class="btn btn-danger btn-lg btn-block" data-dismiss="modal" ng-click="no()">{t}Cancel{/t}</button>
   </div>
   <div class="col-xs-6">
-    <button type="button" class="btn btn-success btn-lg btn-block" ng-click="yes()">{t}Send{/t}</button>
+    <button type="button" class="btn btn-success btn-lg btn-block" ng-click="yes()" ng-disabled="yesLoading">{t}Send{/t}</button>
   </div>
 </div>
