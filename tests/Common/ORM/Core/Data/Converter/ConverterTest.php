@@ -24,7 +24,26 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->locale = new Locale([ 'en_US' ], 'path/to/foo');
+        $this->config = [
+            'backend'  => [
+                'language' => [
+                    'available' => [ 'en_US', 'es_ES' ],
+                    'selected'  => 'en_US',
+                    'slug'      => []
+                ],
+                'timezone' => 'UTC'
+            ],
+            'frontend' => [
+                'language' => [
+                    'available' => [ 'en_US', 'es_ES' ],
+                    'selected'  => 'en_US',
+                    'slug'      => []
+                ],
+                'timezone' => 'UTC'
+            ]
+        ];
+
+        $this->locale = new Locale($this->config, 'path/to/foo');
         $this->locale->setLocale('en_US');
 
         $this->metadata = new Metadata([

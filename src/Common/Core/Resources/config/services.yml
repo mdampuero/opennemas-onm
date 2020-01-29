@@ -4,7 +4,19 @@ imports:
     - { resource: services/loader.yml }
     - { resource: services/subscriber.yml }
 parameters:
-    core.locale.available: [ 'en_US', 'es_ES', 'ca_ES', 'gl_ES' ]
+    core.locale.default:
+        backend:
+            language:
+                available: [ 'en_US', 'es_ES', 'gl_ES' ]
+                selected: 'en_US'
+                slug: []
+            timezone: UTC
+        frontend:
+            language:
+                available: [ 'en_US', 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES' ]
+                selected: 'en_US'
+                slug: { 'en_US': 'en', 'es_ES': 'es', 'eu_ES': 'eu', 'ca_ES': 'ca', 'gl_ES': 'gl' }
+            timezone: UTC
     core.locale.path:      '%kernel.root_dir%/Resources/locale'
     core.maintenance.file: '%kernel.root_dir%/../.maintenance'
     core.template.filters:
@@ -93,7 +105,7 @@ services:
 
     core.locale:
         class:     Common\Core\Component\Locale\Locale
-        arguments: [ '%core.locale.available%', '%core.locale.path%' ]
+        arguments: [ '%core.locale.default%', '%core.locale.path%' ]
         public:    true
 
     core.renderer.newsletter:

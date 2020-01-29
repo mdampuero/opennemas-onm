@@ -511,7 +511,7 @@
                             {if !$multilanguage}
                               <select id="locale-frontend" name="locale-frontend" ng-model="settings.locale.frontend.language.selected" required>
                                 <option value="">{t}Select a language...{/t}</option>
-                                <option value="[% code %]" ng-repeat="(code,name) in extra.locales.backend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
+                                <option value="[% code %]" ng-repeat="(code,name) in extra.locales.frontend" ng-selected="[% code === settings.locale.frontend.language.selected %]">[% name %]</option>
                               </select>
                             {/if}
                             {if $multilanguage}

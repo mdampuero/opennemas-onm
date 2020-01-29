@@ -21,7 +21,26 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->locale = new Locale([], '/wubble/flob');
+        $this->config = [
+            'backend'  => [
+                'language' => [
+                    'available' => [ 'en_US', 'es_ES' ],
+                    'selected'  => 'en_US',
+                    'slug'      => []
+                ],
+                'timezone' => 'UTC'
+            ],
+            'frontend' => [
+                'language' => [
+                    'available' => [ 'en_US', 'es_ES' ],
+                    'selected'  => 'en_US',
+                    'slug'      => []
+                ],
+                'timezone' => 'UTC'
+            ]
+        ];
+
+        $this->locale = new Locale($this->config, '/wubble/flob');
         $this->locale->configure([
             'frontend' => [
                 'language' => [
