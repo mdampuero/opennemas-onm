@@ -112,7 +112,7 @@
           var height = containerSize + padding;
           var width = containerSize + padding;
 
-          var rows = Math.floor(maxHeight / height);
+          var rows = Math.ceil(maxHeight / height);
           var cols = Math.floor(maxWidth / width);
 
           if (rows === 0) {
