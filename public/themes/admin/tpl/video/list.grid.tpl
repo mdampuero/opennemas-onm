@@ -35,6 +35,6 @@
 
 {block name="master-row"}
 <div class="row master-row ng-cloak">
-  <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-15 infinite-col media-item"> </div>
+  <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 m-b-0 infinite-col media-item"> </div>
 </div>
 {/block}
