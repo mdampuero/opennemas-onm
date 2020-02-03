@@ -93,10 +93,10 @@
          * @return {Integer} The number of items per page.
          */
         $scope.getEppInGrid = function() {
-          var maxHeight = $(window).height() - $('.header').height() -
-            $('.actions-navbar').height() * 2;
-          var maxWidth  = $(window).width() - $('.sidebar').width();
           var padding   = 15;
+          var maxHeight = $(window).height() - $('.header').height() -
+            $('.actions-navbar').height() * 2 - padding;
+          var maxWidth  = $(window).width() - $('.sidebar').width();
 
           if ($('.content-wrapper').length > 0) {
             maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
