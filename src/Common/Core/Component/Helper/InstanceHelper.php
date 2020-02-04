@@ -13,6 +13,7 @@ use Common\Data\Serialize\Serializer\PhpSerializer;
 use Common\ORM\Core\Connection;
 use Common\ORM\Entity\Instance;
 use GuzzleHttp\Client;
+use Symfony\Component\Filesystem\Filesystem;
 
 class InstanceHelper
 {
@@ -29,6 +30,13 @@ class InstanceHelper
      * @var Connection
      */
     protected $conn;
+
+    /**
+     * The Filesystem component.
+     *
+     * @var Filesystem
+     */
+    protected $fs;
 
     /**
      * The path to public/media folder.
@@ -55,6 +63,7 @@ class InstanceHelper
     {
         $this->client    = new Client();
         $this->conn      = $conn;
+        $this->fs        = new Filesystem();
         $this->mediaPath = $mediaPath;
         $this->piwik     = $piwik;
     }
@@ -129,7 +138,7 @@ class InstanceHelper
 
             return $created;
         } catch (\Exception $e) {
-            return null;
+            return $instance->created;
         }
     }
 
@@ -153,12 +162,11 @@ class InstanceHelper
      *
      * @param Instance $instance The instance.
      *
-     * @return array The list of files and folders that their size found in
-     *               public/media.
+     * @return int The size of the instance media folder.
      *
      * @codeCoverageIgnore
      */
-    public function getMediaSize(?Instance $instance = null) : array
+    public function getMediaSize(Instance $instance) : int
     {
         $path = sprintf(
             '%s/%s',
@@ -166,21 +174,17 @@ class InstanceHelper
             empty($instance) ? '*' : $instance->internal_name
         );
 
-        $result = shell_exec("du -s $path");
-        $result = array_filter(explode("\n", $result), function ($a) {
-            return !empty($a[0]);
-        });
-
-        $sizes = [];
-        foreach ($result as $line) {
-            list($size, $instance) = preg_split('/\s+/', $line);
-
-            $instance = preg_replace('/.*public\/media\//', '', $instance);
-
-            $sizes[$instance] = (int) $size;
+        if (!$this->fs->exists($path)) {
+            throw new \InvalidArgumentException('No such file or directory: ' . $path);
         }
 
-        return $sizes;
+        exec("du -s $path", $output, $status);
+
+        if (!empty($status)) {
+            throw new \Exception();
+        }
+
+        return (int) preg_replace('/\s+.*/', '', $output[0]);
     }
 
     /**
