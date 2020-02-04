@@ -52,31 +52,6 @@ class SynchronizeCommand extends Command
     }
 
     /**
-     * Returns the list of instances to synchronize.
-     *
-     * @param array $names The list of instance names
-     *
-     * @return array The list of instances.
-     */
-    protected function getInstances(?array $names = []) : array
-    {
-        $oql = sprintf(
-            'activated = 1 and activated_modules ~ "%s"',
-            'NEWS_AGENCY_IMPORTER'
-        );
-
-        if (!empty($names)) {
-            $oql .= sprintf(
-                ' and  internal_name in ["%s"]',
-                implode('","', $names)
-            );
-        }
-
-        return $this->getContainer()->get('orm.manager')
-            ->getRepository('Instance')->findBy($oql);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -272,9 +247,34 @@ class SynchronizeCommand extends Command
     }
 
     /**
+     * Returns the list of instances to synchronize.
+     *
+     * @param array $names The list of instance names
+     *
+     * @return array The list of instances.
+     */
+    protected function getInstances(?array $names = []) : array
+    {
+        $oql = sprintf(
+            'activated = 1 and activated_modules ~ "%s"',
+            'NEWS_AGENCY_IMPORTER'
+        );
+
+        if (!empty($names)) {
+            $oql .= sprintf(
+                ' and internal_name in ["%s"]',
+                implode('","', $names)
+            );
+        }
+
+        return $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy($oql);
+    }
+
+    /**
      * Returns the list of parameters for the command based on the input.
      *
-     * @param InputInterface $input Description
+     * @param InputInterface $input The input component.
      *
      * @return array The list of parameters.
      */
