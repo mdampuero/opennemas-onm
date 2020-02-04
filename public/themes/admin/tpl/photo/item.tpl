@@ -38,10 +38,8 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-5">
+      <div class="row m-b-30">
+        <div class="col-md-7">
           <div class="thumbnail-wrapper">
             <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
               <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="false">
@@ -56,7 +54,7 @@
                 {t}Size{/t}
               </strong>
             </div>
-            <div class="controls">
+            <div class="controls p-l-15">
               [% item.size %] KB
             </div>
             <div class="form-label">
@@ -64,7 +62,7 @@
                 {t}Resolution{/t}
               </strong>
             </div>
-            <div class="controls">
+            <div class="controls p-l-15">
               [% item.width %] x [% item.height %]
             </div>
           </div>
