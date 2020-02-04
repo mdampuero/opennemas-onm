@@ -105,7 +105,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-delete',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {

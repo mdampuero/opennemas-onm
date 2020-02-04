@@ -90,6 +90,33 @@ class RedisTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests init.
+     */
+    public function testInit()
+    {
+        $this->redis->init();
+
+        $this->assertEmpty($this->redis->mru);
+    }
+
+    /**
+     * Tests removeByPattern.
+     */
+    public function testRemoveByPattern()
+    {
+        $this->baseRedis->expects($this->at(0))->method('scan')
+            ->with(null, '*norf*')->willReturn([
+                'thud-foo-corge',
+                'baz-foo-wubble',
+            ]);
+
+        $this->baseRedis->expects($this->at(1))->method('delete')
+            ->with('thud-foo-corge');
+
+        $this->redis->removeByPattern('*norf*');
+    }
+
+    /**
      * Tests setNamespace and getNamespace.
      */
     public function testSetNamespace()

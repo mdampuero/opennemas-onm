@@ -74,14 +74,16 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
-            <li class="m-r-10 input-prepend inside search-input no-boarder">
-              <span class="add-on">
-                <span class="fa fa-search fa-lg"></span>
-              </span>
-              <input class="no-boarder" name="name" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
-            </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
+            <li class="m-r-10 quicklinks">
+              <div class="input-group input-group-animated">
+                <span class="input-group-addon">
+                  <i class="fa fa-search fa-lg"></i>
+                </span>
+                <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
+                <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
+                  <i class="fa fa-times"></i>
+                </span>
+              </div>
             </li>
             <li class="quicklinks hidden-xs ng-cloak" ng-if="config.locale.multilanguage">
               <ui-select name="language" theme="select2" ng-model="criteria.locale">
@@ -90,16 +92,6 @@
                 </ui-select-match>
                 <ui-select-choices repeat="locale.id as locale in config.locale.available | filter: { name: $select.search }">
                   <div ng-bind-html="locale.name"></div>
-                </ui-select-choices>
-              </ui-select>
-            </li>
-            <li class="quicklinks hidden-xs ng-cloak">
-              <ui-select name="view" theme="select2" ng-model="criteria.epp">
-                <ui-select-match>
-                  <strong>{t}View{/t}:</strong> [% $select.selected %]
-                </ui-select-match>
-                <ui-select-choices repeat="item in views | filter: $select.search">
-                  <div ng-bind-html="item | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </li>
@@ -178,11 +170,6 @@
                 </tbody>
               </table>
             </form>
-          </div>
-        </div>
-        <div class="grid-footer clearfix ng-cloak" ng-if="items.length !== 0">
-          <div class="pull-right">
-            <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
           </div>
         </div>
       </div>

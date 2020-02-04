@@ -65,7 +65,7 @@
                 <head>
                   <title><![CDATA[{$article->title}]]></title>
                   <docdata management-status="usable">
-                    <doc.rights provider="Opennemas"/>
+                    <doc.rights agent="Opennemas"/>
                     <doc-id id-string="{$article->id}" />
                     <key-list>
                       <keyword key="{renderMetaKeywords content=$article tags=$tags onlyTags=True }"/>
@@ -80,6 +80,7 @@
                     </hedline>
                     {if $article->author neq 'null'}
                     <rights>
+                      <rights.agent>{setting name=site_name}</rights.agent>
                       <rights.owner>{$article->author->name}</rights.owner>
                       {if $smarty.const.SITE neq 'console'}
                       <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>

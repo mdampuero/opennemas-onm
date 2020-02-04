@@ -113,7 +113,7 @@
           $uibModal.open({
             templateUrl: 'modal-delete',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return { selected: $scope.item.photos.length };
@@ -218,7 +218,7 @@
           $uibModal.open({
             templateUrl: 'modal-edit-album-error',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return null;

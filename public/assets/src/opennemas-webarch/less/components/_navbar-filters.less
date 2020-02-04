@@ -24,12 +24,16 @@
     .input-group-addon {
       border-color: transparent;
       background-color: transparent;
+
+      .fa {
+        vertical-align: 0;
+      }
     }
 
     .input-group-addon-inside {
       position: absolute;
       right: 8px;
-      top: 3px;
+      top: 1px;
     }
 
     &.input-group-animated {
@@ -68,21 +72,6 @@
       }
     }
   }
-  .simple-pagination {
-    .info {
-      font-weight:normal !important;
-    }
-
-    .pagination-links .btn {
-      background-color: #ffffff;
-      border: 1px solid #dddddd;
-
-      &:hover {
-        background-color:rgba(0, 0, 0, 0);
-        border: 1px solid #999;
-      }
-    }
-  }
 
   &.page-navbar .quick-section {
     margin-bottom: 0;
@@ -104,8 +93,7 @@
 }
 
 .page-content .filters-navbar ~ .content {
-  margin-top: 15px;
-  padding-top: 0;
+  margin-top: 100px;
 }
 
 
@@ -118,7 +106,15 @@
   margin: 6px;
 }
 
+.filters-navbar .quick-section-fixed {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 5%);
+  position: fixed;
+  padding: 0 15px;
+  right: 0;
+}
+
 .filters-navbar .quick-section:first-child {
+  display: flex;
   margin-left: 0;
 }
 
@@ -137,6 +133,10 @@
   border-radius: 0 2px 2px 0;
   line-height: 14px;
   min-height: 36px !important;
+}
+
+.filters-navbar .pagination {
+  background: #fff;
 }
 
 .page-navbar .search-input input {
@@ -159,10 +159,5 @@
 @media (max-width: 767px) {
   .page-navbar .search-input input:focus {
     width: 150px !important;
-  }
-}
-@media (max-width: 569px) {
-  .page-navbar.filters-navbar .pagination-status {
-    display:none !important;
   }
 }

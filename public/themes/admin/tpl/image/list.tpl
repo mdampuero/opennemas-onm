@@ -64,30 +64,28 @@
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
         <ul class="nav quick-section">
-          <li class="quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+          <li class="m-r-15 quicklinks ng-cloak" ng-if="!mode || mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
             <button class="btn btn-link" ng-click="setMode('list')">
-              <i class="fa fa-lg fa-list"></i>
+              <i class="fa fa-lg fa-list m-l-5 m-r-5"></i>
             </button>
           </li>
-          <li class="quicklinks ng-cloak" ng-if="mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+          <li class="m-r-15 ng-cloak quicklinks" ng-if="mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
             <button class="btn btn-link" ng-click="setMode('grid')">
-              <i class="fa fa-lg fa-th"></i>
+              <i class="fa fa-lg fa-th m-l-5 m-r-5"></i>
             </button>
           </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
+          <li class="m-r-10 quicklinks">
+            <div class="input-group input-group-animated">
+              <span class="input-group-addon">
+                <i class="fa fa-search fa-lg"></i>
+              </span>
+              <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.title }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+              <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('title')" ng-show="criteria.title">
+                <i class="fa fa-times"></i>
+              </span>
+            </div>
           </li>
-          <li class="m-r-10 input-prepend inside search-input no-boarder">
-            <span class="add-on">
-              <span class="fa fa-search fa-lg"></span>
-            </span>
-            <input class="no-boarder" name="title" ng-model="criteria.title" placeholder="{t}Search by description or metadata{/t}" type="text"/>
-            <input type="hidden" name="in_home" ng-model="criteria.in_home">
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks hidden-xs ng-cloak">
+          <li class="hidden-xs ng-cloak quicklinks">
             <select name="month" ng-model="criteria.month">
               <option value="">{t}All months{/t}</option>
               <optgroup label="[% year.name %]" ng-repeat="year in years">
@@ -97,18 +95,8 @@
               </optgroup>
             </select>
           </li>
-          <li class="quicklinks hidden-xs ng-cloak" ng-if="mode === 'list'">
-            <ui-select name="view" theme="select2" ng-model="criteria.epp">
-              <ui-select-match>
-                <strong>{t}View{/t}:</strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in views  | filter: $select.search">
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-          </li>
         </ul>
-        <ul class="nav quick-section pull-right ng-cloak">
+        <ul class="nav quick-section quick-section-fixed ng-cloak">
           <li class="quicklinks hidden-xs" ng-if="mode === 'list' && contents.length > 0">
             <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
           </li>
@@ -218,11 +206,6 @@
           </table>
         </div>
       </div>
-      <div class="grid-footer clearfix ng-cloak" ng-if="!loading && contents.length > 0">
-        <div class="pull-right">
-          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
-        </div>
-      </div>
     </div>
     <div class="content-wrapper">
       <div class="ng-cloak spinner-wrapper" ng-if="(!mode || mode === 'grid') && loading && contents.length < total">
@@ -240,19 +223,21 @@
           <div class="dynamic-image-placeholder no-margin" ng-click="select(content);xsOnly($event, toggle, content)">
             <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content" only-image="true" transform="zoomcrop,400,400">
               <div class="hidden-select" ng-click="toggle(content)"></div>
-              <div class="thumbnail-actions ng-cloak">
+              <div class="thumbnail-actions thumbnail-actions-3x ng-cloak">
+                {acl isAllowed="PHOTO_UPDATE"}
+                  <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" uib-tooltip="{t}Edit{/t}">
+                    <i class="fa fa-pencil fa-2x text-default"></i>
+                  </a>
+                {/acl}
                 {acl isAllowed="PHOTO_DELETE"}
-                  <div class="thumbnail-action remove-action" ng-click="sendToTrash(content);$event.stopPropagation()">
-                    <i class="fa fa-trash-o fa-2x"></i>
+                  <div class="thumbnail-action remove-action" ng-click="sendToTrash(content)" uib-tooltip="{t}Delete{/t}" tooltip-class="tooltip-danger">
+                    <i class="fa fa-trash-o fa-2x text-danger"></i>
                   </div>
                 {/acl}
                 {acl isAllowed="PHOTO_UPDATE"}
-                  <a class="thumbnail-action" href="[% edit(content.id, 'admin_photo_show') %]" ng-click="$event.stopPropagation()">
-                    <i class="fa fa-pencil fa-2x"></i>
-                  </a>
                   {is_module_activated name="es.openhost.module.imageEditor"}
-                    <a class="thumbnail-action" ng-click="launchPhotoEditor(content)" >
-                      <i class="fa fa-sliders fa-2x"></i>
+                    <a class="thumbnail-action" ng-click="launchPhotoEditor(content)" uib-tooltip="{t}Enhance{/t}" tooltip-class="tooltip-info">
+                      <i class="fa fa-sliders fa-2x text-info"></i>
                     </a>
                   {/is_module_activated}
                 {/acl}

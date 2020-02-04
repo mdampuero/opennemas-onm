@@ -44,13 +44,18 @@
 {/block}
 
 {block name="leftFilters"}
-  <li class="m-r-10 input-prepend inside search-input no-boarder">
-    <span class="add-on">
-      <span class="fa fa-search fa-lg"></span>
-    </span>
-    <input class="no-boarder" type="text" name="title" ng-model="criteria.title" ng-keyup="searchByKeypress($event)" placeholder="{t}Search by name{/t}" />
+  <li class="m-r-10 quicklinks">
+    <div class="input-group input-group-animated">
+      <span class="input-group-addon">
+        <i class="fa fa-search fa-lg"></i>
+      </span>
+      <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.title }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+      <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('title')" ng-show="criteria.title">
+        <i class="fa fa-times"></i>
+      </span>
+    </div>
   </li>
-  <li class="quicklinks hidden-xs">
+  <li class="hidden-xs m-r-10 quicklinks">
     <select id="content_type_name" ng-model="criteria.content_type_name" data-label="<strong>{t}Content Type{/t}</strong>" class="select2">
       <option value="">{t}Any{/t}</option>
       {is_module_activated name="ARTICLE_MANAGER"}
@@ -124,18 +129,12 @@
       {/is_module_activated}
     </select>
   </li>
-  <li class="quicklinks hidden-xs ng-cloak">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-    {include file="ui/component/select/epp.tpl" label="true" ngModel="criteria.epp"}
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-    <span class="h-seperate"></span>
-  </li>
-  <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
+  <li class="hidden-xs ng-cloak quicklinks" ng-show="!isModeSupported() || app.mode === 'list'">
     <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-      <i class="fa fa-lg fa-refresh" ng-class="{ 'fa-spin': flags.http.loading }"></i>
+      <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': flags.http.loading }"></i>
     </button>
   </li>
 {/block}

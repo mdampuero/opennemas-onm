@@ -59,11 +59,6 @@ services:
         class: Framework\Messenger\Messenger
         public: true
 
-    news_agency.importer:
-        class:     Framework\Import\Importer\Importer
-        arguments: [ '@service_container' ]
-        public: true
-
     vat:
         class: Framework\VAT\VATService
         public: true

@@ -40,13 +40,6 @@
         $scope.tm = null;
 
         /**
-         * The available elements per page
-         *
-         * @type {Array}
-         */
-        $scope.views = [ 10, 25, 50, 100 ];
-
-        /**
          * @function areAllSelected
          * @memberOf ListCtrl
          *
@@ -56,8 +49,33 @@
          * @return {Boolean} True if all items are selected. False otherwise.
          */
         $scope.areAllSelected = function() {
-          return $scope.items &&
-            $scope.selected.items.length === $scope.items.length;
+          return $scope.items && $scope.items.filter(function(e) {
+            return $scope.isSelectable(e);
+          }).length === $scope.selected.items.length;
+        };
+
+        /**
+         * @function clear
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Deletes a value from criteria.
+         *
+         * @param {String} property The property name.
+         */
+        $scope.clear = function(property) {
+          delete $scope.criteria[property];
+        };
+
+        /**
+         * @function countSelectedItems
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Returns the number of selected items.
+         */
+        $scope.countSelectedItems = function() {
+          return $scope.selected.items ? $scope.selected.items.length : 0;
         };
 
         /**

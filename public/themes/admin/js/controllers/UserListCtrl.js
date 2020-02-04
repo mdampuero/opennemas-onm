@@ -57,7 +57,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-confirm',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return {

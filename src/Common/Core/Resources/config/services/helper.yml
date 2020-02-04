@@ -15,7 +15,7 @@ services:
 
     core.helper.attachment:
         class:     Common\Core\Component\Helper\AttachmentHelper
-        arguments: [ '@core.instance', '%core.paths.public%' ]
+        arguments: [ '@core.loader.instance', '%core.paths.public%' ]
         public:    true
 
     core.helper.comment:
@@ -53,7 +53,7 @@ services:
 
     core.helper.image:
         class:     Common\Core\Component\Helper\ImageHelper
-        arguments: [ '@core.instance', '%core.paths.public%', '@core.image.processor' ]
+        arguments: [ '@core.loader.instance', '%core.paths.public%', '@core.image.processor' ]
         public:    true
 
     core.helper.instance:
@@ -97,7 +97,7 @@ services:
 
     core.helper.newsstand:
         class:     Common\Core\Component\Helper\NewsstandHelper
-        arguments: [ '@core.instance', '%core.paths.public%' ]
+        arguments: [ '@core.loader.instance', '%core.paths.public%' ]
         public:    true
 
     core.helper.oql:
@@ -112,7 +112,7 @@ services:
 
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
-        arguments: [ '@core.instance', '@orm.manager', '@api.service.tag' ]
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.subscription:

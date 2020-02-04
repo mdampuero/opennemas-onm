@@ -16,6 +16,6 @@ class AttachmentHelper extends FileHelper
      */
     protected function getPathForFile()
     {
-        return $this->instance->getFilesShortPath();
+        return $this->loader->getInstance()->getFilesShortPath();
     }
 }

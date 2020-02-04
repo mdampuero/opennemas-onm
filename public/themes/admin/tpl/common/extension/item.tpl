@@ -16,6 +16,7 @@
                 {block name="title"}{/block}
               </h4>
             </li>
+            {block name="extraTitle"}{/block}
             <li class="hidden-xs m-l-5 m-r-5 quicklinks">
               <h4>
                 <i class="fa fa-angle-right"></i>

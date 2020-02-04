@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewsML Duid="S8_2019-10-02_18-21-30_NEWSML">
+  <Catalog Href="http://www.europapress.es/newsml/mastercatalog.xml"/>
+  <NewsEnvelope>
+    <DateAndTime>2019-10-02T16:21:30</DateAndTime>
+    <NewsService FormalName="S8"/>
+    <NewsProduct FormalName="TXT"/>
+    <Priority FormalName="5"/>
+  </NewsEnvelope>
+  <NewsItem Duid="S8_2019-10-02_18-21-30_NEWSITEM">
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>Europa Press</ProviderId>
+        <DateId>20191002</DateId>
+        <NewsItemId>S8_2019-10-02_18-21-30</NewsItemId>
+        <RevisionId Update="S" PreviousRevision="1">2</RevisionId>
+        <PublicIdentifier>urn:newsml:europapress.es:20191002:S8_2019-10-02_18-21-30:2</PublicIdentifier>
+      </NewsIdentifier>
+      <DateLabel>2019-10-02 16:21:30 GMT (Europa Press)</DateLabel>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News"/>
+      <FirstCreated>2019-10-02T16:21:30</FirstCreated>
+      <ThisRevisionCreated>2019-10-02T16:21:30</ThisRevisionCreated>
+      <Status FormalName="Usable"/>
+      <Urgency FormalName="5"/>
+    </NewsManagement>
+    <NewsComponent EquivalentsList="no" Essential="no" Duid="S8_2019-10-02_18-21-30_MAIN_NC">
+      <TopicSet FormalName="HighImportance">
+        <Topic Duid="ts_1">
+          <TopicType FormalName="Europa Press Legacy Code"/>
+          <FormalName Scheme="EuropaPress_Servicio">S8</FormalName>
+          <Description xml:lang="es">SERVICIO PROVINCIAL DE CÓRDOBA</Description>
+          <Property FormalName="WhyPresent" Value="&gt;Classifier"/>
+        </Topic>
+        <Topic Duid="ts_2">
+          <TopicType FormalName="Europa Press Legacy Code"/>
+          <FormalName Scheme="EuropaPress_Seccion">CYS</FormalName>
+          <Description xml:lang="es">Sociedad</Description>
+          <Property FormalName="WhyPresent" Value="&gt;Classifier"/>
+        </Topic>
+        <Topic Duid="ts_3">
+          <TopicType FormalName="Europa Press Legacy Code"/>
+          <FormalName Scheme="EuropaPress_Tipoinfo">SOC</FormalName>
+          <Description xml:lang="es">SOCIEDAD</Description>
+          <Property FormalName="WhyPresent" Value="&gt;Classifier"/>
+        </Topic>
+        <Topic Duid="ts_4">
+          <TopicType FormalName="asuntos sociales"/>
+          <FormalName Scheme="IPTCSubjectCodes">14000000</FormalName>
+          <Description xml:lang="en">Social Issues</Description>
+          <Description xml:lang="es">asuntos sociales</Description>
+          <Property FormalName="WhyPresent" Value="&gt;Classifier"/>
+        </Topic>
+      </TopicSet>
+      <Role FormalName="Main"/>
+      <AdministrativeMetadata>
+        <FileName>20191002182130.xml</FileName>
+        <Provider>
+          <Party FormalName="Europa Press"/>
+        </Provider>
+        <Source>
+          <Party FormalName="Europa Press"/>
+        </Source>
+        <Property FormalName="SourceFeed" Value="Europa Press"/>
+      </AdministrativeMetadata>
+      <NewsComponent EquivalentsList="no" Essential="no" Duid="S8_2019-10-02_18-21-30_MAIN_TEXT_NC">
+        <Role FormalName="Main Text"/>
+        <NewsLines>
+          <HeadLine>ANDALUCÍA.-Córdoba.- La DOP Priego de Córdoba acoge el I Campeonato Internacional de Catadores   </HeadLine>
+          <ByLine/>
+          <DateLine>2 Oct. 2019</DateLine>
+          <CreditLine>Europa Press</CreditLine>
+          <CopyrightLine>Copyright 2019 Europa Press. Está expresamente prohibida la redistribución y la redifusión sin el previo y expreso consentimiento de Europa Press.</CopyrightLine>
+          <NewsLine>
+            <NewsLineType FormalName="Caption"/>
+            <NewsLineText>ANDALUCÍA.-Córdoba.- La DOP Priego de Córdoba acoge el I Campeonato Internacional de Catadores</NewsLineText>
+          </NewsLine>
+        </NewsLines>
+        <DescriptiveMetadata>
+          <Language FormalName="es-ES"/>
+          <TopicOccurrence Importance="High" Topic="#ts_1"/>
+          <TopicOccurrence Importance="High" Topic="#ts_2"/>
+          <TopicOccurrence Importance="High" Topic="#ts_3"/>
+          <TopicOccurrence Importance="High" Topic="#ts_4"/>
+          <Location HowPresent="DateLine">
+            <Property FormalName="Country" Value="España"/>
+            <Property FormalName="CountryArea" Value="CORDOBA"/>
+            <Property FormalName="City" Value="Córdoba"/>
+          </Location>
+        </DescriptiveMetadata>
+        <ContentItem Duid="S8_2019-10-02_18-21-30_MAIN1_TEXT_CI">
+          <MediaType FormalName="Text"/>
+          <Format FormalName="XHTML"/>
+          <Characteristics>
+            <Property FormalName="ContentID" Value="urn:newsml:europapress.es:20191002:S8_2019-10-02_18-21-30_TXT:1"/>
+            <Property FormalName="ContentCreationDateAndTime" Value="2019-10-02T16:21:30"/>
+          </Characteristics>
+          <DataContent><![CDATA[   <html xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+         <title />
+      </head>
+      <body>
+<p>   PRIEGO DE CÓRDOBA (CÓRDOBA), 2 (EUROPA PRESS)</p>
+<p>   La Asociación para el Control de la Calidad y Promoción de los Aceites de la Comarca de Priego de Córdoba (Asccal) y la Organización Extra Virgin Olive Oil International Savantes celebran este viernes y sábado el I Campeonato Internacional de Catadores, cuya sede oficial será la del Consejo Regulador de la Denominación de Origen Protegida (DOP) Priego de Córdoba, donde se disputará el gran título Savantes.</p>
+<p>   Según ha indicado el consejo regulador en una nota, el sello de calidad prieguense vuelve a posicionarse a nivel internacional como referente dentro del sector sensorial, puesto que ya ha acogido en su sede los tres campeonatos nacionales disputados en España de los que se han seleccionados seis equipos españoles que serán los que representarán a España en este primer campeonato internacional.</p>
+<p>   Así, participarán 13 equipos, ganadores todos ellos en los distintos campeonatos nacionales celebrados en sus respectivos países. En concreto son seis equipos españoles, dos franceses, dos de Sudáfrica, dos Grecia, y uno de Países Bajos.</p>
+<p>   El campeonato reunirá a apasionados del mundo del análisis sensorial con el objetivo de fomentar la excelencia en la evaluación y el reconocimiento de los aceites de oliva vírgenes extra elaborados en todas las regiones productoras del mundo, así como para darle valor a la figura del catador como profesional, con la máxima exigencia y alta calidad del producto.</p>
+<p>   El campeonato se desarrollará en la sede de DOP Priego de Córdoba este viernes y sábado. Los equipos estarán integrados por tres personas que realizarán pruebas individuales y ejercicios en equipo. Las pruebas, individuales y de equipo, estarán divididas en diferentes series: de clasificación por intensidad del defecto de rancio, de intensidad de frutado o identificación de variedades. También las habrá por equipo, centradas en la identificación de las muestras monovarietales que incluirán variedades de diferentes regiones y países del mundo.</p>
+<p>   El comité organizador del campeonato estará compuesto por la secretaria general del Consejo Regulador de la Denominación de Origen Protegida Priego de Córdoba, Francisca García; los asociados savantes Rafael Muela y Tala Seket; y el fundador y director de International Extra Virgin Olive Oil Savantes, Simon Field.  El comité será el responsable de supervisar el Campeonato y de resolver todas aquellas cuestiones, recursos o apelaciones que puedan surgir.</p>
+<p>   Además, para asegurar un alto nivel de integridad en los aspectos técnicos del Campeonato, se ha designado un comité técnico multidisciplinar compuesto por grandes profesionales.</p>
+<p>   El equipo que resulte ganador con la mayor puntuación conseguida, será declarado Campeón Internacional Savantes. Se trata de una oportunidad única para fomentar los criterios de evaluación técnico, armonizar y mejorar el perfil técnico de los catadores a nivel internacional.</p>
+      </body>
+   </html>
+]]></DataContent>
+        </ContentItem>
+      </NewsComponent>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>

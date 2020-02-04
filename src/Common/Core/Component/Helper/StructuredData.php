@@ -9,10 +9,6 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\ORM\Core\EntityManager;
-use Common\ORM\Entity\Instance;
-use Api\Service\V1\TagService;
-
 /**
  * Generates json-ld code for different type of Objects
  * See more: https://schema.org/
@@ -21,228 +17,178 @@ use Api\Service\V1\TagService;
 class StructuredData
 {
     /**
-     * The current instance.
+     * The service container.
      *
-     * @var Instance
+     * @var ServiceContainer
      */
-    protected $instance;
-
-    /**
-     * The dataset service.
-     *
-     * @var DataSet
-     */
-    protected $ds;
-
-    /**
-     * The tag service.
-     *
-     * @var TagService
-     */
-    protected $ts;
+    protected $container;
 
     /**
      * Initializes StructuredData
      *
-     * @param Instance      $instance The current instance.
-     * @param EntityManager $em       The entity manager.
-     * @param TagService    $ts       The tag service.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct(Instance $instance, EntityManager $em, TagService $ts)
+    public function __construct($container)
     {
-        $this->instance = $instance;
-        $this->ds       = $em->getDataSet('Settings', 'instance');
-        $this->ts       = $ts;
+        $this->container = $container;
+        $this->tpl       = $this->container->get('core.template.admin');
+        $this->ts        = $this->container->get('api.service.tag');
+        $this->ds        = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
     }
 
-    /**
-     * Generates json-ld for Images
-     *
-     * @return String the generated json-ld code
-     */
-    public function generateImageJsonLDCode($data)
-    {
-        $code = ',{
-            "@context": "http://schema.org",
-            "@type": "ImageObject",
-            "author": "' . $data['author'] . '",
-            "contentUrl": "' . $data['image']->url . '",
-            "height": ' . $data['image']->height . ',
-            "width": ' . $data['image']->width . ',
-            "datePublished": "' . $data['created'] . '",
-            "caption": "' . strip_tags($data['image']->description) . '",
-            "name": "' . $data['title'] . '"
-        }';
-
-        return $code;
-    }
 
     /**
-     * Generates json-ld for Images
+     * Extract parameters from data.
      *
-     * @return String the generated json-ld code
-     */
-    public function generateVideoJsonLDCode($data)
-    {
-        $keywords = empty($data['video']->tags) ?
-            '' : $this->getTags($data['video']->tags);
-
-        $code = '{
-            "@context": "http://schema.org/",
-            "@type": "VideoObject",
-            "author": "' . $data['author'] . '",
-            "name": "' . $data['video']->title . '",
-            "description": "' . strip_tags($data['video']->description) . '",
-            "@id": "' . $data['url'] . '",
-            "uploadDate": "' . $data['video']->created . '",
-            "thumbnailUrl": "' . $data['video']->thumb . '",
-            "keywords": "' . $keywords . '",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "' . $this->ds->get("site_name") . '",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "' . $data['logo']['url'] . '",
-                    "width": ' . $data['logo']['width'] . ',
-                    "height": ' . $data['logo']['height'] . '
-                },
-                "url": "' . SITE_URL . '"
-            }
-        }';
-
-        return $code;
-    }
-
-    /**
-     * Generates json-ld for Image galleries
+     * @param array $data The array of data.
      *
-     * @return String the generated json-ld code
+     * @return array The array with processed data.
      */
-    public function generateImageGalleryJsonLDCode($data)
+    public function extractParamsFromData($data)
     {
-        $keywords = empty($data['content']->tags) ?
-            '' : $this->getTags($data['content']->tags);
+        $data['title'] = $data['content']->title;
+        // Get content summary, body or description. Otherwise use content title.
+        $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
+            current(array_filter([
+                $data['content']->summary,
+                mb_substr($data['content']->body, 0, 250),
+                $data['content']->description,
+                $data['content']->title
+            ]))
+        ))));
 
-        $code = '{
-            "@context":"http://schema.org",
-            "@type":"ImageGallery",
-            "description": "' . strip_tags($data['summary']) . '",
-            "keywords": "' . $keywords . '",
-            "datePublished" : "' . $data['created'] . '",
-            "dateModified": "' . $data['changed'] . '",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "' . $data['url'] . '"
-            },
-            "headline": "' . $data['title'] . '",
-            "url": "' . $data['url'] . '",
-            "author" : {
-                "@type" : "Person",
-                "name" : "' . $data['author'] . '"
-            },
-            "primaryImageOfPage": {
-                "url": "' . $data['image']->url . '",
-                "height": ' . $data['image']->height . ',
-                "width": ' . $data['image']->width . '
-            }';
+        // Count description data words
+        $data['wordCount'] = str_word_count($data['description']);
 
-        $imgObjects = '';
-        if (!empty($data['content']->photos) && !empty($data['photos'])) {
-            $code .= ',"associatedMedia":[';
+        // Logo, author and media information
+        $data['logo']   = $this->getLogoData();
+        $data['author'] = $this->getAuthorData($data['content']);
+        $media          = $this->getMediaData($data['content']);
+        $data['image']  = $media['image'];
+        $data['video']  = $media['video'];
 
-            foreach ($data['content']->photos as $photo) {
-                $data['photos'][$photo['pk_photo']]->url =
-                    $this->instance->getBaseUrl()
-                    . $this->instance->getImagesShortPath()
-                    . $data['photos'][$photo['pk_photo']]->path_file
-                    . $data['photos'][$photo['pk_photo']]->name;
+        // Content keywords
+        $data['keywords'] = empty($data['content']->tags) ? ''
+            : $this->getTags($data['content']->tags);
 
-                $code .= sprintf(
-                    '{ "url": "%s", "height": %s, "width": %s },',
-                    $data['photos'][$photo['pk_photo']]->url,
-                    $data['photos'][$photo['pk_photo']]->height,
-                    $data['photos'][$photo['pk_photo']]->width
-                );
-
-                $data['image'] = $data['photos'][$photo['pk_photo']];
-                $imgObjects   .= $this->generateImageJsonLDCode($data);
-            }
-
-            $code  = rtrim($code, ',');
-            $code .= ']';
+        if (!empty($data['video'])) {
+            $data['videokeywords'] = empty($data['video']->tags) ? ''
+                : $this->getTags($data['video']->tags);
         }
 
-        $code .= '}';
+        // Site information
+        $data['sitename'] = $this->ds->get('site_name');
+        $data['siteurl']  = SITE_URL;
 
-        if (!empty($imgObjects)) {
-            $code .= $imgObjects;
-        }
-
-        return $code;
+        return $data;
     }
 
     /**
-     * Generates json-ld for NewsArticles
+     * Generate specific JSON code based on the type of content: album, video or article.
      *
-     * @return String the generated json-ld code
+     * @param array $data The array of data.
+     *
+     * @return string $output The JSON code specific for the data.
      */
-    public function generateNewsArticleJsonLDCode($data)
+    public function generateJsonLDCode($data)
     {
-        $keywords = empty($data['content']->tags) ?
-            '' : $this->getTags($data['content']->tags);
+        $params = $this->extractParamsFromData($data);
 
-        $code = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "' . $data['url'] . '"
-            },
-            "headline": "' . $data['title'] . '",
-            "author" : {
-                "@type" : "Person",
-                "name" : "' . $data['author'] . '"
-            },
-            "datePublished" : "' . $data['created'] . '",
-            "dateModified": "' . $data['changed'] . '",
-            "articleSection" : "' . $data['category']->title . '",
-            "keywords": "' . $keywords . '",
-            "url": "' . $data['url'] . '",
-            "wordCount": ' . str_word_count($data['content']->body) . ',
-            "description": "' . strip_tags($data['summary']) . '",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "' . $this->ds->get("site_name") . '",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "' . $data['logo']['url'] . '",
-                    "width": ' . $data['logo']['width'] . ',
-                    "height": ' . $data['logo']['height'] . '
-                },
-                "url": "' . SITE_URL . '"
-            }';
-
-        if (!empty($data['image'])) {
-            $code .= '
-                ,"image": {
-                    "@type": "ImageObject",
-                    "url": "' . $data['image']->url . '",
-                    "height": ' . $data['image']->height . ',
-                    "width": ' . $data['image']->width . '
-                }';
+        $output = $this->tpl->fetch('common/helpers/structured_article_data.tpl', $params);
+        if ($params['content']->content_type_name == 'album') {
+            $output = $this->tpl->fetch('common/helpers/structured_gallery_data.tpl', $params);
+        } elseif (!empty($params['video'])) {
+            $output = $this->tpl->fetch('common/helpers/structured_video_data.tpl', $params);
         }
 
-        $code .= '}';
-
-        return $code;
+        return $output;
     }
 
     /**
-     *  Method to retrieve the tags for a list of tag ids
+     * Method to retrieve the author information.
      *
-     * @param array $ids List of ids we want to retrieve
+     * @param \Content $content The content object.
      *
-     * @return string List of tags fo this tags.
+     * @return string The author information.
+     */
+    protected function getAuthorData($content)
+    {
+        // Get author if exists or agency. Otherwise get site name.
+        $author = '';
+        try {
+            $user   = $this->container->get('api.service.author')->getItem($content->fk_author);
+            $author = $user->name;
+        } catch (\Exception $e) {
+            $author = $content->agency;
+        }
+
+        if (empty($author)) {
+            $author = $this->ds->get('site_name');
+        }
+
+        return $author;
+    }
+
+    /**
+     * Method to retrieve the logo information.
+     *
+     * @return array Array with logo properties.
+     */
+    protected function getLogoData()
+    {
+        // Default logo information
+        $logo = [
+            'url'    => SITE_URL . 'assets/images/logos/opennemas-powered-horizontal.png',
+            'width'  => '350',
+            'height' => '60'
+        ];
+
+        $siteLogo = $this->ds->get('site_logo');
+        if (!empty($siteLogo)) {
+            $logo = [
+                'url'    => SITE_URL
+                    . 'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
+                    . $this->container->get('core.instance')->getMediaShortPath()
+                    . '/sections/' . $siteLogo,
+                'width'  => '260',
+                'height' => '60'
+            ];
+        }
+
+        return $logo;
+    }
+
+    /**
+     * Method to retrieve the media information.
+     *
+     * @param \Content $content The content object.
+     *
+     * @return array Array with media information.
+     */
+    protected function getMediaData($content)
+    {
+        $mediaObject = $this->container->get('core.helper.content_media')
+            ->getContentMediaObject($content);
+
+        $media = [
+            'image' =>
+                (is_object($mediaObject) && get_class($mediaObject) == 'Photo')
+                    ? $mediaObject : null,
+            'video' =>
+                (is_object($mediaObject) && get_class($mediaObject) == 'Video')
+                    ? $mediaObject : null,
+        ];
+
+        return $media;
+    }
+
+    /**
+     * Method to retrieve the tags for a list of tag ids.
+     *
+     * @param array $ids List of ids we want to retrieve.
+     *
+     * @return string    List of tags fo this tags.
      */
     protected function getTags($ids)
     {

@@ -1,0 +1,17 @@
+services:
+    task.factory.worker:
+        class:     Common\Task\Component\Worker\WorkerFactory
+        arguments: [ '@service_container' ]
+        public:    true
+
+    task.service.queue:
+        class:     Common\Task\Component\Queue\Queue
+        arguments: [ '@service_container' ]
+        public:    true
+
+    task.subscriber.queue:
+        class:     Common\Task\EventSubscriber\QueueSubscriber
+        arguments: [ '@task.service.queue', '@task.factory.worker' ]
+        public:    true
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 10 }

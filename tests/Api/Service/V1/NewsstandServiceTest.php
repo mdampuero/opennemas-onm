@@ -43,12 +43,17 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find', 'getConverter', 'getMetadata' ])
             ->getMock();
 
+        $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
         $this->nh = $this->getMockBuilder('Common\Core\Component\Helper\NewsstandHelper')
-            ->setConstructorArgs([ $this->instance, '/wibble/flob' ])
+            ->setConstructorArgs([ $this->il, '/wibble/flob' ])
             ->setMethods([ 'exists', 'generatePath', 'getRelativePath', 'move', 'remove' ])
             ->getMock();
 
@@ -57,6 +62,9 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->em->expects($this->any())->method('getConverter')
             ->with('Content')->willReturn($this->converter);
+
+        $this->il->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
             ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])

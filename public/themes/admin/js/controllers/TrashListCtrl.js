@@ -93,7 +93,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-empty',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return null;
@@ -128,7 +128,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-restore',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return null;
@@ -166,7 +166,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-restore',
             backdrop: 'static',
-            controller: 'modalCtrl',
+            controller: 'ModalCtrl',
             resolve: {
               template: function() {
                 return { selected: $scope.selected.items.length };

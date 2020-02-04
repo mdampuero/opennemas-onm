@@ -12,22 +12,24 @@
               {t}Cache Manager{/t}
             </h4>
           </li>
-          <li class="quicklins hidden-xs">
+          <li class="quicklinks hidden-xs">
             <span class="h-seperate"></span>
           </li>
-          <li class="quicklins hidden-xs">
+          <li class="quicklinks hidden-xs">
             <h5>{t}Settings{/t}</h5>
           </li>
         </ul>
       </div>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
-          <li>
+          <li class="quicklinks">
             <a href="{url name=admin_cache_manager}" class="btn btn-link" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
               <span class="fa fa-reply"></span>
             </a>
           </li>
-          <li class="quicklinks"><span class="h-seperate"></span></li>
+          <li class="quicklinks">
+            <span class="h-seperate"></span>
+          </li>
           <li class="quicklinks">
             <button type="submit" class="btn btn-primary" id="save-button">
               <i class="fa fa-save"></i>

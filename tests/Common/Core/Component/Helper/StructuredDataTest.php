@@ -9,10 +9,6 @@
  */
 namespace Test\Common\Core\Component\Helper;
 
-use Common\Core\Component\Helper\StructuredData;
-use Common\Data\Core\FilterManager;
-use Common\ORM\Entity\Tag;
-
 /**
  * Defines test cases for StructuredData class.
  */
@@ -20,31 +16,36 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get', 'hasParameter' ])
+        $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
+
+
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
-            ->disableOriginalConstructor()
+        $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
-        $this->instance = $this->getMockBuilder('Common\ORM\Entity\Instance')
-            ->setMethods([
-                'getBaseUrl', 'getImagesShortPath', 'hasMultilanguage'
-            ])->getMock();
+        $this->helper = $this->getMockBuilder('ContentMediaHelper')
+            ->setMethods([ 'getContentMediaObject' ])
+            ->getMock();
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getMediaShortPath' ])
+            ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
-        $this->locale = $this->getMockBuilder('Locale')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getContext' ])
+        $this->tpl = $this->getMockBuilder('TemplateAdmin')
+            ->setMethods([ 'fetch' ])
             ->getMock();
 
-        $this->ds = $this->getMockBuilder('DataSet')
-            ->setMethods([ 'get' ])
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
@@ -58,323 +59,282 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
-        $this->instance->expects($this->any())->method('getBaseUrl')
-            ->willReturn('http://xyzzy.com');
-        $this->instance->expects($this->any())->method('getImagesShortPath')
-            ->willReturn('/media/images/');
-
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->fm = new FilterManager($this->container);
-
-        $this->instance->activated_modules = [];
-
         $GLOBALS['kernel'] = $this->kernel;
 
-        $this->data = [
-            'content'  => new \Content(),
-            'url'      => 'http://onm.com/20161013114032000674.html',
-            'title'    => 'This is the object title',
-            'author'   => 'John Doe',
-            'created'  => '2016-10-13 11:40:32',
-            'changed'  => '2016-10-13 11:40:32',
-            'category' => new \StdClass(),
-            'summary'  => '<p>This is the summary</p>',
-            'tags'     => [1,2,3,4],
-            'logo'     => [
-                'url'    => 'http://onm.com/asset/logo.png',
-                'width'  => 350,
-                'height' => 60
-            ],
-            'image'    => new \Photo(),
-            'video'    => new \Video(),
-        ];
-
-        $this->data['image']->url         = "http://image-url.com";
-        $this->data['image']->width       = 700;
-        $this->data['image']->height      = 450;
-        $this->data['image']->description = "Image description/caption";
-
-        $this->data['video']->title       = "This is the video title";
-        $this->data['video']->description = "<p>Video description</p>";
-        $this->data['video']->created     = "2016-10-13 11:40:32";
-        $this->data['video']->thumb       = "http://video-thumb.com";
-        $this->data['video']->tags        = [1,2,3,4,5];
-
-        $this->data['category']->title = "Mundo";
-
-        $this->data['content']->metadata = [1,2,3,4,5];
-        $this->data['content']->body     = "This is the body text";
-
-        $this->object = new StructuredData($this->instance, $this->em, $this->ts);
+        $this->object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->getMock();
     }
 
     public function serviceContainerCallback($name)
     {
-        if ($name === 'data.manager.filter') {
-            return $this->fm;
-        }
+        switch ($name) {
+            case 'core.template.admin':
+                return $this->tpl;
 
-        if ($name === 'core.locale') {
-            return $this->locale;
-        }
+            case 'core.instance':
+                return $this->instance;
 
-        if ($name === 'core.instance') {
-            return $this->instance;
+            case 'orm.manager':
+                return $this->em;
+
+            case 'api.service.author':
+                return $this->as;
+
+            case 'api.service.tag':
+                return $this->ts;
+
+            case 'core.helper.content_media':
+                return $this->helper;
         }
 
         return null;
     }
 
     /**
-     * Test generateImageJsonLDCode
+     * @covers \Common\Core\Component\Helper\StructuredData::__construct
      */
-    public function testGenerateImageJsonLDCode()
+    public function testConstruct()
     {
-        $imageJson = ',{
-            "@context": "http://schema.org",
-            "@type": "ImageObject",
-            "author": "John Doe",
-            "contentUrl": "http://image-url.com",
-            "height": 450,
-            "width": 700,
-            "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption",
-            "name": "This is the object title"
-        }';
-
-        $this->assertEquals($imageJson, $this->object->generateImageJsonLDCode($this->data));
+        $this->assertEquals($this->tpl, $this->object->tpl);
+        $this->assertEquals($this->ts, $this->object->ts);
+        $this->assertEquals($this->ds, $this->object->ds);
     }
 
     /**
-     * Test generateVideoJsonLDCode
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * with tags in both: content and video
      */
-    public function testGenerateVideoJsonLDCode()
+    public function testExtractParamsFromData()
     {
-        $videoJson = '{
-            "@context": "http://schema.org/",
-            "@type": "VideoObject",
-            "author": "John Doe",
-            "name": "This is the video title",
-            "description": "Video description",
-            "@id": "http://onm.com/20161013114032000674.html",
-            "uploadDate": "2016-10-13 11:40:32",
-            "thumbnailUrl": "http://video-thumb.com",
-            "keywords": "keywords,video,json,linking,data",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }
-        }';
+        $data                   = [];
+        $data['content']        = new \Content();
+        $data['content']->tags  = [1,2,3,4];
+        $data['content']->title = 'This is the title';
+        $data['video']          = new \Video();
+        $data['video']->tags    = [1,2,3,4,5];
+
+        $output                   = [];
+        $output['content']        = new \Content();
+        $output['video']          = new \Video();
+        $output['content']->tags  = [1,2,3,4];
+        $output['video']->tags    = [1,2,3,4,5];
+        $output['videokeywords']  = 'keywords,object,json,linking,data';
+        $output['keywords']       = 'keywords,object,json,linking';
+        $output['sitename']       = 'site name';
+        $output['siteurl']        = 'http://console/';
+        $output['content']->body  = '';
+        $output['content']->title = 'This is the title';
+        $output['title']          = 'This is the title';
+        $output['description']    = 'This is the title';
+        $output['wordCount']      = 4;
+        $output['logo']           = 'logo';
+        $output['author']         = 'author';
+        $output['image']          = null;
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'getLogoData', 'getAuthorData', 'getMediaData' ])
+            ->getMock();
+
+        $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
+        $object->expects($this->at(1))->method('getAuthorData')->willReturn('author');
+        $object->expects($this->at(2))->method('getMediaData')
+            ->willReturn([
+                'image' => null,
+                'video' => $data['video']
+            ]);
+
+        $object->expects($this->at(3))->method('getTags')
+            ->with($data['content']->tags)
+            ->willReturn('keywords,object,json,linking');
+
+        $object->expects($this->at(4))->method('getTags')
+            ->with($data['video']->tags)
+            ->willReturn('keywords,object,json,linking,data');
 
         $this->ds->expects($this->once())->method('get')
-            ->willReturn('Site Name');
+            ->with('site_name')
+            ->willReturn('site name');
+
+        $this->assertEquals($output, $object->extractParamsFromData($data));
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
+     * for content of type album
+     */
+    public function testGenerateJsonLDCodeWithAlbum()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'album';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->at(1))->method('fetch')
+            ->with('common/helpers/structured_gallery_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
+     * for content of type video
+     */
+    public function testGenerateJsonLDCodeWithVideo()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'article';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+        $data['video']                      = new \Video();
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->at(1))->method('fetch')
+            ->with('common/helpers/structured_video_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getAuthorData
+     */
+    public function testGetAuthorData()
+    {
+        $method = new \ReflectionMethod($this->object, 'getAuthorData');
+        $method->setAccessible(true);
+
+        $content = new \Content();
+
+        $this->as->expects($this->once())
+            ->method('getItem')
+            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+
+        $method->invokeArgs($this->object, [ $content ]);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getAuthorData
+     */
+    public function testGetAuthorDataWithoutAuthor()
+    {
+        $method = new \ReflectionMethod($this->object, 'getAuthorData');
+        $method->setAccessible(true);
+
+        $content = new \Content();
+
+        $this->as->expects($this->once())
+            ->method('getItem')
+            ->willReturn(null);
+
+        $this->ds->expects($this->once())->method('get')
+            ->with('site_name')
+            ->willReturn('site name');
+
+        $method->invokeArgs($this->object, [ $content ]);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getLogoData
+     */
+    public function testGetLogoData()
+    {
+        $method = new \ReflectionMethod($this->object, 'getLogoData');
+        $method->setAccessible(true);
+
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('site_logo')
+            ->willReturn('logo.png');
+
+        $this->instance->expects($this->once())
+            ->method('getMediaShortPath')
+            ->willReturn('/media/opennemas');
+
+        $method->invokeArgs($this->object, []);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getMediaData
+     */
+    public function testGetMediaDataWithPhoto()
+    {
+        $method = new \ReflectionMethod($this->object, 'getMediaData');
+        $method->setAccessible(true);
+
+        $content = new \Content();
+        $this->helper->expects($this->once())
+            ->method('getContentMediaObject')
+            ->willReturn(new \Photo());
+
+        $method->invokeArgs($this->object, [ $content ]);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getMediaData
+     */
+    public function testGetMediaDataWithVideo()
+    {
+        $method = new \ReflectionMethod($this->object, 'getMediaData');
+        $method->setAccessible(true);
+
+        $content = new \Content();
+        $this->helper->expects($this->once())
+            ->method('getContentMediaObject')
+            ->willReturn(new \Video());
+
+        $method->invokeArgs($this->object, [ $content ]);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getTags
+     */
+    public function testGetTags()
+    {
+        $method = new \ReflectionMethod($this->object, 'getTags');
+        $method->setAccessible(true);
+
+        $ids = [1];
+
+        $tag       = new \Content();
+        $tag->name = 'keywords';
+
         $this->ts->expects($this->once())->method('getListByIds')
-            ->willReturn([
-                'items' => [
-                    new Tag([ 'name' => 'keywords' ]),
-                    new Tag([ 'name' => 'video' ]),
-                    new Tag([ 'name' => 'json' ]),
-                    new Tag([ 'name' => 'linking' ]),
-                    new Tag([ 'name' => 'data' ]),
-                ]
-            ]);
+            ->willReturn([ 'items' => [ $tag ]]);
 
-        $this->assertEquals($videoJson, $this->object->generateVideoJsonLDCode($this->data));
-    }
-
-    /**
-     * Test generateImageGalleryJsonLDCode
-     */
-    public function testGenerateImageGalleryJsonLDCode()
-    {
-        $galleryJson = '{
-            "@context":"http://schema.org",
-            "@type":"ImageGallery",
-            "description": "This is the summary",
-            "keywords": "keywords,object,json,linking,data",
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://onm.com/20161013114032000674.html"
-            },
-            "headline": "This is the object title",
-            "url": "http://onm.com/20161013114032000674.html",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "primaryImageOfPage": {
-                "url": "http://image-url.com",
-                "height": 450,
-                "width": 700
-            }';
-
-        $this->data['content']->tags   = [ 1, 2, 3, 4, 5 ];
-        $this->data['content']->photos = [
-            [ 'pk_photo' => 4094, 'description' => 'xyzzy' ],
-            [ 'pk_photo' => 20044, 'description' => 'foobar' ],
-            [ 'pk_photo' => 8562, 'description' => 'wobble' ],
-        ];
-
-        // Gallery only with cover image
-        $onlyCover = $galleryJson . '}';
-        $this->ts->expects($this->any())->method('getListByIds')
-            ->willReturn([
-                'items' => [
-                    new Tag([ 'name' => 'keywords' ]),
-                    new Tag([ 'name' => 'object' ]),
-                    new Tag([ 'name' => 'json' ]),
-                    new Tag([ 'name' => 'linking' ]),
-                    new Tag([ 'name' => 'data' ]),
-                ]
-            ]);
-
-        $this->assertEquals($onlyCover, $this->object->generateImageGalleryJsonLDCode($this->data));
-
-        // Load album photos
-        $photos = [
-            4094  => new \Photo(),
-            20044 => new \Photo(),
-            8562  => new \Photo()
-        ];
-
-        foreach ($photos as $key => &$photo) {
-            $photo->url         = 'http://image' . $key . '-url.com';
-            $photo->path_file   = $key;
-            $photo->name        = '-url.com';
-            $photo->width       = 700 + $key;
-            $photo->height      = 450 + $key;
-            $photo->description = "Image description/caption " . $key;
-        }
-
-        $this->data['photos'] = $photos;
-
-        $albumPhotosJson = ',"associatedMedia":[{ '
-                . '"url": "http://xyzzy.com/media/images/4094-url.com", '
-                . '"height": 4544, '
-                . '"width": 4794'
-        . ' },{ '
-                . '"url": "http://xyzzy.com/media/images/20044-url.com", '
-                . '"height": 20494, '
-                . '"width": 20744'
-        . ' },{ '
-                . '"url": "http://xyzzy.com/media/images/8562-url.com", '
-                . '"height": 9012, '
-                . '"width": 9262'
-        . ' }]';
-
-        $albumPhotosObjectJson = ',{
-            "@context": "http://schema.org",
-            "@type": "ImageObject",
-            "author": "John Doe",
-            "contentUrl": "http://xyzzy.com/media/images/4094-url.com",
-            "height": 4544,
-            "width": 4794,
-            "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption 4094",
-            "name": "This is the object title"
-        },{
-            "@context": "http://schema.org",
-            "@type": "ImageObject",
-            "author": "John Doe",
-            "contentUrl": "http://xyzzy.com/media/images/20044-url.com",
-            "height": 20494,
-            "width": 20744,
-            "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption 20044",
-            "name": "This is the object title"
-        },{
-            "@context": "http://schema.org",
-            "@type": "ImageObject",
-            "author": "John Doe",
-            "contentUrl": "http://xyzzy.com/media/images/8562-url.com",
-            "height": 9012,
-            "width": 9262,
-            "datePublished": "2016-10-13 11:40:32",
-            "caption": "Image description/caption 8562",
-            "name": "This is the object title"
-        }';
-
-        // Gallery with several photos
-        $severalImages = $galleryJson . $albumPhotosJson . '}' . $albumPhotosObjectJson;
-        $this->ts->expects($this->any())->method('getListByIds')
-            ->willReturn([
-                'items' => [
-                    new Tag([ 'name' => 'keywords' ]),
-                    new Tag([ 'name' => 'video' ]),
-                    new Tag([ 'name' => 'json' ]),
-                    new Tag([ 'name' => 'linking' ]),
-                    new Tag([ 'name' => 'data' ]),
-                ]
-            ]);
-
-        $this->assertEquals($severalImages, $this->object->generateImageGalleryJsonLDCode($this->data));
-    }
-
-    /**
-     * Test generateNewsArticleJsonLDCode
-     */
-    public function testGenerateNewsArticleJsonLDCode()
-    {
-        $articleJson = '{
-            "@context" : "http://schema.org",
-            "@type" : "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "http://onm.com/20161013114032000674.html"
-            },
-            "headline": "This is the object title",
-            "author" : {
-                "@type" : "Person",
-                "name" : "John Doe"
-            },
-            "datePublished" : "2016-10-13 11:40:32",
-            "dateModified": "2016-10-13 11:40:32",
-            "articleSection" : "Mundo",
-            "keywords": "",
-            "url": "http://onm.com/20161013114032000674.html",
-            "wordCount": 5,
-            "description": "This is the summary",
-            "publisher" : {
-                "@type" : "Organization",
-                "name" : "Site Name",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "http://onm.com/asset/logo.png",
-                    "width": 350,
-                    "height": 60
-                },
-                "url": "' . SITE_URL . '"
-            }';
-
-        $this->ds->expects($this->any())->method('get')
-            ->willReturn('Site Name');
-        $this->ts->expects($this->any())->method('getListByIds')
-            ->willReturn([ 'items' => [], 'total' => 0 ]);
-
-        // Article with image
-        $imageJson = '
-                ,"image": {
-                    "@type": "ImageObject",
-                    "url": "http://image-url.com",
-                    "height": 450,
-                    "width": 700
-                }}';
-        $this->assertEquals($articleJson . $imageJson, $this->object->generateNewsArticleJsonLDCode($this->data));
-
-        // Article without image
-        unset($this->data['image']);
-        $articleNoImageJson = $articleJson . '}';
-        $this->assertEquals($articleNoImageJson, $this->object->generateNewsArticleJsonLDCode($this->data));
+        $method->invokeArgs($this->object, [ $ids ]);
     }
 }

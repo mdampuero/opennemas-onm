@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Locale;
 
 use Common\Core\Component\Locale\Locale;
+use Symfony\Component\Validator\Constraints\Language;
 
 /**
  * Defines test cases for Locale class.
@@ -21,9 +22,28 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->config = [
+            'backend'  => [
+                'language' => [
+                    'available' => [ 'en_US', 'es_ES' ],
+                    'selected'  => 'en_US',
+                    'slug'      => []
+                ],
+                'timezone' => 'UTC'
+            ],
+            'frontend' => [
+                'language' => [
+                    'available' => [ 'en_US', 'es_ES' ],
+                    'selected'  => 'en_US',
+                    'slug'      => []
+                ],
+                'timezone' => 'UTC'
+            ]
+        ];
+
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->setMethods([ 'addTextDomain', 'changeLocale', 'changeTimeZone'])
-            ->setConstructorArgs([ [ 'en_US', 'es_ES' ], '/foo/bar' ])
+            ->setConstructorArgs([ $this->config, '/foo/bar' ])
             ->getMock();
     }
 
@@ -40,8 +60,8 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('/foo/bar', $path->getValue($this->locale));
         $this->assertEquals(
-            [ 'en_US', 'es_ES' ],
-            $config->getValue($this->locale)['backend']['language']['available']
+            $this->config,
+            $config->getValue($this->locale)
         );
     }
 
@@ -92,7 +112,7 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($this->locale->getAvailableLocales());
         $this->assertTrue(array_key_exists('en_US', $this->locale->getAvailableLocales()));
         $this->assertTrue(array_key_exists('en_US', $this->locale->setContext('admin')->getAvailableLocales()));
-        $this->assertEmpty($this->locale->setContext('frontend')->getAvailableLocales());
+        $this->assertTrue(array_key_exists('en_US', $this->locale->setContext('frontend')->getAvailableLocales()));
     }
 
     /**

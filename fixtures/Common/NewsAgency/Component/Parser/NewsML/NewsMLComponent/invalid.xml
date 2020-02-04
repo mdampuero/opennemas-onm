@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE NewsML PUBLIC "urn:newsml:iptc.org:20001006:NewsMLv1.0:1" "http://www.afp.com/dtd/NewsMLv1.0.dtd" [
+<!ENTITY % nitf SYSTEM "http://www.afp.com/dtd/nitf-2-5.dtd"> %nitf; ]>
+<NewsML>
+</NewsML>

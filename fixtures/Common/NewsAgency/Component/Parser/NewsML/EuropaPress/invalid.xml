@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewsML Duid="S8_2019-10-02_18-21-30_NEWSML">
+  <Catalog Href="http://www.europapress.es/newsml/mastercatalog.xml"/>
+  <NewsEnvelope>
+    <DateAndTime>2019-10-02T16:21:30</DateAndTime>
+    <NewsService FormalName="S8"/>
+    <NewsProduct FormalName="TXT"/>
+    <Priority FormalName="5"/>
+  </NewsEnvelope>
+  <NewsItem Duid="S8_2019-10-02_18-21-30_NEWSITEM">
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>Waldo</ProviderId>
+        <DateId>20191002</DateId>
+        <NewsItemId>S8_2019-10-02_18-21-30</NewsItemId>
+        <RevisionId Update="S" PreviousRevision="1">2</RevisionId>
+        <PublicIdentifier>urn:newsml:europapress.es:20191002:S8_2019-10-02_18-21-30:2</PublicIdentifier>
+      </NewsIdentifier>
+      <DateLabel>2019-10-02 16:21:30 GMT (Europa Press)</DateLabel>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News"/>
+      <FirstCreated>2019-10-02T16:21:30</FirstCreated>
+      <ThisRevisionCreated>2019-10-02T16:21:30</ThisRevisionCreated>
+      <Status FormalName="Usable"/>
+      <Urgency FormalName="5"/>
+    </NewsManagement>
+  </NewsItem>
+</NewsML>

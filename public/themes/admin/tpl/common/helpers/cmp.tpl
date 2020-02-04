@@ -2,12 +2,13 @@
 <script async=true>
 /* eslint-disable */
   var elem = document.createElement('script');
-  elem.src = 'https://quantcast.mgr.consensu.org/v13/cmp.js';
+  elem.src = 'https://quantcast.mgr.consensu.org/v27/cmp.js';
   elem.async = true;
   var scpt = document.getElementsByTagName('script')[0];
   scpt.parentNode.insertBefore(elem, scpt);
   (function() {
-    var gdprAppliesGlobally = true;
+    var gdprAppliesGlobally = false;
+
     function addFrame() {
       if (!window.frames['__cmpLocator']) {
         if (document.body) {
@@ -36,11 +37,13 @@
       if (json.__cmpCall) {
         var i = json.__cmpCall;
         window.__cmp(i.command, i.parameter, function(retValue, success) {
-          var returnMsg = { '__cmpReturn': {
-          'returnValue': retValue,
-          'success': success,
-          'callId': i.callId
-          }};
+          var returnMsg = {
+            '__cmpReturn': {
+              'returnValue': retValue,
+              'success': success,
+              'callId': i.callId
+            }
+          };
           event.source.postMessage(msgIsString ?
           JSON.stringify(returnMsg) : returnMsg, '*');
         });
@@ -51,8 +54,10 @@
       if (!b.length) {
         return __cmp.a;
       } else if (b[0] === 'ping') {
-        b[2]({ 'gdprAppliesGlobally': gdprAppliesGlobally,
-          'cmpLoaded': false }, true);
+        b[2]({
+          'gdprAppliesGlobally': gdprAppliesGlobally,
+          'cmpLoaded': false
+        }, true);
       } else if (c == '__cmp') {
         return false;
       } else {
@@ -66,8 +71,7 @@
     window.__cmp.msgHandler = cmpMsgHandler;
     if (window.addEventListener) {
       window.addEventListener('message', cmpMsgHandler, false);
-    }
-    else {
+    } else {
       window.attachEvent('onmessage', cmpMsgHandler);
     }
   })();
@@ -77,20 +81,22 @@
     'Initial Screen Body Text Option': 1,
     'Publisher Name': '{$site}',
     'Publisher Purpose IDs': [ 1, 2, 3, 4, 5 ],
-    'Consent Scope': 'service',
     'No Option': false,
     'Display Persistent Consent Link': false,
+    'Consent Scope': 'service',
     'Default Value for Toggles': 'on',
     'UI Layout': 'banner',
     'Initial Screen Title Text': '{t}We value your privacy{/t}',
     'Initial Screen Reject Button Text': '{t}I Do Not Accept{/t}',
     'Initial Screen Accept Button Text': '{t}I Accept{/t}',
+    'Initial Screen Settings Button Text': '{t}Options{/t}',
     'Initial Screen Purpose Link Text': '{t}Show Purposes{/t}',
     'Initial Screen Body Text': '{t}We and our partners use technology such as cookies on our site to personalize content and ads, provide social media features, and analyze our traffic. Click below to consent to the use of this technology by us and these 3rd parties across the web. You can change your mind and revisit your consent choices at anytime by returning to this site.{/t}',
     'Purpose Screen Title Text': '{t}We value your privacy{/t}',
     'Purpose Screen Header Title Text': '{t}Privacy Settings{/t}',
     'Purpose Screen Body Text': '{t}We and our partners use technology such as cookies on our site to personalize content and ads, provide social media features, and analyze our traffic. You can toggle on or off your consent preference based on purpose for all companies listed under each purpose to the use of this technology across the web. You can change your mind and revisit your consent choices at anytime by returning to this site.{/t}',
     'Purpose Screen Enable All Button Text': '{t}Enable all purposes{/t}',
+    'Purpose Screen Disable All Button Text': '{t}Reject All{/t}',
     'Purpose Screen Vendor Link Text': '{t}See full vendor list{/t}',
     'Purpose Screen Cancel Button Text': '{t}Cancel{/t}',
     'Purpose Screen Save and Exit Button Text': '{t}Save & Exit{/t}',
@@ -101,6 +107,7 @@
     'Vendor Screen Purposes Link Text': '{t}Back to purposes{/t}',
     'Vendor Screen Cancel Button Text': '{t}Cancel{/t}',
     'Vendor Screen Save and Exit Button Text': '{t}Save & Exit{/t}',
+    'Back Label': '{t}Go back{/t}'
   });
 </script>
 <!-- End Quantcast Choice. Consent Manager Tag -->

@@ -113,7 +113,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-drop-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -154,7 +154,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-archive-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -241,7 +241,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() {
               return {
@@ -330,6 +330,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.save = function() {
+      $scope.flags.http.saving = true;
+
       if ($scope.frontpageInfo.publish_date === '') {
         $scope.saveWithoutCheckPD();
         return null;
@@ -398,7 +400,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       if (numberOfContents > 100) {
         var message = frontpage_messages.frontpage_too_long.replace('%number%', 100);
 
-        messenger.post(message);
+        $scope.disableFlags('http');
+        $scope.showMessage(message, 'error');
       } else {
         var version = JSON.parse(JSON.stringify($scope.version));
 
@@ -420,6 +423,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           version:            version,
           category:           $scope.categoryId
         }).then(function(response) {
+          $scope.disableFlags('http');
+
           if (!response.data.frontpage_last_saved) {
             return false;
           }
@@ -445,8 +450,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
           }
+
           return null;
         }, function(response) {
+          $scope.disableFlags('http');
           $scope.showMessage(response.data.message, 'error', 5);
           return null;
         });
@@ -514,7 +521,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         var modal = $uibModal.open({
           templateUrl: 'modal-new-version',
           backdrop: 'static',
-          controller: 'modalCtrl',
+          controller: 'ModalCtrl',
           resolve: {
             template: function() {
               return {
@@ -605,7 +612,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       $uibModal.open({
         templateUrl: 'modal-layout',
         backdrop: true,
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {

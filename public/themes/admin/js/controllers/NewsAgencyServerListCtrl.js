@@ -1,28 +1,44 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  NewsAgencyServerListCtrl
      *
      * @requires $controller
      * @requires $http
-     * @requires $uibModal
      * @requires $scope
-     * @requires itemService
-     * @requires routing
      * @requires messenger
      *
      * @description
      *   Controller for server list in news agency.
      */
     .controller('NewsAgencyServerListCtrl', [
-      '$controller', '$http', '$uibModal', '$scope', 'http', 'itemService', 'routing', 'messenger',
-      function($controller, $http, $uibModal, $scope, http, itemService, routing, messenger) {
+      '$controller', '$scope', '$uibModal', 'http', 'messenger',
+      function($controller, $scope, $uibModal, http, messenger) {
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
-        // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', {$scope: $scope}));
+        /**
+         * @memberOf NewsAgencyServerListCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          deleteItem:      'api_v1_backend_news_agency_server_delete_item',
+          deleteList:      'api_v1_backend_news_agency_server_delete_list',
+          emptyItem:       'api_v1_backend_news_agency_server_empty_item',
+          getList:         'api_v1_backend_news_agency_server_get_list',
+          patchItem:       'api_v1_backend_news_agency_server_patch_item',
+          patchList:       'api_v1_backend_news_agency_server_patch_list',
+          redirect:        'backend_news_agency_server_show',
+          synchronizeItem: 'api_v1_backend_news_agency_server_synchronize_item',
+          updateItem:      'api_v1_backend_news_agency_server_update_item',
+        };
 
         /**
          * @function clean
@@ -34,51 +50,81 @@
          * @param {Integer} index Index of the server in the array of contents.
          * @param {Integer} id    The server id.
          */
-        $scope.clean = function (index, id) {
-          $scope.contents[index].cleaning = true;
+        $scope.clean = function(item) {
+          var route = {
+            name: 'backend_ws_news_agency_server_clean',
+            params: { id: item.id }
+          };
 
-          var url = routing.generate('backend_ws_news_agency_server_clean',
-              { id: id });
-
-          $http.post(url).success(function(response) {
-            $scope.contents[index].cleaning = false;
+          http.post(route).success(function(response) {
+            $scope.disableFlags('http');
 
             if (response.messages) {
               messenger.post(response.messages);
             }
           }).error(function() {
-            $scope.contents[index].cleaning = false;
+            $scope.disableFlags('http');
           });
         };
 
         /**
-         * @function patch
+         * @function init
+         * @memberOf CategoryListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.init = function() {
+          $scope.app.columns.selected = _.uniq($scope.app.columns.selected
+            .concat([ 'name', 'synchronization', 'color', 'automatic', 'enabled' ]));
+
+          $scope.list();
+        };
+
+        /**
+         * @function emptyItem
          * @memberOf NewsAgencyServerListCtrl
          *
          * @description
-         *   Enables/disables a server.
+         *   Removes all files downloaded from the current the sever.
          *
-         * @param {String}  item     The server object.
-         * @param {String}  property The property name.
-         * @param {Boolean} value    The property value.
+         * @param {Integer} id The server id.
          */
-        $scope.patch = function(item, property, value) {
-          var data = {};
-
-          item[property + 'Loading'] = 1;
-          data[property] = value;
-
+        $scope.emptyItem = function(id) {
           var route = {
-            name:   'backend_ws_news_agency_server_toggle',
-            params: { id: item.id }
+            name: $scope.routes.emptyItem,
+            params: { id: id }
           };
 
-          http.patch(route, data).then(function(response) {
-            item[property + 'Loading'] = 0;
-            item[property] = value;
+          http.put(route).then(function(response) {
+            $scope.disableFlags('http');
             messenger.post(response.data);
           }, function(response) {
-            item[property + 'Loading'] = 0;
+            $scope.disableFlags('http');
+            messenger.post(response.data);
+          });
+        };
+
+        /**
+         * @function synchronizeItem
+         * @memberOf NewsAgencyServerListCtrl
+         *
+         * @description
+         *   Removes all files downloaded from the current the sever.
+         *
+         * @param {Integer} id The server id.
+         */
+        $scope.synchronizeItem = function(id) {
+          var route = {
+            name: $scope.routes.synchronizeItem,
+            params: { id: id }
+          };
+
+          http.put(route).then(function(response) {
+            $scope.disableFlags('http');
+            messenger.post(response.data);
+          }, function(response) {
+            $scope.disableFlags('http');
             messenger.post(response.data);
           });
         };

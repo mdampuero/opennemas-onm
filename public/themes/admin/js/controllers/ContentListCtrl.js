@@ -54,17 +54,23 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       },
     };
 
-    /**
-     * The available elements per page
-     *
-     * @type {Array}
-     */
-    $scope.views = [ 10, 25, 50, 100 ];
-
     $scope.deselectAll = function() {
       $scope.selected.all          = 0;
       $scope.selected.contents     = [];
       $scope.selected.lastSelected = null;
+    };
+
+    /**
+     * @function clear
+     * @memberOf ContentListCtrl
+     *
+     * @description
+     *   Deletes a value from criteria.
+     *
+     * @param {String} property The property name.
+     */
+    $scope.clear = function(property) {
+      delete $scope.criteria[property];
     };
 
     /**
@@ -400,7 +406,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-update-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -450,7 +456,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-remove-permanently',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -489,7 +495,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -523,7 +529,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -556,7 +562,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-remove-config',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {};
@@ -582,7 +588,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-batch-remove-permanently',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -620,7 +626,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {
@@ -659,7 +665,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var modal = $uibModal.open({
         templateUrl: 'modal-delete-selected',
         backdrop: 'static',
-        controller: 'modalCtrl',
+        controller: 'ModalCtrl',
         resolve: {
           template: function() {
             return {

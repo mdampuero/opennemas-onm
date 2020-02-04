@@ -73,6 +73,7 @@ class ContentHelper
         }
 
         try {
+            $photos   = [];
             $contents = $this->em->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
@@ -93,7 +94,7 @@ class ContentHelper
 
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
-            return [];
+            return [ [], [] ];
         }
 
         return $this->ignoreCurrent($contentId, $items, $epp);

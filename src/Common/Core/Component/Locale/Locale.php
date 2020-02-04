@@ -15,23 +15,11 @@ namespace Common\Core\Component\Locale;
 class Locale
 {
     /**
-     * The default locale configuration.
+     * Locale configuration.
      *
      * @var array
      */
-    protected $config = [
-        'backend' => [
-            'language' => [ 'selected'  => 'en_US', 'slug' => [] ],
-            'timezone' => 'UTC'
-        ],
-        'frontend' => [
-            'language' => [
-                'selected' => 'en_US',
-                'slug'     => []
-            ],
-            'timezone' => 'UTC'
-        ],
-    ];
+    protected $config;
 
     /**
      * The current context.
@@ -77,22 +65,13 @@ class Locale
     /**
      * Initializes the Locale.
      *
-     * @param array  $available The available locales for backend.
-     * @param string $path      The path to locales for backend.
+     * @param array  $config The locale config.
+     * @param string $path   The path to locales.
      */
-    public function __construct($available, $path)
+    public function __construct($config, $path)
     {
-        $this->config['backend']['language']['available'] = $available;
-
-        $this->path = $path;
-
-        // Update contexts adding missing default values
-        foreach ($this->config as $context => $config) {
-            $this->config[$context] = array_replace_recursive(
-                $this->default,
-                $config
-            );
-        }
+        $this->path   = $path;
+        $this->config = $config;
     }
 
     /**
@@ -135,14 +114,15 @@ class Locale
         foreach ($configs as $context => $config) {
             // Convert a timezone id to a timezone name
             if (array_key_exists('timezone', $config)) {
-                $config['timezone'] =
+                $this->config[$context]['timezone'] =
                     $this->getTimeZoneName($config['timezone']);
             }
 
-            $this->config[$context] = array_replace_recursive(
-                $this->config[$context],
-                $config
-            );
+            foreach ($this->config[$context]['language'] as $key => &$value) {
+                if (array_key_exists($key, $config['language'])) {
+                    $value = $config['language'][$key];
+                }
+            }
         }
 
         return $this;
@@ -157,10 +137,6 @@ class Locale
      */
     public function getAvailableLocales($context = null)
     {
-        if (empty($this->config[$this->getContext($context)]['language']['available'])) {
-            return [];
-        }
-
         $locales = [];
 
         foreach ($this->config[$this->getContext($context)]['language']['available'] as $locale) {

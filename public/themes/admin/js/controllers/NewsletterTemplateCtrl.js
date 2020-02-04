@@ -190,8 +190,9 @@
           container.items.push({
             content_type: 'list',
             criteria: {
-              content_type: '',
+              content_type: 'article',
               category: [],
+              opinion_type: '',
               epp: 5,
               in_litter: 0,
               filter: '',

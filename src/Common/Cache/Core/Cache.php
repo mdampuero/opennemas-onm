@@ -21,6 +21,16 @@ abstract class Cache extends DataBuffer
     public $mru = [];
 
     /**
+     * Initializes the cache connection.
+     */
+    public function init()
+    {
+        $this->mru = [];
+
+        return $this;
+    }
+
+    /**
      * Checks if there is data in cache for the given id.
      *
      * @param string $id The cache id.

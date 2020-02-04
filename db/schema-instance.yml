@@ -132,6 +132,12 @@ albums:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: cover_id
+            columns: [cover_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: album_id_contents_id
@@ -139,6 +145,12 @@ albums:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: cover_id
+            source_field: [ cover_id ]
+            target_table: photos
+            target_field: [ pk_photo ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 albums_photos:
     columns:
         pk_album:
@@ -412,10 +424,10 @@ content_categories:
             type: text
             options: { default: null, length: 65532, notnull: false }
         archived:
-            type: integer
+            type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         enabled:
-            type: integer
+            type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         fk_content_category:
             type: bigint
@@ -1039,9 +1051,6 @@ opinions:
             type: integer
             options: { unsigned: true, default: 7, notnull: false }
         fk_author:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
-        fk_author_img:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
     index:
@@ -1688,6 +1697,19 @@ users:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: avatar_img_id
+            columns: [avatar_img_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: avatar_img_id
+            source_field: [ avatar_img_id ]
+            target_table: photos
+            target_field: [ pk_photo ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 user_user_group:
     columns:
         user_id:

@@ -86,7 +86,7 @@ class Validator
             }
 
             return [
-                'type' => $type,
+                'type'   => $type,
                 'errors' => $errors
             ];
         }

@@ -58,6 +58,10 @@ class Connection extends DataBuffer implements Validable
      */
     public function getConnection()
     {
+        if (!empty($this->conn) && !@$this->conn->ping()) {
+            $this->resetConnection();
+        }
+
         if (empty($this->conn)) {
             $this->conn = \Doctrine\DBAL\DriverManager::getConnection(
                 $this->getData(),

@@ -37,13 +37,6 @@
         $scope.tm = null;
 
         /**
-         * The available elements per page
-         *
-         * @type {Array}
-         */
-        $scope.views = [ 10, 25, 50, 100 ];
-
-        /**
          * @function cleanCriteria
          * @memberOf ListCtrl
          *
@@ -184,8 +177,8 @@
          */
         $scope.searchByKeypress = function(event) {
           if (event.keyCode === 13) {
-            if ($scope.pagination.page !== 1) {
-              $scope.pagination.page = 1;
+            if ($scope.criteria.page !== 1) {
+              $scope.criteria.page = 1;
               return;
             }
 

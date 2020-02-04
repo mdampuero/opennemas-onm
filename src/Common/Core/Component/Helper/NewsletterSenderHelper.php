@@ -215,24 +215,18 @@ class NewsletterSenderHelper
             $id = $endpoint->createMessage($messageParams);
 
             $sendingParams = [
-                'iscustom'              => 'Y',
-                'htmlbody'              => $newsletter->html,
-                'textbody'              => $newsletter->html,
-                'sendername'            => $settings['site_name'],
-                'senderemail'           => $settings['newsletter_maillist']['sender'],
-                'subject'               => $newsletter->title,
-                'when'                  => time(),
-                'sendtoids'             => $marketingList['id'],
                 'createcrmmsgsentnotes' => 'N',
+                'footerid'              => $messageParams['footerid'],
+                'headerid'              => $messageParams['headerid'],
+                'htmlbody'              => $newsletter->html,
+                'iscustom'              => 'Y',
+                'senderemail'           => $settings['newsletter_maillist']['sender'],
+                'sendername'            => $settings['site_name'],
+                'sendtoids'             => $marketingList['id'],
+                'subject'               => $newsletter->title,
+                'textbody'              => $newsletter->html,
+                'when'                  => time()
             ];
-
-            if (!empty($settings['actOn.headerId'])) {
-                $sendingParams['headerid'] = $settings['actOn.headerId'];
-            }
-
-            if (!empty($settings['actOn.footerId'])) {
-                $sendingParams['footerid'] = $settings['actOn.footerId'];
-            }
 
             $endpoint->sendMessage($id, $sendingParams);
 

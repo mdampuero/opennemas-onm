@@ -126,11 +126,13 @@ class ImageRenderer extends AdvertisementRenderer
             $template = 'advertisement/helpers/inline/image.amp.tpl';
         }
 
+        $isAbsolute = $format === 'newsletter' ? true : false;
+
         return $this->tpl->fetch($template, [
             'width'  => $img->width,
             'height' => $img->height,
             'src'    => $this->container->get('core.helper.url_generator')
-                ->generate($img),
+                ->generate($img, [ 'absolute' => $isAbsolute ]),
             'url'    => $this->instance->getBaseUrl() . $this->router->generate(
                 'frontend_ad_redirect',
                 [ 'id' => $publicId ]

@@ -1047,19 +1047,9 @@ class ContentManager
                 'title'           => _('Book')
             ],
             [
-                'pk_content_type' => 16,
-                'name'            => 'schedule',
-                'title'           => _('Agenda')
-            ],
-            [
                 'pk_content_type' => 17,
                 'name'            => 'letter',
                 'title'           => _('Letter to editor')
-            ],
-            [
-                'pk_content_type' => 18,
-                'name'            => 'frontpage',
-                'title'           => _('Frontpage')
             ],
         ];
 

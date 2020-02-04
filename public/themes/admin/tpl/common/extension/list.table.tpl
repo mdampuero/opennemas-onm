@@ -6,7 +6,7 @@
   <div>
   {block name="commonColumns"}
     <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('title')">
-      <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" disabled type="checkbox">
+      <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox">
       <label for="checkbox-title">
         {t}Title{/t}
       </label>
@@ -101,7 +101,7 @@
         <tbody>
           <tr data-id="[% getItemId(item) %]" ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items">
             <td class="text-center v-align-middle">
-              <div class="checkbox check-default">
+              <div class="checkbox check-default" ng-if="isSelectable(item)">
                 <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getItemId(item)" type="checkbox">
                 <label for="checkbox[%$index%]"></label>
               </div>
@@ -198,11 +198,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-  <div class="grid-footer clearfix ng-cloak">
-    <div class="pull-right">
-      <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>
     </div>
   </div>
 </div>

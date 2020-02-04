@@ -10,10 +10,10 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Image\Processor;
-use Common\ORM\Entity\Instance;
+use Common\Core\Component\Loader\InstanceLoader;
 use Framework\Component\MIME\MimeTypeTool;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 
 class ImageHelper extends FileHelper
 {
@@ -27,14 +27,14 @@ class ImageHelper extends FileHelper
     /**
      * Initalializes the ImageHelper.
      *
-     * @param Instance  $instance  The current instance.
-     * @param string    $publicDir The server public directory.
-     * @param Processor $processor The image processor service.
+     * @param InstanceLoader $loader    The InstanceLoader service.
+     * @param string         $publicDir The server public directory.
+     * @param Processor      $processor The image processor service.
      */
-    public function __construct(Instance $instance, string $publicDir, Processor $processor)
+    public function __construct(InstanceLoader $loader, string $publicDir, Processor $processor)
     {
         $this->fs        = new Filesystem();
-        $this->instance  = $instance;
+        $this->loader    = $loader;
         $this->processor = $processor;
         $this->publicDir = $publicDir;
     }
@@ -128,6 +128,6 @@ class ImageHelper extends FileHelper
      */
     protected function getPathForFile()
     {
-        return $this->instance->getImagesShortPath();
+        return $this->loader->getInstance()->getImagesShortPath();
     }
 }
