@@ -20,7 +20,7 @@ class RedisTest extends \PHPUnit\Framework\TestCase
     {
         $this->baseRedis = $this->getMockBuilder('Redis')
             ->setMethods([
-                'auth', 'delete', 'exists', 'eval', 'expire', 'get', 'mGet',
+                'auth', 'del', 'exists', 'eval', 'expire', 'get', 'mGet',
                 'mSet', 'pconnect', 'scan', 'set', 'setOption'
             ])->getMock();
 
@@ -49,13 +49,13 @@ class RedisTest extends \PHPUnit\Framework\TestCase
                 'thud-foo-corge',
                 'baz-foo-wubble',
             ]);
-        $this->baseRedis->expects($this->at(1))->method('delete')
+        $this->baseRedis->expects($this->at(1))->method('del')
             ->with('thud-foo-corge');
-        $this->baseRedis->expects($this->at(2))->method('delete')
+        $this->baseRedis->expects($this->at(2))->method('del')
             ->with('baz-foo-wubble');
         $this->baseRedis->expects($this->at(3))->method('scan')
             ->with(null, 'foo*')->willReturn([ 'quux-foo-31584' ]);
-        $this->baseRedis->expects($this->at(4))->method('delete')
+        $this->baseRedis->expects($this->at(4))->method('del')
             ->with('quux-foo-31584');
 
         $method = new \ReflectionMethod($this->redis, 'deleteByPattern');
@@ -110,7 +110,7 @@ class RedisTest extends \PHPUnit\Framework\TestCase
                 'baz-foo-wubble',
             ]);
 
-        $this->baseRedis->expects($this->at(1))->method('delete')
+        $this->baseRedis->expects($this->at(1))->method('del')
             ->with('thud-foo-corge');
 
         $this->redis->removeByPattern('*norf*');
