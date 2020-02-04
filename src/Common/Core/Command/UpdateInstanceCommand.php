@@ -7,14 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Command;
+namespace Common\Core\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InstancesUpdateCommand extends ContainerAwareCommand
+class UpdateInstanceCommand extends ContainerAwareCommand
 {
     /**
      * If true, debug messages will be shown during importing.
@@ -36,7 +36,7 @@ class InstancesUpdateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('instances:update')
+            ->setName('core:instance:update')
             ->setDescription('Updates onm-instances database counters')
             ->setHelp(
                 "Updates the counters in instances table in onm-instances by collecting data from different sources."
@@ -83,9 +83,6 @@ class InstancesUpdateCommand extends ContainerAwareCommand
 
         $helper = $this->getContainer()->get('core.helper.instance');
         $stats  = [];
-        $sizes  = $input->getOption('media')
-            ? $helper->getMediaSize()
-            : [];
 
         foreach ($instances as $instance) {
             $stats[$instance->internal_name]['created']    = $helper->getCreated($instance);
