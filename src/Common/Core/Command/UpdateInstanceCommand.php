@@ -14,22 +14,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateInstanceCommand extends ContainerAwareCommand
+class UpdateInstanceCommand extends Command
 {
-    /**
-     * If true, debug messages will be shown during importing.
-     *
-     * @var boolean
-     */
-    protected $debug;
-
-    /**
-     * Array of database settings to use in migration process.
-     *
-     * @var array
-     */
-    protected $settings;
-
     /**
      * Configures the current command.
      */
@@ -40,6 +26,12 @@ class UpdateInstanceCommand extends ContainerAwareCommand
             ->setDescription('Updates onm-instances database counters')
             ->setHelp(
                 "Updates the counters in instances table in onm-instances by collecting data from different sources."
+            )
+            ->addOption(
+                'instances',
+                'i',
+                InputOption::VALUE_REQUIRED,
+                'The list of instances to update (e.g. norf, quux)'
             )
             ->addOption(
                 'media',
@@ -71,61 +63,146 @@ class UpdateInstanceCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $loader = $this->getContainer()->get('core.loader');
-        $loader->init();
+        $this->getContainer()->get('core.security')->setCliUser();
 
-        $instances = $this->getInstances();
+        $this->start();
+        $output->writeln(sprintf(
+            '<options=bold>'
+                . str_pad('(1/3) Starting command', 50, '.')
+                . '<fg=green;options=bold>DONE</>'
+                . ' <fg=blue;options=bold>(%s)</></>',
+            date('Y-m-d H:i:s', $this->started)
+        ));
 
-        if (empty($instances)) {
-            $output->writeln('No instances');
-            return 1;
-        }
+        list($instances, $media, $stats, $views) = $this->getParameters($input);
+
+        $output->writeln(sprintf(
+            '<options=bold>'
+                . str_pad('(2/3) Processing instances', 50, '.')
+                . '<fg=yellow;options=bold>IN PROGRESS</>'
+                . ' <fg=blue;options=bold>(%s instances)</></>',
+            count($instances)
+        ));
 
         $helper = $this->getContainer()->get('core.helper.instance');
-        $stats  = [];
+        $i      = 1;
 
         foreach ($instances as $instance) {
-            $stats[$instance->internal_name]['created']    = $helper->getCreated($instance);
-            $stats[$instance->internal_name]['last_login'] = $helper->getLastActivity($instance);
-            $stats[$instance->internal_name]['users']      = $helper->countUsers($instance);
-            $stats[$instance->internal_name]['page_views'] = $helper->getPageViews($instance);
+            $output->writeln(str_pad(
+                sprintf(
+                    '<fg=yellow;options=bold>====></><options=bold> (%d/%d) Updating instance %s</>',
+                    $i++,
+                    count($instances),
+                    $instance->internal_name
+                ),
+                50,
+                '.'
+            ));
 
-            $contents = $helper->countContents($instance);
+            try {
+                if (!empty($stats)) {
+                    $output->write(str_pad('- Checking creation date', 50, '.'));
+                    $instance->created = $helper->getCreated($instance);
+                    $output->writeln('<fg=green;options=bold>DONE</>');
 
-            foreach ($contents as $type => $total) {
-                $stats[$instance->internal_name][$type . 's'] = $total;
+                    $output->write(str_pad('- Checking last activity', 50, '.'));
+                    $instance->last_login = $helper->getLastActivity($instance);
+                    $output->writeln('<fg=green;options=bold>DONE</>');
+
+                    $output->write(str_pad('- Counting active users', 50, '.'));
+                    $instance->users = $helper->countUsers($instance);
+                    $output->writeln('<fg=green;options=bold>DONE</>');
+
+                    $output->write(str_pad('- Counting contents', 50, '.'));
+                    $contents = $helper->countContents($instance);
+
+                    foreach ($contents as $type => $total) {
+                        $instance->{$type . 's'} = $total;
+                    }
+
+                    $instance->contents = array_sum($contents);
+                    $output->writeln('<fg=green;options=bold>DONE</>');
+                }
+
+                if (!empty($views)) {
+                    $output->write(str_pad('- Requesting page views', 50, '.'));
+                    $instance->page_views = $helper->getPageViews($instance);
+                    $output->writeln('<fg=green;options=bold>DONE</>');
+                }
+
+                if (!empty($media)) {
+                    $output->write(str_pad('- Calculating media folder size', 50, '.'));
+                    $instance->media_size = $helper->getMediaSize($instance);
+                    $output->writeln('<fg=green;options=bold>DONE</>');
+                }
+            } catch (\Exception $e) {
+                $output->writeln('<fg=red;options=bold>FAIL</>');
             }
 
-            $stats[$instance->internal_name]['contents'] = array_sum($contents);
-
-            if (array_key_exists($instance->internal_name, $sizes)) {
-                $stats[$instance->internal_name]['media_size'] =
-                    $sizes[$instance->internal_name];
+            try {
+                $output->write(str_pad('- Saving instance', 50, '.'));
+                $this->getContainer()->get('orm.manager')->persist($instance);
+                $output->writeln('<fg=green;options=bold>DONE</>');
+            } catch (Exception $e) {
+                $output->writeln('<fg=red;options=bold>FAIL</>');
             }
         }
 
-        foreach ($instances as $instance) {
-            foreach ($stats[$instance->internal_name] as $key => $value) {
-                $instance->{$key} = $value;
-            }
-
-            $this->getContainer()->get('orm.manager')->persist($instance);
-        }
+        $this->end();
+        $output->writeln(sprintf(
+            '<options=bold>'
+                . str_pad('(3/3) Ending command', 50, '.')
+                . '<fg=green;options=bold>DONE</>'
+                . ' <fg=blue;options=bold>(%s)</>'
+                . ' <fg=yellow;options=bold>(%s)</></>',
+            date('Y-m-d H:i:s', $this->ended),
+            $this->getDuration()
+        ));
     }
 
     /**
-     * Returns the list of instances to process.
+     * Returns the list of instances to synchronize.
      *
-     * @return array The list of instances to proccess.
+     * @param array $names The list of instance names
+     *
+     * @return array The list of instances.
      */
-    protected function getInstances() : array
+    protected function getInstances(?array $names = []) : array
     {
-        try {
-            return $this->getContainer()->get('orm.manager')
-                ->getRepository('Instance')
-                ->findBy('order by id asc');
-        } catch (\Exception $e) {
-            return [];
+        $oql = 'order by id asc';
+
+        if (!empty($names)) {
+            $oql = sprintf('internal_name in ["%s"] ', implode('","', $names));
         }
+
+        return $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy($oql);
+    }
+
+    /**
+     * Returns the list of parameters for the command based on the input.
+     *
+     * @param InputInterface $input The input component.
+     *
+     * @return array The list of parameters.
+     */
+    protected function getParameters(InputInterface $input) : array
+    {
+        $instances = $input->getOption('instances');
+
+        if (!empty($instances)) {
+            $instances = preg_split('/\s*,\s*/', $instances);
+        }
+
+        $instances = $this->getInstances($instances);
+        $media     = $input->getOption('media');
+        $stats     = $input->getOption('stats');
+        $views     = $input->getOption('views');
+
+        if (empty($media) && empty($stats) && empty($views)) {
+            throw new \InvalidArgumentException('No option specified');
+        }
+
+        return [ $instances, $media, $stats, $views ];
     }
 }
