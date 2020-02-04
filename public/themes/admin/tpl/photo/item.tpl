@@ -33,56 +33,47 @@
       {include file="ui/component/content-editor/accordion/tags.tpl"}
     </div>
   </div>
-  <div class="grid simple">
-    <div class="grid-body no-padding">
-      <div class="grid-collapse-title ng-cloak">
-        <i class="fa fa-cog m-r-10"></i>
-        {t}Parameters{/t}
-      </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.information = !expanded.information">
-        <i class="fa fa-info-circle m-r-10"></i>{t}Information{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.information }"></i>
-      </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.information }">
-        <div class="row">
-          <div class="col-sm-6">
-            <strong>{t}Resolution{/t}</strong> [% item.width %]px X [% item.height %]px
-          </div>
-          <div class="col-sm-6">
-            <strong>{t}Size{/t}</strong> [% item.size %] KB
-          </div>
-        </div>
-        <div class="form-group">
-          <label style="margin-top:10px" for="author_name" class="form-label">{t}Copyright{/t}</label>
-          <div class="controls">
-            <div class="input-group">
-              <input class="form-control" type="text" id="author_name" name="author_name" ng-model="item.author_name"/>
-              <span class="input-group-addon add-on">
-                <span class="fa fa-copyright"></span>
-              </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 {/block}
 
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      <div class="thumbnail-wrapper">
-        <div class="form-group">
-          <div class="thumbnail-placeholder">
+      <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-5">
+          <div class="thumbnail-wrapper">
             <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
-              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="true">
+              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="false">
               </dynamic-image>
             </div>
           </div>
         </div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <div class="form-label">
+              <strong>
+                {t}Size{/t}
+              </strong>
+            </div>
+            <div class="controls">
+              [% item.size %] KB
+            </div>
+            <div class="form-label">
+              <strong>
+                {t}Resolution{/t}
+              </strong>
+            </div>
+            <div class="controls">
+              [% item.width %] x [% item.height %]
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
         {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
         {include file="ui/component/content-editor/textarea.tpl"  title="{t}Description{/t}" field="description" rows=20}
-        </div>
+      </div>
     </div>
   </div>
 {/block}
