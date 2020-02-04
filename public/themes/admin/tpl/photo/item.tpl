@@ -38,35 +38,29 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      <div class="row m-b-30">
-        <div class="col-md-7">
-          <div class="thumbnail-wrapper">
-            <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
-              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="false">
-              </dynamic-image>
-            </div>
-          </div>
+      <div class="thumbnail-wrapper">
+        <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
+          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="false">
+          </dynamic-image>
         </div>
-        <div class="col-md-5">
-          <div class="form-group">
-            <div class="form-label">
-              <strong>
-                {t}Size{/t}
-              </strong>
-            </div>
-            <div class="controls p-l-15">
-              [% item.size %] KB
-            </div>
-            <div class="form-label">
-              <strong>
-                {t}Resolution{/t}
-              </strong>
-            </div>
-            <div class="controls p-l-15">
-              [% item.width %] x [% item.height %]
-            </div>
-          </div>
-        </div>
+      </div>
+      <div class="m-b-30 m-t-15 text-center">
+        <span class="m-r-30">
+          <strong class="m-r-10">
+            {t}Size{/t}
+          </strong>
+          <span class="badge badge-default text-bold">
+            [% item.size %] KB
+          </span>
+        </span>
+        <span>
+          <strong class="m-r-10">
+            {t}Resolution{/t}
+          </strong>
+          <span class="badge badge-default text-bold">
+            [% item.width %] x [% item.height %]
+          </span>
+        </span>
       </div>
       <div class="form-group">
         {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}

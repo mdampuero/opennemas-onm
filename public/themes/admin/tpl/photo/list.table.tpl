@@ -57,12 +57,16 @@
 {block name="customColumnsBody"}
   {acl isAllowed="PHOTO_RESOLUTION"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('size')">
-      [% item.size %] KB
+      <span class="badge badge-default text-bold">
+        [% item.size %] KB
+      </span>
     </td>
   {/acl}
   {acl isAllowed="PHOTO_SIZE"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('resolution')">
-      [% item.width %]X[% item.height %]
+      <span class="badge badge-default text-bold">
+        [% item.width %] x [% item.height %]
+      </span>
     </td>
   {/acl}
 {/block}
