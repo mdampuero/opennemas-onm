@@ -154,11 +154,9 @@ class ContentOldService implements Service
         $items   = [];
         foreach ($response['items'] as $item) {
             try {
-                $id = $item->pk_content;
+                $item->remove($item->pk_content);
 
-                $item->remove();
-
-                $deleted[] = $id;
+                $deleted[] = $item->pk_content;
                 $items[]   = $item;
             } catch (\Exception $e) {
                 throw new DeleteListException($e->getMessage(), $e->getCode());

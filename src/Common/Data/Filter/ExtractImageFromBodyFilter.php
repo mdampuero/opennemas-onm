@@ -53,6 +53,7 @@ class ExtractImageFromBodyFilter extends Filter
         $basename = $this->getParameter('basename', true);
         $ids[0]   = null;
         $created  = new \Datetime($created);
+        $ps       = $this->container->get('api.service.photo');
 
         foreach ($files as $key => $file) {
             $filepath = $basename ? $path . basename($file) : $path . $file;
@@ -60,8 +61,7 @@ class ExtractImageFromBodyFilter extends Filter
 
             if (empty($id) && file_exists($filepath)) {
                 try {
-                    $photo = new \Photo();
-                    $id    = $photo->createFromLocalFile($filepath, [
+                    $id = $ps->createItem(new \SplFileInfo($filepath), [
                         'created'     => $created->format('Y-m-d H:i:s'),
                         'description' => $file,
                         'path_file'   => $created->format('/Y/m/d/'),

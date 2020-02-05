@@ -322,14 +322,14 @@ class LetterController extends Controller
     public function saveImage(Request $request)
     {
         $file = $request->files->get('image');
+        $ps   = $this->get('api.service.photo');
 
         if (empty($file)) {
             return null;
         }
 
         try {
-            $photo = new \Photo();
-            return $photo->createFromLocalFile($file->getRealPath());
+            return $ps->createItem($file);
         } catch (\Exception $e) {
             $this->get('error.log')->error('Unable to save letter image: ' . $e->getMessage());
             return null;

@@ -79,12 +79,19 @@
         };
 
         /**
-         * Updates the array of contents.
-         *
-         * @param {Boolean} reset Whether to reset the list.
+         * Reloads the image list on media picker close event.
          */
-        $scope.list = function(reset) {
-          if (!$scope.isModeSupported() || reset || $scope.app.mode === 'list') {
+        $scope.$on('MediaPicker.close', function() {
+          if ($scope.criteria.content_type_name === 'photo') {
+            $scope.list($scope.route, true);
+          }
+        });
+
+        /**
+         * Updates the array of contents.
+         */
+        $scope.list = function() {
+          if (!$scope.isModeSupported() || $scope.app.mode === 'list') {
             $scope.flags.http.loading = 1;
           } else {
             $scope.flags.http.loadingMore = 1;
@@ -99,30 +106,7 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            if ($scope.isModeSupported() && !reset && $scope.app.mode === 'grid') {
-              $scope.data = $scope.data ? $scope.data : { extra: [], items: [] };
-
-              // Merge items
-              response.data.items = [].concat($scope.data.items, response.data.items);
-
-              // Merge extra info with the scope
-              for (var key in response.data.extra) {
-                if (angular.isArray(response.data.extra[key]) &&
-                    angular.isArray($scope.data.extra[key])) {
-                  response.data.extra[key] = [].concat($scope.data.extra[key],
-                    response.data.extra[key]);
-                }
-
-                if (angular.isObject(response.data.extra[key]) &&
-                    angular.isObject($scope.data.extra[key])) {
-                  response.data.extra[key] = angular.merge($scope.data.extra[key],
-                    response.data.extra[key]);
-                }
-              }
-            }
-
             $scope.data = response.data;
-
             $scope.parseList(response.data);
             $scope.disableFlags('http');
           }, function(response) {
@@ -131,19 +115,6 @@
             $scope.data = {};
           });
         };
-
-        // Change page when scrolling in grid mode
-        $(window).scroll(function() {
-          if (!$scope.isModeSupported() || $scope.app.mode === 'list' ||
-              $scope.items.length === $scope.data.total) {
-            return;
-          }
-
-          if (!$scope.flags.http.loadingMore && $(document).height() <=
-              $(window).height() + $(window).scrollTop()) {
-            $scope.scroll();
-          }
-        });
       }
     ]);
 })();

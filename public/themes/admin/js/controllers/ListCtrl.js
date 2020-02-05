@@ -238,6 +238,10 @@
           }
         };
 
+        $scope.select = function(item) {
+          $scope.selected.lastSelected = item;
+        };
+
         /**
          * @function sort
          * @memberOf InstanceListCtrl

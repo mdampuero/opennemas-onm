@@ -131,31 +131,6 @@ admin_letters_content_provider:
     path:     /letters/content-provider
     defaults: { _controller: BackendBundle:Letters:contentProvider }
 
-# Image manager routes
-admin_images:
-    path:     /images
-    defaults: { _controller: BackendBundle:Images:list }
-
-admin_image_new:
-    path:     /images/new
-    defaults: { _controller: BackendBundle:Images:new }
-
-admin_photo_show:
-    path:     /images/{id}/show
-    defaults: { _controller: BackendBundle:Images:show }
-    options:
-        expose: true
-
-admin_image_create:
-    path:     /images/create
-    defaults: { _controller: BackendBundle:Images:create }
-    options:
-        expose: true
-
-admin_photo_update:
-    path:     /image/{id}/update
-    defaults: { _controller: BackendBundle:Images:update }
-
 # Books controller routes
 admin_books:
     path:     /books
@@ -424,6 +399,10 @@ backend_opinion:
 backend_password:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/password.yml'
+
+backend_photo:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/photo.yml'
 
 backend_poll:
     prefix:   /

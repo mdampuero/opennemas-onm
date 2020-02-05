@@ -76,7 +76,7 @@
               </li>
               {block name="leftFilters"}{/block}
             </ul>
-            <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="data.items.length > 0 && (!isModeSupported() || app.mode === 'list')">
+            <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="data.items.length > 0">
               {block name="rightFilters"}
                 <li class="quicklinks">
                   <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="data.total"></onm-pagination>

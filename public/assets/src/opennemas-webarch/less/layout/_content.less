@@ -88,19 +88,15 @@
 
 .content .content-sidebar {
   border-left: 1px solid #ccc;
+  background-color: #fff;
   height: 100%;
   left: auto;
   padding: 0 15px 15px;
-  position: absolute;
-  right: 0;
-  top: 100px;
-  width: 250px;
-  z-index: 260;
-}
-
-.content .content-sidebar.scrolled {
   position: fixed;
-  top: 85px;
+  right: 0;
+  top: 135px;
+  width: 250px;
+  overflow-y: auto;
 }
 
 .content-grid .notification-list {
@@ -116,13 +112,14 @@
 
 .content-sidebar .media-information li {
   padding: 0 0 8px;
-}
-
-.content-sidebar .media-information li {
   font-size: 14px;
 }
 
-.content-sidebar .media-information .btn-primary {
+.content-sidebar .media-information .btn-default {
+  width: 90%;
+}
+
+.content-sidebar .media-information .btn-white {
   width: 90%;
 }
 

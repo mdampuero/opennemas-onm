@@ -150,14 +150,14 @@ class Importer
         $data = $this->getData($resource, $data);
 
         if ($resource->type === 'photo') {
-            $path  = $data['path'];
-            $photo = new \Photo();
+            $ps   = $this->container->get('api.service.photo');
+            $file = new \SplFileInfo($data['path']);
 
             unset($data['path']);
 
-            $photo->createFromLocalFile($path, $data, true);
+            $id = $ps->createItem($file, $data, true);
 
-            return $photo;
+            return new \Photo($id);
         }
 
         $target  = \classify($data['content_type_name']);

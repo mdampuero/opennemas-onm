@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
 
 class Photo extends Content
 {
@@ -183,42 +182,6 @@ class Photo extends Content
     }
 
     /**
-     * Creates a photo basing on a file and optional photo information.
-     *
-     * @param string $path The path to the file.
-     * @param array  $data The photo information.
-     * @param bool   $copy Whether to move or copy the file.
-     *
-     * @return int The photo id.
-     */
-    public function createFromLocalFile(string $path, array $data = [], bool $copy = false) : int
-    {
-        $ih   = getService('core.helper.image');
-        $date = new \DateTime($data['created'] ?? null);
-
-        $file     = new File($path);
-        $path     = $ih->generatePath($file, $date);
-        $filename = basename($path);
-
-        $ih->move($file, $path, $copy);
-
-        if ($ih->isOptimizable($path)) {
-            $ih->optimize($path);
-        }
-
-        $data = array_merge([
-            'changed'        => $date->format('Y-m-d H:i:s'),
-            'content_status' => 1,
-            'created'        => $date->format('Y-m-d H:i:s'),
-            'name'           => $filename,
-            'path_file'      => $date->format('/Y/m/d/'),
-            'title'          => $filename,
-        ], $data, $ih->getInformation($path));
-
-        return $this->create($data);
-    }
-
-    /**
      * Updates the photo object given an array with information
      *
      * @param array $data the new photo information
@@ -257,18 +220,19 @@ class Photo extends Content
      */
     public function remove($id)
     {
-        //$path = getService('service_container')->getParameter('core.paths.public')
-            //. getService('core.instance')->getImagesShortPath()
-            //. $this->getRelativePath();
+        if (!empty($this->getRelativePath())) {
+            $path = getService('service_container')->getParameter('core.paths.public')
+            . getService('core.instance')->getImagesShortPath()
+            . $this->getRelativePath();
 
-        //$fs = new Filesystem();
+            $fs = new Filesystem();
 
-        //if ($fs->exists($path)) {
-            //$fs->remove($path);
-        //}
+            if ($fs->exists($path) && !is_dir($path)) {
+                $fs->remove($path);
+            }
+        }
 
         parent::remove($id);
-
         getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
     }
 

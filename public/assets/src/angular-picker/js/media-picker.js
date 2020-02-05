@@ -118,7 +118,7 @@
                       '</div>' +
                       '<ul class="media-information">' +
                         '<li>' +
-                          '<a ng-href="[% routing.generate(\'admin_photo_show\', { id: selected.lastSelected.id}) %]" target="_blank">' +
+                          '<a ng-href="[% routing.generate(\'backend_photo_show\', { id: selected.lastSelected.id}) %]">' +
                             '<strong>' +
                               '[% selected.lastSelected.name %]' +
                               '<i class="fa fa-edit"></i>' +
@@ -826,7 +826,7 @@
 
           $scope.uploader = new FileUploader({
             autoUpload: true,
-            url:        routing.generate('admin_image_create')
+            url:        routing.generate('api_v1_backend_photo_save_item')
           });
 
           // Filter files by extension
@@ -1102,7 +1102,7 @@
             return;
           }
 
-          var route = { name: 'admin_image_create' };
+          var route = { name: 'api_v1_backend_photo_save_item' };
           var body  = [];
 
           body[$scope.selected.lastSelected.name] = image;

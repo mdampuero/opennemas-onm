@@ -257,7 +257,7 @@ class ApiController extends Controller
      *
      * @return array The list of authors.
      */
-    protected function getAuthors($items = null)
+    protected function getAuthors()
     {
         return $this->get('api.service.author')->responsify(
             $this->get('api.service.author')
@@ -306,7 +306,7 @@ class ApiController extends Controller
      *
      * @return array The extra data.
      */
-    protected function getExtraData($items = null)
+    protected function getExtraData()
     {
         return [];
     }

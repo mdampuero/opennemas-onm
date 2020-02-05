@@ -10,7 +10,6 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Loader\InstanceLoader;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class FileHelper
@@ -64,12 +63,12 @@ abstract class FileHelper
     /**
      * Returns the path where the file should be moved.
      *
-     * @param File     $file The file to generate path to.
+     * @param \SplFileInfo     $file The file to generate path to.
      * @param DateTime $date The date to generate the path from.
      *
      * @return string The path where the file should be moved.
      */
-    public function generatePath(File $file, \DateTime $date) : string
+    public function generatePath(\SplFileInfo $file, \DateTime $date) : string
     {
         return preg_replace('/\/+/', '/', sprintf(
             '%s/%s/%s/%s',
@@ -100,13 +99,13 @@ abstract class FileHelper
     /**
      * Moves the file to the target path.
      *
-     * @param File   $file   The file to move.
+     * @param \SplFileInfo   $file   The file to move.
      * @param string $target The path where file will be moved.
      * @param bool   $copy   Whether to copy the file.
      *
      * @return string The target path.
      */
-    public function move(File $file, string $target, bool $copy = false) : void
+    public function move(\SplFileInfo $file, string $target, bool $copy = false) : void
     {
         $name      = basename($target);
         $directory = str_replace($name, '', $target);

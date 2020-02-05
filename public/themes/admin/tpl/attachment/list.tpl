@@ -61,7 +61,7 @@
       <span class="h-seperate"></span>
     </li>
     <li class="quicklinks">
-      <button class="btn btn-link" ng-click="sendToTrash()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+      <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-trash-o fa-lg"></i>
       </button>
     </li>
@@ -99,6 +99,6 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
-    {include file="common/extension/modal.delete.tpl"}
+    {include file="attachment/modal.delete.tpl"}
   </script>
 {/block}

@@ -224,7 +224,7 @@ class Attachment extends Content
             return false;
         }
 
-        if (file_exists($filename)) {
+        if (file_exists($filename) && !is_dir($filename)) {
             unlink($filename);
         }
 

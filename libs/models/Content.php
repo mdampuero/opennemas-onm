@@ -20,7 +20,7 @@ class Content implements \JsonSerializable, CsvSerializable
     const IN_TIME            = 'in-time';
     const POSTPONED          = 'postponed';
     const L10N_CONTENT_TYPES = [
-        'album', 'article', 'attachment' ,'opinion', 'poll', 'video'
+        'album', 'article', 'attachment' ,'opinion', 'photo', 'poll', 'video'
     ];
 
     /**

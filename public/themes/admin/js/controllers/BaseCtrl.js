@@ -93,10 +93,10 @@
          * @return {Integer} The number of items per page.
          */
         $scope.getEppInGrid = function() {
+          var padding   = 15;
           var maxHeight = $(window).height() - $('.header').height() -
-            $('.actions-navbar').height();
+            $('.actions-navbar').height() * 2 - padding;
           var maxWidth  = $(window).width() - $('.sidebar').width();
-          var padding   = 40;
 
           if ($('.content-wrapper').length > 0) {
             maxWidth -= parseInt($('.content-wrapper').css('padding-right'));
@@ -510,10 +510,10 @@
             return null;
           }
 
-          var route = { name: 'admin_image_create' };
+          var route = { name: 'api_v1_backend_photo_save_item' };
           var body  = {};
 
-          body[imgData.name] = image;
+          body['imgData.name'] = image;
           http.post(route, body).success(function() {
             if (typeof $scope.list === 'function') {
               $scope.list($scope.route, true);
