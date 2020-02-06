@@ -53,12 +53,23 @@
             [% item.size %] KB
           </span>
         </span>
-        <span>
+        <span class="m-r-30">
           <strong class="m-r-10">
             {t}Resolution{/t}
           </strong>
           <span class="badge badge-default text-bold">
             [% item.width %] x [% item.height %]
+          </span>
+        </span>
+        <span>
+          <strong class="m-r-10">
+            {t}Original{/t}
+          </strong>
+          <span>
+            <a class="badge badge-default text-bold" href="{$smarty.const.INSTANCE_MEDIA}images[% extra.paths.photo + item.path_img %]" target="_blank">
+              <i class="fa fa-external-link m-r-5"></i>
+              {t}Link{/t}
+            </a>
           </span>
         </span>
       </div>

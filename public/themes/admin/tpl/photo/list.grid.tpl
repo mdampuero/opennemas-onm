@@ -44,44 +44,79 @@
     <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Image details{/t}</h4>
     <div ng-if="selected.lastSelected">
       <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
-        <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
+        <dynamic-image autoscale="true" class="img-thumbnail no-animate" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
       </div>
       <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
-        <dynamic-image autoscale="true" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
+        <dynamic-image autoscale="true" class="img-thumbnail no-animate" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
       </div>
       <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="isFlash(selected.lastSelected)">
-        <dynamic-image autoscale="true" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>
+        <dynamic-image autoscale="true" class="img-thumbnail no-animate" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>
       </div>
       <ul class="media-information">
         <li>
-          <strong>[% selected.lastSelected.name %]</strong>
-        </li>
-        <li>
-          <a class="btn btn-default ng-isolate-scope" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.id}) %]">
+          <a class="btn btn-block btn-default" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.id}) %]">
               <i class="fa fa-edit ng-isolate-scope"></i>
               {t}Edit{/t}
           </a>
         </li>
         {is_module_activated name="es.openhost.module.imageEditor"}
+          <li>
+            <a class="btn btn-block btn-info" ng-click="launchPhotoEditor(selected.lastSelected)">
+                <i class="fa fa-sliders"></i>
+                {t}Enhance{/t}
+            </a>
+          </li>
+        {/is_module_activated}
         <li>
-          <a class="btn btn-white ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
-              <i class="fa fa-sliders"></i>
-              {t}Enhance{/t}
+          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}images[% selected.lastSelected.path_img %]" target="_blank">
+            <i class="fa fa-external-link m-r-5"></i>
+            {t}Link{/t}
           </a>
         </li>
-        {/is_module_activated}
-        <li>[% selected.lastSelected.created %]</li>
-        <li><strong>{t}Size:{/t}</strong> [% selected.lastSelected.width %] x [% selected.lastSelected.height %] ([% selected.lastSelected.size %] KB)</li>
         <li>
-          <div class="form-group">
-            <label for="description">
-              <strong>{t}Description{/t}</strong>
-              <div class="pull-right">
-                <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }"></i>
-              </div>
-            </label>
-            <textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="10"></textarea>
+          <label class="text-bold">
+            {t}Name{/t}
+          </label>
+          <span class="m-l-10">
+            [% selected.lastSelected.name %]
+          </span>
+        </li>
+        <li>
+          <label class="text-bold">
+            {t}Created{/t}
+          </label>
+          <span class="m-l-10">
+            [% selected.lastSelected.created %]
+          </span>
+        </li>
+        <li>
+          <div class="row">
+            <div class="col-xs-6">
+              <label class="text-bold">
+                {t}Resolution{/t}
+              </label>
+              <span class="badge badge-default m-l-10 text-bold">
+                [% selected.lastSelected.width %] x [% selected.lastSelected.height %]
+              </span>
+            </div>
+            <div class="col-xs-6">
+              <label class="text-bold">
+                {t}Size{/t}
+              </label>
+              <span class="badge badge-default m-l-10 text-bold">
+                [% selected.lastSelected.size %] KB
+              </span>
+            </div>
           </div>
+        </li>
+        <li>
+          <label class="text-bold" for="description">
+            {t}Description{/t}
+            <div class="pull-right">
+              <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': saving, 'fa-check text-success': saved, 'fa-times text-danger': error }"></i>
+            </div>
+          </label>
+          <textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="10"></textarea>
         </li>
       </ul>
     </div>

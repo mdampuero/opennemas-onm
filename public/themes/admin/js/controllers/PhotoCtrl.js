@@ -31,5 +31,12 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item');
     };
+
+    /**
+     * @inheritdoc
+     */
+    $scope.hasMultilanguage = function() {
+      return false;
+    };
   }
 ]);
