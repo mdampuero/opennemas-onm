@@ -12,8 +12,8 @@
         "@type": "Person",
         "name": "{$author|escape:'html'}"
       },
-      "datePublished": "{format_date date=$created format="y-MM-dd HH:mm:ss" type="custom"}",
-      "dateModified": "{format_date date=$changed format="y-MM-dd HH:mm:ss" type="custom"}",
+      "datePublished": "{format_date date=$content->created format="y-MM-dd HH:mm:ss" type="custom"}",
+      "dateModified": "{format_date date=$content->changed format="y-MM-dd HH:mm:ss" type="custom"}",
       "articleSection": "{$category->title|escape:'html'}",
       "keywords": "{$keywords|escape:'html'}",
       "url": "{$url}",
