@@ -62,6 +62,12 @@
               {t}Edit{/t}
           </a>
         </li>
+        <li>
+          <a class="btn btn-default ng-isolate-scope" href="{$smarty.const.INSTANCE_MEDIA}images[% selected.lastSelected.path_img %]" target="_blank">
+            <i class="fa fa-external-link m-r-5"></i>
+            {t}Link{/t}
+          </a>
+        </li>
         {is_module_activated name="es.openhost.module.imageEditor"}
         <li>
           <a class="btn btn-white ng-isolate-scope" ng-click="launchPhotoEditor(selected.lastSelected)">
