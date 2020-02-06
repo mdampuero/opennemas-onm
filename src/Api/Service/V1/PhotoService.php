@@ -38,12 +38,17 @@ class PhotoService extends ContentOldService
 
             $filename = basename($path);
             $ih->move($file, $path, $copy);
+            $originalFilename = pathinfo(
+                $file->getClientOriginalName(),
+                PATHINFO_FILENAME
+            );
 
             $data = array_merge([
                 'changed'        => $date->format('Y-m-d H:i:s'),
                 'content_status' => 1,
                 'created'        => $date->format('Y-m-d H:i:s'),
                 'name'           => $filename,
+                'description'    => $originalFilename,
                 'path_file'      => $date->format('/Y/m/d/'),
                 'title'          => $filename,
             ], $data, $ih->getInformation($path));
