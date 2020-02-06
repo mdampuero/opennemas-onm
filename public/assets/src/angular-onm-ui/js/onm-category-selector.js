@@ -99,12 +99,14 @@
             $scope.selectedText = $scope.selectedText || 'selected';
 
             // Force integers in ngModel on initialization
-            if ($scope.ngModel) {
+            if ($scope.ngModel && ($scope.ngModel instanceof Array || Number.isInteger($scope.ngModel))) {
               $scope.ngModel = !$scope.multiple ?
                 parseInt($scope.ngModel) :
                 $scope.ngModel.map(function(e) {
                   return parseInt(e);
                 });
+            } else {
+              $scope.ngModel = [];
             }
 
             var route = {
