@@ -137,39 +137,13 @@
                 $scope.selected = null;
                 return;
               }
-
-              // Add missing category on initialization
-              if (nv[1]) {
-                var category = $scope.data.items.filter(function(e) {
-                  return e.pk_content_category === $scope.ngModel;
-                });
-
-                if (category.length === 0) {
-                  var route = {
-                    name: 'api_v1_backend_category_get_item',
-                    params: { id: $scope.ngModel }
-                  };
-
-                  if ($scope.ngModel.length > 1) {
-                    route.params.id = $scope.ngModel[$scope.ngModel.length - 1];
-                  }
-
-                  http.get(route).then(function(response) {
-                    $scope.addMissingItem(response.data.item);
-                    $scope.localize($scope.data.items, $scope.data.extra);
-                  });
-
-                  return;
-                }
-              }
-
-              if ($scope.multiple && $scope.ngModel &&
-                !angular.isArray($scope.ngModel)) {
-                $scope.ngModel = [ $scope.ngModel ];
-              }
-
               $scope.selected = $scope.categories.filter(function(e) {
-                return e.pk_content_category === $scope.ngModel;
+                for (var i = 0; i < $scope.ngModel.length; i++) {
+                  if (e.pk_content_category === $scope.ngModel[i]) {
+                    return true;
+                  }
+                }
+                return false;
               });
             }, true);
 
