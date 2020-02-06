@@ -27,8 +27,8 @@
      *   Directive to create category selector dynamically.
      */
     .directive('onmCategorySelector', [
-      'http', 'linker', 'localizer',
-      function(http, linker, localizer) {
+      '$q', 'http', 'linker', 'localizer',
+      function($q, http, linker, localizer) {
         return {
           restrict: 'E',
           transclude: true,
@@ -106,7 +106,9 @@
                   return parseInt(e);
                 });
             } else {
-              $scope.ngModel = [];
+              $scope.ngModel = !$scope.multiple ?
+                null :
+                [];
             }
 
             var route = {
