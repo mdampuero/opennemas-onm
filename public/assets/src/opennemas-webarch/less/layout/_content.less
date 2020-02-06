@@ -87,16 +87,17 @@
 }
 
 .content .content-sidebar {
-  border-left: 1px solid #ccc;
   background-color: #fff;
-  height: 100%;
+  border-left: 1px solid #ccc;
+  bottom: 0;
   left: auto;
+  overflow-y: auto;
   padding: 0 15px 15px;
   position: fixed;
   right: 0;
   top: 135px;
   width: 250px;
-  overflow-y: auto;
+  z-index: 200;
 }
 
 .content-grid .notification-list {
@@ -104,23 +105,13 @@
 }
 
 .content-sidebar .media-information {
-  border-top: 1px solid #ccc;
   list-style: none;
   margin: 15px 0 0;
-  padding: 15px 0 0;
+  padding: 0;
 }
 
 .content-sidebar .media-information li {
-  padding: 0 0 8px;
-  font-size: 14px;
-}
-
-.content-sidebar .media-information .btn-default {
-  width: 90%;
-}
-
-.content-sidebar .media-information .btn-white {
-  width: 90%;
+  margin-top: 8px;
 }
 
 .content-sidebar textarea {
