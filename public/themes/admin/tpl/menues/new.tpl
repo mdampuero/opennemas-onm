@@ -83,7 +83,7 @@
                 {if (!empty($menu->id) && $menu->type neq 'user')} readonly="readonly" {/if} />
               </div>
             </div>
-            {if count($menu_positions) > 1}
+            {if !empty($menu_positions) && count($menu_positions) > 1}
             <div class="col-sm-6 col-xs-12 form-group">
               <label for="name" class="form-label">{t}Position{/t}</label>
               <div class="controls">

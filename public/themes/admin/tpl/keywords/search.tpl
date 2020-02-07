@@ -1,4 +1,4 @@
-{if count($terms)>0}
+{if !empty($terms)}
     <ul>
     {section name="s" loop=$terms}
         <li>
