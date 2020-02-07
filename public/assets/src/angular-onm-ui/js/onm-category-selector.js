@@ -141,13 +141,30 @@
                 $scope.selected = null;
                 return;
               }
-              $scope.selected = $scope.categories.filter(function(e) {
-                for (var i = 0; i < $scope.ngModel.length; i++) {
-                  if (e.pk_content_category === $scope.ngModel[i]) {
-                    return true;
+
+              var missing = [];
+
+              for (var i = 0; i < $scope.ngModel.length; i++) {
+                var route = {
+                  name: 'api_v1_backend_category_get_item',
+                  params: { id: $scope.ngModel[i] }
+                };
+
+                missing[i] = http.get(route).then(function(response) {
+                  $scope.addMissingItem(response.data.item);
+                  $scope.localize($scope.data.items, $scope.data.extra);
+                });
+              }
+
+              $q.all(missing).then(function() {
+                $scope.selected = $scope.categories.filter(function(e) {
+                  for (var i = 0; i < $scope.ngModel.length; i++) {
+                    if (e.pk_content_category === $scope.ngModel[i]) {
+                      return true;
+                    }
                   }
-                }
-                return false;
+                  return false;
+                });
               });
             }, true);
 
