@@ -12,8 +12,7 @@ namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
 use Api\Exception\FileAlreadyExistsException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PhotoService extends ContentOldService
 {
@@ -38,10 +37,13 @@ class PhotoService extends ContentOldService
 
             $filename = basename($path);
             $ih->move($file, $path, $copy);
-            $originalFilename = pathinfo(
-                $file->getClientOriginalName(),
-                PATHINFO_FILENAME
-            );
+            $originalFilename = '';
+            if ($file instanceof UploadedFile) {
+                $originalFilename = pathinfo(
+                    $file->getClientOriginalName(),
+                    PATHINFO_FILENAME
+                );
+            }
 
             $data = array_merge([
                 'changed'        => $date->format('Y-m-d H:i:s'),
