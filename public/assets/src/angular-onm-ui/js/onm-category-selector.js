@@ -99,12 +99,14 @@
             $scope.selectedText = $scope.selectedText || 'selected';
 
             // Force integers in ngModel on initialization
-            if ($scope.ngModel) {
+            if ($scope.ngModel && ($scope.ngModel instanceof Array || Number.isInteger($scope.ngModel))) {
               $scope.ngModel = !$scope.multiple ?
                 parseInt($scope.ngModel) :
                 $scope.ngModel.map(function(e) {
                   return parseInt(e);
                 });
+            } else {
+              $scope.ngModel = [];
             }
 
             var route = {
@@ -241,9 +243,15 @@
              *   Update selected categories.
              */
             $scope.updateSelected = function() {
+              var model = $scope.ngModel;
+
+              if (!$scope.multiple) {
+                model = [ $scope.ngModel ];
+              }
+
               var selected = $scope.categories.filter(function(e) {
-                for (var i = 0; i < $scope.ngModel.length; i++) {
-                  if (e.pk_content_category === $scope.ngModel[i]) {
+                for (var i = 0; i < model.length; i++) {
+                  if (e.pk_content_category === model[i]) {
                     return true;
                   }
                 }
