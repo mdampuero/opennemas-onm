@@ -99,16 +99,12 @@
             $scope.selectedText = $scope.selectedText || 'selected';
 
             // Force integers in ngModel on initialization
-            if ($scope.ngModel && ($scope.ngModel instanceof Array || Number.isInteger($scope.ngModel))) {
+            if ($scope.ngModel) {
               $scope.ngModel = !$scope.multiple ?
                 parseInt($scope.ngModel) :
                 $scope.ngModel.map(function(e) {
                   return parseInt(e);
                 });
-            } else {
-              $scope.ngModel = !$scope.multiple ?
-                null :
-                [];
             }
 
             var route = {
@@ -136,46 +132,38 @@
             });
 
             // Updates the selected item when model or categories change
-            $scope.$watch('[ categories, ngModel ]', function(nv) {
+            $scope.$watch('[ categories, ngModel ]', function() {
               if (!$scope.ngModel || !$scope.categories) {
                 $scope.selected = null;
                 return;
               }
 
-              var missing = [];
+              var misses = $scope.findMissingItems();
 
-              for (var i = 0; i < $scope.ngModel.length; i++) {
-                var route = {
-                  name: 'api_v1_backend_category_get_item',
-                  params: { id: $scope.ngModel[i] }
-                };
-
-                missing[i] = http.get(route).then(function(response) {
-                  $scope.addMissingItem(response.data.item);
-                  $scope.localize($scope.data.items, $scope.data.extra);
-                });
-              }
-
-              $q.all(missing).then(function() {
-                $scope.selected = $scope.categories.filter(function(e) {
-                  for (var i = 0; i < $scope.ngModel.length; i++) {
-                    if (e.pk_content_category === $scope.ngModel[i]) {
-                      return true;
-                    }
-                  }
-                  return false;
-                });
-              });
-            }, true);
-
-            // Updates linker when locale changes
-            $scope.$watch('locale', function(nv, ov) {
-              if (nv === ov || !$scope.linker) {
+              if (misses.length === 0) {
+                $scope.selected = $scope.updateSelected();
                 return;
               }
 
-              $scope.linker.setKey(nv);
-              $scope.linker.update();
+              var missing = [];
+
+              for (var i = 0; i < misses.length; i++) {
+                var route = {
+                  name: 'api_v1_backend_category_get_item',
+                  params: { id: misses[i] }
+                };
+
+                missing[i] = http.get(route).then(function(response) {
+                  return response.data.item;
+                });
+              }
+
+              $q.all(missing).then(function(items) {
+                $scope.updateModel(items);
+                $scope.categories = $scope.categories.concat(items);
+                $scope.selected = $scope.updateSelected();
+              });
+              $scope.localize($scope.data.items, $scope.data.extra);
             }, true);
 
             /**
@@ -209,11 +197,68 @@
              */
             $scope.addMissingItem = function(item) {
               if ($scope.data.items[0].pk_content_category !== null) {
-                $scope.items.unshift(item);
+                $scope.data.items.unshift(item);
                 return;
               }
 
               $scope.data.items.splice(1, 0, item);
+            };
+
+            /**
+             * @function findMissingItems
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Find all the selected categories that aren't in the list.
+             *
+             * @return {Array} Selected categories that aren't in the list.
+             */
+            $scope.findMissingItems = function() {
+              var missing = [];
+
+              missing = $scope.ngModel.filter(function(e) {
+                for (var i = 0; i < $scope.categories.length; i++) {
+                  if (e === $scope.categories[i].pk_content_category) {
+                    return false;
+                  }
+                }
+                return true;
+              });
+
+              return missing;
+            };
+
+            /**
+             * @function findMissingItems
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Update selected categories.
+             */
+            $scope.updateSelected = function() {
+              var selected = $scope.categories.filter(function(e) {
+                for (var i = 0; i < $scope.ngModel.length; i++) {
+                  if (e.pk_content_category === $scope.ngModel[i]) {
+                    return true;
+                  }
+                }
+                return false;
+              });
+
+              return selected;
+            };
+
+            /**
+             * @function findMissingItems
+             * @memberOf onmCategorySelector
+             *
+             * @description
+             *   Update model with missing items.
+             */
+            $scope.updateModel = function(items) {
+              for (var i = 0; i < items.length; i++) {
+                $scope.ngModel = $scope.ngModel.concat(items[i].pk_content_category);
+              }
             };
 
             /**
