@@ -238,7 +238,7 @@
 
     if (expires <= now) {
       document.body.appendChild(this.createInterstitial(ad));
-      document.body.className = document.body.className + ' interstitial-open';
+      document.body.classList.add('interstitial-open');
     }
   };
 
@@ -512,7 +512,7 @@
         }, timeout * 1000);
       }
 
-      document.body.className = document.body.className + ' interstitial-open';
+      document.body.classList.add('interstitial-open');
     }
   };
 
