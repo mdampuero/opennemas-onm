@@ -140,19 +140,19 @@
                 return;
               }
 
-              var misses = $scope.findMissingItems();
+              var missed = $scope.findMissingItems();
 
-              if (misses.length === 0) {
+              if (missed.length === 0) {
                 $scope.selected = $scope.updateSelected();
                 return;
               }
 
               var missing = [];
 
-              for (var i = 0; i < misses.length; i++) {
+              for (var i = 0; i < missed.length; i++) {
                 var route = {
                   name: 'api_v1_backend_category_get_item',
-                  params: { id: misses[i] }
+                  params: { id: missed[i] }
                 };
 
                 missing[i] = http.get(route).then(function(response) {
