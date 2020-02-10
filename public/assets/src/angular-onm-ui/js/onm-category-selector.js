@@ -56,7 +56,7 @@
               '  <div ng-bind-html="item.title | highlight: $select.search"></div>' +
               '</ui-select-choices>' +
             '</ui-select>' +
-            '<div class="[% cssClass %] ui-select-container select2 select2-container" ng-class="{dropup: position === \'up\'}" ng-if="multiple">' +
+            '<div class="[% cssClass %] ui-select-container select2 select2-container direction-[% position %]" ng-class="{dropup: position === \'up\'}" ng-if="multiple">' +
               '<a class="select2-choice ui-select-match" data-toggle="dropdown">' +
                 '<span class="select2-chosen">' +
                   '<strong ng-if="labelText">[% labelText %]:</strong>' +
