@@ -214,9 +214,14 @@
              * @return {Array} Selected categories that aren't in the list.
              */
             $scope.findMissingItems = function() {
+              var model = $scope.ngModel;
+
+              if (!$scope.multiple) {
+                model = [ $scope.ngModel ];
+              }
               var missing = [];
 
-              missing = $scope.ngModel.filter(function(e) {
+              missing = model.filter(function(e) {
                 for (var i = 0; i < $scope.categories.length; i++) {
                   if (e === $scope.categories[i].pk_content_category) {
                     return false;
@@ -229,7 +234,7 @@
             };
 
             /**
-             * @function findMissingItems
+             * @function updateSelected
              * @memberOf onmCategorySelector
              *
              * @description
@@ -249,15 +254,19 @@
             };
 
             /**
-             * @function findMissingItems
+             * @function updateModel
              * @memberOf onmCategorySelector
              *
              * @description
              *   Update model with missing items.
              */
             $scope.updateModel = function(items) {
-              for (var i = 0; i < items.length; i++) {
-                $scope.ngModel = $scope.ngModel.concat(items[i].pk_content_category);
+              if (!$scope.multiple) {
+                $scope.ngModel = items[0].pk_content_category;
+              } else {
+                for (var i = 0; i < items.length; i++) {
+                  $scope.ngModel = $scope.ngModel.concat(items[i].pk_content_category);
+                }
               }
             };
 
