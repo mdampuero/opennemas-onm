@@ -89,8 +89,7 @@
         ';expires=' + expires + ';path=/';
     }
 
-    document.body.className = document.body.className
-      .replace(' interstitial-open', '');
+    document.body.classList.remove('interstitial-open');
 
     if (element.parentNode) {
       element.parentNode.removeChild(element);
