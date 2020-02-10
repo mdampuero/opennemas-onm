@@ -106,7 +106,7 @@
                   return parseInt(e);
                 });
             } else {
-              $scope.ngModel = [];
+              $scope.ngModel = $scope.multiple ? [] : null;
             }
 
             var route = {
