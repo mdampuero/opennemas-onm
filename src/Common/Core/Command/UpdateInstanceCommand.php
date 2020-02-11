@@ -68,17 +68,25 @@ class UpdateInstanceCommand extends Command
         $this->start();
         $output->writeln(sprintf(
             '<options=bold>'
-                . str_pad('(1/3) Starting command', 50, '.')
+                . str_pad('(1/4) Starting command', 50, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s', $this->started)
         ));
 
+        $output->write(sprintf(
+            '<options=bold>'
+                . str_pad('(2/4) Checking parameters', 50, '.')
+                . '</>'
+        ));
+
         list($instances, $media, $stats, $views) = $this->getParameters($input);
+
+        $output->writeln('<fg=green;options=bold>DONE</>');
 
         $output->writeln(sprintf(
             '<options=bold>'
-                . str_pad('(2/3) Processing instances', 50, '.')
+                . str_pad('(3/4) Processing instances', 50, '.')
                 . '<fg=yellow;options=bold>IN PROGRESS</>'
                 . ' <fg=blue;options=bold>(%s instances)</></>',
             count($instances)
@@ -159,7 +167,7 @@ class UpdateInstanceCommand extends Command
         $this->end();
         $output->writeln(sprintf(
             '<options=bold>'
-                . str_pad('(3/3) Ending command', 50, '.')
+                . str_pad('(4/4) Ending command', 50, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</>'
                 . ' <fg=yellow;options=bold>(%s)</></>',
@@ -177,14 +185,29 @@ class UpdateInstanceCommand extends Command
      */
     protected function getInstances(?array $names = []) : array
     {
-        $oql = 'order by id asc';
+        $sql = 'select id from instances';
 
         if (!empty($names)) {
-            $oql = sprintf('internal_name in ["%s"] ', implode('","', $names));
+            $sql = sprintf(' where internal_name in ("%s")', implode('","', $names));
         }
 
-        return $this->getContainer()->get('orm.manager')
-            ->getRepository('Instance')->findBy($oql);
+        $sql .= ' order by id asc';
+
+        $ids = $this->getContainer()->get('orm.manager')->getConnection('manager')
+            ->fetchAll($sql);
+
+        $ids = array_map(function ($a) {
+            return $a['id'];
+        }, $ids);
+
+        $instances = [];
+
+        foreach ($ids as $id) {
+            $instances[] = $this->getContainer()->get('orm.manager')
+                ->getRepository('Instance')->find($id);
+        }
+
+        return $instances;
     }
 
     /**
@@ -196,6 +219,14 @@ class UpdateInstanceCommand extends Command
      */
     protected function getParameters(InputInterface $input) : array
     {
+        $media = $input->getOption('media');
+        $stats = $input->getOption('stats');
+        $views = $input->getOption('views');
+
+        if (empty($media) && empty($stats) && empty($views)) {
+            throw new \InvalidArgumentException('No option specified');
+        }
+
         $instances = $input->getOption('instances');
 
         if (!empty($instances)) {
@@ -203,13 +234,6 @@ class UpdateInstanceCommand extends Command
         }
 
         $instances = $this->getInstances($instances);
-        $media     = $input->getOption('media');
-        $stats     = $input->getOption('stats');
-        $views     = $input->getOption('views');
-
-        if (empty($media) && empty($stats) && empty($views)) {
-            throw new \InvalidArgumentException('No option specified');
-        }
 
         return [ $instances, $media, $stats, $views ];
     }
