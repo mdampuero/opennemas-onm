@@ -127,13 +127,21 @@ class UpdateInstanceCommand extends Command
                 if (!empty($views)) {
                     $output->write(str_pad('- Requesting page views', 50, '.'));
                     $instance->page_views = $helper->getPageViews($instance);
-                    $output->writeln('<fg=green;options=bold>DONE</>');
+                    $output->write('<fg=green;options=bold>DONE</>');
+                    $output->writeln(sprintf(
+                        '<fg=blue;options=bold> (%s)</>',
+                        $instance->page_views
+                    ));
                 }
 
                 if (!empty($media)) {
                     $output->write(str_pad('- Calculating media folder size', 50, '.'));
                     $instance->media_size = $helper->getMediaSize($instance);
-                    $output->writeln('<fg=green;options=bold>DONE</>');
+                    $output->write('<fg=green;options=bold>DONE</>');
+                    $output->writeln(sprintf(
+                        '<fg=blue;options=bold> (%0.2f MB)</>',
+                        $instance->media_size / 1024
+                    ));
                 }
             } catch (\Exception $e) {
                 $output->writeln('<fg=red;options=bold>FAIL</>');
