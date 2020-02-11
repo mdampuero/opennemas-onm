@@ -221,7 +221,7 @@ class InstanceHelper
             . '&format=json'
             . '&showColumns=nb_pageviews'
             . '&token_auth=%s',
-            $piwik['server_url'],
+            $this->piwik['url'],
             $piwik['page_id'],
             $from,
             $to,
