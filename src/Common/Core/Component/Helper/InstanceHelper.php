@@ -232,7 +232,9 @@ class InstanceHelper
             $response = $this->client->get($url);
             $body     = json_decode($response->getBody(), true);
 
-            return $body['value'];
+            return array_key_exists('value', $body)
+                ? (int) $body['value']
+                : 0;
         } catch (\Exception $e) {
             return 0;
         }
