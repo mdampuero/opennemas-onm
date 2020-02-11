@@ -241,31 +241,6 @@ class InstanceHelper
     }
 
     /**
-     * Returns the created date of the last created content.
-     *
-     * @param Instance $instance The current instance.
-     *
-     * @return \DateTime The date of the last logging in action.
-     */
-    protected function getLastCreated(Instance $instance) : ?\DateTime
-    {
-        try {
-            $this->conn->selectDatabase($instance->getDatabaseName());
-
-            $sql = 'select created from contents order by created desc limit 1';
-
-            $created = $this->conn->fetchAssoc($sql);
-            $created = new \DateTime(PhpSerializer::unserialize($created['created']));
-
-            $created->setTimeZone(new \DateTimeZone('UTC'));
-
-            return $created;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
      * Returns the date of the last successful authentication action.
      *
      * @param Instance $instance The current instance.
@@ -285,6 +260,31 @@ class InstanceHelper
             $auth->setTimeZone(new \DateTimeZone('UTC'));
 
             return $auth;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the created date of the last created content.
+     *
+     * @param Instance $instance The current instance.
+     *
+     * @return \DateTime The date of the last logging in action.
+     */
+    protected function getLastCreated(Instance $instance) : ?\DateTime
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql = 'select created from contents order by created desc limit 1';
+
+            $created = $this->conn->fetchAssoc($sql);
+            $created = new \DateTime(PhpSerializer::unserialize($created['created']));
+
+            $created->setTimeZone(new \DateTimeZone('UTC'));
+
+            return $created;
         } catch (\Exception $e) {
             return null;
         }
