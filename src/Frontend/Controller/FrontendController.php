@@ -585,7 +585,7 @@ class FrontendController extends Controller
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
             $params['content']->content_type_name,
-            $params['o_category']->pk_content_category
+            $params['o_category']->pk_content_category ?? null
         );
 
         $suggested = $suggestedContents[0];
