@@ -90,7 +90,7 @@ class UpdateInstanceCommand extends Command
         foreach ($instances as $instance) {
             $output->writeln(str_pad(
                 sprintf(
-                    '<fg=yellow;options=bold>====></><options=bold> (%d/%d) Updating instance %s</>',
+                    '<fg=yellow;options=bold>==></><options=bold> (%d/%d) Updating instance %s</>',
                     $i++,
                     count($instances),
                     $instance->internal_name
@@ -129,7 +129,7 @@ class UpdateInstanceCommand extends Command
                     $instance->page_views = $helper->getPageViews($instance);
                     $output->write('<fg=green;options=bold>DONE</>');
                     $output->writeln(sprintf(
-                        '<fg=blue;options=bold> (%s)</>',
+                        '<fg=blue;options=bold> (%s views)</>',
                         $instance->page_views
                     ));
                 }
