@@ -151,7 +151,7 @@ class UpdateInstanceCommand extends Command
                 $output->write(str_pad('- Saving instance', 50, '.'));
                 $this->getContainer()->get('orm.manager')->persist($instance);
                 $output->writeln('<fg=green;options=bold>DONE</>');
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $output->writeln('<fg=red;options=bold>FAIL</>');
             }
         }
