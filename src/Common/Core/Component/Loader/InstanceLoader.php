@@ -120,6 +120,16 @@ class InstanceLoader
     }
 
     /**
+     * Changes the current instance in the loader.
+     *
+     * @param Instance $instance The new instance.
+     */
+    public function setInstance(Instance $instance) : void
+    {
+        $this->instance = $instance;
+    }
+
+    /**
      * Returns a pseudo-instance for the manager.
      *
      * @return Instance The manager instance.
