@@ -204,7 +204,7 @@ class InstanceHelper
         $piwik = $this->getPiwikSettings($instance);
 
         if (empty($piwik)) {
-            throw new \InvalidArgumentException('No valid configuration');
+            throw new \InvalidArgumentException('No valid piwik configuration');
         }
 
         $from = new \DateTime('now');
