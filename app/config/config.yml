@@ -126,8 +126,11 @@ swiftmailer:
     logging:  '%kernel.debug%'
 
 monolog:
-    channels: ['main', 'applog', 'errorlog']
+    channels: [ 'main', 'applog', 'errorlog' ]
     handlers:
+        console:
+            type:      console
+            channels:  [ '!applog', '!errorlog' ]
         main:
             type:      stream
             path:      '%kernel.logs_dir%/%kernel.environment%.log'
