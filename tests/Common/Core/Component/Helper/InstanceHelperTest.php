@@ -183,10 +183,6 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->instance)->willReturn([ 'page_id' => 26274 ]);
 
         $this->client->expects($this->once())->method('get')
-            ->with('http://flob.com?module=API&method=API.get'
-                . '&apiModule=VisitsSummary&apiAction=get&idSite=26274'
-                . '&period=range&date=2020-01-27,2020-02-11&format=json'
-                . '&showColumns=nb_pageviews&token_auth=corgebazfrog')
             ->willReturn($response);
 
         $response->expects($this->once())->method('getBody')
@@ -195,9 +191,10 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(8590, $helper->getPageViews($this->instance));
     }
 
-
     /**
      * Tests getPageViews when an error is thrown while sending the request.
+     *
+     * @expectedException \InvalidArgumentException
      */
     public function testGetPageViewsWhenNoPiwikSettings()
     {
@@ -209,11 +206,13 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
         $helper->expects($this->once())->method('getPiwikSettings')
             ->with($this->instance)->willReturn(null);
 
-        $this->assertEquals(0, $helper->getPageViews($this->instance));
+        $helper->getPageViews($this->instance);
     }
 
     /**
      * Tests getPageViews when an error is thrown while sending the request.
+     *
+     * @expectedException \Exception
      */
     public function testGetPageViewsWhenRequestError()
     {
@@ -232,17 +231,15 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->instance)->willReturn([ 'page_id' => 26274 ]);
 
         $this->client->expects($this->once())->method('get')
-            ->with('http://flob.com?module=API&method=API.get'
-                . '&apiModule=VisitsSummary&apiAction=get&idSite=26274'
-                . '&period=range&date=2020-01-27,2020-02-11&format=json'
-                . '&showColumns=nb_pageviews&token_auth=corgebazfrog')
             ->will($this->throwException(new \Exception()));
 
-        $this->assertEquals(0, $helper->getPageViews($this->instance));
+        $helper->getPageViews($this->instance);
     }
 
     /**
      * Tests getPageViews when an error response is received.
+     *
+     * @expectedException \Exception
      */
     public function testGetPageViewsWhenResponseError()
     {
@@ -266,16 +263,12 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->instance)->willReturn([ 'page_id' => 26274 ]);
 
         $this->client->expects($this->once())->method('get')
-            ->with('http://flob.com?module=API&method=API.get'
-                . '&apiModule=VisitsSummary&apiAction=get&idSite=26274'
-                . '&period=range&date=2020-01-27,2020-02-11&format=json'
-                . '&showColumns=nb_pageviews&token_auth=corgebazfrog')
             ->willReturn($response);
 
         $response->expects($this->once())->method('getBody')
-            ->willReturn([ 'status' => 'error' ]);
+            ->willReturn(json_encode([ 'status' => 'error' ]));
 
-        $this->assertEquals(0, $helper->getPageViews($this->instance));
+        $helper->getPageViews($this->instance);
     }
 
     /**

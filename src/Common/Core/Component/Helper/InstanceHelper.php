@@ -193,13 +193,18 @@ class InstanceHelper
      * @param Instance $instance The instance.
      *
      * @return int The number of page views.
+     *
+     * @throws \Exception When the request fails or there is no valid result.
+     *
+     * @throws \InvalidArgumentException When there is no valid piwik
+     *         configuration.
      */
     public function getPageViews(Instance $instance) : int
     {
         $piwik = $this->getPiwikSettings($instance);
 
         if (empty($piwik)) {
-            return 0;
+            throw new \InvalidArgumentException('No valid configuration');
         }
 
         $from = new \DateTime('now');
@@ -228,16 +233,16 @@ class InstanceHelper
             $this->piwik['token']
         );
 
-        try {
-            $response = $this->client->get($url);
-            $body     = json_decode($response->getBody(), true);
+        $response = $this->client->get($url);
+        $body     = json_decode($response->getBody(), true);
 
-            return array_key_exists('value', $body)
-                ? (int) $body['value']
-                : 0;
-        } catch (\Exception $e) {
-            return 0;
+        if (!array_key_exists('value', $body)) {
+            throw new \Exception(
+                array_key_exists('message', $body) ? $body['message'] : ''
+            );
         }
+
+        return (int) $body['value'];
     }
 
     /**
