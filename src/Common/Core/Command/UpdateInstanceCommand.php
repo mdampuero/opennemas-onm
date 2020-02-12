@@ -152,7 +152,8 @@ class UpdateInstanceCommand extends Command
                     ));
                 }
             } catch (\Exception $e) {
-                $output->writeln('<fg=red;options=bold>FAIL</>');
+                $output->write('<fg=red;options=bold>FAIL</>');
+                $output->writeln(sprintf(' <fg=red;options=bold>(%s)</>', $e->getMessage()));
             }
 
             try {
@@ -161,6 +162,7 @@ class UpdateInstanceCommand extends Command
                 $output->writeln('<fg=green;options=bold>DONE</>');
             } catch (\Exception $e) {
                 $output->writeln('<fg=red;options=bold>FAIL</>');
+                $output->writeln(sprintf(' <fg=red;options=bold>(%s)</>', $e->getMessage()));
             }
         }
 
