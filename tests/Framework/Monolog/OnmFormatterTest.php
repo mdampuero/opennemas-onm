@@ -28,7 +28,10 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->instance = new Instance([ 'internal_name' => 'fred' ]);
+        $this->loader = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
             ->setMethods([ 'getClientIps', 'getUri'])
@@ -50,6 +53,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
         $this->ts->expects($this->any())->method('getToken')
             ->willReturn($this->token);
 
@@ -66,8 +70,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.instance':
-                return $this->instance;
+            case 'core.loader.instance':
+                return $this->loader;
 
             case 'request_stack':
                 return $this->rs;
@@ -86,6 +90,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('User-Agent')->willReturn('glork/plugh');
+        $this->loader->expects($this->any())->method('getInstance')
+            ->willReturn(new Instance([ 'internal_name' => 'fred' ]));
         $this->request->expects($this->once())->method('getClientIps')
             ->willReturn([ '143.53.0.1', '128.0.134.43' ]);
         $this->request->expects($this->once())->method('getUri')
@@ -112,7 +118,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
 
         $record = $this->formatter->processRecord([]);
 
-        $this->assertEquals('fred', $record['extra']['instance']);
+        $this->assertEquals('unknown', $record['extra']['instance']);
         $this->assertEquals('anon.', $record['extra']['user']);
         $this->assertArrayHasKey('client_ip', $record['extra']);
         $this->assertArrayHasKey('user_agent', $record['extra']);
@@ -155,6 +161,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInstance()
     {
+        $this->loader->expects($this->any())->method('getInstance')
+            ->willReturn(new Instance([ 'internal_name' => 'fred' ]));
+
         $method = new \ReflectionMethod($this->formatter, 'getInstance');
         $method->setAccessible(true);
 
@@ -166,7 +175,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInstanceWhenNoInstance()
     {
-        $this->instance = null;
+        $this->loader->expects($this->any())->method('getInstance')
+            ->willReturn(null);
 
         $method = new \ReflectionMethod($this->formatter, 'getInstance');
         $method->setAccessible(true);

@@ -91,8 +91,9 @@ class OnmFormatter
      */
     protected function getInstance()
     {
-        if (!empty($this->container->get('core.instance'))) {
-            return $this->container->get('core.instance')->internal_name;
+        if (!empty($this->container->get('core.loader.instance')->getInstance())) {
+            return $this->container->get('core.loader.instance')
+                ->getInstance()->internal_name;
         }
 
         return 'unknown';
