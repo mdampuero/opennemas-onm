@@ -9,10 +9,9 @@
  */
 namespace Common\Core\Command;
 
+use Common\ORM\Entity\Instance;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateInstanceCommand extends Command
 {
@@ -51,131 +50,66 @@ class UpdateInstanceCommand extends Command
                 InputOption::VALUE_NONE,
                 'If set, the command will gather the page views from Piwik.'
             );
+
+        // Define 4 steps for level 1
+        $this->steps[] = 4;
     }
 
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance.
-     * @param OutputInterface $output An OutputInterface instance.
-     *
-     * @return int|null
+     * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function do()
     {
-        $this->getContainer()->get('core.security')->setCliUser();
+        $this->writeStep('Checking parameters');
+        list($ids, $media, $stats, $views) = $this->getParameters($this->input);
+        $this->writeStatus('success', 'DONE', true);
 
-        $this->start();
-        $output->writeln(sprintf(
-            '<options=bold>'
-                . str_pad('(1/4) Starting command', 50, '.')
-                . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s', $this->started)
-        ));
+        // Define as many steps as instances for level 2
+        $this->steps[] = count($ids);
 
-        $output->write(sprintf(
-            '<options=bold>'
-                . str_pad('(2/4) Checking parameters', 50, '.')
-                . '</>'
-        ));
+        $this->writeStep('Processing instances');
+        $this->writeStatus('warning', 'IN PROGRESS');
+        $this->writeStatus('info', sprintf(' (%s instances)', count($ids)), true);
 
-        list($instances, $media, $stats, $views) = $this->getParameters($input);
-
-        $output->writeln('<fg=green;options=bold>DONE</>');
-
-        $output->writeln(sprintf(
-            '<options=bold>'
-                . str_pad('(3/4) Processing instances', 50, '.')
-                . '<fg=yellow;options=bold>IN PROGRESS</>'
-                . ' <fg=blue;options=bold>(%s instances)</></>',
-            count($instances)
-        ));
-
-        $helper = $this->getContainer()->get('core.helper.instance');
-        $i      = 1;
-
-        foreach ($instances as $instance) {
-            $output->writeln(str_pad(
-                sprintf(
-                    '<fg=yellow;options=bold>==></><options=bold> (%d/%d) Updating instance %s</>',
-                    $i++,
-                    count($instances),
-                    $instance->internal_name
-                ),
-                50,
-                '.'
-            ));
-
+        foreach ($ids as $id) {
             try {
-                if (!empty($stats)) {
-                    $output->write(str_pad('- Checking creation date', 50, '.'));
-                    $instance->created = $helper->getCreated($instance);
-                    $output->writeln('<fg=green;options=bold>DONE</>');
-
-                    $output->write(str_pad('- Checking last activity', 50, '.'));
-                    $instance->last_login = $helper->getLastActivity($instance);
-                    $output->writeln('<fg=green;options=bold>DONE</>');
-
-                    $output->write(str_pad('- Counting active users', 50, '.'));
-                    $instance->users = $helper->countUsers($instance);
-                    $output->writeln('<fg=green;options=bold>DONE</>');
-
-                    $output->write(str_pad('- Counting contents', 50, '.'));
-                    $contents = $helper->countContents($instance);
-
-                    foreach ($contents as $type => $total) {
-                        $instance->{$type . 's'} = $total;
-                    }
-
-                    $instance->contents = array_sum($contents);
-                    $output->writeln('<fg=green;options=bold>DONE</>');
-                }
-
-                if (!empty($views)) {
-                    $output->write(str_pad('- Requesting page views', 50, '.'));
-                    $instance->page_views = $helper->getPageViews($instance);
-                    $output->write('<fg=green;options=bold>DONE</>');
-                    $output->writeln(sprintf(
-                        '<fg=blue;options=bold> (%s views)</>',
-                        $instance->page_views
-                    ));
-                }
-
-                if (!empty($media)) {
-                    $output->write(str_pad('- Calculating media folder size', 50, '.'));
-                    $instance->media_size = $helper->getMediaSize($instance);
-                    $output->write('<fg=green;options=bold>DONE</>');
-                    $output->writeln(sprintf(
-                        '<fg=blue;options=bold> (%0.2f MB)</>',
-                        $instance->media_size / 1024
-                    ));
-                }
+                $instance = $this->getContainer()->get('orm.manager')
+                    ->getRepository('Instance')->find($id);
             } catch (\Exception $e) {
-                $output->write('<fg=red;options=bold>FAIL</>');
-                $output->writeln(sprintf(' <fg=red;options=bold>(%s)</>', $e->getMessage()));
+                $this->getContainer()->get('error.log')->error($e->getMessage());
+                $this->writeStep('Updating instance', false, 2);
+                $this->writeStatus('error', 'FAIL', true);
+                continue;
+            }
+
+            $this->getContainer()->get('core.loader.instance')
+                ->setInstance($instance);
+            $this->writeStep("Updating instance $instance->internal_name", true, 2);
+
+            foreach ([ 'stats', 'media', 'views' ] as $stage) {
+                $method = 'get' . $stage;
+
+                if (!method_exists($this, $method) || empty($$stage)) {
+                    continue;
+                }
+
+                try {
+                    $this->{$method}($instance);
+                } catch (\Exception $e) {
+                    $this->getContainer()->get('error.log')->error($e->getMessage());
+                    $this->writeStatus('error', sprintf('FAIL (%s)', $e->getMessage()), true);
+                }
             }
 
             try {
-                $output->write(str_pad('- Saving instance', 50, '.'));
+                $this->writePad('- Saving instance');
                 $this->getContainer()->get('orm.manager')->persist($instance);
-                $output->writeln('<fg=green;options=bold>DONE</>');
+                $this->writeStatus('success', 'DONE', true);
             } catch (\Exception $e) {
-                $output->writeln('<fg=red;options=bold>FAIL</>');
-                $output->writeln(sprintf(' <fg=red;options=bold>(%s)</>', $e->getMessage()));
+                $this->getContainer()->get('error.log')->error($e->getMessage());
+                $this->writeStatus('error', sprintf('FAIL (%s)', $e->getMessage()), true);
             }
         }
-
-        $this->end();
-        $output->writeln(sprintf(
-            '<options=bold>'
-                . str_pad('(4/4) Ending command', 50, '.')
-                . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</>'
-                . ' <fg=yellow;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s', $this->ended),
-            $this->getDuration()
-        ));
     }
 
     /**
@@ -183,7 +117,7 @@ class UpdateInstanceCommand extends Command
      *
      * @param array $names The list of instance names
      *
-     * @return array The list of instances.
+     * @return array The list of instance ids.
      */
     protected function getInstances(?array $names = []) : array
     {
@@ -198,38 +132,47 @@ class UpdateInstanceCommand extends Command
         $ids = $this->getContainer()->get('orm.manager')->getConnection('manager')
             ->fetchAll($sql);
 
-        $ids = array_map(function ($a) {
+        return array_map(function ($a) {
             return $a['id'];
         }, $ids);
+    }
 
-        $instances = [];
+    /**
+     * Updates the media size for the provided instance.
+     *
+     * @param Instance $instance The instance to update.
+     */
+    protected function getMedia(Instance &$instance) : void
+    {
+        $this->writePad('- Calculating media folder size');
 
-        foreach ($ids as $id) {
-            $instances[] = $this->getContainer()->get('orm.manager')
-                ->getRepository('Instance')->find($id);
-        }
+        $instance->media_size = $this->getContainer()
+            ->get('core.helper.instance')
+            ->getMediaSize($instance);
 
-        return $instances;
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', sprintf(
+            ' (%-.2f MB)',
+            $instance->media_size / 1024
+        ), true);
     }
 
     /**
      * Returns the list of parameters for the command based on the input.
      *
-     * @param InputInterface $input The input component.
-     *
      * @return array The list of parameters.
      */
-    protected function getParameters(InputInterface $input) : array
+    protected function getParameters() : array
     {
-        $media = $input->getOption('media');
-        $stats = $input->getOption('stats');
-        $views = $input->getOption('views');
+        $media = $this->input->getOption('media');
+        $stats = $this->input->getOption('stats');
+        $views = $this->input->getOption('views');
 
         if (empty($media) && empty($stats) && empty($views)) {
             throw new \InvalidArgumentException('No option specified');
         }
 
-        $instances = $input->getOption('instances');
+        $instances = $this->input->getOption('instances');
 
         if (!empty($instances)) {
             $instances = preg_split('/\s*,\s*/', $instances);
@@ -238,5 +181,58 @@ class UpdateInstanceCommand extends Command
         $instances = $this->getInstances($instances);
 
         return [ $instances, $media, $stats, $views ];
+    }
+
+    /**
+     * Updates the statistics for the provided instance.
+     *
+     * @param Instance $instance The instance to update.
+     */
+    protected function getStats(Instance &$instance) : void
+    {
+        $helper = $this->getContainer()->get('core.helper.instance');
+
+        $this->writePad('- Checking creation date');
+        $instance->created = $helper->getCreated($instance);
+        $this->writeStatus('success', 'DONE', true);
+
+        $this->writePad('- Checking last activity');
+        $instance->last_login = $helper->getLastActivity($instance);
+        $this->writeStatus('success', 'DONE', true);
+
+        $this->writePad('- Counting active users');
+        $instance->users = $helper->countUsers($instance);
+        $this->writeStatus('success', 'DONE', true);
+
+        $this->writePad('- Counting contents');
+        $contents = $helper->countContents($instance);
+
+        foreach ($contents as $type => $total) {
+            $instance->{$type . 's'} = $total;
+        }
+
+        $instance->contents = array_sum($contents);
+
+        $this->writeStatus('success', 'DONE', true);
+    }
+
+    /**
+     * Updates the page views for the provided instance.
+     *
+     * @param Instance $instance The instance to update.
+     */
+    protected function getViews(Instance &$instance) : void
+    {
+        $this->writePad('- Requesting page views');
+
+        $instance->page_views = $this->getContainer()
+            ->get('core.helper.instance')
+            ->getPageViews($instance);
+
+        $this->writeStatus('success', 'DONE', true);
+        $this->writeStatus('info', sprintf(
+            ' (%s views)',
+            $instance->page_views
+        ), true);
     }
 }
