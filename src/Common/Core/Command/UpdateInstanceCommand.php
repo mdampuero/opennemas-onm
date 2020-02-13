@@ -82,8 +82,7 @@ class UpdateInstanceCommand extends Command
                 continue;
             }
 
-            $this->getContainer()->get('core.loader.instance')
-                ->setInstance($instance);
+            $this->getContainer()->get('core.globals')->setInstance($instance);
             $this->writeStep("Updating instance $instance->internal_name", true, 2);
 
             foreach ([ 'stats', 'media', 'views' ] as $stage) {
