@@ -63,13 +63,16 @@ class Varnish
                 'timeout' => 2
             ]);
 
-            $this->logger->info(json_encode([
-                'server'   => $name,
-                'url'      => $config['host'] . ':' . $config['port'],
-                'request'  => $request,
-                'status'   => $response->getStatusCode(),
-                'response' => $this->parseResponse($response->getReasonPhrase())
-            ]));
+            $this->logger->info(sprintf(
+                '%s (%s)',
+                $this->parseResponse($response->getReasonPhrase()),
+                json_encode([
+                    'server'   => $name,
+                    'url'      => $config['host'] . ':' . $config['port'],
+                    'request'  => $request,
+                    'status'   => $response->getStatusCode()
+                ])
+            ));
         }
     }
 
