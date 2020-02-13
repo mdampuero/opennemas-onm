@@ -56,6 +56,11 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getConnection', 'getDataSet' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'setInstance', 'setTheme' ])
+            ->getMock();
+
         $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -124,6 +129,9 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             case 'cache.connection.instance':
                 return $this->cache;
 
+            case 'core.globals':
+                return $this->globals;
+
             case 'core.helper.advertisement':
                 return $this->ah;
 
@@ -139,7 +147,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
-            case 'core.manager.layout':
+            case 'core.template.layout':
                 return $this->lm;
 
             case 'core.manager.menu':

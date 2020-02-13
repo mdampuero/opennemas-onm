@@ -50,7 +50,7 @@ class Agency
         $this->validateInt($until);
 
         $er  = getService('entity_repository');
-        $tpl = getService('view')->getBackendTemplate();
+        $tpl = getService('view')->get('backend');
 
         $timeLimit = date('Y-m-d H:i:s', time() - $until);
         $criteria  = [
@@ -98,7 +98,7 @@ class Agency
             throw new RestException(400, 'parameter is not valid');
         }
 
-        $tpl = getService('view')->getBackendTemplate();
+        $tpl = getService('view')->get('backend');
 
         // Add DateTime with format Y-m-d H:i:s
         $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);

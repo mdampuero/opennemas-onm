@@ -24,7 +24,6 @@ class ContentPositionService extends OrmService
 
         $this->ormManager     = $this->container->get('orm.manager');
         $this->applicationLog = $this->container->get('application.log');
-        $this->user           = $this->container->get('core.user');
 
         $this->contentPositionRepository = $this->ormManager
             ->getRepository('ContentPosition');
@@ -122,9 +121,7 @@ class ContentPositionService extends OrmService
             $conn->rollback();
 
             $this->applicationLog->error(sprintf(
-                'User %d (%s) updated frontpage of category %s with error message: %s',
-                $this->user->username,
-                $this->user->id,
+                'Frontpage of category %s updated with error message: %s',
                 $categoryID,
                 $e->getMessage()
             ));
@@ -154,9 +151,7 @@ class ContentPositionService extends OrmService
         $conn->executeUpdate($sql);
 
         $this->applicationLog->info(sprintf(
-            'User %s (%d) clear contents frontpage of category %d',
-            $this->user->username,
-            $this->user->id,
+            'Clear contents frontpage of category %d',
             $categoryID
         ));
 

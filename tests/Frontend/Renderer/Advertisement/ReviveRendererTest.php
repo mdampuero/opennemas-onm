@@ -48,8 +48,14 @@ class ReviveRendererTest extends TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
+        $this->templateAdmin = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->view = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -58,11 +64,15 @@ class ReviveRendererTest extends TestCase
 
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('thud.opennemas.com');
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->view->expects($this->any())->method('get')
+            ->with('backend')->willReturn($this->templateAdmin);
 
         $this->renderer = new ReviveRenderer($this->container);
     }
@@ -79,9 +89,6 @@ class ReviveRendererTest extends TestCase
             case 'core.instance':
                 return $this->instance;
 
-            case 'core.template.admin':
-                return $this->templateAdmin;
-
             case 'orm.manager':
                 return $this->em;
 
@@ -90,6 +97,9 @@ class ReviveRendererTest extends TestCase
 
             case 'router':
                 return $this->router;
+
+            case 'view':
+                return $this->view;
         }
 
         return null;

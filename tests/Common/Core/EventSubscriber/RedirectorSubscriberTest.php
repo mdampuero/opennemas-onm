@@ -11,6 +11,7 @@ namespace Tests\Common\Core\EventSubscriber;
 
 use Common\Core\EventSubscriber\RedirectorSubscriber;
 use Common\ORM\Entity\Instance;
+use Common\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for RedirectorSubscriber class.
@@ -24,23 +25,15 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'mumble' ]);
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
-            ->setMethods([
-                'contains', 'delete', 'deleteByPattern', 'deleteMulti',
-                'fetch', 'fetchMulti', 'remove', 'removeByPattern', 'save',
-                'saveMulti'
-            ])
+        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+            ->setMethods([ 'push' ])
             ->getMock();
 
         $this->event = $this->getMockBuilder('Event')
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->varnish = $this->getMockBuilder('Onm\Varnish\MessageExchanger')
-            ->setMethods([ 'addBanMessage' ])
-            ->getMock();
-
-        $this->subscriber = new RedirectorSubscriber($this->cache, $this->instance, $this->varnish);
+        $this->subscriber = new RedirectorSubscriber($this->instance, $this->queue);
     }
 
     /**
@@ -62,8 +55,12 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveUrlsFromCache()
     {
-        $this->cache->expects($this->once())->method('removeByPattern')
-            ->with('*mumble_redirector*');
+        $this->queue->expects($this->once())->method('push')
+            ->with(new ServiceTask(
+                'cache.connection.instance',
+                'removeByPattern',
+                [ '*mumble_redirector*' ]
+            ));
 
         $this->subscriber->removeUrlsFromCache();
     }
@@ -81,8 +78,10 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(2))->method('hasArgument')
             ->with('ids')->willReturn(false);
 
-        $this->varnish->expects($this->once())->method('addBanMessage')
-            ->with('obj.http.x-tags ~ url-456');
+        $this->queue->expects($this->once())->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'obj.http.x-tags ~ url-456'
+            ]));
 
         $this->subscriber->removeUrlsFromVarnish($this->event);
     }
@@ -100,8 +99,10 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(2))->method('getArgument')
             ->with('ids')->willReturn([ 456, 234 ]);
 
-        $this->varnish->expects($this->once())->method('addBanMessage')
-            ->with('obj.http.x-tags ~ url-456|url-234');
+        $this->queue->expects($this->once())->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'obj.http.x-tags ~ url-456|url-234'
+            ]));
 
         $this->subscriber->removeUrlsFromVarnish($this->event);
     }

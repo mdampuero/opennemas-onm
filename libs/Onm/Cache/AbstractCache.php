@@ -41,6 +41,13 @@ abstract class AbstractCache implements CacheInterface
     protected $buffer = [];
 
     /**
+     * The cache prefix.
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
      * Set the namespace to prefix all cache ids with
      *
      * @param  string $namespace
@@ -312,7 +319,21 @@ abstract class AbstractCache implements CacheInterface
             }, $id);
         }
 
-        return $this->namespace . '_' . $id;
+        return $this->getPrefix() . $this->namespace . '_' . $id;
+    }
+
+    /**
+     * Returns the cache prefix.
+     *
+     * @return string The cache prefix.
+     */
+    protected function getPrefix()
+    {
+        if (!empty($this->prefix)) {
+            return $this->prefix . '_';
+        }
+
+        return '';
     }
 
     /**

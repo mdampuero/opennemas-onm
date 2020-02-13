@@ -304,30 +304,6 @@ admin_paywall_purchases_list_export:
     path:     /paywall/purchases/list-export.csv
     defaults: { _controller: BackendBundle:Paywall:purchasesListExport }
 
-admin_cache_manager:
-    path:     /system/cachemanager
-    defaults: { _controller: BackendBundle:CacheManager:index }
-
-admin_cache_manager_config:
-    path:     /system/cachemanager/config
-    defaults: { _controller: BackendBundle:CacheManager:config }
-
-admin_cache_manager_clearcache:
-    path:     /system/cachemanager/clearcache
-    defaults: { _controller: BackendBundle:CacheManager:clearCache }
-
-admin_cache_manager_clearcompiled:
-    path:     /system/cachemanager/clear-compiled-templates
-    defaults: { _controller: BackendBundle:CacheManager:clearCompiledTemplates }
-
-admin_cache_manager_banvarnishcache:
-    path:     /system/cachemanager/ban-varnish-cache
-    defaults: { _controller: BackendBundle:CacheManager:clearVarnishCache }
-
-admin_cache_manager_clearrediscache:
-    path:     /system/cachemanager/clear-redis-cache
-    defaults: { _controller: BackendBundle:CacheManager:clearRedisCacheForInstance }
-
 admin_system_settings:
     path:     /system/settings
     defaults: { _controller: BackendBundle:SystemSettings:default }
@@ -372,6 +348,10 @@ backend_authentication:
 backend_author:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/author.yml'
+
+backend_cache:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/cache.yml'
 
 backend_category:
     prefix:   /

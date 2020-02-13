@@ -141,5 +141,5 @@ services:
 
     core.helper.varnish:
         class:     Common\Core\Component\Helper\VarnishHelper
-        arguments: [ '@core.helper.url_generator', '@varnish_ban_message_exchanger' ]
+        arguments: [ '@core.helper.url_generator', '@task.service.queue' ]
         public:    true

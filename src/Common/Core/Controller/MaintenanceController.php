@@ -27,15 +27,11 @@ class MaintenanceController extends Controller
     public function defaultAction(Request $request)
     {
         $locale = $request->getPreferredLanguage();
-        $theme  = $this->get('orm.manager')->getRepository('Theme')
-            ->findOneBy('uuid = "es.openhost.theme.admin"');
 
         $this->get('core.locale')->setLocale($locale);
 
-        $this->view = $this->get('core.template.admin');
-        $this->view->addActiveTheme($theme);
-
-        $output = $this->renderView('maintenance/index.tpl');
+        $output = $this->get('core.template.admin')
+            ->render('maintenance/index.tpl');
 
         return new Response($output, 503);
     }

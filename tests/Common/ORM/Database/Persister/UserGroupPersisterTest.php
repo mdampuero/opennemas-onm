@@ -152,8 +152,6 @@ class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->cache->expects($this->exactly(2))->method('remove');
-        $this->cache->expects($this->exactly(1))->method('removeByPattern')
-            ->with('*glorp_user-*');
 
         $this->persister->remove($entity);
 

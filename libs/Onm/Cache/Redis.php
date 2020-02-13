@@ -56,6 +56,12 @@ class Redis extends AbstractCache
             $this->ttl = $options['options']['ttl'];
         }
 
+        if (array_key_exists('options', $options)
+            && array_key_exists('prefix', $options['options'])
+        ) {
+            $this->prefix = $options['options']['prefix'];
+        }
+
         return $this;
     }
 

@@ -51,7 +51,7 @@ class Template extends \Smarty
      *
      * @var Instance
      */
-    protected $instance = null;
+    protected $instance;
 
     /**
      * Whether to include locale in the cache id.
@@ -104,6 +104,12 @@ class Template extends \Smarty
         $this->setupPlugins($theme);
 
         $this->addTheme($theme);
+
+        if (!empty($theme->parameters)
+            && array_key_exists('layouts', $theme->parameters)
+        ) {
+            $this->setupLayouts($theme);
+        }
     }
 
     /**
@@ -137,8 +143,13 @@ class Template extends \Smarty
      */
     public function addTheme($theme)
     {
-        $path = $theme->realpath . '/tpl';
-        $this->addTemplateDir($path);
+        $paths = $theme->multirepo
+            ? [ 'src/tpl', 'vendor/baseline/src/tpl' ]
+            : [ 'tpl' ];
+
+        foreach ($paths as $path) {
+            $this->addTemplateDir($theme->realpath . '/' . $path);
+        }
 
         if (!empty($theme->text_domain)) {
             $path = $theme->realpath . '/locale';
@@ -274,6 +285,30 @@ class Template extends \Smarty
     public function hasValue($name)
     {
         return !empty($this->getValue($name));
+    }
+
+    /**
+     * Assigns parameters to template and returns the generated HTML.
+     *
+     * @param string $template The template name.
+     * @param array  $params   The list of parameters.
+     *
+     * @return string The generated HTML.
+     */
+    public function render($template = null, $params = [])
+    {
+        $cacheId = null;
+
+        if (array_key_exists('cache_id', $params)) {
+            $cacheId = $params['cache_id'];
+            unset($params['cache_id']);
+        }
+
+        if (!empty($params)) {
+            $this->assign($params);
+        }
+
+        return $this->fetch($template, $cacheId);
     }
 
     /**
@@ -416,9 +451,9 @@ class Template extends \Smarty
 
         // Copy default cache configuration if it doesnt exists
         if (!file_exists($path . '/cache.conf')) {
-            $cm = $this->container->get('template_cache_config_manager');
-            $cm->setConfigDir($path);
-            $cm->saveDefault();
+            $cm = $this->container->get('core.template.cache');
+            $cm->setPath($path);
+            $cm->write();
         }
 
         $this->setConfigDir($path);
@@ -452,6 +487,19 @@ class Template extends \Smarty
         }
 
         $this->setCompileDir($path);
+    }
+
+    /**
+     * Configures the path for the layout manager.
+     *
+     * @param Theme $theme The current theme.
+     */
+    protected function setupLayouts($theme)
+    {
+        $path = $theme->multirepo ? 'src/layouts' : 'layouts';
+
+        $this->container->get('core.template.layout')
+            ->setPath($theme->realpath . '/' . $path);
     }
 
     /**

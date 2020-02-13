@@ -23,3 +23,9 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    core.subscriber.user_group:
+        class:     Api\EventSubscriber\UserGroupSubscriber
+        arguments: [ '@api.service.redis' ]
+        tags:
+            - { name: kernel.event_subscriber }
+

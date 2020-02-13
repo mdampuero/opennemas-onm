@@ -5,20 +5,10 @@ imports:
     - { resource: services/orm_repositories.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
-    - { resource: services/templating.yml }
 
 services:
     acl_checker:
         class: Onm\Security\Acl
-        public: true
-
-    varnish_cleaner:
-        class: Onm\Varnish\BanMessagePusher
-        arguments: [ '%varnish%' ]
-        public: true
-
-    varnish_ban_message_exchanger:
-        class: Onm\Varnish\MessageExchanger
         public: true
 
     content_url_matcher:

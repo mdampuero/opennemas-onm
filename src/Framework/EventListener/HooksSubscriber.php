@@ -9,6 +9,7 @@
  */
 namespace Framework\EventListener;
 
+use Common\Task\Component\Task\ServiceTask;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -154,8 +155,11 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheCountries()
     {
-        $this->container->get('cache.manager')->getConnection('manager')
-            ->removeByPattern('*countries*');
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('cache.connection.manager', 'removeByPattern', [
+                '*countries*'
+            ])
+        );
     }
 
     /**
@@ -395,24 +399,30 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $ad = $event->getArgument('advertisement');
 
-        $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id));
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id)
+            ])
+        );
 
         if (!is_array($ad->positions)) {
             return;
         }
 
         foreach ($ad->positions as $position) {
-            $this->container->get('varnish_ban_message_exchanger')
-                ->addBanMessage(sprintf('obj.http.x-tags ~ .*position-%s.*', $position));
+            $this->container->get('task.service.queue')->push(
+                new ServiceTask('core.varnish', 'ban', [
+                    sprintf('obj.http.x-tags ~ .*position-%s.*', $position)
+                ])
+            );
         }
 
         if (!empty($ad->old_position)) {
-            $this->container->get('varnish_ban_message_exchanger')
-                ->addBanMessage(sprintf(
-                    'obj.http.x-tags ~ .*position-%s.*',
-                    $ad->old_position
-                ));
+            $this->container->get('task.service.queue')->push(
+                new ServiceTask('core.varnish', 'ban', [
+                    sprintf('obj.http.x-tags ~ .*position-%s.*', $ad->old_position)
+                ])
+            );
         }
     }
 
@@ -429,8 +439,11 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $instanceName = $this->container->get('core.instance')->internal_name;
 
-        $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s', $instanceName));
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s', $instanceName)
+            ])
+        );
     }
 
     /**
@@ -440,14 +453,21 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheFrontpage()
     {
-        // Clean varnish cache for frontpage
-        if ($this->container->hasParameter('varnish')) {
-            $instanceName = $this->container->get('core.instance')->internal_name;
-
-            $this->container->get('varnish_ban_message_exchanger')
-                ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName))
-                ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName));
+        if (!$this->container->hasParameter('varnish')) {
+            return false;
         }
+
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName)
+            ])
+        )->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName)
+            ])
+        );
     }
 
     /**
@@ -463,8 +483,11 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $instanceName = $this->container->get('core.instance')->internal_name;
 
-        $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName));
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName)
+            ])
+        );
     }
 
     /**
@@ -480,7 +503,10 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $instanceName = $event->getArgument('instance')->internal_name;
 
-        $this->container->get('varnish_ban_message_exchanger')
-            ->addBanMessage(sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName));
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName)
+            ])
+        );
     }
 }

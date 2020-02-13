@@ -105,7 +105,7 @@ class RedisTest extends \PHPUnit\Framework\TestCase
     public function testRemoveByPattern()
     {
         $this->baseRedis->expects($this->at(0))->method('scan')
-            ->with(null, '*norf*')->willReturn([
+            ->with(null, '_*norf*')->willReturn([
                 'thud-foo-corge',
                 'baz-foo-wubble',
             ]);

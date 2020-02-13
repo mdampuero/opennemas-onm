@@ -21,7 +21,7 @@ class GettingStartedController extends Controller
     public function acceptTermsAction(Request $request)
     {
         $em   = $this->get('orm.manager');
-        $user = $this->get('core.security.user');
+        $user = $this->get('core.user');
 
         $user->terms_accepted = null;
 

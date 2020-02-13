@@ -65,6 +65,8 @@ class CoreLoader
         $database  = $instance->getDatabaseName();
         $namespace = $instance->internal_name;
 
+        $this->container->get('core.globals')->setInstance($instance);
+
         // Change database for `instance` database connection
         $this->container->get('orm.manager')->getConnection('instance')
             ->selectDatabase($database);
@@ -118,10 +120,12 @@ class CoreLoader
      *
      * @return CoreLoader The current CoreLoader.
      */
-    public function configureTheme(Theme $theme, array $parents) : CoreLoader
+    public function configureTheme(Theme $theme, array $parents = []) : CoreLoader
     {
         $template = $this->container->get('core.template');
         $wl       = $this->container->get('core.loader.widget');
+
+        $this->container->get('core.globals')->setTheme($theme);
 
         $template->addActiveTheme($theme);
 
@@ -213,8 +217,8 @@ class CoreLoader
         define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
         define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
 
-        if (file_exists($this->theme->realpath . '.deploy.themes.php')) {
-            include_once $this->theme->realpath . '.deploy.themes.php';
+        if (file_exists($this->theme->realpath . '/.deploy.themes.php')) {
+            include_once $this->theme->realpath . '/.deploy.themes.php';
         }
 
         if (!defined('THEMES_DEPLOYED_AT')) {
@@ -329,7 +333,7 @@ class CoreLoader
      */
     protected function loadLayouts($layouts)
     {
-        $this->container->get('core.manager.layout')
+        $this->container->get('core.template.layout')
             ->addLayouts($layouts);
     }
 
