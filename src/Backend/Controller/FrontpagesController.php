@@ -153,12 +153,9 @@ class FrontpagesController extends Controller
                 );
             }
 
-            $logger->info(
-                'User ' . $this->getUser()->name
-                . ' (' . $this->getUser()->id . ') was failed ' . $message . ' to execute'
-                . ' action Frontpage save positions at category ' . $categoryID
-                . ' Ids ' . json_encode($contentsPositions)
-            );
+            $logger->info('Unable to save frontpage positions for category '
+                . $categoryID
+                . ' Ids ' . json_encode($contentsPositions));
 
             return new JsonResponse([ 'message' => $message ]);
         }
@@ -194,12 +191,9 @@ class FrontpagesController extends Controller
         }
 
         // Notice log of this action
-        $logger->info(
-            'User ' . $this->getUser()->name . ' (' . $this->getUser()->id . ') has executed'
-            . ' action Frontpage save positions at category ' . $categoryID
+        $logger->info('Frontpage positions saved for category ' . $categoryID
             . ', frontpage version ' . $version->id
-            . ' and Ids ' . json_encode($contentsPositions)
-        );
+            . ' and Ids ' . json_encode($contentsPositions));
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
         return new JsonResponse([
