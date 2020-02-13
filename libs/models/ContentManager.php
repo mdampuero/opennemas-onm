@@ -233,11 +233,8 @@ class ContentManager
                 return false;
             }
 
-            /* Notice log of this action */
-            getService('application.log')->notice(
-                'User ' . getService('core.user')->username
-                . ' (' . getService('core.user')->id
-                . ') has executed action drop suggested flag at ' . $contentIdsSQL . ' ids'
+            getService('application.log')->info(
+                'Drop suggested flag action executed at ' . $contentIdsSQL . ' ids'
             );
 
             return true;
