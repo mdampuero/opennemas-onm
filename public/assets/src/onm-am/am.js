@@ -478,7 +478,7 @@
     var interstitials = document.getElementsByClassName('interstitial');
 
     for (var i = 0; i < interstitials.length; i++) {
-      var expires = new Date();
+      var expires = now;
       var slot    = interstitials[i].getElementsByClassName('oat');
       var id      = parseInt(slot[0].getAttribute('data-id'));
 
