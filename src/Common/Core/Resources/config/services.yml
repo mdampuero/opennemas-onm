@@ -45,7 +45,7 @@ services:
 
     core.instance:
         class:     Common\ORM\Entity\Instance
-        factory:   [ '@core.loader.instance', 'getInstance' ]
+        factory:   [ '@core.globals', 'getInstance' ]
         public:    true
 
     core.instance.checker:
@@ -144,7 +144,8 @@ services:
         public:    true
 
     core.user:
-        alias:     'core.security.user'
+        class:     Common\ORM\Entity\User
+        factory:   [ '@core.globals', 'getUser' ]
         public:    true
 
     core.validator:
