@@ -82,9 +82,6 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
             case 'core.template':
                 return $this->template;
 
-            case 'core.theme':
-                return 'wobble';
-
             case 'core.user':
                 return 'bar';
 
@@ -132,17 +129,6 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
             ->with('kernel.environment');
 
         $this->globals->getEnvironment();
-    }
-
-    /**
-     * Tests getInstance.
-     */
-    public function testGetInstance()
-    {
-        $this->container->expects($this->once())->method('get')
-            ->with('core.instance');
-
-        $this->globals->getInstance();
     }
 
     /**
@@ -200,22 +186,6 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTheme.
-     */
-    public function testGetTheme()
-    {
-        $this->assertEquals('wobble', $this->globals->getTheme());
-    }
-
-    /**
-     * Tests getUser.
-     */
-    public function testGetUser()
-    {
-        $this->assertEquals('bar', $this->globals->getUser());
-    }
-
-    /**
      * Tests offsetExists.
      */
     public function testOffsetExists()
@@ -229,7 +199,7 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
      */
     public function testOffsetGet()
     {
-        $this->assertEquals('bar', $this->globals['user']);
+        $this->assertEquals('grault', $this->globals['security']);
         $this->assertEmpty($this->globals['plugh']);
     }
 
@@ -273,11 +243,38 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get and set methods for instance.
+     */
+    public function testSetAndGetInstance()
+    {
+        $this->globals->setInstance('norf');
+        $this->assertEquals('norf', $this->globals->getInstance());
+    }
+
+    /**
      * Tests get and set methods for route.
      */
     public function testSetAndGetRoute()
     {
         $this->globals->setRoute('norf');
         $this->assertEquals('norf', $this->globals->getRoute());
+    }
+
+    /**
+     * Tests get and set methods for theme.
+     */
+    public function testSetAndGetTheme()
+    {
+        $this->globals->setTheme('thud');
+        $this->assertEquals('thud', $this->globals->getTheme());
+    }
+
+    /**
+     * Tests get and set methods for user.
+     */
+    public function testSetAndGetUser()
+    {
+        $this->globals->setUser('norf');
+        $this->assertEquals('norf', $this->globals->getUser());
     }
 }
