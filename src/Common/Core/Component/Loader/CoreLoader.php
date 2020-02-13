@@ -65,6 +65,8 @@ class CoreLoader
         $database  = $instance->getDatabaseName();
         $namespace = $instance->internal_name;
 
+        $this->container->get('core.globals')->setInstance($instance);
+
         // Change database for `instance` database connection
         $this->container->get('orm.manager')->getConnection('instance')
             ->selectDatabase($database);
@@ -118,10 +120,12 @@ class CoreLoader
      *
      * @return CoreLoader The current CoreLoader.
      */
-    public function configureTheme(Theme $theme, array $parents) : CoreLoader
+    public function configureTheme(Theme $theme, array $parents = []) : CoreLoader
     {
         $template = $this->container->get('core.template');
         $wl       = $this->container->get('core.loader.widget');
+
+        $this->container->get('core.globals')->setTheme($theme);
 
         $template->addActiveTheme($theme);
 
