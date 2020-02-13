@@ -168,6 +168,16 @@
               $scope.localize($scope.data.items, $scope.data.extra);
             }, true);
 
+            // Updates linker when locale changes
+            $scope.$watch('locale', function(nv, ov) {
+              if (nv === ov || !$scope.linker) {
+                return;
+              }
+
+              $scope.linker.setKey(nv);
+              $scope.linker.update();
+            }, true);
+
             /**
              * @function addDefaultValue
              * @memberOf onmCategorySelector
