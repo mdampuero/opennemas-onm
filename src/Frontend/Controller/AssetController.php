@@ -91,7 +91,7 @@ class AssetController extends Controller
 
         list(, , $contentsInHomepage) =
             $this->get('api.service.frontpage_version')
-                ->getContentsInCurrentVersionforCategory($currentCategoryId);
+            ->getContentsInCurrentVersionforCategory($currentCategoryId);
 
         if (is_array($contentsInHomepage)) {
             $bgColor    = 'bgcolor_' . $currentCategoryId;
@@ -133,7 +133,6 @@ class AssetController extends Controller
                       . "   CSS for contents in frontpage of category $categoryName\n"
                       . " **********************************************************/\n";
 
-            $response .= "@media(min-width:768px) {\n";
             foreach ($contentsInHomepage as $item) {
                 // Background color
                 if (!empty($item->bgcolor)) {
@@ -158,8 +157,6 @@ class AssetController extends Controller
                     $response .= "}\n";
                 }
             }
-
-            $response .= "}\n\n";
         }
 
         return new Response($response, 200, [
