@@ -176,16 +176,6 @@ class Security
     }
 
     /**
-     * Sets an empty user for console commands.
-     *
-     * TODO: Remove when no user usage in data model
-     */
-    public function setCliUser()
-    {
-        $this->user = new User([ 'id' => 0, 'username' => 'cli' ]);
-    }
-
-    /**
      * Changes the current instance.
      *
      * @param Instance $instance The current instance.

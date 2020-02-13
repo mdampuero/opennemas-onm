@@ -95,8 +95,6 @@ abstract class Command extends ContainerAwareCommand
         $this->input  = $input;
         $this->output = $output;
 
-        $this->getContainer()->get('core.security')->setCliUser();
-
         $this->start();
         $this->writeStep('Starting command');
         $this->writeStatus('success', 'DONE ');

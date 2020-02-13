@@ -57,10 +57,6 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->security->getPermissions());
 
         $this->assertEquals($this->user, $this->security->getUser());
-
-        $this->security->setCliUser();
-        $this->assertEquals(0, $this->security->getUser()->id);
-        $this->assertEquals('cli', $this->security->getUser()->username);
     }
 
     /**

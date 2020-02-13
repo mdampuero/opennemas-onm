@@ -42,9 +42,6 @@ EOF
     {
         $this->output = $output;
 
-        // TODO: Remove ASAP
-        $this->getContainer()->get('core.security')->setCliUser();
-
         $instanceName = $input->getArgument('instance');
 
         $this->getContainer()->get('core.loader')

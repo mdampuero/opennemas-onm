@@ -56,8 +56,6 @@ class SynchronizeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('core.security')->setCliUser();
-
         $this->start();
         $output->writeln(sprintf(
             str_pad('<options=bold>(1/3) Starting command', 50, '.')

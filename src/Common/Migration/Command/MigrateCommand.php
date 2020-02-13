@@ -74,9 +74,6 @@ class MigrateCommand extends ContainerAwareCommand
      */
     protected function getConfiguration()
     {
-        // TODO: Remove ASAP
-        $this->getContainer()->get('core.security')->setCliUser();
-
         $instance = $this->getContainer()->get('core.loader.instance')
             ->loadInstanceByName($this->migration['target']['instance'])
             ->getInstance();
