@@ -7,14 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Command;
+namespace Common\Core\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InstancesListCommand extends ContainerAwareCommand
+class ListInstanceCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -22,13 +22,13 @@ class InstancesListCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('instances:list')
+            ->setName('core:instance:list')
             ->setDescription('Lists all the available instances')
             ->setHelp(
                 <<<EOF
 The <info>instances:list</info> command shows a list with all the available instances.
 
-<info>php bin/console instances:list</info>
+<info>php bin/console core:instance:list</info>
 
 EOF
             )

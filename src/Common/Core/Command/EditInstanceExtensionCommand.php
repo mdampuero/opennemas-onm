@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Command;
+namespace Common\Core\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InstanceModuleEditionCommand extends ContainerAwareCommand
+class EditInstanceExtensionCommand extends ContainerAwareCommand
 {
     /**
      * Configures the current command.
@@ -23,28 +23,29 @@ class InstanceModuleEditionCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('instance:module:add')
-            ->setDescription('Updates onm-instances database counters')
+            ->setName('core:instance:extension')
+            ->setDescription('Updates extensions for an instance')
             ->setHelp(
-                'Adds/removes an extension from an instance.'
-            )
-            ->addArgument(
+                <<<EOF
+Adds/removes an extension from the list of purchased extensions.
+
+If `activated` flag enabled, the extension is also enabled.
+
+EOF
+            )->addArgument(
                 'instance',
                 InputArgument::REQUIRED,
                 'Instance internal name.'
-            )
-            ->addArgument(
+            )->addArgument(
                 'uuid',
                 InputArgument::REQUIRED,
                 'Extension UUID.'
-            )
-            ->addOption(
+            )->addOption(
                 'activate',
                 'a',
                 InputOption::VALUE_NONE,
                 'If set, the extension will be enabled/disabled basing on the remove flag.'
-            )
-            ->addOption(
+            )->addOption(
                 'remove',
                 'r',
                 InputOption::VALUE_NONE,
