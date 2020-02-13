@@ -89,8 +89,7 @@ class AssetController extends Controller
         } catch (\Exception $e) {
         }
 
-        list(, , $contentsInHomepage) =
-            $this->get('api.service.frontpage_version')
+        list(, , $contentsInHomepage) = $this->get('api.service.frontpage_version')
             ->getContentsInCurrentVersionforCategory($currentCategoryId);
 
         if (is_array($contentsInHomepage)) {
