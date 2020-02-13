@@ -91,11 +91,11 @@ class OnmFormatter
      */
     protected function getInstance()
     {
-        if (!empty($this->container->get('core.instance'))) {
-            return $this->container->get('core.instance')->internal_name;
+        if (empty($this->container->get('core.globals')->getInstance())) {
+            return 'unknown';
         }
 
-        return 'unknown';
+        return $this->container->get('core.globals')->getInstance()->internal_name;
     }
 
     /**
@@ -105,15 +105,10 @@ class OnmFormatter
      */
     protected function getUser()
     {
-        $ts = $this->container->get('security.token_storage');
-
-        if (empty($ts->getToken())
-            || empty($ts->getToken()->getUser())
-            || empty($ts->getToken()->getUser() !== 'anon.')
-        ) {
+        if (empty($this->container->get('core.globals')->getUser())) {
             return 'anon.';
         }
 
-        return $ts->getToken()->getUser()->email;
+        return $this->container->get('core.globals')->getUser()->email;
     }
 }
