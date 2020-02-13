@@ -168,16 +168,20 @@ abstract class Command extends ContainerAwareCommand
      */
     protected function writeStep($message, $lineBreak = false, $level = 1)
     {
-        $prefix  = str_repeat('==', $level - 1) . ($level > 1 ? '> ' : '');
+        $prefix = $level <= 1 ? '' : str_repeat('  ', $level - 2) . '==> ';
+        $step   = array_key_exists($level - 1, $this->steps) ? sprintf(
+            '(%d/%d) ',
+            $this->step[$level - 1]++,
+            $this->steps[$level - 1]
+        ) : '';
+
         $message = '<fg=yellow;options=bold>' . $prefix . '</>'
             . ($level <= 1 ? '<options=bold>' : '')
-            . str_pad(sprintf(
-                '(%s/%s) %s',
-                $this->step[$level - 1]++,
-                $this->steps[$level - 1],
-                $message
-            ), $this->padding - strlen($prefix), '.')
-            . ($level <= 1 ? '</>' : '');
+            . str_pad(
+                sprintf('%s%s', $step, $message),
+                $this->padding - strlen($prefix),
+                '.'
+            ) . ($level <= 1 ? '</>' : '');
 
         $lineBreak
             ? $this->output->writeln($message)
