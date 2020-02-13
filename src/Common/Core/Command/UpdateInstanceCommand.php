@@ -10,7 +10,6 @@
 namespace Common\Core\Command;
 
 use Common\ORM\Entity\Instance;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 class UpdateInstanceCommand extends Command
