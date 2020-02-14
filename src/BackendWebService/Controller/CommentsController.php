@@ -30,7 +30,7 @@ class CommentsController extends ContentController
 
         $ids = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
+        if (is_array($ids)) {
             foreach ($ids as $id) {
                 $content = $em->find($id);
 
