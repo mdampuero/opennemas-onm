@@ -137,7 +137,7 @@ class LettersController extends Controller
         $id = $request->query->getDigits('id');
 
         // Check empty data
-        if (count($request->request) < 1) {
+        if (empty($request->request)) {
             $this->get('session')->getFlashBag()->add('error', _("Letter data sent not valid."));
 
             return $this->redirect($this->generateUrl('admin_letter_show', [ 'id' => $id ]));
