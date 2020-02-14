@@ -55,7 +55,7 @@ class CommentsController extends ContentController
             }
         }
 
-        if (count($updated) > 0) {
+        if (!empty($updated)) {
             $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
@@ -151,7 +151,7 @@ class CommentsController extends ContentController
         $status = $request->request->get('status');
         $ids    = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
+        if (is_array($ids)) {
             foreach ($ids as $id) {
                 $content = $em->find($id);
 
@@ -177,7 +177,7 @@ class CommentsController extends ContentController
             }
         }
 
-        if (count($updated)) {
+        if (!empty($updated)) {
             $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
