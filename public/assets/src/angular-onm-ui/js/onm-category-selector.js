@@ -215,34 +215,33 @@
               });
 
               if (missed.length === 0) {
+                $scope.updateExportModel();
                 return;
               }
 
-              if (missed.length > 0) {
-                var missing = [];
+              var missing = [];
 
-                for (var i = 0; i < missed.length; i++) {
-                  var route = {
-                    name: 'api_v1_backend_category_get_item',
-                    params: { id: missed[i] }
-                  };
+              for (var i = 0; i < missed.length; i++) {
+                var route = {
+                  name: 'api_v1_backend_category_get_item',
+                  params: { id: missed[i] }
+                };
 
-                  missing[i] = http.get(route).then(function(response) {
-                    return response.data.item;
-                  });
-                }
-
-                $q.all(missing).then(function(items) {
-                  $scope.data.items = items.concat($scope.data.items);
-
-                  $scope.localize($scope.data.items, $scope.data.extra);
-                  $scope.cleanModel();
-                  $scope.updateExportModel();
-                }, function() {
-                  $scope.cleanModel();
-                  $scope.updateExportModel();
+                missing[i] = http.get(route).then(function(response) {
+                  return response.data.item;
                 });
               }
+
+              $q.all(missing).then(function(items) {
+                $scope.data.items = items.concat($scope.data.items);
+
+                $scope.localize($scope.data.items, $scope.data.extra);
+                $scope.cleanModel();
+                $scope.updateExportModel();
+              }, function() {
+                $scope.cleanModel();
+                $scope.updateExportModel();
+              });
             };
 
             /**
