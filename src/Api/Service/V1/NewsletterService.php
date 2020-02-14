@@ -61,10 +61,8 @@ class NewsletterService extends OrmService
 
         // Check if user has reached the limit of sent newsletters
         $total = 0;
-        if (count($newsletters) > 0) {
-            foreach ($newsletters as $newsletter) {
-                $total += (int) $newsletter->sent_items;
-            }
+        foreach ($newsletters as $newsletter) {
+            $total += (int) $newsletter->sent_items;
         }
 
         return $total;
