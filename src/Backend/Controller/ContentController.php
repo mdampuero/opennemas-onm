@@ -94,7 +94,7 @@ class ContentController extends Controller
             $error[] = 'Please specify the ids to set the archive flag on.';
         }
 
-        if (count($error) > 0) {
+        if (!empty($error)) {
             $code = 400;
         } else {
             $error = _('Contents arquived');
@@ -144,7 +144,7 @@ class ContentController extends Controller
             $error[] = 'Please specify the ids to set the archive flag on.';
         }
 
-        if (count($error) > 0) {
+        if (!empty($error)) {
             $code = 400;
         } else {
             $error = 'Done';
