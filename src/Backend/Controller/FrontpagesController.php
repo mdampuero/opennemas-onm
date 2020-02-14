@@ -366,7 +366,7 @@ class FrontpagesController extends Controller
         }
 
         $imageList = [];
-        if (count($imageIdsList) > 0) {
+        if (!empty($imageIdsList)) {
             $imageList = $this->get('entity_repository')->findBy([
                 'content_type_name' => [ [ 'value' => 'photo' ] ],
                 'pk_content'        => [
