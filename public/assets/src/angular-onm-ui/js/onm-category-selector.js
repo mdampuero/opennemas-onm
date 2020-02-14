@@ -44,7 +44,6 @@
             ngModel: '=',
             placeholder: '@',
             position: '@',
-            selected: '=?',
             selectedText: '@'
           },
           template: function() {
@@ -98,15 +97,18 @@
             $scope.required     = $attrs.required ? $attrs.required : false;
             $scope.selectedText = $scope.selectedText || 'selected';
 
-            // Force integers in ngModel on initialization
-            if ($scope.ngModel && ($scope.ngModel instanceof Array || Number.isInteger($scope.ngModel))) {
+            if ($scope.ngModel) {
+              // Convert value to array when multiple and not an array
+              if ($scope.multiple && !($scope.ngModel instanceof Array)) {
+                $scope.ngModel = [ $scope.ngModel ];
+              }
+
+              // Force integers in ngModel on initialization
               $scope.ngModel = !$scope.multiple ?
                 parseInt($scope.ngModel) :
                 $scope.ngModel.map(function(e) {
                   return parseInt(e);
                 });
-            } else {
-              $scope.ngModel = $scope.multiple ? [] : null;
             }
 
             var route = {
@@ -133,51 +135,6 @@
               $scope.localize($scope.data.items, $scope.data.extra);
             });
 
-            // Updates the selected item when model or categories change
-            $scope.$watch('[ categories, ngModel ]', function() {
-              if (!$scope.ngModel || !$scope.categories) {
-                $scope.selected = null;
-                return;
-              }
-
-              var missed = $scope.findMissingItems();
-
-              if (missed.length === 0) {
-                $scope.selected = $scope.updateSelected();
-                return;
-              }
-
-              var missing = [];
-
-              for (var i = 0; i < missed.length; i++) {
-                var route = {
-                  name: 'api_v1_backend_category_get_item',
-                  params: { id: missed[i] }
-                };
-
-                missing[i] = http.get(route).then(function(response) {
-                  return response.data.item;
-                });
-              }
-
-              $q.all(missing).then(function(items) {
-                $scope.updateModel(items);
-                $scope.categories = $scope.categories.concat(items);
-                $scope.selected = $scope.updateSelected();
-              });
-              $scope.localize($scope.data.items, $scope.data.extra);
-            }, true);
-
-            // Updates linker when locale changes
-            $scope.$watch('locale', function(nv, ov) {
-              if (nv === ov || !$scope.linker) {
-                return;
-              }
-
-              $scope.linker.setKey(nv);
-              $scope.linker.update();
-            }, true);
-
             /**
              * @function addDefaultValue
              * @memberOf onmCategorySelector
@@ -198,93 +155,93 @@
             };
 
             /**
-             * @function addMissingItem
+             * @function cleanModel
              * @memberOf onmCategorySelector
              *
              * @description
-             *   Adds missing item to the list keeping default value as first
-             *   item in the list.
-             *
-             * @param {Object} item The item to add.
+             *   Remove from ngModel category ids not found in the list of
+             *   categories.
              */
-            $scope.addMissingItem = function(item) {
-              if ($scope.data.items[0].pk_content_category !== null) {
-                $scope.data.items.unshift(item);
+            $scope.cleanModel = function() {
+              var ids = $scope.categories.map(function(e) {
+                return e.pk_content_category;
+              });
+
+              // Reset ngModel as id is not found in the list of categories
+              if (!$scope.multiple && ids.indexOf($scope.ngModel) === -1) {
+                $scope.ngModel = null;
                 return;
               }
 
-              $scope.data.items.splice(1, 0, item);
-            };
-
-            /**
-             * @function findMissingItems
-             * @memberOf onmCategorySelector
-             *
-             * @description
-             *   Find all the selected categories that aren't in the list.
-             *
-             * @return {Array} Selected categories that aren't in the list.
-             */
-            $scope.findMissingItems = function() {
-              var model = $scope.ngModel;
-
-              if (!$scope.multiple) {
-                model = [ $scope.ngModel ];
+              if ($scope.ngModel instanceof Array) {
+                // Keep only ids found in the list of categories
+                $scope.ngModel = $scope.ngModel.filter(function(e) {
+                  return ids.indexOf(e) !== -1;
+                });
               }
-              var missing = [];
-
-              missing = model.filter(function(e) {
-                for (var i = 0; i < $scope.categories.length; i++) {
-                  if (e === $scope.categories[i].pk_content_category) {
-                    return false;
-                  }
-                }
-                return true;
-              });
-
-              return missing;
             };
 
             /**
-             * @function updateSelected
+             * @function findMissingCategories
              * @memberOf onmCategorySelector
              *
              * @description
-             *   Update selected categories.
+             *   Returns the list of ids in model not present in the list of
+             *   categories.
+             *
+             * @return {Array} The lisf of ids in model not present in the list
+             *                 of categories.
              */
-            $scope.updateSelected = function() {
-              var model = $scope.ngModel;
-
-              if (!$scope.multiple) {
-                model = [ $scope.ngModel ];
+            $scope.findMissingCategories = function() {
+              if (!$scope.categories) {
+                return;
               }
 
-              var selected = $scope.categories.filter(function(e) {
-                for (var i = 0; i < model.length; i++) {
-                  if (e.pk_content_category === model[i]) {
-                    return true;
-                  }
-                }
-                return false;
+              // Selected default value when no value selected
+              if (!$scope.ngModel) {
+                $scope.updateExportModel();
+                return;
+              }
+
+              var model = $scope.ngModel instanceof Array ?
+                $scope.ngModel : [ $scope.ngModel ];
+
+              var ids = $scope.categories.map(function(e) {
+                return e.pk_content_category;
               });
 
-              return selected;
-            };
+              var missed = model.filter(function(e) {
+                return ids.indexOf(e) === -1;
+              });
 
-            /**
-             * @function updateModel
-             * @memberOf onmCategorySelector
-             *
-             * @description
-             *   Update model with missing items.
-             */
-            $scope.updateModel = function(items) {
-              if (!$scope.multiple) {
-                $scope.ngModel = items[0].pk_content_category;
-              } else {
-                for (var i = 0; i < items.length; i++) {
-                  $scope.ngModel = $scope.ngModel.concat(items[i].pk_content_category);
+              if (missed.length === 0) {
+                return;
+              }
+
+              if (missed.length > 0) {
+                var missing = [];
+
+                for (var i = 0; i < missed.length; i++) {
+                  var route = {
+                    name: 'api_v1_backend_category_get_item',
+                    params: { id: missed[i] }
+                  };
+
+                  missing[i] = http.get(route).then(function(response) {
+                    return response.data.item;
+                  });
                 }
+
+                $q.all(missing).then(function(items) {
+                  $scope.data.items = items.concat($scope.data.items);
+
+                  $scope.localize($scope.data.items, $scope.data.extra);
+                  $scope.cleanModel();
+                  $scope.updateExportModel();
+                }, function() {
+                  $scope.cleanModel();
+                  $scope.updateExportModel();
+                });
               }
             };
 
@@ -474,13 +431,11 @@
               }
             };
 
-            // Try to select an option when categories loaded
-            $scope.$watch('categories', function(nv) {
-              if (!nv) {
-                return;
+            // Try to find missing categories when categories loaded
+            $scope.$watch('categories', function(nv, ov) {
+              if (!ov && nv) {
+                $scope.findMissingCategories();
               }
-
-              $scope.updateExportModel();
             });
 
             // Updates external model when internal model changes
@@ -488,8 +443,24 @@
               $scope.updateNgModel();
             }, true);
 
+            // Updates linker when locale changes
+            $scope.$watch('locale', function(nv, ov) {
+              if (nv === ov || !$scope.linker) {
+                return;
+              }
+
+              $scope.linker.setKey(nv);
+              $scope.linker.update();
+            }, true);
+
             // Updates internal model when external model changes
-            $scope.$watch('ngModel', function() {
+            $scope.$watch('ngModel', function(nv, ov) {
+              // Find missing categories on initialization only
+              if (!ov && nv) {
+                $scope.findMissingCategories();
+                return;
+              }
+
               $scope.updateExportModel();
             }, true);
           },
