@@ -89,8 +89,7 @@
         ';expires=' + expires + ';path=/';
     }
 
-    document.body.className = document.body.className
-      .replace(' interstitial-open', '');
+    document.body.classList.remove('interstitial-open');
 
     if (element.parentNode) {
       element.parentNode.removeChild(element);
@@ -239,7 +238,7 @@
 
     if (expires <= now) {
       document.body.appendChild(this.createInterstitial(ad));
-      document.body.className = document.body.className + ' interstitial-open';
+      document.body.classList.add('interstitial-open');
     }
   };
 
@@ -479,7 +478,7 @@
     var interstitials = document.getElementsByClassName('interstitial');
 
     for (var i = 0; i < interstitials.length; i++) {
-      var expires = new Date();
+      var expires = now;
       var slot    = interstitials[i].getElementsByClassName('oat');
       var id      = parseInt(slot[0].getAttribute('data-id'));
 
@@ -513,7 +512,7 @@
         }, timeout * 1000);
       }
 
-      document.body.className = document.body.className + ' interstitial-open';
+      document.body.classList.add('interstitial-open');
     }
   };
 
