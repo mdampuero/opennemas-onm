@@ -52,8 +52,8 @@ class StructuredData
         $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
             current(array_filter([
                 $data['content']->summary,
-                mb_substr($data['content']->body, 0, 250),
                 $data['content']->description,
+                mb_substr($data['content']->body, 0, 250),
                 $data['content']->title
             ]))
         ))));
