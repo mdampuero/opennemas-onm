@@ -233,13 +233,9 @@
               }
 
               $q.all(missing).then(function(items) {
-                if ($scope.data.items[0].pk_content_category === null) {
-                  var first = [ $scope.data.items.shift() ];
-
-                  $scope.data.items = first.concat(items, $scope.data.items);
-                } else {
-                  $scope.data.items = items.concat($scope.data.items);
-                }
+                $scope.data.items = $scope.data.items[0].pk_content_category === null ?
+                  [ $scope.data.items.shift() ].concat(items, $scope.data.items) :
+                  items.concat($scope.data.items);
 
                 $scope.localize($scope.data.items, $scope.data.extra);
                 $scope.cleanModel();
