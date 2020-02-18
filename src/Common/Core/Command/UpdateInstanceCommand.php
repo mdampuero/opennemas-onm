@@ -93,6 +93,8 @@ class UpdateInstanceCommand extends Command
 
                 try {
                     $this->{$method}($instance);
+                } catch (\InvalidArgumentException $e) {
+                    $this->writeStatus('warning', sprintf('SKIP (%s)', $e->getMessage()), true);
                 } catch (\Exception $e) {
                     $this->getContainer()->get('error.log')->error($e->getMessage());
                     $this->writeStatus('error', sprintf('FAIL (%s)', $e->getMessage()), true);
