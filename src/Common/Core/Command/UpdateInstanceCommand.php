@@ -124,7 +124,7 @@ class UpdateInstanceCommand extends Command
         $sql = 'select id from instances';
 
         if (!empty($names)) {
-            $sql = sprintf(' where internal_name in ("%s")', implode('","', $names));
+            $sql .= sprintf(' where internal_name in ("%s")', implode('","', $names));
         }
 
         $sql .= ' order by id asc';
