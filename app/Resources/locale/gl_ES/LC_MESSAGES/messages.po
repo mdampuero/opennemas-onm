@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-29 15:39+0000\n"
-"PO-Revision-Date: 2019-11-29 16:40+0100\n"
+"POT-Creation-Date: 2020-02-18 11:34+0000\n"
+"PO-Revision-Date: 2020-02-18 12:54+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1369,6 +1369,9 @@ msgstr "Anterior"
 msgid "Unable to find the article with the id \"%d\""
 msgstr "Non se puido atopar o artigo co identificador «%d»"
 
+msgid "Running cleanup in background"
+msgstr "Executando limpeza en segundo plano"
+
 msgid "Item imported successfully"
 msgstr "Elemento importado correctamente"
 
@@ -1391,9 +1394,6 @@ msgstr "¡Conexión ao servidor realizada correctamente!"
 
 msgid "Unable to connect to the server"
 msgstr "Non foi posible crear un servidor"
-
-msgid "Running cleanup in background"
-msgstr "Executando limpeza en segundo plano"
 
 msgid "Running syncronization in background"
 msgstr "Executando sincronización en segundo plano"
@@ -1945,6 +1945,21 @@ msgstr "O servizo de ReCaptcha non está configurado"
 msgid "Unable to link your opennemas account to your %s account"
 msgstr "Non se puido asociar a túa conta opennemas á túa conta %s"
 
+msgid "Frontpage mobile version"
+msgstr "Móbil: portada"
+
+msgid "Inner Article"
+msgstr "Artigo: interior"
+
+msgid "Inner Article mobile version"
+msgstr "Móbil: artigo interior"
+
+msgid "Inner Opinion"
+msgstr "Opinión: interior"
+
+msgid "RSS"
+msgstr "RSS"
+
 msgid "API key"
 msgstr "Chave da API"
 
@@ -2096,21 +2111,6 @@ msgstr "Widget %s non dispoñíbel"
 
 msgid "Select a category..."
 msgstr "Selecciona unha categoría…"
-
-msgid "Frontpage mobile version"
-msgstr "Móbil: portada"
-
-msgid "Inner Article"
-msgstr "Artigo: interior"
-
-msgid "Inner Article mobile version"
-msgstr "Móbil: artigo interior"
-
-msgid "Inner Opinion"
-msgstr "Opinión: interior"
-
-msgid "RSS"
-msgstr "RSS"
 
 #, php-format
 msgid "Go to %s"
@@ -4332,6 +4332,9 @@ msgstr "Ver"
 msgid "Import"
 msgstr "Importar"
 
+msgid "No author"
+msgstr "Sen autor"
+
 msgid "Do you want to import the item?"
 msgstr "¿Queres importar o elemento?"
 
@@ -4356,8 +4359,8 @@ msgstr "Si, importar e publicar"
 msgid "Yes, import and edit"
 msgstr "Si, importar e editar"
 
-msgid "Source"
-msgstr "Orixe"
+msgid "Related contents"
+msgstr "Contidos relacionados"
 
 msgid "Synchronization"
 msgstr "Sincronización"
@@ -4403,6 +4406,9 @@ msgstr "Autor defecto"
 
 msgid "Author mapping"
 msgstr "Mapeamento de autores"
+
+msgid "Source"
+msgstr "Orixe"
 
 msgid "Target"
 msgstr "Obxectivo"
@@ -4487,9 +4493,6 @@ msgstr "Titulo para a portada principal"
 
 msgid "Subtitle"
 msgstr "Subtitulo"
-
-msgid "Related contents"
-msgstr "Contidos relacionados"
 
 msgid "Related in frontpage"
 msgstr "Relacionado en portadas"
@@ -5726,8 +5729,20 @@ msgstr "Url relacionado"
 msgid "Image assigned"
 msgstr "Imaxe asignada"
 
-msgid "Cache Manager"
-msgstr "Xestor de caché"
+msgid "Cache"
+msgstr "Caché"
+
+msgid "Key or pattern"
+msgstr "Chave ou patrón"
+
+msgid "Key or pattern will be automatically namespaced"
+msgstr "A chave ou patrón aplicarase no espazo de nomes actual"
+
+msgid "Key will be automatically namespaced"
+msgstr "A chave aplicarase no espazo de nomes actual"
+
+msgid "Delete compiles"
+msgstr "Eliminar compiles"
 
 msgid "Cache group"
 msgstr "Grupo de caché"
@@ -6215,9 +6230,6 @@ msgid "This content will only be available in the time range specified above."
 msgstr ""
 "Este contido só estará dispoñíbel no rango de tempo especificado arriba."
 
-msgid "No author"
-msgstr "Sen autor"
-
 msgid "No image assigned"
 msgstr "Imaxe non asignada"
 
@@ -6616,9 +6628,6 @@ msgstr ""
 
 msgid "Social Networks"
 msgstr "Redes sociais"
-
-msgid "Instance not activated - Opennemas"
-msgstr "Instancia non activada - Opennemas"
 
 msgid "We are improving our platform."
 msgstr "Estamos mellorando a nosa plataforma."
@@ -7723,6 +7732,12 @@ msgstr "Benvido ao Xestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
+
+#~ msgid "Cache Manager"
+#~ msgstr "Xestor de caché"
+
+#~ msgid "Instance not activated - Opennemas"
+#~ msgstr "Instancia non activada - Opennemas"
 
 #~ msgid "Sync"
 #~ msgstr "Sincronizar"
