@@ -521,7 +521,6 @@
       @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
     {/javascripts}
     {javascripts src="
-      @Common/components/angular-bootstrap-multiselect/angular-bootstrap-multiselect.js,
       @Common/components/angular-file-model/angular-file-model.js,
       @Common/components/angular-file-upload/dist/angular-file-upload.min.js,
       @Common/components/angular-filter/dist/angular-filter.min.js,
@@ -539,12 +538,9 @@
       @Common/components/pdfjs-dist/build/pdf.js,
       @Common/components/pdfjs-dist/build/pdf.worker.js,
       @Common/components/tinycon-angularjs/dist/angular-tinycon.min.js,
-      @Common/js/jquery/jquery.multiselect.js,
       @Common/js/jquery/localization/messages_es.js,
-      @Common/js/onm/jquery.password-strength.js,
       @Common/src/fablock/fablock.js,
       @Common/src/angular-autoform/js/*,
-      @Common/src/angular-bootstrap-multiselect/template.js,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
       @Common/src/angular-image-preview/js/image-preview.js,
       @Common/src/angular-picker/js/picker.js,
