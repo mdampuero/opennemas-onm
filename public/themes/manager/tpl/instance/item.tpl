@@ -471,12 +471,6 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="piwik-server-url">{t}Piwik Statistics{/t} - {t}Server url{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="piwik-server-url" ng-model="settings.piwik.server_url" type="text">
-              </div>
-            </div>
           </div>
         </div>
       </div>
