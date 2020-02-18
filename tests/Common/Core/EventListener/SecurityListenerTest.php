@@ -31,10 +31,6 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->fb = $this->getMockBuilder('FlashBag')
-            ->setMethods([ 'add' ])
-            ->getMock();
-
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getRepository' ])
             ->getMock();
@@ -42,6 +38,15 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
         $this->event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRequest' ])
+            ->getMock();
+
+        $this->fb = $this->getMockBuilder('FlashBag')
+            ->setMethods([ 'add' ])
+            ->getMock();
+
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'setUser' ])
             ->getMock();
 
         $this->headers = $this->getMockBuilder('HeaderBag')
@@ -139,6 +144,8 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.user_group':
                 return $this->ugs;
+            case 'core.globals':
+                return $this->globals;
             case 'core.helper.permission':
                 return $this->ph;
             case 'core.security':
@@ -205,6 +212,8 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
             ->with(['baz', 'wibble']);
         $this->security->expects($this->once())->method('setUser')
             ->with($this->user);
+        $this->globals->expects($this->once())->method('setUser')
+            ->with($this->user);
         $this->security->expects($this->once())->method('setCategories')
             ->with([ 'flob', 'grault' ]);
         $this->security->expects($this->once())->method('setPermissions')
@@ -241,6 +250,8 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
         $this->security->expects($this->once())->method('setInstances')
             ->with(['baz', 'wibble']);
         $this->security->expects($this->once())->method('setUser')
+            ->with($this->user);
+        $this->globals->expects($this->once())->method('setUser')
             ->with($this->user);
         $this->security->expects($this->once())->method('setCategories')
             ->with([ 'flob', 'grault' ]);

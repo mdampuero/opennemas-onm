@@ -20,7 +20,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               {acl isAllowed="GROUP_CREATE"}
-                <li>
+                <li class="quicklinks">
                   <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_user_group_create') %]">
                     <i class="fa fa-plus"></i>
                     {t}Create{/t}

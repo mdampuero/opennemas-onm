@@ -635,11 +635,15 @@ class Content implements \JsonSerializable, CsvSerializable
      * @param array $properties the list of properties to update
      *
      * @return void
-     **/
+     */
     public function patch($properties)
     {
-        $properties['changed']             = date('Y-m-d H:i:s');
-        $properties['fk_user_last_editor'] = (int) getService('core.user')->id;
+        $properties['changed'] = date('Y-m-d H:i:s');
+
+        if (!empty(getService('core.user'))) {
+            $properties['fk_user_last_editor'] =
+                (int) getService('core.user')->id;
+        }
 
         if (array_key_exists('content_status', $properties)
             && $properties['content_status'] == 1
@@ -649,11 +653,9 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         try {
-            getService('dbal_connection')->update(
-                'contents',
-                $properties,
-                [ 'pk_content' => $this->pk_content ]
-            );
+            getService('dbal_connection')->update('contents', $properties, [
+                'pk_content' => $this->pk_content
+            ]);
 
             logContentEvent(__METHOD__, $this);
             dispatchEventWithParams('content.update', [ 'item' => $this ]);
@@ -824,18 +826,16 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'in_litter'           => 1,
-                    'fk_user_last_editor' => (int) getService('core.user')->id,
-                    'changed'             => date("Y-m-d H:i:s")
-                ],
-                [ 'pk_content' => $this->id ]
-            );
+            $data = [ 'in_litter' => 1, 'changed' => date("Y-m-d H:i:s") ];
 
-            $this->in_litter           = 1;
-            $this->fk_user_last_editor = (int) getService('core.user')->id;
+            if (!empty(getService('core.user'))) {
+                $data['fk_user_last_editor'] =
+                    (int) getService('core.user')->id;
+            }
+
+            getService('dbal_connection')->update('contents', $data, [
+                'pk_content' => $this->id
+            ]);
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -1022,7 +1022,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return false;
         }
 
-        if ($lastEditor == null) {
+        if ($lastEditor == null && !empty(getService('core.user'))) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
@@ -1196,16 +1196,19 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->content_status = 1;
             $this->frontpage      = 0;
 
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'content_status'      => $this->content_status,
-                    'frontpage'           => $this->frontpage,
-                    'fk_user_last_editor' => (int) getService('core.user')->id,
-                    'changed'             => date("Y-m-d H:i:s")
-                ],
-                [ 'pk_content' => $this->id ]
-            );
+            $data = [
+                'content_status'      => $this->content_status,
+                'frontpage'           => $this->frontpage,
+                'changed'             => date("Y-m-d H:i:s")
+            ];
+
+            if (!empty(getService('core.user'))) {
+                $data['fk_user_last_editor'] = (int) getService('core.user')->id;
+            }
+
+            getService('dbal_connection')->update('contents', $data, [
+                'pk_content' => $this->id
+            ]);
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -1584,11 +1587,8 @@ class Content implements \JsonSerializable, CsvSerializable
                 ]);
             }
 
-            $user = getService('core.user');
-            getService('application.log')->notice(
-                'User ' . $user->username . ' (' . (int) $user->id . ') has executed '
-                . 'action Drop from frontpage to content with ID id ' . $this->id
-            );
+            getService('application.log')
+                ->info('Drop from frontpage content with ID id ' . $this->id);
 
             return true;
         } catch (\Exception $e) {

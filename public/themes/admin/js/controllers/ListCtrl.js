@@ -55,6 +55,26 @@
         };
 
         /**
+         * Checks if any item can be selected.
+         *
+         * @return {Boolean} True if one or more items can be selected. False
+         *                   otherwise.
+         */
+        $scope.areSelectable = function() {
+          if (!$scope.items || $scope.items.length === 0) {
+            return false;
+          }
+
+          for (var i = 0; i < $scope.items.length; i++) {
+            if ($scope.isSelectable($scope.items[i])) {
+              return true;
+            }
+          }
+
+          return false;
+        };
+
+        /**
          * @function clear
          * @memberOf ListCtrl
          *

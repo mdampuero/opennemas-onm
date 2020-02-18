@@ -449,7 +449,7 @@ $menuXml = [
                 'id'          => 'cache',
                 'title'       => _('Cache manager'),
                 'icon'        => 'fa fa-database',
-                'link'        => url('admin_cache_manager'),
+                'link'        => url('backend_cache_list'),
                 'privilege'   => 'MASTER'
             ],
             [

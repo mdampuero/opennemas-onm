@@ -28,30 +28,19 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->instance = new Instance([ 'internal_name' => 'fred' ]);
-
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
             ->setMethods([ 'getClientIps', 'getUri'])
             ->getMock();
 
-        $this->rs = $this->getMockBuilder('RequestStack')
-            ->setMethods([ 'getCurrentRequest'])
-            ->getMock();
-
-        $this->token = $this->getMockBuilder('Token')
-            ->setMethods([ 'getUser' ])
-            ->getMock();
-
-        $this->ts = $this->getMockBuilder('TokenStorage')
-            ->setMethods([ 'getToken' ])
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance', 'getRequest', 'getUser' ])
             ->getMock();
 
         $this->request->headers = $this->headers;
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-        $this->ts->expects($this->any())->method('getToken')
-            ->willReturn($this->token);
 
         $this->formatter = new OnmFormatter($this->container);
     }
@@ -66,14 +55,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.instance':
-                return $this->instance;
-
-            case 'request_stack':
-                return $this->rs;
-
-            case 'security.token_storage':
-                return $this->ts;
+            case 'core.globals':
+                return $this->globals;
         }
 
         return null;
@@ -86,12 +69,15 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('User-Agent')->willReturn('glork/plugh');
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn(new Instance([ 'internal_name' => 'fred' ]));
+        $this->globals->expects($this->any())->method('getRequest')
+            ->willReturn($this->request);
+
         $this->request->expects($this->once())->method('getClientIps')
             ->willReturn([ '143.53.0.1', '128.0.134.43' ]);
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://norf.org/qux');
-        $this->rs->expects($this->any())->method('getCurrentRequest')
-            ->willReturn($this->request);
 
         $record = $this->formatter->processRecord([]);
 
@@ -107,7 +93,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessRecordWhenNoRequest()
     {
-        $this->rs->expects($this->any())->method('getCurrentRequest')
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn(new Instance([ 'internal_name' => 'fred' ]));
+        $this->globals->expects($this->any())->method('getRequest')
             ->willReturn(null);
 
         $record = $this->formatter->processRecord([]);
@@ -155,6 +143,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInstance()
     {
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn(new Instance([ 'internal_name' => 'fred' ]));
+
         $method = new \ReflectionMethod($this->formatter, 'getInstance');
         $method->setAccessible(true);
 
@@ -166,7 +157,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInstanceWhenNoInstance()
     {
-        $this->instance = null;
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn(null);
 
         $method = new \ReflectionMethod($this->formatter, 'getInstance');
         $method->setAccessible(true);
@@ -179,7 +171,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUser()
     {
-        $this->token->expects($this->any())->method('getUser')
+        $this->globals->expects($this->any())->method('getUser')
             ->willReturn(new User([ 'email' => 'quux@wubble.com' ]));
 
         $method = new \ReflectionMethod($this->formatter, 'getUser');
@@ -193,7 +185,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUserWhenNoUser()
     {
-        $this->token->expects($this->any())->method('getUser')->willReturn('anon.');
+        $this->globals->expects($this->any())->method('getUser')
+            ->willReturn(null);
 
         $method = new \ReflectionMethod($this->formatter, 'getUser');
         $method->setAccessible(true);

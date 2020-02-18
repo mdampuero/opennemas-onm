@@ -36,7 +36,7 @@ interface Service
      *
      * @return integer The number of successfully deleted item.
      */
-    public function deleteList($item);
+    public function deleteList($ids);
 
     /**
      * Returns an item.

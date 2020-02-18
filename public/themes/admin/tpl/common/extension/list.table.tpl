@@ -1,62 +1,64 @@
-<div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
-  <span class="column-filters-ellipsis"></span>
-</div>
-<div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
-  <h5>{t}Columns{/t}</h5>
-  <div>
-  {block name="commonColumns"}
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('title')">
-      <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox">
-      <label for="checkbox-title">
-        {t}Title{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('created')">
-      <input id="checkbox-created" checklist-model="app.columns.selected" checklist-value="'created'" type="checkbox">
-      <label for="checkbox-created">
-        {t}Created{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('changed')">
-      <input id="checkbox-changed" checklist-model="app.columns.selected" checklist-value="'changed'" type="checkbox">
-      <label for="checkbox-changed">
-        {t}Updated{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('starttime')">
-      <input id="checkbox-starttime" checklist-model="app.columns.selected" checklist-value="'starttime'" type="checkbox">
-      <label for="checkbox-starttime">
-        {t}Start date{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('endtime')">
-      <input id="checkbox-endtime" checklist-model="app.columns.selected" checklist-value="'endtime'" type="checkbox">
-      <label for="checkbox-endtime">
-        {t}End date{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('category')">
-      <input id="checkbox-support" checklist-model="app.columns.selected" checklist-value="'category'" type="checkbox">
-      <label for="checkbox-support">
-        {t}Category{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('tags')">
-      <input id="checkbox-contents" checklist-model="app.columns.selected" checklist-value="'tags'" type="checkbox">
-      <label for="checkbox-contents">
-        {t}Tags{/t}
-      </label>
-    </div>
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('author')">
-      <input id="checkbox-theme" checklist-model="app.columns.selected" checklist-value="'author'" type="checkbox">
-      <label for="checkbox-theme">
-        {t}Author{/t}
-      </label>
-    </div>
-    {/block}
-    {block name="customColumns"}{/block}
+{block name="columns"}
+  <div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
+    <span class="column-filters-ellipsis"></span>
   </div>
-</div>
+  <div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
+    <h5>{t}Columns{/t}</h5>
+    <div>
+    {block name="commonColumns"}
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('title')">
+        <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox">
+        <label for="checkbox-title">
+          {t}Title{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('created')">
+        <input id="checkbox-created" checklist-model="app.columns.selected" checklist-value="'created'" type="checkbox">
+        <label for="checkbox-created">
+          {t}Created{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('changed')">
+        <input id="checkbox-changed" checklist-model="app.columns.selected" checklist-value="'changed'" type="checkbox">
+        <label for="checkbox-changed">
+          {t}Updated{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('starttime')">
+        <input id="checkbox-starttime" checklist-model="app.columns.selected" checklist-value="'starttime'" type="checkbox">
+        <label for="checkbox-starttime">
+          {t}Start date{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('endtime')">
+        <input id="checkbox-endtime" checklist-model="app.columns.selected" checklist-value="'endtime'" type="checkbox">
+        <label for="checkbox-endtime">
+          {t}End date{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('category')">
+        <input id="checkbox-support" checklist-model="app.columns.selected" checklist-value="'category'" type="checkbox">
+        <label for="checkbox-support">
+          {t}Category{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('tags')">
+        <input id="checkbox-contents" checklist-model="app.columns.selected" checklist-value="'tags'" type="checkbox">
+        <label for="checkbox-contents">
+          {t}Tags{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('author')">
+        <input id="checkbox-theme" checklist-model="app.columns.selected" checklist-value="'author'" type="checkbox">
+        <label for="checkbox-theme">
+          {t}Author{/t}
+        </label>
+      </div>
+      {/block}
+      {block name="customColumns"}{/block}
+    </div>
+  </div>
+{/block}
 <div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">
@@ -64,7 +66,7 @@
         <thead>
           <tr>
             <th class="text-center v-align-middle" width="50">
-              <div class="checkbox checkbox-default">
+              <div class="checkbox checkbox-default" ng-if="areSelectable()">
                 <input id="select-all" ng-checked="areAllSelected()" ng-click="toggleAll();" ng-model="selected.all" type="checkbox">
                 <label for="select-all"></label>
               </div>

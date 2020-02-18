@@ -3,6 +3,7 @@ imports:
     - { resource: services/listener.yml }
     - { resource: services/loader.yml }
     - { resource: services/subscriber.yml }
+    - { resource: services/template.yml }
 parameters:
     core.locale.default:
         backend:
@@ -19,40 +20,6 @@ parameters:
             timezone: UTC
     core.locale.path:      '%kernel.root_dir%/Resources/locale'
     core.maintenance.file: '%kernel.root_dir%/../.maintenance'
-    core.template.filters:
-        output:
-            - meta_amphtml
-            - noindex
-            - canonical_url
-            - ads_generator
-            - ads_scripts
-            - adsense_validator
-            - browser_update
-            - comscore
-            - chartbeat
-            - cmp_script
-            - google_tags_manager
-            - css_includes
-            - generate_fb_admin_tag
-            - generate_fb_pages_tag
-            - google_analytics
-            - js_includes
-            - ojd
-            - piwik
-    core.template.admin.filters:
-        output:
-            - css_includes
-            - js_includes
-            - backend_analytics
-            - browser_update
-            - trimwhitespace
-        ignore_cli:
-            - backend_analytics
-    core.template.manager.filters:
-        output:
-            - css_includes
-            - js_includes
-            - browser_update
 services:
     core.collector.brand:
         class:     Common\Core\Component\Collector\BrandCollector
@@ -90,7 +57,7 @@ services:
 
     core.instance:
         class:     Common\ORM\Entity\Instance
-        factory:   [ '@core.loader.instance', 'getInstance' ]
+        factory:   [ '@core.globals', 'getInstance' ]
         public:    true
 
     core.instance.checker:
@@ -111,7 +78,7 @@ services:
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
         arguments:
-            - '@core.template'
+            - '@core.template.frontend'
             - '@entity_repository'
             - '@api.service.author'
             - '@orm.manager'
@@ -168,11 +135,6 @@ services:
         arguments: [ '@router' ]
         public:    true
 
-    core.security.user:
-        class:   Common\ORM\Entity\User
-        factory: [ '@core.security', 'getUser' ]
-        public:  true
-
     core.security.user.provider:
         class:     Common\Core\Component\Security\User\UserProvider
         arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
@@ -183,36 +145,22 @@ services:
         arguments: [ '@orm.manager', '@security.token_storage', [ 'instance', 'manager' ] ]
         public:    true
 
-    core.template:
-        class:     Common\Core\Component\Template\Template
-        arguments: [ '@service_container', '%core.template.filters%' ]
-        public:    true
-
-    core.template.admin:
-        class:     Common\Core\Component\Template\Template
-        arguments: [ '@service_container', '%core.template.admin.filters%' ]
-        public:    true
-
-    core.template.cache:
-        class:     Common\Core\Component\Template\Cache\CacheManager
-        arguments: [ '@onm_templating' ]
-        public:    true
-
-    core.template.manager:
-        class:     Common\Core\Component\Template\Template
-        arguments: [ '@service_container', '%core.template.manager.filters%' ]
-        public:    true
-
     core.theme:
         class:     Common\ORM\Entity\Extension
         factory:   [ '@core.loader.theme', 'getTheme' ]
         public:    true
 
     core.user:
-        alias:     'core.security.user'
+        class:     Common\ORM\Entity\User
+        factory:   [ '@core.globals', 'getUser' ]
         public:    true
 
     core.validator:
         class:      Common\Core\Component\Validator\Validator
         arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
+        public:    true
+
+    core.varnish:
+        class:     Common\Core\Component\Varnish\Varnish
+        arguments: [ '@application.log', '%varnish%' ]
         public:    true

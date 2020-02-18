@@ -40,11 +40,25 @@ class GlobalVariables implements \ArrayAccess
     protected $extension;
 
     /**
+     * The current instance.
+     *
+     * @var Instance
+     */
+    protected $instance;
+
+    /**
      * The section name.
      *
      * @var string
      */
     protected $section;
+
+    /**
+     * The current request.
+     *
+     * @var Request
+     */
+    protected $request;
 
     /**
      * The route name.
@@ -54,6 +68,20 @@ class GlobalVariables implements \ArrayAccess
     protected $route;
 
     /**
+     * The current theme.
+     *
+     * @var Theme
+     */
+    protected $theme;
+
+    /**
+     * The current user
+     *
+     * @var user
+     */
+    protected $user;
+
+    /**
      * Initializes the GlobalVariables.
      *
      * @param ServiceContainer $container The service container.
@@ -61,6 +89,7 @@ class GlobalVariables implements \ArrayAccess
     public function __construct($container)
     {
         $this->container = $container;
+        $this->request   = $container->get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -140,7 +169,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function getInstance()
     {
-        return $this->container->get('core.instance');
+        return $this->instance;
     }
 
     /**
@@ -151,6 +180,16 @@ class GlobalVariables implements \ArrayAccess
     public function getLocale()
     {
         return $this->container->get('core.locale');
+    }
+
+    /**
+     * Returns the current request.
+     *
+     * @return Request The current request.
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**
@@ -171,6 +210,7 @@ class GlobalVariables implements \ArrayAccess
     public function getSection()
     {
         $template = $this->container->get('core.template');
+
         if ($template->hasValue('o_category')) {
             return $template->getValue('o_category')->name;
         }
@@ -205,7 +245,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function getTheme()
     {
-        return $this->container->get('core.theme');
+        return $this->theme;
     }
 
     /**
@@ -215,7 +255,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function getUser()
     {
-        return $this->container->get('core.user');
+        return $this->user;
     }
 
     /**
@@ -293,6 +333,16 @@ class GlobalVariables implements \ArrayAccess
     }
 
     /**
+     * Sets the instance.
+     *
+     * @param Instance The instance.
+     */
+    public function setInstance($instance)
+    {
+        $this->instance = $instance;
+    }
+
+    /**
      * Sets the route name.
      *
      * @param string The route name.
@@ -300,5 +350,25 @@ class GlobalVariables implements \ArrayAccess
     public function setRoute($route)
     {
         $this->route = $route;
+    }
+
+    /**
+     * Sets the theme.
+     *
+     * @param Theme The theme.
+     */
+    public function setTheme($theme)
+    {
+        $this->theme = $theme;
+    }
+
+    /**
+     * Sets the user.
+     *
+     * @param User The user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 }

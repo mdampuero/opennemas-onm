@@ -45,7 +45,7 @@ class AdvertisementRenderer
     {
         $this->container = $container;
         $this->router    = $this->container->get('router');
-        $this->tpl       = $this->container->get('core.template.admin');
+        $this->tpl       = $this->container->get('view')->get('backend');
         $this->instance  = $this->container->get('core.instance');
         $this->ds        = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');

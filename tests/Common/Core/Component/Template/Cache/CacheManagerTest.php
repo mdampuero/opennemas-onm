@@ -21,26 +21,37 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
+        $this->factory = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
             ->disableOriginalConstructor()
-            ->setMethods([ 'clearAllCache', 'getCacheDir', 'getCacheId' ])
+            ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->templating = $this->getMockBuilder('Onm\Templating\Templating')
+        $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getBundleName', 'getTemplate' ])
+            ->setMethods([ 'dumpFile', 'exists' ])
             ->getMock();
+
+        $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'clearAllCache', 'clearCompiledTemplate', 'getCacheDir',
+                'getCacheId'
+            ])->getMock();
+
+        $this->factory->expects($this->any())->method('get')
+            ->with('frontend')->willReturn($this->smarty);
 
         $this->smarty->expects($this->any())->method('getCacheDir')
             ->willReturn('/glork/quux/corge');
 
-        $this->templating->expects($this->any())->method('getTemplate')
-            ->willReturn($this->smarty);
-
         $this->manager = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
-            ->setConstructorArgs([ $this->templating ])
-            ->setMethods([ 'deleteFile', 'getFiles' ])
+            ->setConstructorArgs([ $this->factory ])
+            ->setMethods([ 'deleteFile', 'getFile', 'getFiles' ])
             ->getMock();
+
+        $property = new \ReflectionProperty($this->manager, 'fs');
+        $property->setAccessible(true);
+        $property->setValue($this->manager, $this->fs);
     }
 
     /**
@@ -48,12 +59,15 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstruct()
     {
-        $manager  = new CacheManager($this->templating);
-        $template = new \ReflectionProperty($manager, 'template');
+        $manager = new CacheManager($this->factory);
+        $factory = new \ReflectionProperty($manager, 'factory');
 
-        $template->setAccessible(true);
+        $factory->setAccessible(true);
 
-        $this->assertInstanceOf('Onm\Templating\Templating', $template->getValue($manager));
+        $this->assertInstanceOf(
+            'Common\Core\Component\Template\TemplateFactory',
+            $factory->getValue($manager)
+        );
     }
 
     /**
@@ -82,5 +96,88 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->once())->method('clearAllCache');
 
         $this->manager->deleteAll();
+    }
+
+    /**
+     * Tests deleteCompiles.
+     */
+    public function testDeleteCompiles()
+    {
+        $this->smarty->expects($this->once())->method('clearCompiledTemplate');
+
+        $this->manager->deleteCompiles();
+    }
+
+    /**
+     * Tests read.
+     */
+    public function testRead()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\Finder\SplFileInfo')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContents' ])
+            ->getMock();
+
+        $file->expects($this->once())->method('getContents')
+            ->willReturn("[corge]\ncaching=1\ncache_lifetime=14336");
+
+        $this->fs->expects($this->once())->method('exists')
+            ->with('/cache.conf')->willReturn(true);
+
+        $this->manager->expects($this->once())->method('getFile')
+            ->with('/cache.conf')->willReturn($file);
+
+        $config = $this->manager->read();
+
+        $this->assertArrayHasKey('corge', $config);
+        $this->assertEquals([
+            'cache_lifetime' => 14336,
+            'caching'        => 1,
+        ], $config['corge']);
+    }
+
+    /**
+     * Tests setPath.
+     */
+    public function testSetPath()
+    {
+        $property = new \ReflectionProperty($this->manager, 'path');
+        $property->setAccessible(true);
+
+        $this->assertEquals($this->manager, $this->manager->setPath('flob'));
+        $this->assertEquals('flob', $property->getValue($this->manager));
+    }
+
+    /**
+     * Tests write.
+     */
+    public function testWrite()
+    {
+        $this->fs->expects($this->once())->method('dumpFile')
+            ->with('/cache.conf');
+
+        $this->manager->write([ 'flob' => [
+            'cache_lifetime' => 16405,
+            'caching'        => 0,
+        ],  'frontpages' => [
+            'cache_lifetime' => 19179,
+            'caching'        => 1,
+        ] ]);
+    }
+
+    /**
+     * Tests getFile.
+     */
+    public function testGetFile()
+    {
+        $manager = new CacheManager($this->factory);
+
+        $method = new \ReflectionMethod($manager, 'getFile');
+        $method->setAccessible(true);
+
+        $this->assertInstanceOf(
+            '\Symfony\Component\Finder\SplFileInfo',
+            $method->invokeArgs($manager, [ '/glork/mumble' ])
+        );
     }
 }

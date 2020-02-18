@@ -37,6 +37,7 @@ class FrontpagesController extends Controller
 
         $fs  = $this->get('api.service.frontpage');
         $fvs = $this->get('api.service.frontpage_version');
+        $lm  = $this->get('core.template.layout');
 
         list($frontpages, $versions, $contentPositionByPos, $contents, $versionId) =
             $fs->getDataForCategoryAndVersion($categoryId, $versionId);
@@ -47,19 +48,11 @@ class FrontpagesController extends Controller
         $versions = $fvs->responsify($versions);
 
         // Get theme layout
-        $layoutTheme = $this->get('orm.manager')
+        $layoutName = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('frontpage_layout_' . $categoryId, 'default');
 
-        // Check if layout is valid,if not use the default value
-        if (!file_exists(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml")) {
-            $layoutTheme = 'default';
-        }
-
-        $lm = $this->get('core.manager.layout');
-        $lm->load(SITE_PATH . "/themes/" . TEMPLATE_USER . "/layouts/" . $layoutTheme . ".xml");
-
-        $layoutSettings = $lm->getLayout($layoutTheme);
+        $lm->selectLayout($layoutName);
 
         $views = $this->get('content_views_repository')->getViews(array_keys($contents));
 
@@ -73,8 +66,6 @@ class FrontpagesController extends Controller
         ]);
         $this->get('core.locale')->setContext('backend');
 
-        $layouts = $this->container->get('core.manager.layout')->getLayouts();
-
         // Get last saved and check
         $lastSaved = $fvs->getLastSaved($categoryId, $versionId);
 
@@ -82,8 +73,8 @@ class FrontpagesController extends Controller
             'contents'             => $contents,
             'category_id'          => $categoryId,
             'layout'               => $layout,
-            'available_layouts'    => $layouts,
-            'layout_theme'         => $layoutSettings,
+            'available_layouts'    => $lm->getLayouts(),
+            'layout_theme'         => $lm->getLayout($layoutName),
             'frontpage_last_saved' => $lastSaved,
             'frontpages'           => $frontpages,
             'versions'             => $versions,
@@ -162,12 +153,9 @@ class FrontpagesController extends Controller
                 );
             }
 
-            $logger->info(
-                'User ' . $this->getUser()->name
-                . ' (' . $this->getUser()->id . ') was failed ' . $message . ' to execute'
-                . ' action Frontpage save positions at category ' . $categoryID
-                . ' Ids ' . json_encode($contentsPositions)
-            );
+            $logger->info('Unable to save frontpage positions for category '
+                . $categoryID
+                . ' Ids ' . json_encode($contentsPositions));
 
             return new JsonResponse([ 'message' => $message ]);
         }
@@ -203,12 +191,9 @@ class FrontpagesController extends Controller
         }
 
         // Notice log of this action
-        $logger->info(
-            'User ' . $this->getUser()->name . ' (' . $this->getUser()->id . ') has executed'
-            . ' action Frontpage save positions at category ' . $categoryID
+        $logger->info('Frontpage positions saved for category ' . $categoryID
             . ', frontpage version ' . $version->id
-            . ' and Ids ' . json_encode($contentsPositions)
-        );
+            . ' and Ids ' . json_encode($contentsPositions));
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
         return new JsonResponse([
@@ -238,7 +223,7 @@ class FrontpagesController extends Controller
             $category = 0;
         }
 
-        $availableLayouts = $this->container->get('core.manager.layout')->getLayouts();
+        $availableLayouts = $this->container->get('core.template.layout')->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
         $layoutValid = in_array($layout, $availableLayouts);

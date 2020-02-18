@@ -40,8 +40,14 @@ class SmartRendererTest extends TestCase
             ->setMethods([ 'getDataSet', 'find' ])
             ->getMock();
 
-        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
+        $this->templateAdmin = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->view = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -50,20 +56,23 @@ class SmartRendererTest extends TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
+        $this->view->expects($this->any())->method('get')
+            ->with('backend')->willReturn($this->templateAdmin);
+
         $this->renderer = new SmartRenderer($this->container);
     }
 
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.template.admin':
-                return $this->templateAdmin;
-
             case 'orm.manager':
                 return $this->em;
 
             case 'entity_repository':
                 return $this->em;
+
+            case 'view':
+                return $this->view;
         }
 
         return null;

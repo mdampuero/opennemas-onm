@@ -111,10 +111,6 @@ class UserGroupPersister extends BasePersister
 
         if ($this->hasCache()) {
             $this->cache->remove($this->metadata->getPrefixedId($entity));
-
-            $this->cache->removeByPattern(
-                "*{$this->instance->internal_name}_user-*"
-            );
         }
     }
 

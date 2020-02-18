@@ -188,10 +188,11 @@ class InstanceSyncController extends Controller
         $categories = simplexml_load_string($xmlString);
 
         // Fetch categories output
-        $output = $this->renderView('instance_sync/partials/_list_categories.tpl', [
-            'site'           => $element,
-            'all_categories' => $categories
-        ]);
+        $output = $this->get('core.template.admin')
+            ->render('instance_sync/partials/_list_categories.tpl', [
+                'site'           => $element,
+                'all_categories' => $categories
+            ]);
 
         // Render view
         return $this->render('instance_sync/new.tpl', [

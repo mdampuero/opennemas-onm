@@ -102,14 +102,15 @@ class PasswordController extends Controller
             $settings['site_title']
         );
 
-        $mailBody = $this->renderView('login/emails/recoverpassword.tpl', [
-            'user' => $user,
-            'url'  => $this->get('router')->generate(
-                'backend_password_change',
-                [ 'token' => $token ],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ),
-        ]);
+        $mailBody = $this->get('core.template.admin')
+            ->render('login/emails/recoverpassword.tpl', [
+                'user' => $user,
+                'url'  => $this->get('router')->generate(
+                    'backend_password_change',
+                    [ 'token' => $token ],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+            ]);
 
         //  Build the message
         $message = \Swift_Message::newInstance();

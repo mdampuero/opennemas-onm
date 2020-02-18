@@ -255,12 +255,12 @@ class SitemapController extends Controller
      */
     protected function getResponse($format, $action, $cacheId)
     {
-        $headers = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
-
-        $contents = $this->renderView('sitemap/sitemap.tpl', [
-            'action'   => $action,
-            'cache_id' => $cacheId
-        ]);
+        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
+        $contents = $this->get('core.template.frontend')
+            ->render('sitemap/sitemap.tpl', [
+                'action'   => $action,
+                'cache_id' => $cacheId
+            ]);
 
         if ($format === 'xml.gz') {
             $contents = gzencode($contents, 9);

@@ -99,7 +99,7 @@ EOF
             mkdir($commonCachepath, 0755, true);
         }
 
-        $this->tpl = $this->getContainer()->get('view')->getBackendTemplate();
+        $this->tpl = $this->getContainer()->get('view')->get('backend');
 
         // Set media
         $this->mediaPath = APPLICATION_PATH . DS . 'public' . DS . 'media' . DS . $instanceName;

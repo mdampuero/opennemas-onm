@@ -50,7 +50,7 @@ EOF
 
         $request = $input->getArgument('request');
 
-        $cleaner = $this->getContainer()->get('varnish_cleaner');
+        $cleaner = $this->getContainer()->get('core.varnish');
 
         $response = $cleaner->ban($request);
 

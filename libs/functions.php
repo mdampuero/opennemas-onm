@@ -57,13 +57,7 @@ function clearslash($string)
 function logContentEvent($action = null, $content = null)
 {
     $logger = getService('application.log');
-    $user   = getService('core.user');
-
-    if (!empty($user)) {
-        $msg = "User {$user->username} ({$user->id}) has executed the action {$action}";
-    } else {
-        $msg = "A not logged user has executed the action {$action}";
-    }
+    $msg    = "Action {$action} executed";
 
     if (!empty($content)) {
         $msg .= " at " . get_class($content) . " (ID:{$content->id})";

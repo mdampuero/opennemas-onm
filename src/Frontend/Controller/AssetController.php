@@ -89,9 +89,8 @@ class AssetController extends Controller
         } catch (\Exception $e) {
         }
 
-        list(, , $contentsInHomepage) =
-            $this->get('api.service.frontpage_version')
-                ->getContentsInCurrentVersionforCategory($currentCategoryId);
+        list(, , $contentsInHomepage) = $this->get('api.service.frontpage_version')
+            ->getContentsInCurrentVersionforCategory($currentCategoryId);
 
         if (is_array($contentsInHomepage)) {
             $bgColor    = 'bgcolor_' . $currentCategoryId;
@@ -207,8 +206,8 @@ class AssetController extends Controller
             ]);
         }
 
-        $coreCss   = $this->get('core.template.admin')->fetch('css/global.tpl');
-        $customCss = $this->renderView(
+        $coreCss   = $this->get('core.template.admin')->render('css/global.tpl');
+        $customCss = $this->get('core.template.frontend')->render(
             'base/custom_css.tpl',
             [ 'cache_id' => $cacheID ]
         );

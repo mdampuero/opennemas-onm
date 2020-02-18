@@ -21,6 +21,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'getParameter', 'hasParameter' ])
             ->getMock();
 
+        $this->lm = $this->getMockBuilder('\Onm\LayoutManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'setPath' ])
+            ->getMock();
+
         $this->locale = $this->getMockBuilder('Locale')
             ->setMethods([ 'addTextDomain', 'getRequestLocale' ])
             ->getMock();
@@ -47,11 +52,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'orm.manager':
-                return $this->ormManager;
-
             case 'core.locale':
                 return $this->locale;
+
+            case 'core.template.layout':
+                return $this->lm;
+
+            case 'orm.manager':
+                return $this->ormManager;
 
             case 'request_stack':
                 return $this->rs;
@@ -67,16 +75,25 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testAddActiveTheme()
     {
         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
-            ->setMethods([ 'addTheme', 'setTemplateVars', 'setupCompiles', 'setupPlugins' ])
-            ->setConstructorArgs([ $this->container, [] ])
+            ->setMethods([
+                'addTheme', 'setTemplateVars', 'setupCompiles', 'setupLayouts',
+                'setupPlugins'
+            ])->setConstructorArgs([ $this->container, [] ])
             ->getMock();
 
-        $template->expects($this->once())->method('setTemplateVars');
-        $template->expects($this->once())->method('setupCompiles')->with('wubble');
-        $template->expects($this->once())->method('setupPlugins')->with('wubble');
-        $template->expects($this->once())->method('addTheme')->with('wubble');
+        $theme = new Theme([
+            'parameters' => [ 'layouts' => [] ],
+            'realpath'   => '/themes/foobar',
+            'uuid'       => 'es.openhost.theme.foobar'
+        ]);
 
-        $template->addActiveTheme('wubble');
+        $template->expects($this->once())->method('setTemplateVars');
+        $template->expects($this->once())->method('setupCompiles')->with($theme);
+        $template->expects($this->once())->method('setupPlugins')->with($theme);
+        $template->expects($this->once())->method('setupLayouts')->with($theme);
+        $template->expects($this->once())->method('addTheme')->with($theme);
+
+        $template->addActiveTheme($theme);
     }
 
     /**
@@ -125,9 +142,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests addTheme.
+     * Tests addTheme when the theme to add is monorepo.
      */
-    public function testAddTheme()
+    public function testAddThemeForMonoRepo()
     {
         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->setMethods([ 'addTemplateDir', 'setupCache' ])
@@ -135,12 +152,38 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $theme = new Theme([
-            'realpath' => '/glorp/waldo',
+            'realpath'    => '/glorp/waldo',
             'text_domain' => 'wubble'
         ]);
 
         $template->expects($this->once())->method('addTemplateDir')
             ->with('/glorp/waldo/tpl');
+        $this->locale->expects($this->once())->method('addTextDomain')
+            ->with('wubble', '/glorp/waldo/locale');
+
+        $template->addTheme($theme);
+    }
+
+    /**
+     * Tests addTheme when the theme to add is multirepo.
+     */
+    public function testAddThemeForMultiRepo()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setMethods([ 'addTemplateDir', 'setupCache' ])
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $theme = new Theme([
+            'multirepo'   => true,
+            'realpath'    => '/glorp/waldo',
+            'text_domain' => 'wubble'
+        ]);
+
+        $template->expects($this->at(0))->method('addTemplateDir')
+            ->with('/glorp/waldo/src/tpl');
+        $template->expects($this->at(1))->method('addTemplateDir')
+            ->with('/glorp/waldo/vendor/baseline/src/tpl');
         $this->locale->expects($this->once())->method('addTextDomain')
             ->with('wubble', '/glorp/waldo/locale');
 
@@ -355,29 +398,51 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests render.
+     */
+    public function testRender()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'assign', 'fetch' ])
+            ->getMock();
+
+        $template->expects($this->once())->method('assign')
+            ->with([ 'foobar' => 'plugh' ]);
+        $template->expects($this->once())->method('fetch')
+            ->with('wobble.tpl', 'flob')
+            ->willReturn('<qux></qux>');
+
+        $this->assertEquals('<qux></qux>', $template->render('wobble.tpl', [
+            'cache_id' => 'flob',
+            'foobar'   => 'plugh'
+        ]));
+    }
+
+    /**
      * Tests setConfig with cache enabled.
      */
     public function testSetConfigWithCacheEnabled()
     {
-         $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
-             ->disableOriginalConstructor()
-             ->setMethods([
-                 'configLoad', 'getConfigVars', 'setCaching', 'setCacheLifetime'
-             ])->getMock();
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'configLoad', 'getConfigVars', 'setCaching', 'setCacheLifetime'
+            ])->getMock();
 
-         $template->expects($this->once())->method('configLoad')
-             ->willReturn(true);
+        $template->expects($this->once())->method('configLoad')
+            ->willReturn(true);
 
-         $template->expects($this->once())->method('getConfigVars')
-             ->willReturn([ 'caching' => true ]);
+        $template->expects($this->once())->method('getConfigVars')
+            ->willReturn([ 'caching' => true ]);
 
-         $template->expects($this->once())->method('setCaching')
-             ->willReturn(true);
+        $template->expects($this->once())->method('setCaching')
+            ->willReturn(true);
 
-         $template->expects($this->once())->method('setCacheLifetime')
-             ->with(86400)->willReturn(true);
+        $template->expects($this->once())->method('setCacheLifetime')
+            ->with(86400)->willReturn(true);
 
-         $this->assertEquals(null, $template->setConfig('frontpage'));
+        $this->assertEquals(null, $template->setConfig('frontpage'));
     }
 
     /**
@@ -494,6 +559,29 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $method->invokeArgs($template, []);
+    }
+
+    /**
+     * Tests setupLayouts.
+     */
+    public function testSetupLayouts()
+    {
+        $template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->setConstructorArgs([ $this->container, [] ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($template, 'setupLayouts');
+        $method->setAccessible(true);
+
+        $theme = new Theme([
+            'realpath'   => '/themes/foobar',
+            'uuid'       => 'es.openhost.theme.foobar'
+        ]);
+
+        $this->lm->expects($this->once())->method('setPath')
+            ->with('/themes/foobar/layouts');
+
+        $method->invokeArgs($template, [ $theme ]);
     }
 
     /**

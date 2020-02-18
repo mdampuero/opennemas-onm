@@ -64,9 +64,7 @@ class TagPersister extends BasePersister
         foreach ($ids as $id) {
             $cacheId = $id['content_type_name'] . '-' . $id['content_id'];
 
-            $this->cache->removeByPattern(
-                "*{$this->instance->internal_name}_{$cacheId}"
-            );
+            $this->cache->remove($cacheId);
         }
     }
 }

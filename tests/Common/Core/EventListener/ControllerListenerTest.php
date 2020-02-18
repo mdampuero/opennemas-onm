@@ -23,7 +23,18 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $container = $this->getMockBuilder('ServiceContainer')->getMock();
+        $container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->rs = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
+        $container->expects($this->once())->method('get')
+            ->with('request_stack')->willReturn($this->rs);
+
+        $this->rs->expects($this->once())->method('getCurrentRequest');
 
         $this->locale   = new Locale([ 'en_US' ], '/foobar/wibble');
         $this->globals  = new GlobalVariables($container);

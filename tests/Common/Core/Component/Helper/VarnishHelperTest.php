@@ -12,6 +12,7 @@ namespace Tests\Common\Core\Component\Helper;
 use Common\Core\Component\Helper\VarnishHelper;
 use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Instance;
+use Common\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for VarnishHelper class.
@@ -28,11 +29,11 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->varnish = $this->getMockBuilder('Onm\Varnish\MessageExchanger')
-            ->setMethods([ 'addBanMessage' ])
+        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+            ->setMethods([ 'push' ])
             ->getMock();
 
-        $this->helper = new VarnishHelper($this->uh, $this->varnish);
+        $this->helper = new VarnishHelper($this->uh, $this->queue);
     }
 
     /**
@@ -48,10 +49,15 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
         $this->uh->expects($this->at(1))->method('generate')
             ->with($itemB)->willReturn('/norf/flob.garply');
 
-        $this->varnish->expects($this->at(0))->method('addBanMessage')
-            ->with('req.url ~ /plugh/norf.wubble');
-        $this->varnish->expects($this->at(1))->method('addBanMessage')
-            ->with('req.url ~ /norf/flob.garply');
+        $this->queue->expects($this->at(0))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'req.url ~ /plugh/norf.wubble'
+            ]));
+
+        $this->queue->expects($this->at(1))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'req.url ~ /norf/flob.garply'
+            ]));
 
         $this->helper->deleteFiles([ $itemA, $itemB ]);
     }
@@ -71,14 +77,25 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
             'path'       => 'norf/flob.garply'
         ]);
 
-        $this->varnish->expects($this->at(0))->method('addBanMessage')
-            ->with('obj.http.x-tags ~ 10605');
-        $this->varnish->expects($this->at(1))->method('addBanMessage')
-            ->with('req.url ~ plugh/norf.wubble');
-        $this->varnish->expects($this->at(2))->method('addBanMessage')
-            ->with('obj.http.x-tags ~ 10883');
-        $this->varnish->expects($this->at(3))->method('addBanMessage')
-            ->with('req.url ~ norf/flob.garply');
+        $this->queue->expects($this->at(0))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'obj.http.x-tags ~ 10605'
+            ]));
+
+        $this->queue->expects($this->at(1))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'req.url ~ plugh/norf.wubble'
+            ]));
+
+        $this->queue->expects($this->at(2))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'obj.http.x-tags ~ 10883'
+            ]));
+
+        $this->queue->expects($this->at(3))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'req.url ~ norf/flob.garply'
+            ]));
 
         $this->helper->deleteNewsstands([ $itemA, $itemB ]);
     }
@@ -88,8 +105,10 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteInstance()
     {
-        $this->varnish->expects($this->once())->method('addBanMessage')
-            ->with('obj.http.x-tags ~ instance-qux');
+        $this->queue->expects($this->once())->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                'obj.http.x-tags ~ instance-qux'
+            ]));
 
         $this->helper->deleteInstance(new Instance([ 'internal_name' => 'qux' ]));
     }

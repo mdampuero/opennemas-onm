@@ -42,6 +42,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->container = $container;
 
         $this->context  = $container->get('security.token_storage');
+        $this->globals  = $container->get('core.globals');
         $this->router   = $container->get('router');
         $this->security = $container->get('core.security');
     }
@@ -77,6 +78,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         $this->security->setUser($user);
+        $this->globals->setUser($user);
 
         // TODO: Uncomment when checking by category name
         //$categories  = $this->getCategories($user);

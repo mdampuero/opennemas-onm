@@ -9,25 +9,135 @@
  */
 namespace Common\Core\Component\Template\Cache;
 
-use Onm\Templating\Templating;
+use Common\Core\Component\Template\TemplateFactory;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\SplFileInfo;
 
 class CacheManager
 {
     /**
-     * The Template service.
+     * Default cache values.
      *
-     * @var Template
+     * @var array
      */
-    protected $template = null;
+    protected $defaults;
+
+    /**
+     * The TemplateFactory service.
+     *
+     * @var TemplateFactory
+     */
+    protected $factory = null;
+
+    /**
+     * The path to the configuration directory.
+     *
+     * @var string
+     */
+    protected $path;
 
     /**
      * Initializes the current CacheManager.
      *
-     * @param Templating $template The Templating service.
+     * @param TemplateFactory $factory The TemplateFactory service.
      */
-    public function __construct(Templating $template)
+    public function __construct(TemplateFactory $factory)
     {
-        $this->template = $template;
+        $this->fs      = new Filesystem();
+        $this->factory = $factory;
+
+        $this->defaults = [
+            'frontpages' => [
+                'cache_lifetime' => 600,
+                'caching'        => 1,
+                'name'           => _('Frontpage'),
+            ],
+            'frontpage-mobile'   => [
+                'caching'        => 1,
+                'cache_lifetime' => 600,
+                'name'           => _('Frontpage mobile version'),
+            ],
+            'articles' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => _('Inner Article')
+            ],
+            'articles-mobile' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => _('Inner Article mobile version')
+            ],
+            'opinion' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => _('Inner Opinion')
+            ],
+            'video' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Frontpage videos')
+            ],
+            'video-inner' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Inner video')
+            ],
+            'gallery-frontpage' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Gallery frontpage')
+            ],
+            'gallery-inner' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Gallery Inner')
+            ],
+            'poll-frontpage' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Polls frontpage')
+            ],
+            'poll-inner' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Poll inner')
+            ],
+            'letter-frontpage' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Letter frontpage')
+            ],
+            'letter-inner' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Letter inner')
+            ],
+            'kiosko' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Kiosko')
+            ],
+            'newslibrary' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Newslibrary')
+            ],
+            'specials' => [
+                'caching'        => 1,
+                'cache_lifetime' => 86400,
+                'name'           => ('Special')
+            ],
+            'sitemap' => [
+                'cache_lifetime' => 300,
+                'caching'        => 1,
+                'name'           => ('Sitemap')
+            ],
+            'rss' => [
+                'cache_lifetime' => 600,
+                'caching'        => 1,
+                'name'           => _('RSS')
+            ]
+        ];
     }
 
     /**
@@ -38,15 +148,15 @@ class CacheManager
     public function delete()
     {
         // Do not add locale to the cache id
-        $this->template->setLocale(false);
+        $this->factory->get('frontend')->setLocale(false);
 
         // Get cache id basing on function arguments
         $cacheId = call_user_func_array(
-            [ $this->template, 'getCacheId' ],
+            [ $this->factory->get('frontend'), 'getCacheId' ],
             func_get_args()
         );
 
-        $this->template->setLocale(true);
+        $this->factory->get('frontend')->setLocale(true);
 
         // Template converts "|" to "^"
         $cacheId = str_replace('|', '^', $cacheId);
@@ -74,13 +184,94 @@ class CacheManager
      */
     public function deleteAll()
     {
-        $this->template->clearAllCache();
+        $this->factory->get('frontend')->clearAllCache();
 
         if (extension_loaded('Zend Opcache')) {
             opcache_reset();
         }
 
         return $this;
+    }
+
+    /**
+     * Deletes all the cache files.
+     *
+     * @return CacheManager The current CacheManager.
+     */
+    public function deleteCompiles()
+    {
+        $this->factory->get('frontend')->clearCompiledTemplate();
+
+        if (extension_loaded('Zend Opcache')) {
+            opcache_reset();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the configuration parameters.
+     *
+     * @return array The configuration.
+     */
+    public function read() : array
+    {
+        $path   = $this->path . '/cache.conf';
+        $config = [];
+
+        if ($this->fs->exists($path)) {
+            $config = parse_ini_string($this->getFile($path)->getContents(), true);
+        }
+
+        foreach ($this->defaults as $key => $value) {
+            $config[$key] = array_key_exists($key, $config)
+                ? array_merge($value, $config[$key])
+                : $value;
+
+            $config[$key]['caching']        = (int) $config[$key]['caching'];
+            $config[$key]['cache_lifetime'] = (int) $config[$key]['cache_lifetime'];
+        }
+
+        return $config;
+    }
+
+    /**
+     * Changes the path to directory where *.ini file is stored.
+     *
+     * @param string $path The path to the configuration directory.
+     *
+     * @return CacheManager The current service.
+     */
+    public function setPath(string $path) : CacheManager
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Saves the Smarty configuration to the configuration file.
+     *
+     * @param array $config The configuration to save.
+     */
+    public function write(array $config = [])
+    {
+        $path    = $this->path . '/cache.conf';
+        $content = '';
+
+        foreach ($config as $section => $entry) {
+            if (!array_key_exists($section, $this->defaults)) {
+                continue;
+            }
+
+            $entry = array_merge($this->defaults[$section], $entry);
+
+            $content .= '[' . $section . ']' . "\n"
+                . 'caching = ' . $entry['caching'] . "\n"
+                . 'cache_lifetime = ' . $entry['cache_lifetime'] . "\n\n";
+        }
+
+        $this->fs->dumpFile($path, $content);
     }
 
     /**
@@ -104,6 +295,18 @@ class CacheManager
     }
 
     /**
+     * Returns a File object from a path.
+     *
+     * @param string $path The path to the file.
+     *
+     * @return SplFileInfo The file.
+     */
+    protected function getFile(string $path) : SplFileInfo
+    {
+        return new SplFileInfo($path, $path, $path);
+    }
+
+    /**
      * Returns a list of files matching pattern.
      *
      * @param string $pattern The pattern to match.
@@ -115,7 +318,7 @@ class CacheManager
     protected function getFiles($pattern = null)
     {
         $caches = [];
-        $files  = new \DirectoryIterator($this->template->getCacheDir());
+        $files  = new \DirectoryIterator($this->factory->get('frontend')->getCacheDir());
 
         foreach ($files as $file) {
             if ($files->isDot()) {

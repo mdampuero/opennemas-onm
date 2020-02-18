@@ -53,8 +53,14 @@ class ImageRendererTest extends TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
+        $this->templateAdmin = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->view = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -68,6 +74,9 @@ class ImageRendererTest extends TestCase
 
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->view->expects($this->any())->method('get')
+            ->with('backend')->willReturn($this->templateAdmin);
 
         $this->renderer = new ImageRenderer($this->container);
     }
@@ -84,9 +93,6 @@ class ImageRendererTest extends TestCase
             case 'core.instance':
                 return $this->instance;
 
-            case 'core.template.admin':
-                return $this->templateAdmin;
-
             case 'core.helper.url_generator':
                 return $this->ugh;
 
@@ -98,6 +104,9 @@ class ImageRendererTest extends TestCase
 
             case 'router':
                 return $this->router;
+
+            case 'view':
+                return $this->view;
         }
 
         return null;
