@@ -142,7 +142,7 @@ class NewsletterTemplateController extends Controller
         }
         foreach ($values['contents'] as &$container) {
             if (!is_array($container['items'])
-                || count($container['items']) <= 0
+                || empty($container['items'])
             ) {
                 continue;
             }
