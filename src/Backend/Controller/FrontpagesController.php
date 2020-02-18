@@ -133,7 +133,7 @@ class FrontpagesController extends Controller
 
         // Check if data send by user is valid
         $validReceivedData = is_array($contentsPositions)
-             && count($contentsPositions) > 0
+             && !empty($contentsPositions)
              && !is_null($categoryID)
              && !is_null($lastVersion)
              && count($contentsPositions) === (int) $numberOfContents;
