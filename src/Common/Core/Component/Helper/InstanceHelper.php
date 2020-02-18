@@ -203,7 +203,11 @@ class InstanceHelper
     {
         $piwik = $this->getPiwikSettings($instance);
 
-        if (empty($piwik)) {
+        if (empty($piwik)
+            || !is_array($piwik)
+            || !array_key_exists('page_id', $piwik)
+            || empty($piwik['page_id'])
+        ) {
             throw new \InvalidArgumentException('No valid piwik configuration');
         }
 
