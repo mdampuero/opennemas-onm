@@ -289,7 +289,7 @@ var newsletterTemplateTranslations = {
                 <div ng-bind-html="item.title | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
-            <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected="selectedCategories" selected-text="{t}selected{/t}"></onm-category-selector>
+            <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected-text="{t}selected{/t}"></onm-category-selector>
           </div>
 
           <div class="limit clearfix">
