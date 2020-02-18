@@ -413,7 +413,8 @@
               var needle = $scope.multiple ? [] : [ null ];
 
               if ($scope.ngModel) {
-                needle = $scope.multiple ? $scope.ngModel : [ $scope.ngModel ];
+                needle = $scope.ngModel instanceof Array ?
+                  $scope.ngModel : [ $scope.ngModel ];
               }
 
               var found = $scope.categories.filter(function(e) {
