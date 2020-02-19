@@ -439,7 +439,7 @@
   <![endif]-->
   {block name="global-js"}
     {javascripts src="
-      @Common/components/jquery2/dist/jquery.min.js,
+      @Common/components/jquery/dist/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
@@ -522,7 +522,6 @@
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
-      @Common/components/jquery-validation/dist/jquery.validate.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/pdfjs-dist/build/pdf.js,
       @Common/components/pdfjs-dist/build/pdf.worker.js,
