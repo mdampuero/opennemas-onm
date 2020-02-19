@@ -47,7 +47,7 @@
                     <strong>Method:</strong> {$trace_step['class']}::{$trace_step['function']}()
                   </p>
                 {/if}
-                {if is_array($trace_step['args']) && count($trace_step['args']) > 0}
+                {if is_array($trace_step['args']) && !empty($trace_step['args'])}
                   <p>
                     <strong>Args:</strong>
                     {foreach from=$trace_step['args'] item=arg}
