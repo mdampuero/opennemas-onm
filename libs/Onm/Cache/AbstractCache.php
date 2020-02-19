@@ -315,7 +315,7 @@ abstract class AbstractCache implements CacheInterface
     {
         if (is_array($id)) {
             return array_map(function ($a) {
-                return $this->namespace . '_' . $a;
+                return $this->getPrefix() . $this->namespace . '_' . $a;
             }, $id);
         }
 
