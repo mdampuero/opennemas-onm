@@ -1,22 +1,3 @@
-/**
- * Method to retrieve tags from url and add this tags to a import field
- *
- * @param {Object} container  element where load all external information
- * @param {String} raw_info   data of the retrieve request
- */
-function load_ajax_in_container(url, container) {
-  jQuery.ajax({
-    url: url,
-    async: true,
-    beforeSend: function() {
-      container.html('<div class="spinner"></div>Loading request...');
-    },
-    success: function(data) {
-      container.html(data);
-    }
-  });
-}
-
 $(document).ready(function() {
   $('.sidebar li > a').on('click', function(e) {
     var item = $(this).parent();
