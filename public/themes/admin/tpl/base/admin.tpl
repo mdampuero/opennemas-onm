@@ -49,8 +49,6 @@
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
-      @Common/components/bootstrap-tabdrop/build/css/tabdrop.css,
-      @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css,
       @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/src/angular-fly-to-cart/less/main.less,
@@ -446,7 +444,6 @@
     {javascripts src="
       @Common/components/jquery2/dist/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
-      @Common/components/breakpoints/breakpoints.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
       @Common/components/angular/angular.min.js,
@@ -474,7 +471,6 @@
       @Common/src/ckeditor-wordcount/wordcount/lang/es.js,
       @Common/src/ckeditor-pastespecial/plugin.js,
       @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-      @Common/components/fastclick/lib/fastclick.js,
       @Common/components/lodash/dist/lodash.min.js,
       @Common/components/messenger/build/js/messenger.min.js,
       @Common/components/messenger/build/js/messenger-theme-flat.js,
@@ -528,8 +524,6 @@
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
-      @Common/components/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min.js,
-      @Common/components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js,
       @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,

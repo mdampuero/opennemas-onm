@@ -34,7 +34,6 @@
     @Common/components/ng-tags-input/ng-tags-input.min.css,
     @Common/components/pace/themes/blue/pace-theme-minimal.css,
     @Common/components/select2/select2.css,
-    @Common/components/spinkit/css/spinkit.css,
     @Common/src/webarch/css/style.css,
     @Common/src/webarch/css/responsive.css,
     @Common/src/webarch/css/custom-icon-set.css,
@@ -283,7 +282,6 @@
   {javascripts src="
     @Common/components/jquery2/dist/jquery.min.js,
     @Common/components/bootstrap/dist/js/bootstrap.min.js,
-    @Common/components/breakpoints/breakpoints.js,
     @Common/components/moment/min/moment-with-locales.min.js,
     @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
     @Common/components/angular/angular.min.js,
@@ -311,7 +309,6 @@
     @Common/src/ckeditor-wordcount/wordcount/lang/es.js,
     @Common/src/ckeditor-pastespecial/plugin.js,
     @Common/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js,
-    @Common/components/fastclick/lib/fastclick.js,
     @Common/components/lodash/dist/lodash.min.js,
     @Common/components/messenger/build/js/messenger.min.js,
     @Common/components/messenger/build/js/messenger-theme-flat.js,
