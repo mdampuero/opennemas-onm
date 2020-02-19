@@ -119,7 +119,6 @@
   {block name="footer-js"}
     {javascripts src="@Common/components/jquery2/dist/jquery.min.js,
         @Common/components/bootstrap/dist/js/bootstrap.min.js,
-        @Common/components/modernizr/modernizr.js,
         @Common/js/onm/md5.min.js" output="login"}
       <script>
         function connect(btn) {

@@ -440,7 +440,6 @@
   <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
   <![endif]-->
   {block name="global-js"}
-      <!-- @Common/components/modernizr/modernizr.js, -->
     {javascripts src="
       @Common/components/jquery2/dist/jquery.min.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
