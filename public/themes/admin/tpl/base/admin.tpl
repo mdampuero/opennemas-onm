@@ -526,7 +526,6 @@
       @Common/components/pdfjs-dist/build/pdf.js,
       @Common/components/pdfjs-dist/build/pdf.worker.js,
       @Common/components/tinycon-angularjs/dist/angular-tinycon.min.js,
-      @Common/js/jquery/localization/messages_es.js,
       @Common/src/fablock/fablock.js,
       @Common/src/angular-autoform/js/*,
       @Common/src/angular-fly-to-cart/js/fly-to-cart.js,
