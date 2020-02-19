@@ -48,7 +48,6 @@
     {/stylesheets}
     {stylesheets src="@Common/components/angular-bootstrap/ui-bootstrap-csp.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
-      @Common/components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css,
       @Common/components/jquery-ui/themes/base/jquery-ui.min.css,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
@@ -522,7 +521,6 @@
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.js,
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
-      @Common/components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
       @Common/components/jquery-validation/dist/jquery.validate.js,
       @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
