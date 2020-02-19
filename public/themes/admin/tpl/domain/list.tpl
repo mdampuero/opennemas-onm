@@ -90,12 +90,7 @@
                   <i class="fa fa-chevron-right fa-lg " ng-class="{ 'fa-rotate-90': expanded[$index]}"></i>
                 </span>
               </div>
-              <div class="domain-list-item-details " ng-class="{ 'expanded': expanded[$index] }">
-                <div class="sk-three-bounce" ng-if="domain.loading">
-                  <div class="sk-child sk-bounce1"></div>
-                  <div class="sk-child sk-bounce2"></div>
-                  <div class="sk-child sk-bounce3"></div>
-                </div>
+              <div class="domain-list-item-details" ng-class="{ 'expanded': expanded[$index] }">
                 <div ng-if="!domain.loading">
                   <div class="row">
                     <div class="col-sm-12" ng-if="!domain.free">

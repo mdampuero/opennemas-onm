@@ -87,15 +87,9 @@
                   <span class="input-group-addon">www.</span>
                   <input autofocus class="form-control uib-typeahead" ng-keyup="mapByKeyPress($event)" ng-model="domain" placeholder="{t}Enter a domain{/t}" uib-typeahead="domain for domain in getSuggestions($viewValue) | filter: $viewValue" type="text">
                   <span class="input-group-btn">
-                    <button class="btn btn-success" ng-click="map()" ng-disabled="!isValid() || !domain">
-                      <span ng-if="!loading">
-                        {t}Map it{/t}
-                      </span>
-                      <div class="sk-three-bounce sk-inline sk-small ng-cloak" ng-if="loading">
-                        <div class="sk-child sk-bounce1"></div>
-                        <div class="sk-child sk-bounce2"></div>
-                        <div class="sk-child sk-bounce3"></div>
-                      </div>
+                    <button class="btn btn-success btn-loading" ng-click="map()" ng-disabled="!isValid() || !domain">
+                      <i class="fa" ng-class="{ 'fa-plus': !loading, 'fa-circle-o-notch fa-spin': loading }"></i>
+                      {t}Add{/t}
                     </button>
                   </span>
                 </div>
