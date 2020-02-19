@@ -101,7 +101,7 @@ class PickerController extends Controller
         $contentMap = array_map(function ($row) {
             return [$row['content_type_name'], $row['pk_content']];
         }, $contentMap);
-        $results = $em->findMulti($contentMap);
+        $results    = $em->findMulti($contentMap);
 
         $languageData = $this->getLocaleData('frontend');
         $fm           = $this->get('data.manager.filter');
@@ -115,7 +115,7 @@ class PickerController extends Controller
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
-        if (count($contentMap) > 0) {
+        if (!empty($contentMap)) {
             $total = $contentMap[0]['resultNumber'];
         }
 
@@ -305,7 +305,7 @@ class PickerController extends Controller
         // Get contents for this home
         list($frontpageVersion, $contentPositions, $results) =
             $this->get('api.service.frontpage_version')
-                ->getContentsInCurrentVersionforCategory(0);
+            ->getContentsInCurrentVersionforCategory(0);
 
         $results = array_filter($results, function ($value) {
             return $value->content_type_name != 'widget';

@@ -192,7 +192,7 @@ class WebServiceController extends Controller
         }
 
         try {
-            if (count($errors) <= 0) {
+            if (empty($errors)) {
                 $this->sendMails(
                     [
                         'name'          => $instance->name,
@@ -210,7 +210,7 @@ class WebServiceController extends Controller
             error_log('Error while sending instance creation emails: ' . $e->getMessage());
         }
 
-        if (is_array($errors) && count($errors) > 0) {
+        if (is_array($errors) && !empty($errors)) {
             return new JsonResponse(['success' => false, 'errors' => $errors], 400);
         }
 

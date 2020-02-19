@@ -25,7 +25,7 @@ class NewsMLComponentTextEuropaPress extends NewsMLComponentText
 
         $node = $data->xpath('/NewsComponent');
 
-        if (!is_array($node) || count($node) == 0) {
+        if (!is_array($node) || empty($node)) {
             return false;
         }
 
@@ -51,7 +51,7 @@ class NewsMLComponentTextEuropaPress extends NewsMLComponentText
     {
         $agency = $data->xpath('//NewsLines/CreditLine');
 
-        if (is_array($agency) && count($agency) > 0) {
+        if (is_array($agency) && !empty($agency)) {
             return (string) $agency[0];
         }
 

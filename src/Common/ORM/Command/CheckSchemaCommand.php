@@ -71,7 +71,7 @@ class CheckSchemaCommand extends ContainerAwareCommand
 
         $sql = $current->getMigrateToSql($default, $conn->getDatabasePlatform());
 
-        if (count($sql) > 0) {
+        if (!empty($sql)) {
             $output->writeln(str_replace("\n", '', \SqlFormatter::highlight("USE `$database`;")));
 
             foreach ($sql as $value) {

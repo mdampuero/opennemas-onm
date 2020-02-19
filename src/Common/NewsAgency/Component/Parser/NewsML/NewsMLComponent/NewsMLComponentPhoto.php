@@ -62,7 +62,7 @@ class NewsMLComponentPhoto extends NewsML
             ->xpath('/NewsComponent/NewsComponent/Role[@FormalName="Thumbnail"]');
 
         foreach ($elements as $value) {
-            if (count($value) === 1) {
+            if (!empty($value) && count($value) === 1) {
                 $count++;
             }
         }
@@ -77,7 +77,7 @@ class NewsMLComponentPhoto extends NewsML
     {
         $agency = $data->xpath('/NewsComponent/AdministrativeMetadata/Provider/Party');
 
-        if (is_array($agency) && count($agency) > 0) {
+        if (is_array($agency) && !empty($agency)) {
             return (string) $agency[0]->attributes()->FormalName;
         }
 

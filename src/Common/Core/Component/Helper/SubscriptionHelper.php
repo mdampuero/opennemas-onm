@@ -173,7 +173,7 @@ class SubscriptionHelper
             }
         );
 
-        return count($subscriptions) > 0;
+        return !empty($subscriptions);
     }
 
     /**

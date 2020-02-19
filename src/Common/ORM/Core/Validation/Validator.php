@@ -398,7 +398,7 @@ class Validator
 
         $missed = array_diff($this->required[$ruleset], array_keys($data));
 
-        if (count($missed) > 0) {
+        if (is_array($missed) && !empty($missed)) {
             throw new InvalidEntityException(
                 sprintf(
                     _("The fields '%s' are missing for entity of class '%s'"),

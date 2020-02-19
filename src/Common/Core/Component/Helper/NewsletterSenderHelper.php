@@ -136,7 +136,7 @@ class NewsletterSenderHelper
 
                     $sentEmails   += $sentEmailsList;
                     $sendResults[] = [ $mailbox, true, sprintf(_('%d subscribers'), $sentEmailsList) ];
-                    if (count($errors) > 0) {
+                    if (!empty($errors)) {
                         foreach ($errors as $error) {
                             $sendResults[] = [ $mailbox, false, $error ];
                         }

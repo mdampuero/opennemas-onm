@@ -64,7 +64,7 @@
             </p>
         </div>
         <?php $backtrace = array_reverse($error->getTrace()); ?>
-        <?php if (is_array($backtrace) && count($backtrace) > 0) :
+        <?php if (is_array($backtrace) && !empty($backtrace)) :
         ?>
             <div class="backtrace">
                 <div class="title"><span>Backtrace:</span> </div>

@@ -342,7 +342,7 @@ EOF
                     if ($content->content_type_name == 'article') {
                         // Get related
                         $relations = getService('related_contents')->getRelations($content->id, 'inner');
-                        if (count($relations) > 0) {
+                        if (!empty($relations)) {
                             $content->related = $this->er->findMulti($relations);
                         }
 

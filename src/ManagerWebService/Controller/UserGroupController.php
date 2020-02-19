@@ -170,7 +170,7 @@ class UserGroupController extends Controller
 
         unset($params['ids']);
 
-        if (!is_array($ids) || count($ids) === 0) {
+        if (!is_array($ids) || empty($ids)) {
             $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }

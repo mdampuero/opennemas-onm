@@ -547,7 +547,7 @@ class RssController extends Controller
 
             $relations = $this->get('related_contents')
                 ->getRelations($content->id, 'inner', $limit);
-            if (count($relations) > 0) {
+            if (!empty($relations)) {
                 $relatedContents = [];
                 $relateds        = $this->get('entity_repository')->findMulti($relations);
 

@@ -89,7 +89,7 @@ class DatabaseCheckSchemaCommand extends ContainerAwareCommand
 
         $sql = $schema->getMigrateToSql($master, $conn->getDatabasePlatform());
 
-        if (count($sql) > 0) {
+        if (!empty($sql)) {
             $output->writeln("use `$database`;");
             $foreignKeys = [];
             foreach ($sql as $value) {

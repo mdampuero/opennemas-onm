@@ -91,7 +91,7 @@ class AssetController extends Controller
 
         list(, , $contentsInHomepage) =
             $this->get('api.service.frontpage_version')
-                ->getContentsInCurrentVersionforCategory($currentCategoryId);
+            ->getContentsInCurrentVersionforCategory($currentCategoryId);
 
         if (is_array($contentsInHomepage)) {
             $bgColor    = 'bgcolor_' . $currentCategoryId;
@@ -128,7 +128,7 @@ class AssetController extends Controller
         $response = '';
 
         // render
-        if (count($contentsInHomepage) > 0) {
+        if (!empty($contentsInHomepage)) {
             $response .= "/**********************************************************\n"
                       . "   CSS for contents in frontpage of category $categoryName\n"
                       . " **********************************************************/\n";
