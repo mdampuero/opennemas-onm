@@ -36,7 +36,6 @@
       @Common/components/messenger/build/css/messenger.css,
       @Common/components/nanoscroller/bin/css/nanoscroller.css,
       @Common/components/ng-tags-input/ng-tags-input.min.css,
-      @Common/components/pace/themes/blue/pace-theme-minimal.css,
       @Common/components/select2/select2.css,
       @Common/src/webarch/css/style.css,
       @Common/src/webarch/css/responsive.css,
