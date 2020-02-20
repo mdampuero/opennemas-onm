@@ -26,7 +26,7 @@
      *  - **`total-items`**: The number of items to paginate. (Required)
      *
      * @example
-     * <onm-pagination items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total" mode="app.mode">
+     * <onm-pagination items-per-page="pagination.epp" ng-model="pagination.page" total-items="pagination.total" hide-views="isModeSupported() && app.mode === 'grid'">
      * </onm-pagination>
      */
     .directive('onmPagination', [
@@ -39,14 +39,14 @@
             itemsPerPage: '=',
             ngModel: '=',
             totalItems: '=',
-            mode: '='
+            hideViews: '='
           },
           link: function($scope, $element, $attrs) {
             var paginationTpl = '<span class="pagination">' +
               '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="bottom">' +
                 '[% totalItems %]' +
               '</span>' +
-              '<span class="pagination-epp" ng-hide="readOnly" ng-if="mode === \'list\'">' +
+              '<span class="pagination-epp" ng-hide="readOnly" ng-if="!hideViews">' +
                 '<button class="pagination-button" data-toggle="dropdown" type="button">' +
                   '<i class="fa fa-eye"></i>' +
                   '<span class="pagination-epp-number">' +
