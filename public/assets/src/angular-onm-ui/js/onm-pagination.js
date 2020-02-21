@@ -43,7 +43,7 @@
           },
           link: function($scope, $element, $attrs) {
             var paginationTpl = '<span class="pagination">' +
-              '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="bottom">' +
+              '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="left">' +
                 '[% totalItems %]' +
               '</span>' +
               '<span class="pagination-epp" ng-hide="readOnly" ng-if="!hideViews">' +
