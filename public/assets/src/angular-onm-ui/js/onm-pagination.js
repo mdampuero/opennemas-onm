@@ -46,7 +46,7 @@
               '<span class="pagination-status" uib-tooltip="[% from %]-[% to %] ' + $window.strings.pagination.of + ' [% totalItems%]" tooltip-placement="left">' +
                 '[% totalItems %]' +
               '</span>' +
-              '<span class="pagination-epp" ng-hide="readOnly" ng-if="!hideViews">' +
+              '<span class="pagination-epp" ng-hide="readOnly || hideViews">' +
                 '<button class="pagination-button" data-toggle="dropdown" type="button">' +
                   '<i class="fa fa-eye"></i>' +
                   '<span class="pagination-epp-number">' +
