@@ -45,7 +45,6 @@ class BrandCollector extends DataCollector
         $this->data = [
             'name'        => $metadata['name'],
             'homepage'    => $metadata['homepage'],
-            'version'     => $metadata['version'],
             'description' => $metadata['description'],
         ];
     }
