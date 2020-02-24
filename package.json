@@ -2,7 +2,6 @@
   "name": "opennemas",
   "description": "The best CMS for online jornalism",
   "homepage": "https://www.opennemas.com",
-  "version": "0.1.0",
   "repository": "https://bitbucket.org/opennemas/onm/",
   "license": "SEE LICENSE IN LICENSE",
   "apidoc": {

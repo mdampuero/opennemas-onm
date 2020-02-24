@@ -1,6 +1,5 @@
 {
   "name": "opennemas",
-  "version": "1.0.0",
   "private": true,
   "repository": "https://bitbucket.org/opennemas/onm",
   "authors": [
@@ -54,14 +53,6 @@
     "tinycon-angularjs": "1.1.2",
     "pdfjs-dist": "2.3.200"
   },
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "public/assets/components",
-    "test",
-    "tests"
-  ],
   "resolutions": {
     "angular": "1.7.9"
   }
