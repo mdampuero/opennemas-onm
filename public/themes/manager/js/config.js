@@ -2,7 +2,9 @@
   'use strict';
 
   angular.module('ManagerApp')
-    .config(['$interpolateProvider', function ($interpolateProvider) {
+    .config(['$locationProvider', function($locationProvider) {
+      $locationProvider.hashPrefix('');
+    }]).config(['$interpolateProvider', function ($interpolateProvider) {
       $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }]).config(['$httpProvider', 'serializerProvider', function ($httpProvider, serializerProvider) {
       $httpProvider.defaults.headers.common['X-App-Version'] = appVersion;
