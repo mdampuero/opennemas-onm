@@ -61,5 +61,8 @@
     "public/assets/components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "angular": "1.7.9"
+  }
 }
