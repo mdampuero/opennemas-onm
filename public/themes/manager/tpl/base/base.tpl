@@ -332,7 +332,6 @@
     @Common/components/angular-webstorage/angular-webstorage.min.js,
     @Common/src/angular-messenger/messenger.js,
     @Common/src/angular-moment/moment.js,
-    @Common/js/onm/md5.min.js,
     @FosJsRoutingBundle/js/router.js,
     @Common/js/routes.js,
     @Common/src/angular-cleaner/cleaner.js,
@@ -349,6 +348,7 @@
     @Common/src/angular-routing/routing.js,
     @Common/src/angular-security/security.js,
     @Common/src/angular-serializer/serializer.js,
+    @Common/src/md5/md5.min.js,
     @Common/src/opennemas-webarch/js/core.js,
     @Common/src/sidebar/js/sidebar.js" filters="uglifyjs" output="common"}
   {/javascripts}
