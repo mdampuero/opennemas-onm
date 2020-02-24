@@ -118,7 +118,7 @@ class EntityManagerTest extends \PHPUnit\Framework\TestCase
         $args = func_get_args();
 
         switch ($args[0]) {
-            case 'environment':
+            case 'kernel.environment':
                 return 'prod';
             case '@foo':
                 return 'foo';
