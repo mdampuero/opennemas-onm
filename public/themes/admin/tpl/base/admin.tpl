@@ -522,7 +522,6 @@
       @Common/components/angulartics/dist/angulartics-ga.min.js,
       @Common/components/angulartics/dist/angulartics.min.js,
       @Common/components/jquery-ui/jquery-ui.min.js,
-      @Common/components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js,
       @Common/components/pdfjs-dist/build/pdf.js,
       @Common/components/pdfjs-dist/build/pdf.worker.js,
       @Common/components/tinycon-angularjs/dist/angular-tinycon.min.js,
