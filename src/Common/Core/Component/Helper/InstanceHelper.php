@@ -311,11 +311,16 @@ class InstanceHelper
         try {
             $this->conn->selectDatabase($instance->getDatabaseName());
 
-            $sql = 'select value from settings where name = "piwik"';
-
+            $sql   = 'select value from settings where name = "piwik"';
             $piwik = $this->conn->fetchAssoc($sql);
 
-            return PhpSerializer::unserialize($piwik['value']);
+            if (!is_array($piwik) || !array_key_exists('value', $piwik)) {
+                return null;
+            }
+
+            $value = PhpSerializer::unserialize($piwik['value']);
+
+            return is_array($value) ? $value : null;
         } catch (\Exception $e) {
             return null;
         }
