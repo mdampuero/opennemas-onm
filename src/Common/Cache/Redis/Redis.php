@@ -52,7 +52,7 @@ class Redis extends Cache
      */
     protected function delete($id)
     {
-        return $this->getRedis()->delete($id);
+        return $this->getRedis()->del($id);
     }
 
     /**
@@ -65,7 +65,7 @@ class Redis extends Cache
 
         while ($keys = $this->getRedis()->scan($cursor, $pattern, 10000)) {
             foreach ($keys as $key) {
-                $this->getRedis()->delete($key);
+                $this->getRedis()->del($key);
                 $deleted = $deleted + 1;
             }
         }
@@ -78,7 +78,7 @@ class Redis extends Cache
      */
     protected function deleteMulti($id)
     {
-        return $this->getRedis()->delete($id);
+        return $this->getRedis()->del($id);
     }
 
     /**

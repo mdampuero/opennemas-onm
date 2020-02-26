@@ -10,6 +10,7 @@ parameters:
     core.paths.cache:        '%kernel.root_dir%/../tmp/instances'
     core.paths.cache.common: '%kernel.root_dir%/../tmp/compiles'
     core.paths.public:       '%kernel.root_dir%/../public'
+    core.paths.media:        '%core.paths.public%/media'
     core.paths.themes:       '%core.paths.public%/themes'
     core.paths.spool:        '%kernel.root_dir%/../tmp/spool'
     core.paths.spool.files:  '%core.paths.spool%/files'
@@ -125,8 +126,11 @@ swiftmailer:
     logging:  '%kernel.debug%'
 
 monolog:
-    channels: ['main', 'applog', 'errorlog']
+    channels: [ 'main', 'applog', 'errorlog' ]
     handlers:
+        console:
+            type:      console
+            channels:  [ '!applog', '!errorlog' ]
         main:
             type:      stream
             path:      '%kernel.logs_dir%/%kernel.environment%.log'

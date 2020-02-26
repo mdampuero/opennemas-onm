@@ -50,19 +50,12 @@ EOF
         $file               = $input->getOption('file');
         $frontpageVersionId = $input->getOption('frontpageVersionId');
 
-        // TODO: Remove ASAP
-        $this->getContainer()->get('core.security')->setCliUser();
-
         $instance = $this->getContainer()
             ->get('core.loader.instance')
             ->loadInstanceByName($instanceName)
             ->getInstance();
 
         $this->getContainer()->get('core.loader')->configureInstance($instance);
-
-        $conn = $this->getContainer()->get('dbal_connection');
-
-        $conn->fetchAssoc('SELECT count(*) FROM contents');
 
         $positionsJson = file_get_contents($file);
         $positions     = json_decode($positionsJson, true);
@@ -78,7 +71,8 @@ EOF
                 ->getCurrentVersionFromDB($category);
         }
 
-        $done = \ContentManager::saveContentPositionsForHomePage($category, $frontpageVersionId, $positions);
+        $done = $this->getContainer()->get('api.service.content_position')
+            ->saveContentPositionsForHomePage($category, $frontpageVersionId, $positions);
 
         if ($done) {
             $output->writeln('[DONE]');

@@ -157,6 +157,18 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests setInstance.
+     */
+    public function testSetInstance()
+    {
+        $instance = new Instance([ 'internal_name' => 'glorp' ]);
+
+        $this->loader->setInstance($instance);
+
+        $this->assertEquals($instance, $this->loader->getInstance());
+    }
+
+    /**
      * Tests getManagerInstance.
      */
     public function testGetManagerInstance()
