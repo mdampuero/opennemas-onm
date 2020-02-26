@@ -11,7 +11,7 @@ services:
     cache.connection.manager:
         class:     'Common\ORM\Entity\Instance'
         factory:   [ '@cache.manager', 'getConnection' ]
-        arguments: [ 'instance' ]
+        arguments: [ 'manager' ]
         public:    true
 
     cache.loader:
