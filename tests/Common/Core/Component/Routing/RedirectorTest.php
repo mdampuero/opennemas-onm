@@ -42,6 +42,11 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
                 'set'
             ])->getMock();
 
+        $this->oldCache = $this->getMockBuilder('Cache')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->conn = $this->getMockBuilder('Connection')
             ->setMethods([ 'fetchAssoc' ])
             ->getMock();
@@ -131,6 +136,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
             case 'api.service.tag':
                 return $this->ts;
+
+            case 'cache':
+                return $this->oldCache;
 
             case 'core.helper.url_generator':
                 return $this->ugh;

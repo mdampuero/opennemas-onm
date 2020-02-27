@@ -25,6 +25,10 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->cache = $this->getMockBuilder('Cache')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->helper = $this->getMockBuilder('L10nRouteHelper')
             ->setMethods([ 'localizeUrl' ])
             ->getMock();
@@ -65,6 +69,15 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->smartySource));
 
         $this->smarty->source->resource = 'foo.tpl';
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
     }
 
     /**
@@ -77,6 +90,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'cache':
+                return $this->cache;
             case 'request':
                 return $this->request;
             case 'core.helper.url_generator':

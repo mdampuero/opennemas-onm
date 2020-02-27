@@ -25,13 +25,17 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->cache = $this->getMockBuilder('Cache')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->disableOriginalConstructor()
             ->setMethods([ 'getTimeZone' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
-            ->with('core.locale')->willReturn($this->locale);
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
         $this->locale->expects($this->any())->method('getTimeZone')
@@ -40,6 +44,18 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
         $GLOBALS['kernel'] = $this->kernel;
 
         $this->object = new \Content;
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'cache':
+                return $this->cache;
+            case 'core.locale':
+                return $this->locale;
+        }
+
+        return null;
     }
 
     /**
