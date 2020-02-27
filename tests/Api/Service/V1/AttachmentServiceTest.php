@@ -131,12 +131,10 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
-        $this->ah->expects($this->once())
-            ->method('generatePath')
+        $this->ah->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
-        $this->ah->expects($this->once())
-            ->method('exists')
+        $this->ah->expects($this->once())->method('exists')
             ->willReturn(true);
 
         $this->service->createItem([ 'title' => 'waldo' ], $file);
@@ -205,21 +203,17 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRelativePath' ])
             ->getMock();
 
-        $this->ah->expects($this->once())
-            ->method('getRelativePath')
+        $this->ah->expects($this->once())->method('getRelativePath')
             ->willReturn('AttachmentHelper');
 
-        $this->ah->expects($this->once())
-            ->method('exists')
+        $this->ah->expects($this->once())->method('exists')
             ->willReturn(true);
 
-        $this->service->expects($this->once())
-            ->method('getItem')
+        $this->service->expects($this->once())->method('getItem')
             ->with(1)
             ->willReturn($attachment);
 
-        $attachment->expects($this->once())
-            ->method('getRelativePath')
+        $attachment->expects($this->once())->method('getRelativePath')
             ->willReturn('Attachment');
 
         $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
@@ -243,17 +237,14 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRelativePath', 'update' ])
             ->getMock();
 
-        $this->service->expects($this->once())
-            ->method('getItem')
+        $this->service->expects($this->once())->method('getItem')
             ->with(1)
             ->willReturn($attachment);
 
-        $this->ah->expects($this->once())
-            ->method('exists')
+        $this->ah->expects($this->once())->method('exists')
             ->willReturn(false);
 
-        $attachment->expects($this->any())
-            ->method('getRelativePath')
+        $attachment->expects($this->any())->method('getRelativePath')
             ->willReturn('Attachment');
 
         $this->ah->expects($this->once())
@@ -283,17 +274,14 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRelativePath', 'update' ])
             ->getMock();
 
-        $this->service->expects($this->once())
-            ->method('getItem')
+        $this->service->expects($this->once())->method('getItem')
             ->with(1)
             ->willReturn($attachment);
 
-        $this->ah->expects($this->once())
-            ->method('exists')
+        $this->ah->expects($this->once())->method('exists')
             ->willReturn(false);
 
-        $attachment->expects($this->any())
-            ->method('getRelativePath')
+        $attachment->expects($this->any())->method('getRelativePath')
             ->willReturn('Attachment');
 
         $this->ah->expects($this->once())

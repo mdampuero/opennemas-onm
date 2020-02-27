@@ -101,12 +101,10 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $externalPhoto = m::mock('overload:\Photo');
 
-        $this->ih->expects($this->once())
-            ->method('generatePath')
+        $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
-        $this->ih->expects($this->once())
-            ->method('exists')
+        $this->ih->expects($this->once())->method('exists')
             ->willReturn(false);
 
         $this->ih->expects($this->once())->method('move');
@@ -128,12 +126,10 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
-        $this->ih->expects($this->once())
-            ->method('generatePath')
+        $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
-        $this->ih->expects($this->once())
-            ->method('exists')
+        $this->ih->expects($this->once())->method('exists')
             ->willReturn(true);
 
         $this->service->createItem($file);
@@ -151,12 +147,10 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $externalPhoto = m::mock('overload:\Photo');
 
-        $this->ih->expects($this->once())
-            ->method('generatePath')
+        $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
-        $this->ih->expects($this->once())
-            ->method('exists')
+        $this->ih->expects($this->once())->method('exists')
             ->willReturn(false);
 
         $this->ih->expects($this->once())->method('move');
