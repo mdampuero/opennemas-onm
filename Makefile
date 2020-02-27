@@ -22,8 +22,10 @@ init: database themes
 # Install all required dependencies to run opennemas
 install: vendor node_modules components routes
 
-# Prepare director
+# Prepare directory for build
 prepare: clean
+
+test: phplint eslint phpunit
 
 ################################################################################
 # Application modes
@@ -106,3 +108,22 @@ clean:
 	rm -rf tmp/cache && mkdir tmp/cache
 	chown -R www-data.www-data tmp/cache
 	chmod -R 777 tmp/cache
+
+
+################################################################################
+# Tests targets
+################################################################################
+eslint: node_modules
+	node_modules/.bin/eslint -c .eslintrc --format=checkstyle \
+		public/assets/src \
+		public/themes/admin \
+		public/themes/manager -o build/logs/eslint.xml
+
+phplint:
+	find libs src -name *.php -print0 | xargs -0 -n1 -P0 php -l
+
+phpunit:
+	bin/phpunit -c phpunit.xml \
+		--coverage-html build/coverage \
+		--coverage-clover build/report/php-coverage.xml \
+		--log-junit build/report/php-result.xml
