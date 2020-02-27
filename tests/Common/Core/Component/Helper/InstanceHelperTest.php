@@ -346,6 +346,44 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getPiwikSettings when the value is empty or is not an array.
+     */
+    public function testGetPiwikSettingsWhenEmpty()
+    {
+        $this->conn->expects($this->at(0))->method('selectDatabase')
+            ->with(3441);
+        $this->conn->expects($this->at(1))->method('fetchAssoc')
+            ->with('select value from settings where name = "piwik"')
+            ->willReturn(null);
+
+        $this->conn->expects($this->at(2))->method('selectDatabase')
+            ->with(3441);
+        $this->conn->expects($this->at(3))->method('fetchAssoc')
+            ->with('select value from settings where name = "piwik"')
+            ->willReturn([ 'value' => '' ]);
+
+        $this->conn->expects($this->at(4))->method('selectDatabase')
+            ->with(3441);
+        $this->conn->expects($this->at(5))->method('fetchAssoc')
+            ->with('select value from settings where name = "piwik"')
+            ->willReturn([ 'value' => 'flob' ]);
+
+        $this->conn->expects($this->at(6))->method('selectDatabase')
+            ->with(3441);
+        $this->conn->expects($this->at(7))->method('fetchAssoc')
+            ->with('select value from settings where name = "piwik"')
+            ->willReturn([ 'value' => 's:0:"";' ]);
+
+        $method = new \ReflectionMethod($this->helper, 'getPiwikSettings');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invokeArgs($this->helper, [ $this->instance ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ $this->instance ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ $this->instance ]));
+        $this->assertNull($method->invokeArgs($this->helper, [ $this->instance ]));
+    }
+
+    /**
      * Tests getPiwikSettings when error.
      */
     public function testGetPiwikSettingsWhenError()
