@@ -191,8 +191,6 @@ class Opinion extends Content
 
         $this->load($rs);
 
-        $this->loadAllContentProperties();
-
         return $this;
     }
 

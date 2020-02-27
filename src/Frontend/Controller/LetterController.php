@@ -70,7 +70,6 @@ class LetterController extends Controller
             $countLetters = $em->countBy($filters);
 
             foreach ($letters as &$letter) {
-                $letter->loadAllContentProperties();
                 if (!empty($letter->image)) {
                     $letter->photo = $letter->photo;
                 }

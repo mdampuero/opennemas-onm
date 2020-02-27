@@ -92,8 +92,6 @@ class Letter extends Content
         if (!empty($this->image)) {
             $this->photo = $this->image;
         }
-
-        $this->loadAllContentProperties();
     }
 
     /**

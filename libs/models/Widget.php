@@ -107,7 +107,6 @@ class Widget extends Content
             }
 
             $this->load($rs);
-            $this->loadAllContentProperties();
             $this->id = $id;
 
             return $this;

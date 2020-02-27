@@ -411,6 +411,9 @@ class Content implements \JsonSerializable, CsvSerializable
             }
         }
 
+        // Load contentmeta properties
+        $this->loadAllContentProperties();
+
         // Special properties
         if (isset($this->pk_content)) {
             $this->id = (int) $this->pk_content;
