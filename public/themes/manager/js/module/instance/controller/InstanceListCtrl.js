@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp.controllers')
@@ -20,7 +20,7 @@
      *   Handles all actions in instances list.
      */
     .controller('InstanceListCtrl', [
-      '$controller', '$uibModal', '$location' ,'$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
       function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
@@ -167,13 +167,28 @@
         };
 
         /**
+         * @function getItemId
+         * @memberOf ListCtrl
+         *
+         * @description
+         *   Returns the item id.
+         *
+         * @param {Object} item The item.
+         *
+         * @return {Integer} The item id.
+         */
+        $scope.getItemId = function(item) {
+          return item.id;
+        };
+
+        /**
          * @function list
          * @memberOf InstanceListCtrl
          *
          * @description
          *   Reloads the list.
          */
-        $scope.list = function () {
+        $scope.list = function() {
           $scope.loading = 1;
 
           oqlEncoder.configure({
@@ -260,12 +275,14 @@
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
+
             if ($scope.selected.items.indexOf(id) !== -1) {
               $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
           var data = { ids: $scope.selected.items };
+
           data[property] = value;
 
           http.patch('manager_ws_instances_patch', data)
