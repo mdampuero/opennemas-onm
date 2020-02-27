@@ -155,7 +155,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ih->expects($this->once())->method('move');
 
-        $externalPhoto->shouldReceive('create')->once()->andReturn(new \Photo());
+        $externalPhoto->shouldReceive('create')->once()->andReturn(1);
 
         $this->service->createItem($file);
     }

@@ -155,9 +155,9 @@ class Importer
 
             unset($data['path']);
 
-            $id = $ps->createItem($file, $data, true);
+            $photo = $ps->createItem($file, $data, true);
 
-            return new \Photo($id);
+            return $photo;
         }
 
         $target  = \classify($data['content_type_name']);

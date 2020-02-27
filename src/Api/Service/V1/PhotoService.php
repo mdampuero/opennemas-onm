@@ -53,11 +53,11 @@ class PhotoService extends ContentOldService
                 'title'          => $filename,
             ], $data, $ih->getInformation($path));
 
-            if (!$photo = $item->create($data)) {
+            if (!$id = $item->create($data)) {
                 throw new \Exception();
             }
 
-            return $photo;
+            return new \Photo($id);
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
