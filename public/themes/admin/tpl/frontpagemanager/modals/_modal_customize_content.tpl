@@ -107,7 +107,7 @@
               <div class="col-sm-9">
                 {assign var='availableFonts' value=','|explode:"Auto,Arial,Verdana,Georgia,Helvetica"}
                 <select id="font-family" name="font-family">
-                  {html_options values=$availableFonts output=$availableFonts selected=22}
+                  {html_options values=$availableFonts output=$availableFonts selected=Auto}
                 </select>
               </div>
             </div>
@@ -132,9 +132,8 @@
             <div class="form-group">
               <label class="col-sm-3 form-label" for="font-size">{t}Title font size{/t}</label>
               <div class="col-sm-9">
-                {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,44,48,54,60,66,72"}
+                {assign var='availableSizes'  value=','|explode:"Auto,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,44,48,54,60,66,72"}
                 <select id="font-size" name="font-size">
-                  <option value="">Auto</option>
                   {html_options values=$availableSizes output=$availableSizes selected=Auto}
                 </select>
               </div>
