@@ -37,8 +37,6 @@
 
     <target name="build" depends="prepare,phplint,eslint,phpunit-ci,tools-parallel"/>
 
-    <target name="build-sequential" depends="prepare,phplint,eslint,karma,phpunit-ci,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,apidoc-ci,jsdoc-ci" />
-
     <target name="tools-parallel" description="Run tools in parallel">
         <parallel>
             <antcall target="pdepend"/>
@@ -63,53 +61,6 @@
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
         <mkdir dir="${basedir}/tmp/cache"/>
-        <parallel>
-            <antcall target="composer" />
-            <antcall target="npm" />
-            <antcall target="bower" />
-        </parallel>
-    </target>
-
-    <target name="composer-check">
-        <available file="${basedir}/composer.phar" property="composer.present"/>
-    </target>
-
-    <target name="composer-download" unless="composer.present">
-        <property name="composer.noselfupdate" value="true"/>
-        <get src="https://getcomposer.org/composer.phar" dest="tmp/composer.phar"/>
-    </target>
-
-    <target name="composer-selfupdate" unless="composer.noselfupdate">
-        <exec executable="php">
-            <arg value="${builddir}/composer.phar"/>
-            <arg value="self-update"/>
-            <arg value="--quiet"/>
-        </exec>
-    </target>
-
-    <!-- For now I will still with bin/composer.phar until the composer-check,downlaod,self-update is on master branch -->
-    <target name="composer" depends="composer-check,composer-download,composer-selfupdate" unless="composer.noupdate" description="Installing composer dependencies">
-        <exec executable="php" failonerror="true">
-            <arg value="${basedir}/bin/composer.phar" />
-            <arg value="install" />
-            <arg value="--prefer-dist" />
-            <arg value="--no-progress" />
-
-            <env key="SYMFONY_ENV" value="prod"/>
-        </exec>
-    </target>
-
-    <target name="npm" description="Installing npm dependencies">
-        <exec executable="npm" failonerror="true">
-            <arg value="install" />
-        </exec>
-    </target>
-
-    <target name="bower" description="Installing bower dependencies">
-        <exec executable="${node_modules_bin_dir}/bower" failonerror="true">
-            <arg value="install" />
-            <arg value="--allow-root"/>
-        </exec>
     </target>
 
     <target name="phplint" description="Checks php files for Syntax errors">
@@ -188,12 +139,6 @@
 
             <arg line="--log-junit" />
             <arg value="${basedir}/build/logs/junit.xml" />
-        </exec>
-    </target>
-
-    <target name="karma" description="Run karma test suites">
-        <exec executable="${node_modules_bin_dir}/karma" failonerror="false">
-            <arg value="start" />
         </exec>
     </target>
 
