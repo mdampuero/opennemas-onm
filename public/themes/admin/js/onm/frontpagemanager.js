@@ -8,13 +8,13 @@ window.get_tooltip_content = function(elem) {
   var parentContentId = elem.closest('div.content-provider-element');
   var contentHtml = '';
 
-  if (parentContentId.data('popover-content') === undefined) {
+  if (parentContentId.data('popover-content') === 'undefined') {
     var id = parentContentId.data('content-id');
     var $url = window.frontpage_urls.quick_info + '?id=' + id;
     var content = '';
 
     content = window.content_states[id];
-    if (content === undefined) {
+    if (content === 'undefined') {
       jQuery.ajax({
         url: $url,
         async: false
@@ -52,7 +52,7 @@ window.get_tooltip_title = function(elem) {
 
   var content = window.content_states[id];
 
-  if (content === undefined) {
+  if (content === 'undefined') {
     jQuery.ajax({
       url: $url,
       async: false
@@ -368,7 +368,7 @@ jQuery(function($) {
 
       modal.find('.modal-body #font-size').val(size);
     } else {
-      modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
+      modal.find('.modal-body #font-size').val('Auto');
     }
     if (typeof title['font-family'] !== 'undefined') {
       modal.find('.modal-body #font-family').val(title['font-family']);
@@ -537,7 +537,7 @@ jQuery(function($) {
    **************************************************************************
    */
   $('#content-provider').dialog({
-    dialogClass: "content-provider-dialog",
+    dialogClass: 'content-provider-dialog',
     minWidth: 800,
     autoOpen: false,
     maxHeight: 500
