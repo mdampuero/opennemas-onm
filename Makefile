@@ -106,9 +106,6 @@ public/assets/js/routes.js:
 clean:
 	rm -rf build && mkdir build
 	rm -rf tmp/cache && mkdir tmp/cache
-	chown -R www-data.www-data tmp/cache
-	chmod -R 777 tmp/cache
-
 
 ################################################################################
 # Tests targets
