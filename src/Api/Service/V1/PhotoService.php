@@ -62,42 +62,4 @@ class PhotoService extends ContentOldService
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
     }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($oql = '')
-    {
-        try {
-            $oql = $this->getOqlForList($oql);
-
-            $repository = $this->em;
-
-            list($criteria, $order, $epp, $page) =
-                $this->container->get('core.helper.oql')->getFiltersFromOql($oql);
-
-            $criteria          = preg_replace(
-                '/(title) LIKE (".*")/',
-                '(${1} LIKE ${2} OR description LIKE ${2})',
-                $criteria
-            );
-            $response['items'] = $repository->findBy($criteria, $order, $epp, $page);
-
-            if ($this->count) {
-                $response['total'] = $repository->countBy($criteria);
-            }
-
-            $this->localizeList($response['items']);
-
-            $this->dispatcher->dispatch($this->getEventName('getList'), [
-                'items' => $response['items'],
-                'oql'   => $oql
-            ]);
-
-            return $response;
-        } catch (\Exception $e) {
-            throw new GetListException($e->getMessage(), $e->getCode());
-        }
-    }
 }
