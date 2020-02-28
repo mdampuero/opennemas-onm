@@ -129,5 +129,5 @@ phplint:
 phpunit:
 	bin/phpunit -c phpunit.xml \
 		--coverage-html build/coverage \
-		--coverage-clover build/report/php-coverage.xml \
-		--log-junit build/report/php-result.xml
+		--coverage-clover build/coverage/coverage.xml \
+		--log-junit build/php-result.xml
