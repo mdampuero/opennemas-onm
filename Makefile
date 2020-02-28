@@ -4,7 +4,8 @@ lrinternacional mega mercury mihos moura nemo nemty notus nyx odin \
 olympus pekka rhea selket simplo skanda slido tecnofisis televisionlr \
 verbeia xaman zisa
 
-.PHONY: clean components dev install prepare prod routes vendor
+.PHONY: assets clean components dev doc install node_modules prepare prod \
+routes translations vendor
 
 ################################################################################
 # Main targets
@@ -20,7 +21,7 @@ doc: jsdoc
 init: database themes
 
 # Install all required dependencies to run opennemas
-install: vendor node_modules components routes
+install: vendor node_modules components routes assets translations
 
 # Prepare directory for build
 prepare: clean
@@ -42,9 +43,7 @@ prod:
 ################################################################################
 # Documentation targets
 ################################################################################
-jsdoc: build/docs/javascript
-
-build/docs/javascript:
+jsdoc: node_modules
 	node_modules/jsdoc/jsdoc.js \
 		-c node_modules/openhost-jsdoc/conf.json \
 		-t node_modules/openhost-jsdoc/template \
@@ -57,8 +56,13 @@ build/docs/javascript:
 # Installation targets
 ################################################################################
 
-# Alias to easy install js/css dependencies
-components: public/assets/components
+# Compile assets for admin and manager themes
+assets: vendor
+	bin/console core:assets:compile
+
+# Install js/css dependencies
+components: public/assets/package.json
+	cd public/assets && ../../node_modules/.bin/yarn install
 
 # Create required databases to run opennemas
 database:
@@ -73,8 +77,9 @@ database:
 	mysql -h mysql -uroot -proot c-default -e "REPLACE INTO settings (name, value) \
 		VALUES ('recaptcha', 'a:2:{s:10:\"public_key\";s:40:\"6LdWlgkUAAAAADzgu34FyZ-wBSB0xlCUc7UVFWGw\";s:11:\"private_key\";s:40:\"6LdWlgkUAAAAAOUnzzBwHNpPgTBIaLwfDjr6XaeQ\";}')"
 
-# Alias to easy dump Symfony routes
-routes: public/assets/js/routes.js
+# Dumps Symfony routes to make them available in javascript
+routes: vendor
+	bin/console fos:js-routing:dump --target public/assets/js/routes.js
 
 # Install node dependencies
 node_modules: package.json
@@ -87,17 +92,13 @@ themes:
 			|| git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme; \
 	done
 
+# Compile translations
+translations: vendor
+	bin/console translation:core
+
 # Install php dependencies
 vendor:
 	bin/composer.phar install --prefer-dist --no-progress
-
-# Install js/css dependencies
-public/assets/components: public/assets/package.json
-	cd public/assets && ../../node_modules/.bin/yarn install
-
-# Dumps Symfony routes to make them available in javascript
-public/assets/js/routes.js:
-	bin/console fos:js-routing:dump --target public/assets/js/routes.js
 
 
 ################################################################################
