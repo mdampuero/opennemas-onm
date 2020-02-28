@@ -1,4 +1,4 @@
- = amon anemoi auris base basic bastet bragi cronicas dryads eurus \
+themes = amon anemoi auris base basic bastet bragi cronicas dryads eurus \
 forseti freya galatea hathor hermes horus kalliope kibele kronos \
 lrinternacional mega mercury mihos moura nemo nemty notus nyx odin \
 olympus pekka rhea selket simplo skanda slido tecnofisis televisionlr \
