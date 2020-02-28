@@ -4,6 +4,8 @@ lrinternacional mega mercury mihos moura nemo nemty notus nyx odin \
 olympus pekka rhea selket simplo skanda slido tecnofisis televisionlr \
 verbeia xaman zisa
 
+www-data = $(shell id -u www-data > /dev/null 2>&1 && echo 'www-data' || echo 'http')
+
 .PHONY: assets clean components dev doc install node_modules prepare prod \
 routes translations vendor
 
@@ -111,8 +113,19 @@ vendor:
 # Prepare targets
 ################################################################################
 clean:
-	rm -rf build && mkdir build
-	rm -rf tmp/cache && mkdir tmp/cache
+	rm -rf build && \
+		mkdir build
+		chmod 775 build && \
+		chown $(www-data):$(www-data) -R build
+	rm -rf public/assets/build && \
+		mkdir public/assets/build && \
+		chmod 775 public/assets/build && \
+		chown $(www-data):$(www-data) -R public/assets/build
+	rm -rf tmp/cache && \
+		mkdir tmp/cache && \
+		chmod 775 tmp/cache && \
+		chown $(www-data):$(www-data) -R tmp/cache
+
 
 ################################################################################
 # Tests targets
