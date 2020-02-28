@@ -12,7 +12,10 @@ routes translations vendor
 ################################################################################
 
 # Execute required targets to run opennemas
-all: init prepare install
+all: init prepare install build
+
+# Generate files to include in build
+build: assets translations
 
 # Generate documentation
 doc: jsdoc
@@ -21,7 +24,7 @@ doc: jsdoc
 init: database themes
 
 # Install all required dependencies to run opennemas
-install: vendor node_modules components routes assets translations
+install: vendor node_modules components routes
 
 # Prepare directory for build
 prepare: clean
@@ -39,6 +42,17 @@ prod:
 	test -f .development && rm .development || true
 	rm -rf tmp/cache/prod/*
 
+################################################################################
+# Build targets
+################################################################################
+
+# Compile assets for admin and manager themes
+assets: vendor
+	bin/console core:assets:compile
+
+# Compile translations
+translations: vendor
+	bin/console translation:core
 
 ################################################################################
 # Documentation targets
@@ -55,10 +69,6 @@ jsdoc: node_modules
 ################################################################################
 # Installation targets
 ################################################################################
-
-# Compile assets for admin and manager themes
-assets: vendor
-	bin/console core:assets:compile
 
 # Install js/css dependencies
 components: public/assets/package.json
@@ -91,10 +101,6 @@ themes:
 		[ -d public/themes/$$theme ] && continue \
 			|| git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme; \
 	done
-
-# Compile translations
-translations: vendor
-	bin/console translation:core
 
 # Install php dependencies
 vendor:
