@@ -4,7 +4,7 @@ lrinternacional mega mercury mihos moura nemo nemty notus nyx odin \
 olympus pekka rhea selket simplo skanda slido tecnofisis televisionlr \
 verbeia xaman zisa
 
-.PHONY: clean components dev install prepare prod routes
+.PHONY: clean components dev install prepare prod routes vendor
 
 ################################################################################
 # Main targets
