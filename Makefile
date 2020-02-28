@@ -89,7 +89,7 @@ themes:
 
 # Install php dependencies
 vendor:
-	bin/composer.phar install
+	bin/composer.phar install --prefer-dist --no-progress
 
 # Install js/css dependencies
 public/assets/components: public/assets/package.json
