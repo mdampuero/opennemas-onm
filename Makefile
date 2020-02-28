@@ -113,18 +113,23 @@ vendor:
 # Prepare targets
 ################################################################################
 clean:
-	rm -rf build && \
-		mkdir build
-		chmod 775 build && \
-		chown $(www-data):$(www-data) -R build
-	rm -rf public/assets/build && \
-		mkdir public/assets/build && \
-		chmod 775 public/assets/build && \
-		chown $(www-data):$(www-data) -R public/assets/build
-	rm -rf tmp/cache && \
-		mkdir tmp/cache && \
-		chmod 775 tmp/cache && \
-		chown $(www-data):$(www-data) -R tmp/cache
+	rm -rf build && mkdir build
+	rm -rf public/assets/build && mkdir public/assets/build
+	rm -rf tmp/cache && mkdir tmp/cache
+
+
+################################################################################
+# Runtime target
+################################################################################
+
+# Fix permissions for some folders
+permissions:
+	chmod 775 tmp/cache
+	chown $(www-data):$(www-data) -R tmp/cache
+	chmod 775 build
+	chown $(www-data):$(www-data) -R build
+	chmod 775 public/assets/build
+	chown $(www-data):$(www-data) -R public/assets/build
 
 
 ################################################################################
