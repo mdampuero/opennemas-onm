@@ -1,0 +1,68 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Framework\Component\Assetic;
+
+class DynamicCssService
+{
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
+     * Initializes the instance
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Retrieves timestamp for an specific section
+     * or create timestamp if doesn't exists
+     *
+     * @param String The section name
+     *
+     * @return Datetime The timestamp for the dynamic css
+     */
+    public function getTimestamp($section)
+    {
+        $settings = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
+
+        $timestamps = $settings->get('dynamic_css', []);
+
+        if (empty($timestamps) || empty($timestamps[ $section ])) {
+            $datetime               = new \DateTime();
+            $timestamps[ $section ] = $datetime->getTimestamp();
+            $settings->set('dynamic_css', $timestamps);
+            return $datetime->getTimestamp();
+        }
+
+        return $timestamps[ $section ];
+    }
+
+    /**
+     * Invalidate timestamp for an specific section
+     *
+     * @param String The section name
+     */
+    public function deleteTimestamp($section)
+    {
+        $settings = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
+
+        $timestamps = $settings->get('dynamic_css', []);
+        unset($timestamps[ $section ]);
+        $settings->set('dynamic_css', $timestamps);
+    }
+}
