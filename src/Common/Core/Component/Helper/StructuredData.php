@@ -51,6 +51,7 @@ class StructuredData
         // Get content summary, body or description. Otherwise use content title.
         $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
             current(array_filter([
+                $data['content']->seo_description,
                 $data['content']->summary,
                 $data['content']->description,
                 mb_substr($data['content']->body, 0, 250),
