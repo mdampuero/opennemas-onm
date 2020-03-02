@@ -137,11 +137,6 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'opinion.create' => [
                 ['removeSmartyCacheAuthorOpinion', 5],
-            ],
-            // Setting hooks
-            'setting.update' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
             ]
         ];
     }
