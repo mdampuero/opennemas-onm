@@ -44,19 +44,22 @@ class CategorySubscriber implements EventSubscriberInterface
      * @param VarnishHelper       $vh       The VarnishHelper service.
      * @param AbstractCache       $cache    The old cache connection.
      * @param CacheManager        $cm       The CacheManager service.
+     * @param ServiceContainer    $container The service container.
      */
     public function __construct(
         ?Instance           $instance,
         TemplateCacheHelper $th,
         VarnishHelper       $vh,
         AbstractCache       $cache,
-        CacheManager        $cm
+        CacheManager        $cm,
+        $container
     ) {
-        $this->instance = $instance;
-        $this->template = $th;
-        $this->varnish  = $vh;
-        $this->oldCache = $cache;
-        $this->cache    = $cm->getConnection('instance');
+        $this->instance  = $instance;
+        $this->template  = $th;
+        $this->varnish   = $vh;
+        $this->oldCache  = $cache;
+        $this->cache     = $cm->getConnection('instance');
+        $this->container = $container;
     }
 
     /**
@@ -125,6 +128,11 @@ class CategorySubscriber implements EventSubscriberInterface
         $categories = $event->hasArgument('item')
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
+
+        $this->container->get('core.service.assetic.dynamic_css')->deleteTimestamp('%global%');
+        foreach ($categories as $category) {
+            $this->container->get('core.service.assetic.dynamic_css')->deleteTimestamp($category->name);
+        }
 
         $this->template->deleteDynamicCss();
         $this->template->deleteCategories($categories);

@@ -32,9 +32,18 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
+            ->getMock();
+
+        $this->dcs = $this->getMockBuilder('Framework\Component\Assetic\DynamicCssService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'deleteTimestamp' ])
             ->getMock();
 
         $this->event = $this->getMockBuilder('Symfony\Component\EventDispatcher\Event')
@@ -60,13 +69,36 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->cm->expects($this->any())->method('getConnection')
             ->with('instance')->willReturn($this->cache);
 
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
+
         $this->subscriber = new CategorySubscriber(
             $this->instance,
             $this->th,
             $this->vh,
             $this->oldCache,
-            $this->cm
+            $this->cm,
+            $this->container
         );
+    }
+
+    /**
+     * Returns a mocked service basing on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.service.assetic.dynamic_css':
+                return $this->dcs;
+
+            default:
+                return null;
+        }
     }
 
     /**
@@ -229,7 +261,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
             ->setConstructorArgs([
-                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm
+                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->container
             ])
             ->setMethods([ 'onCategoryUpdate' ])
             ->getMock();
