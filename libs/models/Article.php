@@ -206,10 +206,6 @@ class Article extends Content
      */
     public function create($data)
     {
-        if (!isset($data['description'])) {
-            $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
-        }
-
         // If content is created without publish, don't save any starttime
         if ($data['content_status'] == 0) {
             $data['starttime'] = null;
@@ -315,11 +311,6 @@ class Article extends Content
             if (array_key_exists($key, $data) && is_array($data[$key])) {
                 $data[$key] = serialize($data[$key]);
             }
-        }
-
-        // Update an article
-        if (!$data['description']) {
-            $data['description'] = \Onm\StringUtils::getNumWords($data['body'], 50);
         }
 
         $contentData = [
