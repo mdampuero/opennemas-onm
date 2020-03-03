@@ -105,7 +105,8 @@ class PollController extends FrontendController
 
             if (!$isValid) {
                 $this->get('session')->getFlashBag()
-                    ->add('error', _('Please fill the captcha code.'));
+                    ->add('error', _("The reCAPTCHA wasn't entered correctly."
+                        . " Go back and try it again."));
 
                 return new RedirectResponse(
                     $this->get('core.helper.url_generator')->generate($poll)
