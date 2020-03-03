@@ -177,6 +177,20 @@ class PollController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($params, $item = null)
+    {
+        $params = parent::getParameters($params, $item);
+
+        $params['recaptcha'] = $this->get('core.recaptcha')
+            ->configureFromSettings()
+            ->getHtml();
+
+        return $params;
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getRoute($action, $params = [])
@@ -246,9 +260,5 @@ class PollController extends FrontendController
     {
         $params['author'] = $this->get('user_repository')
             ->find($params['content']->fk_author);
-
-        $params['recaptcha'] = $this->get('core.recaptcha')
-            ->configureFromSettings()
-            ->getHtml();
     }
 }
