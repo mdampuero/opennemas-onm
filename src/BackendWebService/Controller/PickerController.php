@@ -303,8 +303,8 @@ class PickerController extends Controller
     private function listFrontpageContents()
     {
         // Get contents for this home
-        list($frontpageVersion, $contentPositions, $results) =
-            $this->get('api.service.frontpage_version')
+        list($frontpageVersion, $contentPositions, $results) = $this
+            ->get('api.service.frontpage_version')
             ->getContentsInCurrentVersionforCategory(0);
 
         $results = array_filter($results, function ($value) {

@@ -30,8 +30,7 @@ class Frontpages
         try {
             $category = getService('api.service.category')->getItemBySlug($category);
 
-            list(, $contentsInHomepage, , ) =
-                getService('api.service.frontpage')
+            list(, $contentsInHomepage, , ) = getService('api.service.frontpage')
                 ->getCurrentVersionForCategory($category->pk_content_category);
 
             // Get all frontpages images
