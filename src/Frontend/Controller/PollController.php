@@ -93,8 +93,25 @@ class PollController extends FrontendController
      */
     public function voteAction(Request $request)
     {
-        $answer = (int) $request->request->get('answer');
-        $poll   = $this->getItem($request);
+        $answer   = (int) $request->request->get('answer');
+        $poll     = $this->getItem($request);
+        $response = $request->request->get('g-recaptcha-response');
+
+        // Check reCAPTCHA only if present
+        if (!is_null($response)) {
+            $isValid = $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->isValid($response, $request->getClientIp());
+
+            if (!$isValid) {
+                $this->get('session')->getFlashBag()
+                    ->add('error', _('Please fill the captcha code.'));
+
+                return new RedirectResponse(
+                    $this->get('core.helper.url_generator')->generate($poll)
+                );
+            }
+        }
 
         // Prevent vote when no answer
         if (empty($answer)) {
@@ -228,5 +245,9 @@ class PollController extends FrontendController
     {
         $params['author'] = $this->get('user_repository')
             ->find($params['content']->fk_author);
+
+        $params['recaptcha'] = $this->get('core.recaptcha')
+            ->configureFromSettings()
+            ->getHtml();
     }
 }
