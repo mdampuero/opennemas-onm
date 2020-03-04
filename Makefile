@@ -74,7 +74,7 @@ jsdoc: node_modules
 
 # Install js/css dependencies
 components: public/assets/package.json
-	cd public/assets && ../../node_modules/.bin/yarn install
+	cd public/assets && ../../node_modules/.bin/yarn install --no-progress
 
 # Create required databases to run opennemas
 database:
