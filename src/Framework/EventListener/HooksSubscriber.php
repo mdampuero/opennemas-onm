@@ -96,6 +96,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheFrontpageMap', 5],
                 ['removeVarnishCacheFrontpageCSS', 5],
                 ['removeSmartyCacheForFrontpageOfCategory', 5],
+                ['removeDynamicCssSettingForFrontpage', 5],
             ],
             'frontpage.pick_layout' => [
                 ['removeVarnishCacheFrontpage', 5],
@@ -224,6 +225,21 @@ class HooksSubscriber implements EventSubscriberInterface
                 'frontpage_elements_map_' . $category :
                 'frontpage_elements_map_' . $category . '_' . $frontpageId
         );
+    }
+
+    /**
+     * Remove dynamic css for specific frontpage
+     */
+    public function removeDynamicCssSettingForFrontpage(Event $event)
+    {
+        $categoryId = (int) $event->getArgument('category');
+
+        $key = ($categoryId == 0) ? 'home' :
+            $this->container->get('api.service.category')
+            ->getItem($categoryId)->name;
+
+        $this->container->get('core.service.assetic.dynamic_css')
+            ->deleteTimestamp($key);
     }
 
     /**
