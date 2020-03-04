@@ -97,21 +97,19 @@ class PollController extends FrontendController
         $poll     = $this->getItem($request);
         $response = $request->request->get('g-recaptcha-response');
 
-        // Check reCAPTCHA only if present
-        if (!is_null($response)) {
-            $isValid = $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->isValid($response, $request->getClientIp());
+        // Check reCAPTCHA
+        $isValid = $this->get('core.recaptcha')
+            ->configureFromSettings()
+            ->isValid($response, $request->getClientIp());
 
-            if (!$isValid) {
-                $this->get('session')->getFlashBag()
-                    ->add('error', _("The reCAPTCHA wasn't entered correctly."
-                        . " Go back and try it again."));
+        if (!$isValid) {
+            $this->get('session')->getFlashBag()
+                ->add('error', _("The reCAPTCHA wasn't entered correctly."
+                    . " Go back and try it again."));
 
-                return new RedirectResponse(
-                    $this->get('core.helper.url_generator')->generate($poll)
-                );
-            }
+            return new RedirectResponse(
+                $this->get('core.helper.url_generator')->generate($poll)
+            );
         }
 
         // Prevent vote when no answer
