@@ -43,7 +43,7 @@ class SettingSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get subscribed events action
+     * Tests getSubscribedEvents action
      */
     public function testGetSubscribedEvents()
     {
@@ -51,7 +51,7 @@ class SettingSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests on setting update action
+     * Tests onSettingUpdate action
      */
     public function testOnSettingUpdate()
     {
