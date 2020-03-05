@@ -153,8 +153,6 @@ class Article extends Content
     {
         parent::load($data);
 
-        $this->loadAllContentProperties();
-
         return $this;
     }
 

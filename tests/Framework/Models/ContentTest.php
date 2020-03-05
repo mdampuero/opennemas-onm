@@ -50,6 +50,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
+        $this->cache = $this->getMockBuilder('Cache')
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+        $this->cache->expects($this->any())->method('fetch')
+            ->willReturn([]);
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
@@ -59,7 +65,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();
-
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
@@ -89,6 +94,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
                 return $this->locale;
             case 'data.manager.filter':
                 return $this->fm;
+            case 'cache':
+                return $this->cache;
         }
 
         return null;

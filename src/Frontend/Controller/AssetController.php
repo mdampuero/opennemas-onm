@@ -132,7 +132,6 @@ class AssetController extends Controller
                       . "   CSS for contents in frontpage of category $categoryName\n"
                       . " **********************************************************/\n";
 
-            $response .= "@media(min-width:768px) {\n";
             foreach ($contentsInHomepage as $item) {
                 // Background color
                 if (!empty($item->bgcolor)) {
@@ -157,8 +156,6 @@ class AssetController extends Controller
                     $response .= "}\n";
                 }
             }
-
-            $response .= "}\n\n";
         }
 
         return new Response($response, 200, [
