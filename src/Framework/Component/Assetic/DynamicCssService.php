@@ -9,21 +9,23 @@
  */
 namespace Framework\Component\Assetic;
 
+use Common\ORM\Core\EntityManager;
+
 class DynamicCssService
 {
     /**
-     * The service container.
+     * The entity manager.
      *
-     * @var ServiceContainer
+     * @var EntityManager
      */
-    protected $container;
+    protected $em;
 
     /**
      * Initializes the instance
      */
-    public function __construct($container)
+    public function __construct($em)
     {
-        $this->container = $container;
+        $this->em = $em;
     }
 
     /**
@@ -36,8 +38,7 @@ class DynamicCssService
      */
     public function getTimestamp($section)
     {
-        $settings = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance');
+        $settings = $this->em->getDataSet('Settings', 'instance');
 
         $timestamps = $settings->get('dynamic_css', []);
 
@@ -58,8 +59,7 @@ class DynamicCssService
      */
     public function deleteTimestamp($section)
     {
-        $settings = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance');
+        $settings = $this->em->getDataSet('Settings', 'instance');
 
         $timestamps = $settings->get('dynamic_css', []);
         unset($timestamps[ $section ]);

@@ -13,6 +13,8 @@ use Common\Core\Component\Template\Cache\CacheManager;
 use Common\Core\Component\Helper\VarnishHelper;
 use Common\Orm\Entity\Instance;
 
+use Framework\Component\Assetic\DynamicCssService;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SettingSubscriber implements EventSubscriberInterface
@@ -28,21 +30,21 @@ class SettingSubscriber implements EventSubscriberInterface
     /**
      * Initializes the SettingSubscriber
      *
-     * @param Instance $instance The current instance.
-     * @param TemplateCacheManager $container The service container.
-     * @param CacheManager $th The CacheManager services for template.
-     * @param VarnishHelper $vh The VarnishHelper service.
+     * @param Instance $instance          The current instance.
+     * @param CacheManager $th            The CacheManager services for template.
+     * @param VarnishHelper $vh           The VarnishHelper service.
+     * @param DynamicCssService $dcs      The DynamicCssService.
      */
     public function __construct(
         ?Instance $instance,
         CacheManager $th,
         VarnishHelper $vh,
-        $container
+        DynamicCssService $dcs
     ) {
-        $this->instance  = $instance;
-        $this->template  = $th;
-        $this->varnish   = $vh;
-        $this->container = $container;
+        $this->instance = $instance;
+        $this->template = $th;
+        $this->varnish  = $vh;
+        $this->dcs      = $dcs;
     }
 
     /**
@@ -61,12 +63,7 @@ class SettingSubscriber implements EventSubscriberInterface
     public function onSettingUpdate()
     {
         $this->template->deleteAll();
-        $this->container->get('core.service.assetic.dynamic_css')->deleteTimestamp('%global%');
-
-        if (!$this->container->hasParameter('varnish')) {
-            return;
-        }
-
+        $this->dcs->deleteTimestamp('%global%');
         $this->varnish->deleteInstance($this->instance);
     }
 }

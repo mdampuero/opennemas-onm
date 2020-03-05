@@ -13,6 +13,7 @@ use Common\Cache\Core\CacheManager;
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
 use Common\Orm\Entity\Instance;
+use Framework\Component\Assetic\DynamicCssService;
 use Onm\Cache\AbstractCache;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,7 +45,7 @@ class CategorySubscriber implements EventSubscriberInterface
      * @param VarnishHelper       $vh       The VarnishHelper service.
      * @param AbstractCache       $cache    The old cache connection.
      * @param CacheManager        $cm       The CacheManager service.
-     * @param ServiceContainer    $container The service container.
+     * @param DynamicCssService   $dcs      The DynamicCssService.
      */
     public function __construct(
         ?Instance           $instance,
@@ -52,14 +53,14 @@ class CategorySubscriber implements EventSubscriberInterface
         VarnishHelper       $vh,
         AbstractCache       $cache,
         CacheManager        $cm,
-        $container
+        DynamicCssService   $dcs
     ) {
-        $this->instance  = $instance;
-        $this->template  = $th;
-        $this->varnish   = $vh;
-        $this->oldCache  = $cache;
-        $this->cache     = $cm->getConnection('instance');
-        $this->container = $container;
+        $this->instance = $instance;
+        $this->template = $th;
+        $this->varnish  = $vh;
+        $this->oldCache = $cache;
+        $this->cache    = $cm->getConnection('instance');
+        $this->dcs      = $dcs;
     }
 
     /**
@@ -129,9 +130,9 @@ class CategorySubscriber implements EventSubscriberInterface
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
-        $this->container->get('core.service.assetic.dynamic_css')->deleteTimestamp('%global%');
+        $this->dcs->deleteTimestamp('%global%');
         foreach ($categories as $category) {
-            $this->container->get('core.service.assetic.dynamic_css')->deleteTimestamp($category->name);
+            $this->dcs->deleteTimestamp($category->name);
         }
 
         $this->template->deleteDynamicCss();

@@ -7,7 +7,7 @@ services:
 
     core.subscriber.category:
         class:     Api\EventSubscriber\CategorySubscriber
-        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager', '@service_container' ]
+        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager', '@core.service.assetic.dynamic_css' ]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -31,6 +31,6 @@ services:
 
     core.subscriber.setting:
         class: Api\EventSubscriber\SettingSubscriber
-        arguments: [ '@core.instance', '@core.template.cache', '@core.helper.varnish', '@service_container' ]
+        arguments: [ '@core.instance', '@core.template.cache', '@core.helper.varnish', '@core.service.assetic.dynamic_css' ]
         tags:
             - { name: kernel.event_subscriber }

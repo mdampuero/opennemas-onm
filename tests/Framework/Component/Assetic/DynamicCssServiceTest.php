@@ -27,35 +27,14 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'set' ])
             ->getMock();
 
-        $this->container->expects($this->any())->method('get')
-            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
-
         $this->em->expects($this->any())
             ->method('getDataSet')
             ->willReturn($this->settings);
 
         $this->dcs = $this->getMockBuilder('Framework\Component\Assetic\DynamicCssService')
-            ->setConstructorArgs([ $this->container ])
+            ->setConstructorArgs([ $this->em ])
             ->setMethods([ 'get' ])
             ->getMock();
-    }
-
-    /**
-     * Returns a mocked service basing on the service name
-     *
-     * @param string $name The service name.
-     *
-     * @return mixed The mocked service.
-     */
-    public function serviceContainerCallback($name)
-    {
-        switch ($name) {
-            case 'orm.manager':
-                return $this->em;
-
-            default:
-                return null;
-        }
     }
 
     /**
@@ -63,11 +42,6 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTimestampWhenEmpty()
     {
-        $this->container->expects($this->once())
-            ->method('get')
-            ->with('orm.manager')
-            ->willReturn($this->em);
-
         $this->em->expects($this->once())
             ->method('getDataset')
             ->with('Settings', 'instance');

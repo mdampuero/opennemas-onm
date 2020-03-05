@@ -69,36 +69,14 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->cm->expects($this->any())->method('getConnection')
             ->with('instance')->willReturn($this->cache);
 
-
-        $this->container->expects($this->any())->method('get')
-            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
-
         $this->subscriber = new CategorySubscriber(
             $this->instance,
             $this->th,
             $this->vh,
             $this->oldCache,
             $this->cm,
-            $this->container
+            $this->dcs
         );
-    }
-
-    /**
-     * Returns a mocked service basing on the service name.
-     *
-     * @param string $name The service name.
-     *
-     * @return mixed The mocked service.
-     */
-    public function serviceContainerCallback($name)
-    {
-        switch ($name) {
-            case 'core.service.assetic.dynamic_css':
-                return $this->dcs;
-
-            default:
-                return null;
-        }
     }
 
     /**
@@ -261,7 +239,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
             ->setConstructorArgs([
-                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->container
+                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->dcs
             ])
             ->setMethods([ 'onCategoryUpdate' ])
             ->getMock();
