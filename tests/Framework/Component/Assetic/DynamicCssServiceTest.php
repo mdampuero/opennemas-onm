@@ -10,14 +10,12 @@
  */
 namespace Tests\Framework\Component\Assetic;
 
+use \Framework\Component\Assetic\DynamicCssService;
+
 class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get' ])
-            ->getMock();
-
         $this->em = $this->getMockBuilder('EntityRepository')
             ->setMethods([ 'find', 'getDataSet' ])
             ->getMock();
@@ -31,10 +29,7 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getDataSet')
             ->willReturn($this->settings);
 
-        $this->dcs = $this->getMockBuilder('Framework\Component\Assetic\DynamicCssService')
-            ->setConstructorArgs([ $this->em ])
-            ->setMethods([ 'get' ])
-            ->getMock();
+        $this->dcs = new DynamicCssService($this->em);
     }
 
     /**
