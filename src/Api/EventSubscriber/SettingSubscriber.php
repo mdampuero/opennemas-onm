@@ -19,14 +19,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SettingSubscriber implements EventSubscriberInterface
 {
-
-    /**
-     * The service container.
-     *
-     * @var ServiceContainer
-     */
-    protected $container;
-
     /**
      * Initializes the SettingSubscriber
      *
