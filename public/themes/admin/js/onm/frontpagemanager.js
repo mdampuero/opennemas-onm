@@ -8,13 +8,13 @@ window.get_tooltip_content = function(elem) {
   var parentContentId = elem.closest('div.content-provider-element');
   var contentHtml = '';
 
-  if (parentContentId.data('popover-content') === 'undefined') {
+  if (!parentContentId.data('popover-content')) {
     var id = parentContentId.data('content-id');
     var $url = window.frontpage_urls.quick_info + '?id=' + id;
     var content = '';
 
     content = window.content_states[id];
-    if (content === 'undefined') {
+    if (!content) {
       jQuery.ajax({
         url: $url,
         async: false
@@ -52,7 +52,7 @@ window.get_tooltip_title = function(elem) {
 
   var content = window.content_states[id];
 
-  if (content === 'undefined') {
+  if (!content) {
     jQuery.ajax({
       url: $url,
       async: false
