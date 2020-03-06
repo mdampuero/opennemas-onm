@@ -188,7 +188,7 @@ class LayoutManager
 
         return $tpl->fetch($template, [
             'content' => $content,
-            'param'   => $this->params
+            'params'   => $this->params
         ]);
     }
 
