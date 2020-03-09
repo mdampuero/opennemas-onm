@@ -39,7 +39,7 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests deleteFiles.
      */
-    public function testDeleteFiles()
+    public function testDeleteContents()
     {
         $itemA = new \Attachment();
         $itemB = new \Attachment();
@@ -59,7 +59,7 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
                 'req.url ~ /norf/flob.garply'
             ]));
 
-        $this->helper->deleteFiles([ $itemA, $itemB ]);
+        $this->helper->deleteContents([ $itemA, $itemB ]);
     }
 
     /**

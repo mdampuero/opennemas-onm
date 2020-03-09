@@ -29,7 +29,7 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteFiles' ])
+            ->setMethods([ 'deleteContents' ])
             ->getMock();
 
         $this->subscriber = new AttachmentSubscriber($this->vh);
@@ -71,7 +71,7 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
             ->with('item')->willReturn($item);
 
 
-        $this->vh->expects($this->once())->method('deleteFiles')->with([ $item ]);
+        $this->vh->expects($this->once())->method('deleteContents')->with([ $item ]);
 
         $this->subscriber->onAttachmentUpdate($this->event);
     }
