@@ -17,6 +17,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    core.subscriber.poll:
+        class:     Api\EventSubscriber\PollSubscriber
+        arguments: [ '@core.helper.varnish' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
     core.subscriber.user:
         class:     Api\EventSubscriber\UserSubscriber
         arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache' ]
