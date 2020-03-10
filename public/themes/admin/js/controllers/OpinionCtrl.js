@@ -88,7 +88,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       }
 
       var img1 = $scope.data.extra.related_contents.filter(function(e) {
-        return e.pk_photo === $scope.item.img1;
+        return parseInt(e.pk_photo) === parseInt($scope.item.img1);
       }).shift();
 
       if (img1) {
@@ -96,7 +96,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       }
 
       var img2 = $scope.data.extra.related_contents.filter(function(e) {
-        return e.pk_photo === $scope.item.img2;
+        return parseInt(e.pk_photo) === parseInt($scope.item.img2);
       }).shift();
 
       if (img2) {
@@ -180,7 +180,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         return;
       }
 
-      if (!$scope.item.id || $scope.item.img1 !== nv.pk_photo) {
+      if (!$scope.item.id ||
+          parseInt($scope.item.img1) !== parseInt(nv.pk_photo)) {
         $scope.item.img1        = nv.pk_photo;
         $scope.item.img1_footer = nv.description;
 
@@ -207,7 +208,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         return;
       }
 
-      if (!$scope.item.id || $scope.item.img2 !== nv.pk_photo) {
+      if (!$scope.item.id ||
+          parseInt($scope.item.img2) !== parseInt(nv.pk_photo)) {
         $scope.item.img2        = nv.pk_photo;
         $scope.item.img2_footer = nv.description;
       }
