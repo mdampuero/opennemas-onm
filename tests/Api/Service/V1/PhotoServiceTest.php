@@ -17,7 +17,6 @@ use Mockery as m;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-
 class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 {
 

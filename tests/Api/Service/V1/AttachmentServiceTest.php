@@ -118,7 +118,6 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->createItem([ 'title' => 'waldo' ], $file);
     }
 
-
     /**
      * Tests createItem when file already exists.
      *
@@ -139,7 +138,6 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service->createItem([ 'title' => 'waldo' ], $file);
     }
-
 
     /**
      * Tests createItem when successful upload.
@@ -219,7 +217,6 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
         $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
     }
 
-
     /**
      * Tests updateItem when not empty relative path.
      *
@@ -257,7 +254,6 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
     }
-
 
     /**
      * Tests updateItem when successful update.
