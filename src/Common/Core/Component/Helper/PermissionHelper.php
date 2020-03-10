@@ -1431,13 +1431,6 @@ class PermissionHelper
                 'module'      => 'FRONTEND',
                 'enabled'     => 1
             ],
-            231 => [
-                'id'          => 231,
-                'name'        => 'NON_MEMBER_HIDE_TITLE',
-                'description' => _('Hide title'),
-                'module'      => 'FRONTEND',
-                'enabled'     => 0
-            ],
             232 => [
                 'id'          => 232,
                 'name'        => 'NON_MEMBER_HIDE_SUMMARY',
