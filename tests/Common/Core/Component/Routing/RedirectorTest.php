@@ -48,7 +48,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->conn = $this->getMockBuilder('Connection')
-            ->setMethods([ 'fetchAssoc' ])
+            ->setMethods([ 'fetchAssoc', 'fetchAll' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer')
@@ -525,9 +525,6 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(3))->method('fetchAssoc')
             ->willReturn([ 'pk_content' => 1467 ]);
-
-        $this->oldCache->expects($this->once())->method('fetch')
-            ->willReturn([ 'fred' => 'qux' ]);
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 4562 ]));
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 2345 ]));

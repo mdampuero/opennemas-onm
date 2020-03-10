@@ -60,6 +60,13 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
+        $this->conn = $this->getMockBuilder('DatabaseConnection')
+            ->setMethods([ 'fetchAll' ])
+            ->getMock();
+
+        $this->conn->expects($this->any())->method('fetchAll')
+            ->willReturn([]);
+
         $this->fm = new FilterManager($this->container);
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -94,6 +101,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
                 return $this->locale;
             case 'data.manager.filter':
                 return $this->fm;
+            case 'dbal_connection':
+                return $this->conn;
             case 'cache':
                 return $this->cache;
         }
