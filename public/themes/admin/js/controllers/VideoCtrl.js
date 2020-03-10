@@ -184,7 +184,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @return {String} The URL for the content.
      */
     $scope.getFrontendUrl = function(item) {
-      if (!$scope.selectedCategories || !$scope.selectedCategories.length) {
+      if (!$scope.selectedCategory) {
         return '';
       }
 
@@ -193,7 +193,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           id: item.pk_content,
           created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
           slug: item.slug,
-          category_name: $scope.selectedCategories[0].name
+          category_name: $scope.selectedCategory
         })
       );
     };
