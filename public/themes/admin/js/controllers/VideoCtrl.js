@@ -193,7 +193,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           id: item.pk_content,
           created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
           slug: item.slug,
-          category_name: $scope.selectedCategory
+          category_name: $scope.selectedCategory.name
         })
       );
     };
