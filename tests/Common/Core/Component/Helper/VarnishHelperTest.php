@@ -37,7 +37,7 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests deleteFiles.
+     * Tests deleteContents.
      */
     public function testDeleteContents()
     {
