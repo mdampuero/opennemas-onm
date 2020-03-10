@@ -347,11 +347,11 @@ abstract class AbstractCache implements CacheInterface
     {
         if (is_array($id)) {
             return array_map(function ($a) {
-                return str_replace($this->namespace . '_', '', $a);
+                return str_replace($this->getPrefix() . $this->namespace . '_', '', $a);
             }, $id);
         }
 
-        return str_replace($this->namespace . '_', '', $id);
+        return str_replace($this->getPrefix() . $this->namespace . '_', '', $id);
     }
 
     /**
