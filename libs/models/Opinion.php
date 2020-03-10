@@ -181,17 +181,16 @@ class Opinion extends Content
             if (!$rs) {
                 return false;
             }
+
+            $rs['author'] = $rs['name'];
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
 
             return false;
         }
-
-        $rs['author'] = $rs['name'];
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**
