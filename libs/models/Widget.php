@@ -111,6 +111,8 @@ class Widget extends Content
 
             return $this;
         } catch (\Exception $e) {
+            getService('error.log')->error($e->getMessage());
+
             return false;
         }
     }

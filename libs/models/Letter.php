@@ -118,15 +118,15 @@ class Letter extends Content
             if (!$rs) {
                 return false;
             }
+
+            $this->load($rs);
+
+            return $this;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
 
             return false;
         }
-
-        $this->load($rs);
-
-        return $this;
     }
 
     /**

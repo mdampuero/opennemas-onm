@@ -29,6 +29,10 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->conn = $this->getMockBuilder('DatabaseConnection')
+            ->setMethods([ 'fetchAll' ])
+            ->getMock();
+
         $this->helper = $this->getMockBuilder('L10nRouteHelper')
             ->setMethods([ 'localizeUrl' ])
             ->getMock();
@@ -53,6 +57,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer', 'getTemplateVars', '__set', '__get' ])
             ->getMock();
 
+        $this->conn->expects($this->any())->method('fetchAll')
+            ->willReturn([]);
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -100,6 +106,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
                 return $this->helper;
             case 'core.security':
                 return $this->security;
+            case 'dbal_connection':
+                return $this->conn;
             case 'request_stack':
                 return $this->rs;
         }
@@ -164,9 +172,6 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
 
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
-
-        $this->cache->expects($this->once())->method('fetch')
-            ->with('content-meta-27616')->willReturn([ 'mumble' => 'glorp' ]);
 
         $content = new \Content();
         $content->load([

@@ -29,6 +29,10 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
+        $this->conn = $this->getMockBuilder('DatabaseConnection')
+            ->setMethods([ 'fetchAll' ])
+            ->getMock();
+
         $this->fm = new FilterManager($this->container);
 
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
@@ -45,6 +49,8 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->cache->expects($this->any())->method('fetch')
+            ->willReturn([]);
+        $this->conn->expects($this->any())->method('fetchAll')
             ->willReturn([]);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -82,6 +88,9 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 
             case 'data.manager.filter':
                 return $this->fm;
+
+            case 'dbal_connection':
+                return $this->conn;
 
             case 'core.instance':
                 return $this->instance;

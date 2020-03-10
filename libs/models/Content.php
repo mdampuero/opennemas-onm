@@ -419,7 +419,7 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         // Load contentmeta properties
-        $this->loadAllContentProperties();
+        $this->loadContentMetadata($this->id);
 
         if (isset($this->fk_content_type)) {
             $this->content_type = $this->fk_content_type;
@@ -1876,50 +1876,33 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Load content properties given the content id
+     * Load content properties given the content id.
      *
-     * @param int $id The id of the content
+     * @param int $id The id of the content.
      *
-     * @return boolean|Content if it is in the contentmeta table
+     * @return Content The content object
      */
-    public function loadAllContentProperties($id = null)
+    public function loadContentMetadata($id = null)
     {
-        $cache             = getService('cache');
-        $contentProperties = $cache->fetch('content-meta-' . $this->id);
-
-        if (!is_array($contentProperties)) {
-            if ($this->id == null && $id == null) {
-                return false;
-            }
-
-            if (!empty($id)) {
-                $this->id = $id;
-            }
-
-            $contentProperties = [];
-            try {
-                $properties = getService('dbal_connection')->fetchAll(
-                    'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
-                    [(int) $this->id ]
-                );
-
-                if (!is_null($properties) && is_array($properties)) {
-                    foreach ($properties as $property) {
-                        $contentProperties[$property['meta_name']] =
-                            $this->parseProperty($property['meta_value']);
-                    }
-                }
-            } catch (\Exception $e) {
-                getService('error.log')->error(
-                    'Error on Content:loadAllContentProperties: ' . $e->getMessage()
-                );
-            }
-
-            $cache->save('content-meta-' . $this->id, $contentProperties);
+        if (empty($id)) {
+            return $this;
         }
 
-        foreach ($contentProperties as $key => $value) {
-            $this->{$key} = $value;
+        try {
+            $metadatas = getService('dbal_connection')->fetchAll(
+                'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
+                [ (int) $id ]
+            );
+
+            if (!empty($metadatas)) {
+                foreach ($metadatas as $metadata) {
+                    $this->{$metadata['meta_name']} = $metadata['meta_value'];
+                }
+            }
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                'Error on Content:loadContentMetadata: ' . $e->getMessage()
+            );
         }
 
         return $this;

@@ -94,7 +94,7 @@ class Video extends Content
             );
 
             if (!$rs) {
-                return null;
+                return false;
             }
 
             $this->load($rs);
@@ -102,7 +102,7 @@ class Video extends Content
 
             return $this;
         } catch (\Exception $e) {
-            return null;
+            return false;
         }
     }
 

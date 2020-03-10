@@ -122,7 +122,7 @@ class Album extends Content
             );
 
             if (!$rs) {
-                return;
+                return false;
             }
 
             $this->load($rs);
@@ -134,6 +134,8 @@ class Album extends Content
             getService('error.log')->error(
                 'Error fetching content with id' . $id . ': ' . $e->getMessage()
             );
+
+            return false;
         }
     }
 
