@@ -174,6 +174,10 @@ class SubscriptionHelper
      */
     public function isRestricted($content)
     {
+        if (empty($content->subscriptions)) {
+            return false;
+        }
+
         return !empty(array_intersect(
             $this->getPermissions($content),
             $this->restrictedPermissions
