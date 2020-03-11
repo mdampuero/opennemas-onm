@@ -61,20 +61,20 @@ class ExtractImageFromBodyFilter extends Filter
 
             if (empty($id) && file_exists($filepath)) {
                 try {
-                    $id = $ps->createItem(new \SplFileInfo($filepath), [
+                    $photo = $ps->createItem(new \SplFileInfo($filepath), [
                         'created'     => $created->format('Y-m-d H:i:s'),
                         'description' => $file,
                         'path_file'   => $created->format('/Y/m/d/'),
                         'title'       => $file
                     ], true);
 
-                    $this->insertPhotoTranslation($id, $file);
+                    $this->insertPhotoTranslation($photo->pk_content, $file);
                 } catch (\Exception $e) {
                     continue;
                 }
             }
 
-            $ids[$key] = $id;
+            $ids[$key] = $photo->pk_content;
         }
 
         return $ids[0];

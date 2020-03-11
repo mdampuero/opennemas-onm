@@ -39,8 +39,8 @@ class PhotoController extends ContentOldController
             $this->checkSecurity($this->extension, $this->getActionPermission('save'));
             $files = $request->files->all();
             $file  = array_pop($files);
-            $id    = $this->get($this->service)->createItem($file);
-            return new JsonResponse(new \Photo($id), 201);
+            $item  = $this->get($this->service)->createItem($file);
+            return new JsonResponse($item, 201);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 400);
         }

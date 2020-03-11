@@ -57,7 +57,7 @@ class PhotoService extends ContentOldService
                 throw new \Exception();
             }
 
-            return $id;
+            return new \Photo($id);
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }

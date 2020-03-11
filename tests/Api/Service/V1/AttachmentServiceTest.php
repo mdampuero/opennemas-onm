@@ -13,8 +13,11 @@ use Api\Service\V1\AttachmentService;
 use Common\Core\Component\Helper\AttachmentHelper;
 use Common\ORM\Entity\Instance;
 
+use Mockery as m;
+
 /**
- * Defines test cases for AttachmentService class.
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
 class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,7 +48,7 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AttachmentHelper')
             ->setConstructorArgs([ $this->il, '/wibble/flob' ])
-            ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove' ])
+            ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove', 'exists' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -106,11 +109,51 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
-        $file->expects($this->any())->method('getClientOriginalName')
-            ->willReturn('xyzzy.glorp');
+        $externalAttachment = m::mock('overload:\Attachment');
 
-        $this->ah->expects($this->once())->method('move')
-            ->will($this->throwException(new \Exception()));
+        $this->ah->expects($this->once())->method('move');
+
+        $externalAttachment->shouldReceive('create')->once()->andReturn(null);
+
+        $this->service->createItem([ 'title' => 'waldo' ], $file);
+    }
+
+    /**
+     * Tests createItem when file already exists.
+     *
+     * @expectedException Api\Exception\CreateItemException
+     */
+    public function testCreateItemWhenFileAlreadyExists()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $this->ah->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
+
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(true);
+
+        $this->service->createItem([ 'title' => 'waldo' ], $file);
+    }
+
+    /**
+     * Tests createItem when successful upload.
+     */
+    public function testCreateItemWhenSuccessfulUpload()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $externalAttachment = m::mock('overload:\Attachment');
+
+        $this->ah->expects($this->once())->method('move');
+
+        $externalAttachment->shouldReceive('create')->once()->andReturn($externalAttachment);
 
         $this->service->createItem([ 'title' => 'waldo' ], $file);
     }
@@ -137,6 +180,114 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ah->expects($this->once())->method('generatePath')
             ->will($this->throwException(new \Exception()));
+
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+    }
+
+    /**
+     * Tests updateItem when file already exists.
+     *
+     * @expectedException Api\Exception\UpdateItemException
+     */
+    public function testUpdateItemWhenFileAlreadyExists()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $attachment = $this->getMockBuilder('\Attachment')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRelativePath' ])
+            ->getMock();
+
+        $this->ah->expects($this->once())->method('getRelativePath')
+            ->willReturn('AttachmentHelper');
+
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(true);
+
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)
+            ->willReturn($attachment);
+
+        $attachment->expects($this->once())->method('getRelativePath')
+            ->willReturn('Attachment');
+
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+    }
+
+    /**
+     * Tests updateItem when not empty relative path.
+     *
+     * @expectedException Api\Exception\UpdateItemException
+     */
+    public function testUpdateItemWhenNotEmptyRelativePath()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $attachment = $this->getMockBuilder('\Attachment')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRelativePath', 'update' ])
+            ->getMock();
+
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)
+            ->willReturn($attachment);
+
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $attachment->expects($this->any())->method('getRelativePath')
+            ->willReturn('Attachment');
+
+        $this->ah->expects($this->once())
+            ->method('remove');
+
+        $this->ah->expects($this->once())
+            ->method('move');
+
+        $attachment->expects($this->once())->method('update');
+
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+    }
+
+    /**
+     * Tests updateItem when successful update.
+     */
+    public function testUpdateItemWhenSuccessfulUpdate()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $attachment = $this->getMockBuilder('\Attachment')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRelativePath', 'update' ])
+            ->getMock();
+
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)
+            ->willReturn($attachment);
+
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $attachment->expects($this->any())->method('getRelativePath')
+            ->willReturn('Attachment');
+
+        $this->ah->expects($this->once())
+            ->method('remove');
+
+        $this->ah->expects($this->once())
+            ->method('move');
+
+        $attachment->expects($this->once())->method('update')
+            ->willReturn('something');
 
         $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
     }

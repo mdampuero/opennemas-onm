@@ -328,7 +328,7 @@ class LetterController extends Controller
         }
 
         try {
-            return $ps->createItem($file);
+            return $ps->createItem($file)->pk_content;
         } catch (\Exception $e) {
             $this->get('error.log')->error('Unable to save letter image: ' . $e->getMessage());
             return null;
