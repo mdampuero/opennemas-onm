@@ -29,18 +29,6 @@ class PermissionHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests constructor.
-     */
-    public function testConstructor()
-    {
-        $property = new \ReflectionProperty($this->helper, 'permissions');
-        $property->setAccessible(true);
-
-        $this->assertTrue(is_array($property->getValue($this->helper)));
-        $this->assertNotEmpty($property->getValue($this->helper));
-    }
-
-    /**
      * Tests getAvailable for master users.
      */
     public function testGetAvailableForMaster()
