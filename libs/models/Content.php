@@ -1896,7 +1896,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             if (!empty($metadatas)) {
                 foreach ($metadatas as $metadata) {
-                    $this->{$metadata['meta_name']} = $metadata['meta_value'];
+                    $this->{$metadata['meta_name']} = $this->parseProperty($metadata['meta_value']);
                 }
             }
         } catch (\Exception $e) {
