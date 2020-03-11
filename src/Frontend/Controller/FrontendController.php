@@ -425,7 +425,8 @@ class FrontendController extends Controller
             $params['contentId']   = $item->id;
             $params['item']        = $item;
             $params['o_content']   = $item;
-            $params['x-cacheable'] = empty($params['o_token']);
+            $params['x-cacheable'] = empty($params['o_token'])
+                && empty($this->get('session')->getFlashBag()->peekAll());
             $params['o_token']     = $this->get('core.helper.subscription')
                 ->getToken($item);
 
