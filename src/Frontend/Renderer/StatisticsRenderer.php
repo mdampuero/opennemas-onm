@@ -42,24 +42,29 @@ class StatisticsRenderer
      *
      * @param array $types     The array of types to render
      * @param bool  $imageOnly The flag to indicate if is imageOnly or not
+     * @param String $output   The html page
      *
      * @param String The code of the analytics types indicated
      */
-    public function render($types, $imageOnly = false)
+    public function render($types, $output, $imageOnly = false)
     {
         $method = $this->getCode($imageOnly);
-        $code   = '';
-
         //TODO: Initialize the code with our default analytics code
+        $code = '<script>[Default code]</script>';
+
         foreach ($types as $type) {
             $renderer = $this->getRendererClass($type);
 
             if ($renderer->validate()) {
-                $code .= $renderer->{$method}() . '\n';
+                $code .= $renderer->{$method}();
             }
         }
 
-        return $code;
+        if ($method == 'getAmp') {
+            return preg_replace('@(<body.*>)@', '${1}' . "\n" . $code, $output);
+        }
+
+        return preg_replace('@(</head>)@', $code . '${1}', $output);
     }
 
     /**
