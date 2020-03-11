@@ -75,9 +75,9 @@ class PermissionHelper
      */
     public function getNames(array $ids) : array
     {
-        $names = [];
-
+        $names       = [];
         $permissions = $this->getPermissions();
+
         foreach ($ids as $id) {
             if (array_key_exists($id, $permissions)) {
                 $names[$id] = $permissions[$id]['name'];
