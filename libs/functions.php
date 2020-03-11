@@ -19,13 +19,13 @@ function underscore($name)
 function classify($name)
 {
     $parts = explode('_', $name);
-
     $parts = array_map(
         function ($token) {
             return ucfirst($token);
         },
         $parts
     );
+
     $className = implode('', $parts);
 
     return $className;
@@ -205,13 +205,14 @@ function getPiwikCode($type = false)
 
     if (!is_array($config)
         || !array_key_exists('page_id', $config)
-        || !array_key_exists('server_url', $config)
         || empty(trim($config['page_id']))
     ) {
         return '';
     }
 
-    $config['server_url'] = rtrim($config['server_url'], DS) . DS;
+    $piwikConfig = getService('service_container')->getParameter('opennemas.piwik');
+
+    $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
 
     if ($type === 'amp') {
         $code = generatePiwikAmpCode($config);
@@ -226,16 +227,13 @@ function getPiwikCode($type = false)
 
 function generatePiwikScriptCode($config)
 {
-    $httpsHost = preg_replace("/http:/", "https:", $config['server_url']);
-
     $code = '<!-- Piwik -->
         <script>
         var _paq = _paq || [];
         _paq.push([\'trackPageView\']);
         _paq.push([\'enableLinkTracking\']);
         (function() {
-            var u = (("https:" == document.location.protocol) ? "' .
-            $httpsHost . '" : "' . $config['server_url'] . '");
+            var u = "' . $config['server_url'] . '";
             _paq.push([\'setTrackerUrl\', u+\'piwik.php\']);
             _paq.push([\'setSiteId\', ' . $config['page_id'] . ']);
             var d=document, g=d.createElement(\'script\'), s=d.getElementsByTagName(\'script\')[0];
@@ -258,7 +256,7 @@ function generatePiwikAmpCode($config)
 
     $code = sprintf(
         $imgCode,
-        preg_replace("/^https?:/", "", $config['server_url']),
+        $config['server_url'],
         $config['page_id']
     );
 
