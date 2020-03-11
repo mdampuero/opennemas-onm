@@ -19,7 +19,6 @@ use Mockery as m;
  */
 class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * Configures the testing environment.
      */
