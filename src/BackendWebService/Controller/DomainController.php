@@ -47,32 +47,6 @@ class DomainController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function checkConfiguredAction(Request $request)
-    {
-        $domain   = $request->query->get('domain');
-        $end      = substr($domain, strrpos($domain, '.') + 1);
-        $instance = $this->get('core.instance');
-
-        $expected = "{$instance->internal_name}.{$end}.opennemas.net";
-
-        if (empty($domain) || !$this->isDomainValid($domain, $expected)) {
-            return new JsonResponse(
-                sprintf(_('Your domain has to point to %s'), $expected),
-                400
-            );
-        }
-
-        return new JsonResponse(_('Your domain is configured correctly'));
-    }
-
-    /**
-     * Checks if the domain is configured correcty basing on information from
-     * dig command.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
     public function checkValidAction(Request $request)
     {
         $domain = $request->query->get('domain');
@@ -141,7 +115,8 @@ class DomainController extends Controller
                 'free'   => mb_strtolower($value) === $base,
                 'name'   => $value,
                 'main'   => $value == $primary,
-                'target' => $this->getTarget($value)
+                'target' => $this->getTarget($value),
+                'valid'  => $this->isDomainValid($value)
             ];
         }
 
@@ -161,8 +136,8 @@ class DomainController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $purchase  = $request->request->get('purchase');
-        $nonce     = $request->request->get('nonce');
+        $purchase = $request->request->get('purchase');
+        $nonce    = $request->request->get('nonce');
 
         try {
             $ph = $this->get('core.helper.checkout');
@@ -183,11 +158,11 @@ class DomainController extends Controller
 
             $this->get('application.log')->info(
                 'The user ' . $this->getUser()->username
-                . '(' . $this->getUser()->id  .') has purchased '
+                . '(' . $this->getUser()->id . ') has purchased '
                 . json_encode($purchase->details)
             );
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            $this->get('error.log')->error($e->getMessage());
 
             return new JsonResponse([
                 'message' => $e->getMessage(),
@@ -210,6 +185,62 @@ class DomainController extends Controller
     private function isDomainAvailable($domain)
     {
         return !checkdnsrr($domain, 'ANY');
+    }
+
+    /**
+     * Checks if the domain is valid.
+     *
+     * @param string $domain The domain to check.
+     *
+     * @return bool True if the domain is valid. False otherwise.
+     */
+    private function isDomainValid($domain)
+    {
+        $target   = $this->getTarget($domain);
+        $expected = str_replace('www.', '', $domain) . '.opennemas.net';
+
+        if ($target === $expected) {
+            return true;
+        }
+
+        $ranges = @file_get_contents('https://www.cloudflare.com/ips-v4');
+
+        if (empty($ranges)) {
+            return false;
+        }
+
+        $ranges = array_filter(explode("\n", $ranges));
+
+        foreach ($ranges as $range) {
+            if ($this->isInRange($target, $range)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if IP is in range.
+     *
+     * @param string $ip The IP to check.
+     *
+     * @return bool True if the IP is in range. False otherwise.
+     */
+    private function isInRange($ip, $range)
+    {
+        list($subnet, $bits) = explode('/', $range);
+
+        if ($bits === null) {
+            $bits = 32;
+        }
+
+        $ip      = ip2long($ip);
+        $subnet  = ip2long($subnet);
+        $mask    = -1 << (32 - $bits);
+        $subnet &= $mask;
+
+        return ($ip & $mask) == $subnet;
     }
 
     /**
