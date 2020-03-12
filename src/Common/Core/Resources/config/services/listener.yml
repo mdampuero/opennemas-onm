@@ -78,7 +78,7 @@ services:
 
     core.listener.http_cache_headers:
         class:     Common\Core\EventListener\HttpCacheHeadersListener
-        arguments: [ '@core.instance', '@core.locale', '@core.template' ]
+        arguments: [ '@core.instance', '@core.locale', '@core.template.frontend' ]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
         public: true
