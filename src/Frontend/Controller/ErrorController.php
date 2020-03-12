@@ -87,13 +87,8 @@ class ErrorController extends Controller
     {
         $this->get('application.log')->info('security.authorization.failure');
 
-        list($positions, $advertisements) = $this->getAdvertisements();
-
         return new Response($this->get('core.template.frontend')
-            ->render('static_pages/403.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-            ]), 403);
+            ->render('static_pages/403.tpl'), 403);
     }
 
     /**
@@ -155,15 +150,11 @@ class ErrorController extends Controller
     {
         $this->get('application.log')->info($class);
 
-        list($positions, $advertisements) = $this->getAdvertisements();
-
         $this->view->setConfig('articles');
 
         $content = $this->get('core.template.frontend')
             ->render('static_pages/404.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-                'cache_id'       => $this->view->getCacheId('error', 404),
+                'cache_id' => $this->view->getCacheId('error', 404),
             ]);
 
         return new Response($content, 404, [
