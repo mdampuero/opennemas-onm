@@ -168,6 +168,7 @@ class ErrorController extends Controller
 
         return new Response($content, 404, [
             'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
             'x-tags'      => 'not-found',
         ]);
     }

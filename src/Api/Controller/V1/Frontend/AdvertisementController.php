@@ -53,6 +53,7 @@ class AdvertisementController extends Controller
 
         $headers = [
             'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
             'x-tags'      => $this->getListTags($places, $advertisements)
         ];
 
@@ -85,6 +86,7 @@ class AdvertisementController extends Controller
 
         $headers = [
             'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
             'x-tags'      => $this->getItemTags($ad),
         ];
 

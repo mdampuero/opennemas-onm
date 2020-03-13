@@ -183,6 +183,7 @@ class FrontpagesController extends Controller
             'o_category'     => $category,
             'time'           => $systemDate->getTimestamp(),
             'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-cacheable'    => true,
             'x-tags'         => 'frontpage-page,' . $categoryName
         ]);
     }
@@ -255,6 +256,7 @@ class FrontpagesController extends Controller
             'cache_id'       => $cacheID,
             'x-tags'         => 'frontpage-page,frontpage-page-external,' . $categoryName,
             'x-cache-for'    => '+3 hour',
+            'x-cacheable'  => true,
         ]);
     }
 

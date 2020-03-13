@@ -105,6 +105,7 @@ class LetterController extends Controller
                 ->getHtml(),
             'x-tags'         => 'letter-frontpage',
             'x-cache-for'    => '+1 day',
+            'x-cacheable'    => true,
         ]);
     }
 
@@ -168,6 +169,7 @@ class LetterController extends Controller
             'o_content'      => $letter,
             'x-tags'         => 'letter,' . $letter->id,
             'x-cache-for'    => '+1 day',
+            'x-cacheable'    => true,
             'tags'                   => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($letter->tags)['items']
         ]);
