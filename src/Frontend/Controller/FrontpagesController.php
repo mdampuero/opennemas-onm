@@ -256,7 +256,7 @@ class FrontpagesController extends Controller
             'cache_id'       => $cacheID,
             'x-tags'         => 'frontpage-page,frontpage-page-external,' . $categoryName,
             'x-cache-for'    => '+3 hour',
-            'x-cacheable'  => true,
+            'x-cacheable'    => true,
         ]);
     }
 
