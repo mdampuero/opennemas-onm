@@ -9,7 +9,7 @@
  */
 namespace Tests;
 
-use Common\Data\Core\FilterManager;
+use Common\Data\Filter\FilterManager;
 use \Article;
 
 /**

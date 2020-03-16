@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
-use Common\Data\Core\FilterManager;
+use Common\Data\Filter\FilterManager;
 use Common\ORM\Entity\Category;
 use Common\ORM\Entity\Content;
 use Common\ORM\Entity\Tag;

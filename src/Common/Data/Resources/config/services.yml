@@ -5,6 +5,6 @@ services:
         public: true
 
     data.manager.filter:
-        class:     Common\Data\Core\FilterManager
+        class:     Common\Data\Filter\FilterManager
         arguments: [ '@service_container' ]
         public: true

@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Data\Core;
+namespace Common\Data\Filter;
 
-use Common\Core\Component\Exception\Filter\InvalidFilterException;
+use Common\Data\Exception\InvalidFilterException;
 
 /**
  * The FilterManager applies filters to values.
