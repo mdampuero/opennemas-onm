@@ -439,7 +439,7 @@
   <![endif]-->
   {block name="global-js"}
     {javascripts src="
-      @Common/components/jquery/dist/jquery.min.js,
+      @Common/components/jquery/dist/jquery.js,
       @Common/components/bootstrap/dist/js/bootstrap.min.js,
       @Common/components/moment/min/moment-with-locales.min.js,
       @Common/components/moment-timezone/builds/moment-timezone-with-data.min.js,
