@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Core;
 
-use Framework\Component\Data\DataBuffer;
+use Common\Data\Core\DataBuffer;
 use Common\ORM\Core\Validation\Validable;
 
 /**

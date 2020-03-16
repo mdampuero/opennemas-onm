@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Core\Schema;
 
-use Framework\Component\Data\DataObject;
+use Common\Data\Core\DataObject;
 use Common\ORM\Core\Validation\Validable;
 
 class Schema extends DataObject implements Validable
