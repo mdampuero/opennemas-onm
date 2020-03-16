@@ -48,6 +48,7 @@
     {/stylesheets}
     {stylesheets src="@Common/components/angular-ui-bootstrap/dist/ui-bootstrap-csp.css,
       @Common/components/angular-ui-tree/dist/angular-ui-tree.min.css,
+      @Common/components/jquery-ui-dist/jquery-ui.min.css,
       @Common/components/jquery-ui-dist/jquery-ui.theme.min.css,
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
