@@ -54,6 +54,23 @@ class SubscriptionHelper
     ];
 
     /**
+     * The list of restricted permissions.
+     *
+     * @var array
+     */
+    protected $restrictedPermissions = [
+        'NON_MEMBER_BLOCK_ACCESS',
+        'NON_MEMBER_HIDE_SUMMARY',
+        'NON_MEMBER_HIDE_BODY',
+        'NON_MEMBER_HIDE_PRETITLE',
+        'NON_MEMBER_HIDE_MEDIA',
+        'NON_MEMBER_HIDE_RELATED_CONTENTS',
+        'NON_MEMBER_HIDE_INFO',
+        'NON_MEMBER_HIDE_TAGS',
+        'NON_MEMBER_HIDE_PRINT'
+    ];
+
+    /**
      * The list of permissions to compose the subscribed token.
      *
      * @var array
@@ -146,6 +163,25 @@ class SubscriptionHelper
     public function isIndexable($token)
     {
         return !$this->checkToken($token, 'NO_INDEX');
+    }
+
+    /**
+     * Checks if the content is restricted.
+     *
+     * @param Content $content The content.
+     *
+     * @return boolean True if the item is restricted. False otherwise.
+     */
+    public function isRestricted($content)
+    {
+        if (empty($content->subscriptions)) {
+            return false;
+        }
+
+        return !empty(array_intersect(
+            $this->getPermissions($content),
+            $this->restrictedPermissions
+        ));
     }
 
     /**

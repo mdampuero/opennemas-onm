@@ -59,7 +59,8 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
             ]),
             new UserGroup([
                 'pk_user_group' => 2,
-                'privileges'    => [ 234, 237 ] ]),
+                'privileges'    => [ 234, 237 ]
+            ]),
             new UserGroup([
                 'pk_user_group' => 3,
                 'privileges'    => [ 232, 236 ]
@@ -228,6 +229,36 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->helper->isIndexable('00000000000000'));
         $this->assertFalse($this->helper->isIndexable('00000000000011'));
         $this->assertFalse($this->helper->isIndexable('00010010010011'));
+    }
+
+    /**
+     * Tests isRestricted for content.
+     */
+    public function testIsRestricted()
+    {
+        $subscriptions = [
+            new UserGroup([
+                'pk_user_group' => 1,
+                'privileges'    => [ 234, 237 ]
+            ]),
+            new UserGroup([
+                'pk_user_group' => 2,
+                'privileges'    => [ 240 ]
+            ]),
+        ];
+
+
+        $this->content->subscriptions = [ 1 ];
+        $this->ss->expects($this->at(0))->method('getListbyIds')
+            ->willReturn([ 'items' => [ $subscriptions[0] ], 'total' => 2 ]);
+
+        $this->assertTrue($this->helper->isRestricted($this->content));
+
+        $this->content->subscriptions = [ 2 ];
+        $this->ss->expects($this->at(0))->method('getListbyIds')
+            ->willReturn([ 'items' => [ $subscriptions[1] ], 'total' => 1 ]);
+
+        $this->assertFalse($this->helper->isRestricted($this->content));
     }
 
     /**

@@ -25,8 +25,76 @@ class PermissionHelper
      */
     public function __construct($security)
     {
-        $this->security    = $security;
-        $this->permissions = [
+        $this->security = $security;
+    }
+
+    /**
+     * Returns the list of available permissions.
+     *
+     * @return array The list of available permissions.
+     */
+    public function getAvailable() : array
+    {
+        $security = $this->security;
+
+        return array_filter($this->getPermissions(), function ($a) use ($security) {
+            return array_key_exists('enabled', $a) && $a['enabled'] === 1
+                || $security->hasPermission('MASTER');
+        });
+    }
+
+    /**
+     * Returns a list of permissions groupd by module name.
+     *
+     * @return array The list of permissions groupd by module name.
+     */
+    public function getByModule() : array
+    {
+        $grouped = [];
+
+        foreach ($this->getAvailable() as $permission) {
+            if (!array_key_exists($permission['module'], $grouped)) {
+                $grouped[$permission['module']] = [];
+            }
+
+            $grouped[$permission['module']][] = $permission;
+        }
+
+        ksort($grouped);
+
+        return $grouped;
+    }
+
+    /**
+     * Returns the list of permission names basing on the list of permissions
+     * ids.
+     *
+     * @param array The list of permission ids.
+     *
+     * @return array The list of permission names.
+     */
+    public function getNames(array $ids) : array
+    {
+        $names       = [];
+        $permissions = $this->getPermissions();
+
+        foreach ($ids as $id) {
+            if (array_key_exists($id, $permissions)) {
+                $names[$id] = $permissions[$id]['name'];
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * Returns the list of all permissions.
+     *
+     * @return array The list of permissions.
+     */
+    public function getPermissions() : array
+    {
+        return [
             1 => [
                 'id'          => 1,
                 'name'        => 'CATEGORY_ADMIN',
@@ -1431,13 +1499,6 @@ class PermissionHelper
                 'module'      => 'FRONTEND',
                 'enabled'     => 1
             ],
-            231 => [
-                'id'          => 231,
-                'name'        => 'NON_MEMBER_HIDE_TITLE',
-                'description' => _('Hide title'),
-                'module'      => 'FRONTEND',
-                'enabled'     => 0
-            ],
             232 => [
                 'id'          => 232,
                 'name'        => 'NON_MEMBER_HIDE_SUMMARY',
@@ -1579,63 +1640,5 @@ class PermissionHelper
                 'enabled'     => 1
             ],
         ];
-    }
-
-    /**
-     * Returns the list of available permissions.
-     *
-     * @return array The list of available permissions.
-     */
-    public function getAvailable() : array
-    {
-        $security = $this->security;
-
-        return array_filter($this->permissions, function ($a) use ($security) {
-            return array_key_exists('enabled', $a) && $a['enabled'] === 1
-                || $security->hasPermission('MASTER');
-        });
-    }
-
-    /**
-     * Returns a list of permissions groupd by module name.
-     *
-     * @return array The list of permissions groupd by module name.
-     */
-    public function getByModule() : array
-    {
-        $grouped = [];
-
-        foreach ($this->getAvailable() as $permission) {
-            if (!array_key_exists($permission['module'], $grouped)) {
-                $grouped[$permission['module']] = [];
-            }
-
-            $grouped[$permission['module']][] = $permission;
-        }
-
-        ksort($grouped);
-
-        return $grouped;
-    }
-
-    /**
-     * Returns the list of permission names basing on the list of permissions
-     * ids.
-     *
-     * @param array The list of permission ids.
-     *
-     * @return array The list of permission names.
-     */
-    public function getNames(array $ids) : array
-    {
-        $names = [];
-
-        foreach ($ids as $id) {
-            if (array_key_exists($id, $this->permissions)) {
-                $names[$id] = $this->permissions[$id]['name'];
-            }
-        }
-
-        return $names;
     }
 }
