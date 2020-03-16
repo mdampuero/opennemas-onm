@@ -10,7 +10,7 @@
 namespace Framework\Tests\Component\Routing;
 
 use Framework\Component\Routing\ContentUrlMatcher;
-use Common\Data\Core\FilterManager;
+use Common\Data\Filter\FilterManager;
 
 class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 {

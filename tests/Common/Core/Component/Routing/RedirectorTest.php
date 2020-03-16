@@ -61,7 +61,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
-        $this->fm = $this->getMockBuilder('Common\Data\Core\FilterManager')
+        $this->fm = $this->getMockBuilder('Common\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();

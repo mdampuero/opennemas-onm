@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\CsvHelper;
-use Common\Data\Core\FilterManager;
+use Common\Data\Filter\FilterManager;
 
 /**
  * Defines test cases for CsvHelper class.

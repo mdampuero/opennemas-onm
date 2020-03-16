@@ -71,7 +71,7 @@ class MigrationManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
-        $fm = $this->getMockBuilder('Common\Data\Core\FilterManager')
+        $fm = $this->getMockBuilder('Common\Data\Filter\FilterManager')
             ->setMethods([ 'filter' ])
             ->disableOriginalConstructor()
             ->getMock();

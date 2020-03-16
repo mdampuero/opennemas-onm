@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Data\Filter;
 
-use Common\Data\Core\FilterManager;
+use Common\Data\Filter\FilterManager;
 
 /**
  * Defines test cases for FilterManager class.

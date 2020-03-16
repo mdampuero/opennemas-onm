@@ -2,7 +2,7 @@
 namespace Framework\Tests\Models;
 
 use Common\Core\Component\Locale\Locale;
-use Common\Data\Core\FilterManager;
+use Common\Data\Filter\FilterManager;
 use Common\ORM\Entity\Category;
 
 /**
