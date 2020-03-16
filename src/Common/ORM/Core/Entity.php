@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Core;
 
-use Framework\Component\Data\DataObject;
+use Common\Data\Core\DataObject;
 use Common\ORM\Core\Validation\Validable;
 
 class Entity extends DataObject implements Validable

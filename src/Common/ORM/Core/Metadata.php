@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Core;
 
-use Framework\Component\Data\DataObject;
+use Common\Data\Core\DataObject;
 use Common\ORM\Core\Exception\InvalidConverterException;
 use Common\ORM\Core\Exception\InvalidDataSetException;
 use Common\ORM\Core\Exception\InvalidPersisterException;

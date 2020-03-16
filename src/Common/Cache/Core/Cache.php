@@ -9,7 +9,7 @@
  */
 namespace Common\Cache\Core;
 
-use Framework\Component\Data\DataBuffer;
+use Common\Data\Core\DataBuffer;
 
 abstract class Cache extends DataBuffer
 {
