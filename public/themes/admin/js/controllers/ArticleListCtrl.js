@@ -166,17 +166,17 @@
           http.post({
             name: route,
             params: { contentType: 'article', id: id }
-          }, { value: value }).success(function(response) {
+          }, { value: value }).then(function(response) {
             items[index][loading] = 0;
-            items[index][name] = response[name];
-            messenger.post(response.messages);
+            items[index][name] = response.data[name];
+            messenger.post(response.data.messages);
 
             if (reload) {
               $scope.list($scope.route);
             }
-          }).error(function(response) {
+          }, function(response) {
             items[index][loading] = 0;
-            messenger.post(response.messages);
+            messenger.post(response.data.messages);
           });
 
           // Updated shared variable

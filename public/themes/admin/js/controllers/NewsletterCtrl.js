@@ -168,8 +168,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
           html: $scope.html
         };
 
-        $http.post(url, data).success(function(response) {
-          $scope.renderMessages(response.messages);
+        $http.post(url, data).then(function(response) {
+          $scope.renderMessages(response.data.messages);
         });
       }
     };

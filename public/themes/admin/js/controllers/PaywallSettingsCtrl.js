@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  PaywallSettingsCtrl
@@ -13,7 +14,8 @@
      * @description
      *   Handles actions for paywall settings configuration form.
      */
-    .controller('PaywallSettingsCtrl', ['$controller', '$http', '$rootScope', '$scope', 'messenger', 'routing',
+    .controller('PaywallSettingsCtrl', [
+      '$controller', '$http', '$rootScope', '$scope', 'messenger', 'routing',
       function($controller, $http, $rootScope, $scope, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
@@ -67,9 +69,10 @@
          *   Opens a pop-up window to get Paypal identification data.
          */
         $scope.getIdentification = function() {
-          var url = 'https://www.paypal.com/us/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true';
+          var url   = 'https://www.paypal.com/us/cgi-bin/webscr?cmd=_get-api-signature&generic-flow=true';
           var title = 'PayPal identification informations';
-          window.open (url, title, 'height=500, width=360, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
+
+          window.open(url, title, 'height=500, width=360, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
         };
 
         /**
@@ -103,14 +106,14 @@
             mode:      $scope.settings.mode
           };
 
-          $http.post(url, data).success(function() {
+          $http.post(url, data).then(function() {
             messenger.post({
               message: 'Paypal API authentication is correct.',
               type: 'success'
             });
 
             $scope.validatingCredentials = false;
-          }).error(function() {
+          }, function() {
             messenger.post({
               message: 'Paypal API authentication is incorrect. Please try again.',
               type: 'error'
@@ -138,11 +141,11 @@
             mode:      $scope.settings.mode
           };
 
-          $http.post(url, data).success(function() {
+          $http.post(url, data).then(function() {
             window.location.href = data;
 
             $scope.validatingIpn = false;
-          }).error(function() {
+          }, function() {
             messenger.post({
               message: 'Could not connect to PayPal. Validate your API credentials and try again.',
               type: 'error'

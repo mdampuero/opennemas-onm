@@ -102,10 +102,10 @@
           var url = routing.generate('backend_ws_theme_enable',
               { uuid: item.uuid });
 
-          $http.get(url).success(function() {
+          $http.get(url).then(function() {
             $scope.active = item.uuid;
             item.loading = false;
-          }).error(function() {
+          }, function() {
             item.loading = false;
           });
         };
@@ -211,33 +211,33 @@
           $scope.loading = true;
           var url = routing.generate('backend_ws_theme_list');
 
-          $http.get(url).success(function(response) {
-            $scope.active        = response.active;
-            $scope.customization = response.customization;
-            $scope.exclusive     = response.exclusive;
-            $scope.addons        = response.addons;
+          $http.get(url).then(function(response) {
+            $scope.active        = response.data.active;
+            $scope.customization = response.data.customization;
+            $scope.exclusive     = response.data.exclusive;
+            $scope.addons        = response.data.addons;
 
             $scope.purchased = [];
-            for (var i = 0; i < response.themes.length; i++) {
-              if (response.purchased.indexOf(response.themes[i].uuid) !== -1) {
-                $scope.purchased.push(response.themes[i]);
+            for (var i = 0; i < response.data.themes.length; i++) {
+              if (response.data.purchased.indexOf(response.data.themes[i].uuid) !== -1) {
+                $scope.purchased.push(response.data.themes[i]);
               }
             }
 
             $scope.available = [];
-            for (var i = 0; i < response.themes.length; i++) {
-              if (!$scope.isPurchased(response.themes[i]) &&
-                  !response.themes[i].exclusive) {
-                $scope.available.push(response.themes[i]);
+            for (var i = 0; i < response.data.themes.length; i++) {
+              if (!$scope.isPurchased(response.data.themes[i]) &&
+                  !response.data.themes[i].exclusive) {
+                $scope.available.push(response.data.themes[i]);
               }
             }
 
             $scope.items = $scope[$scope.type];
 
             $scope.loading = false;
-          }).error(function(response) {
+          }, function(response) {
             $scope.loading = false;
-            messenger.post({ type: 'error', message: response });
+            messenger.post({ type: 'error', message: response.data });
           });
         };
 

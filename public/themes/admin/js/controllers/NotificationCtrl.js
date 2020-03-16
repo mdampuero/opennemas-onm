@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  NotificationCtrl
@@ -14,8 +15,9 @@
      * @description
      *   Controller to implement common actions.
      */
-    .controller('NotificationCtrl', [ '$http', '$location', '$scope', '$timeout', '$window', 'routing',
-      function ($http, $location, $scope, $timeout, $window, routing) {
+    .controller('NotificationCtrl', [
+      '$http', '$location', '$scope', '$timeout', '$window', 'routing',
+      function($http, $location, $scope, $timeout, $window, routing) {
         /**
          * The notifications dropdown status.
          *
@@ -35,10 +37,10 @@
 
           var url = routing.generate('backend_ws_notifications_list');
 
-          $http.get(url).success(function(response) {
+          $http.get(url).then(function(response) {
             $scope.loading       = false;
-            $scope.notifications = response.results;
-            $scope.extra         = response.extra;
+            $scope.notifications = response.data.results;
+            $scope.extra         = response.data.extra;
 
             $scope.markAllAsOpen();
           });
@@ -65,8 +67,8 @@
 
           var data = {
             ids: ids,
-            'open_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
-            'view_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
+            open_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+            view_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss')
           };
 
           $http.patch(url, data);
@@ -82,7 +84,7 @@
 
           data = {
             ids: ids,
-            'read_date': $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
+            read_date: $window.moment(date).format('YYYY-MM-DD HH:mm:ss'),
           };
 
           $http.patch(url, data);
@@ -91,7 +93,7 @@
         // Updates the notification dropdown status
         $scope.$watch(function() {
           return $('.dropdown-notifications').attr('class');
-        }, function (nv) {
+        }, function(nv) {
           $scope.isOpen = false;
           if (nv.indexOf('open') !== -1) {
             $scope.isOpen = true;
@@ -119,10 +121,10 @@
         });
 
         // Watch location path after rendering list
-        $scope.$on('ngRepeatFinished', function () {
+        $scope.$on('ngRepeatFinished', function() {
           $scope.$watch(function() {
             return $location.path();
-          }, function () {
+          }, function() {
             var id = '#notification-' + $location.path().replace('/', '');
 
             if ($(id)) {
