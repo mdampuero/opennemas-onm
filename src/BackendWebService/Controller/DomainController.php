@@ -197,9 +197,12 @@ class DomainController extends Controller
     private function isDomainValid($domain)
     {
         $target   = $this->getTarget($domain);
-        $expected = str_replace('www.', '', $domain) . '.opennemas.net';
+        $expected = [
+            str_replace('www.', '', $domain) . '.opennemas.net',
+            str_replace('www.', '', $domain) . '.cdn.cloudflare.net'
+        ];
 
-        if ($target === $expected) {
+        if (in_array($target, $expected)) {
             return true;
         }
 
