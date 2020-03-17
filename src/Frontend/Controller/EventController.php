@@ -194,6 +194,7 @@ class EventController extends FrontendController
             }
 
             $params['x-cache-for'] = $expires;
+            $params['x-cacheable'] = true;
         }
 
         $params['contents']   = $contents;

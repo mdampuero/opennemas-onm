@@ -107,6 +107,9 @@ class PollController extends FrontendController
                 ->add('error', _("The reCAPTCHA wasn't entered correctly."
                     . " Go back and try it again."));
 
+            $this->get('core.dispatcher')
+                ->dispatch('poll.vote', [ 'item' => $poll ]);
+
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)
             );
@@ -118,7 +121,7 @@ class PollController extends FrontendController
                 ->add('error', _('Error: no vote value!'));
 
             $this->get('core.dispatcher')
-                ->dispatch('content.update', [ 'item' => $poll ]);
+                ->dispatch('poll.vote', [ 'item' => $poll ]);
 
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)
@@ -131,7 +134,7 @@ class PollController extends FrontendController
                 ->add('error', _('You can\'t vote this poll, it is closed.'));
 
             $this->get('core.dispatcher')
-                ->dispatch('content.update', [ 'item' => $poll ]);
+                ->dispatch('poll.vote', [ 'item' => $poll ]);
 
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)
@@ -147,7 +150,7 @@ class PollController extends FrontendController
                 ->add('error', _('You have voted this poll previously.'));
 
             $this->get('core.dispatcher')
-                ->dispatch('content.update', [ 'item' => $poll ]);
+                ->dispatch('poll.vote', [ 'item' => $poll ]);
 
             return new RedirectResponse(
                 $this->get('core.helper.url_generator')->generate($poll)

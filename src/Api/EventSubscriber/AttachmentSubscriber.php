@@ -63,6 +63,6 @@ class AttachmentSubscriber implements EventSubscriberInterface
             return $a->content_type_name === 'attachment';
         });
 
-        $this->vh->deleteFiles($files);
+        $this->vh->deleteContents($files);
     }
 }

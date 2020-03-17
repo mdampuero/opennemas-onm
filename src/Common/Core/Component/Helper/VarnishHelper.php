@@ -43,15 +43,15 @@ class VarnishHelper
     }
 
     /**
-     * Delete a list of files from varnish cache.
+     * Delete a list of contents from varnish cache.
      *
-     * @param array $files The list of files to delete from varnish cache.
+     * @param array $contents The list of contents to delete from varnish cache.
      */
-    public function deleteFiles(array $files)
+    public function deleteContents(array $contents)
     {
-        foreach ($files as $file) {
+        foreach ($contents as $content) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('req.url ~ %s', $this->uh->generate($file))
+                sprintf('req.url ~ %s', $this->uh->generate($content))
             ]));
         }
     }

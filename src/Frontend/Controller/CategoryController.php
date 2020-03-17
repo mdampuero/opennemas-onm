@@ -144,6 +144,7 @@ class CategoryController extends FrontendController
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
+            'x-cacheable'    => true,
             'x-tags'         => 'ext-category,' . $slug . ',' . $page,
         ]);
     }
@@ -375,6 +376,7 @@ class CategoryController extends FrontendController
             }
 
             $params['x-cache-for'] = $expires;
+            $params['x-cacheable'] = true;
         }
 
         list($mediaIds, $userIds) = $this->extractIds($contents);

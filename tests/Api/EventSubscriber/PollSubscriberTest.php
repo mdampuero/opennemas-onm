@@ -9,14 +9,13 @@
  */
 namespace Tests\Api\EventSubscriber;
 
-use Api\EventSubscriber\AttachmentSubscriber;
+use Api\EventSubscriber\PollSubscriber;
 use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Instance;
 
 /**
- * Defines test cases for AttachmentSubscriber class.
+ * Defines test cases for PollSubscriber class.
  */
-class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
+class PollSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
@@ -32,7 +31,7 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'deleteContents' ])
             ->getMock();
 
-        $this->subscriber = new AttachmentSubscriber($this->vh);
+        $this->subscriber = new PollSubscriber($this->vh);
     }
 
     /**
@@ -40,30 +39,15 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSubscribedEvents()
     {
-        $this->assertIsArray(AttachmentSubscriber::getSubscribedEvents());
+        $this->assertIsArray(PollSubscriber::getSubscribedEvents());
     }
 
     /**
-     * Tests onAttachmentDelete.
+     * Tests onPollVote.
      */
-    public function testOnAttachmentDelete()
+    public function testOnPollVote()
     {
-        $subscriber = $this->getMockBuilder('Api\EventSubscriber\AttachmentSubscriber')
-            ->setConstructorArgs([ $this->vh ])
-            ->setMethods([ 'onAttachmentUpdate' ])
-            ->getMock();
-
-        $subscriber->expects($this->once())->method('onAttachmentUpdate');
-
-        $subscriber->onAttachmentDelete($this->event);
-    }
-
-    /**
-     * Tests onAttachmentUpdate.
-     */
-    public function testOnAttachmentUpdate()
-    {
-        $item = new Content([ 'content_type_name' => 'attachment' ]);
+        $item = new Content();
 
         $this->event->expects($this->once())->method('hasArgument')
             ->with('item')->willReturn(true);
@@ -73,6 +57,6 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->vh->expects($this->once())->method('deleteContents')->with([ $item ]);
 
-        $this->subscriber->onAttachmentUpdate($this->event);
+        $this->subscriber->onPollVote($this->event);
     }
 }

@@ -125,6 +125,7 @@ class BooksController extends Controller
             'o_content'   => $content,
             'x-tags'      => 'book,' . $content->id,
             'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
         ]);
     }
 }
