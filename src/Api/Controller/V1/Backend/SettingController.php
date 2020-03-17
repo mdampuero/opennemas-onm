@@ -167,12 +167,11 @@ class SettingController extends Controller
             }
         }
 
-        foreach ([ 'logo_enabled' ] as $key) {
-            $settings[$key] = $this->get('data.manager.adapter')
-                ->adapt($key, $settings[$key]);
-        }
+        $toint = [
+            'items_in_blog', 'items_per_page', 'elements_in_rss',
+            'logo_enabled', 'refresh_interval'
+        ];
 
-        $toint = [ 'items_in_blog', 'items_per_page', 'elements_in_rss', 'refresh_interval' ];
         foreach ($toint as $key) {
             $settings[$key] = (int) $settings[$key];
         }
