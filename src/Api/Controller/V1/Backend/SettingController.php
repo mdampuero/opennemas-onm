@@ -146,20 +146,6 @@ class SettingController extends Controller
             ->get($this->keys);
         $locale   = $this->get('core.locale');
 
-        if (array_key_exists('google_analytics', $settings)) {
-            $settings['google_analytics'] = $this->get('data.manager.adapter')
-                ->adapt('google_analytics', $settings['google_analytics']);
-
-            // Decode base64 custom code for analytics
-            foreach ($settings['google_analytics'] as &$value) {
-                if (array_key_exists('custom_var', $value)
-                    && !empty($value['custom_var'])
-                ) {
-                    $value['custom_var'] = base64_decode($value['custom_var']);
-                }
-            }
-        }
-
         // Decode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
             if (array_key_exists($key, $settings)) {
