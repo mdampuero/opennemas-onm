@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\Data\Mapper;
+namespace Tests\Common\Data\Mapper;
 
-use Common\ORM\Core\Data\Mapper\EnumDataMapper;
+use Common\Data\Mapper\EnumDataMapper;
 
 class EnumDataMapperTest extends \PHPUnit\Framework\TestCase
 {

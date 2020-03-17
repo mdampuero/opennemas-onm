@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\Data\Mapper;
+namespace Tests\Common\Data\Mapper;
 
-use Common\ORM\Core\Data\Mapper\DoubleDataMapper;
+use Common\Data\Mapper\DoubleDataMapper;
 
 class DoubleDataMapperTest extends \PHPUnit\Framework\TestCase
 {

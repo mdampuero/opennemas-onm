@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\Data\Mapper;
+namespace Tests\Common\Data\Mapper;
 
-use Common\ORM\Core\Data\Mapper\BooleanDataMapper;
+use Common\Data\Mapper\BooleanDataMapper;
 
 class BooleanDataMapperTest extends \PHPUnit\Framework\TestCase
 {

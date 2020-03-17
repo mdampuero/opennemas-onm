@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\Data\Mapper;
+namespace Tests\Data\Mapper;
 
-use Common\ORM\Core\Data\Mapper\NullDataMapper;
+use Common\Data\Mapper\NullDataMapper;
 
 class NullDataMapperTest extends \PHPUnit\Framework\TestCase
 {

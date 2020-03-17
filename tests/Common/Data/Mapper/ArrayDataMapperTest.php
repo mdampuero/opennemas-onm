@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\Data\Mapper;
+namespace Tests\Common\Data\Mapper;
 
-use Common\ORM\Core\Data\Mapper\ArrayDataMapper;
+use Common\Data\Mapper\ArrayDataMapper;
 
 class ArrayDataMapperTest extends \PHPUnit\Framework\TestCase
 {
