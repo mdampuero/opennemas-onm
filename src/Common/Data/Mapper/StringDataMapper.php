@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\Data\Mapper;
+namespace Common\Data\Mapper;
 
-class FloatDataMapper
+class StringDataMapper
 {
     /**
      * Converts between database and object values if no custom conversion
@@ -17,10 +17,14 @@ class FloatDataMapper
      */
     public function __call($method, $params)
     {
-        if (empty($params) || is_null($params[0])) {
+        if (empty($params) || empty($params[0])) {
             return null;
         }
 
-        return (float) $params[0];
+        return mb_convert_encoding(
+            (string) $params[0],
+            'UTF-8',
+            mb_detect_encoding((string) $params[0])
+        );
     }
 }

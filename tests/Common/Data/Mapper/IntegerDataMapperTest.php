@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Common\ORM\Core\Data\Mapper;
+namespace Tests\Data\Mapper;
 
-use Common\ORM\Core\Data\Mapper\IntegerDataMapper;
+use Common\Data\Mapper\IntegerDataMapper;
 
 class IntegerDataMapperTest extends \PHPUnit\Framework\TestCase
 {

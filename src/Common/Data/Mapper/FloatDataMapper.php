@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Core\Data\Mapper;
+namespace Common\Data\Mapper;
 
-class IntegerDataMapper
+class FloatDataMapper
 {
     /**
      * Converts between database and object values if no custom conversion
@@ -17,10 +17,10 @@ class IntegerDataMapper
      */
     public function __call($method, $params)
     {
-        if (empty($params) || is_null($params[0]) || $params[0] === '') {
+        if (empty($params) || is_null($params[0])) {
             return null;
         }
 
-        return (int) $params[0];
+        return (float) $params[0];
     }
 }

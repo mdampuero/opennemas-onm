@@ -73,7 +73,7 @@ class Converter
      */
     protected function convert($mapper, $method, $value, $params = [])
     {
-        $mapper = 'Common\\ORM\\Core\\Data\\Mapper\\'
+        $mapper = 'Common\\Data\\Mapper\\'
             . \classify($mapper) . 'DataMapper';
 
         $mapper = new $mapper($this->metadata);
