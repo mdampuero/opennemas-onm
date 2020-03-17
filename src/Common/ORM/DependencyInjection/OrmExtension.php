@@ -20,10 +20,12 @@ class OrmExtension extends Extension implements PrependExtensionInterface
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        $loader = new Loader\YamlFileLoader(
+            $container,
+            new FileLocator(__DIR__ . '/../Resources/config')
+        );
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         // Parse config to use item names as keys
@@ -44,7 +46,16 @@ class OrmExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/orm'));
-        $loader->load('orm.yml');
+        $path = !$container->hasParameter('orm.path')
+            ? __DIR__ . '/../Resources/config/orm'
+            : $container->getParameter('kernel.root_dir')
+                . $container->getParameter('orm.path');
+
+        $model = $container->hasParameter('orm.model')
+            ? $container->getParameter('orm.model')
+            : 'model.yml';
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator($path));
+        $loader->load($model);
     }
 }
