@@ -1,9 +1,4 @@
 services:
-    data.manager.adapter:
-        class:     Common\Data\Core\AdapterManager
-        arguments: [ '@service_container' ]
-        public: true
-
     data.manager.filter:
         class:     Common\Data\Filter\FilterManager
         arguments: [ '@service_container' ]
