@@ -8,7 +8,7 @@ orm:
                 - step
                 - updated
             properties:
-                client:      entity::client
+                client:      array
                 client_id:   integer
                 created:     datetime
                 updated:     datetime

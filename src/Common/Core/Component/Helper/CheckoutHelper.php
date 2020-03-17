@@ -103,7 +103,7 @@ class CheckoutHelper
         $this->purchase->updated     = $date;
 
         if (!empty($this->client)) {
-            $this->purchase->client    = $this->client;
+            $this->purchase->client    = $this->client->getData();
             $this->purchase->client_id = $this->client->id;
         }
 
