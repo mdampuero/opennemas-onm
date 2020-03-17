@@ -79,10 +79,10 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
     {
         $this->ds->expects($this->any())
             ->method('get')
-            ->with([ 'favico', 'section_settings' ])
+            ->with([ 'favico', 'logo_enabled' ])
             ->willReturn([
-                'section_settings' => [ 'allowLogo' => 1 ],
-                'favico'           => 'foobar.png'
+                'logo_enabled' => 1 ,
+                'favico'       => 'foobar.png'
             ]);
 
         $this->instance->expects($this->any())

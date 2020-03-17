@@ -389,10 +389,6 @@ class SettingController extends Controller
             }
         }
 
-        if (array_key_exists('logo_enabled', $settings)) {
-            $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
-        }
-
         if (array_key_exists('locale', $settings)
             && is_array($settings['locale'])
         ) {
