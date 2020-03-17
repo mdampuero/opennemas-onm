@@ -2,4 +2,4 @@ services:
     data.manager.filter:
         class:     Common\Data\Filter\FilterManager
         arguments: [ '@service_container' ]
-        public: true
+        public:    true
