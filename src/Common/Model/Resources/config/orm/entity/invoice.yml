@@ -22,11 +22,11 @@ orm:
                     arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
             repositories:
                 freshbooks:
-                    class:     Common\ORM\FreshBooks\Repository\InvoiceRepository
+                    class:     Common\Model\FreshBooks\Repository\InvoiceRepository
                     arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
             persisters:
                 freshbooks:
-                    class:     Common\ORM\FreshBooks\Persister\InvoicePersister
+                    class:     Common\Model\FreshBooks\Persister\InvoicePersister
                     arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
             mapping:
                 freshbooks:

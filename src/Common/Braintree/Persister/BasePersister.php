@@ -7,15 +7,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Braintree\Repository;
+namespace Common\Model\Braintree\Persister;
 
-use Common\ORM\Braintree\Data\Converter\BaseConverter;
-use Common\ORM\Core\Repository;
+use Common\Model\Braintree\Data\Converter\BaseConverter;
+use Common\ORM\Core\Persister;
 
 /**
- * The BaseRepository class defines basic actions for braintree repositories.
+ * The BasePersister class defines basic actions for braintree persisters.
  */
-abstract class BaseRepository extends Repository
+abstract class BasePersister extends Persister
 {
     /**
      * The entity converter.
@@ -41,15 +41,13 @@ abstract class BaseRepository extends Repository
     /**
      * Initializes the Braintree factory.
      *
-     * @param string         $name     The repository name.
      * @param Braintree_Base $factory  The Braintree factory.
      * @param Metadata       $metadata The entity metadata.
      */
-    public function __construct($name, $factory, $metadata)
+    public function __construct($factory, $metadata)
     {
         $this->converter = new BaseConverter($metadata);
         $this->factory   = $factory;
         $this->metadata  = $metadata;
-        $this->name      = $name;
     }
 }

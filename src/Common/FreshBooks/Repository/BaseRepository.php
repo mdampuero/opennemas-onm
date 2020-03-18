@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\FreshBooks\Repository;
+namespace Common\Model\FreshBooks\Repository;
 
+use Common\Model\FreshBooks\Data\Converter\BaseConverter;
 use Common\ORM\Core\Repository;
-use Common\ORM\FreshBooks\Data\Converter\BaseConverter;
 use Freshbooks\FreshBooksApi;
 
 /**

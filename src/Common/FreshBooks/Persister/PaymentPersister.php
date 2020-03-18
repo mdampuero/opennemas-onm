@@ -7,37 +7,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\FreshBooks\Persister;
+namespace Common\Model\FreshBooks\Persister;
 
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
-/**
- * The ClientPersister class defines actions to create, update and remove
- * Clients from FreshBooks.
- */
-class ClientPersister extends BasePersister
+class PaymentPersister extends BasePersister
 {
     /**
-     * Saves a new client in FreshBooks.
+     * Saves a new payment in FreshBooks.
      *
-     * @param Entity $entity The client to save.
+     * @param Entity $entity The payment to save.
      *
-     * @throws \RuntimeException If the the client can not be saved.
+     * @throws RuntimeException If the the payment can not be saved.
      */
     public function create(Entity &$entity)
     {
-        $data = $this->converter->freshbooksfy($entity->getData());
+        $data = $this->converter->freshbooksfy($entity);
 
-        $this->api->setMethod('client.create');
-        $this->api->post([ 'client' => $data ]);
+        $this->api->setMethod('payment.create');
+        $this->api->post([ 'payment' => $data ]);
+
         $this->api->request();
 
         if ($this->api->success()) {
-            $response = $this->api->getResponse();
-
-            $entity->id = (int) $response['client_id'];
-
             return;
         }
 
@@ -45,16 +38,16 @@ class ClientPersister extends BasePersister
     }
 
     /**
-     * Removes the client in FreshBooks.
+     * Removes the payment in FreshBooks.
      *
-     * @param Entity $entity The client to update.
+     * @param Entity $entity The payment to update.
      *
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException If the payment does not exist.
      */
     public function remove(Entity $entity)
     {
-        $this->api->setMethod('client.delete');
-        $this->api->post([ 'client_id' => $entity->id ]);
+        $this->api->setMethod('payment.delete');
+        $this->api->post([ 'payment_id' => $entity->id ]);
         $this->api->request();
 
         if ($this->api->success()) {
@@ -69,18 +62,18 @@ class ClientPersister extends BasePersister
     }
 
     /**
-     * Updates the client in FreshBooks.
+     * Updates the payment in FreshBooks.
      *
-     * @param Entity $entity The client to update.
+     * @param Entity $entity The payment to update.
      *
-     * @throws EntityNotFoundException
+     * @throws EntityNotFoundException If the payment does not exist.
      */
     public function update(Entity $entity)
     {
         $data = $this->converter->freshbooksfy($entity->getData());
 
-        $this->api->setMethod('client.update');
-        $this->api->post([ 'client' => $data ]);
+        $this->api->setMethod('payment.update');
+        $this->api->post([ 'payment' => $data ]);
         $this->api->request();
 
         if ($this->api->success()) {

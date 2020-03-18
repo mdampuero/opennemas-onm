@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Braintree\Repository;
+namespace Common\Model\Braintree\Repository;
 
 use Common\Model\Entity\Client;
 use Common\ORM\Core\Exception\EntityNotFoundException;

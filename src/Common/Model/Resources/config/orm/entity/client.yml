@@ -39,10 +39,10 @@ orm:
                     class:     Common\ORM\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
                 braintree:
-                    class:     Common\ORM\Braintree\Persister\ClientPersister
+                    class:     Common\Model\Braintree\Persister\ClientPersister
                     arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.client' ]
                 freshbooks:
-                    class:     Common\ORM\FreshBooks\Persister\ClientPersister
+                    class:     Common\Model\FreshBooks\Persister\ClientPersister
                     arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.client' ]
             mapping:
                 braintree:
