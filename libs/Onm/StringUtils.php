@@ -500,78 +500,6 @@ class StringUtils
     ];
 
     /**
-     * Clean the special chars into a file name
-     *
-     * @param  string  $name the string to clean
-     *
-     * @return string the string cleaned
-     */
-    public static function cleanFileName($name)
-    {
-        $name = trim($name);
-        $name = html_entity_decode($name, ENT_COMPAT, 'UTF-8');
-        // Keep . for filename extension
-        $trade = self::$trade;
-        unset($trade['.']);
-        $name = strtr($name, $trade);
-        // Trade white spaces to hyphen
-        $name = preg_replace('/[\s]+/', '-', $name);
-
-        return $name;
-    }
-
-    /**
-     * Converts to UTF-8 an string
-     *
-     * @param string $str the string to convert
-     *
-     * @return string the UTF-8 converted string
-     */
-    public static function convertToUTF8AndStrToLower($str)
-    {
-        // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
-        $str = mb_convert_encoding(
-            $str,
-            "UTF-8",
-            "CP1252,CP1251,ISO-8859-1,UTF-8,ISO-8859-15"
-        );
-
-        return mb_strtolower($str, 'UTF-8');
-    }
-
-    /**
-     * Removes bad words from a text
-     *
-     * @param string $text       the text to clean
-     * @param int    $weight     the minimum bad word weight to clean
-     * @param string $replaceStr the replacement string for the bad words
-     *
-     * @return string the cleaned string
-     */
-    public static function filterBadWords($text, $weight = 0, $replaceStr = ' ')
-    {
-        $words = self::loadBadWords();
-        $text  = ' ' . $text . ' ';
-        if ($replaceStr != ' ') {
-            $replaceStr = ' ' . $replaceStr . ' ';
-        }
-
-        foreach ($words as $word) {
-            if ($word['weight'] > $weight) {
-                $text = preg_replace(
-                    '/\W' . $word['text'] . '\W/si',
-                    $replaceStr,
-                    $text
-                );
-            }
-        }
-
-        $text = trim($text);
-
-        return $text;
-    }
-
-    /**
      * Clean the special chars and add - for separate words
      *
      * @param  mixed  $string the string to transform
@@ -703,29 +631,6 @@ class StringUtils
     }
 
     /**
-     * Returns the weight of a text from its bad words
-     *
-     * @param string $text the text to work with
-     *
-     * @return int the weight of the text
-     */
-    public static function getWeightBadWords($text)
-    {
-        $words = self::loadBadWords();
-        $text  = ' ' . $text . ' ';
-
-        $weight = 0;
-
-        foreach ($words as $word) {
-            if (preg_match_all('/' . $word['text'] . '/si', $text, $matches)) {
-                $weight += ($word['weight'] * count($matches[0]));
-            }
-        }
-
-        return $weight;
-    }
-
-    /**
      * Prepares HTML code to use it as html entity attribute
      *
      * @param string $string the string to clean
@@ -737,51 +642,6 @@ class StringUtils
         $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
 
         return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    }
-
-    /**
-     * Retuns a list of bad words with their weigth
-     *
-     * @return array the list of words
-     */
-    public static function loadBadWords()
-    {
-        $badWords = [
-            [
-                'weight' => 5,
-                'text'   => 'm[i]?erda',
-            ],
-            [
-                'weight' => 5,
-                'text'   => 'marica',
-            ],
-            [
-                'weight' => 5,
-                'text'   => 'carallo',
-            ],
-            [
-                'weight' => 10,
-                'text'   => '[h]?ostia',
-            ],
-            [
-                'weight' => 20,
-                'text'   => 'puta[s]?',
-            ],
-            [
-                'weight' => 30,
-                'text'   => 'cabr[oó]n[a]?',
-            ],
-            [
-                'weight' => 50,
-                'text'   => 'fill[ao] d[ae] puta',
-            ],
-            [
-                'weight' => 50,
-                'text'   => 'hij[ao] de puta',
-            ],
-        ];
-
-        return $badWords;
     }
 
     /**
@@ -798,67 +658,6 @@ class StringUtils
         $newname = rtrim($newname);
 
         return $newname;
-    }
-
-    /**
-     * Delete disallowed chars from a sentence and transform it to a url friendly name
-     *
-     * @param  string  $name the string to clean
-     *
-     * @return string the string cleaned
-     */
-    public static function normalizeTag($name)
-    {
-        $newname = mb_strtolower($name, 'UTF-8');
-
-        // Keep # for estrelladigital and renderTags = hashtag
-        $trade = self::$trade;
-        unset($trade['#']);
-
-        $newname = strtr($newname, $trade);
-        $newname = rtrim($newname);
-
-        return $newname;
-    }
-
-    /**
-     * Prevent duplicate metadata
-     *
-     * @param string $metadata  the metadata to clean
-     * @param string $separator Separator character to use for splitting the words.
-     *                          By default ','
-     *
-     * @return string the cleaned metadata string
-     */
-    public static function normalizeMetadata($metadata)
-    {
-        $items = explode(',', $metadata);
-
-        foreach ($items as $k => $item) {
-            $items[$k] = self::normalizeTag(trim($item));
-        }
-
-        $items = array_flip($items);
-        $items = array_keys($items);
-
-        $metadata = implode(',', $items);
-
-        return $metadata;
-    }
-
-    /**
-     * Delete disallowed chars from a sentence and transform it to a url friendly name
-     *
-     * @param  string  $name the string to clean
-     *
-     * @return string the string cleaned
-     */
-    public static function normalizeName($name)
-    {
-        $name = self::normalize($name);
-        $name = preg_replace('/[\- ]+/', '-', $name);
-
-        return $name;
     }
 
     /**

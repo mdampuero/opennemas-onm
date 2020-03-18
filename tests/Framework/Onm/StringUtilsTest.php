@@ -26,14 +26,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Onm\StringUtils::normalizeName
-     */
-    public function testNormalizeName()
-    {
-        $this->assertEquals('the-great-boy', $this->object->normalizeName('The great boy'));
-    }
-
-    /**
      * @covers \Onm\StringUtils::normalize
      */
     public function testNormalize()
@@ -254,17 +246,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Onm\StringUtils::normalizeMetadata
-     */
-    public function testNormalizeMetadata()
-    {
-        $this->assertEquals(
-            'a,list,of,comma,separated,tags',
-            $this->object->normalizeMetadata('a , list, of,comma, separated, tags')
-        );
-    }
-
-    /**
      * @covers \Onm\StringUtils::getTags
      */
     public function testGetTags()
@@ -337,117 +318,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers \Onm\StringUtils::loadBadWords
-     * @todo   Implement testLoadBadWords().
-     */
-    public function testLoadBadWords()
-    {
-        $this->assertTrue(
-            is_array($this->object->loadBadWords())
-        );
-        $this->assertTrue(
-            count($this->object->loadBadWords()) > 0
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::filterBadWords
-     */
-    public function testFilterBadWords()
-    {
-        // Remove the following lines when you implement this test.
-        $this->assertEquals(
-            'O fulano ese é un e un fillo de',
-            $this->object->filterBadWords(
-                'O fulano ese é un marica e un fillo de puta.'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::filterBadWords
-     */
-    public function testFilterBadWordsWithMinWeight()
-    {
-        // Remove the following lines when you implement this test.
-        $this->assertEquals(
-            'O fulano ese é un marica e un',
-            $this->object->filterBadWords(
-                'O fulano ese é un marica e un fillo de puta.',
-                20
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::filterBadWords
-     */
-    public function testFilterBadWordsWithMinWeightAndReplaceString()
-    {
-        // Remove the following lines when you implement this test.
-        $this->assertEquals(
-            'O fulano ese é un marica e un xxx',
-            $this->object->filterBadWords(
-                'O fulano ese é un marica e un fillo de puta.',
-                20,
-                'xxx'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::filterBadWords
-     */
-    public function testFilterBadWordsWithReplaceString()
-    {
-        // Remove the following lines when you implement this test.
-        $this->assertEquals(
-            'O fulano ese é un xxx e un fillo de xxx',
-            $this->object->filterBadWords(
-                'O fulano ese é un marica e un fillo de puta.',
-                0,
-                'xxx'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getWeightBadWords
-     */
-    public function testGetWeightBadWordsWithCleanText()
-    {
-        $this->assertEquals(
-            0,
-            $this->object->getWeightBadWords(
-                'Some text without bad words.'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getWeightBadWords
-     */
-    public function testGetWeightBadWords()
-    {
-        $this->assertEquals(
-            70,
-            $this->object->getWeightBadWords('Hija de puta')
-        );
-        $this->assertEquals(
-            5,
-            $this->object->getWeightBadWords('Carallo')
-        );
-        $this->assertEquals(
-            10,
-            $this->object->getWeightBadWords('ostia')
-        );
-        $this->assertEquals(
-            70,
-            $this->object->getWeightBadWords('fillo de puta')
-        );
-    }
-
     public function testRemovePunctuation()
     {
         $this->assertEquals(
@@ -458,14 +328,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'Urna quam, congue vulputate',
             $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?', [ ',' ])
-        );
-    }
-
-    public function testCleanFileName()
-    {
-        $this->assertEquals(
-            'FileName-for-testing.pdf',
-            $this->object->cleanFileName(' FileName "for" testing.pdf ')
         );
     }
 }
