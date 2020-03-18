@@ -46,10 +46,10 @@ class OrmExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        $path = !$container->hasParameter('orm.path')
+        $path = !$container->hasParameter('orm.config_path')
             ? __DIR__ . '/../Resources/config/orm'
             : $container->getParameter('kernel.root_dir')
-                . $container->getParameter('orm.path');
+                . $container->getParameter('orm.config_path');
 
         $file = $container->hasParameter('orm.file')
             ? $container->getParameter('orm.file')
