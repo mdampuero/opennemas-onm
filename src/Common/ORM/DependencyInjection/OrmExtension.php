@@ -51,11 +51,11 @@ class OrmExtension extends Extension implements PrependExtensionInterface
             : $container->getParameter('kernel.root_dir')
                 . $container->getParameter('orm.path');
 
-        $model = $container->hasParameter('orm.model')
-            ? $container->getParameter('orm.model')
+        $file = $container->hasParameter('orm.file')
+            ? $container->getParameter('orm.file')
             : 'model.yml';
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator($path));
-        $loader->load($model);
+        $loader->load($file);
     }
 }
