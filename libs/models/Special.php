@@ -65,7 +65,7 @@ class Special extends Content
                 return ($uri !== '') ? $uri : $this->permalink;
 
             case 'slug':
-                return \Onm\StringUtils::getTitle($this->title);
+                return \Onm\StringUtils::generateSlug($this->title);
 
             case 'content_type_name':
                 $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);

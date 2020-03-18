@@ -563,23 +563,6 @@ class StringUtils
     }
 
     /**
-     * Generates a valid slug, this function is a "copy" of self::generateSlug,
-     * keep it here to avoid problems for unchanged uses.
-     *
-     * @param  string  $title
-     * @param  boolean $useStopList whether use the stopList array
-     * @param  string  $delimiter
-     *
-     * @return string
-     */
-    public static function getTitle($origString, $useStopList = true, $delimiter = '-')
-    {
-        $useStopList = true;
-
-        return self::generateSlug($origString, $useStopList, $delimiter);
-    }
-
-    /**
      * Gets "n" first words from a given text
      *
      * @example self::getNumWords('hello world', 1)

@@ -224,7 +224,7 @@ class InstanceController extends Controller
 
         $name = '';
         if (!empty($oql)) {
-            $name = '-' . \Onm\StringUtils::getTitle($oql);
+            $name = '-' . \Onm\StringUtils::generateSlug($oql);
         }
 
         $filename = 'opennemas-instances' . $name . '.' . date("YmdHis") . '.csv';
