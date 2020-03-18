@@ -18,7 +18,7 @@ orm:
                     arguments: [ '@orm.metadata.content_position' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\ContentPositionRepository
+                    class:     Common\Model\Database\Repository\ContentPositionRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content_position', '@cache.connection.instance' ]
             persisters:
                 instance:
