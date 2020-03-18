@@ -19,7 +19,7 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\TagPersister
+                    class:     Common\Model\Database\Persister\TagPersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance', '@core.instance' ]
             mapping:
                 database:

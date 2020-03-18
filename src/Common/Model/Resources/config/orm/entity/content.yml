@@ -59,7 +59,7 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\ContentPersister
+                    class:     Common\Model\Database\Persister\ContentPersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance', '@core.user' ]
             mapping:
                 database:
