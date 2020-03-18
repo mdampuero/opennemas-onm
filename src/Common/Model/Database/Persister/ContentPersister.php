@@ -7,14 +7,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Database\Persister;
+namespace Common\Model\Database\Persister;
 
 use Common\Cache\Core\Cache;
+use Common\Model\Entity\User;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
-use Common\Model\Entity\User;
 use Common\ORM\Database\Data\Converter\BaseConverter;
+use Common\ORM\Database\Persister\BasePersister;
 
 /**
  * The InstancecontentPersister class defines actions to persist contents.
