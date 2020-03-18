@@ -42,10 +42,10 @@ class CacheExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        $path = !$container->hasParameter('cache.path')
+        $path = !$container->hasParameter('cache.config_path')
             ? __DIR__ . '/../Resources/config/cache'
             : $container->getParameter('kernel.root_dir')
-                . $container->getParameter('cache.path');
+                . $container->getParameter('cache.config_path');
 
         $file = $container->hasParameter('cache.file')
             ? $container->getParameter('cache.file')
