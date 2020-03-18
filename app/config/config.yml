@@ -14,7 +14,8 @@ parameters:
     core.paths.themes:       '%core.paths.public%/themes'
     core.paths.spool:        '%kernel.root_dir%/../tmp/spool'
     core.paths.spool.files:  '%core.paths.spool%/files'
-    orm.path:                '/../src/Common/Model/Resources/config/orm'
+    cache.config_path:       '/../src/Common/Model/Resources/config/cache'
+    orm.config_path:         '/../src/Common/Model/Resources/config/orm'
 
 framework:
     #esi:             ~
