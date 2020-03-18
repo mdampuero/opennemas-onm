@@ -20,10 +20,12 @@ class CacheExtension extends Extension implements PrependExtensionInterface
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        $loader = new Loader\YamlFileLoader(
+            $container,
+            new FileLocator(__DIR__ . '/../Resources/config')
+        );
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         // Parse config to use item names as keys
@@ -40,7 +42,16 @@ class CacheExtension extends Extension implements PrependExtensionInterface
      */
     public function prepend(ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/cache'));
-        $loader->load('cache.yml');
+        $path = !$container->hasParameter('cache.path')
+            ? __DIR__ . '/../Resources/config/cache'
+            : $container->getParameter('kernel.root_dir')
+                . $container->getParameter('cache.path');
+
+        $file = $container->hasParameter('cache.file')
+            ? $container->getParameter('cache.file')
+            : 'cache.yml';
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator($path));
+        $loader->load($file);
     }
 }
