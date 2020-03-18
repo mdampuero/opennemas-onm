@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace tests\Common\ORM\File\Repository;
+namespace Tests\Common\Model\File\Repository;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Repository\UserGroupRepository;
+use Common\Model\Database\Repository\UserGroupRepository;
 
 class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {

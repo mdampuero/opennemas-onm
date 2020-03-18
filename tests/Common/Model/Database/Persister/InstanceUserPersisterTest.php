@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace tests\Common\ORM\Database\Persister;
+namespace Tests\Common\Model\Database\Persister;
 
-use Common\ORM\Core\Metadata;
+use Common\Model\Database\Persister\InstanceUserPersister;
 use Common\Model\Entity\User;
-use Common\ORM\Database\Persister\ManagerUserPersister;
+use Common\ORM\Core\Metadata;
 
-class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
+class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -24,7 +24,8 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'delete', 'executeQuery', 'insert', 'lastInsertId', 'update',
-                'beginTransaction', 'commit', 'rollback' ])
+                'beginTransaction', 'commit', 'rollback'
+            ])
             ->getMock();
 
         $this->metadata = new Metadata([
@@ -50,7 +51,8 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
                     'relations' => [
                         'groups' => [
                             'table' => 'user_groups',
-                            'ids'   => [ 'id' => 'user_id' ]
+                            'source_key' => 'id',
+                            'target_key' => 'user_id',
                         ]
                     ],
                     'index' => [
@@ -65,10 +67,10 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
             ->disableOriginalConstructor()
-            ->setMethods([ 'delete' ])
+            ->setMethods([ 'remove' ])
             ->getMock();
 
-        $this->persister = new ManagerUserPersister($this->conn, $this->metadata, $this->cache);
+        $this->persister = new InstanceUserPersister($this->conn, $this->metadata, $this->cache);
     }
 
     /**
@@ -78,30 +80,34 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
     {
         $entity = new User([
             'name'        => 'xyzzy',
-            'instances'   => [ 'bar' ],
             'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
         $this->conn->expects($this->once())->method('lastInsertId')->willReturn(1);
         $this->conn->expects($this->once())->method('insert')->with(
             'users',
             [ 'id' => null, 'name' => 'xyzzy' ],
             [ 'id' => \PDO::PARAM_STR, 'name' => \PDO::PARAM_STR ]
         );
-        $this->conn->expects($this->at(3))->method('executeQuery')->with(
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 25, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->at(4))->method('commit');
+        $this->conn->expects($this->at(5))->method('executeQuery')->with(
+            'delete from user_user_group where user_id = ? and user_group_id not in (?)',
+            [ 1, [ 25 ] ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $this->conn->expects($this->at(6))->method('commit');
 
         $this->persister->create($entity);
         $this->assertEquals(1, $entity->id);
     }
 
     /**
-     * Tests create when an error while inserting is thrown.
+     * Tests create when an error while inserting is thrown
      *
      * @expectedException \Throwable
      */
@@ -109,12 +115,12 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
     {
         $entity = new User([
             'name'        => 'xyzzy',
-            'instances'   => [ 'bar' ],
+            'categories'  => [ 1, 2 ],
             'user_groups' => [ [ 'user_group_id' => 25, 'status' => 0 ] ]
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
-        $this->conn->expects($this->once())->method('rollback');
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('rollback');
         $this->conn->expects($this->once())->method('insert')->with(
             'users',
             [ 'id' => null, 'name' => 'xyzzy' ],
@@ -122,40 +128,37 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
         )->will($this->throwException(new \Exception()));
 
         $this->persister->create($entity);
-        $this->assertEquals(1, $entity->id);
     }
 
     /**
-     * Tests update for an user with instances and user groups.
+     * Tests update for an user group with categories.
      */
     public function testUpdate()
     {
         $entity = new User([
             'id'          => 1,
             'name'        => 'garply',
-            'instances'   => [ 'grault' ],
             'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
         $this->conn->expects($this->once())->method('update')->with(
             'users',
             [ 'name' => 'garply' ],
             [ 'id' => 1 ],
             [ 'name' => \PDO::PARAM_STR ]
         );
-        $this->cache->expects($this->exactly(2))->method('delete');
         $this->conn->expects($this->at(3))->method('executeQuery')->with(
-            'delete from user_user_group where user_id = ? and user_group_id not in (?)',
-            [ 1, [ 24 ] ],
-            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
-        );
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
             'replace into user_user_group values (?,?,?,?)',
             [ 1, 24, 0, null ],
             [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_INT ]
         );
-        $this->conn->expects($this->once())->method('commit');
+        $this->conn->expects($this->at(4))->method('executeQuery')->with(
+            'delete from user_user_group where user_id = ? and user_group_id not in (?)',
+            [ 1, [ 24 ] ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $this->conn->expects($this->at(5))->method('commit');
 
         $this->persister->update($entity);
     }
@@ -170,11 +173,12 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
         $entity = new User([
             'id'          => 1,
             'name'        => 'garply',
-            'instances'   => [ 'grault' ],
+            'categories'  => [ 1 ],
             'user_groups' => [ [ 'user_group_id' => 24, 'status' => 0 ] ]
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('beginTransaction');
+        $this->conn->expects($this->exactly(2))->method('rollback');
         $this->conn->expects($this->once())->method('update')->with(
             'users',
             [ 'name' => 'garply' ],
@@ -185,37 +189,40 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
         $this->persister->update($entity);
     }
 
-
-
     /**
-     * Tests update for an user with categories but no user groups.
+     * Tests remove for an user group with categories.
      */
-    public function testUpdateWhenNoUserGroups()
+    public function testRemove()
     {
         $entity = new User([
-            'id'          => 1,
-            'name'        => 'garply',
-            'instances'   => [ 'grault' ],
-            'user_groups' => []
+            'id'         => 1,
+            'name'       => 'garply',
         ]);
 
-        $this->conn->expects($this->once())->method('beginTransaction');
-        $this->conn->expects($this->once())->method('update')->with(
+        $entity->refresh();
+
+        $this->conn->expects($this->once())->method('delete')->with(
             'users',
-            [ 'name' => 'garply' ],
-            [ 'id' => 1 ],
-            [ 'name' => \PDO::PARAM_STR ]
+            [ 'id' => 1 ]
         );
 
-        $this->cache->expects($this->exactly(2))->method('delete');
-        $this->conn->expects($this->at(2))->method('executeQuery')->with(
-            'delete from user_user_group where user_id = ?',
-            [ 1 ],
-            [ \PDO::PARAM_INT ]
-        );
-        $this->conn->expects($this->once())->method('commit');
+        $this->cache->expects($this->exactly(2))->method('remove');
 
+        $this->persister->remove($entity);
 
-        $this->persister->update($entity);
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Tests save categories with no user groups.
+     */
+    public function testSaveUserGroups()
+    {
+        $method = new \ReflectionMethod($this->persister, 'saveUserGroups');
+        $method->setAccessible(true);
+
+        $method->invokeArgs($this->persister, [ 1, [] ]);
+
+        $this->addToAssertionCount(1);
     }
 }

@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Braintree\Data\Converter;
+namespace Tests\Common\Model\Braintree\Data\Converter;
 
-use Common\ORM\Core\Metadata;
 use Common\Model\Entity\Client;
-use Common\ORM\Braintree\Data\Converter\BaseConverter;
+use Common\Model\Braintree\Data\Converter\BaseConverter;
+use Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for BaseConverter class.

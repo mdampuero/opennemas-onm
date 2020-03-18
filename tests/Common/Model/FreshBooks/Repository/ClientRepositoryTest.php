@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\ORM\FreshBooks\Repository;
+namespace Framework\Tests\Model\FreshBooks\Repository;
 
-use Common\ORM\Core\Metadata;
 use Common\Model\Entity\Client;
-use Common\ORM\FreshBooks\Repository\ClientRepository;
+use Common\Model\FreshBooks\Repository\ClientRepository;
+use Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for ClientRepository class.

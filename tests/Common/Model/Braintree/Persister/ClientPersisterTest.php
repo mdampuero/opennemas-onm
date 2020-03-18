@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Braintree\Repository;
+namespace Tests\Common\Model\Braintree\Repository;
 
-use Common\ORM\Core\Metadata;
+use Common\Model\Braintree\Persister\ClientPersister;
 use Common\Model\Entity\Client;
-use Common\ORM\Braintree\Persister\ClientPersister;
+use Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for ClientPersister class.
