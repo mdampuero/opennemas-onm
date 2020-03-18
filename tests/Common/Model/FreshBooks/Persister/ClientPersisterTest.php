@@ -7,16 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Framework\ORM\FreshBooks\Repository;
+namespace Tests\Common\Model\FreshBooks\Repository;
 
+use Common\Model\Entity\Client;
+use Common\Model\FreshBooks\Persister\ClientPersister;
 use Common\ORM\Core\Metadata;
-use Common\Model\Entity\Payment;
-use Common\ORM\FreshBooks\Persister\PaymentPersister;
 
 /**
- * Defines test cases for PaymentPersister class.
+ * Defines test cases for ClientPersister class.
  */
-class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
+class ClientPersisterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the test environment.
@@ -32,44 +32,50 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->metadata = new Metadata([
             'properties' => [
-                'amount'     => 'float',
-                'client_id'  => 'integer',
-                'date'       => 'datetime',
-                'invoice_id' => 'integer',
-                'nonce'      => 'string',
-                'notes'      => 'string',
-                'type'       => 'string',
+                'id'          => 'integer',
+                'first_name'  => 'string',
+                'last_name'   => 'string',
+                'email'       => 'string',
+                'company'     => 'string',
+                'phone'       => 'string',
+                'address'     => 'string',
+                'postal_code' => 'string',
+                'city'        => 'string',
+                'state'       => 'string',
+                'country'     => 'string',
             ],
             'mapping' => [
                 'freshbooks' => [
-                    'client_id' => [ 'name' => 'customerId', 'type' => 'string' ],
-                    'amount'    => [ 'name' => 'amount', 'type' => 'string' ],
-                    'date'      => [ 'name' => 'date', 'type' => 'string' ],
-                    'notes'     => [ 'name' => 'notes', 'type' => 'string' ],
-                    'type'      => [ 'name' => 'type', 'type' => 'string' ],
+                    'id'          => [ 'name' => 'client_id', 'type' => 'string' ],
+                    'first_name'  => [ 'name' => 'first_name', 'type' => 'string' ],
+                    'last_name'   => [ 'name' => 'last_name', 'type' => 'string' ],
+                    'email'       => [ 'name' => 'email', 'type' => 'string' ],
+                    'company'     => [ 'name' => 'organization', 'type' => 'string' ],
+                    'phone'       => [ 'name' => 'work_phone', 'type' => 'string' ],
+                    'address'     => [ 'name' => 'p_street1', 'type' => 'string' ],
+                    'postal_code' => [ 'name' => 'p_code', 'type' => 'string' ],
+                    'city'        => [ 'name' => 'p_city', 'type' => 'string' ],
+                    'state'       => [ 'name' => 'p_state', 'type' => 'string' ],
+                    'country'     => [ 'name' => 'p_country', 'type' => 'string' ],
                 ]
             ],
         ]);
 
-        $this->persister = new PaymentPersister('foo', 'bar', $this->metadata);
+        $this->persister = new ClientPersister('foo', 'bar', $this->metadata);
 
         $property = new \ReflectionProperty($this->persister, 'api');
         $property->setAccessible(true);
         $property->setValue($this->persister, $this->api);
 
-        $this->existingPayment = new Payment([
-            'id'        => 1,
-            'amount'    => 123.12,
-            'client_id' => 1,
-            'date'      => '2013-02-01 10:00:10',
-            'type'      => 'Check',
+        $this->existingClient = new Client([
+            'id'         => 1,
+            'first_name' => 'John',
+            'last_name'  => 'Doe'
         ]);
 
-        $this->unexistingPayment = new Payment([
-            'amount'    => 123.12,
-            'client_id' => 1,
-            'date'      => '2013-02-01 10:00:10',
-            'type'      => 'Check'
+        $this->unexistingClient = new Client([
+            'first_name' => 'John',
+            'last_name'  => 'Doe'
         ]);
     }
 
@@ -83,9 +89,9 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.create');
+            ->with('client.create');
 
-        $this->persister->create($this->existingPayment);
+        $this->persister->create($this->existingClient);
     }
 
     /**
@@ -93,15 +99,26 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithoutErrors()
     {
+        $response = [
+            '@attributes' => [ 'status' => 'ok' ],
+            'client_id'   => '123',
+        ];
+
         $this->api->method('success')->willReturn(true);
+        $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.create');
+            ->with('client.create');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
+        $this->api->expects($this->once())->method('getResponse');
 
-        $this->persister->create($this->unexistingPayment);
+        $this->persister->create($this->unexistingClient);
+        $this->assertEquals(
+            $response['client_id'],
+            $this->unexistingClient->id
+        );
     }
 
     /**
@@ -114,9 +131,9 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.delete');
+            ->with('client.delete');
 
-        $this->persister->remove($this->unexistingPayment);
+        $this->persister->remove($this->unexistingClient);
     }
 
     /**
@@ -130,12 +147,12 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.delete');
+            ->with('client.delete');
 
-        $this->api->expects($this->once())->method('post')->with([ 'payment_id' => 1 ]);
+        $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
 
-        $this->persister->remove($this->existingPayment);
+        $this->persister->remove($this->existingClient);
     }
 
     /**
@@ -148,9 +165,9 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $this->api->method('success')->willReturn(false);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.update');
+            ->with('client.update');
 
-        $this->persister->update($this->unexistingPayment);
+        $this->persister->update($this->unexistingClient);
     }
 
     /**
@@ -164,11 +181,11 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
         $this->api->method('getResponse')->willReturn($response);
 
         $this->api->expects($this->once())->method('setMethod')
-            ->with('payment.update');
+            ->with('client.update');
 
         $this->api->expects($this->once())->method('post');
         $this->api->expects($this->once())->method('success');
 
-        $this->persister->update($this->existingPayment);
+        $this->persister->update($this->existingClient);
     }
 }

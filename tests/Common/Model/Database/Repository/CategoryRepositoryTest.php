@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Database\Repository;
+namespace Tests\Common\Model\Database\Repository;
 
+use Common\Model\Database\Repository\CategoryRepository;
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Repository\CategoryRepository;
 
 /**
  * Defines test cases for CategoryRepository class.

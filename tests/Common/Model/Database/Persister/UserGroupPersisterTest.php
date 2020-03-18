@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace tests\Common\ORM\Database\Persister;
+namespace Tests\Common\Model\Database\Persister;
 
-use Common\ORM\Core\Metadata;
-use Common\Model\Entity\UserGroup;
+use Common\Model\Database\Persister\UserGroupPersister;
 use Common\Model\Entity\Instance;
-use Common\ORM\Database\Persister\UserGroupPersister;
+use Common\Model\Entity\UserGroup;
+use Common\ORM\Core\Metadata;
 
 class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase
 {

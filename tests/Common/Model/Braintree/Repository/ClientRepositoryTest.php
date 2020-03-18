@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Braintree\Repository;
+namespace Tests\Common\Model\Braintree\Repository;
 
-use Common\ORM\Core\Metadata;
+use Common\Model\Braintree\Repository\ClientRepository;
 use Common\Model\Entity\Client;
-use Common\ORM\Braintree\Repository\ClientRepository;
+use Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for ClientRepository class.

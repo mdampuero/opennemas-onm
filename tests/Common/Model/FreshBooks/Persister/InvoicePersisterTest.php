@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\Tests\ORM\FreshBooks\Repository;
+namespace Tests\Common\Model\FreshBooks\Repository;
 
-use Common\ORM\Core\Metadata;
 use Common\Model\Entity\Invoice;
-use Common\ORM\FreshBooks\Persister\InvoicePersister;
+use Common\Model\FreshBooks\Persister\InvoicePersister;
+use Common\ORM\Core\Metadata;
 
 /**
  * Defines test cases for InvoicePersister class.

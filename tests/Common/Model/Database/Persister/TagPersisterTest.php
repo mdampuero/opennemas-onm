@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Database\Persister;
+namespace Tests\Common\Model\Database\Persister;
 
-use Common\ORM\Database\Persister\TagPersister;
+use Common\Model\Database\Persister\TagPersister;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Tag;
 use Common\ORM\Core\Metadata;

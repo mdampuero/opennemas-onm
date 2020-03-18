@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace tests\Common\ORM\File\Repository;
+namespace Tests\Common\Model\Database\Repository;
 
+use Common\Model\Database\Repository\InstanceRepository;
 use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Repository\InstanceRepository;
 
 class InstanceRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -63,7 +63,7 @@ class InstanceRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'exists', 'get', 'set' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('Common\ORM\Database\Repository\InstanceRepository')
+        $this->repository = $this->getMockBuilder('Common\Model\Database\Repository\InstanceRepository')
             ->setMethods([ 'getEntities' ])
             ->setConstructorArgs([ 'foo', $this->conn, $this->metadata, $this->cache ])
             ->getMock();
