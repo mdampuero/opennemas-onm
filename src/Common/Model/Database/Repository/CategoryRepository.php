@@ -7,7 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Database\Repository;
+namespace Common\Model\Database\Repository;
+
+use Common\ORM\Database\Repository\BaseRepository;
 
 class CategoryRepository extends BaseRepository
 {

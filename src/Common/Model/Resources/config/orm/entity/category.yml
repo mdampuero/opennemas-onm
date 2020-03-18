@@ -20,7 +20,7 @@ orm:
                     arguments: [ '@orm.metadata.category' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\CategoryRepository
+                    class:     Common\Model\Database\Repository\CategoryRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             persisters:
                 instance:
