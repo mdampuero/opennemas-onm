@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Braintree\Data\Converter;
+namespace Common\Model\Braintree\Data\Converter;
 
 use Common\ORM\Core\Data\Converter\Converter;
 use Common\ORM\Core\Entity;

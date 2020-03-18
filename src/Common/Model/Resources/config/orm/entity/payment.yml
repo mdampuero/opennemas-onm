@@ -22,10 +22,10 @@ orm:
                     arguments: [ '@orm.metadata.payment' ]
             persisters:
                 braintree:
-                    class:     Common\ORM\Braintree\Persister\PaymentPersister
+                    class:     Common\Model\Braintree\Persister\PaymentPersister
                     arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.payment' ]
                 freshbooks:
-                    class:     Common\ORM\FreshBooks\Persister\PaymentPersister
+                    class:     Common\Model\FreshBooks\Persister\PaymentPersister
                     arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.payment' ]
             mapping:
                 braintree:

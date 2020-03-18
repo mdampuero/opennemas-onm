@@ -7,97 +7,89 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\FreshBooks\Persister;
+namespace Common\Model\FreshBooks\Persister;
 
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 
 /**
- * The InvoicePersister class defines actions to create, update and remove
- * Invoices from FreshBooks.
+ * The ClientPersister class defines actions to create, update and remove
+ * Clients from FreshBooks.
  */
-class InvoicePersister extends BasePersister
+class ClientPersister extends BasePersister
 {
     /**
-     * Saves a new invoice in FreshBooks.
+     * Saves a new client in FreshBooks.
      *
-     * @param Entity $entity The invoice to save.
+     * @param Entity $entity The client to save.
      *
-     * @return InvoicePersister
-     *
-     * @throws \RuntimeException
+     * @throws \RuntimeException If the the client can not be saved.
      */
     public function create(Entity &$entity)
     {
-        $this->api->setMethod('invoice.create');
-        $this->api->post([
-            'invoice' => $this->converter->freshbooksfy($entity)
-        ]);
+        $data = $this->converter->freshbooksfy($entity->getData());
 
+        $this->api->setMethod('client.create');
+        $this->api->post([ 'client' => $data ]);
         $this->api->request();
 
         if ($this->api->success()) {
             $response = $this->api->getResponse();
 
-            $entity->id = (int) $response['invoice_id'];
+            $entity->id = (int) $response['client_id'];
 
-            return $this;
+            return;
         }
 
         throw new \RuntimeException($this->api->getError());
     }
 
     /**
-     * Removes the invoice in FreshBooks.
+     * Removes the client in FreshBooks.
      *
-     * @param Entity $entity The invoice to update.
-     *
-     * @return InvoicePersister
+     * @param Entity $entity The client to update.
      *
      * @throws EntityNotFoundException
      */
     public function remove(Entity $entity)
     {
-        $this->api->setMethod('invoice.delete');
-        $this->api->post([ 'invoice_id' => $entity->invoice_id ]);
+        $this->api->setMethod('client.delete');
+        $this->api->post([ 'client_id' => $entity->id ]);
         $this->api->request();
 
         if ($this->api->success()) {
-            return $this;
+            return;
         }
 
         throw new EntityNotFoundException(
             $this->metadata->name,
-            $entity->invoice_id,
+            $entity->id,
             $this->api->getError()
         );
     }
 
     /**
-     * Updates the invoice in FreshBooks.
+     * Updates the client in FreshBooks.
      *
-     * @param Entity $entity The invoice to update.
-     *
-     * @return InvoicePersister
+     * @param Entity $entity The client to update.
      *
      * @throws EntityNotFoundException
      */
     public function update(Entity $entity)
     {
-        $this->api->setMethod('invoice.update');
-        $this->api->post([
-            'invoice' => $this->converter->freshbooksfy($entity)
-        ]);
+        $data = $this->converter->freshbooksfy($entity->getData());
 
+        $this->api->setMethod('client.update');
+        $this->api->post([ 'client' => $data ]);
         $this->api->request();
 
         if ($this->api->success()) {
-            return $this;
+            return;
         }
 
         throw new EntityNotFoundException(
             $this->metadata->name,
-            $entity->invoice_id,
+            $entity->id,
             $this->api->getError()
         );
     }
