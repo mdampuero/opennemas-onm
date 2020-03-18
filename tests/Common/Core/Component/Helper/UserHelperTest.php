@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Helper;
 
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 use Common\Core\Component\Helper\UserHelper;
 
 /**

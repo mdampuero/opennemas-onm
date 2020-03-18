@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\ORM\Entity;
+namespace Tests\Common\Model\Entity;
 
-use Common\ORM\Entity\Client;
+use Common\Model\Entity\Client;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {

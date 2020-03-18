@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Loader;
 
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Theme;
 use Symfony\Component\Finder\Finder;
 
 class WidgetLoader

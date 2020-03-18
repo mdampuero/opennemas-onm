@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\Database\Repository;
 
-use Common\ORM\Entity\ContentPosition;
+use Common\Model\Entity\ContentPosition;
 
 class ContentPositionRepository extends BaseRepository
 {

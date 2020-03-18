@@ -7,22 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Entity;
+namespace Common\Model\Entity;
 
 use Common\ORM\Core\Entity;
 
 /**
- * The Invoice class represents invoices from FreshBooks.
+ * The UserGroup class represents an user group.
  */
-class Invoice extends Entity
+class FrontpageVersion extends Entity
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function exists()
-    {
-        $id = $this->invoice_id;
-
-        return !empty($id);
-    }
 }

@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Security\Authentication;
 
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 use Common\Core\Component\Exception\Security\InvalidRecaptchaException;
 use Common\Core\Component\Security\Authentication\Authentication;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;

@@ -10,8 +10,8 @@
 namespace tests\Common\ORM\Database\Persister;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\UserGroup;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\UserGroup;
+use Common\Model\Entity\Instance;
 use Common\ORM\Database\Persister\UserGroupPersister;
 
 class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase

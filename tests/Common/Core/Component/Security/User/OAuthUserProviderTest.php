@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Security\User;
 
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 use Common\Core\Component\Security\User\OAuthUserProvider;
 
 /**

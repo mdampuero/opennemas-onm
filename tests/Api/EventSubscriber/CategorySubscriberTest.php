@@ -10,8 +10,8 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\CategorySubscriber;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for CategorySubscriber class.

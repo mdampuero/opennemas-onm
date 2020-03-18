@@ -10,11 +10,11 @@
 namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Tag;
-use Common\ORM\Entity\Url;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Tag;
+use Common\Model\Entity\Url;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for Redirector class.

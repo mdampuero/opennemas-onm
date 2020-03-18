@@ -11,7 +11,7 @@ namespace Common\Core\Component\Loader;
 
 use Common\Cache\Core\CacheManager;
 use Common\ORM\Core\EntityManager;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\HttpFoundation\Request;
 
 class InstanceLoader

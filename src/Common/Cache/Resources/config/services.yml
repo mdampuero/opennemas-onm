@@ -3,13 +3,13 @@ parameters:
 
 services:
     cache.connection.instance:
-        class:     'Common\ORM\Entity\Instance'
+        class:     'Common\Model\Entity\Instance'
         factory:   [ '@cache.manager', 'getConnection' ]
         arguments: [ 'instance' ]
         public:    true
 
     cache.connection.manager:
-        class:     'Common\ORM\Entity\Instance'
+        class:     'Common\Model\Entity\Instance'
         factory:   [ '@cache.manager', 'getConnection' ]
         arguments: [ 'manager' ]
         public:    true

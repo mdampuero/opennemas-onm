@@ -10,8 +10,8 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\VarnishHelper;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
 use Common\Task\Component\Task\ServiceTask;
 
 /**

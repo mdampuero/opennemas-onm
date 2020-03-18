@@ -9,7 +9,7 @@
  */
 namespace Common\ORM\FreshBooks\Repository;
 
-use Common\ORM\Entity\Invoice;
+use Common\Model\Entity\Invoice;
 use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\ORM\Core\Exception\InvalidCriteriaException;
 

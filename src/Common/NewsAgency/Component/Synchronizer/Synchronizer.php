@@ -13,7 +13,7 @@ use Common\Data\Serialize\Serializer\PhpSerializer;
 use Common\NewsAgency\Component\Factory\ParserFactory;
 use Common\NewsAgency\Component\Factory\ServerFactory;
 use Common\NewsAgency\Component\Repository\LocalRepository;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;

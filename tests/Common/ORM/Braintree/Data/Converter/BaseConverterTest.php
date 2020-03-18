@@ -10,7 +10,7 @@
 namespace Tests\Common\ORM\Braintree\Data\Converter;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Client;
+use Common\Model\Entity\Client;
 use Common\ORM\Braintree\Data\Converter\BaseConverter;
 
 /**

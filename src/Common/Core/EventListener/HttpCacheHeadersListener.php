@@ -11,7 +11,7 @@ namespace Common\Core\EventListener;
 
 use Common\Core\Component\Template\Template;
 use Common\Core\Component\Locale\Locale;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class HttpCacheHeadersListener

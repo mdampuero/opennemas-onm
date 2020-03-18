@@ -9,7 +9,7 @@
  */
 namespace tests\Common\ORM\Core;
 
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 class InstanceTest extends \PHPUnit\Framework\TestCase
 {

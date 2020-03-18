@@ -11,7 +11,7 @@ namespace Common\Core\Component\Helper;
 
 use Common\Data\Serialize\Serializer\PhpSerializer;
 use Common\ORM\Core\Connection;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use GuzzleHttp\Client;
 use Symfony\Component\Filesystem\Filesystem;
 

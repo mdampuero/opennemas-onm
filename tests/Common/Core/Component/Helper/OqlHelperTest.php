@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\OqlHelper;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for OqlHelper class.

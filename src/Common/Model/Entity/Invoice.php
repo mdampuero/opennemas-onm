@@ -7,13 +7,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Entity;
+namespace Common\Model\Entity;
 
 use Common\ORM\Core\Entity;
 
 /**
- * The Tag class represents a Tag.
+ * The Invoice class represents invoices from FreshBooks.
  */
-class Tag extends Entity
+class Invoice extends Entity
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function exists()
+    {
+        $id = $this->invoice_id;
+
+        return !empty($id);
+    }
 }

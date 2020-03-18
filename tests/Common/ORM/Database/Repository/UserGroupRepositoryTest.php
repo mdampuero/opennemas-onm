@@ -26,6 +26,7 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->metadata = new Metadata([
             'name' => 'UserGroup',
+            'class' => 'Common\Model\Entity\UserGroup',
             'properties' => [
                 'pk_user_group' => 'integer',
                 'name'          => 'string',

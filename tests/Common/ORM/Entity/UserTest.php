@@ -9,7 +9,7 @@
  */
 namespace tests\Common\ORM\Core;
 
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 
 class UserTest extends \PHPUnit\Framework\TestCase
 {

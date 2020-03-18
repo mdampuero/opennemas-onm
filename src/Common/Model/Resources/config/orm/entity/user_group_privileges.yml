@@ -1,7 +1,7 @@
 orm:
     metadata:
         -
-            name: UserGroupPrivileges
+            name:  UserGroupPrivileges
             mapping:
                 database:
                     table: user_groups_privileges

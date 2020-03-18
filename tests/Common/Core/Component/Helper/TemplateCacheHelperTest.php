@@ -10,9 +10,9 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\TemplateCacheHelper;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for TemplateCacheHelper class.
