@@ -38,67 +38,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Onm\StringUtils::getTitle
-     */
-    public function testGetTitle()
-    {
-        $this->assertEquals(
-            'es-por-tu-bien',
-            $this->object->getTitle(
-                '"Es por tu bien..."'
-            )
-        );
-
-        $this->assertEquals(
-            'es-por-tu-bien',
-            $this->object->getTitle(
-                '"Es por tu bien…"'
-            )
-        );
-
-        $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
-            'porttitor-non-aliquam-ac-sagittis-urna',
-            $this->object->getTitle(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,' .
-                ' porttitor non aliquam ac, sagittis a urna.'
-            )
-        );
-
-        // Test with double slashes
-        $this->assertEquals(
-            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-' .
-            'porttitor-non-aliquam-ac-sagittis-urna',
-            $this->object->getTitle(
-                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,' .
-                ' porttitor non aliquam ac, sagittis a urna.'
-            )
-        );
-
-        $this->assertEquals(
-            'cambio-look-mariana-antoniale',
-            $this->object->getTitle(
-                '¡El cambio de look de Mariana Antoniale!'
-            )
-        );
-
-        $this->assertEquals(
-            '0001-cambio-look-mariana-antoniale-padre',
-            $this->object->getTitle(
-                '0001 ¡El cambio de look de Mariana Antoniale y su padre! ??'
-            )
-        );
-
-        $this->assertEquals(
-            '0001-cambio-look-mariana-antoniale',
-            $this->object->getTitle(
-                '0001 ¡El cambio de look de Mariana Antoniale!'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getTitle
+     * @covers \Onm\StringUtils::getSlug
      */
     public function testGenerateSlug()
     {
@@ -228,19 +168,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
                     'detienen-dieciseis-personas-robo-joyas-kim-kardashian',
                     ''
                 ]
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getTitle
-     */
-    public function testGetTitleReturnsTheSameString()
-    {
-        $this->assertEquals(
-            '',
-            $this->object->getTitle(
-                ''
             )
         );
     }

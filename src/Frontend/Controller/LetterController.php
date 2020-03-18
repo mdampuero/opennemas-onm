@@ -260,11 +260,6 @@ class LetterController extends Controller
         ];
 
         $letter = new \Letter();
-        if ($letter->hasBadWords($data)) {
-            $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
-
-            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
-        }
 
         if ($letter->create($data)) {
             $msg = "Su carta ha sido guardada y está pendiente de publicación.";

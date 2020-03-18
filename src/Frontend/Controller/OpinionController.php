@@ -223,7 +223,7 @@ class OpinionController extends FrontendController
                 || $opinion->author->meta['is_blog'] == 0)
             ) {
                 $opinion->name             = $opinion->author->name;
-                $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
+                $opinion->author_name_slug = \Onm\StringUtils::generateSlug($opinion->name);
 
                 if ($opinion->img1 > 0) {
                     $opinion->img1 = $this->get('entity_repository')
@@ -350,7 +350,7 @@ class OpinionController extends FrontendController
 
         $params['content']->author           = $params['author'];
         $params['content']->author_name_slug =
-            \Onm\StringUtils::getTitle($params['content']->name);
+            \Onm\StringUtils::generateSlug($params['content']->name);
     }
 
     /**
