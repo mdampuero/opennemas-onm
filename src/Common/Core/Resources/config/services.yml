@@ -56,7 +56,7 @@ services:
         public:    true
 
     core.instance:
-        class:     Common\ORM\Entity\Instance
+        class:     Common\Model\Entity\Instance
         factory:   [ '@core.globals', 'getInstance' ]
         public:    true
 
@@ -146,12 +146,12 @@ services:
         public:    true
 
     core.theme:
-        class:     Common\ORM\Entity\Extension
+        class:     Common\Model\Entity\Extension
         factory:   [ '@core.loader.theme', 'getTheme' ]
         public:    true
 
     core.user:
-        class:     Common\ORM\Entity\User
+        class:     Common\Model\Entity\User
         factory:   [ '@core.globals', 'getUser' ]
         public:    true
 

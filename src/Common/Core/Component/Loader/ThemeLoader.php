@@ -10,7 +10,7 @@
 namespace Common\Core\Component\Loader;
 
 use Common\ORM\Core\EntityManager;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Theme;
 
 class ThemeLoader
 {

@@ -12,7 +12,7 @@ namespace Common\ORM\Database\Persister;
 use Common\Cache\Core\Cache;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Common\ORM\Core\Metadata;
 
 /**

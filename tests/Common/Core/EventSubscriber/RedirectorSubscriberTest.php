@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\EventSubscriber;
 
 use Common\Core\EventSubscriber\RedirectorSubscriber;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Common\Task\Component\Task\ServiceTask;
 
 /**

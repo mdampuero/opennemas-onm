@@ -12,7 +12,7 @@ namespace ManagerWebService\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Onm\Instance\InstanceCreator;
 use Common\Core\Controller\Controller;
 use Onm\Exception\DatabaseNotRestoredException;
@@ -90,7 +90,10 @@ class WebServiceController extends Controller
         $validator->validate($instance);
 
         if ($validator->hasErrors()) {
-            error_log('Instance data validation not passed: ' . json_encode($validator->getErrors()));
+            $this->get('error.log')->error(
+                'Instance data validation not passed: '
+                    . json_encode($validator->getErrors())
+            );
 
             return new JsonResponse([
                 'success' => false,
@@ -108,9 +111,8 @@ class WebServiceController extends Controller
 
         $siteLanguage = $request->request->filter('language', '', FILTER_SANITIZE_STRING);
 
-        $em        = $this->get('orm.manager');
-        $converter = $em->getConverter('User');
-        $creator   = new InstanceCreator(
+        $em      = $this->get('orm.manager');
+        $creator = new InstanceCreator(
             $em->getConnection('instance'),
             $this->get('application.log')
         );
@@ -207,7 +209,10 @@ class WebServiceController extends Controller
             }
         } catch (\Exception $e) {
             $errors['all'] = ['Unable to send emails'];
-            error_log('Error while sending instance creation emails: ' . $e->getMessage());
+
+            $this->get('error.log')->error(
+                'Error while sending instance creation emails: ' . $e->getMessage()
+            );
         }
 
         if (is_array($errors) && !empty($errors)) {
@@ -322,7 +327,10 @@ class WebServiceController extends Controller
 
         // Send message
         $this->get('mailer')->send($message);
-        error_log("Error while creating instance. " . $exception->getMessage()
-            . '. Instance Data: ' . json_encode($instance));
+
+        $this->get('error.log')->error(
+            'Error while creating instance. ' . $exception->getMessage()
+            . '. Instance Data: ' . json_encode($instance)
+        );
     }
 }

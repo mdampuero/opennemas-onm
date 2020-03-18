@@ -13,7 +13,7 @@ use Common\Cache\Core\Cache;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * The TagPersister class defines actions to persist Tags.

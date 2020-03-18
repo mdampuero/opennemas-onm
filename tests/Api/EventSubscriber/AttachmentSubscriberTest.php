@@ -10,8 +10,8 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\AttachmentSubscriber;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for AttachmentSubscriber class.

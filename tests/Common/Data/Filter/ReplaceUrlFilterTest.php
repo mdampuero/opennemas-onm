@@ -10,7 +10,7 @@
 namespace Tests\Common\Data\Filter;
 
 use Common\Data\Filter\ReplaceUrlFilter;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for ReplaceUrlFilter class.

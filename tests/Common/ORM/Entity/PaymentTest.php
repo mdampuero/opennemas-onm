@@ -2,7 +2,7 @@
 
 namespace Framework\Tests\ORM\Entity;
 
-use Common\ORM\Entity\Payment;
+use Common\Model\Entity\Payment;
 
 class PaymentTest extends \PHPUnit\Framework\TestCase
 {

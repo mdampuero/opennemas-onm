@@ -25,7 +25,8 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->metadata = new Metadata([
-            'name' => 'User',
+            'name'  => 'User',
+            'class' => 'Common\Model\Entity\User',
             'properties' => [
                 'id'   => 'integer',
                 'name' => 'string',

@@ -3,7 +3,7 @@ security:
         Symfony\Component\Security\Core\User\User: plaintext
         User:
             id: core.security.encoder.password
-        Common\ORM\Entity\User:
+        Common\Model\Entity\User:
             id: core.security.encoder.password
 
     role_hierarchy:

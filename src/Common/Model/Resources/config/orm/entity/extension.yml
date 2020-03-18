@@ -1,7 +1,8 @@
 orm:
     metadata:
         -
-            name: Extension
+            name:  Extension
+            class: Common\Model\Entity\Extension
             enum:
                 type: [ domain, module, theme, theme-addon, widget ]
             required:

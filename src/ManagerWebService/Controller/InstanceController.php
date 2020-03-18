@@ -3,7 +3,7 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;

@@ -13,7 +13,7 @@ use Common\Cache\Core\Cache;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 use Common\ORM\Database\Data\Converter\BaseConverter;
 
 /**

@@ -2,6 +2,7 @@ orm:
     metadata:
         -
             name: Theme
+            class: Common\Model\Entity\Theme
             enum:
                 type: [ domain, module, theme, theme-addon, widget ]
 

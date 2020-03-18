@@ -384,7 +384,7 @@ class BaseRepository extends Repository
             return;
         }
 
-        $class = 'Common\\ORM\\Entity\\' . \classify($this->metadata->name);
+        $class = $this->metadata->class;
 
         if (array_keys($config)[0] === \underscore($this->metadata->name)) {
             $config = $config[\underscore($this->metadata->name)];

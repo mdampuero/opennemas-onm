@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\CategoryService;
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 /**
  * Defines test cases for CategoryService class.
@@ -46,7 +46,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\CategoryService')
             ->setMethods([ 'getItem', 'getItemBy', 'getListByIds' ])
-            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Category' ])
+            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Category' ])
             ->getMock();
     }
 

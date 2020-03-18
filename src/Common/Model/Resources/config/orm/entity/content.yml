@@ -1,7 +1,8 @@
 orm:
     metadata:
         -
-            name: Content
+            name:  Content
+            class: Common\Model\Entity\Content
             enum:
                 content_type_name:
                     - advertisement

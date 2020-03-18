@@ -1,7 +1,8 @@
 orm:
     metadata:
         -
-            name: Frontpage
+            name:  Frontpage
+            class: Common\Model\Entity\Frontpage
             enum:
                 content_type_name: [ static_page ]
             properties:

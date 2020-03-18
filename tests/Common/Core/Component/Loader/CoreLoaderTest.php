@@ -10,8 +10,8 @@
 namespace Tests\Common\Core\Component\Loader;
 
 use Common\Core\Component\Loader\CoreLoader;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\Theme;
 
 /**
  * Defines test cases for CoreLoader class.

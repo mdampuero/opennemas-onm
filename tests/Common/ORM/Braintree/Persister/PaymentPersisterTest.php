@@ -10,7 +10,7 @@
 namespace Tests\Common\ORM\Braintree\Repository;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Payment;
+use Common\Model\Entity\Payment;
 use Common\ORM\Braintree\Persister\PaymentPersister;
 
 /**

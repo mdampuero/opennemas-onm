@@ -10,7 +10,7 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Common\Task\Component\Queue\Queue;
 use Common\Task\Component\Task\ServiceTask;
 

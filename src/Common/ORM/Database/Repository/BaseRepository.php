@@ -483,7 +483,7 @@ class BaseRepository extends Repository
         }
 
         // Build entities from values
-        $class    = 'Common\\ORM\\Entity\\' . $this->metadata->name;
+        $class    = $this->metadata->class;
         $entities = [];
 
         foreach ($values as $key => $value) {

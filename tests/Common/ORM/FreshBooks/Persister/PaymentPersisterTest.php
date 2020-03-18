@@ -10,7 +10,7 @@
 namespace Tests\Framework\ORM\FreshBooks\Repository;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Payment;
+use Common\Model\Entity\Payment;
 use Common\ORM\FreshBooks\Persister\PaymentPersister;
 
 /**

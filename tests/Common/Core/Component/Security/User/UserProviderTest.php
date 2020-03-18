@@ -10,7 +10,7 @@
 namespace Test\Common\Core\Component\Security\User;
 
 use Common\Core\Component\Security\User\UserProvider;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for UserProvider class.

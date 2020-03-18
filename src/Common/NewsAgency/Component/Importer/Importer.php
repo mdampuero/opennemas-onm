@@ -11,7 +11,7 @@ namespace Common\NewsAgency\Component\Importer;
 
 use Common\NewsAgency\Component\Repository\LocalRepository;
 use Common\NewsAgency\Component\Resource\ExternalResource;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 class Importer
 {

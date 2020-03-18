@@ -2,6 +2,7 @@ orm:
     metadata:
         -
             name: User
+            class: Common\Model\Entity\User
             required:
                 - email
                 - type

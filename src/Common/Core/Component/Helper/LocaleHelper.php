@@ -12,7 +12,7 @@ namespace Common\Core\Component\Helper;
 use Common\Core\Component\Locale\Locale;
 use Common\Core\Component\Security\Security;
 use Common\ORM\Core\EntityManager;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class LocaleHelper

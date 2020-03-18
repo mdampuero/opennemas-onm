@@ -11,7 +11,7 @@ namespace Api\EventSubscriber;
 
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
-use Common\Orm\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Onm\Cache\AbstractCache;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

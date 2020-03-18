@@ -7,13 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Entity;
+namespace Common\Model\Entity;
 
 use Common\ORM\Core\Entity;
 
 /**
- * The ContentPosition class represents a element of the content positions.
+ * The UserNotification class represents the connection between users and
+ * notifications.
  */
-class ContentPosition extends Entity
+class UserNotification extends Entity
 {
 }

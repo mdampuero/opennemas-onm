@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->children()
                             ->scalarNode('name')->end()
+                            ->scalarNode('class')->end()
                             ->arrayNode('enum')
                                 ->prototype('array')
                                     ->prototype('scalar')->end()

@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Loader;
 
 use Common\Core\Component\Loader\WidgetLoader;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Theme;
 
 /**
  * Defines test cases for WidgetLoader class.

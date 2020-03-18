@@ -10,7 +10,7 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Client;
+use Common\Model\Entity\Client;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -138,7 +138,7 @@ class ClientController extends Controller
      */
     public function listAction(Request $request)
     {
-        $oql   = $request->query->get('oql', '');
+        $oql = $request->query->get('oql', '');
 
         // Fix OQL for Non-MASTER users
         if (!$this->get('core.security')->hasPermission('MASTER')) {

@@ -41,7 +41,7 @@ class CheckerTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheck()
     {
-        $instance                = new \Common\ORM\Entity\Instance();
+        $instance                = new \Common\Model\Entity\Instance();
         $instance->internal_name = 'test';
         $instance->domains       = [ 'test.domain.com' ];
         $instance->contact_mail  = 'test@opennemas.com';

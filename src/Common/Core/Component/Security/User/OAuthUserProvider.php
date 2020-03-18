@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Security\User;
 
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider as BaseOAuthUserProvider;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;

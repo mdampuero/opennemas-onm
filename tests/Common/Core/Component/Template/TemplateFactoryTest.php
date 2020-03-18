@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Template;
 
 use Common\Core\Component\Template\TemplateFactory;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for TemplateFactory class.

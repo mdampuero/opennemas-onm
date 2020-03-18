@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\ORM\Entity;
+namespace Common\Model\Entity;
 
 use Common\ORM\Core\Entity;
 use Lexik\Bundle\JWTAuthenticationBundle\User\JWTUserInterface;

@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\TagService;
-use Common\ORM\Entity\Tag;
+use Common\Model\Entity\Tag;
 
 /**
  * Defines test cases for TagService class.
@@ -69,7 +69,7 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->any())->method('set')
             ->willReturn($this->fm);
 
-        $this->service = new TagService($this->container, 'Common\ORM\Entity\Tag');
+        $this->service = new TagService($this->container, 'Common\Model\Entity\Tag');
     }
 
     public function serviceContainerCallback($name)

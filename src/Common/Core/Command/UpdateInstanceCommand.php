@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Command;
 
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputOption;
 
 class UpdateInstanceCommand extends Command

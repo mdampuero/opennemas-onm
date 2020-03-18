@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Loader;
 
 use Common\Core\Component\Loader\InstanceLoader;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for InstanceLoader class.

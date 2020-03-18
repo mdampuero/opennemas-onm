@@ -9,7 +9,7 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for SmartyMetaFacebookTagsTest class.

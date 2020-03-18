@@ -1,7 +1,8 @@
 orm:
     metadata:
         -
-            name: UserNotification
+            name:  UserNotification
+            class: Common\Model\Entity\UserNotification
             required:
                 - user_id
                 - notification_id

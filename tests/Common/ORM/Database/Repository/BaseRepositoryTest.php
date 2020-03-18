@@ -11,7 +11,7 @@ namespace tests\Common\ORM\Database\Repository;
 
 use Common\ORM\Core\Metadata;
 use Common\ORM\Database\Repository\BaseRepository;
-use Common\ORM\Entity\Extension;
+use Common\Model\Entity\Extension;
 
 class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,7 +26,8 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->metadata = new Metadata([
-            'name' => 'Extension',
+            'name'  => 'Extension',
+            'class' => 'Common\Model\Entity\Extension',
             'properties' => [
                 'foo'    => 'integer',
                 'bar'    => 'string',
@@ -232,8 +233,8 @@ class BaseRepositoryTest extends \PHPUnit\Framework\TestCase
         $entities = $this->repository->find([ 1, 2, 3 ]);
 
         $this->assertCount(2, $entities);
-        $this->assertInstanceOf('Common\ORM\Entity\Extension', $entities[0]);
-        $this->assertInstanceOf('Common\ORM\Entity\Extension', $entities[1]);
+        $this->assertInstanceOf('Common\Model\Entity\Extension', $entities[0]);
+        $this->assertInstanceOf('Common\Model\Entity\Extension', $entities[1]);
     }
 
     /**

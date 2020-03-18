@@ -10,7 +10,7 @@
 namespace Tests\Api\Validator\V1;
 
 use Api\Validator\V1\CategoryValidator;
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 /**
  * Defines test cases for CategoryValidator class.

@@ -12,7 +12,7 @@ namespace Api\EventSubscriber;
 use Common\Cache\Core\CacheManager;
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
-use Common\Orm\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Framework\Component\Assetic\DynamicCssService;
 use Onm\Cache\AbstractCache;
 use Symfony\Component\EventDispatcher\Event;
@@ -131,6 +131,7 @@ class CategorySubscriber implements EventSubscriberInterface
             : $event->getArgument('items');
 
         $this->dcs->deleteTimestamp('%global%');
+
         foreach ($categories as $category) {
             $this->dcs->deleteTimestamp($category->name);
         }

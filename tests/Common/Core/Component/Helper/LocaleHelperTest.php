@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\LocaleHelper;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for LocaleHelper class.

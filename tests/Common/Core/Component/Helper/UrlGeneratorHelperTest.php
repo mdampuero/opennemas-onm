@@ -11,10 +11,10 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Data\Filter\FilterManager;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Tag;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Tag;
+use Common\Model\Entity\User;
 
 class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 {
@@ -665,7 +665,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForUserBlogger()
     {
-        $user = new \Common\ORM\Entity\User();
+        $user = new \Common\Model\Entity\User();
 
         $user->id       = 252;
         $user->username = 'pepito';

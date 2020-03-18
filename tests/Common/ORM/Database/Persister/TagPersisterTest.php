@@ -10,8 +10,8 @@
 namespace Tests\Common\ORM\Database\Persister;
 
 use Common\ORM\Database\Persister\TagPersister;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\Tag;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\Tag;
 use Common\ORM\Core\Metadata;
 
 /**

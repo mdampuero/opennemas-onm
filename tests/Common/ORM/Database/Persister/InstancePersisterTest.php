@@ -10,7 +10,7 @@
 namespace tests\Common\ORM\Database\Persister;
 
 use Common\ORM\Core\Metadata;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Common\ORM\Database\Persister\InstancePersister;
 
 class InstancePersisterTest extends \PHPUnit\Framework\TestCase

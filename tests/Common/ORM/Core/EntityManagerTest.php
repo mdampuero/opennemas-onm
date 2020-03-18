@@ -11,7 +11,7 @@ namespace Tests\Common\ORM\Core;
 
 use Common\ORM\Braintree\BraintreeManager;
 use Common\ORM\Database\DatabaseManager;
-use Common\ORM\Entity\Client;
+use Common\Model\Entity\Client;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;
 use Common\ORM\Core\EntityManager;

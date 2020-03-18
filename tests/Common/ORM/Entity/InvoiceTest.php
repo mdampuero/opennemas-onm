@@ -2,7 +2,7 @@
 
 namespace Framework\Tests\ORM\Entity;
 
-use Common\ORM\Entity\Invoice;
+use Common\Model\Entity\Invoice;
 
 class InvoiceTest extends \PHPUnit\Framework\TestCase
 {
