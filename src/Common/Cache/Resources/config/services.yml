@@ -1,24 +1,4 @@
-parameters:
-    cache.config_path: '%kernel.root_dir%/../src/Common/Cache/Resources/config/cache'
-
 services:
-    cache.connection.instance:
-        class:     'Common\Model\Entity\Instance'
-        factory:   [ '@cache.manager', 'getConnection' ]
-        arguments: [ 'instance' ]
-        public:    true
-
-    cache.connection.manager:
-        class:     'Common\Model\Entity\Instance'
-        factory:   [ '@cache.manager', 'getConnection' ]
-        arguments: [ 'manager' ]
-        public:    true
-
-    cache.loader:
-        class:     'Common\Cache\Core\Loader\Loader'
-        arguments: [ '%cache.config_path%', '%kernel.environment%', '%cache.default%' ]
-        public:    true
-
     cache.manager:
         class:     'Common\Cache\Core\CacheManager'
         arguments: [ '@service_container' ]
