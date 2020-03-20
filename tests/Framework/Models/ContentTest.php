@@ -2,7 +2,6 @@
 namespace Framework\Tests\Models;
 
 use Common\Core\Component\Locale\Locale;
-use Common\Data\Filter\FilterManager;
 use Common\Model\Entity\Category;
 
 /**
@@ -67,7 +66,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->any())->method('fetchAll')
             ->willReturn([]);
 
-        $this->fm = new FilterManager($this->container);
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
@@ -83,6 +85,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -134,6 +140,10 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $content->content_status);
 
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('mumble');
+
+
         $this->assertEquals([ 'en' => 'mumble' ], $property->getValue($content));
         $this->assertEquals('mumble', $content->title);
     }
@@ -154,12 +164,21 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $content->content_status    = 1;
         $content->content_type_name = 'article';
 
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn([ 'en' => 'fred' ]);
+
         $this->assertEquals('fred', $property->getValue($content));
         $this->assertEquals([ 'en' => 'fred' ], $content->title);
         $this->assertEquals(1, $content->content_status);
 
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn([ 'en' => 'fred' ]);
+
         // Multiple languages in database
         $content->title = 'fred';
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn([ 'en' => 'fred' ]);
 
         $this->assertEquals([ 'en' => 'fred' ], $property->getValue($content));
         $this->assertEquals([ 'en' => 'fred' ], $content->title);

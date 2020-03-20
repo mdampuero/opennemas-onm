@@ -2,7 +2,7 @@
 
 namespace Common\Cache\Core;
 
-use Common\Data\Core\DataBuffer;
+use Opennemas\Data\Core\DataBuffer;
 
 abstract class Cache extends DataBuffer
 {

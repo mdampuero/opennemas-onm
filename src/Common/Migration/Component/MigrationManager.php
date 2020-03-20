@@ -9,12 +9,12 @@
  */
 namespace Common\Migration\Component;
 
-use Common\Core\Component\Filter\FilterManager;
 use Common\ORM\Core\Connection;
 use Common\Migration\Component\Exception\InvalidPersisterException;
 use Common\Migration\Component\Exception\InvalidRepositoryException;
 use Common\Migration\Component\Exception\InvalidTrackerException;
 use Common\Migration\Component\Tracker\Tracker;
+use Opennemas\Data\Filter\FilterManager;
 
 /**
  * The MigrationManager creates components to migrate entities between a source

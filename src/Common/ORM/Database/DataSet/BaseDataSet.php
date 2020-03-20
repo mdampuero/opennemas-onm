@@ -6,7 +6,7 @@ use Common\Cache\Core\Cache;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\DataSet;
 use Common\ORM\Core\Metadata;
-use Common\Data\Serialize\Serializer\PhpSerializer;
+use Opennemas\Data\Serialize\Serializer\PhpSerializer;
 
 class BaseDataSet extends DataSet
 {

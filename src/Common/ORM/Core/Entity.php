@@ -2,8 +2,8 @@
 
 namespace Common\ORM\Core;
 
-use Common\Data\Core\DataObject;
 use Common\ORM\Core\Validation\Validable;
+use Opennemas\Data\Core\DataObject;
 
 class Entity extends DataObject implements Validable
 {

@@ -2,8 +2,8 @@
 
 namespace Common\ORM\Core;
 
-use Common\Data\Core\DataBuffer;
 use Common\ORM\Core\Validation\Validable;
+use Opennemas\Data\Core\DataBuffer;
 
 /**
  * The Connection class represents a database connection.

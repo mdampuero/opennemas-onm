@@ -29,7 +29,7 @@ class Redis extends Cache
             throw new \InvalidArgumentException();
         }
 
-        parent::__construct($data, $env);
+        parent::__construct($data, $env === 'prod');
     }
 
     /**

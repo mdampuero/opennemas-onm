@@ -9,7 +9,7 @@
 namespace Onm\Cache;
 
 use Redis as RedisBase;
-use Common\Data\Serialize\Serializer\PhpSerializer;
+use Opennemas\Data\Serialize\Serializer\PhpSerializer;
 
 /**
  * Redis cache driver.
