@@ -2,12 +2,12 @@
 
 namespace Common\ORM\Core;
 
-use Common\Data\Core\DataObject;
 use Common\ORM\Core\Exception\InvalidConverterException;
 use Common\ORM\Core\Exception\InvalidDataSetException;
 use Common\ORM\Core\Exception\InvalidPersisterException;
 use Common\ORM\Core\Exception\InvalidRepositoryException;
 use Common\ORM\Core\Validation\Validable;
+use Opennemas\Data\Core\DataObject;
 
 /**
  * The Metadata class defines an Entity from data model.

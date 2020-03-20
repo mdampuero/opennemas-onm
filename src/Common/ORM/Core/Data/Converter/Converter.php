@@ -66,8 +66,8 @@ class Converter
      */
     protected function convert($mapper, $method, $value, $params = [])
     {
-        $mapper = 'Common\\Data\\Mapper\\'
-            . \classify($mapper) . 'DataMapper';
+        $mapper = 'Opennemas\\Data\\Converter\\'
+            . \classify($mapper) . 'Converter';
 
         $mapper = new $mapper($this->metadata);
 

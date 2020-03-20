@@ -27,7 +27,7 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->fm = $this->getMockBuilder('Common\Data\Filter\FilterManager')
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();

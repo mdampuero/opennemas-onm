@@ -173,51 +173,6 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Onm\StringUtils::getTags
-     */
-    public function testGetTags()
-    {
-        $this->assertEquals(
-            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, ' .
-            'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->getTags(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing' .
-                ' elit. Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getTags
-     */
-    public function testGetTagsReturnsStringWithUniqueElements()
-    {
-        $this->assertEquals(
-            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, ' .
-            'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->getTags(
-                'Lorem, Lorem, ipsum dolor sit amet, consectetur adipiscing elit. ' .
-                'Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
-            )
-        );
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getTags
-     */
-    public function testGetTagsRemovesUnnecesaryWords()
-    {
-        $this->assertEquals(
-            'Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, Cras, ' .
-            'sapien, porttitor, non, aliquam, ac, sagittis, urna',
-            $this->object->getTags(
-                'de en al lo Lorem ipsum dolor sit amet, consectetur adipiscing elit.' .
-                ' Cras elit sapien, porttitor non aliquam ac, sagittis a urna.'
-            )
-        );
-    }
-
-    /**
      * @covers \Onm\StringUtils::removeShorts
      */
     public function testRemoveShorts()
@@ -228,33 +183,5 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(' a unha', $this->object->removeShorts(' a unha'));
-    }
-
-    /**
-     * @covers \Onm\StringUtils::getNumWords
-     * @todo   Implement testgetNumWords().
-     */
-    public function testGetNumWords()
-    {
-        $this->assertEquals(
-            'Some example text longer...',
-            $this->object->getNumWords(
-                'Some example text longer than four words',
-                4
-            )
-        );
-    }
-
-    public function testRemovePunctuation()
-    {
-        $this->assertEquals(
-            'Urna quam congue vulputate',
-            $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?')
-        );
-
-        $this->assertEquals(
-            'Urna quam, congue vulputate',
-            $this->object->removePunctuation('Urna quam, (-congue-) vulputate!?', [ ',' ])
-        );
     }
 }

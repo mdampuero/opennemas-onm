@@ -563,57 +563,6 @@ class StringUtils
     }
 
     /**
-     * Gets "n" first words from a given text
-     *
-     * @example self::getNumWords('hello world', 1)
-     *
-     * @param  string  $text the text to operate with
-     * @param  integer $numWords
-     *
-     * @return string
-     */
-    public static function getNumWords($text, $numWords)
-    {
-        if (is_array($text)) {
-            return array_map(function ($a) use ($numWords) {
-                self::getNumWords($a, $numWords);
-            }, $text);
-        }
-
-        $noHtml      = strip_tags($text);
-        $description = explode(" ", $noHtml, $numWords + 1);
-        array_pop($description);
-
-        $words = implode(" ", $description) . '...';
-
-        return $words;
-    }
-
-    /**
-     * Returns a string with keywords from a given text
-     *
-     * @param  string $text the text where extract keywords from
-     *
-     * @return string the string of keywords separated by commas
-     */
-    public static function getTags($text)
-    {
-        $text = preg_replace('/[\.]+/', '', trim($text));
-
-        // Remove stop list
-        $text = self::removeShorts($text);
-
-        $text = preg_replace('/[ ]+/', ',', $text);
-        $text = preg_replace('/[\,]+/', ',', $text);
-
-        // Remove duplicates
-        $tags = array_unique(explode(',', $text));
-        $tags = implode(', ', $tags);
-
-        return $tags;
-    }
-
-    /**
      * Prepares HTML code to use it as html entity attribute
      *
      * @param string $string the string to clean
@@ -701,31 +650,6 @@ class StringUtils
         }
 
         return $str;
-    }
-
-    /**
-     * Removes punctuation characters from a string.
-     *
-     * @param string $str     The string to clean.
-     * @param array  $exclude The list of characters to exclude.
-     *
-     * @return The string without punctuation characters.
-     */
-    public static function removePunctuation($str, $exclude = [])
-    {
-        $punctuation = array_slice(
-            self::$trade,
-            0,
-            array_search('À', array_keys(self::$trade))
-        );
-
-        if (!empty($exclude)) {
-            $punctuation = array_diff_key($punctuation, array_flip($exclude));
-        }
-
-        $str = strtr($str, $punctuation);
-
-        return trim(preg_replace('/\s+/', ' ', $str));
     }
 
     /**

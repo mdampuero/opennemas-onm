@@ -10,7 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
-use Common\Data\Serialize\Serializer\PhpSerializer;
+use Opennemas\Data\Serialize\Serializer\PhpSerializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

@@ -38,6 +38,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->fm = $this->getMockBuilder('FilterManager')
+            ->disableOriginalConstructor()
             ->setMethods([ 'get', 'filter', 'set' ])
             ->getMock();
 
