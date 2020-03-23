@@ -26,15 +26,23 @@ class StatisticsRenderer
     protected $global;
 
     /**
+     * The template
+     *
+     * @var Template
+     */
+    protected $tpl;
+
+    /**
      * Initializes the StatisticsRenderer
      *
      * @param RequestStack $stack     The request stack.
      * @param GlobalVariables $global The global variables
      */
-    public function __construct($stack, $global)
+    public function __construct($stack, $global, $tpl)
     {
         $this->stack  = $stack;
         $this->global = $global;
+        $this->tpl    = $tpl;
     }
 
     /**
@@ -58,6 +66,10 @@ class StatisticsRenderer
             if ($renderer->validate()) {
                 $code .= $renderer->{$method}();
             }
+        }
+
+        if ($imageOnly) {
+            return $code;
         }
 
         if ($method == 'getAmp') {
@@ -99,6 +111,6 @@ class StatisticsRenderer
         $class     = $type . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Statistics\\' . $class;
 
-        return new $classPath($this->stack, $this->global);
+        return new $classPath($this->stack, $this->global, $this->tpl);
     }
 }

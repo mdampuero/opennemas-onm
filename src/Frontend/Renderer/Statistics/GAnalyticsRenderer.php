@@ -9,7 +9,9 @@
  */
 namespace Frontend\Renderer\Statistics;
 
-class GAnalyticsRenderer
+use Frontend\Renderer\StatisticsRenderer;
+
+class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
      * The request stack.
@@ -27,15 +29,24 @@ class GAnalyticsRenderer
     protected $global;
 
     /**
+     * The template
+     *
+     * @var Template
+     */
+    protected $tpl;
+
+    /**
      * Initializes the GAnalyticsRenderer
      *
-     * @param RequestStack $stack The request stack.
+     * @param RequestStack    $stack The request stack.
      * @param GlobalVariables $global The global variables
+     * @param Template        $tpl The template
      */
-    public function __construct($stack, $global)
+    public function __construct($stack, $global, $tpl)
     {
         $this->stack  = $stack;
         $this->global = $global;
+        $this->tpl    = $tpl;
     }
 
     /**
@@ -43,7 +54,7 @@ class GAnalyticsRenderer
      */
     public function getAmp()
     {
-        return '';
+        return $this->tpl->fetch('statistics/helpers/GAnalytics/amp.tpl', []);
     }
 
     /**
@@ -51,7 +62,7 @@ class GAnalyticsRenderer
      */
     public function getScript()
     {
-        return '';
+        return $this->tpl->fetch('statistics/helpers/GAnalytics/script.tpl', []);
     }
 
     /**
@@ -59,7 +70,7 @@ class GAnalyticsRenderer
      */
     public function getImage()
     {
-        return '';
+        return $this->tpl->fetch('statistics/helpers/GAnalytics/image.tpl', []);
     }
 
     /**
