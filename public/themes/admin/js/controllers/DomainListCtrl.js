@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  DomainListCtrl
@@ -18,8 +19,8 @@
      *   Controller to handle actions in domains.
      */
     .controller('DomainListCtrl', [
-      '$controller', '$rootScope', '$scope', 'http', 'messenger', 'routing', 'webStorage',
-      function($controller, $rootScope, $scope, http, messenger, routing, webStorage) {
+      '$controller', '$rootScope', '$scope', 'http',
+      function($controller, $rootScope, $scope, http) {
         /**
          * @memberOf DomainListCtrl
          *
@@ -58,20 +59,6 @@
             $scope.base    = response.data.base;
           });
         };
-
-        /**
-         * @function isRight
-         * @memberOf DomainCheckoutCtrl
-         *
-         * @description
-         *   Checks if the domain is valid.
-         *
-         * @return {Boolean} True if the domain is valid. Otherwise, returns
-         *                   false.
-         */
-        $scope.isRight = function(domain) {
-          return domain.target ===
-            domain.name.replace('www.', '') + '.opennemas.net';
-        };
-    }]);
+      }
+    ]);
 })();

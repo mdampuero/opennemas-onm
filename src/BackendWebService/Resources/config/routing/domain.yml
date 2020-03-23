@@ -5,13 +5,6 @@ backend_ws_domain_check_available:
     options:
         expose: true
 
-backend_ws_domain_check_configured:
-    path:     /domains/configured
-    defaults: { _controller: BackendWebServiceBundle:Domain:checkConfigured }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 backend_ws_domain_check_valid:
     path:     /domains/valid
     defaults: { _controller: BackendWebServiceBundle:Domain:checkValid }

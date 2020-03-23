@@ -85,8 +85,8 @@
                   {t}Free{/t}
                 </span>
                 <span class="p-t-15 pull-right">
-                  <span class="p-r-20" ng-if="domain.free || isRight(domain)"><i class="fa fa-lg fa-check text-success"></i></span>
-                  <span class="p-r-20" ng-if="!domain.free && !isRight(domain)"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
+                  <span class="p-r-20" ng-if="domain.free || domain.valid"><i class="fa fa-lg fa-check text-success"></i></span>
+                  <span class="p-r-20" ng-if="!domain.free && !domain.valid"><i class="fa fa-lg fa-exclamation-triangle text-danger"></i></span>
                   <i class="fa fa-chevron-right fa-lg " ng-class="{ 'fa-rotate-90': expanded[$index]}"></i>
                 </span>
               </div>
@@ -100,11 +100,11 @@
                   <div class="row">
                     <div class="col-sm-12" ng-if="!domain.free">
                       <p><strong>{t}Points to{/t}:</strong> [% domain.target %]</p>
-                      <p ng-if="isRight(domain)">
+                      <p ng-if="domain.valid">
                         <i class="fa fa-lg fa-check text-success"></i>
                         {t}Your domain is properly configured{/t}
                       </p>
-                      <p ng-if="!isRight(domain)">
+                      <p ng-if="!domain.valid">
                         <i class="fa fa-lg fa-exclamation-triangle text-danger"></i>
                         {t}Your domain is not properly configured, check the instructions below.{/t}
                       </p>
@@ -116,11 +116,11 @@
                       <i class="fa fa-lg fa-check text-success"></i>
                       {t}This is your opennemas address{/t}
                     </div>
-                    <div class="col-sm-12" ng-if="!domain.free && !isRight(domain)">
+                    <div class="col-sm-12" ng-if="!domain.free && !domain.valid">
                       <h4>{t}Update your DNS records{/t}</h4>
                       <h5 class="semi-bold">{t}Point the www entrace in your domain to the Opennemas service.{/t}</h5>
                       <div>
-                        <pre style="font-size:1.05em; padding:15px; display:block; width:90%; margin:20px auto;">www     IN     CNAME     [% domain.name.replace('www.', '') %].opennemas.net.</pre>
+                        <pre style="padding: 15px; width:90%; margin: 20px auto;">www     IN     CNAME     [% domain.name.replace('www.', '') %].opennemas.net.</pre>
                       </div>
                       <h4 class="m-t-30">{t 1="[% domain.name.replace('www.', '') %]" 2="[% domain.name.replace('www.', '') %]"}Redirect traffic from %1 to  www.%2{/t}</h4>
                       <p>{t}Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done by the hosting provider for your domain){/t}</p>
