@@ -54,6 +54,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
+     *   Object with trusted URLs for preview.
+     *
+     * @type {Object}
+     */
+    $scope.preview = {};
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
      *  The list of routes for the controller.
      *
      * @type {Object}
@@ -198,12 +208,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       );
     };
 
-    /**
-     * Updates scope when cover changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
+    // Update thumbnail information when cover object changes
     $scope.$watch('cover', function(nv) {
       if (!angular.isObject($scope.item.information)) {
         $scope.item.information = {};
@@ -213,6 +218,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.information.thumbnail = nv.pk_photo;
       } else {
         $scope.item.information.thumbnail = {};
+      }
+    }, true);
+
+    // Mark preview URLs as trusted on change
+    $scope.$watch('item.information.source', function(nv) {
+      for (var type in nv) {
+        $scope.preview[type] = $scope.trustSrc(nv[type]);
       }
     }, true);
   }
