@@ -33,16 +33,26 @@ class StatisticsRenderer
     protected $tpl;
 
     /**
+     * The entity manager
+     *
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
      * Initializes the StatisticsRenderer
      *
-     * @param RequestStack $stack     The request stack.
+     * @param RequestStack    $stack  The request stack
      * @param GlobalVariables $global The global variables
+     * @param Template        $tpl    The template
+     * @param EntityManager   $em     The entity manager
      */
-    public function __construct($stack, $global, $tpl)
+    public function __construct($stack, $global, $tpl, $em)
     {
         $this->stack  = $stack;
         $this->global = $global;
         $this->tpl    = $tpl;
+        $this->em     = $em;
     }
 
     /**
@@ -51,8 +61,6 @@ class StatisticsRenderer
      * @param array $types     The array of types to render
      * @param bool  $imageOnly The flag to indicate if is imageOnly or not
      * @param String $output   The html page
-     *
-     * @param String The code of the analytics types indicated
      */
     public function render($types, $output, $imageOnly = false)
     {
@@ -111,6 +119,6 @@ class StatisticsRenderer
         $class     = $type . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Statistics\\' . $class;
 
-        return new $classPath($this->stack, $this->global, $this->tpl);
+        return new $classPath($this->stack, $this->global, $this->tpl, $this->em);
     }
 }

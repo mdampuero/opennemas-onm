@@ -14,42 +14,6 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
-     * The request stack.
-     *
-     * @var RequestStack
-     */
-    protected $stack;
-
-
-    /**
-     * The global variables
-     *
-     * @var GlobalVariables
-     */
-    protected $global;
-
-    /**
-     * The template
-     *
-     * @var Template
-     */
-    protected $tpl;
-
-    /**
-     * Initializes the GAnalyticsRenderer
-     *
-     * @param RequestStack    $stack The request stack.
-     * @param GlobalVariables $global The global variables
-     * @param Template        $tpl The template
-     */
-    public function __construct($stack, $global, $tpl)
-    {
-        $this->stack  = $stack;
-        $this->global = $global;
-        $this->tpl    = $tpl;
-    }
-
-    /**
      * Get code of google analytics for amp pages
      */
     public function getAmp()
@@ -79,5 +43,13 @@ class GAnalyticsRenderer extends StatisticsRenderer
     public function validate()
     {
         return true;
+    }
+
+    /**
+     * Return the parameters needed to generate analytics
+     */
+    protected function prepareParams()
+    {
+        return [];
     }
 }

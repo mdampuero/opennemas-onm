@@ -14,42 +14,6 @@ use Frontend\Renderer\StatisticsRenderer;
 class ComscoreRenderer extends StatisticsRenderer
 {
     /**
-     * The request stack.
-     *
-     * @var RequestStack
-     */
-    protected $stack;
-
-
-    /**
-     * The global variables
-     *
-     * @var GlobalVariables
-     */
-    protected $global;
-
-    /**
-     * The template
-     *
-     * @var Template
-     */
-    protected $tpl;
-
-    /**
-     * Initializes the GAnalyticsRenderer
-     *
-     * @param RequestStack    $stack The request stack.
-     * @param GlobalVariables $global The global variables
-     * @param Template        $tpl    The template
-     */
-    public function __construct($stack, $global, $tpl)
-    {
-        $this->stack  = $stack;
-        $this->global = $global;
-        $this->tpl    = $tpl;
-    }
-
-    /**
      * Get code of google analytics for amp pages
      */
     public function getAmp()
