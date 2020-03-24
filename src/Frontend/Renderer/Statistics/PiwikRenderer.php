@@ -42,7 +42,10 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function validate()
     {
-        $config = $this->em->getDataSet('Settings', 'instance')->get('piwik');
+        $config      = $this->em->getDataSet('Settings', 'instance')->get('piwik');
+        $piwikConfig = getService('service_container')->getParameter('opennemas.piwik');
+
+        $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
 
         if (!is_array($config)
         || !array_key_exists('page_id', $config)
@@ -70,7 +73,7 @@ class PiwikRenderer extends StatisticsRenderer
 
         return [
             'config'   => $config,
-            'httpHost' => $httpsHost,
+            'httpsHost' => $httpsHost,
             'newsurl'  => $newsUrl,
             'ampHost'  => $ampHost
         ];
