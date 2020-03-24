@@ -1,9 +1,0 @@
-services:
-    orm.manager:
-        class: Common\ORM\Core\EntityManager
-        arguments: [ '@service_container' ]
-        public: true
-
-    orm.oql.fixer:
-        class: Common\ORM\Core\Oql\Fixer
-        public: true
