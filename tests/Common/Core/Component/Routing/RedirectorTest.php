@@ -34,7 +34,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             define('THEMES_DEPLOYED_AT', '20181123192820');
         }
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
             ->disableOriginalConstructor()
             ->setMethods([
                 'contains', 'delete', 'deleteByPattern', 'deleteMulti',

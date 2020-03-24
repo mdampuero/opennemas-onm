@@ -10,7 +10,7 @@
 namespace Common\Core\Component\Routing;
 
 use Api\Service\Service;
-use Common\Cache\Core\Cache;
+use Opennemas\Cache\Core\Cache;
 use Common\Model\Entity\Category;
 use Common\Model\Entity\Url;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

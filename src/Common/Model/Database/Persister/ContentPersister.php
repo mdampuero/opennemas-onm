@@ -9,7 +9,7 @@
  */
 namespace Common\Model\Database\Persister;
 
-use Common\Cache\Core\Cache;
+use Opennemas\Cache\Core\Cache;
 use Common\Model\Entity\User;
 use Common\ORM\Core\Connection;
 use Common\ORM\Core\Entity;

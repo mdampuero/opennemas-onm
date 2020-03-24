@@ -58,7 +58,7 @@ class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
             ->setMethods([ 'remove', 'removeByPattern' ])
             ->getMock();

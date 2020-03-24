@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\Cache\Command;
+namespace Test\Opennemas\Cache\Command;
 
 use Common\Core\Command\OptimizeImagesCommand;
 use Symfony\Component\Console\Application;

@@ -25,7 +25,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'flob' ]);
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
             ->setMethods([
                 'contains', 'delete', 'deleteByPattern', 'deleteMulti', 'fetch',
                 'fetchMulti', 'remove', 'save', 'saveMulti'
@@ -36,7 +36,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
+        $this->cm = $this->getMockBuilder('Opennemas\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
             ->getMock();
