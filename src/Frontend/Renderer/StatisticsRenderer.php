@@ -71,7 +71,7 @@ class StatisticsRenderer
         foreach ($types as $type) {
             $renderer = $this->getRendererClass($type);
 
-            if ($renderer->validate()) {
+            if (method_exists($renderer, $method) && $renderer->validate()) {
                 $code .= $renderer->{$method}();
             }
         }
