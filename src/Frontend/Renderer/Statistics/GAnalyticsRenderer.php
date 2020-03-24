@@ -55,6 +55,14 @@ class GAnalyticsRenderer extends StatisticsRenderer
     }
 
     /**
+     * Return if google analytics is correctly configured or not
+     */
+    public function validate()
+    {
+        return true;
+    }
+
+    /**
      * Return the parameters needed to generate analytics
      */
     protected function prepareParams()
@@ -73,13 +81,5 @@ class GAnalyticsRenderer extends StatisticsRenderer
         $extra['extension'] = $this->global->getExtension();
 
         return [ $config, $extra ];
-    }
-
-    /**
-     * Return if google analytics is correctly configured or not
-     */
-    public function validate()
-    {
-        return true;
     }
 }

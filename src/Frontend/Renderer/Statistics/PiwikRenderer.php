@@ -44,4 +44,12 @@ class PiwikRenderer extends StatisticsRenderer
     {
         return true;
     }
+
+    /**
+     * Return the parameters needed to generate piwik code
+     */
+    protected function prepareParams()
+    {
+        return [];
+    }
 }
