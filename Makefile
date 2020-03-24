@@ -49,11 +49,11 @@ prod:
 ################################################################################
 
 # Compile assets for admin and manager themes
-assets: vendor
+assets:
 	bin/console core:assets:compile
 
 # Compile translations
-translations: vendor
+translations:
 	bin/console translation:core
 
 ################################################################################
@@ -90,7 +90,7 @@ database:
 		VALUES ('recaptcha', 'a:2:{s:10:\"public_key\";s:40:\"6LdWlgkUAAAAADzgu34FyZ-wBSB0xlCUc7UVFWGw\";s:11:\"private_key\";s:40:\"6LdWlgkUAAAAAOUnzzBwHNpPgTBIaLwfDjr6XaeQ\";}')"
 
 # Dumps Symfony routes to make them available in javascript
-routes: vendor
+routes:
 	bin/console fos:js-routing:dump --target public/assets/js/routes.js
 
 # Install node dependencies
