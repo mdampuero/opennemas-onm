@@ -3,7 +3,7 @@
   <script type="application/json">
     {
       "vars": {
-          "c2": "' . $config['page_id'] . '"
+          "c2": "{$page_id}"
       }
     }
   </script>

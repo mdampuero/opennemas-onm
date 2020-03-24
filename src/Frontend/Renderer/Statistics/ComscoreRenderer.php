@@ -18,7 +18,7 @@ class ComscoreRenderer extends StatisticsRenderer
      */
     public function getAmp()
     {
-        return $this->tpl->fetch('statistics/helpers/Comscore/amp.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Comscore/amp.tpl', $this->prepareParams());
     }
 
     /**
@@ -26,15 +26,7 @@ class ComscoreRenderer extends StatisticsRenderer
      */
     public function getScript()
     {
-        return $this->tpl->fetch('statistics/helpers/Comscore/script.tpl', []);
-    }
-
-    /**
-     * Get image code for google analytics
-     */
-    public function getImage()
-    {
-        return $this->tpl->fetch('statistics/helpers/Comscore/image.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Comscore/script.tpl', $this->prepareParams());
     }
 
     /**
@@ -42,6 +34,25 @@ class ComscoreRenderer extends StatisticsRenderer
      */
     public function validate()
     {
+        $config = $this->em->getDataSet('Settings', 'instance')->get('comscore');
+
+        if (!is_array($config)
+            || !array_key_exists('page_id', $config)
+            || empty(trim($config['page_id']))
+        ) {
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Return needed parameters to generate comscore code
+     */
+    protected function prepareParams()
+    {
+        $config = $this->em->getDataSet('Settings', 'instance')->get('comscore');
+
+        return [ 'page_id' => $config['page_id']];
     }
 }
