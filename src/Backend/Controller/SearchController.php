@@ -31,6 +31,9 @@ class SearchController extends Controller
     {
         $contentTypesAvailable = \ContentManager::getContentTypesFiltered();
         unset($contentTypesAvailable['comment']);
+        unset($contentTypesAvailable['kiosko']);
+        unset($contentTypesAvailable['event']);
+        unset($contentTypesAvailable['static_page']);
 
         $types = [
             [ 'name' => _('All'), 'value' => null ]
