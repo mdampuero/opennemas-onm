@@ -18,7 +18,7 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function getAmp()
     {
-        return $this->tpl->fetch('statistics/helpers/Piwik/amp.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Piwik/amp.tpl', $this->prepareParams());
     }
 
     /**
@@ -26,7 +26,7 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function getScript()
     {
-        return $this->tpl->fetch('statistics/helpers/Piwik/script.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Piwik/script.tpl', $this->prepareParams());
     }
 
     /**
@@ -34,7 +34,7 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function getImage()
     {
-        return $this->tpl->fetch('statistics/helpers/Piwik/image.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Piwik/image.tpl', $this->prepareParams());
     }
 
     /**
@@ -42,14 +42,37 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function validate()
     {
+        $config = $this->em->getDataSet('Settings', 'instance')->get('piwik');
+
+        if (!is_array($config)
+        || !array_key_exists('page_id', $config)
+        || !array_key_exists('server_url', $config)
+        || empty(trim($config['page_id']))
+        ) {
+            return false;
+        }
+
         return true;
     }
 
     /**
-     * Return the parameters needed to generate piwik code
+     * Return parameters needed to generate piwik code
      */
     protected function prepareParams()
     {
-        return [];
+        $config      = $this->em->getDataSet('Settings', 'instance')->get('piwik');
+        $piwikConfig = getService('service_container')->getParameter('opennemas.piwik');
+
+        $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
+        $httpsHost            = preg_replace("/http:/", "https:", $config['server_url']);
+        $newsUrl              = urlencode(SITE_URL . 'newsletter/' . date("YmdHis"));
+        $ampHost              = preg_replace("/^https?:/", "", $config['server_url']);
+
+        return [
+            'config'   => $config,
+            'httpHost' => $httpsHost,
+            'newsurl'  => $newsUrl,
+            'ampHost'  => $ampHost
+        ];
     }
 }
