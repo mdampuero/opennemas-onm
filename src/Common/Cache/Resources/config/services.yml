@@ -1,5 +1,0 @@
-services:
-    cache.manager:
-        class:     'Common\Cache\Core\CacheManager'
-        arguments: [ '@service_container' ]
-        public:    true
