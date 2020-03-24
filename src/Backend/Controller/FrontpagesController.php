@@ -196,6 +196,12 @@ class FrontpagesController extends Controller
             . ' and Ids ' . json_encode($contentsPositions));
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
+
+        $this->get('core.dispatcher')->dispatch(
+            'frontpage.save_position',
+            [ 'category' => $category, 'frontpageId' => $version->id ]
+        );
+
         return new JsonResponse([
             'message'              => _('Content positions saved properly'),
             'versionId'            => $version->id,

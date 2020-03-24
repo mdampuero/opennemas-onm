@@ -34,6 +34,7 @@ class SettingController extends Controller
         'comscore',
         'contact_email',
         'cookies_hint_url',
+        'dynamic_css',
         'elements_in_rss',
         'facebook',
         'facebook_id',

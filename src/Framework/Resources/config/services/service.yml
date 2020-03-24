@@ -14,6 +14,11 @@ services:
         arguments: [ '@service_container', '%assetic%' ]
         public: true
 
+    core.service.assetic.dynamic_css:
+        class: Framework\Component\Assetic\DynamicCssService
+        arguments: [ '@orm.manager' ]
+        public: true
+
     core.service.notification:
         class: Framework\Service\NotificationService
         arguments: [ '@service_container' ]

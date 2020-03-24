@@ -13,6 +13,7 @@ use Common\Cache\Core\CacheManager;
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
 use Common\Orm\Entity\Instance;
+use Framework\Component\Assetic\DynamicCssService;
 use Onm\Cache\AbstractCache;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,19 +45,22 @@ class CategorySubscriber implements EventSubscriberInterface
      * @param VarnishHelper       $vh       The VarnishHelper service.
      * @param AbstractCache       $cache    The old cache connection.
      * @param CacheManager        $cm       The CacheManager service.
+     * @param DynamicCssService   $dcs      The DynamicCssService.
      */
     public function __construct(
         ?Instance           $instance,
         TemplateCacheHelper $th,
         VarnishHelper       $vh,
         AbstractCache       $cache,
-        CacheManager        $cm
+        CacheManager        $cm,
+        DynamicCssService   $dcs
     ) {
         $this->instance = $instance;
         $this->template = $th;
         $this->varnish  = $vh;
         $this->oldCache = $cache;
         $this->cache    = $cm->getConnection('instance');
+        $this->dcs      = $dcs;
     }
 
     /**
@@ -125,6 +129,11 @@ class CategorySubscriber implements EventSubscriberInterface
         $categories = $event->hasArgument('item')
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
+
+        $this->dcs->deleteTimestamp('%global%');
+        foreach ($categories as $category) {
+            $this->dcs->deleteTimestamp($category->name);
+        }
 
         $this->template->deleteDynamicCss();
         $this->template->deleteCategories($categories);

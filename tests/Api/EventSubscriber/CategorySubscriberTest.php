@@ -32,9 +32,18 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
+            ->getMock();
+
+        $this->dcs = $this->getMockBuilder('Framework\Component\Assetic\DynamicCssService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'deleteTimestamp' ])
             ->getMock();
 
         $this->event = $this->getMockBuilder('Symfony\Component\EventDispatcher\Event')
@@ -65,7 +74,8 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             $this->th,
             $this->vh,
             $this->oldCache,
-            $this->cm
+            $this->cm,
+            $this->dcs
         );
     }
 
@@ -229,7 +239,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
             ->setConstructorArgs([
-                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm
+                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->dcs
             ])
             ->setMethods([ 'onCategoryUpdate' ])
             ->getMock();
