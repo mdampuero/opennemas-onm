@@ -98,34 +98,34 @@ jQuery(document).ready(function($) {
                 <div class="controls row">
                   <div class="col-sm-3">
                     <div class="radio">
-                      <input id="image" name="with_script" ng-model="with_script" {if $with_script == 0}checked{/if} type="radio" value="0">
+                      <input id="image" name="with_script" ng-model="with_script" type="radio" ng-value="0">
                       <label for="image" title="{t}Image or Flash object{/t}">{t}Image or Flash object{/t}</label>
                     </div>
                   </div>
                   <div class="col-sm-3">
                     <div class="radio">
-                      <input id="html" name="with_script" ng-model="with_script"  {if $with_script == 1}checked{/if} type="radio" value="1">
+                      <input id="html" name="with_script" ng-model="with_script" type="radio" ng-value="1">
                       <label for="html" title="{t}HTML or Javascript code{/t}">{t}HTML or Javascript code{/t}</label>
                     </div>
                   </div>
                   {if !empty($extra['openx_server_url'])}
                   <div class="col-sm-2">
                     <div class="radio">
-                      <input id="open-x" name="with_script" ng-model="with_script"  {if $with_script == 2}checked{/if} type="radio" value="2">
+                      <input id="open-x" name="with_script" ng-model="with_script" type="radio" ng-value="2">
                       <label for="open-x" title="{t}OpenX{/t}">{t}OpenX{/t}</label>
                     </div>
                   </div>
                   {/if}
                   <div class="col-sm-2">
                     <div class="radio">
-                      <input id="dfp" name="with_script" ng-model="with_script" {if $with_script == 3}checked{/if} type="radio" value="3">
+                      <input id="dfp" name="with_script" ng-model="with_script" type="radio" ng-value="3">
                       <label for="dfp" title="{t}Google DFP{/t}">{t}Google DFP{/t}</label>
                     </div>
                   </div>
                   {if !empty($extra['smart_server_url'])}
                   <div class="col-sm-2">
                     <div class="radio">
-                      <input id="smart" name="with_script" ng-model="with_script" {if $with_script == 4}checked{/if} type="radio" value="4">
+                      <input id="smart" name="with_script" ng-model="with_script" type="radio" ng-value="4">
                       <label for="smart" title="{t}Smart{/t}">{t}Smart{/t}</label>
                     </div>
                   </div>
