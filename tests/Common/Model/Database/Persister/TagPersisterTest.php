@@ -24,7 +24,7 @@ class TagPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
             ->setMethods([ 'remove' ])
             ->getMock();

@@ -27,7 +27,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'addPositions' ])
             ->getMock();
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
             ->setMethods([ 'setNamespace' ])
             ->getMock();

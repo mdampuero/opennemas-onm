@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Loader;
 
-use Common\Cache\Core\CacheManager;
+use Opennemas\Cache\Core\CacheManager;
 use Common\ORM\Core\EntityManager;
 use Common\Model\Entity\Instance;
 use Symfony\Component\HttpFoundation\Request;

@@ -9,7 +9,7 @@
  */
 namespace Api\EventSubscriber;
 
-use Common\Cache\Core\CacheManager;
+use Opennemas\Cache\Core\CacheManager;
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
 use Common\Model\Entity\Instance;
