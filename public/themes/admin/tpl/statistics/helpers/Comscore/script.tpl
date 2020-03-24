@@ -12,6 +12,6 @@
   })();
 </script>
 <noscript>
-  <img src="http://b.scorecardresearch.com/p?c1=2&c2=$config['{$page_id}']&cv=2.0&cj=1" />
+  <img src="http://b.scorecardresearch.com/p?c1=2&c2={$page_id}&cv=2.0&cj=1" />
 </noscript>
 <!-- EndcomScore  Tag -->
