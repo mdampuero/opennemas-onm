@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ec15ac4f330f3bb52f742b2dc44dea9",
+    "content-hash": "12328c01a15f87fc43cd50d48d05d73a",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2675,6 +2675,71 @@
                 "token"
             ],
             "time": "2016-01-24T11:10:26+00:00"
+        },
+        {
+            "name": "opennemas/cache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:opennemas/cache.git",
+                "reference": "875162cef3edab95d86f4a2eefc966bf5c3accd7"
+            },
+            "require": {
+                "ext-redis": "*",
+                "opennemas/data": "1.0.*",
+                "php": ">=7.1",
+                "symfony/symfony": "3.4.*"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.25.1",
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Opennemas\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\Opennemas\\": "tests/"
+                }
+            },
+            "scripts": {
+                "syntax": [
+                    "phpcs src tests",
+                    "phpmd src ansi phpmd.xml",
+                    "phpmd tests ansi phpmd.xml"
+                ],
+                "test": [
+                    "vendor/bin/phpunit --colors=always"
+                ],
+                "test-coverage": [
+                    "vendor/bin/phpunit --colors=always --coverage-text"
+                ],
+                "test-coverage-report": [
+                    "vendor/bin/phpunit --colors=always --coverage-html coverage"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Opennemas Developers",
+                    "email": "developers@opennemas.com"
+                }
+            ],
+            "description": "Symfony bundle for cache connection",
+            "keywords": [
+                "cache",
+                "file",
+                "redis",
+                "symfony"
+            ],
+            "time": "2020-03-23T16:46:32+00:00"
         },
         {
             "name": "opennemas/data",
@@ -7733,5 +7798,6 @@
     "platform": {
         "php": ">=5.5.9"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

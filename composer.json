@@ -69,6 +69,7 @@
         "symfony/assetic-bundle": "~2.8",
 
         "drexarj/disqus-php": "dev-master",
+        "opennemas/cache": "1.0.*",
         "opennemas/data": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
@@ -97,6 +98,10 @@
         {
             "type": "git",
             "url": "https://github.com/openhost/NativeSession"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/cache.git"
         },
         {
             "type": "git",
