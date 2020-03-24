@@ -1,18 +1,20 @@
-<amp-analytics type="googleanalytics" id="analytics' . $key . '">
-  <script type="application/json">
-  {
-    "vars": {
-      "account": "' . trim($account['api_key']) . '"
-    },
-    "triggers": {
-      "trackPageview": {
-        "on": "visible",
-        "request": "pageview"
+{foreach from=$params key=key item=account}
+  <amp-analytics type="googleanalytics" id="analytics{$key}">
+    <script type="application/json">
+    {
+      "vars": {
+        "account": "{trim($account['api_key'])}"
+      },
+      "triggers": {
+        "trackPageview": {
+          "on": "visible",
+          "request": "pageview"
+        }
       }
     }
-  }
-  </script>
-</amp-analytics>
+    </script>
+  </amp-analytics>
+{/foreach}
 <amp-analytics type="googleanalytics" id="analytics-onm">
   <script type="application/json">
   {

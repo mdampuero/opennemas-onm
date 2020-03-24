@@ -66,7 +66,7 @@ class StatisticsRenderer
     {
         $method = $this->getCode($imageOnly);
         //TODO: Initialize the code with our default analytics code
-        $code = '<script>[Default code]</script>';
+        $code = '';
 
         foreach ($types as $type) {
             $renderer = $this->getRendererClass($type);
