@@ -2,11 +2,11 @@
   <div class="grid-title no-border no-padding"></div>
   <div class="grid-body" ng-click="showDetails(item);$event.stopPropagation()">
     <div class="p-b-50" ng-click="$event.stopPropagation()">
-      <uib-carousel active="a"  class="carousel-minimal" ng-if="item.images.length > 0">
-        <uib-slide ng-repeat="screenshot in item.images track by $index" index="$index">
+      <div uib-carousel active="a"  class="carousel-minimal" ng-if="item.images.length > 0">
+        <div uib-slide ng-repeat="screenshot in item.images track by $index" index="$index">
           <img class="img-responsive" ng-click="showDetails(item)" ng-src="[% '/asset/zoomcrop,1024,768' + item.path + '/' + screenshot %]">
-        </uib-slide>
-      </uib-carousel>
+        </div>
+      </div>
       <img class="img-responsive" ng-click="showDetails(item)" ng-if="!item.images" src="//placehold.it/1024x768">
     </div>
     <div class="clearfix p-t-5 p-b-10">
