@@ -20,15 +20,15 @@ orm:
                 type:         integer
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.url' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.url', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.url', '@cache.connection.instance' ]
             mapping:
                 database:

@@ -12,7 +12,7 @@ namespace Tests\Common\Model\Database\Persister;
 use Common\Model\Database\Persister\TagPersister;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Tag;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for TagPersister class.
@@ -29,7 +29,7 @@ class TagPersisterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'remove' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([
                 'delete', 'executeQuery', 'fetchAll' ,'insert', 'lastInsertId',

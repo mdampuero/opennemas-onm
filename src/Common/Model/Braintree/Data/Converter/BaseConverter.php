@@ -9,8 +9,8 @@
  */
 namespace Common\Model\Braintree\Data\Converter;
 
-use Common\ORM\Core\Data\Converter\Converter;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Data\Converter\Converter;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * The BaseConverter class converts entity data before and after persisting them

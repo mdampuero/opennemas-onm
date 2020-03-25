@@ -9,7 +9,7 @@
  */
 namespace Common\Model\Entity;
 
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * The Client class represents an user who can buy extensions for an instance.

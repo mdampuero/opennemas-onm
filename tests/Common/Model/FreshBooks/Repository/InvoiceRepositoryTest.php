@@ -9,9 +9,9 @@
  */
 namespace Framework\Tests\Model\FreshBooks\Repository;
 
-use Common\ORM\Core\Metadata;
 use Common\Model\Entity\Invoice;
 use Common\Model\FreshBooks\Repository\InvoiceRepository;
+use Opennemas\Orm\Core\Metadata;
 
 class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -63,7 +63,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests find when API call fails.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Opennemas\Orm\Core\Exception\EntityNotFoundException
      */
     public function testFindWithInvalidId()
     {
@@ -113,7 +113,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests findBy when the search criteria is invalid.
      *
-     * @expectedException \Common\ORM\Core\Exception\InvalidCriteriaException
+     * @expectedException \Opennemas\Orm\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithInvalidCriteria()
     {
@@ -250,7 +250,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getPdf when searched the entity is not found.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Opennemas\Orm\Core\Exception\EntityNotFoundException
      */
     public function testGetPdfWithInvalidId()
     {

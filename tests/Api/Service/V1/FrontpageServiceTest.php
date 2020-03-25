@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\FrontpageService;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for FrontpageService class.
@@ -33,7 +33,7 @@ class FrontpageServiceTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->service = new FrontpageService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new FrontpageService($this->container, 'Opennemas\Orm\Core\Entity');
     }
 
     public function serviceContainerCallback($name)

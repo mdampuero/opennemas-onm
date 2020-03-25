@@ -19,15 +19,15 @@ orm:
                 content_type_referenced: string
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.comment' ]
             repositories:
                 database:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.comment', '@cache.connection.instance' ]
             persisters:
                 database:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.comment', '@cache.connection.instance' ]
             mapping:
                 database:

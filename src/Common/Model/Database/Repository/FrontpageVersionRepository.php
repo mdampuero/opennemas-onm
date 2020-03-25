@@ -9,7 +9,7 @@
  */
 namespace Common\Model\Database\Repository;
 
-use Common\ORM\Database\Repository\BaseRepository;
+use Opennemas\Orm\Database\Repository\BaseRepository;
 
 class FrontpageVersionRepository extends BaseRepository
 {

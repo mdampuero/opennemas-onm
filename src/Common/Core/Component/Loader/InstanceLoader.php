@@ -9,9 +9,9 @@
  */
 namespace Common\Core\Component\Loader;
 
-use Opennemas\Cache\Core\CacheManager;
-use Common\ORM\Core\EntityManager;
 use Common\Model\Entity\Instance;
+use Opennemas\Cache\Core\CacheManager;
+use Opennemas\Orm\Core\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class InstanceLoader

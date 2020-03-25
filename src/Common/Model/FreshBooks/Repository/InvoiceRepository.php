@@ -10,8 +10,8 @@
 namespace Common\Model\FreshBooks\Repository;
 
 use Common\Model\Entity\Invoice;
-use Common\ORM\Core\Exception\EntityNotFoundException;
-use Common\ORM\Core\Exception\InvalidCriteriaException;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
+use Opennemas\Orm\Core\Exception\InvalidCriteriaException;
 
 /**
  * The InvoiceRepository class defines actions to search Invoices in FreshBooks.

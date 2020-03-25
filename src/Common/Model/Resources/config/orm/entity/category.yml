@@ -16,7 +16,7 @@ orm:
                 color:               string
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Converter\BaseConverter
                     arguments: [ '@orm.metadata.category' ]
             repositories:
                 instance:
@@ -24,7 +24,7 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             mapping:
                 database:

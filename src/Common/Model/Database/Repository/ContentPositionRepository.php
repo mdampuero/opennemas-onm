@@ -10,7 +10,7 @@
 namespace Common\Model\Database\Repository;
 
 use Common\Model\Entity\ContentPosition;
-use Common\ORM\Database\Repository\BaseRepository;
+use Opennemas\Orm\Database\Repository\BaseRepository;
 
 class ContentPositionRepository extends BaseRepository
 {

@@ -32,12 +32,12 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getConnection' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('Common\ORM\Database\Repository\BaseRepository')
+        $this->repository = $this->getMockBuilder('Openneams\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findOneBy' ])
             ->getMock();

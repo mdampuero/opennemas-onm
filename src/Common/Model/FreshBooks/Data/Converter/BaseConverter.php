@@ -9,8 +9,8 @@
  */
 namespace Common\Model\FreshBooks\Data\Converter;
 
-use Common\ORM\Core\Data\Converter\Converter;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Data\Converter\Converter;
+use Opennemas\Orm\Core\Entity;
 use Symfony\Component\Intl\Intl;
 
 /**

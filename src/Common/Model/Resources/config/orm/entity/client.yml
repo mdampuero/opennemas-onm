@@ -28,15 +28,15 @@ orm:
                 vat_number:  string
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.client' ]
             repositories:
                 manager:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
             persisters:
                 manager:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.manager', '@orm.metadata.client', '@cache.connection.manager' ]
                 braintree:
                     class:     Common\Model\Braintree\Persister\ClientPersister

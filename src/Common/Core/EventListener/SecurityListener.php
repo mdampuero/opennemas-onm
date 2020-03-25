@@ -10,7 +10,7 @@
 namespace Common\Core\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceBlockedException;
-use Common\ORM\Core\Exception\EntityNotFoundException;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;

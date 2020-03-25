@@ -9,8 +9,8 @@
  */
 namespace Tests\Common\Core\Component\Filter;
 
-use Common\ORM\Core\Entity;
 use Common\Core\Component\Filter\LocalizeFilter;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for Localizer class.

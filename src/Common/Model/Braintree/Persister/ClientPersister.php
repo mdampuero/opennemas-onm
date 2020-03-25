@@ -9,7 +9,7 @@
  */
 namespace Common\Model\Braintree\Persister;
 
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * The ClientPersister class defines actions to create, update and remove

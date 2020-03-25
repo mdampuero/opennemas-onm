@@ -46,7 +46,7 @@ class MigrationManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->container = $this->getMockBuilder('Container')->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
 

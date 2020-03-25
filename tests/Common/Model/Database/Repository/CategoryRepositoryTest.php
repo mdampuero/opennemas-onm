@@ -10,7 +10,7 @@
 namespace Tests\Common\Model\Database\Repository;
 
 use Common\Model\Database\Repository\CategoryRepository;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for CategoryRepository class.
@@ -22,7 +22,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'executeQuery', 'fetchAll' ])
             ->getMock();

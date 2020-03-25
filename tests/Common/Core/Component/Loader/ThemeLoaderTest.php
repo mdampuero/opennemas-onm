@@ -22,12 +22,12 @@ class ThemeLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('Common\ORM\File\Repository\BaseRepository')
+        $this->repository = $this->getMockBuilder('Opennemas\Orm\File\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findBy', 'findOneBy' ])
             ->getMock();

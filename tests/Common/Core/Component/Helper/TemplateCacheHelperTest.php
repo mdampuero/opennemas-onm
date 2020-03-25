@@ -29,12 +29,12 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'delete' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetchAll' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
             ->getMock();

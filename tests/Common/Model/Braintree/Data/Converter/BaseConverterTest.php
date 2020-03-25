@@ -11,7 +11,7 @@ namespace Tests\Common\Model\Braintree\Data\Converter;
 
 use Common\Model\Entity\Client;
 use Common\Model\Braintree\Data\Converter\BaseConverter;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for BaseConverter class.

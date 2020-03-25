@@ -10,8 +10,8 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\UserService;
-use Common\ORM\Core\Entity;
-use Common\ORM\Core\Exception\EntityNotFoundException;
+use Opennemas\Orm\Core\Entity;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 
 /**
  * Defines test cases for UserService class.
@@ -84,7 +84,7 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
-        $this->service = new UserService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new UserService($this->container, 'Opennemas\Orm\Core\Entity');
     }
 
     public function serviceContainerCallback($name)
