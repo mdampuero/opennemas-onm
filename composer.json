@@ -72,6 +72,7 @@
         "opennemas/cache": "1.0.*",
         "opennemas/data": "1.0.*",
         "opennemas/orm": "1.0.*",
+        "opennemas/task": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
         "google/recaptcha": "1.1.3",
@@ -110,6 +111,10 @@
         {
             "type": "git",
             "url": "git@bitbucket.org:opennemas/orm.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/task.git"
         }
     ],
     "scripts": {
