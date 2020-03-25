@@ -14,20 +14,6 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
-     * Return the code of the specified type
-     */
-    public function getCode($codeType, $type)
-    {
-        $template = 'statistics/helpers/' . $type . '/' . $codeType . '.tpl';
-
-        try {
-            return $this->tpl->fetch($template, $this->prepareParams());
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    /**
      * Return if google analytics is correctly configured or not
      */
     public function validate()
@@ -38,7 +24,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
     /**
      * Return the parameters needed to generate analytics
      */
-    protected function prepareParams()
+    public function prepareParams()
     {
         $config = $this->global->getContainer()
             ->get('orm.manager')

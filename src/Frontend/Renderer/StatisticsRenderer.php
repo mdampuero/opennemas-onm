@@ -52,7 +52,14 @@ class StatisticsRenderer
             $renderer = $this->getRendererClass($type);
 
             if ($renderer->validate()) {
-                $code .= $renderer->getCode($codeType, $type);
+                try {
+                    $code .= $this->tpl->fetch(
+                        'statistics/helpers/' . $type . '/' . $codeType . '.tpl',
+                        $renderer->prepareParams()
+                    );
+                } catch (\Exception $e) {
+                    continue;
+                }
             }
         }
 

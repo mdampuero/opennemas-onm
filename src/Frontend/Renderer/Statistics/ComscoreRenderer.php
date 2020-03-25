@@ -14,20 +14,6 @@ use Frontend\Renderer\StatisticsRenderer;
 class ComscoreRenderer extends StatisticsRenderer
 {
     /**
-     * Return the code of the specified type
-     */
-    public function getCode($codeType, $type)
-    {
-        $template = 'statistics/helpers/' . $type . '/' . $codeType . '.tpl';
-
-        try {
-            return $this->tpl->fetch($template, $this->prepareParams());
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    /**
      * Return if comscore is correctly configured or not
      */
     public function validate()
@@ -50,7 +36,7 @@ class ComscoreRenderer extends StatisticsRenderer
     /**
      * Return needed parameters to generate comscore code
      */
-    protected function prepareParams()
+    public function prepareParams()
     {
         $config = $this->global->getContainer()
             ->get('orm.manager')

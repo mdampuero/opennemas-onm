@@ -14,20 +14,6 @@ use Frontend\Renderer\StatisticsRenderer;
 class ChartbeatRenderer extends StatisticsRenderer
 {
     /**
-     * Return the code of the specified type
-     */
-    public function getCode($codeType, $type)
-    {
-        $template = 'statistics/helpers/' . $type . '/' . $codeType . '.tpl';
-
-        try {
-            return $this->tpl->fetch($template, $this->prepareParams());
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    /**
      * Return if chartbeat is correctly configured or not
      */
     public function validate()
@@ -52,7 +38,7 @@ class ChartbeatRenderer extends StatisticsRenderer
     /**
      * Return parameters needed to generate chartbeat code
      */
-    protected function prepareParams()
+    public function prepareParams()
     {
         $container = $this->global->getContainer();
         $config    = $container->get('orm.manager')
