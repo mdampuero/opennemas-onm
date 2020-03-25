@@ -38,7 +38,7 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->tq = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->tq = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 

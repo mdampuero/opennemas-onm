@@ -11,8 +11,8 @@ namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
 use Common\Model\Entity\Instance;
-use Common\Task\Component\Queue\Queue;
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Queue\Queue;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class VarnishHelper
 {

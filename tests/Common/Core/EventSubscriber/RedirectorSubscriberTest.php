@@ -11,7 +11,7 @@ namespace Tests\Common\Core\EventSubscriber;
 
 use Common\Core\EventSubscriber\RedirectorSubscriber;
 use Common\Model\Entity\Instance;
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for RedirectorSubscriber class.
@@ -25,7 +25,7 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'mumble' ]);
 
-        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->queue = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 
