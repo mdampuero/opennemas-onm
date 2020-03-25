@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Opennemas\Data\DataBundle(),
             new Opennemas\Cache\CacheBundle(),
+            new Opennemas\Orm\OrmBundle(),
             new CometCult\BraintreeBundle\CometCultBraintreeBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
@@ -51,7 +52,6 @@ class AppKernel extends Kernel
             new Common\Task\TaskBundle(),
             new Common\Test\TestBundle(),
             new Common\Migration\MigrationBundle(),
-            new Common\ORM\OrmBundle(),
             new Common\External\ActOn\ActOnBundle(),
         ];
 
