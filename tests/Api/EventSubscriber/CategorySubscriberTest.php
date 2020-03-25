@@ -26,6 +26,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->instance = new Instance([ 'internal_name' => 'flob' ]);
 
         $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
+            ->disableOriginalConstructor()
             ->setMethods([
                 'contains', 'delete', 'deleteByPattern', 'deleteMulti', 'fetch',
                 'fetchMulti', 'remove', 'save', 'saveMulti'
