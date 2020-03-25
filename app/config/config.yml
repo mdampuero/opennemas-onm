@@ -105,7 +105,6 @@ assetic:
         - BackendBundle
         - BackendWebServiceBundle
         - FrontendBundle
-        - FrontendMobileBundle
         - ManagerBundle
         - ManagerWebServiceBundle
         - WebServiceBundle

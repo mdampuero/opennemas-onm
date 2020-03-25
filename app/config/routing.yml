@@ -21,10 +21,6 @@ frontend:
     resource: '@FrontendBundle/Resources/config/routing.yml'
     prefix:   /
 
-frontendmobile:
-    resource: '@FrontendMobileBundle/Resources/config/routing.yml'
-    prefix:   /
-
 manager:
     resource: '@ManagerBundle/Resources/config/routing.yml'
     prefix:   /
