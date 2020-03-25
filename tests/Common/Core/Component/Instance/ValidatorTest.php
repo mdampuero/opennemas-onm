@@ -21,12 +21,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->repository = $this->getMockBuilder('\Common\ORM\Database\Repository\BaseRepository')
+        $this->repository = $this->getMockBuilder('Opennemas\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findOneBy' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('\Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRepository' ])
             ->getMock();

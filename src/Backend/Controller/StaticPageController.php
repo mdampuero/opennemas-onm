@@ -11,7 +11,6 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

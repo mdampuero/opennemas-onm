@@ -10,7 +10,7 @@
 namespace Common\Model\Braintree\Repository;
 
 use Common\Model\Braintree\Data\Converter\BaseConverter;
-use Common\ORM\Core\Repository;
+use Opennemas\Orm\Core\Repository;
 
 /**
  * The BaseRepository class defines basic actions for braintree repositories.

@@ -34,15 +34,15 @@ orm:
                 url:                 string
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.theme' ]
             repositories:
                 file:
-                    class:     Common\ORM\File\Repository\BaseRepository
+                    class:     Opennemas\Orm\File\Repository\BaseRepository
                     arguments: [ '@service_container', [ 'public/themes' ], [ 'node_modules', 'vendor' ], '@orm.metadata.theme', '@cache.connection.internal' ]
             persisters:
                 database:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.manager', '@orm.metadata.theme', '@cache.connection.manager' ]
             mapping:
                 database:

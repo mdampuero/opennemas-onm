@@ -10,7 +10,7 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Template\Cache\CacheManager;
-use Common\ORM\Core\EntityManager;
+use Opennemas\Orm\Core\EntityManager;
 
 class TemplateCacheHelper
 {

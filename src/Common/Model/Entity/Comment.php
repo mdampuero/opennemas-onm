@@ -9,7 +9,7 @@
  */
 namespace Common\Model\Entity;
 
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * The Comment class represents a content-related comment created by users.

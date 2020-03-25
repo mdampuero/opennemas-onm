@@ -11,7 +11,7 @@ orm:
                 slug:        string
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.tag' ]
             repositories:
                 instance:

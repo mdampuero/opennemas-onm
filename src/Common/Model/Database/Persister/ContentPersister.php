@@ -9,13 +9,13 @@
  */
 namespace Common\Model\Database\Persister;
 
-use Opennemas\Cache\Core\Cache;
 use Common\Model\Entity\User;
-use Common\ORM\Core\Connection;
-use Common\ORM\Core\Entity;
-use Common\ORM\Core\Metadata;
-use Common\ORM\Database\Data\Converter\BaseConverter;
-use Common\ORM\Database\Persister\BasePersister;
+use Opennemas\Cache\Core\Cache;
+use Opennemas\Orm\Core\Connection;
+use Opennemas\Orm\Core\Entity;
+use Opennemas\Orm\Core\Metadata;
+use Opennemas\Orm\Database\Data\Converter\BaseConverter;
+use Opennemas\Orm\Database\Persister\BasePersister;
 
 /**
  * The InstancecontentPersister class defines actions to persist contents.

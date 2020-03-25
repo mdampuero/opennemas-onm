@@ -21,15 +21,15 @@ orm:
                 params:          array
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.newsletter' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.newsletter', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.newsletter', '@cache.connection.instance' ]
             mapping:
                 database:

@@ -18,7 +18,7 @@ orm:
                 terms:     string
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
             repositories:
                 freshbooks:

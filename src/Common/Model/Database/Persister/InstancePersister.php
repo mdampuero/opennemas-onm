@@ -9,8 +9,8 @@
  */
 namespace Common\Model\Database\Persister;
 
-use Common\ORM\Core\Entity;
-use Common\ORM\Database\Persister\BasePersister;
+use Opennemas\Orm\Core\Entity;
+use Opennemas\Orm\Database\Persister\BasePersister;
 
 /**
  * The InstancePersister class defines actions to persist Instances.

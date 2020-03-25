@@ -30,11 +30,11 @@ class LocaleHelperTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->ds = $this->getMockBuilder('Common\ORM\Core\DataSet')
+        $this->ds = $this->getMockBuilder('Opennemas\Orm\Core\DataSet')
             ->setMethods([ 'delete', 'get', 'set' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();

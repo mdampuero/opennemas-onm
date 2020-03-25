@@ -9,8 +9,7 @@
  */
 namespace Common\Model\Database\Persister;
 
-use Common\ORM\Core\Entity;
-use Common\ORM\Database\Persister\BasePersister;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * The InstanceUserPersister class defines actions to persist Users.

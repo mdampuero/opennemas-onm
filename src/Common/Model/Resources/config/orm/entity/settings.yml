@@ -4,10 +4,10 @@ orm:
             name: Settings
             datasets:
                 instance:
-                    class:     Common\ORM\Database\DataSet\BaseDataSet
+                    class:     Opennemas\Orm\Database\DataSet\BaseDataSet
                     arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance', '%orm.parameter.setting.autoload.instance%' ]
                 manager:
-                    class:     Common\ORM\Database\DataSet\BaseDataSet
+                    class:     Opennemas\Orm\Database\DataSet\BaseDataSet
                     arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.manager', '%orm.parameter.setting.autoload.manager%' ]
             mapping:
                 database:

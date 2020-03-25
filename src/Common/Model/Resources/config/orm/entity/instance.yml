@@ -41,7 +41,7 @@ orm:
                 widgets:            integer
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.instance' ]
             repositories:
                 database:

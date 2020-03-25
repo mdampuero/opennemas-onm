@@ -9,8 +9,8 @@
  */
 namespace Common\Model\Entity;
 
-use Common\ORM\Core\Entity;
 use Lexik\Bundle\JWTAuthenticationBundle\User\JWTUserInterface;
+use Opennemas\Orm\Core\Entity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;

@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\ContentPositionService;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for ContentPositionService class.
@@ -59,7 +59,7 @@ class ContentPositionServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
-        $this->service = new ContentPositionService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new ContentPositionService($this->container, 'Opennemas\Orm\Core\Entity');
     }
 
     public function serviceContainerCallback($name)

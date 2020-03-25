@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Model\File\Repository;
 
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 use Common\Model\Database\Repository\UserGroupRepository;
 
 class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
@@ -19,7 +19,7 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetchAll', 'fetchArray' ])
             ->getMock();

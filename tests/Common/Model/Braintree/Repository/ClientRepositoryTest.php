@@ -11,7 +11,7 @@ namespace Tests\Common\Model\Braintree\Repository;
 
 use Common\Model\Braintree\Repository\ClientRepository;
 use Common\Model\Entity\Client;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for ClientRepository class.
@@ -78,7 +78,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests find when API call fails.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Opennemas\Orm\Core\Exception\EntityNotFoundException
      */
     public function testFindWithError()
     {
@@ -136,7 +136,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests findBy when the search criteria is invalid.
      *
-     * @expectedException \Common\ORM\Core\Exception\InvalidCriteriaException
+     * @expectedException \Opennemas\Orm\Core\Exception\InvalidCriteriaException
      */
     public function testFindByWithError()
     {

@@ -10,8 +10,8 @@
 namespace Common\Model\Braintree\Repository;
 
 use Common\Model\Entity\Client;
-use Common\ORM\Core\Exception\EntityNotFoundException;
-use Common\ORM\Core\Exception\InvalidCriteriaException;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
+use Opennemas\Orm\Core\Exception\InvalidCriteriaException;
 
 /**
  * The ClientRepository class defines actions to search Clients in Braintree.

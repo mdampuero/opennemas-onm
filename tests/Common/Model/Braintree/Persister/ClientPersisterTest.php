@@ -11,7 +11,7 @@ namespace Tests\Common\Model\Braintree\Repository;
 
 use Common\Model\Braintree\Persister\ClientPersister;
 use Common\Model\Entity\Client;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for ClientPersister class.

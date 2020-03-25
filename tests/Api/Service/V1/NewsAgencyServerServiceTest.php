@@ -26,7 +26,7 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('Common\ORM\Core\DataSet')
+        $this->dataset = $this->getMockBuilder('Opennemas\Orm\Core\DataSet')
             ->setMethods([ 'delete', 'get', 'init', 'set' ])
             ->getMock();
 
@@ -34,7 +34,7 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();

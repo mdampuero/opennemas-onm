@@ -9,7 +9,7 @@
  */
 namespace Common\Migration\Component\Persister;
 
-use Common\ORM\Core\Connection;
+use Opennemas\Orm\Core\Connection;
 
 /**
  * The DatabasePersister class provides methods to save items to a data source.

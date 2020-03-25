@@ -11,7 +11,7 @@ namespace Tests\Common\Model\Database\Persister;
 
 use Common\Model\Database\Persister\ManagerUserPersister;
 use Common\Model\Entity\User;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,7 +20,7 @@ class ManagerUserPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([
                 'delete', 'executeQuery', 'insert', 'lastInsertId', 'update',

@@ -11,9 +11,9 @@ namespace Tests\Common\Core\EventListener;
 
 use Common\Core\Component\Helper\PermissionHelper;
 use Common\Core\EventListener\SecurityListener;
-use Common\ORM\Core\Exception\EntityNotFoundException;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\User;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 
 /**
  * Defines test cases for SecurityListener class.

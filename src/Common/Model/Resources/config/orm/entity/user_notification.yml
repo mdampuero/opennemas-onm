@@ -17,15 +17,15 @@ orm:
 
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.user_notification' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
             persisters:
                 instance:
-                    class:     Common\ORM\Database\Persister\BasePersister
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.manager', '@orm.metadata.user_notification', '@cache.connection.manager' ]
             mapping:
                 database:

@@ -13,7 +13,7 @@ services:
 
     # TODO: Remove when models use new ORM
     orm.connection.instance:
-        class:     Common\ORM\Core\Connection
+        class:     Opennemas\Orm\Core\Connection
         factory:   [ '@orm.manager', 'getConnection' ]
         arguments: [ 'instance' ]
         public: true

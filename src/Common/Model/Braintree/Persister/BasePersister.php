@@ -10,7 +10,7 @@
 namespace Common\Model\Braintree\Persister;
 
 use Common\Model\Braintree\Data\Converter\BaseConverter;
-use Common\ORM\Core\Persister;
+use Opennemas\Orm\Core\Persister;
 
 /**
  * The BasePersister class defines basic actions for braintree persisters.

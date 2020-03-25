@@ -32,7 +32,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'setNamespace' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'selectDatabase' ])
             ->getMock();
@@ -41,7 +41,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'has' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('Common\ORM\Database\DataSet\BaseDataSet')
+        $this->dataset = $this->getMockBuilder('Opennemas\Orm\Database\DataSet\BaseDataSet')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
             ->getMock();
@@ -51,7 +51,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'selectDatabase' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection', 'getDataSet' ])
             ->getMock();

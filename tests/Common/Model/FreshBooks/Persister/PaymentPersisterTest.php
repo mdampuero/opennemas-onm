@@ -11,7 +11,7 @@ namespace Tests\Common\Model\FreshBooks\Repository;
 
 use Common\Model\Entity\Payment;
 use Common\Model\FreshBooks\Persister\PaymentPersister;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for PaymentPersister class.
@@ -107,7 +107,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests remove when API returns false.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Opennemas\Orm\Core\Exception\EntityNotFoundException
      */
     public function testRemoveWithError()
     {
@@ -141,7 +141,7 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests update when API returns false.
      *
-     * @expectedException \Common\ORM\Core\Exception\EntityNotFoundException
+     * @expectedException \Opennemas\Orm\Core\Exception\EntityNotFoundException
      */
     public function testUpdateWithError()
     {

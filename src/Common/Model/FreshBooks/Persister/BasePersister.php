@@ -10,7 +10,7 @@
 namespace Common\Model\FreshBooks\Persister;
 
 use Common\Model\FreshBooks\Data\Converter\BaseConverter;
-use Common\ORM\Core\Persister;
+use Opennemas\Orm\Core\Persister;
 use Freshbooks\FreshBooksApi;
 
 /**

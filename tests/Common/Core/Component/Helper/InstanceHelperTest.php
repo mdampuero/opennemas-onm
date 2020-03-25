@@ -33,7 +33,8 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
+            ->disableOriginalConstructor()
             ->setMethods([ 'fetchAll', 'fetchAssoc', 'selectDatabase' ])
             ->getMock();
 

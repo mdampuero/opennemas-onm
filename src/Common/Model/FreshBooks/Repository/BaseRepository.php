@@ -10,8 +10,8 @@
 namespace Common\Model\FreshBooks\Repository;
 
 use Common\Model\FreshBooks\Data\Converter\BaseConverter;
-use Common\ORM\Core\Repository;
 use Freshbooks\FreshBooksApi;
+use Opennemas\Orm\Core\Repository;
 
 /**
  * The BaseRepository class defines the base repository for FreshBooks.

@@ -26,7 +26,7 @@ class OAuthUserProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository', 'persist' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('\Common\ORM\Database\Repository\BaseRepository')
+        $this->repository = $this->getMockBuilder('Opennemas\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'find', 'findOneBy' ])
             ->getMock();

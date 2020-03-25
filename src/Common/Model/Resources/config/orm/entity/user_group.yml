@@ -13,7 +13,7 @@ orm:
                 type:          integer
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.user_group' ]
             repositories:
                 instance:

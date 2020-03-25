@@ -10,7 +10,7 @@
 namespace Tests\Common\Model\FreshBooks\Data\Converter;
 
 use Common\Model\FreshBooks\Data\Converter\BaseConverter;
-use Common\ORM\Core\Metadata;
+use Opennemas\Orm\Core\Metadata;
 
 /**
  * Defines test cases for BaseConverter class.

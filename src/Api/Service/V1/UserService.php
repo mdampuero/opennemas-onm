@@ -16,7 +16,7 @@ use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
 use Api\Exception\InvalidArgumentException;
 use Api\Exception\UpdateItemException;
-use Common\ORM\Core\Exception\EntityNotFoundException;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 
 class UserService extends OrmService
 {

@@ -18,11 +18,11 @@ orm:
                 users:   boolean
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.notification' ]
             repositories:
                 manager:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.manager', '@orm.metadata.notification', '@cache.connection.manager' ]
             persisters:
                 manager:

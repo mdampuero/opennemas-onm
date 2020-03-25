@@ -9,10 +9,10 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\ORM\Core\Connection;
 use Common\Model\Entity\Instance;
 use GuzzleHttp\Client;
 use Opennemas\Data\Serialize\Serializer\PhpSerializer;
+use Opennemas\Orm\Core\Connection;
 use Symfony\Component\Filesystem\Filesystem;
 
 class InstanceHelper

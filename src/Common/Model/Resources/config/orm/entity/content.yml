@@ -51,11 +51,11 @@ orm:
                 related_contents:    array
             converters:
                 default:
-                    class:     Common\ORM\Database\Data\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.content' ]
             repositories:
                 instance:
-                    class:     Common\ORM\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             persisters:
                 instance:

@@ -9,8 +9,8 @@
  */
 namespace Common\Model\FreshBooks\Persister;
 
-use Common\ORM\Core\Entity;
-use Common\ORM\Core\Exception\EntityNotFoundException;
+use Opennemas\Orm\Core\Entity;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 
 /**
  * The ClientPersister class defines actions to create, update and remove

@@ -9,8 +9,8 @@
  */
 namespace Common\Core\Component\Loader;
 
-use Common\ORM\Core\EntityManager;
 use Common\Model\Entity\Theme;
+use Opennemas\Orm\Core\EntityManager;
 
 class ThemeLoader
 {
