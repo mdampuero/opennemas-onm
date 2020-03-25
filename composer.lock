@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ef09ea2ca0de37c6576218c850a058d",
+    "content-hash": "9fbe832eb6917ebc033a46caaa7034cb",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2682,7 +2682,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/cache.git",
-                "reference": "875162cef3edab95d86f4a2eefc966bf5c3accd7"
+                "reference": "1d15e390881b5b4d440407fbb1b97ef777efbad8"
             },
             "require": {
                 "ext-redis": "*",
@@ -2739,11 +2739,11 @@
                 "redis",
                 "symfony"
             ],
-            "time": "2020-03-23T16:46:32+00:00"
+            "time": "2020-03-25T12:34:44+00:00"
         },
         {
             "name": "opennemas/data",
-            "version": "1.0.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/data.git",
@@ -2812,7 +2812,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/orm.git",
-                "reference": "82571a1b65f910b472322da5dd1f2a0aa4b8979f"
+                "reference": "c64d800bc01fef55a6f7541296eb964139e6dcd6"
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.6",
@@ -2871,7 +2871,69 @@
                 "opennemas",
                 "orm"
             ],
-            "time": "2020-03-24T19:28:48+00:00"
+            "time": "2020-03-25T12:35:52+00:00"
+        },
+        {
+            "name": "opennemas/task",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:opennemas/task.git",
+                "reference": "787511c6efc53e879b3678cbe21e136ae2c9bebc"
+            },
+            "require": {
+                "php": ">=7.1",
+                "symfony/symfony": "3.4.*"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.25.1",
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Opennemas\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\Opennemas\\": "tests/"
+                }
+            },
+            "scripts": {
+                "syntax": [
+                    "phpcs src tests",
+                    "phpmd src ansi phpmd.xml",
+                    "phpmd tests ansi phpmd.xml"
+                ],
+                "test": [
+                    "vendor/bin/phpunit --colors=always"
+                ],
+                "test-coverage": [
+                    "vendor/bin/phpunit --colors=always --coverage-text"
+                ],
+                "test-coverage-report": [
+                    "vendor/bin/phpunit --colors=always --coverage-html coverage"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Opennemas Developers",
+                    "email": "developers@opennemas.com"
+                }
+            ],
+            "description": "Symfony bundle for task execution",
+            "keywords": [
+                "queue",
+                "symfony",
+                "task"
+            ],
+            "time": "2020-03-25T12:41:59+00:00"
         },
         {
             "name": "paragonie/random_compat",
