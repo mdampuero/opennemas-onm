@@ -12,7 +12,7 @@ namespace Tests\Common\Core\Component\Helper;
 use Common\Core\Component\Helper\VarnishHelper;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Instance;
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for VarnishHelper class.
@@ -29,7 +29,7 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->queue = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 

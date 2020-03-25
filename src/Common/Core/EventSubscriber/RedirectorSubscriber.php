@@ -11,8 +11,8 @@ namespace Common\Core\EventSubscriber;
 
 use Common\Core\Component\EventDispatcher\Event;
 use Common\Model\Entity\Instance;
-use Common\Task\Component\Queue\Queue;
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Queue\Queue;
+use Opennemas\Task\Component\Task\ServiceTask;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class RedirectorSubscriber implements EventSubscriberInterface
