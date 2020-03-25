@@ -45,14 +45,14 @@ class StatisticsRenderer
      */
     public function render($types, $output = null)
     {
-        $method = $this->getCode($output);
-        $code   = '';
+        $codeType = $this->getCodeType($output);
+        $code     = '';
 
         foreach ($types as $type) {
             $renderer = $this->getRendererClass($type);
 
-            if (method_exists($renderer, $method) && $renderer->validate()) {
-                $code .= $renderer->{$method}();
+            if ($renderer->validate()) {
+                $code .= $renderer->getCode($codeType, $type);
             }
         }
 
@@ -60,7 +60,7 @@ class StatisticsRenderer
             return $code;
         }
 
-        if ($method == 'getAmp') {
+        if ($codeType == 'amp') {
             return preg_replace('@(<body.*>)@', '${1}' . "\n" . $code, $output);
         }
 
@@ -72,19 +72,19 @@ class StatisticsRenderer
      *
      * @param bool $imageOnly Image only flag
      */
-    protected function getCode($output)
+    protected function getCodeType($output)
     {
         if (empty($output)) {
-            return 'getImage';
+            return 'image';
         }
 
         $uri = $this->global->getRequest()->getUri();
 
         if (preg_match('@\.amp\.html$@', $uri)) {
-            return 'getAmp';
+            return 'amp';
         }
 
-        return 'getScript';
+        return 'script';
     }
 
     /**

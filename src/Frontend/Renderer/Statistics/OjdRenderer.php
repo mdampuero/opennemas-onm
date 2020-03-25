@@ -14,13 +14,18 @@ use Frontend\Renderer\StatisticsRenderer;
 class OjdRenderer extends StatisticsRenderer
 {
     /**
-     * Get script code for ojd
+     * Return the code of the specified type
      */
-    public function getScript()
+    public function getCode($codeType, $type)
     {
-        return $this->tpl->fetch('statistics/helpers/Ojd/script.tpl', $this->prepareParams());
-    }
+        $template = 'statistics/helpers/' . $type . '/' . $codeType . '.tpl';
 
+        try {
+            return $this->tpl->fetch($template, $this->prepareParams());
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
     /**
      * Return if ojd is correctly configured or not
      */

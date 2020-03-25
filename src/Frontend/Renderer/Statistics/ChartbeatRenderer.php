@@ -14,19 +14,17 @@ use Frontend\Renderer\StatisticsRenderer;
 class ChartbeatRenderer extends StatisticsRenderer
 {
     /**
-     * Get code of google analytics for amp pages
+     * Return the code of the specified type
      */
-    public function getAmp()
+    public function getCode($codeType, $type)
     {
-        return $this->tpl->fetch('statistics/helpers/Chartbeat/amp.tpl', $this->prepareParams());
-    }
+        $template = 'statistics/helpers/' . $type . '/' . $codeType . '.tpl';
 
-    /**
-     * Get script code for google analytics
-     */
-    public function getScript()
-    {
-        return $this->tpl->fetch('statistics/helpers/Chartbeat/script.tpl', $this->prepareParams());
+        try {
+            return $this->tpl->fetch($template, $this->prepareParams());
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**

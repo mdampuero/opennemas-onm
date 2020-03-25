@@ -14,44 +14,17 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
-     * Get code of google analytics for amp pages
+     * Return the code of the specified type
      */
-    public function getAmp()
+    public function getCode($codeType, $type)
     {
-        return $this->tpl->fetch('statistics/helpers/GAnalytics/amp.tpl', [
-            'params' => $this->prepareParams()[0]
-        ]);
-    }
+        $template = 'statistics/helpers/' . $type . '/' . $codeType . '.tpl';
 
-    /**
-     * Get script code for google analytics
-     */
-    public function getScript()
-    {
-        $parameters = $this->prepareParams();
-        $params     = $parameters[0];
-        $extra      = $parameters[1];
-
-        return $this->tpl->fetch('statistics/helpers/GAnalytics/script.tpl', [
-            'params' => $params,
-            'extra'  => $extra
-        ]);
-    }
-
-    /**
-     * Get image code for google analytics
-     */
-    public function getImage()
-    {
-        return $this->tpl->fetch('statistics/helpers/GAnalytics/image.tpl', [
-            'random'  => rand(0, 0x7fffffff),
-            'date'    => date('d/m/Y'),
-            'url'     => urlencode(SITE_URL),
-            'newsurl' => urlencode(SITE_URL . 'newsletter/' . date("Ymd")),
-            'relurl'  => urlencode('newsletter/' . date("Ymd")),
-            'params'  => $this->prepareParams()[0],
-            'utma'    => '__utma%3D999.999.999.999.999.1%3B'
-        ]);
+        try {
+            return $this->tpl->fetch($template, $this->prepareParams());
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**
@@ -82,6 +55,15 @@ class GAnalyticsRenderer extends StatisticsRenderer
         $extra['category']  = $this->global->getSection();
         $extra['extension'] = $this->global->getExtension();
 
-        return [ $config, $extra ];
+        return [
+            'params' => $config,
+            'extra'  => $extra,
+            'random'  => rand(0, 0x7fffffff),
+            'date'    => date('d/m/Y'),
+            'url'     => urlencode(SITE_URL),
+            'newsurl' => urlencode(SITE_URL . 'newsletter/' . date("Ymd")),
+            'relurl'  => urlencode('newsletter/' . date("Ymd")),
+            'utma'    => '__utma%3D999.999.999.999.999.1%3B'
+        ];
     }
 }
