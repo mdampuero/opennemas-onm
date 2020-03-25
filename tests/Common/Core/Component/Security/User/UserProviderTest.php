@@ -80,6 +80,6 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
     public function testSupportClass()
     {
         $this->assertFalse($this->provider->supportsClass('Wubble'));
-        $this->assertTrue($this->provider->supportsClass('User'));
+        $this->assertTrue($this->provider->supportsClass('Common\Model\Entity\User'));
     }
 }
