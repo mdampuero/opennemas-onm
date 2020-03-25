@@ -56,7 +56,8 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria = $scope.criteria;
+          $scope.backup.criteria    = $scope.criteria;
+          $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'
@@ -90,6 +91,7 @@
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
         };
       }
     ]);
