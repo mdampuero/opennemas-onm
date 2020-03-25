@@ -57,7 +57,7 @@ class ComscoreRenderer extends StatisticsRenderer
         $config = $this->global->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('google_analytics');
+            ->get('comscore');
 
         return [ 'page_id' => $config['page_id']];
     }
