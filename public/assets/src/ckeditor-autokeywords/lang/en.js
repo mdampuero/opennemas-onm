@@ -1,4 +1,3 @@
-CKEDITOR.plugins.setLang('autokeywords', 'en',
-{
-    toolbar: 'Automatic keywords'
+CKEDITOR.plugins.setLang('autokeywords', 'en', {
+  toolbar: 'Automatic keywords'
 });
