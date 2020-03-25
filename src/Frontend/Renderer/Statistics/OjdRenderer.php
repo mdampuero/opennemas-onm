@@ -18,7 +18,7 @@ class OjdRenderer extends StatisticsRenderer
      */
     public function getScript()
     {
-        return $this->tpl->fetch('statistics/helpers/Ojd/script.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Ojd/script.tpl', $this->prepareParams());
     }
 
     /**
