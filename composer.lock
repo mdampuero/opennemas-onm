@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12328c01a15f87fc43cd50d48d05d73a",
+    "content-hash": "7ef09ea2ca0de37c6576218c850a058d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2805,6 +2805,73 @@
                 "symfony"
             ],
             "time": "2020-03-23T12:37:48+00:00"
+        },
+        {
+            "name": "opennemas/orm",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:opennemas/orm.git",
+                "reference": "82571a1b65f910b472322da5dd1f2a0aa4b8979f"
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^1.6",
+                "doctrine/orm": "^2.5",
+                "opennemas/cache": "1.0.*",
+                "opennemas/data": "1.0.*",
+                "php": ">=7.1",
+                "symfony/symfony": "3.4.*"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.25.1",
+                "phpmd/phpmd": "^2.6",
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Opennemas\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\Opennemas\\": "tests/"
+                }
+            },
+            "scripts": {
+                "syntax": [
+                    "phpcs src tests",
+                    "phpmd src ansi phpmd.xml",
+                    "phpmd tests ansi phpmd.xml"
+                ],
+                "test": [
+                    "vendor/bin/phpunit --colors=always"
+                ],
+                "test-coverage": [
+                    "vendor/bin/phpunit --colors=always --coverage-text"
+                ],
+                "test-coverage-report": [
+                    "vendor/bin/phpunit --colors=always --coverage-html coverage"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Opennemas Developers",
+                    "email": "developers@opennemas.com"
+                }
+            ],
+            "description": "Simple ORM with cache optimization",
+            "keywords": [
+                "database",
+                "mysql",
+                "opennemas",
+                "orm"
+            ],
+            "time": "2020-03-24T19:28:48+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -7796,7 +7863,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.9"
+        "php": ">=7.1"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"
