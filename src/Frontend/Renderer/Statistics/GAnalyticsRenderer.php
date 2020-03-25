@@ -67,7 +67,9 @@ class GAnalyticsRenderer extends StatisticsRenderer
      */
     protected function prepareParams()
     {
-        $config = $this->em->getDataSet('Settings', 'instance')
+        $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('google_analytics');
 
         //Keep compatibility with old analytics store format

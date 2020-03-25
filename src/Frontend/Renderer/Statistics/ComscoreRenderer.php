@@ -34,7 +34,10 @@ class ComscoreRenderer extends StatisticsRenderer
      */
     public function validate()
     {
-        $config = $this->em->getDataSet('Settings', 'instance')->get('comscore');
+        $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('comscore');
 
         if (!is_array($config)
             || !array_key_exists('page_id', $config)
@@ -51,7 +54,10 @@ class ComscoreRenderer extends StatisticsRenderer
      */
     protected function prepareParams()
     {
-        $config = $this->em->getDataSet('Settings', 'instance')->get('comscore');
+        $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_analytics');
 
         return [ 'page_id' => $config['page_id']];
     }

@@ -42,8 +42,11 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function validate()
     {
-        $config      = $this->em->getDataSet('Settings', 'instance')->get('piwik');
-        $piwikConfig = getService('service_container')->getParameter('opennemas.piwik');
+        $config      = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('piwik');
+        $piwikConfig = $this->global->getContainer()->getParameter('opennemas.piwik');
 
         $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
 
@@ -63,8 +66,11 @@ class PiwikRenderer extends StatisticsRenderer
      */
     protected function prepareParams()
     {
-        $config      = $this->em->getDataSet('Settings', 'instance')->get('piwik');
-        $piwikConfig = getService('service_container')->getParameter('opennemas.piwik');
+        $config      = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('piwik');
+        $piwikConfig = $this->global->getContainer()->getParameter('opennemas.piwik');
 
         $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
         $httpsHost            = preg_replace("/http:/", "https:", $config['server_url']);

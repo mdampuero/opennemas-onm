@@ -18,7 +18,7 @@ class ChartbeatRenderer extends StatisticsRenderer
      */
     public function getAmp()
     {
-        return $this->tpl->fetch('statistics/helpers/Chartbeat/amp.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Chartbeat/amp.tpl', $this->prepareParams());
     }
 
     /**
@@ -26,7 +26,7 @@ class ChartbeatRenderer extends StatisticsRenderer
      */
     public function getScript()
     {
-        return $this->tpl->fetch('statistics/helpers/Chartbeat/script.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Chartbeat/script.tpl', $this->prepareParams());
     }
 
     /**
@@ -34,7 +34,7 @@ class ChartbeatRenderer extends StatisticsRenderer
      */
     public function getImage()
     {
-        return $this->tpl->fetch('statistics/helpers/Chartbeat/image.tpl', []);
+        return $this->tpl->fetch('statistics/helpers/Chartbeat/image.tpl', $this->prepareParams());
     }
 
     /**
@@ -42,6 +42,37 @@ class ChartbeatRenderer extends StatisticsRenderer
      */
     public function validate()
     {
+        $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('chartbeat');
+
+        if (!is_array($config)
+            || !array_key_exists('id', $config)
+            || !array_key_exists('domain', $config)
+            || empty(trim($config['id'])
+            || empty(trim($config['domain'])))
+        ) {
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Return parameters needed to generate chartbeat code
+     */
+    protected function prepareParams()
+    {
+        $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('chartbeat');
+
+        return [
+            'id'       => $config['id'],
+            'domain'   => $config['domain'],
+            'category' => $this->global->getSection()
+        ];
     }
 }

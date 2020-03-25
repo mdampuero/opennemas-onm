@@ -18,5 +18,5 @@ services:
         public:    true
     frontend.renderer.statistics:
         class:     Frontend\Renderer\StatisticsRenderer
-        arguments: [ '@request_stack', '@core.globals', '@core.template.admin', '@orm.manager' ]
+        arguments: [ '@core.globals', '@core.template.admin' ]
         public:    true

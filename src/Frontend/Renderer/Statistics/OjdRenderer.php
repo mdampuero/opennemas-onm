@@ -26,7 +26,10 @@ class OjdRenderer extends StatisticsRenderer
      */
     public function validate()
     {
-        $config = $this->em->getDataSet('Settings', 'instance')->get('ojd');
+        $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ojd');
 
         if (!is_array($config)
             || !array_key_exists('page_id', $config)
@@ -43,7 +46,10 @@ class OjdRenderer extends StatisticsRenderer
      */
     protected function prepareParams()
     {
-        $config = $this->em->getDataSet('Settings', 'instance')->get('ojd');
+        $config = $config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ojd');
 
         return ['page_id' => $config['page_id']];
     }

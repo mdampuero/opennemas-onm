@@ -12,13 +12,6 @@ namespace Frontend\Renderer;
 class StatisticsRenderer
 {
     /**
-     * The request stack.
-     *
-     * @var RequestStack
-     */
-    protected $stack;
-
-    /**
      * The global variables
      *
      * @var GlobalVariables
@@ -33,40 +26,27 @@ class StatisticsRenderer
     protected $tpl;
 
     /**
-     * The entity manager
-     *
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * Initializes the StatisticsRenderer
      *
-     * @param RequestStack    $stack  The request stack
      * @param GlobalVariables $global The global variables
      * @param Template        $tpl    The template
-     * @param EntityManager   $em     The entity manager
      */
-    public function __construct($stack, $global, $tpl, $em)
+    public function __construct($global, $tpl)
     {
-        $this->stack  = $stack;
         $this->global = $global;
         $this->tpl    = $tpl;
-        $this->em     = $em;
     }
 
     /**
      * Renders analytics code giving the types
      *
      * @param array $types     The array of types to render
-     * @param bool  $imageOnly The flag to indicate if is imageOnly or not
      * @param String $output   The html page
      */
-    public function render($types, $output, $imageOnly = false)
+    public function render($types, $output = null)
     {
-        $method = $this->getCode($imageOnly);
-        //TODO: Initialize the code with our default analytics code
-        $code = '';
+        $method = $this->getCode($output);
+        $code   = '';
 
         foreach ($types as $type) {
             $renderer = $this->getRendererClass($type);
@@ -76,7 +56,7 @@ class StatisticsRenderer
             }
         }
 
-        if ($imageOnly) {
+        if (empty($output)) {
             return $code;
         }
 
@@ -92,13 +72,13 @@ class StatisticsRenderer
      *
      * @param bool $imageOnly Image only flag
      */
-    protected function getCode($imageOnly)
+    protected function getCode($output)
     {
-        $uri = $this->stack->getCurrentRequest()->getUri();
-
-        if ($imageOnly) {
+        if (empty($output)) {
             return 'getImage';
         }
+
+        $uri = $this->global->getRequest()->getUri();
 
         if (preg_match('@\.amp\.html$@', $uri)) {
             return 'getAmp';
@@ -119,6 +99,6 @@ class StatisticsRenderer
         $class     = $type . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Statistics\\' . $class;
 
-        return new $classPath($this->stack, $this->global, $this->tpl, $this->em);
+        return new $classPath($this->global, $this->tpl);
     }
 }
