@@ -126,13 +126,6 @@
 
           return data;
         };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.submit = function() {
-          $scope.save();
-        };
       }
     ]);
 })();
