@@ -30,14 +30,6 @@ class ChartbeatRenderer extends StatisticsRenderer
     }
 
     /**
-     * Get image code for google analytics
-     */
-    public function getImage()
-    {
-        return $this->tpl->fetch('statistics/helpers/Chartbeat/image.tpl', $this->prepareParams());
-    }
-
-    /**
      * Return if chartbeat is correctly configured or not
      */
     public function validate()
@@ -64,15 +56,29 @@ class ChartbeatRenderer extends StatisticsRenderer
      */
     protected function prepareParams()
     {
-        $config = $this->global->getContainer()
-            ->get('orm.manager')
+        $container = $this->global->getContainer();
+        $config    = $container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('chartbeat');
+
+        $content = $this->tpl->getValue('content');
+
+        if (!empty($content)) {
+            $author = $container->get('api.service.author')
+                ->getItem($content->fk_author);
+        }
+
+        if (empty($author)) {
+            $author = $container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('site_name');
+        }
 
         return [
             'id'       => $config['id'],
             'domain'   => $config['domain'],
-            'category' => $this->global->getSection()
+            'category' => $this->global->getSection(),
+            'author'   => $author
         ];
     }
 }

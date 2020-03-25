@@ -3,10 +3,10 @@
   <script type="application/json">
     {
       "vars": {
-        "uid": "' . $config['id'] . '",
-        "domain": "' . $config['domain'] . '",
-        "sections": "' . $smarty->tpl_vars['category_name'] . '",
-        "authors": "' . $author . '"
+        "uid": "{$id}",
+        "domain": "{$domain}",
+        "sections": "{$category}",
+        "authors": "{$author}"
       }
     }
   </script>
