@@ -139,28 +139,24 @@ class Agency
             }
         }
 
-        $ur = getService('user_repository');
-
         // Get author obj
-        $article->author = $ur->find($article->fk_author);
+        try {
+            if (!empty($article->fk_author)) {
+                $article->author = getService('api.service.author')
+                    ->getItem($article->fk_author);
 
-        $authorPhoto = '';
-        if (isset($article->author->avatar_img_id) &&
-            !empty($article->author->avatar_img_id)
-        ) {
-            // Get author photo
-            $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
-
-            if (is_object($authorPhoto) && !empty($authorPhoto)) {
-                $article->author->photo = $authorPhoto;
+                if (!empty($article->avatar_img_id)) {
+                    $article->author->photo = $er->find('Photo', $article->avatar_img_id);
+                }
             }
+        } catch (\Exception $e) {
         }
 
         $locale = getService('core.locale')->getRequestLocale();
 
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
             'article'     => $article,
-            'authorPhoto' => $authorPhoto,
+            'authorPhoto' => $article->author->photo ?? '',
             'photo'       => $article->img1,
             'photoInner'  => $article->img2,
             'tags'        => getService('api.service.tag')

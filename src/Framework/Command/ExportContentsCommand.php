@@ -271,22 +271,6 @@ EOF
         foreach ($contents as $content) {
             $this->output->write('Processing ' . $content->content_type_name . ' ');
 
-            $content->created_datetime   =
-                \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $content->created
-                );
-            $content->starttime_datetime =
-                \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $content->starttime
-                );
-            $content->updated_datetime   =
-                \DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $content->changed
-                );
-
             switch ($content->content_type_name) {
                 case 'album':
                     $this->albumsCounter++;
@@ -297,19 +281,6 @@ EOF
                     $content->all_photos = [];
                     foreach ($content->photos as $value) {
                         $photo = $this->er->find('Photo', $value['pk_photo']);
-
-                        // Add DateTime with format Y-m-d H:i:s
-                        $photo->created_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $photo->created
-                            );
-
-                        $photo->updated_datetime =
-                            \DateTime::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $photo->changed
-                            );
 
                         $photo->img_source =
                             $this->mediaPath . DS . 'images' .
@@ -372,17 +343,7 @@ EOF
                         } else {
                             // Load attached and related contents from array
                             $content->loadFrontpageImageFromHydratedArray([$image]);
-                            // Add DateTime with format Y-m-d H:i:s
-                            $content->img1->created_datetime =
-                                \DateTime::createFromFormat(
-                                    'Y-m-d H:i:s',
-                                    $content->img1->created
-                                );
-                            $content->img1->updated_datetime =
-                                \DateTime::createFromFormat(
-                                    'Y-m-d H:i:s',
-                                    $content->img1->changed
-                                );
+
                             if (!mb_check_encoding($content->img1->description)) {
                                 $content->img1->description = utf8_encode($content->img1->description);
                             }
@@ -419,17 +380,7 @@ EOF
                         } else {
                             // Load attached and related contents from array
                             $content->loadInnerImageFromHydratedArray([$image]);
-                            // Add DateTime with format Y-m-d H:i:s
-                            $content->img2->created_datetime =
-                                \DateTime::createFromFormat(
-                                    'Y-m-d H:i:s',
-                                    $content->img2->created
-                                );
-                            $content->img2->updated_datetime =
-                                \DateTime::createFromFormat(
-                                    'Y-m-d H:i:s',
-                                    $content->img2->changed
-                                );
+
                             if (!mb_check_encoding($content->img2->description)) {
                                 $content->img2->description = utf8_encode($content->img2->description);
                             }
