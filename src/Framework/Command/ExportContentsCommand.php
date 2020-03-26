@@ -457,15 +457,17 @@ EOF
             }
 
             // Get author obj
-            $ur = getService('user_repository');
+            try {
+                if (!empty($content->fk_author)) {
+                    $content->author = $this->getContainer()->get('api.service.author')
+                        ->getItem($content->fk_author);
 
-            $content->author = $ur->find($content->fk_author);
-            if (isset($content->author->name)) {
-                $content->author = $content->author->name;
-            } elseif (!empty($content->agency)) {
-                $content->author = $content->agency;
-            } else {
-                $content->author = 'Redacción';
+                    if (!empty($content->avatar_img_id)) {
+                        $content->author->photo = $this->getContainer()->get('entity_repository')
+                            ->find('Photo', $content->avatar_img_id);
+                    }
+                }
+            } catch (\Exception $e) {
             }
 
             // Convert content to NewsML
