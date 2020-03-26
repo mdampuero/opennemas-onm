@@ -100,10 +100,6 @@ class Agency
 
         $tpl = getService('view')->get('backend');
 
-        // Add DateTime with format Y-m-d H:i:s
-        $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
-        $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
-
         $imageId      = $article->img1;
         $imageInnerId = $article->img2;
 
@@ -112,12 +108,6 @@ class Agency
 
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
-
-            // Add DateTime with format Y-m-d H:i:s
-            $article->img1->created_datetime =
-                \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->created);
-            $article->img1->updated_datetime =
-                \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
 
             if (!mb_check_encoding($article->img1->description)) {
                 $article->img1->description = utf8_encode($article->img1->description);
@@ -129,10 +119,6 @@ class Agency
 
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
-
-            // Add DateTime with format Y-m-d H:i:s
-            $article->img2->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->created);
-            $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
 
             if (!mb_check_encoding($article->img2->description)) {
                 $article->img2->description = utf8_encode($article->img2->description);
