@@ -51,7 +51,6 @@
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
     {t}Published{/t}
   </th>
-
 {/block}
 
 {block name="customColumnsBody"}
@@ -87,17 +86,28 @@
 {/block}
 
 {block name="itemActions"}
-  <div class="listing-inline-actions">
-    {acl isAllowed="EVENT_UPDATE"}
-      <a class="btn btn-default btn-small" href="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
-        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
-      </a>
-      <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
-    {/acl}
-    {acl isAllowed="EVENT_DELETE"}
-      <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
-        <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
-      </button>
-    {/acl}
+  {acl isAllowed="EVENT_UPDATE"}
+    <a class="btn btn-default btn-small" href="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+    </a>
+    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+  {/acl}
+  {acl isAllowed="EVENT_DELETE"}
+    <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
+      <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
+    </button>
+  {/acl}
+  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
+    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
+      <i class="fa fa-ellipsis-h"></i>
+    </button>
+    <ul class="dropdown-menu no-padding">
+      <li>
+        <a href="[% getFrontendUrl(item) %]" target="_blank">
+          <i class="fa fa-external-link m-r-5"></i>
+          {t}Link{/t}
+        </a>
+      </li>
+    </ul>
   </div>
 {/block}
