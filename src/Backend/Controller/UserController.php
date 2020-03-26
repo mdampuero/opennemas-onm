@@ -9,20 +9,29 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class UserController extends BackendController
 {
     /**
-     * Shows the form to create a new user.
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return $this->render('user/item.tpl');
-    }
+    protected $extension = 'USER_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'USER_CREATE',
+        'list'   => 'USER_ADMIN',
+        'show'   => 'USER_UPDATE'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $resource = 'user';
 
     /**
      * Disconnects from social account accounts.
@@ -55,35 +64,6 @@ class UserController extends Controller
             'resource' => $resource,
             'style'    => $request->get('style')
         ]));
-    }
-
-    /**
-     * Show a paginated list of backend users.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasExtension('USER_MANAGER')
-     *     and hasPermission('USER_ADMIN')")
-     */
-    public function listAction()
-    {
-        return $this->render('user/list.tpl');
-    }
-
-    /**
-     * Shows the user information given its id
-     *
-     * This action is not mapped with Security annotation because it's
-     * used in edit profile action that should be available to all users with
-     * or without having users module activated.
-     *
-     * @param integer $id The user id.
-     *
-     * @return Response The response object.
-     */
-    public function showAction($id)
-    {
-        return $this->render('user/item.tpl', [ 'id' => $id ]);
     }
 
     /**

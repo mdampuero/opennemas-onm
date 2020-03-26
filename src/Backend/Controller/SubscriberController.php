@@ -9,32 +9,25 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
-
 class SubscriberController extends BackendController
 {
     /**
-     * The extension name required by this controller.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $extension = 'CONTENT_SUBSCRIPTIONS';
 
     /**
-     * The list of permissions for every action.
-     *
-     * @var type
+     * {@inheritdoc}
      */
     protected $permissions = [
-        'create' => 'SUBSCRIBER_CREATE',
-        'list'   => 'SUBSCRIBER_ADMIN',
-        'show'   => 'SUBSCRIBER_UPDATE'
+        'create'   => 'SUBSCRIBER_CREATE',
+        'settings' => 'SUBSCRIBER_SETTINGS',
+        'list'     => 'SUBSCRIBER_ADMIN',
+        'show'     => 'SUBSCRIBER_UPDATE'
     ];
 
     /**
-     * The resource name.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $resource = 'subscriber';
 
@@ -42,12 +35,11 @@ class SubscriberController extends BackendController
      * Displays the list of settings for subscribers.
      *
      * @return Response The response object.
-     *
-     * @Security("hasExtension('CONTENT_SUBSCRIPTIONS')
-     *     and hasPermission('SUBSCRIBER_SETTINGS')")
      */
     public function settingsAction()
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('settings'));
+
         return $this->render('subscriber/settings.tpl');
     }
 }
