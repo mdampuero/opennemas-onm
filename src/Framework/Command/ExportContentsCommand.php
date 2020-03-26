@@ -116,7 +116,7 @@ EOF
     public function convertToNewsML($content)
     {
         $content = $this->tpl->fetch(
-            'news_agency/newsml_templates/export.tpl',
+            'news_agency/newsml_templates/base.tpl',
             [
                 'article'    => $content,
                 'photo'      => $content->img1,
