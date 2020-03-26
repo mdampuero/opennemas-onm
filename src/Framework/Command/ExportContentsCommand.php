@@ -198,7 +198,7 @@ EOF
         $order = [ 'created' => 'ASC' ];
 
         // Get entity repository
-        $this->er = getService('entity_repository');
+        $this->er = $this->getContainer()->get('entity_repository');
 
         // Get total per page contents
         $perPage = 100;
@@ -341,7 +341,8 @@ EOF
                 case 'opinion':
                     if ($content->content_type_name == 'article') {
                         // Get related
-                        $relations = getService('related_contents')->getRelations($content->id, 'inner');
+                        $relations = $this->getContainer()->get('related_contents')
+                            ->getRelations($content->id, 'inner');
                         if (!empty($relations)) {
                             $content->related = $this->er->findMulti($relations);
                         }
