@@ -68,7 +68,7 @@ class StatisticsRenderer
         }
 
         if ($codeType == 'amp') {
-            return preg_replace('@(<body.*>)@', '${1}' . "\n" . $code, $output);
+            return preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
         }
 
         return preg_replace('@(</head>)@', $code . '${1}', $output);
