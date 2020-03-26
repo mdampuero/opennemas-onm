@@ -12,13 +12,13 @@
   <th class="v-align-middle" width="400">
     {t}Email{/t}
   </th>
-  <th class="v-align-middle" width="200">
+  <th class="v-align-middle">
     {t}Lists{/t}
   </th>
   <th class="text-center v-align-middle" width="80">
     {t}Social{/t}
   </th>
-  <th class="text-center v-align-middle" width="80">
+  <th class="text-center v-align-middle" width="100">
     {t}Enabled{/t}
   </th>
 {/block}
@@ -47,7 +47,9 @@
     {/block}
   </td>
   <td class="v-align-middle">
-    [% item.email %]
+    <div class="table-text">
+      [% item.email %]
+    </div>
   </td>
   <td class="v-align-middle">
     <ul class="no-style">
