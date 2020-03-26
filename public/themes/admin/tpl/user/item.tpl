@@ -106,7 +106,7 @@
       {/acl}
     </div>
   </div>
-  {if isset($user['id']) && ($user['id'] == $app.user->id)}
+  {if $id == $app.user->id}
     <div class="grid simple">
       <div class="grid-title">
         <h4>{t}Social Networks{/t}</h4>
@@ -115,13 +115,13 @@
         <div class="form-group">
           <label class="form-label" for="facebook_login">{t}Facebook{/t}</label>
           <div class="controls">
-            <iframe src="{url name=backend_user_social id=$user['id'] resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+            <iframe src="{url name=backend_user_social id=$id resource='facebook'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" for="twitter_login">{t}Twitter{/t}</label>
           <div class="controls">
-            <iframe src="{url name=backend_user_social id=$user['id'] resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
+            <iframe src="{url name=backend_user_social id=$id resource='twitter'}" frameborder="0" style="width:100%;overflow-y:hidden;"></iframe>
           </div>
         </div>
       </div>
