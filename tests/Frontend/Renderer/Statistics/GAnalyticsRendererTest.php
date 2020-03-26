@@ -79,7 +79,19 @@ class GAnalyticsRendererTest extends TestCase
     /**
      * @covers \Frontend\Renderer\Statistics\GAnalyticsRenderer::prepareParams
      */
-    public function testPrepareParams()
+    public function testPrepareParamsWithOldConfig()
+    {
+        $this->ds->expects($this->once())->method('get')
+            ->with('google_analytics')
+            ->willReturn([ 'api_key' => 'UA-40838799-5' ]);
+
+        $this->assertIsArray($this->renderer->prepareParams());
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Statistics\GAnalyticsRenderer::prepareParams
+     */
+    public function testPrepareParamsWithoutOldConfig()
     {
         $this->assertIsArray($this->renderer->prepareParams());
     }
