@@ -25,7 +25,7 @@ class GettingStartedController extends Controller
 
         $user->terms_accepted = null;
 
-        if ($request->get('accept') && $request->get('accept') === 'true') {
+        if ($request->get('accept') && !empty($request->get('accept'))) {
             $user->terms_accepted =
                 new \DateTime(null, new \DateTimeZone('UTC'));
         }

@@ -32,7 +32,7 @@
             <iframe class="terms-of-use" src="/terms_of_use.html" frameborder="0"></iframe>
           </div>
           <div class="checkbox">
-            <input name="accept-terms" id="accept-terms" ng-click="acceptTerms()" ng-model="termsAccepted" ng-value="termsAccepted" type="checkbox">
+            <input id="accept-terms" ng-change="acceptTerms()" ng-false-value="0" ng-model="termsAccepted" ng-true-value="1" type="checkbox">
             <label for="accept-terms">
               {t}Accept the Legal notice & Terms of use{/t}
             </label>
