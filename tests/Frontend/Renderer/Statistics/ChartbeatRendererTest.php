@@ -12,6 +12,7 @@ namespace Tests\Frontend\Renderer;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\ChartbeatRenderer;
 use Common\ORM\Entity\Content;
+use Common\ORM\Entity\User;
 
 /**
  * Defines test cases for ChartbeatRenderer class.
@@ -104,7 +105,7 @@ class ChartbeatRendererTest extends TestCase
     /**
      * @covers \Frontend\Renderer\Statistics\ChartbeatRenderer::prepareParams
      */
-    public function testPrepareParamsWhenContent()
+    public function testPrepareParamsWhenContentAndAuthor()
     {
         $content = new Content([
             'pk_content' => 1,
@@ -116,7 +117,36 @@ class ChartbeatRendererTest extends TestCase
             ->willReturn($content);
 
         $this->api->expects($this->once())->method('getItem')
-            ->with($content->fk_author);
+            ->with($content->fk_author)
+            ->willReturn(new User());
+
+        $this->assertIsArray($this->renderer->prepareParams());
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Statistics\ChartbeatRenderer::prepareParams
+     */
+    public function testPrepareParamsWhenNoAuthor()
+    {
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_author'  => 2
+        ]);
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('chartbeat');
+
+        $this->tpl->expects($this->once())->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->api->expects($this->once())->method('getItem')
+            ->with($content->fk_author)
+            ->willReturn(null);
+
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('site_name')
+            ->willReturn('Site');
 
         $this->assertIsArray($this->renderer->prepareParams());
     }
