@@ -6,14 +6,14 @@
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime>{format_date date=$article->created type="custom" format="Ymd\THisP"}</DateAndTime>
+    <DateAndTime>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</DateAndTime>
   </NewsEnvelope>
   <NewsItem Duid="multimedia_{$article->id}">
     <Comment FormalName="OnmNewsMLVersion"><text>1.0.1</text></Comment>
     <Identification>
       <NewsIdentifier>
         <ProviderId>{setting name=site_name}</ProviderId>
-        <DateId>{format_date date=$article->created type="custom" format="Ymd\THisP"}</DateId>
+        <DateId>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</DateId>
         <NewsItemId>{$article->id}</NewsItemId>
         <RevisionId PreviousRevision="1" Update="U"><text>2</text></RevisionId>
         <PublicIdentifier>{$article->urn_source}</PublicIdentifier>
@@ -22,13 +22,13 @@
     <NewsManagement>
       <NewsItemType FormalName="News" />
       <!--Creation date.-->
-      <FirstCreated>{format_date date=$article->created type="custom" format="Ymd\THisP"}</FirstCreated>
+      <FirstCreated>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
       {if $article->starttime_datetime}
         <!--Published date.-->
-        <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd\THisP"}</FirstPublished>
+        <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
       {/if}
       <!--Last modification date.-->
-      <ThisRevisionCreated>{format_date date=$article->changed type="custom" format="Ymd\THisP"}</ThisRevisionCreated>
+      <ThisRevisionCreated>{format_date date=$article->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
     </NewsManagement>
@@ -56,7 +56,7 @@
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
-            <DateLineDate>{format_date date=$article->created type="custom" format="Ymd\THisP"}</DateLineDate>
+            <DateLineDate>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
             <Property FormalName="Tesauro" Value="{$article->category_name}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
@@ -99,8 +99,8 @@
                       {/if}
                     </rights>
                     <dateline>
-                      <story.date norm="{format_date date=$article->created type='custom' format='Ymd\THisP'}">
-                        {format_date date=$article->created type="custom" format="Ymd\THisP"}
+                      <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                        {format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}
                       </story.date>
                     </dateline>
                     <abstract>
@@ -145,7 +145,7 @@
               </AdministrativeMetadata>
               <DescriptiveMetadata>
                 <Language FormalName="es" />
-                <DateLineDate>{format_date date=$photo->created type="custom" format="Ymd\THisP"}</DateLineDate>
+                <DateLineDate>{format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
                 <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
               </DescriptiveMetadata>
               <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
@@ -187,8 +187,8 @@
                             </hl1>
                           </hedline>
                           <dateline>
-                            <story.date norm="{format_date date=$photo->created type='custom' format='Ymd\THisP'}">
-                              {format_date date=$photo->created type="custom" format="Ymd\THisP"}
+                            <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                              {format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}
                             </story.date>
                           </dateline>
                         </body.head>
@@ -218,7 +218,7 @@
               </AdministrativeMetadata>
               <DescriptiveMetadata>
                 <Language FormalName="es" />
-                <DateLineDate>{format_date date=$photoInner->created type="custom" format="Ymd\THisP"}</DateLineDate>
+                <DateLineDate>{format_date date=$photoInner->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
                 <Property FormalName="Onm_IdRefObject" Value="{$photoInner->id}" />
               </DescriptiveMetadata>
               <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.file">
@@ -260,8 +260,8 @@
                             </hl1>
                           </hedline>
                           <dateline>
-                            <story.date norm="{format_date date=$photoInner->created type='custom' format='Ymd\THisP'}">
-                              {format_date date=$photoInner->created type="custom" format="Ymd\THisP"}
+                            <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                              {format_date date=$photoInner->created type="custom" format="Ymd'T'Hmmssxxx"}
                             </story.date>
                           </dateline>
                         </body.head>
@@ -298,7 +298,7 @@
                 </AdministrativeMetadata>
                 <DescriptiveMetadata>
                   <Language FormalName="es" />
-                  <DateLineDate>{format_date date=$photo->created type="custom" format="Ymd\THisP"}</DateLineDate>
+                  <DateLineDate>{format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
                   <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
                 </DescriptiveMetadata>
                 <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
@@ -340,8 +340,8 @@
                               </hl1>
                             </hedline>
                             <dateline>
-                              <story.date norm="{format_date date=$photo->created type='custom' format='Ymd\THisP'}">
-                                {format_date date=$photo->created type="custom" format="Ymd\THisP"}
+                              <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                                {format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}
                               </story.date>
                             </dateline>
                           </body.head>
