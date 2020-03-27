@@ -9,6 +9,7 @@
  */
 namespace Frontend\Renderer\Statistics;
 
+use Api\Exception\GetItemException;
 use Frontend\Renderer\StatisticsRenderer;
 
 class ChartbeatRenderer extends StatisticsRenderer
@@ -45,17 +46,18 @@ class ChartbeatRenderer extends StatisticsRenderer
             ->getDataSet('Settings', 'instance')
             ->get('chartbeat');
 
-        $content = $this->tpl->getValue('content');
+        $smarty  = $container->get('core.template.frontend');
+        $content = $smarty->getValue('content');
 
         if (!empty($content)) {
-            $author = $container->get('api.service.author')
-                ->getItem($content->fk_author);
-        }
-
-        if (empty($author)) {
-            $author = $container->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('site_name');
+            try {
+                $author = $container->get('api.service.author')
+                    ->getItem($content->fk_author)->name;
+            } catch (GetItemException $ie) {
+                $author = $container->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('site_name');
+            }
         }
 
         return [

@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
+use Api\Exception\GetItemException;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\ChartbeatRenderer;
 use Common\ORM\Entity\Content;
@@ -65,14 +66,17 @@ class ChartbeatRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.author':
+                return $this->api;
+
+            case 'core.template.frontend':
+                return $this->tpl;
+
             case 'orm.manager':
                 return $this->em;
 
             case 'request_stack':
                 return $this->stack;
-
-            case 'api.service.author':
-                return $this->api;
         }
 
         return null;
@@ -118,7 +122,7 @@ class ChartbeatRendererTest extends TestCase
 
         $this->api->expects($this->once())->method('getItem')
             ->with($content->fk_author)
-            ->willReturn(new User());
+            ->willReturn(new User(['name' => 'John Doe']));
 
         $this->assertIsArray($this->renderer->prepareParams());
     }
@@ -142,7 +146,7 @@ class ChartbeatRendererTest extends TestCase
 
         $this->api->expects($this->once())->method('getItem')
             ->with($content->fk_author)
-            ->willReturn(null);
+            ->will($this->throwException(new GetItemException()));
 
         $this->ds->expects($this->at(1))->method('get')
             ->with('site_name')
