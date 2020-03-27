@@ -22,6 +22,7 @@
     <NewsManagement>
       <NewsItemType FormalName="News" />
       <FirstCreated>{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
+      <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$video->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />

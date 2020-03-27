@@ -21,13 +21,8 @@
     </Identification>
     <NewsManagement>
       <NewsItemType FormalName="News" />
-      <!--Creation date.-->
       <FirstCreated>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
-      {if $article->starttime_datetime}
-        <!--Published date.-->
-        <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
-      {/if}
-      <!--Last modification date.-->
+      <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$article->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
