@@ -15,7 +15,7 @@
   <th class="v-align-middle" width="240">
     {t}Username{/t}
   </th>
-  <th class="v-align-middle">
+  <th class="v-align-middle" width="200">
     {t}User groups{/t}
   </th>
   <th class="text-center v-align-middle" width="100">

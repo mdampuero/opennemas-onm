@@ -3,7 +3,7 @@
 {block name="columns"}{/block}
 
 {block name="commonColumnsHeader"}
-  <th class="v-align-middle">
+  <th class="v-align-middle" width="400">
     {t}Name{/t}
   </th>
   <th class="v-align-middle" width="200">
@@ -64,16 +64,16 @@
       </div>
     </div>
   </td>
-  <td class="hidden-xs v-align-middle">
+  <td class="v-align-middle">
     [% item.name %]
   </td>
-  <td class="hidden-sm hidden-xs text-center v-align-middle">
+  <td class="text-center v-align-middle">
     <dynamic-image class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="item.logo_path" only-image="true"></dynamic-image>
   </td>
-  <td class="hidden-sm hidden-xs text-center v-align-middle">
+  <td class="text-center v-align-middle">
     <span class="badge badge-white" ng-if="item.color" ng-style="{ 'background-color': item.color}">&nbsp;&nbsp;</span>
   </td>
-  <td class="hidden-xs text-center v-align-middle">
+  <td class="text-center v-align-middle">
     <span class="badge badge-default" ng-class="{ 'badge-danger': !data.extra.stats[getItemId(item)] || data.extra.stats[getItemId(item)] == 0 }">
       <strong>
         [% data.extra.stats[getItemId(item)] ? data.extra.stats[getItemId(item)] : 0 %]

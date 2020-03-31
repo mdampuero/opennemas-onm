@@ -15,17 +15,17 @@
   <th class="text-center v-align-middle" width="80">
     {t}Blog{/t}
   </th>
-  <th class="v-align-middle">
+  <th class="v-align-middle" width="400">
     {t}Biography{/t}
   </th>
 {/block}
 
 {block name="commonColumnsBody"}
-  <td class="text-center hidden-xs">
+  <td class="text-center v-align-middle">
     <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
     <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
   </td>
-  <td>
+  <td class="v-align-middle">
     <div class="table-text">
       [% item.name %]
     </div>

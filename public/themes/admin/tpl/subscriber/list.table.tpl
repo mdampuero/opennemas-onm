@@ -12,7 +12,7 @@
   <th class="v-align-middle" width="400">
     {t}Email{/t}
   </th>
-  <th class="v-align-middle">
+  <th class="v-align-middle" width="200">
     {t}Lists{/t}
   </th>
   <th class="text-center v-align-middle" width="80">
@@ -24,7 +24,7 @@
 {/block}
 
 {block name="commonColumnsBody"}
-  <td class="text-center hidden-xs">
+  <td class="text-center v-align-middle">
     <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id]" ng-if="item.avatar_img_id"></dynamic-image>
     <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
   </td>

@@ -3,7 +3,7 @@
 {block name="columns"}{/block}
 
 {block name="commonColumnsHeader"}
-  <th class="v-align-middle">
+  <th class="v-align-middle" width="400">
     {t}Name{/t}
   </th>
   <th class="v-align-middle" width="200">
