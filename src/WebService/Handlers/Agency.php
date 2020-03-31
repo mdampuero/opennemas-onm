@@ -100,11 +100,8 @@ class Agency
 
         $tpl = getService('view')->get('backend');
 
-        $imageId      = $article->img1;
-        $imageInnerId = $article->img2;
-
-        if (!empty($imageId)) {
-            $image[] = $er->find('Photo', $imageId);
+        if (!empty($article->img1)) {
+            $image[] = $er->find('Photo', $article->img1);
 
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
@@ -114,8 +111,8 @@ class Agency
             }
         }
 
-        if (!empty($imageInnerId)) {
-            $image[] = $er->find('Photo', $imageInnerId);
+        if (!empty($article->img2)) {
+            $image[] = $er->find('Photo', $article->img2);
 
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
