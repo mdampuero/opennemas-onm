@@ -130,7 +130,7 @@ EOF
         $newsML = $this->tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
             [
-                'article'    => $content,
+                'content'    => $content,
                 'photo'      => $content->img1,
                 'photoInner' => $content->img2,
                 'tags'       => $this->getContainer()->get('api.service.tag')

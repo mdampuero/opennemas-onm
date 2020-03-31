@@ -6,31 +6,31 @@
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</DateAndTime>
+    <DateAndTime>{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}</DateAndTime>
   </NewsEnvelope>
-  <NewsItem Duid="multimedia_{$article->id}">
+  <NewsItem Duid="multimedia_{$content->id}">
     <Comment FormalName="OnmNewsMLVersion"><text>1.0.1</text></Comment>
     <Identification>
       <NewsIdentifier>
         <ProviderId>{setting name=site_name}</ProviderId>
-        <DateId>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</DateId>
-        <NewsItemId>{$article->id}</NewsItemId>
+        <DateId>{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}</DateId>
+        <NewsItemId>{$content->id}</NewsItemId>
         <RevisionId PreviousRevision="1" Update="U"><text>2</text></RevisionId>
-        <PublicIdentifier>{$article->urn_source}</PublicIdentifier>
+        <PublicIdentifier>{$content->urn_source}</PublicIdentifier>
       </NewsIdentifier>
     </Identification>
     <NewsManagement>
       <NewsItemType FormalName="News" />
-      <FirstCreated>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
-      <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
-      <ThisRevisionCreated>{format_date date=$article->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
+      <FirstCreated>{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
+      <FirstPublished>{format_date date=$content->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
+      <ThisRevisionCreated>{format_date date=$content->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
     </NewsManagement>
-    <NewsComponent Duid="multimedia_{$article->id}.multimedia">
+    <NewsComponent Duid="multimedia_{$content->id}.multimedia">
       <NewsLines>
-        <HeadLine><![CDATA[{$article->title}]]></HeadLine>
-        <SubHeadLine><![CDATA[{$article->subtitle}]]></SubHeadLine>
+        <HeadLine><![CDATA[{$content->title}]]></HeadLine>
+        <SubHeadLine><![CDATA[{$content->subtitle}]]></SubHeadLine>
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
@@ -41,74 +41,78 @@
         </Creator>
       </AdministrativeMetadata>
       <!--Text collection.-->
-      <NewsComponent Duid="multimedia_{$article->id}.multimedia.texts">
+      <NewsComponent Duid="multimedia_{$content->id}.multimedia.texts">
         <Role FormalName="Content list" />
-        <NewsComponent Duid="multimedia_{$article->id}.multimedia.texts.{$article->id}" Euid="{$article->id}">
+        <NewsComponent Duid="multimedia_{$content->id}.multimedia.texts.{$content->id}" Euid="{$content->id}">
           <Role FormalName="Main" />
           <NewsLines>
-            <HeadLine><![CDATA[{$article->title}]]></HeadLine>
-            <SubHeadLine><![CDATA[{$article->subtitle}]]></SubHeadLine>
+            <HeadLine><![CDATA[{$content->title}]]></HeadLine>
+            <SubHeadLine><![CDATA[{$content->subtitle}]]></SubHeadLine>
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
-            <DateLineDate>{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
-            <Property FormalName="Tesauro" Value="{$article->category_name}"/>
-            <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
+            <DateLineDate>{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
+            <Property FormalName="Tesauro" Value="{$content->category_name}"/>
+            <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{$article->uri}">
+          <ContentItem Href="{$content->uri}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
             <DataContent>
               <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                 <head>
-                  <title><![CDATA[{$article->title}]]></title>
+                  <title><![CDATA[{$content->title}]]></title>
                   <docdata management-status="usable">
                     <doc.rights agent="Opennemas"/>
-                    <doc-id id-string="{$article->id}" />
+                    <doc-id id-string="{$content->id}" />
                     <key-list>
-                      <keyword key="{renderMetaKeywords content=$article tags=$tags onlyTags=True }"/>
+                      <keyword key="{renderMetaKeywords content=$content tags=$tags onlyTags=True }"/>
                     </key-list>
                   </docdata>
                 </head>
                 <body>
                   <body.head>
                     <hedline>
-                      <hl1><![CDATA[{$article->title}]]></hl1>
-                      <hl2><![CDATA[{$article->subtitle}]]></hl2>
+                      <hl1><![CDATA[{$content->title}]]></hl1>
+                      <hl2><![CDATA[{$content->subtitle}]]></hl2>
                     </hedline>
                     <rights>
                       <rights.agent>{setting name=site_name}</rights.agent>
-                      {if !empty($article->author)}
-                        <rights.owner>{$article->author->name}</rights.owner>
-                        {if $article->author->photo}
+                      {if !empty($content->author)}
+                        <rights.owner>{$content->author->name}</rights.owner>
+                        {if $content->author->photo}
                           <rights.owner.photo>
-                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$article->author->photo->path_img}
+                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path_img}
                           </rights.owner.photo>
                         {/if}
                         <rights.owner.url>
-                          {$app.instance->getBaseUrl()}{url name=frontend_author_frontpage slug=$article->author->username}
+                          {$app.instance->getBaseUrl()}{url name=frontend_author_frontpage slug=$content->author->username}
                         </rights.owner.url>
                       {else}
-                        <rights.owner>{$article->agency|default:'Redacción'}</rights.owner>
+                        <rights.owner>{$content->agency|default:'Redacción'}</rights.owner>
                       {/if}
                     </rights>
                     <dateline>
-                      <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
-                        {format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}
+                      <story.date norm="{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                        {format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}
                       </story.date>
                     </dateline>
                     <abstract>
-                      <p><![CDATA[{$article->summary}]]></p>
+                      <p><![CDATA[{$content->summary}]]></p>
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[{$article->body}]]>
+                    {if $content->content_type_name == 'album'}
+                      <![CDATA[{$content->description}]]>
+                    {else}
+                      <![CDATA[{$content->body}]]>
+                    {/if}
                   </body.content>
                   <body.end>
-                    {if isset($article->related) && !empty($article->related)}
+                    {if isset($content->related) && !empty($content->related)}
                       <block class="related-contents">
-                        {foreach $article->related as $related}
+                        {foreach $content->related as $related}
                           <p>
                             <a href="/{$related->uri}">{$related->title}</a>
                           </p>
@@ -124,13 +128,13 @@
       </NewsComponent>
       {if !empty($photo) || !empty($photoInner)}
         <!--Photo collection.-->
-        <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos">
+        <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
           {if !empty($photo)}
-            <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
+            <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
               <NewsLines>
                 <HeadLine>
-                  <![CDATA[{$article->title}]]>
+                  <![CDATA[{$content->title}]]>
                 </HeadLine>
               </NewsLines>
               <AdministrativeMetadata>
@@ -143,7 +147,7 @@
                 <DateLineDate>{format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
                 <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
               </DescriptiveMetadata>
-              <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
                 <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
@@ -158,7 +162,7 @@
                   </Characteristics>
                 </ContentItem>
               </NewsComponent>
-              <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.text">
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.text">
                 <Role FormalName="Caption" />
                 <ContentItem>
                   <MediaType FormalName="Text" />
@@ -168,7 +172,7 @@
                     <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                       <head>
                         <title>
-                          <![CDATA[{$article->title}]]>
+                          <![CDATA[{$content->title}]]>
                         </title>
                         <docdata management-status="usable">
                           <doc-id id-string="{$photo->id}" />
@@ -178,11 +182,11 @@
                         <body.head>
                           <hedline>
                             <hl1>
-                              <![CDATA[{$article->title}]]>
+                              <![CDATA[{$content->title}]]>
                             </hl1>
                           </hedline>
                           <dateline>
-                            <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                            <story.date norm="{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}">
                               {format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}
                             </story.date>
                           </dateline>
@@ -200,10 +204,10 @@
             </NewsComponent>
           {/if}
           {if !empty($photoInner) && (empty(photo) || (!empty(photo) && $photo->id !== $photoInner->id))}
-            <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}" Euid="{$photoInner->id}">
+            <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}" Euid="{$photoInner->id}">
               <NewsLines>
                 <HeadLine>
-                  <![CDATA[{$article->title}]]>
+                  <![CDATA[{$content->title}]]>
                 </HeadLine>
               </NewsLines>
               <AdministrativeMetadata>
@@ -216,7 +220,7 @@
                 <DateLineDate>{format_date date=$photoInner->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
                 <Property FormalName="Onm_IdRefObject" Value="{$photoInner->id}" />
               </DescriptiveMetadata>
-              <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.file">
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
                 <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
@@ -231,7 +235,7 @@
                   </Characteristics>
                 </ContentItem>
               </NewsComponent>
-              <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.text">
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.text">
                 <Role FormalName="Caption" />
                 <ContentItem>
                   <MediaType FormalName="Text" />
@@ -241,7 +245,7 @@
                     <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                       <head>
                         <title>
-                          <![CDATA[{$article->title}]]>
+                          <![CDATA[{$content->title}]]>
                         </title>
                         <docdata management-status="usable">
                           <doc-id id-string="{$photoInner->id}" />
@@ -251,11 +255,11 @@
                         <body.head>
                           <hedline>
                             <hl1>
-                              <![CDATA[{$article->title}]]>
+                              <![CDATA[{$content->title}]]>
                             </hl1>
                           </hedline>
                           <dateline>
-                            <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                            <story.date norm="{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}">
                               {format_date date=$photoInner->created type="custom" format="Ymd'T'Hmmssxxx"}
                             </story.date>
                           </dateline>
@@ -274,16 +278,16 @@
           {/if}
         </NewsComponent>
       {/if}
-      {if isset($article->all_photos) && !empty($article->all_photos)}
+      {if isset($content->all_photos) && !empty($content->all_photos)}
         <!--Photo collection.-->
-        <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos">
+        <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
-          {foreach $article->all_photos as $photo}
+          {foreach $content->all_photos as $photo}
             {if $photo->id}
-              <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
                 <NewsLines>
                   <HeadLine>
-                    <![CDATA[{$article->title}]]>
+                    <![CDATA[{$content->title}]]>
                   </HeadLine>
                 </NewsLines>
                 <AdministrativeMetadata>
@@ -296,7 +300,7 @@
                   <DateLineDate>{format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}</DateLineDate>
                   <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
                 </DescriptiveMetadata>
-                <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
+                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
                   <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
@@ -311,7 +315,7 @@
                     </Characteristics>
                   </ContentItem>
                 </NewsComponent>
-                <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.text">
+                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.text">
                   <Role FormalName="Caption" />
                   <ContentItem>
                     <MediaType FormalName="Text" />
@@ -321,7 +325,7 @@
                       <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                         <head>
                           <title>
-                            <![CDATA[{$article->title}]]>
+                            <![CDATA[{$content->title}]]>
                           </title>
                           <docdata management-status="usable">
                             <doc-id id-string="{$photo->id}" />
@@ -331,11 +335,11 @@
                           <body.head>
                             <hedline>
                               <hl1>
-                                <![CDATA[{$article->title}]]>
+                                <![CDATA[{$content->title}]]>
                               </hl1>
                             </hedline>
                             <dateline>
-                              <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                              <story.date norm="{format_date date=$content->created type="custom" format="Ymd'T'Hmmssxxx"}">
                                 {format_date date=$photo->created type="custom" format="Ymd'T'Hmmssxxx"}
                               </story.date>
                             </dateline>
