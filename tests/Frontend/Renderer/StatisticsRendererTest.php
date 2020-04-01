@@ -67,7 +67,7 @@ class StatisticsRendererTest extends TestCase
         $this->childRenderer->expects($this->at(1))->method('prepareParams')
             ->willReturn($params);
 
-        $path = 'statistics/helpers/GAnalytics/image.tpl';
+        $path = 'statistics/helpers/ganalytics/image.tpl';
 
         $this->tpl->expects($this->once())->method('fetch')
             ->with($path, $params)->willReturn('Image code');
