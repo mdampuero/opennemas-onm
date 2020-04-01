@@ -6,11 +6,11 @@
   <th class="v-align-middle" width="400">
       {t}Name{/t}
   </th>
-  <th class="text-center v-align-middle" width="80">
+  <th class="text-center v-align-middle" width="150">
     <i class="fa fa-eye" uib-tooltip="{t}Visibility{/t}" tooltip-placement="left"></i>
     <span ng-if="isHelpEnabled()">{t}Visibility{/t}</span>
   </th>
-  <th class="text-center v-align-middle" width="80">
+  <th class="text-center v-align-middle" width="150">
     <i class="fa fa-check" uib-tooltip="{t}Enabled{/t}" tooltip-placement="left"></i>
     <span ng-if="isHelpEnabled()">{t}Enabled{/t}</span>
   </th>
