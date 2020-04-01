@@ -3,14 +3,14 @@
 {block name="columns"}{/block}
 
 {block name="commonColumnsHeader"}
-  <th class="v-align-middle">
+  <th class="v-align-middle" width="400">
       {t}Name{/t}
   </th>
-  <th class="text-center v-align-middle" width="150">
+  <th class="text-center v-align-middle" width="80">
     <i class="fa fa-eye" uib-tooltip="{t}Visibility{/t}" tooltip-placement="left"></i>
     <span ng-if="isHelpEnabled()">{t}Visibility{/t}</span>
   </th>
-  <th class="text-center v-align-middle" width="150">
+  <th class="text-center v-align-middle" width="80">
     <i class="fa fa-check" uib-tooltip="{t}Enabled{/t}" tooltip-placement="left"></i>
     <span ng-if="isHelpEnabled()">{t}Enabled{/t}</span>
   </th>
