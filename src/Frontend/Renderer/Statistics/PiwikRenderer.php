@@ -14,7 +14,9 @@ use Frontend\Renderer\StatisticsRenderer;
 class PiwikRenderer extends StatisticsRenderer
 {
     /**
-     * Return if piwik is correctly configured or not
+     * Returns if piwik is correctly configured or not.
+     *
+     * @return boolean True if piwik is correctly configured, False otherwise.
      */
     public function validate()
     {
@@ -38,7 +40,9 @@ class PiwikRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return parameters needed to generate piwik code
+     * Returns parameters needed to generate piwik code.
+     *
+     * @return array The array of parameters for piwik.
      */
     public function prepareParams()
     {

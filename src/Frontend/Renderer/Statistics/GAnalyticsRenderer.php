@@ -14,7 +14,9 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
-     * Return if google analytics is correctly configured or not
+     * Return if google analytics is correctly configured or not.
+     *
+     * @return boolean True
      */
     public function validate()
     {
@@ -22,7 +24,9 @@ class GAnalyticsRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return the parameters needed to generate analytics
+     * Return the parameters needed to generate analytics.
+     *
+     * @return array The array of parameters for google analytics.
      */
     public function prepareParams()
     {

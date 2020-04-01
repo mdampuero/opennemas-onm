@@ -15,7 +15,9 @@ use Frontend\Renderer\StatisticsRenderer;
 class ChartbeatRenderer extends StatisticsRenderer
 {
     /**
-     * Return if chartbeat is correctly configured or not
+     * Returns if chartbeat is correctly configured or not.
+     *
+     * @return boolean True if chartbeat is correctly configured, False otherwise.
      */
     public function validate()
     {
@@ -37,7 +39,9 @@ class ChartbeatRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return parameters needed to generate chartbeat code
+     * Returns parameters needed to generate chartbeat code.
+     *
+     * @return array The array of parameters for chartbeat.
      */
     public function prepareParams()
     {

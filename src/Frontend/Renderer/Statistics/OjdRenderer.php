@@ -14,7 +14,9 @@ use Frontend\Renderer\StatisticsRenderer;
 class OjdRenderer extends StatisticsRenderer
 {
     /**
-     * Return if ojd is correctly configured or not
+     * Returns if ojd is correctly configured or not.
+     *
+     * @return boolean True if Ojd is correctly configured, False otherwise.
      */
     public function validate()
     {
@@ -34,7 +36,9 @@ class OjdRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return parameters needed to generate ojd code
+     * Returns parameters needed to generate ojd code.
+     *
+     * @return array The array of parameters for ojd.
      */
     public function prepareParams()
     {

@@ -14,7 +14,9 @@ use Frontend\Renderer\StatisticsRenderer;
 class DefaultRenderer extends StatisticsRenderer
 {
     /**
-     * Return if default is correctly configured or not
+     * Returns if default is correctly configured or not.
+     *
+     * @return boolean True if the default code needs to be displayed, False otherwise.
      */
     public function validate()
     {
@@ -34,7 +36,9 @@ class DefaultRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return parameters needed to generate default code
+     * Return parameters needed to generate default code.
+     *
+     * @return array The array of parameters for default code.
      */
     public function prepareParams()
     {

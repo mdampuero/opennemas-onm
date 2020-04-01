@@ -12,24 +12,24 @@ namespace Frontend\Renderer;
 class StatisticsRenderer
 {
     /**
-     * The global variables
+     * The global variables.
      *
      * @var GlobalVariables
      */
     protected $global;
 
     /**
-     * The template
+     * The template.
      *
      * @var Template
      */
     protected $tpl;
 
     /**
-     * Initializes the StatisticsRenderer
+     * Initializes the StatisticsRenderer.
      *
-     * @param GlobalVariables $global The global variables
-     * @param Template        $tpl    The template
+     * @param GlobalVariables $global The global variables.
+     * @param Template        $tpl    The template.
      */
     public function __construct($global, $tpl)
     {
@@ -38,10 +38,12 @@ class StatisticsRenderer
     }
 
     /**
-     * Renders analytics code giving the types
+     * Renders analytics code giving the types.
      *
-     * @param array $types     The array of types to render
-     * @param String $output   The html page
+     * @param array $types     The array of types to render.
+     * @param String $output   The html page.
+     *
+     * @return String The output with the all analytics code inserted.
      */
     public function render($types, $output = null)
     {
@@ -75,9 +77,11 @@ class StatisticsRenderer
     }
 
     /**
-     * Return the specific method to call based on the request and imageOnly flag
+     * Return the specific method to call based on the request and imageOnly flag.
      *
-     * @param bool $imageOnly Image only flag
+     * @param bool $imageOnly Image only flag.
+     *
+     * @return String The code type needed: image, amp or script.
      */
     protected function getCodeType($output)
     {
@@ -95,11 +99,11 @@ class StatisticsRenderer
     }
 
     /**
-     * Returns an instance of the renderer passed as parammeter
+     * Returns an instance of the renderer passed as parammeter.
      *
-     * @param String $type The type of analytics to render
+     * @param String $type The type of analytics to render.
      *
-     * @return mixed An instance of the specific renderer
+     * @return mixed An instance of the specific renderer.
      */
     protected function getRendererClass($type)
     {

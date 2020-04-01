@@ -14,7 +14,9 @@ use Frontend\Renderer\StatisticsRenderer;
 class ComscoreRenderer extends StatisticsRenderer
 {
     /**
-     * Return if comscore is correctly configured or not
+     * Returns if comscore is correctly configured or not.
+     *
+     * @return boolean True if comscore is correctly configured, False otherwise.
      */
     public function validate()
     {
@@ -34,7 +36,9 @@ class ComscoreRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return needed parameters to generate comscore code
+     * Returns needed parameters to generate comscore code.
+     *
+     * @return array The array of parameters for comscore.
      */
     public function prepareParams()
     {
