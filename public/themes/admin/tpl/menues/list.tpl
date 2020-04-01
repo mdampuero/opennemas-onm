@@ -114,7 +114,7 @@
                   </div>
                 </th>
                 <th class="pointer">{t}Name{/t}</th>
-                {if count($menu_positions) > 1}
+                {if !empty($menu_positions) && count($menu_positions) > 1}
                 <th class="pointer nowrap hidden-xs" width="100">{t}Position assigned{/t}</th>
                 {/if}
               </tr>
@@ -153,7 +153,7 @@
                     </button>
                   </div>
                 </td>
-                {if count($menu_positions) > 1}
+                {if !empty($menu_positions) && count($menu_positions) > 1}
                 <td class="hidden-xs">
                   <span ng-if="content.position">
                     [% menu_positions[content.position] %]

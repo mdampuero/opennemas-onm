@@ -3,7 +3,7 @@
         <div class="pagination"> {$pagination} </div>
     {/if}
 
-    {if count($contents) > 0}
+    {if !empty($contents)}
     <ul id='contentList'>
         {foreach from=$contents item=content}
             <li data-id="{$content->id}" data-type="{$contentType}" data-title="{$content->title|clearslash|html_attribute}">

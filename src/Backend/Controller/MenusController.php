@@ -166,7 +166,7 @@ class MenusController extends Controller
         }
 
         // Check empty data
-        if (count($request->request) < 1) {
+        if (empty($request->request)) {
             $this->get('session')->getFlashBag()->add('error', _("Menu data sent not valid."));
 
             return $this->redirect($this->generateUrl('admin_menu_show', ['id' => $id]));

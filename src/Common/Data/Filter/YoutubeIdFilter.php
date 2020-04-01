@@ -27,7 +27,7 @@ class YoutubeIdFilter extends Filter
 
         preg_match($pattern, $str, $matches);
 
-        if (count($matches) > 0) {
+        if (!empty($matches)) {
             return $matches[1];
         }
 

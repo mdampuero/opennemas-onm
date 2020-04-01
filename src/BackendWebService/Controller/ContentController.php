@@ -827,7 +827,7 @@ class ContentController extends Controller
 
         if (isset($positions)
             && is_array($positions)
-            && count($positions) > 0
+            && !empty($positions)
         ) {
             $pos = 1;
             foreach ($positions as $id) {

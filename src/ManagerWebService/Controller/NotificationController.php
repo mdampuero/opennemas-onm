@@ -138,7 +138,7 @@ class NotificationController extends Controller
         $ids = $request->request->get('ids', []);
         $msg = $this->get('core.messenger');
 
-        if (!is_array($ids) || count($ids) === 0) {
+        if (!is_array($ids) || empty($ids)) {
             $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
@@ -370,7 +370,7 @@ class NotificationController extends Controller
 
         unset($params['ids']);
 
-        if (!is_array($ids) || count($ids) === 0) {
+        if (!is_array($ids) || empty($ids)) {
             $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }

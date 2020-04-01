@@ -81,7 +81,7 @@ class Contents
                 [ $contentID ]
             );
 
-            if (count($rs) < 1) {
+            if (empty($rs)) {
                 $returnValue = false;
             } else {
                 $returnValue = $rs['path'];
@@ -102,11 +102,11 @@ class Contents
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT name FROM `contents_categories`,`content_categories` '
-                .'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
+                . 'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
                 [ $id ]
             );
 
-            if (count($rs) < 1) {
+            if (empty($rs)) {
                 $returnValue = false;
             } else {
                 $returnValue = $rs['name'];
@@ -127,11 +127,11 @@ class Contents
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
                 'SELECT title FROM `contents_categories`,`content_categories` '
-                .'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
+                . 'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
                 [ $id ]
             );
 
-            if (count($rs) < 1) {
+            if (empty($rs)) {
                 $returnValue = false;
             } else {
                 $returnValue = $rs['title'];

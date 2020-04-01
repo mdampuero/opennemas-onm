@@ -9,25 +9,25 @@
     </label>
     <select class="form-control" id="item-type" ng-model="type">
       <option value="external">{t}External link{/t}</option>
-      {if count($pages) > 0}
+      {if !empty($pages)}
         <option value="internal">{t}Module{/t}</option>
       {/if}
-      {if count($categories) > 0}
+      {if !empty($categories)}
         <option value="category">{t}Categories{/t}</option>
       {/if}
-      {if count($categories) > 0}
+      {if !empty($categories)}
         <option value="blog-category">{t}Category blog{/t}</option>
       {/if}
-      {if count($static_pages) > 0}
+      {if !empty($static_pages)}
         <option value="static">{t}Static Page{/t}</option>
       {/if}
       {is_module_activated name="SYNC_MANAGER"}
-        {if count($sync_sites) > 0}
+        {if !empty($sync_sites)}
           <option value="syncCategory">{t}Synchronized Category{/t}</option>
         {/if}
       {/is_module_activated}
       {is_module_activated name="SYNC_MANAGER"}
-        {if count($sync_sites) > 0}
+        {if !empty($sync_sites)}
           <option value="syncBlogCategory">{t}Sync Automatic Categories{/t}</option>
         {/if}
       {/is_module_activated}
@@ -52,7 +52,7 @@
       </div>
     </div>
   </div>
-  {if count($categories) > 0}
+  {if !empty($categories)}
     <div ng-if="type == 'category'" ng-init="categories = {json_encode($categories)|clear_json}">
       <div class="form-group" ng-repeat="category in categories">
         <div class="checkbox col-md-6">
@@ -64,7 +64,7 @@
       </div>
     </div>
   {/if}
-  {if count($pages) > 0}
+  {if !empty($pages)}
     <div ng-if="type == 'internal'" ng-init="pages = {json_encode($pages)|clear_json}">
       <div class="form-group" ng-repeat="page in pages">
         <div class="checkbox col-md-6">
@@ -76,7 +76,7 @@
       </div>
     </div>
   {/if}
-  {if count($static_pages) > 0}
+  {if !empty($static_pages)}
     <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($static_pages)|clear_json}">
       <div class="form-group" ng-repeat="page in staticPages">
         <div class="checkbox col-md-6">
@@ -89,7 +89,7 @@
     </div>
   {/if}
   {is_module_activated name="SYNC_MANAGER"}
-    {if count($sync_sites) > 0}
+    {if !empty($sync_sites)}
       <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($sync_sites)|clear_json}">
         <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
           <h5>[% site %]</h5>
@@ -105,7 +105,7 @@
       </div>
     {/if}
   {/is_module_activated}
-  {if count($categories) > 0}
+  {if !empty($categories)}
     <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|clear_json}">
       <div class="form-group" ng-repeat="category in automaticCategories">
         <div class="checkbox col-md-6">
@@ -118,7 +118,7 @@
     </div>
   {/if}
   {is_module_activated name="SYNC_MANAGER"}
-   {if count($sync_sites) > 0}
+   {if !empty($sync_sites)}
     <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($sync_sites)|clear_json}">
       <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
         <h5>[% site %]</h5>

@@ -232,7 +232,7 @@ class ArticleController extends Controller
 
             $relations = $rm->getRelations($article->id, $key);
 
-            if (count($relations) === 0) {
+            if (empty($relations)) {
                 continue;
             }
 

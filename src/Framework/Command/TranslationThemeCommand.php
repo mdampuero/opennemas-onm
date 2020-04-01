@@ -124,7 +124,7 @@ EOF
 
         $files = glob($this->themeFolder . '/**/*.php');
 
-        if (count($files) > 0) {
+        if (!empty($files)) {
             $output->writeln("\t- From PHP files");
             $command =
                 "xgettext "
@@ -153,7 +153,7 @@ EOF
             $extractedtranslationsFiles[] = $tplTranslationsFile;
         }
 
-        if (count($extractedtranslationsFiles)) {
+        if (!empty($extractedtranslationsFiles)) {
             $command       = "msgcat -o " . $finalTranslationFile . ' '
                 . implode(' ', $extractedtranslationsFiles);
             $commandOutput = shell_exec($command);

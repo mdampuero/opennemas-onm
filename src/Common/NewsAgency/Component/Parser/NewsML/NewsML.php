@@ -27,7 +27,7 @@ class NewsML extends Parser
 
         $node = $data->xpath('/NewsML');
 
-        if (!is_array($node) || count($node) == 0) {
+        if (!is_array($node) || empty($node)) {
             return false;
         }
 
@@ -45,7 +45,7 @@ class NewsML extends Parser
     {
         $agency = $data->xpath('//AdministrativeMetadata/Provider/Party');
 
-        if (is_array($agency) && count($agency) > 0) {
+        if (is_array($agency) && !empty($agency)) {
             return (string) $agency[0]->attributes()->FormalName;
         }
 
@@ -132,7 +132,7 @@ class NewsML extends Parser
     {
         $id = $data->xpath('//NewsItemId');
 
-        if (is_array($id) && count($id) > 0) {
+        if (is_array($id) && !empty($id)) {
             return (string) $id[0];
         }
 
@@ -156,7 +156,7 @@ class NewsML extends Parser
     {
         $pretitle = $data->xpath('//SubHeadLine');
 
-        if (is_array($pretitle) && count($pretitle) > 0) {
+        if (is_array($pretitle) && !empty($pretitle)) {
             $pretitle = $pretitle[0];
 
             return iconv(mb_detect_encoding($pretitle), "UTF-8", $pretitle);
@@ -200,7 +200,7 @@ class NewsML extends Parser
     {
         $tags = $data->xpath('//DescriptiveMetadata/OfInterestTo');
 
-        if (is_array($tags) && count($tags) > 0) {
+        if (is_array($tags) && !empty($tags)) {
             return (string) $tags[0]->attributes()->FormalName;
         }
 
@@ -218,7 +218,7 @@ class NewsML extends Parser
     {
         $title = $data->xpath('//HeadLine');
 
-        if (is_array($title) && count($title) > 0) {
+        if (is_array($title) && !empty($title)) {
             $title = (string) $title[0];
             return iconv(mb_detect_encoding($title), "UTF-8", $title);
         }
@@ -237,7 +237,7 @@ class NewsML extends Parser
     {
         $type = $data->xpath("//MediaType");
 
-        if (is_array($type) && count($type) > 0) {
+        if (is_array($type) && !empty($type)) {
             return (string) $type[0]->attributes()->FormalName;
         }
 

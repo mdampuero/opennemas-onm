@@ -32,18 +32,18 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $baseTmpLogsPath = realpath(APP_PATH.'/../tmp/logs');
+        $baseTmpLogsPath = realpath(APP_PATH . '/../tmp/logs');
 
         $output->write(" - Cleaning all the log files : ");
 
         if ($baseTmpLogsPath) {
-            $fullLogsFolderPath = $baseTmpLogsPath.'/*';
-            $files = glob($fullLogsFolderPath);
-            $count = count($files);
+            $fullLogsFolderPath = $baseTmpLogsPath . '/*';
+            $files              = glob($fullLogsFolderPath);
 
-            if ($count > 0) {
-                exec('rm '.$fullLogsFolderPath);
-                $output->writeln($count.' files [REMOVED]');
+            if (!empty($files)) {
+                $count = count($files);
+                exec('rm ' . $fullLogsFolderPath);
+                $output->writeln($count . ' files [REMOVED]');
             } else {
                 $output->writeln('0 files [REMOVED]');
             }

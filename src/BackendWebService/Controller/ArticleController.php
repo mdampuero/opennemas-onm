@@ -99,7 +99,7 @@ class ArticleController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        if (count($request->request) < 1) {
+        if (empty($request->request)) {
             $msg->add(_('Article data sent not valid.'), 'error');
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }

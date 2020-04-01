@@ -112,7 +112,7 @@ class KeywordsController extends Controller
 
         $ids = $request->request->get('ids');
 
-        if (is_array($ids) && count($ids) > 0) {
+        if (is_array($ids)) {
             foreach ($ids as $id) {
                 $keyword = new \PClave();
                 $keyword->read($id);
@@ -139,7 +139,7 @@ class KeywordsController extends Controller
             }
         }
 
-        if (count($updated) > 0) {
+        if (!empty($updated)) {
             $success[] = [
                 'id'      => $updated,
                 'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),

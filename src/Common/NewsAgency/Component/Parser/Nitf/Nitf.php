@@ -28,7 +28,7 @@ class Nitf extends Parser
 
         $node = $data->xpath('/nitf');
 
-        if (!is_array($node) || count($node) == 0) {
+        if (!is_array($node) || empty($node)) {
             return false;
         }
 
@@ -67,7 +67,7 @@ class Nitf extends Parser
     {
         $service = $data->xpath('//rights.owner');
 
-        if (is_array($service) && count($service) > 0) {
+        if (is_array($service) && !empty($service)) {
             return (string) $service[0];
         }
 
@@ -162,7 +162,7 @@ class Nitf extends Parser
      */
     public function getId($data)
     {
-        $id    = $data->xpath('//doc-id');
+        $id = $data->xpath('//doc-id');
 
         if (empty($id)) {
             return '';

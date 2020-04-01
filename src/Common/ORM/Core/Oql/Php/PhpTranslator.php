@@ -160,7 +160,7 @@ class PhpTranslator
             }
         }
 
-        while (count($this->operators) > 0 || count($this->params) > 0) {
+        while (!empty($this->operators) || !empty($this->params)) {
             $map[] = $this->consume();
         }
 

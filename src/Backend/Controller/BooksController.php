@@ -164,7 +164,7 @@ class BooksController extends Controller
         }
 
         // Check empty data
-        if (count($request->request) < 1) {
+        if (empty($request->request)) {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 _("Book data sent not valid.")
