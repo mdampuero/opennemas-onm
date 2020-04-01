@@ -56,7 +56,7 @@ class StatisticsRenderer
             if ($renderer->validate()) {
                 try {
                     $code .= $this->tpl->fetch(
-                        'statistics/helpers/' . $type . '/' . $codeType . '.tpl',
+                        'statistics/helpers/' . strtolower($type) . '/' . $codeType . '.tpl',
                         $renderer->prepareParams()
                     );
                 } catch (\Exception $e) {
