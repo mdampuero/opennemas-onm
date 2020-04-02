@@ -55,7 +55,7 @@ class StatisticsRendererTest extends TestCase
 
         $this->childRenderer = $this->getMockBuilder('Frontend\Renderer\Statistics\GAnalyticsRenderer')
             ->disableOriginalConstructor()
-            ->setMethods([ 'validate', 'prepareParams' ])
+            ->setMethods([ 'validate', 'getParameters' ])
             ->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -97,7 +97,7 @@ class StatisticsRendererTest extends TestCase
 
         $params = [ 'params' => 'params' ];
 
-        $this->childRenderer->expects($this->at(1))->method('prepareParams')
+        $this->childRenderer->expects($this->at(1))->method('getParameters')
             ->willReturn($params);
 
         $path = 'statistics/helpers/ganalytics/image.tpl';
@@ -249,12 +249,12 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * Tests prepareParams
+     * Tests getParameters
      */
-    public function testPrepareParams()
+    public function testGetParameters()
     {
         $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
-        $method   = new \ReflectionMethod($renderer, 'prepareParams');
+        $method   = new \ReflectionMethod($renderer, 'getParameters');
         $method->setAccessible(true);
 
         $this->assertIsArray($method->invokeArgs($renderer, []));

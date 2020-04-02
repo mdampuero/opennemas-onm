@@ -108,9 +108,9 @@ class ChartbeatRendererTest extends TestCase
     }
 
     /**
-     * Tests prepareParams when exists both content and author.
+     * Tests getParameters when exists both content and author.
      */
-    public function testPrepareParamsWhenContentAndAuthor()
+    public function testGetParametersWhenContentAndAuthor()
     {
         $content = new Content([
             'pk_content' => 1,
@@ -125,13 +125,13 @@ class ChartbeatRendererTest extends TestCase
             ->with($content->fk_author)
             ->willReturn(new User(['name' => 'John Doe']));
 
-        $this->assertIsArray($this->renderer->prepareParams());
+        $this->assertIsArray($this->renderer->getParameters());
     }
 
     /**
-     * Tests prepareParams when author is not found.
+     * Tests getParameters when author is not found.
      */
-    public function testPrepareParamsWhenNoAuthor()
+    public function testGetParametersWhenNoAuthor()
     {
         $content = new Content([
             'pk_content' => 1,
@@ -150,6 +150,6 @@ class ChartbeatRendererTest extends TestCase
             ->with('site_name')
             ->willReturn('Site');
 
-        $this->assertIsArray($this->renderer->prepareParams());
+        $this->assertIsArray($this->renderer->getParameters());
     }
 }

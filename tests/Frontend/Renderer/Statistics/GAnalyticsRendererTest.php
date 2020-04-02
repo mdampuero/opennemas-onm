@@ -74,18 +74,18 @@ class GAnalyticsRendererTest extends TestCase
     }
 
     /**
-     * Tests prepareParams with old configuration.
+     * Tests getParameters with old configuration.
      */
-    public function testPrepareParamsWithOldConfig()
+    public function testgetParametersWithOldConfig()
     {
-        $this->assertIsArray($this->renderer->prepareParams());
+        $this->assertIsArray($this->renderer->getParameters());
     }
 
     /**
-     * Tests prepareParams with new configuration.
+     * Tests getParameters with new configuration.
      */
-    public function testPrepareParamsWithoutOldConfig()
+    public function testGetParametersWithoutOldConfig()
     {
-        $this->assertIsArray($this->renderer->prepareParams());
+        $this->assertIsArray($this->renderer->getParameters());
     }
 }

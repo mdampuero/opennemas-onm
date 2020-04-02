@@ -66,7 +66,7 @@ class StatisticsRenderer
                 try {
                     $code .= $this->tpl->fetch(
                         'statistics/helpers/' . strtolower($type) . '/' . $codeType . '.tpl',
-                        $renderer->prepareParams()
+                        $renderer->getParameters()
                     );
                 } catch (\Exception $e) {
                     continue;
@@ -137,7 +137,7 @@ class StatisticsRenderer
      *
      * @return array []
      */
-    protected function prepareParams()
+    protected function getParameters()
     {
         return [];
     }

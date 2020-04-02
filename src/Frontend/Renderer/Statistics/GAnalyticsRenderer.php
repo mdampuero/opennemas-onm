@@ -41,7 +41,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for google analytics.
      */
-    public function prepareParams()
+    public function getParameters()
     {
         $extra['category']  = $this->global->getSection();
         $extra['extension'] = $this->global->getExtension();

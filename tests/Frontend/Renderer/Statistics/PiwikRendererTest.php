@@ -100,10 +100,10 @@ class PiwikRendererTest extends TestCase
     }
 
     /**
-     * Tests prepareParams.
+     * Tests getParameters.
      */
-    public function testPrepareParams()
+    public function testGetParameters()
     {
-        $this->assertIsArray($this->renderer->prepareParams());
+        $this->assertIsArray($this->renderer->getParameters());
     }
 }

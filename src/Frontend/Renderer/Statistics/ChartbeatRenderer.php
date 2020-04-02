@@ -61,7 +61,7 @@ class ChartbeatRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for chartbeat.
      */
-    public function prepareParams()
+    public function getParameters()
     {
         $container = $this->global->getContainer();
 
