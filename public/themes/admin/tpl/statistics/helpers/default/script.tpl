@@ -1,4 +1,4 @@
-{smarty_function_script_tag($params, $smarty)}
+<script src="/assets/js/onm/jquery.onm-stats.00000000000000.js"></script>
 <script>
-  jQuery.onmStats({ content_id: {$smarty->getTemplateVars()['contentId']} });
+  jQuery.onmStats({ content_id: {$item->pk_content});
 </script>

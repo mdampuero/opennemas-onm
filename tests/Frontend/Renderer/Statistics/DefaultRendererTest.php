@@ -33,7 +33,7 @@ class DefaultRendererTest extends TestCase
 
         $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'hasValue' ])
+            ->setMethods([ 'hasValue', 'getValue' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')

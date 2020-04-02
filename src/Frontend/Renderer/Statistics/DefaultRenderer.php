@@ -26,7 +26,7 @@ class DefaultRenderer extends StatisticsRenderer
             || preg_match('@^/admin@', $request->getUri())
             || preg_match('@/preview$@', $request->getUri())
             || preg_match('@^/ext@', $request->getUri())
-            || !$this->smarty->hasValue('contentId')
+            || !$this->smarty->hasValue('item')
         ) {
             return false;
         }
@@ -43,7 +43,7 @@ class DefaultRenderer extends StatisticsRenderer
     {
         return [
             'params' => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'smarty' => $this->smarty
+            'item' => $this->smarty->getValue('item')
         ];
     }
 }
