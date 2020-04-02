@@ -48,8 +48,10 @@ class RssController extends Controller
         }
 
         return $this->render('rss/index.tpl', [
-            'cache_id' => $cacheID,
-            'x-tags'   => 'rss,index',
+            'cache_id'    => $cacheID,
+            'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
+            'x-tags'      => 'rss,index',
         ]);
     }
 
@@ -66,6 +68,9 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
+
+        $invalidationDt = $this->getRssInvalidationDate();
+
         $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
         if (($this->view->getCaching() === 0)
@@ -118,8 +123,10 @@ class RssController extends Controller
         }
 
         $response = $this->render('rss/rss.tpl', [
-            'cache_id' => $cacheID,
-            'x-tags'   => 'rss,frontpage-' . $categoryName
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-tags'      => 'rss,frontpage-' . $categoryName
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -148,6 +155,9 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
+
+        $invalidationDt = $this->getRssInvalidationDate();
+
         $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
         if (($this->view->getCaching() === 0)
@@ -190,8 +200,10 @@ class RssController extends Controller
         }
 
         $response = $this->render('rss/rss.tpl', [
-            'cache_id' => $cacheID,
-            'x-tags'   => 'rss,' . $type . ',' . $slug
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-tags'      => 'rss,' . $type . ',' . $slug
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -213,6 +225,9 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
+
+        $invalidationDt = $this->getRssInvalidationDate();
+
         $cacheID = $this->view->getCacheId('rss', 'author', $slug);
 
         if (($this->view->getCaching() === 0)
@@ -239,6 +254,16 @@ class RssController extends Controller
                 'fk_content_type' => [['value' => [1, 4, 7], 'operator' => 'IN']],
                 'content_status'  => [['value' => 1]],
                 'in_litter'       => [['value' => 0]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
             ];
 
             $contents = $er->findBy($filters, $order, $total, 1);
@@ -259,8 +284,10 @@ class RssController extends Controller
         }
 
         $response = $this->render('rss/rss.tpl', [
-            'cache_id' => $cacheID,
-            'x-tags'   => 'rss,author-' . $slug
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-tags'      => 'rss,author-' . $slug
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -283,6 +310,9 @@ class RssController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
+
+        $invalidationDt = $this->getRssInvalidationDate();
+
         $cacheID = $this->view->getCacheId('rss', 'fia');
 
         if (($this->view->getCaching() === 0)
@@ -350,6 +380,8 @@ class RssController extends Controller
             'ads_positions'  => $adsPositions,
             'ads_format'     => 'fia',
             'cache_id'       => $cacheID,
+            'x-cacheable'    => true,
+            'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
             'x-tags'         => 'rss,instant-articles'
         ]);
 
@@ -439,6 +471,30 @@ class RssController extends Controller
             ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
+    }
+
+    /**
+     * Returs the cache invalidation date based on frontpage contents.
+     *
+     * @param int $category The category identifier.
+     *
+     * @return string $date The invalidation date.
+     */
+    protected function getRssInvalidationDate($categoryId = 0)
+    {
+        list(, , $invalidationDt, ) =
+            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId);
+
+        $systemDate = new \DateTime();
+        $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
+
+        if (!empty($invalidationDt)) {
+            if ($lifetime < $this->view->getCacheLifetime()) {
+                $this->view->setCacheLifetime($lifetime);
+            }
+        }
+
+        return $invalidationDt;
     }
 
     /**
