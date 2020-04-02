@@ -29,13 +29,18 @@ class StatisticsRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->request = $this->getMockBuilder('Symfony\Component\BrowserKit\Request')
             ->disableOriginalConstructor()
             ->setMethods([ 'getUri' ])
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\StatisticsRenderer')
-            ->setConstructorArgs([ $this->global, $this->tpl ])
+            ->setConstructorArgs([ $this->global, $this->tpl, $this->smarty ])
             ->setMethods([ 'getCodeType', 'getRendererClass' ])
             ->getMock();
 
@@ -138,7 +143,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenImage()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl);
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -153,7 +158,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenAmp()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl);
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -173,7 +178,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenScript()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl);
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -193,7 +198,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetRendererClass()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl);
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getRendererClass');
         $method->setAccessible(true);
 

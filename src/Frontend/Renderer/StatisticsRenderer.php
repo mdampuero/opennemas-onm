@@ -19,22 +19,31 @@ class StatisticsRenderer
     protected $global;
 
     /**
-     * The template.
+     * The admin template.
      *
      * @var Template
      */
     protected $tpl;
 
     /**
+     * The frontend template.
+     *
+     * @var Template
+     */
+    protected $smarty;
+
+    /**
      * Initializes the StatisticsRenderer.
      *
      * @param GlobalVariables $global The global variables.
      * @param Template        $tpl    The template.
+     * @param Template        $smarty The smarty template.
      */
-    public function __construct($global, $tpl)
+    public function __construct($global, $tpl, $smarty)
     {
         $this->global = $global;
         $this->tpl    = $tpl;
+        $this->smarty = $smarty;
     }
 
     /**
@@ -110,6 +119,6 @@ class StatisticsRenderer
         $class     = $type . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Statistics\\' . $class;
 
-        return new $classPath($this->global, $this->tpl);
+        return new $classPath($this->global, $this->tpl, $this->smarty);
     }
 }

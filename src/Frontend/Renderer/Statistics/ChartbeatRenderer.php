@@ -50,8 +50,7 @@ class ChartbeatRenderer extends StatisticsRenderer
             ->getDataSet('Settings', 'instance')
             ->get('chartbeat');
 
-        $smarty  = $container->get('core.template.frontend');
-        $content = $smarty->getValue('content');
+        $content = $this->smarty->getValue('content');
 
         if (!empty($content)) {
             try {

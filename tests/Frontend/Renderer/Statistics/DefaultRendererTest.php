@@ -9,11 +9,8 @@
  */
 namespace Tests\Frontend\Renderer;
 
-use Api\Exception\GetItemException;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\DefaultRenderer;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\User;
 
 /**
  * Defines test cases for DefaultRenderer class.
@@ -31,7 +28,12 @@ class DefaultRendererTest extends TestCase
 
         $this->tpl = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetch', 'getTemplateVars' ])
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasValue' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
@@ -45,24 +47,14 @@ class DefaultRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->tpl->expects($this->any())->method('getTemplateVars')
-            ->willReturn([ 'contentId' => 9999 ]);
+        $this->smarty->expects($this->any())->method('hasValue')
+            ->willReturn(true);
 
-        $this->renderer = new DefaultRenderer($this->global, $this->tpl);
-    }
-
-    public function serviceContainerCallback($name)
-    {
-        switch ($name) {
-            case 'core.template.frontend':
-                return $this->tpl;
-        }
-
-        return null;
+        $this->renderer = new DefaultRenderer($this->global, $this->tpl, $this->smarty);
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\DefaultRenderer::validate
+     * Tests validate when default configuration is ok.
      */
     public function testValidateWhenCorrectConfiguration()
     {
@@ -72,13 +64,11 @@ class DefaultRendererTest extends TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('/valid-uri');
 
-        $this->tpl->expects($this->once())->method('getTemplateVars');
-
         $this->assertTrue($this->renderer->validate());
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\DefaultRenderer::validate
+     * Tests validate when default configuration is not ok.
      */
     public function testValidateWhenIncorrectConfiguration()
     {
@@ -92,7 +82,7 @@ class DefaultRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\DefaultRenderer::prepareParams
+     * Tests prepareParams.
      */
     public function testPrepareParams()
     {

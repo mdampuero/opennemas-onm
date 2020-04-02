@@ -21,13 +21,12 @@ class DefaultRenderer extends StatisticsRenderer
     public function validate()
     {
         $request = $this->global->getRequest();
-        $smarty  = $this->global->getContainer()->get('core.template.frontend');
 
         if (empty($request)
-        || preg_match('@^/admin@', $request->getUri())
-        || preg_match('@/preview$@', $request->getUri())
-        || preg_match('@^/ext@', $request->getUri())
-        || !array_key_exists('contentId', $smarty->getTemplateVars())
+            || preg_match('@^/admin@', $request->getUri())
+            || preg_match('@/preview$@', $request->getUri())
+            || preg_match('@^/ext@', $request->getUri())
+            || !$this->smarty->hasValue('contentId')
         ) {
             return false;
         }
@@ -42,11 +41,9 @@ class DefaultRenderer extends StatisticsRenderer
      */
     public function prepareParams()
     {
-        $smarty = $this->global->getContainer()->get('core.template.frontend');
-
         return [
             'params' => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'smarty' => $smarty
+            'smarty' => $this->smarty
         ];
     }
 }

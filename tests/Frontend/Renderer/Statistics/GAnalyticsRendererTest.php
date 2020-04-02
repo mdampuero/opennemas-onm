@@ -43,6 +43,11 @@ class GAnalyticsRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -52,7 +57,7 @@ class GAnalyticsRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->renderer = new GAnalyticsRenderer($this->global, $this->tpl);
+        $this->renderer = new GAnalyticsRenderer($this->global, $this->tpl, $this->smarty);
     }
 
     public function serviceContainerCallback($name)

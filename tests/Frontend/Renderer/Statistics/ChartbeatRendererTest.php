@@ -48,7 +48,12 @@ class ChartbeatRendererTest extends TestCase
 
         $this->tpl = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetch', 'getValue' ])
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
+        $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'fetch', 'getTemplateVars', 'getValue' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -60,7 +65,7 @@ class ChartbeatRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->renderer = new ChartbeatRenderer($this->global, $this->tpl);
+        $this->renderer = new ChartbeatRenderer($this->global, $this->tpl, $this->smarty);
     }
 
     public function serviceContainerCallback($name)
@@ -68,9 +73,6 @@ class ChartbeatRendererTest extends TestCase
         switch ($name) {
             case 'api.service.author':
                 return $this->api;
-
-            case 'core.template.frontend':
-                return $this->tpl;
 
             case 'orm.manager':
                 return $this->em;
@@ -116,7 +118,7 @@ class ChartbeatRendererTest extends TestCase
             'fk_author'  => 2
         ]);
 
-        $this->tpl->expects($this->once())->method('getValue')
+        $this->smarty->expects($this->once())->method('getValue')
             ->with('content')
             ->willReturn($content);
 
@@ -140,7 +142,7 @@ class ChartbeatRendererTest extends TestCase
         $this->ds->expects($this->at(0))->method('get')
             ->with('chartbeat');
 
-        $this->tpl->expects($this->once())->method('getValue')
+        $this->smarty->expects($this->once())->method('getValue')
             ->with('content')
             ->willReturn($content);
 
