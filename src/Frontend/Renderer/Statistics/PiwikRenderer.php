@@ -29,9 +29,9 @@ class PiwikRenderer extends StatisticsRenderer
         $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
 
         if (!is_array($config)
-        || !array_key_exists('page_id', $config)
-        || !array_key_exists('server_url', $config)
-        || empty(trim($config['page_id']))
+            || !array_key_exists('page_id', $config)
+            || !array_key_exists('server_url', $config)
+            || empty(trim($config['page_id']))
         ) {
             return false;
         }
@@ -58,10 +58,10 @@ class PiwikRenderer extends StatisticsRenderer
         $ampHost              = preg_replace("/^https?:/", "", $config['server_url']);
 
         return [
-            'config'   => $config,
+            'config'    => $config,
             'httpsHost' => $httpsHost,
-            'newsurl'  => $newsUrl,
-            'ampHost'  => $ampHost
+            'newsurl'   => $newsUrl,
+            'ampHost'   => $ampHost
         ];
     }
 }

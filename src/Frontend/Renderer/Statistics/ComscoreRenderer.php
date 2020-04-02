@@ -47,6 +47,6 @@ class ComscoreRenderer extends StatisticsRenderer
             ->getDataSet('Settings', 'instance')
             ->get('comscore');
 
-        return [ 'page_id' => $config['page_id']];
+        return [ 'page_id' => $config['page_id'] ];
     }
 }

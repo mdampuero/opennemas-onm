@@ -46,8 +46,8 @@ class GAnalyticsRenderer extends StatisticsRenderer
         $extra['extension'] = $this->global->getExtension();
 
         return [
-            'params' => $config,
-            'extra'  => $extra,
+            'params'  => $config,
+            'extra'   => $extra,
             'random'  => rand(0, 0x7fffffff),
             'date'    => date('d/m/Y'),
             'url'     => urlencode(SITE_URL),

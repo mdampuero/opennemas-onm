@@ -47,6 +47,6 @@ class OjdRenderer extends StatisticsRenderer
             ->getDataSet('Settings', 'instance')
             ->get('ojd');
 
-        return ['page_id' => $config['page_id']];
+        return [ 'page_id' => $config['page_id'] ];
     }
 }
