@@ -37,16 +37,6 @@ class GAnalyticsRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return if google analytics is correctly configured or not.
-     *
-     * @return boolean True
-     */
-    public function validate()
-    {
-        return true;
-    }
-
-    /**
      * Return the parameters needed to generate analytics.
      *
      * @return array The array of parameters for google analytics.

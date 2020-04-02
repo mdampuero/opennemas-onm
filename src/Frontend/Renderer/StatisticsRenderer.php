@@ -121,4 +121,24 @@ class StatisticsRenderer
 
         return new $classPath($this->global, $this->tpl, $this->smarty);
     }
+
+    /**
+     * Returns if valid configuration or not
+     *
+     * @return boolean true
+     */
+    protected function validate()
+    {
+        return true;
+    }
+
+    /**
+     * Returns the needed parameters
+     *
+     * @return array []
+     */
+    protected function prepareParams()
+    {
+        return [];
+    }
 }

@@ -235,4 +235,28 @@ class StatisticsRendererTest extends TestCase
             get_class($method->invokeArgs($renderer, [ 'GAnalytics' ]))
         );
     }
+
+    /**
+     * Tests validate
+     */
+    public function testValidate()
+    {
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $method   = new \ReflectionMethod($renderer, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($renderer, []));
+    }
+
+    /**
+     * Tests prepareParams
+     */
+    public function testPrepareParams()
+    {
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $method   = new \ReflectionMethod($renderer, 'prepareParams');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($renderer, []));
+    }
 }

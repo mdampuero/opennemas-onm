@@ -74,14 +74,6 @@ class GAnalyticsRendererTest extends TestCase
     }
 
     /**
-     * Tests validate.
-     */
-    public function testValidate()
-    {
-        $this->assertTrue($this->renderer->validate());
-    }
-
-    /**
      * Tests prepareParams with old configuration.
      */
     public function testPrepareParamsWithOldConfig()
