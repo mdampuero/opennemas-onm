@@ -67,11 +67,13 @@ class ContentsController extends Controller
         $cacheID = $this->view->getCacheId('content', $contentID, 'print');
 
         return $this->render('article/article_printer.tpl', [
-            'cache_id'  => $cacheID,
-            'content'   => $content,
-            'article'   => $content,
-            'o_content' => $content,
-            'x-tags'    => 'content-print,' . $contentID
+            'cache_id'    => $cacheID,
+            'content'     => $content,
+            'article'     => $content,
+            'o_content'   => $content,
+            'x-tags'      => 'content-print,' . $contentID,
+            'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
         ]);
     }
 

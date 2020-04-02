@@ -59,9 +59,11 @@ class BooksController extends Controller
         }
 
         return $this->render('books/books_frontpage.tpl', [
-            'cache_id' => $cacheID,
-            'page'     => $page,
-            'x-tags'   => 'books-frontpage',
+            'cache_id'    => $cacheID,
+            'page'        => $page,
+            'x-tags'      => 'books-frontpage',
+            'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
         ]);
     }
 

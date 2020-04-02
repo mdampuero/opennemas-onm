@@ -72,6 +72,8 @@ class TagController extends Controller
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
             'x-tags'         => 'tag-page,tag-index',
+            'x-cache-for'    => '+1 day',
+            'x-cacheable'    => true,
         ]);
     }
 
@@ -203,6 +205,8 @@ class TagController extends Controller
             'cache_id'       => $cacheId,
             'tagName'        => (empty($tag)) ? $slug : $tag->name,
             'x-tags'         => 'tag-page,' . $slug,
+            'x-cache-for'    => '+1 day',
+            'x-cacheable'    => true,
         ]);
     }
 

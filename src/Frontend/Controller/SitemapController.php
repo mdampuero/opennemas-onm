@@ -275,7 +275,9 @@ class SitemapController extends Controller
         $headers = array_merge($headers, [
             'x-cache-for' => self::EXPIRE[$action],
             'x-cacheable' => true,
-            'x-tags'      => sprintf('sitemap,%s', $action)
+            'x-tags'      => sprintf('sitemap,%s', $action),
+            'x-cache-for' => '+1 day',
+            'x-cacheable' => true,
         ]);
 
         return new Response($contents, 200, $headers);
