@@ -1,6 +1,6 @@
 <?php
 /**
- * Prints Google Analytics code
+ * Prints statistics code
  *
  * @param string
  *
