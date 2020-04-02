@@ -81,14 +81,14 @@ class PiwikRendererTest extends TestCase
      */
     public function testValidateWhenCorrectConfiguration()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('piwik')
-            ->willReturn([ 'page_id' => 9999 ]);
+        $renderer   = new PiwikRenderer($this->global, $this->tpl, $this->smarty);
+        $reflection = new \ReflectionClass($renderer);
+        $config     = $reflection->getProperty('config');
 
-        $this->container->expects($this->once())->method('getParameter')
-            ->with('opennemas.piwik');
+        $config->setAccessible(true);
+        $config->setValue($renderer, ['page_id' => 99999, 'server_url' => 'domain.com']);
 
-        $this->assertTrue($this->renderer->validate());
+        $this->assertTrue($renderer->validate());
     }
 
     /**
@@ -96,13 +96,6 @@ class PiwikRendererTest extends TestCase
      */
     public function testValidateWhenIncorrectConfiguration()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('piwik')
-            ->willReturn([]);
-
-        $this->container->expects($this->once())->method('getParameter')
-            ->with('opennemas.piwik');
-
         $this->assertFalse($this->renderer->validate());
     }
 
@@ -111,9 +104,6 @@ class PiwikRendererTest extends TestCase
      */
     public function testPrepareParams()
     {
-        $this->container->expects($this->once())->method('getParameter')
-            ->with('opennemas.piwik');
-
         $this->assertIsArray($this->renderer->prepareParams());
     }
 }

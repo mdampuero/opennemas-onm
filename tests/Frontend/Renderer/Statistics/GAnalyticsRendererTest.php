@@ -86,10 +86,6 @@ class GAnalyticsRendererTest extends TestCase
      */
     public function testPrepareParamsWithOldConfig()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('google_analytics')
-            ->willReturn([ 'api_key' => 'UA-40838799-5' ]);
-
         $this->assertIsArray($this->renderer->prepareParams());
     }
 

@@ -14,24 +14,43 @@ use Frontend\Renderer\StatisticsRenderer;
 class PiwikRenderer extends StatisticsRenderer
 {
     /**
+     * The piwik configuration
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * Initializes the PiwikRenderer.
+     *
+     * @param GlobalVariables $global The global variables.
+     * @param Template        $tpl    The template.
+     * @param Template        $smarty The smarty template.
+     */
+    public function __construct($global, $tpl, $smarty)
+    {
+        parent::__construct($global, $tpl, $smarty);
+
+        $this->config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('piwik');
+
+        $this->piwikConfig          = $this->global->getContainer()->getParameter('opennemas.piwik');
+        $this->config['server_url'] = rtrim($this->piwikConfig['url'], DS);
+    }
+
+    /**
      * Returns if piwik is correctly configured or not.
      *
      * @return boolean True if piwik is correctly configured, False otherwise.
      */
     public function validate()
     {
-        $config      = $this->global->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('piwik');
-        $piwikConfig = $this->global->getContainer()->getParameter('opennemas.piwik');
-
-        $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
-
-        if (!is_array($config)
-            || !array_key_exists('page_id', $config)
-            || !array_key_exists('server_url', $config)
-            || empty(trim($config['page_id']))
+        if (!is_array($this->config)
+            || !array_key_exists('page_id', $this->config)
+            || !array_key_exists('server_url', $this->config)
+            || empty(trim($this->config['page_id']))
         ) {
             return false;
         }
@@ -46,19 +65,12 @@ class PiwikRenderer extends StatisticsRenderer
      */
     public function prepareParams()
     {
-        $config      = $this->global->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('piwik');
-        $piwikConfig = $this->global->getContainer()->getParameter('opennemas.piwik');
-
-        $config['server_url'] = rtrim($piwikConfig['url'], DS) . DS;
-        $httpsHost            = preg_replace("/http:/", "https:", $config['server_url']);
-        $newsUrl              = urlencode(SITE_URL . 'newsletter/' . date("YmdHis"));
-        $ampHost              = preg_replace("/^https?:/", "", $config['server_url']);
+        $httpsHost = preg_replace("/http:/", "https:", $this->config['server_url']);
+        $newsUrl   = urlencode(SITE_URL . 'newsletter/' . date("YmdHis"));
+        $ampHost   = preg_replace("/^https?:/", "", $this->config['server_url']);
 
         return [
-            'config'    => $config,
+            'config'    => $this->config,
             'httpsHost' => $httpsHost,
             'newsurl'   => $newsUrl,
             'ampHost'   => $ampHost

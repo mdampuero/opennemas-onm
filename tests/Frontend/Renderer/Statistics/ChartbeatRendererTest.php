@@ -89,11 +89,14 @@ class ChartbeatRendererTest extends TestCase
      */
     public function testValidateWhenCorrectConfiguration()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('chartbeat')
-            ->willReturn([ 'id' => 9999, 'domain' => 'default.dev.opennemas.com' ]);
+        $renderer   = new ChartbeatRenderer($this->global, $this->tpl, $this->smarty);
+        $reflection = new \ReflectionClass($renderer);
+        $config     = $reflection->getProperty('config');
 
-        $this->assertTrue($this->renderer->validate());
+        $config->setAccessible(true);
+        $config->setValue($renderer, ['id' => 99999, 'domain' => 'domain.com']);
+
+        $this->assertTrue($renderer->validate());
     }
 
     /**
@@ -101,10 +104,6 @@ class ChartbeatRendererTest extends TestCase
      */
     public function testValidateWhenIncorrectConfiguration()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('chartbeat')
-            ->willReturn([]);
-
         $this->assertFalse($this->renderer->validate());
     }
 
@@ -139,9 +138,6 @@ class ChartbeatRendererTest extends TestCase
             'fk_author'  => 2
         ]);
 
-        $this->ds->expects($this->at(0))->method('get')
-            ->with('chartbeat');
-
         $this->smarty->expects($this->once())->method('getValue')
             ->with('content')
             ->willReturn($content);
@@ -150,7 +146,7 @@ class ChartbeatRendererTest extends TestCase
             ->with($content->fk_author)
             ->will($this->throwException(new GetItemException()));
 
-        $this->ds->expects($this->at(1))->method('get')
+        $this->ds->expects($this->at(0))->method('get')
             ->with('site_name')
             ->willReturn('Site');
 

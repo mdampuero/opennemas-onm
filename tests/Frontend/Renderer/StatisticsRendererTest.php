@@ -19,9 +19,18 @@ class StatisticsRendererTest extends TestCase
 {
     public function setUp()
     {
+        $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
+
         $this->global = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getRequest' ])
+            ->setMethods([ 'getRequest', 'getContainer' ])
+            ->getMock();
+
+        $this->ds = $this->getMockForAbstractClass('Common\ORM\Core\DataSet');
+
+        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDataSet' ])
             ->getMock();
 
         $this->tpl = $this->getMockBuilder('Common\Core\Component\Template\Template')
@@ -49,6 +58,12 @@ class StatisticsRendererTest extends TestCase
             ->setMethods([ 'validate', 'prepareParams' ])
             ->getMock();
 
+        $this->em->expects($this->any())->method('getDataSet')
+            ->willReturn($this->ds);
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
         $this->renderer->expects($this->any())->method('getRendererClass')
             ->willReturn($this->childRenderer);
 
@@ -57,6 +72,19 @@ class StatisticsRendererTest extends TestCase
 
         $this->global->expects($this->any())->method('getRequest')
             ->willReturn($this->request);
+
+        $this->global->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'orm.manager':
+                return $this->em;
+        }
+
+        return null;
     }
 
     /**

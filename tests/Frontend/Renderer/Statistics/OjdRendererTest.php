@@ -78,11 +78,14 @@ class OjdRendererTest extends TestCase
      */
     public function testValidateWhenCorrectConfiguration()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('ojd')
-            ->willReturn([ 'page_id' => 9999 ]);
+        $renderer   = new OjdRenderer($this->global, $this->tpl, $this->smarty);
+        $reflection = new \ReflectionClass($renderer);
+        $config     = $reflection->getProperty('config');
 
-        $this->assertTrue($this->renderer->validate());
+        $config->setAccessible(true);
+        $config->setValue($renderer, ['page_id' => 99999]);
+
+        $this->assertTrue($renderer->validate());
     }
 
     /**
@@ -90,10 +93,6 @@ class OjdRendererTest extends TestCase
      */
     public function testValidateWhenIncorrectConfiguration()
     {
-        $this->ds->expects($this->once())->method('get')
-            ->with('ojd')
-            ->willReturn([]);
-
         $this->assertFalse($this->renderer->validate());
     }
 

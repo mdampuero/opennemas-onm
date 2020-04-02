@@ -14,6 +14,29 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
+     * The google analytics configuration
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * Initializes the GAnalyticsRenderer.
+     *
+     * @param GlobalVariables $global The global variables.
+     * @param Template        $tpl    The template.
+     * @param Template        $smarty The smarty template.
+     */
+    public function __construct($global, $tpl, $smarty)
+    {
+        parent::__construct($global, $tpl, $smarty);
+        $this->config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_analytics');
+    }
+
+    /**
      * Return if google analytics is correctly configured or not.
      *
      * @return boolean True
@@ -30,23 +53,11 @@ class GAnalyticsRenderer extends StatisticsRenderer
      */
     public function prepareParams()
     {
-        $config = $this->global->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('google_analytics');
-
-        //Keep compatibility with old analytics store format
-        if (is_array($config) && array_key_exists('api_key', $config)) {
-            $oldConfig = $config;
-            $config    = [];
-            $config    = $oldConfig;
-        }
-
         $extra['category']  = $this->global->getSection();
         $extra['extension'] = $this->global->getExtension();
 
         return [
-            'params'  => $config,
+            'params'  => $this->config,
             'extra'   => $extra,
             'random'  => rand(0, 0x7fffffff),
             'date'    => date('d/m/Y'),

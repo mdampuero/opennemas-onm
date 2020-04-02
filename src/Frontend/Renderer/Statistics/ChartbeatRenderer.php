@@ -15,22 +15,40 @@ use Frontend\Renderer\StatisticsRenderer;
 class ChartbeatRenderer extends StatisticsRenderer
 {
     /**
+     * The chartbeat configuration
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * Initializes the StatisticsRenderer.
+     *
+     * @param GlobalVariables $global The global variables.
+     * @param Template        $tpl    The template.
+     * @param Template        $smarty The smarty template.
+     */
+    public function __construct($global, $tpl, $smarty)
+    {
+        parent::__construct($global, $tpl, $smarty);
+        $this->config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('chartbeat');
+    }
+
+    /**
      * Returns if chartbeat is correctly configured or not.
      *
      * @return boolean True if chartbeat is correctly configured, False otherwise.
      */
     public function validate()
     {
-        $config = $this->global->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('chartbeat');
-
-        if (!is_array($config)
-            || !array_key_exists('id', $config)
-            || !array_key_exists('domain', $config)
-            || empty(trim($config['id'])
-            || empty(trim($config['domain'])))
+        if (!is_array($this->config)
+            || !array_key_exists('id', $this->config)
+            || !array_key_exists('domain', $this->config)
+            || empty(trim($this->config['id'])
+            || empty(trim($this->config['domain'])))
         ) {
             return false;
         }
@@ -46,9 +64,6 @@ class ChartbeatRenderer extends StatisticsRenderer
     public function prepareParams()
     {
         $container = $this->global->getContainer();
-        $config    = $container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('chartbeat');
 
         $content = $this->smarty->getValue('content');
 
@@ -64,8 +79,8 @@ class ChartbeatRenderer extends StatisticsRenderer
         }
 
         return [
-            'id'       => $config['id'],
-            'domain'   => $config['domain'],
+            'id'       => $this->config['id'],
+            'domain'   => $this->config['domain'],
             'category' => $this->global->getSection(),
             'author'   => $author
         ];

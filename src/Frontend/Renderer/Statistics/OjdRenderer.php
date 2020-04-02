@@ -14,20 +14,38 @@ use Frontend\Renderer\StatisticsRenderer;
 class OjdRenderer extends StatisticsRenderer
 {
     /**
+     * The google analytics configuration
+     *
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * Initializes the GAnalyticsRenderer.
+     *
+     * @param GlobalVariables $global The global variables.
+     * @param Template        $tpl    The template.
+     * @param Template        $smarty The smarty template.
+     */
+    public function __construct($global, $tpl, $smarty)
+    {
+        parent::__construct($global, $tpl, $smarty);
+        $this->config = $this->global->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ojd');
+    }
+
+    /**
      * Returns if ojd is correctly configured or not.
      *
      * @return boolean True if Ojd is correctly configured, False otherwise.
      */
     public function validate()
     {
-        $config = $this->global->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('ojd');
-
-        if (!is_array($config)
-            || !array_key_exists('page_id', $config)
-            || empty(trim($config['page_id']))
+        if (!is_array($this->config)
+            || !array_key_exists('page_id', $this->config)
+            || empty(trim($this->config['page_id']))
         ) {
             return false;
         }
@@ -42,11 +60,6 @@ class OjdRenderer extends StatisticsRenderer
      */
     public function prepareParams()
     {
-        $config = $config = $this->global->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('ojd');
-
-        return [ 'page_id' => $config['page_id'] ];
+        return [ 'page_id' => $this->config['page_id'] ];
     }
 }
