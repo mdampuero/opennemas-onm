@@ -69,7 +69,7 @@ class ComscoreRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ComscoreRenderer::validate
+     * Tests validate when comscore is correctly configured.
      */
     public function testValidateWhenCorrectConfiguration()
     {
@@ -81,7 +81,7 @@ class ComscoreRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ComscoreRenderer::validate
+     * Tests validate when comscore is not correctly configured.
      */
     public function testValidateWhenIncorrectConfiguration()
     {
@@ -93,7 +93,7 @@ class ComscoreRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ComscoreRenderer::prepareParams
+     * Tests prepareParams.
      */
     public function testPrepareParams()
     {

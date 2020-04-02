@@ -83,7 +83,7 @@ class ChartbeatRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ChartbeatRenderer::validate
+     * Tests validate when chartbeat is correctly configured.
      */
     public function testValidateWhenCorrectConfiguration()
     {
@@ -95,7 +95,7 @@ class ChartbeatRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ChartbeatRenderer::validate
+     * Tests validate when chartbeat is not correctly configured.
      */
     public function testValidateWhenIncorrectConfiguration()
     {
@@ -107,7 +107,7 @@ class ChartbeatRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ChartbeatRenderer::prepareParams
+     * Tests prepareParams when exists both content and author.
      */
     public function testPrepareParamsWhenContentAndAuthor()
     {
@@ -128,7 +128,7 @@ class ChartbeatRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\ChartbeatRenderer::prepareParams
+     * Tests prepareParams when author is not found.
      */
     public function testPrepareParamsWhenNoAuthor()
     {

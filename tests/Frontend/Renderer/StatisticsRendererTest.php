@@ -55,7 +55,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\StatisticsRenderer::render
+     * Tests render when output is empty.
      */
     public function testRenderWhenEmptyOutput()
     {
@@ -76,7 +76,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\StatisticsRenderer::render
+     * Tests render when code is amp.
      */
     public function testRenderWhenAmp()
     {
@@ -95,7 +95,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\StatisticsRenderer::render
+     * Tests render when code is script.
      */
     public function testRenderWhenScript()
     {
@@ -114,7 +114,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\StatisticsRenderer::render
+     * Tests render when no template is available.
      */
     public function testRenderWhenNoTemplate()
     {
@@ -134,7 +134,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * Tests getCodeType when newsletter template
+     * Tests getCodeType when image.
      */
     public function testGetCodeTypeWhenImage()
     {
@@ -149,7 +149,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * Test getCodeType when amp page
+     * Test getCodeType when amp page.
      */
     public function testGetCodeTypeWhenAmp()
     {
@@ -169,7 +169,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * Tests getCodeType when script
+     * Tests getCodeType when script.
      */
     public function testGetCodeTypeWhenScript()
     {
@@ -189,7 +189,7 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * Tests getRendererClass
+     * Tests getRendererClass.
      */
     public function testGetRendererClass()
     {

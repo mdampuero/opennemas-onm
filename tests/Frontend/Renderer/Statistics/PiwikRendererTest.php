@@ -72,7 +72,7 @@ class PiwikRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\PiwikRenderer::validate
+     * Tests validate when piwik is correctly configured.
      */
     public function testValidateWhenCorrectConfiguration()
     {
@@ -87,7 +87,7 @@ class PiwikRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\PiwikRenderer::validate
+     * Tests validate when piwik is not correctly configured.
      */
     public function testValidateWhenIncorrectConfiguration()
     {
@@ -102,7 +102,7 @@ class PiwikRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\PiwikRenderer::prepareParams
+     * Tests prepareParams.
      */
     public function testPrepareParams()
     {

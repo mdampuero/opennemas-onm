@@ -69,7 +69,7 @@ class OjdRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\OjdRenderer::validate
+     * Tests validate when ojd is correctly configured.
      */
     public function testValidateWhenCorrectConfiguration()
     {
@@ -81,7 +81,7 @@ class OjdRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\OjdRenderer::validate
+     * Tests validate when ojd is not correctly configured.
      */
     public function testValidateWhenIncorrectConfiguration()
     {
@@ -93,7 +93,7 @@ class OjdRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\OjdRenderer::prepareParams
+     * Tests prepareParams.
      */
     public function testPrepareParams()
     {

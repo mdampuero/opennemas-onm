@@ -69,7 +69,7 @@ class GAnalyticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\GAnalyticsRenderer::validate
+     * Tests validate.
      */
     public function testValidate()
     {
@@ -77,7 +77,7 @@ class GAnalyticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\GAnalyticsRenderer::prepareParams
+     * Tests prepareParams with old configuration.
      */
     public function testPrepareParamsWithOldConfig()
     {
@@ -89,7 +89,7 @@ class GAnalyticsRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Statistics\GAnalyticsRenderer::prepareParams
+     * Tests prepareParams with new configuration.
      */
     public function testPrepareParamsWithoutOldConfig()
     {
