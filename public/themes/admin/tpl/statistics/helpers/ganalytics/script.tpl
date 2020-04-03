@@ -30,6 +30,5 @@
     var ga = document.createElement('script'); ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-  }
-  )();
+  })();
 </script>
