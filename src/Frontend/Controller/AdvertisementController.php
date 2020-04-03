@@ -128,8 +128,7 @@ class AdvertisementController extends Controller
         // Return the resopnse object
         return new Response($fileContents, 200, [
             'x-tags'      => 'rtb',
-            'x-cache-for' => '+1 day',
-            'x-cacheable'  => true,
+            'x-cacheable' => true,
         ]);
     }
 

@@ -62,7 +62,6 @@ class BooksController extends Controller
             'cache_id'    => $cacheID,
             'page'        => $page,
             'x-tags'      => 'books-frontpage',
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
         ]);
     }
@@ -126,7 +125,6 @@ class BooksController extends Controller
             'cache_id'    => $cacheID,
             'o_content'   => $content,
             'x-tags'      => 'book,' . $content->id,
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
         ]);
     }
