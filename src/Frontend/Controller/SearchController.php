@@ -49,7 +49,6 @@ class SearchController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'x-tags'         => 'google-search',
-            'x-cache-for'    => '+1 day',
             'x-cacheable'    => true,
         ]);
     }

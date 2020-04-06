@@ -42,7 +42,6 @@ class NewsletterController extends Controller
 
         return new Response($item->html, 200, [
             'x-tags'      => 'newsletter-' . $id,
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
         ]);
     }

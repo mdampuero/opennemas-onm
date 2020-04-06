@@ -84,7 +84,6 @@ class Redirector
         $xTags = $response->headers->get('x-tags') . ",url-" . $url->id;
 
         $response->headers->set('x-tags', trim($xTags, ','));
-        $response->headers->set('x-cache-for', '+1 day');
         $response->headers->set('x-cacheable', true);
 
         return $response;

@@ -276,7 +276,6 @@ class SitemapController extends Controller
             'x-cache-for' => self::EXPIRE[$action],
             'x-cacheable' => true,
             'x-tags'      => sprintf('sitemap,%s', $action),
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
         ]);
 

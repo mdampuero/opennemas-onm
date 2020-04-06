@@ -49,7 +49,6 @@ class RssController extends Controller
 
         return $this->render('rss/index.tpl', [
             'cache_id'    => $cacheID,
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
             'x-tags'      => 'rss,index',
         ]);

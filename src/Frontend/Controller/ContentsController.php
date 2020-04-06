@@ -72,7 +72,6 @@ class ContentsController extends Controller
             'article'     => $content,
             'o_content'   => $content,
             'x-tags'      => 'content-print,' . $contentID,
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
         ]);
     }
