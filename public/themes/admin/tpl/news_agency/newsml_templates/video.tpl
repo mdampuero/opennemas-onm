@@ -22,7 +22,7 @@
     <NewsManagement>
       <NewsItemType FormalName="News" />
       <FirstCreated>{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
-      <FirstPublished>{format_date date=$article->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
+      <FirstPublished>{format_date date=$video->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$video->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
@@ -89,7 +89,7 @@
                   {/if}
                   <distributor>{setting name=site_name}</distributor>
                   <dateline>
-                    <story.date norm="{format_date date=$article->created type="custom" format="Ymd'T'Hmmssxxx"}">
+                    <story.date norm="{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}">
                       {format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}
                     </story.date>
                   </dateline>
