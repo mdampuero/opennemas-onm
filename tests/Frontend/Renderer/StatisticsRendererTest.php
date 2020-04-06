@@ -150,6 +150,27 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
+     * Tests render when code is fia.
+     */
+    public function testRenderWhenFia()
+    {
+        $content = new Content();
+        $result  = '<figure class="op-tracker"><iframe>Fia code</iframe></figure>';
+        $output  = '';
+        $types   = [ 'GAnalytics' ];
+
+        $this->renderer->expects($this->at(0))->method('getCodeType')
+            ->with($output)
+            ->willReturn('fia');
+
+        $this->tpl->expects($this->once())->method('fetch')
+            ->willReturn('Fia code');
+
+        $this->assertEquals($result, $this->renderer->render($types, $content, $output));
+    }
+
+
+    /**
      * Tests render when no template is available.
      */
     public function testRenderWhenNoTemplate()
@@ -225,6 +246,26 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
+     * Tests getCodeType when fia.
+     */
+    public function testGetCodeTypeWhenFia()
+    {
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $method   = new \ReflectionMethod($renderer, 'getCodeType');
+        $method->setAccessible(true);
+
+        $this->request->expects($this->once())->method('getUri')
+            ->willReturn(
+                'domain.com/rss/facebook-instant-articles'
+            );
+
+        $this->assertEquals(
+            'fia',
+            $method->invokeArgs($renderer, ['No empty output'])
+        );
+    }
+
+    /**
      * Tests getRendererClass.
      */
     public function testGetRendererClass()
@@ -252,11 +293,25 @@ class StatisticsRendererTest extends TestCase
     }
 
     /**
-     * Tests getParameters
+     * Tests getParameters when not empty content
      */
-    public function testGetParameters()
+    public function testGetParametersWhenContent()
     {
         $content  = new Content();
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $method   = new \ReflectionMethod($renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($renderer, [ $content ]));
+    }
+
+    /**
+     * Tests getParameter when empty content
+     */
+    public function testGetParameterWhenEmptyContent()
+    {
+        $content = null;
+
         $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getParameters');
         $method->setAccessible(true);
