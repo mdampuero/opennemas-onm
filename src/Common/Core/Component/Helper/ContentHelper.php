@@ -32,6 +32,42 @@ class ContentHelper
     }
 
     /**
+     * Get the proper cache invalition time for a category if set.
+     *
+     * @return string $datetime The expire cache datetime in "Y-m-d H:i:s" format.
+     */
+    public function getInvalidationTime()
+    {
+        $filtersStart = [
+            'content_status' => [[ 'value' => 1 ]],
+            'in_litter'      => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'      => [
+                'union' => 'AND',
+                [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        $filtersEnd = [
+            'content_status' => [[ 'value' => 1 ]],
+            'in_litter'      => [[ 'value' => 1, 'operator' => '!=' ]],
+            'endtime'        => [
+                'union' => 'AND',
+                [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        $start = $this->em->findBy($filtersStart, [ 'starttime' => 'ASC' ], 1, 1);
+        $end   = $this->em->findBy($filtersEnd, [ 'endtime' => 'DESC' ], 1, 1);
+
+        $starttime = !empty($start) ? strtotime($start[0]->starttime) : time() + 86400;
+        $endtime   = !empty($end) ? strtotime($end[0]->endtime) : time() + 86400;
+
+        return $starttime < $endtime ? $starttime : $endtime;
+    }
+
+    /**
      * Returns a list of contents related with a content type and category.
      *
      * @param string $contentTypeName  Content types required.
@@ -129,5 +165,19 @@ class ContentHelper
         }
 
         return $items;
+    }
+
+    /**
+     * Set expire date for current view
+     *
+     * @param int $invalidationTime The invalidation time.
+     * @param TemplateFactory $view The current view.
+     */
+    public function setViewExpireDate($invalidationTime, $view)
+    {
+        $lifetime = $invalidationTime - time();
+        if ($lifetime < $view->getCacheLifetime()) {
+            $view->setCacheLifetime($lifetime);
+        }
     }
 }
