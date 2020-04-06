@@ -58,8 +58,8 @@ class OjdRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for ojd.
      */
-    public function getParameters()
+    public function getParameters($content)
     {
-        return [ 'page_id' => $this->config['page_id'] ];
+        return [ 'content' => $content, 'page_id' => $this->config['page_id'] ];
     }
 }

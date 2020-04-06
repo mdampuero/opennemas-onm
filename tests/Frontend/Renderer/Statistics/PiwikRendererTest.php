@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
+use Common\ORM\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\PiwikRenderer;
 
@@ -104,6 +105,8 @@ class PiwikRendererTest extends TestCase
      */
     public function testGetParameters()
     {
-        $this->assertIsArray($this->renderer->getParameters());
+        $content = new Content();
+
+        $this->assertIsArray($this->renderer->getParameters($content));
     }
 }

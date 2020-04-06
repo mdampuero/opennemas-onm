@@ -61,15 +61,19 @@ class ChartbeatRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for chartbeat.
      */
-    public function getParameters()
+    public function getParameters($content)
     {
+        $params    = [
+            'id'       => $this->config['id'],
+            'domain'   => $this->config['domain'],
+            'category' => $this->global->getSection()
+        ];
         $container = $this->global->getContainer();
-
-        $content = $this->smarty->getValue('content');
 
         if (!empty($content)) {
             try {
-                $author = $container->get('api.service.author')
+                $params['title'] = $content->title;
+                $author          = $container->get('api.service.author')
                     ->getItem($content->fk_author)->name;
             } catch (GetItemException $ie) {
                 $author = $container->get('orm.manager')
@@ -78,11 +82,8 @@ class ChartbeatRenderer extends StatisticsRenderer
             }
         }
 
-        return [
-            'id'       => $this->config['id'],
-            'domain'   => $this->config['domain'],
-            'category' => $this->global->getSection(),
-            'author'   => $author
-        ];
+        $params['author'] = $author;
+
+        return $params;
     }
 }

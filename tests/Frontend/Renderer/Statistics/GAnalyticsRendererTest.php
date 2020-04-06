@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
+use Common\ORM\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\GAnalyticsRenderer;
 
@@ -45,7 +46,7 @@ class GAnalyticsRendererTest extends TestCase
 
         $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetch' ])
+            ->setMethods([ 'fetch', 'hasValue', 'getValue' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -74,18 +75,12 @@ class GAnalyticsRendererTest extends TestCase
     }
 
     /**
-     * Tests getParameters with old configuration.
+     * Tests getParameters.
      */
-    public function testgetParametersWithOldConfig()
+    public function testGetParameters()
     {
-        $this->assertIsArray($this->renderer->getParameters());
-    }
+        $content = new Content();
 
-    /**
-     * Tests getParameters with new configuration.
-     */
-    public function testGetParametersWithoutOldConfig()
-    {
-        $this->assertIsArray($this->renderer->getParameters());
+        $this->assertIsArray($this->renderer->getParameters($content));
     }
 }

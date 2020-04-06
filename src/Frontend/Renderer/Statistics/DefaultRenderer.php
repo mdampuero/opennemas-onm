@@ -39,11 +39,12 @@ class DefaultRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for default code.
      */
-    public function prepareParams()
+    public function getParameters($content)
     {
         return [
-            'params' => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'item' => $this->smarty->getValue('item')
+            'content' => $content,
+            'params'  => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
+            'id'    => $this->smarty->getValue('item')->pk_content
         ];
     }
 }

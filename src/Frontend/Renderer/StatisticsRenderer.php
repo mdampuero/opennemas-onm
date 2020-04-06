@@ -49,12 +49,13 @@ class StatisticsRenderer
     /**
      * Renders analytics code giving the types.
      *
-     * @param array $types     The array of types to render.
-     * @param String $output   The html page.
+     * @param array   $types     The array of types to render.
+     * @param String  $output    The html page.
+     * @param Content $content      The content on template.
      *
      * @return String The output with the all analytics code inserted.
      */
-    public function render($types, $output = null)
+    public function render($types, $content = null, $output = null)
     {
         $codeType = $this->getCodeType($output);
         $code     = '';
@@ -66,12 +67,16 @@ class StatisticsRenderer
                 try {
                     $code .= $this->tpl->fetch(
                         'statistics/helpers/' . strtolower($type) . '/' . $codeType . '.tpl',
-                        $renderer->getParameters()
+                        $renderer->getParameters($content)
                     );
                 } catch (\Exception $e) {
                     continue;
                 }
             }
+        }
+
+        if ($codeType == 'fia') {
+            return '<figure class="op-tracker"><iframe>' . $code . '</iframe></figure>';
         }
 
         if (empty($output)) {
@@ -94,11 +99,15 @@ class StatisticsRenderer
      */
     protected function getCodeType($output)
     {
+        $uri = $this->global->getRequest()->getUri();
+
+        if (preg_match('@/rss/facebook-instant-articles$@', $uri)) {
+            return 'fia';
+        }
+
         if (empty($output)) {
             return 'image';
         }
-
-        $uri = $this->global->getRequest()->getUri();
 
         if (preg_match('@\.amp\.html$@', $uri)) {
             return 'amp';
@@ -137,8 +146,12 @@ class StatisticsRenderer
      *
      * @return array []
      */
-    protected function getParameters()
+    protected function getParameters($content)
     {
+        if (!empty($content)) {
+            return [ 'title' => $content->title ];
+        }
+
         return [];
     }
 }

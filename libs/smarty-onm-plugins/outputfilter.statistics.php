@@ -9,6 +9,7 @@
 function smarty_outputfilter_statistics($output, $smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $content = $smarty->getValue('content');
 
     if (is_null($request)) {
         return $output;
@@ -31,6 +32,7 @@ function smarty_outputfilter_statistics($output, $smarty)
             [
                 'Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics'
             ],
+            $content,
             $output
         );
     }

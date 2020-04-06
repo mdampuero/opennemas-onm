@@ -41,12 +41,12 @@ class GAnalyticsRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for google analytics.
      */
-    public function getParameters()
+    public function getParameters($content)
     {
         $extra['category']  = $this->global->getSection();
         $extra['extension'] = $this->global->getExtension();
 
-        return [
+        $params = [
             'params'  => $this->config,
             'extra'   => $extra,
             'random'  => rand(0, 0x7fffffff),
@@ -56,5 +56,11 @@ class GAnalyticsRenderer extends StatisticsRenderer
             'relurl'  => urlencode('newsletter/' . date("Ymd")),
             'utma'    => '__utma%3D999.999.999.999.999.1%3B'
         ];
+
+        if (!empty($content)) {
+            $params['title'] = $content->title;
+        }
+
+        return $params;
     }
 }

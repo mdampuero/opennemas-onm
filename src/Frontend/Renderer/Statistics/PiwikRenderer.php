@@ -63,13 +63,14 @@ class PiwikRenderer extends StatisticsRenderer
      *
      * @return array The array of parameters for piwik.
      */
-    public function getParameters()
+    public function getParameters($content)
     {
         $httpsHost = preg_replace("/http:/", "https:", $this->config['server_url']);
         $newsUrl   = urlencode(SITE_URL . 'newsletter/' . date("YmdHis"));
         $ampHost   = preg_replace("/^https?:/", "", $this->config['server_url']);
 
         return [
+            'content'   => $content,
             'config'    => $this->config,
             'httpsHost' => $httpsHost,
             'newsurl'   => $newsUrl,

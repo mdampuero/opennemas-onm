@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
+use Common\ORM\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\StatisticsRenderer;
 
@@ -113,9 +114,10 @@ class StatisticsRendererTest extends TestCase
      */
     public function testRenderWhenAmp()
     {
-        $result = '<body>' . "\n" . 'Amp code' . "\n" . 'Some different code</body>';
-        $output = '<body>' . "\n" . 'Some different code</body>';
-        $types  = [ 'GAnalytics' ];
+        $content = new Content();
+        $result  = '<body>' . "\n" . 'Amp code' . "\n" . 'Some different code</body>';
+        $output  = '<body>' . "\n" . 'Some different code</body>';
+        $types   = [ 'GAnalytics' ];
 
         $this->renderer->expects($this->at(0))->method('getCodeType')
             ->with($output)
@@ -124,7 +126,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->once())->method('fetch')
             ->willReturn('Amp code');
 
-        $this->assertEquals($result, $this->renderer->render($types, $output));
+        $this->assertEquals($result, $this->renderer->render($types, $content, $output));
     }
 
     /**
@@ -132,9 +134,10 @@ class StatisticsRendererTest extends TestCase
      */
     public function testRenderWhenScript()
     {
-        $result = '<head>Script code</head>';
-        $output = '<head></head>';
-        $types  = [ 'GAnalytics' ];
+        $content = new Content();
+        $result  = '<head>Script code</head>';
+        $output  = '<head></head>';
+        $types   = [ 'GAnalytics' ];
 
         $this->renderer->expects($this->at(0))->method('getCodeType')
             ->with($output)
@@ -143,7 +146,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->once())->method('fetch')
             ->willReturn('Script code');
 
-        $this->assertEquals($result, $this->renderer->render($types, $output));
+        $this->assertEquals($result, $this->renderer->render($types, $content, $output));
     }
 
     /**
@@ -253,10 +256,11 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetParameters()
     {
+        $content  = new Content();
         $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getParameters');
         $method->setAccessible(true);
 
-        $this->assertIsArray($method->invokeArgs($renderer, []));
+        $this->assertIsArray($method->invokeArgs($renderer, [ $content ]));
     }
 }

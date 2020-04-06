@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
+use Common\ORM\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\DefaultRenderer;
 
@@ -50,6 +51,10 @@ class DefaultRendererTest extends TestCase
         $this->smarty->expects($this->any())->method('hasValue')
             ->willReturn(true);
 
+        $this->smarty->expects($this->any())->method('getValue')
+            ->with('item')
+            ->willReturn(new Content());
+
         $this->renderer = new DefaultRenderer($this->global, $this->tpl, $this->smarty);
     }
 
@@ -82,10 +87,12 @@ class DefaultRendererTest extends TestCase
     }
 
     /**
-     * Tests prepareParams.
+     * Tests getParameters.
      */
-    public function testPrepareParams()
+    public function testGetParameters()
     {
-        $this->assertIsArray($this->renderer->prepareParams());
+        $content = new Content();
+
+        $this->assertIsArray($this->renderer->getParameters($content));
     }
 }

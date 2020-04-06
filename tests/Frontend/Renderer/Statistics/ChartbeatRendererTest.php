@@ -117,15 +117,11 @@ class ChartbeatRendererTest extends TestCase
             'fk_author'  => 2
         ]);
 
-        $this->smarty->expects($this->once())->method('getValue')
-            ->with('content')
-            ->willReturn($content);
-
         $this->api->expects($this->once())->method('getItem')
             ->with($content->fk_author)
             ->willReturn(new User(['name' => 'John Doe']));
 
-        $this->assertIsArray($this->renderer->getParameters());
+        $this->assertIsArray($this->renderer->getParameters($content));
     }
 
     /**
@@ -138,10 +134,6 @@ class ChartbeatRendererTest extends TestCase
             'fk_author'  => 2
         ]);
 
-        $this->smarty->expects($this->once())->method('getValue')
-            ->with('content')
-            ->willReturn($content);
-
         $this->api->expects($this->once())->method('getItem')
             ->with($content->fk_author)
             ->will($this->throwException(new GetItemException()));
@@ -150,6 +142,6 @@ class ChartbeatRendererTest extends TestCase
             ->with('site_name')
             ->willReturn('Site');
 
-        $this->assertIsArray($this->renderer->getParameters());
+        $this->assertIsArray($this->renderer->getParameters($content));
     }
 }
