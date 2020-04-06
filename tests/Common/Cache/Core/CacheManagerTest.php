@@ -44,7 +44,7 @@ class CacheManagerTest extends \PHPUnit\Framework\TestCase
             ->with('cache.default')
             ->willReturn($defaults);
         $this->container->expects($this->at(2))->method('getParameter')
-            ->with('environment')
+            ->with('kernel.environment')
             ->willReturn($defaults);
 
 

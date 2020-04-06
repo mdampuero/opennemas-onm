@@ -65,7 +65,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return e.pk_content_category === item.pk_fk_content_category;
+            return item.categories.indexOf(e.pk_content_category) !== -1;
           });
 
           if (categories.length === 0) {

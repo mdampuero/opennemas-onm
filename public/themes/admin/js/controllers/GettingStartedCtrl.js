@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  GettingStartedCtrl
@@ -14,7 +15,8 @@
      * @description
      *   Handle actions for getting started.
      */
-    .controller('GettingStartedCtrl', ['$http', '$scope', '$timeout', 'routing',
+    .controller('GettingStartedCtrl', [
+      '$http', '$scope', '$timeout', 'routing',
       function($http, $scope, $timeout, routing) {
         $scope.step = 1;
         $scope.previous = 0;
@@ -29,7 +31,7 @@
         $scope.acceptTerms = function() {
           var url = routing.generate('backend_ws_getting_started_accept_terms');
 
-          $http.put(url, { accept : $scope.termsAccepted }).error(function() {
+          $http.put(url, { accept: $scope.termsAccepted }).then(null, function() {
             $scope.termsAccepted = false;
           });
         };
@@ -60,5 +62,5 @@
           }, 250);
         };
       }
-  ]);
+    ]);
 })();

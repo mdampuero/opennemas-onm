@@ -28,8 +28,6 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  FastClick.attach(document.body);
-
   //***********************************BEGIN Lazyload images*****************************
   if ($.fn.lazyload) {
     $('img.lazy').lazyload({

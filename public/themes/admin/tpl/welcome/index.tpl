@@ -168,9 +168,9 @@
           <br>
           <p class="text-white">{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}Get more help from our videotutorials in <a href="%1" class="text-white bold">our YouTube channel</a> and subscribe to it.{/t}</p>
 
-          <uib-carousel interval="10000" active="active" class="welcome-youtube-slider">
+          <div uib-carousel interval="10000" active="active" class="welcome-youtube-slider">
             {foreach $youtube_videos as $video name=youtube_videos}
-            <uib-slide index="{$smarty.foreach.youtube_videos.index}">
+            <div uib-slide index="{$smarty.foreach.youtube_videos.index}">
               <div class="video-container">
                 <div class="youtube-icon">
                   <a href="https://www.youtube.com/watch?v={$video['id']}" target="_blank"><i class="fa fa-youtube-play fa-4x"></i></a>
@@ -180,9 +180,9 @@
                   <a href="https://www.youtube.com/watch?v={$video['id']}" target="_blank">{$video['title']}</a>
                 </div>
               </div>
-            </uib-slide>
+            </div>
             {/foreach}
-          </uib-carousel>
+          </div>
         </div>
       </div>
       {/if}

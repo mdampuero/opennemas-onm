@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
@@ -14,6 +22,7 @@ if (file_exists(__DIR__ . '/../tmp/restart.txt')) {
  * @var Composer\Autoload\ClassLoader
  */
 $loader = include __DIR__ . '/../app/autoload.php';
+
 if (PHP_VERSION_ID < 70000) {
     include_once __DIR__ . '/../tmp/bootstrap.php.cache';
 }
@@ -24,23 +33,25 @@ $_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']
 if (file_exists(APPLICATION_PATH . '/.development')
     || (array_key_exists('OPENNEMAS_ENV', $_ENV) && $_ENV["OPENNEMAS_ENV"] == 'dev')
 ) {
-    $kernel = new AppKernel('dev', true);
     Debug::enable();
+    $kernel = new AppKernel('dev', true);
 } else {
     $kernel = new AppKernel('prod', false);
 }
+
 if (PHP_VERSION_ID < 70000) {
     $kernel->loadClassCache();
 }
-//$kernel = new AppCache($kernel);
 
-// When using the HttpCache, you need to call the method in your front controller
-// instead of relying on the configuration parameter
-//Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
-// As the LB ip's change, let's trust on all FORWARDED request headers that comes from them
-// See more: https://symfony.com/doc/2.8/deployment/proxies.html
-Request::setTrustedProxies([ '127.0.0.1', $request->server->get('REMOTE_ADDR') ], Request::HEADER_X_FORWARDED_ALL);
+
+// As the LB ip's change, let's trust on all FORWARDED request headers that
+// comes from them. See more: https://symfony.com/doc/2.8/deployment/proxies.html
+Request::setTrustedProxies([
+    '127.0.0.1',
+    $request->server->get('REMOTE_ADDR')
+], Request::HEADER_X_FORWARDED_ALL);
+
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  NotificationListCtrl
@@ -169,7 +170,7 @@
          * @description
          *   Reloads the list.
          */
-        $scope.list = function () {
+        $scope.list = function() {
           $scope.loading = 1;
 
           oqlEncoder.configure({
@@ -231,13 +232,13 @@
           };
 
           http.patch(route, data).then(function(response) {
-              notification[property + 'Loading'] = 0;
-              notification[property] = value;
-              messenger.post(response.data);
-            }, function(response) {
-              notification[property + 'Loading'] = 0;
-              messenger.post(response.data);
-            });
+            notification[property + 'Loading'] = 0;
+            notification[property] = value;
+            messenger.post(response.data);
+          }, function(response) {
+            notification[property + 'Loading'] = 0;
+            messenger.post(response.data);
+          });
         };
 
         /**
@@ -253,12 +254,14 @@
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
+
             if ($scope.selected.items.indexOf(id) !== -1) {
               $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
           var data = { ids: $scope.selected.items };
+
           data[property] = value;
 
           http.patch('manager_ws_notifications_patch', data)

@@ -2,7 +2,6 @@
   "name": "opennemas",
   "description": "The best CMS for online jornalism",
   "homepage": "https://www.opennemas.com",
-  "version": "0.1.0",
   "repository": "https://bitbucket.org/opennemas/onm/",
   "license": "SEE LICENSE IN LICENSE",
   "apidoc": {
@@ -11,30 +10,16 @@
       "title": "Opennemas REST API"
     }
   },
-  "dependencies": {
-    "bower": "~1.8.4",
-    "less": "~2.6.0",
-    "uglify-js": "~2.6.2",
-    "uglifycss": "0.0.20"
-  },
   "devDependencies": {
     "apidoc": "^0.17.6",
     "csslint": "^1.0.5",
     "eslint": "^4.19.1",
-    "gulp": "^4.0.0",
-    "gulp-batch": "*",
-    "gulp-livereload": "^4.0.1",
-    "jasmine-core": "~3.1.0",
     "jsdoc": "~3.5.5",
-    "karma": "^4.0.0",
-    "karma-html-reporter": "~0.2.7",
-    "karma-jasmine": "~1.1.2",
-    "karma-junit-reporter": "^1.2.0",
-    "karma-phantomjs-launcher": "~1.0.4",
-    "logme": "0.4.0",
+    "less": "~2.6.0",
     "newman": "^4.4.0",
-    "node-notifier": "^5.2.1",
     "openhost-jsdoc": "~0.3.5",
-    "phantomjs-prebuilt": "~2.1.16"
+    "uglify-js": "~2.6.2",
+    "uglifycss": "0.0.20",
+    "yarn": "^1.22.0"
   }
 }

@@ -199,28 +199,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         }
       );
 
-      $http.post(url, { positions: ids }).success(function(response) {
-        messenger.post(response.messages);
-      });
-    };
-
-    $scope.saveOpinionsFrontpage = function() {
-      var ids = {
-        director:  [],
-        editorial: [],
-        opinions:  []
-      };
-
-      for (var name in ids) {
-        for (var i = 0; i < $scope[name].length; i++) {
-          ids[name].push($scope[name][i].id);
-        }
-      }
-
-      var url = routing.generate('backend_ws_opinions_save_frontpage');
-
-      $http.post(url, { positions: ids }).success(function(response) {
-        messenger.post(response.messages);
+      $http.post(url, { positions: ids }).then(function(response) {
+        messenger.post(response.data.messages);
       });
     };
 
@@ -374,17 +354,17 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         }
       );
 
-      $http.post(url, { value: value }).success(function(response) {
+      $http.post(url, { value: value }).then(function(response) {
         contents[index][loading] = 0;
-        contents[index][name] = response[name];
-        messenger.post(response.messages);
+        contents[index][name] = response.data[name];
+        messenger.post(response.data.messages);
 
         if (reload) {
           $scope.list($scope.route);
         }
-      }).error(function(response) {
+      }, function(response) {
         contents[index][loading] = 0;
-        messenger.post(response.messages);
+        messenger.post(response.data.messages);
       });
 
       // Updated shared variable

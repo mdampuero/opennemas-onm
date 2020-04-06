@@ -17,7 +17,7 @@
               $('#loading').show();
               $('.output').hide();
             }
-          }).success(function(data) {
+          }).then(function(data) {
             $('#categories').html(data).show();
             $('#loading').hide();
           });
@@ -69,7 +69,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="grid simple ">
+      <div class="grid simple">
         <div class="grid-body">
           <div class="form-group">
             <label for="site_url" class="form-label">{t}Site URL{/t}</label>

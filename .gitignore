@@ -1,63 +1,35 @@
-# basics
-.idea
-*.sublime-*
+# Common
 *~
 *.pot
-*.todo
-.development
 .deploy.php
 .deploy.themes.php
+.development
 .maintenance
-.phpintel
 .vscode
 
-# app
+# Application
 app/config/parameters.yml
 app/config/connections.yml
 app/Resources/**/*.mo
+backups
+bin
+build
+node_modules
+tmp
+vendor
 
-# bin
-/bin/
-!bin/import-tools/
-bin/import-tools/*/*.log
-bin/import-tools/*/*.ini
-bin/import-tools/*/*.dist
-
-# build
-/build/
-!build/phpmd.xml
-!build/phpdox.dist.xml
-!build/phpdoc.dist.xml
-!build/phpcs.xml
-
-# misc
-/backups
-/doc
-/cache.properties
-/tmp
-!tmp/cache/.gitkeep
-!tmp/logs/.gitkeep
-/vendor
-!tmp/bootstrap.php.cache
-!tmp/SymfonyRequirements.php
-
-# node
-node_modules/*
-
-#public
-public/assets/components/*
+# Public files
+public/assets/components
 public/assets/js/routes.js
-public/assets/images/attention.png
-public/assets/images/ban.png
-public/assets/images/error.png
-public/assets/images/fail.png
-public/assets/images/info.png
-public/assets/images/pass.png
-public/assets/images/success.png
-public/assets/images/warning.png
 public/build
 public/bundles
 public/media/
 public/themes/*
+
+# Not ignore
 !public/themes/admin
 !public/themes/manager
+!tmp/SymfonyRequirements.php
+!tmp/bootstrap.php.cache
+!tmp/cache/.gitkeep
+!tmp/logs/.gitkeep

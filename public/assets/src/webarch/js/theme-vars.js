@@ -1,15 +1,12 @@
-
-
-var color-green="#27cebc";
-var color-blue="#00acec";
-var color-yellow="#FDD01C";
-var color-red="#f35958";
-var color-grey="#dce0e8";
-var color-black="#1b1e24";
-var color-purple="#6d5eac";
-var color-primary="#6d5eac";
-var color-success="#4eb2f5";
-var color-danger="#f35958";
-var color-warning="#f7cf5e";
-var color-info="#3b4751";
-
+var color_green="#27cebc";
+var color_blue="#00acec";
+var color_yellow="#FDD01C";
+var color_red="#f35958";
+var color_grey="#dce0e8";
+var color_black="#1b1e24";
+var color_purple="#6d5eac";
+var color_primary="#6d5eac";
+var color_success="#4eb2f5";
+var color_danger="#f35958";
+var color_warning="#f7cf5e";
+var color_info="#3b4751";
