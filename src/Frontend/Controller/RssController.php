@@ -69,7 +69,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationDt = $this->getRssInvalidationDate();
+        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
+        $this->get('core.helper.content')->setViewExpireDate($invalidationTime, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
@@ -125,7 +126,7 @@ class RssController extends Controller
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-cache-for' => date('Y-m-d H:i:s', $invalidationTime),
             'x-tags'      => 'rss,frontpage-' . $categoryName
         ]);
 
@@ -156,7 +157,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationDt = $this->getRssInvalidationDate();
+        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
+        $this->get('core.helper.content')->setViewExpireDate($invalidationTime, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
@@ -202,7 +204,7 @@ class RssController extends Controller
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-cache-for' => date('Y-m-d H:i:s', $invalidationTime),
             'x-tags'      => 'rss,' . $type . ',' . $slug
         ]);
 
@@ -226,7 +228,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationDt = $this->getRssInvalidationDate();
+        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
+        $this->get('core.helper.content')->setViewExpireDate($invalidationTime);
 
         $cacheID = $this->view->getCacheId('rss', 'author', $slug);
 
@@ -286,7 +289,7 @@ class RssController extends Controller
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-cache-for' => date('Y-m-d H:i:s', $invalidationTime),
             'x-tags'      => 'rss,author-' . $slug
         ]);
 
@@ -311,7 +314,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationDt = $this->getRssInvalidationDate();
+        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
+        $this->get('core.helper.content')->setViewExpireDate($invalidationTime);
 
         $cacheID = $this->view->getCacheId('rss', 'fia');
 
@@ -381,7 +385,7 @@ class RssController extends Controller
             'ads_format'     => 'fia',
             'cache_id'       => $cacheID,
             'x-cacheable'    => true,
-            'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
+            'x-cache-for'    => date('Y-m-d H:i:s', $invalidationTime),
             'x-tags'         => 'rss,instant-articles'
         ]);
 
@@ -471,30 +475,6 @@ class RssController extends Controller
             ->findByPositionsAndCategory($positions, $category);
 
         return [ $positions, $advertisements ];
-    }
-
-    /**
-     * Returs the cache invalidation date based on frontpage contents.
-     *
-     * @param int $category The category identifier.
-     *
-     * @return string $date The invalidation date.
-     */
-    protected function getRssInvalidationDate($categoryId = 0)
-    {
-        list(, , $invalidationDt, ) =
-            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId);
-
-        $systemDate = new \DateTime();
-        $lifetime   = $invalidationDt->getTimestamp() - $systemDate->getTimestamp();
-
-        if (!empty($invalidationDt)) {
-            if ($lifetime < $this->view->getCacheLifetime()) {
-                $this->view->setCacheLifetime($lifetime);
-            }
-        }
-
-        return $invalidationDt;
     }
 
     /**
