@@ -16,7 +16,7 @@ orm:
                 color:               string
             converters:
                 default:
-                    class:     Opennemas\Orm\Converter\BaseConverter
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
                     arguments: [ '@orm.metadata.category' ]
             repositories:
                 instance:
