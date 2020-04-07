@@ -133,6 +133,10 @@ class Agency
                 }
             }
         } catch (\Exception $e) {
+            getService('application.log')->error(
+                'Unable to fetch author with id '
+                . $article->fk_author . ' :' . $e->getMessage()
+            );
         }
 
         $locale = getService('core.locale')->getRequestLocale();
