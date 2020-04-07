@@ -236,9 +236,9 @@ EOF
                 $content->author = $this->getContainer()->get('api.service.author')
                     ->getItem($content->fk_author);
 
-                if (!empty($content->avatar_img_id)) {
+                if (!empty($content->author->avatar_img_id)) {
                     $content->author->photo = $this->getContainer()->get('entity_repository')
-                        ->find('Photo', $content->avatar_img_id);
+                        ->find('Photo', $content->author->avatar_img_id);
                 }
             }
         } catch (\Exception $e) {

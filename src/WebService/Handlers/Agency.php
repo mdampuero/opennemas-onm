@@ -128,8 +128,8 @@ class Agency
                 $article->author = getService('api.service.author')
                     ->getItem($article->fk_author);
 
-                if (!empty($article->avatar_img_id)) {
-                    $article->author->photo = $er->find('Photo', $article->avatar_img_id);
+                if (!empty($article->author->avatar_img_id)) {
+                    $article->author->photo = $er->find('Photo', $article->author->avatar_img_id);
                 }
             }
         } catch (\Exception $e) {
