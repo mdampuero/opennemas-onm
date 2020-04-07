@@ -18,7 +18,8 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        $this->em = $this->getMockBuilder('EntityRepository')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
+            ->disableOriginalConstructor()
             ->setMethods([ 'find', 'getDataSet' ])
             ->getMock();
 

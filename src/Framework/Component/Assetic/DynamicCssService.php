@@ -9,7 +9,7 @@
  */
 namespace Framework\Component\Assetic;
 
-use Common\ORM\Core\EntityManager;
+use Opennemas\Orm\Core\EntityManager;
 use Api\Exception\GetItemException;
 
 class DynamicCssService
