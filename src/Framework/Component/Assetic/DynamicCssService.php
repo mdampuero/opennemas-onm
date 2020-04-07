@@ -9,7 +9,7 @@
  */
 namespace Framework\Component\Assetic;
 
-use Common\ORM\Core\EntityManager;
+use Opennemas\Orm\Core\EntityManager;
 
 class DynamicCssService
 {
@@ -21,9 +21,11 @@ class DynamicCssService
     protected $em;
 
     /**
-     * Initializes the instance
+     * Initializes the DynamicCssService.
+     *
+     * @param EntityManager $em The entity manager service.
      */
-    public function __construct($em)
+    public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
