@@ -13,6 +13,7 @@ namespace Common\Core\Component\Helper;
 
 use Common\Cache\Core\Cache;
 use Repository\EntityManager;
+use Api\Service\Service;
 
 /**
 * Perform searches in Database related with one content
@@ -22,49 +23,62 @@ class ContentHelper
     /**
      * Initializes the ContentHelper.
      *
-     * @param EntityManager  $em    The entity manager.
-     * @param Cache          $cache The cache service.
+     * @param EntityManager  $em      The entity manager.
+     * @param Service        $service The API service for content.
+     * @param Cache          $cache   The cache service.
      */
-    public function __construct(EntityManager $em, Cache $cache)
+    public function __construct(EntityManager $em, Service $service, Cache $cache)
     {
-        $this->cache = $cache;
-        $this->em    = $em;
+        $this->cache   = $cache;
+        $this->service = $service;
+        $this->em      = $em;
     }
 
     /**
-     * Get the proper cache invalition time for a category if set.
+     * Get the proper cache expire date for scheduled contents.
      *
-     * @return string $datetime The expire cache datetime in "Y-m-d H:i:s" format.
+     * @return mixed The expire cache datetime in "Y-m-d H:i:s" format or null.
      */
-    public function getInvalidationTime()
+    public function getCacheExpireDate()
     {
-        $filtersStart = [
-            'content_status' => [[ 'value' => 1 ]],
-            'in_litter'      => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'      => [
-                'union' => 'AND',
-                [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
+        $oqlStart = sprintf(
+            'content_status = 1 and in_litter != 1 and'
+            . ' (starttime !is null and starttime > "%s")'
+            . ' order by starttime asc limit 1',
+            date('Y-m-d H:i:s')
+        );
 
-        $filtersEnd = [
-            'content_status' => [[ 'value' => 1 ]],
-            'in_litter'      => [[ 'value' => 1, 'operator' => '!=' ]],
-            'endtime'        => [
-                'union' => 'AND',
-                [ 'value' => null, 'operator' => 'IS NOT', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
 
-        $start = $this->em->findBy($filtersStart, [ 'starttime' => 'ASC' ], 1, 1);
-        $end   = $this->em->findBy($filtersEnd, [ 'endtime' => 'DESC' ], 1, 1);
+        $oqlEnd = sprintf(
+            'content_status = 1 and in_litter != 1 and'
+            . ' (endtime !is null and endtime > "%s")'
+            . ' order by endtime desc limit 1',
+            date('Y-m-d H:i:s')
+        );
 
-        $starttime = !empty($start) ? strtotime($start[0]->starttime) : time() + 86400;
-        $endtime   = !empty($end) ? strtotime($end[0]->endtime) : time() + 86400;
+        try {
+            $start = $this->service->getItemBy($oqlStart);
+        } catch (\Exception $e) {
+            $start = null;
+        }
 
-        return $starttime < $endtime ? $starttime : $endtime;
+        try {
+            $end = $this->service->getItemBy($oqlEnd);
+        } catch (\Exception $e) {
+            $end = null;
+        }
+
+        if (empty($start) && empty($end)) {
+            return null;
+        }
+
+        // Get valid date formated or null
+        $starttime = !empty($start) && $start->starttime
+            ? $start->starttime->format('Y-m-d H:i:s') : null;
+        $endtime   = !empty($end) && $end->endtime
+            ? $end->endtime->format('Y-m-d H:i:s') : null;
+
+        return min(array_filter([ $starttime, $endtime ]));
     }
 
     /**
@@ -170,12 +184,12 @@ class ContentHelper
     /**
      * Set expire date for current view
      *
-     * @param int $invalidationTime The invalidation time.
-     * @param TemplateFactory $view The current view.
+     * @param string          $expire The expire date.
+     * @param TemplateFactory $view   The current view.
      */
-    public function setViewExpireDate($invalidationTime, $view)
+    public function setViewExpireDate($expire, $view)
     {
-        $lifetime = $invalidationTime - time();
+        $lifetime = strtotime($expire) - time();
         if ($lifetime < $view->getCacheLifetime()) {
             $view->setCacheLifetime($lifetime);
         }
