@@ -214,6 +214,29 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests onCategoryUpdate when instance have multilanguage.
+     */
+    public function testOnCategoryUpdateWhenMultilanguage()
+    {
+        $category = [ new Category([ 'id' => 3750, 'name' => [ 'es_150' => 'sports_es', 'en_151' => 'sports_en' ] ]) ];
+
+        $this->event->expects($this->once())->method('getArgument')
+            ->with('items')->willReturn($category);
+
+        $this->locale->expects($this->once())->method('getLocale')
+            ->with('frontend')
+            ->willReturn('es_150');
+
+        $this->dcs->expects($this->at(0))->method('deleteTimestamp')
+            ->with('%global%');
+
+        $this->dcs->expects($this->at(1))->method('deleteTimestamp')
+            ->with($category[0]->name['es_150']);
+
+        $this->subscriber->onCategoryUpdate($this->event);
+    }
+
+    /**
      * Tests onCategoryUpdate when more than one categories were updated.
      */
     public function testOnCategoryUpdateForList()
