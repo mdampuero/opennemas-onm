@@ -12,6 +12,7 @@ namespace Api\EventSubscriber;
 use Common\Cache\Core\CacheManager;
 use Common\Core\Component\Helper\TemplateCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
+use Common\Core\Component\Locale\Locale;
 use Common\Orm\Entity\Instance;
 use Framework\Component\Assetic\DynamicCssService;
 use Onm\Cache\AbstractCache;
@@ -46,6 +47,7 @@ class CategorySubscriber implements EventSubscriberInterface
      * @param AbstractCache       $cache    The old cache connection.
      * @param CacheManager        $cm       The CacheManager service.
      * @param DynamicCssService   $dcs      The DynamicCssService.
+     * @param Locale              $locale   The Locale.
      */
     public function __construct(
         ?Instance           $instance,
@@ -53,7 +55,8 @@ class CategorySubscriber implements EventSubscriberInterface
         VarnishHelper       $vh,
         AbstractCache       $cache,
         CacheManager        $cm,
-        DynamicCssService   $dcs
+        DynamicCssService   $dcs,
+        Locale              $locale
     ) {
         $this->instance = $instance;
         $this->template = $th;
@@ -61,6 +64,7 @@ class CategorySubscriber implements EventSubscriberInterface
         $this->oldCache = $cache;
         $this->cache    = $cm->getConnection('instance');
         $this->dcs      = $dcs;
+        $this->locale   = $locale;
     }
 
     /**
@@ -132,6 +136,11 @@ class CategorySubscriber implements EventSubscriberInterface
 
         $this->dcs->deleteTimestamp('%global%');
         foreach ($categories as $category) {
+            if (is_array($category->name)) {
+                $this->dcs->deleteTimestamp($category->name[$this->locale->getLocale('frontend')]);
+                continue;
+            }
+
             $this->dcs->deleteTimestamp($category->name);
         }
 

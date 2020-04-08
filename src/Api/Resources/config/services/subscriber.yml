@@ -7,7 +7,7 @@ services:
 
     core.subscriber.category:
         class:     Api\EventSubscriber\CategorySubscriber
-        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager', '@core.service.assetic.dynamic_css' ]
+        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager', '@core.service.assetic.dynamic_css', '@core.locale' ]
         tags:
             - { name: kernel.event_subscriber }
 
