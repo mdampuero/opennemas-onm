@@ -36,6 +36,11 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getLocale' ])
+            ->getMock();
+
         $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
@@ -75,7 +80,8 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             $this->vh,
             $this->oldCache,
             $this->cm,
-            $this->dcs
+            $this->dcs,
+            $this->locale
         );
     }
 
@@ -239,7 +245,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
             ->setConstructorArgs([
-                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->dcs
+                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->dcs, $this->locale
             ])
             ->setMethods([ 'onCategoryUpdate' ])
             ->getMock();
