@@ -59,6 +59,19 @@ class DefaultRendererTest extends TestCase
     }
 
     /**
+     * Tests getParameters.
+     */
+    public function testGetParameters()
+    {
+        $content = new Content();
+
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
+    }
+
+    /**
      * Tests validate when default configuration is ok.
      */
     public function testValidateWhenCorrectConfiguration()
@@ -69,7 +82,10 @@ class DefaultRendererTest extends TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('/valid-uri');
 
-        $this->assertTrue($this->renderer->validate());
+        $method = new \ReflectionMethod($this->renderer, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($this->renderer, []));
     }
 
     /**
@@ -83,16 +99,9 @@ class DefaultRendererTest extends TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('/admin');
 
-        $this->assertFalse($this->renderer->validate());
-    }
+        $method = new \ReflectionMethod($this->renderer, 'validate');
+        $method->setAccessible(true);
 
-    /**
-     * Tests getParameters.
-     */
-    public function testGetParameters()
-    {
-        $content = new Content();
-
-        $this->assertIsArray($this->renderer->getParameters($content));
+        $this->assertFalse($method->invokeArgs($this->renderer, []));
     }
 }

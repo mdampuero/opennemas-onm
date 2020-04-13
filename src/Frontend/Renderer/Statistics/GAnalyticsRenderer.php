@@ -14,18 +14,7 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     /**
-     * The google analytics configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * Initializes the GAnalyticsRenderer.
-     *
-     * @param GlobalVariables $global   The global variables.
-     * @param Template        $backend  The backend template.
-     * @param Template        $frontend The frontend template.
+     * {@inheritdoc}
      */
     public function __construct($global, $backend, $frontend)
     {
@@ -38,12 +27,9 @@ class GAnalyticsRenderer extends StatisticsRenderer
     }
 
     /**
-     * Returns the parameters needed to generate analytics.
-     *
-     * @param  Content The content.
-     * @return array The array of parameters for google analytics.
+     * {@inheritdoc}
      */
-    public function getParameters($content)
+    protected function getParameters($content = null)
     {
         $extra['category']  = $this->global->getSection();
         $extra['extension'] = $this->global->getExtension();

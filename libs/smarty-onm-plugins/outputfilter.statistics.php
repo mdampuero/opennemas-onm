@@ -1,10 +1,11 @@
 <?php
 /**
- * Prints statistics code
+ * Adds all statistics-related code to the HTML output string.
  *
- * @param string
+ * @param string   $output The HTML output string without statistics code.
+ * @param Template $smarty The template service.
  *
- * @return string
+ * @return string The HTML output string with statistics code.
  */
 function smarty_outputfilter_statistics($output, $smarty)
 {

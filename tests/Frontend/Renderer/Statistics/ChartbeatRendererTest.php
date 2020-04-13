@@ -85,29 +85,6 @@ class ChartbeatRendererTest extends TestCase
     }
 
     /**
-     * Tests validate when chartbeat is correctly configured.
-     */
-    public function testValidateWhenCorrectConfiguration()
-    {
-        $renderer   = new ChartbeatRenderer($this->global, $this->tpl, $this->smarty);
-        $reflection = new \ReflectionClass($renderer);
-        $config     = $reflection->getProperty('config');
-
-        $config->setAccessible(true);
-        $config->setValue($renderer, ['id' => 99999, 'domain' => 'domain.com']);
-
-        $this->assertTrue($renderer->validate());
-    }
-
-    /**
-     * Tests validate when chartbeat is not correctly configured.
-     */
-    public function testValidateWhenIncorrectConfiguration()
-    {
-        $this->assertFalse($this->renderer->validate());
-    }
-
-    /**
      * Tests getParameters when exists both content and author.
      */
     public function testGetParametersWhenContentAndAuthor()
@@ -121,7 +98,10 @@ class ChartbeatRendererTest extends TestCase
             ->with($content->fk_author)
             ->willReturn(new User(['name' => 'John Doe']));
 
-        $this->assertIsArray($this->renderer->getParameters($content));
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
     }
 
     /**
@@ -142,6 +122,38 @@ class ChartbeatRendererTest extends TestCase
             ->with('site_name')
             ->willReturn('Site');
 
-        $this->assertIsArray($this->renderer->getParameters($content));
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
+    }
+
+    /**
+     * Tests validate when chartbeat is correctly configured.
+     */
+    public function testValidateWhenCorrectConfiguration()
+    {
+        $renderer   = new ChartbeatRenderer($this->global, $this->tpl, $this->smarty);
+        $reflection = new \ReflectionClass($renderer);
+        $config     = $reflection->getProperty('config');
+
+        $config->setAccessible(true);
+        $config->setValue($renderer, ['id' => 99999, 'domain' => 'domain.com']);
+
+        $method = new \ReflectionMethod($renderer, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($renderer, []));
+    }
+
+    /**
+     * Tests validate when chartbeat is not correctly configured.
+     */
+    public function testValidateWhenIncorrectConfiguration()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invokeArgs($this->renderer, []));
     }
 }

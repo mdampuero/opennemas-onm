@@ -14,18 +14,7 @@ use Frontend\Renderer\StatisticsRenderer;
 class ComscoreRenderer extends StatisticsRenderer
 {
     /**
-     * The comscore configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * Initializes the ComscoreRenderer.
-     *
-     * @param GlobalVariables $global   The global variables.
-     * @param Template        $backend  The backend template.
-     * @param Template        $frontend The frontend template.
+     * {@inheritdoc}
      */
     public function __construct($global, $backend, $frontend)
     {
@@ -38,11 +27,17 @@ class ComscoreRenderer extends StatisticsRenderer
     }
 
     /**
-     * Returns if comscore is correctly configured or not.
-     *
-     * @return boolean True if comscore is correctly configured. False otherwise.
+     * {@inheritdoc}
      */
-    public function validate()
+    protected function getParameters($content = null)
+    {
+        return [ 'content' => $content, 'page_id' => $this->config['page_id'] ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate()
     {
         if (!is_array($this->config)
             || !array_key_exists('page_id', $this->config)
@@ -52,16 +47,5 @@ class ComscoreRenderer extends StatisticsRenderer
         }
 
         return true;
-    }
-
-    /**
-     * Returns needed parameters to generate comscore code.
-     *
-     * @param  Content The content.
-     * @return array The array of parameters for comscore.
-     */
-    public function getParameters($content)
-    {
-        return [ 'content' => $content, 'page_id' => $this->config['page_id'] ];
     }
 }

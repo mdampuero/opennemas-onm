@@ -81,6 +81,9 @@ class GAnalyticsRendererTest extends TestCase
     {
         $content = new Content();
 
-        $this->assertIsArray($this->renderer->getParameters($content));
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
     }
 }

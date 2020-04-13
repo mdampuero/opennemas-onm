@@ -15,18 +15,7 @@ use Frontend\Renderer\StatisticsRenderer;
 class ChartbeatRenderer extends StatisticsRenderer
 {
     /**
-     * The chartbeat configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * Initializes the StatisticsRenderer.
-     *
-     * @param GlobalVariables $global   The global variables.
-     * @param Template        $backend  The backend template.
-     * @param Template        $frontend The frontend template.
+     * {@inheritdoc}
      */
     public function __construct($global, $backend, $frontend)
     {
@@ -39,11 +28,36 @@ class ChartbeatRenderer extends StatisticsRenderer
     }
 
     /**
-     * Returns if chartbeat is correctly configured or not.
-     *
-     * @return boolean True if chartbeat is correctly configured. False otherwise.
+     * {@inheritdoc}
      */
-    public function validate()
+    protected function getParameters($content = null)
+    {
+        $params = array_merge(parent::getParameters($content), [
+            'id'       => $this->config['id'],
+            'domain'   => $this->config['domain'],
+            'category' => $this->global->getSection()
+        ]);
+
+        if (!empty($content)) {
+            try {
+                $params['author'] = $this->global->getContainer()
+                    ->get('api.service.author')
+                    ->getItem($content->fk_author)->name;
+            } catch (GetItemException $ie) {
+                $params['author'] = $this->global->getContainer()
+                    ->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('site_name');
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate()
     {
         if (!is_array($this->config)
             || !array_key_exists('id', $this->config)
@@ -55,38 +69,5 @@ class ChartbeatRenderer extends StatisticsRenderer
         }
 
         return true;
-    }
-
-    /**
-     * Returns parameters needed to generate chartbeat code.
-     *
-     * @param  Content The content.
-     * @return array   The array of parameters for chartbeat.
-     */
-    public function getParameters($content)
-    {
-        $params = [
-            'id'       => $this->config['id'],
-            'domain'   => $this->config['domain'],
-            'category' => $this->global->getSection()
-        ];
-
-        if (!empty($content)) {
-            try {
-                $params = array_merge(parent::getParameters($content), $params);
-                $author = $this->global->getContainer()
-                    ->get('api.service.author')
-                    ->getItem($content->fk_author)->name;
-            } catch (GetItemException $ie) {
-                $author = $this->global->getContainer()
-                    ->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('site_name');
-            }
-        }
-
-        $params['author'] = $author;
-
-        return $params;
     }
 }

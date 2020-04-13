@@ -14,18 +14,7 @@ use Frontend\Renderer\StatisticsRenderer;
 class PiwikRenderer extends StatisticsRenderer
 {
     /**
-     * The piwik configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * Initializes the PiwikRenderer.
-     *
-     * @param GlobalVariables $global   The global variables.
-     * @param Template        $backend  The backend template.
-     * @param Template        $frontend The frontend template.
+     * {@inheritdoc}
      */
     public function __construct($global, $backend, $frontend)
     {
@@ -41,29 +30,9 @@ class PiwikRenderer extends StatisticsRenderer
     }
 
     /**
-     * Returns if piwik is correctly configured or not.
-     *
-     * @return boolean True if piwik is correctly configured. False otherwise.
+     * {@inheritdoc}
      */
-    public function validate()
-    {
-        if (!is_array($this->config)
-            || !array_key_exists('page_id', $this->config)
-            || !array_key_exists('server_url', $this->config)
-            || empty(trim($this->config['page_id']))
-        ) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns parameters needed to generate piwik code.
-     *
-     * @return array The array of parameters for piwik.
-     */
-    public function getParameters($content)
+    protected function getParameters($content = null)
     {
         $httpsHost = preg_replace("/http:/", "https:", $this->config['server_url']);
         $newsUrl   = urlencode(SITE_URL . 'newsletter/' . date("YmdHis"));
@@ -76,5 +45,21 @@ class PiwikRenderer extends StatisticsRenderer
             'newsurl'   => $newsUrl,
             'ampHost'   => $ampHost
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate()
+    {
+        if (!is_array($this->config)
+            || !array_key_exists('page_id', $this->config)
+            || !array_key_exists('server_url', $this->config)
+            || empty(trim($this->config['page_id']))
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

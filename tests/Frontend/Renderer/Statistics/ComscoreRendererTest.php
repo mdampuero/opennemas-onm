@@ -75,6 +75,19 @@ class ComscoreRendererTest extends TestCase
     }
 
     /**
+     * Tests getParameters.
+     */
+    public function testGetParameters()
+    {
+        $content = new Content();
+
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
+    }
+
+    /**
      * Tests validate when comscore is correctly configured.
      */
     public function testValidateWhenCorrectConfiguration()
@@ -86,7 +99,10 @@ class ComscoreRendererTest extends TestCase
         $config->setAccessible(true);
         $config->setValue($renderer, ['page_id' => 99999]);
 
-        $this->assertTrue($renderer->validate());
+        $method = new \ReflectionMethod($renderer, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($renderer, []));
     }
 
     /**
@@ -94,16 +110,9 @@ class ComscoreRendererTest extends TestCase
      */
     public function testValidateWhenIncorrectConfiguration()
     {
-        $this->assertFalse($this->renderer->validate());
-    }
+        $method = new \ReflectionMethod($this->renderer, 'validate');
+        $method->setAccessible(true);
 
-    /**
-     * Tests getParameters.
-     */
-    public function testGetParameters()
-    {
-        $content = new Content();
-
-        $this->assertIsArray($this->renderer->getParameters($content));
+        $this->assertFalse($method->invokeArgs($this->renderer, []));
     }
 }

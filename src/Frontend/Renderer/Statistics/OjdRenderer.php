@@ -14,18 +14,7 @@ use Frontend\Renderer\StatisticsRenderer;
 class OjdRenderer extends StatisticsRenderer
 {
     /**
-     * The google analytics configuration.
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * Initializes the GAnalyticsRenderer.
-     *
-     * @param GlobalVariables $global   The global variables.
-     * @param Template        $backend  The backend template.
-     * @param Template        $frontend The frontend template.
+     * {@inheritdoc}
      */
     public function __construct($global, $backend, $frontend)
     {
@@ -38,11 +27,17 @@ class OjdRenderer extends StatisticsRenderer
     }
 
     /**
-     * Returns if ojd is correctly configured or not.
-     *
-     * @return boolean True if Ojd is correctly configured. False otherwise.
+     * {@inheritdoc}
      */
-    public function validate()
+    protected function getParameters($content = null)
+    {
+        return [ 'content' => $content, 'page_id' => $this->config['page_id'] ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate()
     {
         if (!is_array($this->config)
             || !array_key_exists('page_id', $this->config)
@@ -52,16 +47,5 @@ class OjdRenderer extends StatisticsRenderer
         }
 
         return true;
-    }
-
-    /**
-     * Returns parameters needed to generate ojd code.
-     *
-     * @param  Content The content.
-     * @return array The array of parameters for ojd.
-     */
-    public function getParameters($content)
-    {
-        return [ 'content' => $content, 'page_id' => $this->config['page_id'] ];
     }
 }

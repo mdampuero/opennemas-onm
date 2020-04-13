@@ -14,11 +14,21 @@ use Frontend\Renderer\StatisticsRenderer;
 class DefaultRenderer extends StatisticsRenderer
 {
     /**
-     * Returns if default is correctly configured or not.
-     *
-     * @return boolean True if the default code needs to be displayed. False otherwise.
+     * {@inheritdoc}
      */
-    public function validate()
+    protected function getParameters($content = null)
+    {
+        return [
+            'content' => $content,
+            'params'  => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
+            'id'    => $this->frontend->getValue('item')->pk_content
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate()
     {
         $request = $this->global->getRequest();
 
@@ -32,20 +42,5 @@ class DefaultRenderer extends StatisticsRenderer
         }
 
         return true;
-    }
-
-    /**
-     * Returns parameters needed to generate default code.
-     *
-     * @param  Content The content.
-     * @return array The array of parameters for default code.
-     */
-    public function getParameters($content)
-    {
-        return [
-            'content' => $content,
-            'params'  => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'id'    => $this->frontend->getValue('item')->pk_content
-        ];
     }
 }

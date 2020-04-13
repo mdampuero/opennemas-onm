@@ -78,6 +78,19 @@ class PiwikRendererTest extends TestCase
     }
 
     /**
+     * Tests getParameters.
+     */
+    public function testGetParameters()
+    {
+        $content = new Content();
+
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
+    }
+
+    /**
      * Tests validate when piwik is correctly configured.
      */
     public function testValidateWhenCorrectConfiguration()
@@ -89,7 +102,10 @@ class PiwikRendererTest extends TestCase
         $config->setAccessible(true);
         $config->setValue($renderer, ['page_id' => 99999, 'server_url' => 'domain.com']);
 
-        $this->assertTrue($renderer->validate());
+        $method = new \ReflectionMethod($renderer, 'validate');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($renderer, []));
     }
 
     /**
@@ -97,16 +113,9 @@ class PiwikRendererTest extends TestCase
      */
     public function testValidateWhenIncorrectConfiguration()
     {
-        $this->assertFalse($this->renderer->validate());
-    }
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
 
-    /**
-     * Tests getParameters.
-     */
-    public function testGetParameters()
-    {
-        $content = new Content();
-
-        $this->assertIsArray($this->renderer->getParameters($content));
+        $this->assertIsArray($method->invokeArgs($this->renderer, []));
     }
 }

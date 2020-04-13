@@ -12,6 +12,13 @@ namespace Frontend\Renderer;
 class StatisticsRenderer
 {
     /**
+     * The renderer configuration.
+     *
+     * @var array
+     */
+    protected $config = [];
+
+    /**
      * The global variables.
      *
      * @var GlobalVariables
@@ -121,7 +128,7 @@ class StatisticsRenderer
      *
      * @param String $type The type of analytics to render.
      *
-     * @return mixed An instance of the specific renderer.
+     * @return StatisticsRenderer An instance of the specific renderer.
      */
     protected function getRendererClass($type)
     {
@@ -132,9 +139,9 @@ class StatisticsRenderer
     }
 
     /**
-     * Returns if valid configuration or not
+     * Checks if the renderer configuration is valid.
      *
-     * @return boolean true
+     * @return boolean True if the configuration is valid. False otherwise.
      */
     protected function validate()
     {
@@ -142,11 +149,13 @@ class StatisticsRenderer
     }
 
     /**
-     * Returns the needed parameters
+     * Returns the list of parameters for the current renderer.
      *
-     * @return array []
+     * @param Content $content The returned for the current request.
+     *
+     * @return array The list of parameters.
      */
-    protected function getParameters($content)
+    protected function getParameters($content = null)
     {
         if (!empty($content)) {
             return [ 'title' => $content->title ];
