@@ -48,7 +48,7 @@ class DynamicCssService
     {
         $settings = $this->em->getDataSet('Settings', 'instance');
 
-        if ( $section == '%global%' || $section == 'home' ) {
+        if ($section == '%global%' || $section == 'home') {
             $id = $section;
         } else {
             $id = $this->cs->getItemBySlug($section)->pk_content_category;
