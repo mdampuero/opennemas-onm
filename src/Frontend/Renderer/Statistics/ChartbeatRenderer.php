@@ -25,12 +25,12 @@ class ChartbeatRenderer extends StatisticsRenderer
      * Initializes the StatisticsRenderer.
      *
      * @param GlobalVariables $global   The global variables.
-     * @param Template        $backTpl  The backend template.
-     * @param Template        $frontTpl The frontend template.
+     * @param Template        $backend  The backend template.
+     * @param Template        $frontend The frontend template.
      */
-    public function __construct($global, $backTpl, $frontTpl)
+    public function __construct($global, $backend, $frontend)
     {
-        parent::__construct($global, $backTpl, $frontTpl);
+        parent::__construct($global, $backend, $frontend);
 
         $this->config = $this->global->getContainer()
             ->get('orm.manager')

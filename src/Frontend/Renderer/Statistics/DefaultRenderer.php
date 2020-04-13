@@ -26,7 +26,7 @@ class DefaultRenderer extends StatisticsRenderer
             || preg_match('@^/admin@', $request->getUri())
             || preg_match('@/preview$@', $request->getUri())
             || preg_match('@^/ext@', $request->getUri())
-            || !$this->frontTpl->hasValue('item')
+            || !$this->frontend->hasValue('item')
         ) {
             return false;
         }
@@ -45,7 +45,7 @@ class DefaultRenderer extends StatisticsRenderer
         return [
             'content' => $content,
             'params'  => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'id'    => $this->frontTpl->getValue('item')->pk_content
+            'id'    => $this->frontend->getValue('item')->pk_content
         ];
     }
 }

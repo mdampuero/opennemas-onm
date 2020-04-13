@@ -23,27 +23,27 @@ class StatisticsRenderer
      *
      * @var Template
      */
-    protected $backTpl;
+    protected $backend;
 
     /**
      * The frontend template.
      *
      * @var Template
      */
-    protected $frontTpl;
+    protected $frontend;
 
     /**
      * Initializes the StatisticsRenderer.
      *
      * @param GlobalVariables $global   The global variables.
-     * @param Template        $backTpl  The backend template.
-     * @param Template        $frontTpl The frontend template.
+     * @param Template        $backend  The backend template.
+     * @param Template        $frontend The frontend template.
      */
-    public function __construct($global, $backTpl, $frontTpl)
+    public function __construct($global, $backend, $frontend)
     {
         $this->global   = $global;
-        $this->backTpl  = $backTpl;
-        $this->frontTpl = $frontTpl;
+        $this->backend  = $backend;
+        $this->frontend = $frontend;
     }
 
     /**
@@ -65,7 +65,7 @@ class StatisticsRenderer
 
             if ($renderer->validate()) {
                 try {
-                    $code .= $this->backTpl->fetch(
+                    $code .= $this->backend->fetch(
                         'statistics/helpers/' . strtolower($type) . '/' . $codeType . '.tpl',
                         $renderer->getParameters($content)
                     );
@@ -128,7 +128,7 @@ class StatisticsRenderer
         $class     = $type . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Statistics\\' . $class;
 
-        return new $classPath($this->global, $this->backTpl, $this->frontTpl);
+        return new $classPath($this->global, $this->backend, $this->frontend);
     }
 
     /**
