@@ -16,7 +16,7 @@ class DefaultRenderer extends StatisticsRenderer
     /**
      * Returns if default is correctly configured or not.
      *
-     * @return boolean True if the default code needs to be displayed, False otherwise.
+     * @return boolean True if the default code needs to be displayed. False otherwise.
      */
     public function validate()
     {
@@ -26,7 +26,7 @@ class DefaultRenderer extends StatisticsRenderer
             || preg_match('@^/admin@', $request->getUri())
             || preg_match('@/preview$@', $request->getUri())
             || preg_match('@^/ext@', $request->getUri())
-            || !$this->smarty->hasValue('item')
+            || !$this->frontTpl->hasValue('item')
         ) {
             return false;
         }
@@ -35,8 +35,9 @@ class DefaultRenderer extends StatisticsRenderer
     }
 
     /**
-     * Return parameters needed to generate default code.
+     * Returns parameters needed to generate default code.
      *
+     * @param  Content The content.
      * @return array The array of parameters for default code.
      */
     public function getParameters($content)
@@ -44,7 +45,7 @@ class DefaultRenderer extends StatisticsRenderer
         return [
             'content' => $content,
             'params'  => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'id'    => $this->smarty->getValue('item')->pk_content
+            'id'    => $this->frontTpl->getValue('item')->pk_content
         ];
     }
 }

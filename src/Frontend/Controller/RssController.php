@@ -341,7 +341,6 @@ class RssController extends Controller
             $this->getRelatedContents($contents, 3);
 
             $this->view->assign('contents', $contents);
-            $this->view->assign('content', null);
         }
 
         list($adsPositions, $advertisements) = $this->getAds();

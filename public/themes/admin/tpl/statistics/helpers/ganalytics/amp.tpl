@@ -1,4 +1,4 @@
-{foreach from=$params key=key item=account}
+{foreach $params as $key => $account}
   <amp-analytics type="googleanalytics" id="analytics{$key}">
     <script type="application/json">
     {

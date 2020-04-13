@@ -15,7 +15,7 @@ use Frontend\Renderer\StatisticsRenderer;
 class ChartbeatRenderer extends StatisticsRenderer
 {
     /**
-     * The chartbeat configuration
+     * The chartbeat configuration.
      *
      * @var array
      */
@@ -24,13 +24,14 @@ class ChartbeatRenderer extends StatisticsRenderer
     /**
      * Initializes the StatisticsRenderer.
      *
-     * @param GlobalVariables $global The global variables.
-     * @param Template        $tpl    The template.
-     * @param Template        $smarty The smarty template.
+     * @param GlobalVariables $global   The global variables.
+     * @param Template        $backTpl  The backend template.
+     * @param Template        $frontTpl The frontend template.
      */
-    public function __construct($global, $tpl, $smarty)
+    public function __construct($global, $backTpl, $frontTpl)
     {
-        parent::__construct($global, $tpl, $smarty);
+        parent::__construct($global, $backTpl, $frontTpl);
+
         $this->config = $this->global->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -40,7 +41,7 @@ class ChartbeatRenderer extends StatisticsRenderer
     /**
      * Returns if chartbeat is correctly configured or not.
      *
-     * @return boolean True if chartbeat is correctly configured, False otherwise.
+     * @return boolean True if chartbeat is correctly configured. False otherwise.
      */
     public function validate()
     {
@@ -59,24 +60,26 @@ class ChartbeatRenderer extends StatisticsRenderer
     /**
      * Returns parameters needed to generate chartbeat code.
      *
-     * @return array The array of parameters for chartbeat.
+     * @param  Content The content.
+     * @return array   The array of parameters for chartbeat.
      */
     public function getParameters($content)
     {
-        $params    = [
+        $params = [
             'id'       => $this->config['id'],
             'domain'   => $this->config['domain'],
             'category' => $this->global->getSection()
         ];
-        $container = $this->global->getContainer();
 
         if (!empty($content)) {
             try {
-                $params['title'] = $content->title;
-                $author          = $container->get('api.service.author')
+                $params = array_merge(parent::getParameters($content), $params);
+                $author = $this->global->getContainer()
+                    ->get('api.service.author')
                     ->getItem($content->fk_author)->name;
             } catch (GetItemException $ie) {
-                $author = $container->get('orm.manager')
+                $author = $this->global->getContainer()
+                    ->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
                     ->get('site_name');
             }

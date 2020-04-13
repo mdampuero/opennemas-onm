@@ -5,7 +5,7 @@
     a=s.createElement(o), m=s.getElementsByTagName(o)[0];
     a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  {foreach from=$params key=key item=account}
+  {foreach $params as $key => $account}
     {if !empty($key)}
       {assign var="key" value="account{$key}."}
     {else}

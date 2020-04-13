@@ -1,7 +1,7 @@
 <script>
   var _gaq = _gaq || [];
 
-  {foreach from=$params key=key item=account}
+  {foreach $params as $key => $account}
     {if !empty($key)}
       {assign var="key" value="account{$key}."}
     {else}
