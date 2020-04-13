@@ -21,11 +21,19 @@ class DynamicCssService
     protected $em;
 
     /**
+     * The category api service
+     *
+     * @var CategoryService
+     */
+    protected $cs;
+
+    /**
      * Initializes the instance
      */
-    public function __construct($em)
+    public function __construct($em, $cs)
     {
         $this->em = $em;
+        $this->cs = $cs;
     }
 
     /**
@@ -40,16 +48,22 @@ class DynamicCssService
     {
         $settings = $this->em->getDataSet('Settings', 'instance');
 
+        if ( $section == '%global%' || $section == 'home' ) {
+            $id = $section;
+        } else {
+            $id = $this->cs->getItemBySlug($section)->pk_content_category;
+        }
+
         $timestamps = $settings->get('dynamic_css', []);
 
-        if (empty($timestamps) || empty($timestamps[ $section ])) {
+        if (empty($timestamps) || empty($timestamps[ $id ])) {
             $datetime               = new \DateTime();
-            $timestamps[ $section ] = $datetime->getTimestamp();
+            $timestamps[ $id ]      = $datetime->getTimestamp();
             $settings->set('dynamic_css', $timestamps);
             return $datetime->getTimestamp();
         }
 
-        return $timestamps[ $section ];
+        return $timestamps[ $id ];
     }
 
     /**
