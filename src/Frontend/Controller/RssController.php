@@ -68,8 +68,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
-        $this->get('core.helper.content')->setViewExpireDate($invalidationTime, $this->view);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
@@ -125,7 +125,7 @@ class RssController extends Controller
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => date('Y-m-d H:i:s', $invalidationTime),
+            'x-cache-for' => $expire,
             'x-tags'      => 'rss,frontpage-' . $categoryName
         ]);
 
@@ -156,8 +156,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
-        $this->get('core.helper.content')->setViewExpireDate($invalidationTime, $this->view);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
@@ -203,7 +203,7 @@ class RssController extends Controller
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => date('Y-m-d H:i:s', $invalidationTime),
+            'x-cache-for' => $expire,
             'x-tags'      => 'rss,' . $type . ',' . $slug
         ]);
 
@@ -227,8 +227,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
-        $this->get('core.helper.content')->setViewExpireDate($invalidationTime);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'author', $slug);
 
@@ -288,7 +288,7 @@ class RssController extends Controller
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => date('Y-m-d H:i:s', $invalidationTime),
+            'x-cache-for' => $expire,
             'x-tags'      => 'rss,author-' . $slug
         ]);
 
@@ -313,8 +313,8 @@ class RssController extends Controller
         // Setup templating cache layer
         $this->view->setConfig('rss');
 
-        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
-        $this->get('core.helper.content')->setViewExpireDate($invalidationTime);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'fia');
 
@@ -384,7 +384,7 @@ class RssController extends Controller
             'ads_format'     => 'fia',
             'cache_id'       => $cacheID,
             'x-cacheable'    => true,
-            'x-cache-for'    => date('Y-m-d H:i:s', $invalidationTime),
+            'x-cache-for'    => $expire,
             'x-tags'         => 'rss,instant-articles'
         ]);
 

@@ -366,10 +366,13 @@ class CategoryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $invalidationTime = $this->get('core.helper.content')->getInvalidationTime();
-        $this->get('core.helper.content')->setViewExpireDate($invalidationTime);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
 
-        $params['x-cache-for'] = date('Y-m-d H:i:s', $invalidationTime);
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
 
         list($mediaIds, $userIds) = $this->extractIds($contents);
 

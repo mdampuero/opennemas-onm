@@ -704,4 +704,17 @@ class FrontendController extends Controller
             $this->get('core.locale')->getRequestLocale()
         )['items'];
     }
+
+    /**
+     * Sets the current view expire date.
+     *
+     * @param string $expire The expire date.
+     */
+    protected function setViewExpireDate($expire)
+    {
+        $lifetime = strtotime($expire) - time();
+        if ($lifetime < $this->view->getCacheLifetime()) {
+            $this->view->setCacheLifetime($lifetime);
+        }
+    }
 }
