@@ -400,7 +400,7 @@ class UserController extends Controller
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings');
 
-        $subject = sprintf(_('New user account in %s'), $ds->get('site_title'));
+        $subject = sprintf(_('New user account in %s'), $ds->get('site_name'));
 
         $this->view->setCaching(0);
         $body = $this->get('core.template.frontend')
