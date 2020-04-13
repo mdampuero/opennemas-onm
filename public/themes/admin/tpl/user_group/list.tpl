@@ -1,25 +1,25 @@
 {extends file="common/extension/list.tpl"}
 
 {block name="metaTitle"}
-  > {t}Lists{/t}
+  > {t}User Groups{/t}
 {/block}
 
 {block name="ngInit"}
-  ng-controller="SubscriptionListCtrl" ng-init="init();backup.master = {if $app.security->hasPermission('MASTER')}true{else}false{/if};backup.id = {$app.user->id}"
+  ng-controller="UserGroupListCtrl" ng-init="init()"
 {/block}
 
 {block name="icon"}
-  <i class="fa fa-list m-r-10"></i>
+  <i class="fa fa-users m-r-10"></i>
 {/block}
 
 {block name="title"}
-  {t}Lists{/t}
+  {t}User Groups{/t}
 {/block}
 
 {block name="primaryActions"}
-  {acl isAllowed=SUBSCRIPTION_CREATE}
+  {acl isAllowed=GROUP_CREATE}
     <li class="quicklinks">
-      <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_subscription_create') %]">
+      <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_user_group_create') %]">
         <i class="fa fa-plus"></i>
         {t}Create{/t}
       </a>
@@ -28,7 +28,7 @@
 {/block}
 
 {block name="selectedActions"}
-  {acl isAllowed="SUBSCRIPTION_AVAILABLE"}
+  {acl isAllowed="GROUP_AVAILABLE"}
     <li class="quicklinks">
       <button class="btn btn-link" ng-click="patchSelected('enabled', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-times fa-lg"></i>
@@ -40,12 +40,12 @@
       </button>
     </li>
   {/acl}
-  {acl isAllowed="SUBSCRIPTION_DELETE"}
+  {acl isAllowed="GROUP_DELETE"}
     <li class="quicklinks hidden-xs">
       <span class="h-seperate"></span>
     </li>
     <li class="quicklinks">
-      <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+      <button class="btn btn-link" href="#" ng-click="deleteSelected('backend_ws_user_groups_delete')">
         <i class="fa fa-trash-o fa-lg"></i>
       </button>
     </li>
@@ -58,8 +58,8 @@
       <span class="input-group-addon">
         <i class="fa fa-search fa-lg"></i>
       </span>
-      <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
-      <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
+      <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.title }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+      <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('title')" ng-show="criteria.title">
         <i class="fa fa-times"></i>
       </span>
     </div>
@@ -84,20 +84,11 @@
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="request = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Manual{/t}', value: 1}, { name: '{t}Automatic{/t}', value: 0 } ]">
-    <ui-select name="request" theme="select2" ng-model="criteria.request">
-      <ui-select-match>
-        <strong>{t}Requests{/t}:</strong> [% $select.selected.name %]
-      </ui-select-match>
-      <ui-select-choices repeat="item.value as item in request | filter: $select.search">
-        <div ng-bind-html="item.name | highlight: $select.search"></div>
-      </ui-select-choices>
-    </ui-select>
-  </li>
 {/block}
 
+
 {block name="list"}
-  {include file="subscription/list.table.tpl"}
+  {include file="user_group/list.table.tpl"}
 {/block}
 
 {block name="modals"}

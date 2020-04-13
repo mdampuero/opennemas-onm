@@ -9,43 +9,24 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
-use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-
-class AuthorController extends Controller
+class AuthorController extends BackendController
 {
     /**
-     * Show a list of opinion authors.
-     *
-     * @Security("hasPermission('AUTHOR_ADMIN')")
+     * {@inheritdoc}
      */
-    public function listAction()
-    {
-        return $this->render('author/list.tpl');
-    }
+    protected $extension = 'OPINION_MANAGER';
 
     /**
-     * Shows the author information given its id.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasPermission('AUTHOR_UPDATE')")
+     * {@inheritdoc}
      */
-    public function showAction($id)
-    {
-        return $this->render('author/item.tpl', [ 'id' => $id ]);
-    }
+    protected $permissions = [
+        'create' => 'AUTHOR_CREATE',
+        'list'   => 'AUTHOR_ADMIN',
+        'show'   => 'AUTHOR_UPDATE'
+    ];
 
     /**
-     * Creates an author give some information.
-     *
-     * @return Response The response object.
-     *
-     * @Security("hasPermission('AUTHOR_CREATE')")
+     * {@inheritdoc}
      */
-    public function createAction()
-    {
-        return $this->render('author/item.tpl');
-    }
+    protected $resource = 'author';
 }

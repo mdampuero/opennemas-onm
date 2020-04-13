@@ -282,11 +282,18 @@ class ApiController extends Controller
             $items = [ $items ];
         }
 
-        $ids = array_unique(array_values(array_filter(array_map(function ($a) {
-            return $a->pk_fk_content_category;
-        }, $items), function ($a) {
-            return !empty($a);
-        })));
+        $ids = [];
+
+        foreach ($items as $item) {
+            if (!empty($item->categories)) {
+                $ids = array_merge($ids, $item->categories);
+                continue;
+            }
+
+            if (!empty($item->pk_fk_content_category)) {
+                $ids[] = $item->pk_fk_content_category;
+            }
+        }
 
         if (empty($ids)) {
             return [];
@@ -294,7 +301,7 @@ class ApiController extends Controller
 
         return $this->get('api.service.category')->responsify(
             $this->get('api.service.category')
-                ->getListByIds($ids)['items']
+                ->getListByIds(array_unique($ids))['items']
         );
     }
 

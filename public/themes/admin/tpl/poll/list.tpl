@@ -79,11 +79,6 @@
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="hidden-xs ng-cloak quicklinks" ng-show="!isModeSupported() || app.mode === 'list'">
-    <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-      <i class="fa fa-lg fa-refresh m-l-10 m-r-10" ng-class="{ 'fa-spin': flags.http.loading }"></i>
-    </button>
-  </li>
 {/block}
 
 {block name="list"}
