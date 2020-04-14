@@ -38,7 +38,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Onm\StringUtils::getSlug
+     * @covers \Onm\StringUtils::generateSlug
      */
     public function testGenerateSlug()
     {
