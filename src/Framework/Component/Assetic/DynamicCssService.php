@@ -57,8 +57,8 @@ class DynamicCssService
         $timestamps = $settings->get('dynamic_css', []);
 
         if (empty($timestamps) || empty($timestamps[ $id ])) {
-            $datetime               = new \DateTime();
-            $timestamps[ $id ]      = $datetime->getTimestamp();
+            $datetime          = new \DateTime();
+            $timestamps[ $id ] = $datetime->getTimestamp();
             $settings->set('dynamic_css', $timestamps);
             return $datetime->getTimestamp();
         }
