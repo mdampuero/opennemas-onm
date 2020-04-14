@@ -49,7 +49,7 @@ class TemplateCacheHelper
             $this->cache->delete(
                 'category',
                 'list',
-                $category->pk_content_category
+                $category->id
             );
         }
     }

@@ -266,7 +266,7 @@ class NewsletterRenderer
         if (!empty($criteria->category)
             && !in_array($criteria->content_type, [ 'opinion', 'letter', 'static_page' ])
         ) {
-            $searchCriteria['pk_fk_content_category'] = [
+            $searchCriteria['category_id'] = [
                 [ 'value' => $criteria->category, 'operator' => 'IN' ]
             ];
         }

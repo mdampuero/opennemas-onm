@@ -182,7 +182,7 @@ class ArticlesController extends Controller
         ];
 
         if (!empty($categoryId)) {
-            $filters['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
+            $filters['category_id'] = [ [ 'value' => $categoryId ] ];
         }
 
         $articles = $em->findBy($filters, [ 'created' => 'desc' ], 8, $page);
@@ -299,7 +299,7 @@ class ArticlesController extends Controller
             $suggested = $this->get('core.helper.content')->getSuggested(
                 $article->pk_content,
                 'article',
-                $params['category']->pk_content_category
+                $params['category']->id
             );
 
             $params['suggested'] = $suggested[0];
@@ -361,7 +361,7 @@ class ArticlesController extends Controller
     {
         try {
             $category = $this->get('orm.manager')->getRepository('Category')
-                ->findOneBy(sprintf('pk_content_category = %s', $id));
+                ->findOneBy(sprintf('id = %s', $id));
 
             $category->title = $this->get('data.manager.filter')
                 ->set($category->title)

@@ -44,7 +44,7 @@ class MonographsController extends Controller
             $category = $this->get('api.service.category')
                 ->getItemBySlug($this->categoryName);
 
-            $this->category = $category->pk_content_category;
+            $this->category = $category->id;
         }
 
         $this->view->assign([
@@ -102,7 +102,7 @@ class MonographsController extends Controller
             ];
 
             if ($this->category != 0) {
-                $filters['pk_fk_content_category'] = [ [ 'value' => $this->category ] ];
+                $filters['category_id'] = [ [ 'value' => $this->category ] ];
             }
 
             $monographs = $em->findBy($filters, $order, $epp, $page);

@@ -148,12 +148,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Article();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 28618;
-        $content->created                = '2015-01-14 23:49:40';
-        $content->content_type_name      = 'article';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->category_id       = 28618;
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'article';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $this->cs->expects($this->once())->method('getItem')
             ->with(28618)->willReturn(new Category([ 'name' => 'actualidad' ]));
@@ -315,12 +315,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Article();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 24845;
-        $content->created                = '2015-01-14 23:49:40';
-        $content->content_type_name      = 'article';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->category_id       = 24845;
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'article';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForArticle');
         $method->setAccessible(true);
@@ -342,12 +342,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content = new \Video();
         $date    = new \DateTime();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 6458;
-        $content->created                = $date;
-        $content->content_type_name      = 'video';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->category_id       = 6458;
+        $content->created           = $date;
+        $content->content_type_name = 'video';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);
@@ -600,12 +600,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Video();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 28618;
-        $content->created                = '2015-01-14 23:49:40';
-        $content->content_type_name      = 'video';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_name     = 'actualidad';
+        $content->category_id       = 28618;
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'video';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);

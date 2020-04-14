@@ -287,7 +287,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('archive', date('Ymd'))
             ->delete('rss', $content->content_type_name)
             ->delete('frontpage', $content->content_type_name)
-            ->delete('category', 'list', $content->pk_fk_content_category)
+            ->delete('category', 'list', $content->category_id)
             ->delete($content->content_type_name, 'frontpage')
             ->delete($content->content_type_name, 'list');
 

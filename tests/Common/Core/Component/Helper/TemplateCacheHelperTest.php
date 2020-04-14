@@ -56,8 +56,8 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->with('category', 'list', 18701);
 
         $this->helper->deleteCategories([
-            new Category([ 'pk_content_category' => 2866 ]),
-            new Category([ 'pk_content_category' => 18701 ])
+            new Category([ 'id' => 2866 ]),
+            new Category([ 'id' => 18701 ])
         ]);
 
         $this->cache->expects($this->once())->method('delete')

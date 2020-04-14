@@ -84,7 +84,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     public function testEmptyItemWhenItemIsEmpty()
     {
         $this->service->expects($this->once())->method('getItem')
-            ->willReturn(new Category([ 'pk_content_category' => 18752 ]));
+            ->willReturn(new Category([ 'id' => 18752 ]));
 
         $this->repository->expects($this->once())->method('countContents')
             ->with(18752)->willReturn([]);
@@ -97,7 +97,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyItemWhenItemIsNotEmpty()
     {
-        $category = new Category([ 'pk_content_category' => 18752 ]);
+        $category = new Category([ 'id' => 18752 ]);
         $contents = [ 'id' => 8883, 'type' => 'glorp' ];
 
         $this->service->expects($this->once())->method('getItem')
@@ -146,7 +146,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyListWhenSuccess()
     {
-        $items = [ new Category([ 'pk_content_category' => 1 ]) ];
+        $items = [ new Category([ 'id' => 1 ]) ];
 
         $this->service->expects($this->once())->method('getListByIds')
             ->with([ 1, 2 ])->willReturn([
@@ -190,7 +190,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [ 9230 => 325 ],
-            $this->service->getStats(new Category([ 'pk_content_category' => 9230 ]))
+            $this->service->getStats(new Category([ 'id' => 9230 ]))
         );
     }
 
@@ -204,7 +204,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [ 9230 => 325 ],
-            $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ])
+            $this->service->getStats([ new Category([ 'id' => 9230 ]) ])
         );
     }
 
@@ -218,7 +218,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('countContents')
             ->with([ 9230 ])->will($this->throwException(new \Exception()));
 
-        $this->service->getStats([ new Category([ 'pk_content_category' => 9230 ]) ]);
+        $this->service->getStats([ new Category([ 'id' => 9230 ]) ]);
     }
 
     /**
@@ -250,7 +250,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     public function testMoveItemWhenItemIsEmpty()
     {
         $this->service->expects($this->once())->method('getItem')
-            ->willReturn(new Category([ 'pk_content_category' => 24036 ]));
+            ->willReturn(new Category([ 'id' => 24036 ]));
 
         $this->repository->expects($this->once())->method('countContents')
             ->with(24036)->willReturn([]);
@@ -263,8 +263,8 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveItemWhenItemIsNotEmpty()
     {
-        $source   = new Category([ 'pk_content_category' => 394 ]);
-        $target   = new Category([ 'pk_content_category' => 12119 ]);
+        $source   = new Category([ 'id' => 394 ]);
+        $target   = new Category([ 'id' => 12119 ]);
         $contents = [ 'id' => 8883, 'type' => 'glorp' ];
 
         $this->service->expects($this->at(0))->method('getItem')
@@ -316,8 +316,8 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testMoveListWhenSuccess()
     {
-        $items  = [ new Category([ 'pk_content_category' => 1 ]) ];
-        $target = new Category([ 'pk_content_category' => 22933 ]);
+        $items  = [ new Category([ 'id' => 1 ]) ];
+        $target = new Category([ 'id' => 22933 ]);
 
         $this->service->expects($this->at(0))->method('getListByIds')
             ->with([ 1, 2 ])->willReturn([
@@ -355,7 +355,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('countContents')
             ->will($this->throwException(new \Exception()));
 
-        $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ]);
+        $method->invokeArgs($this->service, [ new Category([ 'id' => 10267 ]) ]);
     }
 
     /**
@@ -370,7 +370,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->assertTrue(
-            $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ])
+            $method->invokeArgs($this->service, [ new Category([ 'id' => 10267 ]) ])
         );
     }
 
@@ -386,7 +386,7 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 10267 => 9223 ]);
 
         $this->assertFalse(
-            $method->invokeArgs($this->service, [ new Category([ 'pk_content_category' => 10267 ]) ])
+            $method->invokeArgs($this->service, [ new Category([ 'id' => 10267 ]) ])
         );
     }
 }

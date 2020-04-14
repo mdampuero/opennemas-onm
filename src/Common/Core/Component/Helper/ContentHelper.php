@@ -69,7 +69,7 @@ class ContentHelper
         ];
 
         if (!empty($categoryId)) {
-            $criteria['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
+            $criteria['category_id'] = [ [ 'value' => $categoryId ] ];
         }
 
         try {

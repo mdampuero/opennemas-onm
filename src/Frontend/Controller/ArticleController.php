@@ -128,7 +128,7 @@ class ArticleController extends FrontendController
         if (array_key_exists('o_category', $params) && !empty($params['o_category'])) {
             $params['o_layout'] = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')->get(
-                    'frontpage_layout_' . $params['o_category']->pk_content_category,
+                    'frontpage_layout_' . $params['o_category']->id,
                     'default'
                 );
         }
@@ -152,7 +152,7 @@ class ArticleController extends FrontendController
         $suggested = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
             'article',
-            $params['o_category']->pk_content_category
+            $params['o_category']->id
         );
 
         $params['tags']       = $this->getTags($params['content']);

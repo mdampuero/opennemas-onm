@@ -163,8 +163,8 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
 
-        $content->pk_fk_content_category = 10633;
-        $content->content_type_name      = 'album';
+        $content->category_id       = 10633;
+        $content->content_type_name = 'album';
 
         $this->smarty->expects($this->at(0))->method('hasValue')
             ->willReturn(true);

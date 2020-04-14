@@ -79,14 +79,14 @@ class ArchiveController extends Controller
 
             foreach ($contents as $content) {
                 // Create category group
-                if (!isset($library[$content->pk_fk_content_category])
-                    && !empty($content->pk_fk_content_category)
+                if (!isset($library[$content->category_id])
+                    && !empty($content->category_id)
                 ) {
-                    $library[$content->pk_fk_content_category] = $this
+                    $library[$content->category_id] = $this
                         ->get('api.service.category')
-                        ->getItem($content->pk_fk_content_category);
+                        ->getItem($content->category_id);
 
-                    $library[$content->pk_fk_content_category]->contents = [];
+                    $library[$content->category_id]->contents = [];
                 }
 
                 // Fetch video or image for article and opinions
@@ -97,7 +97,7 @@ class ArchiveController extends Controller
                 }
 
                 // Add contents to category group
-                $library[$content->pk_fk_content_category]->contents[] = $content;
+                $library[$content->category_id]->contents[] = $content;
             }
 
             // Pagination for block more videos

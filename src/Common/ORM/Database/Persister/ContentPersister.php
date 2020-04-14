@@ -213,7 +213,7 @@ class ContentPersister extends BasePersister
      */
     protected function removeCategories($id)
     {
-        $sql      = "delete from contents_categories where pk_fk_content = ?";
+        $sql      = "delete from content_category where content_id = ?";
         $params[] = $id['pk_content'];
         $types[]  = is_string($id['pk_content']) ?
             \PDO::PARAM_STR : \PDO::PARAM_INT;
@@ -233,8 +233,8 @@ class ContentPersister extends BasePersister
             return;
         }
 
-        $sql = "replace into contents_categories"
-            . "(pk_fk_content, pk_fk_content_category) values "
+        $sql = "replace into content_category"
+            . "(content_id, category_id) values "
             . str_repeat(
                 '(?,?),',
                 count($categories)

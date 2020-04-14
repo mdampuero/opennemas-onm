@@ -3,13 +3,13 @@ orm:
         -
             name: Category
             properties:
-                pk_content_category: integer
+                id: integer
                 title:               l10n_string
                 name:                l10n_string
                 description:         l10n_string
                 archived:            boolean
                 enabled:             boolean
-                fk_content_category: integer
+                parent_id: integer
                 params:              array
                 logo_path:           string
                 color:               string
@@ -27,9 +27,9 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.category', '@cache.connection.instance' ]
             mapping:
                 database:
-                    table: content_categories
+                    table: category
                     columns:
-                        pk_content_category:
+                        id:
                             type: integer
                             options: { default: null, unsigned: true, autoincrement: true }
                         title:
@@ -47,7 +47,7 @@ orm:
                         enabled:
                             type: integer
                             options: { default: '0', notnull: false }
-                        fk_content_category:
+                        parent_id:
                             type: integer
                             options: { default: null, notnull: false }
                         params:
@@ -62,7 +62,7 @@ orm:
                     index:
                         -
                             name: PRIMARY
-                            columns: [ pk_content_category ]
+                            columns: [ id ]
                             primary: true
                             unique: true
                             flags: {}

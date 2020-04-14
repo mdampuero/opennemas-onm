@@ -38,15 +38,15 @@ class BooksController extends Controller
             $categories     = $this->get('api.service.category')->getList();
 
             foreach ($categories['items'] as $category) {
-                $books[$category->pk_content_category] = $contentManager
+                $books[$category->id] = $contentManager
                     ->find_by_category(
                         'Book',
-                        $category->pk_content_category,
+                        $category->id,
                         'content_status=1',
                         'ORDER BY starttime DESC, pk_content DESC LIMIT 5'
                     );
 
-                foreach ($books[$category->pk_content_category] as $book) {
+                foreach ($books[$category->id] as $book) {
                     $book->cover_img = $this->get('entity_repository')
                         ->find('Photo', $book->cover_id);
                 }
@@ -112,7 +112,7 @@ class BooksController extends Controller
             $this->view->assign([
                 'books'    => $books,
                 'category' => $this->get('api.service.category')
-                    ->getItem($content->pk_fk_content_category)
+                    ->getItem($content->category_id)
             ]);
         }
 

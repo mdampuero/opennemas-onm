@@ -166,7 +166,7 @@ class RssController extends Controller
                     $category = $this->get('api.service.category')
                         ->getItemBy($oql);
 
-                    $id       = $category->pk_content_category;
+                    $id       = $category->id;
                     $slug     = $category->name;
                     $rssTitle = $rssTitle . ' - ' . $category->title;
                 } catch (\Exception $e) {
@@ -397,19 +397,19 @@ class RssController extends Controller
             ->getList('enabled = 1 and archived = 0');
 
         $ids = array_map(function ($a) {
-            return $a->pk_content_category;
+            return $a->id;
         }, $categories['items']);
 
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
         if ($contentType !== 'opinion') {
-            $filters['pk_fk_content_category'] = [
+            $filters['category_id'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
 
             if (!empty($category)) {
-                $filters['pk_fk_content_category'] = [ [ 'value' => $category ] ];
+                $filters['category_id'] = [ [ 'value' => $category ] ];
             }
         }
 
@@ -490,7 +490,7 @@ class RssController extends Controller
             $category = $this->get('api.service.category')
                 ->getItemBySlug($name);
 
-            $setting = 'frontpage_layout_' . $category->pk_content_category;
+            $setting = 'frontpage_layout_' . $category->id;
         } catch (\Exception $e) {
             $setting = 'frontpage_layout_0';
         }

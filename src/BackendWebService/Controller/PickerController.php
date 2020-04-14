@@ -79,7 +79,7 @@ class PickerController extends Controller
         }
 
         if (!empty($category)) {
-            $filter[] = "contents_categories.pk_fk_content_category = $category";
+            $filter[] = "content_category.category_id = $category";
         }
 
         $filter[] = "in_litter != 1";
@@ -90,7 +90,7 @@ class PickerController extends Controller
         $query  = "FROM contents  WHERE " . $filter;
 
         if (!in_array('photo', $contentTypes)) {
-            $query = "FROM contents LEFT JOIN contents_categories ON contents_categories.pk_fk_content = "
+            $query = "FROM contents LEFT JOIN content_category ON content_category.content_id = "
                 . "contents.pk_content WHERE " . $filter;
         }
 

@@ -146,9 +146,9 @@
              */
             $scope.addDefaultValue = function(items) {
               if (angular.isArray(items) && items.length > 0 &&
-                  items[0].pk_content_category !== null) {
+                  items[0].id !== null) {
                 items.unshift({
-                  pk_content_category: null,
+                  id: null,
                   title: $scope.defaultValueText
                 });
               }
@@ -164,7 +164,7 @@
              */
             $scope.cleanModel = function() {
               var ids = $scope.categories.map(function(e) {
-                return e.pk_content_category;
+                return e.id;
               });
 
               // Reset ngModel as id is not found in the list of categories

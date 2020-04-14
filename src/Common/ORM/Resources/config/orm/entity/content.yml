@@ -70,14 +70,14 @@ orm:
                         key: meta_name
                     relations:
                         categories:
-                            table: contents_categories
+                            table: content_category
                             source_key: pk_content
-                            target_key: pk_fk_content
-                            return_fields: pk_fk_content_category
+                            target_key: content_id
+                            return_fields: category_id
                             columns:
-                                pk_fk_content:
+                                content_id:
                                     type: integer
-                                pk_fk_content_category:
+                                category_id:
                                     type: integer
 
                         related_contents:

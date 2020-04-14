@@ -183,7 +183,7 @@ class CategoryController extends FrontendController
      */
     protected function getAdvertisements($category = null, $token = null)
     {
-        $categoryId = empty($category) ? 0 : $category->pk_content_category;
+        $categoryId = empty($category) ? 0 : $category->id;
         $action     = $this->get('core.globals')->getAction();
         $group      = $this->getAdvertisementGroup($action);
 
@@ -207,7 +207,7 @@ class CategoryController extends FrontendController
         return $this->view->getCacheId(
             $this->get('core.globals')->getExtension(),
             $this->get('core.globals')->getAction(),
-            $params['category']->pk_content_category,
+            $params['category']->id,
             $params['page']
         );
     }
@@ -240,8 +240,8 @@ class CategoryController extends FrontendController
         $now      = date('Y-m-d H:i:s');
         $order    = [ 'starttime' => 'DESC', 'pk_content' => 'DESC' ];
         $criteria = [
-            'pk_fk_content_category' => [
-                [ 'value' => $params['category']->pk_content_category ]
+            'category_id' => [
+                [ 'value' => $params['category']->id ]
             ],
             'fk_content_type' => [
                 [ 'value' => [1, 7, 9], 'operator' => 'IN' ]
@@ -277,7 +277,7 @@ class CategoryController extends FrontendController
             'time'       => time(),
             'o_category' => $item,
             'x-tags'     => $this->get('core.globals')->getExtension()
-                . ',' . $item->pk_content_category,
+                . ',' . $item->id,
         ]);
 
         if (!array_key_exists('page', $params)) {

@@ -115,7 +115,7 @@ class AlbumController extends FrontendController
             ->get('items_per_page', 10);
 
         $categoryOQL = !empty($category)
-            ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
+            ? sprintf(' and category_id=%d', $category->id)
             : '';
 
         $response = $this->get('api.service.content_old')->getList(sprintf(

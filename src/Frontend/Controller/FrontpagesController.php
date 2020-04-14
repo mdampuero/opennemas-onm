@@ -47,7 +47,7 @@ class FrontpagesController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            $categoryId    = $category->pk_content_category;
+            $categoryId    = $category->id;
             $categoryTitle = $category->title;
             $categoryName  = $category->name;
         }
@@ -247,7 +247,7 @@ class FrontpagesController extends Controller
         }
 
         $ads = unserialize($cm->getUrlContent(
-            $wsUrl . '/ws/ads/frontpage/' . $category->pk_content_category,
+            $wsUrl . '/ws/ads/frontpage/' . $category->id,
             true
         ));
 

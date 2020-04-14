@@ -234,11 +234,11 @@ class FrontpageVersionService extends OrmService
         $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
 
         foreach ($categories['items'] as $category) {
-            if (array_key_exists($category->pk_content_category, $catFrontpagesRel)) {
-                $frontpages[$category->pk_content_category] = [
-                    'id'           => $category->pk_content_category,
+            if (array_key_exists($category->id, $catFrontpagesRel)) {
+                $frontpages[$category->id] = [
+                    'id'           => $category->id,
                     'name'         => $category->name,
-                    'frontpage_id' => $catFrontpagesRel[$category->pk_content_category],
+                    'frontpage_id' => $catFrontpagesRel[$category->id],
                     'manual'       => true
                 ];
             } else {
@@ -246,10 +246,10 @@ class FrontpageVersionService extends OrmService
                     ->set($category->title)
                     ->filter('localize')->get();
 
-                $frontpagesAut[$category->pk_content_category] = [
-                    'id'     => $category->pk_content_category,
+                $frontpagesAut[$category->id] = [
+                    'id'     => $category->id,
                     'name'   => $name,
-                    'manual' => in_array($category->pk_content_category, $catWithFrontpage)
+                    'manual' => in_array($category->id, $catWithFrontpage)
                 ];
             }
         }
