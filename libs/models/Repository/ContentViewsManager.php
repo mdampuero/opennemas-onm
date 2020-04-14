@@ -31,9 +31,9 @@ class ContentViewsManager extends EntityManager
                 return [];
             }
 
-            $sql .= " WHERE content_id IN (" . implode(',', $id) . ")";
+            $sql .= " WHERE pk_fk_content IN (" . implode(',', $id) . ")";
         } else {
-            $sql .= " WHERE content_id = " . intval($id);
+            $sql .= " WHERE pk_fk_content = " . intval($id);
         }
 
         $rs = $this->dbConn->fetchAll($sql);
@@ -49,7 +49,7 @@ class ContentViewsManager extends EntityManager
         $views = [];
 
         foreach ($rs as $value) {
-            $views[$value['content_id']] = $value['views'];
+            $views[$value['pk_fk_content']] = $value['views'];
         }
 
         return $views;
@@ -73,12 +73,12 @@ class ContentViewsManager extends EntityManager
             $sql   .= ' ?';
             $params = [$views, $id];
         }
-        $sql .= ' WHERE content_id = ?';
+        $sql .= ' WHERE pk_fk_content = ?';
 
         try {
             $updateRows = $this->dbConn->executeUpdate($sql, $params);
             if ($updateRows === 0) {
-                $sql    = 'INSERT INTO `content_views` (`content_id`, `views`)'
+                $sql    = 'INSERT INTO `content_views` (`pk_fk_content`, `views`)'
                     . ' VALUES (?, ?);';
                 $params = [$id, 1];
                 $this->dbConn->executeUpdate($sql, $params);
