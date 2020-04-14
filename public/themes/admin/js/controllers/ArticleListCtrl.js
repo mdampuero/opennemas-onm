@@ -55,10 +55,10 @@
          */
         $scope.groupCategories = function(item) {
           var category = $scope.categories.filter(function(e) {
-            return e.pk_content_category === item.fk_content_category;
+            return e.id === item.fk_content_category;
           });
 
-          if (category.length > 0 && category[0].pk_content_category) {
+          if (category.length > 0 && category[0].id) {
             return category[0].title;
           }
 
@@ -104,7 +104,7 @@
             }
 
             $scope.addEmptyValue($scope.data.extra.categories,
-              'pk_content_category', 'title');
+              'id', 'title');
 
             // Load items
             $scope.items      = response.data.results;
@@ -125,7 +125,7 @@
 
               if (!$scope.config.linkers.cl) {
                 $scope.config.linkers.cl = linker.get([ 'title' ],
-                  $scope.config.locale.default, $scope, false, [ 'pk_content_category' ]);
+                  $scope.config.locale.default, $scope, false, [ 'id' ]);
               }
 
               $scope.config.linkers.cl.link($scope.data.extra.categories,

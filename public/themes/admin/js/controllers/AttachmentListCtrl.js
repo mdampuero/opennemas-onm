@@ -27,7 +27,7 @@
          */
         $scope.criteria = {
           content_type_name: 'attachment',
-          pk_fk_content_category: null,
+          category_id: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },

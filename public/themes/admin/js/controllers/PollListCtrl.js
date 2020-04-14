@@ -25,7 +25,7 @@
          */
         $scope.criteria = {
           content_type_name: 'poll',
-          pk_fk_content_category: null,
+          category_id: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },
@@ -84,7 +84,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return e.pk_content_category === item.pk_fk_content_category;
+            return e.id === item.category_id;
           });
 
           if (categories.length === 0) {

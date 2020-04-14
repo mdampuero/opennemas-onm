@@ -102,6 +102,106 @@
                 <div class="thumbnail-actions">
                   <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
                     <i class="fa fa-trash-o fa-2x"></i>
+      <div class="ng-cloak" ng-show="!flags.http.loading && item">
+        <div class="row">
+          <div class="col-md-4 col-md-push-8">
+            <div class="grid simple">
+              <div class="grid-body no-padding">
+                <div class="grid-collapse-title">
+                  <div class="form-group no-margin">
+                    <div class="checkbox">
+                      <input type="checkbox" id="enabled" ng-model="item.enabled" ng-true-value="1">
+                      <label for="enabled" class="form-label">{t}Enabled{/t}</label>
+                    </div>
+                  </div>
+                  <div class="form-group no-margin">
+                    <div class="checkbox m-t-5">
+                      <input type="checkbox" id="archived" ng-model="item.archived" ng-true-value="1">
+                      <label for="archived" class="form-label">{t}Archived{/t}</label>
+                    </div>
+                    <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+                      <i class="fa fa-info-circle m-r-5 text-info"></i>
+                      {t}If enabled, category will not be included in category selectors nor RSS feeds{/t}
+                    </span>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
+                  <i class="fa fa-bookmark m-r-10"></i>{t}Subsection of{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.category && item.fk_content_category">
+                    [% data.extra.selected.title %]
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
+                  <div class="form-group no-margin">
+                    <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" exclude="[ item.id ]" export-model="data.extra.selected" show-archived="true" locale="config.locale.selected" ng-model="item.fk_content_category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.color }" ng-click="expanded.color = !expanded.color">
+                  <i class="fa fa-paint-brush m-r-10"></i>{t}Color{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.color }"></i>
+                  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-style="{ 'background-color': item.color }" ng-show="!expanded.color && item.color">
+                    &nbsp;&nbsp;
+                  </span>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.color }">
+                  <div class="form-group no-margin">
+                    <div class="controls">
+                      {include file="ui/component/input/color.tpl" ngModel="item.color"}
+                    </div>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.logo }" ng-click="expanded.logo = !expanded.logo">
+                  <i class="fa fa-picture-o m-r-10"></i>{t}Logo{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.logo }"></i>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.logo }">
+                  <div class="thumbnail-wrapper">
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover }"></div>
+                    <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover }">
+                      <p>Are you sure?</p>
+                      <div class="confirm-actions">
+                        <button class="btn btn-link" ng-click="toggleOverlay('cover')" type="button">
+                          <i class="fa fa-times fa-lg"></i>
+                          {t}No{/t}
+                        </button>
+                        <button class="btn btn-link" ng-click="removeImage('cover');toggleOverlay('cover')" type="button">
+                          <i class="fa fa-check fa-lg"></i>
+                          {t}Yes{/t}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="thumbnail-placeholder">
+                      <div class="img-thumbnail" ng-show="!cover">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover">
+                          <i class="fa fa-picture-o fa-2x"></i>
+                          <h5>Pick an image</h5>
+                        </div>
+                      </div>
+                      <div class="dynamic-image-placeholder" ng-show="cover">
+                        <dynamic-image autoscale="true" class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="cover">
+                          <div class="thumbnail-actions">
+                            <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover')">
+                              <i class="fa fa-trash-o fa-2x"></i>
+                            </div>
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
+                              <i class="fa fa-camera fa-2x"></i>
+                            </div>
+                          </div>
+                        </dynamic-image>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.menu }" ng-click="expanded.menu = !expanded.menu" ng-show="data.extra.menu">
+                  <i class="fa fa-list-alt m-r-10"></i>{t}Menu{/t}
+                  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.menu }"></i>
+                </div>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.menu }" ng-show="data.extra.menu">
+                  <div class="form-group no-margin">
+                    <div class="controls">
+                      <onm-menu-selector class="block" ng-model="item.params.menu" default-value-text="{t}Default{/t}" placeholder="{t}Default{/t}" label-text></onm-menu-selector>
+                    </div>
                   </div>
                   <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="cover" media-picker-types="photo">
                     <i class="fa fa-camera fa-2x"></i>

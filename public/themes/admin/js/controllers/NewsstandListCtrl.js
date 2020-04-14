@@ -23,7 +23,7 @@
          * @type {Object}
          */
         $scope.criteria = {
-          pk_content_category: null,
+          id: null,
           content_type_name: 'kiosko',
           epp: 10,
           in_litter: 0,
@@ -65,7 +65,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return item.categories.indexOf(e.pk_content_category) !== -1;
+            return item.categories.indexOf(e.id) !== -1;
           });
 
           if (categories.length === 0) {

@@ -88,14 +88,14 @@
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
                 {block name="categoryColumn"}
-                  <small class="text-italic" ng-if="!item.pk_fk_content_category && !item.categories">
+                  <small class="text-italic" ng-if="!item.category_id && !item.categories">
                     &lt;{t}No category{/t}&gt;
                   </small>
-                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.pk_fk_content_category }) %]" ng-if="item.pk_fk_content_category">
-                    [% (categories | filter: { pk_content_category: item.pk_fk_content_category })[0].title %]
+                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.category_id }) %]" ng-if="item.category_id">
+                    [% (categories | filter: { id: item.category_id })[0].title %]
                   </a>
                   <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: id }) %]" ng-if="item.categories" ng-repeat="id in item.categories">
-                    [% (categories | filter: { pk_content_category: id })[0].title %]
+                    [% (categories | filter: { id: id })[0].title %]
                   </a>
                 {/block}
               </td>

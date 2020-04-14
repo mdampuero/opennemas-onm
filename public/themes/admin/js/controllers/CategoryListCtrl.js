@@ -182,7 +182,7 @@
          * @inheritdoc
          */
         $scope.getItemId = function(item) {
-          return item.pk_content_category;
+          return item.id;
         };
 
         /**

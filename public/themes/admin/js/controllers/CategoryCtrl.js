@@ -54,7 +54,7 @@
          * @inheritdoc
          */
         $scope.getItemId = function() {
-          return $scope.item.pk_content_category;
+          return $scope.item.id;
         };
 
         /**
@@ -69,8 +69,8 @@
          * @inheritdoc
          */
         $scope.itemHasId = function() {
-          return $scope.item.pk_content_category &&
-            $scope.item.pk_content_category !== null;
+          return $scope.item.id &&
+            $scope.item.id !== null;
         };
 
         // Updates the logo_path when an image is selected
