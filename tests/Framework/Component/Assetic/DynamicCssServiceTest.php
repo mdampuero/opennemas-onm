@@ -10,6 +10,7 @@
  */
 namespace Tests\Framework\Component\Assetic;
 
+use Api\Exception\GetItemException;
 use \Framework\Component\Assetic\DynamicCssService;
 use Common\ORM\Entity\Category;
 
@@ -88,6 +89,17 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['home' => '1586787581']);
 
         $this->assertEquals('1586787581', $this->dcs->getTimestamp('home'));
+    }
+
+    /**
+     * Tests getTimestamp when invalid section
+     */
+    public function testGetTimestampWhenInvalidSection()
+    {
+        $this->cs->expects($this->at(0))->method('getItemBySlug')
+            ->will($this->throwException(new GetItemException()));
+
+        $this->dcs->getTimestamp(null);
     }
 
     /**
