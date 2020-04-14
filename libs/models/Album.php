@@ -116,7 +116,7 @@ class Album extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN albums ON pk_content = pk_album WHERE pk_content=?',
                 [ $id ]
             );

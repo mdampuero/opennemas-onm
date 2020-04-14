@@ -185,8 +185,8 @@ class FrontpageVersionService extends OrmService
                 if ($contentType === null ||
                     $contentType === $contentposition->content_type
                 ) {
-                    $contentsIds[$contentposition->pk_fk_content] =
-                        $contentposition->pk_fk_content;
+                    $contentsIds[$contentposition->content_id] =
+                        $contentposition->content_id;
                 }
             }
         }
@@ -577,11 +577,11 @@ class FrontpageVersionService extends OrmService
         $contentsMap      = [];
         foreach ($contentPositions as $contentpositionOfPosition) {
             foreach ($contentpositionOfPosition as $contentposition) {
-                if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
+                if (array_key_exists($contentposition->content_id, $contentsMap)) {
                     continue;
                 }
-                $contentsMap[$contentposition->pk_fk_content] =
-                    [$contentposition->content_type, $contentposition->pk_fk_content];
+                $contentsMap[$contentposition->content_id] =
+                    [$contentposition->content_type, $contentposition->content_id];
             }
         }
         $contentsAux = $this->entityRepository->findMulti($contentsMap);

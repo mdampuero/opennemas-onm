@@ -239,7 +239,7 @@ class NewsletterRenderer
                         'type'       => 'INNER',
                         'table'      => 'content_views',
                         'contents.pk_content' => [
-                            [ 'value' => 'content_views.pk_fk_content', 'field' => true ]
+                            [ 'value' => 'content_views.content_id', 'field' => true ]
                         ]
                     ]
                 ],

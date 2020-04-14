@@ -156,7 +156,7 @@ class Poll extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN polls ON pk_content = pk_poll WHERE pk_content=?',
                 [ $id ]
             );

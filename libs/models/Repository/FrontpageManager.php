@@ -42,14 +42,14 @@ class FrontpageManager extends EntityManager
             $whereSQL = " WHERE `fk_category` = " . $categoryId;
         }
 
-        $sql = "SELECT `pk_fk_content` FROM content_positions"
+        $sql = "SELECT `content_id` FROM content_positions"
               . "$whereSQL"
               . " ORDER BY `position` ASC";
 
         $rs = $this->dbConn->fetchAll($sql);
 
         foreach ($rs as $resultElement) {
-            $contents[] = $resultElement['pk_fk_content'];
+            $contents[] = $resultElement['content_id'];
         }
 
         return $contents;
@@ -79,7 +79,7 @@ class FrontpageManager extends EntityManager
 
         $sql = "SELECT content_type_name, pk_content"
             . " FROM `contents`, `content_positions`"
-            . " WHERE `pk_fk_content` = `pk_content` AND $filterSQL"
+            . " WHERE `content_id` = `pk_content` AND $filterSQL"
             . " ORDER BY $orderBySQL $limitSQL";
 
         $rs  = $this->dbConn->fetchAll($sql);
@@ -106,7 +106,7 @@ class FrontpageManager extends EntityManager
 
         // Executing the SQL
         $sql = "SELECT COUNT(pk_content) FROM `contents`, `content_positions`"
-            . " WHERE `pk_fk_content` = `pk_content` AND $filterSQL";
+            . " WHERE `content_id` = `pk_content` AND $filterSQL";
         $rs  = $this->dbConn->fetchArray($sql);
 
         if (!$rs) {

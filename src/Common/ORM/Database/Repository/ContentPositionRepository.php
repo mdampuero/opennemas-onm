@@ -30,11 +30,11 @@ class ContentPositionRepository extends BaseRepository
      */
     public function getContentPositions($categoryId, $frontpageId)
     {
-        $sql = 'select cp.pk_fk_content, cp.fk_category, cp.position,'
+        $sql = 'select cp.content_id, cp.fk_category, cp.position,'
             . ' cp.placeholder, cp.params, cp.content_type,'
             . ' cp.frontpage_version_id'
             . ' from content_positions as cp'
-            . ' inner join contents as c on c.pk_content = cp.pk_fk_content'
+            . ' inner join contents as c on c.pk_content = cp.content_id'
             . ' where ';
 
         $filterVal = null;

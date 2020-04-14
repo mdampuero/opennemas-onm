@@ -35,10 +35,10 @@ function smarty_function_renderplaceholder($params, &$smarty)
     if (array_key_exists($placeholder, $contentPositionByPos)) {
         $count = 0;
         foreach ($contentPositionByPos[$placeholder] as $contentPosition) {
-            if (!array_key_exists($contentPosition->pk_fk_content, $items)) {
+            if (!array_key_exists($contentPosition->content_id, $items)) {
                 continue;
             }
-            $content                  = $items[$contentPosition->pk_fk_content];
+            $content                  = $items[$contentPosition->content_id];
             $content->render_position = $count++;
             $outputHTML              .= $content->render($params, $smarty);
         }
@@ -69,7 +69,7 @@ function getPlaceholderInTheOldWay($placeholder, &$items)
             $item->placeholder === $placeholder
         ) {
             $contentPositionByPos[$placeholder][] =
-                (object) ['pk_fk_content' => $item->pk_content];
+                (object) ['content_id' => $item->pk_content];
         }
     }
 

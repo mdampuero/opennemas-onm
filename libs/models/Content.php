@@ -444,12 +444,12 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->endtime = null;
         }
 
-        if (isset($this->pk_fk_content_category)) {
-            $this->category = $this->pk_fk_content_category;
+        if (isset($this->category_id)) {
+            $this->category = $this->category_id;
         }
 
         if (empty($this->category_name)
-            && !empty($this->pk_fk_content_category)
+            && !empty($this->category_id)
         ) {
             $this->loadCategoryName();
         }
@@ -476,8 +476,8 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories'
-                . ' ON pk_content = pk_fk_content WHERE pk_content = ?',
+                'SELECT * FROM contents LEFT JOIN content_category'
+                . ' ON pk_content = content_id WHERE pk_content = ?',
                 [ (int) $id ]
             );
 
@@ -690,8 +690,8 @@ class Content implements \JsonSerializable, CsvSerializable
         $conn->beginTransaction();
         try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
-            $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
-            $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
+            $conn->delete('content_category', [ 'content_id' => $id ]);
+            $conn->delete('content_positions', [ 'content_id' => $id ]);
             $conn->commit();
 
             logContentEvent(__METHOD__, $this);
@@ -1320,7 +1320,7 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         try {
             $category = getService('api.service.category')
-                ->getItem($this->pk_fk_content_category);
+                ->getItem($this->category_id);
         } catch (\Exception $e) {
             return null;
         }
@@ -1341,7 +1341,7 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         try {
             $category = getService('api.service.category')
-                ->getItem($this->pk_fk_content_category);
+                ->getItem($this->content_id);
         } catch (\Exception $e) {
             return null;
         }
@@ -1570,14 +1570,14 @@ class Content implements \JsonSerializable, CsvSerializable
             // Fetch the list of frontpages where this article is included
             $rs = getService('dbal_connection')->fetchAll(
                 "SELECT fk_category, frontpage_version_id"
-                . " FROM content_positions WHERE pk_fk_content = ?",
+                . " FROM content_positions WHERE content_id = ?",
                 [ $this->id ]
             );
 
             // Remove the content from all frontpages
             getService('dbal_connection')->delete(
                 'content_positions',
-                [ 'pk_fk_content' => $this->id ]
+                [ 'content_id' => $this->id ]
             );
 
             // Clean cache for each frontpage element listing
@@ -1776,7 +1776,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             $rs = getService('dbal_connection')->fetchColumn(
-                'SELECT count(*) FROM content_positions WHERE pk_fk_content=? AND fk_category=?',
+                'SELECT count(*) FROM content_positions WHERE content_id=? AND fk_category=?',
                 [ $this->id, $categoryID ]
             );
 
@@ -2086,14 +2086,14 @@ class Content implements \JsonSerializable, CsvSerializable
         $conn = getService('dbal_connection');
 
         if ($delete) {
-            $conn->delete('contents_categories', [
-                'pk_fk_content' => $this->id
+            $conn->delete('content_category', [
+                'content_id' => $this->id
             ]);
         }
 
-        $conn->insert('contents_categories', [
-            'pk_fk_content'          => $this->id,
-            'pk_fk_content_category' => $id,
+        $conn->insert('content_category', [
+            'content_id'          => $this->id,
+            'category_id' => $id,
             'catName'                => null
         ]);
     }
@@ -2185,7 +2185,7 @@ class Content implements \JsonSerializable, CsvSerializable
     protected function initViews()
     {
         getService('dbal_connection')->insert('content_views', [
-            'pk_fk_content' => $this->id,
+            'content_id' => $this->id,
             'views'         => 0,
         ]);
     }

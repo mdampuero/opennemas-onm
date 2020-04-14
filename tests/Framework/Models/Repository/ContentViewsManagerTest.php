@@ -40,7 +40,7 @@ class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
     {
         $id          = 1;
         $returnValue = 300;
-        $dbValue     = [['views' => 300, 'pk_fk_content' => $id ]];
+        $dbValue     = [['views' => 300, 'content_id' => $id ]];
         $this->dbConn->expects($this->any())->method('fetchAll')
             ->will($this->returnValue($dbValue));
 
@@ -82,7 +82,7 @@ class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
     {
         $id          = [];
         $returnValue = [];
-        $dbValue     = [['views' => 300, 'pk_fk_content' => $id ]];
+        $dbValue     = [['views' => 300, 'content_id' => $id ]];
         $this->dbConn->expects($this->never())->method($this->anything());
 
         $this->contentViewManager = new \Repository\ContentViewsManager(
@@ -107,9 +107,9 @@ class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
             3 => 4000
         ];
         $dbValues     = [
-            [ 'pk_fk_content' => 1, 'views' => 100],
-            [ 'pk_fk_content' => 2, 'views' => 200],
-            [ 'pk_fk_content' => 3, 'views' => 4000],
+            [ 'content_id' => 1, 'views' => 100],
+            [ 'content_id' => 2, 'views' => 200],
+            [ 'content_id' => 3, 'views' => 4000],
         ];
 
         $this->dbConn->expects($this->any())->method('fetchAll')
@@ -156,7 +156,7 @@ class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
         $returnValue = true;
         $dbValue     = [];
         $sql         = 'UPDATE `content_views` SET views = views + 1'
-            . ' WHERE pk_fk_content = ?';
+            . ' WHERE content_id = ?';
 
         $this->dbConn->expects($this->once())->method('executeUpdate')
             ->with($this->equalTo($sql), $this->equalTo([$id]))
@@ -181,7 +181,7 @@ class ContentViewsManagerTest extends \PHPUnit\Framework\TestCase
         $value   = 3;
         $dbValue = null;
         $sql     = 'UPDATE `content_views` SET views = ?'
-            . ' WHERE pk_fk_content = ?';
+            . ' WHERE content_id = ?';
 
         $this->dbConn->expects($this->once())->method('executeUpdate')
             ->with($this->equalTo($sql), $this->equalTo([$value, $id]))

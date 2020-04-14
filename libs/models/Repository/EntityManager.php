@@ -368,19 +368,19 @@ class EntityManager extends BaseManager
      */
     protected function hasCategoryFilter($filters)
     {
-        return strpos($filters, 'pk_fk_content_category') !== false;
+        return strpos($filters, 'category_id') !== false;
     }
 
     /**
      * Parse category condition and transforms it in a condition with a subquery
-     * in the contents_categories table.
+     * in the content_category table.
      *
      * @param string $filters The filters to parse.
      */
     protected function parseCategory(string &$filters)
     {
-        $pattern = '/pk_fk_content_category\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
-            . '|pk_fk_content_category\s*((not|NOT)\s+)?(in|IN)\s*\([\'"0-9, ]+\)/';
+        $pattern = '/category_id\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
+            . '|category_id\s*((not|NOT)\s+)?(in|IN)\s*\([\'"0-9, ]+\)/';
 
         preg_match_all($pattern, $filters, $matches);
 
@@ -388,7 +388,7 @@ class EntityManager extends BaseManager
             $filters = str_replace(
                 $match,
                 sprintf(
-                    'pk_content IN (SELECT pk_fk_content FROM contents_categories WHERE %s)',
+                    'pk_content IN (SELECT content_id FROM content_category WHERE %s)',
                     $match
                 ),
                 $filters
