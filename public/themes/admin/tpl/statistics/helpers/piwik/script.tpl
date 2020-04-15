@@ -6,7 +6,7 @@
   _paq.push(['enableLinkTracking']);
 
   (function() {
-    var u = (("https:" == document.location.protocol) ? "{$httpsHost}" : "{$config['server_url']}");
+    var u = "{$config['server_url']}";
     _paq.push(['setTrackerUrl', u + 'piwik.php']);
     _paq.push(['setSiteId', '{$config["page_id"]}']);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
