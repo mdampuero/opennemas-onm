@@ -76,14 +76,14 @@ opennemas:
         filters:
             uglifyjs:
                 bin:  '%kernel.root_dir%/../node_modules/.bin/uglifyjs'
-                node: /usr/bin/nodejs
+                node: /usr/bin/node
                 options:
                     mangle: true
             uglifycss:
                 bin:  '%kernel.root_dir%/../node_modules/.bin/uglifycss'
-                node: /usr/bin/nodejs
+                node: /usr/bin/node
             less:
-                node:  /usr/bin/nodejs
+                node:  /usr/bin/node
                 node_paths: [ '%kernel.root_dir%/../node_modules' ]
                 options:
                     sourceMap:
