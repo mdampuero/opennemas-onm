@@ -7,7 +7,7 @@
 
   {foreach $params as $key => $account}
     {if !empty($key)}
-      {assign var="key" value="account{$key}."}
+      {assign var="key" value="account{$key}"}
     {else}
       {assign var="key" value=""}
     {/if}
@@ -20,10 +20,10 @@
       {/if}
     {/if}
 
-    ga('{$key}require', 'displayfeatures');
-    ga('{$key}set', 'campaignSource', 'Facebook');
-    ga('{$key}set', 'campaignMedium', 'Social Instant Article');
-    ga('{$key}send', 'pageview', { title: '{$title}' });
+    ga('{$key}.require', 'displayfeatures');
+    ga('{$key}.set', 'campaignSource', 'Facebook');
+    ga('{$key}.set', 'campaignMedium', 'Social Instant Article');
+    ga('{$key}.send', 'pageview', { title: '{$title}' });
   {/foreach}
 
   ga('create', 'UA-40838799-5', 'opennemas.com','onm');
