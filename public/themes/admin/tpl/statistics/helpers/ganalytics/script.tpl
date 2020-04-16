@@ -15,10 +15,10 @@
       {base64_decode(trim($account['custom_var']))}
     {/if}
     {if array_key_exists('category', $account) && is_array($account['category']) && array_key_exists('index', $account['category']) && !empty($account['category']['index'])}
-      _gaq.push(['{$key}_setCustomVar', '{$account["category"]["index"]}', '{$account["category"]["key"]}', '{$extra["category"]}', '{$account["category"]["scope"]}']);
+      _gaq.push(['{$key}_setCustomVar', '{$account["category"]["index"]}', '{$account["category"]["key"]}', '{$extra["category"]}', {$account["category"]["scope"]}]);
     {/if}
     {if array_key_exists('extension', $account) && is_array($account['extension']) && array_key_exists('index', $account['extension']) && !empty($account['extension']['index'])}
-      _gaq.push(['{$key}_setCustomVar', '{$account["extension"]["index"]}', '{$account["extension"]["key"]}', '{$extra["extension"]}', '{$account["extension"]["scp"]}']);
+      _gaq.push(['{$key}_setCustomVar', '{$account["extension"]["index"]}', '{$account["extension"]["key"]}', '{$extra["extension"]}', {$account["extension"]["scp"]}]);
     {/if}
     _gaq.push(['{$key}_trackPageview']);
   {/foreach}
