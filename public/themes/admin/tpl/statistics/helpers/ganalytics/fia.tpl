@@ -14,16 +14,16 @@
 
     {if is_array($account) && array_key_exists('api_key', $account) && !empty(trim($account['api_key']))}
       {if array_key_exists('base_domain', $account) && !empty(trim($account['base_domain']))}
-        ga('create', '{$account['api_key']}', '{trim($account['base_domain'])}', 'account{$key}');
+        ga('create', '{$account['api_key']}', '{trim($account['base_domain'])}', '{$key}');
       {else}
         ga('create', '{$account['api_key']}', 'auto', 'account{$key}');
       {/if}
     {/if}
 
-    ga('account{$key}.require', 'displayfeatures');
-    ga('account{$key}.set', 'campaignSource', 'Facebook');
-    ga('account{$key}.set', 'campaignMedium', 'Social Instant Article');
-    ga('account{$key}.send', 'pageview', { title: '{$title}' });
+    ga('{$key}require', 'displayfeatures');
+    ga('{$key}set', 'campaignSource', 'Facebook');
+    ga('{$key}set', 'campaignMedium', 'Social Instant Article');
+    ga('{$key}send', 'pageview', { title: '{$title}' });
   {/foreach}
 
   ga('create', 'UA-40838799-5', 'opennemas.com','onm');
