@@ -702,7 +702,7 @@ class ContentManager
             $category = getService('api.service.category')->getItem($category);
 
             $criteria['category_id'] = [
-                [ 'value' => $category->pk_content_category ]
+                [ 'value' => $category->id ]
             ];
         }
 

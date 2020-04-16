@@ -3,13 +3,13 @@ orm:
         -
             name: Category
             properties:
-                id: integer
+                id:                  integer
                 title:               l10n_string
                 name:                l10n_string
                 description:         l10n_string
                 archived:            boolean
                 enabled:             boolean
-                parent_id: integer
+                parent_id:           integer
                 params:              array
                 logo_path:           string
                 color:               string

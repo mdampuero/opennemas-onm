@@ -206,7 +206,7 @@ class LayoutManager
         if (array_key_exists($name, $this->positions)) {
             foreach ($this->positions[$name] as $position) {
                 $output .= $this->renderContent(
-                    $this->contents[$position->content_id]
+                    $this->contents[$position->pk_fk_content]
                 );
             }
         }
