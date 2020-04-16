@@ -97,7 +97,7 @@ class ContentPositionService extends OrmService
             $this->clearContentPositionsForHomePageOfCategory($categoryID, $frontpageVersionId, $conn);
 
             // construct the final sql statement and execute it
-            $stmt = 'INSERT INTO content_positions (content_id, fk_category,'
+            $stmt = 'INSERT INTO content_positions (pk_fk_content, fk_category,'
                   . ' position, placeholder, content_type, frontpage_version_id) '
                   . 'VALUES ';
 

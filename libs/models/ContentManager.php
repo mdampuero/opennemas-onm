@@ -436,7 +436,7 @@ class ContentManager
                     'type'                => 'left',
                     'contents.pk_content' => [
                         [
-                            'value' => 'content_views.content_id',
+                            'value' => 'content_views.pk_fk_content',
                             'field' => true
                         ]
                     ]
@@ -679,7 +679,7 @@ class ContentManager
                     'type'                => 'left',
                     'contents.pk_content' => [
                         [
-                            'value' => 'content_views.content_id',
+                            'value' => 'content_views.pk_fk_content',
                             'field' => true
                         ]
                     ]
