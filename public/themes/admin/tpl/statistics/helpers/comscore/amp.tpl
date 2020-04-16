@@ -4,6 +4,9 @@
     {
       "vars": {
           "c2": "{$page_id}"
+      },
+      "extraUrlParams": {
+          "comscorekw": "amp"
       }
     }
   </script>
