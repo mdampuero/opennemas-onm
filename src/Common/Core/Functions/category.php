@@ -15,10 +15,10 @@ function get_category($item = null) : ?\Common\ORM\Entity\Category
         return null;
     }
 
-    if ($item instanceof \Content && !empty($item->pk_fk_content_category)) {
+    if ($item instanceof \Content && !empty($item->category_id)) {
         try {
             return getService('api.service.category')
-                ->getItem($item->pk_fk_content_category);
+                ->getItem($item->category_id);
         } catch (\Exception $e) {
             return null;
         }
