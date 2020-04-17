@@ -28,7 +28,8 @@
         ],
         "files": [
             "libs/functions.php",
-            "src/Common/Core/Functions/category.php"
+            "src/Common/Core/Functions/category.php",
+            "src/Common/Core/Functions/content.php"
         ]
     },
     "autoload-dev": {
