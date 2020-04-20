@@ -15,10 +15,10 @@ function get_category($item = null) : ?\Common\ORM\Entity\Category
         return null;
     }
 
-    if ($item instanceof \Content && !empty($item->category_id)) {
+    if ($item instanceof \Content && !empty($item->pk_fk_content_category)) {
         try {
             return getService('api.service.category')
-                ->getItem($item->category_id);
+                ->getItem($item->pk_fk_content_category);
         } catch (\Exception $e) {
             return null;
         }
@@ -27,6 +27,21 @@ function get_category($item = null) : ?\Common\ORM\Entity\Category
     return $item instanceof \Common\ORM\Entity\Category
         ? $item
         : null;
+}
+
+/**
+ * Returns the category id for the provided item.
+ *
+ * @param Content $item The item to get category id for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return ?int The category id if present. Null otherwise.
+ */
+function get_category_id($item = null) : ?int
+{
+    $category = get_category($item);
+
+    return !empty($category) ? $category->pk_content_category : null;
 }
 
 /**
