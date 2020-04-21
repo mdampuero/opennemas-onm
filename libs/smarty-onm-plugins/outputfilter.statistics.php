@@ -1,14 +1,16 @@
 <?php
 /**
- * Prints Piwik code
+ * Adds all statistics-related code to the HTML output string.
  *
- * @param string
+ * @param string   $output The HTML output string without statistics code.
+ * @param Template $smarty The template service.
  *
- * @return string
+ * @return string The HTML output string with statistics code.
  */
-function smarty_outputfilter_piwik($output, $smarty)
+function smarty_outputfilter_statistics($output, $smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $content = $smarty->getValue('content');
 
     if (is_null($request)) {
         return $output;
@@ -27,14 +29,13 @@ function smarty_outputfilter_piwik($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
     ) {
-        $isAmp = preg_match('@\.amp\.html$@', $uri);
-        if ($isAmp) {
-            $code = getPiwikCode('amp');
-        } else {
-            $code = getPiwikCode();
-        }
-
-        $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $code, $output);
+        $output = $smarty->getContainer()->get('frontend.renderer.statistics')->render(
+            [
+                'Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics'
+            ],
+            $content,
+            $output
+        );
     }
 
     return $output;
