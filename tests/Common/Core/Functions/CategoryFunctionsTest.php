@@ -168,7 +168,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryId()
     {
-        $category = new Category([ 'pk_content_category' => 436 ]);
+        $category = new Category([ 'id' => 436 ]);
 
         $this->assertNull(get_category_id(131));
         $this->assertEquals(436, get_category_id($category));

@@ -41,7 +41,7 @@ function get_category_id($item = null) : ?int
 {
     $category = get_category($item);
 
-    return !empty($category) ? $category->pk_content_category : null;
+    return !empty($category) ? $category->id : null;
 }
 
 /**
