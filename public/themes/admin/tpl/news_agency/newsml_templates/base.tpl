@@ -53,7 +53,7 @@
           <DescriptiveMetadata>
             <Language FormalName="es" />
             <DateLineDate>{$article->created_datetime->format('Ymd\THisP')}</DateLineDate>
-            <Property FormalName="Tesauro" Value="{$article->category_name}"/>
+            <Property FormalName="Tesauro" Value="{get_category_slug($article)}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
           <ContentItem Href="{$article->uri}">
