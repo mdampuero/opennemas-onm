@@ -531,7 +531,6 @@ class Content implements \JsonSerializable, CsvSerializable
         $data = $this->parseData($data);
 
         $this
-            ->generateCategoryName($data, $categoryId)
             ->generateStarttime($data)
             ->generateSlug($data)
             ->serializeParams($data)
@@ -586,7 +585,6 @@ class Content implements \JsonSerializable, CsvSerializable
         $data = $this->parseData($data, $this->id);
 
         $this
-            ->generateCategoryName($data, $categoryId)
             ->generateStarttime($data)
             ->generateSlug($data)
             ->serializeParams($data)
