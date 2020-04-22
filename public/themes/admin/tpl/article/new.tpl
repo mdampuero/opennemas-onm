@@ -235,12 +235,12 @@
                       {/acl}
                     </div>
                   </div>
-                  <div class="form-group" ng-class="{ 'has-error': showRequired && !article.category_id }">
+                  <div class="form-group" ng-class="{ 'has-error': showRequired && !article.category }">
                     <label class="form-label" for="category">
                       {t}Category{/t} *
                     </label>
                     <div class="controls">
-                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.category" locale="config.locale.selected" ng-model="article.category_id" placeholder="{t}Select a category{/t}…"></onm-category-selector>
+                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.category" locale="config.locale.selected" ng-model="article.category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                     </div>
                   </div>
                   <div class="form-group">
@@ -255,7 +255,7 @@
                     <label class="form-label" for="slug">
                       {t}Slug{/t}
                     </label>
-                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !form.category_id.$dirty && !form.content_status.$dirty">
+                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !form.category.$dirty && !form.content_status.$dirty">
                       <a href="[% getFrontendUrl(data.article) %]" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}

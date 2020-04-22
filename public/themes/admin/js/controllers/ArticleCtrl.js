@@ -420,7 +420,7 @@
          */
         $scope.save = function() {
           if ($scope.form.$invalid ||
-              !$scope.data.article.category_id) {
+              !$scope.data.article.category) {
             $scope.showRequired = true;
             return;
           }

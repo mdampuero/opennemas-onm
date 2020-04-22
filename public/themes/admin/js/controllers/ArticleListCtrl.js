@@ -55,7 +55,7 @@
          */
         $scope.groupCategories = function(item) {
           var category = $scope.categories.filter(function(e) {
-            return e.id === item.fk_content_category;
+            return e.id === item.parent_id;
           });
 
           if (category.length > 0 && category[0].id) {

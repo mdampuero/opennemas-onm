@@ -24,7 +24,7 @@
          */
         $scope.item = {
           description: '',
-          fk_content_category: null
+          parent_id: null
         };
 
         /**
