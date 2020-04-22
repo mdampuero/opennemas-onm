@@ -145,7 +145,6 @@ class NewsletterRenderer
      */
     public function hydrateContent($content)
     {
-        $content->cat    = $content->category_name;
         $content->name   = (isset($content->name)) ? $content->name : '';
         $content->image  = (isset($content->cover)) ? $content->cover : '';
         $content->agency = $content->params['agencyBulletin'] ?? '';

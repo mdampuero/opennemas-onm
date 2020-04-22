@@ -77,7 +77,7 @@ class Frontpages
                         ->generate(
                             'frontend_external_article_show',
                             [
-                                'category_name' => $content->category_name,
+                                'category_name' => get_category_slug($content),
                                 'slug'          => $content->slug,
                                 'article_id'    => date('YmdHis', strtotime($content->created)) .
                                                    sprintf('%06d', $content->pk_content),

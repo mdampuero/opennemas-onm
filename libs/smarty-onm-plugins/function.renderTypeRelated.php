@@ -40,9 +40,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             break;
         case 4:
             //Opinion
-            $class                  = 'class="res-opinion" ';
-            $author                 = new \User($content->fk_author);
-            $content->category_name = \Onm\StringUtils::getTitle($author->name);
+            $class = 'class="res-opinion" ';
             break;
         case 7:
             // Album

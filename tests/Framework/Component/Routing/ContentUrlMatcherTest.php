@@ -108,8 +108,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
-            'ciencia'
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
 
         $this->assertTrue(is_object($return), 'The content is not matching');
@@ -123,8 +122,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
-            'ciencia'
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
 
         $this->assertTrue(is_object($return), 'The content is not matching');
@@ -175,8 +173,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
-            null,
-            'ciencia'
+            null
         );
         $this->assertTrue(is_object($return), 'The content is not matching');
     }

@@ -279,7 +279,9 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $content = $event->getArgument('item');
+        $content  = $event->getArgument('item');
+        $category = $this->container->get('api.service.category')
+            ->getItem($content->category_id);
 
         // Clean cache for the content
         $this->template
@@ -296,12 +298,12 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('rss', 'frontpage', 'home')
                 ->delete('rss', 'last')
                 ->delete('rss', 'fia')
-                ->delete('rss', $content->category_name)
+                ->delete('rss', $category->name)
                 ->delete('sitemap', 'image')
                 ->delete('sitemap', 'news')
                 ->delete('sitemap', 'web')
                 ->delete('frontpage', 'home')
-                ->delete('frontpage', 'category', $content->category_name);
+                ->delete('frontpage', 'category', $category->name);
         } elseif ($content->content_type_name == 'video') {
             $this->template->delete('sitemap', 'video');
         } elseif ($content->content_type_name == 'opinion') {

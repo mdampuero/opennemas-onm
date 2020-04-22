@@ -58,7 +58,7 @@ class Special extends Content
                 $uri = Uri::generate('special', [
                     'id'       => sprintf('%06d', $this->id),
                     'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => urlencode($this->category_name),
+                    'category' => get_category_slug($this),
                     'slug'     => urlencode($this->slug),
                 ]);
 

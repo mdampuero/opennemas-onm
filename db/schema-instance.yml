@@ -608,9 +608,6 @@ contents:
         params:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        category_name:
-            type: string
-            options: { length: 255, default: null }
         favorite:
             type: boolean
             options: { default: null, notnull: false }
@@ -685,10 +682,6 @@ contents:
         -
             name: content_type_name
             columns: [content_type_name]
-            unique: false
-        -
-            name: category_name
-            columns: [category_name]
             unique: false
 
 content_category:

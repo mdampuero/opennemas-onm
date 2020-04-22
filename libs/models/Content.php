@@ -52,13 +52,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public $category = null;
 
     /**
-     * DEPRECATED: The category name this content belongs to
-     *
-     * @var string
-     */
-    public $category_name = null;
-
-    /**
      * Status of this content
      *
      * @var int 0|1|2
@@ -249,9 +242,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_title':
-                return $this->loadCategoryTitle();
-
             case 'comments':
                 return 0;
 
@@ -446,12 +436,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
         if (isset($this->category_id)) {
             $this->category = $this->category_id;
-        }
-
-        if (empty($this->category_name)
-            && !empty($this->category_id)
-        ) {
-            $this->loadCategoryName();
         }
 
         if (!empty($this->params) && is_string($this->params)) {
@@ -793,7 +777,7 @@ class Content implements \JsonSerializable, CsvSerializable
         $type     = $this->content_type_name;
         $id       = sprintf('%06d', $this->id);
         $date     = date('YmdHis', strtotime($this->created));
-        $category = urlencode($this->category_name);
+        $category = get_category_slug($this);
         $slug     = $this->__get('slug');
 
         if (is_array($slug)) {
@@ -1298,7 +1282,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return [
                 'title'           => $this->__get('title'),
-                'category'        => $this->category_name,
+                'category'        => get_category_slug($this),
                 'views'           => $this->views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
@@ -1307,46 +1291,6 @@ class Content implements \JsonSerializable, CsvSerializable
                 'last_author'     => $authorName,
             ];
         }
-    }
-
-    /**
-     * TODO: Move to ContentCategory class
-     *
-     * Loads the category name for a given content id
-     *
-     * @return string the category name
-     */
-    public function loadCategoryName()
-    {
-        try {
-            $category = getService('api.service.category')
-                ->getItem($this->category_id);
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        $this->category_name = $category->name;
-
-        return $this->category_name;
-    }
-
-    /**
-     * TODO: Move to ContentCategory class
-     *
-     * Loads the category title for a given content id
-     *
-     * @return string the category title
-     */
-    public function loadCategoryTitle()
-    {
-        try {
-            $category = getService('api.service.category')
-                ->getItem($this->content_id);
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        return $category->title;
     }
 
     /**
@@ -2114,33 +2058,6 @@ class Content implements \JsonSerializable, CsvSerializable
         self::saveTags($tags, $this->id);
 
         $this->tags = $tags;
-    }
-
-    /**
-     * Returns the category name basing on the information used in create or
-     * update method.
-     *
-     * @param array $data The content information.
-     * @param int   $id   The category id.
-     *
-     * @return Content The current content.
-     */
-    protected function generateCategoryName(array &$data, ?int $id) : Content
-    {
-        $data['category_name'] = '';
-
-        if (empty($id)) {
-            return $this;
-        }
-
-        getService('core.locale')->setContext('frontend');
-
-        $data['category_name'] = getService('api.service.category')
-            ->getItem($id)->name;
-
-        getService('core.locale')->setContext('backend');
-
-        return $this;
     }
 
     /**

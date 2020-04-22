@@ -22,7 +22,6 @@ orm:
             properties:
                 available:           boolean
                 body:                l10n_string
-                category_name:       string
                 changed:             datetime
                 content_status:      integer
                 content_type_name:   enum
@@ -169,9 +168,6 @@ orm:
                         params:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
-                        category_name:
-                            type: string
-                            options: { default: '', length: 255, notnull: false }
                         favorite:
                             type: boolean
                             options: { default: null, notnull: false }

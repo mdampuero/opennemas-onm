@@ -72,7 +72,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();
-        $this->kernel = $this->getMockBuilder('Kernel')
+        $this->kernel   = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
@@ -203,7 +203,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('other value', $content->other_value);
         $this->assertEquals(1, $content->content_type);
         $this->assertEquals(2, $content->category_id);
-        $this->assertEquals('testing', $content->category_name);
         $this->assertEquals([ 'test' => 1, 'test2' => 2 ], $content->params);
 
         $property = new \ReflectionProperty($content, 'title');

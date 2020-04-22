@@ -79,7 +79,7 @@ class Book extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'slug'     => urlencode($this->slug),
-                        'category' => urlencode($this->category_name),
+                        'category' => get_category_slug($this),
                     ]
                 );
 
