@@ -467,9 +467,9 @@ class RssController extends Controller
         $sorted = [];
         foreach ($contentPositions as $items) {
             foreach ($items as $item) {
-                if (array_key_exists($item->content_id, $contents)) {
-                    $sorted[$item->content_id] =
-                        $contents[$item->content_id];
+                if (array_key_exists($item->pk_fk_content, $contents)) {
+                    $sorted[$item->pk_fk_content] =
+                        $contents[$item->pk_fk_content];
                 }
             }
         }
