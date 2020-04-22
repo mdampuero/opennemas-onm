@@ -71,9 +71,6 @@ class StatisticsRendererTest extends TestCase
         $this->childRenderer->expects($this->any())->method('validate')
             ->willReturn(true);
 
-        $this->global->expects($this->any())->method('getRequest')
-            ->willReturn($this->request);
-
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
     }
@@ -199,9 +196,12 @@ class StatisticsRendererTest extends TestCase
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn(null);
+
         $this->assertEquals(
             'image',
-            $method->invokeArgs($renderer, [''])
+            $method->invokeArgs($renderer, [])
         );
     }
 
@@ -213,6 +213,9 @@ class StatisticsRendererTest extends TestCase
         $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
+
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
 
         $this->request->expects($this->once())->method('getUri')
             ->willReturn(
@@ -234,6 +237,9 @@ class StatisticsRendererTest extends TestCase
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
+
         $this->request->expects($this->once())->method('getUri')
             ->willReturn(
                 'domain.com/article/category/slug/20180924122634000777.html'
@@ -253,6 +259,9 @@ class StatisticsRendererTest extends TestCase
         $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
+
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
 
         $this->request->expects($this->once())->method('getUri')
             ->willReturn(
