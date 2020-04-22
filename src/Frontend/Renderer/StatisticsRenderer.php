@@ -104,16 +104,18 @@ class StatisticsRenderer
      *
      * @return String The code type needed: image, amp or script.
      */
-    protected function getCodeType($output)
+    protected function getCodeType()
     {
-        $uri = $this->global->getRequest()->getUri();
+        $request = $this->global->getRequest();
+
+        if (empty($request)) {
+            return 'image';
+        }
+
+        $uri = $request->getUri();
 
         if (preg_match('@/rss/facebook-instant-articles$@', $uri)) {
             return 'fia';
-        }
-
-        if (empty($output)) {
-            return 'image';
         }
 
         if (preg_match('@\.amp\.html$@', $uri)) {
