@@ -68,7 +68,7 @@ class RssController extends FrontendController
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire);
 
         $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
@@ -156,7 +156,7 @@ class RssController extends FrontendController
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire);
 
         $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
@@ -227,7 +227,7 @@ class RssController extends FrontendController
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire);
 
         $cacheID = $this->view->getCacheId('rss', 'author', $slug);
 
@@ -313,7 +313,7 @@ class RssController extends FrontendController
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire);
 
         $cacheID = $this->view->getCacheId('rss', 'fia');
 
