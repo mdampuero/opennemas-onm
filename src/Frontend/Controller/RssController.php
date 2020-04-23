@@ -12,12 +12,11 @@ namespace Frontend\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for the public RSS
  */
-class RssController extends Controller
+class RssController extends FrontendController
 {
     /**
      * Shows a page that shows a list of available RSS sources.
@@ -69,7 +68,7 @@ class RssController extends Controller
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
 
@@ -157,7 +156,7 @@ class RssController extends Controller
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', $type, $slug);
 
@@ -228,7 +227,7 @@ class RssController extends Controller
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'author', $slug);
 
@@ -314,7 +313,7 @@ class RssController extends Controller
         $this->view->setConfig('rss');
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
-        $this->get('core.helper.content')->setViewExpireDate($expire, $this->view);
+        $this->setViewExpireDate($expire, $this->view);
 
         $cacheID = $this->view->getCacheId('rss', 'fia');
 
