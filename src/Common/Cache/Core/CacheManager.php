@@ -109,7 +109,7 @@ class CacheManager
             $class = sprintf('Common\\Cache\\%s\\%s', $class, $class);
 
             $items[$config['name']] =
-                new $class($config, $this->container->getParameter('environment'));
+                new $class($config, $this->container->getParameter('kernel.environment'));
         }
 
         return $items;

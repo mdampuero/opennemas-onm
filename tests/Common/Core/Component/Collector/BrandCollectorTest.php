@@ -27,7 +27,6 @@ class BrandCollectorTest extends \PHPUnit\Framework\TestCase
         $metadata = [
             'name'        => 'foo',
             'homepage'    => 'http://www.grault.com',
-            'version'     => '1.0',
             'description' => 'Dui, eget cursus diam purus vel augue.',
             'fubar'       => 'Nulla eu.',
             'baz'         => 'Luctus et ultrices.'

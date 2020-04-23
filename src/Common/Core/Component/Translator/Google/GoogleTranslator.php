@@ -68,7 +68,7 @@ class GoogleTranslator extends Translator
         if (empty($body)
             || !array_key_exists('data', $body)
             || !array_key_exists('translations', $body['data'])
-            || count($body['data']['translations']) === 0
+            || empty($body['data']['translations'])
         ) {
             throw new InvalidTranslationException();
         }

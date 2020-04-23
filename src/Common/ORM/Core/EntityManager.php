@@ -298,7 +298,7 @@ class EntityManager
             $config = array_merge($this->defaults['connection'], $config);
         }
 
-        return new Connection($config, $this->container->getParameter('environment'));
+        return new Connection($config, $this->container->getParameter('kernel.environment'));
     }
 
     /**

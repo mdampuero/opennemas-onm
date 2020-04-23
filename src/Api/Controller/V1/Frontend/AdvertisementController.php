@@ -272,7 +272,7 @@ class AdvertisementController extends Controller
         );
 
         $types = [];
-        if (count($hasInterstitial) > 0) {
+        if (!empty($hasInterstitial)) {
             $types[] = 'interstitial';
         }
 
@@ -283,7 +283,7 @@ class AdvertisementController extends Controller
             }
         );
 
-        if (count($hasNormal) > 0) {
+        if (!empty($hasNormal)) {
             $types[] = 'normal';
         }
 

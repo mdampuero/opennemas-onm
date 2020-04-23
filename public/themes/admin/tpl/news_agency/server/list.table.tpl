@@ -54,22 +54,22 @@
   <th class="v-align-middle" width="400">
     {t}Name{/t}
   </th>
-  <th class="v-align-middle" width="400" ng-if="isColumnEnabled('url')">
+  <th class="v-align-middle" ng-if="isColumnEnabled('url')" width="400">
     {t}URL{/t}
   </th>
-  <th class="text-center v-align-middle" width="150" ng-if="isColumnEnabled('synchronization')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('synchronization')" width="150">
     {t}Synchronization{/t}
   </th>
-  <th class="text-center v-align-middle" width="150" ng-if="isColumnEnabled('synchronized')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('synchronized')" width="150">
     {t}Synchronized{/t}
   </th>
-  <th class="text-center v-align-middle" width="50" ng-if="isColumnEnabled('color')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('color')" width="50">
     <i class="fa fa-paint-brush"></i>
   </th>
-  <th class="text-center v-align-middle" width="110" ng-if="isColumnEnabled('automatic')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('automatic')" width="110">
     {t}Automatic{/t}
   </th>
-  <th class="text-center v-align-middle" width="80" ng-if="isColumnEnabled('enabled')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('enabled')" width="80">
     {t}Enabled{/t}
   </th>
 {/block}

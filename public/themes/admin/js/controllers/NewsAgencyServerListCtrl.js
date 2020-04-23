@@ -56,13 +56,13 @@
             params: { id: item.id }
           };
 
-          http.post(route).success(function(response) {
+          http.post(route).then(function(response) {
             $scope.disableFlags('http');
 
-            if (response.messages) {
-              messenger.post(response.messages);
+            if (response.data.messages) {
+              messenger.post(response.data.messages);
             }
-          }).error(function() {
+          }, function() {
             $scope.disableFlags('http');
           });
         };

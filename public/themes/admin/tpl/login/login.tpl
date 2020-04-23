@@ -117,10 +117,9 @@
     </footer>
   </div>
   {block name="footer-js"}
-    {javascripts src="@Common/components/jquery2/dist/jquery.min.js,
+    {javascripts src="@Common/components/jquery/dist/jquery.min.js,
         @Common/components/bootstrap/dist/js/bootstrap.min.js,
-        @Common/components/modernizr/modernizr.js,
-        @Common/js/onm/md5.min.js" output="login"}
+        @Common/src/md5/md5.min.js" output="login"}
       <script>
         function connect(btn) {
           var win = window.open(

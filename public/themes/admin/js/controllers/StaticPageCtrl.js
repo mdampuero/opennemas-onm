@@ -11,12 +11,12 @@
      *   Handles actions for static page inner
      *
      * @requires $controller
-     * @requires $rootScope
      * @requires $scope
+     * @requires routing
      */
     .controller('StaticPageCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope', 'routing',
+      function($controller, $scope, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -58,6 +58,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_static_page_create_item',
           getItem:    'api_v1_backend_static_page_get_item',
+          public:     'frontend_static_page',
           redirect:   'backend_static_page_show',
           saveItem:   'api_v1_backend_static_page_save_item',
           updateItem: 'api_v1_backend_static_page_update_item'
@@ -68,6 +69,25 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf StaticPageCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              slug: item.slug,
+            })
+          );
         };
       }
     ]);

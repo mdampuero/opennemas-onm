@@ -38,15 +38,6 @@
   </li>
 {/block}
 
-{block name="primaryActions"}
-  <li class="quicklinks">
-    <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" type="button">
-      <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-      {t}Save{/t}
-    </button>
-  </li>
-{/block}
-
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">

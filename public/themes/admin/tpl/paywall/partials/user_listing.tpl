@@ -1,6 +1,6 @@
-{if count($users) > 0}
+{if !empty($users)}
 <table class="table table-condensed">
-    {if count($users) > 0}
+    {if !empty($users)}
     <thead>
         <tr>
             <th class="left">{t}User name{/t}</th>
@@ -61,7 +61,7 @@
     </tr>
     {/foreach}
     </tbody>
-    {if count($users) > 0}
+    {if !empty($users)}
     <tfoot>
         <tr>
             <td colspan="11" class="center" style="padding:5px">

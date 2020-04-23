@@ -119,7 +119,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         locale: $scope.config.locale.selected
       };
 
-      http.put($scope.routes.savePreview, data).success(function() {
+      http.put($scope.routes.savePreview, data).then(function() {
         $uibModal.open({
           templateUrl: 'modal-preview',
           windowClass: 'modal-fullscreen',
@@ -137,7 +137,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         });
 
         $scope.flags.http.generating_preview = false;
-      }).error(function() {
+      }, function() {
         $scope.flats.http.generating_preview = false;
       });
     };

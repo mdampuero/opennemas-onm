@@ -122,7 +122,7 @@ class PClave
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return null;
         }
     }
@@ -151,7 +151,7 @@ class PClave
 
             return $this;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return null;
         }
     }
@@ -178,7 +178,7 @@ class PClave
 
             return true;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -199,7 +199,7 @@ class PClave
 
             return $rs;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return null;
         }
     }
@@ -235,7 +235,7 @@ class PClave
 
             return $terms;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return [];
         }
     }
@@ -250,55 +250,38 @@ class PClave
      */
     public function replaceTerms($text, $terms)
     {
-        if (mb_detect_encoding($text) == "UTF-8") {
-            $text = ' ' . ($text) . ' ';
-        } else {
-            // spaces necessary to evaluate first and last pattern matching
-            $text = ' ' . utf8_decode($text) . ' ';
+        // Spaces necessary to evaluate first and last pattern matching
+        $text = ' ' . $text . ' ';
+        if (mb_detect_encoding($text) !== "UTF-8") {
+            $text = utf8_decode($text);
         }
-
-        usort(
-            $terms,
-            function (
-                $a,
-                $b
-            ) {
-                if (strlen($a->pclave) == strlen($b->pclave)) {
-                    return 0;
-                }
-
-                return (strlen($a->pclave) < strlen($b->pclave)) ? 1 : -1;
-            }
-        );
 
         foreach ($terms as $term) {
             // Select keyword type
             switch ($term->tipo) {
                 case 'url':
                     $replacement = "<a href='" . $term->value . "'
-                                       title='" . $term->pclave . "'>" .
+                                       title='" . $term->pclave . "' target='_blank'>" .
                                        $term->pclave . "</a>";
-
                     break;
-
                 case 'email':
                     $replacement = "<a href='mailto:" . $term->value . "'
                                        target='_blank'>" . $term->pclave . "</a>";
-
                     break;
-
                 case 'intsearch':
-                    $replacement = "<a href='" . SITE_URL . "tag/" . $term->value . "'
+                    $replacement = "<a href='/tag/" . $term->value . "'
                                        target='_blank'>" . $term->pclave . "</a>";
-
                     break;
                 default:
                     break;
             }
 
-            $regexp = '@' . htmlentities($term->pclave) . '@';
-
-            $text = preg_replace($regexp, '\1' . $replacement . '\4', $text);
+            // The \b matches a word boundary
+            $text = preg_replace(
+                '@\b' . $term->pclave . '\b@',
+                '\1' . $replacement . '\4',
+                $text
+            );
         }
 
         return trim($text);

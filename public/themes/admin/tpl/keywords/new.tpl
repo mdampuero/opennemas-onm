@@ -26,7 +26,7 @@
             </li>
             {acl isAllowed="PCLAVE_CREATE"}
             <li class="quicklinks"><span class="h-seperate"></span></li>
-            <li>
+            <li class="quicklinks">
               <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
                 <span class="fa fa-save"></span>
                 <span class="text">{t}Save{/t}</span>

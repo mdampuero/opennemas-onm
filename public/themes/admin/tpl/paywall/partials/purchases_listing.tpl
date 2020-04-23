@@ -1,4 +1,4 @@
-{if count($purchases) > 0}
+{if !empty($purchases)}
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -31,7 +31,7 @@
     </tr>
     {/foreach}
     </tbody>
-    {if count($purchases) > 0}
+    {if !empty($purchases)}
     <tfoot>
         <tr>
             <td colspan="11" class="center" style="margin:5px ">

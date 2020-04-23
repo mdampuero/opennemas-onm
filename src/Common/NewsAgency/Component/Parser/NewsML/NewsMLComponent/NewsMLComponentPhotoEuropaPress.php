@@ -44,7 +44,7 @@ class NewsMLComponentPhotoEuropaPress extends NewsMLComponentPhoto
     {
         $agency = $data->xpath('/NewsComponent/AdministrativeMetadata/Creator/Party');
 
-        if (is_array($agency) && count($agency) > 0) {
+        if (is_array($agency) && !empty($agency)) {
             return (string) $agency[0]->attributes()->FormalName;
         }
 

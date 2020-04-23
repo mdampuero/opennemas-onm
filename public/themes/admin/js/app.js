@@ -43,7 +43,6 @@ angular.module('BackendApp', [
   'ui.sortable',
   'ui.select',
   'ui.tree',
-  'ui.multiselect',
   'webStorageModule',
   'BackendApp.controllers',
   'BackendApp.directives',

@@ -3,15 +3,15 @@
  *
  * This class is the class for make all the transformations needed for the photos
  *
- * @param {object}  conf                - Configuration need for the photo editor
- * @param {string}  conf.container      - Id of the html element to contain the photo editor
- * @param {string}  conf.image          - The image to edit
- * @param {string}  conf.template       - Template name used for the photo editor
- * @param {method}  conf.closeCallBack  - callback by the time the photo edition is finished
- * @param {object}  conf.maxSize        - The maximun size of the photoEditor. If you don't use this the photo editor
+ * @param {Object}  conf                - Configuration need for the photo editor
+ * @param {String}  conf.container      - Id of the html element to contain the photo editor
+ * @param {String}  conf.image          - The image to edit
+ * @param {String}  conf.template       - Template name used for the photo editor
+ * @param {Method}  conf.closeCallBack  - callback by the time the photo edition is finished
+ * @param {Object}  conf.maxSize        - The maximun size of the photoEditor. If you don't use this the photo editor
  *    use the screen size
- * @param {integer} conf.maxSize.width  - Maximun width
- * @param {integer} conf.maxSize.height - Maximun height
+ * @param {Integer} conf.maxSize.width  - Maximun width
+ * @param {Integer} conf.maxSize.height - Maximun height
  */
 window.OnmPhotoEditor = function(conf, translations) {
   this.conf         = conf;
@@ -58,7 +58,7 @@ window.OnmPhotoEditor.prototype.ACTIONS_BRIGHTNESS = 'brightness';
  *
  * Template with the list of actions for the basic template
  *
- * @property {object.<string, mixed>} actionList - List of all actions we can do. The key is the displays
+ * @property {Object} actionList - List of all actions we can do. The key is the displays
  *           availables for this template and the values are the list of actions or displays for the display
  */
 window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
@@ -140,15 +140,15 @@ window.OnmPhotoEditor.prototype.TEMPLATE_BASIC     = {
  *     status for the photo editor. Here we have all data needed to show the
  * current status of the photo editor
  *
- * @typedef  {object}  status
- * @property {string}  status.display                - display selected
- * @property {string}  status.action                 - action selected
- * @property {element} status.image                  - Initial image to load in
+ * @typedef  {Object}  status
+ * @property {String}  status.display                - display selected
+ * @property {String}  status.action                 - action selected
+ * @property {Object} status.image                  - Initial image to load in
  *    Canvas
- * @property {string}  status.error                  - error loading the canvas
- * @property {boolean} status.loading                - If the photo editor is
+ * @property {String}  status.error                  - error loading the canvas
+ * @property {Boolean} status.loading                - If the photo editor is
  *    Loading something
- * @property {object.<string, string>} multiSelect - For actions with your own
+ * @property {Object} multiSelect - For actions with your own
  *    selection. The key is the name of the action and the value is the option
  *    value
  */
@@ -187,7 +187,7 @@ window.OnmPhotoEditor.prototype.statusImage = null;
 /**
  * List of displays and respective actions for the photo editor
  *
- * @property {object.<string, mixed>} actionList - List of all actions we can do with the photo editor. The key is the
+ * @property {Object} actionList - List of all actions we can do with the photo editor. The key is the
  *           displays availables and the values are the list of actions or displays of this displays
  */
 window.OnmPhotoEditor.prototype.actionList  = null;
@@ -426,10 +426,10 @@ window.OnmPhotoEditor.prototype.getTopMenu = function(status) {
  * @description
  *   Method for the generation of the top menu html
  *
- * @param {string} section  - top menu section(cssclass [topMenuBack, topMenuTitle or topMenuSave])
- * @param {string} action   - action to show our client
+ * @param {String} section  - top menu section(cssclass [topMenuBack, topMenuTitle or topMenuSave])
+ * @param {String} action   - action to show our client
  *
- * @return {array<element>} top menu elements for some option.
+ * @return {Array} top menu elements for some option.
  */
 window.OnmPhotoEditor.prototype.getTopMenuSection = function(section, options) {
   var elementList = [];
@@ -843,7 +843,7 @@ window.OnmPhotoEditor.prototype.showCanvas = function(canvas) {
  * @description
  *   Method to cancel the actual display or close the photoeditor
  *
- * @param {event}  e         - the javascript event that triggered the action
+ * @param {Object}  e         - the javascript event that triggered the action
  * @param {status} newStatus - the new action create for this action
  *
  * @return {mixed} - the new status with the display changed or false for close the photoeditor
@@ -1341,7 +1341,7 @@ window.OnmPhotoEditor.prototype.crop = function(canvasOriginal, statusImage) {
  * @description
  *   Method to retrieve the list of actions enable for the photo editor
  *
- * @return {object.<string, mixed>} actionList - List of all actions we can do. The key is the displays
+ * @return {Object} actionList - List of all actions we can do. The key is the displays
  *           availables for this template and the values are the list of actions or displays for the display
  */
 window.OnmPhotoEditor.prototype.getActionList = function(status) {
@@ -1383,7 +1383,7 @@ window.OnmPhotoEditor.prototype.loadMultiSelected = function(actionElement, stat
  * @description
  *   Method to put the multifield in the default values
  *
- * @return {object.<string, mixed>} actionList - List of all actions we can do. The key is the displays
+ * @return {Object} actionList - List of all actions we can do. The key is the displays
  *           availables for this template and the values are the list of actions or displays for the display
  */
 window.OnmPhotoEditor.prototype.resetMultiSelected = function(actionList, status) {

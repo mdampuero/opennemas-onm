@@ -157,7 +157,7 @@ class SpecialsController extends Controller
 
         if ($special->id != null) {
             // Check empty data
-            if (count($request->request) < 1) {
+            if (empty($request->request)) {
                 $this->get('session')->getFlashBag()->add(
                     'error',
                     _("Special data sent not valid.")

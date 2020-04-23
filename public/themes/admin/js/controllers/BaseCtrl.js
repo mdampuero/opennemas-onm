@@ -514,13 +514,15 @@
           var body  = {};
 
           body['imgData.name'] = image;
-          http.post(route, body).success(function() {
+
+          http.post(route, body).then(function() {
             if (typeof $scope.list === 'function') {
               $scope.list($scope.route, true);
             }
-          }).error(function() {
+          }, function() {
             return null;
           });
+
           return null;
         };
 

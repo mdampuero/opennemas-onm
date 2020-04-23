@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('EventListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder', 'routing',
+      function($controller, $scope, oqlEncoder, routing) {
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
@@ -45,7 +45,8 @@
           deleteList: 'api_v1_backend_event_delete_list',
           getList:    'api_v1_backend_event_get_list',
           patchItem:  'api_v1_backend_event_patch_item',
-          patchList:  'api_v1_backend_event_patch_list'
+          patchList:  'api_v1_backend_event_patch_list',
+          public:     'frontend_event_show'
         };
 
         /**
@@ -56,7 +57,8 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria = $scope.criteria;
+          $scope.backup.criteria    = $scope.criteria;
+          $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'
@@ -85,11 +87,31 @@
         };
 
         /**
+         * @function getFrontendUrl
+         * @memberOf EventCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              slug: item.slug,
+            })
+          );
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.parseList = function(data) {
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
+          $scope.localize($scope.data.extra.categories, 'categories');
         };
       }
     ]);

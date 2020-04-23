@@ -69,11 +69,6 @@
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="hidden-xs ng-cloak quicklinks" ng-show="!isModeSupported() || app.mode === 'list'">
-    <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-      <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': flags.http.loading }"></i>
-    </button>
-  </li>
 {/block}
 
 {block name="list"}

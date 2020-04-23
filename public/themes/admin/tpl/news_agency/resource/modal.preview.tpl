@@ -47,7 +47,7 @@
         {t}Tags{/t}
       </label>
       <div class="col-sm-9 col-sm-offset-0 col-xs-offset-1 form-control-static">
-        <span class="label label-info m-r-5 text-bold" ng-if="template.item.tags && template.item.tags.split(',').length > 0" ng-repeat="tag in template.item.tags.split(',')">
+        <span class="inline label label-info m-r-5 text-bold" ng-if="template.item.tags && template.item.tags.split(',').length > 0" ng-repeat="tag in template.item.tags.split(',')">
           [% tag %]
         </span>
       </div>

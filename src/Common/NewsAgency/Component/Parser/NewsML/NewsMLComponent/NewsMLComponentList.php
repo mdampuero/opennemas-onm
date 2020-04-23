@@ -27,7 +27,7 @@ class NewsMLComponentList extends NewsML
 
         $node = $data->xpath('/NewsComponent/NewsComponent');
 
-        if (!is_array($node) || count($node) == 0) {
+        if (!is_array($node) || empty($node)) {
             return false;
         }
 
@@ -60,7 +60,7 @@ class NewsMLComponentList extends NewsML
         }
 
         // Get photo resources
-        $related  = [];
+        $related = [];
         foreach ($contents as $content) {
             if ($content->type === 'photo') {
                 $related[] = $content->id;

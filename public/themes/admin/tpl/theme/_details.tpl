@@ -5,16 +5,16 @@
   <h3 class="no-margin uppercase">[% template.item.name %]</h3>
 </div>
 <div class="modal-body">
-  <uib-carousel active="0" class="carousel-big" ng-if="template.item.images.length > 0">
-    <uib-slide index="$index" ng-repeat="screenshot in template.item.images">
+  <div uib-carousel active="0" class="carousel-big" ng-if="template.item.images.length > 0">
+    <div uib-slide index="$index" ng-repeat="screenshot in template.item.images">
       <img class="img-responsive" ng-src="[% '/asset/zoomcrop,1024,768' + template.item.path + '/' + screenshot %]">
-    </uib-slide>
-  </uib-carousel>
-  <uib-carousel active="0" class="carousel-big" ng-if="!template.item.images">
-    <uib-slide index="0">
+    </div>
+  </div>
+  <div uib-carousel active="0" class="carousel-big" ng-if="!template.item.images">
+    <div uib-slide index="0">
       <img class="img-responsive" src="//placehold.it/1024x768">
-    </uib-slide>
-  </uib-carousel>
+    </div>
+  </div>
   <div class="row m-t-30">
     <div class="col-xs-6">
       <h5 class="semi-bold text-uppercase">

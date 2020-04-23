@@ -156,7 +156,7 @@ class ModuleController extends Controller
      */
     public function listAction(Request $request)
     {
-        $oql   = $request->query->get('oql', '');
+        $oql = $request->query->get('oql', '');
 
         $repository = $this->get('orm.manager')->getRepository('Extension');
         $converter  = $this->get('orm.manager')->getConverter('Extension');
@@ -230,7 +230,7 @@ class ModuleController extends Controller
 
         unset($params['ids']);
 
-        if (!is_array($ids) || count($ids) === 0) {
+        if (!is_array($ids) || empty($ids)) {
             $msg->add(_('Bad request'), 'error', 400);
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
@@ -391,7 +391,7 @@ class ModuleController extends Controller
         $module->setData($data);
         $module->updated = new \DateTime('now');
 
-        if ($request->files->count() > 0) {
+        if (!empty($request->files->count())) {
             $module->images = [];
 
             $fs = new Filesystem();

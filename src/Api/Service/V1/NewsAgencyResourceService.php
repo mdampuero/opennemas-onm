@@ -270,6 +270,8 @@ class NewsAgencyResourceService implements Service
             throw new ApiException($e->getMessage(), $e->getCode());
         }
 
+        $imported = [];
+
         foreach ($resources as $resource) {
             try {
                 if ($this->importer->isImported($resource)) {

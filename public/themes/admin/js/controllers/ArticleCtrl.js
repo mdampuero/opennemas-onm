@@ -388,7 +388,7 @@
 
           var postData = { article: data, locale: $scope.config.locale.selected };
 
-          http.post(previewUrl, postData).success(function() {
+          http.post(previewUrl, postData).then(function() {
             $uibModal.open({
               templateUrl: 'modal-preview',
               windowClass: 'modal-fullscreen',
@@ -406,7 +406,7 @@
             });
 
             $scope.disableFlags();
-          }).error(function() {
+          }, function() {
             $scope.disableFlags();
           });
         };

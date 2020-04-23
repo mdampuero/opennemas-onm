@@ -47,15 +47,15 @@ EOF
 
         $serverName = $input->getArgument('serverName');
 
-        $_SERVER['HTTP_HOST']     ='www.cronicasdelaemigracion.com';
-        $_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
-        $_SERVER['REQUEST_URI']   = '/';
+        $_SERVER['HTTP_HOST']   = 'www.cronicasdelaemigracion.com';
+        $_SERVER['SERVER_NAME'] = 'www.cronicasdelaemigracion.com';
+        $_SERVER['REQUEST_URI'] = '/';
 
 
         $this->generateStatics($output);
 
         $output->writeln(
-            "\n\t<fg=yellow;bg=white>Migration finished for Database: ".$serverName."</fg=yellow;bg=white>"
+            "\n\t<fg=yellow;bg=white>Migration finished for Database: " . $serverName . "</fg=yellow;bg=white>"
         );
     }
 
@@ -68,15 +68,15 @@ EOF
         $request->setTrustedProxies(array('127.0.0.1'));
 
         $framework = getService('framework');
-        $response = $framework->handle($request);
+        $response  = $framework->handle($request);
         $response->send();
         $framework->terminate($request, $response);
 
-        $urlBase = SITE_URL."seccion/";
+        $urlBase = SITE_URL . "seccion/";
 
-        $date          =  new DateTime();
+        $date          = new DateTime();
         $directoryDate = $date->format("/Y/m/d/");
-        $basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
+        $basePath      = SITE_PATH . "/media/cronicas/library" . $directoryDate;
         $curly         = array();
 
         if (!file_exists($basePath)) {
@@ -89,7 +89,7 @@ EOF
         $menu = new \Menu();
         $menu->getMenu('archive');
 
-        if (count(($menu->items)) <= 0) {
+        if (empty($menu->items)) {
             $output->writeln("There are no frontpages. You must define archive menu.");
             return false;
         }
@@ -100,7 +100,7 @@ EOF
             if (!empty($category_name)) {
                 $curly[$category_name] = curl_init();
 
-                $url = $urlBase. $category_name.'/';
+                $url = $urlBase . $category_name . '/';
                 curl_setopt($curly[$category_name], CURLOPT_URL, $url);
                 curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
                 curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
@@ -121,7 +121,7 @@ EOF
         $replacement = array();
 
         foreach ($menu->items as $item) {
-            $category = $item->link;
+            $category  = $item->link;
             $pattern[] = "@href=\"/seccion/{$category}\"@";
             //archive/digital/2013/02/02/home.html
             $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
@@ -137,7 +137,7 @@ EOF
 
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
-            $newFile = $basePath.$category_name.".html";
+            $newFile = $basePath . $category_name . ".html";
             file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);

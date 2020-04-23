@@ -62,7 +62,7 @@ EOF
 
         $menu = $this->generateMenu();
 
-        if (count($menu->items) <= 0) {
+        if (empty($menu->items)) {
             $input->writeln("There are no frontpages. You must define archive menu.");
 
             return;

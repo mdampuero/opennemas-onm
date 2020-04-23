@@ -63,7 +63,7 @@ class LetterController extends ContentController
             }
         }
 
-        if (count($ids) > 0) {
+        if (!empty($ids)) {
              $em = getService('entity_repository');
 
             $criteria = [

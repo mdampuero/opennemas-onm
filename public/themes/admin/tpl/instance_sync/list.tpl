@@ -43,8 +43,8 @@
 
 <div class="content">
   <div class="grid simple">
-    <div class="grid-body {if count($elements) >0}no-padding{/if}">
-      {if count($elements) >0}
+    <div class="grid-body {if !empty($elements)}no-padding{/if}">
+      {if !empty($elements)}
       <table class="table table-hover table-condensed">
         <thead>
           <tr>

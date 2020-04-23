@@ -30,9 +30,8 @@ class Frontpages
         try {
             $category = getService('api.service.category')->getItemBySlug($category);
 
-            list(, $contentsInHomepage, , ) =
-                getService('api.service.frontpage')
-                    ->getCurrentVersionForCategory($category->pk_content_category);
+            list(, $contentsInHomepage, , ) = getService('api.service.frontpage')
+                ->getCurrentVersionForCategory($category->pk_content_category);
 
             // Get all frontpages images
             $imageIdsList = [];
@@ -42,7 +41,7 @@ class Frontpages
                 }
             }
 
-            if (count($imageIdsList) > 0) {
+            if (!empty($imageIdsList)) {
                 $er         = getService('entity_repository');
                 $order      = [ 'created' => 'DESC' ];
                 $imgFilters = [
@@ -162,7 +161,7 @@ class Frontpages
 
         $imageIdsList = array_unique($imageIdsList);
 
-        if (count($imageIdsList) > 0) {
+        if (!empty($imageIdsList)) {
             $imgFilters = [
                 'content_type_name' => [[ 'value' => 'photo' ]],
                 'pk_content'        => [[ 'value' => $imageIdsList, 'operator' => 'IN' ]],

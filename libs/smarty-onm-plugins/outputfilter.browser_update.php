@@ -9,7 +9,7 @@
  */
 function smarty_outputfilter_browser_update($output, $smarty)
 {
-    if ($smarty->getContainer()->getParameter('environment') === 'dev') {
+    if ($smarty->getContainer()->getParameter('kernel.environment') === 'dev') {
         return $output;
     };
 

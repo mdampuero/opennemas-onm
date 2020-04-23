@@ -11,7 +11,7 @@
     </div>
   </form>
 </span>
-{if count($results) > 0}
+{if !empty($results)}
   <div id="search_results_available" class="content-provider-block">
     {foreach from=$results item=content name=video_loop}
       {include file=$content->content_partial_path}

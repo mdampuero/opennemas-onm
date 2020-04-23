@@ -1,10 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
-  /**
-   * Controller to handle list actions.
-   */
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  StoreListCtrl
@@ -166,12 +164,13 @@
           }
 
           var itemsInCart = [];
+
           for (var i = 0; i < $scope.cart.length; i++) {
             itemsInCart.push($scope.cart[i].uuid);
 
             if ($scope.cart[i] && $scope.cart[i].modules_included) {
               itemsInCart = itemsInCart.concat(
-                  $scope.cart[i].modules_included);
+                $scope.cart[i].modules_included);
             }
           }
 
@@ -220,8 +219,8 @@
           $scope.loading = true;
           var url = routing.generate('backend_ws_store_list');
 
-          $http.get(url).success(function(response) {
-            $scope.activated = response.activated;
+          $http.get(url).then(function(response) {
+            $scope.activated = response.data.activated;
 
             $scope.free      = [];
             $scope.module    = [];
@@ -229,37 +228,35 @@
             $scope.partner   = [];
             $scope.service   = [];
             $scope.purchased = [];
-            for (var i = 0; i < response.results.length; i++) {
-              var module = response.results[i];
+            for (var i = 0; i < response.data.results.length; i++) {
+              var module = response.data.results[i];
 
               if ($scope.isFree(module) &&
                   module.category !== 'partner') {
                 $scope.free.push(module);
-              } else if (response.activated.indexOf(module.uuid) !== -1) {
+              } else if (response.data.activated.indexOf(module.uuid) !== -1) {
                 $scope.purchased.push(module);
-              } else {
-                if (module && module.modules_included) {
-                  // Check submodules
-                  var activated = module.modules_included.filter(function(a) {
-                    return response.activated.indexOf(a) === -1;
-                  });
+              } else if (module && module.modules_included) {
+                // Check submodules
+                var activated = module.modules_included.filter(function(a) {
+                  return response.data.activated.indexOf(a) === -1;
+                });
 
-                  if (activated.length === 0) {
-                    $scope.purchased.push(module);
-                  } else {
-                    $scope[module.category].push(module);
-                  }
-                }  else {
+                if (activated.length === 0) {
+                  $scope.purchased.push(module);
+                } else {
                   $scope[module.category].push(module);
                 }
+              } else {
+                $scope[module.category].push(module);
               }
             }
 
             $scope.items = $scope[$scope.type];
             $scope.loading = false;
-          }).error(function(response) {
+          }, function(response) {
             $scope.loading = false;
-            messenger.post({ type: 'error', message: response });
+            messenger.post({ type: 'error', message: response.data });
           });
         };
 
@@ -316,7 +313,7 @@
 
         // Save changes in chart in web storage
         $scope.$watch('cart', function(nv, ov) {
-          if (!nv || (nv instanceof Array && nv.length === 0)) {
+          if (!nv || nv instanceof Array && nv.length === 0) {
             webStorage.local.remove($scope.cartName);
             return;
           }
@@ -324,15 +321,22 @@
           webStorage.local.set($scope.cartName, nv);
 
           // Adding first item or initialization from webstorage
-          if (!ov || (ov instanceof Array && ov.length === 0) || ov === nv) {
+          if (!ov || ov instanceof Array && ov.length === 0 || ov === nv) {
             $scope.bounce = true;
-            $timeout(function() { $scope.bounce = false; }, 1000);
+
+            $timeout(function() {
+              $scope.bounce = false;
+            }, 1000);
+
             return;
           }
 
           // Adding items
           $scope.pulse = true;
-          $timeout(function() { $scope.pulse = false; }, 1000);
+
+          $timeout(function() {
+            $scope.pulse = false;
+          }, 1000);
         }, true);
 
         $scope.$watch('type', function(nv, ov) {
@@ -355,5 +359,6 @@
 
         // Get modules list
         $scope.list();
-    }]);
+      }
+    ]);
 })();

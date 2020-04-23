@@ -266,27 +266,26 @@ class Video extends Content
         }
 
         if ($this->author_name == 'internal') {
-            $thumbnail =
-                MEDIA_IMG_PATH_WEB . "/../" . $information['thumbnails']['normal'];
-        } elseif (!empty($information)
-            && is_array($information)
-            && array_key_exists('thumbnail', $information)
-        ) {
-            if ($this->author_name == 'external' || $this->author_name == 'script') {
-                $this->thumb_image = new \Photo($information['thumbnail']);
-                if (!empty($this->thumb_image->name)) {
-                    $thumbnail = MEDIA_IMG_PATH_WEB . $this->thumb_image->path_file . $this->thumb_image->name;
-                } else {
-                    $thumbnail = '/assets/images/transparent.png';
-                }
-            } else {
-                $thumbnail = $information['thumbnail'];
-            }
-        } else {
-            $thumbnail = '';
+            return MEDIA_IMG_PATH_WEB . "/../" . $information['thumbnails']['normal'];
         }
 
-        return $thumbnail;
+        if (empty($information)
+            || !is_array($information)
+            || ! array_key_exists('thumbnail', $information)
+        ) {
+            return null;
+        }
+
+        if ($this->author_name == 'external' || $this->author_name == 'script') {
+            $this->thumb_image = getService('entity_repository')
+                ->find('Photo', $information['thumbnail']);
+
+            if (!empty($this->thumb_image->name)) {
+                return MEDIA_IMG_PATH_WEB . $this->thumb_image->getRelativePath();
+            }
+        }
+
+        return $information['thumbnail'];
     }
 
     /**

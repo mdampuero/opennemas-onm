@@ -327,7 +327,7 @@ class CommentsController extends Controller
 
         // Fetch data from database
         $commentsCount = [];
-        if (count($ids) > 0) {
+        if (!empty($ids)) {
             try {
                 $ids  = implode(',', $ids);
                 $conn = $this->get('orm.manager')->getConnection('instance');

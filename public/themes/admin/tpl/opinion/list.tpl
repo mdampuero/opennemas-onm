@@ -112,7 +112,6 @@
         </div>
       </div>
     </div>
-
     <div class="page-navbar filters-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -273,5 +272,5 @@
     <script type="text/ng-template" id="modal-update-selected">
       {include file="common/modals/_modalBatchUpdate.tpl"}
     </script>
-  </form>
+  </div>
 {/block}

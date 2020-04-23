@@ -31,6 +31,17 @@ class EventController extends ContentController
     protected $service = 'api.service.content';
 
     /**
+     * {@inheritDoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        return array_merge(parent::getExtraData($items), [
+            'categories' => $this->getCategories($items),
+            'tags'       => $this->getTags($items)
+        ]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getRelatedContents($content)
