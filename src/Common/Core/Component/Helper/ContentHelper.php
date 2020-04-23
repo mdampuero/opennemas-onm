@@ -48,7 +48,6 @@ class ContentHelper
             date('Y-m-d H:i:s')
         );
 
-
         $oqlEnd = sprintf(
             'content_status = 1 and in_litter != 1 and'
             . ' (endtime !is null and endtime > "%s")'
