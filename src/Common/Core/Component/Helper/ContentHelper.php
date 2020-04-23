@@ -179,18 +179,4 @@ class ContentHelper
 
         return $items;
     }
-
-    /**
-     * Set expire date for current view
-     *
-     * @param string          $expire The expire date.
-     * @param TemplateFactory $view   The current view.
-     */
-    public function setViewExpireDate($expire, $view)
-    {
-        $lifetime = strtotime($expire) - time();
-        if ($lifetime < $view->getCacheLifetime()) {
-            $view->setCacheLifetime($lifetime);
-        }
-    }
 }
