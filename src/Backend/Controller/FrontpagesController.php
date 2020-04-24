@@ -323,7 +323,7 @@ class FrontpagesController extends Controller
                 $contentPositionMap[$contentPosition['placeholder']] = [];
             }
 
-            $contentPosition['content_id'] = intval($contentPosition['id']);
+            $contentPosition['pk_fk_content'] = intval($contentPosition['id']);
 
             $contentPositionMap[$contentPosition['placeholder']][] =
                 new ContentPosition($contentPosition);
