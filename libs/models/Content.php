@@ -386,10 +386,6 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function load($properties)
     {
-        if (array_key_exists('catName', $properties)) {
-            unset($properties['catName']);
-        }
-
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 $this->{$propertyName} = $this->parseProperty($propertyValue);
@@ -2034,9 +2030,8 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $conn->insert('content_category', [
-            'content_id'          => $this->id,
-            'category_id' => $id,
-            'catName'                => null
+            'content_id'  => $this->id,
+            'category_id' => $id
         ]);
     }
 
