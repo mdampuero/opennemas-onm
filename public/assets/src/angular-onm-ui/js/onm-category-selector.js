@@ -73,7 +73,7 @@
                   '[% defaultValueText %]' +
                 '</a>' +
                 '<ul class="ui-select-choices select2-results">' +
-                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'fk_content_category\'">' +
+                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'parent_id\'">' +
                     '<div class="ui-select-choices-group-label select2-result-label" ng-show="groupCategories(items[0])">' +
                       '[% groupCategories(items[0]) %]' +
                     '</div>' +
@@ -263,7 +263,7 @@
               }
 
               var category = $scope.categories.filter(function(e) {
-                return e.id === item.fk_content_category;
+                return e.id === item.parent_id;
               });
 
               if (category.length > 0 && category[0].id) {
