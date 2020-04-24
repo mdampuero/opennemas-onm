@@ -913,7 +913,7 @@ class ContentManager
     }
 
     /**
-     * Returns the title, catName and slugs of last headlines from a given category
+     * Returns the title and slugs of last headlines from a given category
      *
      * @param string $filter the SQL WHERE sentence to filter the contents
      * @param string $orderBy the ORDER BY sentence to sort the contents
