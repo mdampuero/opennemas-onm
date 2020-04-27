@@ -1508,14 +1508,14 @@ class Content implements \JsonSerializable, CsvSerializable
             // Fetch the list of frontpages where this article is included
             $rs = getService('dbal_connection')->fetchAll(
                 "SELECT fk_category, frontpage_version_id"
-                . " FROM content_positions WHERE content_id = ?",
+                . " FROM content_positions WHERE pk_fk_content = ?",
                 [ $this->id ]
             );
 
             // Remove the content from all frontpages
             getService('dbal_connection')->delete(
                 'content_positions',
-                [ 'content_id' => $this->id ]
+                [ 'pk_fk_content' => $this->id ]
             );
 
             // Clean cache for each frontpage element listing
@@ -1714,7 +1714,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             $rs = getService('dbal_connection')->fetchColumn(
-                'SELECT count(*) FROM content_positions WHERE content_id=? AND fk_category=?',
+                'SELECT count(*) FROM content_positions WHERE pk_fk_content=? AND fk_category=?',
                 [ $this->id, $categoryID ]
             );
 
@@ -2033,6 +2033,8 @@ class Content implements \JsonSerializable, CsvSerializable
             'content_id'  => $this->id,
             'category_id' => $id
         ]);
+
+        $this->category_id = $id;
     }
 
     /**
@@ -2095,7 +2097,7 @@ class Content implements \JsonSerializable, CsvSerializable
     protected function initViews()
     {
         getService('dbal_connection')->insert('content_views', [
-            'content_id' => $this->id,
+            'pk_fk_content' => $this->id,
             'views'         => 0,
         ]);
     }
