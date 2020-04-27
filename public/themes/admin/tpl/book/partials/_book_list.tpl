@@ -102,7 +102,6 @@
                 </div>
               </th>
               <th class="title">{t}Title{/t}</th>
-              <th class="hidden-xs" width="200">{t}Section{/t}</th>
               {acl isAllowed="BOOK_AVAILABLE"}
               <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
               {/acl}
@@ -136,14 +135,6 @@
                 </button>
                 {/acl}
               </div>
-            </td>
-            <td class="hidden-xs">
-              <span ng-if="content.category_name">
-                [% extra.categories[content.category] %]
-              </span>
-              <span ng-if="!content.category_name">
-                {t}Unassigned{/t}
-              </span>
             </td>
             {acl isAllowed="BOOK_HOME"}
             <td class="hidden-xs text-center">

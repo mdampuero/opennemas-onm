@@ -135,10 +135,28 @@ class Frontpages
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
+            'join' => [
+                [
+                    'type'       => 'INNER',
+                    'table'      => 'content_category',
+                    'contents.pk_content' => [
+                        [ 'value' => 'content_category.content_id', 'field' => true ]
+                    ]
+                ]
+            ],
+            'join' => [
+                [
+                    'type'       => 'INNER',
+                    'table'      => 'category',
+                    'content_category.category_id' => [
+                        [ 'value' => 'category.id', 'field' => true ]
+                    ]
+                ]
+            ],
             'content_type_name' => [[ 'value' => 'article' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'category_name'     => [[ 'value' => $category->name ]],
+            'slug'              => [ [ 'value' => $category->name ] ],
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
@@ -194,7 +212,7 @@ class Frontpages
                     ->generate(
                         'frontend_external_article_show',
                         [
-                            'category_name' => $content->category_name,
+                            'category_name' => get_category_slug($content),
                             'slug'          => $content->slug,
                             'article_id'    => date('YmdHis', strtotime($content->created)) .
                                                sprintf('%06d', $content->pk_content),

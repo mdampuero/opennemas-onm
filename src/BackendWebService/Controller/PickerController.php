@@ -119,11 +119,15 @@ class PickerController extends Controller
             $total = $contentMap[0]['resultNumber'];
         }
 
+        $categories = $this->get('api.service.category')->getList()['items'];
+
         return new JsonResponse([
-            'epp'     => $epp,
-            'page'    => $page,
-            'results' => $results,
-            'total'   => $total,
+            'epp'        => $epp,
+            'page'       => $page,
+            'results'    => $results,
+            'categories' => $this->get('api.service.category')
+                ->responsify($categories),
+            'total'      => $total,
         ]);
     }
 
