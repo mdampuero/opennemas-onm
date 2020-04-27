@@ -421,11 +421,11 @@ class FrontendController extends Controller
         ]);
 
         if (!empty($item)) {
-            $params['content']     = $item;
-            $params['contentId']   = $item->id;
-            $params['item']        = $item;
-            $params['o_content']   = $item;
-            $params['o_token']     = $this->get('core.helper.subscription')
+            $params['content']   = $item;
+            $params['contentId'] = $item->id;
+            $params['item']      = $item;
+            $params['o_content'] = $item;
+            $params['o_token']   = $this->get('core.helper.subscription')
                 ->getToken($item);
 
             $params['x-cacheable'] = empty($params['o_token'])
@@ -572,17 +572,6 @@ class FrontendController extends Controller
             }
         }
 
-        $em = $this->get('entity_repository');
-        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
-            $photoInt = $em->find('Photo', $params['content']->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
-
-        if (isset($params['content']->fk_video2) && ($params['content']->fk_video2 > 0)) {
-            $videoInt = $em->find('Video', $params['content']->fk_video2);
-            $this->view->assign('videoInt', $videoInt);
-        }
-
         //Get suggested contents
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
@@ -594,7 +583,6 @@ class FrontendController extends Controller
         $photos    = $suggestedContents[1];
 
         $this->view->assign([
-            'related'   => $this->getRelated($params['content']),
             'suggested' => $suggested,
             'photos'    => $photos
         ]);
