@@ -54,7 +54,7 @@ class DynamicCssService
             $id = $section;
         } else {
             try {
-                $id = $this->cs->getItemBySlug($section)->pk_content_category;
+                $id = $this->cs->getItemBySlug($section)->id;
             } catch (GetItemException $e) {
                 return $datetime->getTimestamp();
             }
