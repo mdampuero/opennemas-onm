@@ -104,11 +104,6 @@ class BlogController extends FrontendController
     {
         $content = parent::getItem($request);
 
-        if (!empty($content)) {
-            $content->author = $this->get('user_repository')
-                ->find((int) $content->fk_author);
-        }
-
         return $content;
     }
 
@@ -125,16 +120,14 @@ class BlogController extends FrontendController
 
         $slug = $request->get('author_slug', null);
 
-        $criteria = [ 'username' => [ [ 'value' => $slug] ] ];
-        $author   = $this->get('user_repository')->findOneBy($criteria);
+        $author = $this->container->get('api.service.author')
+            ->getItemBy("username='{$slug}'");
 
         if (is_null($author)) {
             throw new ResourceNotFoundException();
         }
 
-        if (array_key_exists('is_blog', $author->meta)
-            && $author->meta['is_blog'] == 0
-        ) {
+        if ($author->is_blog == 0) {
             return new RedirectResponse(
                 $this->generateUrl(
                     'frontend_blog_author_frontpage',
@@ -316,9 +309,7 @@ class BlogController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $author->slug  = $author->username;
         $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
-        $author->getMeta();
 
         $this->cm = new \ContentManager();
         // Get the number of total opinions for this author for pagination purposes
@@ -330,11 +321,6 @@ class BlogController extends FrontendController
             if (isset($blog->img1) && ($blog->img1 > 0)) {
                 $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
             }
-            $blog->author           = $author;
-            $blog->author_name_slug = $author->slug;
-
-            // Generate author uri
-            $blog->author_uri = $this->get('core.helper.url_generator')->generate($author);
         }
 
         $pagination = $this->get('paginator')->get([
@@ -369,10 +355,5 @@ class BlogController extends FrontendController
         }
 
         $params['blog']   = $params['content'];
-        $params['author'] = $params['content']->author;
-
-        // TODO: Remove this ASAP
-        $params['content']->author_name_slug =
-            \Onm\StringUtils::getTitle($params['content']->name);
     }
 }
