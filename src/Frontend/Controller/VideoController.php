@@ -145,10 +145,6 @@ class VideoController extends FrontendController
      */
     protected function hydrateShow(array &$params = []):void
     {
-        $params['content']->author = $this->get('user_repository')->find(
-            (int) $params['content']->fk_author
-        );
-
         $params = array_merge($params, [
             'tags' => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($params['content']->tags)['items']
