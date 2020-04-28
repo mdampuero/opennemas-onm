@@ -27,7 +27,8 @@
             "app/AppCache.php"
         ],
         "files": [
-            "libs/functions.php"
+            "libs/functions.php",
+            "src/Common/Core/Component/Functions/author.php"
         ]
     },
     "autoload-dev": {
