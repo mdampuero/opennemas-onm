@@ -93,14 +93,12 @@ class OpinionController extends FrontendController
         $this->checkSecurity($this->extension);
 
         $authorID = (int) $request->get('author_id', null);
-        $author   = $this->get('user_repository')->find($authorID);
+        $author   = $this->container->get('api.service.author')->getItem($authorID);
         if (is_null($author)) {
             throw new ResourceNotFoundException();
         }
 
-        if (array_key_exists('is_blog', $author->meta)
-            && $author->params['is_blog'] == 1
-        ) {
+        if (!empty($author->is_blog)) {
             return new RedirectResponse(
                 $this->generateUrl(
                     'frontend_blog_author_frontpage',
@@ -208,38 +206,15 @@ class OpinionController extends FrontendController
             'route'       => 'frontend_opinion_frontpage'
         ]);
 
-        $authors = [];
-        $ur      = $this->get('user_repository');
         foreach ($opinions as &$opinion) {
-            if (!array_key_exists($opinion->fk_author, $authors)) {
-                $authors[$opinion->fk_author] = $ur->find($opinion->fk_author);
-            }
-
-            $opinion->author = $authors[$opinion->fk_author];
-
-            if (isset($opinion->author)
-                && (empty($opinion->author->meta)
-                || !array_key_exists('is_blog', $opinion->author->meta)
-                || $opinion->author->meta['is_blog'] == 0)
-            ) {
-                $opinion->name             = $opinion->author->name;
-                $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
-
-                if ($opinion->img1 > 0) {
-                    $opinion->img1 = $this->get('entity_repository')
-                        ->find('Photo', $opinion->img1);
-                }
-
-                $opinion->author->uri = \Uri::generate('opinion_author_frontpage', [
-                    'slug' => urlencode(\Onm\StringUtils::generateSlug($opinion->author->name)),
-                    'id'   => sprintf('%06d', $opinion->author->id)
-                ]);
+            if ($opinion->img1 > 0) {
+                $opinion->img1 = $this->get('entity_repository')
+                    ->find('Photo', $opinion->img1);
             }
         }
 
         $params = array_merge($params, [
             'opinions'   => $opinions,
-            'authors'    => $authors,
             'pagination' => $pagination,
             'page'       => $page
         ]);
@@ -294,15 +269,6 @@ class OpinionController extends FrontendController
         $opinions      = $this->get('opinion_repository')->findBy($filters, $orderBy, $numOpinions, $page);
 
         foreach ($opinions as &$opinion) {
-            // Get author uri
-            $opinion->author_uri = $this->generateUrl(
-                'frontend_opinion_author_frontpage',
-                [
-                    'author_id'   => sprintf('%06d', $author->id),
-                    'author_slug' => $author->slug,
-                ]
-            );
-
             // Get opinion image
             if (isset($opinion->img1) && ($opinion->img1 > 0)) {
                 $opinion->img1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
@@ -343,13 +309,5 @@ class OpinionController extends FrontendController
             $params['photo'] = $this->get('opinion_repository')
                 ->find('Photo', $params['content']->img2);
         }
-
-        // TODO: Remove this ASAP
-        $params['author'] = $this->get('user_repository')
-            ->find((int) $params['content']->fk_author);
-
-        $params['content']->author           = $params['author'];
-        $params['content']->author_name_slug =
-            \Onm\StringUtils::getTitle($params['content']->name);
     }
 }
