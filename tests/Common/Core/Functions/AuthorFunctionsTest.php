@@ -263,4 +263,64 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
             'avatar_img_id' => 593
         ])));
     }
+
+    /**
+     * Tests get_author_bio_summary.
+     */
+    public function testGetAuthorBioSummary()
+    {
+        $this->assertNull(get_author_bio_summary(131));
+        $this->assertEquals('Journalist', get_author_bio_summary(new User([
+            'name' => 'Michelle Price',
+            'bio'  => 'Journalist'
+        ])));
+    }
+
+    /**
+     * Tests get_author_bio_body.
+     */
+    public function testGetAuthorBioBody()
+    {
+        $this->assertNull(get_author_bio_body(131));
+        $this->assertEquals('Journalist', get_author_bio_body(new User([
+            'name'            => 'Michelle Price',
+            'bio_description' => 'Journalist'
+        ])));
+    }
+
+    /**
+     * Tests get_author_social_twitter_url.
+     */
+    public function testGetAuthorSocialTwitterUrl()
+    {
+        $this->assertNull(get_author_social_twitter_url(131));
+        $this->assertEquals('https://www.twitter.com/@MichellePrice', get_author_social_twitter_url(new User([
+            'name'    => 'Michelle Price',
+            'twitter' => '@MichellePrice'
+        ])));
+    }
+
+     /**
+     * Tests has_author_bio_summary.
+     */
+    public function testHasAuthorBioSummary()
+    {
+        $this->assertFalse(has_author_bio_summary(131));
+        $this->assertTrue(has_author_bio_summary(new User([
+            'name' => 'Michelle Price',
+            'bio'  => 'Journalist'
+        ])));
+    }
+
+     /**
+     * Tests has_author_social_twitter_url.
+     */
+    public function testHasAuthorTwitterUrl()
+    {
+        $this->assertFalse(has_author_social_twitter_url(131));
+        $this->assertTrue(has_author_social_twitter_url(new User([
+            'name'    => 'Michelle Price',
+            'twitter' => '@MichellePrice'
+        ])));
+    }
 }

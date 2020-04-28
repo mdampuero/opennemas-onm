@@ -102,6 +102,51 @@ function get_author_slug($item = null) : ?string
 }
 
 /**
+ * Returns the short author bio for the provided item.
+ *
+ * @param Content $item The item to get author slug for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The author bio if author is present. Null otherwise.
+ */
+function get_author_bio_summary($item = null) : ?string
+{
+    $author = get_author($item);
+
+    return !empty($author->bio) ? $author->bio : null;
+}
+
+/**
+ * Returns the long author biography for the provided item.
+ *
+ * @param Content $item The item to get author biography for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The author bio if author is present. Null otherwise.
+ */
+function get_author_bio_body($item = null) : ?string
+{
+    $author = get_author($item);
+
+    return !empty($author->bio_description) ? $author->bio_description : null;
+}
+
+/**
+ * Returns the author twitter url for the provided item.
+ *
+ * @param Content $item The item to get author twitter url for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The twitter url if author is present. Null otherwise.
+ */
+function get_author_social_twitter_url($item = null) : ?string
+{
+    $author = get_author($item);
+
+    return !empty($author->twitter) ? ("https://www.twitter.com/" . $author->twitter) : null;
+}
+
+/**
  * Returns the relative URL to the automatic frontpage of the author for the
  * provided item.
  *
@@ -147,4 +192,36 @@ function has_author($item = null) : bool
 function has_author_avatar($item = null) : bool
 {
     return !empty(get_author_avatar($item));
+}
+
+
+/**
+ * Checks if the author has a bio defined as
+ * parameter.
+ *
+ * @param mixed $item The item to check author's bio for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author has a. False otherwise.
+ */
+function has_author_bio_summary($item = null) : bool
+{
+    return !empty(get_author_bio_summary($item));
+}
+
+
+/**
+ * Checks if the author has a twitter account provided as
+ * parameter.
+ *
+ * @param mixed $item The item to check author's twitter account for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author has a twitter account defined. False otherwise.
+ */
+function has_author_social_twitter_url($item = null) : bool
+{
+    return !empty(get_author_social_twitter_url($item));
 }
