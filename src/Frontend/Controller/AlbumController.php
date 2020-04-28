@@ -162,8 +162,6 @@ class AlbumController extends FrontendController
     protected function hydrateShow(array &$params = []) : void
     {
         $params['tags']   = $this->getTags($params['content']);
-        $params['author'] = $this->get('user_repository')
-            ->find($params['content']->fk_author);
 
         $cacheIds = array_map(function ($a) {
             return [ 'photo', $a['pk_photo'] ];
