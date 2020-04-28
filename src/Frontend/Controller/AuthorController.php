@@ -31,7 +31,7 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
-        $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
+        $user = $this->container->get('api.service.author')->getItemBy("username='{$slug}'");
         if (empty($user)) {
             throw new ResourceNotFoundException();
         }
