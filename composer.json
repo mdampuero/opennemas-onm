@@ -28,7 +28,7 @@
         ],
         "files": [
             "libs/functions.php",
-            "src/Common/Core/Component/Functions/author.php"
+            "src/Common/Core/Functions/author.php"
         ]
     },
     "autoload-dev": {
