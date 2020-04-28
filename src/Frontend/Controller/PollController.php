@@ -259,7 +259,5 @@ class PollController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['author'] = $this->get('user_repository')
-            ->find($params['content']->fk_author);
     }
 }
