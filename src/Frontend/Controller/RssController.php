@@ -94,7 +94,7 @@ class RssController extends Controller
 
             list($contentPositions, $contents, , ) =
                 $this->get('api.service.frontpage')
-                ->getCurrentVersionForCategory($id);
+                    ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -219,10 +219,8 @@ class RssController extends Controller
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Get user by slug
-            $user = $this->get('user_repository')->findOneBy(
-                [ 'username' => [[ 'value' => $slug ]] ],
-                ''
-            );
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username='{$slug}'");
 
             if (is_null($user)) {
                 throw new ResourceNotFoundException();
