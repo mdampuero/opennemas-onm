@@ -53,7 +53,7 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list'    => [ 'page', 'category_name' ],
+        'list'    => [ 'page', 'category_slug' ],
         'showamp' => [ '_format' ],
     ];
 
@@ -87,7 +87,7 @@ class AlbumController extends FrontendController
      */
     protected function getRoute($action, $params = [])
     {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
+        if ($action == 'list' && array_key_exists('category_slug', $params)) {
             return 'frontend_album_frontpage_category';
         }
 
@@ -149,7 +149,7 @@ class AlbumController extends FrontendController
                         ? 'frontend_album_frontpage'
                         : 'frontend_album_frontpage_category',
                     'params' => !empty($category)
-                        ? [ 'category_name' => $category->name ]
+                        ? [ 'category_slug' => $category->name ]
                         : []
                 ]
             ])

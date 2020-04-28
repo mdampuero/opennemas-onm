@@ -51,7 +51,7 @@ class VideoController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list'       => [ 'page', 'category_name' ],
+        'list'       => [ 'page', 'category_slug' ],
         'showamp'    => [ '_format' ],
     ];
 
@@ -134,7 +134,7 @@ class VideoController extends FrontendController
                         : 'frontend_video_frontpage_category',
                     'params' => (!$category)
                         ? []
-                        : ['category_name' => $category->name],
+                        : ['category_slug' => $category->name],
                 ],
             ]),
         ]);
@@ -163,7 +163,7 @@ class VideoController extends FrontendController
      **/
     public function getRoute($action, $params = [])
     {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
+        if ($action == 'list' && array_key_exists('category_slug', $params)) {
             return 'frontend_video_frontpage_category';
         }
 

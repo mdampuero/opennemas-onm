@@ -132,7 +132,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $category = new Category([ 'name' => 'garply' ]);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('category_frontpage', [ 'category_name' => 'garply' ])
+            ->with('category_frontpage', [ 'category_slug' => 'garply' ])
             ->willReturn('blog/section/garply');
 
         $this->assertEquals(
@@ -149,7 +149,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content = new \Article();
 
         $content->id                = 252;
-        $content->category_name     = 'actualidad';
+        $content->category_slug     = 'actualidad';
         $content->category_id       = 28618;
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'article';
@@ -316,7 +316,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content = new \Article();
 
         $content->id                = 252;
-        $content->category_name     = 'actualidad';
+        $content->category_slug     = 'actualidad';
         $content->category_id       = 24845;
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'article';
@@ -343,7 +343,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $date    = new \DateTime();
 
         $content->id                = 252;
-        $content->category_name     = 'actualidad';
+        $content->category_slug     = 'actualidad';
         $content->category_id       = 6458;
         $content->created           = $date;
         $content->content_type_name = 'video';
@@ -372,7 +372,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content = new Content([
             'pk_content'        => 252,
-            'category_name'     => 'actualidad',
+            'category_slug'     => 'actualidad',
             'categories'        => [ 6458 ],
             'created'           => $date,
             'content_type_name' => 'video',
@@ -601,7 +601,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content = new \Video();
 
         $content->id                = 252;
-        $content->category_name     = 'actualidad';
+        $content->category_slug     = 'actualidad';
         $content->category_id       = 28618;
         $content->created           = '2015-01-14 23:49:40';
         $content->content_type_name = 'video';

@@ -139,7 +139,7 @@ class AuthorController extends Controller
      */
     public function extAuthorFrontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Get sync params

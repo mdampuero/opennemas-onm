@@ -55,7 +55,7 @@ class PollController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list'    => [ 'page', 'category_name' ],
+        'list'    => [ 'page', 'category_slug' ],
         'showamp' => [ '_format' ],
     ];
 
@@ -196,7 +196,7 @@ class PollController extends FrontendController
      */
     protected function getRoute($action, $params = [])
     {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
+        if ($action == 'list' && array_key_exists('category_slug', $params)) {
             return 'frontend_poll_frontpage_category';
         }
 
@@ -247,7 +247,7 @@ class PollController extends FrontendController
                         : 'frontend_poll_frontpage_category',
                     'params' => empty($category)
                         ? []
-                        : [ 'category_name' => $category->name ],
+                        : [ 'category_slug' => $category->name ],
                 ]
 
             ])

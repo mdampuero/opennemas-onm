@@ -37,11 +37,11 @@ frontendmobile_opinion_show:
         opinion_id     : '[a-z0-9\-]+'
 
 frontendmobile_article_show:
-    path: /mobile/{component}/{category_name}/{slug}/{article_id}.{_format}
+    path: /mobile/{component}/{category_slug}/{slug}/{article_id}.{_format}
     defaults: { _controller: FrontendMobileBundle:Mobile:articleInnerRedirect, component: articulo, _format: html, page: 1 }
     requirements:
         component     : 'articulo|artigo|article'
-        category_name : '[a-z0-9\-]+'
+        category_slug : '[a-z0-9\-]+'
         slug          : '[a-z0-9\-]+'
         article_id    : '([0-9]+)'
         _format       : 'html|htm'

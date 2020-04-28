@@ -72,7 +72,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'content_status'    => '1',
             'in_litter'         => 0,
         ]);
-        $this->content->category_name = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
+        $this->content->category_slug = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
 
         $this->matcher = new ContentUrlMatcher($this->em);
     }

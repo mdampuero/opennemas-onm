@@ -76,7 +76,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_name: categories[0].name
+              category_slug: categories[0].name
             })
           );
         };

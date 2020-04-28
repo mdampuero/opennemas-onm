@@ -205,7 +205,7 @@ class UrlGeneratorHelper
     protected function getUriForCategory($category)
     {
         $uri = $this->container->get('router')->generate('category_frontpage', [
-            'category_name' => $category->name
+            'category_slug' => $category->name
         ]);
 
         return trim($uri, '/');

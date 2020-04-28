@@ -38,7 +38,7 @@ class MonographsController extends Controller
         $this->category     = 0;
         $this->categoryName = $this->get('request_stack')
             ->getCurrentRequest()
-            ->query->get('category_name', '');
+            ->query->get('category_slug', '');
 
         if (!empty($this->categoryName)) {
             $category = $this->get('api.service.category')
@@ -160,7 +160,7 @@ class MonographsController extends Controller
     {
         $dirtyID      = $request->get('special_id', '');
         $urlSlug      = $request->get('slug', '');
-        $categoryName = $request->get('category_name', '');
+        $categoryName = $request->get('category_slug', '');
 
         $special = $this->get('content_url_matcher')
             ->matchContentUrl('special', $dirtyID, $urlSlug, $categoryName);

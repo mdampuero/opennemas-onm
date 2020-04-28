@@ -121,7 +121,7 @@
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              category_name: $scope.selectedCategory.name
+              category_slug: $scope.selectedCategory.name
             })
           );
         };

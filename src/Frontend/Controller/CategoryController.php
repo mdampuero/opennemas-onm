@@ -40,7 +40,7 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'category_name', 'page' ]
+        'list' => [ 'category_slug', 'page' ]
     ];
 
     /**
@@ -66,8 +66,8 @@ class CategoryController extends FrontendController
         $item   = $this->getItem($request);
         $params = $this->getQueryParameters($action, $request->query->all());
 
-        // Fix category_name from query basing on item
-        $params['category_name'] = $item->name;
+        // Fix category_slug from query basing on item
+        $params['category_slug'] = $item->name;
 
         $expected = $this->getExpectedUri($action, $params);
 
@@ -95,7 +95,7 @@ class CategoryController extends FrontendController
      */
     public function extCategoryAction(Request $request)
     {
-        $slug  = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $slug  = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
         $page  = (int) $request->query->get('page', 1);
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($slug);
 
@@ -217,7 +217,7 @@ class CategoryController extends FrontendController
      */
     protected function getItem(Request $request)
     {
-        $item = $this->getCategory($request->get('category_name'));
+        $item = $this->getCategory($request->get('category_slug'));
 
         if (!$item->enabled) {
             throw new ResourceNotFoundException();
@@ -397,7 +397,7 @@ class CategoryController extends FrontendController
             'route'       => [
                 'name'   => 'category_frontpage',
                 'params' => [
-                    'category_name' => $params['category']->name
+                    'category_slug' => $params['category']->name
                 ]
             ]
         ]);

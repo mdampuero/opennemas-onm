@@ -421,11 +421,11 @@ class FrontendController extends Controller
         ]);
 
         if (!empty($item)) {
-            $params['content']     = $item;
-            $params['contentId']   = $item->id;
-            $params['item']        = $item;
-            $params['o_content']   = $item;
-            $params['o_token']     = $this->get('core.helper.subscription')
+            $params['content']   = $item;
+            $params['contentId'] = $item->id;
+            $params['item']      = $item;
+            $params['o_content'] = $item;
+            $params['o_token']   = $this->get('core.helper.subscription')
                 ->getToken($item);
 
             $params['x-cacheable'] = empty($params['o_token'])
@@ -438,8 +438,8 @@ class FrontendController extends Controller
             $params[$item->content_type_name] = $item;
         }
 
-        if (array_key_exists('category_name', $params)) {
-            $params['o_category'] = $this->getCategory($params['category_name']);
+        if (array_key_exists('category_slug', $params)) {
+            $params['o_category'] = $this->getCategory($params['category_slug']);
             $params['category']   = $params['o_category'];
             $params['categories'] = [];
         }

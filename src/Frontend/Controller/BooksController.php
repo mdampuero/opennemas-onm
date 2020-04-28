@@ -76,7 +76,7 @@ class BooksController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName = $request->get('category_name', null);
+        $categoryName = $request->get('category_slug', null);
         $dirtyID      = $request->get('id', null);
         $urlSlug      = $request->get('slug', null);
 

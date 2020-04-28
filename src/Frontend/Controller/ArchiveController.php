@@ -32,7 +32,7 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $date         = "{$year}-{$month}-{$day}";
         $itemsPerPage = 20;
@@ -70,7 +70,7 @@ class ArchiveController extends Controller
             ];
 
             if ($categoryName != 'home') {
-                $criteria['category_name'] = [[ 'value' => $categoryName ]];
+                $criteria['category_slug'] = [[ 'value' => $categoryName ]];
             }
 
             $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
@@ -157,7 +157,7 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $path         = "{$year}/{$month}/{$day}";
         $html         = '';
         $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";

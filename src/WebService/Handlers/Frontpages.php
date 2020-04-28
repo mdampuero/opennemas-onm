@@ -77,7 +77,7 @@ class Frontpages
                         ->generate(
                             'frontend_external_article_show',
                             [
-                                'category_name' => get_category_slug($content),
+                                'category_slug' => get_category_slug($content),
                                 'slug'          => $content->slug,
                                 'article_id'    => date('YmdHis', strtotime($content->created)) .
                                                    sprintf('%06d', $content->pk_content),
@@ -118,7 +118,7 @@ class Frontpages
     }
 
     /*
-    * @url GET /frontpages/allcontentblog/:category_name/:page
+    * @url GET /frontpages/allcontentblog/:category_slug/:page
     */
     public function allContentBlog($categoryName, $page = 1)
     {
@@ -212,7 +212,7 @@ class Frontpages
                     ->generate(
                         'frontend_external_article_show',
                         [
-                            'category_name' => get_category_slug($content),
+                            'category_slug' => get_category_slug($content),
                             'slug'          => $content->slug,
                             'article_id'    => date('YmdHis', strtotime($content->created)) .
                                                sprintf('%06d', $content->pk_content),
@@ -234,7 +234,7 @@ class Frontpages
             'route' => [
                 'name'   => 'categ_sync_frontpage',
                 'params' => [
-                    'category_name' => $categoryName,
+                    'category_slug' => $categoryName,
                 ]
             ]
         ]);

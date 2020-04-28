@@ -53,7 +53,7 @@ class MobileController extends Controller
     public function articleInnerRedirectAction(Request $request)
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $urlSlug      = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         $article = $this->get('content_url_matcher')

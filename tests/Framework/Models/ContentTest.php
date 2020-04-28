@@ -197,7 +197,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             'fk_content_type'        => 1,
             'category_id'            => 2,
             'params'                 => 'a:2:{s:4:"test";i:1;s:5:"test2";i:2;}',
-            'category_name'          => 'testing',
+            'category_slug'          => 'testing',
         ]);
         $this->assertEquals(123, $content->id);
         $this->assertEquals('other value', $content->other_value);

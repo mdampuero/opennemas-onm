@@ -5,15 +5,15 @@
 */
 use Symfony\Component\HttpFoundation\Request;
 
-require __DIR__.'/../app/autoload.php';
+require __DIR__ . '/../app/autoload.php';
 
 
-$_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
+$_SERVER['SERVER_NAME'] = 'www.cronicasdelaemigracion.com';
 //$_SERVER['SERVER_NAME']   = 'cronicas.local:8080';
-$_SERVER['REQUEST_URI']   = '/';
-$_SERVER['REQUEST_PORT']  = '8080';
-$_SERVER['SERVER_PORT']   = '8080';
-$_SERVER['HTTP_HOST']     = 'www.cronicasdelaemigracion.com';
+$_SERVER['REQUEST_URI']  = '/';
+$_SERVER['REQUEST_PORT'] = '8080';
+$_SERVER['SERVER_PORT']  = '8080';
+$_SERVER['HTTP_HOST']    = 'www.cronicasdelaemigracion.com';
 
 define('INSTANCE_UNIQUE_NAME', 'cronicas');
 
@@ -22,10 +22,10 @@ $routes = new \Symfony\Component\Routing\RouteCollection();
 
 // Create the request object
 $request = Request::createFromGlobals();
-$request->setTrustedProxies(array('127.0.0.1'));
+$request->setTrustedProxies(['127.0.0.1']);
 
 
-$sc = include __DIR__.'/../app/container.php';
+$sc = include __DIR__ . '/../app/container.php';
 
  /*
 $framework = $sc->get('framework');
@@ -34,10 +34,10 @@ $response->send();
 $framework->terminate($request, $response);
 */
 
-$date          =  new DateTime();
+$date          = new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
-$basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
-$curly         = array();
+$basePath      = SITE_PATH . "/media/cronicas/library" . $directoryDate;
+$curly         = [];
 
 if (!file_exists($basePath)) {
     mkdir($basePath, 0777, true);
@@ -50,8 +50,8 @@ $menu = new \Menu();
 //$menu->getMenu('archive');
 
 
-$menu->name  ='archive';
-$menu->items = array();
+$menu->name  = 'archive';
+$menu->items = [];
 
 $item       = new stdClass();
 $item->link = 'home';
@@ -89,41 +89,37 @@ if (count(($menu->items)) <= 0) {
     die();
 }
 
-$urlBase = 'http://'.$_SERVER['SERVER_NAME'].'/'."seccion/";
+$urlBase = 'http://' . $_SERVER['SERVER_NAME'] . '/' . "seccion/";
 //$urlBase = SITE_URL.'/'."seccion/";
 
 foreach ($menu->items as $item) {
+    $category_slug = $item->link;
 
-    $category_name = $item->link;
+    if (!empty($category_slug)) {
+        $curly[$category_slug] = curl_init();
 
-    if (!empty($category_name)) {
+        $url = $urlBase . $category_slug . '/';
+        curl_setopt($curly[$category_slug], CURLOPT_URL, $url);
+        curl_setopt($curly[$category_slug], CURLOPT_HEADER, 0);
+        curl_setopt($curly[$category_slug], CURLOPT_RETURNTRANSFER, 1);
 
-        $curly[$category_name] = curl_init();
-
-        $url = $urlBase. $category_name.'/';
-        curl_setopt($curly[$category_name], CURLOPT_URL, $url);
-        curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
-        curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
-
-        curl_multi_add_handle($mh, $curly[$category_name]);
+        curl_multi_add_handle($mh, $curly[$category_slug]);
     }
 }
 
   // execute the handles
 $running = null;
 do {
-
     curl_multi_exec($mh, $running);
-
 } while ($running > 0);
 
 
 // change menu to stay in archive fronpages
-$pattern     = array();
-$replacement = array();
+$pattern     = [];
+$replacement = [];
 
 foreach ($menu->items as $item) {
-    $category = $item->link;
+    $category  = $item->link;
     $pattern[] = "@href=\"/seccion/{$category}\"@";
     //archive/digital/2013/02/02/home.html
     $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
@@ -134,12 +130,12 @@ array_push($pattern, "@href=\"/\"@");
 array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
 
   // get content and remove handles
-foreach ($curly as $category_name => $c) {
+foreach ($curly as $category_slug => $c) {
     $htmlOut = curl_multi_getcontent($c);
 
     $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
-    $newFile = $basePath.$category_name.".html";
+    $newFile = $basePath . $category_slug . ".html";
     $result  = file_put_contents($newFile, $htmlOut);
 
     curl_multi_remove_handle($mh, $c);

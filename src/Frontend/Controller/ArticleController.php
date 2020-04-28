@@ -63,7 +63,7 @@ class ArticleController extends FrontendController
     {
         // Fetch HTTP variables
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
