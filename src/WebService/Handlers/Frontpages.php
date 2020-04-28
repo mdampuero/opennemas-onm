@@ -156,7 +156,7 @@ class Frontpages
             'content_type_name' => [[ 'value' => 'article' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'slug'              => [ [ 'value' => $category->name ] ],
+            'name'              => [ [ 'value' => $category->name ] ],
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],

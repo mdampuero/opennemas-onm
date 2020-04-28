@@ -47,6 +47,24 @@ class ArchiveController extends Controller
             $er       = $this->get('entity_repository');
             $order    = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
             $criteria = [
+                'join' => [
+                    [
+                        'type'       => 'INNER',
+                        'table'      => 'content_category',
+                        'contents.pk_content' => [
+                            [ 'value' => 'content_category.content_id', 'field' => true ]
+                        ]
+                    ]
+                ],
+                'join' => [
+                    [
+                        'type'       => 'INNER',
+                        'table'      => 'category',
+                        'content_category.category_id' => [
+                            [ 'value' => 'category.id', 'field' => true ]
+                        ]
+                    ]
+                ],
                 'in_litter'       => [[ 'value' => 0 ]],
                 'content_status'  => [[ 'value' => 1 ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -70,7 +88,7 @@ class ArchiveController extends Controller
             ];
 
             if ($categoryName != 'home') {
-                $criteria['category_slug'] = [[ 'value' => $categoryName ]];
+                $criteria['name'] = [[ 'value' => $categoryName ]];
             }
 
             $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
