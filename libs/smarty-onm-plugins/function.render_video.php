@@ -3,45 +3,15 @@ function smarty_function_render_video($params, &$smarty)
 {
     $video = $params['video'];
 
-    if (isset($video->video_content_replaced)) {
-        $output = '';
-    } elseif ($video->author_name == 'script') {
-        $output = '<div class="video-container">' . $video->body . '</div>';
-    } elseif ($video->author_name == 'external') {
-        $output = getExternalVideoOutput($params, $video);
-    } else {
-        $output = getVideoOutput($params, $video);
-    }
+    $output = $video->author_name == 'script'
+        ? '<div class="video-container">' . $video->body . '</div>'
+        : getVideoOutput($params, $video);
 
     if ($params['amp']) {
-        $output = getVideoWithAMPFormat($output);
-    }
-
-    return $output;
-}
-
-function getExternalVideoOutput($params, $video)
-{
-    $cssClass = (array_key_exists('css_class', $params) ? $params['css'] : null);
-    if (!empty($video->video_url)) {
-        $output  = "<video class='{$cssClass}' controls>";
-        $output .= '<source src="' . $video->video_url . '" type="video/flv">';
-        $output .= ' </video>';
-    } elseif (!empty($video->information)) {
-        if (is_array($video->information)) {
-            $videoInfo = $video->information;
-        } else {
-            $videoInfo = unserialize($video->information);
-        }
-        if (!empty($videoInfo['source'])) {
-            $output = '<video controls>';
-            foreach ($videoInfo['source'] as $type => $url) {
-                if (!empty($url)) {
-                    $output .= '<source src="' . $url . '" type="video/' . $type . '">';
-                }
-            }
-            $output .= ' </video>';
-        }
+        $output = getService('data.manager.filter')
+            ->set($output)
+            ->filter('amp')
+            ->get();
     }
 
     return $output;
@@ -49,80 +19,30 @@ function getExternalVideoOutput($params, $video)
 
 function getVideoOutput($params, $video)
 {
-    if (is_array($video->information)) {
-        $videoInfo = $video->information;
-    } else {
-        $videoInfo = unserialize($video->information);
-    }
+    $videoInfo = is_array($video->information)
+        ? $video->information
+        : unserialize($video->information);
 
-    if ($video->author_name == 'Youtube' || $videoInfo['service'] == 'Youtube') {
-        $videoUrl = $video->video_url;
+    $width  = $params['width'] ?? '560';
+    $height = $params['height'] ?? '320';
 
-        $regex = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)'
-            . '/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i';
-        if (preg_match($regex, $videoUrl, $match)) {
-            $videoId = $match[1];
-            if (!empty($videoId)) {
-                $videoUrl = '//www.youtube.com/embed/' . $videoId;
+    // Videos mp4, ogg, webm and flv
+    if (!empty($videoInfo['source'])) {
+        $output = '<video controls width="' . $width . '" height="' . $height . '">';
+        foreach ($videoInfo['source'] as $type => $url) {
+            if (!empty($url)) {
+                $output .= '<source src="' . $url . '" type="video/' . $type . '">';
             }
         }
-        $width  = '560';
-        $height = '320';
-        if ($params['width'] || $params['height']) {
-            $width  = $params['width'];
-            $height = $params['height'];
-        }
-        $output = '<div class="video-container"><iframe width="'
-            . $width . '" height="' . $height . '" src="' . $videoUrl
-            . '" frameborder="0" allowfullscreen></iframe></div>';
-    } else {
-        if ($params['width'] || $params['height']) {
-            $videoInfo['embedHTML'] = preg_replace(
-                "@width=['|\"]\d*['|\"]@",
-                "width=\"{$params['width']}\"",
-                $videoInfo['embedHTML']
-            );
-            $videoInfo['embedHTML'] = preg_replace(
-                "@height=['|\"]\d*['|\"]@",
-                "height=\"{$params['height']}\"",
-                $videoInfo['embedHTML']
-            );
-        }
-        $output = $videoInfo['embedHTML'];
+        $output .= ' </video>';
+
+        return $output;
     }
+
+    // Videos from external services
+    $output = '<div class="video-container"><iframe width="' . $width . '" height="'
+        . $height . '" src="' . $videoInfo['embedUrl']
+        . '" frameborder="0" allowfullscreen></iframe></div>';
 
     return $output;
-}
-
-function getVideoWithAMPFormat($output)
-{
-    // Find iframe
-    preg_match('@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@', $output, $matches);
-
-    if (!empty($matches[0])) {
-        $output = $matches[0];
-    }
-
-    $patterns = [
-        '@<video([^>]+>)(?s)(.*?)<\/video>@',
-        '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
-        '@<object[^>]*>(?s).*?<\/object>@',
-    ];
-
-    $replacements = [
-        '<amp-video layout="responsive" width="500" height="320" controls>
-            ${2}
-            <div fallback>
-                <p>This browser does not support the video element.</p>
-            </div>
-        </amp-video>',
-        '<amp-iframe width=500 height=320
-            sandbox="allow-scripts allow-same-origin"
-            frameborder="0"
-            src="https:${1}">
-        </amp-iframe>',
-        '',
-    ];
-
-    return preg_replace($patterns, $replacements, $output);
 }
