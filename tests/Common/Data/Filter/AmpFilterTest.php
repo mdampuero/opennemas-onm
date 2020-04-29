@@ -84,7 +84,7 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
     {
         // String with img
         $str      = '<p>The string</p><img src="/mumble/" /><p>to</p><p>parse</p>';
-        $expected = '<p>The string</p><div class="fixed-container"><amp-img  class="cover" layout="fill"'
+        $expected = '<p>The string</p><div class="fixed-container"><amp-img class="cover" layout="fill"'
             . ' src="/mumble/"></amp-img></div><p>to</p><p>parse</p>';
 
         $this->assertEquals($expected, $this->filter->filter($str));
@@ -101,7 +101,8 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
         $str      = '<iframe src="http://whatever.com"></iframe>';
         $expected = '<amp-iframe width=518 height=291 sandbox="allow-scripts '
             . 'allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms" '
-            . 'layout="responsive" frameborder="0" src="https://whatever.com"></amp-iframe>';
+            . 'layout="responsive" frameborder="0" src="https://whatever.com"> '
+            . '<amp-img layout="fill" src="/assets/images/lazy-bg.png" placeholder></amp-img></amp-iframe>';
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
