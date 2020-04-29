@@ -32,7 +32,8 @@ class DynamicCssService
     /**
      * Initializes the DynamicCssService.
      *
-     * @param EntityManager $em The entity manager service.
+     * @param EntityManager   $em The entity manager service.
+     * @param CategoryService $cs The category service.
      */
     public function __construct(EntityManager $em, CategoryService $cs)
     {
