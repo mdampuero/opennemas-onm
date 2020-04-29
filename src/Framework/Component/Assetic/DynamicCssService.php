@@ -9,8 +9,9 @@
  */
 namespace Framework\Component\Assetic;
 
-use Opennemas\Orm\Core\EntityManager;
 use Api\Exception\GetItemException;
+use Api\Service\V1\CategoryService;
+use Opennemas\Orm\Core\EntityManager;
 
 class DynamicCssService
 {
@@ -29,9 +30,12 @@ class DynamicCssService
     protected $cs;
 
     /**
-     * Initializes the instance
+     * Initializes the DynamicCssService.
+     *
+     * @param EntityManager   $em The entity manager service.
+     * @param CategoryService $cs The category service.
      */
-    public function __construct($em, $cs)
+    public function __construct(EntityManager $em, CategoryService $cs)
     {
         $this->em = $em;
         $this->cs = $cs;
