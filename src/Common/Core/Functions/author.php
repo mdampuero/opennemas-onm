@@ -191,7 +191,7 @@ function get_author_url($item = null) : ?string
  */
 function has_author($item = null) : bool
 {
-    return !empty(get_author($item));
+    return !empty(get_author_name($item));
 }
 
 /**
