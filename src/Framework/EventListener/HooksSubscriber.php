@@ -235,8 +235,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $categoryId = (int) $event->getArgument('category');
 
         $key = ($categoryId == 0) ? 'home' :
-            $this->container->get('api.service.category')
-            ->getItem($categoryId)->name;
+            $categoryId;
 
         $this->container->get('core.service.assetic.dynamic_css')
             ->deleteTimestamp($key);

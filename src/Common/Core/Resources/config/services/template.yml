@@ -8,17 +8,13 @@ parameters:
             - ads_scripts
             - adsense_validator
             - browser_update
-            - comscore
-            - chartbeat
             - cmp_script
             - google_tags_manager
             - css_includes
             - generate_fb_admin_tag
             - generate_fb_pages_tag
-            - google_analytics
             - js_includes
-            - ojd
-            - piwik
+            - statistics
     core.template.admin.filters:
         output:
             - css_includes

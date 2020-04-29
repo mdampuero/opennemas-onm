@@ -46,17 +46,17 @@
 {/block}
 
 {block name="commonColumnsHeader"}
-  <th class="v-align-middle" width="400" ng-if="isColumnEnabled('title')">
+  <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
     {t}Title{/t}
   </th>
-  <th class="text-center v-align-middle" width="140" ng-if="isColumnEnabled('server')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('server')" width="140">
     {t}Server{/t}
   </th>
-  <th class="text-center v-align-middle pointer" width="110" ng-click="sort('created_time')" ng-if="isColumnEnabled('created')">
+  <th class="text-center v-align-middle pointer" ng-click="sort('created_time')" ng-if="isColumnEnabled('created')" width="110">
     {t}Date{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('created_time') == 'asc', 'fa fa-caret-down': isOrderedBy('created_time') == 'desc' }"></i>
   </th>
-  <th class="text-center v-align-middle" width="140" ng-if="isColumnEnabled('category')">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('category')" width="140">
     {t}Category{/t}
   </th>
   <th class="v-align-middle" ng-if="isColumnEnabled('tags')" width="200">
@@ -65,7 +65,7 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('author')" width="200">
     {t}Author{/t}
   </th>
-  <th class="text-center v-align-middle pointer" width="100" ng-click="sort('priority')" ng-if="isColumnEnabled('priority')">
+  <th class="text-center v-align-middle pointer" ng-click="sort('priority')" ng-if="isColumnEnabled('priority')" width="100">
     {t}Priority{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('priority') == 'asc', 'fa fa-caret-down': isOrderedBy('priority') == 'desc' }"></i>
   </th>

@@ -34,5 +34,5 @@ class UserGroupController extends BackendController
      *
      * @var string
      */
-    protected $resource = 'user-group';
+    protected $resource = 'user_group';
 }

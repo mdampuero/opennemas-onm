@@ -44,5 +44,5 @@ class StaticPageController extends BackendController
      *
      * @var string
      */
-    protected $resource = 'static_pages';
+    protected $resource = 'static_page';
 }

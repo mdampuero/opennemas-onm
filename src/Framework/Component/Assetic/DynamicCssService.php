@@ -9,6 +9,8 @@
  */
 namespace Framework\Component\Assetic;
 
+use Api\Exception\GetItemException;
+use Api\Service\V1\CategoryService;
 use Opennemas\Orm\Core\EntityManager;
 
 class DynamicCssService
@@ -21,13 +23,21 @@ class DynamicCssService
     protected $em;
 
     /**
+     * The category api service
+     *
+     * @var CategoryService
+     */
+    protected $cs;
+
+    /**
      * Initializes the DynamicCssService.
      *
      * @param EntityManager $em The entity manager service.
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, CategoryService $cs)
     {
         $this->em = $em;
+        $this->cs = $cs;
     }
 
     /**
@@ -41,17 +51,27 @@ class DynamicCssService
     public function getTimestamp($section)
     {
         $settings = $this->em->getDataSet('Settings', 'instance');
+        $datetime = new \DateTime();
+
+        if ($section == '%global%' || $section == 'home') {
+            $id = $section;
+        } else {
+            try {
+                $id = $this->cs->getItemBySlug($section)->pk_content_category;
+            } catch (GetItemException $e) {
+                return $datetime->getTimestamp();
+            }
+        }
 
         $timestamps = $settings->get('dynamic_css', []);
 
-        if (empty($timestamps) || empty($timestamps[ $section ])) {
-            $datetime               = new \DateTime();
-            $timestamps[ $section ] = $datetime->getTimestamp();
+        if (empty($timestamps) || empty($timestamps[ $id ])) {
+            $timestamps[ $id ] = $datetime->getTimestamp();
             $settings->set('dynamic_css', $timestamps);
             return $datetime->getTimestamp();
         }
 
-        return $timestamps[ $section ];
+        return $timestamps[ $id ];
     }
 
     /**

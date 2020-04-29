@@ -9,14 +9,14 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $timeout
+     * @requires routing
      *
      * @description
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', '$timeout', 'messenger',
-      function($controller, $scope, $timeout, messenger) {
+      '$controller', '$scope', 'routing',
+      function($controller, $scope, routing) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -64,6 +64,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_event_create_item',
           getItem:    'api_v1_backend_event_get_item',
+          public:     'frontend_event_show',
           redirect:   'backend_event_show',
           saveItem:   'api_v1_backend_event_save_item',
           updateItem: 'api_v1_backend_event_update_item'
@@ -88,6 +89,25 @@
             $scope.cover =
               $scope.data.extra.related_contents[coverId.pk_content2];
           }
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf EventCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              slug: item.slug,
+            })
+          );
         };
 
         // Update slug when title is updated

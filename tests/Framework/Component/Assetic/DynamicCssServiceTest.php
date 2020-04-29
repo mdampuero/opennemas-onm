@@ -10,7 +10,9 @@
  */
 namespace Tests\Framework\Component\Assetic;
 
+use Api\Exception\GetItemException;
 use \Framework\Component\Assetic\DynamicCssService;
+use Common\Model\Entity\Category;
 
 class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,11 +28,22 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'set' ])
             ->getMock();
 
+        $this->cs = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItemBySlug' ])
+            ->getMock();
+
         $this->em->expects($this->any())
             ->method('getDataSet')
             ->willReturn($this->settings);
 
-        $this->dcs = new DynamicCssService($this->em);
+        $category = new Category([ 'pk_content_category' => 1 ]);
+
+        $this->cs->expects($this->any())
+            ->method('getItemBySlug')
+            ->willReturn($category);
+
+        $this->dcs = new DynamicCssService($this->em, $this->cs);
     }
 
     /**
@@ -58,13 +71,36 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTimestampWhenExists()
     {
-        $timestamps['section'] = '1583322926';
+        $timestamps['1'] = '1583322926';
         $this->settings->expects($this->once())
             ->method('get')
             ->with('dynamic_css', [])
             ->willReturn($timestamps);
 
-        $this->assertEquals($timestamps['section'], $this->dcs->getTimestamp('section'));
+        $this->assertEquals($timestamps['1'], $this->dcs->getTimestamp('section'));
+    }
+
+    /**
+     * Tests getTimestamp when special category
+     */
+    public function testGetTimestampWhenSpecialCategory()
+    {
+        $this->settings->expects($this->once())->method('get')
+            ->with('dynamic_css', [])
+            ->willReturn(['home' => '1586787581']);
+
+        $this->assertEquals('1586787581', $this->dcs->getTimestamp('home'));
+    }
+
+    /**
+     * Tests getTimestamp when invalid section
+     */
+    public function testGetTimestampWhenInvalidSection()
+    {
+        $this->cs->expects($this->at(0))->method('getItemBySlug')
+            ->will($this->throwException(new GetItemException()));
+
+        $this->dcs->getTimestamp(null);
     }
 
     /**

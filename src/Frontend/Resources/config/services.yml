@@ -16,3 +16,7 @@ services:
         class:     Frontend\Renderer\AdvertisementRenderer
         arguments: [ '@service_container' ]
         public:    true
+    frontend.renderer.statistics:
+        class:     Frontend\Renderer\StatisticsRenderer
+        arguments: [ '@core.globals', '@core.template.admin', '@core.template.frontend' ]
+        public:    true

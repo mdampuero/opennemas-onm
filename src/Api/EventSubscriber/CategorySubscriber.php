@@ -133,7 +133,7 @@ class CategorySubscriber implements EventSubscriberInterface
         $this->dcs->deleteTimestamp('%global%');
 
         foreach ($categories as $category) {
-            $this->dcs->deleteTimestamp($category->name);
+            $this->dcs->deleteTimestamp($category->pk_content_category);
         }
 
         $this->template->deleteDynamicCss();

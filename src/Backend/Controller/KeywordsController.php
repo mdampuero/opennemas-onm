@@ -68,11 +68,11 @@ class KeywordsController extends Controller
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $data = array(
+            $data = [
                 'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
                 'tipo'   => $request->request->filter('tipo', '', FILTER_SANITIZE_STRING),
                 'value'  => $request->request->filter('value', '', FILTER_SANITIZE_STRING),
-            );
+            ];
 
             $keyword = new \PClave();
             $keyword->create($data);
@@ -82,7 +82,7 @@ class KeywordsController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_keyword_show',
-                    array('id' => $keyword->id)
+                    [ 'id' => $keyword->id ]
                 )
             );
         }
@@ -106,12 +106,12 @@ class KeywordsController extends Controller
      */
     public function updateAction(Request $request)
     {
-        $data = array(
+        $data = [
             'id'     => $request->query->getDigits('id'),
             'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
             'tipo'   => $request->request->filter('tipo', '', FILTER_SANITIZE_STRING),
             'value'  => $request->request->filter('value', '', FILTER_SANITIZE_STRING),
-        );
+        ];
 
         $keyword = new \PClave();
         $keyword->update($data);
@@ -121,7 +121,7 @@ class KeywordsController extends Controller
         return $this->redirect(
             $this->generateUrl(
                 'admin_keyword_show',
-                array('id' => $data['id'])
+                [ 'id' => $data['id'] ]
             )
         );
     }
@@ -142,9 +142,8 @@ class KeywordsController extends Controller
 
         $newContent = '';
         if (!empty($content)) {
-            $keyword = new \PClave();
-            $terms = $keyword->find();
-
+            $keyword    = new \PClave();
+            $terms      = $keyword->find();
             $newContent = $keyword->replaceTerms($content, $terms);
         }
 
