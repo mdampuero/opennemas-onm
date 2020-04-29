@@ -147,6 +147,21 @@ function get_author_social_twitter_url($item = null) : ?string
 }
 
 /**
+ * Returns the author twitter url for the provided item.
+ *
+ * @param Content $item The item to get author facebook url for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The facebook url if author is present. Null otherwise.
+ */
+function get_author_social_facebook_url($item = null) : ?string
+{
+    $author = get_author($item);
+
+    return !empty($author->facebook) ? ("https://www.facebook.com/" . $author->facebook) : null;
+}
+
+/**
  * Returns the relative URL to the automatic frontpage of the author for the
  * provided item.
  *
@@ -172,11 +187,11 @@ function get_author_url($item = null) : ?string
  *                    not provided, the function will try to search the item in
  *                    the template.
  *
- * @return bool True if the author has an avatar. False otherwise.
+ * @return bool True if the author exists. False otherwise.
  */
 function has_author($item = null) : bool
 {
-    return !empty(get_author_name($item));
+    return !empty(get_author($item));
 }
 
 /**
@@ -194,7 +209,6 @@ function has_author_avatar($item = null) : bool
     return !empty(get_author_avatar($item));
 }
 
-
 /**
  * Checks if the author has a bio defined as
  * parameter.
@@ -210,7 +224,6 @@ function has_author_bio_summary($item = null) : bool
     return !empty(get_author_bio_summary($item));
 }
 
-
 /**
  * Checks if the author has a twitter account provided as
  * parameter.
@@ -224,4 +237,19 @@ function has_author_bio_summary($item = null) : bool
 function has_author_social_twitter_url($item = null) : bool
 {
     return !empty(get_author_social_twitter_url($item));
+}
+
+/**
+ * Checks if the author has a facebook account provided as
+ * parameter.
+ *
+ * @param mixed $item The item to check author's facebook account for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author has a facebook account defined. False otherwise.
+ */
+function has_author_social_facebook_url($item = null) : bool
+{
+    return !empty(get_author_social_facebook_url($item));
 }
