@@ -201,7 +201,7 @@ class TagController extends Controller
                 'ads_positions'  => $positions,
                 'advertisements' => $advertisements,
                 'cache_id'       => $cacheId,
-                'tagName'        => (empty($tag)) ? $slug : $tag->name,
+                'tag'            => $tags['total'] > 0 ? $tags['items'][0] : null,
                 'x-tags'         => 'tag-page,' . $slug,
             ]);
         }
