@@ -196,15 +196,13 @@ class TagController extends Controller
 
         list($positions, $advertisements) = $this->getInnerAds();
 
-        foreach ($tags['items'] as $tag) {
-            return $this->render('frontpage/tags.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
-                'cache_id'       => $cacheId,
-                'tag'            => $tags['total'] > 0 ? $tags['items'][0] : null,
-                'x-tags'         => 'tag-page,' . $slug,
-            ]);
-        }
+        return $this->render('frontpage/tags.tpl', [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheId,
+            'tag'            => $tags['total'] > 0 ? $tags['items'][0] : null,
+            'x-tags'         => 'tag-page,' . $slug,
+        ]);
     }
 
     /**
