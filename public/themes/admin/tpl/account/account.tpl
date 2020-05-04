@@ -74,7 +74,7 @@
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
+                    <span class="item-count">{($instance->media_size/1024)|string_format:"%.2f"} MB</span>
                   </div>
                 </div>
               </div>
@@ -280,4 +280,3 @@
     </div>
   </div>
 {/block}
-
