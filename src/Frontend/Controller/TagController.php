@@ -115,45 +115,47 @@ class TagController extends Controller
             $contents = [];
             $total    = 1;
 
-            if ($tags['total'] > 0) {
-                $ids = array_map(function ($a) {
-                    return $a->id;
-                }, $tags['items']);
-
-                $criteria = [
-                    'join' => [
-                        [
-                            'table' => 'contents_tags',
-                            'type'  => 'inner',
-                            'content_id' => [
-                                [ 'value' => 'pk_content', 'field' => true ]
-                            ],
-                            'tag_id' => [
-                                [ 'value' => $ids, 'operator' => 'in' ]
-                            ]
-                        ]
-                    ],
-                    'fk_content_type' => [
-                        [ 'value' => [ 1, 4, 7, 9, 11 ], 'operator' => 'in' ],
-                    ],
-                    'content_status'    => [ [ 'value' => 1 ] ],
-                    'in_litter'         => [ [ 'value' => 0 ] ],
-                    'starttime'         => [
-                        'union' => 'OR',
-                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                    ],
-                    'endtime'           => [
-                        'union' => 'OR',
-                        [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                        [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-                    ]
-                ];
-
-                $em       = $this->get('entity_repository');
-                $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
-                $total    = count($contents) + 1;
+            if ($tags['total'] === 0) {
+                throw new ResourceNotFoundException();
             }
+
+            $ids = array_map(function ($a) {
+                return $a->id;
+            }, $tags['items']);
+
+            $criteria = [
+                'join' => [
+                    [
+                        'table' => 'contents_tags',
+                        'type'  => 'inner',
+                        'content_id' => [
+                            [ 'value' => 'pk_content', 'field' => true ]
+                        ],
+                        'tag_id' => [
+                            [ 'value' => $ids, 'operator' => 'in' ]
+                        ]
+                    ]
+                ],
+                'fk_content_type' => [
+                    [ 'value' => [ 1, 4, 7, 9, 11 ], 'operator' => 'in' ],
+                ],
+                'content_status'    => [ [ 'value' => 1 ] ],
+                'in_litter'         => [ [ 'value' => 0 ] ],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
+
+            $em       = $this->get('entity_repository');
+            $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
+            $total    = count($contents) + 1;
 
             // TODO: review this piece of CRAP
             foreach ($contents as &$item) {
