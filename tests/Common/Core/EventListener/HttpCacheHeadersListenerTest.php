@@ -108,7 +108,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
         $this->headers->expects($this->at(1))->method('set')
             ->with('x-tags', 'qux,baz');
         $this->headers->expects($this->at(2))->method('set')
-            ->with('x-cache-for', '+1 day');
+            ->with('x-cache-for', '86400s');
         $this->headers->expects($this->at(3))->method('set')
             ->with('x-cache-for', 'flob');
 
