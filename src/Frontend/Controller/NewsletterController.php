@@ -38,12 +38,11 @@ class NewsletterController extends Controller
 
         if (!is_object($item) || $item->type == 1) {
             throw new ResourceNotFoundException();
-            // $item->html = $this->get('core.renderer.newsletter')->render($item->contents);
         }
 
-        $internalName = $this->get('core.instance')->internal_name;
         return new Response($item->html, 200, [
-            'x-tags' => 'newsletter-' . $id,
+            'x-tags'      => 'newsletter-' . $id,
+            'x-cacheable' => true,
         ]);
     }
 

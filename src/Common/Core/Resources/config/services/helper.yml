@@ -25,7 +25,7 @@ services:
 
     core.helper.content:
         class:      Common\Core\Component\Helper\ContentHelper
-        arguments:  [ '@entity_repository', '@cache.connection.instance' ]
+        arguments:  [ '@entity_repository', '@api.service.content', '@cache.connection.instance' ]
         public:     true
 
     core.helper.checkout:

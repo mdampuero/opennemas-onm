@@ -161,6 +161,7 @@ class AssetController extends Controller
         return new Response($response, 200, [
             'Content-Type' => 'text/css',
             'x-tags'       => 'frontpagecss',
+            'x-cacheable'  => true,
         ]);
     }
 
@@ -214,6 +215,7 @@ class AssetController extends Controller
         return new Response($contents, 200, [
             'Content-Type' => 'text/css',
             'x-tags'       => 'customcss',
+            'x-cacheable'  => true,
         ]);
     }
 

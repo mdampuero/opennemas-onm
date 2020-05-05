@@ -47,6 +47,7 @@ class FormController extends Controller
                 ->configureFromSettings()
                 ->getHtml(),
             'x-tags'         => 'frontpage-form',
+            'x-cacheable'    => true,
         ]);
     }
 

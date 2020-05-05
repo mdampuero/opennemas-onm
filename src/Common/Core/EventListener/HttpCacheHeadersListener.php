@@ -81,6 +81,7 @@ class HttpCacheHeadersListener
         }
 
         $response->headers->set('x-tags', implode(',', $tags));
+        $response->headers->set('x-cache-for', '86400s'); // 1 day
 
         if (!empty($expire)) {
             $response->headers->set('x-cache-for', $expire);

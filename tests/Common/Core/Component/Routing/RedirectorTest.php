@@ -204,7 +204,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->headers->expects($this->once())->method('get')
             ->with('x-tags')->willReturn('');
-        $this->headers->expects($this->once())->method('set')
+        $this->headers->expects($this->at(1))->method('set')
             ->with('x-tags')->willReturn('url-546');
 
         $redirector->expects($this->once())->method('getForwardResponse')
