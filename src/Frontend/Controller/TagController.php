@@ -179,7 +179,10 @@ class TagController extends Controller
                 }
             }
 
-            $this->view->assign('contents', $contents);
+            $this->view->assign([
+                'contents' => $contents,
+                'tag'      => $tags['items'][0]
+            ]);
 
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
@@ -202,7 +205,6 @@ class TagController extends Controller
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'cache_id'       => $cacheId,
-            'tag'            => $tags['total'] > 0 ? $tags['items'][0] : null,
             'x-tags'         => 'tag-page,' . $slug,
         ]);
     }
