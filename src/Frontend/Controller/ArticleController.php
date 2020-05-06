@@ -175,7 +175,7 @@ class ArticleController extends FrontendController
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
      *
-     * @param array $params Thelist of parameters already in set.
+     * @param array $params The list of parameters already in set.
      */
     protected function hydrateShowAmp(array &$params = []) : void
     {
