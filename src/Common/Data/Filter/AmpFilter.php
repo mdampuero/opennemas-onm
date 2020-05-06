@@ -41,7 +41,7 @@ class AmpFilter extends Filter
 
             // Invalid tags
             '@<object[^>]*>(?s).*?<\/object>@',
-            '@<(script|embed|object|frameset|frame|style|form)[^>]*>(?s).*?<\/\1>@i',
+            '@<(script|embed|object|frameset|iframe|frame|style|form)[^>]*>(?s).*?<\/\1>@i',
             '@<(link|meta|input)[^>]+>@i',
 
             // Clean attributes
