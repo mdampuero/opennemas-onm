@@ -476,6 +476,7 @@ CREATE TABLE `contents` (
   KEY `frontpage` (`frontpage`),
   KEY `available` (`available`),
   KEY `starttime` (`starttime`,`endtime`),
+  KEY `endtime` (`endtime`),
   KEY `created` (`created`),
   KEY `fk_author` (`fk_author`),
   KEY `content_type_name` (`content_type_name`),
