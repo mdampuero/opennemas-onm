@@ -75,7 +75,7 @@
               function onLoadFile(event) {
                 var img = new Image();
 
-                img.onload = onLoadImage();
+                img.onload = onLoadImage;
                 img.src = event.target.result;
               }
 
