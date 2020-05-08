@@ -300,7 +300,21 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
         ])));
     }
 
-     /**
+    /**
+     * Tests has_author_url.
+     */
+    public function testHasAuthorUrl()
+    {
+        $author = new User([ 'name' => 'Michelle Price' ]);
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($author)->willReturn('/foo/michelle-price');
+
+        $this->assertFalse(has_author_url(131));
+        $this->assertTrue(has_author_url($author));
+    }
+
+    /**
      * Tests has_author_bio_summary.
      */
     public function testHasAuthorBioSummary()
@@ -312,7 +326,7 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
         ])));
     }
 
-     /**
+    /**
      * Tests has_author_social_twitter_url.
      */
     public function testHasAuthorTwitterUrl()

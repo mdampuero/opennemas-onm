@@ -180,6 +180,23 @@ function get_author_url($item = null) : ?string
 }
 
 /**
+ * Checks if if the author is configured as blogger based on a content or author
+ * provided as parameter
+ *
+ * @param mixed $item The item to get author is_blog property. If not
+ *                    provided, the function will try to search the item in the
+ *                    template.
+ *
+ * @return int The author avatar id.
+ */
+function is_blog($item = null) : bool
+{
+    $author = get_author($item);
+
+    return !empty($author) ? $author->is_blog : null;
+}
+
+/**
  * Checks if there is an author based on a content or author provided as
  * parameter.
  *
@@ -192,6 +209,21 @@ function get_author_url($item = null) : ?string
 function has_author($item = null) : bool
 {
     return !empty(get_author_name($item));
+}
+
+/**
+ * Checks if the author has an url based on a content or author provided as
+ * parameter.
+ *
+ * @param mixed $item The item to check author for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author exists. False otherwise.
+ */
+function has_author_url($item = null) : bool
+{
+    return !empty(get_author_url($item));
 }
 
 /**
