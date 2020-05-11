@@ -9,7 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\ComscoreRenderer;
 
@@ -22,7 +22,7 @@ class ComscoreRendererTest extends TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->ds = $this->getMockForAbstractClass('Common\ORM\Core\DataSet');
+        $this->ds = $this->getMockForAbstractClass('Opennemas\ORM\Core\DataSet');
 
         $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
             ->disableOriginalConstructor()

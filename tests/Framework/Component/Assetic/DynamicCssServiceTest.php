@@ -12,7 +12,7 @@ namespace Tests\Framework\Component\Assetic;
 
 use Api\Exception\GetItemException;
 use \Framework\Component\Assetic\DynamicCssService;
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
 {
