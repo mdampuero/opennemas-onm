@@ -83,7 +83,7 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->once())->method('set')
             ->willReturn($this->fm);
         $this->fm->expects($this->once())->method('filter')
-            ->with('format_date', [
+            ->with('date', [
                 'format'   => null,
                 'locale'   => 'es_ES',
                 'timezone' => new \DateTimeZone('Europe/Madrid'),
@@ -123,7 +123,7 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->once())->method('set')
             ->willReturn($this->fm);
         $this->fm->expects($this->once())->method('filter')
-            ->with('format_date', [
+            ->with('date', [
                 'format'   => null,
                 'locale'   => 'es_ES',
                 'timezone' => new \DateTimeZone('Europe/Madrid'),
