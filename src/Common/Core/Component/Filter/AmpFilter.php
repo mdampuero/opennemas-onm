@@ -1,22 +1,17 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-namespace Common\Data\Filter;
+
+namespace Common\Core\Component\Filter;
+
+use Opennemas\Data\Filter\Filter;
 
 class AmpFilter extends Filter
 {
     /**
-     * Converts an old image url into onm format with translation.
+     * Converts a regular HTML string to AMP-valid HTML string.
      *
-     * @param string $str The string to filter.
+     * @param string $str The regular HTML string.
      *
-     * @return string The converted string.
+     * @return string The AMP-valid HTML string.
      */
     public function filter($str)
     {
