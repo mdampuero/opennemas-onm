@@ -40,8 +40,15 @@ function smarty_function_renderplaceholder($params, &$smarty)
             }
             $content                  = $items[$contentPosition->pk_fk_content];
             $content->render_position = $count++;
-            $outputHTML              .= $smarty->getContainer()
-                ->get('frontend.renderer')->render($content, $params);
+            $class                    = get_class($content);
+
+            try {
+                $outputHTML .= $smarty->getContainer()
+                    ->get('frontend.renderer.' . strtolower($class))->render($content, $params);
+            } catch (Exception $e) {
+                $outputHTML .= $smarty->getContainer()
+                    ->get('frontend.renderer.content')->render($content, $params);
+            }
         }
     }
 

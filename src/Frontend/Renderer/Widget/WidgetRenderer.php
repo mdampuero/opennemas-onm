@@ -24,11 +24,7 @@ class WidgetRenderer extends Renderer
     }
 
     /**
-     * Renders the widget given a set of params
-     *
-     * @param array $params a list of params to pass to the widget rendering
-     *
-     * @return string the generated HTML
+     * {@inheritDoc}
      */
     public function render($content, $params)
     {
