@@ -22,7 +22,7 @@ class GAnalyticsRendererTest extends TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->ds = $this->getMockForAbstractClass('Opennemas\ORM\Core\DataSet');
+        $this->ds = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
 
         $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
             ->disableOriginalConstructor()

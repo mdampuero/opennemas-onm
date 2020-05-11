@@ -27,7 +27,7 @@ class StatisticsRendererTest extends TestCase
             ->setMethods([ 'getRequest', 'getContainer' ])
             ->getMock();
 
-        $this->ds = $this->getMockForAbstractClass('Opennemas\ORM\Core\DataSet');
+        $this->ds = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
 
         $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
             ->disableOriginalConstructor()
