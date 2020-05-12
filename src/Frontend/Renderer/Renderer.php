@@ -16,7 +16,7 @@ abstract class Renderer
      *
      * @var Container
      */
-    private $container;
+    protected $container;
 
     /**
      * Initializes the Renderer.

@@ -16,13 +16,6 @@ namespace Frontend\Renderer;
 class AdvertisementRenderer extends Renderer
 {
     /**
-     * The service container.
-     *
-     * @var ServiceContainer
-     */
-    protected $container;
-
-    /**
      * The available inline formats.
      *
      * @var array
@@ -43,11 +36,11 @@ class AdvertisementRenderer extends Renderer
      */
     public function __construct($container)
     {
-        $this->container = $container;
-        $this->router    = $this->container->get('router');
-        $this->tpl       = $this->container->get('view')->get('backend');
-        $this->instance  = $this->container->get('core.instance');
-        $this->ds        = $this->container->get('orm.manager')
+        parent::__construct($container);
+        $this->router   = $this->container->get('router');
+        $this->tpl      = $this->container->get('view')->get('backend');
+        $this->instance = $this->container->get('core.instance');
+        $this->ds       = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
     }
 

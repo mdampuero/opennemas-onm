@@ -14,16 +14,6 @@ use Frontend\Renderer\Renderer;
 class ContentRenderer extends Renderer
 {
     /**
-     * Initializes the content renderer.
-     *
-     * @param Container The service container.
-     */
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function render($content, $params)
