@@ -217,30 +217,6 @@ class FrontendController extends Controller
     }
 
     /**
-     * Returns the expire time for cache basing on the endtime of all items in
-     * a list.
-     *
-     * @param array $items The list of items.
-     *
-     * @return string The expire time for cache.
-     */
-    protected function getCacheExpire(array $items)
-    {
-        $listOfExpires = array_filter($items, function ($a) {
-            return !empty($a->endtime);
-        });
-
-        if (empty($listOfExpires)) {
-            return null;
-        }
-        return min(array_map(function ($a) {
-            return $a->endtime instanceof \Datetime
-                ? $a->endtime->format('Y-m-d H:i:s')
-                : $a->endtime;
-        }, $listOfExpires));
-    }
-
-    /**
      * Returns the cache id basing on the list of parameters.
      *
      * @param array $params The list of parameters.
@@ -728,5 +704,18 @@ class FrontendController extends Controller
             $tagIds,
             $this->get('core.locale')->getRequestLocale()
         )['items'];
+    }
+
+    /**
+     * Sets the current view expire date.
+     *
+     * @param string $expire The expire date.
+     */
+    protected function setViewExpireDate($expire)
+    {
+        $lifetime = strtotime($expire) - time();
+        if ($lifetime < $this->view->getCacheLifetime()) {
+            $this->view->setCacheLifetime($lifetime);
+        }
     }
 }

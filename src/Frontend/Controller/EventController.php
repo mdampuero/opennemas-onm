@@ -184,21 +184,16 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $expires = $this->getCacheExpire($contents);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
 
-        if (!empty($expires)) {
-            $lifetime = strtotime($expires) - time();
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
 
-            if ($lifetime < $this->view->getCacheLifetime()) {
-                $this->view->setCacheLifetime($lifetime);
-            }
-
-            $params['x-cache-for'] = $expires;
-            $params['x-cacheable'] = true;
+            $params['x-cache-for'] = $expire;
         }
 
-        $params['contents']   = $contents;
-        $params['pagination'] = $this->get('paginator')->get([
+        $params['contents']    = $contents;
+        $params['pagination']  = $this->get('paginator')->get([
             'directional' => true,
             'boundary'    => false,
             'epp'         => $params['epp'],
