@@ -28,16 +28,17 @@ class ContentRenderer extends Renderer
      */
     public function render($content, $params)
     {
-        $tpl            = getService('core.template');
-        $default        = 'frontpage/contents/_' . strtolower(get_class($content)) . '.tpl';
+        $tpl            = $this->container->get('core.template');
+        $renderer       = $this->getRendererClass($content);
         $params['item'] = $content;
 
         try {
-            if ($params['tpl']) {
-                return $tpl->fetch($params['tpl'], $params);
+            if (!empty($renderer)) {
+                list($template, $params) = $renderer->getTemplate($params);
+                return $tpl->fetch($template, $params);
             }
 
-            return $tpl->fetch($default, $params);
+            return $tpl->fetch('frontpage/contents/_' . strtolower(get_class($content)) . '.tpl', $params);
         } catch (\Exception $e) {
             getService('error.log')->error(
                 $e->getMessage()
@@ -45,5 +46,20 @@ class ContentRenderer extends Renderer
 
             return _('Content not available');
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRendererClass($content)
+    {
+        $class     = get_class($content) . 'Renderer';
+        $classPath = __NAMESPACE__ . '\\Content\\' . $class;
+
+        if (class_exists($classPath)) {
+            return new $classPath($this->container);
+        }
+
+        return null;
     }
 }

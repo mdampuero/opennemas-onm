@@ -13,7 +13,7 @@ namespace Frontend\Renderer;
  * The AdvertisementRenderer class defines common properties and methods for all
  * advertisement renderers.
  */
-class AdvertisementRenderer
+class AdvertisementRenderer extends Renderer
 {
     /**
      * The service container.
@@ -122,7 +122,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML content for the advertisement.
      */
-    public function render(\Advertisement $ad, $params)
+    public function render($ad, $params)
     {
         // Get renderer class and ad format
         $renderer  = $this->getRendererClass($ad->with_script);
