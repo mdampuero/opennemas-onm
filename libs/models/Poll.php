@@ -234,28 +234,6 @@ class Poll extends Content
     }
 
     /**
-     * Renders the poll.
-     *
-     * @param array $params The list of parameters.
-     *
-     * @return string The generated HTML.
-     */
-    public function render($params)
-    {
-        $tpl = getService('core.template');
-
-        $params['item'] = $this;
-
-        try {
-            $html = $tpl->fetch('frontpage/contents/_poll.tpl', $params);
-        } catch (\Exception $e) {
-            $html = _('Poll not available');
-        }
-
-        return $html;
-    }
-
-    /**
      * Updates a poll from an array of data
      *
      * @param array $data the array of data

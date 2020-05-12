@@ -202,33 +202,6 @@ class Album extends Content
     }
 
     /**
-     * Renders the album.
-     *
-     * @param array $params The list of parameters.
-     *
-     * @return string The generated HTML.
-     */
-    public function render(array $params)
-    {
-        $tpl = getService('core.template');
-
-        $params['item'] = $this;
-        $template       = 'frontpage/contents/_album.tpl';
-
-        if ($params['custom'] == 1) {
-            $template = $params['tpl'];
-        }
-
-        try {
-            $html = $tpl->fetch($template, $params);
-        } catch (\Exception $e) {
-            $html = _('Album not available');
-        }
-
-        return $html;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function update($data)
