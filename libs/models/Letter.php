@@ -252,26 +252,4 @@ class Letter extends Content
 
         return $weight > 100;
     }
-
-    /**
-     * Renders the letter.
-     *
-     * @param array $params The parameters for rendering the content
-     *
-     * @return string The generated HTML.
-     */
-    public function render($params)
-    {
-        $tpl = getService('core.template');
-
-        $params['item'] = $this;
-
-        try {
-            $html = $tpl->fetch('frontpage/contents/_content.tpl', $params);
-        } catch (\Exception $e) {
-            $html = '';
-        }
-
-        return $html;
-    }
 }
