@@ -1219,6 +1219,12 @@
                 "url": "https://github.com/openhost/NativeSession",
                 "reference": "81653296944b00be03364a6ccc111ccafa52f087"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drak/NativeSession/zipball/81653296944b00be03364a6ccc111ccafa52f087",
+                "reference": "81653296944b00be03364a6ccc111ccafa52f087",
+                "shasum": ""
+            },
             "require": {
                 "php": ">=5.3.3",
                 "symfony/http-foundation": ">=2.1.0"
@@ -1229,6 +1235,7 @@
                     "Drak": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1239,7 +1246,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2015-03-31T17:40:46+00:00"
+            "time": "2013-03-11T11:07:59+00:00"
         },
         {
             "name": "drexarj/disqus-php",
@@ -2536,7 +2543,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2015-06-12T07:33:40+00:00"
+            "time": "2020-02-13T18:25:17+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2743,11 +2750,11 @@
         },
         {
             "name": "opennemas/data",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/data.git",
-                "reference": "e59f662d3a4fd6ab890bce3beba3a5875da89e3b"
+                "reference": "3c4a53d74be0021076e7e11e7690b78aba5799b8"
             },
             "require": {
                 "ext-intl": "*",
@@ -2804,7 +2811,7 @@
                 "filter",
                 "symfony"
             ],
-            "time": "2020-03-23T12:37:48+00:00"
+            "time": "2020-05-11T15:24:52+00:00"
         },
         {
             "name": "opennemas/orm",
@@ -7927,6 +7934,5 @@
     "platform": {
         "php": ">=7.1"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }
