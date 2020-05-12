@@ -54,7 +54,7 @@ class ContentRenderer extends Renderer
     protected function getRendererClass($content)
     {
         $class     = get_class($content) . 'Renderer';
-        $classPath = __NAMESPACE__ . '\\Content\\' . $class;
+        $classPath = __NAMESPACE__ . '\\' . $class;
 
         if (class_exists($classPath)) {
             return new $classPath($this->container);
