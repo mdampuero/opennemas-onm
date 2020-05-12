@@ -1,5 +1,8 @@
 <?php
 /* {renderplaceholder items=$articles tpl='xxx.tpl' placeholder="placeholder_0_0"} */
+
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+
 function smarty_function_renderplaceholder($params, &$smarty)
 {
     $outputHTML = '';
@@ -45,7 +48,7 @@ function smarty_function_renderplaceholder($params, &$smarty)
             try {
                 $outputHTML .= $smarty->getContainer()
                     ->get('frontend.renderer.' . strtolower($class))->render($content, $params);
-            } catch (Exception $e) {
+            } catch (ServiceNotFoundException $e) {
                 $outputHTML .= $smarty->getContainer()
                     ->get('frontend.renderer.content')->render($content, $params);
             }
