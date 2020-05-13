@@ -32,7 +32,7 @@ class AmpFilter extends Filter
             '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
             '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)?\/.*?>(?s).*?<\/blockquote>@',
             '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
-            '@<div[^>]*class=\"brid\"[^>]*>.*?/partners/([0-9]+).*</div>.*?'
+            '@<div[^>]*class=\"brid\"[^>]*>.*?/partners/([0-9]+).*</div>[^>]*?'
                 . '<script.*"id":"([0-9]+)".*"video":"([0-9]+)".*</script>@',
 
             // Invalid tags
