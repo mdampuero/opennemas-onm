@@ -43,15 +43,8 @@ function smarty_function_renderplaceholder($params, &$smarty)
             }
             $content                  = $items[$contentPosition->pk_fk_content];
             $content->render_position = $count++;
-            $class                    = get_class($content);
 
-            try {
-                $outputHTML .= $smarty->getContainer()
-                    ->get('frontend.renderer.' . strtolower($class))->render($content, $params);
-            } catch (ServiceNotFoundException $e) {
-                $outputHTML .= $smarty->getContainer()
-                    ->get('frontend.renderer.content')->render($content, $params);
-            }
+            $outputHTML .= $smarty->getContainer()->get('frontend.renderer')->render($content, $params);
         }
     }
 

@@ -25,7 +25,7 @@ function smarty_function_render_widget($params, &$smarty)
     $output = '';
     if ($widget->content_status) {
         $output = $smarty->getContainer()
-            ->get('frontend.renderer.widget')->render($widget, $params);
+            ->get('frontend.renderer')->render($widget, $params);
     }
 
     // Render its contents

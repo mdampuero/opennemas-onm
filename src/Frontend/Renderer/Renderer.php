@@ -9,7 +9,9 @@
  */
 namespace Frontend\Renderer;
 
-abstract class Renderer
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+
+class Renderer
 {
     /**
      * The service container.
@@ -36,5 +38,18 @@ abstract class Renderer
      *
      * @return String The html of the content.
      */
-    abstract public function render($content, $params);
+    public function render($content, $params)
+    {
+        if (!empty($params['types'])) {
+            return $this->container->get('frontend.renderer.statistics')->render($content, $params);
+        }
+
+        $class = get_class($content);
+
+        try {
+            return $this->container->get('frontend.renderer.' . strtolower($class))->render($content, $params);
+        } catch (ServiceNotFoundException $e) {
+            return $this->container->get('frontend.renderer.content')->render($content, $params);
+        }
+    }
 }

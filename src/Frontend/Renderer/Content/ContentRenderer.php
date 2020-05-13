@@ -19,16 +19,11 @@ class ContentRenderer extends Renderer
     public function render($content, $params)
     {
         $tpl            = $this->container->get('core.template');
-        $renderer       = $this->getRendererClass($content);
         $params['item'] = $content;
 
         try {
-            if (!empty($renderer)) {
-                list($template, $params) = $renderer->getTemplate($params);
+                $template = $this->getTemplate($params);
                 return $tpl->fetch($template, $params);
-            }
-
-            return $tpl->fetch('frontpage/contents/_' . strtolower(get_class($content)) . '.tpl', $params);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error(
                 $e->getMessage()
@@ -39,17 +34,32 @@ class ContentRenderer extends Renderer
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the specific template.
+     *
+     * @param Array     The array of parameters.
      */
-    protected function getRendererClass($content)
+    public function getTemplate(&$params)
     {
-        $class     = get_class($content) . 'Renderer';
-        $classPath = __NAMESPACE__ . '\\' . $class;
+        $class              = strtolower(get_class($params['item']));
+        $default            = 'frontpage/contents/_' . $class . '.tpl';
+        $params['cssclass'] = $class;
 
-        if (class_exists($classPath)) {
-            return new $classPath($this->container);
+        if ($class == 'article' && !empty($params['tpl'])) {
+            return $params['tpl'];
         }
 
-        return null;
+        if ($class == 'opinion') {
+            $author = new \User($params['item']->fk_author);
+
+            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+                return 'frontpage/contents/_blog.tpl';
+            }
+        }
+
+        if ($class == 'letter') {
+            return 'frontpage/contents/_content.tpl';
+        }
+
+        return $default;
     }
 }
