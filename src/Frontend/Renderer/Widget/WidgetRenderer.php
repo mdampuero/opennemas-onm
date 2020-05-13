@@ -49,7 +49,7 @@ class WidgetRenderer extends Renderer
     private function renderletSmarty($content)
     {
         $resource = 'string:' . $content;
-        $wgtTpl   = getService('core.template');
+        $wgtTpl   = $this->container->get('core.template');
 
         // no caching
         $wgtTpl->caching       = 0;
