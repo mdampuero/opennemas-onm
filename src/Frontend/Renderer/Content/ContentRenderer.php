@@ -30,7 +30,7 @@ class ContentRenderer extends Renderer
 
             return $tpl->fetch('frontpage/contents/_' . strtolower(get_class($content)) . '.tpl', $params);
         } catch (\Exception $e) {
-            getService('error.log')->error(
+            $this->container->get('error.log')->error(
                 $e->getMessage()
             );
 
