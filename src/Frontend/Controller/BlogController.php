@@ -225,7 +225,6 @@ class BlogController extends FrontendController
         $em         = $this->get('opinion_repository');
         $blogs      = $em->findBy($filters, $order, $epp, $page);
         $countItems = $em->countBy($filters);
-        $photos     = $this->get('core.helper.user')->getPhotos($authors);
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
@@ -234,34 +233,6 @@ class BlogController extends FrontendController
             'page'        => $page,
             'route'       => 'frontend_blog_frontpage',
         ]);
-
-        foreach ($blogs as &$blog) {
-            if (!array_key_exists($blog->fk_author, $authors)) {
-                continue;
-            }
-
-            $blog->author           = $authors[$blog->fk_author];
-            $blog->name             = $blog->author->name;
-            $blog->author_name_slug = $blog->author->username;
-
-            if (array_key_exists($blog->author->avatar_img_id, $photos)) {
-                $blog->author->photo =
-                    $photos[$blog->author->avatar_img_id];
-            }
-
-            if (isset($blog->img1) && !empty($blog->img1)) {
-                $blog->img1 = $this->get('entity_repository')
-                    ->find('Photo', $blog->img1);
-            }
-
-            $blog->author->uri = \Uri::generate(
-                'frontend_blog_author_frontpage',
-                [
-                    'slug' => urlencode($blog->author->username),
-                    'id'   => $blog->author->id
-                ]
-            );
-        }
 
         $this->view->assign([
             'opinions'   => $blogs,
@@ -308,8 +279,6 @@ class BlogController extends FrontendController
         $epp = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
-
-        $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
 
         $this->cm = new \ContentManager();
         // Get the number of total opinions for this author for pagination purposes
