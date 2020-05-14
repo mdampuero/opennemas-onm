@@ -360,12 +360,7 @@ class UrlGeneratorHelper
             'author_id'   => $user->id,
         ];
 
-        if ($user->is_blog
-            || (is_array($user->meta)
-                && array_key_exists('is_blog', $user->meta)
-                && $user->meta['is_blog']
-            )
-        ) {
+        if ($user->is_blog) {
             $routeName   = 'frontend_blog_author_frontpage';
             $routeParams = [ 'author_slug' => $user->username ];
         }
