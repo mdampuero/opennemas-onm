@@ -43,8 +43,6 @@ class AuthorController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
-            $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
-
             $criteria = [
                 'fk_author'       => [[ 'value' => $user->id ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -69,8 +67,7 @@ class AuthorController extends Controller
             $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
             foreach ($contents as &$item) {
-                $item         = $item->get($item->id);
-                $item->author = $user;
+                $item = $item->get($item->id);
 
                 if (isset($item->img1) && !empty($item->img1)) {
                     $image = $er->find('Photo', $item->img1);
