@@ -228,8 +228,7 @@ class RssController extends Controller
 
             $rssTitle = sprintf('RSS de «%s»', $user->name);
             // Get entity repository
-            $er          = $this->get('entity_repository');
-            $user->photo = $er->find('Photo', $user->avatar_img_id);
+            $er = $this->get('entity_repository');
 
             $order   = ['starttime' => 'DESC' ];
             $filters = [
@@ -242,7 +241,6 @@ class RssController extends Controller
             $contents = $er->findBy($filters, $order, $total, 1);
 
             foreach ($contents as $key => $content) {
-                $contents[$key]->author = $user;
                 if (isset($content->img1) && ($content->img1 > 0)) {
                     $contents[$key]->photo = $er->find('Photo', $content->img1);
                 }
