@@ -35,5 +35,5 @@ services:
 
     frontend.renderer.statistics:
         class:     Frontend\Renderer\StatisticsRenderer
-        arguments: [ '@core.globals', '@core.template.admin', '@core.template.frontend' ]
+        arguments: [ '@service_container' ]
         public:    true

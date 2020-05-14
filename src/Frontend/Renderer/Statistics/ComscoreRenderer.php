@@ -16,9 +16,9 @@ class ComscoreRenderer extends StatisticsRenderer
     /**
      * {@inheritdoc}
      */
-    public function __construct($global, $backend, $frontend)
+    public function __construct($container)
     {
-        parent::__construct($global, $backend, $frontend);
+        parent::__construct($container);
 
         $this->config = $this->global->getContainer()
             ->get('orm.manager')

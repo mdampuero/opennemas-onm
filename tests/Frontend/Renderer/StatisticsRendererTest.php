@@ -49,11 +49,6 @@ class StatisticsRendererTest extends TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->renderer = $this->getMockBuilder('Frontend\Renderer\StatisticsRenderer')
-            ->setConstructorArgs([ $this->global, $this->tpl, $this->smarty ])
-            ->setMethods([ 'getCodeType', 'getRendererClass' ])
-            ->getMock();
-
         $this->childRenderer = $this->getMockBuilder('Frontend\Renderer\Statistics\GAnalyticsRenderer')
             ->disableOriginalConstructor()
             ->setMethods([ 'validate', 'getParameters' ])
@@ -65,6 +60,11 @@ class StatisticsRendererTest extends TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->renderer = $this->getMockBuilder('Frontend\Renderer\StatisticsRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getCodeType', 'getRendererClass' ])
+            ->getMock();
+
         $this->renderer->expects($this->any())->method('getRendererClass')
             ->willReturn($this->childRenderer);
 
@@ -75,11 +75,30 @@ class StatisticsRendererTest extends TestCase
             ->willReturn($this->container);
     }
 
+    /**
+     * @covers \Frontend\Renderer\StatisticsRenderer::__construct
+     */
+    public function testConstruct()
+    {
+        $this->assertEquals($this->global, $this->renderer->global);
+        $this->assertEquals($this->tpl, $this->renderer->backend);
+        $this->assertEquals($this->smarty, $this->renderer->frontend);
+    }
+
     public function serviceContainerCallback($name)
     {
         switch ($name) {
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.globals':
+                return $this->global;
+
+            case 'core.template.admin':
+                return $this->tpl;
+
+            case 'core.template.frontend':
+                return $this->smarty;
         }
 
         return null;
@@ -103,7 +122,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->once())->method('fetch')
             ->with($path, $params)->willReturn('Image code');
 
-        $this->assertEquals('Image code', $this->renderer->render(['GAnalytics']));
+        $this->assertEquals('Image code', $this->renderer->render(null, ['types' => [ 'GAnalytics' ], 'output' => '']));
     }
 
     /**
@@ -122,7 +141,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->once())->method('fetch')
             ->willReturn('Amp code');
 
-        $this->assertEquals($result, $this->renderer->render($types, $content, $output));
+        $this->assertEquals($result, $this->renderer->render($content, [ 'types' => $types, 'output' => $output ]));
     }
 
     /**
@@ -141,7 +160,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->once())->method('fetch')
             ->willReturn('Script code');
 
-        $this->assertEquals($result, $this->renderer->render($types, $content, $output));
+        $this->assertEquals($result, $this->renderer->render($content, [ 'types' => $types, 'output' => $output ]));
     }
 
     /**
@@ -160,7 +179,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->once())->method('fetch')
             ->willReturn('Fia code');
 
-        $this->assertEquals($result, $this->renderer->render($types, $content, $output));
+        $this->assertEquals($result, $this->renderer->render($content, [ 'types' => $types, 'output' => $output ]));
     }
 
 
@@ -181,7 +200,7 @@ class StatisticsRendererTest extends TestCase
         $this->tpl->expects($this->at(0))->method('fetch')
             ->will($this->throwException(new \Exception()));
 
-        $this->renderer->render($types, $output);
+        $this->renderer->render(null, [ 'types' => $types, 'output' => $output ]);
     }
 
     /**
@@ -189,7 +208,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenCommandImage()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -207,7 +226,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenBackendImage()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -228,7 +247,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenAmp()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -251,7 +270,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenScript()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -274,7 +293,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetCodeTypeWhenFia()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
@@ -297,7 +316,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testGetRendererClass()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getRendererClass');
         $method->setAccessible(true);
 
@@ -312,7 +331,7 @@ class StatisticsRendererTest extends TestCase
      */
     public function testValidate()
     {
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'validate');
         $method->setAccessible(true);
 
@@ -325,7 +344,7 @@ class StatisticsRendererTest extends TestCase
     public function testGetParametersWhenContent()
     {
         $content  = new Content();
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getParameters');
         $method->setAccessible(true);
 
@@ -339,7 +358,7 @@ class StatisticsRendererTest extends TestCase
     {
         $content = null;
 
-        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer = new StatisticsRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getParameters');
         $method->setAccessible(true);
 
