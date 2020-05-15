@@ -73,7 +73,7 @@ class WidgetRenderer extends Renderer
         $widget = $this->factoryWidget($content, $params);
 
         if (is_null($widget)) {
-            return sprintf(_('Widget %s not available'), $content);
+            return sprintf(_('Widget %s not available'), $content->content);
         }
 
         return $widget->render($params);

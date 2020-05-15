@@ -2,6 +2,7 @@
 
 namespace Tests\Frontend\Renderer\Widget;
 
+use Frontend\Renderer\Widget\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
 class WidgetRendererTest extends TestCase
@@ -18,11 +19,37 @@ class WidgetRendererTest extends TestCase
             ->setMethods([ 'renderletSmarty', 'renderletIntelligentWidget', 'factoryWidget' ])
             ->getMock();
 
+        $this->loader = $this->getMockBuilder('Common\Core\Component\Loader\WidgetLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'loadWidget' ])
+            ->getMock();
+
+        $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'fetch' ])
+            ->getMock();
+
         $this->renderer->expects($this->any())->method('renderletSmarty')
             ->willReturn('Smarty Renderlet Code');
 
         $this->renderer->expects($this->any())->method('renderletIntelligentWidget')
             ->willReturn('Intelligent Renderlet Code');
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+    }
+
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.template':
+                return $this->template;
+            case 'core.loader.widget':
+                return $this->loader;
+        }
+
+        return null;
     }
 
     /**
@@ -72,5 +99,72 @@ class WidgetRendererTest extends TestCase
         $expected          = '<div class="widget"></div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
+    }
+
+    /**
+     * Tests renderletSmarty.
+     */
+    public function testRenderletSmarty()
+    {
+        $widget          = new \Widget();
+        $widget->content = "smarty/renderlet/widget.tpl";
+
+        $renderer = new WidgetRenderer($this->container);
+        $method   = new \ReflectionMethod($renderer, 'renderletSmarty');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->once())->method('fetch')
+            ->with('string:' . $widget->content, [ 'widget' => $widget ])
+            ->willReturn('Output');
+
+        $this->assertEquals('Output', $method->invokeArgs($renderer, [ $widget ]));
+    }
+
+    /**
+     * Tests renderletIntelligentWidget when widget doesn't exists.
+     */
+    public function testRenderletIntelligentWidgetWhenNotExists()
+    {
+        $content  = new \Content();
+        $expected = sprintf(_('Widget %s not available'), $content->content);
+
+        $renderer = new WidgetRenderer($this->container);
+        $method   = new \ReflectionMethod($renderer, 'renderletIntelligentWidget');
+        $method->setAccessible(true);
+
+        $this->assertEquals($expected, $method->invokeArgs($renderer, [ $content ]));
+    }
+
+    /**
+     * Tests factoryWidget when empty content.
+     */
+    public function testFactoryWidgetWhenEmpty()
+    {
+        $widget          = new \Widget();
+        $widget->content = null;
+
+        $renderer = new WidgetRenderer($this->container);
+        $method   = new \ReflectionMethod($renderer, 'factoryWidget');
+        $method->setAccessible(true);
+
+        $this->assertEquals(null, $method->invokeArgs($renderer, [ $widget ]));
+    }
+
+    /**
+     * Tests factoryWidget when class doesn't exists.
+     */
+    public function testFactoryWidgetWhenNoClass()
+    {
+        $widget          = new \Widget();
+        $widget->content = 'AllHeadlines';
+
+        $renderer = new WidgetRenderer($this->container);
+        $method   = new \ReflectionMethod($renderer, 'factoryWidget');
+        $method->setAccessible(true);
+
+        $this->loader->expects($this->at(0))->method('loadWidget')
+            ->with($widget->content);
+
+        $this->assertEquals(null, $method->invokeArgs($renderer, [ $widget ]));
     }
 }
