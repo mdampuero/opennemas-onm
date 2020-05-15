@@ -118,9 +118,9 @@ class PiwikRendererTest extends TestCase
      */
     public function testValidateWhenIncorrectConfiguration()
     {
-        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method = new \ReflectionMethod($this->renderer, 'validate');
         $method->setAccessible(true);
 
-        $this->assertIsArray($method->invokeArgs($this->renderer, []));
+        $this->assertFalse($method->invokeArgs($this->renderer, []));
     }
 }
