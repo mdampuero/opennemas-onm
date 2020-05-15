@@ -12,8 +12,6 @@ namespace Tests\Frontend\Renderer\Content;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Content\ContentRenderer;
-use Mockery as m;
-use ReflectionClass;
 
 class ContentRendererTest extends TestCase
 {
