@@ -99,17 +99,4 @@ class VarnishHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->deleteNewsstands([ $itemA, $itemB ]);
     }
-
-    /**
-     * Tests deleteInstance.
-     */
-    public function testDeleteInstance()
-    {
-        $this->queue->expects($this->once())->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                'obj.http.x-tags ~ instance-qux'
-            ]));
-
-        $this->helper->deleteInstance(new Instance([ 'internal_name' => 'qux' ]));
-    }
 }

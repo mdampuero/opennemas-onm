@@ -46,27 +46,6 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests deleteCategories.
-     */
-    public function testDeleteCategories()
-    {
-        $this->cache->expects($this->at(0))->method('delete')
-            ->with('category', 'list', 2866);
-        $this->cache->expects($this->at(1))->method('delete')
-            ->with('category', 'list', 18701);
-
-        $this->helper->deleteCategories([
-            new Category([ 'pk_content_category' => 2866 ]),
-            new Category([ 'pk_content_category' => 18701 ])
-        ]);
-
-        $this->cache->expects($this->once())->method('delete')
-            ->with('category', 'list');
-
-        $this->helper->deleteCategories([]);
-    }
-
-    /**
      * Tests deleteContentsByUsers when list of users is and is not empty.
      */
     public function testDeleteContentsByUsers()
@@ -100,17 +79,6 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests deleteDynamicCss.
-     */
-    public function testDeleteDynamicCss()
-    {
-        $this->cache->expects($this->once())->method('delete')
-            ->with('css', 'global');
-
-        $this->helper->deleteDynamicCss();
-    }
-
-   /**
      * Tests deleteNewsstands.
      */
     public function testDeleteNewsstands()

@@ -34,27 +34,6 @@ class TemplateCacheHelper
     }
 
     /**
-     * Deletes cache files for a list of categories.
-     *
-     * @param array $categories The list of categories to delete cache for.
-     */
-    public function deleteCategories(array $categories) : void
-    {
-        if (empty($categories)) {
-            $this->cache->delete('category', 'list');
-            return;
-        }
-
-        foreach ($categories as $category) {
-            $this->cache->delete(
-                'category',
-                'list',
-                $category->pk_content_category
-            );
-        }
-    }
-
-    /**
      * Deletes cache files for contents created in the last 24 hours by any
      * user in the list.
      *
@@ -88,14 +67,6 @@ class TemplateCacheHelper
         foreach ($contents as $content) {
             $this->cache->delete('content', $content['pk_content']);
         }
-    }
-
-    /**
-     * Deletes cache files for dynamic CSS.
-     */
-    public function deleteDynamicCss()
-    {
-        $this->cache->delete('css', 'global');
     }
 
     /**

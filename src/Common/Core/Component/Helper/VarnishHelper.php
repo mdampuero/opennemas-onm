@@ -73,16 +73,4 @@ class VarnishHelper
             ]));
         }
     }
-
-    /**
-     * Deletes the varnish cache for the current instance.
-     *
-     * @param Instance $instance The instance to delete varnish for.
-     */
-    public function deleteInstance(Instance $instance)
-    {
-        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf('obj.http.x-tags ~ instance-%s', $instance->internal_name)
-        ]));
-    }
 }
