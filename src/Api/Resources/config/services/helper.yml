@@ -1,4 +1,8 @@
 services:
+    api.helper.cache.category:
+        class:     Api\Helper\Cache\CategoryCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
     api.helper.cache.tag:
         class:     Api\Helper\Cache\TagCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
