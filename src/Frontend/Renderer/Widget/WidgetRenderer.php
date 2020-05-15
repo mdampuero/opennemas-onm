@@ -46,7 +46,7 @@ class WidgetRenderer extends Renderer
      * @see resource.string.php Smarty plugin
      * @see resource.widget.php Smarty plugin
      */
-    private function renderletSmarty($content)
+    protected function renderletSmarty($content)
     {
         $resource = 'string:' . $content;
         $wgtTpl   = $this->container->get('core.template');
@@ -68,7 +68,7 @@ class WidgetRenderer extends Renderer
      *
      * @return string the generated HTML
      */
-    private function renderletIntelligentWidget($content, $params = null)
+    protected function renderletIntelligentWidget($content, $params = null)
     {
         $widget = $this->factoryWidget($content, $params);
 
@@ -87,7 +87,7 @@ class WidgetRenderer extends Renderer
      *
      * @return Object the widget instance
      */
-    private function factoryWidget($content, $params = null)
+    protected function factoryWidget($content, $params = null)
     {
         $widget = $content->content;
 
