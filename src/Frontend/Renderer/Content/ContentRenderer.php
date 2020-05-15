@@ -38,7 +38,7 @@ class ContentRenderer extends Renderer
      *
      * @param Array     The array of parameters.
      */
-    public function getTemplate(&$params)
+    protected function getTemplate(&$params)
     {
         $class              = strtolower(get_class($params['item']));
         $default            = 'frontpage/contents/_' . $class . '.tpl';
