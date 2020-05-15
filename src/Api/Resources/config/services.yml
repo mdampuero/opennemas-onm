@@ -1,4 +1,5 @@
 imports:
+    - { resource: services/helper.yml }
     - { resource: services/service.yml }
     - { resource: services/subscriber.yml }
     - { resource: services/validator.yml }
