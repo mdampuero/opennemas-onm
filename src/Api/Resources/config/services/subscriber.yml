@@ -23,6 +23,18 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    core.subscriber.setting:
+        class: Api\EventSubscriber\SettingSubscriber
+        arguments: [ '@core.instance', '@core.template.cache', '@core.helper.varnish', '@core.service.assetic.dynamic_css' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.tag:
+        class:     Api\EventSubscriber\TagSubscriber
+        arguments: [ '@api.helper.cache.tag' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
     core.subscriber.user:
         class:     Api\EventSubscriber\UserSubscriber
         arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache' ]
@@ -32,11 +44,5 @@ services:
     core.subscriber.user_group:
         class:     Api\EventSubscriber\UserGroupSubscriber
         arguments: [ '@api.service.redis' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    core.subscriber.setting:
-        class: Api\EventSubscriber\SettingSubscriber
-        arguments: [ '@core.instance', '@core.template.cache', '@core.helper.varnish', '@core.service.assetic.dynamic_css' ]
         tags:
             - { name: kernel.event_subscriber }
