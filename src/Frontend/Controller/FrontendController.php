@@ -411,7 +411,9 @@ class FrontendController extends Controller
 
             // Ensure that all templates are using params['content'] and
             // then remove the line below
-            $params[$item->content_type_name] = $item;
+            if (!empty($item->content_type_name)) {
+                $params[$item->content_type_name] = $item;
+            }
         }
 
         if (array_key_exists('category_name', $params)) {
