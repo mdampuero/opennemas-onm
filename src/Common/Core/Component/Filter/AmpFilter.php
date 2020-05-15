@@ -64,7 +64,7 @@ class AmpFilter extends Filter
                 . 'data-embed-as="${1}" data-href="${2}"></amp-facebook>',
             '<amp-instagram data-shortcode="${2}" width="400" height="400" layout="responsive"></amp-instagram>',
             '<amp-twitter width=486 height=657 layout="responsive" data-tweetid="${2}"></amp-twitter>',
-            '<amp-brid-player data-partner="${1}" data-player="${2}" data-video="${3}"'
+            '<amp-brid-player autoplay data-partner="${1}" data-player="${2}" data-video="${3}"'
                 . ' layout="responsive" width="518" height="291"></amp-brid-player>',
 
             // Invalid tags
