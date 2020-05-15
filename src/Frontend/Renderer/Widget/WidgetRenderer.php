@@ -16,19 +16,19 @@ class WidgetRenderer extends Renderer
     /**
      * {@inheritDoc}
      */
-    public function render($content, $params)
+    public function render($widget, $params)
     {
-        switch ($content->renderlet) {
+        switch ($widget->renderlet) {
             case 'html':
-                $output = $content->content;
+                $output = $widget->content;
                 break;
 
             case 'smarty':
-                $output = $this->renderletSmarty($content);
+                $output = $this->renderletSmarty($widget);
                 break;
 
             case 'intelligentwidget':
-                $output = $this->renderletIntelligentWidget($content, $params);
+                $output = $this->renderletIntelligentWidget($widget, $params);
                 break;
             default:
                 $output = '';
@@ -46,16 +46,16 @@ class WidgetRenderer extends Renderer
      * @see resource.string.php Smarty plugin
      * @see resource.widget.php Smarty plugin
      */
-    protected function renderletSmarty($content)
+    protected function renderletSmarty($widget)
     {
-        $resource = 'string:' . $content;
+        $resource = 'string:' . $widget->content;
         $wgtTpl   = $this->container->get('core.template');
 
         // no caching
         $wgtTpl->caching       = 0;
         $wgtTpl->force_compile = true;
 
-        $output = $wgtTpl->fetch($resource, [ 'widget' => $content ]);
+        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget ]);
 
         return $output;
     }
