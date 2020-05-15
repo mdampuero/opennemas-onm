@@ -100,9 +100,7 @@ class NewsstandController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $now  = date('Y-m-d H:i:s');
-        $page = array_key_exists('page', $params)
-            ? (int) $params['page']
-            : 1;
+        $page = (int) ($params['page'] ?? 1);
 
         // Invalid page provided as parameter
         if ($page <= 0) {
@@ -145,8 +143,8 @@ class NewsstandController extends FrontendController
 
         $response = $this->get($this->service)->getList($oql);
 
-        // No first page and no contents
-        if ($page > 1 && empty($response['items'])) {
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $response['total'] < $epp * $page) {
             throw new ResourceNotFoundException();
         }
 

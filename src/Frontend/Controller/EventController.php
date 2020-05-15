@@ -107,7 +107,7 @@ class EventController extends FrontendController
     protected function getItems($params)
     {
         $date   = date('Y-m-d H:i:s');
-        $offset = ($params['page'] <= 1) ? 0 : ($params['page'] - 1) * $params['epp'];
+        $offset = $params['epp'] * ($params['page'] - 1);
 
         $eventIds = $this->get('orm.manager')->getConnection('instance')
             ->fetchAll(
@@ -180,7 +180,7 @@ class EventController extends FrontendController
         list($contents, $total) = $this->getItems($params);
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($contents)) {
+        if ($params['page'] > 1 && $total < $params['epp'] * $params['page']) {
             throw new ResourceNotFoundException();
         }
 
