@@ -9,183 +9,248 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
- * Displays a list of tags or a list of contents by tag.
+ * Displays a tag or a list of tags.
  */
-class TagController extends Controller
+class TagController extends FrontendController
 {
     /**
-     * Displays a list of tags.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response The response object.
+     * {@inheritdoc}
      */
-    public function indexAction()
+    protected $caches = [
+        'list' => 'frontpages',
+        'show' => 'frontpages'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'es.openhost.module.tags';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'list' => 'article_inner',
+        'show' => 'article_inner',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'list' => [ 7, 9 ],
+        'show' => [ 7, 9 ]
+    ];
+
+    /**
+     * The list of valid query parameters per action.
+     *
+     * @var array
+     */
+    protected $queries = [
+        'list' => [ 'page' ],
+        'show' => [ 'page', 'slug' ],
+    ];
+
+    /**
+     * The list of routes per action.
+     *
+     * @var array
+     */
+    protected $routes = [
+        'list' => 'frontend_tag_index',
+        'show' => 'frontend_tag_frontpage'
+    ];
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'list'    => 'tag/index.tpl',
+        'show'    => 'frontpage/tags.tpl'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listAction(Request $request)
     {
-        if (!$this->get('core.security')
-            ->hasExtension('es.openhost.module.tagsIndex')
-        ) {
+        $this->checkSecurity('es.openhost.module.tagsIndex');
+
+        return parent::listAction($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function showAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+        $params = $this->getQueryParameters($action, $request->query->all());
+
+        // Deprecate resource parameter
+        unset($params['resource']);
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if (strpos($request->getRequestUri(), $expected) === false) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateShow($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCacheId($params)
+    {
+        $cacheParams = [
+            $this->get('core.globals')->getExtension(),
+            $this->get('core.globals')->getAction()
+        ];
+
+        $cacheParams[] = $params['item']->id ?? null;
+        $cacheParams[] = $params['page'] ?? null;
+
+        return $this->view->getCacheId($cacheParams);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItem(Request $request)
+    {
+        $locale = $this->get('core.locale')->getRequestLocale();
+        $slug   = $this->get('data.manager.filter')
+            ->set($request->get('slug', null))
+            ->filter('slug')
+            ->get();
+
+        try {
+            $item = $this->get('api.service.tag')->getList(sprintf(
+                '(locale = "%s" or locale is null) and slug = "%s"',
+                $locale,
+                $slug
+            ))['items'];
+        } catch (\Exception $e) {
             throw new ResourceNotFoundException();
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', 'tag', 'tag-index');
-        $tags    = [ '#' => [], '*' => [] ];
-
-        $this->view->setConfig('frontpages');
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached('tag/index.tpl', $cacheId)
-        ) {
-            $fm = $this->get('data.manager.filter');
-            $t  = $this->get('api.service.tag')
-                ->getListByContentTypes([ 'article' ]);
-
-            $letters = range('a', 'z');
-
-            foreach ($t['items'] as $tag) {
-                if (is_numeric($tag->name[0])) {
-                    $tags['#'][] = $tag;
-                    continue;
-                }
-
-                $normalized = $fm->set($tag->name)->filter('normalize')->get();
-
-                if (in_array($normalized[0], $letters)) {
-                    $tags[$normalized[0]][] = $tag;
-                    continue;
-                }
-
-                $tags['*'][] = $tag;
-            }
-            ksort($tags);
+        if (empty($item)) {
+            throw new ResourceNotFoundException();
         }
 
-        list($positions, $advertisements) = $this->getInnerAds();
+        return $item;
+    }
 
-        return $this->render('tag/index.tpl', [
-            'tags'           => $tags,
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheId,
-            'x-tags'         => 'tag-page,tag-index',
-            'x-cacheable'    => true,
+    /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($request, $item = null)
+    {
+        return array_merge(parent::getParameters($request, $item[0]), [
+            'items' => $item
         ]);
     }
 
     /**
-     * Shows a paginated list of contents for a given tag name.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response The response object.
-     *
-     * @return Response The response object.
+     * {@inheritdoc}
      */
-    public function tagsAction(Request $request)
+    protected function hydrateShow(array &$params = []) : void
     {
-        $slug = $request->get('slug', null);
-        $page = (int) $request->get('page', 1);
-        $page = $page > 1 ? 2 : 1;
+        $page = (int) ($params['page'] ?? 1);
+        $epp  = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
 
-        $slug = $this->get('data.manager.filter')
-            ->set($slug)
-            ->filter('slug')
-            ->get();
+        $epp = 3;
 
-        $cacheId = $this->view->getCacheId('frontpage', 'tag', $slug, $page);
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $params['items']);
 
-        $this->view->setConfig('frontpages');
-
-        if (empty($this->view->getCaching())
-            || !$this->view->isCached('frontpage/tags.tpl', $cacheId)
-        ) {
-            $epp    = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('items_in_blog', 10);
-            $epp    = empty($epp) ? 10 : $epp;
-            $locale = $this->get('core.locale')->getRequestLocale();
-            $tags   = $this->get('api.service.tag')
-                ->getList(sprintf(
-                    '(locale = "%s" or locale is null) and slug = "%s"',
-                    $locale,
-                    $slug
-                ));
-
-            $contents = [];
-            $total    = 1;
-
-            if ($tags['total'] === 0) {
-                throw new ResourceNotFoundException();
-            }
-
-            $ids = array_map(function ($a) {
-                return $a->id;
-            }, $tags['items']);
-
-            $criteria = [
-                'join' => [
-                    [
-                        'table' => 'contents_tags',
-                        'type'  => 'inner',
-                        'content_id' => [
-                            [ 'value' => 'pk_content', 'field' => true ]
-                        ],
-                        'tag_id' => [
-                            [ 'value' => $ids, 'operator' => 'in' ]
-                        ]
+        $criteria = [
+            'join' => [
+                [
+                    'table' => 'contents_tags',
+                    'type'  => 'inner',
+                    'content_id' => [
+                        [ 'value' => 'pk_content', 'field' => true ]
+                    ],
+                    'tag_id' => [
+                        [ 'value' => $ids, 'operator' => 'in' ]
                     ]
-                ],
-                'fk_content_type' => [
-                    [ 'value' => [ 1, 4, 7, 9, 11 ], 'operator' => 'in' ],
-                ],
-                'content_status'    => [ [ 'value' => 1 ] ],
-                'in_litter'         => [ [ 'value' => 0 ] ],
-                'starttime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'endtime'           => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
-            ];
+            ],
+            'fk_content_type' => [
+                [ 'value' => [ 1, 4, 7, 9, 11 ], 'operator' => 'in' ],
+            ],
+            'content_status'    => [ [ 'value' => 1 ] ],
+            'in_litter'         => [ [ 'value' => 0 ] ],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
 
-            $em       = $this->get('entity_repository');
-            $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
-            $total    = count($contents) + 1;
+        $em       = $this->get('entity_repository');
+        $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
+        $total    = $em->countBy($criteria);
 
-            // TODO: review this piece of CRAP
-            foreach ($contents as &$item) {
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $image = $em->find('Photo', $item->img1);
-                    if (is_object($image) && !is_null($image->id)) {
-                        $item->img1_path = $image->path_file . $image->name;
-                        $item->img1      = $image;
-                    }
-                } elseif ($item->fk_content_type == 7) {
-                    $image           = $em->find('Photo', $item->cover_id);
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $total < $epp * $page) {
+            throw new ResourceNotFoundException();
+        }
+
+        // TODO: review this piece of CRAP
+        foreach ($contents as &$item) {
+            if (isset($item->img1) && ($item->img1 > 0)) {
+                $image = $em->find('Photo', $item->img1);
+                if (is_object($image) && !is_null($image->id)) {
                     $item->img1_path = $image->path_file . $image->name;
                     $item->img1      = $image;
-                } elseif ($item->fk_content_type == 9) {
-                    $item->obj_video = $item;
-                    $item->summary   = $item->description;
                 }
-
-                if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                    $item->video = $em->find('Video', $item->fk_video2);
-                }
+            } elseif ($item->fk_content_type == 7) {
+                $image           = $em->find('Photo', $item->cover_id);
+                $item->img1_path = $image->path_file . $image->name;
+                $item->img1      = $image;
+            } elseif ($item->fk_content_type == 9) {
+                $item->obj_video = $item;
+                $item->summary   = $item->description;
             }
 
-            $this->view->assign([
-                'contents' => $contents,
-                'tag'      => $tags['items'][0]
-            ]);
+            if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                $item->video = $em->find('Video', $item->fk_video2);
+            }
+        }
 
-            $pagination = $this->get('paginator')->get([
+        $params = array_merge($params, [
+            'contents'   => $contents,
+            'tag'        => $params['item'],
+            'pagination' => $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $epp,
                 'maxLinks'    => 0,
@@ -193,45 +258,46 @@ class TagController extends Controller
                 'total'       => $total,
                 'route'       => [
                     'name'   => 'frontend_tag_frontpage',
-                    'params' => [ 'slug' => $slug ]
+                    'params' => [ 'slug' => $params['slug']]
                 ]
-            ]);
-
-            $this->view->assign([ 'pagination' => $pagination ]);
-        }
-
-        list($positions, $advertisements) = $this->getInnerAds();
-
-        return $this->render('frontpage/tags.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheId,
-            'x-tags'         => 'tag-page,' . $slug,
-            'x-cacheable'    => true,
+            ])
         ]);
     }
 
     /**
-     * Returns a list of advertisement positions and advertisements.
-     *
-     * @param string $category The category id.
-     *
-     * @return array A list of advertisement positions and advertisements.
+     * {@inheritdoc}
      */
-    public function getInnerAds($category = 'home')
+    protected function hydrateList(array &$params = []) : void
     {
-        $category = !isset($category) || ($category == 'home') ? 0 : $category;
+        $tags    = [ '#' => [], '*' => [] ];
+        $letters = range('a', 'z');
 
-        // Get article_inner and category_frontpage positions
-        $positionManager = $this->get('core.helper.advertisement');
-        $positions       = array_merge(
-            $positionManager->getPositionsForGroup('category_frontpage'),
-            $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ])
-        );
+        $response = $this->get('api.service.tag')
+            ->getListByContentTypes([ 'article' ]);
 
-        $advertisements = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
+        foreach ($response['items'] as $item) {
+            if (is_numeric($item->name[0])) {
+                $tags['#'][] = $item;
+                continue;
+            }
 
-        return [ $positions, $advertisements ];
+            $normalized = $this->get('data.manager.filter')
+                ->set($item->name[0])
+                ->filter('normalize')
+                ->get();
+
+            if (in_array($normalized[0], $letters)) {
+                $tags[$normalized[0]][] = $item;
+                continue;
+            }
+
+            $tags['*'][] = $tag;
+        }
+
+        ksort($tags);
+
+        $params = array_merge($params, [
+            'tags' => $tags,
+        ]);
     }
 }
