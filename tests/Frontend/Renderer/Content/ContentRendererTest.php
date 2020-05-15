@@ -15,10 +15,6 @@ use Frontend\Renderer\Content\ContentRenderer;
 use Mockery as m;
 use ReflectionClass;
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
 class ContentRendererTest extends TestCase
 {
     public function setUp()
