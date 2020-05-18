@@ -9,6 +9,7 @@
  */
 namespace Frontend\Renderer\Content;
 
+use Api\Exception\GetItemException;
 use Frontend\Renderer\Renderer;
 
 class ContentRenderer extends Renderer
@@ -49,10 +50,14 @@ class ContentRenderer extends Renderer
         }
 
         if ($class == 'opinion') {
-            $author = new \User($params['item']->fk_author);
+            try {
+                $author = $this->container->get('api.service.author')->getItem($params['item']->fk_author);
 
-            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
-                return 'frontpage/contents/_blog.tpl';
+                if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+                    return 'frontpage/contents/_blog.tpl';
+                }
+            } catch (GetItemException $e) {
+
             }
         }
 

@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer\Content;
 
+use Api\Exception\GetItemException;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Content\ContentRenderer;
@@ -35,6 +36,11 @@ class ContentRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
         $this->content = new \Content();
 
         $this->container->expects($this->any())->method('get')
@@ -49,6 +55,8 @@ class ContentRendererTest extends TestCase
                 return $this->template;
             case 'error.log':
                 return $this->logger;
+            case 'api.service.author':
+                return $this->as;
         }
 
         return null;
@@ -107,12 +115,58 @@ class ContentRendererTest extends TestCase
     public function testGetTemplateWhenOpinion()
     {
         $opinion        = new \Opinion();
+        $author         = new \User();
+        $author->meta   = [ 'is_blog' => 0 ];
         $params['item'] = $opinion;
         $tpl            = 'frontpage/contents/_opinion.tpl';
 
         $renderer = new ContentRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getTemplate');
         $method->setAccessible(true);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->willReturn($author);
+
+        $this->assertEquals($tpl, $method->invokeArgs($renderer, [ &$params ]));
+    }
+
+    /**
+     * Tests getTemplate when content is an opinion with invalid author.
+     */
+    public function testGetTemplateWhenInvalidOpinion()
+    {
+        $opinion            = new \Opinion();
+        $opinion->fk_author = 1;
+        $params             = [ 'item' => $opinion ];
+        $tpl                = 'frontpage/contents/_opinion.tpl';
+
+        $renderer = new ContentRenderer($this->container);
+        $method   = new \ReflectionMethod($renderer, 'getTemplate');
+        $method->setAccessible(true);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetItemException()));
+
+        $this->assertEquals($tpl, $method->invokeArgs($renderer, [ &$params ]));
+    }
+
+    /**
+     * Tests getTemplate when content is a blog.
+     */
+    public function testGetTemplateWhenBlog()
+    {
+        $opinion        = new \Opinion();
+        $author         = new \User();
+        $author->meta   = [ 'is_blog' => 1 ];
+        $params['item'] = $opinion;
+        $tpl            = 'frontpage/contents/_blog.tpl';
+
+        $renderer = new ContentRenderer($this->container);
+        $method   = new \ReflectionMethod($renderer, 'getTemplate');
+        $method->setAccessible(true);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->willReturn($author);
 
         $this->assertEquals($tpl, $method->invokeArgs($renderer, [ &$params ]));
     }
