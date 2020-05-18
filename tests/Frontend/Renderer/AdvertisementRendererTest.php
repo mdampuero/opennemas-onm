@@ -598,4 +598,36 @@ class AdvertisementRendererTest extends TestCase
             $method->invokeArgs($renderer, [ $ad->with_script ])
         );
     }
+
+    /**
+     * Tests isFloating when is a floating advertisement.
+     */
+    public function testIsFloatingWhenTrue()
+    {
+        $renderer = new AdvertisementRenderer($this->container);
+        $params   = [ 'placeholder' => 'placeholder_1_1' ];
+
+        $method = new \ReflectionMethod($renderer, 'isFloating');
+        $method->setAccessible(true);
+
+        $this->assertTrue(
+            $method->invokeArgs($renderer, [ &$params ])
+        );
+    }
+
+    /**
+     * Tests isFloating when is a floating advertisement.
+     */
+    public function testIsFloatingWhenFalse()
+    {
+        $renderer = new AdvertisementRenderer($this->container);
+        $params   = [];
+
+        $method = new \ReflectionMethod($renderer, 'isFloating');
+        $method->setAccessible(true);
+
+        $this->assertFalse(
+            $method->invokeArgs($renderer, [ &$params ])
+        );
+    }
 }
