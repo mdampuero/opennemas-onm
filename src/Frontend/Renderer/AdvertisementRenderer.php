@@ -124,8 +124,7 @@ class AdvertisementRenderer extends Renderer
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
         if ($isSafeFrame && !in_array($adsFormat, $this->inlineFormats)) {
-            return array_key_exists('floating', $params)
-                && $params['floating'] === true
+            return $this->isFloating($ad, $params)
                     ? $this->renderSafeFrameSlot($ad)
                     : $renderer->renderSafeFrame($ad, $params);
         }
@@ -260,6 +259,25 @@ class AdvertisementRenderer extends Renderer
             'top' : $ad->params['orientation'];
 
         return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
+    }
+
+    /**
+     * Returns if advertisement is floating or not.
+     *
+     * @param \Advertisement $ad     The advertisement to check.
+     * @param Array          $params The array of parameters.
+     *
+     * @return boolean True if it is floating, False if it isn't.
+     */
+    protected function isFloating($ad, &$params)
+    {
+        if ($ad->positions[0] == 37) {
+            $params['floating']           = true;
+            $params['advertisementGroup'] = 'frontpage';
+            return true;
+        }
+
+        return false;
     }
 
     /**
