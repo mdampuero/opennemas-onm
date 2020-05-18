@@ -136,6 +136,33 @@ class WidgetRendererTest extends TestCase
     }
 
     /**
+     * Tests renderletIntelligentWidget when widget exists.
+     */
+    public function testRenderletIntelligentWidgetWhenExists()
+    {
+        $widget = $this->getMockBuilder('\Widget')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'render' ])
+            ->getMock();
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Widget\WidgetRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'factoryWidget' ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($renderer, 'renderletIntelligentWidget');
+        $method->setAccessible(true);
+
+        $renderer->expects($this->once())->method('factoryWidget')
+            ->willReturn($widget);
+
+        $widget->expects($this->once())->method('render')
+            ->with([]);
+
+        $method->invokeArgs($renderer, [ null, [] ]);
+    }
+
+    /**
      * Tests factoryWidget when empty content.
      */
     public function testFactoryWidgetWhenEmpty()
