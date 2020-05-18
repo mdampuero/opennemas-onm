@@ -11,8 +11,8 @@ namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\NewsstandService;
 use Common\Core\Component\Helper\NewsstandHelper;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for NewsstandService class.
@@ -67,7 +67,7 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
-            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])
+            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->setMethods([ 'getItem' ])
             ->getMock();
     }

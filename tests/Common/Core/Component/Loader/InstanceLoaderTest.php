@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Loader;
 
 use Common\Core\Component\Loader\InstanceLoader;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for InstanceLoader class.
@@ -22,22 +22,22 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
             ->setMethods([ 'exists', 'get', 'set' ])
             ->getMock();
 
-        $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
+        $this->cm = $this->getMockBuilder('Opennemas\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
-        $this->repository = $this->getMockBuilder('Common\ORM\Database\Repository\BaseRepository')
+        $this->repository = $this->getMockBuilder('Openneams\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findOneBy' ])
             ->getMock();

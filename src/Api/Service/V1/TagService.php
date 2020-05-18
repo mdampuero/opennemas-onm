@@ -10,7 +10,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\GetListException;
-use Common\ORM\Entity\Tag;
+use Common\Model\Entity\Tag;
 use Common\Core\Component\Validator\Validator;
 
 class TagService extends OrmService

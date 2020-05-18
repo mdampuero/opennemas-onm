@@ -500,78 +500,6 @@ class StringUtils
     ];
 
     /**
-     * Clean the special chars into a file name
-     *
-     * @param  string  $name the string to clean
-     *
-     * @return string the string cleaned
-     */
-    public static function cleanFileName($name)
-    {
-        $name = trim($name);
-        $name = html_entity_decode($name, ENT_COMPAT, 'UTF-8');
-        // Keep . for filename extension
-        $trade = self::$trade;
-        unset($trade['.']);
-        $name = strtr($name, $trade);
-        // Trade white spaces to hyphen
-        $name = preg_replace('/[\s]+/', '-', $name);
-
-        return $name;
-    }
-
-    /**
-     * Converts to UTF-8 an string
-     *
-     * @param string $str the string to convert
-     *
-     * @return string the UTF-8 converted string
-     */
-    public static function convertToUTF8AndStrToLower($str)
-    {
-        // $str = mb_convert_encoding($str, 'UTF-8', mb_detect_encoding($str));
-        $str = mb_convert_encoding(
-            $str,
-            "UTF-8",
-            "CP1252,CP1251,ISO-8859-1,UTF-8,ISO-8859-15"
-        );
-
-        return mb_strtolower($str, 'UTF-8');
-    }
-
-    /**
-     * Removes bad words from a text
-     *
-     * @param string $text       the text to clean
-     * @param int    $weight     the minimum bad word weight to clean
-     * @param string $replaceStr the replacement string for the bad words
-     *
-     * @return string the cleaned string
-     */
-    public static function filterBadWords($text, $weight = 0, $replaceStr = ' ')
-    {
-        $words = self::loadBadWords();
-        $text  = ' ' . $text . ' ';
-        if ($replaceStr != ' ') {
-            $replaceStr = ' ' . $replaceStr . ' ';
-        }
-
-        foreach ($words as $word) {
-            if ($word['weight'] > $weight) {
-                $text = preg_replace(
-                    '/\W' . $word['text'] . '\W/si',
-                    $replaceStr,
-                    $text
-                );
-            }
-        }
-
-        $text = trim($text);
-
-        return $text;
-    }
-
-    /**
      * Clean the special chars and add - for separate words
      *
      * @param  mixed  $string the string to transform
@@ -635,97 +563,6 @@ class StringUtils
     }
 
     /**
-     * Generates a valid slug, this function is a "copy" of self::generateSlug,
-     * keep it here to avoid problems for unchanged uses.
-     *
-     * @param  string  $title
-     * @param  boolean $useStopList whether use the stopList array
-     * @param  string  $delimiter
-     *
-     * @return string
-     */
-    public static function getTitle($origString, $useStopList = true, $delimiter = '-')
-    {
-        $useStopList = true;
-
-        return self::generateSlug($origString, $useStopList, $delimiter);
-    }
-
-    /**
-     * Gets "n" first words from a given text
-     *
-     * @example self::getNumWords('hello world', 1)
-     *
-     * @param  string  $text the text to operate with
-     * @param  integer $numWords
-     *
-     * @return string
-     */
-    public static function getNumWords($text, $numWords)
-    {
-        if (is_array($text)) {
-            return array_map(function ($a) use ($numWords) {
-                self::getNumWords($a, $numWords);
-            }, $text);
-        }
-
-        $noHtml      = strip_tags($text);
-        $description = explode(" ", $noHtml, $numWords + 1);
-        array_pop($description);
-
-        $words = implode(" ", $description) . '...';
-
-        return $words;
-    }
-
-    /**
-     * Returns a string with keywords from a given text
-     *
-     * @param  string $text the text where extract keywords from
-     *
-     * @return string the string of keywords separated by commas
-     */
-    public static function getTags($text)
-    {
-        $text = preg_replace('/[\.]+/', '', trim($text));
-
-        // Remove stop list
-        $text = self::removeShorts($text);
-
-        $text = preg_replace('/[ ]+/', ',', $text);
-        $text = preg_replace('/[\,]+/', ',', $text);
-
-        // Remove duplicates
-        $tags = array_unique(explode(',', $text));
-        $tags = implode(', ', $tags);
-
-        return $tags;
-    }
-
-    /**
-     * Returns the weight of a text from its bad words
-     *
-     * @param string $text the text to work with
-     *
-     * @return int the weight of the text
-     */
-    public static function getWeightBadWords($text)
-    {
-        $words = self::loadBadWords();
-        $text  = ' ' . $text . ' ';
-
-        $weight = 0;
-
-        foreach ($words as $word) {
-            if (preg_match_all('/' . $word['text'] . '/si', $text, $matches)) {
-                $weight += ($word['weight'] * count($matches[0]));
-            }
-        }
-
-        return $weight;
-    }
-
-    /**
      * Prepares HTML code to use it as html entity attribute
      *
      * @param string $string the string to clean
@@ -737,51 +574,6 @@ class StringUtils
         $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
 
         return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    }
-
-    /**
-     * Retuns a list of bad words with their weigth
-     *
-     * @return array the list of words
-     */
-    public static function loadBadWords()
-    {
-        $badWords = [
-            [
-                'weight' => 5,
-                'text'   => 'm[i]?erda',
-            ],
-            [
-                'weight' => 5,
-                'text'   => 'marica',
-            ],
-            [
-                'weight' => 5,
-                'text'   => 'carallo',
-            ],
-            [
-                'weight' => 10,
-                'text'   => '[h]?ostia',
-            ],
-            [
-                'weight' => 20,
-                'text'   => 'puta[s]?',
-            ],
-            [
-                'weight' => 30,
-                'text'   => 'cabr[oó]n[a]?',
-            ],
-            [
-                'weight' => 50,
-                'text'   => 'fill[ao] d[ae] puta',
-            ],
-            [
-                'weight' => 50,
-                'text'   => 'hij[ao] de puta',
-            ],
-        ];
-
-        return $badWords;
     }
 
     /**
@@ -798,67 +590,6 @@ class StringUtils
         $newname = rtrim($newname);
 
         return $newname;
-    }
-
-    /**
-     * Delete disallowed chars from a sentence and transform it to a url friendly name
-     *
-     * @param  string  $name the string to clean
-     *
-     * @return string the string cleaned
-     */
-    public static function normalizeTag($name)
-    {
-        $newname = mb_strtolower($name, 'UTF-8');
-
-        // Keep # for estrelladigital and renderTags = hashtag
-        $trade = self::$trade;
-        unset($trade['#']);
-
-        $newname = strtr($newname, $trade);
-        $newname = rtrim($newname);
-
-        return $newname;
-    }
-
-    /**
-     * Prevent duplicate metadata
-     *
-     * @param string $metadata  the metadata to clean
-     * @param string $separator Separator character to use for splitting the words.
-     *                          By default ','
-     *
-     * @return string the cleaned metadata string
-     */
-    public static function normalizeMetadata($metadata)
-    {
-        $items = explode(',', $metadata);
-
-        foreach ($items as $k => $item) {
-            $items[$k] = self::normalizeTag(trim($item));
-        }
-
-        $items = array_flip($items);
-        $items = array_keys($items);
-
-        $metadata = implode(',', $items);
-
-        return $metadata;
-    }
-
-    /**
-     * Delete disallowed chars from a sentence and transform it to a url friendly name
-     *
-     * @param  string  $name the string to clean
-     *
-     * @return string the string cleaned
-     */
-    public static function normalizeName($name)
-    {
-        $name = self::normalize($name);
-        $name = preg_replace('/[\- ]+/', '-', $name);
-
-        return $name;
     }
 
     /**
@@ -919,31 +650,6 @@ class StringUtils
         }
 
         return $str;
-    }
-
-    /**
-     * Removes punctuation characters from a string.
-     *
-     * @param string $str     The string to clean.
-     * @param array  $exclude The list of characters to exclude.
-     *
-     * @return The string without punctuation characters.
-     */
-    public static function removePunctuation($str, $exclude = [])
-    {
-        $punctuation = array_slice(
-            self::$trade,
-            0,
-            array_search('À', array_keys(self::$trade))
-        );
-
-        if (!empty($exclude)) {
-            $punctuation = array_diff_key($punctuation, array_flip($exclude));
-        }
-
-        $str = strtr($str, $punctuation);
-
-        return trim(preg_replace('/\s+/', ' ', $str));
     }
 
     /**

@@ -10,7 +10,7 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\PollSubscriber;
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 
 /**
  * Defines test cases for PollSubscriber class.

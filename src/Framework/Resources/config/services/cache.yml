@@ -1,6 +1,6 @@
 services:
     cache:
-        class: '%cache_handler%'
+        class:     '%cache_handler%'
         arguments: [ '%cache_handler_params%' ]
         public: true
 

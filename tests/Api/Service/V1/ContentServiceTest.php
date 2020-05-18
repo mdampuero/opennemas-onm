@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\ContentService;
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 
 /**
  * Defines test cases for CategoryService class.
@@ -64,7 +64,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
             ->setMethods([ 'getItem', 'getItemBy', 'getListByIds' ])
-            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])
+            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->getMock();
     }
 

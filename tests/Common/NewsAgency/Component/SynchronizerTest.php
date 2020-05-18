@@ -10,7 +10,7 @@
 namespace Tests\Common\NewsAgency\Component\Synchronizer;
 
 use Common\NewsAgency\Component\Synchronizer\Synchronizer;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for Synchronizer class.

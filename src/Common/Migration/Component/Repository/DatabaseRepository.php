@@ -9,7 +9,7 @@
  */
 namespace Common\Migration\Component\Repository;
 
-use Common\ORM\Core\Connection;
+use Opennemas\Orm\Core\Connection;
 
 /**
  * The DatabaseRepository class provides methods to search items to migrate from

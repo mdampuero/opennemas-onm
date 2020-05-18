@@ -278,7 +278,7 @@ class Opinion extends Content
 
         $author = new \User($this->fk_author);
 
-        $this->name             = \Onm\StringUtils::getTitle($author->name);
+        $this->name             = \Onm\StringUtils::generateSlug($author->name);
         $this->author_name_slug = $this->name;
 
         if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {

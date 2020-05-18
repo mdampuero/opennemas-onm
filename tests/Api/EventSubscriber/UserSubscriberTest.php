@@ -10,8 +10,8 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\UserSubscriber;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for UserSubscriber class.

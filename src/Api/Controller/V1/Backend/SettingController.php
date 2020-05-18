@@ -146,20 +146,6 @@ class SettingController extends Controller
             ->get($this->keys);
         $locale   = $this->get('core.locale');
 
-        if (array_key_exists('google_analytics', $settings)) {
-            $settings['google_analytics'] = $this->get('data.manager.adapter')
-                ->adapt('google_analytics', $settings['google_analytics']);
-
-            // Decode base64 custom code for analytics
-            foreach ($settings['google_analytics'] as &$value) {
-                if (array_key_exists('custom_var', $value)
-                    && !empty($value['custom_var'])
-                ) {
-                    $value['custom_var'] = base64_decode($value['custom_var']);
-                }
-            }
-        }
-
         // Decode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
             if (array_key_exists($key, $settings)) {
@@ -167,12 +153,11 @@ class SettingController extends Controller
             }
         }
 
-        foreach ([ 'logo_enabled' ] as $key) {
-            $settings[$key] = $this->get('data.manager.adapter')
-                ->adapt($key, $settings[$key]);
-        }
+        $toint = [
+            'items_in_blog', 'items_per_page', 'elements_in_rss',
+            'logo_enabled', 'refresh_interval'
+        ];
 
-        $toint = [ 'items_in_blog', 'items_per_page', 'elements_in_rss', 'refresh_interval' ];
         foreach ($toint as $key) {
             $settings[$key] = (int) $settings[$key];
         }
@@ -386,19 +371,6 @@ class SettingController extends Controller
 
             if (array_key_exists('id', $settings['facebook'])) {
                 $settings['facebook_id'] = $settings['facebook']['id'];
-            }
-        }
-
-        if (array_key_exists('logo_enabled', $settings)) {
-            $settings['section_settings']['allowLogo'] = $settings['logo_enabled'];
-        }
-
-        if (array_key_exists('locale', $settings)
-            && is_array($settings['locale'])
-        ) {
-            if (array_key_exists('frontend', $settings['locale'])) {
-                $settings['site_language'] = $settings['locale']['frontend']['language']['selected'];
-                $settings['time_zone']     = $settings['locale']['frontend']['timezone'];
             }
         }
 

@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  InstanceCtrl
@@ -19,7 +20,7 @@
      */
     .controller('InstanceCtrl', [
       '$filter', '$location', '$routeParams', '$scope', '$uibModal', 'cleaner', 'http', 'messenger', 'oqlEncoder',
-      function ($filter, $location, $routeParams, $scope, $uibModal, cleaner, http, messenger, oqlEncoder) {
+      function($filter, $location, $routeParams, $scope, $uibModal, cleaner, http, messenger, oqlEncoder) {
         /**
          * @memberOf InstanceCtrl
          *
@@ -98,7 +99,6 @@
          * @type {Object}
          */
         $scope.settings = {
-          site_language: 'es_ES',
           pass_level:    -1,
           max_mailing:   0,
           time_zone:     '335'
@@ -128,7 +128,7 @@
          *
          * @param {string} search The name or email.
          */
-        $scope.getClients = function(search) {
+        $scope.getClients = function() {
           $scope.loading = 1;
 
           oqlEncoder.configure({
@@ -191,7 +191,7 @@
          */
         $scope.isPlanSelected = function(plan) {
           return _.difference($scope.modulesByPack[plan],
-              $scope.instance.activated_modules).length ===0;
+            $scope.instance.activated_modules).length === 0;
         };
 
         /**
@@ -228,7 +228,7 @@
           http.post('manager_ws_instance_save', {
             instance: cleaner.clean($scope.instance),
             settings: $scope.settings
-          }).then(function (response) {
+          }).then(function(response) {
             messenger.post(response.data);
 
             if (response.status === 201) {
@@ -239,6 +239,7 @@
               }
 
               var url = response.headers().location.replace('/managerws', '');
+
               $location.path(url);
             }
           }, function(response) {
@@ -322,7 +323,7 @@
             params: { id: $scope.instance.id }
           };
 
-          http.put(route, data).then(function (response) {
+          http.put(route, data).then(function(response) {
             messenger.post(response.data);
             $scope.saving = 0;
           }, function(response) {
@@ -339,7 +340,7 @@
             var pack = $scope.packs[i];
 
             $scope.selected.plan[pack] = _.difference($scope.modulesByPack[pack],
-                $scope.instance.activated_modules).length === 0;
+              $scope.instance.activated_modules).length === 0;
 
             all = all && $scope.selected.plan[pack];
           }
@@ -357,6 +358,7 @@
         $scope.initModules = function() {
           var modules = [];
           var modulesInAPack = [];
+
           for (var i = 0; i < $scope.template.modules.length; i++) {
             var module = $scope.template.modules[i];
 
@@ -376,7 +378,7 @@
 
               // Get modules that this pack adds to the previous pack
               $scope.modulesByPack[module.uuid] = _.difference(
-                  module.modules_included, modulesInAPack);
+                module.modules_included, modulesInAPack);
 
               // Other packs, get all modules in the pack
               if (module.uuid !== 'BASIC_PACK' &&
@@ -394,7 +396,7 @@
           $scope.packs.push('OTHER_PACK');
           $scope.modulesByPack.OTHER_PACK = _.difference(modules, modulesInAPack);
           $scope.selected.plan.OTHER_PACK = _.difference($scope.modulesByPack.OTHER_PACK,
-              $scope.instance.activated_modules) === 0;
+            $scope.instance.activated_modules) === 0;
         };
 
         $scope.$on('$destroy', function() {
@@ -428,7 +430,7 @@
           for (var i = 0; i < response.data.template.modules.length; i++) {
             if (response.data.template.modules[i].plan === 'Base') {
               $scope.instance.activated_modules.push(
-                  response.data.template.modules[i].id);
+                response.data.template.modules[i].id);
             }
           }
 

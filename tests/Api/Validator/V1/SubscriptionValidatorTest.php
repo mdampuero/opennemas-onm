@@ -10,7 +10,7 @@
 namespace Tests\Api\Validator\V1;
 
 use Api\Validator\V1\SubscriptionValidator;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for SubscriptionValidator class.

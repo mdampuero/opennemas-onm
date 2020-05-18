@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\VarnishService;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for VarnishService class.
@@ -38,7 +38,7 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->tq = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->tq = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 

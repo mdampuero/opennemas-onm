@@ -9,7 +9,7 @@
  */
 namespace BackendWebService\Controller;
 
-use Common\ORM\Entity\Client;
+use Common\Model\Entity\Client;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +56,9 @@ class ClientController extends Controller
         $em->persist($client, 'manager');
 
         $instance = $this->get('core.instance');
+
         $instance->client = $client->id;
+
         $em->persist($instance);
 
         $this->get('core.dispatcher')

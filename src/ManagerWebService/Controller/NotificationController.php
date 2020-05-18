@@ -10,7 +10,7 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Notification;
+use Common\Model\Entity\Notification;
 use League\Csv\Writer;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -84,7 +84,7 @@ class NotificationController extends Controller
 
         if (!empty($query)) {
             $oql = 'uuid ~ "%s" ' . $oql;
-            $oql  = sprintf($oql, $query);
+            $oql = sprintf($oql, $query);
         }
 
         if ($security->hasPermission('MASTER')) {
@@ -113,7 +113,7 @@ class NotificationController extends Controller
      */
     public function deleteAction($id)
     {
-        $em = $this->get('orm.manager');
+        $em  = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
         $notification = $em->getRepository('Notification')->find($id);
@@ -143,7 +143,7 @@ class NotificationController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
-        $em = $this->get('orm.manager');
+        $em  = $this->get('orm.manager');
         $oql = sprintf('id in [%s]', implode(',', $ids));
 
         $notifications = $em->getRepository('Notification')->findBy($oql);

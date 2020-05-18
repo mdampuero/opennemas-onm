@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\NewsAgencyServerService;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for NewsAgencyServerService class.
@@ -26,7 +26,7 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('Common\ORM\Core\DataSet')
+        $this->dataset = $this->getMockBuilder('Opennemas\Orm\Core\DataSet')
             ->setMethods([ 'delete', 'get', 'init', 'set' ])
             ->getMock();
 
@@ -34,12 +34,12 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
-        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->queue = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 

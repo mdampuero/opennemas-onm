@@ -11,7 +11,7 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\ContentMediaHelper;
 use Common\Core\Component\Helper\ImageHelper;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for ContentMediaHelper class.
