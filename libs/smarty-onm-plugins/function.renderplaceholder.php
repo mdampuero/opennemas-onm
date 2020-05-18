@@ -1,8 +1,6 @@
 <?php
 /* {renderplaceholder items=$articles tpl='xxx.tpl' placeholder="placeholder_0_0"} */
 
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-
 function smarty_function_renderplaceholder($params, &$smarty)
 {
     $outputHTML = '';

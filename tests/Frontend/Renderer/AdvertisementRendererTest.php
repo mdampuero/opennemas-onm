@@ -223,7 +223,7 @@ class AdvertisementRendererTest extends TestCase
         $ad->pk_content = 123;
         $ad->id         = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'floating' => true ];
+        $ad->params     = [ 'placeholder' => 'placeholder1_1' ];
 
         $returnValue = '<div class="ad-slot oat" data-id="123"'
             . ' data-type="37"></div>';
