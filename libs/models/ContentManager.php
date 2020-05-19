@@ -820,7 +820,7 @@ class ContentManager
      *
      * @param string $contentType the contentType to search for
      * @param string $filter the SQL WHERE sentence to filter contents with
-     * @param int $category_id the category id to search for
+     * @param int    $categoryID the category id to search for
      *
      * @return int the number of contents that match the filter
      */
