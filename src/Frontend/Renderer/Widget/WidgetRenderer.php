@@ -103,7 +103,7 @@ class WidgetRenderer extends Renderer
             return null;
         }
 
-        $class = new $class($widget);
+        $class = new $class($content);
 
         $class->parseParams($params);
 
