@@ -63,7 +63,7 @@ class MobileController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        return $this->redirect('/' . $article->uri);
+        return $this->redirect('/' . get_content_url($article));
     }
 
     /**
@@ -93,6 +93,6 @@ class MobileController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        return $this->redirect('/' . $opinion->uri);
+        return $this->redirect('/' . get_content_url($opinion));
     }
 }

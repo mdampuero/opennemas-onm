@@ -80,7 +80,7 @@ class Articles
 
                 // Generate content uri if it's not an attachment
                 if ($content->fk_content_type == '4') {
-                    $content->uri = "ext" . preg_replace('@//@', '/author/', $content->uri);
+                    $content->uri = "ext" . preg_replace('@//@', '/author/', get_content_url($content));
                 } elseif ($content->fk_content_type == 3) {
                     // Get instance media
                     $basePath = INSTANCE_MEDIA;
@@ -91,7 +91,7 @@ class Articles
                     // Compose the full url to the file
                     $content->fullFilePath = $basePath . FILE_DIR . $filePath;
                 } else {
-                    $content->uri = "ext" . $content->uri;
+                    $content->uri = "ext" . get_content_url($content);
                 }
                 $relatedContents[] = $content;
             }
