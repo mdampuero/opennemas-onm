@@ -540,7 +540,7 @@ class ContentManager
                     'num'        => $content->num_comments,
                     'title'      => $content->title,
                     'permalink'  => $content->slug,
-                    'uri'        => get_content_url($content)
+                    'uri'        => get_url($content)
                 ];
             }
 
