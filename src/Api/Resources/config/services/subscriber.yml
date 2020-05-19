@@ -19,7 +19,7 @@ services:
 
     core.subscriber.poll:
         class:     Api\EventSubscriber\PollSubscriber
-        arguments: [ '@core.helper.varnish' ]
+        arguments: [ '@api.helper.cache.content' ]
         tags:
             - { name: kernel.event_subscriber }
 
