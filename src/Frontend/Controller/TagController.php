@@ -165,8 +165,16 @@ class TagController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
-        return array_merge(parent::getParameters($request, $item[0]), [
-            'items' => $item
+        $action = $this->get('core.globals')->getAction();
+        $params = parent::getParameters($request, $item[0]);
+
+        // Remove o_content to generate o_canonical_url properly
+        unset($params['o_content']);
+
+        return array_merge($params, [
+            'item'        => $item[0],
+            'items'       => $item,
+            'o_canonical' => $this->getCanonicalUrl($action, $params)
         ]);
     }
 
