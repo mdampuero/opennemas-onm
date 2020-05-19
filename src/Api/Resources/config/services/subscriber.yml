@@ -25,7 +25,7 @@ services:
 
     core.subscriber.setting:
         class: Api\EventSubscriber\SettingSubscriber
-        arguments: [ '@core.instance', '@core.template.cache', '@core.helper.varnish', '@core.service.assetic.dynamic_css' ]
+        arguments: [ '@api.helper.cache' ]
         tags:
             - { name: kernel.event_subscriber }
 
