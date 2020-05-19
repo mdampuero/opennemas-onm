@@ -7,6 +7,15 @@ use Opennemas\Task\Component\Task\ServiceTask;
 class ContentCacheHelper extends CacheHelper
 {
     /**
+     * TODO: Remove when using newsstand as content type name.
+     *
+     * Array to map content type names to extensions.
+     *
+     * @var array
+     */
+    protected $map = [ 'kiosko' => 'newsstand' ];
+
+    /**
      * Removes caches for an item which refers to a file. This is valid for
      * attachments, newsstands and photos.
      *
@@ -32,13 +41,16 @@ class ContentCacheHelper extends CacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
+        // TODO: Remove when using newsstand as content type name
+        $extension = $this->map[$item->content_type_name] ?? $item->content_type_name;
+
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
             'content', $item->pk_content
         ]));
 
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [ sprintf(
             'obj.http.x-tags ~ %s-%s',
-            $item->content_type_name,
+            $extension,
             $item->pk_content
         ) ]));
 
