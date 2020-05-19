@@ -55,7 +55,7 @@ class WidgetRenderer extends Renderer
         $wgtTpl->caching       = 0;
         $wgtTpl->force_compile = true;
 
-        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget ]);
+        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget->content ]);
 
         return $output;
     }

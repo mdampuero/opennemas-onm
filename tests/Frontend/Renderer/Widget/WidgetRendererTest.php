@@ -114,7 +114,7 @@ class WidgetRendererTest extends TestCase
         $method->setAccessible(true);
 
         $this->template->expects($this->once())->method('fetch')
-            ->with('string:' . $widget->content, [ 'widget' => $widget ])
+            ->with('string:' . $widget->content, [ 'widget' => $widget->content ])
             ->willReturn('Output');
 
         $this->assertEquals('Output', $method->invokeArgs($renderer, [ $widget ]));
