@@ -196,6 +196,33 @@ function get_author_url($item = null) : ?string
 }
 
 /**
+ * Returns the relative URL to the RSS page of the author for the
+ * provided item.
+ *
+ * @param Content $item The item to get URL for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The rss URL page to the automatic frontpage of the author.
+ */
+function get_author_rss_url($item = null) : ?string
+{
+    $author = get_author($item);
+
+    $routeName   = 'frontend_rss_author';
+    $routeParams = [
+        'author_slug' => $author->slug,
+    ];
+
+    if ($author->inrss) {
+        return !empty($author->slug)
+            ? getService('router')->generate($routeName, $routeParams)
+            : null;
+    }
+
+    return null;
+}
+
+/**
  * Checks if if the author is configured as blogger based on a content or author
  * provided as parameter
  *
@@ -211,6 +238,25 @@ function is_blog($item = null) : bool
 
     return !empty($author) ? $author->is_blog : null;
 }
+
+/**
+ * Checks if if the author has a rss url defined based on a content or author
+ * provided as parameter
+ *
+ * @param mixed $item The item to get author rss url property. If not
+ *                    provided, the function will try to search the item in the
+ *                    template.
+ *
+ * @return int The author avatar id.
+ */
+function has_author_rss_url($item = null) : bool
+{
+    $url = get_author_rss_url($item);
+
+    return !empty($url);
+}
+
+
 
 /**
  * Checks if there is an author based on a content or author provided as
@@ -270,6 +316,21 @@ function has_author_avatar($item = null) : bool
 function has_author_bio_summary($item = null) : bool
 {
     return !empty(get_author_bio_summary($item));
+}
+
+/**
+ * Checks if the author has a bio defined as
+ * parameter.
+ *
+ * @param mixed $item The item to check author's long bio for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author has a long biography defined. False otherwise.
+ */
+function has_author_bio_body($item = null) : bool
+{
+    return !empty(get_author_bio_body($item));
 }
 
 /**
