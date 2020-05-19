@@ -27,6 +27,10 @@ class AppKernel extends Kernel
 
             // Opennemas third-party deps
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Opennemas\Data\DataBundle(),
+            new Opennemas\Cache\CacheBundle(),
+            new Opennemas\Orm\OrmBundle(),
+            new Opennemas\Task\TaskBundle(),
             new CometCult\BraintreeBundle\CometCultBraintreeBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
@@ -39,18 +43,14 @@ class AppKernel extends Kernel
             new BackendWebService\BackendWebServiceBundle(),
             new Framework\OnmFrameworkBundle(),
             new Frontend\FrontendBundle(),
-            new FrontendMobile\FrontendMobileBundle(),
             new Manager\ManagerBundle(),
             new ManagerWebService\ManagerWebServiceBundle(),
             new WebService\WebServiceBundle(),
-            new Common\Cache\CacheBundle(),
             new Common\Core\CoreBundle(),
-            new Common\Data\DataBundle(),
+            new Common\Model\ModelBundle(),
             new Common\NewsAgency\NewsAgencyBundle(),
-            new Common\Task\TaskBundle(),
             new Common\Test\TestBundle(),
             new Common\Migration\MigrationBundle(),
-            new Common\ORM\OrmBundle(),
             new Common\External\ActOn\ActOnBundle(),
         ];
 

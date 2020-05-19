@@ -9,8 +9,8 @@
  */
 namespace Tests\Framework\Monolog;
 
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\User;
 use Framework\Monolog\OnmFormatter;
 
 class OnmFormatterTest extends \PHPUnit\Framework\TestCase

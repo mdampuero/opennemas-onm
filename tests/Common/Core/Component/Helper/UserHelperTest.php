@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Component\Helper;
 
-use Common\ORM\Entity\User;
+use Common\Model\Entity\User;
 use Common\Core\Component\Helper\UserHelper;
 
 /**
@@ -26,7 +26,8 @@ class UserHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->fm = $this->getMockBuilder('FilterManager')
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
 

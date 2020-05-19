@@ -21,7 +21,7 @@ class TrackerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'executeQuery', 'insert', 'fetchAll' ])
             ->getMock();

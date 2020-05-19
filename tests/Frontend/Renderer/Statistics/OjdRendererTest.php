@@ -9,7 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\OjdRenderer;
 
@@ -22,9 +22,9 @@ class OjdRendererTest extends TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->ds = $this->getMockForAbstractClass('Common\ORM\Core\DataSet');
+        $this->ds = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();

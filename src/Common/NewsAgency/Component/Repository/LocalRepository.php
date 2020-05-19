@@ -9,7 +9,7 @@
  */
 namespace Common\NewsAgency\Component\Repository;
 
-use Common\Data\Serialize\Serializer\PhpSerializer;
+use Opennemas\Data\Serialize\Serializer\PhpSerializer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 

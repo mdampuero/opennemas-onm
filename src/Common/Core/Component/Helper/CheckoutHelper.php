@@ -9,9 +9,9 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\ORM\Entity\Invoice;
-use Common\ORM\Entity\Payment;
-use Common\ORM\Entity\Purchase;
+use Common\Model\Entity\Invoice;
+use Common\Model\Entity\Payment;
+use Common\Model\Entity\Purchase;
 use Symfony\Component\Intl\Intl;
 
 class CheckoutHelper
@@ -103,7 +103,7 @@ class CheckoutHelper
         $this->purchase->updated     = $date;
 
         if (!empty($this->client)) {
-            $this->purchase->client    = $this->client;
+            $this->purchase->client    = $this->client->getData();
             $this->purchase->client_id = $this->client->id;
         }
 

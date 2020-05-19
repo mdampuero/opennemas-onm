@@ -11,7 +11,7 @@ namespace Tests\Common\Core\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
 use Common\Core\EventListener\HttpCacheHeadersListener;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for HttpCacheHeadersListener class.

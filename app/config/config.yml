@@ -14,6 +14,9 @@ parameters:
     core.paths.themes:       '%core.paths.public%/themes'
     core.paths.spool:        '%kernel.root_dir%/../tmp/spool'
     core.paths.spool.files:  '%core.paths.spool%/files'
+    cache.config_path:       '/../src/Common/Model/Resources/config/cache'
+    data.filters:            'Common\Core\Component\Filter'
+    orm.config_path:         '/../src/Common/Model/Resources/config/orm'
 
 framework:
     #esi:             ~
@@ -73,14 +76,14 @@ opennemas:
         filters:
             uglifyjs:
                 bin:  '%kernel.root_dir%/../node_modules/.bin/uglifyjs'
-                node: /usr/bin/nodejs
+                node: /usr/bin/node
                 options:
                     mangle: true
             uglifycss:
                 bin:  '%kernel.root_dir%/../node_modules/.bin/uglifycss'
-                node: /usr/bin/nodejs
+                node: /usr/bin/node
             less:
-                node:  /usr/bin/nodejs
+                node:  /usr/bin/node
                 node_paths: [ '%kernel.root_dir%/../node_modules' ]
                 options:
                     sourceMap:
@@ -102,12 +105,12 @@ assetic:
         - BackendBundle
         - BackendWebServiceBundle
         - FrontendBundle
-        - FrontendMobileBundle
         - ManagerBundle
         - ManagerWebServiceBundle
         - WebServiceBundle
         - CacheBundle
         - CoreBundle
+
 # Twig Configuration
 twig:
     debug:            '%kernel.debug%'

@@ -10,7 +10,7 @@
 namespace Common\Core\Component\Helper;
 
 use Api\Service\Service;
-use Common\ORM\Core\EntityManager;
+use Opennemas\Orm\Core\EntityManager;
 
 class NewsletterHelper
 {

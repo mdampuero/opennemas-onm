@@ -19,7 +19,7 @@ use Api\Exception\PatchItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class RedisService implements Service
 {

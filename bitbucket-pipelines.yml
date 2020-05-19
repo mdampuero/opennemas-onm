@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: frandieguez/phpunit:php7.1
+image: opennemas/phpunit
 
 pipelines:
   default:
@@ -11,5 +11,7 @@ pipelines:
         caches:
           - composer
         script: # Modify the commands below to build your repository.
+          - mkdir -p ~/.ssh
+          - (umask  077 ; echo $ssh_private_key | base64 -d > ~/.ssh/id_rsa)
           - composer install -n
           - bin/phpunit

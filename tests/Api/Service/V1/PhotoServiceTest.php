@@ -10,7 +10,7 @@
  */
 namespace Tests\Api\Service\V1;
 
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Mockery as m;
 
 /**

@@ -33,7 +33,7 @@ class Checker
     /**
      * Validates an instance according to its class definition.
      *
-     * @param \Common\ORM\Entity\Instance $class The instance to validate.
+     * @param \Common\Model\Entity\Instance $class The instance to validate.
      */
     public function check(&$instance)
     {
@@ -75,7 +75,7 @@ class Checker
     /**
      * Validates the domains for the given instance.
      *
-     * @param \Common\ORM\Entity\Instance $instance The instance.
+     * @param \Common\Model\Entity\Instance $instance The instance.
      *
      * @throws InstanceAlreadyExistsException
      */

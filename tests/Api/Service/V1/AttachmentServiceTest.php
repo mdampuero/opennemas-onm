@@ -11,7 +11,7 @@ namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\AttachmentService;
 use Common\Core\Component\Helper\AttachmentHelper;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 use Mockery as m;
 

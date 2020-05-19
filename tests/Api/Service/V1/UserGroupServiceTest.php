@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\UserGroupService;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for UserGroupService class.
@@ -55,7 +55,7 @@ class UserGroupServiceTest extends \PHPUnit\Framework\TestCase
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
-        $this->service = new UserGroupService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new UserGroupService($this->container, 'Opennemas\Orm\Core\Entity');
     }
 
     public function serviceContainerCallback($name)

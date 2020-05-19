@@ -27,7 +27,7 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->fm = $this->getMockBuilder('Common\Data\Core\FilterManager')
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
@@ -83,7 +83,7 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->once())->method('set')
             ->willReturn($this->fm);
         $this->fm->expects($this->once())->method('filter')
-            ->with('format_date', [
+            ->with('date', [
                 'format'   => null,
                 'locale'   => 'es_ES',
                 'timezone' => new \DateTimeZone('Europe/Madrid'),
@@ -123,7 +123,7 @@ class SmartyFormatDateTests extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->once())->method('set')
             ->willReturn($this->fm);
         $this->fm->expects($this->once())->method('filter')
-            ->with('format_date', [
+            ->with('date', [
                 'format'   => null,
                 'locale'   => 'es_ES',
                 'timezone' => new \DateTimeZone('Europe/Madrid'),

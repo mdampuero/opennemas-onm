@@ -12,8 +12,8 @@ namespace Tests\Frontend\Renderer;
 use Api\Exception\GetItemException;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\ChartbeatRenderer;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for ChartbeatRenderer class.
@@ -29,9 +29,9 @@ class ChartbeatRendererTest extends TestCase
 
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $this->ds = $this->getMockForAbstractClass('Common\ORM\Core\DataSet');
+        $this->ds = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();

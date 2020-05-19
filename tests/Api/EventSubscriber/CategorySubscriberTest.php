@@ -10,8 +10,8 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\CategorySubscriber;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for CategorySubscriber class.
@@ -25,7 +25,8 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'flob' ]);
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
+            ->disableOriginalConstructor()
             ->setMethods([
                 'contains', 'delete', 'deleteByPattern', 'deleteMulti', 'fetch',
                 'fetchMulti', 'remove', 'save', 'saveMulti'
@@ -36,7 +37,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
+        $this->cm = $this->getMockBuilder('Opennemas\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
             ->getMock();

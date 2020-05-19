@@ -1,0 +1,19 @@
+services:
+    cache.connection.instance:
+        class:     'Common\Model\Entity\Instance'
+        factory:   [ '@cache.manager', 'getConnection' ]
+        arguments: [ 'instance' ]
+        public:    true
+
+    cache.connection.manager:
+        class:     'Common\Model\Entity\Instance'
+        factory:   [ '@cache.manager', 'getConnection' ]
+        arguments: [ 'manager' ]
+        public:    true
+
+    # TODO: Remove when models use new ORM
+    orm.connection.instance:
+        class:     Opennemas\Orm\Core\Connection
+        factory:   [ '@orm.manager', 'getConnection' ]
+        arguments: [ 'instance' ]
+        public: true

@@ -1,0 +1,56 @@
+orm:
+    metadata:
+        -
+            name:  Payment
+            class: Common\Model\Entity\Payment
+            required:
+                - client_id
+                - amount
+                - date
+                - type
+            properties:
+                amount:     float
+                client_id:  integer
+                date:       datetime
+                invoice_id: integer
+                nonce:      string
+                notes:      string
+                type:       string
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.payment' ]
+            persisters:
+                braintree:
+                    class:     Common\Model\Braintree\Persister\PaymentPersister
+                    arguments: [ '@comet_cult_braintree.factory', '@orm.metadata.payment' ]
+                freshbooks:
+                    class:     Common\Model\FreshBooks\Persister\PaymentPersister
+                    arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.payment' ]
+            mapping:
+                braintree:
+                    client_id:
+                        name: customerId
+                        type: string
+                    amount:
+                        name: amount
+                        type: string
+                    nonce:
+                        name: paymentMethodNonce
+                        type: string
+                freshbooks:
+                    invoice_id:
+                        name: invoice_id
+                        type: integer
+                    date:
+                        name: date
+                        type: string
+                    notes:
+                        name: notes
+                        type: string
+                    type:
+                        name: type
+                        type: string
+                    amount:
+                        name: amount
+                        type: float
