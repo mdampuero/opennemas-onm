@@ -8,7 +8,7 @@ use Common\Model\Entity\Instance;
 use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
- * Defines test cases for <|2|> class.
+ * Defines test cases for ContentCacheHelper class.
  */
 class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
 {
