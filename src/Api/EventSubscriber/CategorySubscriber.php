@@ -9,6 +9,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CategorySubscriber implements EventSubscriberInterface
 {
     /**
+     * The helper service.
+     *
+     * @var ContentCacheHelper
+     */
+    protected $helper;
+
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
