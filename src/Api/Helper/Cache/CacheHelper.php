@@ -39,6 +39,12 @@ class CacheHelper
      */
     public function deleteDynamicCss() : CacheHelper
     {
+        $this->queue->push(new ServiceTask(
+            'core.service.assetic.dynamic_css',
+            'deleteTimestamp',
+            [ '%global%' ]
+        ));
+
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
             'css',
             'global'
@@ -54,6 +60,7 @@ class CacheHelper
      */
     public function deleteInstance() : CacheHelper
     {
+        $this->queue->push(new ServiceTask('core.template.cache', 'deleteAll', []));
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [
             sprintf('obj.http.x-tags ~ instance-%s', $this->instance->internal_name)
         ]));

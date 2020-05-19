@@ -31,7 +31,13 @@ class CacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteDynamicCss()
     {
-        $this->queue->expects($this->once())->method('push')
+        $this->queue->expects($this->at(0))->method('push')->with(new ServiceTask(
+            'core.service.assetic.dynamic_css',
+            'deleteTimestamp',
+            [ '%global%' ]
+        ));
+
+        $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.template.cache', 'delete', [
                 'css', 'global'
             ]));
@@ -44,7 +50,10 @@ class CacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteInstance()
     {
-        $this->queue->expects($this->once())->method('push')
+        $this->queue->expects($this->at(0))->method('push')
+            ->with(new ServiceTask('core.template.cache', 'deleteAll', []));
+
+        $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ instance-bar'
             ]));
