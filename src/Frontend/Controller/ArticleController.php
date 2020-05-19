@@ -112,7 +112,6 @@ class ArticleController extends FrontendController
             'suggested'      => $article->suggested,
             'videoInt'       => $article->videoInt,
             'o_content'      => $article,
-            'x-cache-for'    => '+1 day',
             'x-cacheable'    => true,
             'x-tags'         => 'ext-article,' . $article->id
         ]);

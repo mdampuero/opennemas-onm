@@ -146,6 +146,17 @@ class SettingController extends Controller
             ->get($this->keys);
         $locale   = $this->get('core.locale');
 
+        if (array_key_exists('google_analytics', $settings)) {
+            // Decode base64 custom code for analytics
+            foreach ($settings['google_analytics'] as &$value) {
+                if (array_key_exists('custom_var', $value)
+                    && !empty($value['custom_var'])
+                ) {
+                    $value['custom_var'] = base64_decode($value['custom_var']);
+                }
+            }
+        }
+
         // Decode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
             if (array_key_exists($key, $settings)) {
@@ -371,15 +382,6 @@ class SettingController extends Controller
 
             if (array_key_exists('id', $settings['facebook'])) {
                 $settings['facebook_id'] = $settings['facebook']['id'];
-            }
-        }
-
-        if (array_key_exists('locale', $settings)
-            && is_array($settings['locale'])
-        ) {
-            if (array_key_exists('frontend', $settings['locale'])) {
-                $settings['site_language'] = $settings['locale']['frontend']['language']['selected'];
-                $settings['time_zone']     = $settings['locale']['frontend']['timezone'];
             }
         }
 

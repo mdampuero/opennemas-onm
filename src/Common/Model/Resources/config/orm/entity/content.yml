@@ -229,6 +229,12 @@ orm:
                             unique: false
                             flags: {  }
                         -
+                            name: endtime
+                            columns: [endtime]
+                            primary: false
+                            unique: false
+                            flags: {  }
+                        -
                             name: created
                             columns: [created]
                             primary: false

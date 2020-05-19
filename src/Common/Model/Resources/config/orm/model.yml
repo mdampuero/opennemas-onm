@@ -10,7 +10,6 @@ parameters:
         - 'site_description'
         - 'site_footer'
         - 'site_keywords'
-        - 'site_language'
         - 'site_logo'
         - 'site_name'
         - 'site_title'

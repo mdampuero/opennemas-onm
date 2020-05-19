@@ -168,8 +168,10 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
                 params: { ids: $scope.selected.contents }
               }).then(function(response) {
                 $scope.showMessage(response.data, 'success', 5);
+                return true;
               }, function(response) {
                 $scope.showMessage(response.data.responseText, 'error', 5);
+                return true;
               });
             };
           }
