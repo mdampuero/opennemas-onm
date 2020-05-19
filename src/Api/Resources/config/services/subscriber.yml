@@ -1,7 +1,7 @@
 services:
     core.subscriber.attachment:
         class:     Api\EventSubscriber\AttachmentSubscriber
-        arguments: [ '@core.helper.varnish' ]
+        arguments: [ '@api.helper.cache.content' ]
         tags:
             - { name: kernel.event_subscriber }
 
