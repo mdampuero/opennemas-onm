@@ -352,4 +352,21 @@ class OpinionController extends FrontendController
         $params['content']->author_name_slug =
             \Onm\StringUtils::generateSlug($params['content']->name);
     }
+
+    /**
+     * Updates the list of parameters and/or the item when the response for
+     * the current request is not cached.
+     *
+     * @param array $params Thelist of parameters already in set.
+     */
+    protected function hydrateShowAmp(array &$params = []) : void
+    {
+        parent::hydrateShowAmp($params);
+
+        $em = $this->get('entity_repository');
+        if (!empty($params['content']->img2)) {
+            $photoInt = $em->find('Photo', $params['content']->img2);
+            $this->view->assign('photoInt', $photoInt);
+        }
+    }
 }

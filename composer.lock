@@ -1219,6 +1219,12 @@
                 "url": "https://github.com/openhost/NativeSession",
                 "reference": "81653296944b00be03364a6ccc111ccafa52f087"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drak/NativeSession/zipball/81653296944b00be03364a6ccc111ccafa52f087",
+                "reference": "81653296944b00be03364a6ccc111ccafa52f087",
+                "shasum": ""
+            },
             "require": {
                 "php": ">=5.3.3",
                 "symfony/http-foundation": ">=2.1.0"
@@ -1229,6 +1235,7 @@
                     "Drak": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1239,7 +1246,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2015-03-31T17:40:46+00:00"
+            "time": "2013-03-11T11:07:59+00:00"
         },
         {
             "name": "drexarj/disqus-php",
@@ -2536,7 +2543,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2015-06-12T07:33:40+00:00"
+            "time": "2020-02-13T18:25:17+00:00"
         },
         {
             "name": "monolog/monolog",
