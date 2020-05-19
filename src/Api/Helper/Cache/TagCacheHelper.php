@@ -2,8 +2,8 @@
 
 namespace Api\Helper\Cache;
 
-use Common\ORM\Entity\Tag;
-use Common\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Tag;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class TagCacheHelper extends CacheHelper
 {

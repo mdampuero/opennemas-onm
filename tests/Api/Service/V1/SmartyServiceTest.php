@@ -40,7 +40,7 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
         $this->template = new Template($this->container, []);
         $this->template->setConfigDir('/foobar/fred');
 
-        $this->tq = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->tq = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 

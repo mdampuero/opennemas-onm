@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\InstanceHelper;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for InstanceHelper class.
@@ -33,7 +33,8 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
+            ->disableOriginalConstructor()
             ->setMethods([ 'fetchAll', 'fetchAssoc', 'selectDatabase' ])
             ->getMock();
 

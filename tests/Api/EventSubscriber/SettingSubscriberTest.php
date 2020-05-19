@@ -15,7 +15,7 @@ class SettingSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        $this->instance = $this->getMockBuilder('Common\ORM\Entity\Instance')
+        $this->instance = $this->getMockBuilder('Common\Model\Entity\Instance')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -10,11 +10,11 @@
 namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Tag;
-use Common\ORM\Entity\Url;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Tag;
+use Common\Model\Entity\Url;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for Redirector class.
@@ -34,7 +34,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             define('THEMES_DEPLOYED_AT', '20181123192820');
         }
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Core\Cache')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
             ->disableOriginalConstructor()
             ->setMethods([
                 'contains', 'delete', 'deleteByPattern', 'deleteMulti',
@@ -61,7 +61,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
-        $this->fm = $this->getMockBuilder('Common\Data\Core\FilterManager')
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();

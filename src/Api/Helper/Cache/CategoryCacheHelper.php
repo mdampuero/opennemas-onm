@@ -2,8 +2,8 @@
 
 namespace Api\Helper\Cache;
 
-use Common\ORM\Entity\Category;
-use Common\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Category;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class CategoryCacheHelper extends CacheHelper
 {

@@ -42,7 +42,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             //Opinion
             $class                  = 'class="res-opinion" ';
             $author                 = new \User($content->fk_author);
-            $content->category_name = \Onm\StringUtils::getTitle($author->name);
+            $content->category_name = \Onm\StringUtils::generateSlug($author->name);
             break;
         case 7:
             // Album

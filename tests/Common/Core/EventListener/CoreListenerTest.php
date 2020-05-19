@@ -12,7 +12,7 @@ namespace Tests\Common\Core\EventListener;
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Common\Core\EventListener\CoreListener;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**

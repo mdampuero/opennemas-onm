@@ -30,7 +30,7 @@ class ContentPositionService extends OrmService
     }
 
     /**
-     * See: Common\ORM\Entity\ContentPosition\ContentPositionRepository::getContentPositions
+     * See: Common\Model\Entity\ContentPosition\ContentPositionRepository::getContentPositions
      *
      * Returns a list of content positions for a given category and frontpage id
      *
@@ -46,7 +46,7 @@ class ContentPositionService extends OrmService
     }
 
     /**
-     * See: Common\ORM\Entity\ContentPosition\ContentPositionRepository::getCategoriesWithManualFrontpage
+     * See: Common\Model\Entity\ContentPosition\ContentPositionRepository::getCategoriesWithManualFrontpage
      *
      * Returns the list of categories that have a manual frontpage already saved
      *

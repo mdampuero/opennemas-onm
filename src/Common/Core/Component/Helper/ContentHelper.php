@@ -11,7 +11,7 @@
 
 namespace Common\Core\Component\Helper;
 
-use Common\Cache\Core\Cache;
+use Opennemas\Cache\Core\Cache;
 use Repository\EntityManager;
 use Api\Service\Service;
 

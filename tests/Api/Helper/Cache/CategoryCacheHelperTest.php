@@ -1,18 +1,11 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\Helper\Cache;
 
 use Api\Helper\Cache\CategoryCacheHelper;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Instance;
-use Common\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Instance;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for CategoryCacheHelper class.
@@ -26,7 +19,7 @@ class CategoryCacheHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'bar' ]);
 
-        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->queue = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->disableOriginalConstructor()
             ->setMethods([ 'push' ])
             ->getMock();

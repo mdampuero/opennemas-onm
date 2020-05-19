@@ -3,9 +3,9 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\TagSubscriber;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\Tag;
-use Common\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\Tag;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for TagSubscriber class.

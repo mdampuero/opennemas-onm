@@ -2,9 +2,9 @@
 
 namespace Api\Helper\Cache;
 
-use Common\ORM\Entity\Instance;
-use Common\Task\Component\Queue\Queue;
-use Common\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Instance;
+use Opennemas\Task\Component\Queue\Queue;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class CacheHelper
 {

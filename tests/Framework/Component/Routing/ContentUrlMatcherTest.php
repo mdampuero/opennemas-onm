@@ -10,7 +10,6 @@
 namespace Framework\Tests\Component\Routing;
 
 use Framework\Component\Routing\ContentUrlMatcher;
-use Common\Data\Core\FilterManager;
 
 class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +32,10 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'fetchAll' ])
             ->getMock();
 
-        $this->fm = new FilterManager($this->container);
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
 
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->disableOriginalConstructor()
@@ -54,6 +56,10 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
         $this->locale->expects($this->any())->method('getTimeZone')
@@ -105,6 +111,9 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->once())->method('find')
             ->willReturn($this->content);
 
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
+
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
@@ -112,13 +121,16 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'ciencia'
         );
 
-        $this->assertTrue(is_object($return), 'The content is not matching');
+        $this->assertTrue(is_object($return));
     }
 
     public function testValidContentWithShortId()
     {
         $this->em->expects($this->once())->method('find')
             ->willReturn($this->content);
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
 
         $return = $this->matcher->matchContentUrl(
             'article',
@@ -127,7 +139,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'ciencia'
         );
 
-        $this->assertTrue(is_object($return), 'The content is not matching');
+        $this->assertTrue(is_object($return));
     }
 
     public function testWithInvalidDirtyID()
@@ -143,7 +155,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(is_object($return), 'The content is not matching');
     }
 
-    public function testWithoutfullArgs()
+    public function testWithoutFullArgs()
     {
         $this->em->expects($this->any())->method('find')
             ->willReturn($this->content);
@@ -153,7 +165,10 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'article',
             '20150114235016000184'
         );
-        $this->assertTrue(is_object($return), 'The content is not matching');
+        $this->assertTrue(is_object($return));
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
 
         // Not valid category
         $return = $this->matcher->matchContentUrl(
@@ -161,7 +176,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             '20150114235016000184',
             'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
-        $this->assertTrue(is_object($return), 'The content is not matching');
+        $this->assertTrue(is_object($return));
 
         // Not valid category
         $return = $this->matcher->matchContentUrl(
@@ -169,7 +184,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             '20150114235016000184',
             null
         );
-        $this->assertTrue(is_object($return), 'The content is not matching');
+        $this->assertTrue(is_object($return));
 
         // Not valid category
         $return = $this->matcher->matchContentUrl(
@@ -178,7 +193,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             null,
             'ciencia'
         );
-        $this->assertTrue(is_object($return), 'The content is not matching');
+        $this->assertTrue(is_object($return));
     }
 
     public function testEmptyDirtyId()

@@ -10,9 +10,9 @@
 namespace Common\Core\Component\Routing;
 
 use Api\Service\Service;
-use Common\Cache\Core\Cache;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Url;
+use Opennemas\Cache\Core\Cache;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Url;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\RedirectResponse;

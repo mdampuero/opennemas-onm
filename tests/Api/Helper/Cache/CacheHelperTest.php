@@ -3,8 +3,8 @@
 namespace Tests\Api\Helper\Cache;
 
 use Api\Helper\Cache\CacheHelper;
-use Common\ORM\Entity\Instance;
-use Common\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Instance;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
  * Defines test cases for CacheHelper class.
@@ -18,7 +18,7 @@ class CacheHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'bar' ]);
 
-        $this->queue = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->queue = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->disableOriginalConstructor()
             ->setMethods([ 'push' ])
             ->getMock();

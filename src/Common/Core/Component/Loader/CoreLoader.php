@@ -11,8 +11,8 @@ namespace Common\Core\Component\Loader;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\Theme;
 
 /**
  * Loads the opennemas core.

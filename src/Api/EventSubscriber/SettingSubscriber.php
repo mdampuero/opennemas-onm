@@ -11,7 +11,7 @@ namespace Api\EventSubscriber;
 
 use Common\Core\Component\Template\Cache\CacheManager;
 use Common\Core\Component\Helper\VarnishHelper;
-use Common\Orm\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 use Framework\Component\Assetic\DynamicCssService;
 

@@ -10,9 +10,9 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\TemplateCacheHelper;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for TemplateCacheHelper class.
@@ -29,12 +29,12 @@ class TemplateCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'delete' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetchAll' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
             ->getMock();

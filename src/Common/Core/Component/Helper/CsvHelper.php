@@ -9,8 +9,8 @@
  */
 namespace Common\Core\Component\Helper;
 
-use Common\Data\Serialize\Serializable\CsvSerializable;
 use League\Csv\Writer;
+use Opennemas\Data\Serialize\Serializable\CsvSerializable;
 
 class CsvHelper
 {

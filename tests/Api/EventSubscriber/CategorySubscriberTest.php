@@ -10,8 +10,7 @@
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\CategorySubscriber;
-use Common\ORM\Entity\Category;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Category;
 
 /**
  * Defines test cases for CategorySubscriber class.
@@ -29,8 +28,6 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
                 'deleteContents', 'deleteDynamicCss', 'deleteInstance',
                 'deleteItem'
             ])->getMock();
-
-        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
 
         $this->event = $this->getMockBuilder('Symfony\Component\EventDispatcher\Event')
             ->setMethods([ 'getArgument', 'hasArgument' ])

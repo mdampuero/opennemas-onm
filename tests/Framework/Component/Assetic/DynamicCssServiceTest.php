@@ -12,13 +12,14 @@ namespace Tests\Framework\Component\Assetic;
 
 use Api\Exception\GetItemException;
 use \Framework\Component\Assetic\DynamicCssService;
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
-        $this->em = $this->getMockBuilder('EntityRepository')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
+            ->disableOriginalConstructor()
             ->setMethods([ 'find', 'getDataSet' ])
             ->getMock();
 
