@@ -43,6 +43,6 @@ services:
 
     core.subscriber.user_group:
         class:     Api\EventSubscriber\UserGroupSubscriber
-        arguments: [ '@api.service.redis' ]
+        arguments: [ '@api.helper.cache.user_group' ]
         tags:
             - { name: kernel.event_subscriber }
