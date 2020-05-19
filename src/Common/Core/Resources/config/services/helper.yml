@@ -138,8 +138,3 @@ services:
         class:     Common\Core\Component\Helper\UserHelper
         arguments: [ '@service_container' ]
         public:    true
-
-    core.helper.varnish:
-        class:     Common\Core\Component\Helper\VarnishHelper
-        arguments: [ '@core.helper.url_generator', '@task.service.queue' ]
-        public:    true
