@@ -219,12 +219,6 @@ class AuthorController extends Controller
             foreach ($items as &$item) {
                 $author = $authors[$item['id']];
 
-                // Fetch user avatar if exists
-                if (!empty($author->avatar_img_id)) {
-                    $author->photo = $this->get('entity_repository')
-                        ->find('Photo', $author->avatar_img_id);
-                }
-
                 $author->total_contents = $item['total'];
 
                 $item = $author;
