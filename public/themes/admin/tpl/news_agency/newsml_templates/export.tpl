@@ -60,7 +60,7 @@
             <Property FormalName="Tesauro" Value="CAT:{get_category_slug($article)|upper}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{$article->uri}">
+          <ContentItem Href="{get_url($article)}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -102,7 +102,7 @@
                     <block class="related-contents">
                       {foreach $article->related as $related}
                       <p>
-                        <a href="/{$related->uri}">{$related->title}</a>
+                        <a href="/{get_url($related)}">{$related->title}</a>
                       </p>
                       {/foreach}
                     </block>

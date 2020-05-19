@@ -56,7 +56,7 @@
             <Property FormalName="Tesauro" Value="{get_category_slug($article)}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{$article->uri}">
+          <ContentItem Href="{get_url($article)}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
