@@ -176,6 +176,18 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_author_id.
+     */
+    public function testGetAuthorId()
+    {
+        $this->assertNull(get_author_id(131));
+        $this->assertEquals(2, get_author_id(new User([
+            'id'   => 2,
+            'name' => 'Michelle Price'
+        ])));
+    }
+
+    /**
      * Tests get_author_avatar.
      */
     public function testGetAuthorAvatar()
@@ -236,32 +248,17 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests has_author.
+     * Tests get_author_rss_url.
      */
-    public function testHasAuthor()
+    public function testGetAuthorRssUrl()
     {
-        $this->assertFalse(has_author(131));
+        $author = new User([ 'title' => 'gorp' ]);
 
-        $this->assertTrue(has_author(new User([
-            'name'          => 'Michelle Price',
-            'avatar_img_id' => 593
-        ])));
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($author)->willReturn('rss/foo/glork');
 
-        $this->assertTrue(has_author(new Content([
-            'agency' => 'Michelle Price',
-        ])));
-    }
-
-    /**
-     * Tests has_author_avatar.
-     */
-    public function testHasAuthorAvatar()
-    {
-        $this->assertFalse(has_author_avatar(131));
-        $this->assertTrue(has_author_avatar(new User([
-            'name'          => 'Michelle Price',
-            'avatar_img_id' => 593
-        ])));
+        $this->assertNull(get_author_url(131));
+        $this->assertEquals('rss/foo/glork', get_author_url($author));
     }
 
     /**
@@ -301,6 +298,35 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests has_author.
+     */
+    public function testHasAuthor()
+    {
+        $this->assertFalse(has_author(131));
+
+        $this->assertTrue(has_author(new User([
+            'name'          => 'Michelle Price',
+            'avatar_img_id' => 593
+        ])));
+
+        $this->assertTrue(has_author(new Content([
+            'agency' => 'Michelle Price',
+        ])));
+    }
+
+    /**
+     * Tests has_author_avatar.
+     */
+    public function testHasAuthorAvatar()
+    {
+        $this->assertFalse(has_author_avatar(131));
+        $this->assertTrue(has_author_avatar(new User([
+            'name'          => 'Michelle Price',
+            'avatar_img_id' => 593
+        ])));
+    }
+
+    /**
      * Tests has_author_url.
      */
     public function testHasAuthorUrl()
@@ -313,6 +339,21 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(has_author_url(131));
         $this->assertTrue(has_author_url($author));
     }
+
+    /**
+     * Tests has_author_rss_url.
+     */
+    public function testHasAuthorRssUrl()
+    {
+        $author = new User([ 'name' => 'Michelle Price' ]);
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($author)->willReturn('/rss/foo/michelle-price');
+
+        $this->assertFalse(has_author_url(131));
+        $this->assertTrue(has_author_url($author));
+    }
+
 
     /**
      * Tests has_author_bio_summary.
