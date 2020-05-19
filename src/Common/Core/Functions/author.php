@@ -214,9 +214,9 @@ function get_author_rss_url($item = null) : ?string
     ];
 
     if ($author->inrss) {
-        return !empty($author->slug)
-            ? getService('router')->generate($routeName, $routeParams)
-            : null;
+        $url = getService('router')->generate($routeName, $routeParams);
+
+        return !empty($url) ? $url : null;
     }
 
     return null;
