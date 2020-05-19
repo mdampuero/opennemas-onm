@@ -18,3 +18,7 @@ services:
     api.helper.cache.tag:
         class:     Api\Helper\Cache\TagCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.user:
+        class:     Api\Helper\Cache\UserCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
