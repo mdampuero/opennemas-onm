@@ -407,7 +407,11 @@ class FrontendController extends Controller
             $params['x-cacheable'] = empty($params['o_token'])
                 && empty($this->get('session')->getFlashBag()->peekAll());
 
-            $params['x-tags'][] = $item->id;
+            $params['x-tags'][] = sprintf(
+                '%s-%s',
+                $this->get('core.globals')->getExtension(),
+                $item->id
+            );
 
             // Ensure that all templates are using params['content'] and
             // then remove the line below
