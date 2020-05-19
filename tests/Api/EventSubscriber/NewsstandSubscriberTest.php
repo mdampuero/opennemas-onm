@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\NewsstandSubscriber;
@@ -27,17 +20,12 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->th = $this->getMockBuilder('Common\Core\Component\Helper\TemplateCacheHelper')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\NewsstandCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteNewsstands' ])
+            ->setMethods([ 'deleteFile', 'deleteItem', 'deleteList' ])
             ->getMock();
 
-        $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteNewsstands' ])
-            ->getMock();
-
-        $this->subscriber = new NewsstandSubscriber($this->th, $this->vh);
+        $this->subscriber = new NewsstandSubscriber($this->helper);
     }
 
     /**
@@ -54,7 +42,7 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnNewsstandDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\NewsstandSubscriber')
-            ->setConstructorArgs([ $this->th, $this->vh ])
+            ->setConstructorArgs([ $this->helper ])
             ->setMethods([ 'onNewsstandUpdate' ])
             ->getMock();
 
@@ -69,7 +57,7 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnNewsstandPatch()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\NewsstandSubscriber')
-            ->setConstructorArgs([ $this->th, $this->vh ])
+            ->setConstructorArgs([ $this->helper ])
             ->setMethods([ 'onNewsstandUpdate' ])
             ->getMock();
 
@@ -90,9 +78,10 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->once())->method('getArgument')
             ->with('item')->willReturn($item);
 
-
-        $this->th->expects($this->once())->method('deleteNewsstands')->with([ $item ]);
-        $this->vh->expects($this->once())->method('deleteNewsstands')->with([ $item ]);
+        $this->helper->expects($this->at(0))->method('deleteItem')
+            ->with($item)->willReturn($this->helper);
+        $this->helper->expects($this->at(1))->method('deleteFile')->with($item);
+        $this->helper->expects($this->at(2))->method('deleteList');
 
         $this->subscriber->onNewsstandUpdate($this->event);
     }

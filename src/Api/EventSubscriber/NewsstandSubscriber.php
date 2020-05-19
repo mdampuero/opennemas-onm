@@ -1,21 +1,21 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\EventSubscriber;
 
-use Common\Core\Component\Helper\TemplateCacheHelper;
+use Api\Helper\Cache\NewsstandCacheHelper;
 use Common\Core\Component\Helper\VarnishHelper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class NewsstandSubscriber implements EventSubscriberInterface
 {
+    /**
+     * The helper service.
+     *
+     * @var ContentCacheHelper
+     */
+    protected $helper;
+
     /**
      * {@inheritdoc}
      */
@@ -31,13 +31,12 @@ class NewsstandSubscriber implements EventSubscriberInterface
     /**
      * Initializes the NewsstandSubscriber.
      *
-     * @param TemplateCacheHelper $th The TemplateCacheHelper service.
-     * @param VarnishHelper       $vh The VarnishHelper service.
+     * @param ContentCacheHelper $helper The helper to remove caches for
+     *                                   contents.
      */
-    public function __construct(TemplateCacheHelper $th, VarnishHelper $vh)
+    public function __construct(NewsstandCacheHelper $helper)
     {
-        $this->th = $th;
-        $this->vh = $vh;
+        $this->helper = $helper;
     }
 
     /**
@@ -74,11 +73,10 @@ class NewsstandSubscriber implements EventSubscriberInterface
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
-        $items = array_filter($items, function ($a) {
-            return $a->content_type_name = 'kiosko';
-        });
+        foreach ($items as $item) {
+            $this->helper->deleteItem($item)->deleteFile($item);
+        }
 
-        $this->th->deleteNewsstands($items);
-        $this->vh->deleteNewsstands($items);
+        $this->helper->deleteList();
     }
 }

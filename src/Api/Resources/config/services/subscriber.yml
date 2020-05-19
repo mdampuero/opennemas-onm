@@ -13,7 +13,7 @@ services:
 
     core.subscriber.newsstand:
         class:     Api\EventSubscriber\NewsstandSubscriber
-        arguments: [ '@core.helper.template_cache', '@core.helper.varnish' ]
+        arguments: [ '@api.helper.cache.newsstand' ]
         tags:
             - { name: kernel.event_subscriber }
 
