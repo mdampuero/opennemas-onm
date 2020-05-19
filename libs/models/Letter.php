@@ -47,16 +47,6 @@ class Letter extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate('letter', [
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'slug'     => urlencode($this->slug),
-                    'category' => urlencode(\Onm\StringUtils::generateSlug($this->author)),
-                ]);
-                //'cartas-al-director/_AUTHOR_/_SLUG_/_DATE__ID_.html'
-                return $uri;
-
             case 'photo':
                 return new \Photo($this->image);
 

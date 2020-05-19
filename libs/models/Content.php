@@ -259,9 +259,6 @@ class Content implements \JsonSerializable, CsvSerializable
             case 'ratings':
                 return 0;
 
-            case 'uri':
-                return $this->getUri();
-
             default:
                 if ($name === 'slug' && empty($this->slug)) {
                     $this->slug = \Onm\StringUtils::generateSlug($this->title);
@@ -759,40 +756,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return false;
         }
-    }
-
-    /**
-     * Returns the URI for this content
-     *
-     * @return string|array the uri
-     */
-    public function getUri()
-    {
-        $type     = $this->content_type_name;
-        $id       = sprintf('%06d', $this->id);
-        $date     = date('YmdHis', strtotime($this->created));
-        $category = get_category_slug($this);
-        $slug     = $this->__get('slug');
-
-        if (is_array($slug)) {
-            return array_map(function ($a) use ($type, $id, $date, $category) {
-                return Uri::generate(strtolower($type), [
-                    'id'       => $id,
-                    'date'     => $date,
-                    'category' => $category,
-                    'slug'     => urlencode($a),
-                ]);
-            }, $slug);
-        }
-
-        $uri = Uri::generate(strtolower($this->content_type_name), [
-            'id'       => $id,
-            'date'     => $date,
-            'category' => $category,
-            'slug'     => urlencode($slug),
-        ]);
-
-        return !empty($uri) ? $uri : $this->permalink;
     }
 
     /**

@@ -72,18 +72,6 @@ class Book extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate(
-                    'book',
-                    [
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => urlencode($this->slug),
-                        'category' => get_category_slug($this),
-                    ]
-                );
-
-                return ($uri !== '') ? $uri : $this->permalink;
             default:
                 return parent::__get($name);
         }

@@ -54,16 +54,6 @@ class Special extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate('special', [
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => get_category_slug($this),
-                    'slug'     => urlencode($this->slug),
-                ]);
-
-                return ($uri !== '') ? $uri : $this->permalink;
-
             case 'slug':
                 return \Onm\StringUtils::getTitle($this->title);
 
