@@ -37,7 +37,7 @@ services:
 
     core.subscriber.user:
         class:     Api\EventSubscriber\UserSubscriber
-        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache' ]
+        arguments: [ '@api.helper.cache.user' ]
         tags:
             - { name: kernel.event_subscriber }
 
