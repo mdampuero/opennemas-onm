@@ -53,7 +53,12 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
             'pk_content'        => 648
         ]);
 
-        $this->queue->expects($this->once())->method('push')
+        $this->queue->expects($this->at(0))->method('push')
+            ->with(new ServiceTask('core.template.cache', 'delete', [
+                'content', 648
+            ]));
+
+        $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 'obj.http.x-tags ~ attachment-648'
             ]));

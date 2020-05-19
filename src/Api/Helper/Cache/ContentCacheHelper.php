@@ -32,6 +32,10 @@ class ContentCacheHelper extends CacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
+        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
+            'content', $item->pk_content
+        ]));
+
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [ sprintf(
             'obj.http.x-tags ~ %s-%s',
             $item->content_type_name,
