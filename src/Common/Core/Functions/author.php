@@ -34,6 +34,22 @@ function get_author($item = null) : ?\Common\ORM\Entity\User
 }
 
 /**
+ * Returns the author id.
+ *
+ * @param mixed $item The item to get author. If not
+ *                    provided, the function will try to search the item in the
+ *                    template.
+ *
+ * @return int The author avatar id.
+ */
+function get_author_id($item = null) : ?int
+{
+    $author = get_author($item);
+
+    return !empty($author) ? $author->id : null;
+}
+
+/**
  * Returns the id for the author avatar.
  *
  * @param mixed $item The item to get author avatar for or an author. If not
@@ -249,7 +265,7 @@ function has_author_avatar($item = null) : bool
  *                    not provided, the function will try to search the item in
  *                    the template.
  *
- * @return bool True if the author has a. False otherwise.
+ * @return bool True if the author has a short biography defined. False otherwise.
  */
 function has_author_bio_summary($item = null) : bool
 {
