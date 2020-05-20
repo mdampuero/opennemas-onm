@@ -3,11 +3,6 @@ frontend_user_activate:
     defaults: { _controller: FrontendBundle:User:activate }
     methods: [ GET ]
 
-frontend_user_menu:
-    path: /user/menu
-    defaults: { _controller: FrontendBundle:User:getUserMenu }
-    methods: [ GET ]
-
 frontend_user_register:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:register }
