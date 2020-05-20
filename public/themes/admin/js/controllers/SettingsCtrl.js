@@ -15,7 +15,7 @@
      * @requires oqlEncoder
      *
      * @description
-     *   Handles actions for paywall settings configuration form.
+     *   Handles actions for settings configuration form.
      */
     .controller('SettingsCtrl', [
       '$controller', '$scope', 'cleaner', 'http', 'messenger', 'oqlEncoder',

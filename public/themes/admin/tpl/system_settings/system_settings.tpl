@@ -1103,38 +1103,6 @@
                         </div>
                       </div>
                     </div>
-                    {is_module_activated name="PAYWALL"}
-                      <div class="panel-group" data-toggle="collapse" id="panel-group-paypal">
-                        <div class="panel panel-default">
-                          <div class="panel-heading collapsed">
-                            <h4 class="panel-title">
-                              <a class="collapsed" data-parent="#panel-group-paypal" data-toggle="collapse" href="#paypal">
-                                <i class="fa fa-paypal"></i>
-                                {t}Paypal Settings{/t}
-                              </a>
-                            </h4>
-                          </div>
-                        </div>
-                        <div class="panel-collapse collapse" id="paypal">
-                          <div class="panel-body">
-                            <div class="form-group">
-                              <label class="form-label" for="paypal-mail">
-                                {t}Account email:{/t}
-                              </label>
-                              <div class="controls">
-                                <div class="form-group">
-                                  <input class="form-control" id="paypal-mail" name="paypal-mail" ng-model="settings.paypal_mail" type="text">
-                                </div>
-                              </div>
-                              <small class="help">
-                                <i class="fa fa-info-circle m-r-5 text-info"></i>
-                                {t escape=off}You can get your PayPal account email from <a class="external-link" href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank" ng-click="$event.stopPropagation();">PayPal site</a>. This must be a business account for receiving payments{/t}
-                              </small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    {/is_module_activated}
                     <div class="panel-group" data-toggle="collapse" id="panel-group-google-search">
                       <div class="panel panel-default">
                         <div class="panel-heading collapsed">
