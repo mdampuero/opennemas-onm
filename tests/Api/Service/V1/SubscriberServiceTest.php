@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\SubscriberService;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for SubscriberService class.
@@ -67,7 +67,7 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
         $this->metadata->expects($this->any())->method('getIdKeys')
             ->willReturn([ 'id' ]);
 
-        $this->service = new SubscriberService($this->container, 'Common\ORM\Core\Entity');
+        $this->service = new SubscriberService($this->container, 'Opennemas\Orm\Core\Entity');
     }
 
     public function serviceContainerCallback($name)

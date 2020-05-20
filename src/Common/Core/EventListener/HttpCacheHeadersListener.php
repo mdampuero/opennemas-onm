@@ -11,7 +11,7 @@ namespace Common\Core\EventListener;
 
 use Common\Core\Component\Template\Template;
 use Common\Core\Component\Locale\Locale;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class HttpCacheHeadersListener
@@ -81,6 +81,7 @@ class HttpCacheHeadersListener
         }
 
         $response->headers->set('x-tags', implode(',', $tags));
+        $response->headers->set('x-cache-for', '86400s'); // 1 day
 
         if (!empty($expire)) {
             $response->headers->set('x-cache-for', $expire);

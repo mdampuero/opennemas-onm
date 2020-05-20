@@ -74,6 +74,7 @@ class AuthenticationListener implements EventSubscriberInterface
         $response->headers->setCookie(
             new Cookie('__onm_user', json_encode([
                 'name'           => $user->name,
+                'email'          => $user->email,
                 'language'       => $user->user_language,
                 'user_groups'    => array_map(function ($a) {
                     return $a['user_group_id'];

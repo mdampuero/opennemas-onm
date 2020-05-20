@@ -122,8 +122,7 @@ class AuthorController extends Controller
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
             'x-tags'         => 'author-user-frontpage,' . $slug . ',' . $page,
-            'x-cache-for'    => '+1 day',
-            'x-cacheable'  => true,
+            'x-cacheable'    => true,
         ]);
     }
 
@@ -250,8 +249,7 @@ class AuthorController extends Controller
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
             'x-tags'         => 'authors-users-frontpage,' . $page,
-            'x-cache-for'    => '+1 day',
-            'x-cacheable'  => true,
+            'x-cacheable'    => true,
         ]);
     }
 

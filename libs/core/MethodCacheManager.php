@@ -15,7 +15,7 @@
  * @subpackage Cache
  * @author     Fran Dieguez <fran@openhost.es>
  */
-use Common\Data\Serialize\Serializer\PhpSerializer;
+use Opennemas\Data\Serialize\Serializer\PhpSerializer;
 
 class MethodCacheManager
 {

@@ -39,7 +39,7 @@ class Opinions
         $opinion->author = $author;
 
         // Get author name slug
-        $opinion->author_name_slug = \Onm\StringUtils::getTitle($opinion->name);
+        $opinion->author_name_slug = \Onm\StringUtils::generateSlug($opinion->name);
 
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);

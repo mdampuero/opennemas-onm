@@ -104,7 +104,6 @@ class LetterController extends Controller
                 ->configureFromSettings()
                 ->getHtml(),
             'x-tags'         => 'letter-frontpage',
-            'x-cache-for'    => '+1 day',
             'x-cacheable'    => true,
         ]);
     }
@@ -168,7 +167,6 @@ class LetterController extends Controller
             'letter'         => $letter,
             'o_content'      => $letter,
             'x-tags'         => 'letter,' . $letter->id,
-            'x-cache-for'    => '+1 day',
             'x-cacheable'    => true,
             'tags'                   => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($letter->tags)['items']
@@ -260,11 +258,6 @@ class LetterController extends Controller
         ];
 
         $letter = new \Letter();
-        if ($letter->hasBadWords($data)) {
-            $msg = "Su carta fue rechazada debido al uso de palabras malsonantes.";
-
-            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
-        }
 
         if ($letter->create($data)) {
             $msg = "Su carta ha sido guardada y está pendiente de publicación.";

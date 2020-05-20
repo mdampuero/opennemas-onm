@@ -166,13 +166,13 @@
           <div class="grid-body instance-domain-list">
             <div class="form-group" ng-if="instance.domains.length > 0">
               <div class="radio">
-                <input id="domain0" ng-model="instance.main_domain" type="radio" value="0">
+                <input id="domain0" ng-model="instance.main_domain" type="radio" ng-value="0">
                 <label class="form-label" for="domain0">{t}No main domain{/t}</label>
               </div>
             </div>
             <div class="form-group" ng-repeat="domain in instance.domains track by $index">
               <div class="radio radio-input radio-primary">
-                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" value="[% $index + 1 %]" class="blue">
+                <input id="domain[% $index + 1 %]" ng-model="instance.main_domain" type="radio" ng-value="[% $index + 1 %]" class="blue">
                 <label class="form-label" for="domain[% $index + 1 %]">
                   <div class="input-group">
                     <input class="form-control" ng-model="instance.domains[$index]" type="text">

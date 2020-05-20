@@ -9,7 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\DefaultRenderer;
 

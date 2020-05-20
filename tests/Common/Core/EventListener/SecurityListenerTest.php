@@ -11,9 +11,9 @@ namespace Tests\Common\Core\EventListener;
 
 use Common\Core\Component\Helper\PermissionHelper;
 use Common\Core\EventListener\SecurityListener;
-use Common\ORM\Core\Exception\EntityNotFoundException;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\User;
+use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 
 /**
  * Defines test cases for SecurityListener class.
@@ -87,7 +87,7 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getListByIds', 'getOrigin', 'setOrigin' ])
             ->getMock();
 
-        $this->user = $this->getMockBuilder('Common\ORM\Entity\User')
+        $this->user = $this->getMockBuilder('Common\Model\Entity\User')
             ->setMethods([ 'getOrigin', 'isEnabled'])
             ->getMock();
 

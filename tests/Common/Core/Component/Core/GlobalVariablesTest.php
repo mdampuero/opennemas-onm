@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Core;
 
 use Common\Core\Component\Core\GlobalVariables;
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 /**
  * Defines test cases for GlobalVariables class.

@@ -16,10 +16,6 @@ services:
         arguments: [ '@entity_repository' ]
         public: true
 
-    content_cache:
-        class: Framework\Cache\ContentCache
-        public: true
-
     onm.event.authentication_success_listener:
         class: Framework\EventListener\AuthenticationSuccessListener
         tags:

@@ -21,12 +21,12 @@ class CheckerTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->repository = $this->getMockBuilder('\Common\ORM\Database\Repository\BaseRepository')
+        $this->repository = $this->getMockBuilder('Opennemas\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'countBy', 'findBy' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('\Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRepository' ])
             ->getMock();
@@ -41,7 +41,7 @@ class CheckerTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheck()
     {
-        $instance                = new \Common\ORM\Entity\Instance();
+        $instance                = new \Common\Model\Entity\Instance();
         $instance->internal_name = 'test';
         $instance->domains       = [ 'test.domain.com' ];
         $instance->contact_mail  = 'test@opennemas.com';

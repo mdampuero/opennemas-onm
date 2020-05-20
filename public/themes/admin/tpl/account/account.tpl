@@ -54,13 +54,13 @@
             <div class="tiles green m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Support plan{/t}
+                  {t}Contents{/t}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <div class="item-count">
-                      {$instance->support_plan} <i class="fa fa-info-circle" uib-tooltip="{t}Support by tickets{/t}" tooltip-placement="bottom"></i>
-                    </div>
+                    <span class="item-count">
+                      {$instance->contents}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <span class="item-count">{$instance->media_size|string_format:"%.2f"} MB</span>
+                    <span class="item-count">{($instance->media_size/1024)|string_format:"%.2f"} MB</span>
                   </div>
                 </div>
               </div>
@@ -280,4 +280,3 @@
     </div>
   </div>
 {/block}
-

@@ -1,0 +1,50 @@
+orm:
+    metadata:
+        -
+            name:  Invoice
+            class: Common\Model\Entity\Invoice
+            required:
+                - client_id
+                - date
+                - lines
+                - status
+            properties:
+                client_id: integer
+                date:      datetime
+                id:        integer
+                lines:     array
+                notes:     string
+                status:    string
+                terms:     string
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
+            repositories:
+                freshbooks:
+                    class:     Common\Model\FreshBooks\Repository\InvoiceRepository
+                    arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
+            persisters:
+                freshbooks:
+                    class:     Common\Model\FreshBooks\Persister\InvoicePersister
+                    arguments: [ '%freshbooks.domain%', '%freshbooks.token%', '@orm.metadata.invoice' ]
+            mapping:
+                freshbooks:
+                    client_id:
+                        name: client_id
+                        type: string
+                    date:
+                        name: date
+                        type: string
+                    lines:
+                        name: lines
+                        type: array
+                    notes:
+                        name: notes
+                        type: string
+                    status:
+                        name: status
+                        type: string
+                    terms:
+                        name: terms
+                        type: string

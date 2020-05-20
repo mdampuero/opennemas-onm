@@ -9,7 +9,7 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for SmartyMetaFacebookTagsTest class.
@@ -38,6 +38,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->fm = $this->getMockBuilder('FilterManager')
+            ->disableOriginalConstructor()
             ->setMethods([ 'get', 'filter', 'set' ])
             ->getMock();
 

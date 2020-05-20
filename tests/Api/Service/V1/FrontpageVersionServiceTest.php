@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\FrontpageVersionService;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for ContentPositionService class.
@@ -79,7 +79,7 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = new FrontpageVersionService(
             $this->container,
-            'Common\ORM\Core\Entity'
+            'Opennemas\Orm\Core\Entity'
         );
     }
 

@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\ORM\Command;
+namespace Test\Common\Core\Command;
 
 use Common\Core\Command\CheckStatusCommand;
 use Symfony\Component\Console\Application;

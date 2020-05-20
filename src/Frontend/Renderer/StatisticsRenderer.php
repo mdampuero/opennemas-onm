@@ -56,15 +56,15 @@ class StatisticsRenderer
     /**
      * Renders analytics code giving the types.
      *
-     * @param array   $types     The array of types to render.
-     * @param String  $output    The html page.
+     * @param array   $types        The array of types to render.
+     * @param String  $output       The html page.
      * @param Content $content      The content on template.
      *
      * @return String The output with the all analytics code inserted.
      */
     public function render($types, $content = null, $output = null)
     {
-        $codeType = $this->getCodeType($output);
+        $codeType = $this->getCodeType();
         $code     = '';
 
         foreach ($types as $type) {
@@ -104,16 +104,22 @@ class StatisticsRenderer
      *
      * @return String The code type needed: image, amp or script.
      */
-    protected function getCodeType($output)
+    protected function getCodeType()
     {
-        $uri = $this->global->getRequest()->getUri();
+        $request = $this->global->getRequest();
+
+        if (empty($request)) {
+            return 'image';
+        }
+
+        $uri = $request->getUri();
+
+        if (preg_match('@/newsletters/save-contents$@', $uri)) {
+            return 'image';
+        }
 
         if (preg_match('@/rss/facebook-instant-articles$@', $uri)) {
             return 'fia';
-        }
-
-        if (empty($output)) {
-            return 'image';
         }
 
         if (preg_match('@\.amp\.html$@', $uri)) {

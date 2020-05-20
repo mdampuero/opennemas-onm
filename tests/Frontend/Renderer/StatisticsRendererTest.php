@@ -9,7 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\StatisticsRenderer;
 
@@ -27,9 +27,9 @@ class StatisticsRendererTest extends TestCase
             ->setMethods([ 'getRequest', 'getContainer' ])
             ->getMock();
 
-        $this->ds = $this->getMockForAbstractClass('Common\ORM\Core\DataSet');
+        $this->ds = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -70,9 +70,6 @@ class StatisticsRendererTest extends TestCase
 
         $this->childRenderer->expects($this->any())->method('validate')
             ->willReturn(true);
-
-        $this->global->expects($this->any())->method('getRequest')
-            ->willReturn($this->request);
 
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -120,7 +117,6 @@ class StatisticsRendererTest extends TestCase
         $types   = [ 'GAnalytics' ];
 
         $this->renderer->expects($this->at(0))->method('getCodeType')
-            ->with($output)
             ->willReturn('amp');
 
         $this->tpl->expects($this->once())->method('fetch')
@@ -140,7 +136,6 @@ class StatisticsRendererTest extends TestCase
         $types   = [ 'GAnalytics' ];
 
         $this->renderer->expects($this->at(0))->method('getCodeType')
-            ->with($output)
             ->willReturn('script');
 
         $this->tpl->expects($this->once())->method('fetch')
@@ -160,7 +155,6 @@ class StatisticsRendererTest extends TestCase
         $types   = [ 'GAnalytics' ];
 
         $this->renderer->expects($this->at(0))->method('getCodeType')
-            ->with($output)
             ->willReturn('fia');
 
         $this->tpl->expects($this->once())->method('fetch')
@@ -193,15 +187,39 @@ class StatisticsRendererTest extends TestCase
     /**
      * Tests getCodeType when image.
      */
-    public function testGetCodeTypeWhenImage()
+    public function testGetCodeTypeWhenCommandImage()
     {
         $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn(null);
+
         $this->assertEquals(
             'image',
-            $method->invokeArgs($renderer, [''])
+            $method->invokeArgs($renderer, [])
+        );
+    }
+
+    /**
+     * Tests getCodeType when image.
+     */
+    public function testGetCodeTypeWhenBackendImage()
+    {
+        $renderer = new StatisticsRenderer($this->global, $this->tpl, $this->smarty);
+        $method   = new \ReflectionMethod($renderer, 'getCodeType');
+        $method->setAccessible(true);
+
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
+
+        $this->request->expects($this->at(0))->method('getUri')
+            ->willReturn('/newsletters/save-contents');
+
+        $this->assertEquals(
+            'image',
+            $method->invokeArgs($renderer, [])
         );
     }
 
@@ -214,6 +232,9 @@ class StatisticsRendererTest extends TestCase
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
+
         $this->request->expects($this->once())->method('getUri')
             ->willReturn(
                 'domain.com/article/category/slug/20180924122634000777.amp.html'
@@ -221,7 +242,7 @@ class StatisticsRendererTest extends TestCase
 
         $this->assertEquals(
             'amp',
-            $method->invokeArgs($renderer, ['No empty output'])
+            $method->invokeArgs($renderer, [])
         );
     }
 
@@ -234,6 +255,9 @@ class StatisticsRendererTest extends TestCase
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
+
         $this->request->expects($this->once())->method('getUri')
             ->willReturn(
                 'domain.com/article/category/slug/20180924122634000777.html'
@@ -241,7 +265,7 @@ class StatisticsRendererTest extends TestCase
 
         $this->assertEquals(
             'script',
-            $method->invokeArgs($renderer, ['No empty output'])
+            $method->invokeArgs($renderer, [])
         );
     }
 
@@ -254,6 +278,9 @@ class StatisticsRendererTest extends TestCase
         $method   = new \ReflectionMethod($renderer, 'getCodeType');
         $method->setAccessible(true);
 
+        $this->global->expects($this->at(0))->method('getRequest')
+            ->willReturn($this->request);
+
         $this->request->expects($this->once())->method('getUri')
             ->willReturn(
                 'domain.com/rss/facebook-instant-articles'
@@ -261,7 +288,7 @@ class StatisticsRendererTest extends TestCase
 
         $this->assertEquals(
             'fia',
-            $method->invokeArgs($renderer, ['No empty output'])
+            $method->invokeArgs($renderer, [])
         );
     }
 

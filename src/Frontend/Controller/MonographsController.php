@@ -144,7 +144,6 @@ class MonographsController extends Controller
         return $this->render('special/frontpage_special.tpl', [
             'cache_id'    => $cacheID,
             'x-tags'      => 'monograph-frontpage',
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
         ]);
     }
@@ -225,7 +224,6 @@ class MonographsController extends Controller
             'cache_id'    => $cacheID,
             'o_content'   => $special,
             'x-tags'      => 'monograph,' . $special->id,
-            'x-cache-for' => '+1 day',
             'x-cacheable' => true,
             'tags'        => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($special->tags)['items']

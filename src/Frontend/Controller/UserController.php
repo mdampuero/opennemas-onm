@@ -80,23 +80,6 @@ class UserController extends Controller
     }
 
     /**
-     * Generates the HTML for the user menu by ajax.
-     *
-     * @return Response The response object.
-     */
-    public function getUserMenuAction()
-    {
-        $photo = null;
-
-        if (!empty($this->get('core.user')->avatar_img_id)) {
-            $photo = $this->get('entity_repository')
-                ->find('Photo', $this->get('core.user')->avatar_img_id);
-        }
-
-        return $this->render('user/menu.tpl', [ 'photo' => $photo ]);
-    }
-
-    /**
      * Shows the user information.
      *
      * @return Response The response object.

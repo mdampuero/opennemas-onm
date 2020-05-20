@@ -16,17 +16,17 @@ services:
 
     api.service.author:
         class:     Api\Service\V1\AuthorService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\User', '@api.validator.user' ]
         public:    true
 
     api.service.category:
         class:     Api\Service\V1\CategoryService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Category', '@api.validator.category' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Category', '@api.validator.category' ]
         public:    true
 
     api.service.content:
         class:     Api\Service\V1\ContentService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Content' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
     api.service.content_old:
@@ -36,27 +36,27 @@ services:
 
     api.service.content_position:
         class:     Api\Service\V1\ContentPositionService
-        arguments: [ '@service_container', 'Common\ORM\Entity\ContentPosition' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\ContentPosition' ]
         public:    true
 
     api.service.frontpage:
         class:     Api\Service\V1\FrontpageService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Frontpage' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Frontpage' ]
         public:    true
 
     api.service.frontpage_version:
         class:     Api\Service\V1\FrontpageVersionService
-        arguments: [ '@service_container', 'Common\ORM\Entity\FrontpageVersion' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\FrontpageVersion' ]
         public:    true
 
     api.service.newsletter:
         class:     Api\Service\V1\NewsletterService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Newsletter' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Newsletter' ]
         public:    true
 
     api.service.newsstand:
         class:     Api\Service\V1\NewsstandService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Content' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
     api.service.news_agency.resource:
@@ -101,37 +101,37 @@ services:
 
     api.service.subscriber:
         class:     Api\Service\V1\SubscriberService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\User', '@api.validator.user' ]
         public:    true
 
     api.service.subscription:
         class:     Api\Service\V1\SubscriptionService
-        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.subscription' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\UserGroup', '@api.validator.subscription' ]
         public:    true
 
     api.service.tag:
         class:     Api\Service\V1\TagService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Tag', '@api.validator.tag' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Tag', '@api.validator.tag' ]
         public:    true
 
     api.service.trash:
         class:     Api\Service\V1\TrashService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Content' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
     api.service.user:
         class:     Api\Service\V1\UserService
-        arguments: [ '@service_container', 'Common\ORM\Entity\User', '@api.validator.user' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\User', '@api.validator.user' ]
         public:    true
 
     api.service.user_group:
         class:     Api\Service\V1\UserGroupService
-        arguments: [ '@service_container', 'Common\ORM\Entity\UserGroup', '@api.validator.user_group' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\UserGroup', '@api.validator.user_group' ]
         public:    true
 
     api.service.url:
         class:     Api\Service\V1\OrmService
-        arguments: [ '@service_container', 'Common\ORM\Entity\Url' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Url' ]
         public:    true
 
     api.service.video:

@@ -10,8 +10,8 @@
 namespace Tests\Common\Core\Component\Template;
 
 use Common\Core\Component\Template\Template;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\Theme;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {

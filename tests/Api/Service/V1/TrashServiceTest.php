@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\TrashService;
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 
 /**
  * Defines test cases for TrashService class.
@@ -44,7 +44,7 @@ class TrashServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\TrashService')
-            ->setConstructorArgs([ $this->container, 'Common\ORM\Entity\Content' ])
+            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->setMethods([ 'deleteList', 'getList' ])
             ->getMock();
     }

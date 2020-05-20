@@ -1,6 +1,7 @@
-(function () {
+(function() {
   'use strict';
   angular.module('onm.imagePreview', [])
+
     /**
      * @ngdoc directive
      * @name  ngPreview
@@ -10,73 +11,97 @@
      * @description
      *   Previews an image on client side.
      */
-    .directive('ngPreview', ['$window', function($window) {
-      var helper = {
-        support: !!($window.FileReader && $window.CanvasRenderingContext2D),
-        isFile: function(item) {
-          return angular.isObject(item) && item instanceof $window.File;
-        },
-        isImage: function(file) {
-          var type =  '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
-          return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-        }
-      };
+    .directive('ngPreview', [
+      '$window', function($window) {
+        var helper = {
+          support: Boolean($window.FileReader && $window.CanvasRenderingContext2D),
+          isFile: function(item) {
+            return angular.isObject(item) && item instanceof $window.File;
+          },
+          isImage: function(file) {
+            var type =  '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
 
-      return {
-        restrict: 'A',
-        scope:{
-          ngPreview: '='
-        },
-        link: function(scope, element) {
-          if (!helper.support) {
-            return;
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
           }
+        };
 
-          element.prepend('<canvas/>');
-          scope.$watch('ngPreview', function(nv, ov) {
-            var canvas = element.find('canvas');
-
-            function onLoadFile(event) {
-              var img = new Image();
-              img.onload = onLoadImage;
-              img.src = event.target.result;
+        return {
+          restrict: 'A',
+          scope: {
+            ngPreview: '='
+          },
+          link: function(scope, element) {
+            if (!helper.support) {
+              return;
             }
 
-            function onLoadImage() {
-              var h = element.parent().height();
-              var w = this.width * element.parent().height() / this.height;
+            element.prepend('<canvas/>');
+            scope.$watch('ngPreview', function(nv) {
+              var canvas = element.find('canvas');
 
-              if (element.parent().width() > 0 && w > element.parent().width()) {
-                w = element.parent().width();
-                h = this.height * element.parent().width() / this.width;
+              /**
+               * @function onLoadImage
+               * @memberOf ngPreview
+               *
+               * @description
+               * Calculate the size of the canvas.
+               */
+              function onLoadImage() {
+                var h = element.parent().height();
+
+                if (h < 0) {
+                  h = 150;
+                  var w = this.width * h / this.height;
+                } else {
+                  var w = this.width * element.parent().height() / this.height;
+                }
+
+                if (element.parent().width() > 0 && w > element.parent().width()) {
+                  w = element.parent().width();
+                  h = this.height * element.parent().width() / this.width;
+                }
+
+                canvas.attr({ width: w, height: h });
+                canvas[0].getContext('2d').drawImage(this, 0, 0, w, h);
               }
 
-              canvas.attr({ width: w, height: h });
-              canvas[0].getContext('2d').drawImage(this, 0, 0, w, h);
-            }
+              /**
+               * @function onLoadFile
+               * @memberOf ngPreview
+               *
+               * @description
+               * Loads a file.
+               */
+              function onLoadFile(event) {
+                var img = new Image();
 
-            if (!nv) {
-              canvas[0].getContext('2d').clearRect(
+                img.onload = onLoadImage;
+                img.src = event.target.result;
+              }
+
+              if (!nv) {
+                canvas[0].getContext('2d').clearRect(
                   0, 0, canvas[0].width, canvas[0].height);
-              canvas.attr({ width: 0, height: 0 });
-              return;
-            }
+                canvas.attr({ width: 0, height: 0 });
+                return;
+              }
 
-            if (typeof nv !== 'string') {
-              var reader = new FileReader();
-              reader.onload = onLoadFile ;
-              reader.readAsDataURL(nv);
+              if (typeof nv !== 'string') {
+                var reader = new FileReader();
 
-              return;
-            }
+                reader.onload = onLoadFile;
+                reader.readAsDataURL(nv);
 
-            var img = new Image();
-            img.onload = onLoadImage;
-            img.src = nv;
-          });
-        }
-      };
-    }]);
+                return;
+              }
+
+              var img = new Image();
+
+              img.onload = onLoadImage;
+              img.src = nv;
+            });
+          }
+        };
+      }
+    ]);
 })();
-
-

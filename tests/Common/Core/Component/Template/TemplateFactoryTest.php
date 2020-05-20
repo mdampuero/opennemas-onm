@@ -10,7 +10,7 @@
 namespace Tests\Common\Core\Component\Template;
 
 use Common\Core\Component\Template\TemplateFactory;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for TemplateFactory class.
@@ -210,12 +210,12 @@ class TemplateFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTemplateWhenInFrontend()
     {
-        $em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
-        $repository = $this->getMockBuilder('Common\ORM\File\BaseRepository')
+        $repository = $this->getMockBuilder('Opennemas\Orm\File\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findOneBy' ])
             ->getMock();
