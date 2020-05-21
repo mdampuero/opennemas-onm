@@ -268,15 +268,9 @@ class AdvertisementRenderer extends Renderer
      *
      * @return boolean True if it is floating, False if it isn't.
      */
-    protected function isFloating(&$params)
+    protected function isFloating($params)
     {
-        if (array_key_exists('placeholder', $params)) {
-            return true;
-        }
-
-        // This is necessary for smart integration.
-        $params['advertisementGroup'] = 'frontpage';
-        return false;
+        return array_key_exists('placeholder', $params);
     }
 
     /**
