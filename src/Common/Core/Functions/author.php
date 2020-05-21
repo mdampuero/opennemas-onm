@@ -6,9 +6,9 @@
  *                    provided, the function will try to search the item in the
  *                    template.
  *
- * @return \Common\ORM\Entity\User The author if present. Null otherwise.
+ * @return \Common\Model\Entity\Userr The author if present. Null otherwise.
  */
-function get_author($item = null) : ?\Common\ORM\Entity\User
+function get_author($item = null) : ?\Common\Model\Entity\User
 {
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
@@ -17,7 +17,7 @@ function get_author($item = null) : ?\Common\ORM\Entity\User
     }
 
     if (($item instanceof \Content
-        || $item instanceof \Common\ORM\Entity\Content)
+        || $item instanceof \Common\Model\Entity\Content)
         && !empty($item->fk_author)
     ) {
         try {
@@ -28,7 +28,7 @@ function get_author($item = null) : ?\Common\ORM\Entity\User
         }
     }
 
-    return $item instanceof \Common\ORM\Entity\User
+    return $item instanceof \Common\Model\Entity\User
         ? $item
         : null;
 }
@@ -85,7 +85,7 @@ function get_author_name($item = null) : ?string
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
     if ($item instanceof \Content
-        || $item instanceof \Common\ORM\Entity\Content
+        || $item instanceof \Common\Model\Entity\Content
     ) {
         if (!empty($item->agency)) {
             return $item->agency;

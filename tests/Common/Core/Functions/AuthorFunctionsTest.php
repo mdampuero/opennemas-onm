@@ -9,8 +9,8 @@
  */
 namespace Tests\Common\Core\Functions;
 
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for categories functions.

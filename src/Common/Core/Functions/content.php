@@ -19,7 +19,7 @@ function get_content($item = null, $type = null)
         $item = getService('entity_repository')->find($type, $item);
     }
 
-    return $item instanceof \Common\ORM\Entity\Content
+    return $item instanceof \Common\Model\Entity\Content
             || $item instanceof \Content
         ? $item
         : null;
