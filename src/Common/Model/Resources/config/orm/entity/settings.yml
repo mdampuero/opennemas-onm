@@ -1,0 +1,28 @@
+orm:
+    metadata:
+        -
+            name: Settings
+            datasets:
+                instance:
+                    class:     Opennemas\Orm\Database\DataSet\BaseDataSet
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.settings', '@cache.connection.instance', '%orm.parameter.setting.autoload.instance%' ]
+                manager:
+                    class:     Opennemas\Orm\Database\DataSet\BaseDataSet
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.settings', '@cache.connection.manager', '%orm.parameter.setting.autoload.manager%' ]
+            mapping:
+                database:
+                    table: settings
+                    columns:
+                        name:
+                            type:    string
+                            options: { length: 128, notnull: true }
+                        value:
+                            type:    text
+                            options: { length: 65532, notnull: true }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ name ]
+                            primary: true
+                            unique:  true
+                            flags:   {  }

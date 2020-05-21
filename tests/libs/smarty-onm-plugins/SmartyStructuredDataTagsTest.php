@@ -9,7 +9,7 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 /**
  * Defines test cases for SmartyStructuredDataTagsTest class.

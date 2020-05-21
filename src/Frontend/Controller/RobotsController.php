@@ -42,7 +42,6 @@ class RobotsController extends Controller
 
         return new Response($content, 200, [
             'Content-Type' => 'text/plain',
-            'x-cache-for'  => '+1 day',
             'x-cacheable'  => true,
             'x-tags'       => 'robots',
         ]);

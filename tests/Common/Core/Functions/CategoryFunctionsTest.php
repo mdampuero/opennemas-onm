@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Functions;
 
-use Common\ORM\Entity\Category;
+use Common\Model\Entity\Category;
 
 /**
  * Defines test cases for categories functions.

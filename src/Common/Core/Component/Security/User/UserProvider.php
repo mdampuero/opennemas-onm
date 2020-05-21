@@ -9,7 +9,7 @@
  */
 namespace Common\Core\Component\Security\User;
 
-use Common\ORM\Core\EntityManager;
+use Opennemas\Orm\Core\EntityManager;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -78,6 +78,6 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class === 'User';
+        return $class === 'Common\Model\Entity\User';
     }
 }

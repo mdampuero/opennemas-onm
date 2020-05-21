@@ -5,9 +5,9 @@
  * @param Content $item The item to get category for. If not provided, the
  *                      function will try to search the item in the template.
  *
- * @return \Common\ORM\Entity\Category The category.
+ * @return \Common\Model\Entity\Category The category.
  */
-function get_category($item = null) : ?\Common\ORM\Entity\Category
+function get_category($item = null) : ?\Common\Model\Entity\Category
 {
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
@@ -24,7 +24,7 @@ function get_category($item = null) : ?\Common\ORM\Entity\Category
         }
     }
 
-    return $item instanceof \Common\ORM\Entity\Category
+    return $item instanceof \Common\Model\Entity\Category
         ? $item
         : null;
 }

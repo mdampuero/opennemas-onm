@@ -9,8 +9,8 @@
  */
 namespace Tests\Common\Core\Component\Security;
 
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\User;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\User;
 use Common\Core\Component\Security\Security;
 
 /**

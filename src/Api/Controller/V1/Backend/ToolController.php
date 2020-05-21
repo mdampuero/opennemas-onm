@@ -11,7 +11,7 @@ namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
-use Common\ORM\Entity\Tag;
+use Common\Model\Entity\Tag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

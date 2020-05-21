@@ -10,8 +10,8 @@
 namespace Tests\Common\Core\Component\Loader;
 
 use Common\Core\Component\Loader\CoreLoader;
-use Common\ORM\Entity\Instance;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\Theme;
 
 /**
  * Defines test cases for CoreLoader class.
@@ -27,12 +27,12 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'addPositions' ])
             ->getMock();
 
-        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
             ->setMethods([ 'setNamespace' ])
             ->getMock();
 
-        $this->conn = $this->getMockBuilder('Common\ORM\Core\Connection')
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
             ->setMethods([ 'selectDatabase' ])
             ->getMock();
@@ -41,7 +41,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'has' ])
             ->getMock();
 
-        $this->dataset = $this->getMockBuilder('Common\ORM\Database\DataSet\BaseDataSet')
+        $this->dataset = $this->getMockBuilder('Opennemas\Orm\Database\DataSet\BaseDataSet')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
             ->getMock();
@@ -51,7 +51,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'selectDatabase' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('Common\ORM\Core\EntityManager')
+        $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection', 'getDataSet' ])
             ->getMock();

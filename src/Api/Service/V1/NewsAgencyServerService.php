@@ -19,8 +19,7 @@ use Api\Exception\PatchItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
-use Common\ORM\Core\EntityManager;
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class NewsAgencyServerService implements Service
 {

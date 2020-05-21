@@ -9,7 +9,7 @@
  */
 namespace Framework\EventListener;
 
-use Common\Task\Component\Task\ServiceTask;
+use Opennemas\Task\Component\Task\ServiceTask;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
 

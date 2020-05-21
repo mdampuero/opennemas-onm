@@ -10,7 +10,6 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\CsvHelper;
-use Common\Data\Core\FilterManager;
 
 /**
  * Defines test cases for CsvHelper class.
@@ -30,7 +29,10 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
-        $this->fm = new FilterManager($this->container);
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
@@ -48,6 +50,10 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -164,6 +170,36 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
             [ 'pk_item' => 2, 'item' => 'foo', 'votes' => 100 ],
             [ 'pk_item' => 3, 'item' => 'bar', 'votes' => 40 ]
         ];
+
+        // body, description, title, pretitle, item0, item1
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('');
+        $this->fm->expects($this->at(5))->method('get')
+            ->willReturn('');
+        $this->fm->expects($this->at(8))->method('get')
+            ->willReturn('waldo');
+        $this->fm->expects($this->at(11))->method('get')
+            ->willReturn(null);
+        $this->fm->expects($this->at(14))->method('get')
+            ->willReturn('flob');
+        $this->fm->expects($this->at(17))->method('get')
+            ->willReturn('corge');
+
+        // body, description, title, pretitle, item0, item1
+        $this->fm->expects($this->at(20))->method('get')
+            ->willReturn('');
+        $this->fm->expects($this->at(23))->method('get')
+            ->willReturn('');
+        $this->fm->expects($this->at(26))->method('get')
+            ->willReturn('gorp');
+        $this->fm->expects($this->at(29))->method('get')
+            ->willReturn(null);
+        $this->fm->expects($this->at(32))->method('get')
+            ->willReturn('foobar');
+        $this->fm->expects($this->at(35))->method('get')
+            ->willReturn('foo');
+        $this->fm->expects($this->at(38))->method('get')
+            ->willReturn('bar');
 
         $method = new \ReflectionMethod($this->helper, 'parse');
         $method->setAccessible(true);

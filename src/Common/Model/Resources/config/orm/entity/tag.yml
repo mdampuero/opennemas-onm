@@ -1,0 +1,61 @@
+orm:
+    metadata:
+        -
+            name:  Tag
+            class: Common\Model\Entity\Tag
+            properties:
+                description: string
+                id:          integer
+                locale:      string
+                name:        string
+                slug:        string
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.tag' ]
+            repositories:
+                instance:
+                    class:     Common\Model\Database\Repository\TagRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\Model\Database\Persister\TagPersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.tag', '@cache.connection.instance', '@core.instance' ]
+            mapping:
+                database:
+                    table: tags
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: string
+                            options: { default: null, length: 60, notnull: true }
+                        slug:
+                            type: string
+                            options: { default: null, length: 60, notnull: true }
+                        description:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        locale:
+                            type: string
+                            options: { default: null, length: 5, notnull: false  }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique:  true
+                            flags:   {}
+                        -
+                            name: slug
+                            columns: [ slug ]
+                            primary: false
+                            unique: true
+                            flags: {  }
+                        -
+                            name:    locale
+                            columns: [ locale ]
+                            primary: false
+                            unique:  false
+                            flags:   {  }

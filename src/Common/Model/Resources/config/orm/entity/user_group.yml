@@ -1,0 +1,60 @@
+orm:
+    metadata:
+        -
+            name:  UserGroup
+            class: Common\Model\Entity\UserGroup
+            properties:
+                enabled:       boolean
+                name:          string
+                pk_user_group: integer
+                private:       boolean
+                privileges:    array
+                request:       boolean
+                type:          integer
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.user_group' ]
+            repositories:
+                instance:
+                    class:     Common\Model\Database\Repository\UserGroupRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance' ]
+                manager:
+                    class:     Common\Model\Database\Repository\UserGroupRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager' ]
+            persisters:
+                instance:
+                    class:     Common\Model\Database\Persister\UserGroupPersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.user_group', '@cache.connection.instance', '@core.instance' ]
+                manager:
+                    class:     Common\Model\Database\Persister\UserGroupPersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.user_group', '@cache.connection.manager', '@core.instance' ]
+            mapping:
+                database:
+                    table: user_groups
+                    columns:
+                        pk_user_group:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: string
+                            options: { default: null, notnull: false, length: 50 }
+                        type:
+                            type:    integer
+                            options: { default: 0, notnull: true }
+                        private:
+                            type:    boolean
+                            options: { default: 0, notnull: true }
+                        request:
+                            type:    boolean
+                            options: { default: 0, notnull: true }
+                        enabled:
+                            type:    boolean
+                            options: { default: 0, notnull: true }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ pk_user_group ]
+                            primary: true
+                            unique:  true
+                            flags:   {}

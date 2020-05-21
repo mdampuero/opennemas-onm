@@ -2,8 +2,8 @@
 
 namespace Tests\Common\Core\Functions;
 
-use Common\ORM\Entity\Content;
-use Common\ORM\Entity\Theme;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Theme;
 
 /**
  * Defines test cases for helper functions.

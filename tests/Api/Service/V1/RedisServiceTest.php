@@ -21,12 +21,12 @@ class RedisServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->cache = $this->getMockBuilder('Common\Cache\Redis\Redis')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
             ->setMethods([ 'get', 'remove', 'removeByPattern' ])
             ->getMock();
 
-        $this->cm = $this->getMockBuilder('Common\Cache\Core\CacheManager')
+        $this->cm = $this->getMockBuilder('Opennemas\Cache\Core\CacheManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'getConnection' ])
             ->getMock();
@@ -40,7 +40,7 @@ class RedisServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->tq = $this->getMockBuilder('Common\Task\Component\Queue\Queue')
+        $this->tq = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
             ->setMethods([ 'push' ])
             ->getMock();
 

@@ -137,6 +137,7 @@ class ArchiveController extends Controller
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
             'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categoryName,
+            'x-cacheable'     => true,
         ]);
     }
 
@@ -174,7 +175,8 @@ class ArchiveController extends Controller
         }
 
         return new Response($html, 200, [
-            'x-tags' => "archive-digital,{$categoryName},{$year}-{$month}-{$day}"
+            'x-tags'      => "archive-digital,{$categoryName},{$year}-{$month}-{$day}",
+            'x-cacheable' => true,
         ]);
     }
 

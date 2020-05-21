@@ -9,7 +9,6 @@
  */
 namespace Tests;
 
-use Common\Data\Core\FilterManager;
 use \Article;
 
 /**
@@ -26,7 +25,10 @@ class ArticleTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
-        $this->fm = new FilterManager($this->container);
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'filter', 'get', 'set' ])
+            ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
@@ -38,6 +40,10 @@ class ArticleTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+        $this->fm->expects($this->any())->method('set')
+            ->willReturn($this->fm);
+        $this->fm->expects($this->any())->method('filter')
+            ->willReturn($this->fm);
         $this->instance->expects($this->any())->method('hasMultilanguage')
             ->willReturn(false);
         $this->kernel->expects($this->any())->method('getContainer')
@@ -78,13 +84,18 @@ class ArticleTest extends \PHPUnit\Framework\TestCase
         $this->article->id                = 1;
         $this->article->title             = 'wibble';
 
+        $this->fm->expects($this->at(2))->method('get')
+            ->with()->willReturn('wibble');
+
         $this->assertEquals('article', $this->article->content_type_name);
         $this->assertEquals('wibble', $this->article->title);
         $this->assertTrue(empty($this->article->pretitle));
 
         $this->article->pretitle = 'flob';
 
-        $this->assertFalse(empty($this->article->pretitle));
+        $this->fm->expects($this->at(2))->method('get')
+            ->with()->willReturn('flob');
+
         $this->assertEquals('flob', $this->article->pretitle);
     }
 }

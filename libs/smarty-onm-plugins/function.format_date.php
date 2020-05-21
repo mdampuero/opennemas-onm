@@ -41,7 +41,7 @@ function smarty_function_format_date($params, &$smarty)
 
         return $smarty->getContainer()->get('data.manager.filter')
             ->set($date)
-            ->filter('format_date', $params)
+            ->filter('date', $params)
             ->get();
     } catch (Exception $e) {
         return '';

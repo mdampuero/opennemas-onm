@@ -3,7 +3,7 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Instance;
+use Common\Model\Entity\Instance;
 use Onm\Exception\AssetsNotDeletedException;
 use Onm\Exception\BackupException;
 use Onm\Exception\DatabaseNotDeletedException;
@@ -224,7 +224,7 @@ class InstanceController extends Controller
 
         $name = '';
         if (!empty($oql)) {
-            $name = '-' . \Onm\StringUtils::getTitle($oql);
+            $name = '-' . \Onm\StringUtils::generateSlug($oql);
         }
 
         $filename = 'opennemas-instances' . $name . '.' . date("YmdHis") . '.csv';

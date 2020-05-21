@@ -373,6 +373,6 @@ class BlogController extends FrontendController
 
         // TODO: Remove this ASAP
         $params['content']->author_name_slug =
-            \Onm\StringUtils::getTitle($params['content']->name);
+            \Onm\StringUtils::generateSlug($params['content']->name);
     }
 }

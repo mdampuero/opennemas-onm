@@ -11,8 +11,8 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\PermissionHelper;
 use Common\Core\Component\Helper\SubscriptionHelper;
-use Common\ORM\Entity\User;
-use Common\ORM\Entity\UserGroup;
+use Common\Model\Entity\User;
+use Common\Model\Entity\UserGroup;
 
 /**
  * Defines test cases for class class.

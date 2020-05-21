@@ -9,7 +9,7 @@
  */
 namespace Api\Service\V1;
 
-use Common\ORM\Entity\FrontpageVersion;
+use Common\Model\Entity\FrontpageVersion;
 use Api\Exception\CreateItemException;
 
 class FrontpageVersionService extends OrmService
@@ -321,7 +321,7 @@ class FrontpageVersionService extends OrmService
      *
      * @param array $frontpageVersion the frontpage data to save
      *
-     * @return \Common\ORM\Entity\FrontpageVersion|null
+     * @return \Common\Model\Entity\FrontpageVersion|null
      **/
     public function saveFrontPageVersion($frontpageVersion)
     {

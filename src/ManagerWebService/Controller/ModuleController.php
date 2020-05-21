@@ -10,7 +10,7 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\ORM\Entity\Extension;
+use Common\Model\Entity\Extension;
 use Common\Core\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -198,8 +198,8 @@ class ModuleController extends Controller
      */
     public function patchAction(Request $request, $id)
     {
-        $em  = $this->get('orm.manager');
-        $msg = $this->get('core.messenger');
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Extension')
             ->objectify($request->request->all());
 

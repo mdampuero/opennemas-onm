@@ -10,7 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\OrmService;
-use Common\ORM\Core\Entity;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for OrmService class.
@@ -74,7 +74,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = new OrmService(
             $this->container,
-            'Common\ORM\Core\Entity',
+            'Opennemas\Orm\Core\Entity',
             $this->validator
         );
     }
@@ -849,7 +849,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWhenNoValidator()
     {
-        $service = new OrmService($this->container, 'Common\ORM\Core\Entity');
+        $service = new OrmService($this->container, 'Opennemas\Orm\Core\Entity');
 
         $method = new \ReflectionMethod($service, 'validate');
         $method->setAccessible(true);
