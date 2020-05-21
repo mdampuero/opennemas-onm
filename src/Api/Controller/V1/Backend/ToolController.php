@@ -216,7 +216,7 @@ class ToolController extends Controller
 
         $data = [
             'agency'         => $content->agency,
-            'category'       => $content->category,
+            'category'       => $content->category_id,
             'content_status' => $content->content_status,
             'description'    => $content->description,
             'endtime'        => $content->endtime,

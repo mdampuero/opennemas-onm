@@ -100,7 +100,7 @@ class BooksController extends Controller
             $contentManager = new \ContentManager();
             $books          = $contentManager->find_by_category(
                 'Book',
-                $content->category,
+                $content->category_id,
                 'content_status=1 and pk_content != ' . $content->pk_content,
                 'ORDER BY starttime DESC, pk_content DESC LIMIT 5'
             );
@@ -121,7 +121,7 @@ class BooksController extends Controller
             'book'        => $content,
             'content'     => $content,
             'contentId'   => $content->id,
-            'category'    => $content->category,
+            'category'    => $content->category_id,
             'cache_id'    => $cacheID,
             'o_content'   => $content,
             'x-tags'      => 'book,' . $content->id,

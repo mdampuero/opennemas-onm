@@ -265,8 +265,8 @@ class ArticlesController extends Controller
         ];
 
         // Fetch article category name
-        if (!empty($article->category)) {
-            $category = $this->getCategory($article->category);
+        if (!empty($article->category_id)) {
+            $category = $this->getCategory($article->category_id);
         }
 
         list($positions, $advertisements) = $this->getAdvertisements($category);
@@ -295,7 +295,7 @@ class ArticlesController extends Controller
                 ->findMulti($ids);
         }
 
-        if (!empty($article->category)) {
+        if (!empty($article->category_id)) {
             $suggested = $this->get('core.helper.content')->getSuggested(
                 $article->pk_content,
                 'article',

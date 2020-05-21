@@ -45,13 +45,6 @@ class Content implements \JsonSerializable, CsvSerializable
     protected $body = '';
 
     /**
-     * The category id this content belongs to
-     *
-     * @var int
-     */
-    public $category = null;
-
-    /**
      * Status of this content
      *
      * @var int 0|1|2
@@ -427,10 +420,6 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->endtime = null;
         }
 
-        if (isset($this->category_id)) {
-            $this->category = $this->category_id;
-        }
-
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
@@ -517,8 +506,8 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function create($data)
     {
-        $categoryId = array_key_exists('category', $data) ?
-            (int) $data['category'] : null;
+        $categoryId = array_key_exists('category_id', $data) ?
+            (int) $data['category_id'] : null;
 
         $tags = $data['tags'] ?? [];
         $data = $this->parseData($data);
@@ -569,8 +558,8 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function update($data)
     {
-        $categoryId = array_key_exists('category', $data) ?
-            (int) $data['category'] : null;
+        $categoryId = array_key_exists('category_id', $data) ?
+            (int) $data['category_id'] : null;
 
         $tags = array_key_exists('tags', $data) && !empty($data['tags'])
             ? $data['tags'] : [];
@@ -1239,7 +1228,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return [
                 'title'           => $this->__get('title'),
-                'category'        => get_category_slug($this),
+                'category'        => get_category_name($this),
                 'views'           => $this->views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
@@ -1672,7 +1661,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public function isInFrontpageOfCategory($categoryID = null)
     {
         if ($categoryID === null) {
-            $categoryID = $this->category;
+            $categoryID = $this->category_id;
         }
 
         try {

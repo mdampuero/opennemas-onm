@@ -152,7 +152,7 @@ class HttpRss extends Http
         $article->body             = (string) $body;
         $article->created_datetime = new \DateTime($content->pubDate);
         $article->updated_datetime = new \DateTime($content->pubDate);
-        $article->category_slug    = (string) $content->category;
+        $article->category_slug    = (string) $content->category_id;
         $article->tags             = [];
 
         return $article;

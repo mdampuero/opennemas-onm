@@ -102,7 +102,7 @@
                 </div>
               </td>
               <td class="hidden-xs">
-                [% extra.categories[content.category] %]
+                [% extra.categories[content.category_id] %]
               </td>
               {if $category!='widget'}
               {acl isAllowed="SPECIAL_HOME"}
