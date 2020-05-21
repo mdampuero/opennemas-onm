@@ -9,7 +9,7 @@
  */
 namespace Tests\Common\Core\Components\Functions;
 
-use Common\ORM\Entity\Content;
+use Common\Model\Entity\Content;
 
 /**
  * Defines test cases for content functions.
