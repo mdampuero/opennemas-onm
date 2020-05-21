@@ -179,7 +179,13 @@ class UserController extends Controller
             );
 
             $request->getSession()->getFlashBag()
-                ->add('error', _('The email address is already in use.'));
+                ->add('error', sprintf(
+                    _('The email address is already in use. ' .
+                    'Sign in <a href="%s">here</a>. ' .
+                    'Recover password <a href="%s">here</a>.'),
+                    $this->generateUrl('frontend_user_show'),
+                    $this->generateUrl('frontend_password_reset')
+                ));
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         } catch (CreateItemException $e) {
