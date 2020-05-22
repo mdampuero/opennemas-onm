@@ -12,6 +12,7 @@ namespace Common\Core\Component\Security\Authentication;
 use Common\Core\Component\Exception\Security\InvalidRecaptchaException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -179,6 +180,15 @@ class Authentication
         }
 
         $error = $this->getError();
+
+        if ($error instanceof DisabledException) {
+            return sprintf(_(
+                'This account has not been verified. ' .
+                'To verify this account click on the link sent to your email address. ' .
+                'If you have not received any message. Check your spam box. ' .
+                'If you want a new link, click <a href="%s">here</a>.'
+            ), '/user/activate');
+        }
 
         if ($error instanceof BadCredentialsException) {
             return _('Username or password incorrect.');
