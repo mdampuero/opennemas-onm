@@ -62,8 +62,8 @@ class ChartbeatRenderer extends StatisticsRenderer
         if (!is_array($this->config)
             || !array_key_exists('id', $this->config)
             || !array_key_exists('domain', $this->config)
-            || empty(trim($this->config['id'])
-            || empty(trim($this->config['domain'])))
+            || empty(trim($this->config['id']))
+            || empty(trim($this->config['domain']))
         ) {
             return false;
         }
