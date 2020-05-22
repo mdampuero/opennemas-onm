@@ -14,7 +14,7 @@ frontend_user_save:
     methods: [ POST ]
 
 frontend_user_show:
-    path:     /user/me
+    path:     /user
     defaults: { _controller: FrontendBundle:User:show }
     methods:  [ GET ]
 
