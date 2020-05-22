@@ -64,7 +64,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
     $replace      = [ '', '', '' ];
     $titleCleaned = preg_replace($patterns, $replace, $content->title);
 
-    $html = '<a title="' . $titleCleaned . '" href="/' . get_url($content) . '"';
+    $html = '<a title="' . $titleCleaned . '" href="' . get_url($content, ['_absolute' => true]) . '"';
     if ($content->fk_content_type == 3) {
         $html .= ' target="_blank"';
     }
