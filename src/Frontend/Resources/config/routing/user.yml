@@ -1,6 +1,6 @@
 frontend_user_activate:
     path: /user/activate
-    defaults: { _controller: FrontendBundle:User:activate }
+    defaults: { _controller: FrontendBundle:User:verify }
     methods: [ GET ]
 
 frontend_user_register:
