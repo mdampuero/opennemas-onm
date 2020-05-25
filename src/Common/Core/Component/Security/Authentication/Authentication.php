@@ -187,7 +187,7 @@ class Authentication
                 'To verify this account click on the link sent to your email address. ' .
                 'If you have not received any message. Check your spam box. ' .
                 'If you want a new link, click <a href="%s">here</a>.'
-            ), '/user/verify');
+            ), $this->container->get('router')->generate('frontend_user_verify'));
         }
 
         if ($error instanceof BadCredentialsException) {
