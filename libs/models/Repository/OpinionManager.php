@@ -115,21 +115,12 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = [];
                 if ($field == 'blog') {
-                    $bloggers = getService('user_repository')->findByUserMeta(
-                        [
-                            'meta_key' => [
-                                ['value' => 'is_blog']
-                            ],
-                            'meta_value' => [
-                                ['value' => '1']
-                            ]
-                        ],
-                        ['username' => 'asc']
-                    );
+                    $bloggers = getService('api.service.author')->
+                        getList('is_blog = 1 order by username asc');
 
                     if (!empty($bloggers)) {
                         $ids = [];
-                        foreach ($bloggers as $blogger) {
+                        foreach ($bloggers['items'] as $blogger) {
                             $ids[] = $blogger->id;
                         }
 

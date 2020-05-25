@@ -91,18 +91,6 @@ class Opinion extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'content_type_name':
-                return 'Opinion';
-            case 'author_object':
-                $ur        = getService('user_repository');
-                $authorObj = $ur->find($this->fk_author);
-                // TODO: Fix this ASAP
-                if (!empty($authorObj) && !empty($authorObj->avatar_img_id)) {
-                    $authorObj->photo = getService('entity_repository')
-                        ->find('Photo', $authorObj->avatar_img_id);
-                }
-
-                return $authorObj;
             case 'uri':
                 return ltrim(getService('core.helper.url_generator')->generate($this), '/');
             default:
@@ -281,7 +269,7 @@ class Opinion extends Content
         $this->name             = \Onm\StringUtils::generateSlug($author->name);
         $this->author_name_slug = $this->name;
 
-        if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+        if ($author->is_blog == 1) {
             $params['item'] = $this;
             $template       = 'frontpage/contents/_blog.tpl';
 

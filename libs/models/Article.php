@@ -134,9 +134,6 @@ class Article extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'author':
-                return $this->getAuthor();
-
             default:
                 return parent::__get($name);
         }
@@ -479,19 +476,5 @@ class Article extends Content
                 $rel->{$method}($id, $i, $data[$i]);
             }
         }
-    }
-
-    /**
-     * Returns the author object of this article
-     *
-     * @return array the author data
-     */
-    private function getAuthor()
-    {
-        if (empty($this->author)) {
-            $this->author = getService('user_repository')->find($this->fk_author);
-        }
-
-        return $this->author;
     }
 }
