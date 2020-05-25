@@ -365,7 +365,8 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $author = $this->container->get('user_repository')->find($content->fk_author);
+        $author = $this->container->get('api.service.author')
+            ->getItem($content->fk_author);
 
         if (is_object($author)) {
             $this->template
