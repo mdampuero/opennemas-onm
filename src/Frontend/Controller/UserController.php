@@ -29,7 +29,7 @@ class UserController extends Controller
      *
      * @return Response The response object.
      */
-    public function verifyAction(Request $request)
+    public function activateAction(Request $request)
     {
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
 
