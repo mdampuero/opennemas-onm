@@ -255,7 +255,7 @@ class UserController extends Controller
 
             if (empty($token)) {
                 $this->get('session')->getFlashBag()
-                    ->and('error', _('This account is already verified'));
+                    ->add('error', _('This account is already verified'));
 
                 return $this->redirect($this->generateUrl('frontend_user_verify'));
             }
@@ -267,6 +267,9 @@ class UserController extends Controller
             ];
 
             $this->sendCreateEmail($data);
+
+            $this->get('session')->getFlashBag()
+                ->add('success', _('The verification email was sent'));
 
             return $this->redirect($this->generateUrl('frontend_authentication_login'));
         } catch (GetItemException $e) {
