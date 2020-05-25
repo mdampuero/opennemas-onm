@@ -13,6 +13,16 @@ frontend_user_verify:
     defaults: { _controller: FrontendBundle:User:sendVerification }
     methods: [ POST ]
 
+frontend_user_reset:
+    path: /user/recover
+    defaults: { _controller: FrontendBundle:User:reset }
+    methods: [ GET ]
+
+frontend_user_recover:
+    path: /user/recover
+    defaults: { _controller: FrontendBundle:User:recover }
+    methods: [ POST ]
+
 frontend_user_register:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:register }

@@ -117,6 +117,91 @@ class UserController extends Controller
     }
 
     /**
+     * Recover the password for one user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function recoverAction(Request $request)
+    {
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $em    = $this->get('orm.manager');
+
+        try {
+            $user = $em->getRepository('User')->findOneBy("email = '$email'");
+        } catch (\Exception $e) {
+            $request->getSession()->getFlashBag()
+                ->add('error', _('Unable to find an user with that email.'));
+
+            return new RedirectResponse(
+                $this->get('router')->generate('frontend_user_reset')
+            );
+        }
+
+        $this->view->setCaching(0);
+
+        // Generate and update user with new token
+        $token = md5(uniqid(mt_rand(), true));
+        $user->merge([ 'token' => $token ]);
+        $em->persist($user);
+
+        $mailSubject = sprintf(
+            _('Password reminder for %s'),
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_title')
+        );
+
+        $mailBody = $this->get('core.template.frontend')
+            ->render('user/emails/recoverpassword.tpl', [
+                'user' => $user,
+                'url'  => $this->get('router')->generate(
+                    'frontend_password_change',
+                    [ 'token' => $token ],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+            ]);
+
+        //  Build the message
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($mailSubject)
+            ->setBody($mailBody, 'text/plain')
+            ->setTo($user->email)
+            ->setFrom([
+                'no-reply@postman.opennemas.com' =>
+                    $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_name')
+            ]);
+
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - Backend Recover Password'
+        );
+
+        try {
+            $mailer = $this->get('mailer');
+            $mailer->send($message);
+
+            $this->get('application.log')
+                ->info('password.request.email.success: ' . $user->email);
+
+            $this->view->assign([ 'user' => $user ]);
+        } catch (\Exception $e) {
+            $this->get('application.log')->error(
+                'password.request.email.failure: ' . $user->email . '('
+                    . $e->getMessage() . ')',
+                $e->getTrace()
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to send your recover password email. Please try it later.')
+            );
+        }
+        return $this->render('user/request.tpl');
+    }
+
+    /**
      * Displays a form to create a new user.
      *
      * @param Request $request The request object.
@@ -138,6 +223,16 @@ class UserController extends Controller
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
         ]);
+    }
+
+    /**
+     * Shows the form to recover the password.
+     *
+     * @return Response The response object.
+     */
+    public function resetAction()
+    {
+        return $this->render('user/reset.tpl');
     }
 
     /**
