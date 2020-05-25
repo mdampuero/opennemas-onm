@@ -103,7 +103,7 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests loadInstanceByDomain when the provided domain and URI refers to a
-     * valid instance that was previously saved to cache.
+     * valid instance that was previously not saved to cache.
      */
     public function testLoadInstanceByDomainWhenInstanceInDatabase()
     {
@@ -122,6 +122,29 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
             ->getInstance();
 
         $this->assertEquals('garply', $instance->internal_name);
+    }
+
+    /**
+     * Tests loadInstanceByDomain when the provided domain and URI refers to a
+     * valid instance that was previously not saved to cache.
+     */
+    public function testLoadInstanceByDomainWhenWrongInstanceInDatabase()
+    {
+        $this->cache->expects($this->once())->method('exists')
+            ->with('fubar.foo')->willReturn(false);
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('domains regexp "^fubar.foo($|,)|,\s*fubar.foo\s*,|(^|,)\s*fubar.foo$"')
+            ->willReturn(new Instance([
+                'internal_name' => 'garply',
+                'domains'       => [ 'thud.foo' ]
+            ]));
+
+        $this->expectException(\Exception::class);
+
+        $this->loader
+            ->loadInstanceByDomain('fubar.foo', '/')
+            ->getInstance();
     }
 
     /**
@@ -154,6 +177,26 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
             ->getInstance();
 
         $this->assertEquals('garply', $instance->internal_name);
+    }
+
+    /**
+     * Tests loadInstanceByName when the provided instance name is found in
+     * database but wrong.
+     */
+    public function testLoadInstanceByNameWhenWrongInstanceInDatabase()
+    {
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('internal_name = "garply"')
+            ->willReturn(new Instance([
+                'internal_name' => 'thud',
+                'domains'       => [ 'fubar.foo' ]
+            ]));
+
+        $this->expectException(\Exception::class);
+
+        $this->loader
+            ->loadInstanceByName('garply')
+            ->getInstance();
     }
 
     /**

@@ -93,6 +93,10 @@ class InstanceLoader
 
         $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
 
+        if (!$this->isValid($this->instance, $domain)) {
+            throw new \Exception();
+        }
+
         $this->cache->set($domain, $this->instance);
 
         return $this;
@@ -115,6 +119,11 @@ class InstanceLoader
         $oql = sprintf('internal_name = "%s"', $name);
 
         $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
+
+        // Check for valid instance internal name
+        if ($this->instance->internal_name !== $name) {
+            throw new \Exception();
+        }
 
         return $this;
     }
