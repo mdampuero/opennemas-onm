@@ -2105,15 +2105,13 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     protected function addTags(array $tags)
     {
-        if (empty($tags)) {
-            self::deleteTags($this->id);
-            $this->tags = [];
-        }
-
         self::deleteTags($this->id);
-        self::saveTags($tags, $this->id);
+        $this->tags = [];
 
-        $this->tags = $tags;
+        if (!empty($tags)) {
+            self::saveTags($tags, $this->id);
+            $this->tags = $tags;
+        }
     }
 
     /**
