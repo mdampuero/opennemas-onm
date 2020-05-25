@@ -457,9 +457,8 @@ EOF
             }
 
             // Get author obj
-            $ur = getService('user_repository');
-
-            $content->author = $ur->find($content->fk_author);
+            $content->author = $this->getContainer()->get('api.service.author')
+                ->getItem($content->fk_author);
             if (isset($content->author->name)) {
                 $content->author = $content->author->name;
             } elseif (!empty($content->agency)) {
