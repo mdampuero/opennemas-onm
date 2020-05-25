@@ -30,7 +30,7 @@
       </label>
       <div class="col-sm-9 col-sm-offset-0 col-xs-offset-1 form-control-static">
         <span class="label label-default text-bold">
-          [% template.item %]
+          [% template.item.category %]
         </span>
       </div>
     </div>
