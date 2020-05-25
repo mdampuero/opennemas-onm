@@ -323,7 +323,7 @@ class UserController extends Controller
      *
      * @return Response The response object.
      */
-    public function showVerificationAction()
+    public function verifyAction()
     {
         return $this->render('user/verification.tpl');
     }
