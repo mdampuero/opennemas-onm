@@ -224,6 +224,64 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form to get the verification email.
+     *
+     * @return Response The response object.
+     */
+    public function showVerificationAction()
+    {
+        return $this->render('user/verification.tpl');
+    }
+
+    /**
+     * Send the verification email.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function sendVerificationAction(Request $request)
+    {
+        $email = $request->request->get('email', '');
+
+        if (empty($email)) {
+            return $this->redirect($this->generateUrl('frontend_user_verify'));
+        }
+
+        try {
+            $ss    = $this->get('api.service.subscriber');
+            $user  = $ss->getItemBy(sprintf('email = "%s" limit 1', $email));
+            $token = $user->token;
+
+            if (empty($token)) {
+                $this->get('session')->getFlashBag()
+                    ->and('error', _('This account is already verified'));
+
+                return $this->redirect($this->generateUrl('frontend_user_verify'));
+            }
+
+            $data = [
+                'name'  => $user->name,
+                'token' => $token,
+                'email' => $email
+            ];
+
+            $this->sendCreateEmail($data);
+
+            return $this->redirect($this->generateUrl('frontend_authentication_login'));
+        } catch (GetItemException $e) {
+            $this->get('application.log')->error(
+                'user.verify.failure: ' . $email
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to find your account'));
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        }
+    }
+
+    /**
      * Updates the user data.
      *
      * @param Request $request The request object.

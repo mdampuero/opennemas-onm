@@ -3,6 +3,16 @@ frontend_user_activate:
     defaults: { _controller: FrontendBundle:User:verify }
     methods: [ GET ]
 
+frontend_user_mail:
+    path: /user/verify
+    defaults: { _controller: FrontendBundle:User:showVerification }
+    methods: [ GET ]
+
+frontend_user_verify:
+    path: /user/verify
+    defaults: { _controller: FrontendBundle:User:sendVerification }
+    methods: [ POST ]
+
 frontend_user_register:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:register }
