@@ -71,7 +71,7 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testOnNewsstandUpdate()
     {
-        $item = new Content([ 'content_type_name' => 'attachment' ]);
+        $item = new Content([ 'content_type_name' => 'kiosko' ]);
 
         $this->event->expects($this->once())->method('hasArgument')
             ->with('item')->willReturn(true);
@@ -82,6 +82,21 @@ class NewsstandSubscriberTest extends \PHPUnit\Framework\TestCase
             ->with($item)->willReturn($this->helper);
         $this->helper->expects($this->at(1))->method('deleteFile')->with($item);
         $this->helper->expects($this->at(2))->method('deleteList');
+
+        $this->subscriber->onNewsstandUpdate($this->event);
+    }
+
+    /**
+     * Tests onNewsstandUpdate when contents updated but it is not a newsstand.
+     */
+    public function testOnNewsstandUpdateWhenNoNewsstands()
+    {
+        $item = new Content([ 'content_type_name' => 'flob' ]);
+
+        $this->event->expects($this->once())->method('hasArgument')
+            ->with('item')->willReturn(true);
+        $this->event->expects($this->once())->method('getArgument')
+            ->with('item')->willReturn($item);
 
         $this->subscriber->onNewsstandUpdate($this->event);
     }

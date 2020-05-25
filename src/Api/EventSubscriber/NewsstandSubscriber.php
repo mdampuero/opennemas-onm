@@ -73,6 +73,14 @@ class NewsstandSubscriber implements EventSubscriberInterface
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
+        $items = array_filter($items, function ($a) {
+            return $a->content_type_name === 'kiosko';
+        });
+
+        if (empty($items)) {
+            return;
+        }
+
         foreach ($items as $item) {
             $this->helper->deleteItem($item)->deleteFile($item);
         }
