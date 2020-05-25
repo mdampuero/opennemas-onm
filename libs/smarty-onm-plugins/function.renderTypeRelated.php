@@ -60,15 +60,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             break;
     }
 
-    $patterns     = [ '/"/', '/\'/', '/“/' ];
-    $replace      = [ '', '', '' ];
-    $titleCleaned = preg_replace($patterns, $replace, $content->title);
-
-    $html = '<a title="' . $titleCleaned . '" href="' . get_url($content, ['_absolute' => true]) . '"';
-    if ($content->fk_content_type == 3) {
-        $html .= ' target="_blank"';
-    }
-    $html .= '><span ' . $class . '></span>' . clearslash($content->title) . '</a>';
+    $html = sprintf('<a href="%s"><span %s>%s</span></a>', get_url($content), $class, get_title($content));
 
     return $html;
 }
