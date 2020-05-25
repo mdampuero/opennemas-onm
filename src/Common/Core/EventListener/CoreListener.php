@@ -74,7 +74,7 @@ class CoreListener
 
         $this->security->setInstance($instance);
 
-        if ($this->isIgnored($uri) || !in_array($host, $instance->domains)) {
+        if ($this->isIgnored($uri)) {
             return;
         }
 
