@@ -70,35 +70,34 @@ class RssController extends FrontendController
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
         $this->setViewExpireDate($expire);
 
-        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
+        $categoryID = 0;
+        $rssTitle   = _('Homepage News');
+
+        if (!empty($categoryName)) {
+            try {
+                $oql = sprintf(
+                    'enabled = 1 and archived = 0'
+                    . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
+                    $categoryName
+                );
+
+                $category   = $this->get('api.service.category')
+                    ->getItemBy($oql);
+                $categoryID = $category->id;
+                $rssTitle   = $category->name;
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
+
+        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryID);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            $id       = 0;
-            $rssTitle = _('Homepage News');
-
-            if (!empty($categoryName)) {
-                try {
-                    $oql = sprintf(
-                        'enabled = 1 and archived = 0'
-                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
-                        $categoryName
-                    );
-
-                    $c = $this->get('api.service.category')
-                        ->getItemBy($oql);
-
-                    $id       = $c->id;
-                    $rssTitle = $c->title;
-                } catch (\Exception $e) {
-                    throw new ResourceNotFoundException();
-                }
-            }
-
             list($contentPositions, $contents, , ) =
                 $this->get('api.service.frontpage')
-                ->getCurrentVersionForCategory($id);
+                ->getCurrentVersionForCategory($categoryID);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -125,7 +124,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,frontpage-' . $categoryName
+            'x-tags'      => 'rss,frontpage-' . $categoryID
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');

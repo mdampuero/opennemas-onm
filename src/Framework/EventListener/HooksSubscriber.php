@@ -279,9 +279,7 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $content  = $event->getArgument('item');
-        $category = $this->container->get('api.service.category')
-            ->getItem($content->category_id);
+        $content = $event->getArgument('item');
 
         // Clean cache for the content
         $this->template
@@ -298,12 +296,12 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('rss', 'frontpage', 'home')
                 ->delete('rss', 'last')
                 ->delete('rss', 'fia')
-                ->delete('rss', $category->name)
+                ->delete('rss', 'frontpage', $content->category_id)
                 ->delete('sitemap', 'image')
                 ->delete('sitemap', 'news')
                 ->delete('sitemap', 'web')
-                ->delete('frontpage', 'home')
-                ->delete('frontpage', 'category', $category->name);
+                ->delete('frontpage', 'category', 'home')
+                ->delete('frontpage', 'category', $content->category_id);
         } elseif ($content->content_type_name == 'video') {
             $this->template->delete('sitemap', 'video');
         } elseif ($content->content_type_name == 'opinion') {
@@ -338,7 +336,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
             $this->container->get('core.locale')->setContext('backend');
 
-            $category = $category->name;
+            $category = $category->id;
         }
 
         $this->template
@@ -348,7 +346,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('rss', 'last')
             ->delete('rss', 'fia');
 
-        $this->logger->notice("Cleaning frontpage cache for category: {$category} ($category)");
+        $this->logger->info("Cleaning frontpage cache for category: {$category} ($category)");
     }
 
     /**

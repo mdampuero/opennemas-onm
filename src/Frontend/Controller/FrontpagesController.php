@@ -67,7 +67,9 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
+        $cacheId = $categoryName == 'home'
+            ? $this->view->getCacheId('frontpage', 'category', $categoryName, $lastSaved)
+            : $this->view->getCacheId('frontpage', 'category', $categoryId, $lastSaved);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
