@@ -57,10 +57,10 @@ class Frontpages
                 $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
             }
 
-            $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-                $content->author = $ur->find($content->fk_author);
+                $content->author = getService('api.service.author')
+                    ->getItem($content->fk_author);
                 if (!is_null($content->author)) {
                     $content->author->external = 1;
                 }
@@ -175,11 +175,10 @@ class Frontpages
             $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
         }
 
-        $ur = getService('user_repository');
         // Overloading information for contents
         foreach ($articles as &$content) {
             // Load category related information
-            $content->author = $ur->find($content->fk_author);
+            $content->author = getService('api.service.author')->getItem($content->fk_author);
 
             if (!is_null($content->author)) {
                 $content->author->photo            = $content->author->getPhoto();

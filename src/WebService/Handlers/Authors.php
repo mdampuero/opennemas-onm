@@ -26,9 +26,7 @@ class Authors
     {
         $this->validateInt($id);
 
-        $ur = getService('user_repository');
-
-        $author = $ur->find($id);
+        $author = getService('api.service.author')->getItem($id);
 
         return $author;
     }

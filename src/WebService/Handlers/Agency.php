@@ -139,10 +139,8 @@ class Agency
             }
         }
 
-        $ur = getService('user_repository');
-
         // Get author obj
-        $article->author = $ur->find($article->fk_author);
+        $article->author = getService('api.service.author')->getItem($article->fk_author);
 
         $authorPhoto = '';
         if (isset($article->author->avatar_img_id) &&
