@@ -50,6 +50,10 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Router')
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -85,6 +89,9 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.url_generator':
                 return $this->ugh;
+
+            case 'router':
+                return $this->router;
 
             default:
                 return null;
@@ -236,15 +243,45 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests get_author_url.
      */
-    public function testGetAuthorUrl()
+    public function testGetAuthorUrlWhenAuthor()
     {
-        $author = new User([ 'title' => 'gorp' ]);
+        $author = new User([
+            'name' => 'gorp',
+            'slug' => 'gorp',
+        ]);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_author_frontpage', [ 'slug' => 'gorp' ])
+            ->willReturn('/author/gorp');
+
+        $this->assertNull(get_author_url(131));
+
+        $this->assertEquals('/author/gorp', get_author_url($author));
+    }
+
+    /**
+     * Tests get_author_url.
+     */
+    public function testGetAuthorUrlWhenContent()
+    {
+        $content = new Content([
+            'content_type_name' => 'opinion',
+            'fk_author' => 20,
+            'is_blog'   => 1
+        ]);
+        $author = new User([
+            'pk_content_author' => 20,
+            'name'              => 'glork',
+            'slug'              => 'glork',
+        ]);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->with(20)->willReturn($author);
 
         $this->ugh->expects($this->once())->method('generate')
             ->with($author)->willReturn('/foo/glork');
 
-        $this->assertNull(get_author_url(131));
-        $this->assertEquals('/foo/glork', get_author_url($author));
+        $this->assertEquals('/foo/glork', get_author_url($content));
     }
 
     /**
@@ -252,13 +289,18 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAuthorRssUrl()
     {
-        $author = new User([ 'title' => 'gorp' ]);
+        $author = new User([
+            'pk_content_author' => 20,
+            'name'              => 'gorp',
+            'inrss'             => 1,
+        ]);
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($author)->willReturn('rss/foo/glork');
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_rss_author', [ 'author_slug' => 'gorp' ])
+            ->willReturn('rss/author/gorp');
 
-        $this->assertNull(get_author_url(131));
-        $this->assertEquals('rss/foo/glork', get_author_url($author));
+        $this->assertNull(get_author_rss_url(131));
+        $this->assertEquals('rss/author/gorp', get_author_rss_url($author));
     }
 
     /**
@@ -331,10 +373,14 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasAuthorUrl()
     {
-        $author = new User([ 'name' => 'Michelle Price' ]);
+        $author = new User([
+            'name' => 'michelle price',
+            'slug' => 'michelle-price',
+        ]);
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($author)->willReturn('/foo/michelle-price');
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_author_frontpage', [ 'slug' => 'michelle-price' ])
+            ->willReturn('/author/michelle-price');
 
         $this->assertFalse(has_author_url(131));
         $this->assertTrue(has_author_url($author));
@@ -345,13 +391,18 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasAuthorRssUrl()
     {
-        $author = new User([ 'name' => 'Michelle Price' ]);
+        $author = new User([
+            'pk_content_author' => 20,
+            'name'              => 'michelle-price',
+            'inrss'             => 1,
+        ]);
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($author)->willReturn('/rss/foo/michelle-price');
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_rss_author', [ 'author_slug' => 'michelle-price' ])
+            ->willReturn('rss/author/michelle-price');
 
-        $this->assertFalse(has_author_url(131));
-        $this->assertTrue(has_author_url($author));
+        $this->assertFalse(has_author_rss_url(131));
+        $this->assertTrue(has_author_rss_url($author));
     }
 
 

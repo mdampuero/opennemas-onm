@@ -6,7 +6,7 @@
  *                    provided, the function will try to search the item in the
  *                    template.
  *
- * @return \Common\Model\Entity\Userr The author if present. Null otherwise.
+ * @return \Common\Model\Entity\User The author if present. Null otherwise.
  */
 function get_author($item = null) : ?\Common\Model\Entity\User
 {
@@ -190,9 +190,22 @@ function get_author_url($item = null) : ?string
 {
     $author = get_author($item);
 
-    return !empty($author)
-        ? getService('core.helper.url_generator')->generate($author)
-        : null;
+    if (isset($item->content_type_name) && $item->content_type_name === 'opinion') {
+        return !empty($author)
+            ? getService('core.helper.url_generator')->generate($author)
+            : null;
+    }
+
+    if (!empty($author->slug)) {
+        $routeName   = 'frontend_author_frontpage';
+        $routeParams = [
+            'slug' => $author->slug,
+        ];
+
+        return getService('router')->generate($routeName, $routeParams);
+    }
+
+    return null;
 }
 
 /**
@@ -208,15 +221,17 @@ function get_author_rss_url($item = null) : ?string
 {
     $author = get_author($item);
 
-    $routeName   = 'frontend_rss_author';
-    $routeParams = [
-        'author_slug' => $author->slug,
-    ];
+    if (!empty($author)) {
+        $routeName   = 'frontend_rss_author';
+        $routeParams = [
+            'author_slug' => $author->slug,
+        ];
 
-    if ($author->inrss) {
-        $url = getService('router')->generate($routeName, $routeParams);
+        if ($author->inrss) {
+            $url = getService('router')->generate($routeName, $routeParams);
 
-        return !empty($url) ? $url : null;
+            return !empty($url) ? $url : null;
+        }
     }
 
     return null;
@@ -236,7 +251,7 @@ function is_blog($item = null) : bool
 {
     $author = get_author($item);
 
-    return !empty($author) ? $author->is_blog : null;
+    return !empty($author->is_blog) ? $author->is_blog : false;
 }
 
 /**
@@ -255,8 +270,6 @@ function has_author_rss_url($item = null) : bool
 
     return !empty($url);
 }
-
-
 
 /**
  * Checks if there is an author based on a content or author provided as
