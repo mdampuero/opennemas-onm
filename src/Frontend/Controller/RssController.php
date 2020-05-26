@@ -77,7 +77,7 @@ class RssController extends FrontendController
             try {
                 $oql = sprintf(
                     'enabled = 1 and archived = 0'
-                    . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
+                    . ' and name regexp "(%%\"|^)%s(\"%%|$)"',
                     $categoryName
                 );
 
