@@ -340,6 +340,30 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_author_social_facebook_url.
+     */
+    public function testGetAuthorSocialFacebookUrl()
+    {
+        $this->assertNull(get_author_social_facebook_url(131));
+        $this->assertEquals('https://www.facebook.com/MichellePrice', get_author_social_facebook_url(new User([
+            'name'    => 'Michelle Price',
+            'facebook' => 'MichellePrice'
+        ])));
+    }
+
+    /**
+     * Tests is_blog.
+     */
+    public function testIsBlog()
+    {
+        $this->assertFalse(is_blog(131));
+        $this->assertTrue(is_blog(new User([
+            'name'    => 'Michelle Price',
+            'is_blog' => 1
+        ])));
+    }
+
+    /**
      * Tests has_author.
      */
     public function testHasAuthor()
@@ -405,7 +429,6 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(has_author_rss_url($author));
     }
 
-
     /**
      * Tests has_author_bio_summary.
      */
@@ -419,6 +442,18 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests has_author_bio_body.
+     */
+    public function testHasAuthorBioBody()
+    {
+        $this->assertFalse(has_author_bio_body(131));
+        $this->assertTrue(has_author_bio_body(new User([
+            'name'            => 'Michelle Price',
+            'bio_description' => 'Journalist and writer'
+        ])));
+    }
+
+    /**
      * Tests has_author_social_twitter_url.
      */
     public function testHasAuthorTwitterUrl()
@@ -427,6 +462,18 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(has_author_social_twitter_url(new User([
             'name'    => 'Michelle Price',
             'twitter' => '@MichellePrice'
+        ])));
+    }
+
+    /**
+     * Tests has_author_social_facebook_url.
+     */
+    public function testHasAuthorFacebookUrl()
+    {
+        $this->assertFalse(has_author_social_facebook_url(131));
+        $this->assertTrue(has_author_social_facebook_url(new User([
+            'name'     => 'Michelle Price',
+            'facebook' => 'MichellePrice'
         ])));
     }
 }
