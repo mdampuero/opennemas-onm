@@ -157,32 +157,34 @@ class RssController extends FrontendController
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
         $this->setViewExpireDate($expire);
 
-        $cacheID = $this->view->getCacheId('rss', $type, $slug);
+        $rssTitle = $titles[$type];
+
+        if (!empty($slug)) {
+            try {
+                $oql = sprintf(
+                    'enabled = 1 and archived = 0 '
+                    . 'and name regexp "(.*\"|^)%s(\".*|$)"',
+                    $slug
+                );
+
+                $category = $this->get('api.service.category')
+                    ->getItemBy($oql);
+
+                $id       = $category->id;
+                $slug     = $category->name;
+                $rssTitle = $rssTitle . ' - ' . $category->title;
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
+
+        $cacheID = empty($id) ?
+            $this->view->getCacheId('rss', $type, '') :
+            $this->view->getCacheId('rss', $type, $id);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            $rssTitle = $titles[$type];
-
-            if (!empty($slug)) {
-                try {
-                    $oql = sprintf(
-                        'enabled = 1 and archived = 0 '
-                        . 'and name regexp "(.*\"|^)%s(\".*|$)"',
-                        $slug
-                    );
-
-                    $category = $this->get('api.service.category')
-                        ->getItemBy($oql);
-
-                    $id       = $category->id;
-                    $slug     = $category->name;
-                    $rssTitle = $rssTitle . ' - ' . $category->title;
-                } catch (\Exception $e) {
-                    throw new ResourceNotFoundException();
-                }
-            }
-
             $total = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('elements_in_rss', 10);
