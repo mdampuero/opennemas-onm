@@ -22,7 +22,8 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->um = $this->getMockBuilder('UserManager')
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
             ->setMethods([ 'getList' ])
             ->getMock();
 
@@ -30,14 +31,14 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->um->expects($this->any())->method('getList')
+        $this->as->expects($this->any())->method('getList')
             ->willReturn([
                 2,
                 'items' => [new User([ 'id' => 1 ]), new User([ 'id' => 2 ])]
             ]);
 
         $this->container->expects($this->any())->method('get')
-            ->willReturn($this->um);
+            ->willReturn($this->as);
 
         $this->helper = new OqlHelper($this->container);
     }
