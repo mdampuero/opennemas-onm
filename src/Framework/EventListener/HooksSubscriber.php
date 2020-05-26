@@ -343,6 +343,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('frontpage', $category)
             ->delete('frontpage', 'category', $category)
             ->delete('rss', 'frontpage', 'home')
+            ->delete('rss', 'frontpage', $category)
             ->delete('rss', 'last')
             ->delete('rss', 'fia');
 
