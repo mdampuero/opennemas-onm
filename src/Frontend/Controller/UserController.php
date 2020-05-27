@@ -280,8 +280,8 @@ class UserController extends Controller
                     '<li>Sign in <a href="%s">here</a>.</li>' .
                     '<li>Recover password <a href="%s">here</a>.</li>' .
                     '</ul>'),
-                    $this->generateUrl('frontend_user_show'),
-                    $this->generateUrl('frontend_password_reset')
+                    $this->generateUrl('frontend_authentication_login'),
+                    $this->generateUrl('frontend_user_recover')
                 ));
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
