@@ -275,9 +275,11 @@ class UserController extends Controller
 
             $request->getSession()->getFlashBag()
                 ->add('error', sprintf(
-                    _('The email address is already in use. ' .
-                    'Sign in <a href="%s">here</a>. ' .
-                    'Recover password <a href="%s">here</a>.'),
+                    _('<strong>The email address is already in use.</strong>' .
+                    '<ul class="mb-0">' .
+                    '<li>Sign in <a href="%s">here</a>.</li>' .
+                    '<li>Recover password <a href="%s">here</a>.</li>' .
+                    '</ul>'),
                     $this->generateUrl('frontend_user_show'),
                     $this->generateUrl('frontend_password_reset')
                 ));
