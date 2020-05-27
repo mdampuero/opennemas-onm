@@ -1706,6 +1706,12 @@ users:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: user_type
+            columns: [type]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: avatar_img_id
