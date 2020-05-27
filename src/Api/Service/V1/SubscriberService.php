@@ -10,6 +10,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 
 class SubscriberService extends UserService
 {
@@ -59,5 +60,21 @@ class SubscriberService extends UserService
         return $this->container->get('orm.oql.fixer')->fix($oql)
             ->addCondition('type != 0')
             ->getOql();
+    }
+
+    /**
+     * Get all the subscribers users for report.
+     *
+     * @return array The list of items.
+     */
+    public function getReport()
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->getReportSubscribers();
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
     }
 }
