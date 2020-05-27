@@ -64,28 +64,49 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests refresh and getCategories.
+     * Tests getReportSubscribers.
      */
-    public function testRefresh()
+    public function testGetReportSubscribers()
     {
-        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
-            [ 'id' => 1, 'name' => 'glork' ],
-            [ 'id' => 2, 'name' => 'thud' ]
-        ]);
+        $user1 = [
+            'id' => 1,
+            'email' => 'gorp@flob.org',
+            'name' => 'gorp',
+            'activated' => 1,
+            'user_groups' => '7, 10',
+            'register_date' => '2020-02-13 13:30:00'
+        ];
 
-        $method = new \ReflectionMethod($this->repository, 'refresh');
-        $method->setAccessible(true);
+        $user2 = [
+            'id' => 1,
+            'email' => 'grault@flob.org',
+            'name' => 'grault',
+            'activated' => 1,
+            'user_groups' => null,
+            'register_date' => null
+        ];
 
-        $users = $method->invokeArgs($this->repository, [ [ [ 'id' => 1 ] , [ 'id' => 2 ] ] ]);
+        $this->conn->expects($this->once())->method('fetchAll')
+            ->with(
+                'SELECT id, email, name, activated,'
+                . ' GROUP_CONCAT(user_group_id) as user_groups,'
+                . ' meta_value as register_date FROM users'
+                . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
+                . ' LEFT JOIN usermeta ON usermeta.user_id = id AND meta_key = "register_date"'
+                . ' WHERE type != 0'
+                . ' GROUP BY id'
+            )->willReturn([ $user1, $user2 ]);
+
+        $user1['user_groups'] = [7, 10];
+        $user1['register_date'] = '2020-02-13';
+
+        $user2['user_groups'] = [];
+        $user2['register_date'] = '';
+
 
         $this->assertEquals(
-            [ 'id' => 1, 'name' => 'glork' ],
-            $users[1]->getData()
-        );
-
-        $this->assertEquals(
-            [ 'id' => 2, 'name' => 'thud' ],
-            $users[2]->getData()
+            [ $user1, $user2 ],
+            $this->repository->getReportSubscribers()
         );
     }
 }
