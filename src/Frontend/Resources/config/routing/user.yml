@@ -39,6 +39,6 @@ frontend_user_show:
     methods:  [ GET ]
 
 frontend_user_update:
-    path:     /user/me
+    path:     /user
     defaults: { _controller: FrontendBundle:User:update }
     methods:  [ POST ]
