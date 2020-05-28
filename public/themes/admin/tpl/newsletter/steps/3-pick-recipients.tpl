@@ -137,8 +137,8 @@
                     </div>
                     <div class="m-t-15 m-b-10" ng-repeat="item in source.items|filter:{ type: 'acton' }">
                       <div class="checkbox">
-                        <input id="checkbox-left-[% item.uuid %]" checklist-model="source.selected" checklist-value="item" type="checkbox">
-                        <label for="checkbox-left-[% item.uuid %]">
+                        <input id="checkbox-left-[% item.id %]" checklist-model="source.selected" checklist-value="item" type="checkbox">
+                        <label for="checkbox-left-[% item.id %]">
                           <strong>[% item.name %]</strong>
                         </label>
                       </div>
