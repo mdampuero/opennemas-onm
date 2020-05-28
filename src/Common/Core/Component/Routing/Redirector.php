@@ -144,7 +144,7 @@ class Redirector
      */
     protected function getCacheId($slug, $type)
     {
-        if (is_null($type)) {
+        if (empty($type)) {
             $type = [];
         }
 

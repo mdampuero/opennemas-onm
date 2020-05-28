@@ -68,7 +68,9 @@ class RedirectorController extends Controller
 
         $url = $this->get('core.helper.url_generator')->generate($content);
 
-        if ($format === 'amp' && $content->content_type_name === 'article') {
+        if ($format === 'amp' && ($content->content_type_name === 'article' ||
+            $content->content_type_name === 'opinion' ||
+            $content->content_type_name === 'video')) {
             $url = str_replace('.html', '.amp.html', $url);
         }
 
