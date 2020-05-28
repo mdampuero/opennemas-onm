@@ -58,6 +58,9 @@ class GAnalyticsRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
+        $this->ds->expects($this->any())->method('get')
+            ->willReturn([ ['api_key' => 'UA-453942342-1'] ]);
+
         $this->renderer = new GAnalyticsRenderer($this->container);
     }
 
