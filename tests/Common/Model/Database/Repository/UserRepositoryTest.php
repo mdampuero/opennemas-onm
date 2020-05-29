@@ -67,7 +67,7 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
             'name' => 'gorp',
             'activated' => 1,
             'user_groups' => '7, 10',
-            'register_date' => '2020-02-13 13:30:00'
+            'meta' => '{"register_date":"2020-02-13 13:30:00","foobar":"baz"}'
         ];
 
         $user2 = [
@@ -75,27 +75,26 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
             'email' => 'grault@flob.org',
             'name' => 'grault',
             'activated' => 1,
-            'user_groups' => null,
-            'register_date' => null
+            'user_groups'  => null,
+            'meta' => null
         ];
 
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(
                 'SELECT id, email, name, activated,'
-                . ' GROUP_CONCAT(user_group_id) as user_groups,'
-                . ' meta_value as register_date FROM users'
+                . ' GROUP_CONCAT(DISTINCT user_group_id) as user_groups, '
+                . ' CONCAT(\'{\', GROUP_CONCAT(\'"\', meta_key, \'":"\', meta_value, \'"\') ,\'}\') AS meta FROM users '
                 . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
-                . ' LEFT JOIN usermeta ON usermeta.user_id = id AND meta_key = "register_date"'
+                . ' LEFT JOIN usermeta ON usermeta.user_id = id'
                 . ' WHERE type != 0'
                 . ' GROUP BY id'
             )->willReturn([ $user1, $user2 ]);
 
         $user1['user_groups'] = [7, 10];
-        $user1['register_date'] = '2020-02-13';
-
         $user2['user_groups'] = [];
-        $user2['register_date'] = '';
 
+        $user1['meta'] = [ 'register_date' => '2020-02-13 13:30:00', 'foobar' => 'baz' ];
+        $user2['meta'] = [];
 
         $this->assertEquals(
             [ $user1, $user2 ],

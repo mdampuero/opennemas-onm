@@ -14,10 +14,10 @@ class UserRepository extends BaseRepository
     public function findSubscribers()
     {
         $sql = 'SELECT id, email, name, activated,'
-            . ' GROUP_CONCAT(user_group_id) as user_groups,'
-            . ' meta_value as register_date FROM users'
+            . ' GROUP_CONCAT(DISTINCT user_group_id) as user_groups, '
+            . ' CONCAT(\'{\', GROUP_CONCAT(\'"\', meta_key, \'":"\', meta_value, \'"\') ,\'}\') AS meta FROM users '
             . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
-            . ' LEFT JOIN usermeta ON usermeta.user_id = id AND meta_key = "register_date"'
+            . ' LEFT JOIN usermeta ON usermeta.user_id = id'
             . ' WHERE type != 0'
             . ' GROUP BY id';
 
@@ -29,9 +29,9 @@ class UserRepository extends BaseRepository
                 ? explode(',', $subscriber['user_groups'])
                 : [];
 
-            $subscriber['register_date'] = !empty($subscriber['register_date'])
-                ? date('Y-m-d', strtotime($subscriber['register_date']))
-                : '';
+            $subscriber['meta'] = !empty($subscriber['meta'])
+                ? json_decode($subscriber['meta'], true)
+                : [];
         }
 
         return $subscribers;
