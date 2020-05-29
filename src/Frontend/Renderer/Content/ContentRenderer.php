@@ -41,9 +41,8 @@ class ContentRenderer extends Renderer
      */
     protected function getTemplate(&$params)
     {
-        $class              = strtolower(get_class($params['item']));
-        $default            = 'frontpage/contents/_' . $class . '.tpl';
-        $params['cssclass'] = $class;
+        $class   = strtolower(get_class($params['item']));
+        $default = 'frontpage/contents/_' . $class . '.tpl';
 
         if ($class == 'article' && !empty($params['tpl'])) {
             return $params['tpl'];
