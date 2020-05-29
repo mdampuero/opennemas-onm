@@ -103,7 +103,7 @@ class SubscriberController extends ApiController
 
             foreach ($extraFields as $extraField) {
                 if (array_key_exists($extraField['name'], $user)) {
-                    array_push($userInfo, $user[$extraField['name']]);
+                    $userInfo[] = $user[$extraField['name']];
                 }
             }
 
