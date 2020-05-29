@@ -11,7 +11,7 @@ class UserRepository extends BaseRepository
      *
      * @return array The list of activated users.
      */
-    public function getReportSubscribers()
+    public function findSubscribers()
     {
         $sql = 'SELECT id, email, name, activated,'
             . ' GROUP_CONCAT(user_group_id) as user_groups,'

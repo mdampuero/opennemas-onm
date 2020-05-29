@@ -57,9 +57,9 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getReportSubscribers.
+     * Tests findSubscribers.
      */
-    public function testGetReportSubscribers()
+    public function testfindSubscribers()
     {
         $user1 = [
             'id' => 1,
@@ -99,7 +99,7 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [ $user1, $user2 ],
-            $this->repository->getReportSubscribers()
+            $this->repository->findSubscribers()
         );
     }
 }

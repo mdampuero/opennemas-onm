@@ -42,7 +42,7 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy', 'getReportSubscribers' ])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy', 'findSubscribers' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -121,7 +121,7 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Entity([ 'type' => 2 ]);
 
-        $this->repository->expects($this->once())->method('getReportSubscribers')
+        $this->repository->expects($this->once())->method('findSubscribers')
             ->willReturn($item);
 
         $this->assertEquals($item, $this->service->getReport());
@@ -134,7 +134,7 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetReportWhenErrorWhenNoSubscriber()
     {
-        $this->repository->expects($this->once())->method('getReportSubscribers')
+        $this->repository->expects($this->once())->method('findSubscribers')
             ->will($this->throwException(new \Exception()));
 
         $this->service->getReport();

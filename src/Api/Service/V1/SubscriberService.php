@@ -65,7 +65,7 @@ class SubscriberService extends UserService
         try {
             return $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
-                ->getReportSubscribers();
+                ->findSubscribers();
         } catch (\Exception $e) {
             throw new GetListException($e->getMessage(), $e->getCode());
         }
