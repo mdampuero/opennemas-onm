@@ -65,8 +65,6 @@ class Video extends Content
         switch ($name) {
             case 'content_type_name':
                 return 'Video';
-            case 'uri':
-                return ltrim(getService('core.helper.url_generator')->generate($this), '/');
             default:
                 return parent::__get($name);
         }

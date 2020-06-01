@@ -29,14 +29,6 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             } else {
                 $class = 'class="res-file" ';
             }
-
-            // Generate correct attachment uri
-            if ($content->fullFilePath) {
-                $content->uri = $content->fullFilePath;
-            } else {
-                $path         = ContentManager::getFilePathFromId($content->id);
-                $content->uri = 'media' . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $path;
-            }
             break;
         case 4:
             //Opinion

@@ -363,8 +363,6 @@ class Content implements \JsonSerializable, CsvSerializable
             $data[$key] = $this->__get($key);
         }
 
-        $data['uri'] = get_url($this);
-
         return $data;
     }
 

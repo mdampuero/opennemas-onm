@@ -103,8 +103,6 @@ class Opinion extends Content
                 }
 
                 return $authorObj;
-            case 'uri':
-                return ltrim(getService('core.helper.url_generator')->generate($this), '/');
             default:
                 return parent::__get($name);
         }

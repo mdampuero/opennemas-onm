@@ -66,11 +66,6 @@ class Attachment extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = "media" . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $this->path;
-
-                return ($uri !== '') ? $uri : $this->permalink;
-
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
 
