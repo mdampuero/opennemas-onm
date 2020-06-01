@@ -97,15 +97,13 @@ class SubscriberController extends ApiController
                 $user['email'],
                 $user['name'],
                 ($user['activated']) ? _('Yes') : _('No'),
-                $user['meta']['register_date'] ?? '',
+                $user['register_date'] ?? '',
                 implode(',', $userGroups),
             ];
 
             foreach ($extraFields as $extraField) {
-                if (array_key_exists('meta', $user)
-                    && array_key_exists($extraField['name'], $user['meta'])
-                ) {
-                    $userInfo[] = $user['meta'][$extraField['name']];
+                if (array_key_exists($extraField['name'], $user)) {
+                    $userInfo[] = $user[$extraField['name']];
                 }
             }
 
