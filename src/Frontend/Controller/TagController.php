@@ -138,10 +138,7 @@ class TagController extends FrontendController
     protected function getItem(Request $request)
     {
         $locale = $this->get('core.locale')->getRequestLocale();
-        $slug   = $this->get('data.manager.filter')
-            ->set($request->get('slug', null))
-            ->filter('slug')
-            ->get();
+        $slug   = $request->get('slug', null);
 
         try {
             $item = $this->get('api.service.tag')->getList(sprintf(
@@ -289,13 +286,13 @@ class TagController extends FrontendController
                 continue;
             }
 
-            $normalized = $this->get('data.manager.filter')
+            $slug = $this->get('data.manager.filter')
                 ->set($item->name[0])
-                ->filter('normalize')
+                ->filter('slug')
                 ->get();
 
-            if (in_array($normalized[0], $letters)) {
-                $tags[$normalized[0]][] = $item;
+            if (in_array($slug[0], $letters)) {
+                $tags[$slug[0]][] = $item;
                 continue;
             }
 
