@@ -72,7 +72,6 @@ class Frontpages
 
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
-                    $content->uri         = "ext" . get_url($content);
                     $content->externalUri = getService('router')
                         ->generate(
                             'frontend_external_article_show',
@@ -96,16 +95,16 @@ class Frontpages
                 foreach ($content->related_contents as &$item) {
                     // Generate content uri if it's not an attachment
                     if ($item->fk_content_type == '4') {
-                        $item->uri = "ext" . preg_replace('@//@', '/author/', get_url($item));
+                        $item->externalUri = "ext" . preg_replace('@//@', '/author/', get_url($item));
                     } elseif ($item->fk_content_type == 3) {
                         // Get instance media
                         $basePath = INSTANCE_MEDIA;
                         // Get file path for attachments
                         $filePath = \ContentManager::getFilePathFromId($item->id);
                         // Compose the full url to the file
-                        $item->fullFilePath = $basePath . FILE_DIR . $filePath;
+                        $item->externalUri = $basePath . FILE_DIR . $filePath;
                     } else {
-                        $item->uri = "ext" . get_url($item);
+                        $item->externalUri = "ext" . get_url($item);
                     }
                 }
             }
@@ -189,7 +188,6 @@ class Frontpages
 
              // Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
-                $content->uri         = "ext" . get_url($content);
                 $content->externalUri = getService('router')
                     ->generate(
                         'frontend_external_article_show',

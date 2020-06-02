@@ -82,7 +82,7 @@ class Opinions
         $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext' . get_url($opinion);
+            $opinion->externalUri = 'ext' . get_url($opinion);
         }
 
         return $opinions;
@@ -108,7 +108,7 @@ class Opinions
         $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext' . get_url($opinion);
+            $opinion->externalUri = 'ext' . get_url($opinion);
         }
 
         return $opinions;
@@ -135,7 +135,7 @@ class Opinions
         $opinions = $or->findBy($filters, $order, 20, $page);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext' . get_url($opinion);
+            $opinion->externalUri = 'ext' . get_url($opinion);
         }
 
         return $opinions;
@@ -225,7 +225,7 @@ class Opinions
 
         foreach ($otherOpinions as &$otherOpinion) {
             $otherOpinion->author_name_slug = $opinion->author_name_slug;
-            $otherOpinion->uri              = 'ext' . get_url($otherOpinion);
+            $otherOpinion->externalUri      = 'ext' . get_url($otherOpinion);
         }
 
         return $otherOpinions;
