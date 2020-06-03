@@ -82,7 +82,6 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
                 'SELECT id, email, name, activated,'
                 . ' GROUP_CONCAT(DISTINCT user_group_id) as user_groups FROM users '
                 . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
-                . ' LEFT JOIN usermeta ON usermeta.user_id = id'
                 . ' WHERE type != 0'
                 . ' GROUP BY id'
             )->willReturn([ $user1, $user2 ]);
@@ -92,6 +91,7 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 [ 'user_id' => 1, 'meta_key' => 'register_date', 'meta_value' => '2020-02-13 13:30:00' ],
                 [ 'user_id' => 1, 'meta_key' => 'foobar', 'meta_value' => 'baz' ],
+                [ 'user_id' => 9, 'meta_key' => 'foobar', 'meta_value' => 'baz' ],
              ]);
 
         $user1['user_groups'] = [7, 10];
@@ -101,7 +101,7 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
         $user1['foobar']        = 'baz';
 
         $this->assertEquals(
-            [ $user1, $user2 ],
+            [ $user1['id'] => $user1, $user2['id'] => $user2 ],
             $this->repository->findSubscribers()
         );
     }

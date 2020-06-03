@@ -16,26 +16,31 @@ class UserRepository extends BaseRepository
         $sql = 'SELECT id, email, name, activated,'
             . ' GROUP_CONCAT(DISTINCT user_group_id) as user_groups FROM users '
             . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
-            . ' LEFT JOIN usermeta ON usermeta.user_id = id'
             . ' WHERE type != 0'
             . ' GROUP BY id';
 
         $subscribers = $this->conn->fetchAll($sql);
-        $usermetas   = $this->conn->fetchAll('SELECT * FROM usermeta');
+        $metas       = $this->conn->fetchAll('SELECT * FROM usermeta');
 
-        // Prepare user_groups and register_date user data
+        // Parse users for groups and metas
+        $users = [];
         foreach ($subscribers as &$subscriber) {
             $subscriber['user_groups'] = !empty($subscriber['user_groups'])
                 ? explode(',', $subscriber['user_groups'])
                 : [];
 
-            foreach ($usermetas as $usermeta) {
-                if ($subscriber['id'] === $usermeta['user_id']) {
-                    $subscriber[$usermeta['meta_key']] = $usermeta['meta_value'];
-                }
-            }
+            $users[$subscriber['id']] = $subscriber;
         }
 
-        return $subscribers;
+        foreach ($metas as $meta) {
+            if (!array_key_exists($meta['user_id'], $users)) {
+                // If this happens there is a database inconsistency
+                continue;
+            }
+
+            $users[$meta['user_id']][$meta['meta_key']] = $meta['meta_value'];
+        }
+
+        return $users;
     }
 }
