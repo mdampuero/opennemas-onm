@@ -1,15 +1,9 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Service\V1;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 
 class SubscriberService extends UserService
 {
@@ -59,5 +53,21 @@ class SubscriberService extends UserService
         return $this->container->get('orm.oql.fixer')->fix($oql)
             ->addCondition('type != 0')
             ->getOql();
+    }
+
+    /**
+     * Get all the subscribers users for report.
+     *
+     * @return array The list of items.
+     */
+    public function getReport()
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findSubscribers();
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
     }
 }
