@@ -181,17 +181,6 @@ class Authentication
 
         $error = $this->getError();
 
-        if ($error instanceof DisabledException) {
-            return sprintf(_(
-                '<strong>This account has not been verified.</strong>' .
-                '<ul class="mb-0">' .
-                '<li>To verify this account click on the link sent to your email.</li>' .
-                '<li>If you have not received any message. Check your spam box.</li>' .
-                '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
-                '</ul>'
-            ), $this->container->get('router')->generate('frontend_user_verify'));
-        }
-
         if ($error instanceof BadCredentialsException) {
             return _('Username or password incorrect.');
         }
@@ -202,6 +191,17 @@ class Authentication
 
         if ($error instanceof InvalidRecaptchaException) {
             return _('The reCAPTCHA was not entered correctly. Try to authenticate again.');
+        }
+
+        if ($error instanceof DisabledException) {
+            return sprintf(_(
+                '<strong>This account has not been verified.</strong>' .
+                '<ul class="mb-0">' .
+                '<li>To verify this account click on the link sent to your email.</li>' .
+                '<li>If you have not received any message. Check your spam box.</li>' .
+                '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
+                '</ul>'
+            ), $this->container->get('router')->generate('frontend_user_verify'));
         }
 
         return $error->getMessage();

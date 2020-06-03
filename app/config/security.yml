@@ -128,5 +128,5 @@ security:
         - { path: ^/api/v1/backend/*,              roles: [ ROLE_BACKEND ] }
         - { path: ^/managerws/(login|check),       roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/managerws,                     roles: [ ROLE_MANAGER ] }
-        - { path: ^/user$,                      roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/user$,                         roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/*,                             roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }
