@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Framework\Monolog;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +12,18 @@ class OnmFormatter
      * @var ServiceContainer
      */
     protected $container;
+    /**
+     * The patter to look for.
+     *
+     * @var array
+     */
+    protected $patterns;
+    /**
+     * The replacement string.
+     *
+     * @var string
+     */
+    protected $replacement = '<censored>';
 
     /**
      * Initializes the OnmFormatter.
@@ -28,6 +33,13 @@ class OnmFormatter
     public function __construct($container)
     {
         $this->container = $container;
+
+        $conn = $container->get('orm.connection.instance');
+
+        $this->patterns = [
+            '@' . $conn->user . '@',
+            '@' . $conn->password . '@'
+        ];
     }
 
     /*
@@ -39,6 +51,9 @@ class OnmFormatter
      */
     public function processRecord(array $record)
     {
+        $record['message'] = $this->getMessage($record['message']);
+
+        $record['extra']['context']  = $this->getContext($record['context']);
         $record['extra']['instance'] = $this->getInstance();
         $record['extra']['user']     = $this->getUser();
         $record['extra']['url']      = null;
@@ -82,6 +97,38 @@ class OnmFormatter
         }
 
         return null;
+    }
+
+    /*
+     * Replace the user & password in $context by generic message.
+     *
+     * @param array $context The context.
+     *
+     * @return array The preg_replace context.
+     */
+    protected function getContext(array $context)
+    {
+        return preg_replace(
+            $this->patterns,
+            $this->replacement,
+            json_encode($context)
+        );
+    }
+
+    /*
+     * Replace the user & password in $message by generic message.
+     *
+     * @param string $message The message.
+     *
+     * @return string The preg_replace message.
+     */
+    protected function getMessage(string $message)
+    {
+        return preg_replace(
+            $this->patterns,
+            $this->replacement,
+            $message
+        );
     }
 
     /**
