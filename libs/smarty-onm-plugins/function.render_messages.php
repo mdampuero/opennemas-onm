@@ -16,7 +16,7 @@ function smarty_function_render_messages($params, &$smarty)
         $style     = $type;
 
         foreach ($messages as $msg) {
-            $innerHTML .= "{$msg}<br>";
+            $innerHTML .= "{$msg}";
         }
 
         if ($type === 'error') {
@@ -25,9 +25,11 @@ function smarty_function_render_messages($params, &$smarty)
 
         if (!empty($innerHTML)) {
             $messagesHTML .= sprintf(
-                "<div class=\"alert alert-{$style}\" data-created=\"$created\">"
+                "<div class=\"message\">"
+                . "<div class=\"alert alert-{$style}\" data-created=\"$created\">"
                 . "<button class=\"close\" data-dismiss=\"alert\" type=\"button\">×</button>"
                 . "%s"
+                . "</div>"
                 . "</div>\n",
                 $innerHTML
             );
