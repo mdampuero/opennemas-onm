@@ -12,12 +12,14 @@ class OnmFormatter
      * @var ServiceContainer
      */
     protected $container;
+
     /**
      * The patter to look for.
      *
      * @var array
      */
     protected $patterns;
+
     /**
      * The replacement string.
      *
@@ -51,8 +53,7 @@ class OnmFormatter
      */
     public function processRecord(array $record)
     {
-        $record['message'] = $this->getMessage($record['message']);
-
+        $record['extra']['message']  = $this->getMessage($record['message']);
         $record['extra']['context']  = $this->getContext($record['context']);
         $record['extra']['instance'] = $this->getInstance();
         $record['extra']['user']     = $this->getUser();
@@ -100,11 +101,11 @@ class OnmFormatter
     }
 
     /*
-     * Replace the user & password in $context by generic message.
+     * Replaces the user & password in $context by generic message.
      *
      * @param array $context The context.
      *
-     * @return array The preg_replace context.
+     * @return array The censored context.
      */
     protected function getContext(array $context)
     {
@@ -112,22 +113,6 @@ class OnmFormatter
             $this->patterns,
             $this->replacement,
             json_encode($context)
-        );
-    }
-
-    /*
-     * Replace the user & password in $message by generic message.
-     *
-     * @param string $message The message.
-     *
-     * @return string The preg_replace message.
-     */
-    protected function getMessage(string $message)
-    {
-        return preg_replace(
-            $this->patterns,
-            $this->replacement,
-            $message
         );
     }
 
@@ -143,6 +128,22 @@ class OnmFormatter
         }
 
         return $this->container->get('core.globals')->getInstance()->internal_name;
+    }
+
+    /*
+     * Replaces the user & password in $message by generic message.
+     *
+     * @param string $message The message.
+     *
+     * @return string The censored message.
+     */
+    protected function getMessage(string $message)
+    {
+        return preg_replace(
+            $this->patterns,
+            $this->replacement,
+            $message
+        );
     }
 
     /**

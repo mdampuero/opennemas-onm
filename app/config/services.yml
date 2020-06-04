@@ -20,7 +20,7 @@ services:
     monolog.formatter.standard:
         class: Monolog\Formatter\LineFormatter
         arguments:
-            - "%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%% | %%extra.user%% | %%message%% %%extra.context%%\n"
+            - "%%datetime%% | %%level_name%% | %%extra.user_agent%% | %%extra.client_ip%% | %%extra.url%% | %%extra.instance%% | %%extra.user%% | %%extra.message%% %%extra.context%%\n"
         public: true
 
     monolog.processor.onm:

@@ -94,7 +94,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('glork/plugh', $record['extra']['user_agent']);
         $this->assertEquals('http://norf.org/qux', $record['extra']['url']);
         $this->assertEquals('["Link <censored> <censored>"]', $record['extra']['context']);
-        $this->assertEquals('Link <censored> <censored>', $record['message']);
+        $this->assertEquals('Link <censored> <censored>', $record['extra']['message']);
     }
 
     /**
@@ -116,7 +116,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('user_agent', $record['extra']);
         $this->assertArrayHasKey('url', $record['extra']);
         $this->assertEquals('["Link <censored> <censored>"]', $record['extra']['context']);
-        $this->assertEquals('Link <censored> <censored>', $record['message']);
+        $this->assertEquals('Link <censored> <censored>', $record['extra']['message']);
     }
 
     /**
