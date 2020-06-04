@@ -139,7 +139,7 @@ class UserController extends Controller
 
         if (!$user->activated) {
             $this->get('session')->getFlashBag()
-                ->add('success', _('Verify your account before change password'));
+                ->add('success', _('Verify your account before recover password'));
             return $this->redirect($this->generateUrl('frontend_user_verify'));
         }
 
@@ -203,7 +203,7 @@ class UserController extends Controller
             );
         }
 
-        $this->get('session')->getFlashBag()->add('success', _('Recover password email was sent'));
+        $this->get('session')->getFlashBag()->add('success', _('Password recovery email was sent'));
         return $this->redirect($this->generateUrl('frontend_authentication_login'));
     }
 
