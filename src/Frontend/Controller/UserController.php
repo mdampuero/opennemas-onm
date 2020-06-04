@@ -134,9 +134,13 @@ class UserController extends Controller
             $request->getSession()->getFlashBag()
                 ->add('error', _('Unable to find an user with that email.'));
 
-            return new RedirectResponse(
-                $this->get('router')->generate('frontend_user_reset')
-            );
+            return $this->redirect($this->generateUrl('frontend_user_reset'));
+        }
+
+        if (!$user->activated) {
+            $this->get('session')->getFlashBag()
+                ->add('success', _('Verify your account before change password'));
+            return $this->redirect($this->generateUrl('frontend_user_verify'));
         }
 
         $this->view->setCaching(0);
@@ -198,7 +202,9 @@ class UserController extends Controller
                 _('Unable to send your recover password email. Please try it later.')
             );
         }
-        return $this->render('user/request.tpl');
+
+        $this->get('session')->getFlashBag()->add('success', _('Recover password email was sent'));
+        return $this->redirect($this->generateUrl('frontend_authentication_login'));
     }
 
     /**
