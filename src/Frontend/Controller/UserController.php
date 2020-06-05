@@ -139,7 +139,7 @@ class UserController extends Controller
 
         if (!$user->activated) {
             $this->get('session')->getFlashBag()
-                ->add('success', _('Verify your account before recover password'));
+                ->add('error', _('Verify your account before recover password'));
             return $this->redirect($this->generateUrl('frontend_user_verify'));
         }
 
