@@ -30,7 +30,7 @@ class OnmFormatter
     /**
      * Initializes the OnmFormatter.
      *
-     * @param ServiceCotnainer $container The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
