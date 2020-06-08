@@ -5,7 +5,7 @@
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime>{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}</DateAndTime>
+    <DateAndTime>{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateAndTime>
     <NewsProduct FormalName="{$video->author_name}" />
   </NewsEnvelope>
   <NewsItem Duid="video_{$video->id}">
@@ -13,17 +13,17 @@
     <Identification>
       <NewsIdentifier>
         <ProviderId>video.opennemas.com</ProviderId>
-        <DateId>{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}</DateId>
+        <DateId>{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateId>
         <NewsItemId>{$video->id}</NewsItemId>
         <RevisionId PreviousRevision="0" Update="N">1</RevisionId>
-        <PublicIdentifier>urn:newsml:video.opennemas.com:{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}:{$video->id}:1</PublicIdentifier>
+        <PublicIdentifier>urn:newsml:video.opennemas.com:{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}:{$video->id}:1</PublicIdentifier>
       </NewsIdentifier>
     </Identification>
     <NewsManagement>
       <NewsItemType FormalName="News" />
-      <FirstCreated>{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}</FirstCreated>
-      <FirstPublished>{format_date date=$video->starttime type="custom" format="Ymd'T'Hmmssxxx"}</FirstPublished>
-      <ThisRevisionCreated>{format_date date=$video->changed type="custom" format="Ymd'T'Hmmssxxx"}</ThisRevisionCreated>
+      <FirstCreated>{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}</FirstCreated>
+      <FirstPublished>{format_date date=$video->starttime type="custom" format="yMMdd'T'HHmmssxxx"}</FirstPublished>
+      <ThisRevisionCreated>{format_date date=$video->changed type="custom" format="yMMdd'T'HHmmssxxx"}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
     </NewsManagement>
@@ -84,13 +84,13 @@
                   </hedline>
                   {if $video->author neq 'null'}
                   <rights>
-                    <rights.owner>{$video->author|htmlspecialchars}</rights.owner>
+                    <rights.owner>{$video->author->name}</rights.owner>
                   </rights>
                   {/if}
                   <distributor>{setting name=site_name}</distributor>
                   <dateline>
-                    <story.date norm="{format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}">
-                      {format_date date=$video->created type="custom" format="Ymd'T'Hmmssxxx"}
+                    <story.date norm="{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}">
+                      {format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}
                     </story.date>
                   </dateline>
                 </body.head>
