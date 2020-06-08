@@ -52,7 +52,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             break;
     }
 
-    $html = sprintf('<a href="%s"><span %s>%s</span></a>', get_url($content), $class, get_title($content));
+    $html = sprintf('<a href="%s"><span %s></span>%s</a>', get_url($content), $class, get_title($content));
 
     return $html;
 }

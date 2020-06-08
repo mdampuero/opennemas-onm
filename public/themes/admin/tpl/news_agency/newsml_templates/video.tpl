@@ -43,7 +43,7 @@
             </AdministrativeMetadata>
             <DescriptiveMetadata>
                 <Language FormalName="es" />
-                <Property FormalName="Tesauro" Value="CAT:{get_category_slug($video)|upper}" />
+                <Property FormalName="Tesauro" Value="CAT:{get_category_name($video)|upper}" />
             </DescriptiveMetadata>
             <NewsComponent Duid="video_{$video->id}.video.file" EquivalentsList="yes">
                 <Role FormalName="Main" />
