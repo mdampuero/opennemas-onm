@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Framework\Monolog;
 
 use Common\Model\Entity\Instance;
@@ -24,6 +17,13 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->conn = $this->getMockBuilder('Converter' . uniqid())
+            ->setMethods([ 'objectify', 'responsify' ])
+            ->getMock();
+
+        $this->conn->user     = 'root';
+        $this->conn->password = 'root';
+
         $this->headers = $this->getMockBuilder('HeaderBag')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -34,7 +34,7 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getInstance', 'getRequest', 'getUser' ])
+            ->setMethods(['getMessage', 'getContext', 'getInstance', 'getRequest', 'getUser' ])
             ->getMock();
 
         $this->request->headers = $this->headers;
@@ -57,6 +57,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.globals':
                 return $this->globals;
+            case 'orm.connection.instance':
+                return $this->conn;
         }
 
         return null;
@@ -69,6 +71,10 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
     {
         $this->headers->expects($this->once())->method('get')
             ->with('User-Agent')->willReturn('glork/plugh');
+        $this->globals->expects($this->any())->method('getMessage')
+            ->with('root')->willReturn('<censored>');
+        $this->globals->expects($this->any())->method('getContext')
+            ->with('root')->willReturn('<censored>');
         $this->globals->expects($this->any())->method('getInstance')
             ->willReturn(new Instance([ 'internal_name' => 'fred' ]));
         $this->globals->expects($this->any())->method('getRequest')
@@ -79,13 +85,16 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://norf.org/qux');
 
-        $record = $this->formatter->processRecord([]);
+        $record = $this->formatter->processRecord(['message' => 'Link root root',
+            'context' => ['Link root root']]);
 
         $this->assertEquals('fred', $record['extra']['instance']);
         $this->assertEquals('anon.', $record['extra']['user']);
         $this->assertEquals('128.0.134.43', $record['extra']['client_ip']);
         $this->assertEquals('glork/plugh', $record['extra']['user_agent']);
         $this->assertEquals('http://norf.org/qux', $record['extra']['url']);
+        $this->assertEquals('["Link <censored> <censored>"]', $record['extra']['context']);
+        $this->assertEquals('Link <censored> <censored>', $record['extra']['message']);
     }
 
     /**
@@ -98,13 +107,16 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->globals->expects($this->any())->method('getRequest')
             ->willReturn(null);
 
-        $record = $this->formatter->processRecord([]);
+        $record = $this->formatter->processRecord(['message' => 'Link root root',
+            'context' => ['Link root root']]);
 
         $this->assertEquals('fred', $record['extra']['instance']);
         $this->assertEquals('anon.', $record['extra']['user']);
         $this->assertArrayHasKey('client_ip', $record['extra']);
         $this->assertArrayHasKey('user_agent', $record['extra']);
         $this->assertArrayHasKey('url', $record['extra']);
+        $this->assertEquals('["Link <censored> <censored>"]', $record['extra']['context']);
+        $this->assertEquals('Link <censored> <censored>', $record['extra']['message']);
     }
 
     /**
