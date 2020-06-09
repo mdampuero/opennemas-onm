@@ -39,6 +39,7 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
+      {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
     </div>
   </div>
@@ -84,7 +85,7 @@
       </div>
       <div class="form-group">
         {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-        {include file="ui/component/content-editor/textarea.tpl"  title="{t}Description{/t}" field="description" rows=20}
+        {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=20}
       </div>
     </div>
   </div>
