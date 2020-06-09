@@ -11,7 +11,6 @@ namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\CategorySubscriber;
 use Common\Model\Entity\Category;
-use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for CategorySubscriber class.
@@ -23,61 +22,18 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
-
-        $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\CategoryCacheHelper')
             ->disableOriginalConstructor()
             ->setMethods([
-                'contains', 'delete', 'deleteByPattern', 'deleteMulti', 'fetch',
-                'fetchMulti', 'remove', 'save', 'saveMulti'
-            ])
-            ->getMock();
-
-        $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods([ 'get' ])
-            ->getMock();
-
-        $this->cm = $this->getMockBuilder('Opennemas\Cache\Core\CacheManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getConnection' ])
-            ->getMock();
-
-        $this->dcs = $this->getMockBuilder('Framework\Component\Assetic\DynamicCssService')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteTimestamp' ])
-            ->getMock();
+                'deleteContents', 'deleteDynamicCss', 'deleteInstance',
+                'deleteItem'
+            ])->getMock();
 
         $this->event = $this->getMockBuilder('Symfony\Component\EventDispatcher\Event')
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->oldCache = $this->getMockBuilder('Onm\Cache\AbstractCache')
-            ->setMethods([
-                'delete', 'doContains', 'doDelete', 'doFetch', 'doSave', 'getIds'
-            ])
-            ->getMock();
-
-        $this->th = $this->getMockBuilder('Common\Core\Component\Helper\TemplateCacheHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteCategories', 'deleteDynamicCss' ])
-            ->getMock();
-
-        $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteInstance' ])
-            ->getMock();
-
-        $this->cm->expects($this->any())->method('getConnection')
-            ->with('instance')->willReturn($this->cache);
-
-        $this->subscriber = new CategorySubscriber(
-            $this->instance,
-            $this->th,
-            $this->vh,
-            $this->oldCache,
-            $this->cm,
-            $this->dcs
-        );
+        $this->subscriber = new CategorySubscriber($this->helper);
     }
 
     /**
@@ -93,7 +49,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testOnCategoryCreate()
     {
-        $this->th->expects($this->once())->method('deleteDynamicCss');
+        $this->helper->expects($this->once())->method('deleteDynamicCss');
 
         $this->subscriber->onCategoryCreate();
     }
@@ -120,16 +76,16 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(4))->method('getArgument')
             ->with('target')->willReturn($target);
 
-        $this->oldCache->expects($this->once())->method('delete')
-            ->with([ 'content-29457', 'fubar-29457', 'content-28034', 'flob-28034' ]);
-        $this->cache->expects($this->once())->method('remove')
-            ->with([ 'content-29457', 'fubar-29457', 'content-28034', 'flob-28034' ]);
+        $this->helper->expects($this->at(0))->method('deleteItem')
+            ->with($source);
 
-        $this->th->expects($this->once())->method('deleteCategories')
-            ->with([ $source, $target ]);
-
-        $this->vh->expects($this->once())->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->at(1))->method('deleteContents')
+            ->with([
+                'content-29457', 'fubar-29457',  'content-28034', 'flob-28034'
+            ])->willReturn($this->helper);
+        $this->helper->expects($this->at(2))->method('deleteItem')
+            ->with($target)->willReturn($this->helper);
+        $this->helper->expects($this->at(3))->method('deleteInstance');
 
         $this->subscriber->onCategoryMove($this->event);
     }
@@ -161,16 +117,12 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(4))->method('getArgument')
             ->with('target')->willReturn($target);
 
-        $this->oldCache->expects($this->once())->method('delete')
-            ->with([ 'content-29457', 'fubar-29457', 'content-28034', 'flob-28034' ]);
-        $this->cache->expects($this->once())->method('remove')
-            ->with([ 'content-29457', 'fubar-29457', 'content-28034', 'flob-28034' ]);
-
-        $this->th->expects($this->once())->method('deleteCategories')
-            ->with(array_merge($source, [ $target ]));
-
-        $this->vh->expects($this->once())->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->at(2))->method('deleteContents')
+            ->with([ 'content-29457', 'fubar-29457', 'content-28034', 'flob-28034' ])
+            ->willReturn($this->helper);
+        $this->helper->expects($this->at(3))->method('deleteItem')
+            ->with($target)->willReturn($this->helper);
+        $this->helper->expects($this->at(4))->method('deleteInstance');
 
         $this->subscriber->onCategoryMove($this->event);
     }
@@ -198,12 +150,11 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(1))->method('getArgument')
             ->with('item')->willReturn($category);
 
-        $this->th->expects($this->once())->method('deleteDynamicCss');
-        $this->th->expects($this->once())->method('deleteCategories')
-            ->with([ $category ]);
-
-        $this->vh->expects($this->once())->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->at(0))->method('deleteItem')
+            ->with($category);
+        $this->helper->expects($this->at(1))->method('deleteDynamicCss')
+            ->willReturn($this->helper);
+        $this->helper->expects($this->at(2))->method('deleteInstance');
 
         $this->subscriber->onCategoryUpdate($this->event);
     }
@@ -223,12 +174,13 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(1))->method('getArgument')
             ->with('items')->willReturn($categories);
 
-        $this->th->expects($this->once())->method('deleteDynamicCss');
-        $this->th->expects($this->once())->method('deleteCategories')
-            ->with($categories);
-
-        $this->vh->expects($this->once())->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->at(0))->method('deleteItem')
+            ->with($categories[0]);
+        $this->helper->expects($this->at(1))->method('deleteItem')
+            ->with($categories[1]);
+        $this->helper->expects($this->at(2))->method('deleteDynamicCss')
+            ->willReturn($this->helper);
+        $this->helper->expects($this->at(3))->method('deleteInstance');
 
         $this->subscriber->onCategoryUpdate($this->event);
     }
@@ -239,9 +191,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnCategoryDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
-            ->setConstructorArgs([
-                $this->instance, $this->th, $this->vh, $this->oldCache, $this->cm, $this->dcs
-            ])
+            ->setConstructorArgs([ $this->helper ])
             ->setMethods([ 'onCategoryUpdate' ])
             ->getMock();
 

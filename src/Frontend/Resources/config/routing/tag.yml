@@ -1,12 +1,12 @@
 frontend_tag_index:
     path: /tags
-    defaults: { _controller: FrontendBundle:Tag:index }
+    defaults: { _controller: FrontendBundle:Tag:list }
     options:
         l10n: true
 
 frontend_tag_frontpage:
-    path: /{resource}/{slug}
-    defaults: { _controller: FrontendBundle:Tag:tags, resource: tags }
+    path:     /{resource}/{slug}
+    defaults: { _controller: FrontendBundle:Tag:show, resource: tags }
     requirements:
         resource: 'tag|tags'
         slug: '[^\/]+'

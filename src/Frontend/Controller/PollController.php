@@ -209,8 +209,13 @@ class PollController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $category = $params['o_category'];
-        $page     = $params['page'] ?? 1;
+        $page     = (int) ($params['page'] ?? 1);
         $date     = date('Y-m-d H:i:s');
+
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
 
         $epp = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -231,6 +236,11 @@ class PollController extends FrontendController
             $epp,
             $epp * ($page - 1)
         ));
+
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $response['total'] < $epp * $page) {
+            throw new ResourceNotFoundException();
+        }
 
         $params = array_merge($params, [
             'polls'      => $response['items'],

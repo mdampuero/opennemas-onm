@@ -101,9 +101,7 @@ class AlbumController extends FrontendController
     {
         $category = $params['o_category'];
         $date     = date('Y-m-d H:i:s');
-        $page     = array_key_exists('page', $params)
-            ? (int) $params['page']
-            : 1;
+        $page     = (int) ($params['page'] ?? 1);
 
         // Invalid page provided as parameter
         if ($page <= 0) {
@@ -130,8 +128,8 @@ class AlbumController extends FrontendController
             $epp * ($page - 1)
         ));
 
-        // No first page and no contents
-        if ($page > 1 && empty($response['items'])) {
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $response['total'] < $epp * $page) {
             throw new ResourceNotFoundException();
         }
 

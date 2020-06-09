@@ -1,25 +1,20 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\EventSubscriber;
 
-use Opennemas\Cache\Core\CacheManager;
-use Common\Core\Component\Helper\TemplateCacheHelper;
-use Common\Core\Component\Helper\VarnishHelper;
-use Common\Model\Entity\Instance;
-use Framework\Component\Assetic\DynamicCssService;
-use Onm\Cache\AbstractCache;
+use Api\Helper\Cache\CategoryCacheHelper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CategorySubscriber implements EventSubscriberInterface
 {
+    /**
+     * The helper service.
+     *
+     * @var ContentCacheHelper
+     */
+    protected $helper;
+
     /**
      * {@inheritdoc}
      */
@@ -40,27 +35,12 @@ class CategorySubscriber implements EventSubscriberInterface
     /**
      * Initializes the CategorySubscriber.
      *
-     * @param Instance            $instance The current instance.
-     * @param TemplateCacheHelper $th       The TemplateCacheHelper service.
-     * @param VarnishHelper       $vh       The VarnishHelper service.
-     * @param AbstractCache       $cache    The old cache connection.
-     * @param CacheManager        $cm       The CacheManager service.
-     * @param DynamicCssService   $dcs      The DynamicCssService.
+     * @param CategoryCacheHelper $helper The helper to remove category-related
+     *                                    caches.
      */
-    public function __construct(
-        ?Instance           $instance,
-        TemplateCacheHelper $th,
-        VarnishHelper       $vh,
-        AbstractCache       $cache,
-        CacheManager        $cm,
-        DynamicCssService   $dcs
-    ) {
-        $this->instance = $instance;
-        $this->template = $th;
-        $this->varnish  = $vh;
-        $this->oldCache = $cache;
-        $this->cache    = $cm->getConnection('instance');
-        $this->dcs      = $dcs;
+    public function __construct(CategoryCacheHelper $helper)
+    {
+        $this->helper = $helper;
     }
 
     /**
@@ -68,7 +48,7 @@ class CategorySubscriber implements EventSubscriberInterface
      */
     public function onCategoryCreate()
     {
-        $this->template->deleteDynamicCss();
+        $this->helper->deleteDynamicCss();
     }
 
     /**
@@ -103,19 +83,18 @@ class CategorySubscriber implements EventSubscriberInterface
             $cacheIds[] = $content['type'] . '-' . $content['id'];
         }
 
-        if (!empty($cacheIds)) {
-            $this->oldCache->delete($cacheIds);
-            $this->cache->remove($cacheIds);
-        }
-
         $source = $event->hasArgument('item')
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
-        $categories = array_merge($source, [ $event->getArgument('target') ]);
+        foreach ($source as $category) {
+            $this->helper->deleteItem($category);
+        }
 
-        $this->template->deleteCategories($categories);
-        $this->varnish->deleteInstance($this->instance);
+        $this->helper
+            ->deleteContents($cacheIds)
+            ->deleteItem($event->getArgument('target'))
+            ->deleteInstance();
     }
 
     /**
@@ -130,14 +109,10 @@ class CategorySubscriber implements EventSubscriberInterface
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
-        $this->dcs->deleteTimestamp('%global%');
-
         foreach ($categories as $category) {
-            $this->dcs->deleteTimestamp($category->pk_content_category);
+            $this->helper->deleteItem($category);
         }
 
-        $this->template->deleteDynamicCss();
-        $this->template->deleteCategories($categories);
-        $this->varnish->deleteInstance($this->instance);
+        $this->helper->deleteDynamicCss()->deleteInstance();
     }
 }

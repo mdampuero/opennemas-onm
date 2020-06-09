@@ -152,14 +152,19 @@ class OpinionController extends FrontendController
 
     /**
      * {@inheritdoc}
-     *
-     * Action specific for the frontpage
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $page = array_key_exists('page', $params) ? $params['page'] : 1;
+        $date = date('Y-m-d H:i:s');
+        $page = (int) ($params['page'] ?? 1);
 
-        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        $epp = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
         $filters = [
@@ -169,13 +174,13 @@ class OpinionController extends FrontendController
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => $date, 'operator' => '<=' ],
             ],
             'endtime' => [
                 'union'   => 'OR',
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ]
+                [ 'value' => $date, 'operator' => '>' ]
             ],
         ];
 
@@ -197,14 +202,19 @@ class OpinionController extends FrontendController
             ]);
         }
 
-        $opinions      = $em->findBy($filters, $order, $epp, $page);
-        $countOpinions = $em->countBy($filters);
+        $opinions = $em->findBy($filters, $order, $epp, $page);
+        $total    = $em->countBy($filters);
+
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $total < $epp * $page) {
+            throw new ResourceNotFoundException();
+        }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countOpinions,
+            'total'       => $total,
             'route'       => 'frontend_opinion_frontpage'
         ]);
 
@@ -254,10 +264,19 @@ class OpinionController extends FrontendController
      */
     protected function hydrateListAuthor(array &$params, $author)
     {
-        $page = $params['page'] ?? 1;
+        $date = date('Y-m-d H:i:s');
+        $page = (int) ($params['page'] ?? 1);
 
-        // Setting filters for the further SQLs
-        $date    = date('Y-m-d H:i:s');
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        // Total opinions per page
+        $epp = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page');
+
         $filters = [
             'content_status'       => [['value' => 1]],
             'in_litter'            => [['value' => 0]],
@@ -284,14 +303,14 @@ class OpinionController extends FrontendController
 
         $orderBy = ['created' => 'DESC'];
 
-        // Total opinions per page
-        $numOpinions = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page');
-
         // Get the number of total opinions for this author for pagination purposes
-        $countOpinions = $this->get('opinion_repository')->countBy($filters);
-        $opinions      = $this->get('opinion_repository')->findBy($filters, $orderBy, $numOpinions, $page);
+        $total    = $this->get('opinion_repository')->countBy($filters);
+        $opinions = $this->get('opinion_repository')->findBy($filters, $orderBy, $epp, $page);
+
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $total < $epp * $page) {
+            throw new ResourceNotFoundException();
+        }
 
         foreach ($opinions as &$opinion) {
             // Get author uri
@@ -311,9 +330,9 @@ class OpinionController extends FrontendController
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $numOpinions,
+            'epp'         => $epp,
             'page'        => $page,
-            'total'       => $countOpinions,
+            'total'       => $total,
             'route'       => [
                 'name'   => 'frontend_opinion_author_frontpage',
                 'params' => [

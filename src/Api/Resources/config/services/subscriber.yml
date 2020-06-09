@@ -1,42 +1,48 @@
 services:
     core.subscriber.attachment:
         class:     Api\EventSubscriber\AttachmentSubscriber
-        arguments: [ '@core.helper.varnish' ]
+        arguments: [ '@api.helper.cache.content' ]
         tags:
             - { name: kernel.event_subscriber }
 
     core.subscriber.category:
         class:     Api\EventSubscriber\CategorySubscriber
-        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache', '@cache.manager', '@core.service.assetic.dynamic_css' ]
+        arguments: [ '@api.helper.cache.category' ]
         tags:
             - { name: kernel.event_subscriber }
 
     core.subscriber.newsstand:
         class:     Api\EventSubscriber\NewsstandSubscriber
-        arguments: [ '@core.helper.template_cache', '@core.helper.varnish' ]
+        arguments: [ '@api.helper.cache.newsstand' ]
         tags:
             - { name: kernel.event_subscriber }
 
     core.subscriber.poll:
         class:     Api\EventSubscriber\PollSubscriber
-        arguments: [ '@core.helper.varnish' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    core.subscriber.user:
-        class:     Api\EventSubscriber\UserSubscriber
-        arguments: [ '@core.instance', '@core.helper.template_cache', '@core.helper.varnish', '@cache' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    core.subscriber.user_group:
-        class:     Api\EventSubscriber\UserGroupSubscriber
-        arguments: [ '@api.service.redis' ]
+        arguments: [ '@api.helper.cache.content' ]
         tags:
             - { name: kernel.event_subscriber }
 
     core.subscriber.setting:
         class: Api\EventSubscriber\SettingSubscriber
-        arguments: [ '@core.instance', '@core.template.cache', '@core.helper.varnish', '@core.service.assetic.dynamic_css' ]
+        arguments: [ '@api.helper.cache' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.tag:
+        class:     Api\EventSubscriber\TagSubscriber
+        arguments: [ '@api.helper.cache.tag' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.user:
+        class:     Api\EventSubscriber\UserSubscriber
+        arguments: [ '@api.helper.cache.user' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.user_group:
+        class:     Api\EventSubscriber\UserGroupSubscriber
+        arguments: [ '@api.helper.cache.user_group' ]
         tags:
             - { name: kernel.event_subscriber }

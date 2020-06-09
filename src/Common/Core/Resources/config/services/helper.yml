@@ -120,11 +120,6 @@ services:
         arguments: [ '@core.helper.permission', '@core.security', '@api.service.subscription' ]
         public:    true
 
-    core.helper.template_cache:
-        class:     Common\Core\Component\Helper\TemplateCacheHelper
-        arguments: [ '@core.template.cache', '@orm.manager' ]
-        public:    true
-
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper
         public:    true
@@ -137,9 +132,4 @@ services:
     core.helper.user:
         class:     Common\Core\Component\Helper\UserHelper
         arguments: [ '@service_container' ]
-        public:    true
-
-    core.helper.varnish:
-        class:     Common\Core\Component\Helper\VarnishHelper
-        arguments: [ '@core.helper.url_generator', '@task.service.queue' ]
         public:    true
