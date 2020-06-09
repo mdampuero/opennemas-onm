@@ -46,7 +46,7 @@
       </AdministrativeMetadata>
       <DescriptiveMetadata>
         <Language FormalName="es" />
-        <Property FormalName="Tesauro" Value="CAT:{$video->catName|upper}" />
+        <Property FormalName="Tesauro" Value="{$video->category_name}" />
       </DescriptiveMetadata>
       <NewsComponent Duid="video_{$video->id}.video.file" EquivalentsList="yes">
         <Role FormalName="Main" />
@@ -58,7 +58,7 @@
       <NewsComponent Duid="video_{$video->id}.video.text">
         <Role FormalName="Caption" />
         <ContentItem>
-          <ContentItem Href="{$video->uri}" Url="{$video->video_url}" />
+          <ContentItem Href="/{$video->uri}" Url="{$video->video_url}" />
           <MediaType FormalName="Text" />
           <Format FormalName="NITF" />
           <MimeType FormalName="text/vnd.IPTC.NITF" />

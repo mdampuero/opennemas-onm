@@ -55,7 +55,7 @@
             <Property FormalName="Tesauro" Value="{$content->category_name}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{$content->uri}">
+          <ContentItem Href="/{$content->uri}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -83,11 +83,11 @@
                         <rights.owner>{$content->author->name}</rights.owner>
                         {if $content->author->photo}
                           <rights.owner.photo>
-                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path_img}
+                            {$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path_img}
                           </rights.owner.photo>
                         {/if}
                         <rights.owner.url>
-                          {$app.instance->getBaseUrl()}{url name=frontend_author_frontpage slug=$content->author->username}
+                          {url name=frontend_author_frontpage slug=$content->author->username}
                         </rights.owner.url>
                       {else}
                         <rights.owner>{$content->agency|default:'Redacción'}</rights.owner>
@@ -150,7 +150,7 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+                <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
                   <MediaType FormalName="PhotoFront" />
                   <MimeType FormalName="image/{$photo->type_img}" />
                   <Characteristics>
@@ -223,7 +223,7 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
+                <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
                   <MediaType FormalName="PhotoInner" />
                   <MimeType FormalName="image/{$photoInner->type_img}" />
                   <Characteristics>
@@ -303,7 +303,7 @@
                 <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
-                  <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+                  <ContentItem Href="{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
                     <MediaType FormalName="Photo" />
                     <MimeType FormalName="image/{$photo->type_img}" />
                     <Characteristics>
