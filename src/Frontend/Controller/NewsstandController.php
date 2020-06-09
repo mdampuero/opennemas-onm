@@ -143,8 +143,8 @@ class NewsstandController extends FrontendController
 
         $response = $this->get($this->service)->getList($oql);
 
-        // No first page and no contents or contents from invalid offset
-        if ($page > 1 && $response['total'] < $epp * $page) {
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
