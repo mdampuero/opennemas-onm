@@ -128,8 +128,8 @@ class AlbumController extends FrontendController
             $epp * ($page - 1)
         ));
 
-        // No first page and no contents or contents from invalid offset
-        if ($page > 1 && $response['total'] < $epp * $page) {
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 

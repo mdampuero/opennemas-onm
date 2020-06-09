@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Displays a poll or a list of polls.
@@ -237,8 +238,8 @@ class PollController extends FrontendController
             $epp * ($page - 1)
         ));
 
-        // No first page and no contents or contents from invalid offset
-        if ($page > 1 && $response['total'] < $epp * $page) {
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
