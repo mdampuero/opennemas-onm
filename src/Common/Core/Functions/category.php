@@ -15,10 +15,10 @@ function get_category($item = null) : ?\Common\Model\Entity\Category
         return null;
     }
 
-    if ($item instanceof \Content && !empty($item->pk_fk_content_category)) {
+    if ($item instanceof \Content && !empty($item->category_id)) {
         try {
             return getService('api.service.category')
-                ->getItem($item->pk_fk_content_category);
+                ->getItem($item->category_id);
         } catch (\Exception $e) {
             return null;
         }
@@ -74,7 +74,7 @@ function get_category_id($item = null) : ?int
 {
     $category = get_category($item);
 
-    return !empty($category) ? $category->pk_content_category : null;
+    return !empty($category) ? $category->id : null;
 }
 
 /**

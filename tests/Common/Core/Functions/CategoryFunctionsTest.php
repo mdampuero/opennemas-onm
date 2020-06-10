@@ -81,7 +81,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryFromParameterWhenCategory()
     {
-        $category = new Category([ 'pk_content_category' => 20 ]);
+        $category = new Category([ 'id' => 20 ]);
 
         $this->assertEquals($category, get_category($category));
     }
@@ -91,10 +91,10 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryFromParameterWhenContent()
     {
-        $category = new Category([ 'pk_content_category' => 20 ]);
+        $category = new Category([ 'id' => 20 ]);
         $content  = new \Content();
 
-        $content->pk_fk_content_category = 20;
+        $content->category_id = 20;
 
         $this->cs->expects($this->once())->method('getItem')
             ->with(20)->willReturn($category);
@@ -109,7 +109,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
 
-        $content->pk_fk_content_category = 20;
+        $content->category_id = 20;
 
         $this->cs->expects($this->once())->method('getItem')
             ->with(20)->will($this->throwException(new \Exception()));
@@ -133,10 +133,10 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryFromTemplateWhenContent()
     {
-        $category = new Category([ 'pk_content_category' => 20 ]);
+        $category = new Category([ 'id' => 20 ]);
         $content  = new \Content();
 
-        $content->pk_fk_content_category = 20;
+        $content->category_id = 20;
 
         $this->template->expects($this->once())->method('getValue')
             ->with('item')->willReturn($content);
@@ -189,7 +189,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryId()
     {
-        $category = new Category([ 'pk_content_category' => 436 ]);
+        $category = new Category([ 'id' => 436 ]);
 
         $this->assertNull(get_category_id(131));
         $this->assertEquals(436, get_category_id($category));
