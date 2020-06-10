@@ -30,6 +30,23 @@ function get_category($item = null) : ?\Common\Model\Entity\Category
 }
 
 /**
+ * Returns the category color for the provided item.
+ *
+ * @param Content $item The item to get category color for.
+ *                      If not provided, the function will try to search
+ *                      the item in the template.
+ *
+ * @return ?string The category color if present. Null otherwise.
+ */
+function get_category_color($item = null) : ?string
+{
+    $category = get_category($item);
+
+    return !empty($category) ? $category->color : null;
+}
+
+
+/**
  * Returns the category description for the provided item.
  *
  * @param Content $item The item to get category description for. If not
