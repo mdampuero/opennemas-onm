@@ -96,6 +96,14 @@ class Authentication
     }
 
     /**
+     * Remove authentication error from the session.
+     */
+    public function clearError()
+    {
+        $this->session->set(Security::AUTHENTICATION_ERROR, '');
+    }
+
+    /**
      * Checks if the recaptcha response is valid.
      *
      * @param string $response The recaptcha response.
@@ -180,9 +188,6 @@ class Authentication
         }
 
         $error = $this->getError();
-
-        //Remove error from session
-        $this->session->set(Security::AUTHENTICATION_ERROR, '');
 
         if ($error instanceof BadCredentialsException) {
             return _('Username or password incorrect.');
