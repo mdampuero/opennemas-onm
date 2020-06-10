@@ -15,7 +15,7 @@
           </a>
         {/acl}
         {acl isAllowed="PHOTO_DELETE"}
-          <div class="thumbnail-action" ng-click="delete(item.pk_photo)" uib-tooltip="{t}Delete{/t}" tooltip-class="tooltip-danger">
+          <div class="thumbnail-action" ng-click="delete(item.pk_content)" uib-tooltip="{t}Delete{/t}" tooltip-class="tooltip-danger">
             <i class="fa fa-trash-o fa-2x text-danger"></i>
           </div>
         {/acl}
@@ -68,7 +68,7 @@
           </li>
         {/is_module_activated}
         <li>
-          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}images[% selected.lastSelected.path_img %]" target="_blank">
+          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}images[% selected.lastSelected.path %]" target="_blank">
             <i class="fa fa-external-link m-r-5"></i>
             {t}Link{/t}
           </a>

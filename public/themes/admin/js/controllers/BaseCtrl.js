@@ -442,7 +442,7 @@
           modal.rendered.then(function() {
             var photoEditor = new window.OnmPhotoEditor({
               container: 'photoEditor',
-              image: $window.instanceMedia + '/images' + imgData.path_img,
+              image: $window.instanceMedia + '/images' + imgData.path,
               closeCallBack: modal.close,
             }, photoEditorTranslations);
 
