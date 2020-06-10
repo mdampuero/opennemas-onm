@@ -12,7 +12,7 @@
         <div class="checkbox check-default">
           <input id="checkbox_{$category@index}" type="checkbox" name="categories[]" value="{$category->link}" {if array_key_exists('categories', $site) && is_array($site['categories']) && in_array($category->link, $site['categories'])}checked="checked"{/if} />
           <label for="checkbox_{$category@index}">
-            {get_category_name($category)|ucfirst}
+            {$category->title|ucfirst}
           </label>
         </div>
       </div>
