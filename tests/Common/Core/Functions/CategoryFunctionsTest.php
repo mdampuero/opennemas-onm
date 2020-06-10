@@ -172,6 +172,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(get_category_color(131));
         $this->assertEquals('#dc2127', get_category_color($category));
     }
+
     /**
      * Tests get_category_description.
      */
