@@ -235,6 +235,10 @@ class Authentication
             return 'security.authentication.failure.recaptcha';
         }
 
+        if ($error instanceof DisabledException) {
+            return 'security.autentication.failure.disabled';
+        }
+
         return $error->getMessage();
     }
 
