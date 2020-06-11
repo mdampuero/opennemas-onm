@@ -185,8 +185,6 @@ class TagController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
 
-        $epp = 3;
-
         $ids = array_map(function ($a) {
             return $a->id;
         }, $params['items']);
