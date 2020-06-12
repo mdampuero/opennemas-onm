@@ -139,8 +139,15 @@ class UserController extends Controller
 
         if (!$user->activated) {
             $this->get('session')->getFlashBag()
-                ->add('error', _('Verify your account before recover password'));
-            return $this->redirect($this->generateUrl('frontend_user_verify'));
+                ->add('error', sprintf(_(
+                    '<strong>This account has not been verified.</strong>' .
+                    '<ul class="mb-0">' .
+                    '<li>To verify this account click on the link sent to your email.</li>' .
+                    '<li>If you have not received any message, check your spam box.</li>' .
+                    '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
+                    '</ul>'
+                ), $this->generateUrl('frontend_user_verify')));
+            return $this->redirect($this->generateUrl('frontend_user_reset'));
         }
 
         $this->view->setCaching(0);
@@ -189,6 +196,8 @@ class UserController extends Controller
             $this->get('application.log')
                 ->info('password.request.email.success: ' . $user->email);
 
+            $this->get('session')->getFlashBag()->add('success', _('Password recovery email was sent'));
+
             $this->view->assign([ 'user' => $user ]);
         } catch (\Exception $e) {
             $this->get('application.log')->error(
@@ -203,7 +212,6 @@ class UserController extends Controller
             );
         }
 
-        $this->get('session')->getFlashBag()->add('success', _('Password recovery email was sent'));
         return $this->redirect($this->generateUrl('frontend_authentication_login'));
     }
 
