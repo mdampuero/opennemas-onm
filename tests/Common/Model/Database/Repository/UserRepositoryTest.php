@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Model\Database\Repository;
 
 use Common\Model\Database\Repository\UserRepository;
@@ -64,28 +57,52 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests refresh and getCategories.
+     * Tests findSubscribers.
      */
-    public function testRefresh()
+    public function testfindSubscribers()
     {
-        $this->conn->expects($this->at(0))->method('fetchAll')->willReturn([
-            [ 'id' => 1, 'name' => 'glork' ],
-            [ 'id' => 2, 'name' => 'thud' ]
-        ]);
+        $user1 = [
+            'id' => 1,
+            'email' => 'gorp@flob.org',
+            'name' => 'gorp',
+            'activated' => 1,
+            'user_groups' => '7, 10',
+        ];
 
-        $method = new \ReflectionMethod($this->repository, 'refresh');
-        $method->setAccessible(true);
+        $user2 = [
+            'id' => 2,
+            'email' => 'grault@flob.org',
+            'name' => 'grault',
+            'activated' => 1,
+            'user_groups'  => null,
+        ];
 
-        $users = $method->invokeArgs($this->repository, [ [ [ 'id' => 1 ] , [ 'id' => 2 ] ] ]);
+        $this->conn->expects($this->at(0))->method('fetchAll')
+            ->with(
+                'SELECT id, email, name, activated,'
+                . ' GROUP_CONCAT(DISTINCT user_group_id) as user_groups FROM users '
+                . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
+                . ' WHERE type != 0'
+                . ' GROUP BY id'
+            )->willReturn([ $user1, $user2 ]);
+
+        $this->conn->expects($this->at(1))->method('fetchAll')
+            ->with('SELECT * FROM usermeta')
+            ->willReturn([
+                [ 'user_id' => 1, 'meta_key' => 'register_date', 'meta_value' => '2020-02-13 13:30:00' ],
+                [ 'user_id' => 1, 'meta_key' => 'foobar', 'meta_value' => 'baz' ],
+                [ 'user_id' => 9, 'meta_key' => 'foobar', 'meta_value' => 'baz' ],
+             ]);
+
+        $user1['user_groups'] = [7, 10];
+        $user2['user_groups'] = [];
+
+        $user1['register_date'] = '2020-02-13 13:30:00';
+        $user1['foobar']        = 'baz';
 
         $this->assertEquals(
-            [ 'id' => 1, 'name' => 'glork' ],
-            $users[1]->getData()
-        );
-
-        $this->assertEquals(
-            [ 'id' => 2, 'name' => 'thud' ],
-            $users[2]->getData()
+            [ $user1['id'] => $user1, $user2['id'] => $user2 ],
+            $this->repository->findSubscribers()
         );
     }
 }

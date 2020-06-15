@@ -100,9 +100,7 @@ class NewsstandController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $now  = date('Y-m-d H:i:s');
-        $page = array_key_exists('page', $params)
-            ? (int) $params['page']
-            : 1;
+        $page = (int) ($params['page'] ?? 1);
 
         // Invalid page provided as parameter
         if ($page <= 0) {

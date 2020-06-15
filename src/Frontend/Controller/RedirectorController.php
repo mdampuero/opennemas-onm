@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
 use Common\Core\Component\Exception\ContentNotMigratedException;
@@ -68,7 +61,10 @@ class RedirectorController extends Controller
 
         $url = $this->get('core.helper.url_generator')->generate($content);
 
-        if ($format === 'amp' && $content->content_type_name === 'article') {
+        if ($format === 'amp' && in_array(
+            $content->content_type_name,
+            [ 'article', 'opinion', 'video' ]
+        )) {
             $url = str_replace('.html', '.amp.html', $url);
         }
 

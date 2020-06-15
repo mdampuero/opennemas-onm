@@ -90,8 +90,8 @@ class MimeTypeTool
         $extension = self::getMimeTypeFromExtension($file);
         $fileinfo  = self::getMimeTypeFromFileinfo($file);
 
-        if ($fileinfo !== $extension && $fileinfo === 'text/plain') {
-            return $extension;
+        if ($fileinfo !== $extension) {
+            return $extension !== 'text/plain' ? $extension : $fileinfo;
         }
 
         return $fileinfo;

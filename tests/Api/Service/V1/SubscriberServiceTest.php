@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\SubscriberService;
@@ -49,7 +42,7 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'findBy', 'findOneBy'])
+            ->setMethods([ 'countBy', 'findBy', 'findOneBy', 'findSubscribers' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -119,6 +112,32 @@ class SubscriberServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception()));
 
         $this->service->getItem(1);
+    }
+
+    /**
+     * Tests getReport when no error.
+     */
+    public function testGetReport()
+    {
+        $item = new Entity([ 'type' => 2 ]);
+
+        $this->repository->expects($this->once())->method('findSubscribers')
+            ->willReturn($item);
+
+        $this->assertEquals($item, $this->service->getReport());
+    }
+
+    /**
+     * Tests getItem when the item has no subscriber property to true.
+     *
+     * @expectedException \Api\Exception\GetListException
+     */
+    public function testGetReportWhenErrorWhenNoSubscriber()
+    {
+        $this->repository->expects($this->once())->method('findSubscribers')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->getReport();
     }
 
     /*

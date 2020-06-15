@@ -62,12 +62,10 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.update' => [
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeObjectCacheContentMeta', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.delete' => [
                 ['removeObjectCacheForContent', 10],
-                ['removeObjectCacheContentMeta', 10],
             ],
             'content.createItem' => [
                 ['removeVarnishCacheCurrentInstance', 5],
@@ -75,19 +73,16 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.updateItem' => [
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeObjectCacheContentMeta', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.deleteItem' => [
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeObjectCacheContentMeta', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.patchItem'     => [
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeObjectCacheContentMeta', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             // Frontpage hooks
@@ -171,20 +166,6 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('cache.manager')->getConnection('manager')
             ->remove($instance->domains);
-    }
-
-    /**
-     * Deletes the content metadata from cache after it is updated.
-     *
-     * @param Event $event The event to handle.
-     *
-     * @return null
-     */
-    public function removeObjectCacheContentMeta(Event $event)
-    {
-        $content = $event->getArgument('item');
-
-        $this->cache->delete("content-meta-" . $content->id);
     }
 
     /**

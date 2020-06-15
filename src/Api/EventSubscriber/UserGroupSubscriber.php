@@ -1,20 +1,20 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\EventSubscriber;
 
-use Api\Service\V1\RedisService;
+use Api\Helper\Cache\UserGroupCacheHelper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserGroupSubscriber implements EventSubscriberInterface
 {
+    /**
+     * The helper service.
+     *
+     * @var UserGroupCacheHelper
+     */
+    protected $helper;
+
     /**
      * {@inheritdoc}
      */
@@ -32,11 +32,12 @@ class UserGroupSubscriber implements EventSubscriberInterface
     /**
      * Initializes the UserGroupSubscriber.
      *
-     * @param RedisService $service The api.service.redis service.
+     * @param UserGroupCacheHelper $helper The helper to remove user-group
+     *                                     caches.
      */
-    public function __construct(RedisService $service)
+    public function __construct(UserGroupCacheHelper $helper)
     {
-        $this->service = $service;
+        $this->helper = $helper;
     }
 
     /**
@@ -54,6 +55,6 @@ class UserGroupSubscriber implements EventSubscriberInterface
      */
     public function onUserGroupUpdate()
     {
-        $this->service->deleteItemByPattern('user-*');
+        $this->helper->deleteUsers();
     }
 }

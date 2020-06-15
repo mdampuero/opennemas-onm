@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\AttachmentSubscriber;
@@ -27,12 +20,12 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\ContentCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteContents' ])
+            ->setMethods([ 'deleteFile', 'deleteItem' ])
             ->getMock();
 
-        $this->subscriber = new AttachmentSubscriber($this->vh);
+        $this->subscriber = new AttachmentSubscriber($this->helper);
     }
 
     /**
@@ -49,7 +42,7 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnAttachmentDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\AttachmentSubscriber')
-            ->setConstructorArgs([ $this->vh ])
+            ->setConstructorArgs([ $this->helper ])
             ->setMethods([ 'onAttachmentUpdate' ])
             ->getMock();
 
@@ -70,8 +63,9 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->once())->method('getArgument')
             ->with('item')->willReturn($item);
 
-
-        $this->vh->expects($this->once())->method('deleteContents')->with([ $item ]);
+        $this->helper->expects($this->at(0))->method('deleteItem')
+            ->with($item)->willReturn($this->helper);
+        $this->helper->expects($this->at(1))->method('deleteFile')->with($item);
 
         $this->subscriber->onAttachmentUpdate($this->event);
     }
