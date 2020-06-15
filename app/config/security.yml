@@ -66,6 +66,10 @@ security:
             pattern:  ^/framework
             security: false
 
+        manager_ws_refresh:
+            pattern: ^/managerws/refresh
+            security: false
+
         manager_ws_login:
             pattern:  ^/managerws/(login|check)
             stateless: true
