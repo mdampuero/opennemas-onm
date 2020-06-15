@@ -19,13 +19,15 @@ function smarty_function_render_messages($params, &$smarty)
         }
 
         foreach ($messages as $msg) {
-            $messagesHTML .= sprintf(
-                "<div class=\"alert alert-{$style}\" data-created=\"$created\">"
-                . "<button class=\"close\" data-dismiss=\"alert\" type=\"button\">×</button>"
-                . "%s"
-                . "</div>\n",
-                $msg
-            );
+            if (!empty($msg)) {
+                $messagesHTML .= sprintf(
+                    "<div class=\"alert alert-{$style}\" data-created=\"$created\">"
+                    . "<button class=\"close\" data-dismiss=\"alert\" type=\"button\">×</button>"
+                    . "%s"
+                    . "</div>\n",
+                    $msg
+                );
+            }
         }
     }
 
