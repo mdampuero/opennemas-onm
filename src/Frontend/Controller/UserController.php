@@ -196,7 +196,7 @@ class UserController extends Controller
             $this->get('application.log')
                 ->info('password.request.email.success: ' . $user->email);
 
-            $this->get('session')->getFlashBag()->add('success', _('Password recovery email was sent'));
+            $this->get('session')->getFlashBag()->add('success', _('Password recovery email was sent.'));
 
             $this->view->assign([ 'user' => $user ]);
         } catch (\Exception $e) {
@@ -380,7 +380,7 @@ class UserController extends Controller
             $this->sendCreateEmail($data);
 
             $this->get('session')->getFlashBag()
-                ->add('success', _('The verification email was sent'));
+                ->add('success', _('The verification email was sent.'));
 
             return $this->redirect($this->generateUrl('frontend_authentication_login'));
         } catch (GetItemException $e) {
