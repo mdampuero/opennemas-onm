@@ -141,7 +141,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('error', sprintf(_(
                     '<strong>This account has not been verified.</strong>' .
-                    '<ul class="mb-0">' .
+                    '<ul>' .
                     '<li>To verify this account click on the link sent to your email.</li>' .
                     '<li>If you have not received any message, check your spam box.</li>' .
                     '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
@@ -290,7 +290,7 @@ class UserController extends Controller
             $request->getSession()->getFlashBag()
                 ->add('error', sprintf(
                     _('<strong>The email address is already in use.</strong>' .
-                    '<ul class="mb-0">' .
+                    '<ul>' .
                     '<li>Sign in <a href="%s">here</a>.</li>' .
                     '<li>Recover password <a href="%s">here</a>.</li>' .
                     '</ul>'),
