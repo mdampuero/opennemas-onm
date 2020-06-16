@@ -70,7 +70,7 @@ class WidgetRenderer extends Renderer
      */
     protected function renderletIntelligentWidget($content, $params = null)
     {
-        $widget = $this->factoryWidget($content, $params);
+        $widget = $this->getWidget($content, $params);
 
         if (is_null($widget)) {
             return sprintf(_('Widget %s not available'), $content->content);
@@ -87,7 +87,7 @@ class WidgetRenderer extends Renderer
      *
      * @return Object the widget instance
      */
-    protected function factoryWidget($content, $params = null)
+    public function getWidget($content, $params = null)
     {
         $widget = $content->content;
 
