@@ -446,32 +446,6 @@ class Advertisement extends Content
     }
 
     /**
-     * Renders the advertisment given a set of parameters
-     *
-     * @param array $params list of parameters for rendering the advertisement
-     *
-     * @return string the final html for the ad
-     */
-    public function render($params)
-    {
-        // Don't render any non default ads if module is not activated
-        if (!getService('core.security')->hasExtension('ADS_MANAGER')
-            && (!isset($this->default_ad) || $this->default_ad != 1)
-        ) {
-            return '';
-        }
-
-        // With multiple positions we cannot rely on the type_advertisement=37
-        // any more so I'm telling the renderer that this is a floating banner
-        // Also for smart we need advertisementGroup param
-        $params = [ 'floating' => true, 'advertisementGroup' => 'frontpage' ];
-
-        $adsRenderer = getService('frontend.renderer.advertisement');
-
-        return $adsRenderer->render($this, $params);
-    }
-
-    /**
      * Removes positions for the advertisement.
      *
      * @param int $id The advertisement id.

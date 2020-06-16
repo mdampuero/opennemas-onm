@@ -16,9 +16,9 @@ class GAnalyticsRenderer extends StatisticsRenderer
     /**
      * {@inheritdoc}
      */
-    public function __construct($global, $backend, $frontend)
+    public function __construct($container)
     {
-        parent::__construct($global, $backend, $frontend);
+        parent::__construct($container);
 
         $this->config = $this->global->getContainer()
             ->get('orm.manager')
@@ -33,9 +33,16 @@ class GAnalyticsRenderer extends StatisticsRenderer
     {
         $extra['category']  = $this->global->getSection();
         $extra['extension'] = $this->global->getExtension();
+        $cleanConfig        = [];
+
+        foreach ($this->config as $account) {
+            if (array_key_exists('api_key', $account) && !empty(trim($account['api_key']))) {
+                $cleanConfig[] = $account;
+            }
+        }
 
         $params = [
-            'params'  => $this->config,
+            'params'  => $cleanConfig,
             'extra'   => $extra,
             'random'  => rand(0, 0x7fffffff),
             'date'    => date('d/m/Y'),

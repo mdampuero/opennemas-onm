@@ -13,15 +13,8 @@ namespace Frontend\Renderer;
  * The AdvertisementRenderer class defines common properties and methods for all
  * advertisement renderers.
  */
-class AdvertisementRenderer
+class AdvertisementRenderer extends Renderer
 {
-    /**
-     * The service container.
-     *
-     * @var ServiceContainer
-     */
-    protected $container;
-
     /**
      * The available inline formats.
      *
@@ -43,11 +36,11 @@ class AdvertisementRenderer
      */
     public function __construct($container)
     {
-        $this->container = $container;
-        $this->router    = $this->container->get('router');
-        $this->tpl       = $this->container->get('view')->get('backend');
-        $this->instance  = $this->container->get('core.instance');
-        $this->ds        = $this->container->get('orm.manager')
+        parent::__construct($container);
+        $this->router   = $this->container->get('router');
+        $this->tpl      = $this->container->get('view')->get('backend');
+        $this->instance = $this->container->get('core.instance');
+        $this->ds       = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
     }
 
@@ -122,7 +115,7 @@ class AdvertisementRenderer
      *
      * @return string The HTML content for the advertisement.
      */
-    public function render(\Advertisement $ad, $params)
+    public function render($ad, $params)
     {
         // Get renderer class and ad format
         $renderer  = $this->getRendererClass($ad->with_script);
@@ -131,8 +124,7 @@ class AdvertisementRenderer
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
         if ($isSafeFrame && !in_array($adsFormat, $this->inlineFormats)) {
-            return array_key_exists('floating', $params)
-                && $params['floating'] === true
+            return $this->isFloating($params)
                     ? $this->renderSafeFrameSlot($ad)
                     : $renderer->renderSafeFrame($ad, $params);
         }
@@ -267,6 +259,18 @@ class AdvertisementRenderer
             'top' : $ad->params['orientation'];
 
         return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
+    }
+
+    /**
+     * Returns if advertisement is floating or not.
+     *
+     * @param Array          $params The array of parameters.
+     *
+     * @return boolean True if it is floating, False if it isn't.
+     */
+    protected function isFloating($params)
+    {
+        return array_key_exists('placeholder', $params);
     }
 
     /**

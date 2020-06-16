@@ -233,24 +233,23 @@ class Letter extends Content
     }
 
     /**
-     * Renders the letter.
+     * Determines if the content of a comment has bad words.
      *
-     * @param array $params The parameters for rendering the content
+     * @param array $data The data from the comment.
      *
-     * @return string The generated HTML.
+     * @return boolean True if the letter contains bad words. Otherwise, returns
+     *                 false.
      */
-    public function render($params)
+    public function hasBadWords($data)
     {
-        $tpl = getService('core.template');
+        $text = $data['title'] . ' ' . $data['body'];
 
-        $params['item'] = $this;
-
-        try {
-            $html = $tpl->fetch('frontpage/contents/_content.tpl', $params);
-        } catch (\Exception $e) {
-            $html = '';
+        if (isset($data['author'])) {
+            $text .= ' ' . $data['author'];
         }
 
-        return $html;
+        $weight = \Onm\StringUtils::getWeightBadWords($text);
+
+        return $weight > 100;
     }
 }
