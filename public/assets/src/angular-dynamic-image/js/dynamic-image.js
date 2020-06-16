@@ -12,7 +12,7 @@
    *   The `onm.dynamicImage` module provides a service and a directive to load
    *   images dynamically.
    */
-  angular.module('onm.dynamicImage', ['swfobject', 'onm.routing'])
+  angular.module('onm.dynamicImage', [ 'swfobject', 'onm.routing' ])
 
     /**
      * @ngdoc provider
@@ -56,7 +56,7 @@
          * @name     allowedAttributes
          * @type     {Array}
          */
-        this.allowedAttributes = ['class', 'height', 'width'];
+        this.allowedAttributes = [ 'class', 'height', 'width' ];
 
         /**
          * Path to the default image.
@@ -74,7 +74,7 @@
          * @name     property
          * @type     {String}
          */
-        this.property = 'path_img';
+        this.property = 'path';
 
         /**
          * The image folder name.

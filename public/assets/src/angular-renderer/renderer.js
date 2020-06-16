@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -37,7 +37,7 @@
           var alt   = '';
           var align = '';
           var html  = '<img[align] src="' + instanceMedia + 'images' +
-            image.path_img + '"[alt]>';
+            image.path + '"[alt]>';
 
           if (image.description) {
             alt = ' alt="' + image.description + '"';
