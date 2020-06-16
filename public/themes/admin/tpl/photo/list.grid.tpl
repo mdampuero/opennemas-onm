@@ -54,7 +54,7 @@
       </div>
       <ul class="media-information">
         <li>
-          <a class="btn btn-block btn-default" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.id}) %]">
+          <a class="btn btn-block btn-default" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.pk_content}) %]">
               <i class="fa fa-edit ng-isolate-scope"></i>
               {t}Edit{/t}
           </a>
@@ -78,7 +78,7 @@
             {t}Name{/t}
           </label>
           <span class="m-l-10">
-            [% selected.lastSelected.name %]
+            [% selected.lastSelected.name %] [% selected.lastSelected.title %]
           </span>
         </li>
         <li>

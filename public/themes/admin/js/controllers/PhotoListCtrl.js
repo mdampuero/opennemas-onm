@@ -106,9 +106,9 @@
           var data = { description: $scope.selected.lastSelected.description };
 
           var route = {
-            name: 'backend_ws_picker_save_description',
+            name: 'api_v1_backend_photo_patch_item',
             params:  {
-              id: $scope.selected.lastSelected.id
+              id: $scope.selected.lastSelected.pk_content
             }
           };
 
