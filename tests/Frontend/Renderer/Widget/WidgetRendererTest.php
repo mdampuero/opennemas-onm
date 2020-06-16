@@ -16,7 +16,7 @@ class WidgetRendererTest extends TestCase
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\Widget\WidgetRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderletSmarty', 'renderletIntelligentWidget', 'factoryWidget' ])
+            ->setMethods([ 'renderletSmarty', 'renderletIntelligentWidget', 'getWidget' ])
             ->getMock();
 
         $this->loader = $this->getMockBuilder('Common\Core\Component\Loader\WidgetLoader')
@@ -147,13 +147,13 @@ class WidgetRendererTest extends TestCase
 
         $renderer = $this->getMockBuilder('Frontend\Renderer\Widget\WidgetRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'factoryWidget' ])
+            ->setMethods([ 'getWidget' ])
             ->getMock();
 
         $method = new \ReflectionMethod($renderer, 'renderletIntelligentWidget');
         $method->setAccessible(true);
 
-        $renderer->expects($this->once())->method('factoryWidget')
+        $renderer->expects($this->once())->method('getWidget')
             ->willReturn($widget);
 
         $widget->expects($this->once())->method('render')
@@ -163,30 +163,30 @@ class WidgetRendererTest extends TestCase
     }
 
     /**
-     * Tests factoryWidget when empty content.
+     * Tests getWidget when empty content.
      */
-    public function testFactoryWidgetWhenEmpty()
+    public function testgetWidgetWhenEmpty()
     {
         $widget          = new \Widget();
         $widget->content = null;
 
         $renderer = new WidgetRenderer($this->container);
-        $method   = new \ReflectionMethod($renderer, 'factoryWidget');
+        $method   = new \ReflectionMethod($renderer, 'getWidget');
         $method->setAccessible(true);
 
         $this->assertEquals(null, $method->invokeArgs($renderer, [ $widget ]));
     }
 
     /**
-     * Tests factoryWidget when class doesn't exists.
+     * Tests getWidget when class doesn't exists.
      */
-    public function testFactoryWidgetWhenNoClass()
+    public function testgetWidgetWhenNoClass()
     {
         $widget          = new \Widget();
         $widget->content = 'AllHeadlines';
 
         $renderer = new WidgetRenderer($this->container);
-        $method   = new \ReflectionMethod($renderer, 'factoryWidget');
+        $method   = new \ReflectionMethod($renderer, 'getWidget');
         $method->setAccessible(true);
 
         $this->loader->expects($this->at(0))->method('loadWidget')
