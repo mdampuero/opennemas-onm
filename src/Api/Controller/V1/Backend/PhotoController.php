@@ -12,7 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class PhotoController extends ContentOldController
+class PhotoController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,12 @@ class PhotoController extends ContentOldController
             $this->checkSecurity($this->extension, $this->getActionPermission('save'));
             $files = $request->files->all();
             $file  = array_pop($files);
-            $item  = $this->get($this->service)->createItem($file);
+            $data  = [
+                'content_type_name' => 'photo',
+                'fk_content_type'   => 8,
+            ];
+            $item  = $this->get($this->service)->createItem($data, $file);
+
             return new JsonResponse($item, 201);
         } catch (\Exception $e) {
             return new JsonResponse($e->getMessage(), 400);
