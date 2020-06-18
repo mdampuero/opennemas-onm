@@ -1,15 +1,11 @@
 <?php
 
-namespace Framework\Command;
+namespace Common\Core\Command;
 
-use Common\Core\Command\Command;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
-class ExportContentsCommand extends Command
+class ExportContentCommand extends Command
 {
     /**
      * The command stats.
@@ -29,7 +25,7 @@ class ExportContentsCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('export:contents')
+            ->setName('core:content:export')
             ->setDescription('Exports contents from one instance to a given folder path')
             ->addArgument(
                 'instance',
