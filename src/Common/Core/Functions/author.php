@@ -196,10 +196,10 @@ function get_author_url($item = null) : ?string
             : null;
     }
 
-    if (!empty($author->slug)) {
+    if (has_author_slug($author)) {
         $routeName   = 'frontend_author_frontpage';
         $routeParams = [
-            'slug' => $author->slug,
+            'slug' => get_author_slug($author),
         ];
 
         return getService('router')->generate($routeName, $routeParams);
@@ -252,6 +252,23 @@ function is_blog($item = null) : bool
     $author = get_author($item);
 
     return !empty($author->is_blog) ? $author->is_blog : false;
+}
+
+/**
+ * Checks if if the author has a slug defined based on a content or author
+ * provided as parameter
+ *
+ * @param mixed $item The item to get author slug property. If not
+ *                    provided, the function will try to search the item in the
+ *                    template.
+ *
+ * @return int The author avatar id.
+ */
+function has_author_slug($item = null) : bool
+{
+    $slug = get_author_slug($item);
+
+    return !empty($slug);
 }
 
 /**
