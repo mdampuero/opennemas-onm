@@ -250,6 +250,9 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
             'slug' => 'gorp',
         ]);
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn('gorp');
+
         $this->router->expects($this->once())->method('generate')
             ->with('frontend_author_frontpage', [ 'slug' => 'gorp' ])
             ->willReturn('/author/gorp');
@@ -393,6 +396,21 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests has_author_slug.
+     */
+    public function testHasAuthorSlug()
+    {
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn('michelle-price');
+
+        $this->assertFalse(has_author_slug(131));
+        $this->assertTrue(has_author_slug(new User([
+            'name' => 'Michelle Price',
+            'slug' => 'michelle-price'
+        ])));
+    }
+
+    /**
      * Tests has_author_url.
      */
     public function testHasAuthorUrl()
@@ -401,6 +419,9 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
             'name' => 'michelle price',
             'slug' => 'michelle-price',
         ]);
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn('michelle-price');
 
         $this->router->expects($this->once())->method('generate')
             ->with('frontend_author_frontpage', [ 'slug' => 'michelle-price' ])
