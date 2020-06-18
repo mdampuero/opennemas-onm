@@ -19,11 +19,6 @@ services:
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
         public: true
 
-    user_repository:
-        class: Repository\UserManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
-        public: true
-
     menu_repository:
         class: Repository\MenuManager
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
