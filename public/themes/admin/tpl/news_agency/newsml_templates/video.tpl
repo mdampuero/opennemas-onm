@@ -24,7 +24,7 @@
       <FirstCreated>{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}</FirstCreated>
       <FirstPublished>{format_date date=$video->starttime type="custom" format="yMMdd'T'HHmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$video->changed type="custom" format="yMMdd'T'HHmmssxxx"}</ThisRevisionCreated>
-      <Status FormalName="Usable" />
+      <Status FormalName="{if $video->in_litter}Canceled{else}{if $video->content_status}Usable{else}Withheld{/if}{/if}" />
       <Urgency FormalName="5" />
     </NewsManagement>
     <NewsComponent Duid="video_{$video->id}.video">
