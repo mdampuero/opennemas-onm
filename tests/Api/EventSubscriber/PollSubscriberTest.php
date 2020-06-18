@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\PollSubscriber;
@@ -26,12 +19,12 @@ class PollSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\ContentCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteContents' ])
+            ->setMethods([ 'deleteItem' ])
             ->getMock();
 
-        $this->subscriber = new PollSubscriber($this->vh);
+        $this->subscriber = new PollSubscriber($this->helper);
     }
 
     /**
@@ -54,8 +47,7 @@ class PollSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->once())->method('getArgument')
             ->with('item')->willReturn($item);
 
-
-        $this->vh->expects($this->once())->method('deleteContents')->with([ $item ]);
+        $this->helper->expects($this->once())->method('deleteItem')->with($item);
 
         $this->subscriber->onPollVote($this->event);
     }

@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Component\Loader;
 
 use Common\Model\Entity\Instance;
@@ -93,6 +86,10 @@ class InstanceLoader
 
         $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
 
+        if (!$this->isValid($this->instance, $domain)) {
+            throw new \Exception();
+        }
+
         $this->cache->set($domain, $this->instance);
 
         return $this;
@@ -115,6 +112,11 @@ class InstanceLoader
         $oql = sprintf('internal_name = "%s"', $name);
 
         $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
+
+        // Check for valid instance internal name
+        if ($this->instance->internal_name !== $name) {
+            throw new \Exception();
+        }
 
         return $this;
     }

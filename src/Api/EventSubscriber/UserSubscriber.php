@@ -1,23 +1,20 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\EventSubscriber;
 
-use Common\Core\Component\Helper\TemplateCacheHelper;
-use Common\Core\Component\Helper\VarnishHelper;
-use Common\Model\Entity\Instance;
-use Onm\Cache\AbstractCache;
+use Api\Helper\Cache\UserCacheHelper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserSubscriber implements EventSubscriberInterface
 {
+    /**
+     * The helper service.
+     *
+     * @var UserCacheHelper
+     */
+    protected $helper;
+
     /**
      * {@inheritdoc}
      */
@@ -35,21 +32,11 @@ class UserSubscriber implements EventSubscriberInterface
     /**
      * Initializes the UserSubscriber.
      *
-     * @param Instance            $instance The current instance.
-     * @param TemplateCacheHelper $th       The TemplateCacheHelper service.
-     * @param VarnishHelper       $vh       The VarnishHelper service.
-     * @param AbstractCache       $cache    The old cache connection.
+     * @param UserCacheHelper $helper The helper to remove user caches.
      */
-    public function __construct(
-        ?Instance           $instance,
-        TemplateCacheHelper $th,
-        VarnishHelper       $vh,
-        AbstractCache       $cache
-    ) {
-        $this->instance = $instance;
-        $this->template = $th;
-        $this->varnish  = $vh;
-        $this->oldCache = $cache;
+    public function __construct(UserCacheHelper $helper)
+    {
+        $this->helper = $helper;
     }
 
     /**
@@ -77,11 +64,9 @@ class UserSubscriber implements EventSubscriberInterface
 
         // TODO: Remove when using new ORM for users
         foreach ($users as $user) {
-            $this->oldCache->delete('user-' . $user->id);
+            $this->helper->deleteItem($user);
         }
 
-        $this->template->deleteUsers($users);
-        $this->template->deleteContentsByUsers($users);
-        $this->varnish->deleteInstance($this->instance);
+        $this->helper->deleteInstance();
     }
 }

@@ -211,7 +211,7 @@ class NewsletterController extends Controller
         $contentsRAW = $request->request->get('content_ids');
         $containers  = json_decode($contentsRAW);
 
-        $this->get('core.locale')->setContext('frontend');
+        $this->get('core.locale')->setContext('frontend')->apply();
 
         foreach ($containers as &$container) {
             foreach ($container->items as &$content) {
@@ -233,6 +233,7 @@ class NewsletterController extends Controller
         $title        = $request->request->filter('title', $defaultTitle, FILTER_SANITIZE_STRING);
         $html         = $nm->render($containers);
 
+        $this->get('core.locale')->setContext('backend')->apply();
         try {
             if ($id > 0) {
                 $newsletter = $ns->patchItem($id, [

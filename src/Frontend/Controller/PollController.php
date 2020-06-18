@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Displays a poll or a list of polls.
@@ -209,8 +210,13 @@ class PollController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $category = $params['o_category'];
-        $page     = $params['page'] ?? 1;
+        $page     = (int) ($params['page'] ?? 1);
         $date     = date('Y-m-d H:i:s');
+
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
 
         $epp = (int) $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -231,6 +237,11 @@ class PollController extends FrontendController
             $epp,
             $epp * ($page - 1)
         ));
+
+        // No first page and no contents
+        if ($page > 1 && empty($response['items'])) {
+            throw new ResourceNotFoundException();
+        }
 
         $params = array_merge($params, [
             'polls'      => $response['items'],

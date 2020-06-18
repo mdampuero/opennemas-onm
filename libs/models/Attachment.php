@@ -292,29 +292,6 @@ class Attachment extends Content
     }
 
     /**
-     * Renders the file given a set of parameters
-     *
-     * @param array $params the parameters
-     * @param Template $tpl the Template instance
-     *
-     * @return string the final html for the article
-     */
-    public function render($params, $tpl = null)
-    {
-        $tpl = getService('core.template');
-
-        $params['item'] = $this;
-
-        try {
-            $html = $tpl->fetch($params['tpl'], $params);
-        } catch (\Exception $e) {
-            $html = _('File not available');
-        }
-
-        return $html;
-    }
-
-    /**
      *  This method return the path of the file system for this file
      */
     public function getFileSystemPath()

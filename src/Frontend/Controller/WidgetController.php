@@ -40,7 +40,7 @@ class WidgetController extends Controller
             return $response;
         }
 
-        $widget = $widget->factoryWidget();
+        $widget = $this->get('frontend.renderer.widget')->getWidget($widget);
 
         if (!method_exists($widget, $action)) {
             return $response;

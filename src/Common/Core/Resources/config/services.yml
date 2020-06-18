@@ -137,12 +137,12 @@ services:
 
     core.security.user.provider:
         class:     Common\Core\Component\Security\User\UserProvider
-        arguments: [ '@orm.manager', [ 'instance', 'manager' ] ]
+        arguments: [ '@orm.manager', [ 'instance' ] ]
         public:    true
 
     core.security.user.oauth_provider:
         class:     Common\Core\Component\Security\User\OAuthUserProvider
-        arguments: [ '@orm.manager', '@security.token_storage', [ 'instance', 'manager' ] ]
+        arguments: [ '@orm.manager', '@security.token_storage', [ 'instance' ] ]
         public:    true
 
     core.theme:

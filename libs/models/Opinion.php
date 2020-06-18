@@ -255,42 +255,6 @@ class Opinion extends Content
         }
     }
 
-    /**
-     * Renders the opinion article
-     *
-     * @return string the generated HTML for the opinion
-     */
-    public function render($params)
-    {
-        $tpl = getService('core.template');
-
-        $author = new \User($this->fk_author);
-
-        $this->name             = \Onm\StringUtils::generateSlug($author->name);
-        $this->author_name_slug = $this->name;
-
-        if ($author->is_blog == 1) {
-            $params['item'] = $this;
-            $template       = 'frontpage/contents/_blog.tpl';
-
-            if ($params['custom'] == 1) {
-                $template = $params['tpl'];
-            }
-
-            return $tpl->fetch($template, $params);
-        }
-
-        $params['item']     = $this;
-        $params['cssclass'] = 'opinion';
-        $template           = 'frontpage/contents/_opinion.tpl';
-
-        if ($params['custom'] == 1) {
-            $template = $params['tpl'];
-        }
-
-        return $tpl->fetch($template, $params);
-    }
-
    /**
     * Get latest Opinions without opinions present in frontpage
     *

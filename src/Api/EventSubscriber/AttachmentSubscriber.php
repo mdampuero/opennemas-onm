@@ -1,20 +1,20 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\EventSubscriber;
 
-use Common\Core\Component\Helper\VarnishHelper;
+use Api\Helper\Cache\ContentCacheHelper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AttachmentSubscriber implements EventSubscriberInterface
 {
+    /**
+     * The helper service.
+     *
+     * @var ContentCacheHelper
+     */
+    protected $helper;
+
     /**
      * {@inheritdoc}
      */
@@ -30,11 +30,12 @@ class AttachmentSubscriber implements EventSubscriberInterface
     /**
      * Initializes the AttachmentSubscriber.
      *
-     * @param VarnishHelper $vh The VarnishHelper service.
+     * @param ContentCacheHelper $helper The helper to remove caches for
+     *                                   contents.
      */
-    public function __construct(VarnishHelper $vh)
+    public function __construct(ContentCacheHelper $helper)
     {
-        $this->vh = $vh;
+        $this->helper = $helper;
     }
 
     /**
@@ -59,10 +60,8 @@ class AttachmentSubscriber implements EventSubscriberInterface
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
-        $files = array_filter($contents, function ($a) {
-            return $a->content_type_name === 'attachment';
-        });
-
-        $this->vh->deleteContents($files);
+        foreach ($contents as $content) {
+            $this->helper->deleteItem($content)->deleteFile($content);
+        }
     }
 }

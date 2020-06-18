@@ -29,12 +29,9 @@ function smarty_outputfilter_statistics($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
     ) {
-        $output = $smarty->getContainer()->get('frontend.renderer.statistics')->render(
-            [
-                'Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics'
-            ],
+        $output = $smarty->getContainer()->get('frontend.renderer')->render(
             $content,
-            $output
+            [ 'types' => ['Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics'], 'output' => $output ]
         );
     }
 

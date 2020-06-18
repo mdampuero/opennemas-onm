@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\UserGroupSubscriber;
@@ -21,12 +14,12 @@ class UserGroupSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->service = $this->getMockBuilder('Api\Service\V1\RedisService')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\UserGroupCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteItemByPattern' ])
+            ->setMethods([ 'deleteUsers' ])
             ->getMock();
 
-        $this->subscriber = new UserGroupSubscriber($this->service);
+        $this->subscriber = new UserGroupSubscriber($this->helper);
     }
 
     /**
@@ -38,12 +31,12 @@ class UserGroupSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests onUserDelete.
+     * Tests onUserGroupDelete.
      */
-    public function testOnUserDelete()
+    public function testOnUserGroupDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\UserGroupSubscriber')
-            ->setConstructorArgs([ $this->service ])
+            ->setConstructorArgs([ $this->helper ])
             ->setMethods([ 'onUserGroupUpdate' ])
             ->getMock();
 
@@ -53,12 +46,11 @@ class UserGroupSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests onUserUpdate when only an user was updated.
+     * Tests onUserGroupUpdate.
      */
     public function testOnUserUpdateForUser()
     {
-        $this->service->expects($this->once())->method('deleteItemByPattern')
-            ->with('user-*');
+        $this->helper->expects($this->once())->method('deleteUsers');
 
         $this->subscriber->onUserGroupUpdate();
     }

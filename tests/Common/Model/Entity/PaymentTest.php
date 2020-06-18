@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Tests\ORM\Entity;
+namespace Tests\Common\Model\Entity;
 
 use Common\Model\Entity\Payment;
 

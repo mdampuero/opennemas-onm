@@ -438,29 +438,6 @@ class Article extends Content
     }
 
     /**
-     * Renders the article given a set of parameters
-     *
-     * @param array $params a list of parameters to pass to the template object
-     * @param Template $tpl the smarty instance
-     *
-     * @return string the final html for the article
-     */
-    public function render($params, $tpl = null)
-    {
-        $tpl = getService('core.template');
-
-        $params['item'] = $this;
-
-        try {
-            $html = $tpl->fetch($params['tpl'], $params);
-        } catch (\Exception $e) {
-            $html = _('Article not available');
-        }
-
-        return $html;
-    }
-
-    /**
      * Relates a list of content ids to another one
      *
      * @param string $data   list of related content IDs

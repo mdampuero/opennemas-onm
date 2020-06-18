@@ -175,9 +175,16 @@ class BlogController extends FrontendController
      */
     public function hydrateList(array &$params = []) : void
     {
-        $page = array_key_exists('page', $params) ? $params['page'] : 1;
+        $date = date('Y-m-d H:i:s');
+        $page = (int) ($params['page'] ?? 1);
 
-        $epp = $this->get('orm.manager')->getDataSet('Settings', 'instance')
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        $epp = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
         $authors = $this->get('api.service.author')
@@ -208,14 +215,19 @@ class BlogController extends FrontendController
             ],
         ];
 
-        $em         = $this->get('opinion_repository');
-        $blogs      = $em->findBy($filters, $order, $epp, $page);
-        $countItems = $em->countBy($filters);
+        $em     = $this->get('opinion_repository');
+        $blogs  = $em->findBy($filters, $order, $epp, $page);
+        $total  = $em->countBy($filters);
+
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $total < $epp * $page) {
+            throw new ResourceNotFoundException();
+        }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $epp,
-            'total'       => $countItems,
+            'total'       => $total,
             'page'        => $page,
             'route'       => 'frontend_blog_frontpage',
         ]);
@@ -237,12 +249,20 @@ class BlogController extends FrontendController
      */
     public function hydrateListAuthor(array &$params, $author) : void
     {
-        $page = $params['page'] ?? 1;
+        $date = date('Y-m-d H:i:s');
+        $page = (int) ($params['page'] ?? 1);
 
-        // Setting filters for the further SQLs
-        $date    = date('Y-m-d H:i:s');
+        // Invalid page provided as parameter
+        if ($page <= 0) {
+            throw new ResourceNotFoundException();
+        }
+
+        $epp = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
+
         $filters = [
-            'contents`.`fk_author'         => [['value' => $author->id ]],
+            'contents`.`fk_author' => [['value' => $author->id ]],
             'content_status'    => [['value' => 1]],
             'in_litter'         => [['value' => 0]],
             'content_type_name' => [['value' => 'opinion']],
@@ -262,15 +282,13 @@ class BlogController extends FrontendController
 
         $orderBy = ['created' => 'DESC'];
 
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        $this->cm = new \ContentManager();
-        // Get the number of total opinions for this author for pagination purposes
         $total    = $this->get('opinion_repository')->countBy($filters);
         $contents = $this->get('opinion_repository')->findBy($filters, $orderBy, $epp, $page);
 
+        // No first page and no contents or contents from invalid offset
+        if ($page > 1 && $total < $epp * $page) {
+            throw new ResourceNotFoundException();
+        }
 
         foreach ($contents as &$blog) {
             if (isset($blog->img1) && ($blog->img1 > 0)) {
