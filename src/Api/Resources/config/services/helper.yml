@@ -1,0 +1,28 @@
+services:
+    api.helper.cache:
+        class:     Api\Helper\Cache\CacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.category:
+        class:     Api\Helper\Cache\CategoryCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.content:
+        class:     Api\Helper\Cache\ContentCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.newsstand:
+        class:     Api\Helper\Cache\NewsstandCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.tag:
+        class:     Api\Helper\Cache\TagCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.user:
+        class:     Api\Helper\Cache\UserCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.user_group:
+        class:     Api\Helper\Cache\UserGroupCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue' ]

@@ -1262,7 +1262,12 @@ CREATE TABLE `users` (
   KEY `user_username` (`username`),
   KEY `user_email` (`email`),
   KEY `avatar_img_id` (`avatar_img_id`),
+<<<<<<< HEAD
   CONSTRAINT `avatar_img_id` FOREIGN KEY (`avatar_img_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
+=======
+  KEY `user_type` (`type`),
+  CONSTRAINT `avatar_img_id` FOREIGN KEY (`avatar_img_id`) REFERENCES `photos` (`pk_photo`) ON DELETE SET NULL ON UPDATE CASCADE
+>>>>>>> improvement/ONM-6008
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

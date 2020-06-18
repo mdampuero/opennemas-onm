@@ -1,49 +1,29 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Api\EventSubscriber;
 
 use Api\EventSubscriber\SettingSubscriber;
 
+/**
+ * Defines tests cases for SettingSubscriber class.
+ */
 class SettingSubscriberTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Configures the testing environment.
+     */
     public function setUp()
     {
-        $this->instance = $this->getMockBuilder('Common\Model\Entity\Instance')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\CacheHelper')
             ->disableOriginalConstructor()
+            ->setMethods([ 'deleteDynamicCss', 'deleteInstance' ])
             ->getMock();
 
-        $this->tpl = $this->getMockBuilder('Common\Core\Component\Template\Cache\CacheManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteAll' ])
-            ->getMock();
-
-        $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteInstance' ])
-            ->getMock();
-
-        $this->dcs = $this->getMockBuilder('Framework\Component\Assetic\DynamicCssService')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteTimestamp' ])
-            ->getMock();
-
-        $this->subscriber = new SettingSubscriber(
-            $this->instance,
-            $this->tpl,
-            $this->vh,
-            $this->dcs
-        );
+        $this->subscriber = new SettingSubscriber($this->helper);
     }
 
     /**
-     * Tests getSubscribedEvents action
+     * Tests getSubscribedEvents.
      */
     public function testGetSubscribedEvents()
     {
@@ -51,20 +31,13 @@ class SettingSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests onSettingUpdate action
+     * Tests onSettingUpdate.
      */
     public function testOnSettingUpdate()
     {
-        $this->tpl->expects($this->once())
-            ->method('deleteAll');
-
-        $this->dcs->expects($this->once())
-            ->method('deleteTimestamp')
-            ->with('%global%');
-
-        $this->vh->expects($this->once())
-            ->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->at(0))->method('deleteInstance')
+            ->willReturn($this->helper);
+        $this->helper->expects($this->at(1))->method('deleteDynamicCss');
 
         $this->subscriber->onSettingUpdate();
     }

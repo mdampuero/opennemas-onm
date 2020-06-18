@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
@@ -72,11 +65,11 @@ class SubscriberController extends ApiController
     public function getReportAction()
     {
         // Get information
-        $items = $this->get('api.service.subscriber')->getList();
-        $extra = $this->getExtraData($items['items']);
+        $items = $this->get('api.service.subscriber')->getReport();
 
-        $extraFields   = $extra['settings']['fields'];
-        $subscriptions = $extra['subscriptions'];
+        $settings      = $this->getSettings();
+        $extraFields   = $settings['fields'];
+        $subscriptions = $this->getSubscriptions();
 
         // Prepare contents for CSV
         $headers = [
@@ -92,29 +85,26 @@ class SubscriberController extends ApiController
         }
 
         $data = [];
-        foreach ($items['items'] as $user) {
-            if (!is_array($user->user_groups)) {
-                $user->user_groups = [];
-            }
-
+        foreach ($items as $user) {
             $userGroups = [];
-            foreach ($user->user_groups as $value) {
-                if (array_key_exists($value['user_group_id'], $subscriptions)) {
-                    $userGroups[] = $subscriptions[$value['user_group_id']]['name'];
+            foreach ($user['user_groups'] as $value) {
+                if (array_key_exists($value, $subscriptions)) {
+                    $userGroups[] = $subscriptions[$value]['name'];
                 }
             }
 
             $userInfo = [
-                $user->email,
-                $user->name,
-                ($user->activated) ? _('Yes') : _('No'),
-                ($user->register_date instanceof \DateTime)
-                    ? $user->register_date->format('Y-m-d') : '',
+                $user['email'],
+                $user['name'],
+                ($user['activated']) ? _('Yes') : _('No'),
+                $user['register_date'] ?? '',
                 implode(',', $userGroups),
             ];
 
             foreach ($extraFields as $extraField) {
-                array_push($userInfo, $user->{$extraField['name']});
+                if (array_key_exists($extraField['name'], $user)) {
+                    $userInfo[] = $user[$extraField['name']];
+                }
             }
 
             $data[] = $userInfo;

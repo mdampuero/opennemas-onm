@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Framework\Monolog;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +14,34 @@ class OnmFormatter
     protected $container;
 
     /**
+     * The patter to look for.
+     *
+     * @var array
+     */
+    protected $patterns;
+
+    /**
+     * The replacement string.
+     *
+     * @var string
+     */
+    protected $replacement = '<censored>';
+
+    /**
      * Initializes the OnmFormatter.
      *
-     * @param ServiceCotnainer $container The service container.
+     * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
         $this->container = $container;
+
+        $conn = $container->get('orm.connection.instance');
+
+        $this->patterns = [
+            '@' . $conn->user . '@',
+            '@' . $conn->password . '@'
+        ];
     }
 
     /*
@@ -39,6 +53,8 @@ class OnmFormatter
      */
     public function processRecord(array $record)
     {
+        $record['extra']['message']  = $this->getMessage($record['message']);
+        $record['extra']['context']  = $this->getContext($record['context']);
         $record['extra']['instance'] = $this->getInstance();
         $record['extra']['user']     = $this->getUser();
         $record['extra']['url']      = null;
@@ -84,6 +100,22 @@ class OnmFormatter
         return null;
     }
 
+    /*
+     * Replaces the user & password in $context by generic message.
+     *
+     * @param array $context The context.
+     *
+     * @return array The censored context.
+     */
+    protected function getContext(array $context)
+    {
+        return preg_replace(
+            $this->patterns,
+            $this->replacement,
+            json_encode($context)
+        );
+    }
+
     /**
      * Returns the instance to include in the record.
      *
@@ -96,6 +128,22 @@ class OnmFormatter
         }
 
         return $this->container->get('core.globals')->getInstance()->internal_name;
+    }
+
+    /*
+     * Replaces the user & password in $message by generic message.
+     *
+     * @param string $message The message.
+     *
+     * @return string The censored message.
+     */
+    protected function getMessage(string $message)
+    {
+        return preg_replace(
+            $this->patterns,
+            $this->replacement,
+            $message
+        );
     }
 
     /**

@@ -9,10 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Framework\ORM\Entity\Client;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Common\Core\Annotation\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 class DomainController extends Controller
 {

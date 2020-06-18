@@ -100,67 +100,49 @@ class Agency
 
         $tpl = getService('view')->get('backend');
 
-        // Add DateTime with format Y-m-d H:i:s
-        $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
-        $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
-
-        $imageId      = $article->img1;
-        $imageInnerId = $article->img2;
-
-        if (!empty($imageId)) {
-            $image[] = $er->find('Photo', $imageId);
+        if (!empty($article->img1)) {
+            $image[] = $er->find('Photo', $article->img1);
 
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
-
-            // Add DateTime with format Y-m-d H:i:s
-            $article->img1->created_datetime =
-                \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->created);
-            $article->img1->updated_datetime =
-                \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
 
             if (!mb_check_encoding($article->img1->description)) {
                 $article->img1->description = utf8_encode($article->img1->description);
             }
         }
 
-        if (!empty($imageInnerId)) {
-            $image[] = $er->find('Photo', $imageInnerId);
+        if (!empty($article->img2)) {
+            $image[] = $er->find('Photo', $article->img2);
 
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
-
-            // Add DateTime with format Y-m-d H:i:s
-            $article->img2->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->created);
-            $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
 
             if (!mb_check_encoding($article->img2->description)) {
                 $article->img2->description = utf8_encode($article->img2->description);
             }
         }
 
-        $ur = getService('user_repository');
-
         // Get author obj
-        $article->author = $ur->find($article->fk_author);
+        try {
+            if (!empty($article->fk_author)) {
+                $article->author = getService('api.service.author')
+                    ->getItem($article->fk_author);
 
-        $authorPhoto = '';
-        if (isset($article->author->avatar_img_id) &&
-            !empty($article->author->avatar_img_id)
-        ) {
-            // Get author photo
-            $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
-
-            if (is_object($authorPhoto) && !empty($authorPhoto)) {
-                $article->author->photo = $authorPhoto;
+                if (!empty($article->author->avatar_img_id)) {
+                    $article->author->photo = $er->find('Photo', $article->author->avatar_img_id);
+                }
             }
+        } catch (\Exception $e) {
+            getService('application.log')->error(
+                'Unable to fetch author with id '
+                . $article->fk_author . ' :' . $e->getMessage()
+            );
         }
 
         $locale = getService('core.locale')->getRequestLocale();
 
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
-            'article'     => $article,
-            'authorPhoto' => $authorPhoto,
+            'content'     => $article,
             'photo'       => $article->img1,
             'photoInner'  => $article->img2,
             'tags'        => getService('api.service.tag')

@@ -29,27 +29,12 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->oldCache = $this->getMockBuilder('Onm\Cache\AbstractCache')
-            ->setMethods([
-                'delete', 'doContains', 'doDelete', 'doFetch', 'doSave', 'getIds'
-            ])->getMock();
-
-        $this->th = $this->getMockBuilder('Common\Core\Component\Helper\TemplateCacheHelper')
+        $this->helper = $this->getMockBuilder('Api\Helper\Cache\UserCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteContentsByUsers', 'deleteUsers' ])
+            ->setMethods([ 'deleteInstance', 'deleteItem' ])
             ->getMock();
 
-        $this->vh = $this->getMockBuilder('Common\Core\Component\Helper\VarnishHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'deleteInstance' ])
-            ->getMock();
-
-        $this->subscriber = new UserSubscriber(
-            $this->instance,
-            $this->th,
-            $this->vh,
-            $this->oldCache
-        );
+        $this->subscriber = new UserSubscriber($this->helper);
     }
 
     /**
@@ -66,9 +51,7 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnUserDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\UserSubscriber')
-            ->setConstructorArgs([
-                $this->instance, $this->th, $this->vh, $this->oldCache
-            ])
+            ->setConstructorArgs([ $this->helper ])
             ->setMethods([ 'onUserUpdate' ])
             ->getMock();
 
@@ -89,13 +72,9 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(1))->method('getArgument')
             ->with('item')->willReturn($user);
 
-        $this->th->expects($this->once())->method('deleteUsers')
-            ->with([ $user ]);
-        $this->th->expects($this->once())->method('deleteContentsByUsers')
-            ->with([ $user ]);
-
-        $this->vh->expects($this->once())->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->once())->method('deleteItem')
+            ->with($user);
+        $this->helper->expects($this->once())->method('deleteInstance');
 
         $this->subscriber->onUserUpdate($this->event);
     }
@@ -115,13 +94,12 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->at(1))->method('getArgument')
             ->with('items')->willReturn($users);
 
-        $this->th->expects($this->once())->method('deleteUsers')
-            ->with($users);
-        $this->th->expects($this->once())->method('deleteContentsByUsers')
-            ->with($users);
+        $this->helper->expects($this->at(0))->method('deleteItem')
+            ->with($users[0]);
+        $this->helper->expects($this->at(1))->method('deleteItem')
+            ->with($users[1]);
 
-        $this->vh->expects($this->once())->method('deleteInstance')
-            ->with($this->instance);
+        $this->helper->expects($this->at(2))->method('deleteInstance');
 
         $this->subscriber->onUserUpdate($this->event);
     }

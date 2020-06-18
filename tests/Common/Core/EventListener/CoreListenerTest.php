@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Core\EventListener;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
@@ -210,7 +203,7 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
         $this->event->expects($this->once())->method('setResponse');
 
         $this->loader->expects($this->once())->method('load')
-            ->with('qux.glork', '/')
+            ->with('www.waldo.com', '/')
             ->willReturn($this->loader);
         $this->loader->expects($this->once())->method('onlyEnabled')
             ->willReturn($this->loader);
@@ -220,7 +213,7 @@ class CoreListenerTest extends \PHPUnit\Framework\TestCase
             ->with('core.listener.redirect: https://www.waldo.com:8080/');
 
         $this->request->expects($this->any())->method('getHost')
-            ->willReturn('qux.glork');
+            ->willReturn('www.waldo.com');
         $this->request->expects($this->any())->method('getPort')
             ->willReturn(8080);
         $this->request->expects($this->any())->method('getScheme')

@@ -1,20 +1,20 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\EventSubscriber;
 
-use Common\Core\Component\Helper\VarnishHelper;
+use Api\Helper\Cache\ContentCacheHelper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PollSubscriber implements EventSubscriberInterface
 {
+    /**
+     * The helper service.
+     *
+     * @var ContentCacheHelper
+     */
+    protected $helper;
+
     /**
      * {@inheritdoc}
      */
@@ -28,24 +28,27 @@ class PollSubscriber implements EventSubscriberInterface
     /**
      * Initializes the PollSubscriber.
      *
-     * @param VarnishHelper $vh The VarnishHelper service.
+     * @param ContentCacheHelper $helper The helper to remove caches for
+     *                                   contents.
      */
-    public function __construct(VarnishHelper $vh)
+    public function __construct(ContentCacheHelper $helper)
     {
-        $this->vh = $vh;
+        $this->helper = $helper;
     }
 
     /**
-     * Removes polls from varnish when an poll is deleted.
+     * Removes polls from varnish when someone voted on a poll.
      *
      * @param Event $event The dispatched event.
      */
     public function onPollVote(Event $event)
     {
-        $poll = $event->hasArgument('item')
+        $contents = $event->hasArgument('item')
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
 
-        $this->vh->deleteContents($poll);
+        foreach ($contents as $content) {
+            $this->helper->deleteItem($content);
+        }
     }
 }

@@ -30,6 +30,39 @@ function get_category($item = null) : ?\Common\Model\Entity\Category
 }
 
 /**
+ * Returns the category color for the provided item.
+ *
+ * @param Content $item The item to get category color for.
+ *                      If not provided, the function will try to search
+ *                      the item in the template.
+ *
+ * @return ?string The category color if present. Null otherwise.
+ */
+function get_category_color($item = null) : ?string
+{
+    $category = get_category($item);
+
+    return !empty($category) ? $category->color : null;
+}
+
+
+/**
+ * Returns the category description for the provided item.
+ *
+ * @param Content $item The item to get category description for. If not
+ *                      provided, the function will try to search the item in
+ *                      the template.
+ *
+ * @return ?string The category id if present. Null otherwise.
+ */
+function get_category_description($item = null) : ?string
+{
+    $category = get_category($item);
+
+    return !empty($category) ? $category->description : null;
+}
+
+/**
  * Returns the category id for the provided item.
  *
  * @param Content $item The item to get category id for. If not provided, the
@@ -42,6 +75,24 @@ function get_category_id($item = null) : ?int
     $category = get_category($item);
 
     return !empty($category) ? $category->id : null;
+}
+
+/**
+ * Returns the path to category logo for the provided item.
+ *
+ * @param Content $item The item to get logo path for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return ?string The path to category logo. Null otherwise.
+ */
+function get_category_logo($item = null) : ?string
+{
+    $category = get_category($item);
+
+    return empty($category) || empty($category->logo_path)
+        ? null
+        : getService('core.instance')->getImagesShortPath()
+            . $category->logo_path;
 }
 
 /**
@@ -91,4 +142,32 @@ function get_category_url($item = null) : ?string
     return !empty($category)
         ? getService('core.helper.url_generator')->generate($category)
         : null;
+}
+
+/**
+ * Checks if the category has a description.
+ *
+ * @param Content $item The item to check category description for. If not
+ *                      provided, the function will try to search the item in
+ *                      the template.
+ *
+ * @return bool True if the category has a logo. False otherwise.
+ */
+function has_category_description($item = null) : bool
+{
+    return !empty(get_category_description($item));
+}
+
+/**
+ * Checks if the category has a logo.
+ *
+ * @param Content $item The item to check category logo for. If not provided,
+ *                      the function will try to search the item in the
+ *                      template.
+ *
+ * @return bool True if the category has a logo. False otherwise.
+ */
+function has_category_logo($item = null) : bool
+{
+    return !empty(get_category_logo($item));
 }
