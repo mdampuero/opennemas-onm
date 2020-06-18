@@ -97,9 +97,8 @@ class RssController extends FrontendController
                 }
             }
 
-            list($contentPositions, $contents, , ) =
-                $this->get('api.service.frontpage')
-                    ->getCurrentVersionForCategory($id);
+            list($contentPositions, $contents, , ) = $this->get('api.service.frontpage')
+                ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
             $contents = array_filter(
