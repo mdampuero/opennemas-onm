@@ -456,13 +456,8 @@ EOF
                     break;
             }
 
-            // Get author obj
-            $content->author = $this->getContainer()->get('api.service.author')
-                ->getItem($content->fk_author);
-            if (isset($content->author->name)) {
-                $content->author = $content->author->name;
-            } elseif (!empty($content->agency)) {
-                $content->author = $content->agency;
+            if (has_author($content)) {
+                $content->author = get_author_name($content);
             } else {
                 $content->author = 'Redacción';
             }
