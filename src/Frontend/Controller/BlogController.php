@@ -14,6 +14,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -93,21 +94,6 @@ class BlogController extends FrontendController
     ];
 
     /**
-     * Returns a content basing on the parameters in the current request and
-     * the current controller.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Content The content.
-     */
-    protected function getItem(Request $request)
-    {
-        $content = parent::getItem($request);
-
-        return $content;
-    }
-
-    /**
      * Renders the opinion author's frontpage
      *
      * @param Request $request the request object
@@ -120,11 +106,11 @@ class BlogController extends FrontendController
 
         $slug = $request->get('author_slug', null);
 
-        $author = $this->container->get('api.service.author')
-            ->getItemBy("username='{$slug}'");
-
-        if (is_null($author)) {
-            throw new ResourceNotFoundException();
+        try {
+            $author = $this->container->get('api.service.author')
+                ->getItemBy("username='{$slug}'");
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
         }
 
         if ($author->is_blog == 0) {

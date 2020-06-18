@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
@@ -31,9 +32,10 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
-        $user = $this->container->get('api.service.author')->getItemBy("username='{$slug}'");
-        if (empty($user)) {
-            throw new ResourceNotFoundException();
+        try {
+            $user = $this->container->get('api.service.author')->getItemBy("username='{$slug}'");
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
         }
 
         // Setup templating cache layer

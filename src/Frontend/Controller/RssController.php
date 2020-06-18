@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -235,11 +236,11 @@ class RssController extends FrontendController
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Get user by slug
-            $user = $this->container->get('api.service.author')
-                ->getItemBy("username='{$slug}'");
-
-            if (is_null($user)) {
-                throw new ResourceNotFoundException();
+            try {
+                $user = $this->container->get('api.service.author')
+                    ->getItemBy("username='{$slug}'");
+            } catch (GetItemException $e) {
+                throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
             }
 
             $rssTitle = sprintf('RSS de «%s»', $user->name);

@@ -253,11 +253,4 @@ class PollController extends FrontendController
             ])
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []) : void
-    {
-    }
 }

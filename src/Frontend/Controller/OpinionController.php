@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,9 +94,11 @@ class OpinionController extends FrontendController
         $this->checkSecurity($this->extension);
 
         $authorID = (int) $request->get('author_id', null);
-        $author   = $this->container->get('api.service.author')->getItem($authorID);
-        if (is_null($author)) {
-            throw new ResourceNotFoundException();
+
+        try {
+            $author = $this->container->get('api.service.author')->getItem($authorID);
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
         }
 
         if (!empty($author->is_blog)) {
