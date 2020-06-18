@@ -139,19 +139,23 @@ class Agency
             }
         }
 
-        // Get author obj
-        $article->author = getService('api.service.author')->getItem($article->fk_author);
+        try {
+            // Get author obj
+            $article->author = getService('api.service.author')->getItem($article->fk_author);
 
-        $authorPhoto = '';
-        if (isset($article->author->avatar_img_id) &&
-            !empty($article->author->avatar_img_id)
-        ) {
-            // Get author photo
-            $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
+            $authorPhoto = '';
+            if (isset($article->author->avatar_img_id) &&
+                !empty($article->author->avatar_img_id)
+            ) {
+                // Get author photo
+                $authorPhoto = $er->find('Photo', $article->author->avatar_img_id);
 
-            if (is_object($authorPhoto) && !empty($authorPhoto)) {
-                $article->author->photo = $authorPhoto;
+                if (is_object($authorPhoto) && !empty($authorPhoto)) {
+                    $article->author->photo = $authorPhoto;
+                }
             }
+        } catch (\Exception $e) {
+            throw new RestException(404, $e->getMessage());
         }
 
         $locale = getService('core.locale')->getRequestLocale();

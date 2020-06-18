@@ -33,12 +33,16 @@ class Opinions
             throw new RestException(404, 'Page not found');
         }
 
-        // Get author information
-        $author          = getService('api.service.author')->getItem($opinion->fk_author);
-        $opinion->author = $author;
+        try {
+            // Get author information
+            $author          = getService('api.service.author')->getItem($opinion->fk_author);
+            $opinion->author = $author;
 
-        // Get author name slug
-        $opinion->author_name_slug = \Onm\StringUtils::generateSlug($opinion->name);
+            // Get author name slug
+            $opinion->author_name_slug = \Onm\StringUtils::generateSlug($author->name);
+        } catch (\Exception $e) {
+            throw new RestException(404, $e->getMessage());
+        }
 
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);

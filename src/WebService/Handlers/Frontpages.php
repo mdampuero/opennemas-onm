@@ -59,10 +59,14 @@ class Frontpages
 
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-                $content->author = getService('api.service.author')
-                    ->getItem($content->fk_author);
-                if (!is_null($content->author)) {
-                    $content->author->external = 1;
+                try {
+                    $content->author = getService('api.service.author')
+                        ->getItem($content->fk_author);
+                    if (!is_null($content->author)) {
+                        $content->author->external = 1;
+                    }
+                } catch (\Exception $e) {
+                    throw new RestException(404, $e->getMessage());
                 }
 
                 // Load attached and related contents from array
@@ -178,12 +182,16 @@ class Frontpages
         // Overloading information for contents
         foreach ($articles as &$content) {
             // Load category related information
-            $content->author = getService('api.service.author')->getItem($content->fk_author);
+            try {
+                $content->author = getService('api.service.author')->getItem($content->fk_author);
 
-            if (!is_null($content->author)) {
-                $content->author->photo            = $content->author->getPhoto();
-                $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
-                $content->author->external         = 1;
+                if (!is_null($content->author)) {
+                    $content->author->photo            = $content->author->getPhoto();
+                    $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
+                    $content->author->external         = 1;
+                }
+            } catch (\Exception $e) {
+                throw new RestException(404, $e->getMessage());
             }
 
              // Change uri for href links except widgets
