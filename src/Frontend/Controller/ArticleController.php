@@ -107,7 +107,6 @@ class ArticleController extends FrontendController
             'content'        => $article,
             'contentId'      => $article->id,// Used on module_comments.tpl
             'ext'            => 1,
-            'photoInt'       => $article->photoInt,
             'relationed'     => $article->relatedContents,
             'suggested'      => $article->suggested,
             'videoInt'       => $article->videoInt,
@@ -157,13 +156,8 @@ class ArticleController extends FrontendController
         $params['tags']       = $this->getTags($params['content']);
         $params['relationed'] = $this->getRelated($params['content']);
         $params['suggested']  = $suggested[0];
-        $params['photos']     = $suggested[1];
 
         $em = $this->get('entity_repository');
-
-        if (!empty($params['content']->img2)) {
-            $params['photoInt'] = $em->find('Photo', $params['content']->img2);
-        }
 
         if (!empty($params['content']->fk_video2)) {
             $params['videoInt'] = $em->find('Video', $params['content']->fk_video2);
@@ -181,10 +175,6 @@ class ArticleController extends FrontendController
         parent::hydrateShowAmp($params);
 
         $em = $this->get('entity_repository');
-        if (!empty($params['content']->img2)) {
-            $photoInt = $em->find('Photo', $params['content']->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
 
         if (!empty($params['content']->fk_video2)) {
             $videoInt = $em->find('Video', $params['content']->fk_video2);
@@ -223,9 +213,7 @@ class ArticleController extends FrontendController
                 continue;
             }
 
-            if ($content->content_type == 1 && !empty($content->img1)) {
-                $content->photo = $em->find('Photo', $content->img1);
-            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
+            if ($content->content_type == 1 && !empty($content->fk_video)) {
                 $content->video = $em->find('Video', $content->fk_video);
             }
 

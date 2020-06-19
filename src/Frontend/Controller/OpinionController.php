@@ -235,11 +235,6 @@ class OpinionController extends FrontendController
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug = \Onm\StringUtils::generateSlug($opinion->name);
 
-                if ($opinion->img1 > 0) {
-                    $opinion->img1 = $this->get('entity_repository')
-                        ->find('Photo', $opinion->img1);
-                }
-
                 $opinion->author->uri = \Uri::generate('opinion_author_frontpage', [
                     'slug' => urlencode(\Onm\StringUtils::generateSlug($opinion->author->name)),
                     'id'   => sprintf('%06d', $opinion->author->id)
@@ -321,11 +316,6 @@ class OpinionController extends FrontendController
                     'author_slug' => $author->slug,
                 ]
             );
-
-            // Get opinion image
-            if (isset($opinion->img1) && ($opinion->img1 > 0)) {
-                $opinion->img1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
-            }
         }
 
         $pagination = $this->get('paginator')->get([
@@ -357,12 +347,6 @@ class OpinionController extends FrontendController
     {
         $params['tags'] = $this->getTags($params['content']);
 
-        // Associated media code
-        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
-            $params['photo'] = $this->get('opinion_repository')
-                ->find('Photo', $params['content']->img2);
-        }
-
         // TODO: Remove this ASAP
         $params['author'] = $this->get('user_repository')
             ->find((int) $params['content']->fk_author);
@@ -370,22 +354,5 @@ class OpinionController extends FrontendController
         $params['content']->author           = $params['author'];
         $params['content']->author_name_slug =
             \Onm\StringUtils::generateSlug($params['content']->name);
-    }
-
-    /**
-     * Updates the list of parameters and/or the item when the response for
-     * the current request is not cached.
-     *
-     * @param array $params Thelist of parameters already in set.
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-
-        $em = $this->get('entity_repository');
-        if (!empty($params['content']->img2)) {
-            $photoInt = $em->find('Photo', $params['content']->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
     }
 }
