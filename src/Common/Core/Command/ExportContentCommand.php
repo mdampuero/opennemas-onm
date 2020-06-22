@@ -214,10 +214,6 @@ class ExportContentCommand extends Command
                 }
             }
         } catch (\Exception $e) {
-            $this->output->writeln(
-                'Failed to fetch author with ID ' . $content->fk_author . ' : '
-                . $e->getMessage()
-            );
         }
     }
 
