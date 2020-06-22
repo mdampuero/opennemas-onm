@@ -52,7 +52,9 @@
         <Role FormalName="Main" />
         <MediaType FormalName="Video" />
         <Characteristics>
-          <Property FormalName="TotalDuration" Value="{$video->information['duration']}" />
+          {if !empty($video->information) && array_key_exists('duration', $video->information)}
+            <Property FormalName="TotalDuration" Value="{$video->information['duration']}" />
+          {/if}
         </Characteristics>
       </NewsComponent>
       <NewsComponent Duid="video_{$video->id}.video.text">
@@ -82,10 +84,10 @@
                       <![CDATA[{$video->description}]]>
                     </hl2>
                   </hedline>
-                  {if $video->author neq 'null'}
-                  <rights>
-                    <rights.owner>{$video->author->name}</rights.owner>
-                  </rights>
+                  {if !empty($video->author)}
+                    <rights>
+                      <rights.owner>{$video->author->name}</rights.owner>
+                    </rights>
                   {/if}
                   <distributor>{setting name=site_name}</distributor>
                   <dateline>
