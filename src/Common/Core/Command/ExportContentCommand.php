@@ -103,6 +103,8 @@ class ExportContentCommand extends Command
             $this->writeStatus('warning', 'IN PROGRESS', true);
         }
 
+        $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
+
         $this->exportContents($target, $from, $limit);
 
         if (!$this->output->isVerbose()) {
