@@ -12,6 +12,7 @@ namespace Common\Core\Component\Security\Authentication;
 use Common\Core\Component\Exception\Security\InvalidRecaptchaException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -92,6 +93,14 @@ class Authentication
         }
 
         return $valid;
+    }
+
+    /**
+     * Remove authentication error from the session.
+     */
+    public function clearError()
+    {
+        $this->session->set(Security::AUTHENTICATION_ERROR, '');
     }
 
     /**
@@ -192,6 +201,17 @@ class Authentication
             return _('The reCAPTCHA was not entered correctly. Try to authenticate again.');
         }
 
+        if ($error instanceof DisabledException) {
+            return sprintf(_(
+                '<strong>This account has not been verified.</strong>' .
+                '<ul>' .
+                '<li>To verify this account click on the link sent to your email.</li>' .
+                '<li>If you have not received any message, check your spam box.</li>' .
+                '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
+                '</ul>'
+            ), $this->container->get('router')->generate('frontend_user_verify'));
+        }
+
         return $error->getMessage();
     }
 
@@ -218,6 +238,10 @@ class Authentication
 
         if ($error instanceof InvalidRecaptchaException) {
             return 'security.authentication.failure.recaptcha';
+        }
+
+        if ($error instanceof DisabledException) {
+            return 'security.autentication.failure.disabled';
         }
 
         return $error->getMessage();

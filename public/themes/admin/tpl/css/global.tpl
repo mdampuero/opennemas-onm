@@ -171,6 +171,11 @@
   transform: rotate(90deg);
 }
 
+.recaptcha {
+  width: 304px;
+  margin: 0 auto;
+}
+
 @media (max-width: 767px) {
   .oat.hidden-phone {
     display: none !important;
