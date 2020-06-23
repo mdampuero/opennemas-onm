@@ -240,8 +240,8 @@ class BlogController extends FrontendController
         $total  = $em->countBy($filters);
         $photos = $this->get('core.helper.user')->getPhotos($authors);
 
-        // No first page and no contents or contents from invalid offset
-        if ($page > 1 && $total < $epp * $page) {
+        // No first page and no contents
+        if ($page > 1 && empty($blogs)) {
             throw new ResourceNotFoundException();
         }
 
@@ -338,8 +338,8 @@ class BlogController extends FrontendController
         $total    = $this->get('opinion_repository')->countBy($filters);
         $contents = $this->get('opinion_repository')->findBy($filters, $orderBy, $epp, $page);
 
-        // No first page and no contents or contents from invalid offset
-        if ($page > 1 && $total < $epp * $page) {
+        // No first page and no contents
+        if ($page > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
         }
 
