@@ -357,6 +357,7 @@ class BlogController extends FrontendController
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $epp,
+            'page'        => $page,
             'total'       => $total,
             'route'       => [
                 'name'   => 'frontend_blog_author_frontpage',
