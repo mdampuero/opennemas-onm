@@ -39,8 +39,8 @@ class OnmFormatter
         $conn = $container->get('orm.connection.instance');
 
         $this->patterns = [
-            '@' . $conn->user . '@',
-            '@' . $conn->password . '@'
+            "@" . preg_quote($conn->user, '@') . "@",
+            "@" . preg_quote($conn->password, '@') . "@"
         ];
     }
 
@@ -112,7 +112,7 @@ class OnmFormatter
         return preg_replace(
             $this->patterns,
             $this->replacement,
-            json_encode($context)
+            json_encode($context, JSON_UNESCAPED_UNICODE)
         );
     }
 
