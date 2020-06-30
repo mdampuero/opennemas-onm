@@ -66,7 +66,7 @@ class Frontpages
                         $content->author->external = 1;
                     }
                 } catch (\Exception $e) {
-                    throw new RestException(404, $e->getMessage());
+                    return;
                 }
 
                 // Load attached and related contents from array
@@ -191,7 +191,7 @@ class Frontpages
                     $content->author->external         = 1;
                 }
             } catch (\Exception $e) {
-                throw new RestException(404, $e->getMessage());
+                return;
             }
 
              // Change uri for href links except widgets
