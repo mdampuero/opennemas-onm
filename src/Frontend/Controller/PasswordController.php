@@ -29,7 +29,10 @@ class PasswordController extends Controller
         } catch (\Exception $e) {
             $request->getSession()->getFlashBag()->add(
                 'error',
-                _('Unable to find the password reset request. Please check the url we sent you in the email.')
+                _('The password reset request cannot be found. '
+                . 'Please check the link we send you in the email. '
+                . 'Remember that the link is for single use and '
+                . 'you can request a new one from the Forgot password link.')
             );
 
             return new RedirectResponse(
@@ -64,7 +67,10 @@ class PasswordController extends Controller
         } catch (\Exception $e) {
             $session->getFlashBag()->add(
                 'error',
-                _('Unable to find the password reset request. Please check the url we sent you in the email.')
+                _('The password reset request cannot be found. '
+                . 'Please check the link we send you in the email. '
+                . 'Remember that the link is for single use and '
+                . 'you can request a new one from the Forgot password link.')
             );
 
             return new RedirectResponse(
