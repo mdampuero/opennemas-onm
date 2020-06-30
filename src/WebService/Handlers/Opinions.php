@@ -41,7 +41,6 @@ class Opinions
             // Get author name slug
             $opinion->author_name_slug = \Onm\StringUtils::generateSlug($author->name);
         } catch (\Exception $e) {
-            throw new RestException(404, $e->getMessage());
         }
 
         //Fetch the other opinions for this author
