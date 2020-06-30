@@ -26,9 +26,14 @@ class Authors
     {
         $this->validateInt($id);
 
-        $author = getService('api.service.author')->getItem($id);
+        try {
+            $author = getService('api.service.author')->getItem($id);
 
-        return $author;
+            return $author;
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     /*
