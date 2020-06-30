@@ -352,7 +352,7 @@ class HooksSubscriber implements EventSubscriberInterface
             $author = $this->container->get('api.service.author')
                 ->getItem($content->fk_author);
         } catch (GetItemException $e) {
-            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
+            return;
         }
 
         if (is_object($author)) {
