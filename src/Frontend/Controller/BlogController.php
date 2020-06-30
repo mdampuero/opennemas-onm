@@ -215,9 +215,9 @@ class BlogController extends FrontendController
             ],
         ];
 
-        $em     = $this->get('opinion_repository');
-        $blogs  = $em->findBy($filters, $order, $epp, $page);
-        $total  = $em->countBy($filters);
+        $em    = $this->get('opinion_repository');
+        $blogs = $em->findBy($filters, $order, $epp, $page);
+        $total = $em->countBy($filters);
 
         // No first page and no contents or contents from invalid offset
         if ($page > 1 && $total < $epp * $page) {
