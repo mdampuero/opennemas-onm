@@ -76,7 +76,7 @@ class PasswordController extends Controller
             );
 
             return new RedirectResponse(
-                $this->generateUrl('backend_authentication_login')
+                $this->generateUrl('frontend_authentication_login')
             );
         }
 
@@ -87,7 +87,7 @@ class PasswordController extends Controller
             );
 
             return new RedirectResponse(
-                $this->generateUrl('backend_authentication_login')
+                $this->generateUrl('frontend_authentication_login')
             );
         }
 
