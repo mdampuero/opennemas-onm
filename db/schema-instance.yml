@@ -423,10 +423,13 @@ category:
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        archived:
+        visible:
             type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         enabled:
+            type: boolean
+            options: { unsigned: true, default: 0, notnull: false }
+        rss:
             type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         parent_id:

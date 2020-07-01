@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.22-log
+-- Server version	5.7.23-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,10 +14,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Current Database: `1`
---
 
 --
 -- Table structure for table `action_counters`
@@ -267,8 +263,9 @@ CREATE TABLE `category` (
   `title` text NOT NULL,
   `name` text,
   `description` text,
-  `archived` tinyint(1) unsigned DEFAULT '0',
+  `visible` tinyint(1) unsigned DEFAULT '0',
   `enabled` tinyint(1) unsigned DEFAULT '0',
+  `rss` tinyint(1) unsigned DEFAULT '0',
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `params` text,
   `logo_path` varchar(200) DEFAULT NULL,
@@ -283,7 +280,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,1,1,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,0,1,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,0,1,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,0,1,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,0,1,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,0,1,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,0,1,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,0,1,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,0,1,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,0,1,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,0,1,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,0,1,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,0,1,NULL,NULL,NULL,NULL);
+INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,NULL,'',NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,NULL,'',NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,NULL,'',NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,NULL,'',NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,NULL,'',NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,NULL,'',NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,NULL,'',NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,NULL,'',NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,NULL,'',NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,NULL,'',NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,NULL,'',NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,NULL,'',NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,NULL,'',NULL,NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1397,4 +1394,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-22 14:24:46
+-- Dump completed on 2020-07-01 16:18:03
