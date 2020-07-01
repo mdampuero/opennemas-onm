@@ -62,9 +62,9 @@ class Frontpages
                 try {
                     $content->author = getService('api.service.author')
                         ->getItem($content->fk_author);
-                    if (!is_null($content->author)) {
-                        $content->author->external = 1;
-                    }
+
+                    $content->author->external = 1;
+                    $content->author_name      = $content->author->name;
                 } catch (\Exception $e) {
                     return;
                 }
@@ -185,11 +185,10 @@ class Frontpages
             try {
                 $content->author = getService('api.service.author')->getItem($content->fk_author);
 
-                if (!is_null($content->author)) {
-                    $content->author->photo            = $content->author->getPhoto();
-                    $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
-                    $content->author->external         = 1;
-                }
+                $content->author_name              = $content->author->name;
+                $content->author->photo            = $content->author->getPhoto();
+                $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
+                $content->author->external         = 1;
             } catch (\Exception $e) {
                 return;
             }
