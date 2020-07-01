@@ -117,12 +117,8 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = [];
                 if ($field == 'blog') {
-                    try {
-                        $bloggers = getService('api.service.author')->
+                    $bloggers = getService('api.service.author')->
                             getList('is_blog = 1 order by username asc');
-                    } catch (\Exception $e) {
-                        throw new GetListException($e->getMessage(), $e->getCode());
-                    }
 
                     if (!empty($bloggers['items'])) {
                         $ids = [];
