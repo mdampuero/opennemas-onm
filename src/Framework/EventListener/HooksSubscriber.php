@@ -10,7 +10,6 @@
 namespace Framework\EventListener;
 
 use Api\Exception\GetItemException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Opennemas\Task\Component\Task\ServiceTask;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
