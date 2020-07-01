@@ -239,7 +239,7 @@ class RssController extends FrontendController
                 $user = $this->container->get('api.service.author')
                     ->getItemBy("username='{$slug}'");
             } catch (GetItemException $e) {
-                throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
+                throw new ResourceNotFoundException();
             }
 
             $rssTitle = sprintf('RSS de «%s»', $user->name);

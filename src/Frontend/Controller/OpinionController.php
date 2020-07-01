@@ -98,7 +98,7 @@ class OpinionController extends FrontendController
         try {
             $author = $this->container->get('api.service.author')->getItem($authorID);
         } catch (GetItemException $e) {
-            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
+            throw new ResourceNotFoundException();
         }
 
         if (!empty($author->is_blog)) {

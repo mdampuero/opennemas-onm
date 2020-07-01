@@ -35,7 +35,7 @@ class AuthorController extends Controller
         try {
             $user = $this->container->get('api.service.author')->getItemBy("username='{$slug}'");
         } catch (GetItemException $e) {
-            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
+            throw new ResourceNotFoundException();
         }
 
         // Setup templating cache layer
