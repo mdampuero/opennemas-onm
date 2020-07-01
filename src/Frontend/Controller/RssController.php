@@ -33,9 +33,9 @@ class RssController extends FrontendController
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            // Get categories with enabled = 1 and archived = 0
+            // Get categories with enabled = 1 and rss = 1
             $categories = $this->get('api.service.category')
-                ->getList('enabled = 1 and archived = 0');
+                ->getList('enabled = 1 and rss = 1');
 
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
@@ -76,7 +76,7 @@ class RssController extends FrontendController
         if (!empty($categoryName)) {
             try {
                 $oql = sprintf(
-                    'enabled = 1 and archived = 0'
+                    'enabled = 1 and rss = 1'
                     . ' and name regexp "(%%\"|^)%s(\"%%|$)"',
                     $categoryName
                 );
@@ -162,7 +162,7 @@ class RssController extends FrontendController
         if (!empty($slug)) {
             try {
                 $oql = sprintf(
-                    'enabled = 1 and archived = 0 '
+                    'enabled = 1 and rss = 1 '
                     . 'and name regexp "(.*\"|^)%s(\".*|$)"',
                     $slug
                 );
@@ -427,9 +427,9 @@ class RssController extends FrontendController
             ]
         ];
 
-        // Get categories with enabled = 1 and archived = 0
+        // Get categories with enabled = 1 and rss = 1
         $categories = $this->get('api.service.category')
-            ->getList('enabled = 1 and archived = 0');
+            ->getList('enabled = 1 and rss = 1');
 
         $ids = array_map(function ($a) {
             return $a->id;
