@@ -1,18 +1,10 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PasswordController extends Controller
 {
@@ -37,7 +29,12 @@ class PasswordController extends Controller
         } catch (\Exception $e) {
             $request->getSession()->getFlashBag()->add(
                 'error',
-                _('Unable to find the password reset request. Please check the url we sent you in the email.')
+                sprintf(_(
+                    'The password reset request cannot be found. '
+                    . 'Please check the link we sent you in the email. '
+                    . 'Remember that the link is for single use. '
+                    . 'You can request a new one <a href="%s">here</a>.'
+                ), $this->generateUrl('frontend_user_recover'))
             );
 
             return new RedirectResponse(
@@ -72,11 +69,16 @@ class PasswordController extends Controller
         } catch (\Exception $e) {
             $session->getFlashBag()->add(
                 'error',
-                _('Unable to find the password reset request. Please check the url we sent you in the email.')
+                sprintf(_(
+                    'The password reset request cannot be found. '
+                    . 'Please check the link we sent you in the email. '
+                    . 'Remember that the link is for single use. '
+                    . 'You can request a new one <a href="%s">here</a>.'
+                ), $this->generateUrl('frontend_user_recover'))
             );
 
             return new RedirectResponse(
-                $this->generateUrl('backend_authentication_login')
+                $this->generateUrl('frontend_authentication_login')
             );
         }
 
@@ -87,7 +89,7 @@ class PasswordController extends Controller
             );
 
             return new RedirectResponse(
-                $this->generateUrl('backend_authentication_login')
+                $this->generateUrl('frontend_password_change', [ 'token' => $token ])
             );
         }
 
