@@ -15,10 +15,16 @@ function get_category($item = null) : ?\Common\Model\Entity\Category
         return null;
     }
 
-    if ($item instanceof \Content && !empty($item->category_id)) {
+    if (($item instanceof \Content && !empty($item->category_id))
+        || ($item instanceof \Common\Model\Entity\Content && !empty($item->categories))) {
         try {
-            return getService('api.service.category')
-                ->getItem($item->category_id);
+            $category = $item instanceof \Content ?
+            getService('api.service.category')
+                ->getItem($item->category_id) :
+            getService('api.service.category')
+                ->getItem($item->categories[0]);
+
+            return $category;
         } catch (\Exception $e) {
             return null;
         }
