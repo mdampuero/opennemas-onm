@@ -30,10 +30,12 @@ class PasswordController extends Controller
         } catch (\Exception $e) {
             $request->getSession()->getFlashBag()->add(
                 'error',
-                _('The password reset request cannot be found. '
-                . 'Please check the link we send you in the email. '
-                . 'Remember that the link is for single use and '
-                . 'you can request a new one from the Forgot password link.')
+                sprintf(_(
+                    'The password reset request cannot be found. '
+                    . 'Please check the link we sent you in the email. '
+                    . 'Remember that the link is for single use. '
+                    . 'You can request a new one <a href="%s">here</a>.'
+                ), $this->generateUrl('backend_password_reset'))
             );
 
             return new RedirectResponse(
@@ -173,10 +175,12 @@ class PasswordController extends Controller
         } catch (\Exception $e) {
             $session->getFlashBag()->add(
                 'error',
-                _('The password reset request cannot be found. '
-                . 'Please check the link we send you in the email. '
-                . 'Remember that the link is for single use and '
-                . 'you can request a new one from the Forgot password link.')
+                sprintf(_(
+                    'The password reset request cannot be found. '
+                    . 'Please check the link we sent you in the email. '
+                    . 'Remember that the link is for single use. '
+                    . 'You can request a new one <a href="%s">here</a>.'
+                ), $this->generateUrl('backend_password_reset'))
             );
 
             return new RedirectResponse(
@@ -191,7 +195,7 @@ class PasswordController extends Controller
             );
 
             return new RedirectResponse(
-                $this->generateUrl('backend_authentication_login')
+                $this->generateUrl('backend_password_change', [ 'token' => $token ])
             );
         }
 
