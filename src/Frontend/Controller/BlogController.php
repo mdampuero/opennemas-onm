@@ -110,7 +110,7 @@ class BlogController extends FrontendController
             $author = $this->container->get('api.service.author')
                 ->getItemBy("username='{$slug}'");
         } catch (GetItemException $e) {
-            throw new ResourceNotFoundException($e->getMessage(), $e->getCode());
+            throw new ResourceNotFoundException();
         }
 
         if ($author->is_blog == 0) {
@@ -175,7 +175,6 @@ class BlogController extends FrontendController
      */
     public function hydrateList(array &$params = []) : void
     {
-        $date = date('Y-m-d H:i:s');
         $page = (int) ($params['page'] ?? 1);
 
         // Invalid page provided as parameter
@@ -330,7 +329,6 @@ class BlogController extends FrontendController
         $params['blog'] = $params['content'];
     }
 
-
     /**
      * Updates the list of parameters and/or the item when the response for
      * the current request is not cached.
@@ -341,9 +339,9 @@ class BlogController extends FrontendController
     {
         parent::hydrateShowAmp($params);
 
-        $em = $this->get('entity_repository');
         if (!empty($params['content']->img2)) {
-            $photoInt = $em->find('Photo', $params['content']->img2);
+            $photoInt = $this->get('entity_repository')
+                ->find('Photo', $params['content']->img2);
             $this->view->assign('photoInt', $photoInt);
         }
     }

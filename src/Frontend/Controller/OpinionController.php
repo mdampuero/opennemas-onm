@@ -343,9 +343,9 @@ class OpinionController extends FrontendController
     {
         parent::hydrateShowAmp($params);
 
-        $em = $this->get('entity_repository');
         if (!empty($params['content']->img2)) {
-            $photoInt = $em->find('Photo', $params['content']->img2);
+            $photoInt = $this->get('entity_repository')
+                ->find('Photo', $params['content']->img2);
             $this->view->assign('photoInt', $photoInt);
         }
     }
