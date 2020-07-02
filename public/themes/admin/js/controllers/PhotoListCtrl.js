@@ -112,7 +112,7 @@
             }
           };
 
-          http.post(route, data).then(function() {
+          http.put(route, data).then(function() {
             $scope.saving = false;
             $scope.saved = true;
 
