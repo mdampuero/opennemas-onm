@@ -31,7 +31,7 @@ class Authors
 
             return $author;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }
@@ -50,12 +50,12 @@ class Authors
             );
 
             // Get photo object from avatar_img_id
-            $er = getService('entity_repository');
-            $photo = $er->find('Photo', $rs['avatar_img_id']);
+            $photo = getService('entity_repository')
+                ->find('Photo', $rs['avatar_img_id']);
 
             return $photo;
         } catch (\Exception $e) {
-            error_log($e->getMessage());
+            getService('error.log')->error($e->getMessage());
             return false;
         }
     }

@@ -66,7 +66,6 @@ class Frontpages
                     $content->author->external = 1;
                     $content->author_name      = $content->author->name;
                 } catch (\Exception $e) {
-                    return;
                 }
 
                 // Load attached and related contents from array
@@ -190,7 +189,6 @@ class Frontpages
                 $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
                 $content->author->external         = 1;
             } catch (\Exception $e) {
-                return;
             }
 
              // Change uri for href links except widgets
