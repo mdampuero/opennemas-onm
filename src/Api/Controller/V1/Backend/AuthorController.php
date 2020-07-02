@@ -69,7 +69,7 @@ class AuthorController extends ApiController
             $photos = $this->get('entity_repository')->findMulti($ids);
             $photos = $this->get('data.manager.filter')
                 ->set($photos)
-                ->filter('mapify', [ 'key' => 'pk_photo' ])
+                ->filter('mapify', [ 'key' => 'pk_content' ])
                 ->get();
         }
 
