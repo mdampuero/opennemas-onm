@@ -31,6 +31,14 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->helper = new OqlHelper($this->container);
+    }
+
+    /**
+     * Tests getFiltersFromQql with multiple values.
+     */
+    public function testGetFiltersFromOql()
+    {
         $this->as->expects($this->any())->method('getList')
             ->willReturn([
                 2,
@@ -40,14 +48,6 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->willReturn($this->as);
 
-        $this->helper = new OqlHelper($this->container);
-    }
-
-    /**
-     * Tests getFiltersFromQql with multiple values.
-     */
-    public function testGetFiltersFromOql()
-    {
         $this->assertEquals([ '', '', 10, 1 ], $this->helper->getFiltersFromOql());
         $this->assertEquals(
             [ '', '', 30, 1 ],
@@ -76,6 +76,23 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [ 'fk_author IN (1,2)', 'flob desc, foo asc', 10, 1 ],
+            $this->helper->getFiltersFromOql('blog = "1" order by flob desc, foo asc')
+        );
+    }
+
+    /**
+     * Tests getFiltersFromOql when no bloggers provided.
+     */
+    public function testGetFiltersFromOqlWhenNoBloggersProvided()
+    {
+        $this->as->expects($this->any())->method('getList')
+            ->willReturn([ 'items' => [], 0 ]);
+
+        $this->container->expects($this->any())->method('get')
+            ->willReturn($this->as);
+
+        $this->assertEquals(
+            [ 'fk_author IN (0)', 'flob desc, foo asc', 10, 1 ],
             $this->helper->getFiltersFromOql('blog = "1" order by flob desc, foo asc')
         );
     }

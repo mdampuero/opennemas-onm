@@ -76,9 +76,7 @@ class OqlHelper
         }, $bloggers['items']);
 
         if (empty($ids)) {
-            $this->oql = preg_replace('/blog\s*=\s*"?(1|0)"?/', '', $this->oql);
-
-            return;
+            $ids = [0];
         }
 
         $operator = (int) $matches[1][0] === 0 ? 'NOT IN' : 'IN';
