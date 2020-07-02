@@ -11,6 +11,8 @@
 
 namespace Repository;
 
+use Api\Exception\GetListException;
+
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.
@@ -115,8 +117,12 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = [];
                 if ($field == 'blog') {
-                    $bloggers = getService('api.service.author')->
-                            getList('is_blog = 1 order by username asc');
+                    try {
+                        $bloggers = getService('api.service.author')
+                            ->getList('is_blog = 1 order by username asc');
+                    } catch (\Exception $e) {
+                        throw new GetListException($e->getMessage(), $e->getCode());
+                    }
 
                     if (!empty($bloggers['items'])) {
                         $ids = [];
