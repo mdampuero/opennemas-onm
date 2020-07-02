@@ -69,8 +69,6 @@ class AuthorController extends Controller
             $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
             foreach ($contents as &$item) {
-                $item = $item->get($item->id);
-
                 if (isset($item->img1) && !empty($item->img1)) {
                     $image = $er->find('Photo', $item->img1);
 
@@ -142,10 +140,6 @@ class AuthorController extends Controller
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
