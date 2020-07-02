@@ -704,7 +704,7 @@ content_category:
     index:
         -
             name: PRIMARY
-            columns: [content_id, category_id]
+            columns: [category_id, content_id]
             primary: true
             unique: true
             flags: {  }
