@@ -123,7 +123,8 @@ parameters:
     # Sessions in redis, (tcp://ip:port?<options>)
     session_handler_id:       session.handler.drak.redis
     session_handler_savepath: tcp://localhost:6379?timeout=2
-    session_handler_options:  []
+    session_handler_options:
+        cookie_lifetime: 86400
 
     # Varnish
     varnish:
