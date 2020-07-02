@@ -35,12 +35,22 @@
         </div>
         <div class="form-group no-margin">
           <div class="checkbox m-t-5">
-            <input type="checkbox" id="archived" ng-model="item.archived" ng-true-value="1">
-            <label for="archived" class="form-label">{t}Archived{/t}</label>
+            <input type="checkbox" id="visible" ng-model="item.visible" ng-true-value="1">
+            <label for="visible" class="form-label">{t}Visible{/t}</label>
           </div>
           <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
             <i class="fa fa-info-circle m-r-5 text-info"></i>
-            {t}If enabled, category will not be included in category selectors nor RSS feeds{/t}
+            {t}If enabled, category will be included in category selectors{/t}
+          </span>
+        </div>
+        <div class="form-group no-margin">
+          <div class="checkbox m-t-5">
+            <input type="checkbox" id="rss" ng-model="item.rss" ng-true-value="1">
+            <label for="rss" class="form-label">{t}RSS{/t}</label>
+          </div>
+          <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+            <i class="fa fa-info-circle m-r-5 text-info"></i>
+            {t}If enabled, category will be included in RSS feeds{/t}
           </span>
         </div>
       </div>
