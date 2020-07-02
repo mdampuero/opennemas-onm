@@ -55,7 +55,7 @@
             <Property FormalName="Tesauro" Value="{get_category_slug($content)}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{$app.instance->getBaseUrl()}/{$content->uri}">
+          <ContentItem Href="{get_url($video)}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -114,7 +114,7 @@
                       <block class="related-contents">
                         {foreach $content->related as $related}
                           <p>
-                            <a href="{$app.instance->getBaseUrl()}/{$related->uri}">{$related->title}</a>
+                            <a href="{get_url($related)}">{$related->title}</a>
                           </p>
                         {/foreach}
                       </block>
