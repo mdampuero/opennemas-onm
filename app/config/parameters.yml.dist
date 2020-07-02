@@ -115,11 +115,6 @@ parameters:
     session.name:          __onm_sess
     session.gc_maxlifetime: 86400
 
-    # Memcached options, savepath for Memcached (ip:port)
-    # session_handler_id:       session.handler.drak.memcached
-    # session_handler_savepath: 127.0.0.1:11211
-    # session_handler_options:  []
-
     # Sessions in redis, (tcp://ip:port?<options>)
     session_handler_id:       session.handler.drak.redis
     session_handler_savepath: tcp://localhost:6379?timeout=2
