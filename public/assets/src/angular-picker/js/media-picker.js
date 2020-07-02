@@ -487,7 +487,7 @@
               };
 
               // Get the parameters for the media picker
-              http.post(route).then(function(response) {
+              http.put(route).then(function(response) {
                 $scope.loading = false;
                 $scope.picker.params = response.data;
 
@@ -518,8 +518,8 @@
      * @requires routing
      */
     .controller('MediaPickerCtrl', [
-      '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'http', 'routing',
-      function($rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, http, routing) {
+      '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'http', 'oqlEncoder', 'routing',
+      function($rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, http, oqlEncoder, routing) {
         /**
          * The array of contents.
          *
@@ -785,7 +785,35 @@
             data.to = $scope.to;
           }
 
-          http.get({ name: 'api_v1_backend_photo_get_list', params: data })
+          var route = {
+            name: 'backend_ws_picker_list',
+            params: data
+          };
+
+          if (data.content_type_name == 'photo') {
+            $scope.criteria = {
+              content_type_name: $scope.picker.types.enabled,
+              epp: $scope.epp,
+              in_litter: 0,
+              orderBy: { created:  'desc' },
+              page: $scope.page
+            };
+
+            oqlEncoder.configure({
+              placeholder: {
+                title: '(title ~ "%[value]%" or description ~ "%[value]%")',
+                created: '[key] ~ "%[value]%"'
+              }
+            });
+
+            var oql   = oqlEncoder.getOql($scope.criteria);
+            var route = {
+              name: 'api_v1_backend_photo_get_list',
+              params:  { oql: oql }
+            };
+          }
+
+          http.get(route)
             .then(function(response) {
               $scope.loadingMore = false;
 
@@ -929,7 +957,7 @@
             params: { id: $scope.selected.lastSelected.pk_content }
           };
 
-          http.post(route, data).then(function() {
+          http.put(route, data).then(function() {
             $scope.saving = false;
             $scope.saved = true;
 
