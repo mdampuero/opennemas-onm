@@ -209,7 +209,6 @@ class BlogController extends FrontendController
             'endtime'           => [
                 'union'   => 'OR',
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                 [ 'value' => $date, 'operator' => '>' ]
             ],
         ];
