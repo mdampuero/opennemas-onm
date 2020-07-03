@@ -11,8 +11,6 @@
 
 namespace Repository;
 
-use Api\Exception\GetListException;
-
 /**
  * An EntityRepository serves as a repository for entities with generic as well
  * as business specific methods for retrieving entities.
@@ -117,31 +115,21 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = [];
                 if ($field == 'blog') {
-                    try {
-                        $bloggers = getService('api.service.author')
-                            ->getList('is_blog = 1 order by username asc');
-                    } catch (\Exception $e) {
-                        throw new GetListException($e->getMessage(), $e->getCode());
+                    $bloggers = getService('api.service.author')
+                        ->getList('is_blog = 1 order by username asc');
+
+                    $ids = array_map(function ($a) {
+                        return $a->id;
+                    }, $bloggers['items']);
+
+                    if (empty($ids)) {
+                        $ids = [0];
                     }
 
-                    if (!empty($bloggers['items'])) {
-                        $ids = [];
-                        foreach ($bloggers['items'] as $blogger) {
-                            $ids[] = $blogger->id;
-                        }
+                    $operator = (int) $filters[0]['value'] === 0 ? 'NOT IN' : 'IN';
 
-                        if ($filters[0]['value']) {
-                            $filterSQL[] = 'opinions.fk_author IN ('
-                                . implode(', ', array_values($ids)) . ") ";
-                        } else {
-                            $filterSQL[] = 'opinions.fk_author NOT IN ('
-                                . implode(', ', array_values($ids)) . ") ";
-                        }
-                    } else {
-                        if ($filters[0]['value']) {
-                            $filterSQL[] = 'opinions.fk_author=-1';
-                        }
-                    }
+                    $filterSQL[] = 'opinions.fk_author ' . $operator . ' ('
+                        . implode(', ', array_values($ids)) . ") ";
                 } elseif ($field == 'author') {
                     $filterSQL[] = 'opinions.fk_author=' . $filters[0]['value'];
                 } else {
