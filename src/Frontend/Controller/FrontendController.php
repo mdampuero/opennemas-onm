@@ -664,9 +664,7 @@ class FrontendController extends Controller
                 continue;
             }
 
-            if ($content->fk_content_type == 1 && !empty($content->img1)) {
-                $content->photo = $em->find('Photo', $content->img1);
-            } elseif ($content->fk_content_type == 1 && !empty($content->fk_video)) {
+            if ($content->fk_content_type == 1 && !empty($content->fk_video)) {
                 $content->video = $em->find('Video', $content->fk_video);
             }
 

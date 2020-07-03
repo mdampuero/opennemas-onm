@@ -72,24 +72,6 @@ class AuthorController extends Controller
                 $item         = $item->get($item->id);
                 $item->author = $user;
 
-                if (isset($item->img1) && !empty($item->img1)) {
-                    $image = $er->find('Photo', $item->img1);
-
-                    if (is_object($image) && !is_null($image->id)) {
-                        $item->img1_path = $image->path_file . $image->name;
-                        $item->img1      = $image;
-                    }
-                }
-
-                if ($item->fk_content_type == 7 && !empty($item->cover_id)) {
-                    $image = $er->find('Photo', $item->cover_id);
-
-                    if (is_object($image) && !is_null($image->id)) {
-                        $item->img1_path = $image->path_file . $image->name;
-                        $item->img1      = $image;
-                    }
-                }
-
                 if ($item->fk_content_type == 9) {
                     $item->obj_video = $item;
                     $item->summary   = $item->description;

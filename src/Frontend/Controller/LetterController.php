@@ -69,12 +69,6 @@ class LetterController extends Controller
             $letters      = $em->findBy($filters, $order, $itemsPerPage, $page);
             $countLetters = $em->countBy($filters);
 
-            foreach ($letters as &$letter) {
-                if (!empty($letter->image)) {
-                    $letter->photo = $letter->photo;
-                }
-            }
-
             // Pagination for block more videos
             $pagination = $this->get('paginator')->get([
                 'boundary'    => false,
@@ -323,7 +317,7 @@ class LetterController extends Controller
         }
 
         try {
-            return $ps->createItem($file)->pk_content;
+            return $ps->createItem([], $file)->pk_content;
         } catch (\Exception $e) {
             $this->get('error.log')->error('Unable to save letter image: ' . $e->getMessage());
             return null;

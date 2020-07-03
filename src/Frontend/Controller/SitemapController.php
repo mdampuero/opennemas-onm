@@ -93,12 +93,6 @@ class SitemapController extends Controller
 
         $em = getService('entity_repository');
 
-        foreach ($contents as &$content) {
-            if (!empty($content->img2)) {
-                $content->image = $em->find('Photo', $content->img2);
-            }
-        }
-
         $this->view->assign(['contents' => $contents]);
     }
 
@@ -112,12 +106,6 @@ class SitemapController extends Controller
         $em       = $this->get('entity_repository');
 
         foreach ($contents as &$content) {
-            if (!empty($content->img1)) {
-                $content->image = $em->find('Photo', $content->img2);
-            } elseif (!empty($content->img2)) {
-                $content->image = $em->find('Photo', $content->img2);
-            }
-
             if (!empty($content->fk_video)) {
                 $content->video = $em->find('Video', $content->fk_video);
             } elseif (!empty($content->fk_video2)) {

@@ -92,8 +92,6 @@ class ArchiveController extends Controller
                 // Fetch video or image for article and opinions
                 if (!empty($content->fk_video)) {
                     $content->video = $er->find('Video', $content->fk_video);
-                } elseif (!empty($content->img1)) {
-                    $content->image = $er->find('Photo', $content->img1);
                 }
 
                 // Add contents to category group

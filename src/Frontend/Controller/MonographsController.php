@@ -112,13 +112,6 @@ class MonographsController extends Controller
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
                     $tagsIds = array_merge($monograph->tags, $tagsIds);
-                    if (!empty($monograph->img1)) {
-                        $img = $this->get('entity_repository')
-                            ->find('Photo', $monograph->img1);
-                        // Generate image path
-                        $monograph->img1_path = $img->path_file . $img->name;
-                        $monograph->img       = $img;
-                    }
                 }
 
                 $pagination = $this->get('paginator')->get([
@@ -183,12 +176,6 @@ class MonographsController extends Controller
                 foreach ($contents as $item) {
                     $content = \Content::get($item['fk_content']);
 
-                    if (!empty($content->img1)) {
-                        $photo              = $er->find('Photo', $content->img1);
-                        $content->img1_path = $photo->path_file . $photo->name;
-                        $content->img1      = $photo;
-                    }
-
                     if (!empty($content->fk_video)) {
                         $video              = $er->find('Video', $content->fk_video);
                         $content->obj_video = $video;
@@ -206,12 +193,6 @@ class MonographsController extends Controller
 
                     $columns[] = $content;
                 }
-            }
-
-            if (!empty($special->img1)) {
-                $photo             = $er->find('Photo', $special->img1);
-                $special->path_img = $photo->path_file . $photo->name;
-                $special->img      = $photo;
             }
 
             $this->view->assign(['columns' => $columns]);

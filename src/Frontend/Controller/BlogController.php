@@ -267,11 +267,6 @@ class BlogController extends FrontendController
                     $photos[$blog->author->avatar_img_id];
             }
 
-            if (isset($blog->img1) && !empty($blog->img1)) {
-                $blog->img1 = $this->get('entity_repository')
-                    ->find('Photo', $blog->img1);
-            }
-
             $blog->author->uri = \Uri::generate(
                 'frontend_blog_author_frontpage',
                 [
@@ -344,9 +339,6 @@ class BlogController extends FrontendController
         }
 
         foreach ($contents as &$blog) {
-            if (isset($blog->img1) && ($blog->img1 > 0)) {
-                $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
-            }
             $blog->author           = $author;
             $blog->author_name_slug = $author->slug;
 
@@ -377,14 +369,7 @@ class BlogController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['tags'] = $this->getTags($params['content']);
-
-        // Associated media code
-        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
-            $params['photo'] = $this->get('opinion_repository')
-                ->find('Photo', $params['content']->img2);
-        }
-
+        $params['tags']   = $this->getTags($params['content']);
         $params['blog']   = $params['content'];
         $params['author'] = $params['content']->author;
 
