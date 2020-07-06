@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fbe832eb6917ebc033a46caaa7034cb",
+    "content-hash": "79bece14060f94b0348171a14f5e48f4",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1213,11 +1213,11 @@
         },
         {
             "name": "drak/native-session",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openhost/NativeSession",
-                "reference": "81653296944b00be03364a6ccc111ccafa52f087"
+                "reference": "e7e32631131aca0c7a94b7ed1ce972664b9e1781"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1239,7 +1239,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2015-03-31T17:40:46+00:00"
+            "time": "2020-07-03T14:51:15+00:00"
         },
         {
             "name": "drexarj/disqus-php",
@@ -2536,7 +2536,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2015-06-12T07:33:40+00:00"
+            "time": "2020-02-13T18:25:17+00:00"
         },
         {
             "name": "monolog/monolog",

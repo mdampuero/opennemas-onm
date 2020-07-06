@@ -48,7 +48,7 @@
         "symfony/symfony": "3.4.*",
         "twig/twig": "^1.0||^2.0",
 
-        "drak/native-session": "*",
+        "drak/native-session": "1.0.2",
         "econea/nusoap": "0.9.*",
         "friendsofsymfony/jsrouting-bundle": "2.2.*",
         "giggsey/libphonenumber-for-php": "^7.2",
