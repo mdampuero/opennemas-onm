@@ -11,9 +11,9 @@
         </div>
         <div class="title">
             {if is_blog($content)}
-              <span class="type">{$content->content_type_l10n_name}</span>
-            {else}
               <strong>{t}Blog{/t}</strong>
+            {else}
+              <span class="type">{$content->content_type_l10n_name}</span>
             {/if}
             {get_author_name($content)} - {$content->title}
         </div>
