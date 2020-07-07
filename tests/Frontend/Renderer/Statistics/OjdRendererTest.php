@@ -58,7 +58,7 @@ class OjdRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->renderer = new OjdRenderer($this->global, $this->tpl, $this->smarty);
+        $this->renderer = new OjdRenderer($this->container);
     }
 
     public function serviceContainerCallback($name)
@@ -66,7 +66,12 @@ class OjdRendererTest extends TestCase
         switch ($name) {
             case 'orm.manager':
                 return $this->em;
-
+            case 'core.globals':
+                return $this->global;
+            case 'core.template.admin':
+                return $this->tpl;
+            case 'core.template.frontend':
+                return $this->smarty;
             case 'request_stack':
                 return $this->stack;
         }
@@ -92,7 +97,7 @@ class OjdRendererTest extends TestCase
      */
     public function testValidateWhenCorrectConfiguration()
     {
-        $renderer   = new OjdRenderer($this->global, $this->tpl, $this->smarty);
+        $renderer   = new OjdRenderer($this->container);
         $reflection = new \ReflectionClass($renderer);
         $config     = $reflection->getProperty('config');
 

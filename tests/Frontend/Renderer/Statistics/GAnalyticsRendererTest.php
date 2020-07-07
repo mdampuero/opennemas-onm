@@ -58,7 +58,10 @@ class GAnalyticsRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->renderer = new GAnalyticsRenderer($this->global, $this->tpl, $this->smarty);
+        $this->ds->expects($this->any())->method('get')
+            ->willReturn([ ['api_key' => 'UA-453942342-1'] ]);
+
+        $this->renderer = new GAnalyticsRenderer($this->container);
     }
 
     public function serviceContainerCallback($name)
@@ -66,7 +69,12 @@ class GAnalyticsRendererTest extends TestCase
         switch ($name) {
             case 'orm.manager':
                 return $this->em;
-
+            case 'core.globals':
+                return $this->global;
+            case 'core.template.admin':
+                return $this->tpl;
+            case 'core.template.frontend':
+                return $this->smarty;
             case 'request_stack':
                 return $this->stack;
         }

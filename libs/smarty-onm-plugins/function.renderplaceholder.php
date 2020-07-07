@@ -1,5 +1,6 @@
 <?php
 /* {renderplaceholder items=$articles tpl='xxx.tpl' placeholder="placeholder_0_0"} */
+
 function smarty_function_renderplaceholder($params, &$smarty)
 {
     $outputHTML = '';
@@ -40,7 +41,8 @@ function smarty_function_renderplaceholder($params, &$smarty)
             }
             $content                  = $items[$contentPosition->pk_fk_content];
             $content->render_position = $count++;
-            $outputHTML              .= $content->render($params, $smarty);
+
+            $outputHTML .= $smarty->getContainer()->get('frontend.renderer')->render($content, $params);
         }
     }
 

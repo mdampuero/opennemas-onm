@@ -63,6 +63,11 @@ class SmartRenderer extends AdvertisementRenderer
             $template = 'smart.slot.' . $config['tags_format'] . '.tpl';
         }
 
+        // This is necessary for smart integration when floating in frontpage.
+        if (array_key_exists('placeholder', $params)) {
+            $params['advertisementGroup'] = 'frontpage';
+        }
+
         $content = $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
                 'config'        => $config,
@@ -89,6 +94,11 @@ class SmartRenderer extends AdvertisementRenderer
      */
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
+        // This is necessary for smart integration when floating in frontpage.
+        if (array_key_exists('placeholder', $params)) {
+            $params['advertisementGroup'] = 'frontpage';
+        }
+
         $config = $this->ds->get('smart_ad_server');
         $params = [
             'config'        => $config,

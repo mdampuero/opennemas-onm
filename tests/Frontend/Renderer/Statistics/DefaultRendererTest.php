@@ -55,7 +55,25 @@ class DefaultRendererTest extends TestCase
             ->with('item')
             ->willReturn(new Content());
 
-        $this->renderer = new DefaultRenderer($this->global, $this->tpl, $this->smarty);
+        $this->renderer = new DefaultRenderer($this->container);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'orm.manager':
+                return $this->em;
+            case 'core.globals':
+                return $this->global;
+            case 'core.template.admin':
+                return $this->tpl;
+            case 'core.template.frontend':
+                return $this->smarty;
+            case 'request_stack':
+                return $this->stack;
+        }
+
+        return null;
     }
 
     /**
