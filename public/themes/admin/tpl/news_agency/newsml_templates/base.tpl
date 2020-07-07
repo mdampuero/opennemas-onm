@@ -24,13 +24,13 @@
       <FirstCreated>{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}</FirstCreated>
       <FirstPublished>{format_date date=$content->starttime type="custom" format="yMMdd'T'HHmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$content->changed type="custom" format="yMMdd'T'HHmmssxxx"}</ThisRevisionCreated>
-      <Status FormalName="Usable" />
+      <Status FormalName="{if $content->in_litter}Canceled{else}{if $content->content_status}Usable{else}Withheld{/if}{/if}" />
       <Urgency FormalName="5" />
     </NewsManagement>
     <NewsComponent Duid="multimedia_{$content->id}.multimedia">
       <NewsLines>
         <HeadLine><![CDATA[{$content->title}]]></HeadLine>
-        <SubHeadLine><![CDATA[{$content->subtitle}]]></SubHeadLine>
+        <SubHeadLine><![CDATA[{$content->pretitle}]]></SubHeadLine>
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
@@ -47,7 +47,7 @@
           <Role FormalName="Main" />
           <NewsLines>
             <HeadLine><![CDATA[{$content->title}]]></HeadLine>
-            <SubHeadLine><![CDATA[{$content->subtitle}]]></SubHeadLine>
+            <SubHeadLine><![CDATA[{$content->pretitle}]]></SubHeadLine>
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
@@ -55,7 +55,7 @@
             <Property FormalName="Tesauro" Value="{get_category_slug($content)}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{$app.instance->getBaseUrl()}/{$content->uri}">
+          <ContentItem Href="{get_url($video)}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -75,7 +75,7 @@
                   <body.head>
                     <hedline>
                       <hl1><![CDATA[{$content->title}]]></hl1>
-                      <hl2><![CDATA[{$content->subtitle}]]></hl2>
+                      <hl2><![CDATA[{$content->pretitle}]]></hl2>
                     </hedline>
                     <rights>
                       <rights.agent>{setting name=site_name}</rights.agent>
@@ -114,7 +114,7 @@
                       <block class="related-contents">
                         {foreach $content->related as $related}
                           <p>
-                            <a href="{$app.instance->getBaseUrl()}/{$related->uri}">{$related->title}</a>
+                            <a href="{get_url($related)}">{$related->title}</a>
                           </p>
                         {/foreach}
                       </block>

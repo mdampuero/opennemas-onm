@@ -117,6 +117,105 @@ class UserController extends Controller
     }
 
     /**
+     * Recover the password for one user.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function recoverAction(Request $request)
+    {
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $em    = $this->get('orm.manager');
+
+        try {
+            $user = $em->getRepository('User')->findOneBy("email = '$email'");
+        } catch (\Exception $e) {
+            $request->getSession()->getFlashBag()
+                ->add('error', _('Unable to find an user with that email.'));
+
+            return $this->redirect($this->generateUrl('frontend_user_reset'));
+        }
+
+        if (!$user->activated) {
+            $this->get('session')->getFlashBag()
+                ->add('error', sprintf(_(
+                    '<strong>This account has not been verified.</strong>' .
+                    '<ul>' .
+                    '<li>To verify this account click on the link sent to your email.</li>' .
+                    '<li>If you have not received any message, check your spam box.</li>' .
+                    '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
+                    '</ul>'
+                ), $this->generateUrl('frontend_user_verify')));
+            return $this->redirect($this->generateUrl('frontend_user_reset'));
+        }
+
+        $this->view->setCaching(0);
+
+        // Generate and update user with new token
+        $token = md5(uniqid(mt_rand(), true));
+        $user->merge([ 'token' => $token ]);
+        $em->persist($user);
+
+        $mailSubject = sprintf(
+            _('Password reminder for %s'),
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_title')
+        );
+
+        $mailBody = $this->get('core.template.frontend')
+            ->render('user/emails/recoverpassword.tpl', [
+                'user' => $user,
+                'url'  => $this->get('router')->generate(
+                    'frontend_password_change',
+                    [ 'token' => $token ],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+            ]);
+
+        //  Build the message
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($mailSubject)
+            ->setBody($mailBody, 'text/plain')
+            ->setTo($user->email)
+            ->setFrom([
+                'no-reply@postman.opennemas.com' =>
+                    $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_name')
+            ]);
+
+        $headers = $message->getHeaders();
+        $headers->addParameterizedHeader(
+            'ACUMBAMAIL-SMTPAPI',
+            $this->get('core.instance')->internal_name . ' - Backend Recover Password'
+        );
+
+        try {
+            $mailer = $this->get('mailer');
+            $mailer->send($message);
+
+            $this->get('application.log')
+                ->info('password.request.email.success: ' . $user->email);
+
+            $this->get('session')->getFlashBag()->add('success', _('Password recovery email was sent.'));
+
+            $this->view->assign([ 'user' => $user ]);
+        } catch (\Exception $e) {
+            $this->get('application.log')->error(
+                'password.request.email.failure: ' . $user->email . '('
+                    . $e->getMessage() . ')',
+                $e->getTrace()
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Unable to send your recover password email. Please try it later.')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('frontend_authentication_login'));
+    }
+
+    /**
      * Displays a form to create a new user.
      *
      * @param Request $request The request object.
@@ -138,6 +237,16 @@ class UserController extends Controller
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
         ]);
+    }
+
+    /**
+     * Shows the form to recover the password.
+     *
+     * @return Response The response object.
+     */
+    public function resetAction()
+    {
+        return $this->render('user/reset.tpl');
     }
 
     /**
@@ -179,7 +288,15 @@ class UserController extends Controller
             );
 
             $request->getSession()->getFlashBag()
-                ->add('error', _('The email address is already in use.'));
+                ->add('error', sprintf(
+                    _('<strong>The email address is already in use.</strong>' .
+                    '<ul>' .
+                    '<li>Sign in <a href="%s">here</a>.</li>' .
+                    '<li>Recover password <a href="%s">here</a>.</li>' .
+                    '</ul>'),
+                    $this->generateUrl('frontend_authentication_login'),
+                    $this->generateUrl('frontend_user_recover')
+                ));
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         } catch (CreateItemException $e) {
@@ -215,6 +332,67 @@ class UserController extends Controller
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
         ]);
+    }
+
+    /**
+     * Show the form to get the verification email.
+     *
+     * @return Response The response object.
+     */
+    public function verifyAction()
+    {
+        return $this->render('user/verification.tpl');
+    }
+
+    /**
+     * Send the verification email.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function sendVerificationAction(Request $request)
+    {
+        $email = $request->request->get('email', '');
+
+        if (empty($email)) {
+            return $this->redirect($this->generateUrl('frontend_user_verify'));
+        }
+
+        try {
+            $ss    = $this->get('api.service.subscriber');
+            $user  = $ss->getItemBy(sprintf('email = "%s" limit 1', $email));
+            $token = $user->token;
+
+            if (empty($token)) {
+                $this->get('session')->getFlashBag()
+                    ->add('error', _('This account is already verified'));
+
+                return $this->redirect($this->generateUrl('frontend_user_verify'));
+            }
+
+            $data = [
+                'name'  => $user->name,
+                'token' => $token,
+                'email' => $email
+            ];
+
+            $this->sendCreateEmail($data);
+
+            $this->get('session')->getFlashBag()
+                ->add('success', _('The verification email was sent.'));
+
+            return $this->redirect($this->generateUrl('frontend_authentication_login'));
+        } catch (GetItemException $e) {
+            $this->get('application.log')->error(
+                'user.verify.failure: ' . $email
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('error', _('Unable to find your account'));
+
+            return $this->redirect($this->generateUrl('frontend_user_register'));
+        }
     }
 
     /**

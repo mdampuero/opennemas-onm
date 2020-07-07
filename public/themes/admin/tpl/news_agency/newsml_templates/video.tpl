@@ -24,7 +24,7 @@
       <FirstCreated>{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}</FirstCreated>
       <FirstPublished>{format_date date=$video->starttime type="custom" format="yMMdd'T'HHmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$video->changed type="custom" format="yMMdd'T'HHmmssxxx"}</ThisRevisionCreated>
-      <Status FormalName="Usable" />
+      <Status FormalName="{if $video->in_litter}Canceled{else}{if $video->content_status}Usable{else}Withheld{/if}{/if}" />
       <Urgency FormalName="5" />
     </NewsManagement>
     <NewsComponent Duid="video_{$video->id}.video">
@@ -52,13 +52,15 @@
         <Role FormalName="Main" />
         <MediaType FormalName="Video" />
         <Characteristics>
-          <Property FormalName="TotalDuration" Value="{$video->information['duration']}" />
+          {if !empty($video->information) && array_key_exists('duration', $video->information)}
+            <Property FormalName="TotalDuration" Value="{$video->information['duration']}" />
+          {/if}
         </Characteristics>
       </NewsComponent>
       <NewsComponent Duid="video_{$video->id}.video.text">
         <Role FormalName="Caption" />
         <ContentItem>
-          <ContentItem Href="{$app.instance->getBaseUrl()}/{$video->uri}" Url="{$video->video_url}" />
+          <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" Url="{$video->video_url}" />
           <MediaType FormalName="Text" />
           <Format FormalName="NITF" />
           <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -82,10 +84,10 @@
                       <![CDATA[{$video->description}]]>
                     </hl2>
                   </hedline>
-                  {if $video->author neq 'null'}
-                  <rights>
-                    <rights.owner>{$video->author->name}</rights.owner>
-                  </rights>
+                  {if !empty($video->author)}
+                    <rights>
+                      <rights.owner>{$video->author->name}</rights.owner>
+                    </rights>
                   {/if}
                   <distributor>{setting name=site_name}</distributor>
                   <dateline>

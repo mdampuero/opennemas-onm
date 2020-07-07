@@ -9,7 +9,7 @@
  */
 namespace Frontend\Renderer;
 
-class StatisticsRenderer
+class StatisticsRenderer extends Renderer
 {
     /**
      * The renderer configuration.
@@ -19,55 +19,32 @@ class StatisticsRenderer
     protected $config = [];
 
     /**
-     * The global variables.
-     *
-     * @var GlobalVariables
-     */
-    protected $global;
-
-    /**
-     * The admin template.
-     *
-     * @var Template
-     */
-    protected $backend;
-
-    /**
-     * The frontend template.
-     *
-     * @var Template
-     */
-    protected $frontend;
-
-    /**
      * Initializes the StatisticsRenderer.
      *
-     * @param GlobalVariables $global   The global variables.
-     * @param Template        $backend  The backend template.
-     * @param Template        $frontend The frontend template.
+     * @param Container The service container.
      */
-    public function __construct($global, $backend, $frontend)
+    public function __construct($container)
     {
-        $this->global   = $global;
-        $this->backend  = $backend;
-        $this->frontend = $frontend;
+        parent::__construct($container);
+        $this->global   = $this->container->get('core.globals');
+        $this->backend  = $this->container->get('core.template.admin');
+        $this->frontend = $this->container->get('core.template.frontend');
     }
 
     /**
      * Renders analytics code giving the types.
      *
-     * @param array   $types        The array of types to render.
-     * @param String  $output       The html page.
+     * @param Array   $params       The array of parameters.
      * @param Content $content      The content on template.
      *
      * @return String The output with the all analytics code inserted.
      */
-    public function render($types, $content = null, $output = null)
+    public function render($content, $params)
     {
         $codeType = $this->getCodeType();
         $code     = '';
 
-        foreach ($types as $type) {
+        foreach ($params['types'] as $type) {
             $renderer = $this->getRendererClass($type);
 
             if ($renderer->validate()) {
@@ -86,15 +63,15 @@ class StatisticsRenderer
             return '<figure class="op-tracker"><iframe>' . $code . '</iframe></figure>';
         }
 
-        if (empty($output)) {
+        if (empty($params['output'])) {
             return $code;
         }
 
         if ($codeType == 'amp') {
-            return preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
+            return preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $params['output']);
         }
 
-        return preg_replace('@(</head>)@', $code . '${1}', $output);
+        return preg_replace('@(</head>)@', $code . '${1}', $params['output']);
     }
 
     /**
@@ -141,7 +118,7 @@ class StatisticsRenderer
         $class     = $type . 'Renderer';
         $classPath = __NAMESPACE__ . '\\Statistics\\' . $class;
 
-        return new $classPath($this->global, $this->backend, $this->frontend);
+        return new $classPath($this->container);
     }
 
     /**

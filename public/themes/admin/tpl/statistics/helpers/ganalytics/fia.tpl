@@ -6,12 +6,10 @@
     a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
   {foreach $params as $key => $account}
-    {if is_array($account) && array_key_exists('api_key', $account) && !empty(trim($account['api_key']))}
-      {if array_key_exists('base_domain', $account) && !empty(trim($account['base_domain']))}
-        ga('create', '{$account['api_key']}', '{trim($account['base_domain'])}', 'account{$key}');
-      {else}
-        ga('create', '{$account['api_key']}', 'auto', 'account{$key}');
-      {/if}
+    {if array_key_exists('base_domain', $account) && !empty(trim($account['base_domain']))}
+      ga('create', '{$account['api_key']}', '{trim($account['base_domain'])}', 'account{$key}');
+    {else}
+      ga('create', '{$account['api_key']}', 'auto', 'account{$key}');
     {/if}
 
     ga('account{$key}.require', 'displayfeatures');

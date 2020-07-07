@@ -223,8 +223,8 @@ class TagController extends FrontendController
         $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
         $total    = $em->countBy($criteria);
 
-        // No first page and no contents or contents from invalid offset
-        if ($page > 1 && $total < $epp * $page) {
+        // No first page and no contents
+        if ($page > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
         }
 

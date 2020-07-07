@@ -161,8 +161,8 @@ class SmartRendererTest extends TestCase
             'advertisementGroup' => 'foo',
             'category'           => '',
             'extension'          => '',
-            'content'            => $content
-
+            'content'            => $content,
+            'placeholder'        => 'bar'
         ];
 
         $output = '<div id="sas_{$id}"></div>
@@ -176,7 +176,7 @@ class SmartRendererTest extends TestCase
             'domain'      => 'https://example.com',
             'network_id'  => 0000,
             'site_id'     => 1234,
-            'page_id'     => [ 'foo' => 111 ],
+            'page_id'     => [ 'foo' => 111, 'frontpage' => 111 ],
             'tags_format' => 'onecall_async'
         ];
 
@@ -232,7 +232,7 @@ class SmartRendererTest extends TestCase
         $ad->created = '2019-03-28 18:40:32';
         $ad->params  = [ 'smart_format_id' => 321 ];
 
-        $params = [ 'advertisementGroup' => 'foo' ];
+        $params = [ 'advertisementGroup' => 'foo', 'placeholder' => 'bar' ];
         $output = '<html>
         <head>
           <style>
@@ -274,7 +274,7 @@ class SmartRendererTest extends TestCase
             'domain'     => 'https://example.com',
             'network_id' => 0000,
             'site_id'    => 1234,
-            'page_id'    => [ 'foo' => 111 ]
+            'page_id'    => [ 'foo' => 111, 'frontpage' => 111 ]
         ];
 
         $this->ds->expects($this->any())->method('get')

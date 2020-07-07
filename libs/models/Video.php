@@ -285,35 +285,4 @@ class Video extends Content
 
         return $information['thumbnail'];
     }
-
-    /**
-     * Renders the video object in frontpage
-     *
-     * @param array $params the parameters for changing the rendering behaviour
-     *
-     * @return string the final HTML for this video
-     */
-    public function render($params)
-    {
-        $tpl = getService('core.template');
-
-        $params['item'] = $this;
-        $template       = 'frontpage/contents/_video.tpl';
-
-        if ($params['custom'] == 1) {
-            $template = $params['tpl'];
-        }
-
-        try {
-            $html = $tpl->fetch($template, $params);
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' ' . $e->getTraceAsString()
-            );
-
-            $html = _('Video not available');
-        }
-
-        return $html;
-    }
 }

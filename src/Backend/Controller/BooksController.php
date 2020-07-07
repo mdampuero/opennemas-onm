@@ -56,7 +56,7 @@ class BooksController extends Controller
                 ->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->filter('description', ''),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->getInt('category', 0),
+            'category_id'    => $request->request->getInt('category', 0),
             'content_status' => $request->request->getInt('content_status', 0),
             'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)
@@ -183,7 +183,7 @@ class BooksController extends Controller
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', ''),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->getInt('category', 0),
+            'category_id'    => $request->request->getInt('category', 0),
             'content_status' => $request->request->getInt('content_status', 0),
             'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)

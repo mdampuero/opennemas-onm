@@ -121,7 +121,7 @@ class HttpRss extends Http
         $content = $this->parseXml($path, $xml);
 
         $newsML = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
-            'article' => $content,
+            'content' => $content,
             'tags'    => []
         ]);
 

@@ -36,7 +36,7 @@
             defaultValueText: '@',
             exclude: '=?',
             exportModel: '=?',
-            showArchived: '@',
+            showVisible: '@',
             labelText: '@',
             locale: '=',
             multiple: '@',
@@ -113,10 +113,10 @@
 
             var route = {
               name: 'api_v1_backend_category_get_list',
-              params: { oql: 'archived = 0' }
+              params: { oql: 'visible = 1' }
             };
 
-            if ($scope.showArchived) {
+            if ($scope.showVisible) {
               delete route.params;
             }
 
