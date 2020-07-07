@@ -130,6 +130,10 @@ class CategoryController extends FrontendController
                 )
             );
 
+            foreach ($articles as &$article) {
+                $article->agency = $article->author->name;
+            }
+
             $this->view->assign([
                 'articles'   => $articles,
                 'category'   => $category,

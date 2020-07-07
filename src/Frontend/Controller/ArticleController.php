@@ -97,6 +97,8 @@ class ArticleController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $article->agency = $article->author->name;
+
         list($positions, $advertisements) = $this->getAdvertisements();
 
         return $this->render('article/article.tpl', [
