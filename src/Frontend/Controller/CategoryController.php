@@ -130,8 +130,10 @@ class CategoryController extends FrontendController
                 )
             );
 
-            foreach ($articles as &$article) {
-                $article->agency = $article->author->name;
+            if (!empty($articles)) {
+                foreach ($articles as &$article) {
+                    $article->agency = $article->author->name;
+                }
             }
 
             $this->view->assign([
