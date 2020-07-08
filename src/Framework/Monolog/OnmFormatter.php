@@ -112,7 +112,7 @@ class OnmFormatter
         return preg_replace(
             $this->patterns,
             $this->replacement,
-            json_encode($context, JSON_UNESCAPED_UNICODE)
+            stripslashes(json_encode($context, JSON_UNESCAPED_UNICODE))
         );
     }
 
