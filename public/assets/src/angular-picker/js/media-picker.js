@@ -50,7 +50,7 @@
                         '</div>' +
                       '</li>' +
                       '<li ng-if="picker.isTypeEnabled(\'photo\')">' +
-                        '<select name="month" ng-model="$parent.$parent.date">' +
+                        '<select name="month" ng-model="criteria.created">' +
                           '<option value="">[% picker.params.explore.allMonths %]</option>' +
                           '<optgroup label="[% year.name %]" ng-repeat="year in picker.params.explore.dates">' +
                             '<option value="[% month.value %]" ng-repeat="month in year.months">' +
@@ -527,6 +527,13 @@
          */
         $scope.contents = [];
 
+        $scope.criteria = {
+          epp: $scope.epp,
+          in_litter: 0,
+          orderBy: { created:  'desc' },
+          page: $scope.page
+        };
+
         /**
          * The number of elements per page.
          *
@@ -785,33 +792,30 @@
             data.to = $scope.to;
           }
 
-          var route = {
+          $scope.criteria.content_type_name = $scope.picker.types.enabled;
+
+          oqlEncoder.configure({
+            placeholder: {
+              title: '(title ~ "%[value]%" or description ~ "%[value]%")',
+              created: '[key] ~ "%[value]%"'
+            }
+          });
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+
+          var routes = {
+            photo: {
+              name: 'api_v1_backend_content_get_list',
+              params:  { oql: oql }
+            }
+          };
+
+          var oldRoute = {
             name: 'backend_ws_picker_list',
             params: data
           };
 
-          if (data.content_type_name == 'photo') {
-            $scope.criteria = {
-              content_type_name: $scope.picker.types.enabled,
-              epp: $scope.epp,
-              in_litter: 0,
-              orderBy: { created:  'desc' },
-              page: $scope.page
-            };
-
-            oqlEncoder.configure({
-              placeholder: {
-                title: '(title ~ "%[value]%" or description ~ "%[value]%")',
-                created: '[key] ~ "%[value]%"'
-              }
-            });
-
-            var oql   = oqlEncoder.getOql($scope.criteria);
-            var route = {
-              name: 'api_v1_backend_photo_get_list',
-              params:  { oql: oql }
-            };
-          }
+          var route = routes[data.content_type_name] ? routes[data.content_type_name] : oldRoute;
 
           http.get(route)
             .then(function(response) {
@@ -1146,7 +1150,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[category, date, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, criteria.created, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }

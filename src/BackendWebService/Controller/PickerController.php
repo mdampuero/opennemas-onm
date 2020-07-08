@@ -125,6 +125,7 @@ class PickerController extends Controller
             'epp'        => $epp,
             'page'       => $page,
             'results'    => $results,
+            'items'      => $results,
             'categories' => $this->get('api.service.category')
                 ->responsify($categories),
             'total'      => $total,
