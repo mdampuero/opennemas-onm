@@ -14,7 +14,7 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
     $container           = $smarty->getContainer();
     $request             = $container->get('request_stack')->getCurrentRequest();
     $templateVars        = $smarty->getTemplateVars();
-    $allowedContentTypes = [ 'article', 'opinion', 'video' ];
+    $allowedContentTypes = [ 'article', 'opinion', 'video', 'album' ];
     $content             =
         is_array($templateVars) && array_key_exists('o_content', $templateVars)
         ? $templateVars['o_content']

@@ -22,7 +22,7 @@ class AlbumController extends FrontendController
     protected $caches = [
         'list'    => 'gallery-frontpage',
         'show'    => 'gallery-inner',
-        'showamp' => 'gallery-inner',
+        'showamp' => 'amp/content.tpl',
     ];
 
     /**
@@ -36,7 +36,7 @@ class AlbumController extends FrontendController
     protected $groups = [
         'list'    => 'album_frontpage',
         'show'    => 'album_inner',
-        'showamp' => 'amp_inner',
+        'showamp' => 'amp/content.tpl',
     ];
 
     /**
@@ -158,6 +158,28 @@ class AlbumController extends FrontendController
      * {@inheritdoc}
      */
     protected function hydrateShow(array &$params = []) : void
+    {
+        $params['tags']   = $this->getTags($params['content']);
+        $params['author'] = $this->get('user_repository')
+            ->find($params['content']->fk_author);
+
+        $cacheIds = array_map(function ($a) {
+            return [ 'photo', $a['pk_photo'] ];
+        }, $params['content']->photos);
+
+        $photos = $this->get('entity_repository')
+            ->findMulti($cacheIds);
+
+        $params['photos'] = $this->get('data.manager.filter')
+            ->set($photos)
+            ->filter('mapify', [ 'key' => 'pk_photo' ])
+            ->get();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateShowAmp(array &$params = []) : void
     {
         $params['tags']   = $this->getTags($params['content']);
         $params['author'] = $this->get('user_repository')
