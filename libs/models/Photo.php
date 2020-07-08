@@ -11,26 +11,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Photo extends Content
 {
-    /**
-     * Photo id
-     *
-     * @var int
-     */
-    public $pk_photo = null;
-
-    /**
-     * File name of the photo
-     *
-     * @var string
-     */
-    public $name = null;
 
     /**
      * Full path to the photo file
      *
      * @var string
      */
-    public $path_file = null;
+    public $path = null;
 
     /**
      * The size of the image
@@ -54,20 +41,6 @@ class Photo extends Content
     public $height = null;
 
     /**
-     * The copyright of the image
-     *
-     * @var string
-     */
-    public $author_name = null;
-
-    /**
-     * The photo information.
-     *
-     * @var string
-     */
-    public $infor = null;
-
-    /**
      * Initializes the Photo object instance given an id
      *
      * @param int $id the photo id to load
@@ -81,159 +54,6 @@ class Photo extends Content
         $this->content_type_name      = 'photo';
 
         parent::__construct($id);
-    }
-
-    /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
-     */
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        $this->pk_photo  = $properties['pk_photo'];
-        $this->name      = $properties['name'];
-        $this->path_file = $properties['path_file'];
-
-        if (!empty($properties['path_file'])) {
-            $this->path_img = $properties['path_file'] . DS . $properties['name'];
-        }
-
-        $this->size        = $properties['size'];
-        $this->width       = $properties['width'];
-        $this->height      = $properties['height'];
-        $this->author_name = $properties['author_name'];
-        $this->address     = $properties['address'];
-        $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
-
-        if (!empty($properties['address'])) {
-            $positions = explode(',', $properties['address']);
-            if (is_array($positions)
-                && array_key_exists(0, $positions)
-                && array_key_exists(1, $positions)
-            ) {
-                $this->latlong = [
-                    'lat' => $positions[0],
-                    'long' => $positions[1],
-                ];
-            }
-        }
-    }
-
-    /**
-     * Returns an instance of the Photo object given a photo id
-     *
-     * @param int $id the photo id to load
-     *
-     * @return Photo the photo object
-     */
-    public function read($id)
-    {
-        if ((int) $id <= 0) {
-            return;
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN photos ON pk_content = pk_photo WHERE pk_content=?',
-                [ $id ]
-            );
-
-            if (!$rs) {
-                return false;
-            }
-
-            $this->load($rs);
-
-            return $this;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Creates a new photo given an array of information
-     *
-     * @param array $data the photo information
-     *
-     * @return int the photo id
-     * @return boolean false if the photo was not created
-     */
-    public function create($data)
-    {
-        $data['content_status'] = 1;
-
-        parent::create($data);
-
-        getService('dbal_connection')->insert('photos', [
-            'pk_photo'    => $this->id,
-            'name'        => $data['name'],
-            'path_file'   => $data['path_file'],
-            'size'        => $data['size'],
-            'width'       => $data['width'],
-            'height'      => $data['height'],
-            'author_name' => $data['author_name'] ?? null
-        ]);
-
-        return $this->id;
-    }
-
-    /**
-     * Updates the photo object given an array with information
-     *
-     * @param array $data the new photo information
-     *
-     * @return boolean true if the photo was updated properly
-     */
-    public function update($data)
-    {
-        try {
-            parent::update($data);
-
-            getService('dbal_connection')->update('photos', [
-                'name'        => $this->name,
-                'path_file'   => $this->path_file,
-                'size'        => $this->size,
-                'width'       => (int) $this->width,
-                'height'      => (int) $this->height,
-                'author_name' => $data['author_name'],
-                'address'     => $data['address'],
-            ], [ 'pk_photo' => (int) $data['id'] ]);
-
-            return true;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Removes a photo given its id.
-     *
-     * @param int $id the photo id to delete
-     *
-     * @return boolean true if the photo was deleted
-     */
-    public function remove($id)
-    {
-        if (!empty($this->getRelativePath())) {
-            $path = getService('service_container')->getParameter('core.paths.public')
-            . getService('core.instance')->getImagesShortPath()
-            . $this->getRelativePath();
-
-            $fs = new Filesystem();
-
-            if ($fs->exists($path) && !is_dir($path)) {
-                $fs->remove($path);
-            }
-        }
-
-        parent::remove($id);
-        getService('dbal_connection')->delete('photos', [ 'pk_photo' => $id ]);
     }
 
     /**
