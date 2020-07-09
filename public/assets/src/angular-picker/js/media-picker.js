@@ -45,7 +45,7 @@
                             '<span class="input-group-addon">' +
                               '<i class="fa fa-search"></i>' +
                             '</span>' +
-                            '<input ng-model="$parent.title" placeholder="[% picker.params.explore.search %]" type="text"/>' +
+                            '<input ng-model="criteria.title" placeholder="[% picker.params.explore.search %]" type="text"/>' +
                           '</div>' +
                         '</div>' +
                       '</li>' +
@@ -796,7 +796,8 @@
 
           oqlEncoder.configure({
             placeholder: {
-              title: '(title ~ "%[value]%" or description ~ "%[value]%")',
+              title: '(title ~ "%[value]%")',
+              /* or description ~ "%[value]%" */
               created: '[key] ~ "%[value]%"'
             }
           });
@@ -1150,7 +1151,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[category, criteria.created, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, criteria.created, criteria.title, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }
