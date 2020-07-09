@@ -184,10 +184,8 @@ class Frontpages
             try {
                 $content->author = getService('api.service.author')->getItem($content->fk_author);
 
-                $content->author_name              = $content->author->name;
-                $content->author->photo            = $content->author->getPhoto();
-                $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
-                $content->author->external         = 1;
+                $content->author_name      = $content->author->name;
+                $content->author->external = 1;
             } catch (\Exception $e) {
             }
 
@@ -225,6 +223,6 @@ class Frontpages
             ]
         ]);
 
-        return utf8_encode(serialize([ $pagination->links, $articles ]));
+        return utf8_encode(serialize([ $pagination, $articles ]));
     }
 }
