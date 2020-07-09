@@ -464,7 +464,7 @@
                 }
 
                 for (var i = 0; i < target.length; i++) {
-                  $scope.selected.ids.push(target[i].pk_content);
+                  $scope.selected.ids.push(target[i].id);
                 }
 
                 $scope.selected.items = target;
@@ -709,7 +709,7 @@
           return $scope.mediaPickerIgnore &&
             $scope.mediaPickerIgnore.map(function(e) {
               return e.pk_content;
-            }).indexOf(item.id) !== -1;
+            }).indexOf(item.pk_content) !== -1;
         };
 
         /**
@@ -1069,7 +1069,7 @@
             return;
           }
 
-          var index = $scope.selected.ids.indexOf(item.id);
+          var index = $scope.selected.ids.indexOf(item.pk_content);
 
           // Remove element
           if (index !== -1) {
@@ -1087,7 +1087,7 @@
 
           // Add element
           if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
-            $scope.selected.ids.push(item.id);
+            $scope.selected.ids.push(item.pk_content);
             $scope.selected.items.push(item);
           }
         };
