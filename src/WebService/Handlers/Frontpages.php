@@ -63,8 +63,7 @@ class Frontpages
                     $content->author = getService('api.service.author')
                         ->getItem($content->fk_author);
 
-                    $content->author->external = 1;
-                    $content->author_name      = $content->author->name;
+                    $content->agency = !empty($content->author) ? $content->author->name : $content->agency;
                 } catch (\Exception $e) {
                 }
 
@@ -183,9 +182,7 @@ class Frontpages
             // Load category related information
             try {
                 $content->author = getService('api.service.author')->getItem($content->fk_author);
-
-                $content->author_name      = $content->author->name;
-                $content->author->external = 1;
+                $content->agency = !empty($content->author) ? $content->author->name : $content->agency;
             } catch (\Exception $e) {
             }
 
