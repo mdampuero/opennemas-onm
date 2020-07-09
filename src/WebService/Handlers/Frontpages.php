@@ -60,10 +60,10 @@ class Frontpages
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
                 try {
-                    $content->author = getService('api.service.author')
-                        ->getItem($content->fk_author);
+                    $author = getService('api.service.author')->getItem($content->fk_author);
 
-                    $content->agency = !empty($content->author) ? $content->author->name : $content->agency;
+                    $content->agency    = !empty($author) ? $author->name : $content->agency;
+                    $content->fk_author = null;
                 } catch (\Exception $e) {
                 }
 
@@ -179,10 +179,12 @@ class Frontpages
 
         // Overloading information for contents
         foreach ($articles as &$content) {
-            // Load category related information
+            // Load related information
             try {
-                $content->author = getService('api.service.author')->getItem($content->fk_author);
-                $content->agency = !empty($content->author) ? $content->author->name : $content->agency;
+                $author = getService('api.service.author')->getItem($content->fk_author);
+
+                $content->agency    = !empty($author) ? $author->name : $content->agency;
+                $content->fk_author = null;
             } catch (\Exception $e) {
             }
 
