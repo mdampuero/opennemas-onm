@@ -318,15 +318,13 @@ class UrlGeneratorHelper
      */
     protected function getUriForPhoto($content)
     {
-        $pathFile    = trim(rtrim($content->path_file, DS), DS);
-        $contentName = trim(rtrim($content->name, DS), DS);
+        $pathFile = trim(rtrim($content->path, DS), DS);
 
         return implode(DS, [
             "media",
             $this->instance->internal_name,
             'images',
-            $pathFile,
-            $contentName
+            $pathFile
         ]);
     }
 
