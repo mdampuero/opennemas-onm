@@ -134,6 +134,15 @@ class Frontpages
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
+            'join' => [
+                [
+                    'type'                => 'INNER',
+                    'table'               => 'content_category',
+                    'contents.pk_content' => [
+                        [ 'value' => 'content_category.content_id', 'field' => true ]
+                    ]
+                ]
+            ],
             'content_type_name' => [[ 'value' => 'article' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
