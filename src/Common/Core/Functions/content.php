@@ -60,6 +60,12 @@ function get_featured_media($item, $type)
         ], 'album' => [
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
+        ], 'book' => [
+            'frontpage' => [ 'cover_id' ],
+            'inner'     => []
+        ], 'special' => [
+            'frontpage' => [ 'img1' ],
+            'inner'     => [ 'img1' ]
         ]
     ];
 
