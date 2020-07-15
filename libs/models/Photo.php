@@ -63,6 +63,6 @@ class Photo extends Content
      */
     public function getRelativePath()
     {
-        return $this->path_file . $this->name;
+        return $this->path;
     }
 }
