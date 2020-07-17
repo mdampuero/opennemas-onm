@@ -7,6 +7,12 @@
  */
 function smarty_function_render_messages($params, &$smarty)
 {
+    $request = !getService('request_stack')->getCurrentRequest();
+
+    if (empty($request) || !$request->hasPreviousSession()) {
+        return '';
+    }
+
     $created        = time();
     $messagesHTML   = '';
     $messagesByType = getService('session')->getFlashBag()->all();
