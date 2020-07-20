@@ -30,7 +30,9 @@
             "libs/functions.php",
             "src/Common/Core/Functions/category.php",
             "src/Common/Core/Functions/content.php",
-            "src/Common/Core/Functions/helper.php"
+            "src/Common/Core/Functions/helper.php",
+            "src/Common/Core/Functions/author.php",
+            "src/Common/Core/Functions/photo.php"
         ]
     },
     "autoload-dev": {

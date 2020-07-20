@@ -243,6 +243,6 @@ class Photo extends Content
      */
     public function getRelativePath()
     {
-        return $this->path_file . $this->name;
+        return preg_replace('@[/]+@', '/', $this->path_file . '/' . $this->name);
     }
 }

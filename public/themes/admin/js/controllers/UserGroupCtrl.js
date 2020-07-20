@@ -111,7 +111,7 @@
           {
             title: 'Utils',
             rows: [
-              [ 'ADVANCED_SEARCH', 'NEWSLETTER_MANAGER', 'KEYWORD_MANAGER', 'PAYWALL' ],
+              [ 'ADVANCED_SEARCH', 'NEWSLETTER_MANAGER', 'KEYWORD_MANAGER' ],
               [ 'SYNC_MANAGER', 'NEWS_AGENCY_IMPORTER' ],
             ]
           },

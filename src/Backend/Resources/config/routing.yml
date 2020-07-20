@@ -234,51 +234,6 @@ admin_trash:
     path:     /trash
     defaults: { _controller: BackendBundle:Trash:default }
 
-# Paywall controller routes
-admin_paywall:
-    path:     /paywall
-    defaults: { _controller: BackendBundle:Paywall:default }
-
-admin_paywall_users:
-    path:     /paywall/users
-    defaults: { _controller: BackendBundle:Paywall:users }
-
-admin_paywall_purchases:
-    path:     /paywall/purchases
-    defaults: { _controller: BackendBundle:Paywall:purchases }
-
-admin_paywall_settings:
-    path:     /paywall/settings
-    defaults: { _controller: BackendBundle:Paywall:settings }
-
-admin_paywall_settings_save:
-    path:     /paywall/settings/save
-    defaults: { _controller: BackendBundle:Paywall:settingsSave }
-
-admin_paywall_validate_api:
-    path:     /paywall/settings/validate/api
-    defaults: { _controller: BackendBundle:Paywall:validateCredentials }
-    options:
-        expose: true
-
-admin_paywall_set_validate_ipn:
-    path:     /paywall/settings/set/validate/ipn
-    defaults: { _controller: BackendBundle:Paywall:setValidateIpn }
-    options:
-        expose: true
-
-admin_paywall_do_validate_ipn:
-    path:     /paywall/settings/do/validate/ipn
-    defaults: { _controller: BackendBundle:Paywall:doValidateIpn }
-
-admin_paywall_users_list_export:
-    path:     /paywall/users/list-export.csv
-    defaults: { _controller: BackendBundle:Paywall:userListExport }
-
-admin_paywall_purchases_list_export:
-    path:     /paywall/purchases/list-export.csv
-    defaults: { _controller: BackendBundle:Paywall:purchasesListExport }
-
 admin_system_settings:
     path:     /system/settings
     defaults: { _controller: BackendBundle:SystemSettings:default }

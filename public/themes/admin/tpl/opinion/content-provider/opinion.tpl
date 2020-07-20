@@ -10,12 +10,12 @@
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            {if $content->author_object->meta['is_blog'] neq 1}
-              <span class="type">{$content->content_type_l10n_name}</span>
-            {else}
+            {if is_blog($content)}
               <strong>{t}Blog{/t}</strong>
+            {else}
+              <span class="type">{$content->content_type_l10n_name}</span>
             {/if}
-              {$content->author_object->name} - {$content->title}
+            {get_author_name($content)} - {$content->title}
         </div>
     </div>
     <div class="content-action-buttons btn-group">
