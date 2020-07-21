@@ -51,7 +51,7 @@
         "symfony/symfony": "3.4.*",
         "twig/twig": "^1.0||^2.0",
 
-        "drak/native-session": "*",
+        "drak/native-session": "1.0.2",
         "econea/nusoap": "0.9.*",
         "friendsofsymfony/jsrouting-bundle": "2.2.*",
         "giggsey/libphonenumber-for-php": "^7.2",
@@ -74,7 +74,7 @@
         "drexarj/disqus-php": "dev-master",
         "opennemas/cache": "1.0.*",
         "opennemas/data": "1.0.*",
-        "opennemas/orm": "1.0.*",
+        "opennemas/orm": "1.0.2",
         "opennemas/task": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "1.0.*",

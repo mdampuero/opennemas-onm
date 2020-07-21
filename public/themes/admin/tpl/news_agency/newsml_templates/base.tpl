@@ -24,13 +24,13 @@
       <FirstCreated>{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}</FirstCreated>
       <FirstPublished>{format_date date=$content->starttime type="custom" format="yMMdd'T'HHmmssxxx"}</FirstPublished>
       <ThisRevisionCreated>{format_date date=$content->changed type="custom" format="yMMdd'T'HHmmssxxx"}</ThisRevisionCreated>
-      <Status FormalName="Usable" />
+      <Status FormalName="{if $content->in_litter}Canceled{else}{if $content->content_status}Usable{else}Withheld{/if}{/if}" />
       <Urgency FormalName="5" />
     </NewsManagement>
     <NewsComponent Duid="multimedia_{$content->id}.multimedia">
       <NewsLines>
         <HeadLine><![CDATA[{$content->title}]]></HeadLine>
-        <SubHeadLine><![CDATA[{$content->subtitle}]]></SubHeadLine>
+        <SubHeadLine><![CDATA[{$content->pretitle}]]></SubHeadLine>
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
@@ -47,7 +47,7 @@
           <Role FormalName="Main" />
           <NewsLines>
             <HeadLine><![CDATA[{$content->title}]]></HeadLine>
-            <SubHeadLine><![CDATA[{$content->subtitle}]]></SubHeadLine>
+            <SubHeadLine><![CDATA[{$content->pretitle}]]></SubHeadLine>
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
@@ -75,7 +75,7 @@
                   <body.head>
                     <hedline>
                       <hl1><![CDATA[{$content->title}]]></hl1>
-                      <hl2><![CDATA[{$content->subtitle}]]></hl2>
+                      <hl2><![CDATA[{$content->pretitle}]]></hl2>
                     </hedline>
                     <rights>
                       <rights.agent>{setting name=site_name}</rights.agent>

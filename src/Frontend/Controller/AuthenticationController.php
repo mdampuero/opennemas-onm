@@ -41,6 +41,7 @@ class AuthenticationController extends Controller
 
         if ($auth->hasError()) {
             $session->getFlashBag()->add('error', $auth->getErrorMessage());
+            $auth->clearError();
         }
 
         if ($auth->isRecaptchaRequired()) {
