@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
@@ -31,8 +32,9 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
-        $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
-        if (empty($user)) {
+        try {
+            $user = $this->container->get('api.service.author')->getItemBy("username='{$slug}'");
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 
@@ -43,8 +45,6 @@ class AuthorController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
-            $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
-
             $criteria = [
                 'fk_author'       => [[ 'value' => $user->id ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -69,9 +69,6 @@ class AuthorController extends Controller
             $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
             foreach ($contents as &$item) {
-                $item         = $item->get($item->id);
-                $item->author = $user;
-
                 if ($item->fk_content_type == 9) {
                     $item->obj_video = $item;
                     $item->summary   = $item->description;
@@ -125,10 +122,6 @@ class AuthorController extends Controller
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
@@ -202,12 +195,6 @@ class AuthorController extends Controller
 
             foreach ($items as &$item) {
                 $author = $authors[$item['id']];
-
-                // Fetch user avatar if exists
-                if (!empty($author->avatar_img_id)) {
-                    $author->photo = $this->get('entity_repository')
-                        ->find('Photo', $author->avatar_img_id);
-                }
 
                 $author->total_contents = $item['total'];
 

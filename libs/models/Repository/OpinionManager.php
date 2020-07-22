@@ -115,36 +115,21 @@ class OpinionManager extends EntityManager
 
                 $fieldFilters = [];
                 if ($field == 'blog') {
-                    $bloggers = getService('user_repository')->findByUserMeta(
-                        [
-                            'meta_key' => [
-                                ['value' => 'is_blog']
-                            ],
-                            'meta_value' => [
-                                ['value' => '1']
-                            ]
-                        ],
-                        ['username' => 'asc']
-                    );
+                    $bloggers = getService('api.service.author')
+                        ->getList('is_blog = 1 order by username asc');
 
-                    if (!empty($bloggers)) {
-                        $ids = [];
-                        foreach ($bloggers as $blogger) {
-                            $ids[] = $blogger->id;
-                        }
+                    $ids = array_map(function ($a) {
+                        return $a->id;
+                    }, $bloggers['items']);
 
-                        if ($filters[0]['value']) {
-                            $filterSQL[] = 'opinions.fk_author IN ('
-                                . implode(', ', array_values($ids)) . ") ";
-                        } else {
-                            $filterSQL[] = 'opinions.fk_author NOT IN ('
-                                . implode(', ', array_values($ids)) . ") ";
-                        }
-                    } else {
-                        if ($filters[0]['value']) {
-                            $filterSQL[] = 'opinions.fk_author=-1';
-                        }
+                    if (empty($ids)) {
+                        $ids = [0];
                     }
+
+                    $operator = (int) $filters[0]['value'] === 0 ? 'NOT IN' : 'IN';
+
+                    $filterSQL[] = 'opinions.fk_author ' . $operator . ' ('
+                        . implode(', ', array_values($ids)) . ") ";
                 } elseif ($field == 'author') {
                     $filterSQL[] = 'opinions.fk_author=' . $filters[0]['value'];
                 } else {

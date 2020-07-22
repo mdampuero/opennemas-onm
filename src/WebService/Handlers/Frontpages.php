@@ -57,12 +57,14 @@ class Frontpages
                 $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
             }
 
-            $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-                $content->author = $ur->find($content->fk_author);
-                if (!is_null($content->author)) {
-                    $content->author->external = 1;
+                try {
+                    $author = getService('api.service.author')->getItem($content->fk_author);
+
+                    $content->agency    = !empty($author) ? $author->name : $content->agency;
+                    $content->fk_author = null;
+                } catch (\Exception $e) {
                 }
 
                 // Load attached and related contents from array
@@ -134,10 +136,19 @@ class Frontpages
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
+            'join' => [
+                [
+                    'type'                => 'INNER',
+                    'table'               => 'content_category',
+                    'contents.pk_content' => [
+                        [ 'value' => 'content_category.content_id', 'field' => true ]
+                    ]
+                ]
+            ],
             'content_type_name' => [[ 'value' => 'article' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'name'              => [ [ 'value' => $category->name ] ],
+            'category_id'       => [ [ 'value' => $category->id ] ],
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
@@ -174,16 +185,15 @@ class Frontpages
             $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
         }
 
-        $ur = getService('user_repository');
         // Overloading information for contents
         foreach ($articles as &$content) {
-            // Load category related information
-            $content->author = $ur->find($content->fk_author);
+            // Load related information
+            try {
+                $author = getService('api.service.author')->getItem($content->fk_author);
 
-            if (!is_null($content->author)) {
-                $content->author->photo            = $content->author->getPhoto();
-                $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
-                $content->author->external         = 1;
+                $content->agency    = !empty($author) ? $author->name : $content->agency;
+                $content->fk_author = null;
+            } catch (\Exception $e) {
             }
 
              // Change uri for href links except widgets
@@ -219,6 +229,6 @@ class Frontpages
             ]
         ]);
 
-        return utf8_encode(serialize([ $pagination->links, $articles ]));
+        return utf8_encode(serialize([ $pagination, $articles ]));
     }
 }
