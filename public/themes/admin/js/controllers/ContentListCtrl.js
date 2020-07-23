@@ -130,6 +130,8 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       oqlEncoder.configure({
         placeholder: {
           title: 'title ~ "%[value]%"',
+          fk_content_categories: 'fk_content_categories regexp' +
+            '"^[value]($|,)|,*[value]*,|(^|,)*[value]$"'
         }
       });
 
