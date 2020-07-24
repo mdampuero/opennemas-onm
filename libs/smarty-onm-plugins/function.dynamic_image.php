@@ -31,7 +31,7 @@ function smarty_function_dynamic_image($params, &$smarty)
 
     $baseUrl = array_key_exists('base_url', $params)
         ? $params['base_url'] . DS
-        : '';
+        : INSTANCE_MEDIA . 'images';
 
     $resource = $baseUrl . $params['src'];
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
