@@ -79,7 +79,7 @@
             return;
           }
 
-          $scope.item.logo_path = nv ? nv.path_img : null;
+          $scope.item.logo_path = nv ? nv.path : null;
         }, true);
 
         // Generates slug when flag changes

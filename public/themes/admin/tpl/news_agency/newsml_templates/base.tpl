@@ -83,7 +83,7 @@
                         <rights.owner>{$content->author->name}</rights.owner>
                         {if $content->author->photo}
                           <rights.owner.photo>
-                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path_img}
+                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path}
                           </rights.owner.photo>
                         {/if}
                         <rights.owner.url>
