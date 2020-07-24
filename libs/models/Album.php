@@ -97,8 +97,7 @@ class Album extends Content
                 ->find('Photo', $this->cover_id);
 
             if (!empty($this->cover_image)) {
-                $this->cover = $this->cover_image->path_file
-                    . $this->cover_image->name;
+                $this->cover = $this->cover_image->path;
             }
         }
 
