@@ -214,7 +214,6 @@ class OpinionController extends ContentOldController
      */
     protected function getRelatedContents($content)
     {
-        $em    = $this->get('entity_repository');
         $extra = [];
 
         if (empty($content)) {
@@ -228,7 +227,7 @@ class OpinionController extends ContentOldController
         foreach ($content as $element) {
             foreach (['img1', 'img2'] as $relation) {
                 if (!empty($element->{$relation})) {
-                    $photo = $em->find('Photo', $element->{$relation});
+                    $photo = $this->get('api.service.photo')->getItem($element->{$relation});
 
                     if (is_object($photo)) {
                         $extra[] = \Onm\StringUtils::convertToUtf8($photo);

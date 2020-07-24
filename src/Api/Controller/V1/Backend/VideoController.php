@@ -150,7 +150,7 @@ class VideoController extends ContentOldController
                 continue;
             }
 
-            $photo = $em->find('Photo', $item->information['thumbnail']);
+            $photo = $this->get('api.service.photo')->getItem($item->information['thumbnail']);
 
             $extra[] = \Onm\StringUtils::convertToUtf8($photo);
         }

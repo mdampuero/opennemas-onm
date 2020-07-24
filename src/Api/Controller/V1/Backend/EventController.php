@@ -67,7 +67,7 @@ class EventController extends ContentController
                     continue;
                 }
 
-                $photo = $em->find('Photo', $relation['pk_content2']);
+                $photo = $this->get('api.service.photo')->getItem($relation['pk_content2']);
 
                 $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
             }

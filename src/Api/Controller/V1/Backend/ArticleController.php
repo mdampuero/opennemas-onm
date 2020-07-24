@@ -173,7 +173,6 @@ class ArticleController extends Controller
      */
     protected function getPhotos($article)
     {
-        $em    = $this->get('entity_repository');
         $extra = [];
         $keys  = [ 'img1', 'img2' ];
 
@@ -182,7 +181,7 @@ class ArticleController extends Controller
                 continue;
             }
 
-            $photo = $em->find('Photo', $article->{$key});
+            $photo = $this->get('api.service.photo')->getItem($article->{$key});
 
             if (!empty($photo)) {
                 $extra[$key] = \Onm\StringUtils::convertToUtf8($photo);
@@ -196,7 +195,7 @@ class ArticleController extends Controller
             return $extra;
         }
 
-        $photo = $em->find('Photo', $article->params['imageHome']);
+        $photo = $this->get('api.service.photo')->getItem($article->params['imageHome']);
 
         if (!empty($photo)) {
             $extra['imageHome'] = \Onm\StringUtils::convertToUtf8($photo);
