@@ -150,7 +150,7 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path}">
                   <MediaType FormalName="PhotoFront" />
                   <MimeType FormalName="image/{$photo->type_img}" />
                   <Characteristics>
@@ -223,7 +223,7 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
+                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path}">
                   <MediaType FormalName="PhotoInner" />
                   <MimeType FormalName="image/{$photoInner->type_img}" />
                   <Characteristics>
@@ -303,12 +303,12 @@
                 <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
-                  <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+                  <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path}">
                     <MediaType FormalName="Photo" />
                     <MimeType FormalName="image/{$photo->type_img}" />
                     <Characteristics>
                       <SizeInBytes>{$photo->size*1024}</SizeInBytes>
-                      <Property FormalName="Onm_Filename" Value="{$photo->name}" />
+                      <Property FormalName="Onm_Filename" Value="{$photo->title}" />
                       <Property FormalName="Height" Value="{$photo->height}" />
                       <Property FormalName="PixelDepth" Value="24" />
                       <Property FormalName="Width" Value="{$photo->width}" />

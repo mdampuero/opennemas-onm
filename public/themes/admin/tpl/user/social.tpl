@@ -61,9 +61,9 @@
         </p>
         <ul class="social-connection clearfix">
           <li>
-            {if $user->photo->name}
+            {if $user->photo->path}
               <div style="width: 40px; height: 40px;">
-                <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path}" alt="{t}Photo{/t}"/>
               </div>
             {else}
               <div style="width: 40px; height: 40px;">
