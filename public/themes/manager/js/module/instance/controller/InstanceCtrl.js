@@ -167,28 +167,6 @@
          * @return boolean True if all modules of the plan are selected.
          *                 Otherwise, return false.
          */
-        $scope.areAllSelected = function() {
-          for (var i = 0; i < $scope.packs.length; i++) {
-            if (!$scope.selected.plan[$scope.packs[i]]) {
-              return false;
-            }
-          }
-
-          return true;
-        };
-
-        /**
-         * @function isPlanSelected
-         * @memberOf InstanceCtrl
-         *
-         * @description
-         *   Checks if all modules of the plan are selected.
-         *
-         * @param string  plan The plan to check.
-         *
-         * @return boolean True if all modules of the plan are selected.
-         *                 Otherwise, return false.
-         */
         $scope.isPlanSelected = function(plan) {
           return _.difference($scope.modulesByPack[plan],
             $scope.instance.activated_modules).length === 0;
