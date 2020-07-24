@@ -101,7 +101,7 @@ class Agency
         $tpl = getService('view')->get('backend');
 
         if (!empty($article->img1)) {
-            $image[] = $er->find('Photo', $article->img1);
+            $image[] = getService('api.service.photo')->getItem($article->img1);
 
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
@@ -112,7 +112,7 @@ class Agency
         }
 
         if (!empty($article->img2)) {
-            $image[] = $er->find('Photo', $article->img2);
+            $image[] = getService('api.service.photo')->getItem($article->img2);
 
             // Load attached and related contents from array
             $article->loadInnerImageFromHydratedArray($image);
@@ -129,7 +129,8 @@ class Agency
                     ->getItem($article->fk_author);
 
                 if (!empty($article->author->avatar_img_id)) {
-                    $article->author->photo = $er->find('Photo', $article->author->avatar_img_id);
+                    $article->author->photo = getService('api.service.photo')
+                        ->getItem($article->author->avatar_img_id);
                 }
             }
         } catch (\Exception $e) {

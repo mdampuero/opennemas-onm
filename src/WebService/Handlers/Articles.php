@@ -47,7 +47,7 @@ class Articles
 
         // Get inner image for this article
         if (isset($article->img2) && ($article->img2 != 0)) {
-            $photoInt = $er->find('Photo', $article->img2);
+            $photoInt = getService('api.service.photo')->getItem($article->img2);
             if (!empty($photoInt)) {
                 $photoInt->media_url = MEDIA_IMG_ABSOLUTE_URL;
                 $article->photoInt   = $photoInt;

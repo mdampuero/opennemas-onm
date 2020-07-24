@@ -26,8 +26,7 @@ class Images
     {
         $this->validateInt(func_get_args());
 
-        $er = getService('entity_repository');
-        $image = $er->find('Photo', $id);
+        $image = getService('api.service.photo')->getItem($id);
 
         return $image;
     }
