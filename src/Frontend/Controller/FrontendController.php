@@ -563,11 +563,10 @@ class FrontendController extends Controller
         );
 
         $suggested = $suggestedContents[0];
-        $photos    = $suggestedContents[1];
+
 
         $this->view->assign([
             'suggested' => $suggested,
-            'photos'    => $photos
         ]);
     }
 
