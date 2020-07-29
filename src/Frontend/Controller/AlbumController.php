@@ -22,7 +22,7 @@ class AlbumController extends FrontendController
     protected $caches = [
         'list'    => 'gallery-frontpage',
         'show'    => 'gallery-inner',
-        'showamp' => 'amp/content.tpl',
+        'showamp' => 'gallery-inner',
     ];
 
     /**
@@ -36,7 +36,7 @@ class AlbumController extends FrontendController
     protected $groups = [
         'list'    => 'album_frontpage',
         'show'    => 'album_inner',
-        'showamp' => 'amp/content.tpl',
+        'showamp' => 'amp_inner',
     ];
 
     /**
