@@ -21,8 +21,8 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'objectify', 'responsify' ])
             ->getMock();
 
-        $this->conn->user     = 'root';
-        $this->conn->password = 'root';
+        $this->conn->user     = "user@email.com";
+        $this->conn->password = "Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:";
 
         $this->headers = $this->getMockBuilder('HeaderBag')
             ->setMethods([ 'get' ])
@@ -85,8 +85,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://norf.org/qux');
 
-        $record = $this->formatter->processRecord(['message' => 'Link root root',
-            'context' => ['Link root root']]);
+        $record = $this->formatter->processRecord(['message' => "Link user@email.com "
+            . "Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:",
+            'context' => ["Link user@email.com Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:"]]);
 
         $this->assertEquals('fred', $record['extra']['instance']);
         $this->assertEquals('anon.', $record['extra']['user']);
@@ -107,8 +108,9 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->globals->expects($this->any())->method('getRequest')
             ->willReturn(null);
 
-        $record = $this->formatter->processRecord(['message' => 'Link root root',
-            'context' => ['Link root root']]);
+        $record = $this->formatter->processRecord(['message' => "Link user@email.com "
+            . "Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:",
+            'context' => ["Link user@email.com Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:"]]);
 
         $this->assertEquals('fred', $record['extra']['instance']);
         $this->assertEquals('anon.', $record['extra']['user']);

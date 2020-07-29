@@ -148,9 +148,6 @@ class InstanceController extends Controller
 
                 $database = $instance->getDatabaseName();
 
-                $em->remove($instance);
-                $deleted++;
-
                 $this->get('core.dispatcher')
                     ->dispatch('instance.delete', [ 'instance' => $instance ]);
 
@@ -161,6 +158,9 @@ class InstanceController extends Controller
 
                 $creator->deleteAssets($instance->internal_name);
                 $creator->deleteDatabase($database);
+
+                $em->remove($instance);
+                $deleted++;
             } catch (BackupException $e) {
                 $creator->deleteBackup($backupPath);
                 $msg->add($e->getMessage(), 'error', 400);
