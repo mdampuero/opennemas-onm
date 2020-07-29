@@ -149,6 +149,7 @@ class WebServiceController extends Controller
             $em->getDataSet('Settings', 'instance')->set([
                 'locale'       => $locale,
                 'site_created' => $instance->created->format('Y-m-d H:i:s'),
+                'last_login'   => $instance->created->format('Y-m-d H:i:s'),
             ]);
 
             $password = $request->request->filter('user_password', '', FILTER_SANITIZE_STRING);
