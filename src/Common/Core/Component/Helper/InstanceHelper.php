@@ -264,7 +264,13 @@ class InstanceHelper
             $sql = 'select value from settings where name = "last_login"';
 
             $auth = $this->conn->fetchAssoc($sql);
-            $auth = new \DateTime(PhpSerializer::unserialize($auth['value']));
+            $auth = PhpSerializer::unserialize($auth['value']);
+
+            if (empty($auth)) {
+                return null;
+            }
+
+            $auth = new \DateTime($auth);
 
             $auth->setTimeZone(new \DateTimeZone('UTC'));
 
