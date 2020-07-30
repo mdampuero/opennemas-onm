@@ -5,8 +5,8 @@
 function smarty_function_image_tag($params, &$smarty)
 {
     if (array_key_exists('id', $params) && !empty($params['id'])) {
-        $photo         = getService('entity_repository')->find('Photo', $params['id']);
-        $params['src'] = $photo->path_img;
+        $photo         = getService('api.service.photo')->getItem($params['id']);
+        $params['src'] = get_property($photo, 'path');
     }
 
     if (empty($params['src'])) {
