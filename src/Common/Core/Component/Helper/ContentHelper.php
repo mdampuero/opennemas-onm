@@ -122,24 +122,11 @@ class ContentHelper
         }
 
         try {
-            $photos   = [];
             $contents = $this->em->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
 
-            foreach ($contents as &$content) {
-                if (empty($content->img1)) {
-                    continue;
-                }
-
-                $photo = $this->em->find('Photo', $content->img1);
-
-                if (!empty($photo)) {
-                    $photos[$content->img1] = $photo;
-                }
-            }
-
-            $items = [ $contents, $photos ];
+            $items = [ $contents ];
 
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {

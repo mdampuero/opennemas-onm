@@ -113,7 +113,7 @@ class ContentMediaHelper
             // Photo author
             $mediaObject      = $authorPhoto;
             $mediaObject->url = $this->mediaUrl . '/'
-                . ltrim($mediaObject->path_img, '/');
+                . ltrim($mediaObject->path, '/');
         }
 
         return $mediaObject;
@@ -131,7 +131,7 @@ class ContentMediaHelper
         if (isset($content->cover_image) && !empty($content->cover_image)) {
             $mediaObject      = $content->cover_image;
             $mediaObject->url = $this->mediaUrl . '/'
-                . ltrim($content->cover_image->path_img, '/');
+                . ltrim($content->cover_image->path, '/');
 
             return $mediaObject;
         }
@@ -218,14 +218,14 @@ class ContentMediaHelper
         $photo = null;
         if (isset($content->img2) && ($content->img2 > 0)) {
             // Inner photo
-            $photo = $this->er->find('Photo', $content->img2);
+            $photo = getService('api.service.photo')->getItem($content->img2);
         } elseif (isset($content->img1) && ($content->img1 > 0)) {
             // Front photo
-            $photo = $this->er->find('Photo', $content->img1);
+            $photo = getService('api.service.photo')->getItem($content->img1);
         }
 
         if (!empty($photo)) {
-            $photo->url = $this->mediaUrl . $photo->path_file . $photo->name;
+            $photo->url = $this->mediaUrl . $photo->path;
         }
 
         return $photo;
