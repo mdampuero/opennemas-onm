@@ -385,18 +385,6 @@ class CategoryController extends FrontendController
         foreach ($contents as &$content) {
             $content->loadRelatedContents($params['category']->name);
 
-            if (isset($content->img1)
-                && !empty($content->img1)
-                && array_key_exists($content->img1, $params['o_media'])
-            ) {
-                $image = $params['o_media'][$content->img1];
-
-                $content->img1_path = $image->path_file . $image->name;
-                $content->img1      = $image;
-
-                continue;
-            }
-
             if (!empty($content->fk_video)
                 && array_key_exists($content->fk_video, $params['o_media'])
             ) {
