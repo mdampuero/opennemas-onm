@@ -273,6 +273,23 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getLastAuthentication when empty.
+     */
+    public function testGetLastAuthenticationWhenEmpty()
+    {
+        $this->conn->expects($this->once())->method('selectDatabase')
+            ->with(3441);
+        $this->conn->expects($this->once())->method('fetchAssoc')
+            ->with('select value from settings where name = "last_login"')
+            ->willReturn([ 'value' => serialize('') ]);
+
+        $method = new \ReflectionMethod($this->helper, 'getLastAuthentication');
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($this->helper, [ $this->instance ]));
+    }
+
+    /**
      * Tests getLastAuthentication when error.
      */
     public function testGetLastAuthenticationWhenError()

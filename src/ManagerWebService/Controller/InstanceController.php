@@ -148,9 +148,6 @@ class InstanceController extends Controller
 
                 $database = $instance->getDatabaseName();
 
-                $em->remove($instance);
-                $deleted++;
-
                 $this->get('core.dispatcher')
                     ->dispatch('instance.delete', [ 'instance' => $instance ]);
 
@@ -161,6 +158,9 @@ class InstanceController extends Controller
 
                 $creator->deleteAssets($instance->internal_name);
                 $creator->deleteDatabase($database);
+
+                $em->remove($instance);
+                $deleted++;
             } catch (BackupException $e) {
                 $creator->deleteBackup($backupPath);
                 $msg->add($e->getMessage(), 'error', 400);
@@ -485,6 +485,9 @@ class InstanceController extends Controller
                 ->selectDatabase($instance->getDatabaseName());
 
             $settings = array_intersect_key($settings, array_flip($this->keys));
+
+            $settings['last_login']   = $instance->created->format('Y-m-d H:i:s');
+            $settings['site_created'] = $instance->created->format('Y-m-d H:i:s');
 
             $em->getDataSet('Settings', 'instance')->set($settings);
 
