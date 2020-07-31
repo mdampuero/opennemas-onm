@@ -71,7 +71,7 @@ function getPlaceholderInTheOldWay($placeholder, &$items)
             $item->placeholder === $placeholder
         ) {
             $contentPositionByPos[$placeholder][] =
-                (object) ['content_id' => $item->pk_content];
+                (object) ['pk_fk_content' => $item->pk_content];
         }
     }
 
