@@ -67,7 +67,7 @@ class PhotoController extends ContentOldController
         );
 
         foreach ($results as $value) {
-            $date = \DateTime::createFromFormat('!Y-n', $value['date_month']);
+            $date = \DateTime::createFromFormat('!Y-m', $value['date_month']);
             $fmt  = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
             if (!is_null($fmt)) {
