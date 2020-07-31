@@ -48,7 +48,7 @@ class Letter extends Content
     {
         switch ($name) {
             case 'photo':
-                return new \Photo($this->image);
+                return getService('api.service.photo')->getItem($this->image);
 
             case 'summary':
                 $summary = substr(strip_tags($this->body), 0, 200);

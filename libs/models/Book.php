@@ -91,7 +91,7 @@ class Book extends Content
         }
         if (array_key_exists('cover_id', $properties)) {
             $this->cover_id  = (int) $properties['cover_id'];
-            $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
+            $this->cover_img = getService('api.service.photo')->getItem($properties['cover_id']);
         }
     }
 

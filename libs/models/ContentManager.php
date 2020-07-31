@@ -943,10 +943,9 @@ class ContentManager
             );
 
             foreach ($rs as &$row) {
-                $photo = getService('entity_repository')
-                    ->find('Photo', $row['avatar_img_id']);
+                $photo = getService('api.service.photo')->getItem($row['avatar_img_id']);
 
-                $row['path_img'] = $photo->getRelativePath();
+                $row['path_img'] = get_photo_path($photo);
             }
 
             return $rs;

@@ -93,8 +93,7 @@ class Album extends Content
         parent::load($properties);
 
         if (!empty($this->cover_id)) {
-            $this->cover_image = getService('entity_repository')
-                ->find('Photo', $this->cover_id);
+            $this->cover_image = getService('api.service.photo')->getItem($this->cover_id);
 
             if (!empty($this->cover_image)) {
                 $this->cover = $this->cover_image->path;

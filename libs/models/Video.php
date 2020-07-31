@@ -275,8 +275,7 @@ class Video extends Content
         }
 
         if ($this->author_name == 'external' || $this->author_name == 'script') {
-            $this->thumb_image = getService('entity_repository')
-                ->find('Photo', $information['thumbnail']);
+            $this->thumb_image = getService('api.service.photo')->getItem($information['thumbnail']);
 
             if (!empty($this->thumb_image->name)) {
                 return MEDIA_IMG_PATH_WEB . $this->thumb_image->getRelativePath();

@@ -157,7 +157,7 @@ class Advertisement extends Content
 
         // Check if it contains a flash element
         if ($this->with_script == 0) {
-            $img = getService('entity_repository')->find('Photo', $this->path);
+            $img = getService('api.service.photo')->getItem($this->path);
 
             $this->is_flash = !empty($img) && $img->type_img == "swf";
         }
