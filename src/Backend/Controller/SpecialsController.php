@@ -109,7 +109,7 @@ class SpecialsController extends Controller
         $contents = $special->getContents($id);
 
         if (!empty($special->img1)) {
-            $photo1 = new \Photo($special->img1);
+            $photo1 = getService('api.service.photo')->getItem($special->img1);
             $this->view->assign('photo1', $photo1);
         }
 

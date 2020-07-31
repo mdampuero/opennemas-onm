@@ -101,7 +101,7 @@ class LettersController extends Controller
         $letter = $this->get('entity_repository')->find('Letter', $id);
 
         if (!empty($letter->image)) {
-            $photo1 = new \Photo($letter->image);
+            $photo1 = getService('api.service.photo')->getItem($letter->image);
             $this->view->assign('photo1', $photo1);
         }
 

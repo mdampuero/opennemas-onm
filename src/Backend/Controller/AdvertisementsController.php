@@ -180,7 +180,7 @@ class AdvertisementsController extends Controller
 
         // If the advertisement has photo assigned retrieve it
         if (!empty($advertisement->path)) {
-            $photo1 = new \Photo($advertisement->path);
+            $photo1 = getService('api.service.photo')->getItem($advertisement->path);
             $this->view->assign('photo1', $photo1);
         }
 

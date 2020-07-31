@@ -277,11 +277,6 @@ class ArticlesController extends Controller
 
         $er = $this->get('entity_repository');
 
-        // Fetch media associated to the article
-        if (isset($article->img2) && ($article->img2 != 0)) {
-            $params['photoInt'] = $er->find('Photo', $article->img2);
-        }
-
         if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
             $params['videoInt'] = $er->find('Video', $article->fk_video2);
         }
@@ -303,7 +298,6 @@ class ArticlesController extends Controller
             );
 
             $params['suggested'] = $suggested[0];
-            $params['photos']    = $suggested[1];
         }
 
         $this->view->assign($params);

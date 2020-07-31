@@ -173,7 +173,7 @@ class PickerController extends Controller
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
 
         try {
-            $photo = $this->get('entity_repository')->find('Photo', $id);
+            $photo = $this->get('api.service.photo')->getItem($id);
 
             // Check if the photo exists
             if (!is_object($photo)) {
