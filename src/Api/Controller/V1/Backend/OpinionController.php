@@ -134,12 +134,6 @@ class OpinionController extends ContentOldController
         } catch (\Exception $e) {
         }
 
-        // Associated media code --------------------------------------
-        $photo = '';
-        if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-            $photo = new \Photo($opinion->img2);
-        }
-
         $otherOpinions = $cm->find(
             'Opinion',
             ' opinions.fk_author=' . (int) $opinion->fk_author
@@ -214,7 +208,8 @@ class OpinionController extends ContentOldController
      */
     protected function getRelatedContents($content)
     {
-        $extra = [];
+        $extra   = [];
+        $service = $this->get('api.service.photo');
 
         if (empty($content)) {
             return $extra;
@@ -227,10 +222,10 @@ class OpinionController extends ContentOldController
         foreach ($content as $element) {
             foreach (['img1', 'img2'] as $relation) {
                 if (!empty($element->{$relation})) {
-                    $photo = $this->get('api.service.photo')->getItem($element->{$relation});
-
-                    if (is_object($photo)) {
-                        $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+                    try {
+                        $photo   = $service->getItem($element->{$relation});
+                        $extra[] = $service->responsify($photo);
+                    } catch (GetItemException $e) {
                     }
                 }
             }

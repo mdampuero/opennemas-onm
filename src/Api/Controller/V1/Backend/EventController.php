@@ -46,8 +46,8 @@ class EventController extends ContentController
      */
     protected function getRelatedContents($content)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
+        $service = $this->get('api.service.photo');
+        $extra   = [];
 
         if (empty($content)) {
             return $extra;
@@ -66,10 +66,11 @@ class EventController extends ContentController
                 if ($relation['relationship'] !== 'cover') {
                     continue;
                 }
-
-                $photo = $this->get('api.service.photo')->getItem($relation['pk_content2']);
-
-                $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
+                try {
+                    $photo   = $service->getItem($relation['pk_content2']);
+                    $extra[] = $service->responsify($photo);
+                } catch (GetItemException $e) {
+                }
             }
         }
 
