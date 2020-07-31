@@ -65,7 +65,7 @@ function get_featured_media($item, $type)
             'inner'     => []
         ], 'special' => [
             'frontpage' => [ 'img1' ],
-            'inner'     => [ 'img1' ]
+            'inner'     => [ ]
         ]
     ];
 

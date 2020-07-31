@@ -12,6 +12,7 @@ namespace Tests\Common\Core\Component\Helper;
 use Common\Core\Component\Helper\ContentMediaHelper;
 use Common\Core\Component\Helper\ImageHelper;
 use Common\Model\Entity\Instance;
+use Common\Model\Entity\Photo;
 
 /**
  * Defines test cases for ContentMediaHelper class.
@@ -43,6 +44,11 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->em = $this->getMockBuilder('EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
+            ->getMock();
+
+        $this->servicePhoto = $this->getMockBuilder('Api\Service\V1\PhotoService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger' . uniqid())
@@ -78,6 +84,9 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.image':
                 return $this->ih;
+
+            case 'api.service.photo':
+                return $this->servicePhoto;
 
             case 'error.log':
                 return $this->logger;
@@ -208,18 +217,13 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $extVideo->thumb = 'https://i.ytimg.com/vi/qXYLOmqtZSA/sddefault.jpg';
 
         // Photo object
-        $photo            = new \Photo();
-        $photo->path_file = '/route/to/';
-        $photo->name      = 'file.name';
+        $photo       = new \Photo();
+        $photo->path = '/route/to/file.name';
 
         $this->em->expects($this->at(0))->method('find')
             ->with('Video', 123)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
             ->with('Video', 123)->willReturn($extVideo);
-        $this->em->expects($this->at(2))->method('find')
-            ->with('Photo', 123)->willReturn($photo);
-        $this->em->expects($this->at(3))->method('find')
-            ->with('Photo', 123)->willReturn($photo);
 
         $method = new \ReflectionMethod($this->helper, 'getMediaObjectForArticle');
         $method->setAccessible(true);
@@ -235,18 +239,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'https://i.ytimg.com/vi/qXYLOmqtZSA/sddefault.jpg',
             $videoExtMedia->url
         );
-
-        $innerMedia = $method->invokeArgs($this->helper, [ $articleInner ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $innerMedia->url
-        );
-
-        $frontMedia = $method->invokeArgs($this->helper, [ $articleFront ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $frontMedia->url
-        );
     }
 
     /**
@@ -254,25 +246,14 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaObjectForOpinion()
     {
-        $opinion                          = new \Opinion();
-        $opinion->author                  = new \User();
-        $opinion->author->photo           = new \Photo();
-        $opinion->author->photo->path_img = '/route/to/file.name';
-
-        $opinionInner                = new \Opinion();
-        $opinionInner->author        = new \User();
-        $opinionInner->author->photo = new \Photo();
-        $opinionInner->img2          = 123;
-
-        $opinionFront                = new \Opinion();
-        $opinionFront->author        = new \User();
-        $opinionFront->author->photo = new \Photo();
-        $opinionFront->img1          = 123;
+        $opinion                      = new \Opinion();
+        $opinion->author              = new \User();
+        $opinion->author->photo       = new \Photo();
+        $opinion->author->photo->path = '/route/to/file.name';
 
         // Photo object
-        $photo            = new \Photo();
-        $photo->path_file = '/route/to/';
-        $photo->name      = 'file.name';
+        $photo       = new \Photo();
+        $photo->path = '/route/to/file.name';
 
         $this->em->expects($this->any())->method('find')
             ->with('Photo', 123)->willReturn($photo);
@@ -286,18 +267,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             $authorObject->url
         );
 
-        $innerObject = $method->invokeArgs($this->helper, [ $opinionInner ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $innerObject->url
-        );
-
-        $frontObject = $method->invokeArgs($this->helper, [ $opinionFront ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $frontObject->url
-        );
-
         $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
         $this->assertNull($method->invokeArgs($this->helper, [ null ]));
     }
@@ -307,9 +276,9 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaObjectForAlbum()
     {
-        $album                        = new \Album();
-        $album->cover_image           = new \Photo();
-        $album->cover_image->path_img = '/route/to/file.name';
+        $album                    = new \Album();
+        $album->cover_image       = new \Photo();
+        $album->cover_image->path = '/route/to/file.name';
 
         $method = new \ReflectionMethod($this->helper, 'getMediaObjectForAlbum');
         $method->setAccessible(true);
@@ -466,12 +435,13 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $front->img2 = 0;
 
         // Photo object
-        $photo            = new \Photo();
-        $photo->path_file = '/route/to/';
-        $photo->name      = 'file.name';
+        $photo       = new \Photo();
+        $photo->path = '/route/to/file.name';
 
-        $this->em->expects($this->any())->method('find')
-            ->with('Photo', 123)->willReturn($photo);
+
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with(123)
+            ->willReturn($photo);
 
         $method = new \ReflectionMethod($this->helper, 'getImageMediaObject');
         $method->setAccessible(true);

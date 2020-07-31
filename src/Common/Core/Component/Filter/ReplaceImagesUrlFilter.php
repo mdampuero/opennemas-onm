@@ -25,7 +25,7 @@ class ReplaceImagesUrlFilter extends Filter
                 ->getTranslation($slug, 'photo');
 
             if ($translation) {
-                $photo = $this->get('api.service.photo')->getItem($translation['pk_content']);
+                $photo = $this->container->get('api.service.photo')->getItem($translation['pk_content']);
 
                 $str = str_replace($slug, $path . $photo->path, $str);
             }

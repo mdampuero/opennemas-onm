@@ -44,6 +44,11 @@ class ReplaceImagesUrlFilterTest extends \PHPUnit\Framework\TestCase
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
+        $this->servicePhoto = $this->getMockBuilder('Api\Service\V1\PhotoService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
         $GLOBALS['kernel'] = $this->kernel;
 
         $this->container->expects($this->any())->method('get')
@@ -66,6 +71,9 @@ class ReplaceImagesUrlFilterTest extends \PHPUnit\Framework\TestCase
 
             case 'entity_repository':
                 return $this->em;
+
+            case 'api.service.photo':
+                return $this->servicePhoto;
         }
 
         return null;
@@ -78,12 +86,14 @@ class ReplaceImagesUrlFilterTest extends \PHPUnit\Framework\TestCase
     {
         $photo = new \Photo();
 
-        $photo->path_img = '/2017/01/01/grault-01.jpg';
+        $photo->path = '/2017/01/01/grault-01.jpg';
 
         $this->redirector->expects($this->once())->method('getTranslation')
             ->willReturn([ 'pk_content' => 1234 ]);
-        $this->em->expects($this->once())->method('find')
-            ->with('Photo', 1234)->willReturn($photo);
+
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with(1234)
+            ->willReturn($photo);
 
         $this->assertEquals(
             'plugh/frog/2017/01/01/grault-01.jpg',
