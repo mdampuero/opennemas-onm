@@ -21,5 +21,7 @@
 </script>
 <!-- OneTrust CMP Builder end -->
 <style>
-  .ot-floating-button { display: none!important; }
+  .ot-floating-button {
+    display: none !important;
+  }
 </style>
