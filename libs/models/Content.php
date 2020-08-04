@@ -653,7 +653,7 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
             $conn->delete('content_category', [ 'content_id' => $id ]);
-            $conn->delete('content_positions', [ 'content_id' => $id ]);
+            $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
             $conn->commit();
 
             logContentEvent(__METHOD__, $this);
