@@ -27,7 +27,10 @@
             "app/AppCache.php"
         ],
         "files": [
-            "libs/functions.php"
+            "libs/functions.php",
+            "src/Common/Core/Functions/author.php",
+            "src/Common/Core/Functions/content.php",
+            "src/Common/Core/Functions/photo.php"
         ]
     },
     "autoload-dev": {

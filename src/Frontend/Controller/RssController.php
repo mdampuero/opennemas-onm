@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,8 +97,7 @@ class RssController extends FrontendController
                 }
             }
 
-            list($contentPositions, $contents, , ) =
-                $this->get('api.service.frontpage')
+            list($contentPositions, $contents, , ) = $this->get('api.service.frontpage')
                 ->getCurrentVersionForCategory($id);
 
             // Remove advertisements and widgets
@@ -235,19 +235,16 @@ class RssController extends FrontendController
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
             // Get user by slug
-            $user = $this->get('user_repository')->findOneBy(
-                [ 'username' => [[ 'value' => $slug ]] ],
-                ''
-            );
-
-            if (is_null($user)) {
+            try {
+                $user = $this->container->get('api.service.author')
+                    ->getItemBy("username='{$slug}'");
+            } catch (GetItemException $e) {
                 throw new ResourceNotFoundException();
             }
 
             $rssTitle = sprintf('RSS de «%s»', $user->name);
             // Get entity repository
-            $er          = $this->get('entity_repository');
-            $user->photo = $er->find('Photo', $user->avatar_img_id);
+            $er = $this->get('entity_repository');
 
             $order   = ['starttime' => 'DESC' ];
             $filters = [
@@ -270,7 +267,6 @@ class RssController extends FrontendController
             $contents = $er->findBy($filters, $order, $total, 1);
 
             foreach ($contents as $key => $content) {
-                $contents[$key]->author = $user;
                 if (isset($content->img1) && ($content->img1 > 0)) {
                     $contents[$key]->photo = $er->find('Photo', $content->img1);
                 }

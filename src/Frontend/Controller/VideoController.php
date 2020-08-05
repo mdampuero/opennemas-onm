@@ -143,29 +143,10 @@ class VideoController extends FrontendController
      */
     protected function hydrateShow(array &$params = []):void
     {
-        $params['content']->author = $this->get('user_repository')->find(
-            (int) $params['content']->fk_author
-        );
-
         $params = array_merge($params, [
             'tags' => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($params['content']->tags)['items']
         ]);
-    }
-
-    /**
-     * Updates the list of parameters and/or the item when the response for
-     * the current request is not cached.
-     *
-     * @param array $params Thelist of parameters already in set.
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-
-        $params['content']->author = $this->get('user_repository')->find(
-            (int) $params['content']->fk_author
-        );
     }
 
     /**

@@ -326,30 +326,6 @@ class CategoryController extends FrontendController
     }
 
     /**
-     * Returns a list of users, where the key is the id and the value is the
-     * user, basing on a list of ids.
-     *
-     * @param array $ids The list of ids.
-     *
-     * @return array The list of users.
-     */
-    protected function getUsers($ids)
-    {
-        if (empty($ids)) {
-            return [];
-        }
-
-        $users = $this->get('user_repository')->findBy([
-            'id' => [ [ 'value' => $ids, 'operator' => 'IN' ] ]
-        ]);
-
-        return $this->get('data.manager.filter')
-            ->set($users)
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
@@ -377,7 +353,6 @@ class CategoryController extends FrontendController
         list($mediaIds, $userIds) = $this->extractIds($contents);
 
         $params['o_media'] = $this->getMedia($mediaIds);
-        $params['o_users'] = $this->getUsers($userIds);
 
         $this->hydrateContents($contents, $params);
 
@@ -408,10 +383,6 @@ class CategoryController extends FrontendController
     protected function hydrateContents($contents, $params)
     {
         foreach ($contents as &$content) {
-            if (array_key_exists($content->fk_author, $params['o_users'])) {
-                $content->author = $params['o_users'][$content->fk_author];
-            }
-
             $content->loadRelatedContents($params['category']->name);
 
             if (isset($content->img1)

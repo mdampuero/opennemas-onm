@@ -33,13 +33,15 @@ class Opinions
             throw new RestException(404, 'Page not found');
         }
 
-        // Get author information
-        $ur = getService('user_repository');
-        $author = $ur->find($opinion->fk_author);
-        $opinion->author = $author;
+        try {
+            // Get author information
+            $author          = getService('api.service.author')->getItem($opinion->fk_author);
+            $opinion->author = $author;
 
-        // Get author name slug
-        $opinion->author_name_slug = \Onm\StringUtils::generateSlug($opinion->name);
+            // Get author name slug
+            $opinion->author_name_slug = \Onm\StringUtils::generateSlug($author->name);
+        } catch (\Exception $e) {
+        }
 
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);
@@ -82,7 +84,7 @@ class Opinions
         $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
+            $opinion->uri = 'ext' . $opinion->uri;
         }
 
         return $opinions;
@@ -108,7 +110,7 @@ class Opinions
         $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
+            $opinion->uri = 'ext' . $opinion->uri;
         }
 
         return $opinions;
@@ -135,7 +137,7 @@ class Opinions
         $opinions = $or->findBy($filters, $order, 20, $page);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
+            $opinion->uri = 'ext' . $opinion->uri;
         }
 
         return $opinions;
@@ -150,13 +152,13 @@ class Opinions
 
         $cm = new \ContentManager();
 
-        $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
+        $limit = ' LIMIT ' . (($page - 1) * ITEMS_PAGE) . ',' . (ITEMS_PAGE);
 
         // Get the list articles for this author
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.fk_author='.$id.
+            'opinions.fk_author=' . $id .
             ' AND contents.content_status=1',
-            'ORDER BY created DESC '.$limit
+            'ORDER BY created DESC ' . $limit
         );
 
         return $opinions;
@@ -224,7 +226,7 @@ class Opinions
 
         foreach ($otherOpinions as &$otherOpinion) {
             $otherOpinion->author_name_slug  = $opinion->author_name_slug;
-            $otherOpinion->uri = 'ext'.$otherOpinion->uri;
+            $otherOpinion->uri = 'ext' . $otherOpinion->uri;
         }
 
         return $otherOpinions;

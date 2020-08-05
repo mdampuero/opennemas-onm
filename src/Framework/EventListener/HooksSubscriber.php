@@ -9,6 +9,7 @@
  */
 namespace Framework\EventListener;
 
+use Api\Exception\GetItemException;
 use Opennemas\Task\Component\Task\ServiceTask;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
@@ -346,7 +347,12 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $author = $this->container->get('user_repository')->find($content->fk_author);
+        try {
+            $author = $this->container->get('api.service.author')
+                ->getItem($content->fk_author);
+        } catch (GetItemException $e) {
+            return;
+        }
 
         if (is_object($author)) {
             $this->template
