@@ -1641,7 +1641,7 @@ usermeta:
             flags: {  }
     foreign_keys:
         -
-            name: usermeta_userid_users_id
+            name:         usermeta_user_id_users_id
             source_field: [ user_id ]
             target_table: users
             target_field: [ id ]
