@@ -68,41 +68,41 @@ orm:
                                     type: datetime
                     columns:
                         id:
-                            type: integer
-                            options: { default: null, unsigned: true, autoincrement: true }
+                            type:    integer
+                            options: { autoincrement: true, default: null, length: 20, unsigned: true, }
                         username:
-                            type: string
+                            type:    string
                             options: { default: null, length: 100, notnull: false }
                         password:
-                            type: string
+                            type:    string
                             options: { default: null, length: 50, notnull: false }
                         url:
-                            type: string
-                            options: { default: ' ', length: 255, notnull: false }
+                            type:    string
+                            options: { default: null, length: 255, notnull: false }
                         bio:
-                            type: text
-                            options: { default: ' ', length: 65532, notnull: false }
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
                         avatar_img_id:
-                            type: bigint
-                            options: { default: null, unsigned: true, notnull: false }
+                            type:    bigint
+                            options: { default: null,  notnull: false, unsigned: true }
                         email:
-                            type: string
+                            type:    string
                             options: { default: null, length: 255, notnull: false }
                         name:
-                            type: string
+                            type:    string
                             options: { default: null, length: 100, notnull: false }
                         slug:
-                            type: string
+                            type:    string
                             options: { default: null, length: 100, notnull: false }
                         type:
-                            type: integer
-                            options: { default: '0', comment: '0 backend - 1 frontend', notnull: true }
+                            type:    integer
+                            options: { comment: '0 backend - 1 frontend', default: 1, notnull: true, unsigned: true }
                         token:
-                            type: string
+                            type:    string
                             options: { default: null, length: 32, notnull: false }
                         activated:
-                            type: integer
-                            options: { default: 0, comment: '1 activated - 0 disabled', notnull: true }
+                            type:    integer
+                            options: { default: 0, notnull: true, unsigned: true }
                     index:
                         -
                             name:    PRIMARY
