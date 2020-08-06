@@ -170,10 +170,7 @@ class NotificationController extends Controller
             $un->notification_id = $id;
         }
 
-        $un->user = [
-            'username' => $this->getUser()->username,
-            'email'    => $this->getUser()->email
-        ];
+        $un->user = [ 'email' => $this->getUser()->email ];
 
         foreach ($request->request->all() as $key => $value) {
             $date = new \Datetime($value);
@@ -231,10 +228,7 @@ class NotificationController extends Controller
             foreach ($notifications as $notification) {
                 $read[] = $notification->notification_id;
 
-                $notification->user = [
-                    'username' => $this->getUser()->username,
-                    'email'    => $this->getUser()->email
-                ];
+                $notification->user = [ 'email' => $this->getUser()->email ];
 
                 $notification->merge($converter->objectify($params));
 
@@ -247,11 +241,11 @@ class NotificationController extends Controller
             foreach ($missed as $id) {
                 $un = new UserNotification();
 
-                $un->instance_id     = $instance;
-                $un->user            = [
-                    'username' => $this->getUser()->username,
-                    'email'    => $this->getUser()->email
+                $un->instance_id = $instance;
+                $un->user        = [
+                    'email' => $this->getUser()->email
                 ];
+
                 $un->user_id         = $this->getUser()->id;
                 $un->notification_id = (int) $id;
                 $un->merge($converter->objectify($params));
