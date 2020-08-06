@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
@@ -341,7 +334,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->any(2))->method('get')
             ->willReturn('alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena');
         $this->assertEquals(
-
             'articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
@@ -701,9 +693,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $user = new \Common\Model\Entity\User();
 
-        $user->id       = 252;
-        $user->username = 'pepito';
-        $user->is_blog  = 1;
+        $user->id      = 252;
+        $user->slug    = 'pepito';
+        $user->is_blog = 1;
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
         $method->setAccessible(true);
