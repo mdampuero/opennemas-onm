@@ -103,7 +103,7 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAuthorFromParameterWhenAuthor()
     {
-        $author = new User([ 'pk_content_author' => 20 ]);
+        $author = new User([ 'id' => 20 ]);
 
         $this->assertEquals($author, get_author($author));
     }
@@ -113,7 +113,7 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAuthorFromParameterWhenContent()
     {
-        $author  = new User([ 'pk_content_author' => 20 ]);
+        $author  = new User([ 'id' => 20 ]);
         $content = new \Content();
 
         $content->fk_author = 20;
@@ -273,9 +273,9 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
             'is_blog'   => 1
         ]);
         $author = new User([
-            'pk_content_author' => 20,
-            'name'              => 'glork',
-            'slug'              => 'glork',
+            'id'   => 20,
+            'name' => 'glork',
+            'slug' => 'glork',
         ]);
 
         $this->as->expects($this->once())->method('getItem')
@@ -293,17 +293,18 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     public function testGetAuthorRssUrl()
     {
         $author = new User([
-            'pk_content_author' => 20,
-            'name'              => 'gorp',
-            'inrss'             => 1,
+            'id'    => 20,
+            'name'  => 'Vera Willis',
+            'slug'  => 'vera-willis',
+            'inrss' => 1,
         ]);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_rss_author', [ 'author_slug' => 'gorp' ])
-            ->willReturn('rss/author/gorp');
+            ->with('frontend_rss_author', [ 'author_slug' => 'vera-willis' ])
+            ->willReturn('rss/author/vera-willis');
 
         $this->assertNull(get_author_rss_url(131));
-        $this->assertEquals('rss/author/gorp', get_author_rss_url($author));
+        $this->assertEquals('rss/author/vera-willis', get_author_rss_url($author));
     }
 
     /**
@@ -437,9 +438,10 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
     public function testHasAuthorRssUrl()
     {
         $author = new User([
-            'pk_content_author' => 20,
-            'name'              => 'michelle-price',
-            'inrss'             => 1,
+            'id'    => 20,
+            'name'  => 'Michelle Price',
+            'slug'  => 'michelle-price',
+            'inrss' => 1,
         ]);
 
         $this->router->expects($this->once())->method('generate')

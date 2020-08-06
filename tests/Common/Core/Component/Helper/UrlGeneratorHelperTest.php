@@ -671,17 +671,20 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $user = new User();
 
         $user->id   = 252;
-        $user->name = 'pepito';
+        $user->name = 'Karl Woods';
+        $user->slug = 'karl-woods';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
         $method->setAccessible(true);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_opinion_author_frontpage', [ 'author_slug' => $user->name, 'author_id' => $user->id ])
-            ->willReturn('opinion/autor/252/pepito');
+            ->with('frontend_opinion_author_frontpage', [
+                'author_slug' => $user->slug,
+                'author_id'   => $user->id
+            ])->willReturn('opinion/autor/252/karl-woods');
 
         $this->assertEquals(
-            'opinion/autor/252/pepito',
+            'opinion/autor/252/karl-woods',
             $method->invokeArgs($this->urlGenerator, [ $user ])
         );
     }
@@ -694,18 +697,18 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $user = new \Common\Model\Entity\User();
 
         $user->id      = 252;
-        $user->slug    = 'pepito';
+        $user->slug    = 'olga-gilbert';
         $user->is_blog = 1;
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
         $method->setAccessible(true);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_blog_author_frontpage', [ 'author_slug' => $user->username ])
-            ->willReturn('opinion/autor/252/pepito');
+            ->with('frontend_blog_author_frontpage', [ 'author_slug' => $user->slug ])
+            ->willReturn('opinion/autor/252/olga-gilbert');
 
         $this->assertEquals(
-            'opinion/autor/252/pepito',
+            'opinion/autor/252/olga-gilbert',
             $method->invokeArgs($this->urlGenerator, [ $user ])
         );
     }
