@@ -1,22 +1,13 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Handles the actions for the public RSS
- */
 class RssController extends FrontendController
 {
     /**
@@ -220,8 +211,23 @@ class RssController extends FrontendController
      */
     public function authorRSSAction(Request $request)
     {
-        $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $slug  = $request->query->filter('author_slug', null);
         $total = 10;
+
+        // Get user by slug
+        try {
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expected = $this->get('router')
+            ->generate('frontend_rss_author', [ 'author_slug' => $user->slug ]);
+
+        if ($request->getPathInfo() !== $expected) {
+            return new RedirectResponse($expected);
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
@@ -234,14 +240,6 @@ class RssController extends FrontendController
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            // Get user by slug
-            try {
-                $user = $this->container->get('api.service.author')
-                    ->getItemBy("username='{$slug}'");
-            } catch (GetItemException $e) {
-                throw new ResourceNotFoundException();
-            }
-
             $rssTitle = sprintf('RSS de «%s»', $user->name);
             // Get entity repository
             $er = $this->get('entity_repository');
