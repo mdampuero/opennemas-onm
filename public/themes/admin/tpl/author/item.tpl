@@ -57,6 +57,9 @@
           </div>
         {/is_module_activated}
       </div>
+      {acl isAllowed="USER_ADMIN"}
+        {include file="ui/component/content-editor/accordion/slug.tpl"}
+      {/acl}
     </div>
   </div>
 {/block}
