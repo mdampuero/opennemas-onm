@@ -222,6 +222,6 @@ class Frontpages
             ]
         ]);
 
-        return utf8_encode(serialize([ $pagination, $articles ]));
+        return utf8_encode(serialize([ $pagination->links, $articles ]));
     }
 }
