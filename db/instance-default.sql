@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.23-log
+-- Server version	5.7.22-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1220,7 +1220,7 @@ DROP TABLE IF EXISTS `user_user_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_user_group` (
-  `user_id` bigint(20) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `user_group_id` int(10) unsigned NOT NULL,
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '0 rejected - 1 accepted - 2 requested',
   `expires` datetime DEFAULT NULL,
@@ -1250,14 +1250,14 @@ DROP TABLE IF EXISTS `usermeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usermeta` (
-  `user_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
   `meta_key` varchar(255) NOT NULL,
   `meta_value` text,
   PRIMARY KEY (`user_id`,`meta_key`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`),
   CONSTRAINT `usermeta_userid_users_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1278,7 +1278,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
@@ -1286,14 +1286,16 @@ CREATE TABLE `users` (
   `avatar_img_id` bigint(20) unsigned DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
+  `slug` varchar(100) DEFAULT NULL,
   `type` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '0 backend - 1 frontend',
-  `token` varchar(50) DEFAULT NULL,
-  `activated` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '1 activated - 0 deactivated',
+  `token` varchar(32) DEFAULT NULL,
+  `activated` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_username` (`username`),
   KEY `user_email` (`email`),
   KEY `avatar_img_id` (`avatar_img_id`),
   KEY `user_type` (`type`),
+  KEY `user_slug` (`slug`),
   CONSTRAINT `avatar_img_id` FOREIGN KEY (`avatar_img_id`) REFERENCES `photos` (`pk_photo`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1304,7 +1306,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'editorial@opennemas.com','Editorial',0,NULL,0),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'director@opennemas.com','Director',0,NULL,0),(8,'xabier-r-blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',636,'xabi.blanco@opennemas.com','Xabier R. Blanco',0,NULL,0),(9,'jose-luis-gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',641,'joseluis@opennemas.com','Jose Luis Gomez',0,NULL,0),(10,'joaquin-vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',643,'jvidal@estrelladigital.es','JoaquÃ­n Vidal',0,NULL,0),(11,'alberto-j-rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',642,'alberto.rey@opennemas.com','Alberto J. Rey',0,NULL,0),(12,'javier-fumero',NULL,' ','La EspaÃ±a Profunda',652,'javier.fumero@openhost.es','Javier Fumero',0,NULL,0),(13,'juan-mendez',NULL,' ',' ',661,'juan-mendez@openhost.es','Juan MÃ©ndez',0,NULL,0),(14,'lorenzo-sentenac',NULL,' ',' ',739,'lorenzo.sentenac@openhost.es','Lorenzo Sentenac',0,NULL,0);
+INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'editorial@opennemas.com','Editorial',NULL,0,NULL,0),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'director@opennemas.com','Director',NULL,0,NULL,0),(8,'xabier-r-blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',636,'xabi.blanco@opennemas.com','Xabier R. Blanco',NULL,0,NULL,0),(9,'jose-luis-gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',641,'joseluis@opennemas.com','Jose Luis Gomez',NULL,0,NULL,0),(10,'joaquin-vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',643,'jvidal@estrelladigital.es','JoaquÃ­n Vidal',NULL,0,NULL,0),(11,'alberto-j-rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',642,'alberto.rey@opennemas.com','Alberto J. Rey',NULL,0,NULL,0),(12,'javier-fumero',NULL,' ','La EspaÃ±a Profunda',652,'javier.fumero@openhost.es','Javier Fumero',NULL,0,NULL,0),(13,'juan-mendez',NULL,' ',' ',661,'juan-mendez@openhost.es','Juan MÃ©ndez',NULL,0,NULL,0),(14,'lorenzo-sentenac',NULL,' ',' ',739,'lorenzo.sentenac@openhost.es','Lorenzo Sentenac',NULL,0,NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1397,4 +1399,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-09 11:21:13
+-- Dump completed on 2020-08-06 14:50:56
