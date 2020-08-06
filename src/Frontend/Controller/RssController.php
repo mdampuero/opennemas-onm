@@ -211,7 +211,7 @@ class RssController extends FrontendController
      */
     public function authorRSSAction(Request $request)
     {
-        $slug  = $request->query->filter('author_slug', null);
+        $slug  = $request->get('author_slug', null);
         $total = 10;
 
         // Get user by slug
