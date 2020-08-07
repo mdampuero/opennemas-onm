@@ -1,22 +1,13 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for the user profile.
- */
 class AuthorController extends Controller
 {
     /**
@@ -33,9 +24,17 @@ class AuthorController extends Controller
         $itemsPerPage = 12;
 
         try {
-            $user = $this->container->get('api.service.author')->getItemBy("username='{$slug}'");
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
         } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
+        }
+
+        $expected = $this->get('router')
+            ->generate('frontend_author_frontpage', [ 'slug' => $user->slug ]);
+
+        if ($request->getPathInfo() !== $expected) {
+            return new RedirectResponse($expected);
         }
 
         // Setup templating cache layer
