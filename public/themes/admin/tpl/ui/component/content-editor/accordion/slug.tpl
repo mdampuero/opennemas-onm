@@ -13,7 +13,7 @@
   {/if}
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.slug }">
-  {include file="ui/component/input/slug.tpl" iClass="no-margin" iFlag="slug" iField="slug" iRequired=true iValidation=true}
+  {include file="ui/component/input/slug.tpl" iClass="no-margin" iFlag="slug" iField="slug" iPosition="right" iRequired=true iValidation=true}
   <div class="m-t-10 text-right" ng-if="item.pk_content && item.slug">
     <a ng-href="{$iRoute}" target="_blank">
       <i class="fa fa-external-link m-r-5"></i>{t}Link{/t}
