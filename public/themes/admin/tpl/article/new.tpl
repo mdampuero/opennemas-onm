@@ -120,7 +120,7 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="!article.id ? article.agency = '{setting name=site_agency}' : ''" type="text">
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" type="text">
                   </div>
                 </div>
               </div>
