@@ -100,6 +100,6 @@ class PlaygroundController extends Controller
             return;
         }
 
-        return $widget->render($params);
+        return getService('frontend.renderer.widget')->render($widget, $params);
     }
 }
