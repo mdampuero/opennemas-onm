@@ -43,6 +43,7 @@
     "imageresize": "https://github.com/nmmf/imageresize.git",
     "jquery": "3.4.1",
     "jquery-ui": "1.12.1",
+    "jquery-ui-touch-punch": "https://github.com/furf/jquery-ui-touch-punch.git",
     "lodash": "4.17.15",
     "messenger": "https://github.com/HubSpot/messenger.git#1.5.0",
     "moment": "2.24.0",
