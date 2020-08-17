@@ -30,3 +30,14 @@ frontend_poll_vote:
     defaults: { _controller: FrontendBundle:Poll:vote }
     requirements:
         id: '([0-9]+)'
+
+frontend_poll_show_amp:
+    path:     /encuesta/{category_name}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Poll:showAmp, _format: amp }
+    requirements:
+        category_name: '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+        slug:          '[^/]+'
+    options:
+        l10n: true

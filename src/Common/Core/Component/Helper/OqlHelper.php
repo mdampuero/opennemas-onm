@@ -68,8 +68,9 @@ class OqlHelper
         if (!preg_match_all('/blog\s*=\s*"?(1|0)"?/', $this->oql, $matches)) {
             return;
         }
+
         $bloggers = $this->container->get('api.service.author')
-            ->getList('is_blog = 1 order by username asc');
+            ->getList('is_blog = 1 order by id asc');
 
         $ids = array_map(function ($a) {
             return $a->id;

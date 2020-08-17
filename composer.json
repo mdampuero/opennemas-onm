@@ -81,8 +81,6 @@
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
         "google/recaptcha": "1.1.3",
-        "paypal/adaptivepayments-sdk-php": "v3.9.2",
-        "paypal/merchant-sdk-php": "v3.9.1",
         "rtconner/freshbooks-api": "dev-master"
     },
     "require-dev": {

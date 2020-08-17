@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Component\Helper;
 
 class UrlGeneratorHelper
@@ -356,13 +349,13 @@ class UrlGeneratorHelper
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
-            'author_slug' => \Onm\StringUtils::generateSlug($user->name),
+            'author_slug' => $user->slug,
             'author_id'   => $user->id,
         ];
 
         if ($user->is_blog) {
             $routeName   = 'frontend_blog_author_frontpage';
-            $routeParams = [ 'author_slug' => $user->username ];
+            $routeParams = [ 'author_slug' => $user->slug ];
         }
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);

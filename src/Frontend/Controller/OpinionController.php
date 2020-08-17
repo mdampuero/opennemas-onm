@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
@@ -93,20 +86,20 @@ class OpinionController extends FrontendController
     {
         $this->checkSecurity($this->extension);
 
-        $authorID = (int) $request->get('author_id', null);
+        $id = (int) $request->get('author_id', null);
 
         try {
-            $author = $this->container->get('api.service.author')->getItem($authorID);
+            $author = $this->container->get('api.service.author')
+                ->getItem($id);
         } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 
         if (!empty($author->is_blog)) {
             return new RedirectResponse(
-                $this->generateUrl(
-                    'frontend_blog_author_frontpage',
-                    ['author_slug' => $author->username]
-                )
+                $this->generateUrl('frontend_blog_author_frontpage', [
+                    'author_slug' => $author->slug
+                ])
             );
         }
 
@@ -114,10 +107,6 @@ class OpinionController extends FrontendController
 
         $expected = $this->get('core.helper.url_generator')->generate($author);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
-
-        if (!$this->get('core.security')->hasExtension($this->extension)) {
-            throw new ResourceNotFoundException();
-        }
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
@@ -273,11 +262,6 @@ class OpinionController extends FrontendController
                 [ 'value' => $date, 'operator' => '>' ]
             ],
         ];
-
-        $author->slug = $this->get('data.manager.filter')
-            ->set($author->name)
-            ->filter('slug')
-            ->get();
 
         $orderBy = ['created' => 'DESC'];
 
