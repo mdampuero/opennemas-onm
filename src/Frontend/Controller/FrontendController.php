@@ -405,8 +405,9 @@ class FrontendController extends Controller
                 ->getToken($item);
 
             $params['x-cacheable'] = empty($params['o_token'])
-                && $request->hasPreviousSession()
-                && empty($request->getSession()->getFlashBag()->peekAll());
+                && (!$request->hasPreviousSession()
+                    || $request->hasPreviousSession()
+                    && empty($request->getSession()->getFlashBag()->peekAll()));
 
             $params['x-tags'][] = sprintf(
                 '%s-%s',

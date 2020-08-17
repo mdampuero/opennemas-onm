@@ -149,8 +149,7 @@ class OpinionController extends ContentOldController
         $params = [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
-            'opinion'        => $opinion,
-            'blog'           => $opinion,
+            'item'           => $opinion,
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,

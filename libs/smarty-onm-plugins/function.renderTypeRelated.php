@@ -16,43 +16,35 @@
 function smarty_function_renderTypeRelated($params, &$smarty)
 {
     $content = $params['content'];
+    $attrs   = '';
 
     switch ($content->fk_content_type) {
-        case 1:
-            // Article
-            $class = 'class="res-article" ';
+        case 1: // Article
+            $attrs = 'class="res-article" ';
             break;
-        case 3:
-            // Attachments
-            if ((preg_match("/.+\.jpeg|jpg|gif/", $content->path))) {
-                $class = 'class="res-image" ';
-            } else {
-                $class = 'class="res-file" ';
-            }
+        case 3: // Attachments
+            $attrs = 'class="res-file"';
             break;
-        case 4:
-            //Opinion
-            $class = 'class="res-opinion" ';
+        case 4: //Opinion
+            $attrs = 'class="res-opinion" ';
             break;
-        case 7:
-            // Album
-            $class = 'class="res-image" ';
-            break;
-        case 8:
-            // Photo
-            $class = 'class="res-image" ';
+        case 7: // Album
+            $attrs = 'class="res-image" ';
             break;
         case 9:
             // Video
-            $class = 'class="res-video" ';
+            $attrs = 'class="res-video" ';
             break;
         default:
             // Link
-            $class = 'class="res-link" ';
+            $attrs = 'class="res-link" ';
             break;
     }
 
-    $html = sprintf('<a href="%s"><span %s></span>%s</a>', get_url($content), $class, get_title($content));
-
-    return $html;
+    return sprintf(
+        '<a href="%s"><span %s></span>%s</a>',
+        $smarty->getContainer()->get('core.helper.url_generator')->generate($content),
+        $attrs,
+        $content->title
+    );
 }

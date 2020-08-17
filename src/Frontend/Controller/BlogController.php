@@ -1,17 +1,5 @@
 <?php
-/**
- * Defines the frontend controller for the opinion-blog content type
- *
- * @package Frontend_Controllers
- */
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
@@ -21,11 +9,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- */
 class BlogController extends FrontendController
 {
     /**
@@ -108,17 +91,17 @@ class BlogController extends FrontendController
 
         try {
             $author = $this->container->get('api.service.author')
-                ->getItemBy("username='{$slug}'");
+                ->getItemBy("username = '$slug' or slug = '$slug'");
         } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 
         if ($author->is_blog == 0) {
             return new RedirectResponse(
-                $this->generateUrl(
-                    'frontend_blog_author_frontpage',
-                    ['author_slug' => $author->username]
-                )
+                $this->generateUrl('frontend_opinion_author_frontpage', [
+                    'author_id'   => $author->id,
+                    'author_slug' => $author->slug
+                ])
             );
         }
 
@@ -126,10 +109,6 @@ class BlogController extends FrontendController
 
         $expected = $this->get('core.helper.url_generator')->generate($author);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
-
-        if (!$this->get('core.security')->hasExtension($this->extension)) {
-            throw new ResourceNotFoundException();
-        }
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);

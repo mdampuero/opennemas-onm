@@ -254,7 +254,7 @@
          *   Generates an username basing on the name.
          */
         $scope.getUsername = function() {
-          if ($scope.item.username) {
+          if ($scope.item.username && $scope.item.slug) {
             return;
           }
 
@@ -266,8 +266,15 @@
 
           $scope.tm = $timeout(function() {
             $scope.getSlug($scope.item.name, function(response) {
-              $scope.item.username = response.data.slug;
-              $scope.form.username.$setDirty(true);
+              if (!$scope.item.username) {
+                $scope.item.username = response.data.slug;
+                $scope.form.username.$setDirty(true);
+              }
+
+              if (!$scope.item.slug) {
+                $scope.item.slug = response.data.slug;
+                $scope.form.slug.$setDirty(true);
+              }
             });
           }, 500);
         };
