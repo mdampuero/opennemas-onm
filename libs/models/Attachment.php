@@ -127,6 +127,8 @@ class Attachment extends Content
             return false;
         }
 
+        $data['category'] = $data['category_id'];
+
         // all the data is ready to save into the database,
         // so create the general entry for this content
         parent::create($data);
