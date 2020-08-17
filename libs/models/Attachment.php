@@ -176,6 +176,8 @@ class Attachment extends Content
     {
         parent::update($data);
 
+        $data['category'] = $data['category_id'];
+
         try {
             $this->serializeL10nKeys($data);
 
