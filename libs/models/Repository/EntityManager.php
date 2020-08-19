@@ -11,6 +11,7 @@
 
 namespace Repository;
 
+use \Common\Model\Entity\Content;
 use Onm\Cache\CacheInterface;
 
 /**
@@ -25,6 +26,10 @@ use Onm\Cache\CacheInterface;
  */
 class EntityManager extends BaseManager
 {
+
+    const ORM_CONTENT_TYPES = [
+        'kiosko', 'event', 'static_page'
+    ];
     /**
      * Initializes the entity manager.
      *
@@ -79,6 +84,12 @@ class EntityManager extends BaseManager
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity))
         ) {
+            if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
+                $entity = new \Content($id);
+
+                return $entity;
+            }
+
             $entity = new $contentType($id);
 
             if (!is_object($entity)
