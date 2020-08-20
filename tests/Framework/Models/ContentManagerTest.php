@@ -117,116 +117,40 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
         $cm = $rc->newInstanceWithoutConstructor();
 
         // Check with content in time
-        $content = new \Content();
-        $content->load([
-            'starttime' => '2012-08-22 03:03:12',
-            'endtime'   => '3012-08-27 03:03:12',
-        ]);
+        $content            = new \Content();
+        $content->starttime = '2012-08-22 03:03:12';
+        $content->endtime   = '3012-08-27 03:03:12';
 
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content with scheduling incorrent (start = end)
-        $content = new \Content();
-        $content->load([
-            'starttime' => '2012-08-22 03:03:12',
-            'endtime'   => '2012-08-22 03:03:12',
-        ]);
+        $content->starttime = '2012-08-22 03:03:12';
+        $content->endtime   = '2012-08-22 03:03:12';
 
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content scheduled in the future
-        $content = new \Content();
-        $content->load([
-            'starttime' => '3059-08-22 03:03:12',
-            'endtime'   => '3059-08-23 03:03:12',
-        ]);
+        $content->starttime = '3059-08-22 03:03:12';
+        $content->endtime   = '3059-08-23 03:03:12';
 
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content dued in the past
-        $content = new \Content();
-        $content->load([
-            'starttime' => '2010-08-22 03:03:12',
-            'endtime'   => '2010-08-23 03:03:12',
-        ]);
+        $content->starttime = '2010-08-22 03:03:12';
+        $content->endtime   = '2010-08-23 03:03:12';
 
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content with null values
-        $content = new \Content();
-        $content->load([
-            'starttime' => null,
-            'endtime'   => null,
-        ]);
+        $content->starttime = null;
+        $content->endtime   = null;
 
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
 
         // Check with content with zeroed values
-        $content = new \Content();
-        $content->load([
-            'starttime' => '0000-00-00 00:00:00',
-            'endtime'   => '0000-00-00 00:00:00',
-        ]);
+        $content->starttime = '0000-00-00 00:00:00';
+        $content->endtime   = '0000-00-00 00:00:00';
 
         $this->assertEquals(0, count($cm->getinTime([ $content ])));
-
-        // Now with Arrays
-        // ----------------------------------------------------------
-
-        // Check with content in time
-        $content = [
-            'starttime' => '2013-08-22 03:03:12',
-            'endtime'   => '3012-08-27 03:03:12',
-        ];
-
-        $this->assertEquals(1, count($cm->getinTime([ $content ])));
-
-        // Check with content with scheduling incorrent (start = end)
-        $content = [
-            'starttime' => '2012-08-22 03:03:12',
-            'endtime'   => '2012-08-22 03:03:12',
-        ];
-
-        $this->assertEquals(1, count($cm->getinTime([ $content ])));
-
-        // Check with content scheduled in the future
-        $content = [
-            'starttime' => '3059-08-22 03:03:12',
-            'endtime'   => '3059-08-23 03:03:12',
-        ];
-
-        $this->assertEquals(0, count($cm->getinTime([ $content ])));
-
-        // Check with content dued in the past
-        $content = [
-            'starttime' => '2010-08-22 03:03:12',
-            'endtime'   => '2010-08-23 03:03:12',
-        ];
-
-        $this->assertEquals(0, count($cm->getinTime([ $content ])));
-
-        // Check with content with null values
-        $content = [
-            'starttime' => null,
-            'endtime'   => null,
-        ];
-
-        $this->assertEquals(1, count($cm->getinTime([ $content ])));
-
-        // Check with content with zeroed values
-        $content = [
-            'starttime' => '0000-00-00 00:00:00',
-            'endtime'   => '0000-00-00 00:00:00',
-        ];
-
-        $this->assertEquals(1, count($cm->getinTime([ $content ])));
-
-        // Check with content with zeroed values
-        $content = [
-            'starttime' => '0000-00-00 00:00:00',
-            'endtime'   => '0000-00-00 00:00:00',
-        ];
-
-        $this->assertEquals(1, count($cm->getinTime([ $content ])));
     }
 }
