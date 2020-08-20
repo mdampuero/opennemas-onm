@@ -733,54 +733,12 @@ class ContentManager
     {
         $filtered = [];
         if (is_array($items)) {
-            $filtered = array_filter(
-                $items,
-                function ($item) {
-                    if (is_object($item)) {
-                        return $item->isInTime();
-                    } else {
-                        return self::isInTime($item['starttime'], $item['endtime']);
-                    }
-                }
-            );
+            $filtered = array_filter($items, function ($item) {
+                return $item->isInTime();
+            });
         }
 
         return array_values($filtered);
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $starttime the initial time from it will be available
-     * @param string $endtime   the initial time until it will be available
-     *
-     * @return boolean
-     */
-    public static function isInTime($starttime = null, $endtime = null)
-    {
-        $start       = !empty($starttime) ? strtotime($starttime) : null;
-        $end         = !empty($endtime) ? strtotime($endtime) : null;
-        $currentTime = time();
-
-        // If $start and $end not defined or they are equals  => is in time
-        if ((empty($start) && empty($end))
-            || $start == $end
-        ) {
-            return true;
-        }
-
-        // only setted $end -> check endttime
-        if (empty($start)) {
-            return $currentTime < $end;
-        }
-
-        // only setted $start -> check startime
-        if (empty($end) || $end <= 0) {
-            return $currentTime > $start;
-        }
-
-        // $start < $currentTime < $end
-        return ($currentTime < $end) && ($currentTime > $start);
     }
 
     /**
