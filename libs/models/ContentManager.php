@@ -1225,50 +1225,13 @@ class ContentManager
     }
 
     /**
-     * Returns a list of metaproperty values from a list of contents
+     * Sets a metaproperty for the actual content.
      *
-     * @param string $property the property name to fetch
+     * @param string $id       The id of the content.
+     * @param string $property The name of the property.
+     * @param mixed  $value    The value of the property.
      *
-     * @return boolean true if it is in the category
-     */
-    public static function getMultipleProperties($propertyMap)
-    {
-        if (empty($propertyMap)) {
-            return [];
-        }
-
-        $map = $values = [];
-        foreach ($propertyMap as $property) {
-            $map[]    = '(fk_content=? AND `meta_name`=?)';
-            $values[] = $property[0];
-            $values[] = $property[1];
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT `fk_content`, `meta_name`, `meta_value` '
-                . 'FROM `contentmeta` WHERE (' . implode(' OR ', $map) . ')',
-                $values
-            );
-
-            return $rs;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return false;
-        }
-    }
-
-    /**
-     * Sets a metaproperty for the actual content
-     *
-     * @param string $id the id of the content
-     * @param string $property the name of the property
-     * @param mixed $value     the value of the property
-     *
-     * @return boolean true if the property was setted
+     * @return boolean true If the property was setted.
      */
     public static function setContentMetadata($id, $property, $value)
     {
