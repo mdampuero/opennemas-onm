@@ -1443,31 +1443,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Check if a content start time for publishing
-     * don't check Content::endtime
-     *
-     * @param string $now the current date
-     *
-     * @return boolean
-    */
-    public function isStarted($now = null)
-    {
-        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
-            return true;
-        }
-
-        $start = new \DateTime($this->starttime);
-        $now   = new \DateTime($now);
-
-        // If $start isn't defined then return true
-        if ($start->getTimeStamp() > 0) {
-            return ($now->getTimeStamp() > $start->getTimeStamp());
-        }
-
-        return false;
-    }
-
-    /**
      * Check if this content is postponed
      *
      *       Now     Start

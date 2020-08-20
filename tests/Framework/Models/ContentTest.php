@@ -366,34 +366,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Content::isStarted
-     */
-    public function testIsStarted()
-    {
-        $content = new \Content();
-        $now     = '2012-08-22 03:03:12';
-
-        // Check Content::isStarted with starttime in past
-        $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = null;
-        $this->assertTrue($content->isStarted($now));
-
-        // Check Content::isStarted with starttime in the future
-        $content->starttime = '2012-08-23 03:03:12';
-        $content->endtime   = null;
-        $this->assertFalse($content->isStarted($now));
-
-        // Check Content::isStarted with zeroed/nulled starttime
-        $content->starttime = null;
-        $content->endtime   = null;
-        $this->assertTrue($content->isStarted($now));
-
-        $content->starttime = null;
-        $content->endtime   = null;
-        $this->assertTrue($content->isStarted($now));
-    }
-
-    /**
      * @covers Content::isPostponed
      */
     public function testIsPostponed()
