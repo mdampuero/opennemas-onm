@@ -28,7 +28,7 @@ class EntityManager extends BaseManager
 {
 
     const ORM_CONTENT_TYPES = [
-        'kiosko', 'event', 'static_page'
+        'kiosko'
     ];
     /**
      * Initializes the entity manager.
@@ -75,6 +75,10 @@ class EntityManager extends BaseManager
     {
         $entity = null;
 
+        if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
+            return null;
+        }
+
         $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!empty($id)
@@ -84,12 +88,6 @@ class EntityManager extends BaseManager
             || ($entity = $this->cache->fetch($cacheId)) === false
             || !is_object($entity))
         ) {
-            if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
-                $entity = new \Content($id);
-
-                return $entity;
-            }
-
             $entity = new $contentType($id);
 
             if (!is_object($entity)
