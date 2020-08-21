@@ -1710,6 +1710,8 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      *  @param mixed  $data the data to load in the object
      *  @param string $type type of the extra field
+     *
+     * @return Content The current content for method chaining.
      */
     public function saveMetadataFields($data, $type)
     {
@@ -1744,7 +1746,10 @@ class Content implements \JsonSerializable, CsvSerializable
                 $emptyKeys[] = $field['key'];
             }
         }
+
         $this->removeMetadata($emptyKeys);
+
+        return $this;
     }
 
     /**

@@ -415,7 +415,9 @@ class Article extends Content
     /**
      * Saves the list of related contents.
      *
-     * @param string $data The information for the article.
+     * @param array $data The information for the article.
+     *
+     * @return Article The current article for method chaining.
      */
     protected function saveRelated($data)
     {
@@ -456,5 +458,7 @@ class Article extends Content
             . str_repeat('(?,?,?,?,?),', count($data['related_contents']));
 
         $conn->executeQuery(trim($sql, ','), $related);
+
+        return $this;
     }
 }
