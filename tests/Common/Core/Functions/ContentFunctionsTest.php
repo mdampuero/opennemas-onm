@@ -25,6 +25,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->content = new Content([
+            'content_status' => 1,
+            'in_litter'      => 0,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
@@ -74,10 +80,8 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentFromParameter()
     {
-        $content = new Content([ 'wobble' => 'wubble' ]);
-
         $this->assertNull(get_content());
-        $this->assertEquals($content, get_content($content));
+        $this->assertEquals($this->content, get_content($this->content));
     }
 
     /**
@@ -85,12 +89,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentFromParameterWhenId()
     {
-        $content = new Content([ 'wobble' => 'wubble' ]);
-
         $this->em->expects($this->once())->method('find')
-            ->with('Photo', 43)->willReturn($content);
+            ->with('Photo', 43)->willReturn($this->content);
 
-        $this->assertEquals($content, get_content(43, 'Photo'));
+        $this->assertEquals($this->content, get_content(43, 'Photo'));
     }
 
     /**
@@ -99,12 +101,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContentFromTemplateWhenContent()
     {
-        $content = new Content([ 'quux' => 'grault' ]);
-
         $this->template->expects($this->once())->method('getValue')
-            ->with('item')->willReturn($content);
+            ->with('item')->willReturn($this->content);
 
-        $this->assertEquals($content, get_content());
+        $this->assertEquals($this->content, get_content());
     }
 
     /**
@@ -112,18 +112,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDescription()
     {
-        $this->assertEquals('His ridens eu sed quod ignota.', get_description(
-            new Content([ 'description' => 'His ridens eu sed quod ignota.' ])
-        ));
+        $this->assertNull(get_description($this->content));
 
-        $this->assertEquals(
-            'Percipit &quot;mollis&quot; at scriptorem usu.',
-            get_description(new Content([
-                'description' => 'Percipit "mollis" at scriptorem usu.'
-            ]))
-        );
+        $this->content->description = 'His ridens eu sed quod ignota.';
+        $this->assertEquals('His ridens eu sed quod ignota.', get_description($this->content));
 
-        $this->assertNull(get_description(new Content([ 'flob' => 'wibble' ])));
+        $this->content->description = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertEquals('Percipit &quot;mollis&quot; at scriptorem usu.', get_description($this->content));
     }
 
     /**
@@ -131,18 +126,22 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMedia()
     {
-        $photo   = new Content([ 'id' => 893 ]);
-        $content = new Content([
-            'content_type_name' => 'article',
-            'img1' => 893
+        $photo   = new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
         ]);
 
         $this->em->expects($this->once())->method('find')
             ->with('Photo', 893)->willReturn($photo);
 
-        $this->assertNull(get_featured_media($content, 'baz'));
-        $this->assertNull(get_featured_media($content, 'inner'));
-        $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
+        $this->assertNull(get_featured_media($this->content, 'baz'));
+        $this->assertNull(get_featured_media($this->content, 'inner'));
+
+        $this->content->content_type_name = 'article';
+        $this->content->img1              = 893;
+
+        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
     }
 
     /**
@@ -150,14 +149,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaCaption()
     {
-        $content = new Content([
-            'content_type_name' => 'article',
-            'img1_footer'       => 'Rhoncus pretium'
-        ]);
+        $this->assertNull(get_featured_media_caption($this->content, 'baz'));
+        $this->assertNull(get_featured_media_caption($this->content, 'inner'));
 
-        $this->assertNull(get_featured_media_caption($content, 'baz'));
-        $this->assertNull(get_featured_media_caption($content, 'inner'));
-        $this->assertEquals('Rhoncus pretium', get_featured_media_caption($content, 'frontpage'));
+        $this->content->content_type_name = 'article';
+        $this->content->img1_footer       = 'Rhoncus pretium';
+
+        $this->assertEquals('Rhoncus pretium', get_featured_media_caption($this->content, 'frontpage'));
     }
 
     /**
@@ -165,13 +163,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetProperty()
     {
-        $this->assertEquals('wubble', get_property(new Content([
-            'wobble' => 'wubble'
-        ]), 'wobble'));
+        $this->content->wobble = 'wubble';
 
-        $this->assertEquals('bar', get_property(new Content([
-            'wubble' => 'bar'
-        ]), 'wubble'));
+        $this->assertNull(get_property($this->content, 'corge'));
+        $this->assertEquals('wubble', get_property($this->content, 'wobble'));
     }
 
     /**
@@ -179,25 +174,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPretitle()
     {
-        $this->assertEquals('His ridens eu sed quod ignota.', get_pretitle(
-            new Content([ 'pretitle' => 'His ridens eu sed quod ignota.' ])
-        ));
+        $this->assertNull(get_pretitle($this->content));
 
-        $this->assertEquals(
-            'Percipit &quot;mollis&quot; at scriptorem usu.',
-            get_pretitle(new Content([
-                'pretitle' => 'Percipit "mollis" at scriptorem usu.'
-            ]))
-        );
+        $this->content->pretitle = 'His ridens eu sed quod ignota.';
+        $this->assertEquals('His ridens eu sed quod ignota.', get_pretitle($this->content));
 
-        $this->assertNull(get_pretitle(new Content([ 'flob' => 'wibble' ])));
+        $this->content->pretitle = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertEquals('Percipit &quot;mollis&quot; at scriptorem usu.', get_pretitle($this->content));
     }
 
     /**
      * Tests get_property when the item is extracted from template and it is
      * not a content.
      */
-    public function testGetTypeFromTemplateWhenNoContent()
+    public function testGetPropertyFromTemplateWhenNoContent()
     {
         $this->template->expects($this->once())->method('getValue')
             ->with('item')->willReturn(null);
@@ -210,18 +200,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSummary()
     {
-        $this->assertEquals('His ridens eu sed quod ignota.', get_summary(
-            new Content([ 'summary' => 'His ridens eu sed quod ignota.' ])
-        ));
+        $this->assertNull(get_summary($this->content));
 
-        $this->assertEquals(
-            'Percipit &quot;mollis&quot; at scriptorem usu.',
-            get_summary(new Content([
-                'summary' => 'Percipit "mollis" at scriptorem usu.'
-            ]))
-        );
+        $this->content->summary = 'His ridens eu sed quod ignota.';
+        $this->assertEquals('His ridens eu sed quod ignota.', get_summary($this->content));
 
-        $this->assertNull(get_summary(new Content([ 'flob' => 'wibble' ])));
+        $this->content->summary = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertEquals('Percipit &quot;mollis&quot; at scriptorem usu.', get_summary($this->content));
     }
 
     /**
@@ -229,18 +214,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTitle()
     {
-        $this->assertEquals('His ridens eu sed quod ignota.', get_title(
-            new Content([ 'title' => 'His ridens eu sed quod ignota.' ])
-        ));
+        $this->assertNull(get_title($this->content));
 
-        $this->assertEquals(
-            'Percipit &quot;mollis&quot; at scriptorem usu.',
-            get_title(new Content([
-                'title' => 'Percipit "mollis" at scriptorem usu.'
-            ]))
-        );
+        $this->content->title = 'His ridens eu sed quod ignota.';
+        $this->assertEquals('His ridens eu sed quod ignota.', get_title($this->content));
 
-        $this->assertNull(get_title(new Content([ 'flob' => 'wibble' ])));
+        $this->content->title = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertEquals('Percipit &quot;mollis&quot; at scriptorem usu.', get_title($this->content));
     }
 
     /**
@@ -248,15 +228,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetType()
     {
-        $this->assertEquals('article', get_type(new Content([
-            'content_type_name' => 'article'
-        ])));
+        $this->assertNull(get_type(new Content([ 'flob' => 'wibble' ])));
 
-        $this->assertEquals('Static page', get_type(new Content([
-            'content_type_name' => 'static_page'
-        ]), true));
+        $this->content->content_type_name = 'article';
+        $this->assertEquals('article', get_type($this->content));
 
-        $this->assertNull(get_type(new Content([ 'flob' => 'wibble' ]), true));
+        $this->content->content_type_name = 'static_page';
+        $this->assertEquals('Static page', get_type($this->content, true));
     }
 
     /**
@@ -264,10 +242,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasDescription()
     {
-        $this->assertFalse(has_description(new Content([])));
-        $this->assertTrue(has_description(new Content([
-            'description' => 'Percipit "mollis" at scriptorem usu.'
-        ])));
+        $this->assertFalse(has_description($this->content));
+
+        $this->content->description = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertTrue(has_description($this->content));
     }
 
     /**
@@ -275,18 +253,22 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasFeaturedMedia()
     {
-        $photo   = new Content([ 'id' => 893 ]);
-        $content = new Content([
-            'content_type_name' => 'article',
-            'img1' => 893
+        $photo = new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'in_litter'      => 0,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
         ]);
+
+        $this->content->content_type_name = 'article';
+        $this->content->img1              = 893;
 
         $this->em->expects($this->once())->method('find')
             ->with('Photo', 893)->willReturn($photo);
 
-        $this->assertFalse(has_featured_media($content, 'baz'));
-        $this->assertFalse(has_featured_media($content, 'inner'));
-        $this->assertTrue(has_featured_media($content, 'frontpage'));
+        $this->assertFalse(has_featured_media($this->content, 'baz'));
+        $this->assertFalse(has_featured_media($this->content, 'inner'));
+        $this->assertTrue(has_featured_media($this->content, 'frontpage'));
     }
 
     /**
@@ -294,14 +276,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasFeaturedMediaCaption()
     {
-        $content = new Content([
-            'content_type_name' => 'article',
-            'img1_footer'       => 'Rhoncus pretium'
-        ]);
+        $this->content->content_type_name = 'article';
+        $this->content->img1_footer       = 'Rhoncus pretium';
 
-        $this->assertFalse(has_featured_media_caption($content, 'baz'));
-        $this->assertFalse(has_featured_media_caption($content, 'inner'));
-        $this->assertTrue(has_featured_media_caption($content, 'frontpage'));
+        $this->assertFalse(has_featured_media_caption($this->content, 'baz'));
+        $this->assertFalse(has_featured_media_caption($this->content, 'inner'));
+        $this->assertTrue(has_featured_media_caption($this->content, 'frontpage'));
     }
 
     /**
@@ -309,10 +289,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasPretitle()
     {
-        $this->assertFalse(has_pretitle(new Content([])));
-        $this->assertTrue(has_pretitle(new Content([
-            'pretitle' => 'Percipit "mollis" at scriptorem usu.'
-        ])));
+        $this->assertFalse(has_pretitle($this->content));
+
+        $this->content->pretitle = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertTrue(has_pretitle($this->content));
     }
 
     /**
@@ -320,10 +300,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasSummary()
     {
-        $this->assertFalse(has_summary(new Content([])));
-        $this->assertTrue(has_summary(new Content([
-            'summary' => 'Percipit "mollis" at scriptorem usu.'
-        ])));
+        $this->assertFalse(has_summary($this->content));
+
+        $this->content->summary = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertTrue(has_summary($this->content));
     }
 
     /**
@@ -331,9 +311,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasTitle()
     {
-        $this->assertFalse(has_title(new Content([])));
-        $this->assertTrue(has_title(new Content([
-            'title' => 'Percipit "mollis" at scriptorem usu.'
-        ])));
+        $this->assertFalse(has_title($this->content));
+
+        $this->content->title = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertTrue(has_title($this->content));
     }
 }

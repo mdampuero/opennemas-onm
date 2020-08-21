@@ -19,10 +19,13 @@ function get_content($item = null, $type = null)
         $item = getService('entity_repository')->find($type, $item);
     }
 
-    return $item instanceof \Common\Model\Entity\Content
-            || $item instanceof \Content
-        ? $item
-        : null;
+    if (!$item instanceof \Common\Model\Entity\Content
+        && !$item instanceof \Content
+    ) {
+        return null;
+    }
+
+    return $item->isReadyForPublish() ? $item : null;
 }
 
 /**
@@ -185,6 +188,30 @@ function get_title($item = null) : ?string
 }
 
 /**
+ * Returns the list of related contents for the provided item based on the
+ * relation type.
+ *
+ * @param Content $item The item to get related contents for.
+ * @param string  $type The relation type.
+ *
+ * @return array The list of related contents.
+ */
+function get_related_contents($item, string $type) : array
+{
+    if (empty($item->related_contents)) {
+        return [];
+    }
+
+    $related = array_filter($item->related_contents, function ($a) use ($type) {
+        return $a['type'] === 'related_' . $type;
+    });
+
+    return array_filter(array_map(function ($a) {
+        return get_content($a['target_id'], $a['content_type_name']);
+    }, $related));
+}
+
+/**
  * Returns the internal type or human-readable type for the provided item.
  *
  * @param Content $item     The item to get content type for.
@@ -254,7 +281,20 @@ function has_pretitle($item) : bool
 }
 
 /**
- * Check if the content has a summary.
+ * Checks if the item has related contents in the specified relation.
+ *
+ * @param Content $item The item to check.
+ * @param string  $type The relation type.
+ *
+ * @return bool True if the content has related contents. False otherwise.
+ */
+function has_related_contents($item, string $type) : bool
+{
+    return !empty(get_related_contents($item, $type));
+}
+
+/**
+ * Checks if the content has a summary.
  *
  * @param Content $item The item to check summary for.
  *
@@ -266,7 +306,7 @@ function has_summary($item) : bool
 }
 
 /**
- * Check if the content has a title.
+ * Checks if the content has a title.
  *
  * @param Content $item The item to check title for.
  *
