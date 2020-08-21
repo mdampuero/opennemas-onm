@@ -17,7 +17,7 @@ class Content implements \JsonSerializable, CsvSerializable
     const NOT_SCHEDULED      = 'not-scheduled';
     const SCHEDULED          = 'scheduled';
     const DUED               = 'dued';
-    const IN_TIME            = 'in-time';
+    const IN_TIME            = 'intime';
     const POSTPONED          = 'postponed';
     const L10N_CONTENT_TYPES = [
         'album', 'article', 'attachment' ,'opinion', 'poll', 'video'
@@ -430,17 +430,11 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->content_type = null;
         }
 
-        if (!isset($this->starttime)
-            || empty($this->starttime)
-            || $this->starttime === '0000-00-00 00:00:00'
-        ) {
+        if (!isset($this->starttime) || empty($this->starttime)) {
             $this->starttime = null;
         }
 
-        if (!isset($this->endtime)
-            || empty($this->endtime)
-            || $this->endtime === '0000-00-00 00:00:00'
-        ) {
+        if (!isset($this->endtime) || empty($this->endtime)) {
             $this->endtime = null;
         }
 
@@ -1031,9 +1025,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             if (!is_array($status)) {
-                if ($status == 1
-                    && ($this->starttime == '0000-00-00 00:00:00' || empty($this->starttime))
-                ) {
+                if ($status == 1 && empty($this->starttime)) {
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
@@ -1098,9 +1090,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             if (!is_array($status)) {
-                if (($status == 1)
-                    && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)
-                ) {
+                if ($status == 1 && empty($this->starttime)) {
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
@@ -1308,6 +1298,26 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
+     * Returns the scheduling state.
+     *
+     * @return string The scheduling state.
+     */
+    public function getSchedulingState()
+    {
+        if ($this->isScheduled()) {
+            if ($this->isInTime()) {
+                return self::IN_TIME;
+            } elseif ($this->isDued()) {
+                return self::DUED;
+            } elseif ($this->isPostponed()) {
+                return self::POSTPONED;
+            }
+        }
+
+        return self::NOT_SCHEDULED;
+    }
+
+    /**
      * TODO: Move to ContentCategory class
      *
      * Loads the category name for a given content id
@@ -1348,145 +1358,15 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Returns the scheduling state
+     * Check if a content is in time for publishing.
      *
-     * @param string $now string that represents the actual
-     *                    time, useful for testing purposes
-     *
-     * @return string the scheduling state
+     * @return bool
      */
-    public function getSchedulingState($now = null)
+    public function isInTime()
     {
-        if ($this->isScheduled($now)) {
-            if ($this->isInTime($now)) {
-                return self::IN_TIME;
-            } elseif ($this->isDued($now)) {
-                return self::DUED;
-            } elseif ($this->isPostponed($now)) {
-                return self::POSTPONED;
-            }
-        }
-
-        return self::NOT_SCHEDULED;
-    }
-
-    /**
-     * Returns the scheduling state translated
-     *
-     * @param string $state the state string
-     *
-     * @return string the scheduling state translated
-     */
-    public function getL10nSchedulingState($state = null)
-    {
-        switch ($state) {
-            case 'not-scheduled':
-                $state = _('not scheduled');
-                break;
-            case 'scheduled':
-                $state = _('scheduled');
-                break;
-            case 'dued':
-                $state = _('dued');
-                break;
-            case 'in-time':
-                $state = _('in time');
-                break;
-            case 'postponed':
-                $state = _('postponed');
-                break;
-        }
-
-        return $state;
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     */
-    public function isInTime($now = null)
-    {
-        return $this->isScheduled($now)
-                && !$this->isDued($now)
-                && !$this->isPostponed($now);
-    }
-
-    /**
-     * Check if this content is scheduled or, in others words, if this
-     * content has a starttime and/or endtime defined
-     *
-     * @param string $now string that represents the actual
-     *                    time, useful for testing purposes
-     *
-     * @return boolean
-    */
-    public function isScheduled($now = null)
-    {
-        if (empty($this->starttime)) {
-            return false;
-        }
-
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
-
-        // If the starttime is equals to and endtime (wrong values), this is not scheduled
-        //
-        // TODO: Remove this checking when values fixed in database
-        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if this content is postponed
-     *
-     *       Now     Start
-     * -------|--------[-----------
-     *
-     * @param string $now the current date
-     *
-     * @return boolean
-     */
-    public function isPostponed($now = null)
-    {
-        if (empty($this->starttime) || $this->starttime == '0000-00-00 00:00:00') {
-            return false;
-        }
-
-        $timezone = getService('core.locale')->getTimeZone();
-
-        $start = new \DateTime($this->starttime, $timezone);
-        $now   = new \DateTime($now, $timezone);
-
-        return ($now->getTimeStamp() < $start->getTimeStamp());
-    }
-
-    /**
-     * Check if this content is dued
-     *       End      Now
-     * -------]--------|-----------
-     *
-     * @param string $now the current date
-     *
-     * @return boolean
-     */
-    public function isDued($now = null)
-    {
-        if (empty($this->endtime) || $this->endtime == '0000-00-00 00:00:00') {
-            return false;
-        }
-
-        $timezone = getService('core.locale')->getTimeZone();
-
-        $end = new \DateTime($this->endtime, $timezone);
-        $now = new \DateTime($now, $timezone);
-
-        return ($now->getTimeStamp() > $end->getTimeStamp());
+        return $this->isScheduled()
+            && !$this->isDued()
+            && !$this->isPostponed();
     }
 
     /**
@@ -2115,24 +1995,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Generates the starttime basing on the current content status.
-     *
-     * @param array $data The content information.
-     *
-     * @return Content The current content.
-     */
-    protected function generateStarttime(array &$data) : Content
-    {
-        if (!array_key_exists('starttime', $data) || empty($data['starttime'])) {
-            $data['starttime'] = empty($data['content_status'])
-                ? null
-                : date('Y-m-d H:i:s');
-        }
-
-        return $this;
-    }
-
-    /**
      * Generates the slug for the content basing on the provided slug or the
      * title.
      *
@@ -2151,6 +2013,54 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
+     * Generates the starttime basing on the current content status.
+     *
+     * @param array $data The content information.
+     *
+     * @return Content The current content.
+     */
+    protected function generateStarttime(array &$data) : Content
+    {
+        if (!array_key_exists('starttime', $data) || empty($data['starttime'])) {
+            $data['starttime'] = empty($data['content_status'])
+                ? null
+                : date('Y-m-d H:i:s');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the scheduling state translated
+     *
+     * @param string $state the state string
+     *
+     * @return string the scheduling state translated
+     */
+    protected function getL10nSchedulingState($state = null)
+    {
+        switch ($state) {
+            case 'not-scheduled':
+                $state = _('not scheduled');
+                break;
+            case 'scheduled':
+                $state = _('scheduled');
+                break;
+            case 'dued':
+                $state = _('dued');
+                break;
+            case 'in-time':
+                $state = _('in time');
+                break;
+            case 'postponed':
+                $state = _('postponed');
+                break;
+        }
+
+        return $state;
+    }
+
+    /**
      * Inserts the first entry in content_views when the content is created.
      */
     protected function initViews()
@@ -2160,6 +2070,75 @@ class Content implements \JsonSerializable, CsvSerializable
             'views'         => 0,
         ]);
     }
+
+    /**
+     * Check if this content is dued
+     *       End      Now
+     * -------]--------|-----------
+     *
+     * @return bool
+     */
+    protected function isDued()
+    {
+        if (empty($this->endtime)) {
+            return false;
+        }
+
+        $timezone = getService('core.locale')->getTimeZone();
+
+        $end = new \DateTime($this->endtime, $timezone);
+        $now = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() > $end->getTimeStamp();
+    }
+
+    /**
+     * Check if this content is postponed
+     *
+     *       Now     Start
+     * -------|--------[-----------
+     *
+     * @return bool
+     */
+    protected function isPostponed()
+    {
+        if (empty($this->starttime)) {
+            return false;
+        }
+
+        $timezone = getService('core.locale')->getTimeZone();
+
+        $start = new \DateTime($this->starttime, $timezone);
+        $now   = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() < $start->getTimeStamp();
+    }
+
+    /**
+     * Check if this content is scheduled or, in others words, if this
+     * content has a starttime and/or endtime defined.
+     *
+     * @return bool
+    */
+    protected function isScheduled()
+    {
+        if (empty($this->starttime)) {
+            return false;
+        }
+
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
+
+        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
 
     /**
      * Parses the content information before trying to save/update.
