@@ -418,8 +418,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->id = null;
         }
 
-        // Load contentmeta properties
-        $this->loadContentMetadata($this->id);
+        $this->loadMetas()->loadRelatedContents();
 
         if (isset($this->fk_content_type)) {
             $this->content_type = $this->fk_content_type;
@@ -1469,46 +1468,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * TODO: improve performance, it uses Content::get instead of the entity service
-     * Loads all the related contents for this content
-     *
-     * @param string $categoryName the category where fetching related contents from
-     *
-     * @return Content the content object
-     */
-    public function loadRelatedContents($categoryName = '')
-    {
-        $this->related_contents = [];
-
-        $relationsHandler = getService('related_contents');
-
-        if (getService('core.security')->hasExtension('CRONICAS_MODULES')
-            && $categoryName == 'home'
-        ) {
-            $relations = $relationsHandler->getRelations($this->id, 'home');
-        } else {
-            $relations = $relationsHandler->getRelations($this->id, 'frontpage');
-        }
-
-        if (count($relations) > 0) {
-            $relatedContents = getService('entity_repository')->findMulti($relations);
-
-            // Filter out not ready for publish contents.
-            foreach ($relatedContents as $content) {
-                if (!$content->isReadyForPublish()
-                    && $content->fk_content_type !== 4
-                ) {
-                    continue;
-                }
-
-                $this->related_contents[] = $content;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Loads all Frontpage attached images for this content given an array of images
      *
      * @param array $images list of Image object to hydrate the current content
@@ -1726,39 +1685,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return false;
         }
-    }
-
-    /**
-     * Load content properties given the content id.
-     *
-     * @param int $id The id of the content.
-     *
-     * @return Content The content object
-     */
-    public function loadContentMetadata($id = null)
-    {
-        if (empty($id)) {
-            return $this;
-        }
-
-        try {
-            $metadatas = getService('dbal_connection')->fetchAll(
-                'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
-                [ (int) $id ]
-            );
-
-            if (!empty($metadatas)) {
-                foreach ($metadatas as $metadata) {
-                    $this->{$metadata['meta_name']} = $this->parseProperty($metadata['meta_value']);
-                }
-            }
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                'Error on Content:loadContentMetadata: ' . $e->getMessage()
-            );
-        }
-
-        return $this;
     }
 
     /**
@@ -2136,9 +2062,55 @@ class Content implements \JsonSerializable, CsvSerializable
         return true;
     }
 
+    /**
+     * Load content properties given the content id.
+     *
+     * @return Content The current content.
+     */
+    protected function loadMetas()
+    {
+        try {
+            $metadatas = getService('dbal_connection')->fetchAll(
+                'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
+                [ (int) $this->pk_content ]
+            );
 
+            foreach ($metadatas as $metadata) {
+                $this->{$metadata['meta_name']} =
+                    $this->parseProperty($metadata['meta_value']);
+            }
+        } catch (\Exception $e) {
+            getService('error.log')
+                ->error('Error on Content:loadMetas: ' . $e->getMessage());
+        }
 
+        return $this;
+    }
 
+    /**
+     * Loads all the related contents for this content.
+     *
+     * @return Content The current object.
+     */
+    protected function loadRelatedContents()
+    {
+        $this->related_contents = [];
+
+        try {
+            $this->related_contents = getService('dbal_connection')->fetchAll(
+                'SELECT `target_id`, `type`, `caption`, `content_type_name`'
+                . 'FROM `related_contents` '
+                . 'LEFT JOIN contents ON source_id = pk_content WHERE source_id=? '
+                . 'ORDER BY `type` ASC, `related_contents`.`position` ASC',
+                [ (int) $this->pk_content ]
+            );
+        } catch (\Exception $e) {
+            getService('error.log')
+                ->error('Error on Content:loadRelatedContents: ' . $e->getMessage());
+        }
+
+        return $this;
+    }
 
     /**
      * Parses the content information before trying to save/update.
