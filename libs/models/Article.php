@@ -265,21 +265,6 @@ class Article extends Content
 
             $conn->commit();
 
-            // Moving related contents saving code out of transaction due to ONM-1368
-            if (!empty($data['relatedFront'])) {
-                $this->saveRelated($data['relatedFront'], $this->id, 'setRelationPosition');
-            }
-
-            if (!empty($data['relatedInner'])) {
-                $this->saveRelated($data['relatedInner'], $this->id, 'setRelationPositionForInner');
-            }
-
-            if (!empty($data['relatedHome'])) {
-                $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
-            }
-
-            $this->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
-
             return $this->id;
         } catch (\Exception $e) {
             getService('error.log')->error(
@@ -289,6 +274,20 @@ class Article extends Content
 
             $conn->rollback();
 
+            return false;
+        }
+
+        try {
+            // Moving related contents saving code out of transaction due to ONM-1638
+            $this->saveRelated($data)
+                ->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
+
+            return true;
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -349,37 +348,19 @@ class Article extends Content
             );
 
             $conn->commit();
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
+            $conn->rollback();
+            return false;
+        }
 
-            // Moving related contents saving code out of transaction due to ONM-1368
-            // Drop related and insert new ones
-            getService('related_contents')->delete($data['id']);
-
-            // Insert new related contents
-            if (!empty($data['relatedFront'])) {
-                $this->saveRelated(
-                    $data['relatedFront'],
-                    $data['id'],
-                    'setRelationPosition'
-                );
-            }
-
-            if (!empty($data['relatedInner'])) {
-                $this->saveRelated(
-                    $data['relatedInner'],
-                    $data['id'],
-                    'setRelationPositionForInner'
-                );
-            }
-
-            if (!empty($data['relatedHome'])) {
-                $this->saveRelated(
-                    $data['relatedHome'],
-                    $this->id,
-                    'setHomeRelations'
-                );
-            }
-
-            $this->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
+        try {
+            // Moving related contents saving code out of transaction due to ONM-1638
+            $this->saveRelated($data)
+                ->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
 
             return true;
         } catch (\Exception $e) {
@@ -387,7 +368,6 @@ class Article extends Content
                 'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
-            $conn->rollback();
             return false;
         }
     }
@@ -420,11 +400,6 @@ class Article extends Content
             getService('comment_repository')->deleteFromFilter(['content_id' => $id]);
             $conn->commit();
 
-            // Delete related
-            // Moved out of transaction due to problems with foreign key
-            // If db has fk on related relation is deleted on cascade
-            getService('related_contents')->delete($id);
-
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
@@ -438,20 +413,48 @@ class Article extends Content
     }
 
     /**
-     * Relates a list of content ids to another one
+     * Saves the list of related contents.
      *
-     * @param string $data   list of related content IDs
-     * @param int    $id     the id of the content we want to relate other contents
-     * @param string $method the method to bind related contents
+     * @param string $data The information for the article.
      */
-    public function saveRelated($data, $id, $method)
+    protected function saveRelated($data)
     {
-        $rel = getService('related_contents');
+        $conn = getService('dbal_connection');
 
-        if (is_array($data) && count($data) > 0) {
-            for ($i = 0; $i < count($data); $i++) {
-                $rel->{$method}($id, $i, $data[$i]);
-            }
+        $conn->executeQuery(
+            'DELETE FROM related_contents WHERE source_id = ?',
+            [ $this->pk_content ]
+        );
+
+        if (!array_key_exists('related_contents', $data)
+            || empty($data['related_contents'])
+        ) {
+            return $this;
         }
+
+        $related  = [];
+        $position = 0;
+
+        for ($i = 0; $i < count($data['related_contents']); $i++) {
+            if ($i > 0
+                && $data['related_contents'][$i]['type']
+                    !== $data['related_contents'][$i - 1]['type']
+            ) {
+                $position = 0;
+            }
+
+            $related[] = $this->pk_content;
+            $related[] = $data['related_contents'][$i]['target_id'];
+            $related[] = $data['related_contents'][$i]['type'];
+            $related[] = !empty($data['related_contents'][$i]['caption'])
+                ? $data['related_contents'][$i]['caption'] : null;
+            $related[] = $position++;
+        }
+
+        $sql = 'INSERT INTO related_contents '
+            . '(source_id, target_id, type, caption, position) VALUES '
+            . str_repeat('(?,?,?,?,?),', count($data['related_contents']));
+
+        $conn->executeQuery(trim($sql, ','), $related);
     }
 }
