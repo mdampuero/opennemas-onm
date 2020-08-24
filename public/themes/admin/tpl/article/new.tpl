@@ -123,6 +123,16 @@
                     <input class="form-control" id="agency" name="agency" ng-model="article.agency" type="text">
                   </div>
                 </div>
+                {is_module_activated name="CRONICAS_MODULES"}
+                  <div class="form-group col-sm-4">
+                    <label class="form-label" for="agency_bulletin">
+                      {t}Signature{/t} #2
+                    </label>
+                    <div class="controls">
+                      <input class="form-control" id="agency_bulletin" ng-model="article.params.agencyBulletin" type="text">
+                    </div>
+                  </div>
+                {/is_module_activated}
               </div>
               <div class="form-group">
                 <label class="form-label" for="pretitle">
