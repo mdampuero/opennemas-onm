@@ -375,7 +375,7 @@ jQuery(document).ready(function($) {
                       <i class="fa fa-calendar m-r-5"></i>
                       {t}Start{/t}
                     </span>
-                    <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
+                    <input class="form-control" type="datetime" id="starttime" name="starttime" value="{if isset($advertisement)}{$advertisement->starttime}{/if}" datetime-picker ng-model="starttime" />
                   </div>
                 </div>
                 <div class="form-group">
