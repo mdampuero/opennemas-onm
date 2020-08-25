@@ -61,17 +61,6 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="form-label" for="site-agency">
-                          {t}Site agency{/t}
-                        </label>
-                        <span class="help">
-                          {t}This will be displayed as the default article signature.{/t}
-                        </span>
-                        <div class="controls">
-                          <input class="form-control"  id="site-agency" name="site-agency" ng-model="settings.site_agency" type="text">
-                        </div>
-                      </div>
-                      <div class="form-group">
                         <label class="form-label" for="site-footer">
                           {t}Footer text{/t}
                         </label>

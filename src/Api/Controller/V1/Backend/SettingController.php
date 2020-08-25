@@ -70,7 +70,6 @@ class SettingController extends Controller
         'robots_txt_rules',
         'rtb_files',
         'section_settings',
-        'site_agency',
         'site_color',
         'site_color_secondary',
         'site_description',
