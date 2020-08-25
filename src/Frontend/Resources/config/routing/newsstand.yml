@@ -15,10 +15,10 @@ frontend_newsstand_frontpage_date:
         l10n: true
 
 frontend_newsstand_show:
-    path:     /portadas-papel/{category_name}/{created}{id}.html
+    path:     /portadas-papel/{category_slug}/{created}{id}.html
     defaults: { _controller: FrontendBundle:Newsstand:show }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
         slug:          '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'

@@ -53,7 +53,7 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list'    => [ 'page', 'category_name' ],
+        'list'    => [ 'page', 'category_slug' ],
         'showamp' => [ '_format' ],
     ];
 
@@ -87,7 +87,7 @@ class AlbumController extends FrontendController
      */
     protected function getRoute($action, $params = [])
     {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
+        if ($action == 'list' && array_key_exists('category_slug', $params)) {
             return 'frontend_album_frontpage_category';
         }
 
@@ -113,7 +113,7 @@ class AlbumController extends FrontendController
             ->get('items_per_page', 10);
 
         $categoryOQL = !empty($category)
-            ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
+            ? sprintf(' and category_id=%d', $category->id)
             : '';
 
         $response = $this->get('api.service.content_old')->getList(sprintf(
@@ -147,7 +147,7 @@ class AlbumController extends FrontendController
                         ? 'frontend_album_frontpage'
                         : 'frontend_album_frontpage_category',
                     'params' => !empty($category)
-                        ? [ 'category_name' => $category->name ]
+                        ? [ 'category_slug' => $category->name ]
                         : []
                 ]
             ])

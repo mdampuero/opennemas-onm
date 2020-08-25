@@ -381,7 +381,7 @@ class Importer
     protected function getDataForArticle(ExternalResource $resource, array $data) : array
     {
         $data = array_merge($data, [
-            'category'  => $this->getCategory($resource, $data),
+            'category_id'  => $this->getCategory($resource, $data),
             'agency'    => !empty($resource->signature)
                 ? $resource->signature
                 : array_key_exists('agency_string', $this->config)

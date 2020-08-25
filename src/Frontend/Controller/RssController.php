@@ -25,9 +25,9 @@ class RssController extends FrontendController
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            // Get categories with enabled = 1 and archived = 0
+            // Get categories with enabled = 1 and rss = 1
             $categories = $this->get('api.service.category')
-                ->getList('enabled = 1 and archived = 0');
+                ->getList('enabled = 1 and rss = 1');
 
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
@@ -62,34 +62,34 @@ class RssController extends FrontendController
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
         $this->setViewExpireDate($expire);
 
-        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
+        $categoryID = 0;
+        $rssTitle   = _('Homepage News');
+
+        if (!empty($categoryName)) {
+            try {
+                $oql = sprintf(
+                    'enabled = 1 and rss = 1'
+                    . ' and name regexp "(%%\"|^)%s(\"%%|$)"',
+                    $categoryName
+                );
+
+                $category   = $this->get('api.service.category')
+                    ->getItemBy($oql);
+                $categoryID = $category->id;
+                $rssTitle   = $category->name;
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
+
+        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryID);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            $id       = 0;
-            $rssTitle = _('Homepage News');
-
-            if (!empty($categoryName)) {
-                try {
-                    $oql = sprintf(
-                        'enabled = 1 and archived = 0'
-                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
-                        $categoryName
-                    );
-
-                    $c = $this->get('api.service.category')
-                        ->getItemBy($oql);
-
-                    $id       = $c->id;
-                    $rssTitle = $c->title;
-                } catch (\Exception $e) {
-                    throw new ResourceNotFoundException();
-                }
-            }
-
-            list($contentPositions, $contents, , ) = $this->get('api.service.frontpage')
-                ->getCurrentVersionForCategory($id);
+            list($contentPositions, $contents, , ) =
+                $this->get('api.service.frontpage')
+                ->getCurrentVersionForCategory($categoryID);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -116,7 +116,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,frontpage-' . $categoryName
+            'x-tags'      => 'rss,frontpage-' . $categoryID
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -149,32 +149,34 @@ class RssController extends FrontendController
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
         $this->setViewExpireDate($expire);
 
-        $cacheID = $this->view->getCacheId('rss', $type, $slug);
+        $rssTitle = $titles[$type];
+
+        if (!empty($slug)) {
+            try {
+                $oql = sprintf(
+                    'enabled = 1 and rss = 1 '
+                    . 'and name regexp "(.*\"|^)%s(\".*|$)"',
+                    $slug
+                );
+
+                $category = $this->get('api.service.category')
+                    ->getItemBy($oql);
+
+                $id       = $category->id;
+                $slug     = $category->name;
+                $rssTitle = $rssTitle . ' - ' . $category->title;
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
+
+        $cacheID = empty($id) ?
+            $this->view->getCacheId('rss', $type, '') :
+            $this->view->getCacheId('rss', $type, $id);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            $rssTitle = $titles[$type];
-
-            if (!empty($slug)) {
-                try {
-                    $oql = sprintf(
-                        'enabled = 1 and archived = 0 '
-                        . 'and name regexp "(.*\"|^)%s(\".*|$)"',
-                        $slug
-                    );
-
-                    $category = $this->get('api.service.category')
-                        ->getItemBy($oql);
-
-                    $id       = $category->pk_content_category;
-                    $slug     = $category->name;
-                    $rssTitle = $rssTitle . ' - ' . $category->title;
-                } catch (\Exception $e) {
-                    throw new ResourceNotFoundException();
-                }
-            }
-
             $total = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('elements_in_rss', 10);
@@ -420,24 +422,24 @@ class RssController extends FrontendController
             ]
         ];
 
-        // Get categories with enabled = 1 and archived = 0
+        // Get categories with enabled = 1 and rss = 1
         $categories = $this->get('api.service.category')
-            ->getList('enabled = 1 and archived = 0');
+            ->getList('enabled = 1 and rss = 1');
 
         $ids = array_map(function ($a) {
-            return $a->pk_content_category;
+            return $a->id;
         }, $categories['items']);
 
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
         if ($contentType !== 'opinion') {
-            $filters['pk_fk_content_category'] = [
+            $filters['category_id'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
 
             if (!empty($category)) {
-                $filters['pk_fk_content_category'] = [ [ 'value' => $category ] ];
+                $filters['category_id'] = [ [ 'value' => $category ] ];
             }
         }
 
@@ -518,7 +520,7 @@ class RssController extends FrontendController
             $category = $this->get('api.service.category')
                 ->getItemBySlug($name);
 
-            $setting = 'frontpage_layout_' . $category->pk_content_category;
+            $setting = 'frontpage_layout_' . $category->id;
         } catch (\Exception $e) {
             $setting = 'frontpage_layout_0';
         }

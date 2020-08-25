@@ -198,10 +198,10 @@ class ContentManager
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT ' . $fields
-                . ' FROM `contents`, `' . $table . '`, `contents_categories` '
+                . ' FROM `contents`, `' . $table . '`, `content_category` '
                 . ' WHERE ' . $where
                 . ' AND `contents`.`pk_content`= `' . $table . '` . `pk_' . $contentType . '` '
-                . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` ' . $orderBy
+                . ' AND `contents`.`pk_content`= `content_category`.`content_id` ' . $orderBy
             );
 
             return $this->loadObject($rs, $contentType);
@@ -463,7 +463,7 @@ class ContentManager
                 $category = [$category];
             }
 
-            $criteria['pk_fk_content_category'] = [['value' => $category, 'operator' => 'IN']];
+            $criteria['category_id'] = [['value' => $category, 'operator' => 'IN']];
         }
 
         if ($author) {
@@ -540,7 +540,6 @@ class ContentManager
                     'num'        => $content->num_comments,
                     'title'      => $content->title,
                     'permalink'  => $content->slug,
-                    'uri'        => $content->uri
                 ];
             }
 
@@ -611,10 +610,10 @@ class ContentManager
         }
 
         if (intval($category) > 0) {
-            $tables .= ', `contents_categories` ';
+            $tables .= ', `content_category` ';
 
-            $tablesRelationSQL .= ' AND  `contents_categories`.pk_fk_content = `contents`.pk_content '
-                . 'AND `contents_categories`.pk_fk_content_category=' . $category . ' ';
+            $tablesRelationSQL .= ' AND  `content_category`.contend_id = `contents`.pk_content '
+                . 'AND `content_category`.category_id=' . $category . ' ';
         }
 
         $sql = 'SELECT * FROM ' . $tables
@@ -701,8 +700,8 @@ class ContentManager
         if ($category) {
             $category = getService('api.service.category')->getItem($category);
 
-            $criteria['pk_fk_content_category'] = [
-                [ 'value' => $category->pk_content_category ]
+            $criteria['category_id'] = [
+                [ 'value' => $category->id ]
             ];
         }
 
@@ -820,7 +819,7 @@ class ContentManager
      *
      * @param string $contentType the contentType to search for
      * @param string $filter the SQL WHERE sentence to filter contents with
-     * @param int $pk_fk_content_category the category id to search for
+     * @param int    $categoryID the category id to search for
      *
      * @return int the number of contents that match the filter
      */
@@ -836,10 +835,10 @@ class ContentManager
 
         if (intval($categoryID) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
-                 . 'FROM `contents_categories`, `contents`, ' . $table . '  '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`=' . $categoryID
+                 . 'FROM `content_category`, `contents`, ' . $table . '  '
+                 . ' WHERE `content_category`.`category_id`=' . $categoryID
                  . '  AND pk_content=`' . $table . '`.`pk_' . $contentType
-                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . '` AND  `content_category`.`content_id` = `contents`.`pk_content` '
                  . $whereSQL;
         } else {
             $sql = 'SELECT COUNT(contents.pk_content) AS total '
@@ -889,11 +888,11 @@ class ContentManager
         }
 
         if (intval($categoryID) > 0) {
-            $sql = 'SELECT * FROM contents_categories, contents, ' . $table . '  '
+            $sql = 'SELECT * FROM content_category, contents, ' . $table . '  '
                  . 'WHERE ' . $whereSQL
-                 . ' AND `contents_categories`.`pk_fk_content_category`=' . $categoryID
+                 . ' AND `content_category`.`category_id`=' . $categoryID
                  . ' AND `contents`.`pk_content`=`' . $table . '`.`pk_' . $contentType . '` '
-                 . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . ' AND  `content_category`.`content_id` = `contents`.`pk_content` '
                  . $orderBy;
         } else {
             return [];
@@ -913,7 +912,7 @@ class ContentManager
     }
 
     /**
-     * Returns the title, catName and slugs of last headlines from a given category
+     * Returns the title and slugs of last headlines from a given category
      *
      * @param string $filter the SQL WHERE sentence to filter the contents
      * @param string $orderBy the ORDER BY sentence to sort the contents

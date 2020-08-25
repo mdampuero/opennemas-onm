@@ -32,7 +32,7 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $date         = "{$year}-{$month}-{$day}";
         $itemsPerPage = 20;
@@ -70,7 +70,7 @@ class ArchiveController extends Controller
             ];
 
             if ($categoryName != 'home') {
-                $criteria['category_name'] = [[ 'value' => $categoryName ]];
+                $criteria['name'] = [[ 'value' => $categoryName ]];
             }
 
             $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
@@ -79,14 +79,14 @@ class ArchiveController extends Controller
 
             foreach ($contents as $content) {
                 // Create category group
-                if (!isset($library[$content->pk_fk_content_category])
-                    && !empty($content->pk_fk_content_category)
+                if (!isset($library[$content->category_id])
+                    && !empty($content->category_id)
                 ) {
-                    $library[$content->pk_fk_content_category] = $this
+                    $library[$content->category_id] = $this
                         ->get('api.service.category')
-                        ->getItem($content->pk_fk_content_category);
+                        ->getItem($content->category_id);
 
-                    $library[$content->pk_fk_content_category]->contents = [];
+                    $library[$content->category_id]->contents = [];
                 }
 
                 // Fetch video or image for article and opinions
@@ -97,7 +97,7 @@ class ArchiveController extends Controller
                 }
 
                 // Add contents to category group
-                $library[$content->pk_fk_content_category]->contents[] = $content;
+                $library[$content->category_id]->contents[] = $content;
             }
 
             // Pagination for block more videos
@@ -158,7 +158,7 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $path         = "{$year}/{$month}/{$day}";
         $html         = '';
         $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";

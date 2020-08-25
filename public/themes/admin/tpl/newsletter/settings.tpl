@@ -177,16 +177,6 @@
             <input type="text" required id="sender" name="newsletter_maillist[sender]" ng-model="settings.newsletter_maillist.sender" class="form-control" placeholder="noreply@your_domain_name.com"/>
           </div>
         </div>
-        <div class="form-group">
-          <label for="newsletter_maillist_link" class="form-label">{t}Newsletter links points to{/t}</label>
-          <div class="controls">
-            <select name="newsletter_maillist[link]" id="newsletter_maillist_link" ng-model="settings.newsletter_maillist.link">
-              <option value="inner">{t}Point to inner{/t}</option>
-              <option value="front">{t}Point to frontpage{/t}</option>
-            </select>
-            <div class="help">{t}You can choose if you prefer that the links of the contents of the newsletter point within the content or contents on the frontpage{/t}</div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

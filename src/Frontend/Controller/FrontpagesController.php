@@ -47,7 +47,7 @@ class FrontpagesController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            $categoryId    = $category->pk_content_category;
+            $categoryId    = $category->id;
             $categoryTitle = $category->title;
             $categoryName  = $category->name;
         }
@@ -67,7 +67,9 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
+        $cacheId = $categoryName == 'home'
+            ? $this->view->getCacheId('frontpage', 'category', $categoryName, $lastSaved)
+            : $this->view->getCacheId('frontpage', 'category', $categoryId, $lastSaved);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
@@ -247,7 +249,7 @@ class FrontpagesController extends Controller
         }
 
         $ads = unserialize($cm->getUrlContent(
-            $wsUrl . '/ws/ads/frontpage/' . $category->pk_content_category,
+            $wsUrl . '/ws/ads/frontpage/' . $category->id,
             true
         ));
 

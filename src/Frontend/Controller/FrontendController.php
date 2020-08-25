@@ -422,8 +422,8 @@ class FrontendController extends Controller
             }
         }
 
-        if (array_key_exists('category_name', $params)) {
-            $params['o_category'] = $this->getCategory($params['category_name']);
+        if (array_key_exists('category_slug', $params)) {
+            $params['o_category'] = $this->getCategory($params['category_slug']);
             $params['category']   = $params['o_category'];
             $params['categories'] = [];
         }
@@ -560,7 +560,7 @@ class FrontendController extends Controller
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
             $params['content']->content_type_name,
-            $params['o_category']->pk_content_category ?? null
+            $params['o_category']->id ?? null
         );
 
         $suggested = $suggestedContents[0];

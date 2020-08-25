@@ -45,20 +45,6 @@ class Content implements \JsonSerializable, CsvSerializable
     protected $body = '';
 
     /**
-     * The category id this content belongs to
-     *
-     * @var int
-     */
-    public $category = null;
-
-    /**
-     * DEPRECATED: The category name this content belongs to
-     *
-     * @var string
-     */
-    public $category_name = null;
-
-    /**
      * Status of this content
      *
      * @var int 0|1|2
@@ -249,9 +235,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_title':
-                return $this->loadCategoryTitle();
-
             case 'comments':
                 return 0;
 
@@ -268,9 +251,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             case 'ratings':
                 return 0;
-
-            case 'uri':
-                return $this->getUri();
 
             default:
                 if ($name === 'slug' && empty($this->slug)) {
@@ -383,8 +363,6 @@ class Content implements \JsonSerializable, CsvSerializable
             $data[$key] = $this->__get($key);
         }
 
-        $data['uri'] = $this->uri;
-
         return $data;
     }
 
@@ -396,10 +374,6 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function load($properties)
     {
-        if (array_key_exists('catName', $properties)) {
-            unset($properties['catName']);
-        }
-
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 $this->{$propertyName} = $this->parseProperty($propertyValue);
@@ -444,16 +418,6 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->endtime = null;
         }
 
-        if (isset($this->pk_fk_content_category)) {
-            $this->category = $this->pk_fk_content_category;
-        }
-
-        if (empty($this->category_name)
-            && !empty($this->pk_fk_content_category)
-        ) {
-            $this->loadCategoryName();
-        }
-
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = @unserialize($this->params);
         }
@@ -476,8 +440,8 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories'
-                . ' ON pk_content = pk_fk_content WHERE pk_content = ?',
+                'SELECT * FROM contents LEFT JOIN content_category'
+                . ' ON pk_content = content_id WHERE pk_content = ?',
                 [ (int) $id ]
             );
 
@@ -540,14 +504,13 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function create($data)
     {
-        $categoryId = array_key_exists('category', $data) ?
-            (int) $data['category'] : null;
+        $categoryId = array_key_exists('category_id', $data) ?
+            (int) $data['category_id'] : null;
 
         $tags = $data['tags'] ?? [];
         $data = $this->parseData($data);
 
         $this
-            ->generateCategoryName($data, $categoryId)
             ->generateStarttime($data)
             ->generateSlug($data)
             ->serializeParams($data)
@@ -593,8 +556,8 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function update($data)
     {
-        $categoryId = array_key_exists('category', $data) ?
-            (int) $data['category'] : null;
+        $categoryId = array_key_exists('category_id', $data) ?
+            (int) $data['category_id'] : null;
 
         $tags = array_key_exists('tags', $data) && !empty($data['tags'])
             ? $data['tags'] : [];
@@ -602,7 +565,6 @@ class Content implements \JsonSerializable, CsvSerializable
         $data = $this->parseData($data, $this->id);
 
         $this
-            ->generateCategoryName($data, $categoryId)
             ->generateStarttime($data)
             ->generateSlug($data)
             ->serializeParams($data)
@@ -690,7 +652,7 @@ class Content implements \JsonSerializable, CsvSerializable
         $conn->beginTransaction();
         try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
-            $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
+            $conn->delete('content_category', [ 'content_id' => $id ]);
             $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
             $conn->commit();
 
@@ -781,40 +743,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return false;
         }
-    }
-
-    /**
-     * Returns the URI for this content
-     *
-     * @return string|array the uri
-     */
-    public function getUri()
-    {
-        $type     = $this->content_type_name;
-        $id       = sprintf('%06d', $this->id);
-        $date     = date('YmdHis', strtotime($this->created));
-        $category = urlencode($this->category_name);
-        $slug     = $this->__get('slug');
-
-        if (is_array($slug)) {
-            return array_map(function ($a) use ($type, $id, $date, $category) {
-                return Uri::generate(strtolower($type), [
-                    'id'       => $id,
-                    'date'     => $date,
-                    'category' => $category,
-                    'slug'     => urlencode($a),
-                ]);
-            }, $slug);
-        }
-
-        $uri = Uri::generate(strtolower($this->content_type_name), [
-            'id'       => $id,
-            'date'     => $date,
-            'category' => $category,
-            'slug'     => urlencode($slug),
-        ]);
-
-        return !empty($uri) ? $uri : $this->permalink;
     }
 
     /**
@@ -1296,7 +1224,7 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return [
                 'title'           => $this->__get('title'),
-                'category'        => $this->category_name,
+                'category'        => get_category_name($this),
                 'views'           => $this->views,
                 'starttime'       => $this->starttime,
                 'endtime'         => $this->endtime,
@@ -1305,46 +1233,6 @@ class Content implements \JsonSerializable, CsvSerializable
                 'last_author'     => $authorName,
             ];
         }
-    }
-
-    /**
-     * TODO: Move to ContentCategory class
-     *
-     * Loads the category name for a given content id
-     *
-     * @return string the category name
-     */
-    public function loadCategoryName()
-    {
-        try {
-            $category = getService('api.service.category')
-                ->getItem($this->pk_fk_content_category);
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        $this->category_name = $category->name;
-
-        return $this->category_name;
-    }
-
-    /**
-     * TODO: Move to ContentCategory class
-     *
-     * Loads the category title for a given content id
-     *
-     * @return string the category title
-     */
-    public function loadCategoryTitle()
-    {
-        try {
-            $category = getService('api.service.category')
-                ->getItem($this->pk_fk_content_category);
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        return $category->title;
     }
 
     /**
@@ -1769,7 +1657,7 @@ class Content implements \JsonSerializable, CsvSerializable
     public function isInFrontpageOfCategory($categoryID = null)
     {
         if ($categoryID === null) {
-            $categoryID = $this->category;
+            $categoryID = $this->category_id;
         }
 
         try {
@@ -2084,16 +1972,17 @@ class Content implements \JsonSerializable, CsvSerializable
         $conn = getService('dbal_connection');
 
         if ($delete) {
-            $conn->delete('contents_categories', [
-                'pk_fk_content' => $this->id
+            $conn->delete('content_category', [
+                'content_id' => $this->id
             ]);
         }
 
-        $conn->insert('contents_categories', [
-            'pk_fk_content'          => $this->id,
-            'pk_fk_content_category' => $id,
-            'catName'                => null
+        $conn->insert('content_category', [
+            'content_id'  => $this->id,
+            'category_id' => $id
         ]);
+
+        $this->category_id = $id;
     }
 
     /**
@@ -2110,33 +1999,6 @@ class Content implements \JsonSerializable, CsvSerializable
             self::saveTags($tags, $this->id);
             $this->tags = $tags;
         }
-    }
-
-    /**
-     * Returns the category name basing on the information used in create or
-     * update method.
-     *
-     * @param array $data The content information.
-     * @param int   $id   The category id.
-     *
-     * @return Content The current content.
-     */
-    protected function generateCategoryName(array &$data, ?int $id) : Content
-    {
-        $data['category_name'] = '';
-
-        if (empty($id)) {
-            return $this;
-        }
-
-        getService('core.locale')->setContext('frontend');
-
-        $data['category_name'] = getService('api.service.category')
-            ->getItem($id)->name;
-
-        getService('core.locale')->setContext('backend');
-
-        return $this;
     }
 
     /**
