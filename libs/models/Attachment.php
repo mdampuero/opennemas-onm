@@ -174,6 +174,8 @@ class Attachment extends Content
      */
     public function update($data)
     {
+        $data['category'] = $data['category_id'];
+
         parent::update($data);
 
         try {
@@ -181,7 +183,8 @@ class Attachment extends Content
 
             getService('dbal_connection')->update('attachments', [
                 'title'    => $data['title'],
-                'path'     => $data['path']
+                'path'     => $data['path'],
+                'category' => $data['category']
             ], [ 'pk_attachment' => (int) $data['id'] ]);
 
             return true;

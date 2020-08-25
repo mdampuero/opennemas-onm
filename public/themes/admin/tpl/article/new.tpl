@@ -120,18 +120,18 @@
                     {t}Signature{/t}
                   </label>
                   <div class="controls">
-                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" ng-init="!article.id ? article.agency = '{setting name=site_agency}' : ''" type="text">
+                    <input class="form-control" id="agency" name="agency" ng-model="article.agency" type="text">
                   </div>
                 </div>
-                {is_module_activated name="ADVANCED_ARTICLE_MANAGER"}
-                <div class="form-group col-sm-4">
-                  <label class="form-label" for="agency_bulletin">
-                    {t}Signature{/t} #2
-                  </label>
-                  <div class="controls">
-                    <input class="form-control" id="agency_bulletin" ng-model="article.params.agencyBulletin" ng-init="!article.id ? article.params.agencyBulletin = '{setting name=site_agency}' : ''" type="text">
+                {is_module_activated name="CRONICAS_MODULES"}
+                  <div class="form-group col-sm-4">
+                    <label class="form-label" for="agency_bulletin">
+                      {t}Signature{/t} #2
+                    </label>
+                    <div class="controls">
+                      <input class="form-control" id="agency_bulletin" ng-model="article.params.agencyBulletin" type="text">
+                    </div>
                   </div>
-                </div>
                 {/is_module_activated}
               </div>
               <div class="form-group">
