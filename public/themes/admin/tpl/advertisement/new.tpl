@@ -384,7 +384,7 @@ jQuery(document).ready(function($) {
                       <span class="fa fa-calendar m-r-5"></span>
                       {t}End{/t}&nbsp;&nbsp;&nbsp;
                     </span>
-                    <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
+                    <input class="form-control" type="datetime" id="endtime" name="endtime" value="{if isset($advertisement)}{$advertisement->endtime}{/if}" datetime-picker ng-model="endtime" />
                   </div>
                 </div>
                 <div class="m-t-10">

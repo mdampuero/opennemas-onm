@@ -142,7 +142,7 @@
                 <label for="starttime" class="form-label">{t}Date{/t}</label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" type="datetime" id="date" name="starttime" value="{if $book->starttime neq '0000-00-00 00:00:00'}{$book->starttime}{/if}">
+                    <input class="form-control" type="datetime" id="date" name="starttime" value="{if $book->starttime}{$book->starttime}{/if}">
                     <span class="input-group-addon add-on">
                       <span class="fa fa-calendar"></span>
                     </span>
