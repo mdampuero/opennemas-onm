@@ -26,13 +26,7 @@
       send_to_trash:         '{url name=admin_content_send_to_trash}',
       customize_content:     '{url name=admin_content_update_property}'
     };
-    var content_states = {
-      {foreach $contents as $content}
-        {if $content->id}
-          {$content->id}: {$content->getQuickInfo()|json_encode},
-        {/if}
-      {/foreach}
-    }
+    var content_states = {};
   </script>
   {/javascripts}
 {/block}
