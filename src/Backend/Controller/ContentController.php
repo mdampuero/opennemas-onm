@@ -166,6 +166,8 @@ class ContentController extends Controller
      */
     public function quickInfoAction(Request $request)
     {
+        $this->get('core.locale')->setContext('frontend');
+
         $id = (int) $request->query->getDigits('id', null);
 
         if ($id > 0) {
