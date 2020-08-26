@@ -181,10 +181,6 @@ class AlbumController extends FrontendController
     {
         parent::hydrateShowAmp($params);
 
-        $params['content']->author = $this->get('user_repository')->find(
-            (int) $params['content']->fk_author
-        );
-
         $cacheIds = array_map(function ($a) {
             return [ 'photo', $a['pk_photo'] ];
         }, $params['content']->photos);
