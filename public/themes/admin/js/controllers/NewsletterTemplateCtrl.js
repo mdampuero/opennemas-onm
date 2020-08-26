@@ -233,7 +233,7 @@
         $scope.toggleAllCategories = function(content) {
           if (content.criteria.category.length !== $scope.data.extra.categories.length) {
             content.criteria.category = $scope.data.extra.categories.map(function(item) {
-              return item.pk_content_category;
+              return item.id;
             });
           } else {
             content.criteria.category = [];

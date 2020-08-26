@@ -38,13 +38,13 @@ class MonographsController extends Controller
         $this->category     = 0;
         $this->categoryName = $this->get('request_stack')
             ->getCurrentRequest()
-            ->query->get('category_name', '');
+            ->query->get('category_slug', '');
 
         if (!empty($this->categoryName)) {
             $category = $this->get('api.service.category')
                 ->getItemBySlug($this->categoryName);
 
-            $this->category = $category->pk_content_category;
+            $this->category = $category->id;
         }
 
         $this->view->assign([
@@ -102,7 +102,7 @@ class MonographsController extends Controller
             ];
 
             if ($this->category != 0) {
-                $filters['pk_fk_content_category'] = [ [ 'value' => $this->category ] ];
+                $filters['category_id'] = [ [ 'value' => $this->category ] ];
             }
 
             $monographs = $em->findBy($filters, $order, $epp, $page);
@@ -159,7 +159,7 @@ class MonographsController extends Controller
     {
         $dirtyID      = $request->get('special_id', '');
         $urlSlug      = $request->get('slug', '');
-        $categoryName = $request->get('category_name', '');
+        $categoryName = $request->get('category_slug', '');
 
         $special = $this->get('content_url_matcher')
             ->matchContentUrl('special', $dirtyID, $urlSlug, $categoryName);

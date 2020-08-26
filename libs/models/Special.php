@@ -54,16 +54,6 @@ class Special extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate('special', [
-                    'id'       => sprintf('%06d', $this->id),
-                    'date'     => date('YmdHis', strtotime($this->created)),
-                    'category' => urlencode($this->category_name),
-                    'slug'     => urlencode($this->slug),
-                ]);
-
-                return ($uri !== '') ? $uri : $this->permalink;
-
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
 
@@ -100,7 +90,7 @@ class Special extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN specials ON pk_content = pk_special WHERE pk_content=?',
                 [ $id ]
             );

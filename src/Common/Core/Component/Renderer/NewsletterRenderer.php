@@ -145,11 +145,9 @@ class NewsletterRenderer
      */
     public function hydrateContent($content)
     {
-        $content->cat    = $content->category_name;
-        $content->name   = (isset($content->name)) ? $content->name : '';
-        $content->image  = (isset($content->cover)) ? $content->cover : '';
-        $content->agency = $content->params['agencyBulletin'] ?? '';
-        $content->date   = date(
+        $content->name  = (isset($content->name)) ? $content->name : '';
+        $content->image = (isset($content->cover)) ? $content->cover : '';
+        $content->date  = date(
             'Y-m-d',
             strtotime(str_replace('/', '-', substr($content->created, 6)))
         );
@@ -266,7 +264,7 @@ class NewsletterRenderer
         if (!empty($criteria->category)
             && !in_array($criteria->content_type, [ 'opinion', 'letter', 'static_page' ])
         ) {
-            $searchCriteria['pk_fk_content_category'] = [
+            $searchCriteria['category_id'] = [
                 [ 'value' => $criteria->category, 'operator' => 'IN' ]
             ];
         }

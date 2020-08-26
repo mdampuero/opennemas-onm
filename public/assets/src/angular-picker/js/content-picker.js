@@ -93,7 +93,7 @@
                             '[% selected.lastSelected.title %]' +
                           '</strong>' +
                         '</li>' +
-                        '<li ng-show="selected.lastSelected.category_name"><strong>[% picker.params.explore.category %]:</strong> [% selected.lastSelected.category_name %]</li>' +
+                        '<li><strong>[% picker.params.explore.category %]:</strong> [% (categories | filter: { id: selected.lastSelected.category_id })[0].title %]</li>' +
                         '<li ng-show="selected.lastSelected.created"><strong>[% picker.params.explore.created %]:</strong> [% selected.lastSelected.created | moment %]</li>' +
                         '<li ng-show="selected.lastSelected.description">' +
                           '<div><strong>[% picker.params.explore.description %]</strong></div>' +
@@ -551,6 +551,8 @@
             } else {
               $scope.contents = $scope.contents.concat(response.data.results);
             }
+
+            $scope.categories    = response.data.categories;
 
             $scope.total = response.data.total;
 

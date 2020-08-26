@@ -150,14 +150,12 @@ class OpinionController extends ContentOldController
         foreach ($otherOpinions as &$otOpinion) {
             $otOpinion->author           = $opinion->author;
             $otOpinion->author_name_slug = $opinion->author_name_slug;
-            $otOpinion->uri              = $otOpinion->uri;
         }
 
         $params = [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
-            'opinion'        => $opinion,
-            'blog'           => $opinion,
+            'item'           => $opinion,
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,

@@ -66,6 +66,9 @@
           </div>
         </div>
       </div>
+      {acl isAllowed="USER_ADMIN"}
+        {include file="ui/component/content-editor/accordion/slug.tpl"}
+      {/acl}
       <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.user_groups }" ng-click="expanded.user_groups = !expanded.user_groups">
         <i class="fa fa-users m-r-10"></i>{t}User Groups{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.user_groups }"></i>
@@ -99,8 +102,9 @@
           <div class="m-t-10" ng-show="isHelpEnabled()">
             <small class="help m-l-3">
               <i class="fa fa-info-circle m-r-5 text-info"></i>
-              {t}Used for interface, messages and units in the control panel{/t}</div>
+              {t}Used for interface, messages and units in the control panel{/t}
             </small>
+          </div>
         </div>
       </div>
       {/acl}

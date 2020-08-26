@@ -192,8 +192,8 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $params['contents']    = $contents;
-        $params['pagination']  = $this->get('paginator')->get([
+        $params['contents']   = $contents;
+        $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'boundary'    => false,
             'epp'         => $params['epp'],

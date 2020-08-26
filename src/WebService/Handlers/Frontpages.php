@@ -31,7 +31,7 @@ class Frontpages
             $category = getService('api.service.category')->getItemBySlug($category);
 
             list(, $contentsInHomepage, , ) = getService('api.service.frontpage')
-                ->getCurrentVersionForCategory($category->pk_content_category);
+                ->getCurrentVersionForCategory($category->id);
 
             // Get all frontpages images
             $imageIdsList = [];
@@ -57,12 +57,14 @@ class Frontpages
                 $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
             }
 
-            $ur = getService('user_repository');
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-                $content->author = $ur->find($content->fk_author);
-                if (!is_null($content->author)) {
-                    $content->author->external = 1;
+                try {
+                    $author = getService('api.service.author')->getItem($content->fk_author);
+
+                    $content->agency    = !empty($author) ? $author->name : $content->agency;
+                    $content->fk_author = null;
+                } catch (\Exception $e) {
                 }
 
                 // Load attached and related contents from array
@@ -72,12 +74,11 @@ class Frontpages
 
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
-                    $content->uri         = "ext" . $content->uri;
                     $content->externalUri = getService('router')
                         ->generate(
                             'frontend_external_article_show',
                             [
-                                'category_name' => $content->category_name,
+                                'category_slug' => get_category_slug($content),
                                 'slug'          => $content->slug,
                                 'article_id'    => date('YmdHis', strtotime($content->created)) .
                                                    sprintf('%06d', $content->pk_content),
@@ -96,16 +97,16 @@ class Frontpages
                 foreach ($content->related_contents as &$item) {
                     // Generate content uri if it's not an attachment
                     if ($item->fk_content_type == '4') {
-                        $item->uri = "ext" . preg_replace('@//@', '/author/', $item->uri);
+                        $item->externalUri = "ext" . preg_replace('@//@', '/author/', get_url($item));
                     } elseif ($item->fk_content_type == 3) {
                         // Get instance media
                         $basePath = INSTANCE_MEDIA;
                         // Get file path for attachments
                         $filePath = \ContentManager::getFilePathFromId($item->id);
                         // Compose the full url to the file
-                        $item->fullFilePath = $basePath . FILE_DIR . $filePath;
+                        $item->externalUri = $basePath . FILE_DIR . $filePath;
                     } else {
-                        $item->uri = "ext" . $item->uri;
+                        $item->externalUri = "ext" . get_url($item);
                     }
                 }
             }
@@ -118,7 +119,7 @@ class Frontpages
     }
 
     /*
-    * @url GET /frontpages/allcontentblog/:category_name/:page
+    * @url GET /frontpages/allcontentblog/:category_slug/:page
     */
     public function allContentBlog($categoryName, $page = 1)
     {
@@ -135,10 +136,19 @@ class Frontpages
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
+            'join' => [
+                [
+                    'type'                => 'INNER',
+                    'table'               => 'content_category',
+                    'contents.pk_content' => [
+                        [ 'value' => 'content_category.content_id', 'field' => true ]
+                    ]
+                ]
+            ],
             'content_type_name' => [[ 'value' => 'article' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'category_name'     => [[ 'value' => $category->name ]],
+            'category_id'       => [ [ 'value' => $category->id ] ],
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => '0000-00-00 00:00:00' ],
@@ -175,26 +185,24 @@ class Frontpages
             $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
         }
 
-        $ur = getService('user_repository');
         // Overloading information for contents
         foreach ($articles as &$content) {
-            // Load category related information
-            $content->author = $ur->find($content->fk_author);
+            // Load related information
+            try {
+                $author = getService('api.service.author')->getItem($content->fk_author);
 
-            if (!is_null($content->author)) {
-                $content->author->photo            = $content->author->getPhoto();
-                $content->author->photo->media_url = MEDIA_IMG_ABSOLUTE_URL;
-                $content->author->external         = 1;
+                $content->agency    = !empty($author) ? $author->name : $content->agency;
+                $content->fk_author = null;
+            } catch (\Exception $e) {
             }
 
              // Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
-                $content->uri         = "ext" . $content->uri;
                 $content->externalUri = getService('router')
                     ->generate(
                         'frontend_external_article_show',
                         [
-                            'category_name' => $content->category_name,
+                            'category_slug' => get_category_slug($content),
                             'slug'          => $content->slug,
                             'article_id'    => date('YmdHis', strtotime($content->created)) .
                                                sprintf('%06d', $content->pk_content),
@@ -216,7 +224,7 @@ class Frontpages
             'route' => [
                 'name'   => 'categ_sync_frontpage',
                 'params' => [
-                    'category_name' => $categoryName,
+                    'category_slug' => $categoryName,
                 ]
             ]
         ]);

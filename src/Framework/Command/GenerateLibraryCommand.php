@@ -74,17 +74,17 @@ EOF
         $mh = curl_multi_init();
 
         foreach ($menu->items as $item) {
-            $category_name = $item->link;
+            $category_slug = $item->link;
 
-            if (!empty($category_name)) {
-                $curly[$category_name] = curl_init();
+            if (!empty($category_slug)) {
+                $curly[$category_slug] = curl_init();
 
-                $url = $urlBase . $category_name . '/';
-                curl_setopt($curly[$category_name], CURLOPT_URL, $url);
-                curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
-                curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
+                $url = $urlBase . $category_slug . '/';
+                curl_setopt($curly[$category_slug], CURLOPT_URL, $url);
+                curl_setopt($curly[$category_slug], CURLOPT_HEADER, 0);
+                curl_setopt($curly[$category_slug], CURLOPT_RETURNTRANSFER, 1);
 
-                curl_multi_add_handle($mh, $curly[$category_name]);
+                curl_multi_add_handle($mh, $curly[$category_slug]);
             }
         }
 
@@ -111,12 +111,12 @@ EOF
         array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
 
           // get content and remove handles
-        foreach ($curly as $category_name => $c) {
+        foreach ($curly as $category_slug => $c) {
             $htmlOut = curl_multi_getcontent($c);
 
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
-            $newFile = $basePath . $category_name . ".html";
+            $newFile = $basePath . $category_slug . ".html";
             file_put_contents($newFile, $htmlOut);
 
             curl_multi_remove_handle($mh, $c);

@@ -27,7 +27,12 @@
             "app/AppCache.php"
         ],
         "files": [
-            "libs/functions.php"
+            "libs/functions.php",
+            "src/Common/Core/Functions/category.php",
+            "src/Common/Core/Functions/content.php",
+            "src/Common/Core/Functions/helper.php",
+            "src/Common/Core/Functions/author.php",
+            "src/Common/Core/Functions/photo.php"
         ]
     },
     "autoload-dev": {
@@ -76,8 +81,6 @@
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
         "google/recaptcha": "1.1.3",
-        "paypal/adaptivepayments-sdk-php": "v3.9.2",
-        "paypal/merchant-sdk-php": "v3.9.1",
         "rtconner/freshbooks-api": "dev-master"
     },
     "require-dev": {

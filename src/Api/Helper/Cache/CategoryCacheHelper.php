@@ -35,11 +35,11 @@ class CategoryCacheHelper extends CacheHelper
     public function deleteItem(Category $category) : CacheHelper
     {
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
-            [ 'category', 'list', $category->pk_content_category ]
+            [ 'category', 'list', $category->id ]
         ]))->push(new ServiceTask('core.service.assetic.dynamic_css', 'deleteTimestamp', [
             '%global%'
         ]))->push(new ServiceTask('core.service.assetic.dynamic_css', 'deleteTimestamp', [
-            $category->pk_content_category
+            $category->id
         ]));
 
         return $this;
