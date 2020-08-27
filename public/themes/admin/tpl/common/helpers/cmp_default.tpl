@@ -21,7 +21,8 @@
 </script>
 <!-- OneTrust CMP Builder end -->
 <style>
-  .ot-floating-button {
+  .ot-floating-button,
+  button#onetrust-reject-all-handler {
     display: none !important;
   }
 </style>
