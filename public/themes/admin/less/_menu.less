@@ -1,20 +1,56 @@
-.input-wrapper {
+.menu-item {
+  background: #fff;
+  border: 1px solid #d1dade;
+  margin-bottom: 15px;
+  padding: 5px;
   position: relative;
 
-  input {
-    background: none;
-    opacity: .9999;
+  & + .angular-ui-tree-nodes {
     padding-left: 30px !important;
-    transition: all .25s;
-
-    &:focus {
-      padding-left: 8px !important;
-    }
   }
 
-  .fa {
-    margin: 12px 0 0 12px;
-    position: absolute;
-    z-index: 0;
+  &:hover {
+    border-color: #d1dade;
   }
+}
+
+.menu-item-button {
+  margin-top: -19px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+}
+
+.menu-item-type-icon {
+  height: 24px;
+  margin-top: -12px;
+  padding: 5px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 24px;
+}
+
+.menu-item-title[type=text],
+.menu-item-link[type=text] {
+  border-color: transparent;
+
+  &:hover {
+    border-color: transparent;
+  }
+
+  &:focus {
+    border-color: #d1dade;
+  }
+}
+
+.menu-item-link[type=text] {
+  &[disabled] {
+    border-color: transparent;
+    font-color: #d1fade;
+  }
+}
+
+.menu-items .angular-ui-tree-placeholder {
+  margin-bottom: 15px !important;
 }
