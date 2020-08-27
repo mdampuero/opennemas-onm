@@ -125,8 +125,6 @@ class User
     public function __get($property)
     {
         switch ($property) {
-            case 'photo':
-                return $this->getPhoto();
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->name);
             default:
@@ -198,26 +196,6 @@ class User
             error_log($e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Returns the Photo object that represents the user avatar
-     *
-     * @return Photo the photo object
-     */
-    public function getPhoto()
-    {
-        $photo = null;
-
-        if (!property_exists($this, 'photo')
-            || ((property_exists($this, 'photo')
-            && !is_object($this->photo)
-            && $this->avatar_img_id != 0))
-        ) {
-            $this->photo = $photo = getService('api.service.photo')->getItem($this->avatar_img_id);
-        }
-
-        return $photo;
     }
 
     /**

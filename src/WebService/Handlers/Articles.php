@@ -54,12 +54,6 @@ class Articles
             }
         }
 
-        if (is_object($article->author) && !empty($article->author)) {
-            if (!empty($article->author->avatar_img_id)) {
-                $article->author->photo = $article->author->getPhoto();
-            }
-        }
-
         // Get inner video for this article
         if (isset($article->fk_video2)) {
             $videoInt          = $er->find('Video', $article->fk_video2);
