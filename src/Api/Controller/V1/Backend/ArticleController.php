@@ -215,41 +215,20 @@ class ArticleController extends Controller
      */
     protected function getRelated(&$article)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $fm    = $this->get('data.manager.filter');
-        $keys  = [ 'frontpage', 'inner', 'home' ];
-        $rm    = $this->get('related_contents');
-
-        foreach ($keys as $key) {
-            $name = 'related' . ucfirst(str_replace('page', '', $key));
-
-            if ($key === 'home'
-                && !$this->get('core.security')->hasExtension('CRONICAS_MODULES')
-            ) {
-                continue;
-            }
-
-            $relations = $rm->getRelations($article->id, $key);
-
-            if (empty($relations)) {
-                continue;
-            }
-
-            $extra[$name] = array_map(function ($content) {
-                return \Onm\StringUtils::convertToUtf8($content);
-            }, $em->findMulti($relations));
-
-            $extra[$name] = $fm->set($extra[$name])
-                ->filter('localize', [ 'keys' => [ 'title' ] ])
-                ->get();
-
-            $article->{$name} = array_map(function ($a) {
-                return $a[1];
-            }, $relations);
+        if (empty($article->related_contents)) {
+            return [ 'related' => [] ];
         }
 
-        return $extra;
+        $repository = $this->get('entity_repository');
+        $contents   = array_filter(array_map(function ($a) use ($repository) {
+            return $repository->find($a['content_type_name'], $a['target_id']);
+        }, $article->related_contents));
+
+        $contents = $this->get('data.manager.filter')->set($contents)
+            ->filter('mapify', [ 'key' => 'pk_content' ])
+            ->get();
+
+        return [ 'related' => $contents ];
     }
 
     /**
