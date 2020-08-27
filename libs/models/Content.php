@@ -392,7 +392,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->id = null;
         }
 
-        $this->loadMetas()->loadRelatedContents();
+        $this->loadMetas()->loadRelated();
 
         if (isset($this->fk_content_type)) {
             $this->content_type = $this->fk_content_type;
@@ -1899,21 +1899,21 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @return Content The current object.
      */
-    protected function loadRelatedContents()
+    protected function loadRelated()
     {
         $this->related_contents = [];
 
         try {
             $this->related_contents = getService('dbal_connection')->fetchAll(
                 'SELECT `target_id`, `type`, `caption`, `content_type_name`'
-                . 'FROM `related_contents` '
+                . 'FROM `content_content` '
                 . 'LEFT JOIN contents ON source_id = pk_content WHERE source_id=? '
-                . 'ORDER BY `type` ASC, `related_contents`.`position` ASC',
+                . 'ORDER BY `type` ASC, `content_content`.`position` ASC',
                 [ (int) $this->pk_content ]
             );
         } catch (\Exception $e) {
             getService('error.log')
-                ->error('Error on Content:loadRelatedContents: ' . $e->getMessage());
+                ->error('Error on Content:loadRelated: ' . $e->getMessage());
         }
 
         return $this;
@@ -1988,6 +1988,57 @@ class Content implements \JsonSerializable, CsvSerializable
 
         return $value;
     }
+
+    /**
+     * Saves the list of related contents.
+     *
+     * @param array $data The information for the article.
+     *
+     * @return Article The current article for method chaining.
+     */
+    protected function saveRelated($data)
+    {
+        $conn = getService('dbal_connection');
+
+        $conn->executeQuery(
+            'DELETE FROM content_content WHERE source_id = ?',
+            [ $this->pk_content ]
+        );
+
+        if (!array_key_exists('related_contents', $data)
+            || empty($data['related_contents'])
+        ) {
+            return $this;
+        }
+
+        $related  = [];
+        $position = 0;
+
+        for ($i = 0; $i < count($data['related_contents']); $i++) {
+            if ($i > 0
+                && $data['related_contents'][$i]['type']
+                    !== $data['related_contents'][$i - 1]['type']
+            ) {
+                $position = 0;
+            }
+
+            $related[] = $this->pk_content;
+            $related[] = $data['related_contents'][$i]['target_id'];
+            $related[] = $data['related_contents'][$i]['type'];
+            $related[] = !empty($data['related_contents'][$i]['caption'])
+                ? $data['related_contents'][$i]['caption'] : null;
+            $related[] = $position++;
+        }
+
+        $sql = 'INSERT INTO content_content '
+            . '(source_id, target_id, type, caption, position) VALUES '
+            . str_repeat('(?,?,?,?,?),', count($data['related_contents']));
+
+        $conn->executeQuery(trim($sql, ','), $related);
+
+        return $this;
+    }
+
 
     /**
      * Serializes the l10n properties before trying to save/update the current

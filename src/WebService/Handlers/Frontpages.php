@@ -69,8 +69,7 @@ class Frontpages
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
-                    ->loadAttachedVideo()
-                    ->loadRelatedContents($category);
+                    ->loadAttachedVideo();
 
                 //Change uri for href links except widgets
                 if ($content->content_type_name != 'widget') {
@@ -212,8 +211,7 @@ class Frontpages
 
             // Load attached and related contents from array
             $content->loadFrontpageImageFromHydratedArray($imageList)
-                ->loadAttachedVideo()
-                ->loadRelatedContents($categoryName);
+                ->loadAttachedVideo();
         }
 
         // Set pagination

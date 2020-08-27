@@ -383,8 +383,6 @@ class CategoryController extends FrontendController
     protected function hydrateContents($contents, $params)
     {
         foreach ($contents as &$content) {
-            $content->loadRelatedContents($params['category']->name);
-
             if (isset($content->img1)
                 && !empty($content->img1)
                 && array_key_exists($content->img1, $params['o_media'])
