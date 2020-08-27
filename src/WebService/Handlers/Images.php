@@ -8,6 +8,7 @@
  */
 namespace WebService\Handlers;
 
+use Api\Exception\GetItemException;
 use Luracast\Restler\RestException;
 
 /**
@@ -26,7 +27,11 @@ class Images
     {
         $this->validateInt(func_get_args());
 
-        $image = getService('api.service.photo')->getItem($id);
+        try {
+            $image = getService('api.service.photo')->getItem($id);
+        } catch (GetItemException $e) {
+            throw new RestException(400, 'Photo not found');
+        }
 
         return $image;
     }
