@@ -90,26 +90,6 @@ window.showMessage = function(message, type, time, id) {
 };
 
 /**
- * @function initializePopovers
- *
- * @description
- *   Initializes the UI popovers
- */
-window.initializePopovers = function() {
-  jQuery('div.placeholder div.content-provider-element .info').each(function() {
-    var element = jQuery(this);
-
-    jQuery(this).popover({
-      placement: 'top',
-      animation: false,
-      title: window.get_tooltip_title(element),
-      content: window.get_tooltip_content(element),
-      html: true
-    });
-  });
-};
-
-/**
  * @function makeContentProviderAndPlaceholdersSortable
  *
  * @description
@@ -166,6 +146,29 @@ window.remove_element = function(element) {
   });
 };
 
+window.initializePopovers = function() {
+  $('div.placeholder div.content-provider-element .info').each(
+    function() {
+      var element = jQuery(this);
+
+      element.on('mouseenter', function() {
+        element.popover({
+          placement: 'top',
+          animation: false,
+          title: window.get_tooltip_title(element),
+          content: window.get_tooltip_content(element),
+          html: true
+        });
+
+        element.popover('show');
+      });
+
+      element.on('mouseleave', function() {
+        $(this).popover('hide');
+      });
+    });
+};
+
 jQuery(function($) {
   /*
    **************************************************************************
@@ -211,14 +214,6 @@ jQuery(function($) {
 
   $('div.content').on('mouseleave', 'div.placeholder div.content-provider-element', function() {
     $(this).find('.content-action-buttons').removeClass('open');
-  });
-
-  $('div.placeholder').on('mouseenter', 'div.content-provider-element .info', function() {
-    $('div.placeholder div.content-provider-element .info').popover('show');
-  });
-
-  $('div.placeholder').on('mouseleave', 'div.content-provider-element .info', function() {
-    $('div.placeholder div.content-provider-element .info').popover('hide');
   });
 
   window.initializePopovers();
