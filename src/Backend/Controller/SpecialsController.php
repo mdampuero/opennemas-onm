@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,9 +109,10 @@ class SpecialsController extends Controller
 
         $contents = $special->getContents($id);
 
-        if (!empty($special->img1)) {
+        try {
             $photo1 = getService('api.service.photo')->getItem($special->img1);
             $this->view->assign('photo1', $photo1);
+        } catch (GetItemException $e) {
         }
 
         $contentsLeft  = [];
