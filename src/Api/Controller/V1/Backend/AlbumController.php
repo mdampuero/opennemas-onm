@@ -9,6 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Request;
 
 class AlbumController extends ContentOldController
@@ -108,11 +109,8 @@ class AlbumController extends ContentOldController
 
         foreach ($content as $item) {
             try {
-                $photo = $service->getItem($item->cover_id);
-
-                if (!empty($photo)) {
-                    $extra[] = $service->responsify($photo);
-                }
+                $photo   = $service->getItem($item->cover_id);
+                $extra[] = $service->responsify($photo);
             } catch (GetItemException $e) {
             }
         }
