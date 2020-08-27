@@ -146,6 +146,12 @@ window.remove_element = function(element) {
   });
 };
 
+/**
+ * @function initializePopovers
+ *
+ * @description
+ *   Initializes the UI popovers
+ */
 window.initializePopovers = function() {
   $('div.placeholder div.content-provider-element .info').each(
     function() {
