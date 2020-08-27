@@ -21,7 +21,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         return $output;
     }
 
-    if (empty($ds->get('cmp_script'))) {
+    if ((int) $ds->get('cookies') !== 2) {
         return $output;
     }
 
@@ -37,12 +37,10 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/rss/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
+        $cmp  = [ 'default', 'custom_quantcast', 'custom_onetrust' ];
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
-            'common/helpers/cmp.tpl',
-            [
-                'lang' => $smarty->getContainer()->get('core.locale')->getLocaleShort(),
-                'site' => $ds->get('site_name')
-            ]
+            'common/helpers/cmp_' . $cmp[(int) $ds->get('cmp_type')] . '.tpl',
+            [ 'id' => $ds->get('cmp_id') ]
         );
 
         $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);
