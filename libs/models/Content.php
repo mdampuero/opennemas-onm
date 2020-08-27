@@ -1907,7 +1907,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->related_contents = getService('dbal_connection')->fetchAll(
                 'SELECT `target_id`, `type`, `caption`, `content_type_name`'
                 . 'FROM `content_content` '
-                . 'LEFT JOIN contents ON source_id = pk_content WHERE source_id=? '
+                . 'LEFT JOIN contents ON target_id = pk_content WHERE source_id=? '
                 . 'ORDER BY `type` ASC, `content_content`.`position` ASC',
                 [ (int) $this->pk_content ]
             );

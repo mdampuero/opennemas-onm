@@ -68,9 +68,9 @@ class EntityManager extends BaseManager
      */
     private function findOne($contentType, $id, $isMulti = false)
     {
-        $entity = null;
-
-        $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
+        $entity      = null;
+        $contentType = \classify($contentType);
+        $cacheId     = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!empty($id)
             && class_exists($contentType)
