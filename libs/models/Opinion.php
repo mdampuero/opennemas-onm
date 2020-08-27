@@ -82,23 +82,6 @@ class Opinion extends Content
     }
 
     /**
-     * Magic method for getting not assigned variables
-     *
-     * @param string $name the property name
-     *
-     * @return mixed the value of the property
-     */
-    public function __get($name)
-    {
-        switch ($name) {
-            case 'uri':
-                return ltrim(getService('core.helper.url_generator')->generate($this), '/');
-            default:
-                return parent::__get($name);
-        }
-    }
-
-    /**
      * Creates a new opinion article given an array of data
      *
      * @param array $data the

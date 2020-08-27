@@ -251,7 +251,10 @@ function has_description($item) : bool
  */
 function has_featured_media($item, string $type) : bool
 {
-    return !empty(get_featured_media($item, $type));
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_featured_media($item, $type))
+        && !getService('core.helper.subscription')->isHidden($token, 'media');
 }
 
 /**
@@ -265,7 +268,10 @@ function has_featured_media($item, string $type) : bool
  */
 function has_featured_media_caption($item, string $type) : bool
 {
-    return !empty(get_featured_media_caption($item, $type));
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_featured_media_caption($item, $type))
+        && !getService('core.helper.subscription')->isHidden($token, 'media');
 }
 
 /**
@@ -277,7 +283,10 @@ function has_featured_media_caption($item, string $type) : bool
  */
 function has_pretitle($item) : bool
 {
-    return !empty(get_pretitle($item));
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_pretitle($item))
+        && !getService('core.helper.subscription')->isHidden($token, 'pretitle');
 }
 
 /**
@@ -302,7 +311,10 @@ function has_related_contents($item, string $type) : bool
  */
 function has_summary($item) : bool
 {
-    return !empty(get_summary($item));
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_summary($item))
+        && !getService('core.helper.subscription')->isHidden($token, 'summary');
 }
 
 /**
@@ -314,5 +326,8 @@ function has_summary($item) : bool
  */
 function has_title($item) : bool
 {
-    return !empty(get_title($item));
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_title($item))
+        && !getService('core.helper.subscription')->isHidden($token, 'title');
 }

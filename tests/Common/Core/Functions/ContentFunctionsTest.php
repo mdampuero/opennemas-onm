@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Core\Components\Functions;
+namespace Tests\Common\Core\Functions;
 
 use Common\Model\Entity\Content;
 
@@ -34,6 +34,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
+            ->getMock();
+
+        $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isHidden' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -64,6 +69,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.helper.subscription':
+                return $this->helper;
+
             case 'core.template.frontend':
                 return $this->template;
 
@@ -126,7 +134,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMedia()
     {
-        $photo   = new Content([
+        $photo = new Content([
             'id'             => 893,
             'content_status' => 1,
             'starttime'      => new \Datetime('2020-01-01 00:00:00')
@@ -279,8 +287,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->content->content_type_name = 'article';
         $this->content->img1_footer       = 'Rhoncus pretium';
 
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_featured_media_caption($this->content, 'baz'));
-        $this->assertFalse(has_featured_media_caption($this->content, 'inner'));
+        $this->assertFalse(has_featured_media_caption($this->content, 'frontpage'));
         $this->assertTrue(has_featured_media_caption($this->content, 'frontpage'));
     }
 
@@ -289,9 +300,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasPretitle()
     {
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_pretitle($this->content));
 
         $this->content->pretitle = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertFalse(has_pretitle($this->content));
         $this->assertTrue(has_pretitle($this->content));
     }
 
@@ -300,9 +315,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasSummary()
     {
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_summary($this->content));
 
         $this->content->summary = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertFalse(has_summary($this->content));
         $this->assertTrue(has_summary($this->content));
     }
 
@@ -311,9 +330,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasTitle()
     {
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_title($this->content));
 
         $this->content->title = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertFalse(has_title($this->content));
         $this->assertTrue(has_title($this->content));
     }
 }

@@ -150,7 +150,6 @@ class OpinionController extends ContentOldController
         foreach ($otherOpinions as &$otOpinion) {
             $otOpinion->author           = $opinion->author;
             $otOpinion->author_name_slug = $opinion->author_name_slug;
-            $otOpinion->uri              = $otOpinion->uri;
         }
 
         $params = [

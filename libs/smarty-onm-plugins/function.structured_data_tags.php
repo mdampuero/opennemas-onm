@@ -14,7 +14,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
 
     try {
         $category = $container->get('api.service.category')
-            ->getItem($content->pk_fk_content_category);
+            ->getItem($content->category_id);
     } catch (\Exception $e) {
         return '';
     }

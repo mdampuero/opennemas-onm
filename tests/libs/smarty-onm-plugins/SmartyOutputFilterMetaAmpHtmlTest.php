@@ -176,7 +176,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $content = new \Content();
         $content->load([
             'pk_content'        => 27616,
-            'category_name'     => 'gorp',
+            'category_slug'     => 'gorp',
             'created'           => '1999-12-31 23:59:59',
             'content_type_name' => 'opinion',
             'slug'              => 'foobar-thud'

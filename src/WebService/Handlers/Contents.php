@@ -101,8 +101,8 @@ class Contents
     {
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT name FROM `contents_categories`,`content_categories` '
-                . 'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
+                'SELECT name FROM `content_category`,`category` '
+                . 'WHERE category_id = id AND content_id =?',
                 [ $id ]
             );
 
@@ -126,8 +126,8 @@ class Contents
     {
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT title FROM `contents_categories`,`content_categories` '
-                . 'WHERE pk_fk_content_category = pk_content_category AND pk_fk_content =?',
+                'SELECT title FROM `content_category`,`category` '
+                . 'WHERE category_id = id AND content_id =?',
                 [ $id ]
             );
 

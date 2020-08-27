@@ -55,7 +55,7 @@ class SpecialsController extends Controller
                 ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'category_id'    => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'favorite'       => $request->request->filter('favorite', 0, FILTER_SANITIZE_STRING),
@@ -134,7 +134,7 @@ class SpecialsController extends Controller
         $ls = $this->get('core.locale');
         return $this->render('special/new.tpl', [
             'special'  => $special,
-            'category' => $special->category,
+            'category' => $special->category_id,
             'locale'   => $ls->getRequestLocale('frontend'),
         ]);
     }
@@ -174,7 +174,7 @@ class SpecialsController extends Controller
                     ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'description'    => $request->request->get('description', ''),
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-                'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+                'category_id'    => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
                 'favorite'       => $request->request->filter('favorite', 0, FILTER_SANITIZE_STRING),
@@ -216,7 +216,7 @@ class SpecialsController extends Controller
     public function deleteAction(Request $request)
     {
         $id       = $request->query->getDigits('id');
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category_id', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {

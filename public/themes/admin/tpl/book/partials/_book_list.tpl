@@ -57,7 +57,7 @@
           </div>
         </li>
         <li class="hidden-xs m-r-10 ng-cloak quicklinks"  ng-init="categories = {json_encode($categories)|clear_json}">
-          <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
+          <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.category_id" placeholder="{t}Any{/t}"></onm-category-selector>
         </li>
         <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ]">
           <ui-select name="status" theme="select2" ng-model="criteria.content_status">
@@ -102,7 +102,6 @@
                 </div>
               </th>
               <th class="title">{t}Title{/t}</th>
-              <th class="hidden-xs" width="200">{t}Section{/t}</th>
               {acl isAllowed="BOOK_AVAILABLE"}
               <th class="hidden-xs text-center" width="100">{t}Home{/t}</th>
               {/acl}
@@ -136,14 +135,6 @@
                 </button>
                 {/acl}
               </div>
-            </td>
-            <td class="hidden-xs">
-              <span ng-if="content.category_name">
-                [% extra.categories[content.category] %]
-              </span>
-              <span ng-if="!content.category_name">
-                {t}Unassigned{/t}
-              </span>
             </td>
             {acl isAllowed="BOOK_HOME"}
             <td class="hidden-xs text-center">

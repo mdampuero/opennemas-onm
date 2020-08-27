@@ -23,7 +23,7 @@
          * @type {Object}
          */
         $scope.criteria = {
-          pk_content_category: null,
+          id: null,
           content_type_name: 'kiosko',
           epp: 10,
           in_litter: 0,
@@ -65,7 +65,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return item.categories.indexOf(e.pk_content_category) !== -1;
+            return item.categories.indexOf(e.id) !== -1;
           });
 
           if (categories.length === 0) {
@@ -76,7 +76,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_name: categories[0].name
+              category_slug: categories[0].name
             })
           );
         };

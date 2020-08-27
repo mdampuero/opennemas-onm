@@ -172,6 +172,6 @@ class CategoryController extends ApiController
      */
     protected function getItemId($item)
     {
-        return $item->pk_content_category;
+        return $item->id;
     }
 }
