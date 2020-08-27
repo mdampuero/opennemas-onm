@@ -1408,39 +1408,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Returns true if this content is only available from paywall
-     *
-     * @return boolean true if only avilable for subscribers
-     */
-    public function isOnlyAvailableForSubscribers()
-    {
-        $onlySubscribers = false;
-        if (is_array($this->params) && array_key_exists('only_subscribers', $this->params)) {
-            $onlySubscribers = ($this->params['only_subscribers'] == true);
-        }
-
-        return $onlySubscribers;
-    }
-
-    /**
-     * Checks if the content is only available for registered users.
-     *
-     * @return boolean True if content is only available for registered users.
-     */
-    public function isOnlyAvailableForRegistered()
-    {
-        $available = false;
-
-        if (is_array($this->params)
-            && array_key_exists('only_registered', $this->params)
-        ) {
-            $available = ($this->params['only_registered'] == true);
-        }
-
-        return $available;
-    }
-
-    /**
      * Loads the attached video's information for the content.
      * If force param is true don't take care of attached images.
      *
@@ -1461,35 +1428,6 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         return $this;
-    }
-
-    /**
-     * Checks if this content is in one category frontpage given the category id
-     *
-     * @param int $categoryID the category id
-     *
-     * @return boolean true if it is in the category
-     */
-    public function isInFrontpageOfCategory($categoryID = null)
-    {
-        if ($categoryID === null) {
-            $categoryID = $this->category_id;
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchColumn(
-                'SELECT count(*) FROM content_positions WHERE pk_fk_content=? AND fk_category=?',
-                [ $this->id, $categoryID ]
-            );
-
-            return $rs > 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                'Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')'
-            );
-
-            return false;
-        }
     }
 
     /**
