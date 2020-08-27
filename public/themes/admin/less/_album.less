@@ -1,31 +1,10 @@
-.album-thumbnail-sortable {
+.album-thumbnail-sortable:not(.ui-sortable-placeholder) {
   background: #fff;
   border: 1px solid transparent;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
   padding: 15px;
-
-  &.album-thumbnail-sortable-placeholder {
-    background: #f4f5f7;
-    border: 1px dashed #e5e5e5;
-  }
 
   &:hover {
     border: 1px solid #e5e5e5;
-  }
-
-  .img-thumbnail {
-    display: block;
-  }
-
-  .sort-icon {
-    border-left: 3px dotted #ccc;
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    height: 15px;
-    margin: -7px 0 0 -8px;
-    width: 2px;
   }
 
   .thumbnail-wrapper .confirm-dialog.open {
