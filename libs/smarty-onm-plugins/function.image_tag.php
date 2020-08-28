@@ -8,7 +8,6 @@ function smarty_function_image_tag($params, &$smarty)
         $photo         = getService('api.service.photo')->getItem($params['id']);
         $params['src'] = get_property($photo, 'path');
     } catch (\Exception $e) {
-        return '';
     }
 
     if (empty($params['src'])) {
