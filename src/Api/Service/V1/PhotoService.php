@@ -17,6 +17,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class PhotoService extends ContentService
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $defaults = [
+        'content_type_name' => 'photo',
+        'fk_content_type'   => 8
+    ];
+
+    /**
      *{@inheritdoc}
      */
     public function createItem($data = [], $file = null, bool $copy = false)
