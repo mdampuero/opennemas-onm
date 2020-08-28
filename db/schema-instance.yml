@@ -1,30 +1,3 @@
-action_counters:
-    columns:
-        id:
-            type: integer
-            options: { unsigned: true, autoincrement: true }
-        action_name:
-            type: string
-            options: { length: 255, default: null }
-        date:
-            type: datetime
-            options: { default: CURRENT_TIMESTAMP }
-        counter:
-            type: integer
-            options: { unsigned: true, default: 0 }
-    index:
-        -
-            name: PRIMARY
-            columns: [id]
-            primary: true
-            unique: true
-            flags: {  }
-        -
-            name: action_name
-            columns: [action_name]
-            primary: false
-            unique: false
-            flags: {  }
 advertisements:
     columns:
         pk_advertisement:
@@ -1105,36 +1078,6 @@ orders:
             primary: true
             unique: true
             flags: {  }
-pc_users:
-    columns:
-        pk_pc_user:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        email:
-            type: string
-            options: { length: 255, default: null }
-        name:
-            type: string
-            options: { length: 255, default: null }
-        firstname:
-            type: string
-            options: { length: 255, default: null }
-        lastname:
-            type: string
-            options: { length: 255, default: null }
-        status:
-            type: integer
-            options: { default: null }
-        subscription:
-            type: integer
-            options: { default: null }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_pc_user]
-            primary: true
-            unique: true
-            flags: {  }
 pclave:
     columns:
         id:
@@ -1285,61 +1228,46 @@ ratings:
             primary: true
             unique: true
             flags: {  }
-related_contents:
+content_content:
     columns:
-        pk_content1:
-            type: bigint
+        source_id:
+            type:    bigint
             options: { length: 20, unsigned: true }
-        pk_content2:
-            type: bigint
+        target_id:
+            type:    bigint
             options: { length: 20, unsigned: true }
-        relationship:
-            type: string
-            options: { length: 50, default: null, notnull: false }
-        text:
-            type: string
-            options: { length: 50, default: null, notnull: false }
+        type:
+            type:    string
+            options: { length: 50, default: null }
+        caption:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
         position:
-            type: integer
-            options: { default: 0 }
-        posinterior:
-            type: integer
-            options: { default: 0 }
-        verportada:
-            type: integer
-            options: { default: 0 }
-        verinterior:
-            type: integer
-            options: { default: 0 }
+            type:    integer
+            options: { default: 0, unsigned: true }
     index:
         -
-            name: pk_content1
-            columns: [pk_content1]
+            name:    source_id
+            columns: [ source_id ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {}
         -
-            name: pk_content2
-            columns: [pk_content2]
+            name:    target_id
+            columns: [ target_id ]
             primary: false
-            unique: false
-            flags: {  }
-        -
-            name: verportada
-            columns: [verportada]
-            primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {}
     foreign_keys:
         -
-            name: related_contents_content1_contents_id
-            source_field: [ pk_content1 ]
+            name:         related_contents_source_id_pk_content
+            source_field: [ source_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
         -
-            name: related_contents_content2_contents_id
-            source_field: [ pk_content2 ]
+            name:         related_contents_target_id_pk_content
+            source_field: [ target_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
