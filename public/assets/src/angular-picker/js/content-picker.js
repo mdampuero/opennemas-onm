@@ -302,7 +302,7 @@
               }
 
               if (attrs.contentPickerTarget && $scope.contentPickerTarget) {
-                var target = $scope.contentPickerTarget;
+                var target = angular.copy($scope.contentPickerTarget);
 
                 if (!(target instanceof Array)) {
                   target = [ target ];
@@ -472,10 +472,6 @@
          */
         $scope.insert = function() {
           var items = $scope.selected.items;
-
-          if ($scope.picker.selection.maxSize === 1) {
-            items = items[0];
-          }
 
           $rootScope.$broadcast(
             'ContentPicker.insert',
