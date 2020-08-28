@@ -1,4 +1,5 @@
 <div class="menu-item" ui-tree-handle>
+  <span class="angular-ui-tree-icon"></span>
   <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" uib-tooltip="{t}Module{/t}"></span>
   <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'blog-category'" uib-tooltip="{t}Category blog{/t}"></span>
   <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" uib-tooltip="{t}Frontpage{/t}"></span>
@@ -14,11 +15,11 @@
         </label>
         <input class="menu-item-title" data-nodrag ng-model="item.title[lang]" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.title[languageData.default] %]">
       </div>
-      <div class="col-sm-6 col-lg-6">
+      <div class="col-sm-6 col-lg-6" ng-if="item.type == 'external'">
         <label class="visible-xs">
           {t}Link to{/t}
         </label>
-        <input class="menu-item-link" data-nodrag ng-model="item.link[lang]" ng-disabled="item.type != 'external'" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]">
+        <input class="menu-item-link" data-nodrag ng-model="item.link[lang]" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]">
       </div>
     </div>
   </div>
