@@ -95,7 +95,7 @@
     <div class="grid-body">
       <div class="row">
         <div class="col-md-12">
-          <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable album-thumbnail-sortable-placeholder album-thumbnail-sortable-' + app.mode }" ng-model="item.photos">
+          <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable-' + app.mode }" ng-model="item.photos">
             <div class="album-thumbnail-sortable album-thumbnail-sortable-[% app.mode %]" ng-repeat="(index, photo) in item.photos">
               <div class="thumbnail-wrapper row">
                 <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ photo.pk_photo] }"></div>
@@ -112,7 +112,7 @@
                     </button>
                   </div>
                 </div>
-                <span class="sort-icon"></span>
+                <span class="ui-sortable-icon"></span>
                 <div ng-class="{ 'col-lg-2 col-sm-3': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
                   <div class="dynamic-image-placeholder">
                     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,200,200">
