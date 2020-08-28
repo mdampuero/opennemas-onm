@@ -155,11 +155,11 @@ class ContentRendererTest extends TestCase
      */
     public function testGetTemplateWhenBlog()
     {
-        $opinion        = new \Opinion();
-        $author         = new \User();
-        $author->meta   = [ 'is_blog' => 1 ];
-        $params['item'] = $opinion;
-        $tpl            = 'frontpage/contents/_blog.tpl';
+        $opinion         = new \Opinion();
+        $author          = new \User();
+        $author->is_blog = 1;
+        $params['item']  = $opinion;
+        $tpl             = 'frontpage/contents/_blog.tpl';
 
         $renderer = new ContentRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getTemplate');
