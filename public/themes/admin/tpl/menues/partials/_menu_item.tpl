@@ -1,5 +1,7 @@
-<div class="menu-item" ui-tree-handle>
-  <span class="angular-ui-tree-icon"></span>
+<div class="menu-item">
+  <span ui-tree-handle>
+    <span class="angular-ui-tree-icon"></span>
+  </span>
   <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" uib-tooltip="{t}Module{/t}"></span>
   <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'blog-category'" uib-tooltip="{t}Category blog{/t}"></span>
   <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" uib-tooltip="{t}Frontpage{/t}"></span>
