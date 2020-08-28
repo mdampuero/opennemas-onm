@@ -6,121 +6,208 @@
     </h4>
   </div>
   <div class="grid-body">
-    <div class="m-b-40">
-      <div class="clearfix">
-        <h5 class="pull-left">{t}Related in frontpage{/t}</h5>
-        <button class="btn btn-white btn-mini pull-right m-t-5" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="data.article.relatedFront" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
-          <i class="fa fa-plus"></i>
-          {t}Add contents{/t}
-        </button>
-      </div>
-      <div ui-sortable class="ng-cloak" ng-model="data.article.relatedFront">
-        <div class="related-item" ng-repeat="content in data.article.relatedFront">
-          <div class="related-item-info">
-            <span class="sort-icon"></span>
-            [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
+    <div class="row">
+      <div class="col-sm-6">
+        <h5>
+          {t}Related in frontpage{/t}
+        </h5>
+        <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
+          <div class="related" ui-tree-nodes="" ng-model="data.relatedFrontpage">
+            <div class="related-item" ng-repeat="r in data.relatedFrontpage" ui-tree-handle ui-tree-node>
+              <span class="angular-ui-tree-icon"></span>
+              <div class="related-item-info">
+                <span class="related-item-type">
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                </span>
+                <span class="related-item-title">
+                  [% related[r.target_id].title %]
+                </span>
+                <span class="related-item-status" ng-if="r.content_status == 0">
+                  ({t}No published{/t})
+                </span>
+              </div>
+              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.relatedFrontpage', $index)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
+            </div>
           </div>
-          <button class="btn btn-white" ng-click="removeItem('data.article.relatedFront', $index)">
-            <i class="fa fa-trash-o text-danger"></i>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedFrontpage" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
           </button>
         </div>
       </div>
-    </div>
-    <div class="m-b-40">
-      <div class="clearfix">
-        <h5 class="pull-left">{t}Related in inner{/t}</h5>
-        <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="data.article.relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
-          <i class="fa fa-plus"></i>
-          {t}Add contents{/t}
-        </button>
-      </div>
-      <div ui-sortable class="ng-cloak" ng-model="data.article.relatedInner">
-        <div class="related-item" ng-repeat="content in data.article.relatedInner">
-          <div class="related-item-info">
-            <span class="sort-icon"></span>
-            [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
+      <div class="col-sm-6">
+        <h5>
+          {t}Related in inner{/t}
+        </h5>
+        <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
+          <div class="related" ui-tree-nodes="" ng-model="data.relatedInner">
+            <div class="related-item" ng-repeat="r in data.relatedInner" ui-tree-handle ui-tree-node>
+              <span class="angular-ui-tree-icon"></span>
+              <div class="related-item-info">
+                <span class="related-item-type">
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                </span>
+                <span class="related-item-title">
+                  [% related[r.target_id].title %]
+                </span>
+                <span class="related-item-status" ng-if="r.content_status == 0">
+                  ({t}No published{/t})
+                </span>
+              </div>
+              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.relatedInner', $index)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
+            </div>
           </div>
-          <button class="btn btn-white" ng-click="removeItem('data.article.relatedInner', $index)">
-            <i class="fa fa-trash-o text-danger"></i>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
           </button>
         </div>
       </div>
     </div>
     {is_module_activated name="CRONICAS_MODULES"}
-      <div class="m-b-40">
-        <div class="clearfix">
-          <h5 class="pull-left">{t}Related in home{/t}</h5>
-          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="data.article.relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
-            <i class="fa fa-plus"></i>
-            {t}Add contents{/t}
-          </button>
-        </div>
-        <div ui-sortable class="ng-cloak" ng-model="data.article.relatedHome">
-          <div class="related-item" ng-repeat="content in data.article.relatedHome">
-            <div class="related-item-info">
-              <span class="sort-icon"></span>
-              [% content.content_type_l10n_name %] - [% content.title %] <span class="status" ng-if="content.content_status == 0">({t}No published{/t})</span>
+    <div class="row m-t-50">
+      <div class="col-sm-6">
+        <h5>
+          {t}Related in home{/t}
+        </h5>
+        <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
+          <div class="related" ui-tree-nodes="" ng-model="data.relatedHome">
+            <div class="related-item" ng-repeat="r in data.relatedHome" ui-tree-handle ui-tree-node>
+              <span class="angular-ui-tree-icon"></span>
+              <div class="related-item-info">
+                <span class="related-item-type">
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                </span>
+                <span class="related-item-title">
+                  [% related[r.target_id].title %]
+                </span>
+                <span class="related-item-status" ng-if="r.content_status == 0">
+                  ({t}No published{/t})
+                </span>
+              </div>
+              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.relatedHome', $index)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
             </div>
-            <button class="btn btn-white" ng-click="removeItem('data.article.relatedHome', $index)">
-              <i class="fa fa-trash-o text-danger"></i>
-            </button>
           </div>
         </div>
-      </div>
-      <div class="m-b-40">
-        <div class="clearfix">
-          <h5 class="pull-left">{t}Gallery for frontpage{/t} <small>*{t}Only one album{/t}</small></h5>
-          <button class="btn btn-white btn-mini pull-right" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="article.params.withGallery" content-picker-type="album" type="button">
-            <i class="fa fa-plus"></i>
-            {t}Add gallery{/t}
-          </button>
-        </div>
-        <div class="related-item ng-cloak" ng-if="article.params.withGallery">
-          <div class="related-item-info">
-            <span class="sort-icon"></span>
-            [% article.params.withGallery.content_type_name %] - [% article.params.withGallery.title %]
-          </div>
-          <button class="btn btn-white" ng-click="removeItem('article.params.withGallery')" type="album">
-            <i class="fa fa-trash-o text-danger"></i>
+        <div class="text-center">
+          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
           </button>
         </div>
       </div>
-      <div class="m-b-40">
-        <div class="clearfix">
-          <h5 class="pull-left">{t}Gallery for inner{/t} <small>*{t}Only one album{/t}</small></h5>
-           <button class="btn btn-white btn-mini pull-right" content-picker content-picker-max-size="1" content-picker-selection="true" content-picker-target="article.params.withGalleryInt" content-picker-type="album" type="button">
-            <i class="fa fa-plus"></i>
-            {t}Add gallery{/t}
+      <div class="col-sm-6">
+        <h5>
+          {t}Album for frontpage{/t}
+          <small>
+            ({t}Only one album{/t})
+          </small>
+        </h5>
+        <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
+          <div class="related" ui-tree-nodes="" ng-model="data.albumFrontpage">
+            <div class="related-item" ng-repeat="r in data.albumFrontpage" ui-tree-handle ui-tree-node>
+              <span class="angular-ui-tree-icon"></span>
+              <div class="related-item-info">
+                <span class="related-item-type">
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                </span>
+                <span class="related-item-title">
+                  [% related[r.target_id].title %]
+                </span>
+                <span class="related-item-status" ng-if="r.content_status == 0">
+                  ({t}No published{/t})
+                </span>
+              </div>
+              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.albumFrontpage', $index)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="1" content-picker-target="albumFrontpage" content-picker-type="album" ng-if="!data.albumFrontpage || data.albumFrontpage.length === 0" type="button">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
           </button>
         </div>
-          <div class="related-item ng-cloak" ng-if="article.params.withGalleryInt">
-          <div class="related-item-info">
-            <span class="sort-icon"></span>
-            [% article.params.withGalleryInt.content_type_name %] - [% article.params.withGalleryInt.title %]
+        <h5>
+          {t}Albumfor inner{/t}
+          <small>
+            ({t}Only one album{/t})
+          </small>
+        </h5>
+        <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
+          <div class="related" ui-tree-nodes="" ng-model="data.albumInner">
+            <div class="related-item" ng-repeat="r in data.albumInner" ui-tree-handle ui-tree-node>
+              <span class="angular-ui-tree-icon"></span>
+              <div class="related-item-info">
+                <span class="related-item-type">
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                </span>
+                <span class="related-item-title">
+                  [% related[r.target_id].title %]
+                </span>
+                <span class="related-item-status" ng-if="r.content_status == 0">
+                  ({t}No published{/t})
+                </span>
+              </div>
+              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.albumInner', $index)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
+            </div>
           </div>
-          <button class="btn btn-white" ng-click="removeItem('article.params.withGalleryInt')" type="album">
-            <i class="fa fa-trash-o text-danger"></i>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-default" content-picker content-picker-max-size="1" content-picker-selection="true" content-picker-target="albumInner" content-picker-type="album" ng-if="!data.albumInner || data.albumInner.length === 0" type="button">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
           </button>
+        </div>
+        <h5>
+          {t}Gallery for Home{/t}
+          <small>
+            ({t}Only one album{/t})
+          </small>
+        </h5>
+        <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
+          <div class="related" ui-tree-nodes="" ng-model="data.albumHome">
+            <div class="related-item" ng-repeat="r in data.albumHome" ui-tree-handle ui-tree-node>
+              <span class="angular-ui-tree-icon"></span>
+              <div class="related-item-info">
+                <span class="related-item-type">
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                </span>
+                <span class="related-item-title">
+                  [% related[r.target_id].title %]
+                </span>
+                <span class="related-item-status" ng-if="r.content_status == 0">
+                  ({t}No published{/t})
+                </span>
+              </div>
+              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.albumHome', $index)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="btn btn-default" content-picker content-picker-max-size="1" content-picker-selection="true" content-picker-target="albumHome" content-picker-type="album" ng-if="!data.albumHome || data.albumHome.length === 0" type="button">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
+          </div>
         </div>
       </div>
-      <div>
-        <div class="clearfix">
-          <h5 class="pull-left">{t}Gallery for Home{/t} <small>*{t}Only one album{/t}</small></h5>
-          <div class="btn btn-white btn-mini pull-right" content-picker content-picker-max-size="1" content-picker-selection="true" content-picker-target="article.params.withGalleryHome" content-picker-type="album" type="button">
-            <i class="fa fa-plus"></i>
-            {t}Add gallery{/t}
-          </div>
-        </div>
-        <div class="related-item ng-cloak" ng-if="article.params.withGalleryHome">
-          <div class="related-item-info">
-            <span class="sort-icon"></span>
-            [% article.params.withGalleryHome.content_type_name %] - [% article.params.withGalleryHome.title %]
-          </div>
-          <button class="btn btn-white" ng-click="removeItem('article.params.withGalleryHome')" type="album">
-            <i class="fa fa-trash-o text-danger"></i>
-          </button>
-        </div>
-      </div>
-    {/is_module_activated}
+    </div>
   </div>
+  {/is_module_activated}
 </div>
