@@ -152,6 +152,8 @@ class VideoController extends ContentOldController
                 try {
                     $photo   = $service->getItem($item->information['thumbnail']);
                     $extra[] = $service->responsify($photo);
+
+                    $item->thumb_image = $photo->path;
                 } catch (GetItemException $e) {
                 }
             }
