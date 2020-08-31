@@ -92,6 +92,36 @@ class WebCrawlingCommand extends Command
     }
 
     /**
+     * Configures spider based on the parameters passed as arguments.
+     *
+     * @param string  The domain to execute the crawling.
+     * @param array   The array of parameters.
+     *
+     * @return Spider The configured spider ready to crawl.
+     */
+    protected function configureSpider(array $parameters)
+    {
+        $domain = $parameters['prod'] ?
+                'http://' . $instance->domains[0] :
+                'http://' . $instance->domains[0] . ':8080';
+        $spider = new Spider($domain);
+        $spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
+        $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
+        $spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([ $domain ], false));
+        $spider->getDiscovererSet()->maxDepth = $parameters['depth'];
+
+        $spider->getQueueManager()->maxQueueSize = $parameters['limit'];
+
+        $politenessPolicy = new PolitenessPolicyListener($parameters['time']);
+        $spider->getDownloader()->getDispatcher()->addListener(
+            SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
+            [ $politenessPolicy, 'onCrawlPreRequest' ]
+        );
+
+        return $spider;
+    }
+
+    /**
      * Executes the current command.
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -129,56 +159,6 @@ class WebCrawlingCommand extends Command
             date('Y-m-d H:i:s', $this->ended),
             $this->getDuration()
         ));
-    }
-
-    /**
-     * Configures spider based on the parameters passed as arguments.
-     *
-     * @param string  The domain to execute the crawling.
-     * @param array   The array of parameters.
-     *
-     * @return Spider The configured spider ready to crawl.
-     */
-    protected function configureSpider(array $parameters)
-    {
-        $domain = $parameters['prod'] ?
-                'http://' . $instance->domains[0] :
-                'http://' . $instance->domains[0] . ':8080';
-        $spider = new Spider($domain);
-        $spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
-        $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
-        $spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([ $domain ], false));
-        $spider->getDiscovererSet()->maxDepth = $parameters['depth'];
-
-        $spider->getQueueManager()->maxQueueSize = $parameters['limit'];
-
-        $politenessPolicy = new PolitenessPolicyListener($parameters['time']);
-        $spider->getDownloader()->getDispatcher()->addListener(
-            SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
-            [ $politenessPolicy, 'onCrawlPreRequest' ]
-        );
-
-        return $spider;
-    }
-
-    /**
-     * Prints a report with the results of the crawling.
-     *
-     * @param OutputInterface $output       The output interface to write on console.
-     * @param Spider          $statsHandler The spider that performs the crawling.
-     */
-    protected function printReport(OutputInterface $output, Spider $spider)
-    {
-        $crawlResults = '';
-        foreach ($spider->getDownloader()->getPersistenceHandler() as $resource) {
-            $crawlResults .= sprintf(
-                "URL: %s\nRESPONSE_STATUS: %s\n",
-                $resource->getUri(),
-                $resource->getResponse()->getStatusCode()
-            );
-        }
-
-        $output->writeln($crawlResults);
     }
 
     /**
@@ -247,4 +227,25 @@ class WebCrawlingCommand extends Command
             'time'      => $time
         ];
     }
+
+    /**
+     * Prints a report with the results of the crawling.
+     *
+     * @param OutputInterface $output       The output interface to write on console.
+     * @param Spider          $statsHandler The spider that performs the crawling.
+     */
+    protected function printReport(OutputInterface $output, Spider $spider)
+    {
+        $crawlResults = '';
+        foreach ($spider->getDownloader()->getPersistenceHandler() as $resource) {
+            $crawlResults .= sprintf(
+                "URL: %s\nRESPONSE_STATUS: %s\n",
+                $resource->getUri(),
+                $resource->getResponse()->getStatusCode()
+            );
+        }
+
+        $output->writeln($crawlResults);
+    }
+
 }
