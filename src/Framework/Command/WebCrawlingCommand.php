@@ -17,25 +17,45 @@ use VDB\Spider\StatsHandler;
 class WebCrawlingCommand extends Command
 {
     /**
-     * The array of predefined parameters.
+     * The predefined depth.
+     *
+     * @var integer
+     */
+    const DEPTH = 10;
+
+    /**
+     * The predefined limit.
+     *
+     * @var integer
+     */
+    const LIMIT = 1000;
+
+    /**
+     * The predefined instances.
      *
      * @var array
      */
-    private $parameters;
+    const INSTANCES = [];
+
+    /**
+     * The predefined environment.
+     *
+     * @var boolean
+     */
+    const PROD = false;
+
+    /**
+     * The predefined time between requests.
+     *
+     * @var integer
+     */
+    const TIME = 3000;
 
     /**
      * Configures the current command.
      */
     protected function configure()
     {
-        $this->parameters = [
-            'depth'     => 10,
-            'limit'     => 1000,
-            'instances' => [],
-            'prod'      => false,
-            'time'      => 3000
-        ];
-
         $this
             ->setName('crawling:execute')
             ->setDescription('Executes a crawling')
@@ -85,11 +105,9 @@ class WebCrawlingCommand extends Command
             date('Y-m-d H:i:s', $this->started)
         ));
 
-        list($depth, $limit, $instances, $prod, $time) = $this->getParameters($input);
+        $parameters = $this->getParameters($input);
 
-        $this->overrideParameters($depth, $limit, $instances, $prod, $time);
-
-        foreach ($instances as $instance) {
+        foreach ($parameters['instances'] as $instance) {
             $output->writeln(
                 sprintf(
                     "\nExecute crawling domain: %s",
@@ -97,10 +115,7 @@ class WebCrawlingCommand extends Command
                 )
             );
 
-            $domain = $prod ?
-                'http://' . $instance->domains[0] :
-                'http://' . $instance->domains[0] . ':8080';
-            $spider = $this->configureSpider($domain);
+            $spider = $this->configureSpider($parameters);
             $spider->crawl();
             $this->printReport($output, $spider);
         }
@@ -120,48 +135,30 @@ class WebCrawlingCommand extends Command
      * Configures spider based on the parameters passed as arguments.
      *
      * @param string  The domain to execute the crawling.
+     * @param array   The array of parameters.
      *
      * @return Spider The configured spider ready to crawl.
      */
-    protected function configureSpider(string $domain)
+    protected function configureSpider(array $parameters)
     {
+        $domain = $parameters['prod'] ?
+                'http://' . $instance->domains[0] :
+                'http://' . $instance->domains[0] . ':8080';
         $spider = new Spider($domain);
         $spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
         $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
         $spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([ $domain ], false));
-        $spider->getDiscovererSet()->maxDepth = $this->parameters['depth'];
+        $spider->getDiscovererSet()->maxDepth = $parameters['depth'];
 
-        $spider->getQueueManager()->maxQueueSize = $this->parameters['limit'];
+        $spider->getQueueManager()->maxQueueSize = $parameters['limit'];
 
-        $politenessPolicy = new PolitenessPolicyListener($this->parameters['time']);
+        $politenessPolicy = new PolitenessPolicyListener($parameters['time']);
         $spider->getDownloader()->getDispatcher()->addListener(
             SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
             [ $politenessPolicy, 'onCrawlPreRequest' ]
         );
 
         return $spider;
-    }
-
-    /**
-     * Overrides the predefined parameters of the crawling.
-     *
-     * @param array The array of parameters.
-     */
-    protected function overrideParameters($depth, $limit, $instances, $prod, $time)
-    {
-        $parameters = [
-            'depth'     => $depth,
-            'limit'     => $limit,
-            'instances' => $instances,
-            'time'      => $time,
-            'prod'      => $prod
-        ];
-
-        foreach ($this->parameters as $key => $value) {
-            $this->parameters[$key] = empty($parameters[$key]) ?
-            $value :
-            $parameters[$key];
-        }
     }
 
     /**
@@ -206,6 +203,20 @@ class WebCrawlingCommand extends Command
             ->getRepository('Instance')->findBy($oql);
     }
 
+    /**
+     * Returns the parameter if is not empty, otherwise return the predefined value.
+     *
+     * @param InputInterface The input interface.
+     * @param string         The name of the parametern to retrieve.
+     *
+     * @return mixed The parameter value.
+     */
+    protected function getNotEmptyParameter(InputInterface $input, string $name)
+    {
+        return !empty($input->getOption($name)) ?
+            $input->getOption($name) :
+            constant('self::' . strtoupper($name));
+    }
 
     /**
      * Returns the list of parameters for the command based on the input.
@@ -216,11 +227,11 @@ class WebCrawlingCommand extends Command
      */
     protected function getParameters(InputInterface $input) : array
     {
-        $depth     = $input->getOption('depth');
-        $limit     = $input->getOption('limit');
-        $instances = $input->getOption('instances');
-        $prod      = $input->getOption('prod');
-        $time      = $input->getOption('time');
+        $depth     = $this->getNotEmptyParameter($input, 'depth');
+        $limit     = $this->getNotEmptyParameter($input, 'limit');
+        $instances = $this->getNotEmptyParameter($input, 'instances');
+        $prod      = $this->getNotEmptyParameter($input, 'prod');
+        $time      = $this->getNotEmptyParameter($input, 'time');
 
         if (!empty($instances)) {
             $instances = preg_split('/\s*,\s*/', $instances);
@@ -228,6 +239,12 @@ class WebCrawlingCommand extends Command
 
         $instances = $this->getInstances($instances);
 
-        return [ $depth, $limit, $instances, $prod, $time ];
+        return [
+            'depth'     => $depth,
+            'limit'     => $limit,
+            'instances' => $instances,
+            'prod'      => $prod,
+            'time'      => $time
+        ];
     }
 }
