@@ -63,7 +63,7 @@ class RedirectorController extends Controller
 
         if ($format === 'amp' && in_array(
             $content->content_type_name,
-            [ 'article', 'opinion', 'video', 'poll' ]
+            [ 'album', 'article', 'opinion', 'poll', 'video' ]
         )) {
             $url = str_replace('.html', '.amp.html', $url);
         }

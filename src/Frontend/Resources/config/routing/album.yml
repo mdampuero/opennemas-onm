@@ -23,3 +23,14 @@ frontend_album_show:
     options:
         expose: true
         l10n: true
+
+frontend_album_show_amp:
+    path:     /album/{category_name}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Album:showAmp, _format: amp }
+    requirements:
+        category_name: '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+        slug:          '[^/]+'
+    options:
+        l10n: true
