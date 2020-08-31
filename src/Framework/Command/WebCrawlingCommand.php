@@ -3,6 +3,7 @@
 namespace Framework\Command;
 
 use Common\Core\Command\Command;
+use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -99,7 +100,7 @@ class WebCrawlingCommand extends Command
      *
      * @return Spider The configured spider ready to crawl.
      */
-    protected function configureSpider(array $parameters)
+    protected function configureSpider(array $parameters, Instance $instance)
     {
         $domain = $parameters['prod'] ?
                 'http://' . $instance->domains[0] :
@@ -145,7 +146,7 @@ class WebCrawlingCommand extends Command
                 )
             );
 
-            $spider = $this->configureSpider($parameters);
+            $spider = $this->configureSpider($parameters, $instance);
             $spider->crawl();
             $this->printReport($output, $spider);
         }
