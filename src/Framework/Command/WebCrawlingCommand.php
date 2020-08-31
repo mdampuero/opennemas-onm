@@ -10,6 +10,7 @@ use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
 use VDB\Spider\Event\SpiderEvents;
 use VDB\Spider\EventListener\PolitenessPolicyListener;
 use VDB\Spider\Filter\Prefetch\AllowedSchemeFilter;
+use VDB\Spider\Filter\Prefetch\AllowedHostsFilter;
 use VDB\Spider\Spider;
 use VDB\Spider\StatsHandler;
 
@@ -99,8 +100,7 @@ class WebCrawlingCommand extends Command
             $domain = $prod ?
                 'http://' . $instance->domains[0] :
                 'http://' . $instance->domains[0] . ':8080';
-            $spider = new Spider($domain);
-            $this->configureSpider($spider);
+            $spider = $this->configureSpider($domain);
             $spider->crawl();
             $this->printReport($output, $spider);
         }
@@ -119,14 +119,16 @@ class WebCrawlingCommand extends Command
     /**
      * Configures spider based on the parameters passed as arguments.
      *
-     * @param Spider        The spider to configure.
+     * @param string  The domain to execute the crawling.
      *
-     * @return StatsHandler The stats handler associated to the spider.
+     * @return Spider The configured spider ready to crawl.
      */
-    protected function configureSpider(Spider &$spider)
+    protected function configureSpider(string $domain)
     {
-        $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
+        $spider = new Spider($domain);
         $spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
+        $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
+        $spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([ $domain ], false));
         $spider->getDiscovererSet()->maxDepth = $this->parameters['depth'];
 
         $spider->getQueueManager()->maxQueueSize = $this->parameters['limit'];
@@ -136,6 +138,8 @@ class WebCrawlingCommand extends Command
             SpiderEvents::SPIDER_CRAWL_PRE_REQUEST,
             [ $politenessPolicy, 'onCrawlPreRequest' ]
         );
+
+        return $spider;
     }
 
     /**
