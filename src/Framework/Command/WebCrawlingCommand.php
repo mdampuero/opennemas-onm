@@ -55,6 +55,7 @@ class WebCrawlingCommand extends Command
      * The colors for the different status codes.
      */
     const COLORS = [
+        '1' => 'blue',
         '2' => 'green',
         '3' => 'yellow',
         '4' => 'red',
