@@ -25,6 +25,9 @@ use Onm\Cache\CacheInterface;
  */
 class EntityManager extends BaseManager
 {
+    const ORM_CONTENT_TYPES = [
+        'kiosko', 'photo'
+    ];
     /**
      * Initializes the entity manager.
      *
@@ -69,6 +72,12 @@ class EntityManager extends BaseManager
     private function findOne($contentType, $id, $isMulti = false)
     {
         $entity = null;
+
+        if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
+            $entity = getService('api.service.content')->getItem($id);
+
+            return $entity;
+        }
 
         $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
 
@@ -378,7 +387,9 @@ class EntityManager extends BaseManager
      */
     private function loadExtraDataToContents($saveInCacheIds, &$contents)
     {
-        if (empty($saveInCacheIds)) {
+        if (empty($saveInCacheIds)
+            && in_array(\underscore(array_values($contents)[0]->content_type_name), self::ORM_CONTENT_TYPES)
+        ) {
             return [];
         }
 
