@@ -13,7 +13,6 @@ use VDB\Spider\EventListener\PolitenessPolicyListener;
 use VDB\Spider\Filter\Prefetch\AllowedSchemeFilter;
 use VDB\Spider\Filter\Prefetch\AllowedHostsFilter;
 use VDB\Spider\Spider;
-use VDB\Spider\StatsHandler;
 
 class WebCrawlingCommand extends Command
 {
@@ -51,6 +50,16 @@ class WebCrawlingCommand extends Command
      * @var integer
      */
     const TIME = 3000;
+
+    /**
+     * The colors for the different status codes.
+     */
+    const COLORS = [
+        '2' => 'green',
+        '3' => 'yellow',
+        '4' => 'red',
+        '5' => 'red'
+    ];
 
     /**
      * Configures the current command.
@@ -95,8 +104,8 @@ class WebCrawlingCommand extends Command
     /**
      * Configures spider based on the parameters passed as arguments.
      *
-     * @param string  The domain to execute the crawling.
-     * @param array   The array of parameters.
+     * @param array    The array of parameters.
+     * @param Instance The instance to configure spider.
      *
      * @return Spider The configured spider ready to crawl.
      */
@@ -110,6 +119,8 @@ class WebCrawlingCommand extends Command
         $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
         $spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([ $domain ], false));
         $spider->getDiscovererSet()->maxDepth = $parameters['depth'];
+
+        $spider->getDownloader()->setRequestHandler(new LinkCheckRequestHandler());
 
         $spider->getQueueManager()->maxQueueSize = $parameters['limit'];
 
@@ -240,12 +251,28 @@ class WebCrawlingCommand extends Command
         $crawlResults = '';
         foreach ($spider->getDownloader()->getPersistenceHandler() as $resource) {
             $crawlResults .= sprintf(
-                "URL: %s\nRESPONSE_STATUS: %s\n",
-                $resource->getUri(),
-                $resource->getResponse()->getStatusCode()
+                str_pad("%s", 150 - strlen($resource->getUri()->getPath()), '.') .
+                "RESPONSE_STATUS: %s\n",
+                $resource->getUri()->getPath(),
+                $this->printStatusCode($resource->getResponse()->getStatusCode())
             );
         }
 
         $output->writeln($crawlResults);
+    }
+
+    /**
+     * Print responses in different colors.
+     *
+     * @param string $statusCode The status code of the response.
+     *
+     * @return string $output The output of the status code in different colors based on the code.
+     */
+    protected function printStatusCode(string $statusCode)
+    {
+        $codeType = substr($statusCode, 0, 1);
+        $color    = self::COLORS[$codeType];
+
+        return sprintf('<fg=%s;options=bold>%s</>', $color, $statusCode);
     }
 }
