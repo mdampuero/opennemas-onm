@@ -28,8 +28,8 @@
                   ({t}No published{/t})
                 </span>
               </div>
-              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.relatedFrontpage', $index)">
-                <i class="fa fa-trash-o text-danger"></i>
+              <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.relatedFrontpage', $index)">
+                <i class="fa fa-trash-o"></i>
               </button>
             </div>
           </div>
@@ -62,8 +62,8 @@
                   ({t}No published{/t})
                 </span>
               </div>
-              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.relatedInner', $index)">
-                <i class="fa fa-trash-o text-danger"></i>
+              <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.relatedInner', $index)">
+                <i class="fa fa-trash-o"></i>
               </button>
             </div>
           </div>
@@ -99,8 +99,8 @@
                   ({t}No published{/t})
                 </span>
               </div>
-              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.relatedHome', $index)">
-                <i class="fa fa-trash-o text-danger"></i>
+              <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.relatedHome', $index)">
+                <i class="fa fa-trash-o"></i>
               </button>
             </div>
           </div>
@@ -133,8 +133,8 @@
                   ({t}No published{/t})
                 </span>
               </div>
-              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.albumFrontpage', $index)">
-                <i class="fa fa-trash-o text-danger"></i>
+              <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.albumFrontpage', $index)">
+                <i class="fa fa-trash-o"></i>
               </button>
             </div>
           </div>
@@ -165,8 +165,8 @@
                   ({t}No published{/t})
                 </span>
               </div>
-              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.albumInner', $index)">
-                <i class="fa fa-trash-o text-danger"></i>
+              <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.albumInner', $index)">
+                <i class="fa fa-trash-o"></i>
               </button>
             </div>
           </div>
@@ -197,8 +197,8 @@
                   ({t}No published{/t})
                 </span>
               </div>
-              <button class="btn btn-white" data-nodrag ng-click="removeItem('data.albumHome', $index)">
-                <i class="fa fa-trash-o text-danger"></i>
+              <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.albumHome', $index)">
+                <i class="fa fa-trash-o"></i>
               </button>
             </div>
           </div>
