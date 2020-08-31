@@ -123,20 +123,20 @@
                   <h4>{t}Image for Special{/t}</h4>
                 </div>
                 <div class="grid-body">
-                  <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
+                  <div class="col-md-12" {if isset($photo1)}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
                     <div class="form-group ng-cloak">
                       <div class="thumbnail-placeholder">
                         <div class="img-thumbnail" ng-if="!photo1">
                           <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                             <i class="fa fa-picture-o fa-2x"></i>
-                            <h5>{t}Pick an image{/t}</h5>
+                            <h5>no que esta{t}Pick an image{/t}</h5>
                           </div>
                         </div>
                         <div class="dynamic-image-placeholder" ng-if="photo1">
                           <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="photo1" transform="thumbnail,220,220">
                           <div class="thumbnail-actions">
                             <div class="thumbnail-action remove-action" ng-click="removeImage('photo1')">
-                              <i class="fa fa-trash-o fa-2x"></i>
+                              <i class="fa fa-trash-o fa-2x"></i> {$photo1->path}
                             </div>
                             <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                               <i class="fa fa-camera fa-2x"></i>

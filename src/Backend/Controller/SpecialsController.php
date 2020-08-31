@@ -108,10 +108,11 @@ class SpecialsController extends Controller
         }
 
         $contents = $special->getContents($id);
-
+        $service  = $this->get('api.service.photo');
         try {
-            $photo1 = getService('api.service.photo')->getItem($special->img1);
-            $this->view->assign('photo1', $photo1);
+            $photo1 = $service->getItem($special->img1);
+
+            $this->view->assign('photo1', $service->responsify($photo1));
         } catch (GetItemException $e) {
         }
 
