@@ -19,7 +19,7 @@ angular.module('BackendApp.controllers').controller('BookCtrl', [
       $scope.book_cover_id = null;
 
       if ($scope.book_cover) {
-        $scope.book_cover_id = $scope.book_cover.id;
+        $scope.book_cover_id = $scope.book_cover.pk_content;
       }
     }, true);
   }
