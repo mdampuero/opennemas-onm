@@ -69,7 +69,7 @@ class EventController extends ContentController
                 }
                 try {
                     $photo   = $service->getItem($relation['pk_content2']);
-                    $extra[] = $service->responsify($photo);
+                    $extra[$relation['pk_content2']] = $service->responsify($photo);
                 } catch (GetItemException $e) {
                 }
             }
