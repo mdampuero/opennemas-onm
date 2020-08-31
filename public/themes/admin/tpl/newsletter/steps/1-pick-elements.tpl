@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=backend_newsletters_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|clear_json})">
+  <form action="{url name=backend_newsletters_save_contents}" method="POST" name="newsletterForm" id="newsletter-pick-elements-form" ng-controller="NewsletterCtrl" ng-init="stepOne({json_encode($newsletterContent)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -49,7 +49,7 @@
         </div>
         <div class="grid-body">
           <div class="form-group">
-              <input type="text" name="title" id="title" value="{$newsletter->title|default:$name}" required class="form-control" placeholder="{$name}"/>
+            <input type="text" name="title" id="title" value="{$newsletter->title|default:$name}" required class="form-control" placeholder="{$name}"/>
           </div>
         </div>
       </div>
@@ -57,54 +57,72 @@
         <div class="grid simple" >
           <div class="grid-title clearfix">
             <div class="pull-left">{t}Add contents to groups by using the "Add contents" button{/t}</div>
-            <div class="pull-right">
-              <button type="button" class="btn btn-mini" ng-click="addContainer()">
-                <span class="fa fa-plus"></span> {t}Add Container{/t}
-              </button>
-              <button type="button" title="{t}Clean containers{/t}" class="btn btn-mini" ng-click="cleanContainers()">
-                <i class="fa fa-trash-o"></i> {t}Clean contents{/t}
-              </button>
-            </div>
           </div>
           <div class="grid-body">
-            <div ui-tree="options" id="newsletter-contents">
-              <ol ui-tree-nodes ng-model="newsletterContents" type="container">
-                <li class="newsletter-container ng-cloak" ui-tree-node ng-repeat="container in newsletterContents" collapsed="false">
-                  <div class="newsletter-container-title clearfix" ui-tree-handle>
-                    <div class="input-group title pull-left" data-nodrag>
-                      <input ng-model="container.title" type="text" class="form-control">
-                      <div class="input-group-addon" id="basic-addon1"><i class="fa fa-pencil"></i></div>
-                    </div>
-                    <div class="container-actions pull-right">
-                      <button type="button" class="btn btn-white" data-nodrag content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video,special">
-                        <i class="fa fa-plus"></i>
-                        {t}Add contents{/t}
-                      </button>
-                      <button type="button" data-nodrag ng-click="container.hide = !container.hide" class="btn btn-white">
-                        <i class="fa" ng-class="{ 'fa-plus-square-o': container.hide, 'fa-minus-square-o': !container.hide }"></i>
-                      </button>
-                      <button type="button" data-nodrag ng-click="moveContainerUp(container)" class="btn btn-white" ng-if="$index !== 0">
-                        <i class="fa fa-chevron-up"></i>
-                      </button>
-                      <button type="button" data-nodrag ng-click="moveContainerDown(container)" class="btn btn-white" ng-if="$index+1 < newsletterContents.length">
-                        <i class="fa fa-chevron-down"></i>
-                      </button>
-                      <button class="btn btn-white" data-nodrag ng-click="removeContainer(container)" type="button">
-                        <i class="fa fa-trash-o text-danger"></i>
-                      </button>
+            <div ui-tree="treeOptions">
+              <div ng-model="containers" type="container" ui-tree-nodes="">
+                <div class="newsletter-container ng-cloak" ng-repeat="container in containers" ui-tree-node>
+                  <span ui-tree-handle>
+                    <span class="angular-ui-tree-icon"></span>
+                  </span>
+                  <div class="newsletter-container-title">
+                    <div class="row">
+                      <div class="col-sm-6 col-lg-4 m-t-15">
+                        <input class="form-control" ng-model="container.title" type="text">
+                      </div>
+                      <div class="col-sm-6 col-lg-8 m-b-10 m-t-15 text-right">
+                        <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,opinion,poll,video,special" type="button">
+                          <i class="fa fa-plus m-r-5"></i>
+                          {t}Add{/t}
+                        </button>
+                        <button class="btn btn-danger m-b-5 " ng-click="removeContainer($index)" type="button">
+                          <i class="fa fa-trash-o m-r-5"></i>
+                          {t}Delete{/t}
+                        </button>
+                        <button class="btn btn-white m-b-5 " ng-click="emptyContainer($index)" type="button">
+                          <i class="fa fa-fire m-r-5"></i>
+                          {t}Empty{/t}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div class="newsletter-container-contents clearfix" ng-if="!container.hide" ui-tree-handle>
-                    <div class="hint-message p-b-15" ng-if="container.items.length == 0">
-                      {t}Click in "Add contents" button above or drop contents from other containers{/t}
+                  <div class="newsletter-container-items" ui-tree="treeOptions">
+                    <div class="newsletter-container-items-placeholder" ng-if="container.items.length == 0">
+                      {t}Click on "Add" button above or drop contents from other containers{/t}
                     </div>
-                    <ol ui-tree-nodes="" ng-model="container.items" type="content">
-                      <li ng-repeat="content in container.items" ui-tree-node ng-include="'item'"></li>
-                    </ol>
+                    <div ng-model="container.items" type="content" ui-tree-nodes="">
+                      <div class="newsletter-item" ng-repeat="content in container.items" ui-tree-node>
+                        <span ui-tree-handle>
+                          <span class="angular-ui-tree-icon"></span>
+                        </span>
+                        <span class="newsletter-item-type">
+                          <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-stack-overflow': content.content_type_name == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                        </span>
+                        <span class="newsletter-item-title">
+                          [% content.title %]
+                        </span>
+                        <button class="btn btn-danger" ng-click="removeContent(container, $index)" type="button">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </li>
-
-              </ol>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-default" ng-click="addContainer()">
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Add{/t}
+              </button>
+              <button class="btn btn-danger" ng-click="removeContainer()" type="button">
+                <i class="fa fa-trash-o m-r-5"></i>
+                {t}Delete{/t}
+              </button>
+              <button class="btn btn-white" ng-click="emptyContainer()" type="button">
+                <i class="fa fa-fire m-r-5"></i>
+                {t}Empty{/t}
+              </button>
             </div>
           </div>
         </div>
@@ -112,16 +130,5 @@
     </div>
     <input type="hidden" name="content_ids" ng-value="contents">
     <input type="hidden" name="id" value="{$newsletter->id}">
-    <script type="text/ng-template" id="item">
-      <div class="newsletter-item clearfix" ui-tree-handle>
-        <span></span>
-        <span class="newsletter-item-title">[% content.content_type_l10n_name %]</span>
-        <span class="h-seperate"></span>
-        <span class="item-title">[% content.title %]</span>
-        <button class="btn btn-white pull-right" data-nodrag ng-click="removeContent(container, content)" type="button">
-          <i class="fa fa-trash-o text-danger"></i>
-        </button>
-      </div>
-    </script>
   </form>
 {/block}

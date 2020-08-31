@@ -54,16 +54,6 @@ var newsletterTemplateTranslations = {
       </div>
     </div>
 
-    {* <div class="grid simple ng-cloak">
-      <div class="grid-title">
-        <i class="fa fa-envelope-o m-r-10"></i>{t}Name{/t}
-      </div>
-
-      <div class="grid-body">
-        <input type="text" class="form-control" name="title" id="title" ng-model="item.name"/>
-      </div>
-    </div> *}
-
     <div class="grid simple ng-cloak">
       <div class="grid-title">
         <i class="fa fa-envelope-o m-r-10"></i>{t}Subject{/t}
@@ -204,121 +194,121 @@ var newsletterTemplateTranslations = {
     </div>
 
     <div class="grid simple ng-cloak newsletter-contents" ng-if="!flags.loading">
-      <div class="grid-title clearfix">
-        <h5 class="pull-left">{t}Contents{/t}</h5>
-        <div class="pull-right">
-            <button type="button" class="btn" ng-click="addContainer()">
-              <span class="fa fa-plus"></span> {t}Add Container{/t}
-            </button>
-        </div>
+      <div class="grid-title">
+        <h4>
+          {t}Contents{/t}
+        </h4>
       </div>
       <div class="grid-body">
-        <div id="newsletter-contents">
-          <ol ng-model="item.contents" type="container">
-            <li class="newsletter-container" ng-repeat="container in item.contents">
-              <div class="newsletter-container-title clearfix">
-                <input ng-model="container.title" type="text" class="form-control title pull-left" placeholder="{t}Block title{/t}">
-                <div class="container-actions pull-right">
-                  <button class="btn btn-white" ng-click="removeContainer(container)" type="button">
-                    <i class="fa fa-trash-o text-danger"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="newsletter-container-contents clearfix" ng-if="!container.hide" >
-                <ol class="newsletter-container-contents-list" ng-model="container.items" ui-sortable="{ handle: '.sortable-handle'}" type="content">
-                  <li ng-repeat="content in container.items" ng-include="'item'">
-                  </li>
-                </ol>
-                <div class="add-contents p-b-15">
-                  <h5 class="text-center">{t}Add contents{/t}</h5>
-                  <div class="row">
-                    <div class="col-xs-4 col-sm-offset-2">
-                      <a ng-click="addDynamicContent(container)" class="btn btn-primary btn-block">
-                        <i class="fa fa-bolt"></i>
-                        {t}Add dynamic contents{/t}
-                      </a>
-                    </div>
-                    <div class="col-xs-4">
-                      <button type="button" class="btn btn-primary btn-block" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="container.items" content-picker-type="album,article,attachment,opinion,poll,video">
-                        <i class="fa fa-hand-o-up"></i>
-                        {t}Pick contents{/t}
-                      </button>
-                    </div>
+        <div ui-tree="treeOptions">
+          <div ng-model="item.contents" type="container" ui-tree-nodes="">
+            <div class="newsletter-container" ng-repeat="container in item.contents" ui-tree-node>
+              <span ui-tree-handle>
+                <span class="angular-ui-tree-icon"></span>
+              </span>
+              <div class="newsletter-container-title">
+                <div class="row">
+                  <div class="col-sm-6 col-lg-4 m-t-15">
+                    <input class="form-control" ng-model="container.title" type="text">
+                  </div>
+                  <div class="col-sm-6 col-lg-8 m-b-10 m-t-15 text-right">
+                    <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,opinion,poll,video,special" type="button">
+                      <i class="fa fa-plus m-r-5"></i>
+                      {t}Add{/t}
+                    </button>
+                    <button class="btn btn-default m-b-5" ng-click="addSearch($index)">
+                      <i class="fa fa-search m-r-5"></i>
+                      {t}Search{/t}
+                    </button>
+                    <button class="btn btn-danger m-b-5 " ng-click="removeContainer($index)" type="button">
+                      <i class="fa fa-trash-o m-r-5"></i>
+                      {t}Delete{/t}
+                    </button>
+                    <button class="btn btn-white m-b-5 " ng-click="emptyContainer($index)" type="button">
+                      <i class="fa fa-fire m-r-5"></i>
+                      {t}Empty{/t}
+                    </button>
                   </div>
                 </div>
               </div>
-            </li>
-
-          </ol>
+              <div class="newsletter-container-items" ui-tree="treeOptions">
+                <div class="newsletter-container-items-placeholder" ng-if="container.items.length == 0">
+                  {t}Click on "Add" button above or drop contents from other containers{/t}
+                </div>
+                <div ng-model="container.items" type="content" ui-tree-nodes="">
+                  <div class="newsletter-item" ng-repeat="content in container.items" ui-tree-node>
+                    <span ui-tree-handle>
+                      <span class="angular-ui-tree-icon"></span>
+                    </span>
+                    <span class="newsletter-item-type" ng-if="content.content_type !== 'list'">
+                      <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type == 'article', 'fa-quote-right': content.content_type == 'opinion', 'fa-pie-chart': content.content_type == 'poll', 'fa-file': content.content_type == 'static_page', 'fa-envelope': content.content_type == 'letter', 'fa-paperclip': content.content_type == 'attachment', 'fa-film': content.content_type == 'video', 'fa-stack-overflow': content.content_type == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                    </span>
+                    <span class="newsletter-item-type" ng-if="content.content_type === 'list'">
+                      <span class="fa fa-search" uib-tooltip="{t}List of contents{/t}"></span>
+                    </span>
+                    <div class="newsletter-item-title" ng-show="content.content_type !== 'list'">
+                      [% content.title %]
+                    </div>
+                    <div class="newsletter-item-search" ng-show="content.content_type === 'list'">
+                      <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
+                        <ui-select-match>
+                          <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
+                        </ui-select-match>
+                        <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }" position='down'>
+                          <div ng-bind-html="item.title | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                      <ui-select name="opinion_type" theme="select2" ng-model="content.criteria.opinion_type" ng-if="content.criteria.content_type === 'opinion'">
+                        <ui-select-match>
+                          <strong>{t}Opinion type{/t}: </strong> [% $select.selected.title %]
+                        </ui-select-match>
+                        <ui-select-choices repeat="item.value as item in data.extra.opinion_types | filter: { title: $select.search }" position='down'>
+                          <div ng-bind-html="item.title | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                      <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected-text="{t}selected{/t}"></onm-category-selector>
+                      <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
+                        <ui-select-match>
+                          <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
+                        </ui-select-match>
+                        <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }" position='down'>
+                          <div ng-bind-html="item.title | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                      <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
+                        <ui-select-match>
+                          <strong>{t}Amount{/t}: </strong> [% $select.selected %]
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in numberOfElements  | filter: $select.search" position='down'>
+                          <div ng-bind-html="item | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </div>
+                    <button class="btn btn-danger" ng-click="removeContent(container, $index)" type="button">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
+        <div class="text-center">
+          <button type="button" class="btn btn-default" ng-click="addContainer()">
+            <i class="fa fa-plus m-r-5"></i>
+            {t}Add{/t}
+          </button>
+          <button class="btn btn-danger" ng-click="removeContainer()" type="button">
+            <i class="fa fa-trash-o m-r-5"></i>
+            {t}Delete{/t}
+          </button>
+          <button class="btn btn-white" ng-click="emptyContainer()" type="button">
+            <i class="fa fa-fire m-r-5"></i>
+            {t}Empty{/t}
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <script type="text/ng-template" id="item">
-  <div class="newsletter-item clearfix">
-    <div class="sortable-handle p-l-5"><i class="fa fa-align-justify"></i></div>
-
-    <div ng-show="content.content_type !== 'list'" class="newsletter-item-wrapper">
-      <div class="newsletter-item-title">[% content.content_type_l10n_name %]</div>
-      <div class="newsletter-item-content">
-        <div class="newsletter-item-content-title">[% content.title %]</div>
-      </div>
-    </div>
-
-    <div ng-show="content.content_type === 'list'" class="newsletter-item-wrapper item-list">
-      <div class="newsletter-item-title">{t}List of contents{/t}</div>
-      <div class="newsletter-item-content">
-        <div class="item-list-criteria">
-          <div class="criteria clearfix">
-            <span class="item-list-icon fa fa-filter"></span>
-
-            <ui-select name="content_type" theme="select2" ng-model="content.criteria.content_type">
-              <ui-select-match>
-                <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }" position='down'>
-                <div ng-bind-html="item.title | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-            <ui-select name="opinion_type" theme="select2" ng-model="content.criteria.opinion_type" ng-if="content.criteria.content_type === 'opinion'">
-              <ui-select-match>
-                <strong>{t}Opinion type{/t}: </strong> [% $select.selected.title %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.value as item in data.extra.opinion_types | filter: { title: $select.search }" position='down'>
-                <div ng-bind-html="item.title | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-            <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected-text="{t}selected{/t}"></onm-category-selector>
-          </div>
-
-          <div class="limit clearfix">
-            <span class="item-list-icon fa fa-sort-amount-asc"></span>
-            <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
-              <ui-select-match>
-                <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
-              </ui-select-match>
-              <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }" position='down'>
-                <div ng-bind-html="item.title | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-            <ui-select name="view" theme="select2" ng-model="content.criteria.epp">
-              <ui-select-match>
-                <strong>{t}Amount{/t}: </strong> [% $select.selected %]
-              </ui-select-match>
-              <ui-select-choices repeat="item in numberOfElements  | filter: $select.search" position='down'>
-                <div ng-bind-html="item | highlight: $select.search"></div>
-              </ui-select-choices>
-            </ui-select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-white pull-right button-remove" ng-click="removeContent(container, content)" type="button">
-      <i class="fa fa-trash-o text-danger"></i>
-    </button>
-  </div>
-  </script>
 </form>
 {/block}
