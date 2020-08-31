@@ -232,7 +232,7 @@ class WebCrawlingCommand extends Command
      * Prints a report with the results of the crawling.
      *
      * @param OutputInterface $output       The output interface to write on console.
-     * @param Spider          $statsHandler The spider that performs the crawling.
+     * @param Spider          $spider The spider that performs the crawling.
      */
     protected function printReport(OutputInterface $output, Spider $spider)
     {
@@ -247,5 +247,4 @@ class WebCrawlingCommand extends Command
 
         $output->writeln($crawlResults);
     }
-
 }
