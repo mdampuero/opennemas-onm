@@ -155,7 +155,7 @@ class ArticleController extends FrontendController
 
         $params['tags']       = $this->getTags($params['content']);
         $params['relationed'] = $this->getRelated($params['content']);
-        $params['suggested']  = $suggested[0];
+        $params['suggested']  = $suggested;
 
         $em = $this->get('entity_repository');
 

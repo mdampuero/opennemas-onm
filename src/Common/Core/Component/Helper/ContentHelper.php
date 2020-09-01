@@ -97,7 +97,7 @@ class ContentHelper
 
         $items = $this->cache->get($cacheId);
 
-        if (!empty($items) && !empty($items[0])) {
+        if (!empty($items)) {
             return $this->ignoreCurrent($contentId, $items, $epp);
         }
 
@@ -122,15 +122,13 @@ class ContentHelper
         }
 
         try {
-            $contents = $this->em->findBy($criteria, [
+            $items = $this->em->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
 
-            $items = [ $contents ];
-
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
-            return [ [], [] ];
+            return [];
         }
 
         return $this->ignoreCurrent($contentId, $items, $epp);
@@ -150,19 +148,13 @@ class ContentHelper
      */
     protected function ignoreCurrent($contentId, $items, $epp)
     {
-        $current = array_filter($items[0], function ($a) use ($contentId) {
+        $current = array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content == $contentId;
         });
 
-        $items[0] = array_slice(array_filter($items[0], function ($a) use ($contentId) {
+        $items[0] = array_slice(array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content != $contentId;
         }), 0, $epp);
-
-        if (!empty($current)) {
-            if (!empty($current[0]->img1)) {
-                unset($items[1][$current[0]->img1]);
-            }
-        }
 
         return $items;
     }

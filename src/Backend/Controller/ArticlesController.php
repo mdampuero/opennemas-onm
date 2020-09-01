@@ -291,13 +291,11 @@ class ArticlesController extends Controller
         }
 
         if (!empty($article->category_id)) {
-            $suggested = $this->get('core.helper.content')->getSuggested(
+            $params['suggested'] = $this->get('core.helper.content')->getSuggested(
                 $article->pk_content,
                 'article',
                 $params['category']->id
             );
-
-            $params['suggested'] = $suggested[0];
         }
 
         $this->view->assign($params);
