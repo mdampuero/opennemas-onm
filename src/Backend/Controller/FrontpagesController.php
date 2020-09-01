@@ -80,8 +80,7 @@ class FrontpagesController extends Controller
             'versions'             => $versions,
             'version_id'           => $versionId,
             'time'                 => [
-                'timezone'         => $this->get('core.locale')->getTimeZone()
-                    ->getName(),
+                'timezone'         => $this->get('core.locale')->getTimeZone()->getName(),
                 'timestamp'        => time() * 1000
             ]
         ]);
@@ -348,27 +347,8 @@ class FrontpagesController extends Controller
         list($positions, $advertisements) =
             \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
-        // Get all frontpage images
-        $imageIdsList = [];
-        foreach ($contentsInHomepage as $content) {
-            if (isset($content->img1)) {
-                $imageIdsList[] = $content->img1;
-            }
-        }
-
-        $imageList = [];
-        if (!empty($imageIdsList)) {
-            $imageList = $this->get('entity_repository')->findBy([
-                'content_type_name' => [ [ 'value' => 'photo' ] ],
-                'pk_content'        => [
-                    [ 'value' => $imageIdsList, 'operator' => 'IN' ]
-                ]
-            ]);
-        }
-
         foreach ($contentsInHomepage as &$content) {
-            $content->loadFrontpageImageFromHydratedArray($imageList)
-                ->loadAttachedVideo()
+            $content->loadAttachedVideo()
                 ->loadRelatedContents();
         }
 
