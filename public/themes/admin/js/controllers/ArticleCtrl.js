@@ -44,6 +44,7 @@
           created: new Date(),
           fk_author: null,
           params: {},
+          related_contents: [],
           starttime: null,
           summary: '',
           tags: []
