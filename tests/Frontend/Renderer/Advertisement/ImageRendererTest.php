@@ -139,7 +139,7 @@ class ImageRendererTest extends TestCase
             ],
         ];
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -236,7 +236,7 @@ class ImageRendererTest extends TestCase
             ->getMock();
 
         $renderer->expects($this->once())->method('getImage')
-            ->willReturn(new \Photo());
+            ->willReturn(new \Content());
 
         $renderer->expects($this->once())->method('renderSafeFrameImage')
             ->willReturn('foo');
@@ -263,7 +263,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo           = new \Photo();
+        $photo           = new \Content();
         $photo->width    = 300;
         $photo->height   = 300;
         $photo->type_img = 'swf';
@@ -342,7 +342,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -403,7 +403,7 @@ class ImageRendererTest extends TestCase
      */
     public function testGetImage()
     {
-        $photo    = new \Photo();
+        $photo    = new \Content();
         $ad       = new \Advertisement();
         $ad->path = 0;
 
@@ -440,7 +440,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -513,7 +513,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo           = new \Photo();
+        $photo           = new \Content();
         $photo->width    = 300;
         $photo->height   = 300;
         $photo->type_img = 'swf';
@@ -570,7 +570,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 

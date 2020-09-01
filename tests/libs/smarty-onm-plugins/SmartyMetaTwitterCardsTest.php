@@ -286,7 +286,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Site description');
 
         // Photo object
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->url    = 'http://route/to/file.name';
         $photo->path   = '/route/to/file.name';
         $photo->width  = 600;

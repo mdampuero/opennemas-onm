@@ -298,7 +298,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $content = new \Content();
         $this->helper->expects($this->once())
             ->method('getContentMediaObject')
-            ->willReturn(new \Photo());
+            ->willReturn(new \Content());
 
         $method->invokeArgs($this->object, [ $content ]);
     }

@@ -288,7 +288,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('Site Name');
 
         // Photo object
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->url    = 'http://route/to/file.name';
         $photo->path   = '/route/to/file.name';
         $photo->width  = 600;

@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Filter;
 
 use Common\Core\Component\Filter\ReplaceImagesUrlFilter;
+use Common\Model\Entity\Content;
 
 /**
  * Defines test cases for ReplaeImagesUrlFilter class.
@@ -84,7 +85,7 @@ class ReplaceImagesUrlFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
-        $photo = new \Photo();
+        $photo = new \Content();
 
         $photo->path = '/2017/01/01/grault-01.jpg';
 

@@ -599,7 +599,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForPhoto()
     {
-        $content = new \Photo();
+        $content = new \Content();
 
         $content->content_type_name = 'photo';
         $content->path              = 'route/to/photo.file.name';
