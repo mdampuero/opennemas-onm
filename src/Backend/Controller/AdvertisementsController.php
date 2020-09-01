@@ -180,9 +180,10 @@ class AdvertisementsController extends Controller
         }
 
         // If the advertisement has photo assigned retrieve it
+        $service = $this->get('api.service.photo');
         try {
-            $photo1 = getService('api.service.photo')->getItem($advertisement->path);
-            $this->view->assign('photo1', $photo1);
+            $photo1 = $service->getItem($advertisement->path);
+            $this->view->assign('photo1', $service->responsify($photo1));
         } catch (GetItemException $e) {
         }
 
