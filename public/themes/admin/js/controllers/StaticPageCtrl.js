@@ -58,6 +58,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_static_page_create_item',
           getItem:    'api_v1_backend_static_page_get_item',
+          list:       'backend_static_pages_list',
           public:     'frontend_static_page',
           redirect:   'backend_static_page_show',
           saveItem:   'api_v1_backend_static_page_save_item',

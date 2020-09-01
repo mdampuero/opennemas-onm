@@ -70,6 +70,7 @@
           createItem: 'api_v1_backend_widget_create_item',
           getItem:    'api_v1_backend_widget_get_item',
           getForm:    'api_v1_backend_widget_get_form',
+          list:       'backend_widgets_list',
           redirect:   'backend_widget_show',
           saveItem:   'api_v1_backend_widget_save_item',
           updateItem: 'api_v1_backend_widget_update_item'

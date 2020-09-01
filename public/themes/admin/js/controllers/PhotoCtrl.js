@@ -19,6 +19,7 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      */
     $scope.routes = {
       getItem:    'api_v1_backend_photo_get_item',
+      list:       'backend_photos_list',
       public:     'frontend_photo_show',
       redirect:   'backend_photo_show',
       saveItem:   'api_v1_backend_photo_save_item',

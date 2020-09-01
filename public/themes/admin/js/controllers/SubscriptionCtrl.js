@@ -43,6 +43,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_subscription_create_item',
           getItem:    'api_v1_backend_subscription_get_item',
+          list:       'backend_subscriptions_list',
           redirect:   'backend_subscription_show',
           saveItem:   'api_v1_backend_subscription_save_item',
           updateItem: 'api_v1_backend_subscription_update_item'

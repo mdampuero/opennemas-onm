@@ -64,6 +64,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_event_create_item',
           getItem:    'api_v1_backend_event_get_item',
+          list:       'backend_events_list',
           public:     'frontend_event_show',
           redirect:   'backend_event_show',
           saveItem:   'api_v1_backend_event_save_item',
