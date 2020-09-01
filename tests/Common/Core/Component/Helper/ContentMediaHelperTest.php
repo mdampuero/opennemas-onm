@@ -13,6 +13,7 @@ use Common\Core\Component\Helper\ContentMediaHelper;
 use Common\Core\Component\Helper\ImageHelper;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for ContentMediaHelper class.
@@ -206,9 +207,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $articleInner       = new \Article();
         $articleInner->img2 = 123;
 
-        $articleFront       = new \Article();
-        $articleFront->img2 = 123;
-
         // Video object
         $video        = new \Video();
         $video->thumb = '/media/opennemas/images/2016/12/01/2016120118435298511.jpg';
@@ -217,7 +215,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $extVideo->thumb = 'https://i.ytimg.com/vi/qXYLOmqtZSA/sddefault.jpg';
 
         // Photo object
-        $photo       = new \Content();
+        $photo       = new Content();
         $photo->path = '/route/to/file.name';
 
         $this->em->expects($this->at(0))->method('find')
@@ -247,12 +245,12 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetMediaObjectForOpinion()
     {
         $opinion                      = new \Opinion();
-        $opinion->author              = new \User();
-        $opinion->author->photo       = new \Content();
+        $opinion->author              = new User();
+        $opinion->author->photo       = new Content();
         $opinion->author->photo->path = '/route/to/file.name';
 
         // Photo object
-        $photo       = new \Content();
+        $photo       = new Content();
         $photo->path = '/route/to/file.name';
 
         $this->em->expects($this->any())->method('find')
@@ -277,7 +275,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetMediaObjectForAlbum()
     {
         $album                    = new \Album();
-        $album->cover_image       = new \Content();
+        $album->cover_image       = new Content();
         $album->cover_image->path = '/route/to/file.name';
 
         $method = new \ReflectionMethod($this->helper, 'getMediaObjectForAlbum');
@@ -426,13 +424,11 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     {
         // Image inner
         $inner       = new \Content();
-        $inner->img1 = 0;
         $inner->img2 = 123;
 
         // Photo object
-        $photo       = new \Content();
+        $photo       = new Content();
         $photo->path = '/route/to/file.name';
-
 
         $this->servicePhoto->expects($this->any())->method('getItem')
             ->with(123)
