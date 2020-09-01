@@ -942,12 +942,6 @@ class ContentManager
                 AND ' . $whereSQL . ' ' . $orderBy
             );
 
-            foreach ($rs as &$row) {
-                $photo = getService('api.service.photo')->getItem($row['avatar_img_id']);
-
-                $row['path_img'] = get_photo_path($photo);
-            }
-
             return $rs;
         } catch (\Exception $e) {
             getService('error.log')->error(
