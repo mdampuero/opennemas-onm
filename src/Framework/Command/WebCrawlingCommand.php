@@ -252,8 +252,8 @@ class WebCrawlingCommand extends Command
         $crawlResults = '';
         foreach ($spider->getDownloader()->getPersistenceHandler() as $resource) {
             $crawlResults .= sprintf(
-                str_pad("%s", 150 - strlen($resource->getUri()->getPath()), '.') .
-                "RESPONSE_STATUS: %s\n",
+                str_pad("%s...", 150 - strlen($resource->getUri()->getPath() + 3), '.') .
+                "STATUS: %s\n",
                 $resource->getUri()->getPath(),
                 $this->printStatusCode($resource->getResponse()->getStatusCode())
             );
