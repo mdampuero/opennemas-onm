@@ -1580,7 +1580,7 @@ class Content implements \JsonSerializable, CsvSerializable
             if (!empty($images)) {
                 foreach ($images as $image) {
                     if ($image->pk_content == $this->img2) {
-                        $this->img2_path = $image->path_file . $image->name;
+                        $this->img2_path = $image->path;
                         $this->img2      = $image;
                         break;
                     }
