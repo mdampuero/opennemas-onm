@@ -312,8 +312,8 @@ class ExportContentCommand extends Command
             return;
         }
 
-        // Load photo object on content
-        $content->loadFrontpageImageFromHydratedArray([ $image ]);
+        $content->img1_path = $image->path;
+        $content->img1      = $image;
 
         if (!mb_check_encoding($content->img1->description)) {
             $content->img1->description = utf8_encode($content->img1->description);
@@ -334,8 +334,8 @@ class ExportContentCommand extends Command
             return;
         }
 
-        // Load photo object on content
-        $content->loadInnerImageFromHydratedArray([ $image ]);
+        $content->img2_path = $image->path;
+        $content->img2      = $image;
 
         if (!mb_check_encoding($content->img2->description)) {
             $content->img2->description = utf8_encode($content->img2->description);
