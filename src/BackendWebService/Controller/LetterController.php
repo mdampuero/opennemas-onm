@@ -37,49 +37,31 @@ class LetterController extends ContentController
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
 
+
+        $service = $this->get('api.service.photo');
+
+        $ids = array_filter(array_map(function ($item) {
+            return $item->image;
+        }, $results), function ($photo) {
+                return !empty($photo);
+        });
+
+        $photos = [];
+        try {
+            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
+            $photos = $this->get('data.manager.filter')
+                ->set($photos)
+                ->filter('mapify', [ 'key' => 'pk_content' ])
+                ->get();
+
+            $photos = $this->get('api.service.content')->responsify($photos);
+        } catch (GetItemException $e) {
+        }
+
         return new JsonResponse([
-            'extra'   => $this->loadExtraData($results),
+            'extra'   => ['photos' => $photos],
             'results' => $results,
             'total'   => $total,
         ]);
-    }
-
-    /**
-     * Returns extra information for letter.
-     *
-     * @param array $results The list of letters.
-     *
-     * @return array The extra information.
-     */
-    public function loadExtraData($results = [])
-    {
-        $data = parent::loadExtraData($results);
-
-        $ids = $photos = [];
-
-        foreach ($results as $letter) {
-            if (!is_object($letter->photo) && (int) $letter->photo > 0) {
-                $ids[] = $letter->photo;
-            }
-        }
-
-        if (!empty($ids)) {
-             $em = getService('entity_repository');
-
-            $criteria = [
-                'content_status'    => [ [ 'value' => 1 ] ],
-                'content_type_name' => [ [ 'value' => 'photo' ] ],
-                'pk_content'        => [ [ 'value' => $ids, 'operator' => 'IN' ] ],
-            ];
-
-            $order     = [ 'starttime' => 'desc' ];
-            $photosRAW = $em->findBy($criteria, $order);
-
-            foreach ($photosRAW as $photo) {
-                $photos[$photo->pk_content] = $photo;
-            }
-        }
-
-        return array_merge($data, ['photos' => $photos]);
     }
 }

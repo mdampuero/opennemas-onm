@@ -101,9 +101,10 @@ class LettersController extends Controller
         $id     = $request->query->getDigits('id', null);
         $letter = $this->get('entity_repository')->find('Letter', $id);
 
+        $service = $this->get('api.service.photo');
         try {
-            $photo1 = getService('api.service.photo')->getItem($letter->image);
-            $this->view->assign('photo1', $photo1);
+            $photo1 = $service->getItem($letter->image);
+            $this->view->assign('photo1', $service->responsify($photo1));
         } catch (GetItemException $e) {
         }
 
