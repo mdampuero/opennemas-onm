@@ -124,7 +124,6 @@ class PickerController extends Controller
         return new JsonResponse([
             'epp'        => $epp,
             'page'       => $page,
-            'results'    => $results,
             'items'      => $results,
             'categories' => $this->get('api.service.category')
                 ->responsify($categories),
@@ -173,24 +172,7 @@ class PickerController extends Controller
         $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
 
         try {
-            $photo = $this->get('api.service.photo')->getItem($id);
-
-            // Check if the photo exists
-            if (!is_object($photo)) {
-                return new JsonResponse('Photo doesnt exists', 404);
-            }
-
-            $this->get('orm.manager')->getConnection('instance')->executeUpdate(
-                "UPDATE contents SET `description`=? WHERE pk_content=?",
-                [ $description, $id ]
-            );
-
-            // Invalidate the cache for the photo
-            dispatchEventWithParams('content.update', [ 'item' => $photo ]);
-            dispatchEventWithParams(
-                $photo->content_type_name . '.update',
-                [ 'content' => $photo ]
-            );
+            $this->get('api.service.photo')->patchItem($id, [ 'description' => $description ]);
 
             return new JsonResponse('ok');
         } catch (\Exception $e) {
