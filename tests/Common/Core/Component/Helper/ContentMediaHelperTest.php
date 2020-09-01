@@ -429,11 +429,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $inner->img1 = 0;
         $inner->img2 = 123;
 
-        // Image front
-        $front       = new \Content();
-        $front->img1 = 123;
-        $front->img2 = 0;
-
         // Photo object
         $photo       = new \Content();
         $photo->path = '/route/to/file.name';
@@ -450,12 +445,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
             $innerMediaObject->url
-        );
-
-        $frontMediaObject = $method->invokeArgs($this->helper, [ $front ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $frontMediaObject->url
         );
 
         $this->assertNull($method->invokeArgs($this->helper, [ '' ]));

@@ -9,6 +9,8 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Api\Exception\GetItemException;
+
 class ContentMediaHelper
 {
     /**
@@ -216,18 +218,14 @@ class ContentMediaHelper
     protected function getImageMediaObject($content)
     {
         $photo = null;
-        if (isset($content->img2) && ($content->img2 > 0)) {
+        try {
             // Inner photo
-            $photo = $this->container->get('api.service.photo')->getItem($content->img2);
-        } elseif (isset($content->img1) && ($content->img1 > 0)) {
-            // Front photo
-            $photo = $this->container->get('api.service.photo')->getItem($content->img1);
-        }
-
-        if (!empty($photo)) {
+            $photo      = $this->container->get('api.service.photo')->getItem($content->img2);
             $photo->url = $this->mediaUrl . $photo->path;
-        }
 
-        return $photo;
+            return $photo;
+        } catch (GetItemException $e) {
+            return;
+        }
     }
 }
