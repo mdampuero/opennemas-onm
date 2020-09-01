@@ -33,7 +33,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       $scope.img1 = null;
 
       if ($scope.photo1) {
-        $scope.img1 = $scope.photo1.id;
+        $scope.img1 = $scope.photo1.pk_content;
       }
     }, true);
 
