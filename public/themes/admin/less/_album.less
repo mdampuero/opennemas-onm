@@ -1,11 +1,22 @@
-.album-thumbnail-sortable:not(.ui-sortable-placeholder) {
-  background: #fff;
-  border: 1px solid transparent;
-  padding: 15px;
-
-  &:hover {
-    border: 1px solid #e5e5e5;
+.album-photos {
+  .angular-ui-tree-placeholder {
+    margin: 0 15px 15px 0 !important;
   }
+
+  &.album-photos-grid {
+    .angular-ui-tree-placeholder {
+      float: left;
+      width: 190px;
+    }
+  }
+}
+
+.album-photos-item {
+  background: #fff;
+  border: 1px solid #d1dade;
+  padding: 15px 15px 15px 30px;
+  margin: 0 15px 15px 0;
+  position: relative;
 
   .thumbnail-wrapper .confirm-dialog.open {
     margin-top: -33px;
@@ -22,68 +33,40 @@
   }
 
   textarea {
+    margin-bottom: 0;
     resize: vertical;
   }
 }
 
-.album-thumbnail-sortable-grid {
-  float: left;
-  height: 383px !important;
-  width: 200px;
+.album-photos-grid {
+  .album-photos-item {
+    float: left;
+    width: 190px;
 
-  .album-thumbnail-description {
-    margin-top: 15px;
-    height: 168px !important;
-  }
+    .album-thumbnail-description {
+      margin-top: 15px;
+      height: 160px !important;
+    }
 
-  .dynamic-image-placeholder {
-    margin: 0 auto;
-  }
-}
-
-.album-thumbnail-sortable-list {
-  min-height: 190px;
-
-  .album-thumbnail-description {
-    min-height: 158px;
-  }
-
-  .dynamic-image-placeholder {
-    margin: 0 auto;
+    .dynamic-image-placeholder {
+      margin: 0 auto;
+    }
   }
 }
 
-.album-thumbnail-placeholder {
-  float: left;
+.album-photos-list {
+  .angular-ui-tree-placeholder,
+  .album-photos-item {
+    margin-right: 0 !important;
+    min-height: 190px;
 
-  .thumbnail-empty {
-    background: #eee;
-    cursor: pointer;
-    height: 100%;
-    padding-top: 50px;
-    text-align: center;
-    width: 100%;
-  }
-}
+    .album-thumbnail-description {
+      min-height: 158px;
+    }
 
-.album-thumbnail-placeholder-grid {
-  height: 168px;
-  width: 168px;
-  margin: 15px;
-
-  .img-thumbnail {
-    display: block;
-    height: 168px;
-  }
-}
-
-.album-thumbnail-placeholder-list {
-  height: 158px;
-  margin-left: 15px;
-  padding-top: 100%;
-
-  .img-thumbnail {
-    display: block;
+    .dynamic-image-placeholder {
+      margin: 0 auto;
+    }
   }
 }
 

@@ -95,9 +95,12 @@
     <div class="grid-body">
       <div class="row">
         <div class="col-md-12">
-          <div ui-sortable="{ axis: 'x,y', placeholder: 'album-thumbnail-sortable-' + app.mode }" ng-model="item.photos">
-            <div class="album-thumbnail-sortable album-thumbnail-sortable-[% app.mode %]" ng-repeat="(index, photo) in item.photos">
-              <div class="thumbnail-wrapper row">
+          <div ui-tree>
+            <div class="album-photos album-photos-[% app.mode %]" ng-model="item.photos" ui-tree-nodes="">
+              <div class="album-photos-item" ng-repeat="photo in item.photos" ui-tree-node>
+                <span ui-tree-handle>
+                  <span class="angular-ui-tree-icon"></span>
+                </span>
                 <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay['photo_'+ photo.pk_photo] }"></div>
                 <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay['photo_'+ photo.pk_photo] }">
                   <p>{t}Are you sure?{/t}</p>
@@ -112,21 +115,22 @@
                     </button>
                   </div>
                 </div>
-                <span class="ui-sortable-icon"></span>
-                <div ng-class="{ 'col-lg-2 col-sm-3': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
-                  <div class="dynamic-image-placeholder">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,200,200">
-                      <div class="thumbnail-actions">
-                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ photo.pk_photo)">
-                          <i class="fa fa-trash-o fa-2x"></i>
+                <div class="thumbnail-wrapper row">
+                  <div ng-class="{ 'col-lg-2 col-sm-3': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
+                    <div class="dynamic-image-placeholder">
+                      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[photo.pk_photo]" transform="zoomcrop,200,200">
+                        <div class="thumbnail-actions">
+                          <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ photo.pk_photo)">
+                            <i class="fa fa-trash-o fa-2x"></i>
+                          </div>
                         </div>
-                      </div>
-                    </dynamic-image>
+                      </dynamic-image>
+                    </div>
                   </div>
-                </div>
-                <div ng-class="{ 'col-lg-10 col-sm-9': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
-                  <div class="form-group no-margin">
-                    <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]"></textarea>
+                  <div ng-class="{ 'col-lg-10 col-sm-9': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
+                    <div class="form-group no-margin">
+                      <textarea class="album-thumbnail-description form-control" ng-model="photo.description" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.photos[index].description[data.extra.locale.default] : '' %]"></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
