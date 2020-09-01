@@ -388,7 +388,7 @@ class EntityManager extends BaseManager
     private function loadExtraDataToContents($saveInCacheIds, &$contents)
     {
         if (empty($saveInCacheIds)
-            && in_array(\underscore(array_values($contents)[0]->content_type_name), self::ORM_CONTENT_TYPES)
+            || in_array(\underscore(array_values($contents)[0]->content_type_name), self::ORM_CONTENT_TYPES)
         ) {
             return [];
         }
