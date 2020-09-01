@@ -124,9 +124,9 @@
 
           for (var key in $scope.item.params) {
             // eslint-disable-next-line no-new-wrappers
-            var value = new Number($scope.item.params[key]).toString();
+            var value = new Number($scope.item.params[key]);
 
-            value = value === 'NaN' ? $scope.item.params[key] : value;
+            value = value.toString() === 'NaN' ? $scope.item.params[key] : value.valueOf();
 
             params.push({ name: key, value: value });
           }
