@@ -78,13 +78,16 @@ class AlbumController extends ContentOldController
             }, $item->photos)));
         }
 
-        $photos = $this->get('api.service.content_old')
-            ->getListByIds($ids)['items'];
+        try {
+            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
+            $photos = $this->get('data.manager.filter')
+                ->set($photos)
+                ->filter('mapify', [ 'key' => 'pk_content' ])
+                ->get();
 
-        return $this->get('data.manager.filter')
-            ->set($photos)
-            ->filter('mapify', [ 'key' => 'pk_content' ])
-            ->get();
+            return $this->get('api.service.content')->responsify($photos);
+        } catch (GetItemException $e) {
+        }
     }
 
     /**
@@ -110,7 +113,7 @@ class AlbumController extends ContentOldController
         foreach ($content as $item) {
             try {
                 $photo   = $service->getItem($item->cover_id);
-                $extra[] = $service->responsify($photo);
+                $extra[$item->cover_id] = $service->responsify($photo);
             } catch (GetItemException $e) {
             }
         }
