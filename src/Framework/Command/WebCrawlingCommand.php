@@ -3,7 +3,6 @@
 namespace Framework\Command;
 
 use Common\Core\Command\Command;
-use Common\Core\Component\EventDispatcher\Event;
 use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
