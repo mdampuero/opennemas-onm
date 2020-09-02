@@ -23,14 +23,14 @@ class WebCrawlingCommand extends Command
      *
      * @var integer
      */
-    const DEPTH = 10;
+    const DEPTH = 3;
 
     /**
      * The predefined limit.
      *
      * @var integer
      */
-    const LIMIT = 1000;
+    const LIMIT = 3000;
 
     /**
      * The predefined instances.
