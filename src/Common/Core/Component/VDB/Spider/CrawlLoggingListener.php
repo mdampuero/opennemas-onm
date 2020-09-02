@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Command;
+namespace Common\Core\Component\VDB\Spider;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;

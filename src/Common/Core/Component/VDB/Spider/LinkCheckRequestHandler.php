@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Command;
+namespace Common\Core\Component\VDB\Spider;
 
 use VDB\Spider\RequestHandler\GuzzleRequestHandler;
 use VDB\Spider\Resource;

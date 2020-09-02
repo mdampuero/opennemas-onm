@@ -1,8 +1,10 @@
 <?php
 
-namespace Framework\Command;
+namespace Common\Core\Command;
 
 use Common\Core\Command\Command;
+use Common\Core\Component\VDB\Spider\CrawlLoggingListener;
+use Common\Core\Component\VDB\Spider\LinkCheckRequestHandler;
 use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
