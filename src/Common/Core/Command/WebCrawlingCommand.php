@@ -149,7 +149,7 @@ class WebCrawlingCommand extends Command
 
         $this->output->writeln(sprintf(
             '<options=bold>'
-            . str_pad('(1/3) Starting command', 100, '.')
+            . str_pad('(1/3) Starting command', 200, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s', $this->started)
@@ -160,7 +160,7 @@ class WebCrawlingCommand extends Command
         if ($this->output->isVerbose() && !$this->output->isVeryVerbose()) {
             $this->output->writeln(sprintf(
                 '<options=bold>'
-                . str_pad('(2/3) Executing crawling', 100, '.')
+                . str_pad('(2/3) Executing crawling', 200, '.')
                     . '<fg=yellow;options=bold>IN PROGRESS</>'
             ));
         }
@@ -171,7 +171,7 @@ class WebCrawlingCommand extends Command
                     '<options=bold>'
                     . str_pad(
                         sprintf('(2/3) Executing crawling domain %s', $instance->domains[0]),
-                        100,
+                        200,
                         '.'
                     )
                     . '<fg=yellow;options=bold>IN PROGRESS</> '
@@ -186,7 +186,7 @@ class WebCrawlingCommand extends Command
                     '<options=bold>'
                     . str_pad(
                         sprintf('(2/3) Executing crawling domain %s', $instance->domains[0]),
-                        100,
+                        200,
                         '.'
                     )
                     . '<fg=green;options=bold>DONE</> '
@@ -196,14 +196,14 @@ class WebCrawlingCommand extends Command
 
         $this->output->writeln(sprintf(
             '<options=bold>'
-            . str_pad('(2/3) Executing crawling', 100, '.')
+            . str_pad('(2/3) Executing crawling', 200, '.')
             . '<fg=green;options=bold>DONE</>'
         ));
 
         $this->end();
         $this->output->writeln(sprintf(
             '<options=bold>'
-            . str_pad('(3/3) Ending command', 100, '.')
+            . str_pad('(3/3) Ending command', 200, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</>'
                 . ' <fg=yellow;options=bold>(%s)</></>',

@@ -55,7 +55,7 @@ class CrawlLoggingListener
         $this->output->writeln(
             str_pad(
                 $current->getUri()->getPath(),
-                100,
+                200,
                 '.'
             ) .
             $this->printStatusCode($current->getResponse()->getStatusCode())
