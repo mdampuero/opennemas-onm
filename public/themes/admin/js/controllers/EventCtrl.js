@@ -83,12 +83,12 @@
           }
 
           var coverId = $scope.data.item.related_contents.filter(function(e) {
-            return e.relationship === 'cover';
+            return e.type === 'cover';
           }).shift();
 
           if (coverId) {
             $scope.cover =
-              $scope.data.extra.related_contents[coverId.pk_content2];
+              $scope.data.extra.related_contents[coverId.target_id];
           }
         };
 
@@ -120,9 +120,10 @@
           }
 
           $scope.item.related_contents.push({
-            pk_content2: nv.pk_content,
-            relationship: 'cover',
-            position: 0
+            caption: null,
+            position: 0,
+            target_id: nv.pk_content,
+            type: 'cover'
           });
         }, true);
       }
