@@ -156,11 +156,13 @@ class WebCrawlingCommand extends Command
 
         $parameters = $this->getParameters($input);
 
-        $this->output->writeln(sprintf(
-            '<options=bold>'
-            . str_pad('(2/3) Executing crawling', 100, '.')
-                . '<fg=yellow;options=bold>IN PROGRESS</>'
-        ));
+        if ($this->output->isVerbose() && !$this->output->isVeryVerbose()) {
+            $this->output->writeln(sprintf(
+                '<options=bold>'
+                . str_pad('(2/3) Executing crawling', 100, '.')
+                    . '<fg=yellow;options=bold>IN PROGRESS</>'
+            ));
+        }
 
         foreach ($parameters['instances'] as $instance) {
             if ($this->output->isVeryVerbose()) {
