@@ -50,8 +50,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $data   = [ 'related_contents' => [
             [
-                'pk_content2'  => 2,
-                'relationship' => 'photo',
+                'target_id' => 2,
+                'type'      => 'photo',
             ]
         ] ];
         $entity = new Content($data);
@@ -68,8 +68,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $data   = [ 'related_contents' => [
             [
-                'pk_content2'  => 2,
-                'relationship' => 'photo',
+                'target_id' => 2,
+                'type'      => 'photo',
             ]
         ] ];
         $entity = new Content($data);
@@ -78,12 +78,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $data   = [ 'related_contents' => [
             [
-                'pk_content2'  => 2,
-                'relationship' => 'photo',
+                'target_id' => 2,
+                'type'      => 'photo',
             ],
             [
-                'pk_content2'  => 3,
-                'relationship' => 'photo',
+                'target_id' => 3,
+                'type'      => 'photo',
             ]
         ] ];
         $entity = new Content($data);
@@ -95,12 +95,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     {
         $data   = [ 'related_contents' => [
             [
-                'pk_content2'  => 2,
-                'relationship' => 'photo',
+                'target_id' => 2,
+                'type'      => 'photo',
             ],
             [
-                'pk_content2'  => 3,
-                'relationship' => 'photo',
+                'target_id' => 3,
+                'type'      => 'photo',
             ]
         ] ];
         $entity = new Content($data);

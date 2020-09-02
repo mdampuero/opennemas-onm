@@ -73,9 +73,9 @@ class Content extends Entity
     public function getRelated($name)
     {
         $related = array_map(function ($el) {
-            return $el['pk_content2'];
+            return $el['target_id'];
         }, array_filter($this->related_contents, function ($element) use ($name) {
-            return $element['relationship'] == $name;
+            return $element['type'] == $name;
         }));
 
         return $related;
@@ -91,7 +91,7 @@ class Content extends Entity
     public function hasRelated($name)
     {
         return count(array_filter($this->related_contents, function ($element) use ($name) {
-            return $element['relationship'] == $name;
+            return $element['type'] == $name;
         })) > 0;
     }
 

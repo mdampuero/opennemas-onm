@@ -1247,6 +1247,12 @@ content_content:
             options: { default: 0, unsigned: true }
     index:
         -
+            name:    PRIMARY
+            columns: [ source_id, target_id, type ]
+            primary: true
+            unique:  false
+            flags:   {}
+        -
             name:    source_id
             columns: [ source_id ]
             primary: false
