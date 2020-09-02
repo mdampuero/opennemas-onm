@@ -3,6 +3,7 @@
 namespace Framework\Command;
 
 use Common\Core\Command\Command;
+use Common\Core\Component\EventDispatcher\Event;
 use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -42,7 +43,7 @@ class WebCrawlingCommand extends Command
      *
      * @var boolean
      */
-    const PROD = false;
+    const PORT = '';
 
     /**
      * The predefined time between requests.
@@ -50,17 +51,6 @@ class WebCrawlingCommand extends Command
      * @var integer
      */
     const TIME = 3000;
-
-    /**
-     * The colors for the different status codes.
-     */
-    const COLORS = [
-        '1' => 'blue',
-        '2' => 'green',
-        '3' => 'yellow',
-        '4' => 'red',
-        '5' => 'red'
-    ];
 
     /**
      * Configures the current command.
@@ -89,10 +79,10 @@ class WebCrawlingCommand extends Command
                 'The list of instances to execute crawling in'
             )
             ->addOption(
-                'prod',
+                'port',
                 'p',
-                InputOption::VALUE_NONE,
-                'If the command is executed in prod or not'
+                InputOption::VALUE_OPTIONAL,
+                'The port to send the request to'
             )
             ->addOption(
                 'time',
@@ -112,9 +102,14 @@ class WebCrawlingCommand extends Command
      */
     protected function configureSpider(array $parameters, Instance $instance)
     {
-        $domain = $parameters['prod'] ?
-                'http://' . $instance->domains[0] :
-                'http://' . $instance->domains[0] . ':8080';
+        $protocol = in_array(
+            'es.openhost.module.frontendSsl',
+            $instance->activated_modules
+        ) ? 'https' : 'http';
+
+        $port   = empty($parameters['port']) ? $parameters['port'] : ':' . $parameters['port'];
+        $domain = sprintf('%s://%s%s', $protocol, $instance->domains[0], $port);
+
         $spider = new Spider($domain);
         $spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
         $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
@@ -131,6 +126,14 @@ class WebCrawlingCommand extends Command
             [ $politenessPolicy, 'onCrawlPreRequest' ]
         );
 
+        if ($this->output->isDebug()) {
+            $loggingListener = new CrawlLoggingListener($spider, $this->output);
+            $spider->getDownloader()->getDispatcher()->addListener(
+                SpiderEvents::SPIDER_CRAWL_POST_REQUEST,
+                [ $loggingListener, 'onCrawlPostRequest' ]
+            );
+        }
+
         return $spider;
     }
 
@@ -141,8 +144,11 @@ class WebCrawlingCommand extends Command
     {
         $this->start();
 
-        $output->writeln(sprintf(
-            str_pad('<options=bold>(1/3) Starting command', 50, '.')
+        $this->output = $output;
+
+        $this->output->writeln(sprintf(
+            '<options=bold>'
+            . str_pad('(1/3) Starting command', 100, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s', $this->started)
@@ -150,22 +156,51 @@ class WebCrawlingCommand extends Command
 
         $parameters = $this->getParameters($input);
 
+        $this->output->writeln(sprintf(
+            '<options=bold>'
+            . str_pad('(2/3) Executing crawling', 100, '.')
+                . '<fg=yellow;options=bold>IN PROGRESS</>'
+        ));
+
         foreach ($parameters['instances'] as $instance) {
-            $output->writeln(
-                sprintf(
-                    "\nExecute crawling domain: %s",
-                    $instance->domains[0]
-                )
-            );
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln(
+                    '<options=bold>'
+                    . str_pad(
+                        sprintf('(2/3) Executing crawling domain %s', $instance->domains[0]),
+                        100,
+                        '.'
+                    )
+                    . '<fg=yellow;options=bold>IN PROGRESS</> '
+                );
+            }
 
             $spider = $this->configureSpider($parameters, $instance);
             $spider->crawl();
-            $this->printReport($output, $spider);
+
+            if ($this->output->isVeryVerbose()) {
+                $this->output->writeln(
+                    '<options=bold>'
+                    . str_pad(
+                        sprintf('(2/3) Executing crawling domain %s', $instance->domains[0]),
+                        100,
+                        '.'
+                    )
+                    . '<fg=green;options=bold>DONE</> '
+                );
+            }
         }
 
+        $this->output->writeln(sprintf(
+            '<options=bold>'
+            . str_pad('(2/3) Executing crawling', 100, '.')
+            . '<fg=green;options=bold>DONE</>'
+        ));
+
         $this->end();
-        $output->writeln(sprintf(
-            str_pad('<options=bold>(3/3) Ending command', 50, '.')
+        $this->output->writeln(sprintf(
+            '<options=bold>'
+            . str_pad('(3/3) Ending command', 100, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</>'
                 . ' <fg=yellow;options=bold>(%s)</></>',
@@ -223,7 +258,7 @@ class WebCrawlingCommand extends Command
         $depth     = $this->getNotEmptyParameter($input, 'depth');
         $limit     = $this->getNotEmptyParameter($input, 'limit');
         $instances = $this->getNotEmptyParameter($input, 'instances');
-        $prod      = $this->getNotEmptyParameter($input, 'prod');
+        $port      = $this->getNotEmptyParameter($input, 'port');
         $time      = $this->getNotEmptyParameter($input, 'time');
 
         if (!empty($instances)) {
@@ -236,44 +271,8 @@ class WebCrawlingCommand extends Command
             'depth'     => $depth,
             'limit'     => $limit,
             'instances' => $instances,
-            'prod'      => $prod,
+            'port'      => $port,
             'time'      => $time
         ];
-    }
-
-    /**
-     * Prints a report with the results of the crawling.
-     *
-     * @param OutputInterface $output       The output interface to write on console.
-     * @param Spider          $spider The spider that performs the crawling.
-     */
-    protected function printReport(OutputInterface $output, Spider $spider)
-    {
-        $crawlResults = '';
-        foreach ($spider->getDownloader()->getPersistenceHandler() as $resource) {
-            $crawlResults .= sprintf(
-                str_pad("%s...", 150 - strlen($resource->getUri()->getPath() + 3), '.') .
-                "STATUS: %s\n",
-                $resource->getUri()->getPath(),
-                $this->printStatusCode($resource->getResponse()->getStatusCode())
-            );
-        }
-
-        $output->writeln($crawlResults);
-    }
-
-    /**
-     * Print responses in different colors.
-     *
-     * @param string $statusCode The status code of the response.
-     *
-     * @return string $output The output of the status code in different colors based on the code.
-     */
-    protected function printStatusCode(string $statusCode)
-    {
-        $codeType = substr($statusCode, 0, 1);
-        $color    = self::COLORS[$codeType];
-
-        return sprintf('<fg=%s;options=bold>%s</>', $color, $statusCode);
     }
 }
