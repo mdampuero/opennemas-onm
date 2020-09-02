@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\Common\Core\Components\Functions;
+namespace Tests\Common\Core\Functions;
 
 use Common\Model\Entity\Content;
 
@@ -28,6 +28,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
+            ->getMock();
+
+        $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isHidden' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -58,6 +63,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.helper.subscription':
+                return $this->helper;
+
             case 'core.template.frontend':
                 return $this->template;
 
@@ -299,8 +307,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'img1_footer'       => 'Rhoncus pretium'
         ]);
 
+        $this->helper->expects($this->at(2))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_featured_media_caption($content, 'baz'));
         $this->assertFalse(has_featured_media_caption($content, 'inner'));
+        $this->assertFalse(has_featured_media_caption($content, 'frontpage'));
         $this->assertTrue(has_featured_media_caption($content, 'frontpage'));
     }
 
@@ -309,7 +321,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasPretitle()
     {
+        $this->helper->expects($this->at(1))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_pretitle(new Content([])));
+        $this->assertFalse(has_pretitle(new Content([
+            'pretitle' => 'Percipit "mollis" at scriptorem usu.'
+        ])));
         $this->assertTrue(has_pretitle(new Content([
             'pretitle' => 'Percipit "mollis" at scriptorem usu.'
         ])));
@@ -320,7 +338,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasSummary()
     {
+        $this->helper->expects($this->at(1))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_summary(new Content([])));
+        $this->assertFalse(has_summary(new Content([
+            'summary' => 'Percipit "mollis" at scriptorem usu.'
+        ])));
         $this->assertTrue(has_summary(new Content([
             'summary' => 'Percipit "mollis" at scriptorem usu.'
         ])));
@@ -331,7 +355,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasTitle()
     {
+        $this->helper->expects($this->at(1))->method('isHidden')
+            ->willReturn(true);
+
         $this->assertFalse(has_title(new Content([])));
+        $this->assertFalse(has_title(new Content([
+            'title' => 'Percipit "mollis" at scriptorem usu.'
+        ])));
         $this->assertTrue(has_title(new Content([
             'title' => 'Percipit "mollis" at scriptorem usu.'
         ])));

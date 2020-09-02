@@ -37,7 +37,7 @@ class DynamicCssServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getDataSet')
             ->willReturn($this->settings);
 
-        $category = new Category([ 'pk_content_category' => 1 ]);
+        $category = new Category([ 'id' => 1 ]);
 
         $this->cs->expects($this->any())
             ->method('getItemBySlug')

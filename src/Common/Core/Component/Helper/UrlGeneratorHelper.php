@@ -173,7 +173,7 @@ class UrlGeneratorHelper
     {
         try {
             $category = $this->container->get('api.service.category')
-                ->getItem($content->pk_fk_content_category);
+                ->getItem($content->category_id);
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
@@ -198,7 +198,7 @@ class UrlGeneratorHelper
     protected function getUriForCategory($category)
     {
         $uri = $this->container->get('router')->generate('category_frontpage', [
-            'category_name' => $category->name
+            'category_slug' => $category->name
         ]);
 
         return trim($uri, '/');
@@ -222,7 +222,7 @@ class UrlGeneratorHelper
         try {
             $categoryId = !empty($content->categories)
                 ? $content->categories[0]
-                : $content->pk_fk_content_category;
+                : $content->category_id;
 
             $category = $this->container->get('api.service.category')
                 ->getItem($categoryId);

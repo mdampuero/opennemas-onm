@@ -41,7 +41,7 @@ class Categories
         try {
             $item = getService('api.service.category')->getItemBySlug($slug);
 
-            return $item->pk_content_category;
+            return $item->id;
         } catch (\Exception $e) {
             throw new RestException(404, 'Category not found');
         }
@@ -99,7 +99,7 @@ class Categories
 
             $layout = getService('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get('frontpage_layout_' . $item->pk_content_category, 'default');
+                ->get('frontpage_layout_' . $item->id, 'default');
 
             return $layout;
         } catch (\Exception $e) {

@@ -129,7 +129,7 @@
             </div>
           </li>
           <li class="hidden-xs m-r-10 ng-cloak quicklinks ">
-            <onm-category-selector class="block" default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
+            <onm-category-selector class="block" default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.category_id" placeholder="{t}Any{/t}"></onm-category-selector>
           </li>
           <li class="hidden-xs m-r-10 ng-cloak quicklinks">
             {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
@@ -193,11 +193,11 @@
                     <strong>{t}Created{/t}: </strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                   <div class="small-text">
-                    <span ng-if="content.starttime && content.starttime != '0000-00-00 00:00:00'">
+                    <span ng-if="content.starttime">
                       <strong>{t}Available from{/t} </strong>
                       [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </span>
-                    <span ng-if="content.endtime && content.endtime != '0000-00-00 00:00:00'">
+                    <span ng-if="content.endtime">
                       <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </span>
                   </div>
@@ -227,11 +227,11 @@
                   </span>
                 </td>
                 <td class="hidden-xs">
-                  <span ng-if="!content.pk_fk_content_category">
+                  <span ng-if="!content.category_id">
                     {t}Unasigned{/t}
                   </span>
-                  <span ng-if="content.pk_fk_content_category">
-                    [% (categories | filter : { pk_content_category: content.pk_fk_content_category } : true)[0].title %]
+                  <span ng-if="content.category_id">
+                    [% (categories | filter : { id: content.category_id } : true)[0].title %]
                   </span>
                 </td>
                 <td class="text-center">
