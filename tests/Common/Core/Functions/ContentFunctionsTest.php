@@ -153,6 +153,31 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_featured_media for events.
+     */
+    public function testGetFeaturedMediaForEvents()
+    {
+        $photo = new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $this->content->content_type_name = 'event';
+        $this->content->related_contents = [ [
+            'content_type_name' => 'photo',
+            'source_id'         => 485,
+            'target_id'         => 893,
+            'type'              => 'cover'
+        ] ];
+
+        $this->em->expects($this->once())->method('find')
+            ->with('photo', 893)->willReturn($photo);
+
+        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+    }
+
+    /**
      * Tests get_featured_media.
      */
     public function testGetFeaturedMediaCaption()
@@ -160,8 +185,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(get_featured_media_caption($this->content, 'baz'));
         $this->assertNull(get_featured_media_caption($this->content, 'inner'));
 
+
         $this->content->content_type_name = 'article';
-        $this->content->img1_footer       = 'Rhoncus pretium';
+
+        $this->assertNull(get_featured_media_caption($this->content, 'frontpage'));
+
+        $this->content->img1_footer = 'Rhoncus pretium';
 
         $this->assertEquals('Rhoncus pretium', get_featured_media_caption($this->content, 'frontpage'));
     }
@@ -201,6 +230,65 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             ->with('item')->willReturn(null);
 
         $this->assertNull(get_property(null, 'flob'));
+    }
+
+    /**
+     * Tests get_related.
+     */
+    public function testGetRelated()
+    {
+        $article = new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $this->em->expects($this->once())->method('find')
+            ->with('article', 205)->willReturn($article);
+
+        $this->assertEmpty(get_related($this->content, 'inner'));
+
+        $this->content->related_contents = [ [
+            'content_type_name' => 'article',
+            'target_id'         => 205,
+            'type'              => 'related_inner',
+        ] ];
+
+        $this->assertEmpty(get_related($this->content, 'inner'));
+
+        $this->assertEquals(
+            [ $article ],
+            get_related($this->content, 'related_inner')
+        );
+
+        $this->assertEquals(
+            [ $article ],
+            get_related($this->content, 'related_inner', [ 205 => $article ])
+        );
+    }
+
+    /**
+     * Tests get_related_contents.
+     */
+    public function testGetRelatedContents()
+    {
+        $article = new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $this->em->expects($this->any())->method('find')
+            ->with('article', 205)->willReturn($article);
+
+        $this->content->related_contents = [ [
+            'content_type_name' => 'article',
+            'target_id'         => 205,
+            'type'              => 'related_inner',
+        ] ];
+
+        $this->assertEmpty(get_related_contents($this->content, 'mumble'));
+        $this->assertEquals([ $article ], get_related_contents($this->content, 'inner'));
     }
 
     /**
@@ -308,6 +396,32 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->content->pretitle = 'Percipit "mollis" at scriptorem usu.';
         $this->assertFalse(has_pretitle($this->content));
         $this->assertTrue(has_pretitle($this->content));
+    }
+
+    /**
+     * Tests has_related_contents.
+     */
+    public function testHasRelatedContents()
+    {
+        $this->em->expects($this->any())->method('find')
+            ->with('article', 205)->willReturn(new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]));
+
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
+        $this->content->related_contents = [ [
+            'content_type_name' => 'article',
+            'target_id'         => 205,
+            'type'              => 'related_inner',
+        ] ];
+
+        $this->assertFalse(has_related_contents($this->content, 'mumble'));
+        $this->assertFalse(has_related_contents($this->content, 'inner'));
+        $this->assertTrue(has_related_contents($this->content, 'inner'));
     }
 
     /**
