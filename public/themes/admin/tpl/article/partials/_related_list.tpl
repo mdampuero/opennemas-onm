@@ -146,7 +146,7 @@
           </button>
         </div>
         <h5>
-          {t}Albumfor inner{/t}
+          {t}Album for inner{/t}
           <small>
             ({t}Only one album{/t})
           </small>
