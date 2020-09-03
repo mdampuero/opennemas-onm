@@ -76,8 +76,8 @@
           rtb_files: [],
           theme_skin: 'default',
           translators: [],
-          cookies: '0',
-          cmp_type: '0'
+          cookies: 'none',
+          cmp_type: 'default'
         };
 
         /**
