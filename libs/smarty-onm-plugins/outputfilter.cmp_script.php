@@ -17,11 +17,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
 
-    if (is_null($request)) {
-        return $output;
-    }
-
-    if ((int) $ds->get('cookies') !== 2) {
+    if (is_null($request) || $ds->get('cookies') !== 'cmp') {
         return $output;
     }
 
@@ -37,9 +33,8 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/rss/', $uri)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $cmp  = [ 'default', 'custom_quantcast', 'custom_onetrust' ];
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
-            'common/helpers/cmp_' . $cmp[(int) $ds->get('cmp_type')] . '.tpl',
+            'common/helpers/cmp_' . $ds->get('cmp_type') . '.tpl',
             [ 'id' => $ds->get('cmp_id') ]
         );
 

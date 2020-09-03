@@ -82,7 +82,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))
             ->method('get')
             ->with('cookies')
-            ->willReturn(1);
+            ->willReturn('default');
 
         $this->ds->expects($this->at(1))
             ->method('get')
@@ -103,7 +103,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))
             ->method('get')
             ->with('cookies')
-            ->willReturn(1);
+            ->willReturn('default');
 
         $this->ds->expects($this->at(1))
             ->method('get')
@@ -124,7 +124,7 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))
             ->method('get')
             ->with('cookies')
-            ->willReturn(0);
+            ->willReturn('none');
 
         $this->assertEmpty(smarty_function_cookie_hint(null, $this->smarty));
     }

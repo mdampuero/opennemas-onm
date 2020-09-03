@@ -13,7 +13,9 @@ function smarty_function_cookie_hint($params, &$smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
 
-    if ($ds->get('cookies') != 1) {
+    $cookies = $ds->get('cookies');
+
+    if (empty($cookies) || $cookies != 'default') {
         return '';
     }
 

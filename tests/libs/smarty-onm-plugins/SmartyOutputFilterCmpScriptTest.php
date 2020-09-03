@@ -129,7 +129,7 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->any())
             ->method('get')
             ->with('cookies')
-            ->willReturn(0);
+            ->willReturn('none');
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
             $this->output,
@@ -148,12 +148,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))
             ->method('get')
             ->with('cookies')
-            ->willReturn(2);
+            ->willReturn('cmp');
 
         $this->ds->expects($this->at(1))
             ->method('get')
             ->with('cmp_type')
-            ->willReturn(0);
+            ->willReturn('default');
 
         $returnvalue = "foo-bar-baz";
 
