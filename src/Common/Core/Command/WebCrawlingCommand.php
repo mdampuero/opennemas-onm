@@ -61,6 +61,13 @@ class WebCrawlingCommand extends Command
     const RANDOM = false;
 
     /**
+     * The max time in hours to perform the crawling.
+     *
+     * @var integer
+     */
+    const MAXTIME = 0;
+
+    /**
      * Configures the current command.
      */
     protected function configure()
@@ -77,6 +84,12 @@ class WebCrawlingCommand extends Command
             ->addOption(
                 'limit',
                 'l',
+                InputOption::VALUE_OPTIONAL,
+                'The limit of items to follow'
+            )
+            ->addOption(
+                'maxtime',
+                'm',
                 InputOption::VALUE_OPTIONAL,
                 'The limit of items to follow'
             )
@@ -170,9 +183,7 @@ class WebCrawlingCommand extends Command
 
         $parameters = $this->getParameters($input);
 
-        $parameters['instances'] = $parameters['random'] ?
-            $this->randomizeInstance($parameters['instances']) :
-            $parameters['instances'];
+        $parameters['instances'] = $this->filterInstancesByParameters($parameters);
 
         if ($this->output->isVerbose() && !$this->output->isVeryVerbose()) {
             $this->output->writeln(sprintf(
@@ -230,6 +241,70 @@ class WebCrawlingCommand extends Command
     }
 
     /**
+     * Returns an estimation of the number of instances that adjust max time.
+     *
+     * @param array $parameters The array of parameters.
+     *
+     * @return integer The number of instances that adjust to specified time.
+     */
+    protected function estimateInstancesByMaxTime(int $maxTime, int $timeByRequest, int $limit)
+    {
+        // TotalTime = timebetweenrequests * requests * instances
+        // instances = TotalTime / timebetweenrequests * requests
+        //TODO: Fix this formula.
+        //return floor($maxTime * 3600 / $timeByRequest * $limit);
+        return 5;
+    }
+
+    /**
+     * Returns the list of instances to crawl based on maxtime and random parameters.
+     *
+     * @param array $parameters The array of parameters.
+     *
+     * @return array The list of filtered instances.
+     */
+    protected function filterInstancesByParameters(array $parameters)
+    {
+        if ($parameters['random']) {
+            return [ $this->randomizeInstance($parameters['instances']) ];
+        }
+
+        if ($parameters['maxtime'] != 0) {
+            return $this->filterInstancesByTime($parameters);
+        }
+
+        return $parameters['instances'];
+    }
+
+    /**
+     * Returns a list of random instances based on time to perform the crawl.
+     *
+     * @param array $parameters The array of parameters.
+     *
+     * @return array An array of random instances filtered by max time.
+     */
+    protected function filterInstancesByTime(array $parameters)
+    {
+        $instancesNumber = $this->estimateInstancesByMaxTime(
+            $parameters['maxtime'],
+            $parameters['time'],
+            $parameters['limit']
+        );
+
+        if ($instancesNumber > count($parameters['instances'])) {
+            return $parameters['instances'];
+        }
+
+        $instances = [];
+
+        while (count($instances) < $instancesNumber) {
+            $instances[] = $this->randomizeInstance($parameters['instances']);
+        }
+
+        return $instances;
+    }
+
+    /**
      * Returns the list of instances to synchronize.
      *
      * @param array $names The list of instance names
@@ -277,6 +352,7 @@ class WebCrawlingCommand extends Command
     {
         $depth     = $this->getNotEmptyParameter($input, 'depth');
         $limit     = $this->getNotEmptyParameter($input, 'limit');
+        $maxTime   = $this->getNotEmptyParameter($input, 'maxtime');
         $instances = $this->getNotEmptyParameter($input, 'instances');
         $port      = $this->getNotEmptyParameter($input, 'port');
         $time      = $this->getNotEmptyParameter($input, 'time');
@@ -291,6 +367,7 @@ class WebCrawlingCommand extends Command
         return [
             'depth'     => $depth,
             'limit'     => $limit,
+            'maxtime'   => $maxTime,
             'instances' => $instances,
             'port'      => $port,
             'time'      => $time,
@@ -307,7 +384,8 @@ class WebCrawlingCommand extends Command
      */
     protected function randomizeInstance(array $instances)
     {
-        $randomInstance[] = $instances[rand(0, count($instances) - 1)];
-        return $randomInstance;
+        $randomNumber = rand(0, count($instances) - 1);
+
+        return $instances[$randomNumber];
     }
 }
