@@ -249,8 +249,7 @@ class WebCrawlingCommand extends Command
      */
     protected function estimateInstancesByMaxTime(int $maxTime, int $timeByRequest, int $limit)
     {
-        //return floor( ($maxTime * 3600) / ($timeByRequest * $limit));
-        return 3;
+        return floor((($maxTime * 3600) / ($timeByRequest / 1000)) / $limit);
     }
 
     /**
