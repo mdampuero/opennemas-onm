@@ -303,10 +303,11 @@ class WebCrawlingCommand extends Command
      *
      * @param array The array of instances.
      *
-     * @return Instance The selected instance.
+     * @return array An array with the selected instance.
      */
     protected function randomizeInstance(array $instances)
     {
-        return $instances[rand(0, count($instances) - 1)];
+        $randomInstance[] = $instances[rand(0, count($instances) - 1)];
+        return $randomInstance;
     }
 }
