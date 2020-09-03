@@ -729,6 +729,7 @@
                 $scope.data[name].push({
                   target_id: nv[i][j].pk_content,
                   caption: null,
+                  content_type_name: nv[i][j].content_type_name,
                   type: type
                 });
 
