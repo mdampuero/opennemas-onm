@@ -88,14 +88,6 @@ class FrontpagesController extends Controller
                 }
             }
 
-            // Get related content ids
-            $relatedMap = $this->get('related_contents')
-                ->getRelatedContents($ids, $categoryId);
-
-            foreach ($relatedMap as $ids) {
-                $relatedIds = array_merge($relatedIds, $ids);
-            }
-
             $relatedIds = array_unique($relatedIds);
             $date       = date('Y-m-d H:i:s');
 
@@ -139,18 +131,6 @@ class FrontpagesController extends Controller
                     && array_key_exists($content->fk_video, $related)
                 ) {
                     $content->obj_video = $related[$content->fk_video];
-                }
-
-                if (array_key_exists($content->pk_content, $relatedMap)) {
-                    $content->related_contents = [];
-
-                    $keys = $relatedMap[$content->pk_content];
-
-                    foreach ($keys as $key) {
-                        if (array_key_exists($key, $related)) {
-                            $content->related_contents[] = $related[$key];
-                        }
-                    }
                 }
             }
 
