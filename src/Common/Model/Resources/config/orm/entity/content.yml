@@ -88,9 +88,11 @@ orm:
                                     type: integer
                                 target_id:
                                     type: integer
-                                caption:
-                                    type: string
                                 type:
+                                    type: string
+                                content_type_name:
+                                    type: string
+                                caption:
                                     type: string
                                 position:
                                     type: integer

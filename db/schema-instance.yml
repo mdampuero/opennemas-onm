@@ -1239,6 +1239,9 @@ content_content:
         type:
             type:    string
             options: { length: 50, default: null }
+        content_type_name:
+            type:    string
+            options: { length: 20, default: null }
         caption:
             type:    text
             options: { default: null, length: 65532, notnull: false }

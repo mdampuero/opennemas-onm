@@ -1907,7 +1907,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->related_contents = getService('dbal_connection')->fetchAll(
                 'SELECT `target_id`, `type`, `caption`, `content_type_name`'
                 . 'FROM `content_content` '
-                . 'LEFT JOIN contents ON target_id = pk_content WHERE source_id=? '
+                . 'WHERE source_id=? '
                 . 'ORDER BY `type` ASC, `content_content`.`position` ASC',
                 [ (int) $this->pk_content ]
             );
@@ -2025,14 +2025,15 @@ class Content implements \JsonSerializable, CsvSerializable
             $related[] = $this->pk_content;
             $related[] = $data['related_contents'][$i]['target_id'];
             $related[] = $data['related_contents'][$i]['type'];
+            $related[] = $data['related_contents'][$i]['content_type_name'];
             $related[] = !empty($data['related_contents'][$i]['caption'])
                 ? $data['related_contents'][$i]['caption'] : null;
             $related[] = $position++;
         }
 
         $sql = 'INSERT INTO content_content '
-            . '(source_id, target_id, type, caption, position) VALUES '
-            . str_repeat('(?,?,?,?,?),', count($data['related_contents']));
+            . '(source_id, target_id, type, content_type_name, caption, position) VALUES '
+            . str_repeat('(?,?,?,?,?,?),', count($data['related_contents']));
 
         $conn->executeQuery(trim($sql, ','), $related);
 
