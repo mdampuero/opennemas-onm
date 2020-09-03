@@ -54,6 +54,13 @@ class WebCrawlingCommand extends Command
     const TIME = 3000;
 
     /**
+     * The flag to check if is random or not.
+     *
+     * @var boolean
+     */
+    const RANDOM = false;
+
+    /**
      * Configures the current command.
      */
     protected function configure()
@@ -90,6 +97,12 @@ class WebCrawlingCommand extends Command
                 't',
                 InputOption::VALUE_OPTIONAL,
                 'The time between requests in ms'
+            )
+            ->addOption(
+                'random',
+                'r',
+                InputOption::VALUE_NONE,
+                'If random flag is enabled, only performs crawling over a random instance'
             );
     }
 
@@ -156,6 +169,10 @@ class WebCrawlingCommand extends Command
         ));
 
         $parameters = $this->getParameters($input);
+
+        $parameters['instances'] = $parameters['random'] ?
+            $this->randomizeInstance($parameters['instances']) :
+            $parameters['instances'];
 
         if ($this->output->isVerbose() && !$this->output->isVeryVerbose()) {
             $this->output->writeln(sprintf(
@@ -263,6 +280,7 @@ class WebCrawlingCommand extends Command
         $instances = $this->getNotEmptyParameter($input, 'instances');
         $port      = $this->getNotEmptyParameter($input, 'port');
         $time      = $this->getNotEmptyParameter($input, 'time');
+        $random    = $this->getNotEmptyParameter($input, 'random');
 
         if (!empty($instances)) {
             $instances = preg_split('/\s*,\s*/', $instances);
@@ -275,7 +293,20 @@ class WebCrawlingCommand extends Command
             'limit'     => $limit,
             'instances' => $instances,
             'port'      => $port,
-            'time'      => $time
+            'time'      => $time,
+            'random'    => $random
         ];
+    }
+
+    /**
+     * Returns a random instance from the array of instances.
+     *
+     * @param array The array of instances.
+     *
+     * @return Instance The selected instance.
+     */
+    protected function randomizeInstance(array $instances)
+    {
+        return $instances[rand(0, count($instances) - 1)];
     }
 }
