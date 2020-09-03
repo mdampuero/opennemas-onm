@@ -121,6 +121,7 @@
 
           $scope.item.related_contents.push({
             caption: null,
+            content_type_name: nv.content_type_name,
             position: 0,
             target_id: nv.pk_content,
             type: 'cover'

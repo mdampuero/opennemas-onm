@@ -382,9 +382,9 @@ class ContentPersister extends BasePersister
         }
 
         $sql = "insert into content_content"
-            . "(source_id, target_id, type, caption, position) values "
+            . "(source_id, target_id, type, content_type_name, caption, position) values "
             . str_repeat(
-                '(?,?,?,?,?),',
+                '(?,?,?,?,?,?),',
                 count($relations)
             );
 
@@ -396,6 +396,7 @@ class ContentPersister extends BasePersister
             $params = array_merge($params, array_merge($id, [
                 (int) $value['target_id'],
                 $value['type'],
+                $value['content_type_name'],
                 empty($value['caption']) ? null : $value['caption'],
                 (int) $value['position'],
             ]));
@@ -403,6 +404,7 @@ class ContentPersister extends BasePersister
             $types = array_merge($types, [
                 \PDO::PARAM_INT,
                 \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 empty($value['caption']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 \PDO::PARAM_INT
