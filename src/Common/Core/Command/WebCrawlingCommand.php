@@ -249,7 +249,7 @@ class WebCrawlingCommand extends Command
      */
     protected function estimateInstancesByMaxTime(int $maxTime, int $timeByRequest, int $limit)
     {
-        return floor((($maxTime * 3600) / ($timeByRequest / 1000)) / $limit);
+        return floor($maxTime * 3600 / (($timeByRequest / 1000) * $limit));
     }
 
     /**
@@ -294,7 +294,6 @@ class WebCrawlingCommand extends Command
         $instances = [];
         $domains   = [];
 
-        //TODO: Improve this to remove from array the returned instance and avoid intermediate tries.
         while (count($instances) < $instancesNumber) {
             $instance = $this->randomizeInstance($parameters['instances']);
             $domain   = $instance->domains[0];
