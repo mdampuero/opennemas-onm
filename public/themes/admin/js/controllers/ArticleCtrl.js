@@ -312,7 +312,7 @@
           return $scope.getL10nUrl(
             $scope.routing.generate('frontend_article_show', {
               id:            localized.pk_content,
-              category_name: $scope.data.extra.category.name,
+              category_slug: $scope.data.extra.category.name,
               created:       created,
               slug:          localized.slug
             })
@@ -420,7 +420,7 @@
          */
         $scope.save = function() {
           if ($scope.form.$invalid ||
-              !$scope.data.article.pk_fk_content_category) {
+              !$scope.data.article.category_id) {
             $scope.showRequired = true;
             return;
           }

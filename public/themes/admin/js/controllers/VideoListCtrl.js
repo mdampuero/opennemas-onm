@@ -28,7 +28,7 @@
          */
         $scope.criteria = {
           content_type_name: 'video',
-          pk_fk_content_category: null,
+          category_id: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },
@@ -69,7 +69,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return e.pk_content_category === item.pk_fk_content_category;
+            return e.id === item.category_id;
           });
 
           if (categories.length === 0) {
@@ -81,7 +81,7 @@
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              category_name: categories[0].name
+              category_slug: categories[0].name
             })
           );
         };

@@ -123,7 +123,7 @@
               <div class="form-group">
                 <label for="category" class="form-label">{t}Category{/t}</label>
                 <div class="controls">
-                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="book.pk_fk_content_category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
+                  <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" locale="config.locale.selected" ng-model="book.category_id" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
                 </div>
               </div>
               <div class="form-group">
@@ -142,7 +142,7 @@
                 <label for="starttime" class="form-label">{t}Date{/t}</label>
                 <div class="controls">
                   <div class="input-group">
-                    <input class="form-control" type="datetime" id="date" name="starttime" value="{if $book->starttime neq '0000-00-00 00:00:00'}{$book->starttime}{/if}">
+                    <input class="form-control" type="datetime" id="date" name="starttime" value="{if $book->starttime}{$book->starttime}{/if}">
                     <span class="input-group-addon add-on">
                       <span class="fa fa-calendar"></span>
                     </span>

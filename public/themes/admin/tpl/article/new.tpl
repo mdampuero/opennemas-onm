@@ -123,6 +123,16 @@
                     <input class="form-control" id="agency" name="agency" ng-model="article.agency" type="text">
                   </div>
                 </div>
+                {is_module_activated name="CRONICAS_MODULES"}
+                  <div class="form-group col-sm-4">
+                    <label class="form-label" for="agency_bulletin">
+                      {t}Signature{/t} #2
+                    </label>
+                    <div class="controls">
+                      <input class="form-control" id="agency_bulletin" ng-model="article.params.agencyBulletin" type="text">
+                    </div>
+                  </div>
+                {/is_module_activated}
               </div>
               <div class="form-group">
                 <label class="form-label" for="pretitle">
@@ -225,12 +235,12 @@
                       {/acl}
                     </div>
                   </div>
-                  <div class="form-group" ng-class="{ 'has-error': showRequired && !article.pk_fk_content_category }">
+                  <div class="form-group" ng-class="{ 'has-error': showRequired && !article.category_id }">
                     <label class="form-label" for="category">
                       {t}Category{/t} *
                     </label>
                     <div class="controls">
-                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.category" locale="config.locale.selected" ng-model="article.pk_fk_content_category" placeholder="{t}Select a category{/t}…"></onm-category-selector>
+                      <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.category" locale="config.locale.selected" ng-model="article.category_id" placeholder="{t}Select a category{/t}…"></onm-category-selector>
                     </div>
                   </div>
                   <div class="form-group">
@@ -245,7 +255,7 @@
                     <label class="form-label" for="slug">
                       {t}Slug{/t}
                     </label>
-                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !form.pk_fk_content_category.$dirty && !form.content_status.$dirty">
+                    <span class="m-t-2 pull-right" ng-if="article.pk_article && backup.content_status != '0' && !form.category_id.$dirty && !form.content_status.$dirty">
                       <a href="[% getFrontendUrl(data.article) %]" target="_blank">
                         <i class="fa fa-external-link"></i>
                         {t}Link{/t}

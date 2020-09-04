@@ -290,8 +290,8 @@ class ApiController extends Controller
                 continue;
             }
 
-            if (!empty($item->pk_fk_content_category)) {
-                $ids[] = $item->pk_fk_content_category;
+            if (!empty($item->category_id)) {
+                $ids[] = $item->category_id;
             }
         }
 

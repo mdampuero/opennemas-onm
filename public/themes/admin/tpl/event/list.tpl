@@ -65,7 +65,7 @@
     </div>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
-    <onm-category-selector ng-model="criteria.pk_fk_content_category" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
+    <onm-category-selector ng-model="criteria.category_id" label-text="{t}Category{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}

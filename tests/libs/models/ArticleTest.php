@@ -79,7 +79,6 @@ class ArticleTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet()
     {
-        $this->article->category_name     = 'foobar';
         $this->article->content_type_name = 'article';
         $this->article->created           = '2018-01-01 10:10:10';
         $this->article->id                = 1;

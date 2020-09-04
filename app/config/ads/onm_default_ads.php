@@ -50,7 +50,7 @@ return array_map(function ($ad) use (&$i, $default) {
     $adObject->id               = $i;
     $adObject->pk_advertisement = $i;
     $adObject->pk_content       = $i;
-    $adObject->pk_fk_content    = $i;
+    $adObject->content_id       = $i;
     $adObject->default_ad       = 1;
 
     $i++;

@@ -215,15 +215,14 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             'pk_content'             => 123,
             'other_value'            => 'other value',
             'fk_content_type'        => 1,
-            'pk_fk_content_category' => 2,
+            'category_id'            => 2,
             'params'                 => 'a:2:{s:4:"test";i:1;s:5:"test2";i:2;}',
-            'category_name'          => 'testing',
+            'category_slug'          => 'testing',
         ]);
         $this->assertEquals(123, $content->id);
         $this->assertEquals('other value', $content->other_value);
         $this->assertEquals(1, $content->content_type);
-        $this->assertEquals(2, $content->pk_fk_content_category);
-        $this->assertEquals('testing', $content->category_name);
+        $this->assertEquals(2, $content->category_id);
         $this->assertEquals([ 'test' => 1, 'test2' => 2 ], $content->params);
 
         $property = new \ReflectionProperty($content, 'title');

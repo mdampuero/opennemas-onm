@@ -78,7 +78,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'content_status'    => '1',
             'in_litter'         => 0,
         ]);
-        $this->content->category_name = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
+        $this->content->category_slug = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
 
         $this->matcher = new ContentUrlMatcher($this->em);
     }
@@ -117,8 +117,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
-            'ciencia'
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
 
         $this->assertTrue(is_object($return));
@@ -135,8 +134,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
-            'ciencia'
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
 
         $this->assertTrue(is_object($return));
@@ -190,8 +188,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
-            null,
-            'ciencia'
+            null
         );
         $this->assertTrue(is_object($return));
     }

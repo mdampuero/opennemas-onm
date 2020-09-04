@@ -31,7 +31,7 @@ class ArticleController extends Controller
         $article = new \Article();
 
         $data             = $request->request->all();
-        $data['category'] = $data['pk_fk_content_category'];
+        $data['category'] = $data['category_id'];
         $msg              = $this->get('core.messenger');
 
         if (!$article->create($data)) {
@@ -106,7 +106,7 @@ class ArticleController extends Controller
 
         $data = $request->request->all();
 
-        $data['category'] = $data['pk_fk_content_category'];
+        $data['category'] = $data['category_id'];
 
         if (!$article->update($data)) {
             $msg->add(_('Unable to update the article.'), 'error');

@@ -177,9 +177,12 @@ class Processor
             throw new \InvalidArgumentException();
         }
 
-        $this->imagine = $this->getImagine();
-        $this->image   = $this->imagine->open($path);
-
+        try {
+            $this->imagine = $this->getImagine();
+            $this->image   = $this->imagine->open($path);
+        } catch (\Exception $e) {
+            return null;
+        }
         return $this;
     }
 
