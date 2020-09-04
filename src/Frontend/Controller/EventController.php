@@ -242,15 +242,15 @@ class EventController extends FrontendController
             return [];
         }
 
-        $relations = $this->get('entity_repository')->findBy([
-            'content_type_name' => [[ 'value' => 'photo', ]],
-            'pk_content'        => [[ 'value' => array_unique($ids), 'operator' => 'IN', 'value']],
-        ]);
-
-        $relations = $this->get('data.manager.filter')
-            ->set($relations)
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
+        try {
+            $relations = getService('api.service.content')->getListByIds($ids)['items'];
+            $relations = $this->get('data.manager.filter')
+                ->set($relations)
+                ->filter('mapify', [ 'key' => 'pk_content' ])
+                ->get();
+        } catch (GetItemException $e) {
+            return;
+        }
 
         return $relations;
     }
