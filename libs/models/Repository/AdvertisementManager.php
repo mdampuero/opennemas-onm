@@ -241,15 +241,7 @@ class AdvertisementManager extends EntityManager
         $advertisements = $this->findMulti($result);
 
         return array_filter($advertisements, function ($a) {
-            if (!is_object($a)
-                || !$a->isInTime()
-                || $a->content_status != 1
-                || $a->in_litter != 0
-            ) {
-                return false;
-            }
-
-            return true;
+            return $a->isReadyForPublish();
         });
     }
 
