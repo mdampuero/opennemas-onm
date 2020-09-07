@@ -9,12 +9,12 @@
       formatId: {$id},
       tagId: 'sas_{$id}_{$rand}',
       target: targetingCode
-    }, {
+    }{if !$config['header_bidding']}, {
       onNoad: function(data) {
         if (data.formatId) {
           $('#' + data.tagId).parent().remove();
         }
       }
-    });
+    }{/if});
   });
 </script>

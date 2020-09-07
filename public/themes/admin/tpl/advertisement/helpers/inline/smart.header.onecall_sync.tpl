@@ -13,11 +13,11 @@
     pageId: {$page_id},
     formatId: "{foreach $zones as $zone}{if $zone@last}{$zone['format_id']}{else}{$zone['format_id']},{/if}{/foreach}",
     target: targetingCode
-  }, {
+  }{if !$config['header_bidding']}, {
     onNoad: function(data) {
       if (data.formatId) {
         $('#' + data.tagId).parent().remove();
       }
     }
-  });
+  }{/if});
 </script>
