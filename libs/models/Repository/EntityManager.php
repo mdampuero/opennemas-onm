@@ -11,6 +11,7 @@
 
 namespace Repository;
 
+use \Common\Model\Entity\Content;
 use Onm\Cache\CacheInterface;
 
 /**
@@ -25,6 +26,10 @@ use Onm\Cache\CacheInterface;
  */
 class EntityManager extends BaseManager
 {
+
+    const ORM_CONTENT_TYPES = [
+        'kiosko'
+    ];
     /**
      * Initializes the entity manager.
      *
@@ -69,6 +74,10 @@ class EntityManager extends BaseManager
     private function findOne($contentType, $id, $isMulti = false)
     {
         $entity = null;
+
+        if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
+            return null;
+        }
 
         $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
 
