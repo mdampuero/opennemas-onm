@@ -52,8 +52,7 @@ class ContentRenderer extends Renderer
             try {
                 $author = $this->container->get('api.service.author')->getItem($params['item']->fk_author);
 
-                if (!empty($author->meta) && array_key_exists('is_blog', $author->meta)
-                    && $author->meta['is_blog'] == 1) {
+                if ($author->is_blog == 1) {
                     return 'frontpage/contents/_blog.tpl';
                 }
             } catch (GetItemException $e) {
