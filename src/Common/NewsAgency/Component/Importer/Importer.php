@@ -195,10 +195,6 @@ class Importer
             return $a->urn;
         }, $resources);
 
-        if (!is_array($urns)) {
-            $urns = [ $urns ];
-        }
-
         $criteria = [
             'urn_source' => [
                 [ 'value' => $urns, 'operator' => 'IN' ]
