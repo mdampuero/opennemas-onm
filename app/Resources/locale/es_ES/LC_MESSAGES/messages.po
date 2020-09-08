@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-07 07:55+0000\n"
-"PO-Revision-Date: 2020-07-07 10:09+0200\n"
+"POT-Creation-Date: 2020-09-08 15:28+0000\n"
+"PO-Revision-Date: 2020-09-08 17:28+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -376,41 +376,6 @@ msgstr "Contraseña actualizada correctamente"
 msgid "Unable to update your password."
 msgstr "No se ha podido actualizar la contraseña."
 
-msgid "Day"
-msgstr "Día"
-
-msgid "Week"
-msgstr "Semana"
-
-msgid "SemiMonth"
-msgstr "Medio mes"
-
-msgid "Month"
-msgstr "Mes"
-
-msgid "Year"
-msgstr "Año"
-
-msgid "Please configure your Paywall module before using it."
-msgstr "Debes configurar el módulo «Paywall» antes de usarlo."
-
-msgid "Paypal API authentication is incorrect."
-msgstr "La autenticación del API de PayPal no es correcta."
-
-msgid "We are checking your IPN url. Please wait a minute."
-msgstr "Estamos verificando tu url de IPN. Por favor, espere un minuto."
-
-msgid "Paypal IPN configuration is incorrect. Please validate it."
-msgstr ""
-"La configuración del IPN en Paypal es incorrecta. Por favor, compruébela."
-
-msgid "Paywall settings saved."
-msgstr "Configuración de Paywall guardada."
-
-msgid "Paypal IPN configuration is incorrect. Please correct it and try again."
-msgstr ""
-"La configuración del IPN de Paypal es incorrecta. Por favor, corríjelo."
-
 msgid "Special successfully created."
 msgstr "Especial creado con éxito."
 
@@ -522,18 +487,6 @@ msgstr "Papelera"
 
 msgid "Keywords"
 msgstr "Palabras clave"
-
-msgid "Paywall"
-msgstr "Paywall"
-
-msgid "Statistics"
-msgstr "Estadísticas"
-
-msgid "Paywall users"
-msgstr "Usuarios de paywall"
-
-msgid "Paywall purchases"
-msgstr "Compras en paywall"
 
 msgid "Sync Instances"
 msgstr "Sincronizar Instancias"
@@ -1017,16 +970,6 @@ msgstr "Te has suscrito al boletín de noticias."
 msgid "You have been unsubscribed from the newsletter."
 msgstr "Hemos eliminado tu suscripción del boletín de noticias."
 
-#, php-format
-msgid "You already have an active Subscription until %s"
-msgstr "Ya tienes una suscripción activa hasta el %s"
-
-msgid "Your payment was already registered"
-msgstr "Tu pago ya fue registrado"
-
-msgid "Your subscription could not been created. Please try again."
-msgstr "No se ha podido crear tu suscripción. Por favor, inténtalo de nuevo."
-
 msgid "You can't vote this poll, it is closed."
 msgstr "La encuesta está cerrada, no puedes votar."
 
@@ -1071,11 +1014,10 @@ msgid ""
 "click <a href=\"%s\">here</a>.</li></ul>"
 msgstr ""
 "<strong>Esta cuenta aún no ha sido verificada.</strong><ul><li>Para "
-"verificarla, pulsa en el enlace que hemos enviado a tu "
-"dirección de correo.</li><li>Si no has recibido ningún mensaje, revisa que "
-"tu gestor de correo no lo haya clasificado como spam.</li><li>Si quieres que "
-"te enviemos un nuevo enlace de verificación, pulsa <a href=\"%s\">aquí</a>.</"
-"li></ul>"
+"verificarla, pulsa en el enlace que hemos enviado a tu dirección de correo.</"
+"li><li>Si no has recibido ningún mensaje, revisa que tu gestor de correo no "
+"lo haya clasificado como spam.</li><li>Si quieres que te enviemos un nuevo "
+"enlace de verificación, pulsa <a href=\"%s\">aquí</a>.</li></ul>"
 
 msgid "Password recovery email was sent."
 msgstr "El correo de recuperación de contraseña fue enviado."
@@ -1086,9 +1028,8 @@ msgid ""
 "\"%s\">here</a>.</li><li>Recover password <a href=\"%s\">here</a>.</li></ul>"
 msgstr ""
 "<strong>Esta dirección de correo ya está en uso.</strong><ul><li>Si quieres "
-"iniciar sesión, pulsa <a href=\"%s\">aquí</a>.</"
-"li><li>Si has olvidado tu contraseña, pulsa <a href=\"%s\">aquí</a> para "
-"recuperarla.</li></ul>"
+"iniciar sesión, pulsa <a href=\"%s\">aquí</a>.</li><li>Si has olvidado tu "
+"contraseña, pulsa <a href=\"%s\">aquí</a> para recuperarla.</li></ul>"
 
 msgid "Unable to create your user account. Please try it later."
 msgstr "No se pudo crear tu cuenta de usuario. Por favor inténtalo más tarde"
@@ -1114,10 +1055,6 @@ msgstr "Nueva cuenta de usuario en %s"
 #, php-format
 msgid "Welcome to %s"
 msgstr "Bienvenido a %s"
-
-#, php-format
-msgid "%s - Premium subscription activated"
-msgstr "%s - Suscripción premium activada"
 
 msgid "Advertisement"
 msgstr "Publicidad"
@@ -1363,6 +1300,19 @@ msgstr "%s elementos eliminados correctamente"
 
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Has excedido el límite de versiones. Elimina una para crear una nueva"
+
+msgid "Item not found"
+msgstr "Elemento no encontrado"
+
+msgid "Invalid argument"
+msgstr "Parámetro incorrecto"
+
+msgid "The item is already imported"
+msgstr "El elemento ya está importado"
+
+msgid "The synchronization is already in progress. Try again later."
+msgstr ""
+"El proceso de sincronización está en curso. Inténtalo de nuevo más tarde."
 
 msgid "Invalid category"
 msgstr "Categoría no válida"
@@ -2839,12 +2789,6 @@ msgstr "Nombre del sitio"
 msgid "This will be displayed as your site name."
 msgstr "Usado como el nombre de tu sitio."
 
-msgid "Site agency"
-msgstr "Agencia del sitio"
-
-msgid "This will be displayed as the default article signature."
-msgstr "Usado como firma por defecto en los artículos."
-
 msgid "Footer text"
 msgstr "Texto del pie de página"
 
@@ -3182,23 +3126,6 @@ msgstr ""
 msgid "Used when we want to test if the user is an human and not a robot."
 msgstr ""
 "Usado cuando quieress comprobar si un usuario es un humano y no un robot."
-
-msgid "Paypal Settings"
-msgstr "Opciones de Paypal"
-
-msgid "Account email:"
-msgstr "Correo del usuario de la cuenta"
-
-msgid ""
-"You can get your PayPal account email from <a class=\"external-link\" href="
-"\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target="
-"\"_blank\" ng-click=\"$event.stopPropagation();\">PayPal site</a>. This must "
-"be a business account for receiving payments"
-msgstr ""
-"Puedes recibir correos electrónicos de <a class=\"external-link\" href="
-"\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target="
-"\"_blank\" ng-click=\"$event.stopPropagation();\">PayPal</a>. Esta debe ser "
-"tu cuenta de empresa para recibir las notificaciones de pagos."
 
 msgid "Google Search"
 msgstr "Búsqueda de Google"
@@ -4668,228 +4595,6 @@ msgstr "Selecciona un contenido"
 msgid "Examples"
 msgstr "Ejemplos"
 
-msgid "Premium users"
-msgstr "Usuarios premium"
-
-msgid "Create new user"
-msgstr "Crear nuevo usuario"
-
-msgid "Filter by name"
-msgstr "Filtrar por nombre"
-
-msgid "E-mail"
-msgstr "Correo electrónico"
-
-msgid "Last login"
-msgstr "Último inicio de sesión"
-
-msgid "End of subscription"
-msgstr "Fin de la suscripción"
-
-msgid "--All--"
-msgstr "--Todos--"
-
-msgid "Registered"
-msgstr "Registrado"
-
-msgid "Expired"
-msgstr "Expirado"
-
-msgid "%1 users"
-msgstr "%1 usuarios"
-
-msgid "Export list"
-msgstr "Exportar listado"
-
-msgid "Filter by name or email"
-msgstr "Filtrar por nombre"
-
-msgid "Sort by"
-msgstr "Ordenar por"
-
-msgid "Payment date"
-msgstr "Fecha de pago"
-
-msgid "User name"
-msgstr "Nombre de usuario"
-
-msgid "Full name"
-msgstr "Nombre completo"
-
-msgid "%1 purchases"
-msgstr "%1 compras"
-
-msgid "Show all…"
-msgstr "Mostrar todo…"
-
-msgid "No paywall users yet."
-msgstr "No hay usuarios de paywall aún."
-
-msgid "Order id"
-msgstr "Id de la compra"
-
-msgid "Amount"
-msgstr "Cantidad"
-
-msgid "No purchases were made yet."
-msgstr "No se ha realizado ninguna compra actualmente"
-
-msgid "Config newsletter module"
-msgstr "Configuración del módulo «Boletín de noticias»"
-
-msgid ""
-"The paywall allows you to monetize your contents by enabling a subscription "
-"enabled model access to your contents."
-msgstr ""
-"«Paywall» le permite monetizar sus contenidos permitiendo un modelos de "
-"acceso bajo suscripción a sus contenidos."
-
-msgid "Subscribed users"
-msgstr "Usuarios suscritos"
-
-msgid "Lastest purchases"
-msgstr "Últimas compras"
-
-msgid "Purchases last month"
-msgstr "Compras en el último mes"
-
-msgid "Paypal API authentication"
-msgstr "Autenticación del API de Paypal"
-
-msgid "Get this parameters from your "
-msgstr "Obtenga estos parametros desde su"
-
-msgid "Paypal identification data"
-msgstr "datos de identificación de Paypal"
-
-msgid "Use the testing environment Sandbox"
-msgstr "Utiliza el entorno de prueba Sandbox"
-
-msgid "Real mode (recommended)"
-msgstr "Modo real (recomendado)"
-
-msgid "Testing mode"
-msgstr "Modo de prueba"
-
-msgid ""
-"Paypal allows you to enable a testing environment where <strong>all the "
-"transactions will not be real</strong>, so you can test if the paywall is "
-"working well."
-msgstr ""
-"Paypal te permite activar un entorno de pruebas donde <strong> todas las "
-"transacciones no serán reales </strong>, por lo que puedes probar si el muro "
-"de pago está funcionando bien."
-
-msgid ""
-"Active a testing environment in your Paypal account (only if you are a "
-"developer)"
-msgstr ""
-"Activa un entorno de prueba en tu cuenta de Paypal (sólo si eres un "
-"desarrollador)"
-
-msgid "More information"
-msgstr "Más información"
-
-msgid "Validate here your Paypal API credentials in the selected mode"
-msgstr "Valida aquí tus credenciales del API de PayPal en el modo seleccionado"
-
-msgid "Validate"
-msgstr "Validar"
-
-msgid "Currency & taxes"
-msgstr "Moneda e impuestos"
-
-msgid "Money unit"
-msgstr "Moneda"
-
-msgid "VAT %"
-msgstr "IVA %"
-
-msgid "Payment modes"
-msgstr "Modos de pago"
-
-msgid ""
-"Below you can add different payment modes by including the time range that "
-"the user can purchase, the description and the price"
-msgstr ""
-"A continuación puedes agregar diferentes formas de pago incluyendo el rango "
-"de tiempo que el usuario puede comprar, la descripción y el precio"
-
-msgid "Add new payment mode"
-msgstr "Añadir un nuevo modo de pago"
-
-msgid "Recurring payments (optional)"
-msgstr "Pagos recurrentes (opcional)"
-
-msgid ""
-"Paypal allow your users to subscribe to your Paywall through recurring "
-"payments. This means that your users will be charged periodically without "
-"having to worry about payments and due dates, and will allow you to increase "
-"the user engagement."
-msgstr ""
-"PayPal permite a los usuarios que se suscriban a su Paywall través de pagos "
-"periódicos. Esto significa que los usuarios deberán pagar periódicamente sin "
-"tener que preocuparse acerca de los pagos y las fechas de vencimiento, y le "
-"permitirá aumentar la participación de los usuarios."
-
-msgid "Mark this if you want to enable recurring payments"
-msgstr "Marque esta opción si desea habilitar los pagos recurrentes"
-
-msgid ""
-"You have to activate some options in the Paypal configuration to make "
-"recurring payments work. Please follow next steps:"
-msgstr ""
-"Tienes que activar algunas opciones en la configuración de Paypal para hacer "
-"que los pagos recurrentes funcionen. Por favor, sigue los siguientes pasos:"
-
-msgid "Go to your merchant Paypal"
-msgstr "Ve a tu cuenta de comerciante de Paypal"
-
-msgid "IPN web configuration page "
-msgstr "Página de configuración del IPN"
-
-msgid " and log in with your merchant account"
-msgstr "e inicie sesión con su cuenta de comerciante"
-
-msgid "Click in the \"Choose IPN configuration\" button"
-msgstr "Haz clic en el botón \"Escoger configuración del IPN\""
-
-msgid "Fill in the \"Notification URL\" field with this address"
-msgstr "Rellene el campo \"URL de notificación\" con esta dirección"
-
-msgid "Enable the \"Receive IPN messages\" checkbox"
-msgstr "Active la casilla de verificación \"Recibir mensajes de IPN\""
-
-msgid ""
-"Click on the validate button to check ipn is working fine and enable "
-"recurring payment"
-msgstr ""
-"Haz clic en el botón de validación para comprobar que IPN está funcionando y "
-"habilitar el pago recurrente"
-
-msgid "Waiting"
-msgstr "Esperando"
-
-msgid "Valid"
-msgstr "Válido"
-
-msgid "Finally, click in the \"Save\" button to save this configuration"
-msgstr ""
-"Por último, haga clic en el botón \"Guardar\" para guardar la configuración"
-
-msgid "Accept Opennemas payment agreements terms"
-msgstr "Acepto el acuerdo y condiciones de pago de Opennemas"
-
-msgid ""
-"Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank"
-"\">payment agreements terms</a> of Opennemas"
-msgstr ""
-"Lea y acepte los <a href=\"http://help.opennemas.com/\" target=\"_blank\"> "
-"términos de pago </a> de Opennemas"
-
-msgid "Set a price"
-msgstr "Establecer el precio"
-
 msgid "Number of videos in frontpage"
 msgstr "Número de vídeos en portada"
 
@@ -5738,6 +5443,9 @@ msgstr "Seleccionar contenidos"
 msgid "Pick recipients"
 msgstr "Seleccionar destinatarios"
 
+msgid "Config newsletter module"
+msgstr "Configuración del módulo «Boletín de noticias»"
+
 msgid "Create template"
 msgstr "Crear planificación"
 
@@ -5809,6 +5517,9 @@ msgstr "Tipo de opinión"
 
 msgid "None"
 msgstr "Ninguno"
+
+msgid "Amount"
+msgstr "Cantidad"
 
 msgid "Unable to find setting for newsletters."
 msgstr "No se han encontrado las configuraciones de boletines."
@@ -6215,80 +5926,6 @@ msgstr "Si, actualizar todos"
 
 msgid "No available contents"
 msgstr "No hay contenidos disponibles"
-
-msgid "We value your privacy"
-msgstr "Tu privacidad es importante para nosotros"
-
-msgid "I Do Not Accept"
-msgstr "No acepto"
-
-msgid "I Accept"
-msgstr "Aceptar"
-
-msgid "Show Purposes"
-msgstr "Ver propósitos"
-
-msgid ""
-"We and our partners use technology such as cookies on our site to "
-"personalize content and ads, provide social media features, and analyze our "
-"traffic. Click below to consent to the use of this technology by us and "
-"these 3rd parties across the web. You can change your mind and revisit your "
-"consent choices at anytime by returning to this site."
-msgstr ""
-"Tanto nuestros partners como nosotros utilizamos cookies en nuestro sitio "
-"web para personalizar contenido y publicidad, proporcionar funcionalidades a "
-"las redes sociales, o analizar nuestro tráfico. Haciendo click consientes el "
-"uso de esta tecnologia en nuestra web. Puedes cambiar de opinion y "
-"personalizar tu consentimiento siempre que quieras volviendo a esta web"
-
-msgid "Privacy Settings"
-msgstr "Configuración de privacidad"
-
-msgid ""
-"We and our partners use technology such as cookies on our site to "
-"personalize content and ads, provide social media features, and analyze our "
-"traffic. You can toggle on or off your consent preference based on purpose "
-"for all companies listed under each purpose to the use of this technology "
-"across the web. You can change your mind and revisit your consent choices at "
-"anytime by returning to this site."
-msgstr ""
-"Puedes configurar tus preferencias y elegir como quieres que tus datos sean "
-"utilizados para los siguientes propósitos. Puedes elegir configurar tus "
-"preferencias solo con nosotros independientemente del resto de nuestros "
-"partners. Cada propósito tiene una descripción para que puedas saber como "
-"nosotros y nuestros partners utilizamos tus datos"
-
-msgid "Enable all purposes"
-msgstr "Habilitar todo"
-
-msgid "Reject All"
-msgstr "Rechazar todo"
-
-msgid "See full vendor list"
-msgstr "Ver lista completa de partners"
-
-msgid "Save & Exit"
-msgstr "Guardar y salir"
-
-msgid ""
-"We and our partners use technology such as cookies on our site to "
-"personalize content and ads, provide social media features, and analyze our "
-"traffic. You can toggle on or off your consent preference for each company "
-"to the use of this technology across the web. You can change your mind and "
-"revisit your consent choices at anytime by returning to this site."
-msgstr ""
-"Puedes dar tu consentimiento de manera individual a cada partner. Ver la "
-"lista de todos los propósitos para los cuales utilizan tus datos para tener "
-"más información. En algunos casos, las empresas pueden revelar que usan tus "
-"datos sin pedir tu consentimiento, en función de intereses legítimos. Puedes "
-"hacer click en su política de privacidad para obtener más información al "
-"respecto o para rechazarlo."
-
-msgid "Accept All"
-msgstr "Aceptar todo"
-
-msgid "Back to purposes"
-msgstr "Volver a los propósitos"
 
 msgid "Columns"
 msgstr "Columnas"
@@ -6920,6 +6557,9 @@ msgstr "Iniciando"
 msgid "Welcome, Master"
 msgstr "Bienvenido, Maestro"
 
+msgid "User name"
+msgstr "Nombre de usuario"
+
 msgid "Login"
 msgstr "Iniciar sesión"
 
@@ -7512,3 +7152,379 @@ msgstr "Bienvenido al Gestor de Opennemas"
 
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
+
+#~ msgid "Day"
+#~ msgstr "Día"
+
+#~ msgid "Week"
+#~ msgstr "Semana"
+
+#~ msgid "SemiMonth"
+#~ msgstr "Medio mes"
+
+#~ msgid "Month"
+#~ msgstr "Mes"
+
+#~ msgid "Year"
+#~ msgstr "Año"
+
+#~ msgid "Please configure your Paywall module before using it."
+#~ msgstr "Debes configurar el módulo «Paywall» antes de usarlo."
+
+#~ msgid "Paypal API authentication is incorrect."
+#~ msgstr "La autenticación del API de PayPal no es correcta."
+
+#~ msgid "We are checking your IPN url. Please wait a minute."
+#~ msgstr "Estamos verificando tu url de IPN. Por favor, espere un minuto."
+
+#~ msgid "Paypal IPN configuration is incorrect. Please validate it."
+#~ msgstr ""
+#~ "La configuración del IPN en Paypal es incorrecta. Por favor, compruébela."
+
+#~ msgid "Paywall settings saved."
+#~ msgstr "Configuración de Paywall guardada."
+
+#~ msgid ""
+#~ "Paypal IPN configuration is incorrect. Please correct it and try again."
+#~ msgstr ""
+#~ "La configuración del IPN de Paypal es incorrecta. Por favor, corríjelo."
+
+#~ msgid "Paywall"
+#~ msgstr "Paywall"
+
+#~ msgid "Statistics"
+#~ msgstr "Estadísticas"
+
+#~ msgid "Paywall users"
+#~ msgstr "Usuarios de paywall"
+
+#~ msgid "Paywall purchases"
+#~ msgstr "Compras en paywall"
+
+#~ msgid "You already have an active Subscription until %s"
+#~ msgstr "Ya tienes una suscripción activa hasta el %s"
+
+#~ msgid "Your payment was already registered"
+#~ msgstr "Tu pago ya fue registrado"
+
+#~ msgid "Your subscription could not been created. Please try again."
+#~ msgstr ""
+#~ "No se ha podido crear tu suscripción. Por favor, inténtalo de nuevo."
+
+#~ msgid "%s - Premium subscription activated"
+#~ msgstr "%s - Suscripción premium activada"
+
+#~ msgid "Site agency"
+#~ msgstr "Agencia del sitio"
+
+#~ msgid "This will be displayed as the default article signature."
+#~ msgstr "Usado como firma por defecto en los artículos."
+
+#~ msgid "Paypal Settings"
+#~ msgstr "Opciones de Paypal"
+
+#~ msgid "Account email:"
+#~ msgstr "Correo del usuario de la cuenta"
+
+#~ msgid ""
+#~ "You can get your PayPal account email from <a class=\"external-link\" "
+#~ "href=\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" "
+#~ "target=\"_blank\" ng-click=\"$event.stopPropagation();\">PayPal site</a>. "
+#~ "This must be a business account for receiving payments"
+#~ msgstr ""
+#~ "Puedes recibir correos electrónicos de <a class=\"external-link\" href="
+#~ "\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target="
+#~ "\"_blank\" ng-click=\"$event.stopPropagation();\">PayPal</a>. Esta debe "
+#~ "ser tu cuenta de empresa para recibir las notificaciones de pagos."
+
+#~ msgid "Premium users"
+#~ msgstr "Usuarios premium"
+
+#~ msgid "Create new user"
+#~ msgstr "Crear nuevo usuario"
+
+#~ msgid "Filter by name"
+#~ msgstr "Filtrar por nombre"
+
+#~ msgid "E-mail"
+#~ msgstr "Correo electrónico"
+
+#~ msgid "Last login"
+#~ msgstr "Último inicio de sesión"
+
+#~ msgid "End of subscription"
+#~ msgstr "Fin de la suscripción"
+
+#~ msgid "--All--"
+#~ msgstr "--Todos--"
+
+#~ msgid "Registered"
+#~ msgstr "Registrado"
+
+#~ msgid "Expired"
+#~ msgstr "Expirado"
+
+#~ msgid "%1 users"
+#~ msgstr "%1 usuarios"
+
+#~ msgid "Export list"
+#~ msgstr "Exportar listado"
+
+#~ msgid "Filter by name or email"
+#~ msgstr "Filtrar por nombre"
+
+#~ msgid "Sort by"
+#~ msgstr "Ordenar por"
+
+#~ msgid "Payment date"
+#~ msgstr "Fecha de pago"
+
+#~ msgid "Full name"
+#~ msgstr "Nombre completo"
+
+#~ msgid "%1 purchases"
+#~ msgstr "%1 compras"
+
+#~ msgid "Show all…"
+#~ msgstr "Mostrar todo…"
+
+#~ msgid "No paywall users yet."
+#~ msgstr "No hay usuarios de paywall aún."
+
+#~ msgid "Order id"
+#~ msgstr "Id de la compra"
+
+#~ msgid "No purchases were made yet."
+#~ msgstr "No se ha realizado ninguna compra actualmente"
+
+#~ msgid ""
+#~ "The paywall allows you to monetize your contents by enabling a "
+#~ "subscription enabled model access to your contents."
+#~ msgstr ""
+#~ "«Paywall» le permite monetizar sus contenidos permitiendo un modelos de "
+#~ "acceso bajo suscripción a sus contenidos."
+
+#~ msgid "Subscribed users"
+#~ msgstr "Usuarios suscritos"
+
+#~ msgid "Lastest purchases"
+#~ msgstr "Últimas compras"
+
+#~ msgid "Purchases last month"
+#~ msgstr "Compras en el último mes"
+
+#~ msgid "Paypal API authentication"
+#~ msgstr "Autenticación del API de Paypal"
+
+#~ msgid "Get this parameters from your "
+#~ msgstr "Obtenga estos parametros desde su"
+
+#~ msgid "Paypal identification data"
+#~ msgstr "datos de identificación de Paypal"
+
+#~ msgid "Use the testing environment Sandbox"
+#~ msgstr "Utiliza el entorno de prueba Sandbox"
+
+#~ msgid "Real mode (recommended)"
+#~ msgstr "Modo real (recomendado)"
+
+#~ msgid "Testing mode"
+#~ msgstr "Modo de prueba"
+
+#~ msgid ""
+#~ "Paypal allows you to enable a testing environment where <strong>all the "
+#~ "transactions will not be real</strong>, so you can test if the paywall is "
+#~ "working well."
+#~ msgstr ""
+#~ "Paypal te permite activar un entorno de pruebas donde <strong> todas las "
+#~ "transacciones no serán reales </strong>, por lo que puedes probar si el "
+#~ "muro de pago está funcionando bien."
+
+#~ msgid ""
+#~ "Active a testing environment in your Paypal account (only if you are a "
+#~ "developer)"
+#~ msgstr ""
+#~ "Activa un entorno de prueba en tu cuenta de Paypal (sólo si eres un "
+#~ "desarrollador)"
+
+#~ msgid "More information"
+#~ msgstr "Más información"
+
+#~ msgid "Validate here your Paypal API credentials in the selected mode"
+#~ msgstr ""
+#~ "Valida aquí tus credenciales del API de PayPal en el modo seleccionado"
+
+#~ msgid "Validate"
+#~ msgstr "Validar"
+
+#~ msgid "Currency & taxes"
+#~ msgstr "Moneda e impuestos"
+
+#~ msgid "Money unit"
+#~ msgstr "Moneda"
+
+#~ msgid "VAT %"
+#~ msgstr "IVA %"
+
+#~ msgid "Payment modes"
+#~ msgstr "Modos de pago"
+
+#~ msgid ""
+#~ "Below you can add different payment modes by including the time range "
+#~ "that the user can purchase, the description and the price"
+#~ msgstr ""
+#~ "A continuación puedes agregar diferentes formas de pago incluyendo el "
+#~ "rango de tiempo que el usuario puede comprar, la descripción y el precio"
+
+#~ msgid "Add new payment mode"
+#~ msgstr "Añadir un nuevo modo de pago"
+
+#~ msgid "Recurring payments (optional)"
+#~ msgstr "Pagos recurrentes (opcional)"
+
+#~ msgid ""
+#~ "Paypal allow your users to subscribe to your Paywall through recurring "
+#~ "payments. This means that your users will be charged periodically without "
+#~ "having to worry about payments and due dates, and will allow you to "
+#~ "increase the user engagement."
+#~ msgstr ""
+#~ "PayPal permite a los usuarios que se suscriban a su Paywall través de "
+#~ "pagos periódicos. Esto significa que los usuarios deberán pagar "
+#~ "periódicamente sin tener que preocuparse acerca de los pagos y las fechas "
+#~ "de vencimiento, y le permitirá aumentar la participación de los usuarios."
+
+#~ msgid "Mark this if you want to enable recurring payments"
+#~ msgstr "Marque esta opción si desea habilitar los pagos recurrentes"
+
+#~ msgid ""
+#~ "You have to activate some options in the Paypal configuration to make "
+#~ "recurring payments work. Please follow next steps:"
+#~ msgstr ""
+#~ "Tienes que activar algunas opciones en la configuración de Paypal para "
+#~ "hacer que los pagos recurrentes funcionen. Por favor, sigue los "
+#~ "siguientes pasos:"
+
+#~ msgid "Go to your merchant Paypal"
+#~ msgstr "Ve a tu cuenta de comerciante de Paypal"
+
+#~ msgid "IPN web configuration page "
+#~ msgstr "Página de configuración del IPN"
+
+#~ msgid " and log in with your merchant account"
+#~ msgstr "e inicie sesión con su cuenta de comerciante"
+
+#~ msgid "Click in the \"Choose IPN configuration\" button"
+#~ msgstr "Haz clic en el botón \"Escoger configuración del IPN\""
+
+#~ msgid "Fill in the \"Notification URL\" field with this address"
+#~ msgstr "Rellene el campo \"URL de notificación\" con esta dirección"
+
+#~ msgid "Enable the \"Receive IPN messages\" checkbox"
+#~ msgstr "Active la casilla de verificación \"Recibir mensajes de IPN\""
+
+#~ msgid ""
+#~ "Click on the validate button to check ipn is working fine and enable "
+#~ "recurring payment"
+#~ msgstr ""
+#~ "Haz clic en el botón de validación para comprobar que IPN está "
+#~ "funcionando y habilitar el pago recurrente"
+
+#~ msgid "Waiting"
+#~ msgstr "Esperando"
+
+#~ msgid "Valid"
+#~ msgstr "Válido"
+
+#~ msgid "Finally, click in the \"Save\" button to save this configuration"
+#~ msgstr ""
+#~ "Por último, haga clic en el botón \"Guardar\" para guardar la "
+#~ "configuración"
+
+#~ msgid "Accept Opennemas payment agreements terms"
+#~ msgstr "Acepto el acuerdo y condiciones de pago de Opennemas"
+
+#~ msgid ""
+#~ "Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank"
+#~ "\">payment agreements terms</a> of Opennemas"
+#~ msgstr ""
+#~ "Lea y acepte los <a href=\"http://help.opennemas.com/\" target=\"_blank"
+#~ "\"> términos de pago </a> de Opennemas"
+
+#~ msgid "Set a price"
+#~ msgstr "Establecer el precio"
+
+#~ msgid "We value your privacy"
+#~ msgstr "Tu privacidad es importante para nosotros"
+
+#~ msgid "I Do Not Accept"
+#~ msgstr "No acepto"
+
+#~ msgid "I Accept"
+#~ msgstr "Aceptar"
+
+#~ msgid "Show Purposes"
+#~ msgstr "Ver propósitos"
+
+#~ msgid ""
+#~ "We and our partners use technology such as cookies on our site to "
+#~ "personalize content and ads, provide social media features, and analyze "
+#~ "our traffic. Click below to consent to the use of this technology by us "
+#~ "and these 3rd parties across the web. You can change your mind and "
+#~ "revisit your consent choices at anytime by returning to this site."
+#~ msgstr ""
+#~ "Tanto nuestros partners como nosotros utilizamos cookies en nuestro sitio "
+#~ "web para personalizar contenido y publicidad, proporcionar "
+#~ "funcionalidades a las redes sociales, o analizar nuestro tráfico. "
+#~ "Haciendo click consientes el uso de esta tecnologia en nuestra web. "
+#~ "Puedes cambiar de opinion y personalizar tu consentimiento siempre que "
+#~ "quieras volviendo a esta web"
+
+#~ msgid "Privacy Settings"
+#~ msgstr "Configuración de privacidad"
+
+#~ msgid ""
+#~ "We and our partners use technology such as cookies on our site to "
+#~ "personalize content and ads, provide social media features, and analyze "
+#~ "our traffic. You can toggle on or off your consent preference based on "
+#~ "purpose for all companies listed under each purpose to the use of this "
+#~ "technology across the web. You can change your mind and revisit your "
+#~ "consent choices at anytime by returning to this site."
+#~ msgstr ""
+#~ "Puedes configurar tus preferencias y elegir como quieres que tus datos "
+#~ "sean utilizados para los siguientes propósitos. Puedes elegir configurar "
+#~ "tus preferencias solo con nosotros independientemente del resto de "
+#~ "nuestros partners. Cada propósito tiene una descripción para que puedas "
+#~ "saber como nosotros y nuestros partners utilizamos tus datos"
+
+#~ msgid "Enable all purposes"
+#~ msgstr "Habilitar todo"
+
+#~ msgid "Reject All"
+#~ msgstr "Rechazar todo"
+
+#~ msgid "See full vendor list"
+#~ msgstr "Ver lista completa de partners"
+
+#~ msgid "Save & Exit"
+#~ msgstr "Guardar y salir"
+
+#~ msgid ""
+#~ "We and our partners use technology such as cookies on our site to "
+#~ "personalize content and ads, provide social media features, and analyze "
+#~ "our traffic. You can toggle on or off your consent preference for each "
+#~ "company to the use of this technology across the web. You can change your "
+#~ "mind and revisit your consent choices at anytime by returning to this "
+#~ "site."
+#~ msgstr ""
+#~ "Puedes dar tu consentimiento de manera individual a cada partner. Ver la "
+#~ "lista de todos los propósitos para los cuales utilizan tus datos para "
+#~ "tener más información. En algunos casos, las empresas pueden revelar que "
+#~ "usan tus datos sin pedir tu consentimiento, en función de intereses "
+#~ "legítimos. Puedes hacer click en su política de privacidad para obtener "
+#~ "más información al respecto o para rechazarlo."
+
+#~ msgid "Accept All"
+#~ msgstr "Aceptar todo"
+
+#~ msgid "Back to purposes"
+#~ msgstr "Volver a los propósitos"

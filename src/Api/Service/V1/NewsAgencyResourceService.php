@@ -133,7 +133,7 @@ class NewsAgencyResourceService implements Service
             throw new ApiException($e->getMessage(), $e->getCode());
         }
 
-        throw new ApiException('File not found', 404);
+        throw new ApiException(_('Item not found'), 404);
     }
 
     /**
@@ -193,7 +193,7 @@ class NewsAgencyResourceService implements Service
         $this->checkSynchronizer();
 
         if (!is_array($ids)) {
-            throw new GetListException('Invalid ids', 400);
+            throw new GetListException(_('Invalid argument'), 400);
         }
 
         if (empty($ids)) {
@@ -239,7 +239,7 @@ class NewsAgencyResourceService implements Service
             $resource = $this->repository->find($id);
 
             if ($this->importer->isImported($resource)) {
-                throw new ApiException('The item is already imported', 409);
+                throw new ApiException(_('The item is already imported'), 409);
             }
 
             $server = $this->container->get('api.service.news_agency.server')
@@ -354,7 +354,7 @@ class NewsAgencyResourceService implements Service
             || ($params['content_type_name'] === 'opinion'
                 && !array_key_exists('fk_author', $params))
         ) {
-            throw new ApiException('Invalid arguments', 400);
+            throw new ApiException(_('Invalid argument'), 400);
         }
     }
 
@@ -367,7 +367,7 @@ class NewsAgencyResourceService implements Service
     {
         if ($this->synchronizer->isBusy()) {
             throw new ApiException(
-                _('A synchronization is already in progress. Try again later.'),
+                _('The synchronization is already in progress. Try again later.'),
                 409
             );
         }
