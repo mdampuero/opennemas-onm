@@ -2,13 +2,13 @@
   <span ui-tree-handle>
     <span class="angular-ui-tree-icon"></span>
   </span>
-  <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" uib-tooltip="{t}Module{/t}"></span>
-  <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'blog-category'" uib-tooltip="{t}Category blog{/t}"></span>
-  <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" uib-tooltip="{t}Frontpage{/t}"></span>
-  <span class="menu-item-type-icon fa fa-file" ng-if="item.type == 'static'" uib-tooltip="{t}Static Page{/t}"></span>
-  <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncCategory'" uib-tooltip="{t}Synched category{/t}"></span>
-  <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncBlogCategory'" uib-tooltip="{t}Synched blog category{/t}"></span>
-  <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'" uib-tooltip="{t}External link{/t}"></span>
+  <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" tooltip-placement="right" uib-tooltip="{t}Module{/t}"></span>
+  <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'blog-category'" tooltip-placement="right" uib-tooltip="{t}Category blog{/t}"></span>
+  <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" tooltip-placement="right" uib-tooltip="{t}Frontpage{/t}"></span>
+  <span class="menu-item-type-icon fa fa-file" ng-if="item.type == 'static'" tooltip-placement="right" uib-tooltip="{t}Static Page{/t}"></span>
+  <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncCategory'" tooltip-placement="right" uib-tooltip="{t}Synched category{/t}"></span>
+  <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncBlogCategory'" tooltip-placement="right" uib-tooltip="{t}Synched blog category{/t}"></span>
+  <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'" tooltip-placement="right" uib-tooltip="{t}External link{/t}"></span>
   <div class="p-l-35 p-r-35">
     <div class="row">
       <div class="col-sm-6 col-lg-6">
