@@ -937,7 +937,7 @@ class ContentController extends Controller
         $this->get('core.locale')->setContext('backend');
 
         foreach ($response['items'] as $item) {
-            $extra['categories'][$item->pk_content_category] = $item->title;
+            $extra['categories'][$item->id] = $item->title;
         }
 
         $extra['paths'] = [

@@ -85,7 +85,7 @@ class AssetController extends Controller
             $category = $this->get('api.service.category')
                 ->getItemBySlug($categoryName);
 
-            $currentCategoryId = $category->pk_content_category;
+            $currentCategoryId = $category->id;
         } catch (\Exception $e) {
         }
 

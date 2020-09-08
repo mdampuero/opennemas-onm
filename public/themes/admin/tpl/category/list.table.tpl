@@ -19,10 +19,13 @@
     {t}Contents{/t}
   </th>
   <th class="text-center v-align-middle" width="100">
-    {t}Archived{/t}
+    {t}Visible{/t}
   </th>
   <th class="text-center v-align-middle" width="100">
     {t}Enabled{/t}
+  </th>
+  <th class="text-center v-align-middle" width="100">
+    {t}RSS{/t}
   </th>
 {/block}
 
@@ -81,13 +84,18 @@
     </span>
   </td>
   <td class="text-center v-align-middle">
-    <button class="btn btn-white" ng-click="patch(item, 'archived', item.archived != 1 ? 1 : 0)" type="button">
-      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.archivedLoading, 'fa-check text-success' : !item.archivedLoading && item.archived == '1', 'fa-times text-error': !item.archivedLoading && item.archived == '0' }"></i>
+    <button class="btn btn-white" ng-click="patch(item, 'visible', item.visible != 1 ? 1 : 0)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.visibleLoading, 'fa-check text-success' : !item.visibleLoading && item.visible == '1', 'fa-times text-error': !item.visibleLoading && item.visible == '0' }"></i>
     </button>
   </td>
   <td class="text-center v-align-middle">
     <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled != 1 ? 1 : 0)" type="button">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.enabledLoading, 'fa-check text-success' : !item.enabledLoading && item.enabled == '1', 'fa-times text-error': !item.enabledLoading && item.enabled == '0' }"></i>
+    </button>
+  </td>
+  <td class="text-center v-align-middle">
+    <button class="btn btn-white" ng-click="patch(item, 'rss', item.rss != 1 ? 1 : 0)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.rssLoading, 'fa-check text-success' : !item.rssLoading && item.rss == '1', 'fa-times text-error': !item.rssLoading && item.rss == '0' }"></i>
     </button>
   </td>
 {/block}

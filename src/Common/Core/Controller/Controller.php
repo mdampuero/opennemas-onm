@@ -193,7 +193,7 @@ class Controller extends SymfonyController
             return [ [], [] ];
         }
 
-        $categoryId = empty($category) ? 0 : $category->pk_content_category;
+        $categoryId = empty($category) ? 0 : $category->id;
         $action     = $this->get('core.globals')->getAction();
         $group      = $this->getAdvertisementGroup($action);
 
@@ -227,9 +227,9 @@ class Controller extends SymfonyController
             ])->get();
 
             return [
-                'id'     => (int) $a->pk_content_category,
+                'id'     => (int) $a->id,
                 'name'   => $a->title,
-                'parent' => (int) $a->fk_content_category
+                'parent' => (int) $a->parent_id
             ];
         }, $categories);
 

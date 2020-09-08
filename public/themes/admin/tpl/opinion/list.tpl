@@ -192,12 +192,12 @@
                       <strong>{t}Created{/t}:</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </div>
                     <div class="small-text">
-                      <span ng-if="content.starttime && content.starttime != '0000-00-00 00:00:00'">
+                      <span ng-if="item.starttime">
                         <strong>{t}Available from{/t} </strong>
-                        [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                        [% item.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                       </span>
-                      <span ng-if="content.endtime && content.endtime != '0000-00-00 00:00:00'">
-                        <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                      <span ng-if="item.endtime">
+                        <strong>{t}to{/t} </strong> [% item.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                       </span>
                     </div>
                     <div class="listing-inline-actions">

@@ -27,7 +27,7 @@
          */
         $scope.criteria = {
           content_type_name: 'widget',
-          pk_fk_content_category: null,
+          category_id: null,
           renderlet: null,
           epp: 10,
           in_litter: 0,

@@ -121,7 +121,9 @@ function get_author_name($item = null) : ?string
             return $item->agency;
         }
 
-        if (!empty($item->author_name)) {
+        if (!empty($item->author_name)
+            && !$item instanceof \Video
+        ) {
             return $item->author_name;
         }
     }

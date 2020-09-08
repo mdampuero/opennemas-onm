@@ -35,7 +35,7 @@
 
 {block name="categoryColumn"}
   <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: category }) %]" ng-repeat="category in item.categories">
-    [% (categories | filter: { pk_content_category: category })[0].title %]
+    [% (categories | filter: { id: category })[0].title %]
   </a>
 {/block}
 

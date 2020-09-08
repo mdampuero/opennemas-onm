@@ -13,7 +13,7 @@ function smarty_outputfilter_statistics($output, $smarty)
     $content = $smarty->getValue('content');
 
     if (is_null($request)
-        || !preg_match('/<html.*?>.*<head>.*<\/head>.*<\/html>/s', $output)) {
+        || strpos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 

@@ -409,9 +409,9 @@ commentsmeta:
             target_table: comments
             target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-content_categories:
+category:
     columns:
-        pk_content_category:
+        id:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         title:
@@ -423,13 +423,16 @@ content_categories:
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        archived:
+        visible:
             type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         enabled:
             type: boolean
             options: { unsigned: true, default: 0, notnull: false }
-        fk_content_category:
+        rss:
+            type: boolean
+            options: { unsigned: true, default: 0, notnull: false }
+        parent_id:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         params:
@@ -444,7 +447,7 @@ content_categories:
     index:
         -
             name: PRIMARY
-            columns: [pk_content_category]
+            columns: [id]
             primary: true
             unique: true
             flags: {  }
@@ -608,9 +611,6 @@ contents:
         params:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        category_name:
-            type: string
-            options: { length: 255, default: null }
         favorite:
             type: boolean
             options: { default: null, notnull: false }
@@ -692,59 +692,46 @@ contents:
             name: content_type_name
             columns: [content_type_name]
             unique: false
-        -
-            name: category_name
-            columns: [category_name]
-            unique: false
 
-contents_categories:
+content_category:
     columns:
-        pk_fk_content:
+        content_id:
             type: bigint
             options: { length: 20, unsigned: true }
-        pk_fk_content_category:
+        category_id:
             type: bigint
             options: { unsigned: true }
-        catName:
-            type: string
-            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
-            columns: [pk_fk_content, pk_fk_content_category]
+            columns: [category_id, content_id]
             primary: true
             unique: true
             flags: {  }
         -
-            name: pk_fk_content
-            columns: [pk_fk_content]
+            name: content_category_content_id
+            columns: [content_id]
             primary: false
             unique: false
             flags: {  }
         -
-            name: pk_fk_content_category
-            columns: [pk_fk_content_category]
-            primary: false
-            unique: false
-            flags: {  }
-        -
-            name: content_categories_catname
-            columns: [catName]
+            name: content_category_category_id
+            columns: [category_id]
             primary: false
             unique: false
             flags: {  }
     foreign_keys:
         -
-            name: contentcategory_contentid_contents_id
-            source_field: [ pk_fk_content ]
+            name: content_category_content_content_id
+            source_field: [ content_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
         -
-            name: contentcategory_category_category_id
-            source_field: [ pk_fk_content_category ]
-            target_table: content_categories
-            target_field: [ pk_content_category ]
+            name: content_category_category_category_id
+            source_field: [ category_id ]
+            target_table: category
+            target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contents_tags:
     columns:

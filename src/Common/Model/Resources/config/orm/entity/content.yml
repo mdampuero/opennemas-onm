@@ -23,7 +23,6 @@ orm:
             properties:
                 available:           boolean
                 body:                l10n_string
-                category_name:       string
                 changed:             datetime
                 content_status:      integer
                 content_type_name:   enum
@@ -71,14 +70,14 @@ orm:
                         key: meta_name
                     relations:
                         categories:
-                            table: contents_categories
+                            table: content_category
                             source_key: pk_content
-                            target_key: pk_fk_content
-                            return_fields: pk_fk_content_category
+                            target_key: content_id
+                            return_fields: category_id
                             columns:
-                                pk_fk_content:
+                                content_id:
                                     type: integer
-                                pk_fk_content_category:
+                                category_id:
                                     type: integer
 
                         related_contents:
@@ -170,9 +169,6 @@ orm:
                         params:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
-                        category_name:
-                            type: string
-                            options: { default: '', length: 255, notnull: false }
                         favorite:
                             type: boolean
                             options: { default: null, notnull: false }

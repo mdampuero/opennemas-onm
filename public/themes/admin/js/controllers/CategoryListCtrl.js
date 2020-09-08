@@ -179,13 +179,6 @@
         };
 
         /**
-         * @inheritdoc
-         */
-        $scope.getItemId = function(item) {
-          return item.pk_content_category;
-        };
-
-        /**
          * @function init
          * @memberOf CategoryListCtrl
          *
@@ -333,7 +326,7 @@
          */
         $scope.sortItems = function(items, parent, level) {
           var parents = items.filter(function(e) {
-            return e.fk_content_category === parent;
+            return e.parent_id === parent;
           });
 
           var sorted = [];
