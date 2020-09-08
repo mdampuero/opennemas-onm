@@ -130,24 +130,26 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_featured_media.
+     * Tests get_featured_media for an external content.
      */
-    public function testGetFeaturedMedia()
+    public function testGetFeaturedMediaForExternalContent()
     {
         $photo = new Content([
-            'id'             => 893,
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+            'id'                => 893,
+            'content_status'    => 1,
+            'content_type_name' => 'photo',
+            'starttime'         => new \Datetime('2020-01-01 00:00:00')
         ]);
 
-        $this->em->expects($this->once())->method('find')
-            ->with('Photo', 893)->willReturn($photo);
+        $this->template->expects($this->once())->method('getValue')
+            ->with('related', [])->willReturn([ 893 => $photo ]);
 
         $this->assertNull(get_featured_media($this->content, 'baz'));
         $this->assertNull(get_featured_media($this->content, 'inner'));
 
         $this->content->content_type_name = 'article';
         $this->content->img1              = 893;
+        $this->content->external          = 1;
 
         $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
     }
@@ -164,7 +166,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->content->content_type_name = 'event';
-        $this->content->related_contents = [ [
+        $this->content->related_contents  = [ [
             'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
@@ -178,7 +180,90 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_featured_media.
+     * Tests get_featured_media when the featured media is a photo.
+     */
+    public function testGetFeaturedMediaWhenFeaturedPhoto()
+    {
+        $photo = new Content([
+            'id'                => 893,
+            'content_status'    => 1,
+            'content_type_name' => 'photo',
+            'starttime'         => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $this->em->expects($this->once())->method('find')
+            ->with('Photo', 893)->willReturn($photo);
+
+        $this->assertNull(get_featured_media($this->content, 'baz'));
+        $this->assertNull(get_featured_media($this->content, 'inner'));
+
+        $this->content->content_type_name = 'article';
+        $this->content->img1              = 893;
+
+        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+    }
+
+    /**
+     * Tests get_featured_media when the featured media is a video and the
+     * featured media for the video is a photo.
+     */
+    public function testGetFeaturedMediaWhenFeaturedVideoWithPhoto()
+    {
+        $photo = new Content([
+            'id'                => 893,
+            'content_status'    => 1,
+            'content_type_name' => 'photo',
+            'starttime'         => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $video = new Content([
+            'id'                => 779,
+            'content_status'    => 1,
+            'content_type_name' => 'video',
+            'starttime'         => new \Datetime('2020-01-01 00:00:00'),
+            'information'       => [
+                'thumbnail' => 893
+            ]
+        ]);
+
+        $this->em->expects($this->at(0))->method('find')
+            ->with('Video', 779)->willReturn($video);
+        $this->em->expects($this->at(1))->method('find')
+            ->with('Photo', 893)->willReturn($photo);
+
+        $this->content->content_type_name = 'article';
+        $this->content->fk_video          = 779;
+
+        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+    }
+
+    /**
+     * Tests get_featured_media when the featured media is a video and the
+     * featured media for the video is the URL of the external photo.
+     */
+    public function testGetFeaturedMediaWhenFeaturedVideoWithUrl()
+    {
+        $video = new Content([
+            'id'                => 779,
+            'content_status'    => 1,
+            'content_type_name' => 'video',
+            'starttime'         => new \Datetime('2020-01-01 00:00:00'),
+            'information'       => [
+                'thumbnail' => 'http://waldo/thud.jpg'
+            ]
+        ]);
+
+        $this->em->expects($this->once())->method('find')
+            ->with('Video', 779)->willReturn($video);
+
+        $this->content->content_type_name = 'article';
+        $this->content->fk_video          = 779;
+
+        $this->assertEquals('http://waldo/thud.jpg', get_featured_media($this->content, 'frontpage'));
+    }
+
+    /**
+     * Tests get_featured_media_caption.
      */
     public function testGetFeaturedMediaCaption()
     {
@@ -233,7 +318,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_related.
+     * Tests get_related when
      */
     public function testGetRelated()
     {
@@ -260,10 +345,32 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             [ $article ],
             get_related($this->content, 'related_inner')
         );
+    }
+
+    /**
+     * Tests get_related when for an external content
+     */
+    public function testGetRelatedForExternal()
+    {
+        $article = new Content([
+            'id'             => 205,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $this->template->expects($this->once())->method('getValue')
+            ->with('related')->willReturn([ 205 => $article ]);
+
+        $this->content->external         = 1;
+        $this->content->related_contents = [ [
+            'content_type_name' => 'article',
+            'target_id'         => 205,
+            'type'              => 'related_inner',
+        ] ];
 
         $this->assertEquals(
             [ $article ],
-            get_related($this->content, 'related_inner', [ 205 => $article ])
+            get_related($this->content, 'related_inner')
         );
     }
 
