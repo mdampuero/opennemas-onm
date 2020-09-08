@@ -171,6 +171,16 @@ class Synchronizer
     }
 
     /**
+     * Checks if the synchronizer is busy.
+     *
+     * @return bool True if the synchronizer is busy. False otherwise
+     */
+    public function isBusy() : bool
+    {
+        return $this->fs->exists($this->lockFilePath);
+    }
+
+    /**
      * Resets the synchronizer statistics.
      *
      * @return Synchronizer The current synchronizer.
