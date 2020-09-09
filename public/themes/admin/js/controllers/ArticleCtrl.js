@@ -139,7 +139,7 @@
           }
 
           // Map of related contents localized in the current language
-          $scope.related = {};
+          $scope.related = $scope.data.extra.related;
 
           // Build related contents lists
           for (var type in $scope.relatedMap) {
@@ -377,6 +377,7 @@
           $scope.config.linkers.article.link($scope.data.article, $scope.article);
 
           // Localize related contents
+          $scope.related = {};
           for (var i in $scope.data.extra.related) {
             $scope.related[i] = $scope.localizeRelated(
               $scope.data.extra.related[i], i);
