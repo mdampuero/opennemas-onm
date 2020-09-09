@@ -241,10 +241,10 @@ var newsletterTemplateTranslations = {
                       <span class="angular-ui-tree-icon"></span>
                     </span>
                     <span class="newsletter-item-type" ng-if="content.content_type !== 'list'">
-                      <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type == 'article', 'fa-quote-right': content.content_type == 'opinion', 'fa-pie-chart': content.content_type == 'poll', 'fa-file': content.content_type == 'static_page', 'fa-envelope': content.content_type == 'letter', 'fa-paperclip': content.content_type == 'attachment', 'fa-film': content.content_type == 'video', 'fa-stack-overflow': content.content_type == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                      <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type == 'article', 'fa-quote-right': content.content_type == 'opinion', 'fa-pie-chart': content.content_type == 'poll', 'fa-file': content.content_type == 'static_page', 'fa-envelope': content.content_type == 'letter', 'fa-paperclip': content.content_type == 'attachment', 'fa-film': content.content_type == 'video', 'fa-stack-overflow': content.content_type == 'album' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                     </span>
                     <span class="newsletter-item-type" ng-if="content.content_type === 'list'">
-                      <span class="fa fa-search" uib-tooltip="{t}List of contents{/t}"></span>
+                      <span class="fa fa-search" tooltip-placement="right" uib-tooltip="{t}List of contents{/t}"></span>
                     </span>
                     <div class="newsletter-item-title" ng-show="content.content_type !== 'list'">
                       [% content.title %]
@@ -254,7 +254,7 @@ var newsletterTemplateTranslations = {
                         <ui-select-match>
                           <strong>{t}Type{/t}: </strong> [% $select.selected.title %]
                         </ui-select-match>
-                        <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }" position='down'>
+                        <ui-select-choices repeat="item.value as item in data.extra.content_types | filter: { title: $select.search }" position='up'>
                           <div ng-bind-html="item.title | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>
@@ -262,16 +262,16 @@ var newsletterTemplateTranslations = {
                         <ui-select-match>
                           <strong>{t}Opinion type{/t}: </strong> [% $select.selected.title %]
                         </ui-select-match>
-                        <ui-select-choices repeat="item.value as item in data.extra.opinion_types | filter: { title: $select.search }" position='down'>
+                        <ui-select-choices repeat="item.value as item in data.extra.opinion_types | filter: { title: $select.search }" position='up'>
                           <div ng-bind-html="item.title | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>
-                      <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" multiple="true" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" ng-model="content.criteria.category" placeholder="{t}Any{/t}" selected-text="{t}selected{/t}"></onm-category-selector>
+                      <onm-category-selector ng-if="!['opinion', 'letter', 'static_page'].includes(content.criteria.content_type)" default-value-text="{t}All{/t}/{t}None{/t}" label-text="{t}Categories{/t}" locale="config.locale.selected" multiple="true" ng-model="content.criteria.category" placeholder="{t}Any{/t}" position="up" selected-text="{t}selected{/t}"></onm-category-selector>
                       <ui-select name="view" theme="select2" ng-model="content.criteria.filter">
                         <ui-select-match>
                           <strong>{t}Filter{/t}: </strong> [% $select.selected.title %]
                         </ui-select-match>
-                        <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }" position='down'>
+                        <ui-select-choices repeat="item.value as item in data.extra.filters | filter: { title: $select.search }" position='up'>
                           <div ng-bind-html="item.title | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>
@@ -279,7 +279,7 @@ var newsletterTemplateTranslations = {
                         <ui-select-match>
                           <strong>{t}Amount{/t}: </strong> [% $select.selected %]
                         </ui-select-match>
-                        <ui-select-choices repeat="item in numberOfElements  | filter: $select.search" position='down'>
+                        <ui-select-choices repeat="item in numberOfElements  | filter: $select.search" position='up'>
                           <div ng-bind-html="item | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>
