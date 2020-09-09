@@ -171,11 +171,11 @@ class Synchronizer
     }
 
     /**
-     * Checks if the synchronizer is busy.
+     * Checks if the environment is locked.
      *
-     * @return bool True if the synchronizer is busy. False otherwise
+     * @return bool True if the environment is locked. False otherwise.
      */
-    public function isBusy() : bool
+    public function isLocked() : bool
     {
         return $this->fs->exists($this->lockFilePath);
     }

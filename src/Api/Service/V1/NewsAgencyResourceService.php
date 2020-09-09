@@ -365,7 +365,7 @@ class NewsAgencyResourceService implements Service
      */
     protected function checkSynchronizer()
     {
-        if ($this->synchronizer->isBusy()) {
+        if ($this->synchronizer->isLocked()) {
             throw new ApiException(
                 _('The synchronization is already in progress. Try again later.'),
                 409
