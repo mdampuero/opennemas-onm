@@ -338,6 +338,23 @@
         };
 
         /**
+         * @function getRelatedIds
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Returns the list of ids from the list of related contents.
+         *
+         * @param {Array} related The list of related contents.
+         *
+         * @return {Array} The list of ids.
+         */
+        $scope.getRelatedIds = function(related) {
+          return related.map(function(e) {
+            return e.target_id;
+          });
+        };
+
+        /**
          * @function init
          * @memberOf ArticleListCtrl
          *

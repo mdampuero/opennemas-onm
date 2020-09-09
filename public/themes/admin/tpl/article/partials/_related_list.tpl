@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="text-center">
-          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedFrontpage" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+          <button class="btn btn-default" content-picker content-picker-ignore="[% getRelatedIds(data.relatedFrontpage) %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedFrontpage" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
             <i class="fa fa-plus m-r-5"></i>
             {t}Add{/t}
           </button>
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="text-center">
-          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+          <button class="btn btn-default" content-picker content-picker-ignore="[% getRelatedIds(data.relatedInner) %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedInner" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
             <i class="fa fa-plus m-r-5"></i>
             {t}Add{/t}
           </button>
@@ -106,7 +106,7 @@
           </div>
         </div>
         <div class="text-center">
-          <button class="btn btn-default" content-picker content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+          <button class="btn btn-default" content-picker content-picker-ignore="[% getRelatedIds(data.relatedHome) %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="relatedHome" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
             <i class="fa fa-plus m-r-5"></i>
             {t}Add{/t}
           </button>
