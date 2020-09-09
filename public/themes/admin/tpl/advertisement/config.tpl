@@ -110,7 +110,6 @@
                     <select id="smart_ad_server_tags_format" name="smart_ad_server_tags_format" ng-required="smart.domain" ng-model="smart.tagsFormat">
                       <option value="onecall_async">Asynchronous (One call)</option>
                       <option value="ajax_async">Asynchronous Ajax</option>
-                      <option value="onecall_sync">Synchronous (One call)</option>
                     </select>
                   </div>
                 </div>
