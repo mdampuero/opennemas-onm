@@ -123,7 +123,12 @@
           var params = [];
 
           for (var key in $scope.item.params) {
-            params.push({ name: key, value: $scope.item.params[key] });
+            // eslint-disable-next-line no-new-wrappers
+            var value = new Number($scope.item.params[key]);
+
+            value = value.toString() === 'NaN' ? $scope.item.params[key] : value.valueOf();
+
+            params.push({ name: key, value: value });
           }
 
           $scope.item.params = params;

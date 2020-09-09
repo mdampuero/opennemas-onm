@@ -1208,12 +1208,14 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
+        $authorName = '';
+
         try {
-            $author = getService('api.service.author')->getItem($this->fk_author);
+            $author     = getService('api.service.author')->getItem($this->fk_author);
+            $authorName = (is_object($author)) ? $author->name : '';
         } catch (\Exception $e) {
         }
 
-        $authorName = (is_object($author)) ? $author->name : '';
         if ($this->id !== null) {
             if (is_null($this->views)) {
                 $this->views = getService('content_views_repository')->getViews($this->id);

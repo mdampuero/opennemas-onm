@@ -11,6 +11,7 @@
 
 namespace Repository;
 
+use \Common\Model\Entity\Content;
 use Onm\Cache\CacheInterface;
 
 /**
