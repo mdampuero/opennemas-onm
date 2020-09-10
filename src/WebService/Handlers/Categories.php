@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Categories
 {
-    public $restler;
-
     /*
     * @url GET /categories/allcontent/:id
     */

@@ -18,8 +18,6 @@ use Luracast\Restler\RestException;
  */
 class Agency
 {
-    public $restler;
-
     /**
     * Get instance for contentManager
     * This is used in some actions at lists function

@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Authors
 {
-    public $restler;
-
     /*
     * @url GET /authors/id/:id
     */

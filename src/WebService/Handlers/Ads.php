@@ -15,8 +15,6 @@ namespace WebService\Handlers;
  */
 class Ads
 {
-    public $restler;
-
     /*
     * @url GET /ads/frontpage/:categoryId
     */
