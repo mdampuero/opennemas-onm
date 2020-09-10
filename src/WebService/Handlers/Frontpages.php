@@ -19,29 +19,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class Frontpages
 {
     /*
-    * @url GET /frontpages/allcontent/:category
-    */
-    public function allContent($category)
-    {
-        $contents = [];
-        $related  = [];
-
-        try {
-            $category = getService('api.service.category')->getItemBySlug($category);
-
-            list(, $contents, , ) = getService('api.service.frontpage')
-                ->getCurrentVersionForCategory($category->id);
-
-            $contents = $this->hydrateContents($contents);
-            $related  = $this->getRelated($contents);
-        } catch (\Exception  $e) {
-            throw new RestException(404, $e->getMessage());
-        }
-
-        return utf8_encode(serialize([ $contents, $related ]));
-    }
-
-    /*
     * @url GET /frontpages/allcontentblog/:category_slug/:page
     */
     public function allContentBlog($categoryName, $page = 1)
