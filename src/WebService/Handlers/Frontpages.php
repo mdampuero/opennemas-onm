@@ -74,22 +74,21 @@ class Frontpages
             'category_id'       => [ [ 'value' => $category->id ] ],
             'starttime'         => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
             ]
         ];
 
-        // Get all articles for this page
-        $er            = getService('entity_repository');
-        $articles      = $er->findBy($filters, $order, $epp, $page);
-        $countArticles = $er->countBy($filters);
+        $er       = getService('entity_repository');
+        $articles = $er->findBy($filters, $order, $epp, $page);
+        $total    = $er->countBy($filters);
+        $related  = $this->getRelated($articles);
 
         // Set pagination
         $pagination = getService('paginator')->get([
             'page'  => $page,
             'epp'   => $epp,
-            'total' => $countArticles,
+            'total' => $total,
             'route' => [
                 'name'   => 'categ_sync_frontpage',
                 'params' => [
