@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Articles
 {
-    public $restler;
-
     /**
      * Get a complete article
      *

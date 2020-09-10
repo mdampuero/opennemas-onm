@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Images
 {
-    public $restler;
-
     /*
     * @url GET /images/id/:id
     */

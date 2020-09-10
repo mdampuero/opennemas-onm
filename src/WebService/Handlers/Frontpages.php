@@ -18,8 +18,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  */
 class Frontpages
 {
-    public $restler;
-
     /*
     * @url GET /frontpages/allcontent/:category
     */
