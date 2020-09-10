@@ -90,10 +90,7 @@ class ArticleController extends FrontendController
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('sync', 'content', $dirtyID);
 
-        if ($article->content_status != 1
-            || $article->in_litter == 1
-            || !$article->isStarted()
-        ) {
+        if (!$article->isReadyForPublish()) {
             throw new ResourceNotFoundException();
         }
 
@@ -107,7 +104,6 @@ class ArticleController extends FrontendController
             'content'        => $article,
             'contentId'      => $article->id,// Used on module_comments.tpl
             'ext'            => 1,
-            'relationed'     => $article->relatedContents,
             'suggested'      => $article->suggested,
             'videoInt'       => $article->videoInt,
             'o_content'      => $article,
@@ -153,9 +149,8 @@ class ArticleController extends FrontendController
             $params['o_category']->id
         );
 
-        $params['tags']       = $this->getTags($params['content']);
-        $params['relationed'] = $this->getRelated($params['content']);
-        $params['suggested']  = $suggested;
+        $params['tags']      = $this->getTags($params['content']);
+        $params['suggested'] = $suggested;
 
         $em = $this->get('entity_repository');
 
@@ -180,46 +175,5 @@ class ArticleController extends FrontendController
             $videoInt = $em->find('Video', $params['content']->fk_video2);
             $this->view->assign('videoInt', $videoInt);
         }
-
-        $this->view->assign([
-            'related' => $this->getRelated($params['content']),
-        ]);
-    }
-
-    /**
-     * Returns the list of related contents for an article.
-     *
-     * @param Article $article The article object.
-     *
-     * @return array The list of rellated contents.
-     */
-    protected function getRelated($article)
-    {
-        $relations = $this->get('related_contents')
-            ->getRelations($article->id, 'inner');
-
-        if (empty($relations)) {
-            return [];
-        }
-
-        $em = $this->get('entity_repository');
-
-        $related  = [];
-        $contents = $em->findMulti($relations);
-
-        // Filter out not ready for publish contents.
-        foreach ($contents as $content) {
-            if (!$content->isReadyForPublish()) {
-                continue;
-            }
-
-            if ($content->content_type == 1 && !empty($content->fk_video)) {
-                $content->video = $em->find('Video', $content->fk_video);
-            }
-
-            $related[] = $content;
-        }
-
-        return $related;
     }
 }

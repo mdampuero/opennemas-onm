@@ -80,7 +80,8 @@ class EntityManager extends BaseManager
             return $entity;
         }
 
-        $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
+        $contentType = \classify($contentType);
+        $cacheId     = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!empty($id)
             && class_exists($contentType)

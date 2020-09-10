@@ -70,6 +70,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       createItem:  'api_v1_backend_opinion_create_item',
       getItem:     'api_v1_backend_opinion_get_item',
       getPreview:  'api_v1_backend_opinion_get_preview',
+      list:        'backend_opinions_list',
       redirect:    'backend_opinion_show',
       saveItem:    'api_v1_backend_opinion_save_item',
       savePreview: 'api_v1_backend_opinion_save_preview',

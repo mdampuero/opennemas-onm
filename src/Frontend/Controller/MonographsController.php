@@ -187,9 +187,8 @@ class MonographsController extends Controller
                         $content->placeholder = 'placeholder_1_1';
                     }
 
-                        // Load attached and related contents from array
-                    $content->loadAttachedVideo()
-                        ->loadRelatedContents($this->categoryName);
+                    // Load attached and related contents from array
+                    $content->loadAttachedVideo();
 
                     $columns[] = $content;
                 }

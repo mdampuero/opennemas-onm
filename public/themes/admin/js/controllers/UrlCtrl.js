@@ -50,6 +50,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_url_create_item',
           getItem:    'api_v1_backend_url_get_item',
+          list:       'backend_urls_list',
           redirect:   'backend_url_show',
           saveItem:   'api_v1_backend_url_save_item',
           updateItem: 'api_v1_backend_url_update_item'

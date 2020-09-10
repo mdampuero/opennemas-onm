@@ -80,7 +80,8 @@ class FrontpagesController extends Controller
             'versions'             => $versions,
             'version_id'           => $versionId,
             'time'                 => [
-                'timezone'         => $this->get('core.locale')->getTimeZone()->getName(),
+                'timezone'         => $this->get('core.locale')->getTimeZone()
+                    ->getName(),
                 'timestamp'        => time() * 1000
             ]
         ]);
@@ -348,8 +349,7 @@ class FrontpagesController extends Controller
             \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
         foreach ($contentsInHomepage as &$content) {
-            $content->loadAttachedVideo()
-                ->loadRelatedContents();
+            $content->loadAttachedVideo();
         }
 
         // Fetch category layout

@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Framework\Component\Paginator;
 
 class Paginator
@@ -30,6 +23,7 @@ class Paginator
         'epp'         => 10,
         'maxLinks'    => 5,
         'page'        => 1,
+        'pages'       => 0,
         'route'       => null,
         'total'       => 0,
     ];
@@ -71,6 +65,7 @@ class Paginator
     public function get($options = [])
     {
         $this->options = array_merge($this->options, $options);
+        $this->links   = '';
 
         // Do not generator the paginator if epp is less than 0. Division by 0.
         // Or if total items are 0 or less than epp
@@ -79,7 +74,7 @@ class Paginator
             || $this->options['total'] <= $this->options['epp']
             || $this->options['epp'] <= 0
         ) {
-            return '';
+            return $this;
         }
 
         if (array_key_exists('templates', $options)) {

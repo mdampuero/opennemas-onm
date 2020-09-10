@@ -66,6 +66,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_album_create_item',
           getItem:    'api_v1_backend_album_get_item',
+          list:       'backend_albums_list',
           public:     'frontend_album_show',
           redirect:   'backend_album_show',
           saveItem:   'api_v1_backend_album_save_item',

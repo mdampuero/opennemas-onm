@@ -41,6 +41,10 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             break;
     }
 
+    if (!$content instanceof \Content) {
+        return;
+    }
+
     return sprintf(
         '<a href="%s"><span %s></span>%s</a>',
         $smarty->getContainer()->get('core.helper.url_generator')->generate($content),

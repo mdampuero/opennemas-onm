@@ -35,6 +35,7 @@
         $scope.routes = {
           createItem:   'api_v1_backend_tag_create_item',
           getItem:      'api_v1_backend_tag_get_item',
+          list:         'backend_tags_list',
           redirect:     'backend_tag_show',
           saveItem:     'api_v1_backend_tag_save_item',
           updateItem:   'api_v1_backend_tag_update_item',

@@ -51,6 +51,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_author_create_item',
           getItem:    'api_v1_backend_author_get_item',
+          list:       'backend_authors_list',
           redirect:   'backend_author_show',
           saveItem:   'api_v1_backend_author_save_item',
           updateItem: 'api_v1_backend_author_update_item'

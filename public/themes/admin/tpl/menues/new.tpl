@@ -12,7 +12,13 @@
                 <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221738-opennemas-c%C3%B3mo-cambiar-el-men%C3%BA-de-mi-peri%C3%B3dico" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                   <i class="fa fa-question"></i>
                 </a>
-                {t}Menus{/t}
+              </h4>
+            </li>
+            <li class="quicklinks">
+              <h4>
+                <a class="no-padding" href="{url name=admin_menus}">
+                  {t}Menus{/t}
+                </a>
               </h4>
             </li>
             <li class="quicklinks visible-xs">
@@ -20,23 +26,23 @@
                 <i class="fa fa-question fa-lg"></i>
               </a>
             </li>
-            <li class="quicklinks hidden-xs">
-              <span class="h-seperate"></span>
+            <li class="hidden-xs m-l-5 m-r-5 quicklinks">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
             </li>
-            <li class="quicklinks hidden-xs">
-              <h5>
-                {if isset($menu->name)}
-                  {t}Editing menu{/t}
-                {else}
-                  {t}Creating menu{/t}
-                {/if}
-              </h5>
+            <li class="hidden-xs quicklinks">
+              <h4>
+                {if empty($menu->name)}{t}Create{/t}{else}{t}Edit{/t}{/if}
+              </h4>
             </li>
             {if $multilanguage}
-            <li class="hidden-xs quicklinks ng-cloak">
-              <span class="h-seperate"></span>
+            <li class="hidden-xs m-l-5 m-r-5 quicklinks">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
             </li>
-            <li class="hidden-xs ng-cloak">
+            <li class="hidden-xs ng-cloak quicklinks">
               <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
             </li>
             {/if}
@@ -44,17 +50,9 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_menus}" title="{t}Go back to list{/t}">
-                  <i class="fa fa-reply"></i>
-                </a>
-              </li>
-              <li class="quicklinks hidden-xs">
-                <span class="h-seperate"></span>
-              </li>
-              <li class="quicklinks">
-                <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
-                  <span class="fa fa-save"></span>
-                  <span class="text">{t}Save{/t}</span>
+                <button class="btn btn-loading btn-success text-uppercase" type="submit" data-text="{t}Saving{/t}..." id="save-button">
+                  <i class="fa fa-save m-r-4"></i>
+                  {t}Save{/t}
                 </button>
               </li>
             </ul>
@@ -63,67 +61,60 @@
       </div>
     </div>
     <div class="content">
-      <div class="grid simple">
-        <div class="grid-body">
-          <div class="row">
-            {if $multilanguage}
-            <div class="col-md-ng-cloak hidden-md hidden-lg hidden-sm clearfix">
-              Language:
-              <div class="cleafix pull-right">
-                <translator ng-model="lang" options="{json_encode($language_data)|clear_json}"/>
-              </div>
-            </div>
-            <hr>
-            {/if}
-            <div class="col-sm-6 col-xs-12 form-group">
-              <label for="name" class="form-label">{t}Name{/t}</label>
-              <div class="controls">
-                <input type="text" id="name" name="name" value="{$menu->name|default:""}"
-                maxlength="120" tabindex="1" required class="form-control"
-                {if (!empty($menu->id) && $menu->type neq 'user')} readonly="readonly" {/if} />
-              </div>
-            </div>
-            {if !empty($menu_positions) && count($menu_positions) > 1}
-            <div class="col-sm-6 col-xs-12 form-group">
-              <label for="name" class="form-label">{t}Position{/t}</label>
-              <div class="controls">
-                {html_options options=$menu_positions selected=$menu->position name=position}
-                <br>
-                <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
-              </div>
-            </div>
-            {/if}
-          </div>
+      <div class="row">
+        <div class="col-md-4 col-md-push-8">
+          {block name="rightColumn"}{/block}
         </div>
-      </div>
-      <div class="grid simple">
-        <div class="grid-title clearfix">
-          <div class="row">
-            <div class="col-xs-12 col-sm-6">
-              <h4><span class="semi-bold">{t}Menu structure{/t}</span></h4>
-              <h6>
-                {t}Use drag and drop to sort and nest elements.{/t}
-                <br> {t}Click on arrow to reveal more configuration options.{/t}
-              </h6>
+        <div class="col-md-8 col-md-pull-4">
+          <div class="grid simple">
+            <div class="grid-body">
+              <div class="form-group">
+                <label class="form-label" for="name">
+                  {t}Name{/t}
+                </label>
+                <div class="controls">
+                  <input class="form-control" type="text" id="name" name="name" value="{$menu->name|default:""}" maxlength="120" required>
+                </div>
+              </div>
+              {if !empty($menu_positions) && count($menu_positions) > 1}
+                <div class="form-group no-margin">
+                  <label for="name" class="form-label">{t}Position{/t}</label>
+                  <div class="controls">
+                    {html_options options=$menu_positions selected=$menu->position name=position}
+                    <br>
+                    <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
+                  </div>
+                </div>
+              {/if}
             </div>
-            <div class="col-xs-12 col-sm-6 right">
-              <button class="btn btn-white" type="button" ng-click="open('modal-add-item')">
+          </div>
+          <div class="grid simple">
+            <div class="grid-title">
+              <h4>
+                {t}Menu structure{/t}
+              </h4>
+              <button class="btn btn-white pull-right btn-small" type="button" ng-click="open('modal-add-item')">
                 <i class="fa fa-plus"></i>
                 {t}Add items{/t}
               </button>
             </div>
+            <div class="grid-body">
+              <p>
+                {t}Use drag and drop to sort and nest elements.{/t}
+              </p>
+              <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
+                <ol ui-tree-nodes="" ng-model="menu.items">
+                  <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
+                </ol>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="grid-body">
-          <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
-            <ol ui-tree-nodes="" ng-model="menu.items">
-              <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
-            </ol>
-          </div>
-        </div>
-      </div>
       <input type="hidden" name="items" ng-value="menuItems"/>
       <input type="hidden" name="lang" ng-value="lang"/>
+
+        </div>
+
+      </div>
     </div>
     <script type="text/ng-template" id="menu-item">
       {include file="menues/partials/_menu_item.tpl"}

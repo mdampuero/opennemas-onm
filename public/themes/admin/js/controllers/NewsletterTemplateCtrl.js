@@ -27,6 +27,17 @@
          * @memberOf NewsletterTemplateCtrl
          *
          * @description
+         *  The index of the container where contents selected in content picker
+         *  should be inserted.
+         *
+         * @type {Integer}
+         */
+        $scope.containerTarget = null;
+
+        /**
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
          *  The newsletter object.
          *
          * @type {Object}
@@ -54,10 +65,9 @@
          *
          * @type {Array}
          */
-        $scope.numberOfElements = [];
-        for (var i = 1; i < 21; i++) {
-          $scope.numberOfElements.push(i);
-        }
+        $scope.numberOfElements = [ ... Array(20).keys() ].map(function(e) {
+          return e + 1;
+        });
 
         /**
          * @memberOf UserCtrl
@@ -73,6 +83,25 @@
           saveItem:   'api_v1_backend_newsletter_template_save',
           getItem:    'api_v1_backend_newsletter_template_show',
           updateItem: 'api_v1_backend_newsletter_template_update'
+        };
+
+        /**
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *  The list of options for angular-ui-tree directive.
+         *
+         * @type {Object}
+         */
+        $scope.treeOptions = {
+          accept: function(source, target) {
+            return (source.$modelValue.id ||
+              source.$modelValue.content_type === 'list') &&
+              target.$element.attr('type') === 'content' ||
+              !source.$modelValue.id &&
+              !source.content_type &&
+              target.$element.attr('type') !== 'content';
+          }
         };
 
         /**
@@ -136,7 +165,7 @@
          * @memberOf NewsletterTemplateCtrl
          *
          * @description
-         *   Adds a new container to the newsletter contents.
+         *   Adds a container.
          */
         $scope.addContainer = function() {
           $scope.item.contents.push({
@@ -146,38 +175,7 @@
         };
 
         /**
-         * @function removeContainer
-         * @memberOf NewsletterTemplateCtrl
-         *
-         * @description
-         *   Removes a container from the list.
-         *
-         * @param {Object} container The container to remove.
-         */
-        $scope.removeContainer = function(container) {
-          var position = $scope.item.contents.indexOf(container);
-
-          $scope.item.contents.splice(position, 1);
-        };
-
-        /**
-         * @function removeContent
-         * @memberOf NewsletterTemplateCtrl
-         *
-         * @description
-         *   Removes a content from a container.
-         *
-         * @param {Object} container The container where to remove.
-         * @param {Object} content The content to remove.
-         */
-        $scope.removeContent = function(container, content) {
-          var position = container.items.indexOf(content);
-
-          container.items.splice(position, 1);
-        };
-
-        /**
-         * @function addDynamicContent
+         * @function addSearch
          * @memberOf NewsletterTemplateCtrl
          *
          * @description
@@ -186,8 +184,8 @@
          * @param {Object} container The container where to remove.
          * @param {Object} content The content to remove.
          */
-        $scope.addDynamicContent = function(container) {
-          container.items.push({
+        $scope.addSearch = function(index) {
+          $scope.item.contents[index].items.push({
             content_type: 'list',
             criteria: {
               content_type: 'article',
@@ -202,42 +200,70 @@
         };
 
         /**
-         * @function addDynamicContent
+         * @function emptyContainer
          * @memberOf NewsletterTemplateCtrl
          *
          * @description
-         *   Adds/removes a categoryId from the content category criteria.
+         *   Empties a container if index is provided or all containers if index is
+         *   not provided.
          *
-         * @param {Object} content The content to change category criteria from.
-         * @param {Object} categoryId The categoryId to add/remove from the criteria.
+         * @param {Integer} index The index of the container to empty.
          */
-        $scope.toggleCategory = function(content, categoryId) {
-          var position = content.criteria.category.indexOf(categoryId);
+        $scope.emptyContainer = function(index) {
+          if (angular.isDefined(index)) {
+            $scope.item.contents[index].items = [];
+            return;
+          }
 
-          if (position < 0) {
-            content.criteria.category.push(categoryId);
-          } else {
-            content.criteria.category.splice(position, 1);
+          for (var i = 0; i < $scope.item.contents.length; i++) {
+            $scope.item.contents[i].items = [];
           }
         };
 
         /**
-         * @function toggleAllCategories
-         * @memberOf NewsletterTemplateCtrl
+         * @function markContainer
+         * @memberOf NewsletterCtrl
          *
          * @description
-         *   Adds or removes all categories from the content criteria.
+         *   Marks a container as target after clicking on button to add contents.
          *
-         * @param {Object} content The content to change category criteria from.
+         * @param {Integer} index The index of the container in the list of
+         *                        containers.
          */
-        $scope.toggleAllCategories = function(content) {
-          if (content.criteria.category.length !== $scope.data.extra.categories.length) {
-            content.criteria.category = $scope.data.extra.categories.map(function(item) {
-              return item.id;
-            });
-          } else {
-            content.criteria.category = [];
+        $scope.markContainer = function(index) {
+          $scope.containerTarget = index;
+        };
+
+        /**
+         * @function removeContainer
+         * @memberOf NewsletterCtrl
+         *
+         * @description
+         *   Removes a container.
+         *
+         * @param {Integer} index The index of the container to remove.
+         */
+        $scope.removeContainer = function(index) {
+          if (angular.isDefined(index)) {
+            $scope.item.contents.splice(index, 1);
+            return;
           }
+
+          $scope.item.contents = [];
+        };
+
+        /**
+         * @function removeContent
+         * @memberOf NewsletterCtrl
+         *
+         * @description
+         *   Removes a content from a container.
+         *
+         * @param {Array}   container The container to remove contents from.
+         * @param {Integer} index     The index of the content to remove.
+         */
+        $scope.removeContent = function(container, index) {
+          container.items.splice(index, 1);
         };
 
         /**
@@ -258,6 +284,27 @@
           $scope.save();
           return null;
         };
+
+        // Add contents to the marked container when content-picker-target changes
+        $scope.$watch('target', function(nv) {
+          if ($scope.containerTarget === null || !nv || nv.length === 0) {
+            return;
+          }
+
+          $scope.item.contents[$scope.containerTarget].items =
+            $scope.item.contents[$scope.containerTarget].items
+            .concat(nv.map(function(e) {
+              return {
+                content_type: e.content_type_name,
+                content_type_l10n_name: e.content_type_l10n_name,
+                id: e.pk_content,
+                title: e.title
+              };
+            }));
+
+          $scope.containerTarget = null;
+          $scope.target          = [];
+        }, true);
       }
     ]);
 })();

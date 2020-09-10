@@ -25,97 +25,22 @@ class Frontpages
     */
     public function allContent($category)
     {
-        $contentsInHomepage = null;
+        $contents = [];
+        $related  = [];
 
         try {
             $category = getService('api.service.category')->getItemBySlug($category);
 
-            list(, $contentsInHomepage, , ) = getService('api.service.frontpage')
+            list(, $contents, , ) = getService('api.service.frontpage')
                 ->getCurrentVersionForCategory($category->id);
 
-            // Get all frontpages images
-            $imageIdsList = [];
-            foreach ($contentsInHomepage as $content) {
-                if (isset($content->img1)) {
-                    $imageIdsList [] = $content->img1;
-                }
-            }
-
-            if (!empty($imageIdsList)) {
-                $er         = getService('entity_repository');
-                $order      = [ 'created' => 'DESC' ];
-                $imgFilters = [
-                    'content_type_name' => [[ 'value' => 'photo' ]],
-                    'pk_content'        => [[ 'value' => $imageIdsList, 'operator' => 'IN' ]],
-                ];
-                $imageList  = $er->findBy($imgFilters, $order);
-            } else {
-                $imageList = [];
-            }
-
-            foreach ($imageList as &$img) {
-                $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
-            }
-
-            // Overloading information for contents
-            foreach ($contentsInHomepage as &$content) {
-                try {
-                    $author = getService('api.service.author')->getItem($content->fk_author);
-
-                    $content->agency    = !empty($author) ? $author->name : $content->agency;
-                    $content->fk_author = null;
-                } catch (\Exception $e) {
-                }
-
-                // Load attached and related contents from array
-                $content->loadFrontpageImageFromHydratedArray($imageList)
-                    ->loadAttachedVideo()
-                    ->loadRelatedContents($category);
-
-                //Change uri for href links except widgets
-                if ($content->content_type_name != 'widget') {
-                    $content->externalUri = getService('router')
-                        ->generate(
-                            'frontend_external_article_show',
-                            [
-                                'category_slug' => get_category_slug($content),
-                                'slug'          => $content->slug,
-                                'article_id'    => date('YmdHis', strtotime($content->created)) .
-                                                   sprintf('%06d', $content->pk_content),
-                            ]
-                        );
-                    // Overload floating ads with external url's
-                    if ($content->content_type_name == 'advertisement') {
-                        $content->extWsUrl    = SITE_URL;
-                        $content->extUrl      = SITE_URL . 'ads/' . date('YmdHis', strtotime($content->created))
-                            . sprintf('%06d', $content->pk_advertisement) . '.html';
-                        $content->extMediaUrl = SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME . '/images';
-                    }
-                }
-
-                // Generate uri for related content
-                foreach ($content->related_contents as &$item) {
-                    // Generate content uri if it's not an attachment
-                    if ($item->fk_content_type == '4') {
-                        $item->externalUri = "ext" . preg_replace('@//@', '/author/', get_url($item));
-                    } elseif ($item->fk_content_type == 3) {
-                        // Get instance media
-                        $basePath = INSTANCE_MEDIA;
-                        // Get file path for attachments
-                        $filePath = \ContentManager::getFilePathFromId($item->id);
-                        // Compose the full url to the file
-                        $item->externalUri = $basePath . FILE_DIR . $filePath;
-                    } else {
-                        $item->externalUri = "ext" . get_url($item);
-                    }
-                }
-            }
+            $contents = $this->hydrateContents($contents);
+            $related  = $this->getRelated($contents);
         } catch (\Exception  $e) {
             throw new RestException(404, $e->getMessage());
         }
 
-        // Use htmlspecialchars to avoid utf-8 erros with json_encode
-        return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
+        return utf8_encode(serialize([ $contents, $related ]));
     }
 
     /*
@@ -162,60 +87,6 @@ class Frontpages
         $articles      = $er->findBy($filters, $order, $epp, $page);
         $countArticles = $er->countBy($filters);
 
-        $imageIdsList = [];
-        foreach ($articles as $content) {
-            if (isset($content->img1) && !empty($content->img1)) {
-                $imageIdsList [] = $content->img1;
-            }
-        }
-
-        $imageIdsList = array_unique($imageIdsList);
-
-        if (!empty($imageIdsList)) {
-            $imgFilters = [
-                'content_type_name' => [[ 'value' => 'photo' ]],
-                'pk_content'        => [[ 'value' => $imageIdsList, 'operator' => 'IN' ]],
-            ];
-            $imageList  = $er->findBy($imgFilters, $order);
-        } else {
-            $imageList = [];
-        }
-
-        foreach ($imageList as &$img) {
-            $img->media_url = MEDIA_IMG_ABSOLUTE_URL;
-        }
-
-        // Overloading information for contents
-        foreach ($articles as &$content) {
-            // Load related information
-            try {
-                $author = getService('api.service.author')->getItem($content->fk_author);
-
-                $content->agency    = !empty($author) ? $author->name : $content->agency;
-                $content->fk_author = null;
-            } catch (\Exception $e) {
-            }
-
-             // Change uri for href links except widgets
-            if ($content->content_type != 'Widget') {
-                $content->externalUri = getService('router')
-                    ->generate(
-                        'frontend_external_article_show',
-                        [
-                            'category_slug' => get_category_slug($content),
-                            'slug'          => $content->slug,
-                            'article_id'    => date('YmdHis', strtotime($content->created)) .
-                                               sprintf('%06d', $content->pk_content),
-                        ]
-                    );
-            }
-
-            // Load attached and related contents from array
-            $content->loadFrontpageImageFromHydratedArray($imageList)
-                ->loadAttachedVideo()
-                ->loadRelatedContents($categoryName);
-        }
-
         // Set pagination
         $pagination = getService('paginator')->get([
             'page'  => $page,
@@ -229,6 +100,91 @@ class Frontpages
             ]
         ]);
 
-        return utf8_encode(serialize([ $pagination->links, $articles ]));
+        return utf8_encode(serialize([ $pagination->links, $articles, $related ]));
+    }
+
+    /**
+     * Adds special information to contents in order to work properly in the
+     * target instance.
+     *
+     * @param array $contents The list of contents.
+     *
+     * @return array The list of contents with the special information.
+     */
+    protected function hydrateContents($contents)
+    {
+        foreach ($contents as &$content) {
+            try {
+                $author = getService('api.service.author')
+                    ->getItem($content->fk_author);
+
+                $content->agency = !empty($author) ? $author->name : $content->agency;
+
+                // Prevent errors when trying to search authors in target
+                $content->fk_author = null;
+            } catch (\Exception $e) {
+            }
+
+             // Change uri for href links except widgets
+            if ($content->content_type_name !== 'widget') {
+                $content->external    = 1;
+                $content->externalUri = getService('router')
+                    ->generate('frontend_external_article_show', [
+                        'category_slug' => get_category_slug($content),
+                        'slug'          => $content->slug,
+                        'article_id'    => date('YmdHis', strtotime($content->created)) .
+                        sprintf('%06d', $content->pk_content),
+                    ]);
+            }
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Returns the list of contents related to the provided contents.
+     *
+     * @param array $contents The list of contents to search related contents
+     *                        for.
+     *
+     * @return array The list of related contents.
+     */
+    protected function getRelated($contents)
+    {
+        $ids = [];
+        foreach ($contents as $content) {
+            if (!empty($content->fk_video) || !empty($content->img1)) {
+                $ids[] = !empty($content->fk_video)
+                    ? $content->fk_video
+                    : $content->img1;
+            }
+
+            $ids = array_merge($ids, array_map(function ($a) {
+                return $a['target_id'];
+            }, array_filter($content->related_contents, function ($a) {
+                return $a['type'] === 'related_frontpage';
+            })));
+        }
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        $related = getService('entity_repository')->findBy([
+            'pk_content' => [[ 'value' => $ids, 'operator' => 'IN' ]],
+        ], [ 'starttime' => 'DESC' ]);
+
+        $related = getService('data.manager.filter')
+            ->set($related)
+            ->filter('mapify', [ 'key' => 'pk_content' ])
+            ->get($related);
+
+        foreach ($related as $r) {
+            $r->external    = 1;
+            $r->externalUri = getService('core.helper.url_generator')
+                ->generate($r, [ 'absolute' => true ]);
+        }
+
+        return $related;
     }
 }

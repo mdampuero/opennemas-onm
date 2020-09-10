@@ -59,7 +59,7 @@
         </div>
         <div class="listing-no-contents ng-cloak" ng-show="!flags.http.loading && item === null">
           <div class="text-center p-b-15 p-t-15">
-            <a href="[% routing.generate('backend_videos_list') %]">
+            <a href="[% routing.generate(routes.list) %]">
               <i class="fa fa-4x fa-warning text-warning"></i>
               <h3>{t}Unable to find the item{/t}</h3>
               <h4>{t}Click here to return to the list{/t}</h4>

@@ -84,14 +84,6 @@ class FrontpagesController extends Controller
                 }
             }
 
-            // Get related content ids
-            $relatedMap = $this->get('related_contents')
-                ->getRelatedContents($ids, $categoryId);
-
-            foreach ($relatedMap as $ids) {
-                $relatedIds = array_merge($relatedIds, $ids);
-            }
-
             $relatedIds = array_unique($relatedIds);
             $date       = date('Y-m-d H:i:s');
 
@@ -127,18 +119,6 @@ class FrontpagesController extends Controller
                     && array_key_exists($content->fk_video, $related)
                 ) {
                     $content->obj_video = $related[$content->fk_video];
-                }
-
-                if (array_key_exists($content->pk_content, $relatedMap)) {
-                    $content->related_contents = [];
-
-                    $keys = $relatedMap[$content->pk_content];
-
-                    foreach ($keys as $key) {
-                        if (array_key_exists($key, $related)) {
-                            $content->related_contents[] = $related[$key];
-                        }
-                    }
                 }
             }
 
@@ -187,30 +167,26 @@ class FrontpagesController extends Controller
      */
     public function extShowAction(Request $request)
     {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
-        $wsUrl = $this->get('core.helper.instance_sync')
-            ->getSyncUrl($categoryName);
+        $slug  = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($slug);
 
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
 
-        $cm = new \ContentManager();
-
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
-        $cacheID = $this->view->getCacheId('sync', 'frontpage', $categoryName);
+        $cacheId = $this->view->getCacheId('sync', 'frontpage', $slug);
 
         if ($this->view->getCaching() === 0
-            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
+            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
-            $category = unserialize(
-                $cm->getUrlContent(
-                    $wsUrl . '/ws/categories/object/' . $categoryName,
-                    true
-                )
-            );
+            $cm = new \ContentManager();
+
+            $category = unserialize($cm->getUrlContent(
+                $wsUrl . '/ws/categories/object/' . $slug,
+                true
+            ));
 
             if (empty($category)) {
                 throw new ResourceNotFoundException();
@@ -218,16 +194,19 @@ class FrontpagesController extends Controller
 
             // Get all contents for this frontpage
             $contents = $cm->getUrlContent(
-                $wsUrl . '/ws/frontpages/allcontent/' . $categoryName,
+                $wsUrl . '/ws/frontpages/allcontent/' . $slug,
                 true
             );
 
-            $this->view->assign('column', unserialize(utf8_decode(
-                htmlspecialchars_decode($contents)
-            )));
+            list($contents, $related) = unserialize(utf8_decode($contents));
+
+            $this->view->assign([
+                'column'  => $contents,
+                'related' => $related
+            ]);
 
             // Fetch layout for categories
-            $layout = $cm->getUrlContent($wsUrl . '/ws/categories/layout/' . $categoryName, true);
+            $layout = $cm->getUrlContent($wsUrl . '/ws/categories/layout/' . $slug, true);
 
             if (!$layout) {
                 $layout = 'default';
@@ -236,17 +215,15 @@ class FrontpagesController extends Controller
             $this->view->assign([ 'layoutFile' => 'layouts/' . $layout . '.tpl' ]);
         }
 
-        $ads = unserialize($cm->getUrlContent(
-            $wsUrl . '/ws/ads/frontpage/' . $category->id,
-            true
-        ));
+        list($positions, $advertisements) = $this->getAdvertisements();
 
         return $this->render('frontpage/frontpage.tpl', [
-            'advertisements' => $ads,
-            'cache_id'       => $cacheID,
-            'x-tags'         => 'frontpage-page,frontpage-page-external,' . $categoryName,
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
             'x-cacheable'    => true,
+            'x-tags'         => 'frontpage-page,frontpage-page-external,' . $slug
         ]);
     }
 

@@ -64,12 +64,12 @@ class EventController extends ContentController
             }
 
             foreach ($element->related_contents as $relation) {
-                if ($relation['relationship'] !== 'cover') {
+                if ($relation['type'] !== 'cover') {
                     continue;
                 }
                 try {
-                    $photo   = $service->getItem($relation['pk_content2']);
-                    $extra[$relation['pk_content2']] = $service->responsify($photo);
+                    $photo   = $service->getItem($relation['target_id']);
+                    $extra[$relation['target_id']] = $service->responsify($photo);
                 } catch (GetItemException $e) {
                 }
             }

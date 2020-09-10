@@ -40,6 +40,7 @@
           checkItem:  'api_v1_backend_news_agency_server_check_item',
           createItem: 'api_v1_backend_news_agency_server_create_item',
           getItem:    'api_v1_backend_news_agency_server_get_item',
+          list:       'backend_news_agency_server_list',
           redirect:   'backend_news_agency_server_show',
           saveItem:   'api_v1_backend_news_agency_server_save_item',
           updateItem: 'api_v1_backend_news_agency_server_update_item'

@@ -50,6 +50,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_subscriber_create_item',
           getItem:    'api_v1_backend_subscriber_get_item',
+          list:       'backend_subscribers_list',
           redirect:   'backend_subscriber_show',
           saveItem:   'api_v1_backend_subscriber_save_item',
           updateItem: 'api_v1_backend_subscriber_update_item'

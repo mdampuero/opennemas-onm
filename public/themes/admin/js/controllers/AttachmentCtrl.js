@@ -59,6 +59,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_attachment_create_item',
           getItem:    'api_v1_backend_attachment_get_item',
+          list:       'backend_attachments_list',
           redirect:   'backend_attachment_show',
           saveItem:   'api_v1_backend_attachment_save_item',
           updateItem: 'api_v1_backend_attachment_update_item'
