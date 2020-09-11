@@ -181,8 +181,9 @@ class Processor
             $this->imagine = $this->getImagine();
             $this->image   = $this->imagine->open($path);
         } catch (\Exception $e) {
-            return null;
+            throw new \InvalidArgumentException();
         }
+
         return $this;
     }
 
