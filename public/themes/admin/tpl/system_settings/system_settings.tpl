@@ -443,28 +443,28 @@
                             </label>
                           </div>
                         </div>
-                      </div>
-                      <div class="form-group m-t-15" ng-if="settings.cmp_type == 'quantcast'">
-                        <label class="form-label" for="cmp-id">
-                          {t}Quantcast UTID{/t}
-                        </label>
-                        <span class="help">
-                          {t escape=off}How to find your Quantcast UTID <a class="external-link" href="https://help.quantcast.com/hc/en-us/articles/360051794614-TCF-v2-GTM-Implementation-Guide-Finding-your-UTID" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
-                        </span>
-                        <div class="controls">
-                          <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                        <div class="form-group m-t-15" ng-if="settings.cmp_type == 'quantcast'">
+                          <label class="form-label" for="cmp-id">
+                            {t}Quantcast UTID{/t}
+                          </label>
+                          <span class="help">
+                            {t escape=off}How to find your Quantcast UTID <a class="external-link" href="https://help.quantcast.com/hc/en-us/articles/360051794614-TCF-v2-GTM-Implementation-Guide-Finding-your-UTID" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
+                          </span>
+                          <div class="controls">
+                            <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                          </div>
                         </div>
+                        <div class="form-group m-t-15" ng-if="settings.cmp_type == 'onetrust'">
+                          <label class="form-label" for="cmp-id">
+                            {t}OneTrust data-domain-script{/t}
+                          </label>
+                          <span class="help">
+                            {t escape=off}Get your data-domain-script from your OneTrust script. Check an example script <a class="external-link" href="https://community.cookiepro.com/s/article/UUID-5394213a-70b9-c4e6-d68c-f809b55e7af6#UUID-7478d3b4-18eb-3ac0-a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
+                          </span>
+                          <div class="controls">
+                            <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                          </div>
                       </div>
-                      <div class="form-group m-t-15" ng-if="settings.cmp_type == 'onetrust'">
-                        <label class="form-label" for="cmp-id">
-                          {t}OneTrust data-domain-script{/t}
-                        </label>
-                        <span class="help">
-                          {t escape=off}Get your data-domain-script from your OneTrust script. Check an example script <a class="external-link" href="https://community.cookiepro.com/s/article/UUID-5394213a-70b9-c4e6-d68c-f809b55e7af6#UUID-7478d3b4-18eb-3ac0-a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
-                        </span>
-                        <div class="controls">
-                          <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
-                        </div>
                       </div>
                       <h4>
                         <i class="fa fa-internet-explorer"></i>
