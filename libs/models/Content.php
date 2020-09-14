@@ -1193,33 +1193,39 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
-        $authorName = '';
-
-        try {
-            $author     = getService('api.service.author')->getItem($this->fk_author);
-            $authorName = (is_object($author)) ? $author->name : '';
-        } catch (\Exception $e) {
+        if (empty($this->id)) {
+            return;
         }
 
-        if ($this->id !== null) {
-            if (is_null($this->views)) {
-                $this->views = getService('content_views_repository')->getViews($this->id);
+        if (!empty($this->fk_user_last_editor)) {
+            try {
+                $user = getService('orm.manager')->getRepository('User')
+                    ->find($this->fk_user_last_editor);
+            } catch (\Exception $e) {
+                $user = getService('orm.manager')->getRepository('User', 'manager')
+                    ->find($this->fk_user_last_editor);
             }
 
-            $status          = $this->getStatus();
-            $schedulingState = $this->getSchedulingState();
-
-            return [
-                'title'           => $this->__get('title'),
-                'category'        => get_category_name($this),
-                'views'           => $this->views,
-                'starttime'       => $this->starttime,
-                'endtime'         => $this->endtime,
-                'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
-                'state'           => $this->getL10nStatus($status),
-                'last_author'     => $authorName,
-            ];
+            $userName = is_object($user) ? $user->name : '';
         }
+
+        if (is_null($this->views)) {
+            $this->views = getService('content_views_repository')->getViews($this->id);
+        }
+
+        $status          = $this->getStatus();
+        $schedulingState = $this->getSchedulingState();
+
+        return [
+            'title'           => $this->__get('title'),
+            'category'        => get_category_name($this),
+            'views'           => $this->views,
+            'starttime'       => $this->starttime,
+            'endtime'         => $this->endtime,
+            'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
+            'state'           => $this->getL10nStatus($status),
+            'last_editor'     => $userName ?? '',
+        ];
     }
 
     /**
