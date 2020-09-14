@@ -29,11 +29,10 @@ class ContentMediaHelper
      * Get image url for a given content
      *
      * @param object $content The content object.
-     * @param array $params An array with the image url passed from template.
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getContentMediaObject($content, $params = null)
+    public function getContentMediaObject($content)
     {
         // Generate method name with object content_type
         $method = 'getMediaObjectFor' . ucfirst($content->content_type_name);
@@ -99,9 +98,14 @@ class ContentMediaHelper
         $mediaObject = $this->getImageMediaObject($content);
 
         // Check author
-        $authorPhoto = null;
-        if (isset($content->author) && is_object($content->author)) {
-            $authorPhoto = $content->author->photo;
+        try {
+            $author = $this->container->get('api.service.author')->getItem($content->fk_author);
+
+            if (!empty($author->avatar_img_id)) {
+                $authorPhoto = $this->container->get('entity_repository')
+                    ->find('Photo', $author->avatar_img_id);
+            }
+        } catch (\Exception $e) {
         }
 
         if (empty($mediaObject)
