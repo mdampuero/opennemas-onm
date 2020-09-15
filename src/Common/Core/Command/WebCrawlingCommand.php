@@ -3,13 +3,13 @@
 namespace Common\Core\Command;
 
 use Common\Core\Command\Command;
+use Common\Core\Component\EventDispatcher\Event;
 use Common\Core\Component\VDB\Spider\CrawlLoggingListener;
 use Common\Core\Component\VDB\Spider\LinkCheckRequestHandler;
 use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
 use VDB\Spider\Event\SpiderEvents;
 use VDB\Spider\EventListener\PolitenessPolicyListener;
@@ -164,7 +164,7 @@ class WebCrawlingCommand extends Command
 
         $spider->getDispatcher()->addListener(
             SpiderEvents::SPIDER_CRAWL_USER_STOPPED,
-            function (GenericEvent $event) {
+            function (Event $event) {
                 $this->output->writeln("Crawling Stoped");
                 exit();
             }
