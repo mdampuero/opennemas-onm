@@ -331,7 +331,9 @@ class CategoryController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         // Invalid page provided as parameter
-        if ($params['page'] <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
