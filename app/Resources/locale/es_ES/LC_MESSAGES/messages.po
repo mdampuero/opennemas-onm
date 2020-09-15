@@ -1,13 +1,11 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-03 14:53+0000\n"
-"PO-Revision-Date: 2020-09-03 17:12+0200\n"
+"POT-Creation-Date: 2020-09-15 08:39+0000\n"
+"PO-Revision-Date: 2020-09-08 17:28+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1302,6 +1300,19 @@ msgstr "%s elementos eliminados correctamente"
 
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Has excedido el límite de versiones. Elimina una para crear una nueva"
+
+msgid "Item not found"
+msgstr "Elemento no encontrado"
+
+msgid "Invalid argument"
+msgstr "Parámetro incorrecto"
+
+msgid "The item is already imported"
+msgstr "El elemento ya está importado"
+
+msgid "The synchronization is already in progress. Try again later."
+msgstr ""
+"El proceso de sincronización está en curso. Inténtalo de nuevo más tarde."
 
 msgid "Invalid category"
 msgstr "Categoría no válida"
@@ -7183,6 +7194,9 @@ msgstr "¿Estás seguro de que quieres eliminar la notificación?"
 msgid "Do you want to delete the selected notifications?"
 msgstr ""
 "¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
+
+#~ msgid "Use Consent Management Platform (CMP)"
+#~ msgstr "Utilizar Plataforma de gestión de consentimiento (CMP)"
 
 #~ msgid "Day"
 #~ msgstr "Día"

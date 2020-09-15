@@ -171,6 +171,16 @@ class Synchronizer
     }
 
     /**
+     * Checks if the environment is locked.
+     *
+     * @return bool True if the environment is locked. False otherwise.
+     */
+    public function isLocked() : bool
+    {
+        return $this->fs->exists($this->lockFilePath);
+    }
+
+    /**
      * Resets the synchronizer statistics.
      *
      * @return Synchronizer The current synchronizer.
