@@ -3,13 +3,13 @@
 namespace Common\Core\Command;
 
 use Common\Core\Command\Command;
-use Common\Core\Component\EventDispatcher\Event;
 use Common\Core\Component\VDB\Spider\CrawlLoggingListener;
 use Common\Core\Component\VDB\Spider\LinkCheckRequestHandler;
 use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\Event;
 use VDB\Spider\Discoverer\XPathExpressionDiscoverer;
 use VDB\Spider\Event\SpiderEvents;
 use VDB\Spider\EventListener\PolitenessPolicyListener;
