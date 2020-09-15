@@ -24,7 +24,7 @@
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
                 </span>
-                <span class="related-item-status" ng-if="r.content_status == 0">
+                <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
                   ({t}No published{/t})
                 </span>
               </div>
@@ -58,7 +58,7 @@
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
                 </span>
-                <span class="related-item-status" ng-if="r.content_status == 0">
+                <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
                   ({t}No published{/t})
                 </span>
               </div>
@@ -95,7 +95,7 @@
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
                 </span>
-                <span class="related-item-status" ng-if="r.content_status == 0">
+                <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
                   ({t}No published{/t})
                 </span>
               </div>
@@ -129,7 +129,7 @@
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
                 </span>
-                <span class="related-item-status" ng-if="r.content_status == 0">
+                <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
                   ({t}No published{/t})
                 </span>
               </div>
@@ -161,7 +161,7 @@
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
                 </span>
-                <span class="related-item-status" ng-if="r.content_status == 0">
+                <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
                   ({t}No published{/t})
                 </span>
               </div>
@@ -193,7 +193,7 @@
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
                 </span>
-                <span class="related-item-status" ng-if="r.content_status == 0">
+                <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
                   ({t}No published{/t})
                 </span>
               </div>
