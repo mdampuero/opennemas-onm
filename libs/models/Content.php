@@ -1782,7 +1782,7 @@ class Content implements \JsonSerializable, CsvSerializable
             case 'dued':
                 $state = _('dued');
                 break;
-            case 'in-time':
+            case 'intime':
                 $state = _('in time');
                 break;
             case 'postponed':
