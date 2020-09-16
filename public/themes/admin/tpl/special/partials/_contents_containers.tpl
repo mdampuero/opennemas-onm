@@ -30,8 +30,8 @@
               </button>
             </div>
           </div>
-          <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="contentsLeft" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
-            <button class="btn btn-default" type="button">
+          <div class="content-placeholder text-center">
+            <button class="btn btn-default" content-picker content-picker-ignore="[% getContentIds(contentsLeft) %]"content-picker-selection="true" content-picker-max-size="30" content-picker-target="tmp.contentsLeft" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item" type="button">
               <i class="fa fa-plus"></i>
               {t}Add{/t}
             </button>
@@ -62,8 +62,8 @@
               </button>
             </div>
           </div>
-          <div class="content-placeholder" content-picker content-picker-selection="true" content-picker-max-size="30" content-picker-target="contentsRight" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item">
-            <button class="btn btn-default" type="button">
+          <div class="content-placeholder text-center">
+            <button class="btn btn-default" content-picker content-picker-ignore="[% getContentIds() %]" content-picker-selection="true" content-picker-max-size="30" content-picker-target="tmp.contentsRight" content-picker-type="album,article,opinion,poll,video" content-picker-view="list-item" type="button">
               <i class="fa fa-plus"></i>
               {t}Add{/t}
             </button>
