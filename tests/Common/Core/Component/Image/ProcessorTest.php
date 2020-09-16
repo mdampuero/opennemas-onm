@@ -246,6 +246,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests open when exception.
+     *
+     * @expectedException \InvalidArgumentException
      */
     public function testOpenWhenException()
     {
@@ -254,7 +256,6 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->imagine->expects($this->once())->method('open')
             ->will($this->throwException(new \Exception()));
 
-        $this->expectException(\InvalidArgumentException::class);
         $this->im->open('xyzzy/grault.flob');
     }
 
