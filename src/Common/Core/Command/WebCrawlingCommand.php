@@ -15,6 +15,7 @@ use VDB\Spider\Event\SpiderEvents;
 use VDB\Spider\EventListener\PolitenessPolicyListener;
 use VDB\Spider\Filter\Prefetch\AllowedSchemeFilter;
 use VDB\Spider\Filter\Prefetch\AllowedHostsFilter;
+use VDB\Spider\QueueManager\InMemoryQueueManager;
 use VDB\Spider\Spider;
 
 class WebCrawlingCommand extends Command
@@ -138,13 +139,20 @@ class WebCrawlingCommand extends Command
         $port   = empty($parameters['port']) ? $parameters['port'] : ':' . $parameters['port'];
         $domain = sprintf('%s://%s%s', $protocol, $instance->domains[0], $port);
 
+        $queueManager = new InMemoryQueueManager();
+        $queueManager->setTraversalAlgorithm(InMemoryQueueManager::ALGORITHM_BREADTH_FIRST);
+
         $spider = new Spider($domain);
+        $spider->setQueueManager($queueManager);
         $spider->getDiscovererSet()->set(new XPathExpressionDiscoverer('//a'));
         $spider->getDiscovererSet()->addFilter(new AllowedSchemeFilter([ 'http', 'https' ]));
         $spider->getDiscovererSet()->addFilter(new AllowedHostsFilter([ $domain ], false));
         $spider->getDiscovererSet()->maxDepth = $parameters['depth'];
 
-        $spider->getDownloader()->setRequestHandler(new LinkCheckRequestHandler());
+        $customRequestHandler = new LinkCheckRequestHandler();
+        $customRequestHandler->setDomain($domain);
+
+        $spider->getDownloader()->setRequestHandler($customRequestHandler);
 
         $spider->getQueueManager()->maxQueueSize = $parameters['limit'];
 
