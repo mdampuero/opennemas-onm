@@ -19,8 +19,7 @@ class LinkCheckRequestHandler extends GuzzleRequestHandler
             'http_errors'     => false,
             'base_uri'        => $this->domain,
             'allow_redirects' => false
-        ]
-    );
+        ]);
 
         return new Resource($uri, $response);
     }
