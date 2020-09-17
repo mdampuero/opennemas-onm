@@ -410,11 +410,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/site_logo.jpg',
             $siteLogo->url
         );
-
-        $this->assertEquals(
-            $method->invokeArgs($this->helper, [ $mediaObject ]),
-            $mediaObject
-        );
     }
 
     /**
@@ -422,7 +417,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultMediaObjectException()
     {
-        $mediaObject = new \StdClass();
+        $mediaObject = null;
 
         $this->instance->expects($this->any())
             ->method('getMediaShortPath')

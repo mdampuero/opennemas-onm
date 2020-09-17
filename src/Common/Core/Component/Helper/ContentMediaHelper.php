@@ -38,23 +38,20 @@ class ContentMediaHelper
         // Generate method name with object content_type
         $method = 'getMediaObjectFor' . ucfirst($content->content_type_name);
 
-        $mediaObject = null;
         if (method_exists($this, $method)) {
             $mediaObject = $this->$method($content);
         }
 
-        // The content does not have associated media so return empty object.
-        $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
-
-        if (!isset($mediaObject->url) && $this->ds->get('logo_enabled')) {
-            $mediaObject = $this->getDefaultMediaObject($mediaObject);
+        // If content does not have associated media check for default
+        if (empty($mediaObject) && $this->ds->get('logo_enabled')) {
+            $mediaObject = $this->getDefaultMediaObject();
         }
 
-        // Overload object image size
-        $mediaObject->width  = (isset($mediaObject->width) && !empty($mediaObject->width))
-            ? $mediaObject->width : 700;
-        $mediaObject->height = (isset($mediaObject->height) && !empty($mediaObject->height))
-            ? $mediaObject->height : 450;
+        // Overload object image size if media object exists
+        if (is_object($mediaObject)) {
+            $mediaObject->width  = $mediaObject->width ?? 700;
+            $mediaObject->height = $mediaObject->height ?? 450;
+        }
 
         return $mediaObject;
     }
@@ -165,11 +162,9 @@ class ContentMediaHelper
     /**
      * Returns default media object for content
      *
-     * @param object $mediaObject The media object.
-     *
      * @return object  $mediaObject The media object.
      */
-    protected function getDefaultMediaObject($mediaObject)
+    protected function getDefaultMediaObject()
     {
         $ih       = $this->container->get('core.helper.image');
         $instance = $this->container->get('core.instance');
@@ -188,17 +183,16 @@ class ContentMediaHelper
             $defaultLogo = $this->ds->get('site_logo');
         }
 
+        $mediaObject = null;
         if (!empty($defaultLogo)) {
             try {
                 $information         = $ih->getInformation($filepath . $defaultLogo);
+                $mediaObject         = new \stdClass();
                 $mediaObject->url    = $baseUrl . $defaultLogo;
                 $mediaObject->width  = $information['width'];
                 $mediaObject->height = $information['height'];
             } catch (\Exception $e) {
-                $this->container->get('error.log')->error(sprintf(
-                    'Error trying to get image information: %s',
-                    $e->getMessage()
-                ));
+                return null;
             }
         }
 
