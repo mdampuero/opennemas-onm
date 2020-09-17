@@ -396,6 +396,11 @@ class FrontendController extends Controller
             ]
         ]);
 
+        // Always force a page parameter
+        $params['page'] = array_key_exists('page', $params)
+            ? (int) $params['page']
+            : 1;
+
         if (!empty($item)) {
             $params['content']   = $item;
             $params['contentId'] = $item->id;
