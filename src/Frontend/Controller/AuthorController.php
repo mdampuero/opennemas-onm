@@ -20,7 +20,7 @@ class AuthorController extends Controller
     public function authorFrontpageAction(Request $request)
     {
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $page         = (int) $request->get('page');
+        $page         = (int) $request->get('page', 1);
         $itemsPerPage = 12;
 
         try {
