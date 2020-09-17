@@ -51,6 +51,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_author_create_item',
           getItem:    'api_v1_backend_author_get_item',
+          list:       'backend_authors_list',
           redirect:   'backend_author_show',
           saveItem:   'api_v1_backend_author_save_item',
           updateItem: 'api_v1_backend_author_update_item'
@@ -85,7 +86,7 @@
          *   Generates an username basing on the name.
          */
         $scope.getUsername = function() {
-          if ($scope.item.username) {
+          if ($scope.item.username && $scope.item.slug) {
             return;
           }
 
@@ -97,8 +98,15 @@
 
           $scope.tm = $timeout(function() {
             $scope.getSlug($scope.item.name, function(response) {
-              $scope.item.username = response.data.slug;
-              $scope.form.username.$setDirty(true);
+              if (!$scope.item.username) {
+                $scope.item.username = response.data.slug;
+                $scope.form.username.$setDirty(true);
+              }
+
+              if (!$scope.item.slug) {
+                $scope.item.slug = response.data.slug;
+                $scope.form.slug.$setDirty(true);
+              }
             });
           }, 500);
         };

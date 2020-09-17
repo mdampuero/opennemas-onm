@@ -23,7 +23,7 @@ class ArticleController extends Controller
      */
     public function createAction()
     {
-        return new JsonResponse([ 'extra' => $this->getExtraData(false) ]);
+        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
     }
 
     /**
@@ -79,11 +79,7 @@ class ArticleController extends Controller
             );
         }
 
-        $extra = $this->getExtraData(false);
-        $extra = array_merge($extra, $this->getPhotos($article));
-        $extra = array_merge($extra, $this->getVideos($article));
-        $extra = array_merge($extra, $this->getAlbums($article));
-        $extra = array_merge($extra, $this->getRelated($article));
+        $extra = $this->getExtraData($article);
 
         if (!empty($article->tags)) {
             $ts = $this->get('api.service.tag');
@@ -97,43 +93,11 @@ class ArticleController extends Controller
     }
 
     /**
-     * Returns the list of albums linked to the article.
-     *
-     * @param Article $article The article.
-     *
-     * @return array The list of albums linked to the article.
-     */
-    protected function getAlbums($article)
-    {
-        if (!$this->get('core.security')->hasExtension('CRONICAS_MODULES')) {
-            return [];
-        }
-
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $keys  = [ 'withGallery', 'withGalleryInt', 'withGalleryHome' ];
-
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $article->params)
-                && !empty($article->params[$key])
-            ) {
-                $extra[$key] = \Onm\StringUtils::convertToUtf8(
-                    $em->find('Album', $article->params[$key])
-                );
-            }
-        }
-
-        return $extra;
-    }
-
-    /**
      * Loads extra data related to the given contents.
-     *
-     * @param boolean $all Whether to use 'All' or 'Select...' option.
      *
      * @return array Array of extra data.
      */
-    protected function getExtraData($all = true)
+    protected function getExtraData($article = null)
     {
         $extra      = [ 'tags' => [] ];
         $categories = $this->get('api.service.category')->getList()['items'];
@@ -161,6 +125,11 @@ class ArticleController extends Controller
 
         $extra['with_comment'] = $this->get('core.helper.comment')->enableCommentsByDefault();
 
+        $extra['related'] = $this->getRelated($article);
+
+        $extra = array_merge($extra, $this->getPhotos($article));
+        $extra = array_merge($extra, $this->getVideos($article));
+
         return $extra;
     }
 
@@ -173,6 +142,10 @@ class ArticleController extends Controller
      */
     protected function getPhotos($article)
     {
+        if (empty($article)) {
+            return [];
+        }
+
         $em    = $this->get('entity_repository');
         $extra = [];
         $keys  = [ 'img1', 'img2' ];
@@ -213,43 +186,22 @@ class ArticleController extends Controller
      *
      * @return array The list of contents linked to the article.
      */
-    protected function getRelated(&$article)
+    protected function getRelated(&$article = null)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $fm    = $this->get('data.manager.filter');
-        $keys  = [ 'frontpage', 'inner', 'home' ];
-        $rm    = $this->get('related_contents');
-
-        foreach ($keys as $key) {
-            $name = 'related' . ucfirst(str_replace('page', '', $key));
-
-            if ($key === 'home'
-                && !$this->get('core.security')->hasExtension('CRONICAS_MODULES')
-            ) {
-                continue;
-            }
-
-            $relations = $rm->getRelations($article->id, $key);
-
-            if (empty($relations)) {
-                continue;
-            }
-
-            $extra[$name] = array_map(function ($content) {
-                return \Onm\StringUtils::convertToUtf8($content);
-            }, $em->findMulti($relations));
-
-            $extra[$name] = $fm->set($extra[$name])
-                ->filter('localize', [ 'keys' => [ 'title' ] ])
-                ->get();
-
-            $article->{$name} = array_map(function ($a) {
-                return $a[1];
-            }, $relations);
+        if (empty($article) || empty($article->related_contents)) {
+            return [];
         }
 
-        return $extra;
+        $repository = $this->get('entity_repository');
+        $contents   = array_filter(array_map(function ($a) use ($repository) {
+            return $repository->find($a['content_type_name'], $a['target_id']);
+        }, $article->related_contents));
+
+        $contents = $this->get('data.manager.filter')->set($contents)
+            ->filter('mapify', [ 'key' => 'pk_content' ])
+            ->get();
+
+        return $contents;
     }
 
     /**
@@ -261,6 +213,10 @@ class ArticleController extends Controller
      */
     protected function getVideos($article)
     {
+        if (empty($article)) {
+            return [];
+        }
+
         $em    = $this->get('entity_repository');
         $extra = [];
         $keys  = [ 'fk_video', 'fk_video2' ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Tests\Component\Paginator;
+namespace Tests\Framework\Component\Paginator;
 
 use Framework\Component\Paginator\Paginator;
 
@@ -44,7 +44,7 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
 
     public function testEmpty()
     {
-        $this->assertEmpty($this->paginator->get());
+        $this->assertEmpty($this->paginator->get()->__toString());
     }
 
     public function testGet()
@@ -57,7 +57,11 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, substr_count($this->paginator->links, '<li'));
 
         // Test if passing epp=0 the return is empty.
-        $this->assertEquals('', $this->paginator->get([ 'epp' => 0, 'maxLinks' => 5, 'total' => 100 ]));
+        $this->assertEquals('', $this->paginator->get([
+            'epp'      => 0,
+            'maxLinks' => 5,
+            'total'    => 100
+        ])->__toString());
 
         $this->paginator->get([
             'epp'         => 10,
@@ -83,7 +87,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->expects($this->once())->method('generate');
 
-        $this->assertEmpty($this->paginator->get());
         $this->assertEmpty(
             $this->methods['getFirstLink']->invokeArgs($this->paginator, [])
         );
@@ -99,7 +102,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->expects($this->once())->method('generate');
 
-        $this->assertEmpty($this->paginator->get());
         $this->assertEmpty(
             $this->methods['getLastLink']->invokeArgs($this->paginator, [])
         );
@@ -115,7 +117,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->expects($this->exactly(4))->method('generate');
 
-        $this->assertEmpty($this->paginator->get([ 'maxLinks' => 0 ]));
         $this->assertEmpty(
             $this->methods['getLinks']->invokeArgs($this->paginator, [])
         );
@@ -129,7 +130,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->expects($this->once())->method('generate');
 
-        $this->assertEmpty($this->paginator->get());
         $this->assertEmpty(
             $this->methods['getNextLink']->invokeArgs($this->paginator, [])
         );
@@ -145,7 +145,6 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->expects($this->once())->method('generate');
 
-        $this->assertEmpty($this->paginator->get());
         $this->assertEmpty(
             $this->methods['getPreviousLink']->invokeArgs($this->paginator, [])
         );

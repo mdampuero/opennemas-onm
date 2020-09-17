@@ -23,12 +23,7 @@
       {/if}
       {is_module_activated name="SYNC_MANAGER"}
         {if !empty($sync_sites)}
-          <option value="syncCategory">{t}Synchronized Category{/t}</option>
-        {/if}
-      {/is_module_activated}
-      {is_module_activated name="SYNC_MANAGER"}
-        {if !empty($sync_sites)}
-          <option value="syncBlogCategory">{t}Sync Automatic Categories{/t}</option>
+          <option value="syncBlogCategory">{t}Synchronized Category{/t}</option>
         {/if}
       {/is_module_activated}
     </select>
@@ -88,23 +83,6 @@
       </div>
     </div>
   {/if}
-  {is_module_activated name="SYNC_MANAGER"}
-    {if !empty($sync_sites)}
-      <div ng-if="type == 'syncCategory'" ng-init="elements = {json_encode($sync_sites)|clear_json}">
-        <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
-          <h5>[% site %]</h5>
-          <div class="form-group" ng-repeat="category in params.categories" >
-            <div class="checkbox col-md-6">
-              <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
-              <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
-                [% category %]
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    {/if}
-  {/is_module_activated}
   {if !empty($categories)}
     <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|clear_json}">
       <div class="form-group" ng-repeat="category in automaticCategories">

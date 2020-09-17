@@ -14,8 +14,8 @@
         <span class="fa fa-circle-o-notch fa-spin" ng-if="flags.http.{$iFlag}"></span>
       {/if}
       <span class="fa fa-check text-success" ng-if="{if $iFlag}!flags.http.{$iFlag} && {/if}(form.{$iField}.$dirty || item.{$iField}) && form.{$iField}.$valid"></span>
-      <span class="fa fa-info-circle text-info" ng-if="{if $iFlag}!flags.http.{$iFlag} && {/if}!form.{$iField}.$dirty && form.{$iField}.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
-      <span class="fa fa-times text-error" ng-if="{if $iFlag}!flags.http.{$iFlag} && {/if}form.{$iField}.$dirty && form.{$iField}.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+      <span class="fa fa-info-circle text-info" ng-if="{if $iFlag}!flags.http.{$iFlag} && {/if}!form.{$iField}.$dirty && form.{$iField}.$invalid" {if $iPosition}tooltip-class="tooltip-{$iPosition}"{/if} uib-tooltip="{t}This field is required{/t}"></span>
+      <span class="fa fa-times text-error" ng-if="{if $iFlag}!flags.http.{$iFlag} && {/if}form.{$iField}.$dirty && form.{$iField}.$invalid" {if $iPosition}tooltip-class="tooltip-{$iPosition}"{/if} uib-tooltip="{t}This field is invalid{/t}"></span>
     </span>
   {/if}
 </span>

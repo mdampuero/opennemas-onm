@@ -22,6 +22,7 @@
           controller: 'contentPickerCtrl',
           restrict: 'A',
           scope: {
+            contentPickerIgnore: '@',
             contentPickerTarget: '='
           },
           link: function($scope, elm, attrs) {
@@ -64,7 +65,7 @@
                   '<div class="picker-panel-wrapper">' +
                     '<div class="picker-panel-content" when-scrolled="scroll()">' +
                       '<div class="items" ng-if="!searchLoading">' +
-                        '<div class="list-item [selectable]"[selection] ng-repeat="content in contents track by $index">' +
+                        '<div class="list-item"[selection] ng-repeat="content in contents track by $index">' +
                           '<div>' +
                             '[% (picker.params.explore.contentTypes | filter: { name: content.content_type_name })[0].title %] - [% content.title %]' +
                           '</div>' +
@@ -93,7 +94,7 @@
                             '[% selected.lastSelected.title %]' +
                           '</strong>' +
                         '</li>' +
-                        '<li ng-show="selected.lastSelected.category_name"><strong>[% picker.params.explore.category %]:</strong> [% selected.lastSelected.category_name %]</li>' +
+                        '<li><strong>[% picker.params.explore.category %]:</strong> [% (categories | filter: { id: selected.lastSelected.category_id })[0].title %]</li>' +
                         '<li ng-show="selected.lastSelected.created"><strong>[% picker.params.explore.created %]:</strong> [% selected.lastSelected.created | moment %]</li>' +
                         '<li ng-show="selected.lastSelected.description">' +
                           '<div><strong>[% picker.params.explore.description %]</strong></div>' +
@@ -114,7 +115,7 @@
                     '<li>' +
                       '<h4>' +
                         '[% selected.items.length %]' +
-                        '<span class="hidden-xs">[% picker.params.explore.itemsSelected %]</span>' +
+                        '<span class="hidden-xs m-l-5">[% picker.params.explore.itemsSelected %]</span>' +
                       '</h4>' +
                     '</li>' +
                   '</ul>' +
@@ -230,16 +231,17 @@
               render: function() {
                 var content = contentTpl.explore;
                 var picker  = pickerTpl;
-                var selectable = '';
                 var selection = '';
 
                 // Add selection actions
                 if (this.selection.enabled) {
-                  selectable = ' selectable';
-                  selection  = 'ng-class="{ \'selected\': isSelected(content) }" ng-click="toggle(content, $event)"';
+                  selection  = 'ng-class="{ ' +
+                    '\'selected\': isSelected(content), ' +
+                    '\'ignored\': isIgnored(content), ' +
+                    '\'selectable\': isSelectable(content) ' +
+                    '}" ng-click="toggle(content, $event)"';
                 }
 
-                content = content.replace(/\[selectable\]/g, selectable);
                 content = content.replace(/\[selection\]/g, selection);
                 picker = picker.replace(/\[content\]/g, content);
 
@@ -302,7 +304,7 @@
               }
 
               if (attrs.contentPickerTarget && $scope.contentPickerTarget) {
-                var target = $scope.contentPickerTarget;
+                var target = angular.copy($scope.contentPickerTarget);
 
                 if (!(target instanceof Array)) {
                   target = [ target ];
@@ -473,10 +475,6 @@
         $scope.insert = function() {
           var items = $scope.selected.items;
 
-          if ($scope.picker.selection.maxSize === 1) {
-            items = items[0];
-          }
-
           $rootScope.$broadcast(
             'ContentPicker.insert',
             {
@@ -486,6 +484,40 @@
           );
 
           $scope.picker.close();
+        };
+
+        /**
+         * @function isIgnored
+         * @memberof ContentPickerCtrl
+         *
+         * @description
+         *   Checks if the given item is included in the list of ignored items.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {boolean} True if the item is in the list of ignored items.
+         *                   False otherwise.
+         */
+        $scope.isIgnored = function(item) {
+          return $scope.contentPickerIgnore &&
+            $scope.contentPickerIgnore.indexOf(item.id) !== -1;
+        };
+
+        /**
+         * @function isSelectable
+         * @memberof ContentPickerCtrl
+         *
+         * @description
+         *   Checks if the item can be selected.
+         *
+         * @param {Object} item The item to check.
+         *
+         * @return {boolean} True if the item can be selected. False otherwise.
+         */
+        $scope.isSelectable = function(item) {
+          return $scope.picker.selection.enabled &&
+            (!$scope.contentPickerIgnore ||
+            $scope.contentPickerIgnore.indexOf(item.id) === -1);
         };
 
         /**
@@ -551,6 +583,8 @@
             } else {
               $scope.contents = $scope.contents.concat(response.data.results);
             }
+
+            $scope.categories    = response.data.categories;
 
             $scope.total = response.data.total;
 
@@ -656,6 +690,10 @@
          * @param {Object} event The event object.
          */
         $scope.toggle = function(item, event) {
+          if (!$scope.isSelectable(item)) {
+            return;
+          }
+
           // If shifKey
           if (event.shiftKey) {
             $scope.selectionMultiple(item);

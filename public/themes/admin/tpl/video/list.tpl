@@ -91,7 +91,7 @@
     </div>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
-    <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.pk_fk_content_category" placeholder="{t}Any{/t}"></onm-category-selector>
+    <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.category_id" placeholder="{t}Any{/t}"></onm-category-selector>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}

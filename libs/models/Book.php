@@ -72,18 +72,6 @@ class Book extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate(
-                    'book',
-                    [
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => urlencode($this->slug),
-                        'category' => urlencode($this->category_name),
-                    ]
-                );
-
-                return ($uri !== '') ? $uri : $this->permalink;
             default:
                 return parent::__get($name);
         }
@@ -123,7 +111,7 @@ class Book extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN books ON pk_content = pk_book WHERE pk_content = ?',
                 [ $id ]
             );

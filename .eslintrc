@@ -9,6 +9,9 @@
         "angular": true,
         "Uint8Array": true
     },
+    "parserOptions": {
+        "ecmaVersion": 2015
+    },
     "rules": {
         // Errors
         "for-direction":               [ "error" ],
@@ -303,7 +306,7 @@
         "prefer-spread":           [ "off" ],
         "prefer-template":         [ "off" ],
         "require-yield":           [ "off" ],
-        "rest-spread-spacing":     [ "off" ],
+        "rest-spread-spacing":     [ "error", "always" ],
         "sort-imports":            [ "off" ],
         "symbol-description":      [ "off" ],
         "template-curly-spacing":  [ "error", "never" ],

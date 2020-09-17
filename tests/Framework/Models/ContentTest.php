@@ -215,15 +215,14 @@ class ContentTest extends \PHPUnit\Framework\TestCase
             'pk_content'             => 123,
             'other_value'            => 'other value',
             'fk_content_type'        => 1,
-            'pk_fk_content_category' => 2,
+            'category_id'            => 2,
             'params'                 => 'a:2:{s:4:"test";i:1;s:5:"test2";i:2;}',
-            'category_name'          => 'testing',
+            'category_slug'          => 'testing',
         ]);
         $this->assertEquals(123, $content->id);
         $this->assertEquals('other value', $content->other_value);
         $this->assertEquals(1, $content->content_type);
-        $this->assertEquals(2, $content->pk_fk_content_category);
-        $this->assertEquals('testing', $content->category_name);
+        $this->assertEquals(2, $content->category_id);
         $this->assertEquals([ 'test' => 1, 'test2' => 2 ], $content->params);
 
         $property = new \ReflectionProperty($content, 'title');
@@ -261,36 +260,16 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
     }
 
-    /*
-     * @covers Content::getSchedulingState
-     */
-    public function testGetSchedulingStateWithPostponedArticle()
-    {
-        $now = '2012-08-22 03:03:12';
-
-        $content            = new \Content();
-        $content->starttime = '2013-08-22 03:03:12';
-        $content->endtime   = null;
-        $this->assertEquals(\Content::POSTPONED, $content->getSchedulingState($now));
-
-        // Check scheduling state with postponed article with nulled endtime
-        $content->starttime = '2013-08-22 03:03:12';
-        $content->endtime   = '2013-08-23 03:03:12';
-        $this->assertEquals(\Content::POSTPONED, $content->getSchedulingState($now));
-    }
-
     /**
      * @covers Content::getSchedulingState
      */
     public function testGetSchedulingStateWithDuedArticle()
     {
-        $now = '2012-08-22 03:03:12';
-
         // Check scheduling state with dued article with valid starttime
         $content            = new \Content();
         $content->starttime = '2013-08-20 03:03:12';
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertEquals(\Content::DUED, $content->getSchedulingState($now));
+        $this->assertEquals(\Content::DUED, $content->getSchedulingState());
     }
 
     /**
@@ -298,127 +277,82 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSchedulingStateWithInTimeArticle()
     {
-        $now = '2012-08-22 03:03:12';
-
-        // Check scheduling state with in time article with valid starttime
-        $content            = new \Content();
-        $content->starttime = '2012-08-20 03:03:12';
-        $content->endtime   = '2012-08-24 03:03:12';
-        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState($now));
-
-        // Check scheduling state with in time article with nulled starttime
         $content            = new \Content();
         $content->starttime = '2012-08-20 03:03:12';
         $content->endtime   = null;
-        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState($now));
+
+        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState());
+
+        $content            = new \Content();
+        $content->starttime = '2012-08-20 03:03:12';
+        $content->endtime   = '3012-08-20 03:03:12';
+
+        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState());
+    }
+
+    /*
+     * @covers Content::getSchedulingState
+     */
+    public function testGetSchedulingStateWithPostponedArticle()
+    {
+        $content            = new \Content();
+        $content->starttime = '3013-08-22 03:03:12';
+        $content->endtime   = null;
+
+        $this->assertEquals(\Content::POSTPONED, $content->getSchedulingState());
     }
 
     /**
      * @covers Content::isScheduled
-     *
      */
     public function testIsScheduled()
     {
         $content = new \Content();
-        $now     = '2012-08-22 03:03:12';
+
+        $method = new \ReflectionMethod($content, 'isScheduled');
+        $method->setAccessible(true);
 
         //  now    start    end
         // --|-------(-------)--
         $content->starttime = '2012-08-23 03:03:12';
         $content->endtime   = '2012-08-25 03:03:12';
-        $this->assertTrue($content->isScheduled($now));
+        $this->assertTrue($method->invokeArgs($content, []));
 
         // start    now     end
         // --(-------|-------)--
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '2012-08-25 03:03:12';
-        $this->assertTrue($content->isScheduled($now));
+        $this->assertTrue($method->invokeArgs($content, []));
 
         // start    end     now
         // --(-------)-------|--
         $content->starttime = '2012-08-20 03:03:12';
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertTrue($content->isScheduled($now));
+        $this->assertTrue($method->invokeArgs($content, []));
 
         //  now    start
         // --|-------(----------
         $content->starttime = '2012-08-23 03:03:12';
         $content->endtime   = null;
-        $this->assertTrue($content->isScheduled($now));
+        $this->assertTrue($method->invokeArgs($content, []));
 
         // start    now
         // --(-------|----------
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = null;
-        $this->assertTrue($content->isScheduled($now));
+        $this->assertTrue($method->invokeArgs($content, []));
 
         $content->starttime = null;
         $content->endtime   = null;
-        $this->assertFalse($content->isScheduled($now));
+        $this->assertFalse($method->invokeArgs($content, []));
 
         $content->starttime = null;
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($content->isScheduled($now));
+        $this->assertFalse($method->invokeArgs($content, []));
 
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($content->isScheduled($now));
-    }
-
-    /**
-     * @covers Content::isStarted
-     */
-    public function testIsStarted()
-    {
-        $content = new \Content();
-        $now     = '2012-08-22 03:03:12';
-
-        // Check Content::isStarted with starttime in past
-        $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = null;
-        $this->assertTrue($content->isStarted($now));
-
-        // Check Content::isStarted with starttime in the future
-        $content->starttime = '2012-08-23 03:03:12';
-        $content->endtime   = null;
-        $this->assertFalse($content->isStarted($now));
-
-        // Check Content::isStarted with zeroed/nulled starttime
-        $content->starttime = null;
-        $content->endtime   = null;
-        $this->assertTrue($content->isStarted($now));
-
-        $content->starttime = null;
-        $content->endtime   = null;
-        $this->assertTrue($content->isStarted($now));
-    }
-
-    /**
-     * @covers Content::isPostponed
-     */
-    public function testIsPostponed()
-    {
-        $content = new \Content();
-        $now     = '2012-08-22 03:03:12';
-
-        // Check Content::isPostponed with starttime in future
-        $content->starttime = '2012-08-23 03:03:12';
-        $content->endtime   = null;
-        $this->assertTrue($content->isPostponed($now));
-
-        // Check Content::isPostponed with starttime in the past
-        $content->starttime = '2012-08-24 03:03:12';
-        $content->endtime   = '2012-08-26 03:03:12';
-        $this->assertTrue($content->isPostponed($now));
-
-        // Check Content::isPostponed with zeroed/nulled starttime
-        $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = null;
-        $this->assertFalse($content->isPostponed($now));
-
-        $content->starttime = null;
-        $content->endtime   = null;
-        $this->assertFalse($content->isPostponed($now));
+        $this->assertFalse($method->invokeArgs($content, []));
     }
 
     /**
@@ -427,38 +361,17 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     public function testIsDued()
     {
         $content = new \Content();
-        $now     = '2012-08-22 03:03:12';
 
-        // Check Content::isPostponed with starttime in future
+        $method = new \ReflectionMethod($content, 'isDued');
+        $method->setAccessible(true);
+
         $content->starttime = null;
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertTrue($content->isDued($now));
+        $this->assertTrue($method->invokeArgs($content, []));
 
-        // Check Content::isPostponed with starttime in the past
         $content->starttime = null;
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertFalse($content->isDued($now));
-
-        // Check Content::isPostponed with in time content
-        $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertFalse($content->isDued($now));
-
-        // Check Content::isPostponed with dued content
-        $content->starttime = '2012-08-20 03:03:12';
-        $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertTrue($content->isDued($now));
-
-        // Check Content::isPostponed with endtime date equals now
-        $myNow              = '2012-08-23 03:03:12';
-        $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertFalse($content->isDued($myNow));
-
-        // Check Content::isPostponed with zeroed/nulled starttime
-        $content->starttime = null;
-        $content->endtime   = null;
-        $this->assertFalse($content->isDued($now));
+        $content->endtime   = '3012-01-01 00:00:00';
+        $this->assertFalse($method->invokeArgs($content, []));
     }
 
     /**
@@ -467,56 +380,54 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     public function testIsInTime()
     {
         $content = new \Content();
-        $now     = '2012-08-22 03:03:12';
 
-        // Check ContentManager::isInTime with no endtime and no starttime
         $content->starttime = null;
         $content->endtime   = null;
-        $this->assertFalse($content->isInTime($now));
+        $this->assertFalse($content->isInTime());
 
-        // Check ContentManager::isInTime with no content->starttime
         $content->starttime = null;
         $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $this->assertFalse($content->isInTime());
 
         $content->starttime = null;
-        $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $content->endtime   = '3012-08-21 03:03:12';
+        $this->assertFalse($content->isInTime());
 
-        // Check ContentManager::isInTime with no content->endtime
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-23 03:03:12';
+        $this->assertFalse($content->isInTime());
+
+        $content->starttime = '2012-08-21 03:03:12';
+        $content->endtime   = '2012-08-21 03:03:12';
+        $this->assertFalse($content->isInTime());
+
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = null;
-        $this->assertTrue($content->isInTime($now));
-
-        // Check ContentManager::isInTime with content->starttime and content->endtime defined
-        $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertTrue($content->isInTime($now));
-
-        $content->starttime = '2012-08-23 03:03:12';
-        $content->endtime   = '2012-08-24 03:03:12';
-        $this->assertFalse($content->isInTime($now));
-
-        $content->starttime = '2012-08-20 03:03:12';
-        $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $this->assertTrue($content->isInTime());
 
         $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = '2012-08-20 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $content->endtime   = '3012-08-21 03:03:12';
+        $this->assertTrue($content->isInTime());
+    }
 
-        // Check ContentManager::isInTime with content->starttime and content->endtime are equals -> is in time
+    /**
+     * @covers Content::isPostponed
+     */
+    public function testIsPostponed()
+    {
+        $content = new \Content();
+
+        $method = new \ReflectionMethod($content, 'isPostponed');
+        $method->setAccessible(true);
+
         $content->starttime = '2012-08-21 03:03:12';
-        $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $this->assertFalse($method->invokeArgs($content, []));
 
-        $content->starttime = '2012-08-22 03:03:12';
-        $content->endtime   = '2012-08-22 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $content->starttime = null;
+        $this->assertFalse($method->invokeArgs($content, []));
 
-        $content->starttime = '2012-08-23 03:03:12';
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertFalse($content->isInTime($now));
+        $content->starttime = '3012-08-24 03:03:12';
+        $this->assertTrue($method->invokeArgs($content, []));
     }
 
     /**

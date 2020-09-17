@@ -84,6 +84,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_event_create_item',
           getItem:    'api_v1_backend_event_get_item',
+          list:       'backend_events_list',
           public:     'frontend_event_show',
           redirect:   'backend_event_show',
           saveItem:   'api_v1_backend_event_save_item',
@@ -118,12 +119,12 @@
           }
 
           var coverId = $scope.data.item.related_contents.filter(function(e) {
-            return e.relationship === 'cover';
+            return e.type === 'cover';
           }).shift();
 
           if (coverId) {
             $scope.cover =
-              $scope.data.extra.related_contents[coverId.pk_content2];
+              $scope.data.extra.related_contents[coverId.target_id];
           }
         };
 
@@ -207,9 +208,11 @@
           }
 
           $scope.item.related_contents.push({
-            pk_content2: nv.pk_content,
-            relationship: 'cover',
-            position: 0
+            caption: null,
+            content_type_name: nv.content_type_name,
+            position: 0,
+            target_id: nv.pk_content,
+            type: 'cover'
           });
         }, true);
       }

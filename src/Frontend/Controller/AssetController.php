@@ -85,7 +85,7 @@ class AssetController extends Controller
             $category = $this->get('api.service.category')
                 ->getItemBySlug($categoryName);
 
-            $currentCategoryId = $category->pk_content_category;
+            $currentCategoryId = $category->id;
         } catch (\Exception $e) {
         }
 
@@ -102,23 +102,14 @@ class AssetController extends Controller
                 $properties[] = [$content->id, $titleColor];
             }
 
-            $properties = \ContentManager::getMultipleProperties($properties);
-
             foreach ($contentsInHomepage as &$content) {
                 foreach ($properties as $property) {
-                    if ($property['fk_content'] != $content->id) {
-                        continue;
+                    if (!empty($content->{$bgColor})) {
+                        $content->bgcolor = $content->{$bgColor};
                     }
 
-                    if ($property['meta_name'] == $bgColor) {
-                        $content->bgcolor = $property['meta_value'];
-                    }
-
-                    if ($property['meta_name'] == $titleColor) {
-                        $content->title_props = $property['meta_value'];
-                        if (!empty($content->title_props)) {
-                            $content->title_props = json_decode($content->title_props);
-                        }
+                    if (!empty($content->{$titleColor})) {
+                        $content->title_props = json_decode($content->{$titleColor});
                     }
                 }
             }

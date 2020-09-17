@@ -1,60 +1,35 @@
-<div class="menu-item clearfix" ui-tree-handle ng-init="showForm = false">
-    <div class="menu-item-heading clearfix">
-      <div class="menu-item-info clearfix pull-left" uib-tooltip="{t}Link to {/t} '[% item.link[lang] %]'">
-        <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'blog-category'"></span>
-        <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'albumCategory'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'pollCategory'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'videoCategory'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'static'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncCategory'"></span>
-        <span class="menu-item-type-icon fa fa-folder-o" ng-if="item.type == 'syncBlogCategory'"></span>
-        <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'"></span>
-
-        <div class="menu-item-title">[% item.title[lang] %]</div>
-
-        <div class="menu-item-type">
-          <small>
-            <span ng-if="item.type == 'external'">({t}External link{/t})</span>
-            <span ng-if="item.type == 'internal'">({t}Module{/t})</span>
-            <span ng-if="item.type == 'blog-category'">({t}Category blog{/t})</span>
-            <span ng-if="item.type == 'category'">({t}Frontpage{/t})</span>
-            <span ng-if="item.type == 'albumCategory'">({t}Album category{/t})</span>
-            <span ng-if="item.type == 'pollCategory'">({t}Poll category{/t}</span>
-            <span ng-if="item.type == 'videoCategory'">({t}Video Category{/t})</span>
-            <span ng-if="item.type == 'static'">({t}Static Page{/t})</span>
-            <span ng-if="item.type == 'syncCategory'">({t}Synched category{/t})</span>
-            <span ng-if="item.type == 'syncBlogCategory'">({t}Synched blog category{/t})</span>
-          </small>
-        </div>
+<div class="menu-item">
+  <span ui-tree-handle>
+    <span class="angular-ui-tree-icon"></span>
+  </span>
+  <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" tooltip-placement="right" uib-tooltip="{t}Module{/t}"></span>
+  <span class="menu-item-type-icon fa fa-bookmark" ng-if="item.type == 'blog-category'" tooltip-placement="right" uib-tooltip="{t}Category blog{/t}"></span>
+  <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" tooltip-placement="right" uib-tooltip="{t}Frontpage{/t}"></span>
+  <span class="menu-item-type-icon fa fa-file" ng-if="item.type == 'static'" tooltip-placement="right" uib-tooltip="{t}Static Page{/t}"></span>
+  <span class="menu-item-type-icon fa fa-exchange" ng-if="item.type == 'syncBlogCategory'" tooltip-placement="right" uib-tooltip="{t}Synched category{/t}"></span>
+  <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'" tooltip-placement="right" uib-tooltip="{t}External link{/t}"></span>
+  <div class="p-l-35 p-r-35">
+    <div class="row">
+      <div class="col-sm-6 col-lg-6">
+        <label class="visible-xs">
+          {t}Title{/t}
+        </label>
+        <input class="menu-item-title" data-nodrag ng-model="item.title[lang]" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.title[languageData.default] %]">
       </div>
-
-      <div class="btn-group pull-right">
-        <a class="btn btn-white" data-nodrag class="pull-right"  ng-click="showForm = !showForm">
-          <i class="fa" ng-class="(showForm === false) ? 'fa-caret-down' : 'fa-caret-up'"></i>
-        </a>
-        <button data-nodrag class="btn btn-white" ng-click="removeItem($index{if isset($subitem) && $subitem}, parentIndex{/if})" type="button">
-          <i class="fa fa-trash-o text-danger"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="menu-item-form ng-cloak" data-nodrag ng-show="showForm">
-      <div class="form-group">
-        <label for="form-label">{t}Title{/t}</label>
-        <div class="controls">
-          <input ng-model="item.title[lang]" type="text" class="form-control" uib-tooltip="{t}Original:{/t} [% item.title[languageData.default] %]" tooltip-enable="languageData.default !== lang">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="form-label">{t}Link{/t}</label>
-        <div class="controls">
-          <input ng-model="item.link[lang]" type="text" class="form-control" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]" tooltip-enable=" languageData.default !== lang" ng-readonly="item.type != 'external'">
-        </div>
+      <div class="col-sm-6 col-lg-6" ng-if="item.type == 'external'">
+        <label class="visible-xs">
+          {t}Link to{/t}
+        </label>
+        <input class="menu-item-link" data-nodrag ng-model="item.link[lang]" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.link[languageData.default] %]">
       </div>
     </div>
   </div>
+  <div class="menu-item-button">
+    <button data-nodrag class="btn btn-white" ng-click="removeItem($index{if isset($subitem) && $subitem}, parentIndex{/if})" type="button">
+      <i class="fa fa-trash-o text-danger"></i>
+    </button>
+  </div>
+  </span>
 </div>
 <ol ui-tree-nodes="" ng-model="item.submenu">
   <li ng-repeat="item in item.submenu" ui-tree-node ng-include="'menu-sub-item'"></li>

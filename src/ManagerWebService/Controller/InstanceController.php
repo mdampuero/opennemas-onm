@@ -486,6 +486,9 @@ class InstanceController extends Controller
 
             $settings = array_intersect_key($settings, array_flip($this->keys));
 
+            $settings['last_login']   = $instance->created->format('Y-m-d H:i:s');
+            $settings['site_created'] = $instance->created->format('Y-m-d H:i:s');
+
             $em->getDataSet('Settings', 'instance')->set($settings);
 
             $this->get('core.dispatcher')

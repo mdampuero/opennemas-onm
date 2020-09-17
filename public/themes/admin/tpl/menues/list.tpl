@@ -12,6 +12,10 @@
               <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/221738-opennemas-c%C3%B3mo-cambiar-el-men%C3%BA-de-mi-peri%C3%B3dico" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
                 <i class="fa fa-question"></i>
               </a>
+            </h4>
+          </li>
+          <li class="quicklinks">
+            <h4>
               {t}Menus{/t}
             </h4>
           </li>
@@ -25,7 +29,7 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               {acl isAllowed="MENU_CREATE"}
-              <a href="{url name=admin_menu_create}" class="btn btn-primary" id="create-button">
+              <a href="{url name=admin_menu_create}" class="btn btn-loading btn-success text-uppercase" id="create-button">
                 <i class="fa fa-plus"></i>
                 {t}Create{/t}
               </a>

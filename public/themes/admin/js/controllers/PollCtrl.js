@@ -59,6 +59,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_poll_create_item',
           getItem:    'api_v1_backend_poll_get_item',
+          list:       'backend_polls_list',
           public:     'frontend_poll_show',
           redirect:   'backend_poll_show',
           saveItem:   'api_v1_backend_poll_save_item',
@@ -121,7 +122,7 @@
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              category_name: $scope.selectedCategory.name
+              category_slug: $scope.selectedCategory.name
             })
           );
         };

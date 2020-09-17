@@ -53,6 +53,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_newsstand_create_item',
           getItem:    'api_v1_backend_newsstand_get_item',
+          list:       'backend_newsstands_list',
           public:     'frontend_newsstand_show',
           redirect:   'backend_newsstand_show',
           saveItem:   'api_v1_backend_newsstand_save_item',
@@ -187,7 +188,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_name: $scope.selectedCategory.name
+              category_slug: $scope.selectedCategory.name
             })
           );
         };

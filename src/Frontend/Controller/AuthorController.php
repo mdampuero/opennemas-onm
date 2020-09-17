@@ -1,21 +1,13 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for the user profile.
- */
 class AuthorController extends Controller
 {
     /**
@@ -31,9 +23,18 @@ class AuthorController extends Controller
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 12;
 
-        $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
-        if (empty($user)) {
+        try {
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
+        }
+
+        $expected = $this->get('router')
+            ->generate('frontend_author_frontpage', [ 'slug' => $user->slug ]);
+
+        if ($request->getPathInfo() !== $expected) {
+            return new RedirectResponse($expected);
         }
 
         // Setup templating cache layer
@@ -43,8 +44,6 @@ class AuthorController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
-            $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
-
             $criteria = [
                 'fk_author'       => [[ 'value' => $user->id ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -69,9 +68,6 @@ class AuthorController extends Controller
             $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
             foreach ($contents as &$item) {
-                $item         = $item->get($item->id);
-                $item->author = $user;
-
                 if (isset($item->img1) && !empty($item->img1)) {
                     $image = $er->find('Photo', $item->img1);
 
@@ -138,15 +134,11 @@ class AuthorController extends Controller
      */
     public function extAuthorFrontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
@@ -220,12 +212,6 @@ class AuthorController extends Controller
 
             foreach ($items as &$item) {
                 $author = $authors[$item['id']];
-
-                // Fetch user avatar if exists
-                if (!empty($author->avatar_img_id)) {
-                    $author->photo = $this->get('entity_repository')
-                        ->find('Photo', $author->avatar_img_id);
-                }
 
                 $author->total_contents = $item['total'];
 

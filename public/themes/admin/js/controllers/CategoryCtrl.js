@@ -24,7 +24,7 @@
          */
         $scope.item = {
           description: '',
-          fk_content_category: null
+          parent_id: null
         };
 
         /**
@@ -33,6 +33,7 @@
         $scope.routes = {
           createItem: 'api_v1_backend_category_create_item',
           getItem:    'api_v1_backend_category_get_item',
+          list:       'backend_categories_list',
           redirect:   'backend_category_show',
           saveItem:   'api_v1_backend_category_save_item',
           updateItem: 'api_v1_backend_category_update_item'
@@ -54,7 +55,7 @@
          * @inheritdoc
          */
         $scope.getItemId = function() {
-          return $scope.item.pk_content_category;
+          return $scope.item.id;
         };
 
         /**
@@ -69,8 +70,8 @@
          * @inheritdoc
          */
         $scope.itemHasId = function() {
-          return $scope.item.pk_content_category &&
-            $scope.item.pk_content_category !== null;
+          return $scope.item.id &&
+            $scope.item.id !== null;
         };
 
         // Updates the logo_path when an image is selected

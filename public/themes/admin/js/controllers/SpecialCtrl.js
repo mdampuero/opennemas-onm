@@ -10,6 +10,27 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
     /**
+     * @function getContentIds
+     * @memberOf specialCtrl
+     *
+     * @description
+     *   Returns the list of ids of all contents added to the special.
+     *
+     * @return {Array} The list of ids.
+     */
+    $scope.getContentIds = function() {
+      var left = !$scope.contentsLeft ? [] : $scope.contentsLeft.map(function(e) {
+        return e.pk_content;
+      });
+
+      var right = !$scope.contentsRight ? [] : $scope.contentsRight.map(function(e) {
+        return e.pk_content;
+      });
+
+      return left.concat(right);
+    };
+
+    /**
      * Parse the photos from template and initialize the scope properly
      *
      * @param Object photos The album photos.
@@ -26,9 +47,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       }
     };
 
-    /**
-     * Updates scope when photo1 changes.
-     */
+    // Updates scope when photo1 changes.
     $scope.$watch('photo1', function() {
       $scope.img1 = null;
 
@@ -37,11 +56,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       }
     }, true);
 
-    /**
-     * Updates scope when relatedInFrontpage changes.
-     *
-     * @param array nv The new values.
-     */
+    // Update scope when contentsLeft changes
     $scope.$watch('contentsLeft', function(nv) {
       $scope.relatedLeft = [];
       var items          = [];
@@ -57,11 +72,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       $scope.relatedLeft = angular.toJson(items);
     }, true);
 
-    /**
-     * Updates scope when relatedInInner changes.
-     *
-     * @param array nv The new values.
-     */
+    // Update scope when contentsRight changes
     $scope.$watch('contentsRight', function(nv) {
       $scope.relatedRight = [];
       var items           = [];
@@ -75,6 +86,40 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       }
 
       $scope.relatedRight = angular.toJson(items);
+    }, true);
+
+    // Add contents to left column on content picker insert
+    $scope.$watch('tmp.contentsLeft', function(nv) {
+      if (!nv) {
+        return;
+      }
+
+      if (!$scope.contentsLeft) {
+        $scope.contentsLeft = [];
+      }
+
+      for (var i = 0; i < nv.length; i++) {
+        $scope.contentsLeft.push(nv[i]);
+      }
+
+      $scope.tmp.contentsLeft = [];
+    }, true);
+
+    // Add contents to right column on content picker insert
+    $scope.$watch('tmp.contentsRight', function(nv) {
+      if (!nv) {
+        return;
+      }
+
+      if (!$scope.contentsRight) {
+        $scope.contentsRight = [];
+      }
+
+      for (var i = 0; i < nv.length; i++) {
+        $scope.contentsRight.push(nv[i]);
+      }
+
+      $scope.tmp.contentsRight = [];
     }, true);
   }
 ]);

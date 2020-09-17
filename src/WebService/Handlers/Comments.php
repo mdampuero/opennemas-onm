@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Comments
 {
-    public $restler;
-
     /*
     * @url GET /comments/count/:id
     */

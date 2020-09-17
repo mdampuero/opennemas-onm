@@ -117,15 +117,6 @@ angular-ui-bootstrap@>=0.14.0:
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
   integrity sha512-yzcHpPMLQl0232nDzm5P4iAFTFQ9dMw0QgFLuKYbDj9M0xJ62z0oudYD/Lvh1pWfRsukiytP4Xj6BHOSrSXP8A==
 
-angular-ui-sortable@0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/angular-ui-sortable/-/angular-ui-sortable-0.19.0.tgz#4ac4391fc4d4de57110db4b5d31a7c198d314fd0"
-  integrity sha512-u/uc981Nzg4XN1bMU9qKleMTSt7F1XjMWnyGw6gxPLIeQeLZm8jWNy7tj8y2r2HmvzXFbQVq2z6rObznFKAekQ==
-  dependencies:
-    angular ">=1.2.x"
-    jquery ">=3.1.x"
-    jquery-ui-dist ">=1.12.x"
-
 angular-ui-tab-scroll@2.3.5:
   version "2.3.5"
   resolved "https://registry.yarnpkg.com/angular-ui-tab-scroll/-/angular-ui-tab-scroll-2.3.5.tgz#4e315a88aa56f375461608f65223b74c6c60aa04"
@@ -144,7 +135,7 @@ angular-ui-tree@2.22.6:
   version "0.0.0"
   resolved "https://github.com/fredricrylander/angular-webstorage.git#b5b4e139bccddd98befa6c7a10322bc5c942d0d6"
 
-angular@*, angular@1.7.9, angular@1.x, angular@>=1.2.x, angular@>=1.4.6, angular@^1.7.9:
+angular@*, angular@1.7.9, angular@1.x, angular@>=1.4.6, angular@^1.7.9:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"
   integrity sha512-5se7ZpcOtu0MBFlzGv5dsM1quQDoDeUTwZrWjGtTNA7O88cD8TEk5IEKCTDa3uECV9XnvKREVUr7du1ACiWGFQ==
@@ -299,17 +290,16 @@ inherits@^2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-jquery-ui-dist@>=1.12.x:
+jquery-ui-dist@1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
   integrity sha1-XAgV08xvkP9fqvWyaKbiO0ypBPo=
 
-jquery-ui@1.12.1:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
-  integrity sha1-vLQEXI3QU5wTS8FIjN0+dop6nlE=
+"jquery-ui-touch-punch@https://github.com/furf/jquery-ui-touch-punch.git":
+  version "0.0.0"
+  resolved "https://github.com/furf/jquery-ui-touch-punch.git#4bc009145202d9c7483ba85f3a236a8f3470354d"
 
-jquery@3.4.1, jquery@>=1.6, jquery@>=3.1.x, "jquery@^1.8.3 || ^2.0 || ^3.0":
+jquery@3.4.1, jquery@>=1.6, "jquery@^1.8.3 || ^2.0 || ^3.0":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==

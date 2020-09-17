@@ -176,6 +176,9 @@ class NewsletterController extends Controller
             return $this->redirect($this->generateUrl('backend_newsletters_list'));
         }
 
+        // Localize items in newsletter
+        $this->get('core.locale')->setContext('frontend');
+
         foreach ($item->contents as &$container) {
             foreach ($container['items'] as &$element) {
                 $contentType = array_key_exists('content_type_name', $element)
@@ -216,8 +219,8 @@ class NewsletterController extends Controller
         foreach ($containers as &$container) {
             foreach ($container->items as &$content) {
                 $content = [
-                    'content_type'           => \classify($content->content_type_name),
-                    'id'                     => $content->id,
+                    'content_type' => \classify($content->content_type),
+                    'id'           => $content->id,
                 ];
             }
         }

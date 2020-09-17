@@ -9,6 +9,17 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+    /**
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *  The index of the container where contents selected in content picker
+     *  should be inserted.
+     *
+     * @type {Integer}
+     */
+    $scope.containerTarget = null;
+
     $scope.source = {
       items: [],
       selected: []
@@ -20,7 +31,22 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       selected: []
     };
 
-    $scope.expanded = 'external';
+    /**
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *  The list of options for angular-ui-tree directive.
+     *
+     * @type {Object}
+     */
+    $scope.treeOptions = {
+      accept: function(source, target) {
+        return source.$modelValue.pk_content &&
+          target.$element.attr('type') === 'content' ||
+          !source.$modelValue.pk_content &&
+          target.$element.attr('type') !== 'content';
+      }
+    };
 
     /**
      * Initialize list of mail accounts
@@ -46,7 +72,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * Add selected email to receivers list and remove them from available
      * receivers list.
      */
-    $scope.addRecipients = function(section) {
+    $scope.addRecipients = function() {
       // Had to use forEach in order to avoid to insert duplicates
       $scope.source.selected.forEach(function(el) {
         if ($scope.recipients.items.indexOf(el) < 0) {
@@ -75,7 +101,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      * @param array nv The new values.
      * @param array ov The old values.
      */
-    $scope.$watch('recipients.items', function(nv, ov) {
+    $scope.$watch('recipients.items', function(nv) {
       $scope.targetItems = angular.toJson(nv);
     }, true);
 
@@ -176,100 +202,124 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
 
     /*  ====================================================================== */
     $scope.stepOne = function(containers) {
-      if (containers !== null) {
-        $scope.newsletterContents = containers;
-      } else {
-        $scope.newsletterContents = [];
-      }
+      $scope.containers = [];
 
-      $scope.sortableOptions = {
-        placeholder: 'newsletter-content-placeholder',
-        connectWith: '.newsletter-container-contents-sortable'
-      };
+      if (containers !== null) {
+        $scope.containers = containers;
+      }
     };
 
+    /**
+     * @function addContainer
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *   Adds a container.
+     */
     $scope.addContainer = function() {
-      $scope.newsletterContents.push({
-        id: 0,
+      $scope.containers.push({
         title: '',
-        position: '',
         items: []
       });
     };
 
-    $scope.moveContainerUp = function(container) {
-      var from = $scope.newsletterContents.indexOf(container);
-      var to = from - 1;
-
-      $scope.newsletterContents.splice(to, 0, $scope.newsletterContents.splice(from, 1)[0]);
-    };
-
-    $scope.moveContainerDown = function(container) {
-      var from = $scope.newsletterContents.indexOf(container);
-      var to = from + 1;
-
-      $scope.newsletterContents.splice(to, 0, $scope.newsletterContents.splice(from, 1)[0]);
-    };
-
-    $scope.removeContainer = function(container) {
-      var position = $scope.newsletterContents.indexOf(container);
-
-      $scope.newsletterContents.splice(position, 1);
-    };
-
-    $scope.cleanContainers = function() {
-      for (var i = $scope.newsletterContents.length - 1; i >= 0; i--) {
-        $scope.newsletterContents[i].items = [];
-      }
-    };
-
-    $scope.removeContent = function(container, content) {
-      var position = container.items.indexOf(content);
-
-      container.items.splice(position, 1);
-    };
-
-    $scope.options = {
-      accept: function(sourceNode, destNodes, destIndex) {
-        var data = sourceNode.$modelValue;
-        var destType = destNodes.$element.attr('type');
-
-        return data.content_type == destType;
-      }
-    };
-
     /**
-     * Removes unnecessary fields from items and updates the JSON string to send
-     * to server.
+     * @function emptyContainer
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *   Empties a container if index is provided or all containers if index is
+     *   not provided.
+     *
+     * @param {Integer} index The index of the container to empty.
      */
-    $scope.$watch('newsletterContents', function() {
-      if (!$scope.newsletterContents) {
+    $scope.emptyContainer = function(index) {
+      if (angular.isDefined(index)) {
+        $scope.containers[index].items = [];
         return;
       }
 
-      for (var i = 0; i < $scope.newsletterContents.length; i++) {
-        if ($scope.newsletterContents[i].items) {
-          for (var j = 0; j < $scope.newsletterContents[i].items.length; j++) {
-            var newElement = {
-              id:                     $scope.newsletterContents[i].items[j].id,
-              content_type_name:      $scope.newsletterContents[i].items[j].content_type_name,
-              content_type_l10n_name: $scope.newsletterContents[i].items[j].content_type_l10n_name,
-              title:                  $scope.newsletterContents[i].items[j].title,
-              content_type:           'content',
-              position:               j
-            };
-
-            $scope.newsletterContents[i].items[j] = newElement;
-          }
-        }
+      for (var i = 0; i < $scope.containers.length; i++) {
+        $scope.containers[i].items = [];
       }
-
-      $scope.contents = angular.toJson($scope.newsletterContents);
-    }, true);
+    };
 
     /**
-     * Updates the trusted HTML to show in preview when HTML changes.
+     * @function markContainer
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *   Marks a container as target after clicking on button to add contents.
+     *
+     * @param {Integer} index The index of the container in the list of
+     *                        containers.
      */
+    $scope.markContainer = function(index) {
+      $scope.containerTarget = index;
+    };
+
+    /**
+     * @function removeContainer
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *   Removes a container.
+     *
+     * @param {Integer} index The index of the container to remove.
+     */
+    $scope.removeContainer = function(index) {
+      if (angular.isDefined(index)) {
+        $scope.containers.splice(index, 1);
+        return;
+      }
+
+      $scope.containers = [];
+    };
+
+    /**
+     * @function removeContent
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *   Removes a content from a container.
+     *
+     * @param {Array}   container The container to remove contents from.
+     * @param {Integer} index     The index of the content to remove.
+     */
+    $scope.removeContent = function(container, index) {
+      container.items.splice(index, 1);
+    };
+
+    // Encodes containers as a JSON string when containers change
+    $scope.$watch('containers', function() {
+      if (!$scope.containers) {
+        return;
+      }
+
+      $scope.contents = angular.toJson($scope.containers.map(function(e) {
+        return {
+          title: e.title,
+          items: e.items.map(function(e) {
+            return { id: e.pk_content, content_type: e.content_type_name };
+          })
+        };
+      }));
+    }, true);
+
+    // Add contents to the marked container when content-picker-target changes
+    $scope.$watch('target', function(nv) {
+      if ($scope.containerTarget === null || !nv || nv.length === 0) {
+        return;
+      }
+
+      $scope.containers[$scope.containerTarget].items =
+        $scope.containers[$scope.containerTarget].items.concat(nv);
+
+      $scope.containerTarget = null;
+      $scope.target          = [];
+    }, true);
+
+    // Updates the trusted HTML to show in preview when HTML changes
     $scope.$watch('html', function() {
       $scope.trustedHtml = $sce.trustAsHtml($scope.html);
     });
