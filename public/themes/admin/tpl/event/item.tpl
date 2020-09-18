@@ -136,8 +136,90 @@
           </div>
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="photo1" footer="item.img1_footer"}
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="photo2" footer="item.img2_footer"}
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.featuredFrontpage = !expanded.featuredFrontpage">
+        <i class="fa fa-image m-t-5"></i> {t}Frontpage image{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.featuredFrontpage }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.featuredFrontpage }">
+        <div class="thumbnail-wrapper">
+          <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.featuredFrontpage }"></div>
+          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.featuredFrontpage }">
+            <p>Are you sure?</p>
+            <div class="confirm-actions">
+              <button class="btn btn-link" ng-click="toggleOverlay('featuredFrontpage')" type="button">
+                <i class="fa fa-times fa-lg"></i>
+                {t}No{/t}
+              </button>
+              <button class="btn btn-link" ng-click="removeImage('featuredFrontpage');toggleOverlay('featuredFrontpage')" type="button">
+                <i class="fa fa-check fa-lg"></i>
+                {t}Yes{/t}
+              </button>
+            </div>
+          </div>
+          <div class="thumbnail-placeholder">
+            <div class="img-thumbnail" ng-show="!featuredFrontpage">
+              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="featuredFrontpage">
+                <i class="fa fa-picture-o fa-2x"></i>
+                <h5>Pick an image</h5>
+              </div>
+            </div>
+            <div class="dynamic-image-placeholder" ng-show="featuredFrontpage">
+              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="featuredFrontpage">
+                <div class="thumbnail-actions">
+                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('featuredFrontpage')">
+                    <i class="fa fa-trash-o fa-2x"></i>
+                  </div>
+                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="featuredFrontpage" media-picker-types="photo">
+                    <i class="fa fa-camera fa-2x"></i>
+                  </div>
+                </div>
+              </dynamic-image>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.featuredInner = !expanded.featuredInner">
+        <i class="fa fa-image m-t-5"></i> {t}Inner image{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.featuredInner }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.featuredInner }">
+        <div class="thumbnail-wrapper">
+          <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.featuredInner }"></div>
+          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.featuredInner }">
+            <p>Are you sure?</p>
+            <div class="confirm-actions">
+              <button class="btn btn-link" ng-click="toggleOverlay('featuredInner')" type="button">
+                <i class="fa fa-times fa-lg"></i>
+                {t}No{/t}
+              </button>
+              <button class="btn btn-link" ng-click="removeImage('featuredInner');toggleOverlay('featuredInner')" type="button">
+                <i class="fa fa-check fa-lg"></i>
+                {t}Yes{/t}
+              </button>
+            </div>
+          </div>
+          <div class="thumbnail-placeholder">
+            <div class="img-thumbnail" ng-show="!featuredInner">
+              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="featuredInner">
+                <i class="fa fa-picture-o fa-2x"></i>
+                <h5>Pick an image</h5>
+              </div>
+            </div>
+            <div class="dynamic-image-placeholder" ng-show="featuredInner">
+              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="featuredInner">
+                <div class="thumbnail-actions">
+                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('featuredInner')">
+                    <i class="fa fa-trash-o fa-2x"></i>
+                  </div>
+                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="featuredInner" media-picker-types="photo">
+                    <i class="fa fa-camera fa-2x"></i>
+                  </div>
+                </div>
+              </dynamic-image>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {/block}

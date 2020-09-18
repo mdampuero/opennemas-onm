@@ -54,26 +54,6 @@
         };
 
         /**
-         * @memberOf OpinionCtrl
-         *
-         * @description
-         *  The photo1 object.
-         *
-         * @type {Object}
-         */
-        $scope.photo1 = null;
-
-        /**
-         * @memberOf OpinionCtrl
-         *
-         * @description
-         *  The photo2 object.
-         *
-         * @type {Object}
-         */
-        $scope.photo2 = null;
-
-        /**
          * @memberOf EventCtrl
          *
          * @description
@@ -102,30 +82,25 @@
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
-          var img1 = $scope.data.item.related_contents.filter(function(e) {
-            return parseInt(e.pk_photo) === parseInt($scope.item.img1);
+          var featuredFrontpage = $scope.data.item.related_contents.filter(function(e) {
+            return e.type === 'featured_frontpage';
           }).shift();
 
-          if (img1) {
-            $scope.photo1 = img1;
-          }
-
-          var img2 = $scope.data.item.related_contents.filter(function(e) {
-            return parseInt(e.pk_photo) === parseInt($scope.item.img2);
+          var featuredInner = $scope.data.item.related_contents.filter(function(e) {
+            return e.type === 'featured_inner';
           }).shift();
 
-          if (img2) {
-            $scope.photo2 = img2;
+          if (featuredFrontpage) {
+            $scope.featuredFrontpage =
+              $scope.data.extra.related_contents[featuredFrontpage.target_id];
           }
 
-          var coverId = $scope.data.item.related_contents.filter(function(e) {
-            return e.type === 'cover';
-          }).shift();
-
-          if (coverId) {
-            $scope.cover =
-              $scope.data.extra.related_contents[coverId.target_id];
+          if (featuredInner) {
+            $scope.featuredInner =
+              $scope.data.extra.related_contents[featuredInner.target_id];
           }
+
+          $scope.item.related_contents = [];
         };
 
         /**
@@ -147,61 +122,10 @@
           );
         };
 
-        /**
-         * Updates scope when photo1 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
-        $scope.$watch('photo1', function(nv, ov) {
-          if (angular.equals(nv, ov)) {
-            return;
-          }
-
-          if (!nv) {
-            $scope.item.img1        = null;
-            $scope.item.img1_footer = null;
-            return;
-          }
-
-          if (!$scope.item.id ||
-              parseInt($scope.item.img1) !== parseInt(nv.pk_photo)) {
-            $scope.item.img1        = nv.pk_photo;
-            $scope.item.img1_footer = nv.description;
-
-            if (angular.equals(ov, $scope.photo2)) {
-              $scope.photo2 = nv;
-            }
-          }
-        }, true);
-
-        /**
-         * Updates scope when photo2 changes.
-         *
-         * @param array nv The new values.
-         * @param array ov The old values.
-         */
-        $scope.$watch('photo2', function(nv, ov) {
-          if (angular.equals(nv, ov)) {
-            return;
-          }
-
-          if (!nv) {
-            $scope.item.img2        = null;
-            $scope.item.img2_footer = null;
-            return;
-          }
-
-          if (!$scope.item.id ||
-              parseInt($scope.item.img2) !== parseInt(nv.pk_photo)) {
-            $scope.item.img2        = nv.pk_photo;
-            $scope.item.img2_footer = nv.description;
-          }
-        }, true);
-
-        // Update slug when title is updated
-        $scope.$watch('cover', function(nv) {
-          $scope.item.related_contents = [];
+        $scope.$watch('featuredFrontpage', function(nv) {
+          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
+            return e.type !== 'featured_frontpage';
+          });
 
           if (!nv) {
             return;
@@ -212,7 +136,25 @@
             content_type_name: nv.content_type_name,
             position: 0,
             target_id: nv.pk_content,
-            type: 'cover'
+            type: 'featured_frontpage'
+          });
+        }, true);
+
+        $scope.$watch('featuredInner', function(nv) {
+          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
+            return e.type !== 'featured_inner';
+          });
+
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.related_contents.push({
+            caption: null,
+            content_type_name: nv.content_type_name,
+            position: 0,
+            target_id: nv.pk_content,
+            type: 'featured_inner'
           });
         }, true);
       }

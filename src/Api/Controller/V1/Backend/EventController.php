@@ -63,7 +63,7 @@ class EventController extends ContentController
             }
 
             foreach ($element->related_contents as $relation) {
-                if ($relation['type'] !== 'cover') {
+                if ($relation['type'] !== 'featured_frontpage' && $relation['type'] !== 'featured_inner') {
                     continue;
                 }
 

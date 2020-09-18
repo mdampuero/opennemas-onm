@@ -170,7 +170,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
-            'type'              => 'cover'
+            'type'              => 'featured_frontpage'
         ] ];
 
         $this->em->expects($this->once())->method('find')
@@ -515,7 +515,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'id'             => 893,
             'content_status' => 1,
             'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]));
+            ]));
 
         $this->helper->expects($this->at(0))->method('isHidden')
             ->willReturn(true);
