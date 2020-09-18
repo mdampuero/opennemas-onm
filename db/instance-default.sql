@@ -378,6 +378,37 @@ INSERT INTO `content_category` VALUES (163,26),(164,25),(165,24),(166,22),(575,3
 UNLOCK TABLES;
 
 --
+-- Table structure for table `content_content`
+--
+
+DROP TABLE IF EXISTS `content_content`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `content_content` (
+  `source_id` bigint(20) unsigned NOT NULL,
+  `target_id` bigint(20) unsigned NOT NULL,
+  `type` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `content_type_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `caption` text COLLATE utf8_unicode_ci,
+  `position` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`source_id`,`target_id`,`type`),
+  KEY `source_id` (`source_id`),
+  KEY `target_id` (`target_id`),
+  CONSTRAINT `related_contents_source_id_pk_content` FOREIGN KEY (`source_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `related_contents_target_id_pk_content` FOREIGN KEY (`target_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `content_content`
+--
+
+LOCK TABLES `content_content` WRITE;
+/*!40000 ALTER TABLE `content_content` DISABLE KEYS */;
+/*!40000 ALTER TABLE `content_content` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `content_positions`
 --
 
@@ -926,39 +957,6 @@ LOCK TABLES `ratings` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `related_contents`
---
-
-DROP TABLE IF EXISTS `related_contents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `related_contents` (
-  `pk_content1` bigint(20) unsigned NOT NULL,
-  `pk_content2` bigint(20) unsigned NOT NULL,
-  `relationship` varchar(50) DEFAULT NULL,
-  `text` varchar(50) DEFAULT NULL,
-  `position` int(10) NOT NULL DEFAULT '0',
-  `posinterior` int(2) NOT NULL DEFAULT '0',
-  `verportada` int(2) NOT NULL DEFAULT '0',
-  `verinterior` int(2) NOT NULL DEFAULT '0',
-  KEY `pk_content1` (`pk_content1`),
-  KEY `verportada` (`verportada`),
-  KEY `pk_content2` (`pk_content2`),
-  CONSTRAINT `related_contents_content1_contents_id` FOREIGN KEY (`pk_content1`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `related_contents_content2_contents_id` FOREIGN KEY (`pk_content2`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `related_contents`
---
-
-LOCK TABLES `related_contents` WRITE;
-/*!40000 ALTER TABLE `related_contents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `related_contents` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `settings`
 --
 
@@ -1365,4 +1363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-08-25 11:15:57
+-- Dump completed on 2020-09-15 10:32:36

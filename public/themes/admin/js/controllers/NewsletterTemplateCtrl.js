@@ -65,9 +65,7 @@
          *
          * @type {Array}
          */
-        $scope.numberOfElements = [ ... Array(20).keys() ].map(function(e) {
-          return e + 1;
-        });
+        $scope.numberOfElements = _.range(1, 21);
 
         /**
          * @memberOf UserCtrl
@@ -293,14 +291,14 @@
 
           $scope.item.contents[$scope.containerTarget].items =
             $scope.item.contents[$scope.containerTarget].items
-            .concat(nv.map(function(e) {
-              return {
-                content_type: e.content_type_name,
-                content_type_l10n_name: e.content_type_l10n_name,
-                id: e.pk_content,
-                title: e.title
-              };
-            }));
+              .concat(nv.map(function(e) {
+                return {
+                  content_type: e.content_type_name,
+                  content_type_l10n_name: e.content_type_l10n_name,
+                  id: e.pk_content,
+                  title: e.title
+                };
+              }));
 
           $scope.containerTarget = null;
           $scope.target          = [];

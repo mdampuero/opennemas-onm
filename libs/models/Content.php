@@ -253,10 +253,6 @@ class Content implements \JsonSerializable, CsvSerializable
                 return 0;
 
             default:
-                if ($name === 'slug' && empty($this->slug)) {
-                    $this->slug = \Onm\StringUtils::generateSlug($this->title);
-                }
-
                 if (in_array($this->content_type_name, self::L10N_CONTENT_TYPES)
                     && in_array($name, $this->getL10nKeys())
                 ) {
@@ -1782,7 +1778,7 @@ class Content implements \JsonSerializable, CsvSerializable
             case 'dued':
                 $state = _('dued');
                 break;
-            case 'in-time':
+            case 'intime':
                 $state = _('in time');
                 break;
             case 'postponed':
