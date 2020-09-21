@@ -155,7 +155,7 @@ class Importer
 
             unset($data['path']);
 
-            return $ps->createItem($file, $data, true);
+            return $ps->createItem($data, $file, true);
         }
 
         $target  = \classify($data['content_type_name']);
