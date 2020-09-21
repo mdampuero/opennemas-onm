@@ -103,7 +103,7 @@ class NewsstandController extends FrontendController
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
-            || $params['page'] < $this->getParameter('core.max_page')
+            || $params['page'] > $this->getParameter('core.max_page')
         ) {
             throw new ResourceNotFoundException();
         }
