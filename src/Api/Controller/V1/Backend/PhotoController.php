@@ -35,17 +35,27 @@ class PhotoController extends ContentController
      */
     public function saveItemAction(Request $request)
     {
-        try {
-            $this->checkSecurity($this->extension, $this->getActionPermission('save'));
-            $files = $request->files->all();
-            $file  = array_pop($files);
-            $data  = $request->request->all();
-            $item  = $this->get($this->service)->createItem($data, $file);
+        $msg = $this->get('core.messenger');
 
-            return new JsonResponse($item, 201);
-        } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 400);
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+        $files = $request->files->all();
+        $file  = array_pop($files);
+        $data  = $request->request->all();
+        $item  = $this->get($this->service)->createItem($data, $file);
+
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('id', $this->getItemId($item));
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                [ 'id' => $this->getItemId($item) ]
+            ));
         }
+
+        return $response;
     }
 
     /**

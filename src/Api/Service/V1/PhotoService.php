@@ -70,7 +70,7 @@ class PhotoService extends ContentService
             $id = $this->em->getMetadata($item)->getId($item);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => $id,
+                'id'   => array_pop($id),
                 'item' => $item
             ]);
 

@@ -792,6 +792,8 @@
             data.to = $scope.to;
           }
 
+          $scope.criteria.epp = $scope.epp;
+          $scope.criteria.page = $scope.page;
           $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
           oqlEncoder.configure({
@@ -908,24 +910,32 @@
            *
            * @param object fileItem The completed item.
            * @param object response The response content.
+           * @param object code     The response code.
            */
-          $scope.uploader.onCompleteItem = function(fileItem, response) {
+          $scope.uploader.onCompleteItem = function(fileItem, response, code, headers) {
             $timeout(function() {
               $scope.uploader.removeFromQueue(fileItem);
 
               // Autoselect items uploaded
-              if (!response.id) {
+              if (code !== 201) {
                 $scope.uploadError = true;
                 return;
               }
 
-              $scope.addItem(response);
-              $scope.selected.lastSelected = response;
+              var route = {
+                name: 'api_v1_backend_photo_get_item',
+                params:  { id: headers.id }
+              };
 
-              if ($scope.picker.selection.enabled) {
-                $scope.selected.ids.push(response.id);
-                $scope.selected.items.push(response);
-              }
+              http.get(route).then(function(response) {
+                $scope.addItem(response.data.item);
+                $scope.selected.lastSelected = response.data.item;
+
+                if ($scope.picker.selection.enabled) {
+                  $scope.selected.ids.push(response.data.item.pk_content);
+                  $scope.selected.items.push(response.data.item);
+                }
+              });
             }, 500);
           };
         };
