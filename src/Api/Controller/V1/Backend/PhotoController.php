@@ -48,7 +48,6 @@ class PhotoController extends ContentController
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
 
         if (!empty($this->getItemRoute)) {
-            $response->headers->set('id', $this->getItemId($item));
             $response->headers->set('Location', $this->generateUrl(
                 $this->getItemRoute,
                 [ 'id' => $this->getItemId($item) ]

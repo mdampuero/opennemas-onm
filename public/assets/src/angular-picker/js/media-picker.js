@@ -916,15 +916,14 @@
             $timeout(function() {
               $scope.uploader.removeFromQueue(fileItem);
 
-              // Autoselect items uploaded
               if (code !== 201) {
                 $scope.uploadError = true;
                 return;
               }
-
+              var id = headers.location.substring(headers.location.lastIndexOf('/') + 1);
               var route = {
                 name: 'api_v1_backend_photo_get_item',
-                params:  { id: headers.id }
+                params:  { id: id }
               };
 
               http.get(route).then(function(response) {
