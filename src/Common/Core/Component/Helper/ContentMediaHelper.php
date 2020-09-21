@@ -108,9 +108,7 @@ class ContentMediaHelper
         } catch (\Exception $e) {
         }
 
-        if (empty($mediaObject)
-            && !empty($authorPhoto)
-        ) {
+        if (empty($mediaObject) && !empty($authorPhoto)) {
             // Photo author
             $mediaObject      = $authorPhoto;
             $mediaObject->url = $this->mediaUrl . '/'
