@@ -107,6 +107,18 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_url for contents from external data source.
+     */
+    public function testGetUrlForExternalContent()
+    {
+        $item = new Content();
+
+        $item->externalUri = '/xyzzy/plugh';
+
+        $this->assertEquals('/xyzzy/plugh', get_url($item));
+    }
+
+    /**
      * Tests get_url when the provided parameter is a route name.
      */
     public function testGetUrlForRoute()
