@@ -62,7 +62,7 @@ class Frontpages
 
         $this->hydrateContents($articles);
 
-        $related  = $this->getRelated($articles);
+        $related = $this->getRelated($articles);
 
         // Set pagination
         $pagination = getService('paginator')->get([
