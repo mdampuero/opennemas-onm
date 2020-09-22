@@ -98,15 +98,7 @@ class ContentMediaHelper
         $mediaObject = $this->getImageMediaObject($content);
 
         // Check author
-        try {
-            $author = $this->container->get('api.service.author')->getItem($content->fk_author);
-
-            if (!empty($author->avatar_img_id)) {
-                $authorPhoto = $this->container->get('entity_repository')
-                    ->find('Photo', $author->avatar_img_id);
-            }
-        } catch (\Exception $e) {
-        }
+        $authorPhoto = $this->getAuthorPhoto($content);
 
         if (empty($mediaObject) && !empty($authorPhoto)) {
             // Photo author
@@ -199,6 +191,33 @@ class ContentMediaHelper
         }
 
         return $mediaObject;
+    }
+
+    /**
+     * Returns the author's photo.
+     *
+     * @param Object  $content The content object.
+     *
+     * @return Object $authorPhoto The author photo object.
+     */
+    protected function getAuthorPhoto($content)
+    {
+        if (empty($content->fk_author)) {
+            return null;
+        }
+
+        $authorPhoto = null;
+        try {
+            $author = $this->container->get('api.service.author')->getItem($content->fk_author);
+
+            if (!empty($author->avatar_img_id)) {
+                $authorPhoto = $this->container->get('entity_repository')
+                    ->find('Photo', $author->avatar_img_id);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $authorPhoto;
     }
 
     /**
