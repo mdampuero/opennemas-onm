@@ -59,6 +59,9 @@ class Frontpages
         $er       = getService('entity_repository');
         $articles = $er->findBy($filters, $order, $epp, $page);
         $total    = $er->countBy($filters);
+
+        $this->hydrateContents($articles);
+
         $related  = $this->getRelated($articles);
 
         // Set pagination

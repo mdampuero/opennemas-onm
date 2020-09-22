@@ -73,18 +73,22 @@ class ArticleController extends FrontendController
 
         $cm = new \ContentManager;
 
-        // Get full article
-        $article = $cm->getUrlContent($wsUrl . '/ws/articles/complete/' . $dirtyID, true);
+        list($article, $related) = unserialize($cm->getUrlContent(
+            $wsUrl . '/ws/articles/complete/' . $dirtyID,
+            true
+        ));
 
-        if (is_string($article)) {
-            $article = @unserialize($article);
-        }
-
-        if (empty($article) ||
-            (!empty($article->error) && !empty($article->error->code) && $article->error->code === 404)
-        ) {
+        if (empty($article)) {
             throw new ResourceNotFoundException();
         }
+
+        $this->view->assign([
+            'article'   => $article,
+            'item'      => $article,
+            'content'   => $article,
+            'related'   => $related,
+            'o_content' => $article,
+        ]);
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
@@ -99,15 +103,11 @@ class ArticleController extends FrontendController
         return $this->render('article/article.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
-            'article'        => $article,
             'cache_id'       => $cacheID,
-            'content'        => $article,
-            'contentId'      => $article->id,// Used on module_comments.tpl
             'ext'            => 1,
             'photoInt'       => $article->photoInt,
             'suggested'      => $article->suggested,
             'videoInt'       => $article->videoInt,
-            'o_content'      => $article,
             'x-cacheable'    => true,
             'x-tags'         => 'ext-article,' . $article->id
         ]);
