@@ -212,8 +212,6 @@ class ToolController extends Controller
      */
     private function saveContent($content, $propertiesToUpdate)
     {
-        $relatedSrv = $this->get('related_contents');
-
         $data = [
             'agency'           => $content->agency,
             'category'         => $content->category_id,
