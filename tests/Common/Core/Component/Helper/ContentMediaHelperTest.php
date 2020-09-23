@@ -293,6 +293,32 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getMediaObjectForOpinion
+     */
+    public function testGetMediaObjectForOpinionWithoutMedia()
+    {
+        $opinion = new \Opinion();
+
+        $mediaHelper = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
+            ->setMethods([ 'getAuthorPhoto', 'getImageMediaObject' ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($mediaHelper, 'getMediaObjectForOpinion');
+        $method->setAccessible(true);
+
+        $mediaHelper->expects($this->any())->method('getImageMediaObject')
+            ->willReturn(null);
+        $mediaHelper->expects($this->any())->method('getAuthorPhoto')
+            ->willReturn(null);
+
+        $this->assertNull(
+            $method->invokeArgs($mediaHelper, [ $opinion ])
+        );
+    }
+
+    /**
      * Tests getMediaObjectForAlbum
      */
     public function testGetMediaObjectForAlbum()
