@@ -203,8 +203,7 @@ class EventController extends FrontendController
             'route'       => 'frontend_events',
         ]);
 
-        $params['related_contents'] = $this->getRelations($contents);
-        $params['tags']             = $this->getTags($contents);
+        $params['tags'] = $this->getTags($contents);
     }
 
     /**
@@ -212,46 +211,6 @@ class EventController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['related_contents'] = $this->getRelations($params['content']);
-        $params['tags']             = $this->getTags($params['content']);
-    }
-
-    /**
-     * Returns the list of covers
-     *
-     * @param array $coverIds the list of contents to fetch related from
-     *
-     * @return array
-     */
-    public function getRelations($contents)
-    {
-        if (!is_array($contents)) {
-            $contents = [ $contents ];
-        }
-
-        $ids = [];
-        foreach ($contents as $content) {
-            if (!$content->hasRelated('cover')) {
-                continue;
-            }
-
-            $ids[] = $content->getMedia('cover');
-        }
-
-        if (empty($ids)) {
-            return [];
-        }
-
-        try {
-            $relations = getService('api.service.content')->getListByIds($ids)['items'];
-            $relations = $this->get('data.manager.filter')
-                ->set($relations)
-                ->filter('mapify', [ 'key' => 'pk_content' ])
-                ->get();
-        } catch (GetItemException $e) {
-            return;
-        }
-
-        return $relations;
+        $params['tags'] = $this->getTags($params['content']);
     }
 }

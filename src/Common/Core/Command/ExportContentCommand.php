@@ -256,13 +256,6 @@ class ExportContentCommand extends Command
         if (!empty($article->img2)) {
             $this->processInnerImage($article);
         }
-
-        // Get related
-        $relations = $this->getContainer()->get('related_contents')
-            ->getRelations($article->id, 'inner');
-        if (count($relations) > 0) {
-            $article->related = $this->er->findMulti($relations);
-        }
     }
 
     /**

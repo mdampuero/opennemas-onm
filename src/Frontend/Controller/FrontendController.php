@@ -557,14 +557,14 @@ class FrontendController extends Controller
         }
 
         //Get suggested contents
-        $suggested = $this->get('core.helper.content')->getSuggested(
+        $suggestedContents = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
             $params['content']->content_type_name,
             $params['o_category']->id ?? null
         );
 
         $this->view->assign([
-            'suggested' => $suggested,
+            'suggested' => $suggestedContents,
         ]);
     }
 
@@ -633,43 +633,6 @@ class FrontendController extends Controller
         return array_key_exists($action, $this->queries)
             ? array_diff_key($params, array_flip($this->queries[$action]))
             : $params;
-    }
-
-    /**
-     * Returns the list of related contents for a content.
-     *
-     * @param Content $content The content object.
-     *
-     * @return array The list of rellated contents.
-     */
-    protected function getRelated($content)
-    {
-        $relations = $this->get('related_contents')
-            ->getRelations($content->id, 'inner');
-
-        if (empty($relations)) {
-            return [];
-        }
-
-        $em = $this->get('entity_repository');
-
-        $related  = [];
-        $contents = $em->findMulti($relations);
-
-        // Filter out not ready for publish contents.
-        foreach ($contents as $content) {
-            if (!$content->isReadyForPublish()) {
-                continue;
-            }
-
-            if ($content->fk_content_type == 1 && !empty($content->fk_video)) {
-                $content->video = $em->find('Video', $content->fk_video);
-            }
-
-            $related[] = $content;
-        }
-
-        return $related;
     }
 
     /**

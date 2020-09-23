@@ -8,7 +8,6 @@
  */
 namespace WebService\Handlers;
 
-use Api\Exception\GetItemException;
 use Luracast\Restler\RestException;
 
 /**
@@ -38,59 +37,30 @@ class Articles
             throw new RestException(404, 'Page not found');
         }
 
-        $er       = getService('entity_repository');
-        $this->cm = new \ContentManager();
-
-        // Assigned media_url used with author photo & related or machine articles with photo
-        $article->media_url = MEDIA_IMG_ABSOLUTE_URL;
-
-        // Get inner image for this article
         try {
-            $photoInt            = getService('api.service.photo')->getItem($article->img2);
-            $photoInt->media_url = MEDIA_IMG_ABSOLUTE_URL;
-            $article->photoInt   = $photoInt;
-        } catch (GetItemException $e) {
+            $author = getService('api.service.author')
+                ->getItem($article->fk_author);
+
+            $article->agency = !empty($author) ? $author->name : $article->agency;
+
+            // Prevent errors when trying to search authors in target
+            $article->fk_author = null;
+        } catch (\Exception $e) {
         }
 
-        // Get inner video for this article
-        if (isset($article->fk_video2)) {
-            $videoInt          = $er->find('Video', $article->fk_video2);
-            $article->videoInt = $videoInt;
-        }
+        $article->external    = 1;
+        $article->externalUri = getService('router')
+            ->generate('frontend_external_article_show', [
+                'category_slug' => get_category_slug($article),
+                'slug'          => $article->slug,
+                'article_id'    => date('YmdHis', strtotime($article->created)) .
+                sprintf('%06d', $article->pk_content),
+            ]);
 
-        // Related contents code ---------------------------------------
-        $relations       = getService('related_contents')->getRelations($article->id, 'inner');
-        $relatedContents = [];
-        if (!empty($relations)) {
-            $relatedObjects = getService('entity_repository')->findMulti($relations);
 
-            // Filter out not ready for publish contents.
-            foreach ($relatedObjects as $content) {
-                if (!$content->isReadyForPublish()) {
-                    continue;
-                }
+        $related = $this->getRelated($article);
 
-                // Generate content uri if it's not an attachment
-                if ($content->fk_content_type == '4') {
-                    $content->externalUri = "ext" . preg_replace('@//@', '/author/', get_url($content));
-                } elseif ($content->fk_content_type == 3) {
-                    // Get instance media
-                    $basePath = INSTANCE_MEDIA;
-
-                    // Get file path for attachments
-                    $filePath = \ContentManager::getFilePathFromId($content->id);
-
-                    // Compose the full url to the file
-                    $content->externalUri = $basePath . FILE_DIR . $filePath;
-                } else {
-                    $content->externalUri = "ext" . get_url($content);
-                }
-                $relatedContents[] = $content;
-            }
-        }
-        $article->relatedContents = $relatedContents;
-
-        return serialize($article);
+        return serialize([ $article, $related ]);
     }
 
     /**
@@ -110,5 +80,49 @@ class Articles
         if (is_infinite($number)) {
             throw new RestException(400, 'parameter is not finite');
         }
+    }
+
+    /**
+     * Returns the list of contents related to the provided contents.
+     *
+     * @param Content $article The article to get related contents for.
+     *
+     * @return array The list of related contents.
+     */
+    protected function getRelated($article)
+    {
+        $ids = [];
+        if (!empty($article->fk_video2) || !empty($article->img2)) {
+            $ids[] = !empty($article->fk_video2)
+                ? $article->fk_video2
+                : $article->img2;
+        }
+
+        $ids = array_merge($ids, array_map(function ($a) {
+            return $a['target_id'];
+        }, array_filter($article->related_contents, function ($a) {
+            return $a['type'] === 'related_inner';
+        })));
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        $related = getService('entity_repository')->findBy([
+            'pk_content' => [[ 'value' => $ids, 'operator' => 'IN' ]],
+        ], [ 'starttime' => 'DESC' ]);
+
+        $related = getService('data.manager.filter')
+            ->set($related)
+            ->filter('mapify', [ 'key' => 'pk_content' ])
+            ->get($related);
+
+        foreach ($related as $r) {
+            $r->external    = 1;
+            $r->externalUri = getService('core.helper.url_generator')
+                ->generate($r, [ 'absolute' => true ]);
+        }
+
+        return $related;
     }
 }

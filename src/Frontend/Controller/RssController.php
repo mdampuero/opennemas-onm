@@ -308,7 +308,6 @@ class RssController extends FrontendController
             // Get last articles contents
             $contents = $this->getLatestContents('article', null, 50);
 
-            // Fetch extras for each article
             $er = $this->get('entity_repository');
             foreach ($contents as $key => $content) {
                 // Exclude articles with external link or without body from RSS
@@ -548,26 +547,6 @@ class RssController extends FrontendController
             if (isset($content->params['bodyLink'])
                && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
-            }
-
-            $relations = $this->get('related_contents')
-                ->getRelations($content->id, 'inner', $limit);
-            if (!empty($relations)) {
-                $relatedContents = [];
-                $relateds        = $this->get('entity_repository')->findMulti($relations);
-
-                // Filter out not ready for publish contents.
-                foreach ($relateds as $related) {
-                    if ($related->isReadyForPublish()) {
-                        if ($related->content_type == 1 && !empty($related->fk_video)) {
-                            $related->video = $er->find('Video', $related->fk_video);
-                        }
-
-                        $relatedContents[] = $related;
-                    }
-                }
-
-                $content->related = $relatedContents;
             }
         }
     }
