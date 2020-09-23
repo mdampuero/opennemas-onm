@@ -110,11 +110,13 @@
                     {/if}
                   </body.content>
                   <body.end>
-                    {if isset($content->related) && !empty($content->related)}
+                    {if has_related_contents($content, 'inner')}
                       <block class="related-contents">
-                        {foreach $content->related as $related}
+                        {foreach get_related_contents($content, 'inner') as $related}
                           <p>
-                            <a href="{get_url($related)}">{$related->title}</a>
+                            <a href="{get_url($related)}">
+                              {get_title($related)
+                            </a>
                           </p>
                         {/foreach}
                       </block>
