@@ -94,21 +94,10 @@ class ContentMediaHelper
      */
     protected function getMediaObjectForOpinion($content)
     {
-        // Check images
         $mediaObject = $this->getImageMediaObject($content);
 
         if (empty($mediaObject)) {
-            // Check author
-            $authorPhoto = $this->getAuthorPhoto($content);
-
-            if (empty($authorPhoto)) {
-                return null;
-            }
-
-            // Photo author
-            $mediaObject      = $authorPhoto;
-            $mediaObject->url = $this->mediaUrl . '/'
-                . ltrim($mediaObject->path_img, '/');
+            return $this->getAuthorPhoto($content);
         }
 
         return $mediaObject;
@@ -210,18 +199,28 @@ class ContentMediaHelper
             return null;
         }
 
-        $authorPhoto = null;
         try {
-            $author = $this->container->get('api.service.author')->getItem($content->fk_author);
+            $author = $this->container->get('api.service.author')
+                ->getItem($content->fk_author);
 
-            if (!empty($author->avatar_img_id)) {
-                $authorPhoto = $this->container->get('entity_repository')
-                    ->find('Photo', $author->avatar_img_id);
+            if (empty($author->avatar_img_id)) {
+                return null;
             }
-        } catch (\Exception $e) {
-        }
 
-        return $authorPhoto;
+            $photo = $this->container->get('entity_repository')
+                ->find('Photo', $author->avatar_img_id);
+
+            if (empty($photo)) {
+                return null;
+            }
+
+            $photo->url = $this->mediaUrl . '/'
+                . ltrim($photo->path_img, '/');
+
+            return $photo;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
