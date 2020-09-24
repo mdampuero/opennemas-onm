@@ -115,7 +115,7 @@
                         {foreach get_related_contents($content, 'inner') as $related}
                           <p>
                             <a href="{get_url($related)}">
-                              {get_title($related)
+                              {get_title($related)}
                             </a>
                           </p>
                         {/foreach}
