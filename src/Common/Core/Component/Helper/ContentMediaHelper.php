@@ -219,9 +219,12 @@ class ContentMediaHelper
     {
         $photo = null;
         try {
-            // Inner photo
-            $photo      = $this->container->get('api.service.photo')->getItem($content->img2);
-            $photo->url = $this->mediaUrl . $photo->path;
+            if (!empty($content->img2)) {
+                $photo = $this->container->get('api.service.photo')->getItem($content->img2);
+                if (!empty($photo)) {
+                    $photo->url = $this->mediaUrl . $photo->path;
+                }
+            }
         } catch (GetItemException $e) {
         }
         return $photo;
