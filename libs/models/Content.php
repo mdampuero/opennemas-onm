@@ -676,17 +676,12 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      * @return null
      */
-    public function delete($id, $lastEditor = null)
+    public function delete($id)
     {
-        if (getService('core.security')->hasPermission('MASTER')) {
-            $lastEditor = $this->fk_user_last_editor;
-        }
-
         try {
             getService('dbal_connection')->update(
                 'contents',
                 [
-                    'fk_user_last_editor' => $lastEditor,
                     'in_litter' => 1,
                     'content_status' => 0,
                     'changed' => date("Y-m-d H:i:s"),
