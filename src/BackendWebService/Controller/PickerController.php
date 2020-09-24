@@ -160,27 +160,6 @@ class PickerController extends Controller
     }
 
     /**
-     * Saved the description for a content.
-     *
-     * @param Request $request The request object.
-     * @param integer $id      The content id.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveDescriptionAction(Request $request, $id)
-    {
-        $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
-
-        try {
-            $this->get('api.service.photo')->patchItem($id, [ 'description' => $description ]);
-
-            return new JsonResponse('ok');
-        } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 500);
-        }
-    }
-
-    /**
      * Returns the available months registered in images.
      *
      * @return JsonResponse the object response
