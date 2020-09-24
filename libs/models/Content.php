@@ -1988,7 +1988,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'favorite'       => $data['favorite'] ?? 0,
             'fk_author'      => !empty($data['fk_author']) ?
                 (int) $data['fk_author'] : null,
-            'fk_publisher'   => $currentUserId,
+            'fk_publisher'   => $this->fk_publisher ?? $currentUserId,
             'frontpage'      => $data['frontpage'] ?? 0,
             'in_home'        => $data['in_home'] ?? 0,
             'params'         => $data['params'] ?? null,
