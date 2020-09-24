@@ -47,11 +47,6 @@ class ContentPersister extends BasePersister
             $entity->starttime = new \DateTime();
         }
 
-        if (!$this->getContainer->get('core.security')->hasPermission('MASTER')) {
-            $entity->fk_user_last_editor = $this->user->id;
-            $entity->fk_publisher        = $this->user->id;
-        }
-
         $categories = [];
         if (!empty($entity->categories)) {
             $categories = $entity->categories;
@@ -101,11 +96,6 @@ class ContentPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        if (!$this->getContainer->get('core.security')->hasPermission('MASTER')) {
-            $entity->fk_user_last_editor = $this->user->id;
-            $entity->fk_publisher        = $this->user->id;
-        }
-
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tags       = $entity->tags;
