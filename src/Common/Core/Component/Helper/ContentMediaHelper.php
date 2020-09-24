@@ -219,16 +219,9 @@ class ContentMediaHelper
     {
         $photo = null;
         try {
-            if (isset($content->img2) && ($content->img2 > 0)) {
-                // Inner photo
-                $photo = $this->container->get('api.service.photo')->getItem($content->img2);
-            } elseif (isset($content->img1) && ($content->img1 > 0)) {
-                // Front photo
-                $photo = $this->container->get('api.service.photo')->getItem($content->img1);
-            }
-            if (!empty($photo)) {
-                $photo->url = $this->mediaUrl . $photo->path;
-            }
+            // Inner photo
+            $photo      = $this->container->get('api.service.photo')->getItem($content->img2);
+            $photo->url = $this->mediaUrl . $photo->path;
         } catch (GetItemException $e) {
         }
         return $photo;
