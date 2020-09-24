@@ -81,8 +81,6 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInformation()
     {
-        $this->processor->expects($this->once())->method('open')
-            ->willReturn(true);
         $this->processor->expects($this->once())->method('getHeight')
             ->willReturn(220);
         $this->processor->expects($this->once())->method('getSize')

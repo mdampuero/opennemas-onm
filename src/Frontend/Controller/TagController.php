@@ -180,10 +180,15 @@ class TagController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $page = (int) ($params['page'] ?? 1);
-        $epp  = $this->get('orm.manager')
+        $epp = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
+
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
+            throw new ResourceNotFoundException();
+        }
 
         $ids = array_map(function ($a) {
             return $a->id;
@@ -220,11 +225,11 @@ class TagController extends FrontendController
         ];
 
         $em       = $this->get('entity_repository');
-        $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
+        $contents = $em->findBy($criteria, 'starttime DESC', $epp, $params['page']);
         $total    = $em->countBy($criteria);
 
         // No first page and no contents
-        if ($page > 1 && empty($contents)) {
+        if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
         }
 
@@ -247,7 +252,7 @@ class TagController extends FrontendController
                 'directional' => true,
                 'epp'         => $epp,
                 'maxLinks'    => 0,
-                'page'        => $page,
+                'page'        => $params['page'],
                 'total'       => $total,
                 'route'       => [
                     'name'   => 'frontend_tag_frontpage',

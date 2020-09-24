@@ -20,7 +20,7 @@ class AuthorController extends Controller
     public function authorFrontpageAction(Request $request)
     {
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
+        $page         = (int) $request->get('page', 1);
         $itemsPerPage = 12;
 
         try {
@@ -44,6 +44,10 @@ class AuthorController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
+            if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+                throw new ResourceNotFoundException();
+            }
+
             $criteria = [
                 'fk_author'       => [[ 'value' => $user->id ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -143,6 +147,10 @@ class AuthorController extends Controller
             ->get('items_in_blog', 10);
 
         $offset = ($page - 1) * $itemsPerPage;
+
+        if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+            throw new ResourceNotFoundException();
+        }
 
         // Redirect to first page
         if ($page < 1) {

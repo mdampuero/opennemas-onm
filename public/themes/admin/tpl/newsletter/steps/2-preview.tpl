@@ -54,7 +54,7 @@
         </div>
         <div class="grid-body">
           <div class="form-group">
-              <input type="text" name="subject" id="title" value="{$newsletter->title}" required class="form-control"/>
+              <input type="text" name="subject" id="title" value="{$newsletter->title|escape:"html"}" required class="form-control"/>
           </div>
         </div>
       </div>

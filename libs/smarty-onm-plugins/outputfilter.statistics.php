@@ -13,7 +13,7 @@ function smarty_outputfilter_statistics($output, $smarty)
     $content = $smarty->getValue('content');
 
     if (is_null($request)
-        || strpos($output, '<!doctype html>') !== 0) {
+        || stripos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 

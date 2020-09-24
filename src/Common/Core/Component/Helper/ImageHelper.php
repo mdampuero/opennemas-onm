@@ -94,20 +94,17 @@ class ImageHelper extends FileHelper
      */
     public function getInformation(string $path) : array
     {
-        $result      = $this->processor->open($path);
-        $information = [];
+        $this->processor->open($path);
 
-        if ($result) {
-            $information = [
-                'height' => $this->processor->getHeight(),
-                'size'   => $this->processor->getSize() / 1024,
-                'width'  => $this->processor->getWidth()
-            ];
+        $information = [
+            'height' => $this->processor->getHeight(),
+            'size'   => $this->processor->getSize() / 1024,
+            'width'  => $this->processor->getWidth()
+        ];
 
-            $description = $this->processor->getDescription();
-            if (!empty($description)) {
-                $information['description'] = $description;
-            }
+        $description = $this->processor->getDescription();
+        if (!empty($description)) {
+            $information['description'] = $description;
         }
 
         return $information;

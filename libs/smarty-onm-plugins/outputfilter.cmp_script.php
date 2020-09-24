@@ -17,11 +17,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
 
-    if (is_null($request)) {
-        return $output;
-    }
-
-    if (empty($ds->get('cmp_script'))) {
+    if (is_null($request) || $ds->get('cookies') !== 'cmp') {
         return $output;
     }
 
@@ -38,11 +34,8 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('@\.amp\.html$@', $uri)
     ) {
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
-            'common/helpers/cmp.tpl',
-            [
-                'lang' => $smarty->getContainer()->get('core.locale')->getLocaleShort(),
-                'site' => $ds->get('site_name')
-            ]
+            'common/helpers/cmp_' . $ds->get('cmp_type') . '.tpl',
+            [ 'id' => $ds->get('cmp_id') ]
         );
 
         $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);

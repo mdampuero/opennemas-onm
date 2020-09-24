@@ -37,9 +37,15 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods([ 'getExtension', 'getInformation' ])
             ->getMock();
+
         $this->ds = $this->getMockBuilder('DataSet')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
             ->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager')
@@ -85,6 +91,12 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.image':
                 return $this->ih;
+
+            case 'api.service.author':
+                return $this->as;
+
+            case 'entity_repository':
+                return $this->em;
 
             case 'api.service.photo':
                 return $this->servicePhoto;
@@ -207,6 +219,9 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $articleInner       = new \Article();
         $articleInner->img2 = 123;
 
+        $articleFront       = new \Article();
+        $articleFront->img2 = 123;
+
         // Video object
         $video        = new \Video();
         $video->thumb = '/media/opennemas/images/2016/12/01/2016120118435298511.jpg';
@@ -222,6 +237,10 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with('Video', 123)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
             ->with('Video', 123)->willReturn($extVideo);
+        $this->em->expects($this->at(2))->method('find')
+            ->with('Photo', 123)->willReturn($photo);
+        $this->em->expects($this->at(3))->method('find')
+            ->with('Photo', 123)->willReturn($photo);
 
         $method = new \ReflectionMethod($this->helper, 'getMediaObjectForArticle');
         $method->setAccessible(true);
@@ -237,36 +256,107 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'https://i.ytimg.com/vi/qXYLOmqtZSA/sddefault.jpg',
             $videoExtMedia->url
         );
+
+        $innerMedia = $method->invokeArgs($this->helper, [ $articleInner ]);
+        $this->assertEquals(
+            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
+            $innerMedia->url
+        );
+
+        $frontMedia = $method->invokeArgs($this->helper, [ $articleFront ]);
+        $this->assertEquals(
+            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
+            $frontMedia->url
+        );
     }
 
     /**
-     * Tests getMediaObjectForOpinion
+     * Tests getMediaObjectForOpinion when the opinion has a valid media.
      */
     public function testGetMediaObjectForOpinion()
     {
-        $opinion                      = new \Opinion();
-        $opinion->author              = new User();
-        $opinion->author->photo       = new Content();
-        $opinion->author->photo->path = '/route/to/file.name';
+        $opinion         = new \Opinion();
+        $opinion->author = new User();
+        $opinion->img2   = 123;
 
-        // Photo object
-        $photo       = new Content();
-        $photo->path = '/route/to/file.name';
+        $photo      = new Content();
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name';
 
-        $this->em->expects($this->any())->method('find')
-            ->with('Photo', 123)->willReturn($photo);
+        $mediaHelper = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
+            ->setMethods([ 'getAuthorPhoto', 'getImageMediaObject' ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
+            ->getMock();
 
-        $method = new \ReflectionMethod($this->helper, 'getMediaObjectForOpinion');
+        $mediaHelper->expects($this->any())->method('getImageMediaObject')
+            ->willReturn($photo);
+
+        $method = new \ReflectionMethod($mediaHelper, 'getMediaObjectForOpinion');
         $method->setAccessible(true);
 
-        $authorObject = $method->invokeArgs($this->helper, [ $opinion ]);
         $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $authorObject->url
+            $photo,
+            $method->invokeArgs($mediaHelper, [ $opinion ])
         );
+    }
 
-        $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
+    /**
+     * Tests getMediaObjectForOpinion when the author has a valid media.
+     */
+    public function testGetMediaObjectForOpinionWhenAuthor()
+    {
+        $opinion         = new \Opinion();
+        $opinion->author = new User();
+        $opinion->img2   = 123;
+
+        $photo      = new \Photo();
+        $photo->url = MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name';
+
+        $mediaHelper = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
+            ->setMethods([ 'getAuthorPhoto', 'getImageMediaObject' ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
+            ->getMock();
+
+        $mediaHelper->expects($this->any())->method('getImageMediaObject')
+            ->willReturn(null);
+        $mediaHelper->expects($this->any())->method('getAuthorPhoto')
+            ->willReturn($photo);
+
+        $method = new \ReflectionMethod($mediaHelper, 'getMediaObjectForOpinion');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            $photo,
+            $method->invokeArgs($mediaHelper, [ $opinion ])
+        );
+    }
+
+    /**
+     * Tests getMediaObjectForOpinion when the opinion nor the opinion's author
+     * has a valid media.
+     */
+    public function testGetMediaObjectForOpinionWithoutMedia()
+    {
+        $opinion = new \Opinion();
+
+        $mediaHelper = $this
+            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
+            ->setMethods([ 'getAuthorPhoto', 'getImageMediaObject' ])
+            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($mediaHelper, 'getMediaObjectForOpinion');
+        $method->setAccessible(true);
+
+        $mediaHelper->expects($this->any())->method('getImageMediaObject')
+            ->willReturn(null);
+        $mediaHelper->expects($this->any())->method('getAuthorPhoto')
+            ->willReturn(null);
+
+        $this->assertNull(
+            $method->invokeArgs($mediaHelper, [ $opinion ])
+        );
     }
 
     /**
@@ -377,11 +467,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             SITE_URL . 'media/' . MEDIA_DIR . '/sections/site_logo.jpg',
             $siteLogo->url
         );
-
-        $this->assertEquals(
-            $method->invokeArgs($this->helper, [ $mediaObject ]),
-            $mediaObject
-        );
     }
 
     /**
@@ -389,7 +474,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDefaultMediaObjectException()
     {
-        $mediaObject = new \StdClass();
+        $mediaObject = null;
 
         $this->instance->expects($this->any())
             ->method('getMediaShortPath')
@@ -418,13 +503,120 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getAuthorPhoto.
+     */
+    public function testGetAuthorPhoto()
+    {
+        $author = new User([ 'id' => 433, 'avatar_img_id' => 364 ]);
+
+        $opinion            = new \Opinion();
+        $opinion->fk_author = 5;
+
+        $photo            = new \Photo();
+        $photo->path_file = '/route/to/';
+        $photo->name      = 'file.name';
+        $photo->path_img  = '/route/to/file.name';
+
+        $this->as->expects($this->any())->method('getItem')
+            ->with(5)->willReturn($author);
+
+        $this->em->expects($this->any())->method('find')
+            ->with('Photo', 364)->willReturn($photo);
+
+        $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
+        $method->setAccessible(true);
+
+        $this->assertEquals($photo, $method->invokeArgs($this->helper, [ $opinion ]));
+    }
+
+    /**
+     * Tests getAuthorPhoto when the opinion has no author.
+     */
+    public function testGetAuthorPhotoWhenNoAuthor()
+    {
+        $opinion            = new \Opinion();
+        $opinion->fk_author = null;
+
+        $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invokeArgs($this->helper, [ $opinion ]));
+    }
+
+    /**
+     * Tests getAuthorPhoto when the opinion has an author but the author has
+     * no avatar.
+     */
+    public function testGetAuthorPhotoWhenNoAvatar()
+    {
+        $author = new User([ 'id' => 433, 'avatar_img_id' => null ]);
+
+        $opinion            = new \Opinion();
+        $opinion->fk_author = 433;
+
+        $this->as->expects($this->any())->method('getItem')
+            ->with(433)->willReturn($author);
+
+        $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invokeArgs($this->helper, [ $opinion ]));
+    }
+
+    /**
+     * Tests getAuthorPhoto when the opinion has an author but the author has
+     * no avatar.
+     */
+    public function testGetAuthorPhotoWhenAvatarNotFound()
+    {
+        $author = new User([ 'id' => 433, 'avatar_img_id' => 280 ]);
+
+        $opinion            = new \Opinion();
+        $opinion->fk_author = 433;
+
+        $this->as->expects($this->any())->method('getItem')
+            ->with(433)->willReturn($author);
+
+        $this->em->expects($this->any())->method('find')
+            ->with('Photo', 280)->willReturn(null);
+
+        $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invokeArgs($this->helper, [ $opinion ]));
+    }
+
+    /**
+     * Tests getAuthorPhoto
+     */
+    public function testGetAuthorPhotoWhenErrorWhileSearchingAuthor()
+    {
+        $opinion            = new \Opinion();
+        $opinion->fk_author = 'foo';
+
+        $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
+        $method->setAccessible(true);
+
+        $this->as->expects($this->any())->method('getItem')
+            ->with('foo')->will($this->throwException(new \Exception()));
+
+        $this->assertNull($method->invokeArgs($this->helper, [ $opinion ]));
+    }
+
+    /**
      * Tests getImageMediaObject
      */
     public function testGetImageMediaObject()
     {
         // Image inner
         $inner       = new \Content();
+        $inner->img1 = 0;
         $inner->img2 = 123;
+
+        // Image front
+        $front       = new \Content();
+        $front->img1 = 123;
+        $front->img2 = 0;
 
         // Photo object
         $photo       = new Content();
@@ -441,6 +633,12 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
             $innerMediaObject->url
+        );
+
+        $frontMediaObject = $method->invokeArgs($this->helper, [ $front ]);
+        $this->assertEquals(
+            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
+            $frontMediaObject->url
         );
 
         $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
