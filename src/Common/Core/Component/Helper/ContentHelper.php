@@ -135,16 +135,14 @@ class ContentHelper
     }
 
     /**
-     * Removes the current content and its photo from the list of suggested
+     * Removes the current content from the list of suggested
      * contents.
      *
      * @param int   $contentId The current content id.
-     * @param array $items     The list of suggested contents and photos for a
-     *                         category.
+     * @param array $items     The list of suggested contents for a category.
      * @param int   $epp       The maximum number of items to return.
      *
-     * @return array The list of suggested contents and their photos without
-     *               the current content.
+     * @return array The list of suggested contents.
      */
     protected function ignoreCurrent($contentId, $items, $epp)
     {
@@ -152,7 +150,7 @@ class ContentHelper
             return $a->pk_content == $contentId;
         });
 
-        $items[0] = array_slice(array_filter($items, function ($a) use ($contentId) {
+        $items = array_slice(array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content != $contentId;
         }), 0, $epp);
 
