@@ -78,7 +78,7 @@
             {t}Name{/t}
           </label>
           <span class="m-l-10">
-            [% selected.lastSelected.name %] [% selected.lastSelected.title %]
+            [% selected.lastSelected.title %]
           </span>
         </li>
         <li>
