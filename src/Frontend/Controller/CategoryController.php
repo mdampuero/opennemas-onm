@@ -301,7 +301,6 @@ class CategoryController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $this->hydrateContents($contents, $params);
 
         $params['articles']   = $contents;
         $params['pagination'] = $this->get('paginator')->get([
@@ -318,26 +317,5 @@ class CategoryController extends FrontendController
                 ]
             ]
         ]);
-    }
-
-    /**
-     * Adds more information to contents in the list of contents by using all
-     * parameters collected during the current request.
-     *
-     * @param array $contents The list of contents.
-     * @param array $params   The list of parameters.
-     */
-    protected function hydrateContents($contents, $params)
-    {
-        foreach ($contents as &$content) {
-            if (!empty($content->fk_video)
-                && array_key_exists($content->fk_video, $params['o_media'])
-            ) {
-                $video = $params['o_media'][$content->fk_video];
-
-                $content->video     = $video;
-                $content->obj_video = $video;
-            }
-        }
     }
 }
