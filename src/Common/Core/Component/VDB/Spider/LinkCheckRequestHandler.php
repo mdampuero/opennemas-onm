@@ -33,4 +33,14 @@ class LinkCheckRequestHandler extends GuzzleRequestHandler
     {
         $this->domain = $domain;
     }
+
+    /**
+     * Returns the base domain of the request handler.
+     *
+     * @return string The base domain for the requests.
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
 }
