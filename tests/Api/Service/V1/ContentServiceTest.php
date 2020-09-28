@@ -52,6 +52,10 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
                 'countContents', 'moveContents', 'removeContents'
             ])->getMock();
 
+        $this->security = $this->getMockBuilder('Sercurity')
+            ->setMethods([ 'hasPermission' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -79,6 +83,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.security':
+                return $this->security;
         }
 
         return null;

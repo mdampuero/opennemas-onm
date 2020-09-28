@@ -28,6 +28,13 @@ class NewsstandService extends ContentService
             $data = $this->em->getConverter($this->entity)
                 ->objectify(array_merge($this->defaults, $data));
 
+            if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+                $currentUserId = $this->container->get('core.user')->id ?? null;
+
+                $data['fk_user_last_editor'] = $currentUserId;
+                $data['fk_publisher']        = $currentUserId;
+            }
+
             $item = new $this->class($data);
 
             $nh            = $this->container->get('core.helper.newsstand');
@@ -72,6 +79,12 @@ class NewsstandService extends ContentService
         try {
             $data = $this->em->getConverter($this->entity)
                 ->objectify(array_merge($this->defaults, $data));
+
+            if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+                $currentUserId = $this->container->get('core.user')->id ?? null;
+
+                $data['fk_user_last_editor'] = $currentUserId;
+            }
 
             $item = $this->getItem($id);
             $item->setData($data);

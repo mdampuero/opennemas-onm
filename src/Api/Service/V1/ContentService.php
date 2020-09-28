@@ -18,6 +18,13 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
+        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+            $currentUserId = $this->container->get('core.user')->id ?? null;
+
+            $data['fk_user_last_editor'] = $currentUserId;
+            $data['fk_publisher']        = $currentUserId;
+        }
+
         return parent::createItem($data);
     }
 
@@ -57,6 +64,12 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
+        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+            $currentUserId = $this->container->get('core.user')->id ?? null;
+
+            $data['fk_user_last_editor'] = $currentUserId;
+        }
+
         parent::patchItem($id, $data);
     }
 
@@ -67,6 +80,12 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
+        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+            $currentUserId = $this->container->get('core.user')->id ?? null;
+
+            $data['fk_user_last_editor'] = $currentUserId;
+        }
+
         return parent::patchList($ids, $data);
     }
 
@@ -76,6 +95,12 @@ class ContentService extends OrmService
     public function updateItem($id, $data)
     {
         $data['changed'] = new \DateTime();
+
+        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+            $currentUserId = $this->container->get('core.user')->id ?? null;
+
+            $data['fk_user_last_editor'] = $currentUserId;
+        }
 
         parent::updateItem($id, $data);
     }

@@ -57,6 +57,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'exists', 'generatePath', 'getRelativePath', 'move', 'remove' ])
             ->getMock();
 
+        $this->security = $this->getMockBuilder('Sercurity')
+            ->setMethods([ 'hasPermission' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
@@ -90,6 +94,9 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.newsstand':
                 return $this->nh;
+
+            case 'core.security':
+                return $this->security;
 
             default:
                 return null;
