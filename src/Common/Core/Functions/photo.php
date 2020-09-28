@@ -27,3 +27,63 @@ function get_photo_path($item, string $transform = null, array $params = [])
         'path'   => $url
     ]);
 }
+
+/**
+ * Returns the size for the provided photo.
+ *
+ * @param Content $item The photo to get property from.
+ *
+ * @return string The photo size.
+ */
+function get_photo_size($item = null) : ?string
+{
+    $value = get_property($item, 'size');
+
+    return !empty($value) ? $value : null;
+}
+
+/**
+ * Returns the width for the provided photo.
+ *
+ * @param Content $item The photo to get property from.
+ *
+ * @return string The photo width.
+ */
+function get_photo_width($item = null) : ?string
+{
+    $value = get_property($item, 'width');
+
+    return !empty($value) ? $value : null;
+}
+
+/**
+ * Returns the height for the provided photo.
+ *
+ * @param Content $item The photo to get property from.
+ *
+ * @return string The photo height.
+ */
+function get_photo_height($item = null) : ?string
+{
+    $value = get_property($item, 'height');
+
+    return !empty($value) ? $value : null;
+}
+
+/**
+ * Returns the height for the provided photo.
+ *
+ * @param Content $item The photo to get property from.
+ *
+ * @return string The photo height.
+ */
+function get_photo_mime_type($item = null) : ?string
+{
+    $path = get_photo_path($item);
+    if (!preg_match('/^http?.*/', $path)) {
+        $path = getService('core.instance')->getMainDomain() . $path;
+    }
+    $value = mime_content_type($path);
+
+    return !empty($value) ? $value : null;
+}

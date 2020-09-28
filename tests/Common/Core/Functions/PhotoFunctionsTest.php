@@ -46,6 +46,13 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->container);
 
         $GLOBALS['kernel'] = $this->kernel;
+
+        $this->content = new Content([
+            'content_type'   => 'photo',
+            'content_status' => 1,
+            'in_litter'      => 0,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
     }
 
     /**
@@ -100,5 +107,60 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ])->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault'));
+    }
+
+    /**
+     * Tests get_size.
+     */
+    public function testGetPhotoSize()
+    {
+        $this->assertNull(get_photo_size($this->content));
+
+        $this->content->size = '222';
+        $this->assertEquals('222', get_photo_size($this->content));
+    }
+
+    /**
+     * Tests get_width.
+     */
+    public function testGetPhotoWidth()
+    {
+        $this->assertNull(get_photo_width($this->content));
+
+        $this->content->size = '222';
+        $this->assertEquals('222', get_photo_width($this->content));
+    }
+
+    /**
+     * Tests get_height.
+     */
+    public function testGetPhotoHeight()
+    {
+        $this->assertNull(get_photo_height($this->content));
+
+        $this->content->size = '222';
+        $this->assertEquals('222', get_photo_height($this->content));
+    }
+
+    /**
+     * Tests get_photo_mime_type.
+     */
+    public function testGetPhotoMimeType()
+    {
+        $this->assertNull(get_photo_mime_type($this->content));
+
+        $this->content->path = '/glorp/xyzzy/foobar.jpg';
+        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_mime_type($this->content));
+    }
+
+    /**
+     * Tests get_photo_mime_type when external photo.
+     */
+    public function testGetPhotoMimeTypeWhenExternal()
+    {
+        $this->assertNull(get_photo_mime_type($this->content));
+
+        $this->content->path = '/glorp/xyzzy/foobar.jpg';
+        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_mime_type($this->content));
     }
 }

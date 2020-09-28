@@ -316,7 +316,7 @@ class UrlGeneratorHelper
         return implode(DS, [
             "media",
             $this->instance->internal_name,
-            'images',
+            //'images',
             $pathFile
         ]);
     }
