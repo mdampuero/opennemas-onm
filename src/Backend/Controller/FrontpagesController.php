@@ -368,8 +368,7 @@ class FrontpagesController extends Controller
 
         foreach ($contentsInHomepage as &$content) {
             $content->loadFrontpageImageFromHydratedArray($imageList)
-                ->loadAttachedVideo()
-                ->loadRelatedContents();
+                ->loadAttachedVideo();
         }
 
         // Fetch category layout

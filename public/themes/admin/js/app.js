@@ -40,7 +40,6 @@ angular.module('BackendApp', [
   'swfobject',
   'ui.bootstrap',
   'ui.tab.scroll',
-  'ui.sortable',
   'ui.select',
   'ui.tree',
   'webStorageModule',

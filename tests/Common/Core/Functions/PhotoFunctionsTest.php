@@ -79,6 +79,7 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
 
+        $this->assertEquals('/plugh', get_photo_path('/plugh'));
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo));
     }
 

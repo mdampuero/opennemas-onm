@@ -66,6 +66,16 @@
          * @memberOf InnerCtrl
          *
          * @description
+         *  The list of overlays.
+         *
+         * @type {Object}
+         */
+        $scope.overlay = {};
+
+        /**
+         * @memberOf InnerCtrl
+         *
+         * @description
          *  List of tags by id
          *
          * @type {Array}
@@ -73,14 +83,15 @@
         $scope.tags = {};
 
         /**
-         * @memberOf InnerCtrl
+         * @memberOf BaseCtrl
          *
          * @description
-         *  The list of overlays.
+         *  Temporal scope. It should be used only with objects needed in the
+         *  UI and information in it should never be sent to the server.
          *
          * @type {Object}
          */
-        $scope.overlay = {};
+        $scope.tmp = {};
 
         /**
          * @function BaseCtrl

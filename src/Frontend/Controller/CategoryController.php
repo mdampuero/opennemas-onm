@@ -112,16 +112,17 @@ class CategoryController extends FrontendController
         ) {
             $cm = new \ContentManager();
 
-            // Get category object
-            $category = unserialize(
-                $cm->getUrlContent(
-                    $wsUrl . '/ws/categories/object/' . $slug,
-                    true
-                )
-            );
+            $category = unserialize($cm->getUrlContent(
+                $wsUrl . '/ws/categories/object/' . $slug,
+                true
+            ));
+
+            if (empty($category)) {
+                throw new ResourceNotFoundException();
+            }
 
             // Get all contents for this frontpage
-            list($pagination, $articles) = unserialize(
+            list($pagination, $articles, $related) = unserialize(
                 utf8_decode(
                     $cm->getUrlContent(
                         $wsUrl . '/ws/frontpages/allcontentblog/' . $slug . '/' . $page,
@@ -132,6 +133,7 @@ class CategoryController extends FrontendController
 
             $this->view->assign([
                 'articles'   => $articles,
+                'related'    => $related,
                 'category'   => $category,
                 'pagination' => $pagination
             ]);
@@ -145,7 +147,7 @@ class CategoryController extends FrontendController
             'cache_id'       => $cacheId,
             'x-cache-for'    => '+3 hour',
             'x-cacheable'    => true,
-            'x-tags'         => 'ext-category,' . $slug . ',' . $page,
+            'x-tags'         => 'ext-category,' . $slug . ',' . $page
         ]);
     }
 
@@ -385,8 +387,6 @@ class CategoryController extends FrontendController
     protected function hydrateContents($contents, $params)
     {
         foreach ($contents as &$content) {
-            $content->loadRelatedContents($params['category']->name);
-
             if (isset($content->img1)
                 && !empty($content->img1)
                 && array_key_exists($content->img1, $params['o_media'])

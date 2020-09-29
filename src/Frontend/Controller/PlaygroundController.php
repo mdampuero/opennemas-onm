@@ -78,7 +78,7 @@ class PlaygroundController extends Controller
         if (!empty($id)) {
             $widget = $this->get('entity_repository')->find('Widget', $id);
 
-            return $widget->render($params);
+            return $this->get('frontend.renderer')->render($widget, $params);
         }
 
         $criteria = [

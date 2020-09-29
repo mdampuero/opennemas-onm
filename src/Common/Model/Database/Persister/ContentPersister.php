@@ -349,7 +349,7 @@ class ContentPersister extends BasePersister
         }
 
         // Remove old relations
-        $this->removeRelations($id, array_values($relations));
+        $this->removeRelations($id);
 
         // Update relations
         $this->saveRelations($id, $relations);
@@ -362,7 +362,7 @@ class ContentPersister extends BasePersister
      */
     protected function removeRelations($id)
     {
-        $sql      = "delete from related_contents where pk_content1 = ?";
+        $sql      = "delete from content_content where source_id = ?";
         $params[] = $id['pk_content'];
         $types[]  = \PDO::PARAM_INT;
 
@@ -381,26 +381,34 @@ class ContentPersister extends BasePersister
             return;
         }
 
-        $sql = "replace into related_contents"
-            . "(pk_content1, pk_content2, relationship, position) values "
+        $sql = "insert into content_content"
+            . "(source_id, target_id, type, content_type_name, caption, position) values "
             . str_repeat(
-                '(?,?,?,?),',
+                '(?,?,?,?,?,?),',
                 count($relations)
             );
 
+        $id     = array_values($id);
         $sql    = rtrim($sql, ',');
         $params = [];
         $types  = [];
         foreach ($relations as $value) {
-            $params = array_merge(
-                $params,
-                array_merge(array_values($id), array_values($value))
-            );
+            $params = array_merge($params, array_merge($id, [
+                (int) $value['target_id'],
+                $value['type'],
+                $value['content_type_name'],
+                empty($value['caption']) ? null : $value['caption'],
+                (int) $value['position'],
+            ]));
 
-            $types = array_merge(
-                $types,
-                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_INT ]
-            );
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                empty($value['caption']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                \PDO::PARAM_INT
+            ]);
         }
 
         $this->conn->executeQuery($sql, $params, $types);

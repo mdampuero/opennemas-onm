@@ -258,9 +258,10 @@ class ArticlesController extends Controller
         }
 
         $params = [
-            'contentId' => $article->id,
             'article'   => $article,
             'content'   => $article,
+            'contentId' => $article->id,
+            'item'      => $article,
             'tags'      => $tags
         ];
 

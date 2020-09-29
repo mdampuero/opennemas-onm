@@ -88,14 +88,6 @@ class FrontpagesController extends Controller
                 }
             }
 
-            // Get related content ids
-            $relatedMap = $this->get('related_contents')
-                ->getRelatedContents($ids, $categoryId);
-
-            foreach ($relatedMap as $ids) {
-                $relatedIds = array_merge($relatedIds, $ids);
-            }
-
             $relatedIds = array_unique($relatedIds);
             $date       = date('Y-m-d H:i:s');
 
@@ -140,18 +132,6 @@ class FrontpagesController extends Controller
                 ) {
                     $content->obj_video = $related[$content->fk_video];
                 }
-
-                if (array_key_exists($content->pk_content, $relatedMap)) {
-                    $content->related_contents = [];
-
-                    $keys = $relatedMap[$content->pk_content];
-
-                    foreach ($keys as $key) {
-                        if (array_key_exists($key, $related)) {
-                            $content->related_contents[] = $related[$key];
-                        }
-                    }
-                }
             }
 
             $layout = $this->get('orm.manager')
@@ -187,78 +167,6 @@ class FrontpagesController extends Controller
             'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
             'x-cacheable'    => true,
             'x-tags'         => 'frontpage-page,' . $categoryName
-        ]);
-    }
-
-    /**
-     * Displays an external frontpage.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function extShowAction(Request $request)
-    {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
-        $wsUrl = $this->get('core.helper.instance_sync')
-            ->getSyncUrl($categoryName);
-
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $cm = new \ContentManager();
-
-        // Setup templating cache layer
-        $this->view->setConfig('frontpages');
-        $cacheID = $this->view->getCacheId('sync', 'frontpage', $categoryName);
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
-        ) {
-            $category = unserialize(
-                $cm->getUrlContent(
-                    $wsUrl . '/ws/categories/object/' . $categoryName,
-                    true
-                )
-            );
-
-            if (empty($category)) {
-                throw new ResourceNotFoundException();
-            }
-
-            // Get all contents for this frontpage
-            $contents = $cm->getUrlContent(
-                $wsUrl . '/ws/frontpages/allcontent/' . $categoryName,
-                true
-            );
-
-            $this->view->assign('column', unserialize(utf8_decode(
-                htmlspecialchars_decode($contents)
-            )));
-
-            // Fetch layout for categories
-            $layout = $cm->getUrlContent($wsUrl . '/ws/categories/layout/' . $categoryName, true);
-
-            if (!$layout) {
-                $layout = 'default';
-            }
-
-            $this->view->assign([ 'layoutFile' => 'layouts/' . $layout . '.tpl' ]);
-        }
-
-        $ads = unserialize($cm->getUrlContent(
-            $wsUrl . '/ws/ads/frontpage/' . $category->id,
-            true
-        ));
-
-        return $this->render('frontpage/frontpage.tpl', [
-            'advertisements' => $ads,
-            'cache_id'       => $cacheID,
-            'x-tags'         => 'frontpage-page,frontpage-page-external,' . $categoryName,
-            'x-cache-for'    => '+3 hour',
-            'x-cacheable'    => true,
         ]);
     }
 

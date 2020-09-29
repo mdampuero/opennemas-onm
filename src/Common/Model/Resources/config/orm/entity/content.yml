@@ -79,19 +79,23 @@ orm:
                                     type: integer
                                 category_id:
                                     type: integer
-
                         related_contents:
-                            table: related_contents
+                            table:      content_content
                             source_key: pk_content
-                            target_key: pk_content1
+                            target_key: source_id
                             columns:
-                                pk_content1:
+                                source_id:
                                     type: integer
-                                pk_content2:
+                                target_id:
                                     type: integer
-                                relationship:
+                                type:
+                                    type: string
+                                content_type_name:
+                                    type: string
+                                caption:
+                                    type: string
+                                position:
                                     type: integer
-
                         tags:
                             table: contents_tags
                             source_key: pk_content

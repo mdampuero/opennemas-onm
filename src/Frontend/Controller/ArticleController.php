@@ -73,27 +73,28 @@ class ArticleController extends FrontendController
 
         $cm = new \ContentManager;
 
-        // Get full article
-        $article = $cm->getUrlContent($wsUrl . '/ws/articles/complete/' . $dirtyID, true);
+        list($article, $related) = unserialize($cm->getUrlContent(
+            $wsUrl . '/ws/articles/complete/' . $dirtyID,
+            true
+        ));
 
-        if (is_string($article)) {
-            $article = @unserialize($article);
-        }
-
-        if (empty($article) ||
-            (!empty($article->error) && !empty($article->error->code) && $article->error->code === 404)
-        ) {
+        if (empty($article)) {
             throw new ResourceNotFoundException();
         }
+
+        $this->view->assign([
+            'article'   => $article,
+            'item'      => $article,
+            'content'   => $article,
+            'related'   => $related,
+            'o_content' => $article,
+        ]);
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('sync', 'content', $dirtyID);
 
-        if ($article->content_status != 1
-            || $article->in_litter == 1
-            || !$article->isStarted()
-        ) {
+        if (!$article->isReadyForPublish()) {
             throw new ResourceNotFoundException();
         }
 
@@ -102,16 +103,11 @@ class ArticleController extends FrontendController
         return $this->render('article/article.tpl', [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
-            'article'        => $article,
             'cache_id'       => $cacheID,
-            'content'        => $article,
-            'contentId'      => $article->id,// Used on module_comments.tpl
             'ext'            => 1,
             'photoInt'       => $article->photoInt,
-            'relationed'     => $article->relatedContents,
             'suggested'      => $article->suggested,
             'videoInt'       => $article->videoInt,
-            'o_content'      => $article,
             'x-cacheable'    => true,
             'x-tags'         => 'ext-article,' . $article->id
         ]);
@@ -154,10 +150,9 @@ class ArticleController extends FrontendController
             $params['o_category']->id
         );
 
-        $params['tags']       = $this->getTags($params['content']);
-        $params['relationed'] = $this->getRelated($params['content']);
-        $params['suggested']  = $suggested[0];
-        $params['photos']     = $suggested[1];
+        $params['tags']      = $this->getTags($params['content']);
+        $params['suggested'] = $suggested[0];
+        $params['photos']    = $suggested[1];
 
         $em = $this->get('entity_repository');
 
@@ -190,48 +185,5 @@ class ArticleController extends FrontendController
             $videoInt = $em->find('Video', $params['content']->fk_video2);
             $this->view->assign('videoInt', $videoInt);
         }
-
-        $this->view->assign([
-            'related' => $this->getRelated($params['content']),
-        ]);
-    }
-
-    /**
-     * Returns the list of related contents for an article.
-     *
-     * @param Article $article The article object.
-     *
-     * @return array The list of rellated contents.
-     */
-    protected function getRelated($article)
-    {
-        $relations = $this->get('related_contents')
-            ->getRelations($article->id, 'inner');
-
-        if (empty($relations)) {
-            return [];
-        }
-
-        $em = $this->get('entity_repository');
-
-        $related  = [];
-        $contents = $em->findMulti($relations);
-
-        // Filter out not ready for publish contents.
-        foreach ($contents as $content) {
-            if (!$content->isReadyForPublish()) {
-                continue;
-            }
-
-            if ($content->content_type == 1 && !empty($content->img1)) {
-                $content->photo = $em->find('Photo', $content->img1);
-            } elseif ($content->content_type == 1 && !empty($content->fk_video)) {
-                $content->video = $em->find('Video', $content->fk_video);
-            }
-
-            $related[] = $content;
-        }
-
-        return $related;
     }
 }

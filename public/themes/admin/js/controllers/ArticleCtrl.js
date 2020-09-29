@@ -44,6 +44,7 @@
           created: new Date(),
           fk_author: null,
           params: {},
+          related_contents: [],
           starttime: null,
           summary: '',
           tags: []
@@ -80,6 +81,38 @@
         $scope.dtm = null;
 
         /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The map of related contents and types.
+         *
+         * @type {Object}
+         */
+        $scope.relatedMap = {
+          relatedFrontpage: 'related_frontpage',
+          relatedInner:     'related_inner',
+          relatedHome:      'related_home',
+          albumFrontpage:   'album_frontpage',
+          albumInner:       'album_inner',
+          albumHome:        'album_home',
+        };
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The angular-ui-tree options.
+         *
+         * @type {Object}
+         */
+        $scope.treeOptions = {
+          accept: function(source, target) {
+            return target.$modelValue && target.$modelValue.length > 0 &&
+              target.$modelValue[0].type === source.$modelValue.type;
+          }
+        };
+
+        /**
          * @function build
          * @memberOf ArticleCtrl
          *
@@ -94,10 +127,7 @@
             }
           }
 
-          var keys = [
-            'img1', 'img2', 'fk_video', 'fk_video2', 'relatedFront',
-            'relatedInner', 'relatedHome'
-          ];
+          var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2' ];
 
           for (var i = 0; i < keys.length; i++) {
             if (!$scope.data.extra[keys[i]]) {
@@ -106,6 +136,17 @@
             }
 
             $scope.article[keys[i]] = $scope.data.extra[keys[i]];
+          }
+
+          // Map of related contents localized in the current language
+          $scope.related = $scope.data.extra.related;
+
+          // Build related contents lists
+          for (var type in $scope.relatedMap) {
+            $scope.data[type] = $scope.data.article.related_contents
+              .filter(function(e) {
+                return e.type === $scope.relatedMap[type];
+              });
           }
 
           // Force params to be an object when empty array from server
@@ -190,7 +231,7 @@
          * @description
          *   Executes actions to adapt data from template to the webservice.
          */
-        $scope.clean = function(article, preview) {
+        $scope.clean = function(article) {
           var data = angular.copy(article);
 
           var keys = [ 'img1', 'img2', 'fk_video', 'fk_video2' ];
@@ -201,29 +242,6 @@
             }
 
             data[keys[k]] = article[keys[k]].pk_content;
-          }
-
-          keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
-
-          for (var l = 0; l < keys.length; l++) {
-            if (!article[keys[l]]) {
-              continue;
-            }
-
-            data[keys[l]] = [];
-
-            for (var m = 0; m < article[keys[l]].length; m++) {
-              var item = article[keys[l]][m].pk_content;
-
-              if (preview) {
-                item = {
-                  id: article[keys[l]][m].pk_content,
-                  type: article[keys[l]][m].content_type_name
-                };
-              }
-
-              data[keys[l]].push(item);
-            }
           }
 
           keys = [
@@ -320,6 +338,23 @@
         };
 
         /**
+         * @function getRelatedIds
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Returns the list of ids from the list of related contents.
+         *
+         * @param {Array} related The list of related contents.
+         *
+         * @return {Array} The list of ids.
+         */
+        $scope.getRelatedIds = function(related) {
+          return related.map(function(e) {
+            return e.target_id;
+          });
+        };
+
+        /**
          * @function init
          * @memberOf ArticleListCtrl
          *
@@ -346,27 +381,51 @@
          *   Configures the localization for the current form.
          */
         $scope.localize = function() {
-          var lz   = localizer.get($scope.data.extra.locale);
-          var keys = [ 'relatedFront', 'relatedInner', 'relatedHome' ];
+          var lz = localizer.get($scope.data.extra.locale);
 
           // Localize original items
           $scope.article = lz.localize($scope.data.article,
             $scope.data.extra.keys, $scope.config.locale.selected);
 
           $scope.config.linkers.article = linker.get($scope.data.extra.keys,
-            $scope.config.locale.default, $scope, true, keys);
+            $scope.config.locale.default, $scope, true);
 
           $scope.config.linkers.article.setKey($scope.config.locale.selected);
           $scope.config.linkers.article.link($scope.data.article, $scope.article);
 
-          for (var i = 0; i < keys.length; i++) {
-            if (!$scope.article[keys[i]]) {
-              continue;
-            }
-
-            $scope.data.article[keys[i]] = lz.localize($scope.data.extra[keys[i]],
-              [ 'title' ], $scope.config.locale);
+          // Localize related contents
+          $scope.related = {};
+          for (var i in $scope.data.extra.related) {
+            $scope.related[i] = $scope.localizeRelated(
+              $scope.data.extra.related[i], i);
           }
+        };
+
+        /**
+         * @function localizeItem
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Localizes a photo in the array of photos.
+         *
+         * @param {Object}  original The photo to localize.
+         * @param {Integer} index    The index in the array of photos to use as
+         *                           linker name.
+         */
+        $scope.localizeRelated = function(original, index) {
+          var localized = localizer.get($scope.config.locale).localize(original,
+            [ 'title' ], $scope.config.locale);
+
+          // Initialize linker
+          delete $scope.config.linkers[index];
+          $scope.config.linkers[index] = linker.get([ 'title' ],
+            $scope.config.locale.default, $scope);
+
+          // Link original and localized items
+          $scope.config.linkers[index].setKey($scope.config.locale.selected);
+          $scope.config.linkers[index].link(original, localized);
+
+          return localized;
         };
 
         /**
@@ -382,7 +441,7 @@
         $scope.preview = function(previewUrl, getPreviewUrl) {
           $scope.flags.preview = true;
 
-          var data = $scope.clean($scope.article, true);
+          var data = $scope.clean($scope.article);
 
           data = cleaner.clean(data);
 
@@ -676,21 +735,72 @@
             }
           }, true);
 
-        // Sets relatedInner equals to relatedFront
-        $scope.$watch('data.article.relatedFront', function(nv, ov) {
-          if ($scope.data && (!$scope.data.article.relatedInner ||
-              angular.equals(ov, $scope.data.article.relatedInner))) {
-            $scope.data.article.relatedInner = angular.copy(nv);
+        // Updates related contents after insertion via content picker
+        $scope.$watch('[ relatedFrontpage, relatedInner, relatedHome, ' +
+            'albumFrontpage, albumInner, albumHome ]', function(nv, ov) {
+          for (var i = 0; i < nv.length; i++) {
+            if (nv[i] && nv[i].length > 0 && !angular.equals(nv[i], ov[i])) {
+              var name = Object.keys($scope.relatedMap)[i];
+              var type = $scope.relatedMap[name];
+
+              for (var j = 0; j < nv[i].length; j++) {
+                $scope.data[name].push({
+                  target_id: nv[i][j].pk_content,
+                  caption: null,
+                  content_type_name: nv[i][j].content_type_name,
+                  type: type
+                });
+
+                // Add content to unlocalized map of contents
+                if (!$scope.data.extra.related[nv[i][j].pk_content]) {
+                  $scope.data.extra.related[nv[i][j].pk_content] = nv[i][j];
+                }
+
+                // Add content to localized map of contents
+                if (!$scope.related[nv[i][j].pk_content]) {
+                  $scope.related[nv[i][j].pk_content] =
+                    $scope.localizeRelated(nv[i][j], nv[i][j].pk_content);
+                }
+              }
+
+              $scope[name] = [];
+            }
           }
         }, true);
 
-        // TODO: Remove when no target="_blank" in URI for external
-        $scope.$watch('article.uri', function(nv, ov) {
-          if (nv !== ov) {
-            if (typeof $scope.article.uri === 'string') {
-              $scope.article.uri = $scope.article.uri
-                .replace('" target="_blank', '');
-            }
+        // Updates data to send to server when related contents change
+        $scope.$watch('[ data.relatedFrontpage, data.relatedHome, ' +
+            'data.relatedInner, data.albumFrontpage, data.albumInner, ' +
+            'data.albumHome ]', function(nv) {
+          if (!$scope.data || !$scope.data.article) {
+            return;
+          }
+
+          $scope.data.article.related_contents = nv[0].concat(nv[1])
+            .concat(nv[2]).concat(nv[3]).concat(nv[4]).concat(nv[5]);
+        }, true);
+
+        // Mirror related contents in inner when frontpage changes
+        $scope.$watch('data.relatedFrontpage', function(nv, ov) {
+          if (!$scope.data) {
+            return;
+          }
+
+          var sourceIds = !angular.isArray(ov) ? [] : ov.map(function(e) {
+            return e.target_id;
+          });
+
+          var targetIds = !angular.isArray($scope.data.relatedInner) ? [] :
+            $scope.data.relatedInner.map(function(e) {
+              return e.target_id;
+            });
+
+          if (angular.equals(sourceIds, targetIds)) {
+            $scope.data.relatedInner = nv.map(function(e) {
+              e = angular.copy(e);
+              e.type = 'related_inner';
+              return e;
+            });
           }
         }, true);
 

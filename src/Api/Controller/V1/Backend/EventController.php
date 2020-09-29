@@ -63,13 +63,16 @@ class EventController extends ContentController
             }
 
             foreach ($element->related_contents as $relation) {
-                if ($relation['relationship'] !== 'cover') {
+                if ($relation['type'] !== 'cover') {
                     continue;
                 }
 
-                $photo = $em->find('Photo', $relation['pk_content2']);
+                $photo = $em->find('Photo', $relation['target_id']);
 
-                $extra[$relation['pk_content2']] = \Onm\StringUtils::convertToUtf8($photo);
+                if (!empty($photo)) {
+                    $extra[$relation['target_id']] =
+                        \Onm\StringUtils::convertToUtf8($photo);
+                }
             }
         }
 

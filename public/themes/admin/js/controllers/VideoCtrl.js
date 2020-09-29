@@ -71,6 +71,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.routes = {
       createItem: 'api_v1_backend_video_create_item',
       getItem:    'api_v1_backend_video_get_item',
+      list:       'backend_videos_list',
       public:     'frontend_video_show',
       redirect:   'backend_video_show',
       saveItem:   'api_v1_backend_video_save_item',

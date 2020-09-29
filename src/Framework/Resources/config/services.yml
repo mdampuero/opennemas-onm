@@ -36,11 +36,6 @@ services:
         arguments: [ '@router' ]
         public: true
 
-    related_contents:
-        class: RelatedContent
-        arguments: [ '@orm.connection.instance', '@entity_repository', '@cache', '%cache_prefix%' ]
-        public: true
-
     core.messenger:
         class: Framework\Messenger\Messenger
         public: true

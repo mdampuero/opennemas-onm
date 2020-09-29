@@ -645,45 +645,6 @@ class FrontendController extends Controller
     }
 
     /**
-     * Returns the list of related contents for a content.
-     *
-     * @param Content $content The content object.
-     *
-     * @return array The list of rellated contents.
-     */
-    protected function getRelated($content)
-    {
-        $relations = $this->get('related_contents')
-            ->getRelations($content->id, 'inner');
-
-        if (empty($relations)) {
-            return [];
-        }
-
-        $em = $this->get('entity_repository');
-
-        $related  = [];
-        $contents = $em->findMulti($relations);
-
-        // Filter out not ready for publish contents.
-        foreach ($contents as $content) {
-            if (!$content->isReadyForPublish()) {
-                continue;
-            }
-
-            if ($content->fk_content_type == 1 && !empty($content->img1)) {
-                $content->photo = $em->find('Photo', $content->img1);
-            } elseif ($content->fk_content_type == 1 && !empty($content->fk_video)) {
-                $content->video = $em->find('Video', $content->fk_video);
-            }
-
-            $related[] = $content;
-        }
-
-        return $related;
-    }
-
-    /**
      * Returns the list of tags from a list of contents.
      *
      * @param array $contents The list of contents to fetch tags from.
