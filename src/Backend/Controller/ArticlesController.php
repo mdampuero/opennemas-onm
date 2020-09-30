@@ -232,9 +232,10 @@ class ArticlesController extends Controller
         $data = array_merge(
             $request->request->filter('article'),
             [
-                'pk_article'   => 0,
-                'id'           => 0,
-                'with_comment' => 0
+                'pk_article'     => 0,
+                'id'             => 0,
+                'with_comment'   => 0,
+                'content_status' => 1
             ]
         );
 
