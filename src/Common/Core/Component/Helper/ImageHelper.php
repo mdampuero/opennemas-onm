@@ -61,10 +61,9 @@ class ImageHelper extends FileHelper
     public function generatePath(\SplFileInfo $file, \DateTime $date) : string
     {
         return preg_replace('/\/+/', '/', sprintf(
-            '%s/%s/%s/%s/%s%05d.%s',
+            '%s/%s/%s/%s%s.%s',
             $this->publicDir,
             $this->getPathForFile(),
-            'images/',
             $date->format('Y/m/d'),
             $date->format('YmdHis'),
             substr(gettimeofday()['usec'], 0, 5),

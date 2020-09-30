@@ -92,7 +92,7 @@ class Instance extends Entity
      */
     public function getImagesShortPath()
     {
-        return $this->getMediaShortPath();
+        return $this->getMediaShortPath() . '/images';
     }
 
     /**

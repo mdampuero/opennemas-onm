@@ -98,7 +98,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $instance = new Instance([ 'internal_name' => 'garply' ]);
 
-        $this->assertEquals('/media/garply', $instance->getImagesShortPath());
+        $this->assertEquals('/media/garply/images', $instance->getImagesShortPath());
     }
 
     /**
