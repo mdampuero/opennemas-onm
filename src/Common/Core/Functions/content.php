@@ -123,7 +123,7 @@ function get_featured_media($item, $type)
         }
 
         if (!empty($featured)) {
-            if (get_type($featured) === 'video') {
+            if (get_type($featured) === 'video' && $type === 'frontpage') {
                 return get_featured_media($featured, 'frontpage');
             }
 

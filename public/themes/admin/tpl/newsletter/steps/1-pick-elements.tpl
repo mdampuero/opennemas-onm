@@ -49,7 +49,7 @@
         </div>
         <div class="grid-body">
           <div class="form-group">
-              <input type="text" name="title" id="title" value="{$newsletter->title|default:$name|escape:"html"}" required class="form-control" placeholder="{$name}"/>
+            <input type="text" name="title" id="title" value="{$newsletter->title|default:$name|escape:"html"}" required class="form-control" placeholder="{$name}"/>
           </div>
         </div>
       </div>

@@ -29,6 +29,7 @@ class EntityManager extends BaseManager
     const ORM_CONTENT_TYPES = [
         'kiosko', 'photo'
     ];
+
     /**
      * Initializes the entity manager.
      *

@@ -84,6 +84,14 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_photo_path when empty photo provided.
+     */
+    public function testGetPhotoPathWhenEmpty()
+    {
+        $this->assertNull(get_photo_path(null));
+    }
+
+    /**
      * Tests get_photo_path when no transform provided.
      */
     public function testGetPhotoPathWhenNoTransform()
