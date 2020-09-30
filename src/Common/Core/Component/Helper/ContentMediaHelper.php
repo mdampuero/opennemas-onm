@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Common\Model\Entity\Content;
 use Api\Exception\GetItemException;
 
 class ContentMediaHelper
@@ -181,10 +182,7 @@ class ContentMediaHelper
                 $mediaObject->width  = $information['width'];
                 $mediaObject->height = $information['height'];
             } catch (\Exception $e) {
-                $this->container->get('error.log')->error(sprintf(
-                    'Error trying to get image information: %s',
-                    $e->getMessage()
-                ));
+                return null;
             }
         }
 
@@ -213,7 +211,7 @@ class ContentMediaHelper
             }
 
             $photo = $this->container->get('api.service.photo')
-                ->getItem('Photo', $author->avatar_img_id);
+                ->getItem($author->avatar_img_id);
 
             if (empty($photo)) {
                 return null;
@@ -241,7 +239,9 @@ class ContentMediaHelper
         $photo = null;
         try {
             if (!empty($content->img2)) {
-                $photo = $this->container->get('api.service.photo')->getItem($content->img2);
+                $photo = $this->container->get('api.service.photo')
+                    ->getItem($content->img2);
+
                 if (!empty($photo)) {
                     $photo->url = $this->mediaUrl . $photo->path;
                 }

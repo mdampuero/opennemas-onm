@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\ContentMediaHelper;
 use Common\Core\Component\Helper\ImageHelper;
+use Common\Core\Component\Helper\InstanceHelper;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\User;
@@ -63,7 +64,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         if (!defined('MEDIA_IMG_ABSOLUTE_URL')) {
-            define('MEDIA_IMG_ABSOLUTE_URL', 'http://test.com/media/test/images');
+            define('MEDIA_IMG_ABSOLUTE_URL', 'http://test.com/media/test');
         }
 
         if (!defined('MEDIA_DIR')) {
@@ -219,9 +220,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $articleInner       = new \Article();
         $articleInner->img2 = 123;
 
-        $articleFront       = new \Article();
-        $articleFront->img2 = 123;
-
         // Video object
         $video        = new \Video();
         $video->thumb = '/media/opennemas/images/2016/12/01/2016120118435298511.jpg';
@@ -232,15 +230,15 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         // Photo object
         $photo       = new Content();
         $photo->path = '/route/to/file.name';
+        $photo->url  = MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name';
 
         $this->em->expects($this->at(0))->method('find')
             ->with('Video', 123)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
             ->with('Video', 123)->willReturn($extVideo);
-        $this->em->expects($this->at(2))->method('find')
-            ->with('Photo', 123)->willReturn($photo);
-        $this->em->expects($this->at(3))->method('find')
-            ->with('Photo', 123)->willReturn($photo);
+
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with(123)->willReturn($photo);
 
         $method = new \ReflectionMethod($this->helper, 'getMediaObjectForArticle');
         $method->setAccessible(true);
@@ -261,12 +259,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
             $innerMedia->url
-        );
-
-        $frontMedia = $method->invokeArgs($this->helper, [ $articleFront ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $frontMedia->url
         );
     }
 
@@ -309,7 +301,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $opinion->author = new User();
         $opinion->img2   = 123;
 
-        $photo      = new \Photo();
+        $photo      = new Content();
         $photo->url = MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name';
 
         $mediaHelper = $this
@@ -512,16 +504,15 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $opinion            = new \Opinion();
         $opinion->fk_author = 5;
 
-        $photo            = new \Photo();
-        $photo->path_file = '/route/to/';
-        $photo->name      = 'file.name';
-        $photo->path_img  = '/route/to/file.name';
+        $photo       = new Content();
+        $photo->path = '/images/route/to/file.name';
+
 
         $this->as->expects($this->any())->method('getItem')
             ->with(5)->willReturn($author);
 
-        $this->em->expects($this->any())->method('find')
-            ->with('Photo', 364)->willReturn($photo);
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with(364)->willReturn($photo);
 
         $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
         $method->setAccessible(true);
@@ -577,8 +568,8 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->as->expects($this->any())->method('getItem')
             ->with(433)->willReturn($author);
 
-        $this->em->expects($this->any())->method('find')
-            ->with('Photo', 280)->willReturn(null);
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with(280)->willReturn(null);
 
         $method = new \ReflectionMethod($this->helper, 'getAuthorPhoto');
         $method->setAccessible(true);
@@ -610,13 +601,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     {
         // Image inner
         $inner       = new \Content();
-        $inner->img1 = 0;
         $inner->img2 = 123;
-
-        // Image front
-        $front       = new \Content();
-        $front->img1 = 123;
-        $front->img2 = 0;
 
         // Photo object
         $photo       = new Content();
@@ -630,15 +615,10 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $innerMediaObject = $method->invokeArgs($this->helper, [ $inner ]);
+
         $this->assertEquals(
             MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
             $innerMediaObject->url
-        );
-
-        $frontMediaObject = $method->invokeArgs($this->helper, [ $front ]);
-        $this->assertEquals(
-            MEDIA_IMG_ABSOLUTE_URL . '/route/to/file.name',
-            $frontMediaObject->url
         );
 
         $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
