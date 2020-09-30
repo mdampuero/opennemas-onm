@@ -383,7 +383,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $content->starttime = null;
         $content->endtime   = null;
-        $this->assertFalse($content->isInTime());
+        $this->assertTrue($content->isInTime());
 
         $content->starttime = null;
         $content->endtime   = '2012-08-23 03:03:12';
@@ -391,7 +391,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $content->starttime = null;
         $content->endtime   = '3012-08-21 03:03:12';
-        $this->assertFalse($content->isInTime());
+        $this->assertTrue($content->isInTime());
 
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '2012-08-23 03:03:12';
