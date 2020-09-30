@@ -54,7 +54,7 @@ class PhotoService extends ContentService
                 'created'     => $date->format('Y-m-d H:i:s'),
                 'changed'     => $date->format('Y-m-d H:i:s'),
                 'description' => $originalFilename,
-                'path'        => $date->format('/Y/m/d/') . $filename,
+                'path'        => '/images' . $date->format('/Y/m/d/') . $filename,
                 'title'       => $filename,
                 'slug'        => $filename,
             ], $data, $ih->getInformation($path));
