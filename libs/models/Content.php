@@ -1243,15 +1243,27 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Check if a content is in time for publishing.
+     * Check if a content is in time for publishing
      *
-     * @return bool
+     * @param string $now the current time
+     *
+     * @return boolean
      */
-    public function isInTime()
+    public function isInTime($now = null)
     {
-        return $this->isScheduled()
-            && !$this->isDued()
-            && !$this->isPostponed();
+        $now = new \DateTime($now);
+
+        $dued = (
+            !empty($this->endtime)
+            && $now->getTimeStamp() > strtotime($this->endtime)
+        );
+
+        $postponed = (
+            !empty($this->starttime)
+            && $now->getTimeStamp() < strtotime($this->starttime)
+        );
+
+        return (!$dued && !$postponed);
     }
 
     /**
