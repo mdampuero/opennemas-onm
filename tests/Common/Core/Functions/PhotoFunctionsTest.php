@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\Core\Components\Functions;
 
+use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
 
 /**
@@ -37,6 +38,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getBaseUrl' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -71,6 +76,8 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             case 'router':
                 return $this->router;
 
+            case 'core.instance':
+                return $this->instance;
             default:
                 return null;
         }
@@ -127,7 +134,7 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull(get_photo_width($this->content));
 
-        $this->content->size = '222';
+        $this->content->width = '222';
         $this->assertEquals('222', get_photo_width($this->content));
     }
 
@@ -138,7 +145,7 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull(get_photo_height($this->content));
 
-        $this->content->size = '222';
+        $this->content->height = '222';
         $this->assertEquals('222', get_photo_height($this->content));
     }
 
@@ -147,10 +154,11 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoMimeType()
     {
-        $this->assertNull(get_photo_mime_type($this->content));
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://glorp.com/pp.jpg');
 
         $this->content->path = '/glorp/xyzzy/foobar.jpg';
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_mime_type($this->content));
+        $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
     }
 
     /**
@@ -158,9 +166,9 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoMimeTypeWhenExternal()
     {
-        $this->assertNull(get_photo_mime_type($this->content));
-
-        $this->content->path = '/glorp/xyzzy/foobar.jpg';
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_mime_type($this->content));
+        $this->content->path = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://glorp.com/ppp.jpg');
+        $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
     }
 }
