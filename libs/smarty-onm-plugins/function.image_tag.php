@@ -17,11 +17,11 @@ function smarty_function_image_tag($params, &$smarty)
 
     $src = $params['src'];
 
-    $baseUrl = INSTANCE_MEDIA . 'images';
+    $baseUrl = INSTANCE_MEDIA;
     if (preg_match('@http(s)?://@', $src)) {
         $baseUrl = '';
     } elseif (array_key_exists('common', $params) && $params['common'] == "1") {
-        $baseUrl = SS . "assets" . SS . "images" . SS;
+        $baseUrl = SS . "assets" . SS;
     } elseif (array_key_exists('bundle', $params)) {
         $baseUrl = SS . "bundles" . SS . $params['bundle'] . SS;
     } elseif (array_key_exists('base_url', $params)) {
