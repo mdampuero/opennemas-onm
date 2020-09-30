@@ -1245,13 +1245,11 @@ class Content implements \JsonSerializable, CsvSerializable
     /**
      * Check if a content is in time for publishing
      *
-     * @param string $now the current time
-     *
      * @return boolean
      */
-    public function isInTime($now = null)
+    public function isInTime()
     {
-        $now = new \DateTime($now);
+        $now = new \DateTime();
 
         $dued = (
             !empty($this->endtime)
