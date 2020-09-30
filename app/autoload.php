@@ -52,7 +52,7 @@ define('BASE_URL', '/');
 define('ADMIN_DIR', 'admin');
 define('SITE_URL', $protocol . SITE . BASE_URL);
 
-define('IMG_DIR', 'images');
+define('IMG_DIR', '');
 define('FILE_DIR', 'files');
 define('ITEMS_PAGE', '20'); // TODO: delete from application
 
