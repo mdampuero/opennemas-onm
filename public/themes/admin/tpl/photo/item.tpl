@@ -76,7 +76,7 @@
             {t}Original{/t}
           </strong>
           <span>
-            <a class="badge badge-default text-bold" href="{$smarty.const.INSTANCE_MEDIA}images[% extra.paths.photo + item.path %]" target="_blank">
+            <a class="badge badge-default text-bold" href="{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" target="_blank">
               <i class="fa fa-external-link m-r-5"></i>
               {t}Link{/t}
             </a>

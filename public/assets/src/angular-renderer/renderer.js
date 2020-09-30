@@ -36,8 +36,7 @@
         this.renderImage = function(image, align) {
           var alt   = '';
           var align = '';
-          var html  = '<img[align] src="' + instanceMedia + 'images' +
-            image.path + '"[alt]>';
+          var html  = '<img[align] src="' + instanceMedia + image.path + '"[alt]>';
 
           if (image.description) {
             alt = ' alt="' + image.description + '"';

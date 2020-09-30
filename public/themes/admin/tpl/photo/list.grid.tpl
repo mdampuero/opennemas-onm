@@ -68,7 +68,7 @@
           </li>
         {/is_module_activated}
         <li>
-          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}images[% selected.lastSelected.path %]" target="_blank">
+          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}[% selected.lastSelected.path %]" target="_blank">
             <i class="fa fa-external-link m-r-5"></i>
             {t}Link{/t}
           </a>

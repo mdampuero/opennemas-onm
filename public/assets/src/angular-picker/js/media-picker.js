@@ -1114,7 +1114,7 @@
           $scope.enhance = !$scope.enhance;
           var photoEditor = new window.OnmPhotoEditor({
             container: 'photoEditor',
-            image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path,
+            image: $window.instanceMedia + $scope.selected.lastSelected.path,
             closeCallBack: $scope.uploadMediaImg,
             maximunSize: { width: 800, height: 600 }
           }, photoEditorTranslations);

@@ -83,7 +83,7 @@
          * @name     property
          * @type     {String}
          */
-        this.imageFolder = 'images';
+        this.imageFolder = '';
 
         /**
          * @function generateUrl

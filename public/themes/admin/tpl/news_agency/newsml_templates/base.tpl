@@ -83,7 +83,7 @@
                         <rights.owner>{$content->author->name}</rights.owner>
                         {if $content->author->photo}
                           <rights.owner.photo>
-                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path}
+                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{get_photo_path($content->author->photo)}
                           </rights.owner.photo>
                         {/if}
                         <rights.owner.url>
@@ -152,15 +152,15 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path}">
+                <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path($photo)}">
                   <MediaType FormalName="PhotoFront" />
-                  <MimeType FormalName="image/{$photo->type_img}" />
+                  <MimeType FormalName="{get_photo_mime_type($photo)}" />
                   <Characteristics>
-                    <SizeInBytes>{$photo->size*1024}</SizeInBytes>
+                    <SizeInBytes>{get_photo_size($photo)*1024}</SizeInBytes>
                     <Property FormalName="Onm_Filename" Value="{$photo->name}" />
-                    <Property FormalName="Height" Value="{$photo->height}" />
+                    <Property FormalName="Height" Value="{get_photo_height($photo)}" />
                     <Property FormalName="PixelDepth" Value="24" />
-                    <Property FormalName="Width" Value="{$photo->width}" />
+                    <Property FormalName="Width" Value="{get_photo_width($photo)}" />
                   </Characteristics>
                 </ContentItem>
               </NewsComponent>
@@ -225,15 +225,15 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.file">
                 <Role FormalName="Main" />
                 <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path}">
+                <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path($photoInner)}">
                   <MediaType FormalName="PhotoInner" />
-                  <MimeType FormalName="image/{$photoInner->type_img}" />
+                  <MimeType FormalName="{get_photo_mime_type($photoInner)}" />
                   <Characteristics>
-                    <SizeInBytes>{$photoInner->size*1024}</SizeInBytes>
+                    <SizeInBytes>{get_photo_size($photoInner)*1024}</SizeInBytes>
                     <Property FormalName="Onm_Filename" Value="{$photoInner->name}" />
-                    <Property FormalName="Height" Value="{$photoInner->height}" />
+                    <Property FormalName="Height" Value="{get_photo_height($photoInner)}" />
                     <Property FormalName="PixelDepth" Value="24" />
-                    <Property FormalName="Width" Value="{$photoInner->width}" />
+                    <Property FormalName="Width" Value="{get_photo_width($photoInner)}" />
                   </Characteristics>
                 </ContentItem>
               </NewsComponent>
@@ -305,15 +305,15 @@
                 <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
-                  <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path}">
+                  <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path($photo)}">
                     <MediaType FormalName="Photo" />
-                    <MimeType FormalName="image/{$photo->type_img}" />
+                    <MimeType FormalName="{get_photo_mime_type($photo)}" />
                     <Characteristics>
-                      <SizeInBytes>{$photo->size*1024}</SizeInBytes>
+                      <SizeInBytes>{get_photo_size($photo)*1024}</SizeInBytes>
                       <Property FormalName="Onm_Filename" Value="{$photo->title}" />
-                      <Property FormalName="Height" Value="{$photo->height}" />
+                      <Property FormalName="Height" Value="{get_photo_height($photo)}" />
                       <Property FormalName="PixelDepth" Value="24" />
-                      <Property FormalName="Width" Value="{$photo->width}" />
+                      <Property FormalName="Width" Value="{get_photo_width($photo)}" />
                     </Characteristics>
                   </ContentItem>
                 </NewsComponent>

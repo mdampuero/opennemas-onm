@@ -602,7 +602,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content = new \Content();
 
         $content->content_type_name = 'photo';
-        $content->path              = 'route/to/photo.file.name';
+        $content->path              = 'images/route/to/photo.file.name';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForPhoto');
         $method->setAccessible(true);
