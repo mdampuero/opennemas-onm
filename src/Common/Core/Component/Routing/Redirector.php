@@ -94,7 +94,7 @@ class Redirector
      */
     public function getUrl($source, $contentType = [])
     {
-        if (empty($source)) {
+        if (is_null($source) || $source === '') {
             throw new \InvalidArgumentException();
         }
 
