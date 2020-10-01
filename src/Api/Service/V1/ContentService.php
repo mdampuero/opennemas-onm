@@ -18,12 +18,7 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
-            $currentUserId = $this->container->get('core.user')->id ?? null;
-
-            $data['fk_user_last_editor'] = $currentUserId;
-            $data['fk_publisher']        = $currentUserId;
-        }
+        $data = $this->parseData($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
         return parent::createItem($data);
     }
@@ -64,11 +59,7 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
-            $currentUserId = $this->container->get('core.user')->id ?? null;
-
-            $data['fk_user_last_editor'] = $currentUserId;
-        }
+        $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
 
         parent::patchItem($id, $data);
     }
@@ -80,11 +71,7 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
-            $currentUserId = $this->container->get('core.user')->id ?? null;
-
-            $data['fk_user_last_editor'] = $currentUserId;
-        }
+        $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
 
         return parent::patchList($ids, $data);
     }
@@ -96,12 +83,28 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
-            $currentUserId = $this->container->get('core.user')->id ?? null;
-
-            $data['fk_user_last_editor'] = $currentUserId;
-        }
+        $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
 
         parent::updateItem($id, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function parseData($data, $userFields = null)
+    {
+        if ($this->container->get('core.security')->hasPermission('MASTER')
+            || empty($userFields)
+        ) {
+            return $data;
+        }
+
+        $currentUserId = $this->container->get('core.user')->id ?? null;
+
+        foreach ($userFields as $field) {
+            $data[$field] = $currentUserId;
+        }
+
+        return $data;
     }
 }

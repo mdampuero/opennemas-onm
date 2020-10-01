@@ -105,8 +105,7 @@ class OrmService implements Service
     public function createItem($data)
     {
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
+            $data = $this->parseData($data);
 
             $item = new $this->class($data);
 
@@ -325,8 +324,7 @@ class OrmService implements Service
     public function patchItem($id, $data)
     {
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify($data);
+            $data = $this->parseData($data);
 
             $item = $this->getItem($id);
 
@@ -353,7 +351,7 @@ class OrmService implements Service
             throw new PatchListException('Invalid ids', 400);
         }
 
-        $data = $this->em->getConverter($this->entity)->objectify($data);
+        $data = $this->parseData($data);
 
         try {
             $response = $this->getListByIds($ids);
@@ -428,8 +426,7 @@ class OrmService implements Service
     public function updateItem($id, $data)
     {
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify($data);
+            $data = $this->parseData($data);
 
             $item = $this->getItem($id);
             $item->setData($data);
@@ -533,6 +530,19 @@ class OrmService implements Service
         }
 
         return $items;
+    }
+
+    /**
+     * Parses the content data array
+     *
+     * @param array $data The content data array.
+     *
+     * @return array The parsed data array.
+     */
+    protected function parseData($data)
+    {
+        return $this->em->getConverter($this->entity)
+            ->objectify(array_merge($this->defaults, $data));
     }
 
     /**

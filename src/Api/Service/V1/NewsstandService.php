@@ -25,15 +25,7 @@ class NewsstandService extends ContentService
         }
 
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
-
-            if (!$this->container->get('core.security')->hasPermission('MASTER')) {
-                $currentUserId = $this->container->get('core.user')->id ?? null;
-
-                $data['fk_user_last_editor'] = $currentUserId;
-                $data['fk_publisher']        = $currentUserId;
-            }
+            $data = $this->parseData($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
             $item = new $this->class($data);
 
@@ -77,14 +69,7 @@ class NewsstandService extends ContentService
         }
 
         try {
-            $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
-
-            if (!$this->container->get('core.security')->hasPermission('MASTER')) {
-                $currentUserId = $this->container->get('core.user')->id ?? null;
-
-                $data['fk_user_last_editor'] = $currentUserId;
-            }
+            $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
 
             $item = $this->getItem($id);
             $item->setData($data);
