@@ -49,6 +49,17 @@ class WebCrawlingCommandTest extends \PHPUnit\Framework\TestCase
                 [ 'getOption' ]
             );
 
+        $this->output = $this
+            ->getMockForAbstractClass(
+                'Symfony\Component\Console\Output\Output',
+                [],
+                '',
+                true,
+                true,
+                true,
+                [ 'isDebug' ]
+            );
+
         $this->ir = $this->getMockBuilder('Common\Model\Database\Repository\InstanceRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findBy' ])
@@ -84,6 +95,42 @@ class WebCrawlingCommandTest extends \PHPUnit\Framework\TestCase
         }
 
         return null;
+    }
+
+    /**
+     * Tests configureSpider when not in debug mode.
+     */
+    public function testConfigureSpiderNotDebug()
+    {
+        $instance = new Instance([
+            'activated_modules' => [ 'es.openhost.module.frontendSsl' ],
+            'domains'           => [ 'testinstance.dom' ],
+            ]);
+
+        $parameters = [
+            'port'  => 8080,
+            'depth' => 2,
+            'limit' => 1000,
+            'time'  => 1000
+        ];
+
+        $command = new WebCrawlingCommand();
+
+        $method = new \ReflectionMethod($command, 'configureSpider');
+        $method->setAccessible(true);
+
+        $output = new \ReflectionProperty($command, 'output');
+        $output->setAccessible(true);
+        $output->setValue($command, $this->output);
+
+        $this->output->expects($this->at(0))->method('isDebug')
+            ->willReturn(false);
+
+        $this->output->expects($this->at(1))->method('isDebug')
+            ->willReturn(true);
+
+        $this->assertIsObject($method->invokeArgs($command, [ $parameters, $instance ]));
+        $this->assertIsObject($method->invokeArgs($command, [ $parameters, $instance ]));
     }
 
     /**
