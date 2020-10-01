@@ -150,6 +150,9 @@ function get_featured_media_caption($item, $type)
         ], 'album' => [
             'frontpage' => [],
             'inner'     => []
+        ], 'event' => [
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ]
     ];
 
@@ -158,6 +161,12 @@ function get_featured_media_caption($item, $type)
         || !array_key_exists($type, $map[get_type($item)])
     ) {
         return null;
+    }
+
+    if ($item instanceof \Common\Model\Entity\Content
+        && get_type($item) === 'event'
+    ) {
+        return $type === 'inner' ? $item->related_contents[0]['caption'] : $item->related_contents[1]['caption'];
     }
 
     foreach ($map[get_type($item)][$type] as $key) {

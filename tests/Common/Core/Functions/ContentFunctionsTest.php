@@ -278,6 +278,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->content->img1_footer = 'Rhoncus pretium';
 
         $this->assertEquals('Rhoncus pretium', get_featured_media_caption($this->content, 'frontpage'));
+
+        $this->content->content_type_name = 'event';
+
+        get_featured_media_caption($this->content, 'inner');
     }
 
     /**
