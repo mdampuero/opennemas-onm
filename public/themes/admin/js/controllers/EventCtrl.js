@@ -93,11 +93,13 @@
           if (featuredFrontpage) {
             $scope.featuredFrontpage =
               $scope.data.extra.related_contents[featuredFrontpage.target_id];
+            $scope.featuredFrontpageFooter = featuredFrontpage.caption;
           }
 
           if (featuredInner) {
             $scope.featuredInner =
               $scope.data.extra.related_contents[featuredInner.target_id];
+            $scope.featuredInnerFooter = featuredInner.caption;
           }
 
           $scope.item.related_contents = [];
@@ -132,7 +134,7 @@
           }
 
           $scope.item.related_contents.push({
-            caption: null,
+            caption: $scope.featuredFrontpageFooter,
             content_type_name: nv.content_type_name,
             position: 0,
             target_id: nv.pk_content,
@@ -150,10 +152,54 @@
           }
 
           $scope.item.related_contents.push({
-            caption: null,
+            caption: $scope.featuredInnerFooter,
             content_type_name: nv.content_type_name,
             position: 0,
             target_id: nv.pk_content,
+            type: 'featured_inner'
+          });
+        }, true);
+
+        $scope.$watch('featuredFrontpageFooter', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          if ($scope.item.related_contents.length === 0) {
+            return;
+          }
+
+          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
+            return e.type !== 'featured_frontpage';
+          });
+
+          $scope.item.related_contents.push({
+            caption: nv,
+            content_type_name: $scope.featuredFrontpage.content_type_name,
+            position: 0,
+            target_id: $scope.featuredFrontpage.pk_content,
+            type: 'featured_frontpage'
+          });
+        }, true);
+
+        $scope.$watch('featuredInnerFooter', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          if ($scope.item.related_contents.length === 0) {
+            return;
+          }
+
+          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
+            return e.type !== 'featured_inner';
+          });
+
+          $scope.item.related_contents.push({
+            caption: nv,
+            content_type_name: $scope.featuredInner.content_type_name,
+            position: 0,
+            target_id: $scope.featuredInner.pk_content,
             type: 'featured_inner'
           });
         }, true);

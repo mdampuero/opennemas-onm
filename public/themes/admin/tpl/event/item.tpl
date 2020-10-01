@@ -136,8 +136,8 @@
           </div>
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="featuredFrontpage"}
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="featuredInner"}
+      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="featuredFrontpage" footer="featuredFrontpageFooter"}
+      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="featuredInner" footer="featuredInnerFooter"}
     </div>
   </div>
 {/block}
