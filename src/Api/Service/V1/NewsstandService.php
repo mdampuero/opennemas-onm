@@ -25,7 +25,11 @@ class NewsstandService extends ContentService
         }
 
         try {
-            $data = $this->parseData($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
+            $data = $this->parseData(
+                $data,
+                [ 'fk_user_last_editor', 'fk_publisher' ],
+                true
+            );
 
             $item = new $this->class($data);
 
