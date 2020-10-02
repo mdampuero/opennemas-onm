@@ -172,6 +172,9 @@ class WebCrawlingCommand extends Command
 
         $spider->getDispatcher()->addListener(
             SpiderEvents::SPIDER_CRAWL_USER_STOPPED,
+            /**
+             * @codeCoverageIgnore
+             */
             function (Event $event) {
                 $this->output->writeln("Crawling Stoped");
                 exit();
