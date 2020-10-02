@@ -18,7 +18,11 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        $data = $this->parseData($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
+        $data = $this->parseData(
+            $data,
+            [ 'fk_user_last_editor', 'fk_publisher' ],
+            true
+        );
 
         return parent::createItem($data);
     }
@@ -91,8 +95,10 @@ class ContentService extends OrmService
     /**
      * {@inheritdoc}
      */
-    protected function parseData($data, $userFields = null)
+    protected function parseData($data, $userFields = [], $default = null)
     {
+        $data = parent::parseData($data, $default);
+
         if ($this->container->get('core.security')->hasPermission('MASTER')
             || empty($userFields)
         ) {

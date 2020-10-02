@@ -259,6 +259,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $data = [ 'name' => 'mumble' ];
 
+        $this->converter->expects($this->any())->method('objectify')
+            ->will($this->returnArgument(0));
+
         $this->security->expects($this->any())->method('hasPermission')
             ->willReturn(false);
 
@@ -279,6 +282,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $data = [ 'name' => 'mumble' ];
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->will($this->returnArgument(0));
 
         $this->security->expects($this->any())->method('hasPermission')
             ->willReturn(true);

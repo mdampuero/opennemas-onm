@@ -105,7 +105,7 @@ class OrmService implements Service
     public function createItem($data)
     {
         try {
-            $data = $this->parseData($data);
+            $data = $this->parseData($data, true);
 
             $item = new $this->class($data);
 
@@ -535,14 +535,17 @@ class OrmService implements Service
     /**
      * Parses the content data array
      *
-     * @param array $data The content data array.
+     * @param array   $data The content data array.
+     * @param boolean $default True for setting default data.
      *
      * @return array The parsed data array.
      */
-    protected function parseData($data)
+    protected function parseData($data, $default = null)
     {
+        $data = empty($default) ? $data : array_merge($this->defaults, $data);
+
         return $this->em->getConverter($this->entity)
-            ->objectify(array_merge($this->defaults, $data));
+            ->objectify($data);
     }
 
     /**
