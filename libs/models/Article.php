@@ -264,8 +264,6 @@ class Article extends Content
             ]);
 
             $conn->commit();
-
-            return $this->id;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
@@ -282,7 +280,7 @@ class Article extends Content
             $this->saveRelated($data)
                 ->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
 
-            return true;
+            return $this->id;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
