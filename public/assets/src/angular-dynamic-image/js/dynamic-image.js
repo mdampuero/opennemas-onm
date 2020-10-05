@@ -116,6 +116,10 @@
             }
           }
 
+          if (!image) {
+            return this.brokenImage;
+          }
+
           if (!/^http/.test(image) && !raw) {
             if (!instanceMedia) {
               throw new Error('Invalid instance media folder path');
@@ -375,23 +379,22 @@
                 attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
             }
 
+            var img = new Image();
+
+            img.onload = function() {
+              $scope.bg = this.src;
+              $scope.loading = false;
+
+              $scope.settings = DynamicImage.getSettings(this.height,
+                this.width, maxHeight, maxWidth);
+
+              $scope.$apply();
+            };
+
             $scope.$watch('src', function(nv) {
               if (!DynamicImage.isFlash(nv) || $scope.onlyImage) {
                 $scope.loading = true;
-
-                var img = new Image();
-
-                img.onload = function() {
-                  $scope.bg = nv;
-                  $scope.loading = false;
-
-                  $scope.settings = DynamicImage.getSettings(img.height,
-                    img.width, maxHeight, maxWidth);
-
-                  $scope.$apply();
-                };
-
-                img.src = nv;
+                img.src        = nv;
               }
             });
 
