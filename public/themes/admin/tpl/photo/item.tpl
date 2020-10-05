@@ -49,9 +49,8 @@
   <div class="grid simple">
     <div class="grid-body">
       <div class="thumbnail-wrapper">
-        <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
-          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="false">
-          </dynamic-image>
+        <div class="dynamic-image-placeholder ng-cloak">
+          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" only-image="false"></dynamic-image>
         </div>
       </div>
       <div class="m-b-30 m-t-15 text-center">
