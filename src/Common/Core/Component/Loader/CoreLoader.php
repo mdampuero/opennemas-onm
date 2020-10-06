@@ -205,13 +205,11 @@ class CoreLoader
         // local path to write media (/path/to/media)
         define('MEDIA_PATH', SITE_PATH . "media" . DS . INSTANCE_UNIQUE_NAME);
 
-        define('MEDIA_IMG_PATH_URL', MEDIA_URL . MEDIA_DIR . '/' . IMG_DIR);
-        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL . "media" . '/' . MEDIA_DIR . '/' . IMG_DIR);
+        define('MEDIA_IMG_PATH_URL', MEDIA_URL . MEDIA_DIR);
+        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL . "media" . '/' . MEDIA_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
-        define('MEDIA_IMG_PATH', MEDIA_PATH . DS . IMG_DIR);
-        // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR . '/' . IMG_DIR);
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR);
 
         // Template settings
         define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
