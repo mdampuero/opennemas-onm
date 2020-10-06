@@ -31,9 +31,9 @@ class Ads
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl    = SITE_URL;
-            $ad->extUrl      = SITE_URL . 'ads/' . date('YmdHis', strtotime($ad->created))
+            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
                 . sprintf('%06d', $ad->pk_advertisement) . '.html';
-            $ad->extMediaUrl = SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME;
+            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
@@ -55,9 +55,9 @@ class Ads
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl    = SITE_URL;
-            $ad->extUrl      = SITE_URL . 'ads/' . date('YmdHis', strtotime($ad->created))
+            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
                 . sprintf('%06d', $ad->pk_advertisement) . '.html';
-            $ad->extMediaUrl = SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME;
+            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
@@ -79,9 +79,9 @@ class Ads
 
         foreach ($ads as &$ad) {
             $ad->extWsUrl    = SITE_URL;
-            $ad->extUrl      = SITE_URL . 'ads/' . date('YmdHis', strtotime($ad->created))
+            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
                       . sprintf('%06d', $ad->pk_advertisement) . '.html';
-            $ad->extMediaUrl = SITE_URL . 'media/' . INSTANCE_UNIQUE_NAME;
+            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);

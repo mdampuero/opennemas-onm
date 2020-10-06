@@ -67,10 +67,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             define('MEDIA_IMG_ABSOLUTE_URL', 'http://test.com/media/test');
         }
 
-        if (!defined('MEDIA_DIR')) {
-            define('MEDIA_DIR', 'test');
-        }
-
         $this->orm = $this->getMockBuilder('OrmEntityManager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -444,19 +440,19 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $sndefault = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
-            SITE_URL . 'media/' . MEDIA_DIR . '/sections/sn_default_img.jpg',
+            SITE_URL . '/media/test/sections/sn_default_img.jpg',
             $sndefault->url
         );
 
         $mobileLogo = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
-            SITE_URL . 'media/' . MEDIA_DIR . '/sections/mobile_logo.jpg',
+            SITE_URL . '/media/test/sections/mobile_logo.jpg',
             $mobileLogo->url
         );
 
         $siteLogo = $method->invokeArgs($this->helper, [ $mediaObject ]);
         $this->assertEquals(
-            SITE_URL . 'media/' . MEDIA_DIR . '/sections/site_logo.jpg',
+            SITE_URL . '/media/test/sections/site_logo.jpg',
             $siteLogo->url
         );
     }

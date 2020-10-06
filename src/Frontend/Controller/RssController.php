@@ -334,7 +334,7 @@ class RssController extends FrontendController
                     $replacements  = [
                         '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
                         '<figure class="op-interactive">${2}</figure>${1}',
-                        'src="' . SITE_URL . 'media/'
+                        'src="' . SITE_URL . '/media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 

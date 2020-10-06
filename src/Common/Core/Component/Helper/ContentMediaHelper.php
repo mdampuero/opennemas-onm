@@ -78,7 +78,7 @@ class ContentMediaHelper
             $mediaObject = $this->er->find('Video', $content->fk_video2);
             if (!empty($mediaObject)) {
                 if (strpos($mediaObject->thumb, 'http') === false) {
-                    $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
+                    $mediaObject->thumb = SITE_URL . '/' . $mediaObject->thumb;
                 }
 
                 $mediaObject->url = $mediaObject->thumb;
@@ -137,7 +137,7 @@ class ContentMediaHelper
     {
         if (isset($content->thumb) && !empty($content->thumb)) {
             if (strpos($content->thumb, 'http') === false) {
-                $content->thumb = SITE_URL . $content->thumb;
+                $content->thumb = SITE_URL . '/' . $content->thumb;
             }
 
             $mediaObject      = $content;

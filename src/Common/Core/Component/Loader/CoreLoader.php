@@ -206,7 +206,7 @@ class CoreLoader
         define('MEDIA_PATH', SITE_PATH . "media" . DS . INSTANCE_UNIQUE_NAME);
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL . MEDIA_DIR);
-        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL . "media" . '/' . MEDIA_DIR);
+        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL . "/media" . '/' . MEDIA_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR);

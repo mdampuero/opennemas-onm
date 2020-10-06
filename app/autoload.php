@@ -48,9 +48,8 @@ define('SYS_LOG_PATH', realpath(SITE_PATH . DS . '../tmp/logs'));
 
 $serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : 'console';
 define('SITE', $serverName);
-define('BASE_URL', '/');
 define('ADMIN_DIR', 'admin');
-define('SITE_URL', $protocol . SITE . BASE_URL);
+define('SITE_URL', $protocol . SITE);
 
 define('FILE_DIR', 'files');
 define('ITEMS_PAGE', '20'); // TODO: delete from application

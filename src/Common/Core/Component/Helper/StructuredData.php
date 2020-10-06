@@ -140,7 +140,7 @@ class StructuredData
     {
         // Default logo information
         $logo = [
-            'url'    => SITE_URL . 'assets/images/logos/opennemas-powered-horizontal.png',
+            'url'    => SITE_URL . '/assets/images/logos/opennemas-powered-horizontal.png',
             'width'  => '350',
             'height' => '60'
         ];
@@ -149,7 +149,7 @@ class StructuredData
         if (!empty($siteLogo)) {
             $logo = [
                 'url'    => SITE_URL
-                    . 'asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
+                    . '/asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
                     . $this->container->get('core.instance')->getMediaShortPath()
                     . '/sections/' . $siteLogo,
                 'width'  => '260',
