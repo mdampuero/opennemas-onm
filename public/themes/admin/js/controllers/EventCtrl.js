@@ -124,7 +124,11 @@
           );
         };
 
-        $scope.$watch('featuredFrontpage', function(nv) {
+        $scope.$watch('featuredFrontpage', function(nv, ov) {
+          var oldFeaturedFrontpage = $scope.item.related_contents.filter(function(e) {
+            return e.type === 'featured_frontpage';
+          })[0];
+
           $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
             return e.type !== 'featured_frontpage';
           });
@@ -133,16 +137,30 @@
             return;
           }
 
+          if (!ov) {
+            var caption = nv.description;
+          } else {
+            var caption = oldFeaturedFrontpage.caption === ov.caption ? nv.description : oldFeaturedFrontpage.caption;
+          }
+
           $scope.item.related_contents.push({
-            caption: $scope.featuredFrontpageFooter,
+            caption: caption,
             content_type_name: nv.content_type_name,
             position: 0,
             target_id: nv.pk_content,
             type: 'featured_frontpage'
           });
+
+          if (!$scope.featuredInner) {
+            $scope.featuredInner = $scope.featuredFrontpage;
+          }
         }, true);
 
-        $scope.$watch('featuredInner', function(nv) {
+        $scope.$watch('featuredInner', function(nv, ov) {
+          var oldFeaturedInner = $scope.item.related_contents.filter(function(e) {
+            return e.type === 'featured_inner';
+          })[0];
+
           $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
             return e.type !== 'featured_inner';
           });
@@ -151,55 +169,17 @@
             return;
           }
 
+          if (!ov) {
+            var caption = nv.description;
+          } else {
+            var caption = oldFeaturedInner.caption === ov.caption ? nv.description : oldFeaturedInner.caption;
+          }
+
           $scope.item.related_contents.push({
-            caption: $scope.featuredInnerFooter,
+            caption: caption,
             content_type_name: nv.content_type_name,
             position: 0,
             target_id: nv.pk_content,
-            type: 'featured_inner'
-          });
-        }, true);
-
-        $scope.$watch('featuredFrontpageFooter', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          if ($scope.item.related_contents.length === 0) {
-            return;
-          }
-
-          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
-            return e.type !== 'featured_frontpage';
-          });
-
-          $scope.item.related_contents.push({
-            caption: nv,
-            content_type_name: $scope.featuredFrontpage.content_type_name,
-            position: 0,
-            target_id: $scope.featuredFrontpage.pk_content,
-            type: 'featured_frontpage'
-          });
-        }, true);
-
-        $scope.$watch('featuredInnerFooter', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          if ($scope.item.related_contents.length === 0) {
-            return;
-          }
-
-          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
-            return e.type !== 'featured_inner';
-          });
-
-          $scope.item.related_contents.push({
-            caption: nv,
-            content_type_name: $scope.featuredInner.content_type_name,
-            position: 0,
-            target_id: $scope.featuredInner.pk_content,
             type: 'featured_inner'
           });
         }, true);
