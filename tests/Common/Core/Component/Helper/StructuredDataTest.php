@@ -125,7 +125,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['videokeywords']  = 'keywords,object,json,linking,data';
         $output['keywords']       = 'keywords,object,json,linking';
         $output['sitename']       = 'site name';
-        $output['siteurl']        = 'http://console/';
+        $output['siteurl']        = 'http://console';
         $output['content']->body  = '';
         $output['content']->title = 'This is the title';
         $output['title']          = 'This is the title';
