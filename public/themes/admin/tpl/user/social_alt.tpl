@@ -46,7 +46,7 @@
     {if $connected}
       <div class="social-orb">
         {if $user->photo->path}
-            <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path}" alt="{t}Photo{/t}"/>
+          <img src="{$app.instance->getMediaShortPath()}/{$user->photo->path}" alt="{t}Photo{/t}"/>
         {else}
           {gravatar email=$user->email image_dir=$_template->getImageDir() image=true size="100"}
         {/if}

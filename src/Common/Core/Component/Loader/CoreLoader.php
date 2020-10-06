@@ -205,7 +205,6 @@ class CoreLoader
         // local path to write media (/path/to/media)
         define('MEDIA_PATH', SITE_PATH . "media" . DS . INSTANCE_UNIQUE_NAME);
 
-        define('MEDIA_IMG_PATH_URL', MEDIA_URL . MEDIA_DIR);
         define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL . "/media" . '/' . MEDIA_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
