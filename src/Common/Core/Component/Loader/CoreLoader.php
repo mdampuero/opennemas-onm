@@ -175,12 +175,6 @@ class CoreLoader
         }
 
         define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-
-        $mainDomain = $instance->getMainDomain();
-        if (!is_null($mainDomain)) {
-            define('INSTANCE_MAIN_DOMAIN', 'http://' . $mainDomain);
-        }
-
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
         $cachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . INSTANCE_UNIQUE_NAME;
@@ -209,10 +203,6 @@ class CoreLoader
         // TODO: A Eliminar
         // TODO: delete from application
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL . MEDIA_DIR);
-
-        // Template settings
-        define('TEMPLATE_USER_PATH', SITE_PATH . DS . "themes" . DS . TEMPLATE_USER . DS);
-        define('TEMPLATE_USER_URL', "/themes" . '/' . TEMPLATE_USER . '/');
 
         if (file_exists($this->theme->realpath . '/.deploy.themes.php')) {
             include_once $this->theme->realpath . '/.deploy.themes.php';
