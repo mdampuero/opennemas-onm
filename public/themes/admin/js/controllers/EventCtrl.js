@@ -93,16 +93,46 @@
           if (featuredFrontpage) {
             $scope.featuredFrontpage =
               $scope.data.extra.related_contents[featuredFrontpage.target_id];
-            $scope.featuredFrontpageFooter = featuredFrontpage.caption;
           }
 
           if (featuredInner) {
             $scope.featuredInner =
               $scope.data.extra.related_contents[featuredInner.target_id];
-            $scope.featuredInnerFooter = featuredInner.caption;
+          }
+        };
+
+        $scope.getPosition = function(relation) {
+          var position = -1;
+
+          for (var i = 0; i < $scope.item.related_contents.length; i++) {
+            if ($scope.item.related_contents[i].type === relation) {
+              position = i;
+            }
           }
 
-          $scope.item.related_contents = [];
+          return position;
+        };
+
+        $scope.getCaption = function(relation, nv, ov) {
+          var featured = $scope.item.related_contents.filter(function(e) {
+            return e.type === relation;
+          })[0];
+
+          var oldCaption = !featured ?
+            null :
+            featured.caption;
+
+          var ovCaption = !ov ? null : ov.description;
+
+          if (oldCaption && !ovCaption) {
+            return oldCaption;
+          }
+
+          if (ovCaption && ovCaption !== oldCaption) {
+            return oldCaption;
+          }
+
+          return nv.description;
         };
 
         /**
@@ -125,23 +155,15 @@
         };
 
         $scope.$watch('featuredFrontpage', function(nv, ov) {
-          var oldFeaturedFrontpage = $scope.item.related_contents.filter(function(e) {
-            return e.type === 'featured_frontpage';
-          })[0];
-
-          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
-            return e.type !== 'featured_frontpage';
-          });
-
           if (!nv) {
             return;
           }
 
-          if (!ov) {
-            var caption = nv.description;
-          } else {
-            var caption = oldFeaturedFrontpage.caption === ov.caption ? nv.description : oldFeaturedFrontpage.caption;
-          }
+          var caption = $scope.getCaption('featured_frontpage', nv, ov);
+
+          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
+            return e.type !== 'featured_frontpage';
+          });
 
           $scope.item.related_contents.push({
             caption: caption,
@@ -157,23 +179,15 @@
         }, true);
 
         $scope.$watch('featuredInner', function(nv, ov) {
-          var oldFeaturedInner = $scope.item.related_contents.filter(function(e) {
-            return e.type === 'featured_inner';
-          })[0];
-
-          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
-            return e.type !== 'featured_inner';
-          });
-
           if (!nv) {
             return;
           }
 
-          if (!ov) {
-            var caption = nv.description;
-          } else {
-            var caption = oldFeaturedInner.caption === ov.caption ? nv.description : oldFeaturedInner.caption;
-          }
+          var caption = $scope.getCaption('featured_inner', nv, ov);
+
+          $scope.item.related_contents = $scope.item.related_contents.filter(function(e) {
+            return e.type !== 'featured_inner';
+          });
 
           $scope.item.related_contents.push({
             caption: caption,
