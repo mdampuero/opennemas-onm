@@ -80,6 +80,7 @@ function get_featured_media($item, $type)
     }
 
     if ($item instanceof \Common\Model\Entity\Content
+        || $item instanceof \Content
         && get_type($item) === 'event'
     ) {
         $covers = get_related($item, $map[get_type($item)][$type][0]);
@@ -258,7 +259,9 @@ function get_related($item, string $type) : array
     }
 
     return array_filter(array_map(function ($a) {
-        return get_content($a['target_id'], $a['content_type_name']);
+        $content = get_content($a['target_id'], $a['content_type_name']);
+        // TODO: Remove this provisional logic on ONM-6154
+        return !empty($content) ? $content->loadAttachedVideo() : null;
     }, $items));
 }
 
