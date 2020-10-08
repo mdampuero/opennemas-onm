@@ -189,7 +189,6 @@ class CoreLoader
          */
         //TODO: All the MEDIA_* should be ported to use this constant
         define('INSTANCE_MEDIA', MEDIA_URL . INSTANCE_UNIQUE_NAME . DS);
-        define('INSTANCE_MEDIA_PATH', SITE_PATH . DS . "media" . DS . INSTANCE_UNIQUE_NAME . DS);
 
         // External server or a local dir
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
