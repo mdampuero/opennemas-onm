@@ -59,7 +59,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->helper = $this->getMockBuilder('ContentMediaHelper')
-            ->setMethods([ 'getContentMediaObject' ])
+            ->setMethods([ 'getMedia' ])
             ->getMock();
 
         $this->fm->expects($this->any())->method('set')
@@ -137,7 +137,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_name')
             ->willReturn('Site Name');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
@@ -173,7 +173,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_name')
             ->willReturn('Site Name');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
@@ -208,7 +208,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_name')
             ->willReturn('Site Name');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
@@ -251,7 +251,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->at(5))->method('get')
             ->willReturn('This is the description');
 
-        $this->helper->expects($this->once())->method('getContentMediaObject')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
@@ -294,7 +294,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $photo->width  = 600;
         $photo->height = 400;
 
-        $this->helper->expects($this->once())->method('getContentMediaObject')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"

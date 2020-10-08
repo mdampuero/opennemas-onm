@@ -170,7 +170,7 @@ class StructuredData
     protected function getMediaData($content)
     {
         $mediaObject = $this->container->get('core.helper.content_media')
-            ->getContentMediaObject($content);
+            ->getMedia($content);
 
         $media = [
             'image' =>

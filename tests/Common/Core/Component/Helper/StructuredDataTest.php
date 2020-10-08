@@ -28,7 +28,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->helper = $this->getMockBuilder('ContentMediaHelper')
-            ->setMethods([ 'getContentMediaObject' ])
+            ->setMethods([ 'getMedia' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -297,7 +297,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Content();
         $this->helper->expects($this->once())
-            ->method('getContentMediaObject')
+            ->method('getMedia')
             ->willReturn(new \Content());
 
         $method->invokeArgs($this->object, [ $content ]);
@@ -313,7 +313,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Content();
         $this->helper->expects($this->once())
-            ->method('getContentMediaObject')
+            ->method('getMedia')
             ->willReturn(new \Video());
 
         $method->invokeArgs($this->object, [ $content ]);
