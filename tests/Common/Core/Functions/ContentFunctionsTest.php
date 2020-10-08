@@ -171,19 +171,15 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->once())->method('find')
             ->with('photo', 893)->willReturn($photo);
 
-        $content                    = new \Content();
-        $content->content_status    = 1;
-        $content->in_litter         = 0;
-        $content->starttime         = '2020-01-01 00:00:00';
-        $content->content_type_name = 'event';
-        $content->related_contents  = [ [
+        $this->content->content_type_name = 'event';
+        $this->content->related_contents  = [ [
             'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
             'type'              => 'cover'
         ] ];
 
-        $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
+        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
     }
 
     /**

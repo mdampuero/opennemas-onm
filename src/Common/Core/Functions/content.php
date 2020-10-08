@@ -80,7 +80,6 @@ function get_featured_media($item, $type)
     }
 
     if ($item instanceof \Common\Model\Entity\Content
-        || $item instanceof \Content
         && get_type($item) === 'event'
     ) {
         $covers = get_related($item, $map[get_type($item)][$type][0]);
