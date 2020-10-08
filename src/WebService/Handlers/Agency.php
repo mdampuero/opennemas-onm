@@ -8,6 +8,7 @@
  */
 namespace WebService\Handlers;
 
+use Api\Exception\GetItemException;
 use Luracast\Restler\Format\XmlFormat;
 use Luracast\Restler\RestException;
 
@@ -132,18 +133,12 @@ class Agency
                 }
             }
         } catch (\Exception $e) {
-            getService('application.log')->error(
-                'Unable to fetch author with id '
-                . $article->fk_author . ' :' . $e->getMessage()
-            );
         }
 
         $locale = getService('core.locale')->getRequestLocale();
 
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
             'content'     => $article,
-            'photo'       => $article->img1,
-            'photoInner'  => $article->img2,
             'tags'        => getService('api.service.tag')
                 ->getListByIdsKeyMapped($article->tags, $locale)['items']
         ]);
@@ -153,6 +148,7 @@ class Agency
 
         libxml_use_internal_errors(true);
 
+        $output = html_entity_decode($output);
         $output = simplexml_load_string($output);
 
         if (!empty(libxml_get_errors())) {
