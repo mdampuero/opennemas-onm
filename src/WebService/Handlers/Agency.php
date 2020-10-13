@@ -1,14 +1,7 @@
 <?php
-/**
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace WebService\Handlers;
 
-use Api\Exception\GetItemException;
 use Luracast\Restler\Format\XmlFormat;
 use Luracast\Restler\RestException;
 
@@ -98,20 +91,6 @@ class Agency
         }
 
         $tpl = getService('view')->get('backend');
-
-        // Get author obj
-        try {
-            if (!empty($article->fk_author)) {
-                $article->author = getService('api.service.author')
-                    ->getItem($article->fk_author);
-
-                if (!empty($article->author->avatar_img_id)) {
-                    $article->author->photo = getService('api.service.photo')
-                        ->getItem($article->author->avatar_img_id);
-                }
-            }
-        } catch (\Exception $e) {
-        }
 
         $locale = getService('core.locale')->getRequestLocale();
 
