@@ -99,28 +99,6 @@ class Agency
 
         $tpl = getService('view')->get('backend');
 
-        try {
-            $image[] = getService('api.service.photo')->getItem($article->img1);
-
-            // Load attached and related contents from array
-            $article->loadFrontpageImageFromHydratedArray($image);
-
-            if (!mb_check_encoding($article->img1->description)) {
-                $article->img1->description = utf8_encode($article->img1->description);
-            }
-
-
-            $image[] = getService('api.service.photo')->getItem($article->img2);
-
-            // Load attached and related contents from array
-            $article->loadInnerImageFromHydratedArray($image);
-
-            if (!mb_check_encoding($article->img2->description)) {
-                $article->img2->description = utf8_encode($article->img2->description);
-            }
-        } catch (GetItemException $e) {
-        }
-
         // Get author obj
         try {
             if (!empty($article->fk_author)) {

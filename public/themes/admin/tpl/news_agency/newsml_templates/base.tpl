@@ -79,16 +79,18 @@
                     </hedline>
                     <rights>
                       <rights.agent>{setting name=site_name}</rights.agent>
-                      {if !empty($content->author)}
-                        <rights.owner>{$content->author->name}</rights.owner>
-                        {if $content->author->photo}
+                      {if has_author($content)}
+                        <rights.owner>{get_author_name($content)}</rights.owner>
+                        {if has_author_avatar($content)}
                           <rights.owner.photo>
-                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{get_photo_path($content->author->photo)}
+                          {get_url(get_content(get_author_avatar($content), 'Photo'), [ '_absolute' => true ])}
                           </rights.owner.photo>
                         {/if}
-                        <rights.owner.url>
-                          {$app.instance->getBaseUrl()}{url name=frontend_author_frontpage slug=$content->author->username}
-                        </rights.owner.url>
+                        {if has_author_url($content)}
+                          <rights.owner.url>
+                            {get_url(get_author($content), [ '_absolute' => true ])}
+                          </rights.owner.url>
+                        {/if}
                       {else}
                         <rights.owner>{$content->agency|default:'Redacción'}</rights.owner>
                       {/if}
