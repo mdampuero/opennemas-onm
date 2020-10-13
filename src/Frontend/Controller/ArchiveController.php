@@ -159,8 +159,11 @@ class ArchiveController extends Controller
         $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $path         = "{$year}/{$month}/{$day}";
         $html         = '';
-        $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";
         $url          = "/archive/content/{$path}/";
+
+        $file = $this->getParameter('core.paths.public')
+            . $this->get('core.instance')->getMediaShortPath()
+            . "/library/$path/$categoryName.html";
 
         if (file_exists($file) && is_readable($file)) {
             $html = file_get_contents($file);

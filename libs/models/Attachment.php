@@ -209,7 +209,9 @@ class Attachment extends Content
             return false;
         }
 
-        $filename = MEDIA_PATH . DS . FILE_DIR . $this->path;
+        $filename = getService('service_container')->getParameter('core.paths.public')
+            . getService('core.instance')->getFilesShortPath()
+            . $this->path;
 
         try {
             parent::remove($id);
@@ -246,44 +248,6 @@ class Attachment extends Content
             );
 
             return intval($rs) > 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Removes files given its id
-     *
-     * @param array $arrayId the photo ids to delete
-     *
-     * @return boolean true if the photo was deleted
-     */
-    public static function batchDelete($arrayIds)
-    {
-        try {
-            $contents = implode(', ', array_map(function ($item) {
-                return (int) $item;
-            }, $arrayIds));
-
-            $paths = getService('dbal_connection')->fetchAll(
-                'SELECT path FROM attachments WHERE pk_attachment IN (' . $contents . ')'
-            );
-
-            getService('dbal_connection')->executeUpdate(
-                'DELETE FROM attachments WHERE `pk_attachment` IN (' . $contents . ')'
-            );
-
-            foreach ($paths as $path) {
-                $file = MEDIA_PATH . DS . FILE_DIR . DS . $path['path'];
-                if (file_exists($file)) {
-                    echo $path . "\n";
-                    // @unlink($file);
-                }
-            }
-
-            return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
 
