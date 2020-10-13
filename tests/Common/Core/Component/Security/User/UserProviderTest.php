@@ -22,6 +22,22 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->cache = $this->getMockBuilder('CacheConnection')
+            ->setMethods([ 'set' ])
+            ->getMock();
+
+        $this->conn = $this->getMockBuilder('DatabaseConnection')
+            ->setMethods([ 'getData' ])
+            ->getMock();
+
+        $this->cm = $this->getMockBuilder('Opennemas\Cache\Core\CacheManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getConnection' ])
+            ->getMock();
+
+        $this->cm->expects($this->any())->method('getConnection')
+            ->willReturn($this->cache);
+
         $this->repository = $this->getMockBuilder('Opennemas\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
             ->setMethods([ 'findOneBy' ])
@@ -29,12 +45,15 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getRepository' ])
+            ->setMethods([ 'getRepository', 'getConnection' ])
             ->getMock();
 
-        $this->em->expects($this->any())->method('getRepository')->willReturn($this->repository);
+        $this->em->expects($this->any())->method('getRepository')
+            ->willReturn($this->repository);
+        $this->em->expects($this->any())->method('getConnection')
+            ->willReturn($this->conn);
 
-        $this->provider = new UserProvider($this->em, [ 'flob' ]);
+        $this->provider = new UserProvider($this->em, $this->cm, [ 'flob' ]);
     }
 
     /**
@@ -47,6 +66,33 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('username = "wibble" or email = "wibble"')
             ->willReturn($user);
+
+        $this->em->expects($this->any())->method('getConnection')
+            ->willReturn($this->repository);
+
+        $this->conn->expects($this->any())->method('getData')
+            ->willReturn([ 'dbname' => 'quux' ]);
+
+        $this->assertEquals($user, $this->provider->loadUserByUsername('wibble'));
+    }
+
+    /**
+     * Tests loadUserByUsername from manager (onm-instances).
+     */
+    public function testLoadUserByUsernameFromManager()
+    {
+        $user = new User([ 'id' => 1 ]);
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('username = "wibble" or email = "wibble"')
+            ->willReturn($user);
+
+        $this->em->expects($this->any())->method('getConnection')
+            ->willReturn($this->repository);
+
+        $this->conn->expects($this->any())->method('getData')
+            ->willReturn([ 'dbname' => 'onm-instances' ]);
+
 
         $this->assertEquals($user, $this->provider->loadUserByUsername('wibble'));
     }

@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Security\User;
 
+use Opennemas\Cache\Core\CacheManager;
 use Opennemas\Orm\Core\EntityManager;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -36,11 +37,14 @@ class UserProvider implements UserProviderInterface
     /**
      * Initializes the current user provider.
      *
-     * @param EntityManager $em The entity manager.
+     * @param EntityManager $em           The entity manager.
+     * @param CacheManager  $cache        The cache service.
+     * @param array         $repositories The list of repositories to use.
      */
-    public function __construct(EntityManager $em, $repositories)
+    public function __construct(EntityManager $em, CacheManager $cm, $repositories)
     {
         $this->em           = $em;
+        $this->cm           = $cm;
         $this->repositories = $repositories;
     }
 
@@ -55,6 +59,16 @@ class UserProvider implements UserProviderInterface
             try {
                 $user = $this->em->getRepository('User', $repository)
                     ->findOneBy($oql);
+
+                // Force origin for manager users
+                $connData = $this->em->getConnection($repository)->getData();
+                if (array_key_exists('dbname', $connData)
+                    && $connData['dbname'] === 'onm-instances'
+                ) {
+                    $user->setOrigin('manager');
+                    $this->cm->getConnection($repository)
+                        ->set('user-' . $user->id, $user);
+                }
 
                 // Prevent password deletion when calling eraseCredentials
                 return clone($user);
