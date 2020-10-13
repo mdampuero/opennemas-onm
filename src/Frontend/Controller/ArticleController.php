@@ -105,7 +105,6 @@ class ArticleController extends FrontendController
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
             'ext'            => 1,
-            'suggested'      => $article->suggested,
             'videoInt'       => $article->videoInt,
             'x-cacheable'    => true,
             'x-tags'         => 'ext-article,' . $article->id
