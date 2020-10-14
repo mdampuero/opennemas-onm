@@ -1249,9 +1249,7 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function isInTime()
     {
-        $timezone  = new \DateTimeZone(
-            getService('core.locale')->getTimeZone()->getName()
-        );
+        $timezone  = getService('core.locale')->getTimeZone();
         $now       = new \DateTime(null, $timezone);
         $starttime = new \DateTime($this->starttime, $timezone);
         $endtime   = new \DateTime($this->endtime, $timezone);
