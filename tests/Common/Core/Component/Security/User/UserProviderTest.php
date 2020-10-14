@@ -93,6 +93,8 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->any())->method('getData')
             ->willReturn([ 'dbname' => 'onm-instances' ]);
 
+        $this->cache->expects($this->any())->method('set')
+            ->willReturn($user);
 
         $this->assertEquals($user, $this->provider->loadUserByUsername('wibble'));
     }
