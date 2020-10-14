@@ -95,10 +95,10 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'dbname' => 'onm-instances' ]);
 
         $this->cache->expects($this->any())->method('set')
-            ->with('user-' . $user->id)
-            ->willReturn($user->setOrigin('manager'));
+            ->with('user-1', $user);
 
         $this->assertEquals($user, $this->provider->loadUserByUsername('wibble'));
+        $this->assertEquals('manager', $user->getOrigin());
     }
 
     /**
