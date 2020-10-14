@@ -82,6 +82,7 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
     public function testLoadUserByUsernameFromManager()
     {
         $user = new User([ 'id' => 1 ]);
+        $user->setOrigin('instance');
 
         $this->repository->expects($this->once())->method('findOneBy')
             ->with('username = "wibble" or email = "wibble"')
@@ -94,7 +95,8 @@ class UserProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'dbname' => 'onm-instances' ]);
 
         $this->cache->expects($this->any())->method('set')
-            ->willReturn($user);
+            ->with('user-' . $user->id)
+            ->willReturn($user->setOrigin('manager'));
 
         $this->assertEquals($user, $this->provider->loadUserByUsername('wibble'));
     }
