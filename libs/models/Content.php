@@ -781,16 +781,15 @@ class Content implements \JsonSerializable, CsvSerializable
     public function restoreFromTrash()
     {
         try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'in_litter' => 0,
-                    'changed'    => date("Y-m-d H:i:s"),
-                ],
-                [ 'pk_content' => $this->id ]
-            );
+            $data = [ 'in_litter' => 0, 'changed' => date("Y-m-d H:i:s") ];
 
-            $this->in_litter = 0;
+            if (!getService('core.security')->hasPermission('MASTER')) {
+                $data['fk_user_last_editor'] = (int) getService('core.user')->id;
+            }
+
+            getService('dbal_connection')->update('contents', $data, [
+                'pk_content' => $this->id
+            ]);
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -803,7 +802,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return $this;
         } catch (\Exception $e) {
             getService('error.log')->error(
-                'Error removing content (ID:' . $this->id . '):' . $e->getMessage()
+                'Error restoring content (ID:' . $this->id . '):' . $e->getMessage()
             );
             return false;
         }
