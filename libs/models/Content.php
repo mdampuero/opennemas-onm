@@ -1204,22 +1204,19 @@ class Content implements \JsonSerializable, CsvSerializable
             }
         }
 
-        if (is_null($this->views)) {
-            $this->views = getService('content_views_repository')->getViews($this->id);
-        }
-
         $status          = $this->getStatus();
         $schedulingState = $this->getSchedulingState();
 
         return [
             'title'           => $this->__get('title'),
             'category'        => get_category_name($this),
-            'views'           => $this->views,
             'starttime'       => $this->starttime,
             'endtime'         => $this->endtime,
             'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
             'state'           => $this->getL10nStatus($status),
             'last_editor'     => $user->name ?? '',
+            'views'           => getService('content_views_repository')
+                ->getViews($this->id),
         ];
     }
 
