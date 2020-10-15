@@ -923,14 +923,13 @@ class Content implements \JsonSerializable, CsvSerializable
 
     /**
      * TODO: review functionality, the is_array thing could be wrong
-     * Change the current value of available content_status property
+     * Change the current value of available content_status property.
      *
-     * @param int $status the available value
-     * @param int $lastEditor the author id that performs the action
+     * @param int $status The available value.
      *
-     * @return boolean true if it was changed successfully
+     * @return boolean true If it was changed successfully.
      */
-    public function setAvailable($status = 1, $lastEditor = null)
+    public function setAvailable($status = 1)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
