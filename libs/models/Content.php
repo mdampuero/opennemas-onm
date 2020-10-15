@@ -664,14 +664,12 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Make unavailable one content, but without deleting it
-     *
-     * This simulates a trash system by setting their available flag to false
+     * Make unavailable one content, but without deleting it.
+     * This simulates a trash system by setting their available flag to false.
      *
      * @param integer $id
-     * @param integer $lastEditor
      *
-     * @return null
+     * @return boolean true If the action was executed
      */
     public function delete($id)
     {
