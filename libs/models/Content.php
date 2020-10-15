@@ -1201,11 +1201,7 @@ class Content implements \JsonSerializable, CsvSerializable
                 $user = getService('orm.manager')->getRepository('User')
                     ->find($this->fk_user_last_editor);
             } catch (\Exception $e) {
-                $user = getService('orm.manager')->getRepository('User', 'manager')
-                    ->find($this->fk_user_last_editor);
             }
-
-            $userName = is_object($user) ? $user->name : '';
         }
 
         if (is_null($this->views)) {
@@ -1223,7 +1219,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'endtime'         => $this->endtime,
             'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
             'state'           => $this->getL10nStatus($status),
-            'last_editor'     => $userName ?? '',
+            'last_editor'     => $user->name ?? '',
         ];
     }
 
