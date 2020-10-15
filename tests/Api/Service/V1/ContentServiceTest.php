@@ -76,7 +76,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
-            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'parseData' ])
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->getMock();
     }
@@ -108,10 +108,14 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateItem()
     {
-        $data = [ 'name' => 'flob' ];
+        $data = [ 'name' => 'flob', 'changed' => 'foo' ];
 
-        $this->service->expects($this->any())->method('parseData')
-            ->willReturn([ 'name' => 'flob', 'changed' => 'foo' ]);
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'flob', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->em->expects($this->once())->method('persist');
         $this->dispatcher->expects($this->once())->method('dispatch')
@@ -164,10 +168,14 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     public function testPatchItem()
     {
         $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $data = [ 'name' => 'mumble', 'changed' => 'foo' ];
 
-        $this->service->expects($this->any())->method('parseData')
-            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo' ]);
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->service->expects($this->once())->method('getItem')
             ->with(1)->willReturn($item);
@@ -193,10 +201,14 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     public function testPatchList()
     {
         $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $data = [ 'name' => 'mumble', 'changed' => 'foo' ];
 
-        $this->service->expects($this->any())->method('parseData')
-            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo' ]);
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->service->expects($this->once())->method('getListByIds')
             ->with([ 1 ])->willReturn([ 'items' => [ $item ], 'total' => 1 ]);
@@ -224,10 +236,14 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     public function testUpdateItem()
     {
         $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $data = [ 'name' => 'flob', 'changed' => 'foo' ];
 
-        $this->service->expects($this->any())->method('parseData')
-            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo' ]);
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->service->expects($this->once())->method('getItem')
             ->with(1)->willReturn($item);
@@ -248,50 +264,44 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests parseData.
+     * Tests assignUser.
      */
-    public function testParseData()
+    public function testAssignUser()
     {
         $this->service = new ContentService($this->container, 'Common\Model\Entity\Content');
 
-        $method = new \ReflectionMethod($this->service, 'parseData');
+        $method = new \ReflectionMethod($this->service, 'assignUser');
         $method->setAccessible(true);
 
         $data = [ 'name' => 'mumble' ];
-
-        $this->converter->expects($this->any())->method('objectify')
-            ->will($this->returnArgument(0));
 
         $this->security->expects($this->any())->method('hasPermission')
             ->willReturn(false);
 
         $this->assertEquals(
-            [ 'name' => 'mumble', 'fk_user_last_editor' => 1 ],
-            $method->invokeArgs($this->service, [ $data, [ 'fk_user_last_editor' ] ])
+            [ 'name' => 'mumble', 'foo' => 1, 'baz' => 1 ],
+            $method->invokeArgs($this->service, [ $data, [ 'foo', 'baz' ] ])
         );
     }
 
     /**
-     * Tests parseData with Master.
+     * Tests assignUser with Master.
      */
-    public function testParseDataWithMaster()
+    public function testAssignUserWithMaster()
     {
         $this->service = new ContentService($this->container, 'Common\Model\Entity\Content');
 
-        $method = new \ReflectionMethod($this->service, 'parseData');
+        $method = new \ReflectionMethod($this->service, 'assignUser');
         $method->setAccessible(true);
 
         $data = [ 'name' => 'mumble' ];
-
-        $this->converter->expects($this->any())->method('objectify')
-            ->will($this->returnArgument(0));
 
         $this->security->expects($this->any())->method('hasPermission')
             ->willReturn(true);
 
         $this->assertEquals(
             $data,
-            $method->invokeArgs($this->service, [ $data, null ])
+            $method->invokeArgs($this->service, [ $data, [ 'foo', 'baz' ] ])
         );
     }
 }

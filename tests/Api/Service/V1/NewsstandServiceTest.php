@@ -72,7 +72,7 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem', 'parseData' ])
+            ->setMethods([ 'getItem', 'assignUser' ])
             ->getMock();
     }
 
@@ -116,7 +116,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->service->expects($this->any())->method('parseData')
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
         $this->nh->expects($this->once())->method('move')
@@ -138,7 +141,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->service->expects($this->any())->method('parseData')
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
         $this->nh->expects($this->once())->method('exists')
@@ -176,7 +182,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
-        $this->service->expects($this->any())->method('parseData')
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
         $this->service->expects($this->once())->method('getItem')

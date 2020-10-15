@@ -105,7 +105,8 @@ class OrmService implements Service
     public function createItem($data)
     {
         try {
-            $data = $this->parseData($data, true);
+            $data = $this->em->getConverter($this->entity)
+                ->objectify($this->parseData($data));
 
             $item = new $this->class($data);
 
@@ -324,7 +325,8 @@ class OrmService implements Service
     public function patchItem($id, $data)
     {
         try {
-            $data = $this->parseData($data);
+            $data = $this->em->getConverter($this->entity)
+                ->objectify($data);
 
             $item = $this->getItem($id);
 
@@ -351,7 +353,8 @@ class OrmService implements Service
             throw new PatchListException('Invalid ids', 400);
         }
 
-        $data = $this->parseData($data);
+        $data = $this->em->getConverter($this->entity)
+            ->objectify($data);
 
         try {
             $response = $this->getListByIds($ids);
@@ -426,7 +429,8 @@ class OrmService implements Service
     public function updateItem($id, $data)
     {
         try {
-            $data = $this->parseData($data);
+            $data = $this->em->getConverter($this->entity)
+                ->objectify($data);
 
             $item = $this->getItem($id);
             $item->setData($data);
@@ -533,19 +537,15 @@ class OrmService implements Service
     }
 
     /**
-     * Parses the content data array
+     * Parses the content data array.
      *
-     * @param array   $data The content data array.
-     * @param boolean $default True for setting default data.
+     * @param array $data The content data array.
      *
      * @return array The parsed data array.
      */
-    protected function parseData($data, $default = null)
+    protected function parseData($data)
     {
-        $data = empty($default) ? $data : array_merge($this->defaults, $data);
-
-        return $this->em->getConverter($this->entity)
-            ->objectify($data);
+        return array_merge($this->defaults, $data);
     }
 
     /**

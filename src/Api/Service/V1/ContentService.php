@@ -18,10 +18,9 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        $data = $this->parseData(
+        $data = $this->assignUser(
             $data,
-            [ 'fk_user_last_editor', 'fk_publisher' ],
-            true
+            [ 'fk_user_last_editor', 'fk_publisher' ]
         );
 
         return parent::createItem($data);
@@ -63,7 +62,7 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
+        $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
 
         parent::patchItem($id, $data);
     }
@@ -75,7 +74,7 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
+        $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
 
         return parent::patchList($ids, $data);
     }
@@ -87,21 +86,22 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        $data = $this->parseData($data, [ 'fk_user_last_editor' ]);
+        $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
 
         parent::updateItem($id, $data);
     }
 
     /**
-     * {@inheritdoc}
+     * Assign the user data for content.
+     *
+     * @param array $data       The content data.
+     * @param array $userFields The user data fields to update.
+     *
+     * @return Content The content.
      */
-    protected function parseData($data, $userFields = [], $default = null)
+    protected function assignUser($data, $userFields = [])
     {
-        $data = parent::parseData($data, $default);
-
-        if ($this->container->get('core.security')->hasPermission('MASTER')
-            || empty($userFields)
-        ) {
+        if ($this->container->get('core.security')->hasPermission('MASTER')) {
             return $data;
         }
 
