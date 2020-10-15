@@ -45,10 +45,16 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale' . uniqid())
+            ->setMethods([ 'getTimeZone' ])->getMock();
+
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'getValue' ])
             ->getMock();
+
+        $this->locale->expects($this->any())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('UTC'));
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -77,6 +83,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
             case 'entity_repository':
                 return $this->em;
+
+            case 'core.locale':
+                return $this->locale;
 
             default:
                 return null;

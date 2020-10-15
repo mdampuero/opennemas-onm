@@ -1249,16 +1249,19 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function isInTime()
     {
-        $now = new \DateTime();
+        $timezone  = getService('core.locale')->getTimeZone();
+        $now       = new \DateTime(null, $timezone);
+        $starttime = new \DateTime($this->starttime, $timezone);
+        $endtime   = new \DateTime($this->endtime, $timezone);
 
         $dued = (
             !empty($this->endtime)
-            && $now->getTimeStamp() > strtotime($this->endtime)
+            && $now->getTimestamp() > $endtime->getTimestamp()
         );
 
         $postponed = (
             !empty($this->starttime)
-            && $now->getTimeStamp() < strtotime($this->starttime)
+            && $now->getTimestamp() < $starttime->getTimestamp()
         );
 
         return (!$dued && !$postponed);
