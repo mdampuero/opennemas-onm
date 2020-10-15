@@ -193,9 +193,6 @@ class CoreLoader
         // External server or a local dir
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
 
-        // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL . INSTANCE_UNIQUE_NAME);
-
         if (file_exists($this->theme->realpath . '/.deploy.themes.php')) {
             include_once $this->theme->realpath . '/.deploy.themes.php';
         }

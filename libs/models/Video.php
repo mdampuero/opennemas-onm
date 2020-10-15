@@ -266,10 +266,6 @@ class Video extends Content
             $information = $this->information;
         }
 
-        if ($this->author_name == 'internal') {
-            return MEDIA_IMG_PATH_WEB . "/../" . $information['thumbnails']['normal'];
-        }
-
         if (empty($information)
             || !is_array($information)
             || ! array_key_exists('thumbnail', $information)
