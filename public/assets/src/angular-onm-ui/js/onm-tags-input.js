@@ -92,7 +92,7 @@
          *
          * @type {Array}
          */
-        $scope.tags = [];
+        $scope.tags = null;
 
         /**
          * @function clear
@@ -374,7 +374,7 @@
         $scope.$watch('locale', function(nv) {
           $scope.tagsInLocale = $scope.tags;
 
-          if (nv && nv.multilanguage) {
+          if (nv && nv.multilanguage && angular.isArray($scope.tags)) {
             $scope.tagsInLocale = $scope.tags.filter(function(e) {
               return !e.locale || e.locale === nv.selected;
             });
@@ -423,7 +423,7 @@
 
         // Updates ngModel when tags added/removed
         $scope.$watch('tags', function(nv) {
-          $scope.ngModel = !nv ? [] : nv.map(function(e) {
+          $scope.ngModel = !nv ? null : nv.map(function(e) {
             return e.id;
           });
         }, true);
@@ -456,9 +456,21 @@
             $scope.tags = $scope.tags.filter(function(e) {
               return toDelete.indexOf(e.id) === -1;
             });
+
+            if ($scope.tags.length === 0) {
+              $scope.tags = null;
+            }
           }
 
           if (toAdd.length > 0) {
+            if (!$scope.tags) {
+              $scope.tags = [];
+            }
+
+            if (!$scope.ngModel) {
+              $scope.ngModel = [];
+            }
+
             $scope.tags = $scope.tags.concat(nv.filter(function(e) {
               return toAdd.indexOf(e.id) !== -1 &&
                 $scope.ngModel.indexOf(e.id) === -1;

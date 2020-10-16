@@ -47,7 +47,7 @@
             selectedText: '@'
           },
           template: function() {
-            return '<ui-select class="[% cssClass %]" ng-required="required" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
+            return '<ui-select class="[% cssClass %]" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
               '<ui-select-match placeholder="[% $parent.placeholder %]">' +
               '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
               '</ui-select-match>' +
@@ -88,7 +88,7 @@
                 '</ul>' +
               '</div>' +
             '</div>' +
-            '<input id="category" name="category" type="hidden" value="[% ngModel %]">';
+            '<input id="category" name="category" ng-model="ngModel" ng-required="true" type="hidden" value="[% ngModel %]">';
           },
           link: function($scope, elem, $attrs) {
             $scope.cssClass     = $attrs.class ? $attrs.class : '';
