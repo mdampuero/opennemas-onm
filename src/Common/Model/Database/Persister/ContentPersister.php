@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Model\Database\Persister;
 
 use Common\Model\Entity\User;
@@ -28,14 +21,18 @@ class ContentPersister extends BasePersister
      * @param Connection $conn     The database connection.
      * @param Metadata   $metadata The entity metadata.
      * @param Cache      $cache    The cache service.
+     * @param User       $user     The current user.
      */
     public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null, User $user)
     {
-        $this->cache     = $cache;
-        $this->conn      = $conn;
-        $this->converter = new BaseConverter($metadata);
-        $this->metadata  = $metadata;
-        $this->user      = $user;
+        $this->cache    = $cache;
+        $this->conn     = $conn;
+        $this->metadata = $metadata;
+        $this->user     = $user;
+
+        $class = $metadata->getConverter()['class'];
+
+        $this->converter = new $class($metadata);
     }
 
     /**
@@ -381,6 +378,8 @@ class ContentPersister extends BasePersister
             return;
         }
 
+        $relations = $this->converter->databasifyRelated($relations);
+
         $sql = "insert into content_content"
             . "(source_id, target_id, type, content_type_name, caption, position) values "
             . str_repeat(
@@ -397,7 +396,7 @@ class ContentPersister extends BasePersister
                 (int) $value['target_id'],
                 $value['type'],
                 $value['content_type_name'],
-                empty($value['caption']) ? null : $value['caption'],
+                $value['caption'],
                 (int) $value['position'],
             ]));
 
