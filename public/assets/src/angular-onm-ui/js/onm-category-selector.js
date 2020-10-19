@@ -88,7 +88,7 @@
                 '</ul>' +
               '</div>' +
             '</div>' +
-            '<input id="category" name="category" ng-model="ngModel" ng-required="true" type="hidden" value="[% ngModel %]">';
+            '<input id="category" name="category" ng-model="ngModel" ng-required="required" type="hidden" value="[% ngModel %]">';
           },
           link: function($scope, elem, $attrs) {
             $scope.cssClass     = $attrs.class ? $attrs.class : '';
