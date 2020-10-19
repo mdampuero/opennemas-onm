@@ -12,7 +12,7 @@
         </button>
       </span>
       <input class="form-control" id="{$iField}" name="{$iField}" ng-disabled="flags.block.slug" ng-model="item.{$iField}" {if $iRequired}required{/if} type="text">
-      {include file="ui/component/icon/status.tpl" iClass="form-status-absolute"}
+      {include file="ui/component/icon/status.tpl" iForm=$iField iClass="form-status-absolute"}
     </div>
   </div>
 </div>

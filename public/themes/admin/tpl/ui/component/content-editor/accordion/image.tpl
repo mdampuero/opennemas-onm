@@ -1,9 +1,10 @@
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.{$field} = !expanded.{$field}">
   <i class="fa fa-image m-r-10"></i> {$title}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$field} }"></i>
-  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.{$field}" ng-class="{ 'badge-danger' : item.{$field} == 0 }">
-      <span ng-show="item.{$field} === 0"><strong>{t}No image assigned{/t}</strong></span>
-      <span ng-show="item.{$field} != 0"><i class="fa fa-image"></i></span>
+  <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.{$field} && {$field}" ng-class="{ 'badge-danger' : item.{$field} == 0 }">
+    <span ng-show="{$field}">
+      <i class="fa fa-image"></i>
+    </span>
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$field} }">
@@ -48,7 +49,7 @@
         {t}Footer text{/t}
       </label>
       <div class="controls">
-        <textarea class="form-control" name="{$footer}" ng-model="{$footer}" ng-value="{$footer}"></textarea>
+        <textarea class="form-control" name="{$footer}" ng-model="{$footer}"></textarea>
       </div>
     </div>
     {/if}
