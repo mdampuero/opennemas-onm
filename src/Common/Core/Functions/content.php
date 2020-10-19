@@ -264,9 +264,7 @@ function get_related($item, string $type) : array
     }
 
     return array_filter(array_map(function ($a) {
-        $content = get_content($a['target_id'], $a['content_type_name']);
-        // TODO: Remove this provisional logic on ONM-6154
-        return !empty($content) ? $content->loadAttachedVideo() : null;
+        return get_content($a['target_id'], $a['content_type_name']);
     }, $items));
 }
 
