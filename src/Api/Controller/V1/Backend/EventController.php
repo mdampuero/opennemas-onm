@@ -63,13 +63,15 @@ class EventController extends ContentController
             }
 
             foreach ($element->related_contents as $relation) {
-                if ($relation['type'] === 'featured_frontpage' || $relation['type'] === 'featured_inner') {
-                    $photo = $em->find('Photo', $relation['target_id']);
+                if (!preg_match('/featured_.*/', $relation['type'])) {
+                    continue;
+                }
 
-                    if (!empty($photo)) {
-                        $extra[$relation['target_id']] =
-                            \Onm\StringUtils::convertToUtf8($photo);
-                    }
+                $photo = $em->find('Photo', $relation['target_id']);
+
+                if (!empty($photo)) {
+                    $extra[$relation['target_id']] =
+                        \Onm\StringUtils::convertToUtf8($photo);
                 }
             }
         }
