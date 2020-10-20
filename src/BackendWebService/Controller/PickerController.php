@@ -285,6 +285,7 @@ class PickerController extends Controller
             'epp'     => count($results),
             'page'    => 1,
             'results' => array_values($results),
+            'items'   => array_values($results),
             'total'   => count($results)
         ]);
     }
