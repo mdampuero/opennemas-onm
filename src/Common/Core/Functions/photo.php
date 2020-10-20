@@ -8,11 +8,11 @@ use Framework\Component\MIME\MimeTypeTool;
  * @param Content $item      The photo to generate path for.
  * @param string  $transform The transform to apply.
  * @param array   $params    The list of parameters for the transform.
- * @param array   $urlParams The list of parameters for the url generator.
+ * @param bool    $absolute  Wheter to generate an absolute URL.
  *
  * @return string The URL for the image.
  */
-function get_photo_path($item, string $transform = null, array $params = [], $urlParams = [])
+function get_photo_path($item, string $transform = null, array $params = [], $absolute = false)
 {
     if (empty($item)) {
         return null;
@@ -22,7 +22,11 @@ function get_photo_path($item, string $transform = null, array $params = [], $ur
         return $item;
     }
 
-    $url = getService('core.helper.url_generator')->generate($item, $urlParams);
+    $absolute = $absolute
+        ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+        : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
+
+    $url = getService('core.helper.url_generator')->generate($item);
 
     // Do not transform if empty or external photo
     if (empty($transform) || preg_match('/^https?.*/', $url)) {
@@ -32,7 +36,7 @@ function get_photo_path($item, string $transform = null, array $params = [], $ur
     return getService('router')->generate('asset_image', [
         'params' => implode(',', array_merge([ $transform ], $params)),
         'path'   => $url
-    ]);
+    ], $absolute);
 }
 
 /**
