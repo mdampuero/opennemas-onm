@@ -18,10 +18,7 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
-        $data = $this->assignUser(
-            $data,
-            [ 'fk_user_last_editor', 'fk_publisher' ]
-        );
+        $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
         return parent::createItem($data);
     }
@@ -107,10 +104,6 @@ class ContentService extends OrmService
 
         $currentUserId = $this->container->get('core.user')->id ?? null;
 
-        foreach ($userFields as $field) {
-            $data[$field] = $currentUserId;
-        }
-
-        return $data;
+        return array_merge($data, array_fill_keys($userFields, $currentUserId));
     }
 }
