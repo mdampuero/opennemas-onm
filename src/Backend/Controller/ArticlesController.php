@@ -223,8 +223,6 @@ class ArticlesController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $keys = ['img1', 'img2', 'fk_video', 'fk_video2'];
-
         $this->get('core.locale')->setContext('frontend')
             ->setRequestLocale($request->get('locale'));
 
@@ -241,16 +239,12 @@ class ArticlesController extends Controller
             ]
         );
 
-        foreach ($keys as $key) {
-            $data[$key] = $data[$key] === '' ? null : $data[$key];
-        }
-
         // Load config
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 
         foreach ($data as $key => $value) {
-            $article->{$key} = $value;
+            $article->{$key} = empty($value) ? null : $value;
         }
 
         $tags = [];
