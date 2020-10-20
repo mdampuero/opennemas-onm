@@ -35,6 +35,11 @@ class UserGroupPersisterTest extends \PHPUnit\Framework\TestCase
                 'name'          => 'string',
                 'privileges'    => 'array'
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'user_groups',

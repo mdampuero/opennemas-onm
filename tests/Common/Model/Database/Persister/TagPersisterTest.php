@@ -45,6 +45,11 @@ class TagPersisterTest extends \PHPUnit\Framework\TestCase
                 'name' => 'string',
                 'slug' => 'string'
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'tags',
