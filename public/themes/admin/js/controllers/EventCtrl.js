@@ -135,7 +135,10 @@
                     return e.type === type;
                   }).shift();
 
-                  caption = removedItem ? removedItem.caption : null;
+                  caption     = removedItem ? removedItem.caption : null;
+                  removedItem = removedItem ?
+                    $scope.data.extra.related_contents[removedItem.target_id] :
+                    null;
                 }
 
                 // Remove from unlocalized
@@ -163,8 +166,11 @@
                   $scope.data.extra.related_contents[items[j].pk_content] = items[j];
                 }
 
-                // Override caption only when adding new item
-                if (!removedItem) {
+                /**
+                 * Override caption when adding new item or when caption matches
+                 * the removed item description
+                 */
+                if (!removedItem || removedItem.description === caption) {
                   caption = items[j].description;
                 }
 
