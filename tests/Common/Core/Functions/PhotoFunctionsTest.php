@@ -125,6 +125,25 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_photo_path when generating absolute URL.
+     */
+    public function testGetPhotoPathWhenAbsolute()
+    {
+        $photo = new Content();
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('asset_image', [
+                'params' => 'grault',
+                'path'   => '/glorp/xyzzy/foobar.jpg'
+            ])->willReturn('/glorp/xyzzy/foobar.jpg');
+
+        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault', [], true));
+    }
+
+    /**
      * Tests get_size.
      */
     public function testGetPhotoSize()
