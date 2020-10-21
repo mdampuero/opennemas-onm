@@ -222,7 +222,7 @@ class SpecialsController extends Controller
         if (!empty($id)) {
             $special = new \Special($id);
 
-            $special->delete($id, $this->getUser()->id);
+            $special->delete($id);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _("Special deleted successfully.")

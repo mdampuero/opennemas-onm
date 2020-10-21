@@ -29,7 +29,7 @@ window.get_tooltip_content = function(elem) {
           '<span class="scheduled-state ' + content.scheduled_state +
           '">' + content.scheduled_state + '</span>' +
         '<br>' + window.tooltip_strings.starttime + content.starttime +
-        '<br>' + window.tooltip_strings.last_author + content.last_author;
+        '<br>' + window.tooltip_strings.last_editor + content.last_editor;
       parentContentId.data('popover-content', contentHtml);
     }
   } else {
