@@ -44,9 +44,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-
-        $this->container->expects($this->any())->method('getParameter')
-            ->with('core.paths.themes')->willReturn('/wobble/themes');
     }
 
     public function serviceContainerCallback($name)
@@ -595,8 +592,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $theme = new Theme([
-            'uuid' => 'es.openhost.theme.foobar',
-            'path' => '/themes/foobar/'
+            'uuid'     => 'es.openhost.theme.foobar',
+            'path'     => '/themes/foobar/',
+            'realpath' => '/wobble/themes/foobar'
         ]);
 
         $method = new \ReflectionMethod($template, 'setupPlugins');

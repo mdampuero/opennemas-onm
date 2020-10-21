@@ -64,8 +64,8 @@ jsdoc: node_modules
 		-t node_modules/openhost-jsdoc/template \
 		-d build/docs/javascript \
 		-r public/assets/src \
-		-r public/themes/admin \
-		-r public/themes/manager
+		-r public/core/admin \
+		-r public/core/manager
 
 ################################################################################
 # Installation targets
@@ -137,8 +137,8 @@ permissions:
 eslint: node_modules
 	node_modules/.bin/eslint -c .eslintrc --format=checkstyle \
 		public/assets/src \
-		public/themes/admin \
-		public/themes/manager -o build/logs/eslint.xml
+		public/core/admin \
+		public/core/manager -o build/logs/eslint.xml
 
 phplint:
 	find libs src -name *.php -print0 | xargs -0 -n1 -P0 php -l
