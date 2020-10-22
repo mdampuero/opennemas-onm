@@ -62,8 +62,15 @@
          * @type {Object}
          */
         $scope.relatedMap = {
-          featured_frontpage: { simple: true, name: 'featuredFrontpage' },
-          featured_inner:     { simple: true, name: 'featuredInner' },
+          featured_frontpage: {
+            name:        'featuredFrontpage',
+            replicateOn: 'featured_inner',
+            simple:      true
+          },
+          featured_inner: {
+            name:   'featuredInner',
+            simple: true
+          },
         };
 
         /**
@@ -184,6 +191,16 @@
 
                 $scope.data.item.related_contents.push(related);
                 $scope.item.related_contents.push($scope.localizeRelated(related, j));
+              }
+
+              // Copy current item to another item
+              if ($scope.relatedMap[type].replicateOn) {
+                var replicated = $scope.relatedMap[$scope.relatedMap[type].replicateOn];
+
+                if (!$scope[replicated.name] ||
+                    angular.equals($scope[replicated.name], ov[i])) {
+                  $scope[replicated.name] = angular.copy(nv[i]);
+                }
               }
             }
           }, true);
