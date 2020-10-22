@@ -594,7 +594,9 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $properties['changed'] = date('Y-m-d H:i:s');
 
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!getService('core.security')->hasPermission('MASTER')
+            && !empty(getService('core.user'))
+        ) {
             $properties['fk_user_last_editor'] = (int) getService('core.user')->id;
         }
 
@@ -744,7 +746,9 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $data = [ 'in_litter' => 1, 'changed' => date("Y-m-d H:i:s") ];
 
-            if (!getService('core.security')->hasPermission('MASTER')) {
+            if (!getService('core.security')->hasPermission('MASTER')
+                && !empty(getService('core.user'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -783,7 +787,9 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $data = [ 'in_litter' => 0, 'changed' => date("Y-m-d H:i:s") ];
 
-            if (!getService('core.security')->hasPermission('MASTER')) {
+            if (!getService('core.security')->hasPermission('MASTER')
+                && !empty(getService('core.user'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -936,7 +942,9 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $lastEditor = $this->fk_user_last_editor;
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!getService('core.security')->hasPermission('MASTER')
+            && !empty(getService('core.user'))
+        ) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
@@ -1006,7 +1014,9 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $lastEditor = $this->fk_user_last_editor;
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!getService('core.security')->hasPermission('MASTER')
+            && !empty(getService('core.user'))
+        ) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
@@ -1117,7 +1127,9 @@ class Content implements \JsonSerializable, CsvSerializable
                 'changed'             => date("Y-m-d H:i:s")
             ];
 
-            if (!getService('core.security')->hasPermission('MASTER')) {
+            if (!getService('core.security')->hasPermission('MASTER')
+                && !empty(getService('core.user'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -1937,7 +1949,9 @@ class Content implements \JsonSerializable, CsvSerializable
     protected function parseData(array $data, int $id = null) : array
     {
         $currentUserId = $this->fk_user_last_editor;
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!getService('core.security')->hasPermission('MASTER')
+            && !empty(getService('core.user'))
+        ) {
             $currentUserId = (int) getService('core.user')->id;
         }
 
