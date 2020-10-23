@@ -46,7 +46,7 @@
     {if $footer}
       <div class="form-group ng-cloak m-t-15" ng-show="{$field}">
         <label class="form-label" for="{$footer}">
-          {t}Footer text{/t}
+          {t}Caption{/t}
         </label>
         <div class="controls">
           <textarea class="form-control" name="{$footer}" ng-model="{$footer}"></textarea>
