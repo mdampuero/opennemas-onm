@@ -51,12 +51,13 @@ class PhotoService extends ContentService
             );
 
             $data = array_merge([
-                'created'     => $date->format('Y-m-d H:i:s'),
-                'changed'     => $date->format('Y-m-d H:i:s'),
-                'description' => $originalFilename,
-                'path'        => 'images' . $date->format('/Y/m/d/') . $filename,
-                'title'       => $filename,
-                'slug'        => $filename,
+                'content_status' => 1,
+                'created'        => $date->format('Y-m-d H:i:s'),
+                'changed'        => $date->format('Y-m-d H:i:s'),
+                'description'    => $originalFilename,
+                'path'           => 'images' . $date->format('/Y/m/d/') . $filename,
+                'title'          => $filename,
+                'slug'           => $filename,
             ], $data, $ih->getInformation($path));
 
             $data = $this->em->getConverter($this->entity)
