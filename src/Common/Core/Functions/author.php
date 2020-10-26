@@ -121,7 +121,9 @@ function get_author_name($item = null) : ?string
             return $item->agency;
         }
 
-        if (!empty($item->author_name)) {
+        if (!empty($item->author_name)
+            && !$item instanceof \Video
+        ) {
             return $item->author_name;
         }
     }
@@ -170,10 +172,7 @@ function get_author_slug($item = null) : ?string
 {
     $author = get_author($item);
 
-    return empty($author) ? null : getService('data.manager.filter')
-        ->set($author->name)
-        ->filter('slug')
-        ->get();
+    return empty($author) ? null : $author->slug;
 }
 
 /**

@@ -145,7 +145,7 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
         $content->starttime = null;
         $content->endtime   = null;
 
-        $this->assertEquals(0, count($cm->getinTime([ $content ])));
+        $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
         // Check with content with zeroed values
         $content->starttime = '0000-00-00 00:00:00';

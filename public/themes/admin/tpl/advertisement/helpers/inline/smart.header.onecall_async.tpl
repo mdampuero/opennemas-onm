@@ -22,12 +22,12 @@
         {/foreach}
       ],
       target: targetingCode
-    }, {
+    }{if !$config['header_bidding']}, {
       onNoad: function(data) {
         if (data.formatId) {
           $('#' + data.tagId).parent().remove();
         }
       }
-    });
+    }{/if});
   });
 </script>

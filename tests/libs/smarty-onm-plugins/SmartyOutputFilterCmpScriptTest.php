@@ -64,9 +64,6 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')->willReturn($this->request);
-
         $this->output = '<html><head>Hello World</head><body></body></html>';
 
         $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
@@ -108,14 +105,31 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test CMP when no request
+     */
+    public function testCmpWhenNoRequest()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn(null);
+
+        $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
      * Test CMP not activated
      */
     public function testCmpNotActivated()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->ds->expects($this->any())
             ->method('get')
-            ->with('cmp_script')
-            ->willReturn(0);
+            ->with('cookies')
+            ->willReturn('none');
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
             $this->output,
@@ -128,27 +142,23 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
      */
     public function testCmpActivated()
     {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
         $this->ds->expects($this->at(0))
             ->method('get')
-            ->with('cmp_script')
-            ->willReturn(1);
-
-        $this->locale->expects($this->any())
-            ->method('getLocaleShort')
-            ->willReturn('en');
+            ->with('cookies')
+            ->willReturn('cmp');
 
         $this->ds->expects($this->at(1))
             ->method('get')
-            ->with('site_name')
-            ->willReturn('Opennemas');
+            ->with('cmp_type')
+            ->willReturn('default');
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp.tpl', [
-                'lang' => 'en',
-                'site' => 'Opennemas',
-            ])
+            ->with('common/helpers/cmp_default.tpl', [ 'id' => null ])
             ->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";

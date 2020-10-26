@@ -117,7 +117,7 @@ function get_featured_media($item, $type)
         }
 
         if (!empty($featured)) {
-            if (get_type($featured) === 'video') {
+            if (get_type($featured) === 'video' && $type === 'frontpage') {
                 return get_featured_media($featured, 'frontpage');
             }
 
@@ -267,7 +267,9 @@ function get_related($item, string $type) : array
     }
 
     return array_filter(array_map(function ($a) {
-        return get_content($a['target_id'], $a['content_type_name']);
+        $content = get_content($a['target_id'], $a['content_type_name']);
+        // TODO: Remove this provisional logic on ONM-6154
+        return !empty($content) ? $content->loadAttachedVideo() : null;
     }, $items));
 }
 

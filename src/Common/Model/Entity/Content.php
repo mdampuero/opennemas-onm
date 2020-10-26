@@ -110,13 +110,11 @@ class Content extends Entity
     /**
      * Check if a content is in time for publishing
      *
-     * @param string $now the current time
-     *
      * @return boolean
      */
-    protected function isInTime($now = null)
+    protected function isInTime()
     {
-        $now = new \DateTime($now);
+        $now = new \DateTime();
 
         $dued = (
             !empty($this->endtime)

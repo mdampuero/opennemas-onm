@@ -57,6 +57,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'exists', 'generatePath', 'getRelativePath', 'move', 'remove' ])
             ->getMock();
 
+        $this->security = $this->getMockBuilder('Sercurity')
+            ->setMethods([ 'hasPermission' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
@@ -68,7 +72,7 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getItem', 'assignUser' ])
             ->getMock();
     }
 
@@ -91,6 +95,9 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.newsstand':
                 return $this->nh;
 
+            case 'core.security':
+                return $this->security;
+
             default:
                 return null;
         }
@@ -109,7 +116,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->converter->expects($this->once())->method('objectify')
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
         $this->nh->expects($this->once())->method('move')
@@ -131,7 +141,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->converter->expects($this->once())->method('objectify')
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
         $this->nh->expects($this->once())->method('exists')
@@ -169,7 +182,10 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
-        $this->converter->expects($this->once())->method('objectify')
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
         $this->service->expects($this->once())->method('getItem')

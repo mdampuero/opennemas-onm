@@ -106,7 +106,7 @@ class OrmService implements Service
     {
         try {
             $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
+                ->objectify($this->parseData($data));
 
             $item = new $this->class($data);
 
@@ -353,7 +353,8 @@ class OrmService implements Service
             throw new PatchListException('Invalid ids', 400);
         }
 
-        $data = $this->em->getConverter($this->entity)->objectify($data);
+        $data = $this->em->getConverter($this->entity)
+            ->objectify($data);
 
         try {
             $response = $this->getListByIds($ids);
@@ -533,6 +534,18 @@ class OrmService implements Service
         }
 
         return $items;
+    }
+
+    /**
+     * Parses the content data array.
+     *
+     * @param array $data The content data array.
+     *
+     * @return array The parsed data array.
+     */
+    protected function parseData($data)
+    {
+        return array_merge($this->defaults, $data);
     }
 
     /**

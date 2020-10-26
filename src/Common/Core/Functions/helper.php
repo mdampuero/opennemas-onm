@@ -13,6 +13,10 @@ function get_url($item = null, array $params = []) : ?string
         return null;
     }
 
+    if (!empty($item->externalUri)) {
+        return $item->externalUri;
+    }
+
     $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
     $escape   = array_key_exists('_escape', $params) && $params['_escape'];
     $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];

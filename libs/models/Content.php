@@ -594,9 +594,10 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $properties['changed'] = date('Y-m-d H:i:s');
 
-        if (!empty(getService('core.user'))) {
-            $properties['fk_user_last_editor'] =
-                (int) getService('core.user')->id;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
+            $properties['fk_user_last_editor'] = (int) getService('core.user')->id;
         }
 
         if (array_key_exists('content_status', $properties)
@@ -665,22 +666,19 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Make unavailable one content, but without deleting it
-     *
-     * This simulates a trash system by setting their available flag to false
+     * Make unavailable one content, but without deleting it.
+     * This simulates a trash system by setting their available flag to false.
      *
      * @param integer $id
-     * @param integer $lastEditor
      *
-     * @return null
+     * @return boolean true If the action was executed
      */
-    public function delete($id, $lastEditor = null)
+    public function delete($id)
     {
         try {
             getService('dbal_connection')->update(
                 'contents',
                 [
-                    'fk_user_last_editor' => $lastEditor,
                     'in_litter' => 1,
                     'content_status' => 0,
                     'changed' => date("Y-m-d H:i:s"),
@@ -748,9 +746,10 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $data = [ 'in_litter' => 1, 'changed' => date("Y-m-d H:i:s") ];
 
-            if (!empty(getService('core.user'))) {
-                $data['fk_user_last_editor'] =
-                    (int) getService('core.user')->id;
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
+                $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
             getService('dbal_connection')->update('contents', $data, [
@@ -786,16 +785,17 @@ class Content implements \JsonSerializable, CsvSerializable
     public function restoreFromTrash()
     {
         try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'in_litter' => 0,
-                    'changed'    => date("Y-m-d H:i:s"),
-                ],
-                [ 'pk_content' => $this->id ]
-            );
+            $data = [ 'in_litter' => 0, 'changed' => date("Y-m-d H:i:s") ];
 
-            $this->in_litter = 0;
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
+                $data['fk_user_last_editor'] = (int) getService('core.user')->id;
+            }
+
+            getService('dbal_connection')->update('contents', $data, [
+                'pk_content' => $this->id
+            ]);
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -808,7 +808,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return $this;
         } catch (\Exception $e) {
             getService('error.log')->error(
-                'Error removing content (ID:' . $this->id . '):' . $e->getMessage()
+                'Error restoring content (ID:' . $this->id . '):' . $e->getMessage()
             );
             return false;
         }
@@ -929,20 +929,22 @@ class Content implements \JsonSerializable, CsvSerializable
 
     /**
      * TODO: review functionality, the is_array thing could be wrong
-     * Change the current value of available content_status property
+     * Change the current value of available content_status property.
      *
-     * @param int $status the available value
-     * @param int $lastEditor the author id that performs the action
+     * @param int $status The available value.
      *
-     * @return boolean true if it was changed successfully
+     * @return boolean true If it was changed successfully.
      */
-    public function setAvailable($status = 1, $lastEditor = null)
+    public function setAvailable($status = 1)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
 
-        if ($lastEditor == null && !empty(getService('core.user'))) {
+        $lastEditor = $this->fk_user_last_editor;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
@@ -1009,6 +1011,13 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
+        }
+
+        $lastEditor = $this->fk_user_last_editor;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
+            $lastEditor = (int) getService('core.user')->id;
         }
 
         try {
@@ -1118,7 +1127,9 @@ class Content implements \JsonSerializable, CsvSerializable
                 'changed'             => date("Y-m-d H:i:s")
             ];
 
-            if (!empty(getService('core.user'))) {
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -1193,33 +1204,32 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
-        $authorName = '';
-
-        try {
-            $author     = getService('api.service.author')->getItem($this->fk_author);
-            $authorName = (is_object($author)) ? $author->name : '';
-        } catch (\Exception $e) {
+        if (empty($this->id)) {
+            return;
         }
 
-        if ($this->id !== null) {
-            if (is_null($this->views)) {
-                $this->views = getService('content_views_repository')->getViews($this->id);
+        if (!empty($this->fk_user_last_editor)) {
+            try {
+                $user = getService('orm.manager')->getRepository('User')
+                    ->find($this->fk_user_last_editor);
+            } catch (\Exception $e) {
             }
-
-            $status          = $this->getStatus();
-            $schedulingState = $this->getSchedulingState();
-
-            return [
-                'title'           => $this->__get('title'),
-                'category'        => get_category_name($this),
-                'views'           => $this->views,
-                'starttime'       => $this->starttime,
-                'endtime'         => $this->endtime,
-                'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
-                'state'           => $this->getL10nStatus($status),
-                'last_author'     => $authorName,
-            ];
         }
+
+        $status          = $this->getStatus();
+        $schedulingState = $this->getSchedulingState();
+
+        return [
+            'title'           => $this->__get('title'),
+            'category'        => get_category_name($this),
+            'starttime'       => $this->starttime,
+            'endtime'         => $this->endtime,
+            'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
+            'state'           => $this->getL10nStatus($status),
+            'last_editor'     => $user->name ?? '',
+            'views'           => getService('content_views_repository')
+                ->getViews($this->id),
+        ];
     }
 
     /**
@@ -1243,15 +1253,28 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Check if a content is in time for publishing.
+     * Check if a content is in time for publishing
      *
-     * @return bool
+     * @return boolean
      */
     public function isInTime()
     {
-        return $this->isScheduled()
-            && !$this->isDued()
-            && !$this->isPostponed();
+        $timezone  = getService('core.locale')->getTimeZone();
+        $now       = new \DateTime(null, $timezone);
+        $starttime = new \DateTime($this->starttime, $timezone);
+        $endtime   = new \DateTime($this->endtime, $timezone);
+
+        $dued = (
+            !empty($this->endtime)
+            && $now->getTimestamp() > $endtime->getTimestamp()
+        );
+
+        $postponed = (
+            !empty($this->starttime)
+            && $now->getTimestamp() < $starttime->getTimestamp()
+        );
+
+        return (!$dued && !$postponed);
     }
 
     /**
@@ -1925,8 +1948,12 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     protected function parseData(array $data, int $id = null) : array
     {
-        $currentUserId = !empty(getService('core.user'))
-            ? getService('core.user')->id : null;
+        $currentUserId = $this->fk_user_last_editor;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
+            $currentUserId = (int) getService('core.user')->id;
+        }
 
         $overrides = [
             'changed'             => date('Y-m-d H:i:s'),
@@ -1948,7 +1975,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'favorite'       => $data['favorite'] ?? 0,
             'fk_author'      => !empty($data['fk_author']) ?
                 (int) $data['fk_author'] : null,
-            'fk_publisher'   => $currentUserId,
+            'fk_publisher'   => $this->fk_publisher ?? $currentUserId,
             'frontpage'      => $data['frontpage'] ?? 0,
             'in_home'        => $data['in_home'] ?? 0,
             'params'         => $data['params'] ?? null,

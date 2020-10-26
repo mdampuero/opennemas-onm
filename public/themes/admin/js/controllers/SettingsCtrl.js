@@ -75,7 +75,9 @@
           },
           rtb_files: [],
           theme_skin: 'default',
-          translators: []
+          translators: [],
+          cookies: 'none',
+          cmp_type: 'default'
         };
 
         /**

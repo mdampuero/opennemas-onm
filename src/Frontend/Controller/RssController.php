@@ -574,28 +574,6 @@ class RssController extends FrontendController
                && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
             }
-
-            $relations = $this->get('related_contents')
-                ->getRelations($content->id, 'inner', $limit);
-            if (!empty($relations)) {
-                $relatedContents = [];
-                $relateds        = $this->get('entity_repository')->findMulti($relations);
-
-                // Filter out not ready for publish contents.
-                foreach ($relateds as $related) {
-                    if ($related->isReadyForPublish()) {
-                        if ($related->content_type == 1 && !empty($related->img1)) {
-                            $related->photo = $er->find('Photo', $related->img1);
-                        } elseif ($related->content_type == 1 && !empty($related->fk_video)) {
-                            $related->video = $er->find('Video', $related->fk_video);
-                        }
-
-                        $relatedContents[] = $related;
-                    }
-                }
-
-                $content->related = $relatedContents;
-            }
         }
     }
 }

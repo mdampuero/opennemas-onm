@@ -45,10 +45,16 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Locale' . uniqid())
+            ->setMethods([ 'getTimeZone' ])->getMock();
+
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'getValue' ])
             ->getMock();
+
+        $this->locale->expects($this->any())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('UTC'));
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -77,6 +83,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
             case 'entity_repository':
                 return $this->em;
+
+            case 'core.locale':
+                return $this->locale;
 
             default:
                 return null;
@@ -134,12 +143,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaForExternalContent()
     {
-        $photo = new Content([
-            'id'                => 893,
-            'content_status'    => 1,
-            'content_type_name' => 'photo',
-            'starttime'         => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $photo                    = new \Content();
+        $photo->id                = 893;
+        $photo->content_status    = 1;
+        $photo->starttime         = '2020-01-01 00:00:00';
+        $photo->content_type_name = 'photo';
 
         $this->template->expects($this->once())->method('getValue')
             ->with('related', [])->willReturn([ 893 => $photo ]);
@@ -147,11 +155,15 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(get_featured_media($this->content, 'baz'));
         $this->assertNull(get_featured_media($this->content, 'inner'));
 
-        $this->content->content_type_name = 'article';
-        $this->content->img1              = 893;
-        $this->content->external          = 1;
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->img1              = 893;
+        $content->external          = 1;
 
-        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
     }
 
     /**
@@ -159,11 +171,14 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaForEvents()
     {
-        $photo = new Content([
-            'id'             => 893,
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $photo                    = new \Content();
+        $photo->id                = 893;
+        $photo->content_status    = 1;
+        $photo->starttime         = '2020-01-01 00:00:00';
+        $photo->content_type_name = 'photo';
+
+        $this->em->expects($this->once())->method('find')
+            ->with('photo', 893)->willReturn($photo);
 
         $this->content->content_type_name = 'event';
         $this->content->related_contents  = [ [
@@ -173,9 +188,6 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'type'              => 'featured_frontpage'
         ] ];
 
-        $this->em->expects($this->once())->method('find')
-            ->with('photo', 893)->willReturn($photo);
-
         $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
     }
 
@@ -184,12 +196,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaWhenFeaturedPhoto()
     {
-        $photo = new Content([
-            'id'                => 893,
-            'content_status'    => 1,
-            'content_type_name' => 'photo',
-            'starttime'         => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $photo                    = new \Content();
+        $photo->id                = 893;
+        $photo->content_status    = 1;
+        $photo->starttime         = '2020-01-01 00:00:00';
+        $photo->content_type_name = 'photo';
 
         $this->em->expects($this->once())->method('find')
             ->with('Photo', 893)->willReturn($photo);
@@ -197,10 +208,14 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(get_featured_media($this->content, 'baz'));
         $this->assertNull(get_featured_media($this->content, 'inner'));
 
-        $this->content->content_type_name = 'article';
-        $this->content->img1              = 893;
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->img1              = 893;
 
-        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
     }
 
     /**
@@ -209,32 +224,32 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaWhenFeaturedVideoWithPhoto()
     {
-        $photo = new Content([
-            'id'                => 893,
-            'content_status'    => 1,
-            'content_type_name' => 'photo',
-            'starttime'         => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $photo                    = new \Content();
+        $photo->id                = 893;
+        $photo->content_status    = 1;
+        $photo->starttime         = '2020-01-01 00:00:00';
+        $photo->content_type_name = 'photo';
 
-        $video = new Content([
-            'id'                => 779,
-            'content_status'    => 1,
-            'content_type_name' => 'video',
-            'starttime'         => new \Datetime('2020-01-01 00:00:00'),
-            'information'       => [
-                'thumbnail' => 893
-            ]
-        ]);
+        $video                    = new \Content();
+        $video->id                = 779;
+        $video->content_status    = 1;
+        $video->starttime         = '2020-01-01 00:00:00';
+        $video->content_type_name = 'video';
+        $video->information       = [ 'thumbnail' => 893 ];
 
         $this->em->expects($this->at(0))->method('find')
             ->with('Video', 779)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
             ->with('Photo', 893)->willReturn($photo);
 
-        $this->content->content_type_name = 'article';
-        $this->content->fk_video          = 779;
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->fk_video          = 779;
 
-        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
     }
 
     /**
@@ -243,23 +258,24 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaWhenFeaturedVideoWithUrl()
     {
-        $video = new Content([
-            'id'                => 779,
-            'content_status'    => 1,
-            'content_type_name' => 'video',
-            'starttime'         => new \Datetime('2020-01-01 00:00:00'),
-            'information'       => [
-                'thumbnail' => 'http://waldo/thud.jpg'
-            ]
-        ]);
+        $video                    = new \Content();
+        $video->id                = 779;
+        $video->content_status    = 1;
+        $video->starttime         = '2020-01-01 00:00:00';
+        $video->content_type_name = 'video';
+        $video->information       = [ 'thumbnail' => 'http://waldo/thud.jpg' ];
 
         $this->em->expects($this->once())->method('find')
             ->with('Video', 779)->willReturn($video);
 
-        $this->content->content_type_name = 'article';
-        $this->content->fk_video          = 779;
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->fk_video          = 779;
 
-        $this->assertEquals('http://waldo/thud.jpg', get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals('http://waldo/thud.jpg', get_featured_media($content, 'frontpage'));
     }
 
     /**
@@ -326,28 +342,32 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRelated()
     {
-        $article = new Content([
-            'id'             => 893,
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $article                 = new \Content();
+        $article->id             = 893;
+        $article->content_status = 1;
+        $article->starttime      = '2020-01-01 00:00:00';
 
         $this->em->expects($this->once())->method('find')
             ->with('article', 205)->willReturn($article);
 
-        $this->assertEmpty(get_related($this->content, 'inner'));
+        $content                 = new \Content();
+        $content->content_status = 1;
+        $content->in_litter      = 0;
+        $content->starttime      = '2020-01-01 00:00:00';
 
-        $this->content->related_contents = [ [
+        $this->assertEmpty(get_related($content, 'inner'));
+
+        $content->related_contents = [ [
             'content_type_name' => 'article',
             'target_id'         => 205,
-            'type'              => 'related_inner',
+            'type'              => 'related_inner'
         ] ];
 
-        $this->assertEmpty(get_related($this->content, 'inner'));
+        $this->assertEmpty(get_related($content, 'inner'));
 
         $this->assertEquals(
             [ $article ],
-            get_related($this->content, 'related_inner')
+            get_related($content, 'related_inner')
         );
     }
 
@@ -356,17 +376,21 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRelatedForExternal()
     {
-        $article = new Content([
-            'id'             => 205,
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $article                 = new \Content();
+        $article->id             = 205;
+        $article->content_status = 1;
+        $article->starttime      = '2020-01-01 00:00:00';
 
         $this->template->expects($this->once())->method('getValue')
             ->with('related')->willReturn([ 205 => $article ]);
 
-        $this->content->external         = 1;
-        $this->content->related_contents = [ [
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->external          = 1;
+        $content->related_contents  = [ [
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
@@ -374,7 +398,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [ $article ],
-            get_related($this->content, 'related_inner')
+            get_related($content, 'related_inner')
         );
     }
 
@@ -383,23 +407,28 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRelatedContents()
     {
-        $article = new Content([
-            'id'             => 893,
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]);
+        $article                 = new \Content();
+        $article->id             = 893;
+        $article->content_status = 1;
+        $article->starttime      = '2020-01-01 00:00:00';
 
         $this->em->expects($this->any())->method('find')
             ->with('article', 205)->willReturn($article);
 
-        $this->content->related_contents = [ [
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->target_id         = 205;
+        $content->related_contents  = [ [
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
         ] ];
 
-        $this->assertEmpty(get_related_contents($this->content, 'mumble'));
-        $this->assertEquals([ $article ], get_related_contents($this->content, 'inner'));
+        $this->assertEmpty(get_related_contents($content, 'mumble'));
+        $this->assertEquals([ $article ], get_related_contents($content, 'inner'));
     }
 
     /**
@@ -460,22 +489,32 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasFeaturedMedia()
     {
-        $photo = new Content([
-            'id'             => 893,
-            'content_status' => 1,
-            'in_litter'      => 0,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]);
-
-        $this->content->content_type_name = 'article';
-        $this->content->img1              = 893;
+        $photo                    = new \Content();
+        $photo->id                = 893;
+        $photo->content_status    = 1;
+        $photo->in_litter         = 0;
+        $photo->starttime         = '2020-01-01 00:00:00';
+        $photo->content_type_name = 'photo';
 
         $this->em->expects($this->once())->method('find')
             ->with('Photo', 893)->willReturn($photo);
 
-        $this->assertFalse(has_featured_media($this->content, 'baz'));
-        $this->assertFalse(has_featured_media($this->content, 'inner'));
-        $this->assertTrue(has_featured_media($this->content, 'frontpage'));
+        $this->assertNull(get_featured_media($this->content, 'baz'));
+        $this->assertNull(get_featured_media($this->content, 'inner'));
+
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->img1              = 893;
+
+        $this->em->expects($this->once())->method('find')
+            ->with('Photo', 893)->willReturn($photo);
+
+        $this->assertFalse(has_featured_media($content, 'baz'));
+        $this->assertFalse(has_featured_media($content, 'inner'));
+        $this->assertTrue(has_featured_media($content, 'frontpage'));
     }
 
     /**
@@ -514,25 +553,32 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasRelatedContents()
     {
+        $article                 = new \Content();
+        $article->id             = 893;
+        $article->content_status = 1;
+        $article->starttime      = '2020-01-01 00:00:00';
+
         $this->em->expects($this->any())->method('find')
-            ->with('article', 205)->willReturn(new Content([
-            'id'             => 893,
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-            ]));
+            ->with('article', 205)->willReturn($article);
 
         $this->helper->expects($this->at(0))->method('isHidden')
             ->willReturn(true);
 
-        $this->content->related_contents = [ [
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->target_id         = 205;
+        $content->related_contents  = [ [
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
         ] ];
 
-        $this->assertFalse(has_related_contents($this->content, 'mumble'));
-        $this->assertFalse(has_related_contents($this->content, 'inner'));
-        $this->assertTrue(has_related_contents($this->content, 'inner'));
+        $this->assertFalse(has_related_contents($content, 'mumble'));
+        $this->assertFalse(has_related_contents($content, 'inner'));
+        $this->assertTrue(has_related_contents($content, 'inner'));
     }
 
     /**

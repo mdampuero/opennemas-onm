@@ -86,7 +86,7 @@ class SmartyOutputFilterStatisticsTest extends \PHPUnit\Framework\TestCase
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn(null);
 
-        $output = '<html><head></head><body>Hello World!</body></html>';
+        $output = '<!doctype html><head></head><body>Hello World!</body></html>';
 
         $this->assertEquals($output, smarty_outputfilter_statistics($output, $this->smarty));
     }
@@ -112,8 +112,8 @@ class SmartyOutputFilterStatisticsTest extends \PHPUnit\Framework\TestCase
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
 
-        $output      = '<html><head></head><body>Hello World!</body></html>';
-        $returnvalue = '<html><head>foo-bar-baz</head><body>Hello World!</body></html>';
+        $output      = '<!DocType html><head></head><body>Hello World!</body></html>';
+        $returnvalue = '<!DocType html><head>foo-bar-baz</head><body>Hello World!</body></html>';
 
         $this->fr->expects($this->any())->method('render')
             ->with(null, [

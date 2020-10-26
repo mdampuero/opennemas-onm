@@ -231,12 +231,9 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAuthorSlug()
     {
-        $this->fm->expects($this->once())->method('get')
-            ->willReturn('michelle-price');
-
         $this->assertNull(get_author_slug(131));
         $this->assertEquals('michelle-price', get_author_slug(new User([
-            'name' => 'Michelle Price'
+            'slug' => 'michelle-price'
         ])));
     }
 

@@ -233,8 +233,9 @@ class NewsletterController extends Controller
             ->get('site_name');
         $time         = new \DateTime();
         $defaultTitle = sprintf('%s [%s]', $siteTitle, $time->format('d/m/Y'));
-        $title        = $request->request->filter('title', $defaultTitle, FILTER_SANITIZE_STRING);
         $html         = $nm->render($containers);
+        $title        = $request->request
+            ->filter('title', $defaultTitle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
         $this->get('core.locale')->setContext('backend')->apply();
         try {

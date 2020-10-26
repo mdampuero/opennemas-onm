@@ -322,7 +322,7 @@ class PickerController extends Controller
         return new JsonResponse([
             'epp'     => count($results),
             'page'    => 1,
-            'results' => $results,
+            'results' => array_values($results),
             'total'   => count($results)
         ]);
     }

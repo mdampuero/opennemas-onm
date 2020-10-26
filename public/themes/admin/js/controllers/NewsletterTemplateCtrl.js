@@ -93,12 +93,12 @@
          */
         $scope.treeOptions = {
           accept: function(source, target) {
-            return (source.$modelValue.id ||
-              source.$modelValue.content_type === 'list') &&
-              target.$element.attr('type') === 'content' ||
-              !source.$modelValue.id &&
-              !source.content_type &&
-              target.$element.attr('type') !== 'content';
+            if (target.$element.attr('type') === 'content') {
+              return source.$modelValue.content_type ||
+                source.$modelValue.content_type === 'list';
+            }
+
+            return !source.$modelValue.content_type;
           }
         };
 

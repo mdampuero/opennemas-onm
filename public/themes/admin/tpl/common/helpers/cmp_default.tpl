@@ -1,6 +1,5 @@
 <!-- OneTrust CMP Builder start -->
-<script src="https://cmp-cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8"
-    data-cmp-builder-version="1.8.0" data-domain-script="bottom-panel-dark-stack-global-ot"></script>
+<script src="https://cmp-cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-cmp-builder-version="2.0.0" data-domain-script="bottom-panel-dark-stack-global-ot"></script>
 <script>
     function OptanonWrapper() {
         addCmpBuilderFeatures();
@@ -21,7 +20,8 @@
 </script>
 <!-- OneTrust CMP Builder end -->
 <style>
-  .ot-floating-button {
+  .ot-floating-button,
+  button#onetrust-reject-all-handler {
     display: none !important;
   }
 </style>

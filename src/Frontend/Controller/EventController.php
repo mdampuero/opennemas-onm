@@ -173,7 +173,9 @@ class EventController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         // Invalid page provided as parameter
-        if ($params['page'] <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
@@ -203,8 +205,7 @@ class EventController extends FrontendController
             'route'       => 'frontend_events',
         ]);
 
-        $params['related_contents'] = $this->getRelations($contents);
-        $params['tags']             = $this->getTags($contents);
+        $params['tags'] = $this->getTags($contents);
     }
 
     /**
@@ -212,46 +213,6 @@ class EventController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['related_contents'] = $this->getRelations($params['content']);
-        $params['tags']             = $this->getTags($params['content']);
-    }
-
-    /**
-     * Returns the list of covers
-     *
-     * @param array $coverIds the list of contents to fetch related from
-     *
-     * @return array
-     */
-    public function getRelations($contents)
-    {
-        if (!is_array($contents)) {
-            $contents = [ $contents ];
-        }
-
-        $ids = [];
-        foreach ($contents as $content) {
-            if (!$content->hasRelated('cover')) {
-                continue;
-            }
-
-            $ids[] = $content->getMedia('cover');
-        }
-
-        if (empty($ids)) {
-            return [];
-        }
-
-        $relations = $this->get('entity_repository')->findBy([
-            'content_type_name' => [[ 'value' => 'photo', ]],
-            'pk_content'        => [[ 'value' => array_unique($ids), 'operator' => 'IN', 'value']],
-        ]);
-
-        $relations = $this->get('data.manager.filter')
-            ->set($relations)
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
-
-        return $relations;
+        $params['tags'] = $this->getTags($params['content']);
     }
 }

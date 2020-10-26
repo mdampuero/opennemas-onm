@@ -81,7 +81,8 @@
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "1.0.*",
         "google/recaptcha": "1.1.3",
-        "rtconner/freshbooks-api": "dev-master"
+        "rtconner/freshbooks-api": "dev-master",
+        "vdb/php-spider": "^0.4.4"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",

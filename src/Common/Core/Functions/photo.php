@@ -11,6 +11,10 @@
  */
 function get_photo_path($item, string $transform = null, array $params = [])
 {
+    if (empty($item)) {
+        return null;
+    }
+
     if (is_string($item)) {
         return $item;
     }

@@ -271,9 +271,19 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testGetUrlWhenInvalidArgument()
+    public function testGetUrlWhenNull()
     {
         $this->redirector->getUrl(null);
+    }
+
+    /**
+     * Tests getUrl when source is invalid.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetUrlWhenEmpty()
+    {
+        $this->redirector->getUrl('');
     }
 
     /**
@@ -350,6 +360,43 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->with('baz-quux', [ 'norf' ])->willReturn($url);
 
         $this->assertEquals($url, $redirector->getUrl('baz-quux', [ 'norf' ]));
+    }
+
+    /**
+     * Tests getUrl when an Url with the source value is found.
+     */
+    public function testGetUrlWhenZero()
+    {
+        $url = new Url([
+            'content_type' => 'norf',
+            'enabled'      => true,
+            'redirection'  => true,
+            'source'       => '0',
+            'target'       => 4796,
+            'type'         => 0
+        ]);
+
+        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
+            ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
+            ->setMethods([ 'getLiteralUrl' ])
+            ->getMock();
+
+        $this->fm->expects($this->once())->method('set')
+            ->with('0')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('filter')
+            ->with('url_decode')->willReturn($this->fm);
+        $this->fm->expects($this->once())->method('get')
+            ->willReturn('0');
+
+        $this->cache->expects($this->at(0))->method('exists')
+            ->with('redirector-' . md5('0') . '-norf');
+        $this->cache->expects($this->at(1))->method('set')
+            ->with('redirector-' . md5('0') . '-norf')->willReturn($url);
+
+        $redirector->expects($this->once())->method('getLiteralUrl')
+            ->with('0', [ 'norf' ])->willReturn($url);
+
+        $this->assertEquals($url, $redirector->getUrl('0', [ 'norf' ]));
     }
 
     /**

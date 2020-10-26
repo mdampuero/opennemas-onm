@@ -44,9 +44,6 @@ class ContentPersister extends BasePersister
             $entity->starttime = new \DateTime();
         }
 
-        $entity->fk_user_last_editor = $this->user->id;
-        $entity->fk_publisher        = $this->user->id;
-
         $categories = [];
         if (!empty($entity->categories)) {
             $categories = $entity->categories;
@@ -96,9 +93,6 @@ class ContentPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        $entity->fk_user_last_editor = $this->user->id;
-        $entity->fk_publisher        = $this->user->id;
-
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tags       = $entity->tags;

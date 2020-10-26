@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 11:55+0000\n"
-"PO-Revision-Date: 2020-10-23 14:00+0200\n"
+"POT-Creation-Date: 2020-10-26 15:19+0000\n"
+"PO-Revision-Date: 2020-10-26 16:28+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1293,6 +1293,19 @@ msgstr "%s elementos eliminados correctamente"
 
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Excedeches o límite de versións. Elimina unha para crear unha nova"
+
+msgid "Item not found"
+msgstr "Elemento non encontrado"
+
+msgid "Invalid argument"
+msgstr "Parámetro incorrecto"
+
+msgid "The item is already imported"
+msgstr "O elemento xa está importado"
+
+msgid "The synchronization is already in progress. Try again later."
+msgstr ""
+"O proceso de sincronización está en curso. Inténtao de novo máis tarde."
 
 msgid "Invalid category"
 msgstr "Categoría non válida"
@@ -2840,11 +2853,57 @@ msgstr "Imaxe por defecto para redes sociais"
 msgid "Cookies agreement"
 msgstr "Aceptación de cookies"
 
+msgid "None"
+msgstr "Ningún"
+
+msgid "Basic cookies advise"
+msgstr "Aviso de cookies básico"
+
+msgid "Consent Management Platform (CMP)"
+msgstr "Plataforma de xestión de consentimento (CMP)"
+
 msgid "Cookie agreement page URL"
 msgstr "URL da páxina de aceptación de cookies"
 
-msgid "Use Consent Management Platform (CMP)"
-msgstr "Usar plataforma de xestión de consentimento (CMP)"
+msgid "Choose your CMP"
+msgstr "Elixe o teu CMP"
+
+msgid "Quantcast"
+msgstr "Quantcast"
+
+msgid "OneTrust"
+msgstr "OneTrust"
+
+msgid "Quantcast UTID"
+msgstr "Quantcast UTID"
+
+msgid ""
+"How to find your Quantcast UTID <a class=\"external-link\" href=\"https://"
+"help.quantcast.com/hc/en-us/articles/360051794614-TCF-v2-GTM-Implementation-"
+"Guide-Finding-your-UTID\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">here</a>."
+msgstr ""
+"Como atopar o teu Quantcast UTID <a class=\"external-link\" href=\"https://"
+"help.quantcast.com/hc/en-us/articles/360051794614-TCF-v2-GTM-Implementation-"
+"Guide-Finding-your-UTID\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">aquí</a>."
+
+msgid "OneTrust data-domain-script"
+msgstr "OneTrust data-domain-script"
+
+msgid ""
+"Get your data-domain-script from your OneTrust script. Check an example "
+"script <a class=\"external-link\" href=\"https://community.cookiepro.com/s/"
+"article/UUID-5394213a-70b9-c4e6-d68c-f809b55e7af6#UUID-7478d3b4-18eb-3ac0-"
+"a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" target=\"_blank"
+"\" ng-click=\"$event.stopPropagation();\">here</a>."
+msgstr ""
+"Obtén o teu OneTrust data-domain-script dende o propio script. Comproba un "
+"script de exemplo <a class=\"external-link\" href=\"https://community."
+"cookiepro.com/s/article/UUID-5394213a-70b9-c4e6-d68c-"
+"f809b55e7af6#UUID-7478d3b4-18eb-3ac0-a6fd-fb7ebff9f8dc_section-"
+"idm4591571479548831554522590036\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">aquí</a>."
 
 msgid "Browser update"
 msgstr "Actualización do navegador"
@@ -5446,9 +5505,6 @@ msgstr "Id a cabeceira de Act-On"
 
 msgid "Opinion type"
 msgstr "Tipo de opinión"
-
-msgid "None"
-msgstr "Ningún"
 
 msgid "Amount"
 msgstr "Cantidade"

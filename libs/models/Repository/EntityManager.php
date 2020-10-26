@@ -25,6 +25,10 @@ use Onm\Cache\CacheInterface;
  */
 class EntityManager extends BaseManager
 {
+    const ORM_CONTENT_TYPES = [
+        'kiosko'
+    ];
+
     /**
      * Initializes the entity manager.
      *
@@ -71,6 +75,10 @@ class EntityManager extends BaseManager
         $entity      = null;
         $contentType = \classify($contentType);
         $cacheId     = \underscore($contentType) . $this->cacheSeparator . $id;
+
+        if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
+            return null;
+        }
 
         if (!empty($id)
             && class_exists($contentType)

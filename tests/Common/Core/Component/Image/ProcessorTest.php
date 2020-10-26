@@ -189,7 +189,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getHeight.
+     * Tests getSize.
      */
     public function testGetSize()
     {
@@ -242,6 +242,21 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->with('xyzzy/grault.flob')->willReturn(false);
 
          $this->im->open('xyzzy/grault.flob');
+    }
+
+    /**
+     * Tests open when exception.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testOpenWhenException()
+    {
+        $this->fs->expects($this->once())->method('exists')
+            ->with('xyzzy/grault.flob')->willReturn(true);
+        $this->imagine->expects($this->once())->method('open')
+            ->will($this->throwException(new \Exception()));
+
+        $this->im->open('xyzzy/grault.flob');
     }
 
     /**
