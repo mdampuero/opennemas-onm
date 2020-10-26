@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Components\Functions;
 
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Defines test cases for content functions.
@@ -138,7 +139,7 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->with('asset_image', [
                 'params' => 'grault',
                 'path'   => '/glorp/xyzzy/foobar.jpg'
-            ])->willReturn('/glorp/xyzzy/foobar.jpg');
+            ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault', [], true));
     }

@@ -1,6 +1,7 @@
 <?php
 
 use Framework\Component\MIME\MimeTypeTool;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Returns the URL for a photo.
@@ -23,8 +24,8 @@ function get_photo_path($item, string $transform = null, array $params = [], $ab
     }
 
     $absolute = $absolute
-        ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-        : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
+        ? UrlGeneratorInterface::ABSOLUTE_URL
+        : UrlGeneratorInterface::ABSOLUTE_PATH;
 
     $url = getService('core.helper.url_generator')->generate($item);
 
