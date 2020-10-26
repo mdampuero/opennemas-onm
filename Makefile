@@ -22,7 +22,7 @@ build: assets translations
 doc: jsdoc
 
 # Initialize opennemas
-init: database themes
+init: database themes media
 
 # Install all required dependencies to run opennemas
 install: vendor node_modules components routes
@@ -92,12 +92,20 @@ database:
 routes:
 	bin/console fos:js-routing:dump --target public/assets/js/routes.js
 
+# Copies the media for the default instance
+media:
+	mkdir -p public/media
+
+	[ -d public/media/opennemas ] || cp -r public/core/default public/media/opennemas
+
 # Install node dependencies
 node_modules: package.json
 	npm install
 
 # Install missing opennemas themes
 themes:
+	mkdir -p public/themes
+
 	for theme in $(themes); do \
 		[ -d public/themes/$$theme ] && continue \
 			|| git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme; \
