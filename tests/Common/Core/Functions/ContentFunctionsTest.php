@@ -295,9 +295,17 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('Rhoncus pretium', get_featured_media_caption($this->content, 'frontpage'));
 
-        $this->content->content_type_name = 'event';
+        $content = new Content([
+            'content_status' => 1,
+            'in_litter'      => 0,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
 
-        get_featured_media_caption($this->content, 'inner');
+        $content->related_contents = [ [ 'type' => 'featured_inner', 'caption' => 'glorp' ] ];
+
+        $content->content_type_name = 'event';
+
+        $this->assertEquals('glorp', get_featured_media_caption($content, 'inner'));
     }
 
     /**
