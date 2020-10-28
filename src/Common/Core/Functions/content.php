@@ -166,12 +166,17 @@ function get_featured_media_caption($item, $type)
     if ($item instanceof \Common\Model\Entity\Content
         && get_type($item) === 'event'
     ) {
-        $related = array_filter($item->related_contents, function ($related) use ($map, $type, $item) {
-            if ($related['type'] === array_shift($map[get_type($item)][$type])) {
-                return $related;
-            }
+        $key = array_shift($map['event'][$type]);
+
+        $related = array_filter($item->related_contents, function ($a) use ($key) {
+            return $a['type'] === $key;
         });
-        return array_shift($related)['caption'];
+
+        $item = array_shift($related);
+
+        if (!empty($item)) {
+            return $item['caption'];
+        }
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
