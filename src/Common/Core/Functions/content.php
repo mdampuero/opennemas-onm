@@ -172,11 +172,7 @@ function get_featured_media_caption($item, $type)
             return $a['type'] === $key;
         });
 
-        $item = array_shift($related);
-
-        if (!empty($item)) {
-            return $item['caption'];
-        }
+        return !empty($related) ? array_shift($related)['caption'] : null;
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
