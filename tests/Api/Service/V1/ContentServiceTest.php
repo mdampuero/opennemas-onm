@@ -44,6 +44,11 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['filter', 'get', 'set'])
+            ->getMock();
+
         $this->logger = $this->getMockBuilder('Logger')
             ->setMethods([ 'error' ])
             ->getMock();
@@ -76,7 +81,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
-            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser', 'localizeArray' ])
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->getMock();
     }
@@ -98,6 +103,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'core.user':
                 return $this->user;
+
+            case 'data.manager.filter':
+                return $this->fm;
         }
 
         return null;
@@ -303,5 +311,56 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             $data,
             $method->invokeArgs($this->service, [ $data, [ 'foo', 'baz' ] ])
         );
+    }
+
+    /**
+     * Tests localizeItem.
+     */
+    public function testLocalizeItem()
+    {
+        $item = new \Content();
+
+        $item->related_contents = [ [ 'caption' => [ 'es_ES' => 'glorp', 'en_US' => 'baz' ] ] ];
+
+        $method = new \ReflectionMethod($this->service, 'localizeItem');
+        $method->setAccessible(true);
+
+        $this->service->expects($this->any())->method('localizeArray')
+            ->willReturn([ [ 'caption' => 'glorp' ] ]);
+
+        $item->related_contents = [ 'caption' => 'glorp' ];
+
+        $this->assertEquals($item, $method->invokeArgs($this->service, [ $item ]));
+    }
+
+    /**
+     * Tests localizeArray.
+     */
+    public function testLocalizeArray()
+    {
+        $related = [ [ 'caption' => [ 'es_ES' => 'glorp', 'en_US' => 'baz' ] ] ];
+        $keys    = [ 'caption' ];
+        $result  = [ [ 'caption' => 'glorp' ] ];
+
+        $service = $this->getMockBuilder('Api\Service\V1\ContentService')
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
+            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
+            ->getMock();
+
+        $method = new \ReflectionMethod($service, 'localizeArray');
+        $method->setAccessible(true);
+
+        $this->fm->expects($this->at(0))->method('set')
+            ->with($related[0]['caption'])
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->at(1))->method('filter')
+            ->with('localize')
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn('glorp');
+
+        $this->assertEquals($result, $method->invokeArgs($service, [ $related, $keys ]));
     }
 }
