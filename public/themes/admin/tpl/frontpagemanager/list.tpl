@@ -15,7 +15,7 @@
       category: "{t}Category{/t}: ",
       schedule: "{t}Schedule{/t}: ",
       starttime: "{t}Available from{/t}: ",
-      last_author: "{t}Last editor{/t}: ",
+      last_editor: "{t}Last editor{/t}: ",
     }
 
     var frontpage_urls = {

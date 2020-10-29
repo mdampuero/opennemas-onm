@@ -31,6 +31,11 @@ class UserGroupRepositoryTest extends \PHPUnit\Framework\TestCase
                 'pk_user_group' => 'integer',
                 'name'          => 'string',
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'user_groups',

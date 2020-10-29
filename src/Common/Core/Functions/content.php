@@ -64,8 +64,8 @@ function get_featured_media($item, $type)
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
         ], 'event' => [
-            'frontpage' => [ 'cover' ],
-            'inner'     => [ 'cover' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'video' => [
             'frontpage' => [ 'thumbnail' ],
             'inner'     => [ 'embedUrl' ]
@@ -88,9 +88,9 @@ function get_featured_media($item, $type)
     if ($item instanceof \Common\Model\Entity\Content
         && get_type($item) === 'event'
     ) {
-        $covers = get_related($item, $map[get_type($item)][$type][0]);
+        $media = get_related($item, $map[get_type($item)][$type][0]);
 
-        return array_shift($covers);
+        return array_shift($media);
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
@@ -156,6 +156,9 @@ function get_featured_media_caption($item, $type)
         ], 'album' => [
             'frontpage' => [],
             'inner'     => []
+        ], 'event' => [
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ]
     ];
 
@@ -164,6 +167,18 @@ function get_featured_media_caption($item, $type)
         || !array_key_exists($type, $map[get_type($item)])
     ) {
         return null;
+    }
+
+    if ($item instanceof \Common\Model\Entity\Content
+        && get_type($item) === 'event'
+    ) {
+        $key = array_shift($map['event'][$type]);
+
+        $related = array_filter($item->related_contents, function ($a) use ($key) {
+            return $a['type'] === $key;
+        });
+
+        return !empty($related) ? array_shift($related)['caption'] : null;
     }
 
     foreach ($map[get_type($item)][$type] as $key) {

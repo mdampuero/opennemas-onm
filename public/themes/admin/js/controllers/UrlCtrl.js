@@ -58,12 +58,14 @@
 
         // Updates item target when selected content from content picker changes
         $scope.$watch('data.extra.content', function(nv, ov) {
-          if (!nv || nv === ov) {
+          if (!nv || nv.length === 0 || nv === ov) {
             return;
           }
 
-          $scope.item.target       = nv.pk_content;
-          $scope.item.content_type = nv.content_type_name;
+          var item = nv.shift();
+
+          $scope.item.target       = item.pk_content;
+          $scope.item.content_type = item.content_type_name;
         }, true);
 
         // Updates item when item type changes

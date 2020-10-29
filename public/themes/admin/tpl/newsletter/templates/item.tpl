@@ -233,7 +233,7 @@ var newsletterTemplateTranslations = {
               </div>
               <div class="newsletter-container-items" ui-tree="treeOptions">
                 <div class="newsletter-container-items-placeholder" ng-if="container.items.length == 0">
-                  {t}Click on "Add" button above or drop contents from other containers{/t}
+                  {t}Click on "Add" or drop contents from other containers{/t}
                 </div>
                 <div ng-model="container.items" type="content" ui-tree-nodes="">
                   <div class="newsletter-item" ng-repeat="content in container.items" ui-tree-node>

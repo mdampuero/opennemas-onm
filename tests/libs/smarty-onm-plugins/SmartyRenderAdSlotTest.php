@@ -59,6 +59,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
+        $this->locale->expects($this->any())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('UTC'));
+
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 

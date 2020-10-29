@@ -125,10 +125,10 @@
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.import }" ng-click="flags.expanded.import = !flags.expanded.import">
           <i class="fa fa-cloud-download m-r-10"></i>
           {t}Import{/t} {t}as{/t}
-          <span ng-if="!flags.expanded.import">
-            {include file="ui/component/icon/status.tpl" iField="target" iRequired=true iValidation=true}
-          </span>
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.import }"></i>
+          <span class="pull-right" ng-if="!flags.expanded.import">
+            {include file="ui/component/icon/status.tpl" iField="target" iForm="target" iRequired=true iValidation=true}
+          </span>
           <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.import && item.target">
             <span ng-if="item.target === 'article'">{t}Article{/t}</span>
             <span ng-if="item.target === 'opinion'">{t}Opinion{/t}</span>
@@ -142,16 +142,16 @@
                 <option value="article">{t}Article{/t}</option>
                 <option value="opinion">{t}Opinion{/t}</option>
               </select>
-              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="target" iRequired=true iValidation=true}
+              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="target" iForm="target" iRequired=true iValidation=true}
             </div>
           </div>
         </div>
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.author }" ng-click="flags.expanded.author = !flags.expanded.author">
           <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
-          <span ng-if="!flags.expanded.author">
-            {include file="ui/component/icon/status.tpl" iField="author" iRequired=true iValidation=true}
-          </span>
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.author }"></i>
+          <span class="pull-right" ng-if="!flags.expanded.author">
+            {include file="ui/component/icon/status.tpl" iField="author" iForm="author" iRequired=true iValidation=true}
+          </span>
           <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.author && item.author">
             [% defaultAuthor.name %]
           </span>
@@ -163,7 +163,7 @@
             </label>
             <div class="controls controls-validation">
               <onm-author-selector class="block" default-value-text="{t}Select an author{/t}…" export-model="defaultAuthor" name="author" ng-model="item.author" placeholder="{t}Select an author{/t}…" required></onm-author-selector>
-              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="author" iRequired=true iValidation=true}
+              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="author" iForm="author" iRequired=true iValidation=true}
             </div>
           </div>
           <div class="form-group">
@@ -200,10 +200,10 @@
         </div>
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.category }" ng-click="flags.expanded.category = !flags.expanded.category" ng-if="item.target === 'article'">
           <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
-          <span ng-if="!flags.expanded.category">
-            {include file="ui/component/icon/status.tpl" iField="category" iRequired=true iValidation=true}
-          </span>
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.category }"></i>
+          <span class="pull-right" ng-if="!flags.expanded.category">
+            {include file="ui/component/icon/status.tpl" iField="category" iForm="category" iRequired=true iValidation=true}
+          </span>
           <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.category && item.category">
             [% data.extra.defaultCategory.title %]
           </span>
@@ -215,7 +215,7 @@
             </label>
             <div class="controls controls-validation">
               <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.defaultCategory" name="category" ng-model="item.category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
-              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="category" iRequired=true iValidation=true}
+              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="category" iForm="category" iRequired=true iValidation=true}
             </div>
           </div>
           <div class="form-group">
@@ -333,7 +333,7 @@
             </label>
             <div class="controls">
               <input class="form-control" name="url" ng-model="item.url" ng-if="item.type == 0" placeholder="ftp://server.com/path" required type="text">
-              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="url" iRequired=true iValidation=true}
+              {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iField="url" iForm="url" iRequired=true iValidation=true}
               <div class="input-group no-animate ng-cloak p-r-50" ng-if="item.type == 1">
                 <span class="input-group-addon">
                   https://
