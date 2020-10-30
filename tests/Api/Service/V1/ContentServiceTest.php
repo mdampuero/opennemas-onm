@@ -81,7 +81,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
-            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser', 'localizeArray' ])
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->getMock();
     }
@@ -322,45 +322,23 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $item->related_contents = [ [ 'caption' => [ 'es_ES' => 'glorp', 'en_US' => 'baz' ] ] ];
 
+        $result                   = $item;
+        $result->related_contents = [ 'caption' => 'glorp' ];
+
         $method = new \ReflectionMethod($this->service, 'localizeItem');
         $method->setAccessible(true);
 
-        $this->service->expects($this->any())->method('localizeArray')
-            ->willReturn([ [ 'caption' => 'glorp' ] ]);
-
-        $item->related_contents = [ 'caption' => 'glorp' ];
-
-        $this->assertEquals($item, $method->invokeArgs($this->service, [ $item ]));
-    }
-
-    /**
-     * Tests localizeArray.
-     */
-    public function testLocalizeArray()
-    {
-        $related = [ [ 'caption' => [ 'es_ES' => 'glorp', 'en_US' => 'baz' ] ] ];
-        $keys    = [ 'caption' ];
-        $result  = [ [ 'caption' => 'glorp' ] ];
-
-        $service = $this->getMockBuilder('Api\Service\V1\ContentService')
-            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
-            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
-            ->getMock();
-
-        $method = new \ReflectionMethod($service, 'localizeArray');
-        $method->setAccessible(true);
-
-        $this->fm->expects($this->at(0))->method('set')
-            ->with($related[0]['caption'])
+        $this->fm->expects($this->any())->method('set')
+            ->with($item->related_contents)
             ->willReturn($this->fm);
 
-        $this->fm->expects($this->at(1))->method('filter')
-            ->with('localize')
+        $this->fm->expects($this->any())->method('filter')
+            ->with('localize', [ 'keys' => [ 'caption' ] ])
             ->willReturn($this->fm);
 
-        $this->fm->expects($this->at(2))->method('get')
-            ->willReturn('glorp');
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($result->related_contents);
 
-        $this->assertEquals($result, $method->invokeArgs($service, [ $related, $keys ]));
+        $this->assertEquals($result, $method->invokeArgs($this->service, [ $item ]));
     }
 }

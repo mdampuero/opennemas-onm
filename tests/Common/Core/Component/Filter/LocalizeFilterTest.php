@@ -73,9 +73,36 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
             ])
         ];
 
+        $related = [
+            [
+                'source_id'         => 866,
+                'target_id'         => 876,
+                'type'              => 'featured_frontpage',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'glorp',
+                    'en' => 'baz'
+                ],
+            ],
+            [
+                'source_id'         => 516,
+                'target_id'         => 1009,
+                'type'              => 'featured_inner',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'corge',
+                    'en' => 'mumble'
+                ],
+            ]
+        ];
+
         $this->assertEmpty($this->filter->filter([]));
         $this->assertEmpty($this->filter->filter(null));
         $this->assertEquals('wobble', $this->filter->filter('wobble'));
+
+        $translated = $this->filter->filter($related);
+        $this->assertEquals('glorp', $translated[0]['xyzzy']);
+        $this->assertEquals('corge', $translated[1]['xyzzy']);
 
         $this->filter->filter($entities);
         $this->assertEquals('frog', $entities[0]->xyzzy);
@@ -89,6 +116,44 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
         $property->setValue($this->filter, $params);
 
         $this->assertEquals('quux', $this->filter->filter([ 'es' => 'quux' ]));
+    }
+
+    /**
+     * Tests filterArray.
+     */
+    public function testFilterArray()
+    {
+        $related = [
+            [
+                'source_id'         => 866,
+                'target_id'         => 876,
+                'type'              => 'featured_frontpage',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'glorp',
+                    'en' => 'baz'
+                ],
+            ],
+            [
+                'source_id'         => 516,
+                'target_id'         => 1009,
+                'type'              => 'featured_inner',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'corge',
+                    'en' => 'mumble'
+                ],
+            ]
+        ];
+
+        $result             = $related;
+        $result[0]['xyzzy'] = 'glorp';
+        $result[1]['xyzzy'] = 'corge';
+
+        $method = new \ReflectionMethod($this->filter, 'filterArray');
+        $method->setAccessible(true);
+
+        $this->assertEquals($result, $method->invokeArgs($this->filter, [ $related ]));
     }
 
     /**

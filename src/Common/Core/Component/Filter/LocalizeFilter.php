@@ -20,6 +20,10 @@ class LocalizeFilter extends Filter
             return $this->filterValue($items);
         }
 
+        if (is_array($items) && is_array($items[0])) {
+            return $this->filterArray($items);
+        }
+
         if (is_array($items)) {
             foreach ($items as $item) {
                 $this->filterItem($item);
@@ -31,6 +35,27 @@ class LocalizeFilter extends Filter
         $this->filterItem($items);
 
         return $items;
+    }
+
+    /**
+     * Filters an array.
+     *
+     * @param array $item The array to filter.
+     *
+     * @return array Filtered array.
+     */
+    protected function filterArray($items)
+    {
+        $keys = $this->getParameter('keys');
+
+        return array_map(function ($a) use ($keys) {
+            foreach ($keys as $key) {
+                if (!empty($a[$key])) {
+                    $a[$key] = $this->filterValue($a[$key]);
+                    return $a;
+                }
+            }
+        }, $items);
     }
 
     /**
