@@ -24,7 +24,7 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->locale = $this->getMockBuilder('Locale')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getRequestLocale' ])
+            ->setMethods([ 'getRequestLocale', 'getContext' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer')
@@ -49,6 +49,9 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
+        $this->locale->expects($this->any())->method('getContext')
+            ->willReturn('frontend');
+
         $entities = [
             new Entity([
                 'flob' => 'norf',
@@ -116,6 +119,20 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
         $property->setValue($this->filter, $params);
 
         $this->assertEquals('quux', $this->filter->filter([ 'es' => 'quux' ]));
+    }
+
+    /**
+     * Tests filter when backend context.
+     */
+    public function testFilterBackendContext()
+    {
+        $this->locale->expects($this->any())->method('getContext')
+            ->willReturn('backend');
+
+        $this->assertEquals(
+            [ 'es_ES' => 'glorp', 'en_US' => 'baz'],
+            $this->filter->filter([ 'es_ES' => 'glorp', 'en_US' => 'baz'])
+        );
     }
 
     /**

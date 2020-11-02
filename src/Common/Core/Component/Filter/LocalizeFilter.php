@@ -15,6 +15,12 @@ class LocalizeFilter extends Filter
             return $items;
         }
 
+        $lm = $this->container->get('core.locale');
+
+        if ($lm->getContext() !== 'frontend') {
+            return $items;
+        }
+
         // Filter simple values
         if (empty($this->getParameter('keys'))) {
             return $this->filterValue($items);

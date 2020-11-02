@@ -500,9 +500,7 @@ class OrmService implements Service
      */
     protected function localizeItem($item)
     {
-        if (empty($this->getL10nKeys())
-            || $this->container->get('core.locale')->getContext() !== 'frontend'
-        ) {
+        if (empty($this->getL10nKeys())) {
             return $item;
         }
 
