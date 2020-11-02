@@ -217,6 +217,7 @@ class FrontpageVersionService extends OrmService
 
     public function getFrontpageWithCategory($categoryId)
     {
+        $this->container->get('core.locale')->setContext('frontend');
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
         $categories         = $this->container->get('api.service.category')
             ->getList();
