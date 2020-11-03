@@ -13,8 +13,8 @@ dbpass = $(shell [ -f app/config/connections.yml ] && \
 		grep 'password:' app/config/connections.yml | head -n 1 | sed -e "s/.*password:\s\+//g" || \
 		grep 'password:' app/config/parameters.yml | head -n 1 | sed -e "s/.*password:\s\+//g")
 
-.PHONY: assets clean components dev doc install node_modules prepare prod \
-routes translations vendor
+.PHONY: assets clean clean-database components database dev doc install \
+node_modules prepare prod routes translations vendor
 
 ################################################################################
 # Main targets
