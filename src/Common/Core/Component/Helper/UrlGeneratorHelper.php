@@ -85,7 +85,10 @@ class UrlGeneratorHelper
             $request = $this->container->get('request_stack')
                 ->getCurrentRequest();
 
-            if (!empty($request)) {
+            if (!empty($request)
+                && (!array_key_exists('ignore_request', $params)
+                    || $params['ignore_request'] === false)
+            ) {
                 // Absolute URL basing on the current request
                 $uri = $request->getSchemeAndHttpHost();
             }
