@@ -27,17 +27,7 @@ jQuery(document).ready(function() {
     return null;
   }
 
-  var __onm_user = JSON.parse(readCookie('__onm_user'));
-
-  if (__onm_user.name.length > 0) {
-    $('input[name=author-name]').attr('readonly', true);
-    $('input[name=author-name]').val(__onm_user.name);
-  }
-
-  if (__onm_user.email.length > 0) {
-    $('input[name=author-email]').attr('readonly', true);
-    $('input[name=author-email]').val(__onm_user.email);
-  }
+  var onmuser = JSON.parse(readCookie('__onm_user'));
 
   // Show/Hide the auth section when focusing on the comment-form textarea
   $('.comment-form')
@@ -98,7 +88,17 @@ jQuery(document).ready(function() {
       });
   });
 
-  // Autoresize textarea while its being filled
+  if (onmuser.name.length > 0) {
+    $('input[name=author-name]').attr('readonly', true);
+    $('input[name=author-name]').val(onmuser.name);
+  }
+
+  if (onmuser.email.length > 0) {
+    $('input[name=author-email]').attr('readonly', true);
+    $('input[name=author-email]').val(onmuser.email);
+  }
+
+// Autoresize textarea while its being filled
   $('textarea').autosize({ append: '\n' });
 
   // Handle vote buttons
