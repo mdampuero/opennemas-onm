@@ -29,6 +29,18 @@ jQuery(document).ready(function() {
 
   var onmuser = JSON.parse(readCookie('__onm_user'));
 
+  function initUser() {
+      if (onmuser.name.length > 0) {
+      $('input[name=author-name]').attr('readonly', true);
+      $('input[name=author-name]').val(onmuser.name);
+    }
+
+    if (onmuser.email.length > 0) {
+      $('input[name=author-email]').attr('readonly', true);
+      $('input[name=author-email]').val(onmuser.email);
+    }
+  }
+
   // Show/Hide the auth section when focusing on the comment-form textarea
   $('.comment-form')
     .on('focus', '.textarea', function() {
@@ -58,6 +70,7 @@ jQuery(document).ready(function() {
           .fadeIn();
 
         form.find('input[type=text], input[type=email], textarea').val('');
+        initUser();
 
         $('.auth').addClass('hidden');
       })
@@ -88,17 +101,9 @@ jQuery(document).ready(function() {
       });
   });
 
-  if (onmuser.name.length > 0) {
-    $('input[name=author-name]').attr('readonly', true);
-    $('input[name=author-name]').val(onmuser.name);
-  }
+  initUser();
 
-  if (onmuser.email.length > 0) {
-    $('input[name=author-email]').attr('readonly', true);
-    $('input[name=author-email]').val(onmuser.email);
-  }
-
-// Autoresize textarea while its being filled
+  // Autoresize textarea while its being filled
   $('textarea').autosize({ append: '\n' });
 
   // Handle vote buttons
