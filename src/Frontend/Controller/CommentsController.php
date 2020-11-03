@@ -46,7 +46,6 @@ class CommentsController extends Controller
 
         $comments = $this->getComments($content, $epp, $offset);
 
-        $user  = $this->get('core.user');
         $sh    = $this->get('core.helper.subscription');
         $total = $this->get('comment_repository')
             ->countCommentsForContentId($content->id);
@@ -58,7 +57,6 @@ class CommentsController extends Controller
         }
 
         return $this->render('comments/loader.tpl', [
-            'user'           => $user,
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,
             'total'          => $total,
