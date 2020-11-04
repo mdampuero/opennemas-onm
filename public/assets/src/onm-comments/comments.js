@@ -7,35 +7,43 @@ jQuery(document).ready(function() {
   var commentVoteUrl  = body.data('urlcommentsvote');
   var params          = body.data();
 
-  function readCookie(name) {
-    // Split cookie string and get all individual name=value pairs in an array
-    var cookieArr = document.cookie.split(";");
+  /**
+   * @function getCookie
+   *
+   * @description
+   *   Returns the cookie value.
+   *
+   * @param {String} name The cookie name.
+   *
+   * @return {String} The cookie value.
+   */
+  function getCookie(name) {
+    var cookies = document.cookie.split(';');
+    var pattern = new RegExp('^' + name + '=.*');
 
-    // Loop through the array elements
-    for (var i = 0; i < cookieArr.length; i++) {
-      var cookiePair = cookieArr[i].split('=');
+    cookies = cookies.filter(function(e) {
+      return pattern.test(e.trim());
+    });
 
-      /* Removing whitespace at the beginning of the cookie name
-      and compare it with the given string */
-      if (name === cookiePair[0].trim()) {
-        // Decode the cookie value and return
-        return decodeURIComponent(cookiePair[1]);
-      }
+    if (cookies.length === 0) {
+      return null;
     }
 
-    // Return null if not found
-    return null;
+    return cookies[0].trim().replace(name + '=', '');
   }
 
-  var onmuser = JSON.parse(readCookie('__onm_user'));
-
+  /**
+   * @function initUser
+   *
+   * @description
+   *   Initialize the name and email with the data from the cookie.
+   */
   function initUser() {
-      if (onmuser.name.length > 0) {
+    var onmuser = JSON.parse(decodeURIComponent(getCookie('__onm_user')));
+
+    if (onmuser.name && onmuser.email) {
       $('input[name=author-name]').attr('readonly', true);
       $('input[name=author-name]').val(onmuser.name);
-    }
-
-    if (onmuser.email.length > 0) {
       $('input[name=author-email]').attr('readonly', true);
       $('input[name=author-email]').val(onmuser.email);
     }
