@@ -692,6 +692,8 @@
             $('[name=form]')[0].reportValidity();
             return false;
           }
+
+          return true;
         };
 
         // Update footers when photos change
