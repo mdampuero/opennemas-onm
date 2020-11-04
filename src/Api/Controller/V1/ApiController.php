@@ -215,6 +215,7 @@ class ApiController extends Controller
 
         $item = $this->get($this->service)
             ->createItem($request->request->all());
+
         $msg->add(_('Item saved successfully'), 'success', 201);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());

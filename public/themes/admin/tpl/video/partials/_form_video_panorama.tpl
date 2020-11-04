@@ -2,9 +2,9 @@
   <label for="video_url" class="form-label">{t}Video URL{/t}</label>
   <div class="controls">
     <div class="input-group">
-      <input type="text" id="video_url" name="video_url" ng-model="item.video_url" required class="form-control" />
+      <input type="text" id="video_url" name="video_url" ng-model="item.path" required class="form-control" />
       <span class="input-group-btn">
-        <button class="btn btn-primary" id="video_url_button" type="button" ng-click="getVideoData()" ng-disabled="!item.video_url">
+        <button class="btn btn-primary" id="video_url_button" type="button" ng-click="getVideoData()" ng-disabled="!item.path">
           <span class="fa fa-refresh"></span>
           <span class="hidden-xs">{t}Get information{/t}</span>
         </button>

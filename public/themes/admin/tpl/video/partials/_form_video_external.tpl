@@ -4,12 +4,12 @@
 <div class="form-group">
   <label for="typ_medida" class="form-label">{t}Video type and file URLs{/t}</label>
   <div class="controls">
-    <select name="file_type" id="file_type" ng-model="item.type" required>
+    <select name="file_type" id="file_type" ng-model="html" required>
       <option value="html5">{t}HTML5 video{/t}</option>
       <option value="flv">{t}Flash video{/t}</option>
     </select>
     <p></p>
-    <div class="ng-cloak" ng-if="item.type == 'html5'">
+    <div class="ng-cloak" ng-if="html === 'html5'">
       <div class="input-group">
         <span class="input-group-addon">{t}MP4 format{/t}</span>
         <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="information[source][mp4]" ng-model="item.information.source.mp4" aria-describedby="basic-addon-mp4">
@@ -25,7 +25,7 @@
         <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="information[source][webm]" ng-model="item.information.source.webm" aria-describedby="basic-addon-webm">
       </div>
     </div>
-    <div class="ng-cloak" ng-if="item.type == 'flv'">
+    <div class="ng-cloak" ng-if="html === 'flv'">
       <div class="input-group">
         <span class="input-group-addon">{t}FLV format{/t}</span>
         <input type="text" class="form-control" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" name="information[source][flv]" ng-model="item.information.source.flv" aria-describedby="basic-addon-flv">

@@ -16,8 +16,7 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-if="item.thumb_image" ng-model="item.thumb_image"></dynamic-image>
-    <dynamic-image class="img-thumbnail" ng-if="!item.thumb_image" ng-model="item.thumb"></dynamic-image>
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumbnail" only-image="true"></dynamic-image>
   </td>
 {/block}
 
