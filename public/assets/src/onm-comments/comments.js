@@ -33,15 +33,15 @@ jQuery(document).ready(function() {
   }
 
   /**
-   * @function initUser
+   * @function loadUser
    *
    * @description
    *   Initialize the name and email with the data from the cookie.
    */
-  function initUser() {
+  function loadUser() {
     var onmuser = JSON.parse(decodeURIComponent(getCookie('__onm_user')));
 
-    if (onmuser.name && onmuser.email) {
+    if (onmuser) {
       $('input[name=author-name]').attr('readonly', true);
       $('input[name=author-name]').val(onmuser.name);
       $('input[name=author-email]').attr('readonly', true);
@@ -78,7 +78,6 @@ jQuery(document).ready(function() {
           .fadeIn();
 
         form.find('input[type=text], input[type=email], textarea').val('');
-        initUser();
 
         $('.auth').addClass('hidden');
       })
@@ -103,13 +102,15 @@ jQuery(document).ready(function() {
           .slideDown()
           .fadeIn();
       }).always(function() {
+        loadUser();
+
         if (typeof grecaptcha !== 'undefined') {
           grecaptcha.reset();
         }
       });
   });
 
-  initUser();
+  loadUser();
 
   // Autoresize textarea while its being filled
   $('textarea').autosize({ append: '\n' });
