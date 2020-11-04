@@ -44,6 +44,11 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['filter', 'get', 'set'])
+            ->getMock();
+
         $this->logger = $this->getMockBuilder('Logger')
             ->setMethods([ 'error' ])
             ->getMock();
@@ -98,6 +103,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'core.user':
                 return $this->user;
+
+            case 'data.manager.filter':
+                return $this->fm;
         }
 
         return null;
@@ -303,5 +311,34 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             $data,
             $method->invokeArgs($this->service, [ $data, [ 'foo', 'baz' ] ])
         );
+    }
+
+    /**
+     * Tests localizeItem.
+     */
+    public function testLocalizeItem()
+    {
+        $item = new \Content();
+
+        $item->related_contents = [ [ 'caption' => [ 'es_ES' => 'glorp', 'en_US' => 'baz' ] ] ];
+
+        $result                   = $item;
+        $result->related_contents = [ 'caption' => 'glorp' ];
+
+        $method = new \ReflectionMethod($this->service, 'localizeItem');
+        $method->setAccessible(true);
+
+        $this->fm->expects($this->any())->method('set')
+            ->with($item->related_contents)
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->any())->method('filter')
+            ->with('localize', [ 'keys' => [ 'caption' ] ])
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($result->related_contents);
+
+        $this->assertEquals($result, $method->invokeArgs($this->service, [ $item ]));
     }
 }

@@ -546,8 +546,8 @@
          *   Saves tags and, then, saves the article.
          */
         $scope.submit = function() {
-          if (!$('[name=form]')[0].checkValidity()) {
-            $('[name=form]')[0].reportValidity();
+          if (!$scope.validate()) {
+            messenger.post(window.strings.forms.not_valid, 'error');
             return;
           }
 
@@ -670,6 +670,28 @@
          */
         $scope.generateTagsFrom = function() {
           return $scope.article.title;
+        };
+
+        /**
+         * @function validate
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Validates the form and/or the current item in the scope.
+         *
+         * @return {Boolean} True if the form and/or the item are valid. False
+         *                   otherwise.
+         */
+        $scope.validate = function() {
+          if ($scope.form && $scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
         };
 
         // Update footers when photos change

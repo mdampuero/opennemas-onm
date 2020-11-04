@@ -219,6 +219,8 @@ class Controller extends SymfonyController
             ->getRepository('Category')
             ->findBy('order by name asc');
 
+        $this->get('core.locale')->setContext('frontend');
+
         $categories = array_map(function ($a) {
             // Sometimes category is array. When create & update advertisement
             $a = $this->get('data.manager.filter')->set($a)->filter('localize', [

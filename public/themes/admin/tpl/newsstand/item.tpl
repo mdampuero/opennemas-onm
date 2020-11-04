@@ -36,7 +36,7 @@
           {/acl}
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/category.tpl" field="item.categories[0]"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>

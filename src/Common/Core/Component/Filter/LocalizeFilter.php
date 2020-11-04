@@ -15,9 +15,17 @@ class LocalizeFilter extends Filter
             return $items;
         }
 
+        if ($this->container->get('core.locale')->getContext() !== 'frontend') {
+            return $items;
+        }
+
         // Filter simple values
         if (empty($this->getParameter('keys'))) {
             return $this->filterValue($items);
+        }
+
+        if (is_array($items) && is_array($items[0])) {
+            return $this->filterArray($items);
         }
 
         if (is_array($items)) {
@@ -31,6 +39,27 @@ class LocalizeFilter extends Filter
         $this->filterItem($items);
 
         return $items;
+    }
+
+    /**
+     * Filters an array.
+     *
+     * @param array $item The array to filter.
+     *
+     * @return array Filtered array.
+     */
+    protected function filterArray($items)
+    {
+        $keys = $this->getParameter('keys');
+
+        return array_map(function ($a) use ($keys) {
+            foreach ($keys as $key) {
+                if (!empty($a[$key])) {
+                    $a[$key] = $this->filterValue($a[$key]);
+                    return $a;
+                }
+            }
+        }, $items);
     }
 
     /**

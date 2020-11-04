@@ -194,7 +194,7 @@
             return false;
           }
 
-          if ($scope.form.$invalid) {
+          if ($scope.form && $scope.form.$invalid) {
             $('[name=form]')[0].reportValidity();
             return false;
           }

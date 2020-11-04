@@ -33,6 +33,8 @@ class PickerController extends Controller
         $contentTypes = $request->query->filter('content_type_name', [], FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $filter = [ "in_litter = 0" ];
 
         if (!empty($contentTypes)) {
@@ -110,8 +112,6 @@ class PickerController extends Controller
             'locale'    => $languageData['default']
         ])->get();
         $results      = \Onm\StringUtils::convertToUtf8($results);
-
-        $this->get('core.locale')->setContext('frontend');
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;

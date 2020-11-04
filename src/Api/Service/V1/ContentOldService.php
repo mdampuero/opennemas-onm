@@ -456,17 +456,14 @@ class ContentOldService implements Service
      */
     protected function localizeItem($item)
     {
-        if (empty($this->getL10nKeys())
-            || $this->container->get('core.locale')->getContext() !== 'frontend'
-        ) {
+        if (empty($this->getL10nKeys())) {
             return $item;
         }
 
-        $fm = $this->container->get('data.manager.filter');
-
         foreach ($this->getL10nKeys() as $key) {
             if (!empty($item->{$key})) {
-                $item->{$key} = $fm->set($item->{$key})
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
                     ->filter('localize')
                     ->get();
             }

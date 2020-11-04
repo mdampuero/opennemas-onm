@@ -24,7 +24,7 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->locale = $this->getMockBuilder('Locale')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getRequestLocale' ])
+            ->setMethods([ 'getRequestLocale', 'getContext' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer')
@@ -49,6 +49,9 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
+        $this->locale->expects($this->any())->method('getContext')
+            ->willReturn('frontend');
+
         $entities = [
             new Entity([
                 'flob' => 'norf',
@@ -73,9 +76,36 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
             ])
         ];
 
+        $related = [
+            [
+                'source_id'         => 866,
+                'target_id'         => 876,
+                'type'              => 'featured_frontpage',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'glorp',
+                    'en' => 'baz'
+                ],
+            ],
+            [
+                'source_id'         => 516,
+                'target_id'         => 1009,
+                'type'              => 'featured_inner',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'corge',
+                    'en' => 'mumble'
+                ],
+            ]
+        ];
+
         $this->assertEmpty($this->filter->filter([]));
         $this->assertEmpty($this->filter->filter(null));
         $this->assertEquals('wobble', $this->filter->filter('wobble'));
+
+        $translated = $this->filter->filter($related);
+        $this->assertEquals('glorp', $translated[0]['xyzzy']);
+        $this->assertEquals('corge', $translated[1]['xyzzy']);
 
         $this->filter->filter($entities);
         $this->assertEquals('frog', $entities[0]->xyzzy);
@@ -89,6 +119,58 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
         $property->setValue($this->filter, $params);
 
         $this->assertEquals('quux', $this->filter->filter([ 'es' => 'quux' ]));
+    }
+
+    /**
+     * Tests filter when backend context.
+     */
+    public function testFilterBackendContext()
+    {
+        $this->locale->expects($this->any())->method('getContext')
+            ->willReturn('backend');
+
+        $this->assertEquals(
+            [ 'es_ES' => 'glorp', 'en_US' => 'baz'],
+            $this->filter->filter([ 'es_ES' => 'glorp', 'en_US' => 'baz'])
+        );
+    }
+
+    /**
+     * Tests filterArray.
+     */
+    public function testFilterArray()
+    {
+        $related = [
+            [
+                'source_id'         => 866,
+                'target_id'         => 876,
+                'type'              => 'featured_frontpage',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'glorp',
+                    'en' => 'baz'
+                ],
+            ],
+            [
+                'source_id'         => 516,
+                'target_id'         => 1009,
+                'type'              => 'featured_inner',
+                'content_type_name' => 'photo',
+                'xyzzy'             => [
+                    'es' => 'corge',
+                    'en' => 'mumble'
+                ],
+            ]
+        ];
+
+        $result             = $related;
+        $result[0]['xyzzy'] = 'glorp';
+        $result[1]['xyzzy'] = 'corge';
+
+        $method = new \ReflectionMethod($this->filter, 'filterArray');
+        $method->setAccessible(true);
+
+        $this->assertEquals($result, $method->invokeArgs($this->filter, [ $related ]));
     }
 
     /**
