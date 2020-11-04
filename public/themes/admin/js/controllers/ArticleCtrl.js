@@ -690,7 +690,7 @@
 
           if (!$('[name=form]')[0].checkValidity()) {
             $('[name=form]')[0].reportValidity();
-            return;
+            return false;
           }
         };
 
