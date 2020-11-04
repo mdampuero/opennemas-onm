@@ -15,7 +15,8 @@ class LocalizeFilter extends Filter
             return $items;
         }
 
-        if ($this->container->get('core.locale')->getContext() !== 'frontend') {
+        if ($this->container->get('core.locale')->getContext() !== 'frontend' &&
+            $this->container->get('core.instance')->hasMultilanguage()) {
             return $items;
         }
 

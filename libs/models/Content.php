@@ -256,15 +256,11 @@ class Content implements \JsonSerializable, CsvSerializable
                 if (in_array($this->content_type_name, self::L10N_CONTENT_TYPES)
                     && in_array($name, $this->getL10nKeys())
                 ) {
-                    if (!getService('core.instance')->hasMultilanguage()
-                        || getService('core.locale')->getContext() !== 'backend'
-                    ) {
-                        if (property_exists($this, $name)) {
-                            return getService('data.manager.filter')
-                                ->set($this->{$name})
-                                ->filter('localize')
-                                ->get();
-                        }
+                    if (property_exists($this, $name)) {
+                        return getService('data.manager.filter')
+                            ->set($this->{$name})
+                            ->filter('localize')
+                            ->get();
                     }
 
                     if (property_exists($this, $name)) {
