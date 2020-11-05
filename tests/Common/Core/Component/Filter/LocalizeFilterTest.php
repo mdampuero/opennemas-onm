@@ -27,6 +27,11 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRequestLocale', 'getContext' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'hasParameter', 'get' ])
             ->disableOriginalConstructor()
@@ -34,8 +39,9 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->locale->expects($this->any())->method('getRequestLocale')
             ->willReturn('gl');
+
         $this->container->expects($this->any())->method('get')
-            ->with('core.locale')->willReturn($this->locale);
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->filter = new LocalizeFilter($this->container, [
             'keys'    => [ 'xyzzy' ],
@@ -45,10 +51,34 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Returns a mocked service based on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.locale':
+                return $this->locale;
+
+            case 'core.instance':
+                return $this->instance;
+
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Tests filter.
      */
     public function testFilter()
     {
+        $this->instance->expects($this->any())->method('hasMultilanguage')
+            ->willReturn(false);
+
         $this->locale->expects($this->any())->method('getContext')
             ->willReturn('frontend');
 
@@ -126,6 +156,9 @@ class LocalizeFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterBackendContext()
     {
+        $this->instance->expects($this->any())->method('hasMultilanguage')
+            ->willReturn(true);
+
         $this->locale->expects($this->any())->method('getContext')
             ->willReturn('backend');
 

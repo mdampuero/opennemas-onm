@@ -219,6 +219,7 @@ class Controller extends SymfonyController
             ->getRepository('Category')
             ->findBy('order by name asc');
 
+        $context = $this->get('core.locale')->getContext();
         $this->get('core.locale')->setContext('frontend');
 
         $categories = array_map(function ($a) {
@@ -234,6 +235,8 @@ class Controller extends SymfonyController
                 'parent' => (int) $a->parent_id
             ];
         }, $categories);
+
+        $this->get('core.locale')->setContext($context);
 
         array_unshift(
             $categories,

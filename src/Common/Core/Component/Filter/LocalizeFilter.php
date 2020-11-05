@@ -15,7 +15,8 @@ class LocalizeFilter extends Filter
             return $items;
         }
 
-        if ($this->container->get('core.locale')->getContext() !== 'frontend') {
+        if ($this->container->get('core.locale')->getContext() !== 'frontend' &&
+            $this->container->get('core.instance')->hasMultilanguage()) {
             return $items;
         }
 
@@ -56,8 +57,9 @@ class LocalizeFilter extends Filter
             foreach ($keys as $key) {
                 if (!empty($a[$key])) {
                     $a[$key] = $this->filterValue($a[$key]);
-                    return $a;
                 }
+
+                return $a;
             }
         }, $items);
     }

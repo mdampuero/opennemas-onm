@@ -67,15 +67,11 @@ class Album extends Content
     {
         switch ($name) {
             case 'photos':
-                if (!getService('core.instance')->hasMultilanguage()
-                    || getService('core.locale')->getContext() !== 'backend'
-                ) {
-                    foreach ($this->photos as &$photo) {
-                        $photo['description'] = getService('data.manager.filter')
-                            ->set($photo['description'])
-                            ->filter('localize')
-                            ->get();
-                    }
+                foreach ($this->photos as &$photo) {
+                    $photo['description'] = getService('data.manager.filter')
+                        ->set($photo['description'])
+                        ->filter('localize')
+                        ->get();
                 }
 
                 return $this->photos;

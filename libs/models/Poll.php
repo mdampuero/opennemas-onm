@@ -107,15 +107,11 @@ class Poll extends Content
     {
         switch ($name) {
             case 'items':
-                if (!getService('core.instance')->hasMultilanguage()
-                    || getService('core.locale')->getContext() !== 'backend'
-                ) {
-                    foreach ($this->items as &$item) {
-                        $item['item'] = getService('data.manager.filter')
-                            ->set($item['item'])
-                            ->filter('localize')
-                            ->get();
-                    }
+                foreach ($this->items as &$item) {
+                    $item['item'] = getService('data.manager.filter')
+                        ->set($item['item'])
+                        ->filter('localize')
+                        ->get();
                 }
 
                 return $this->items;
