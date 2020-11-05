@@ -60,7 +60,7 @@
                         '</select>' +
                       '</li>' +
                       '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
-                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="$parent.$parent.category" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
+                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="criteria.category_id" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
                       '</li>' +
                     '</ul>' +
                   '</div>' +
@@ -79,8 +79,12 @@
                           '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
                             $window.instanceMedia +
                              '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && !content.thumb_image" path="[% content.thumb %]"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && content.thumb_image" instance="' + $window.instanceMedia + '" ng-model="content.thumb_image"></dynamic-image>' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && !isString(content.thumbnail)" instance="' +
+                          $window.instanceMedia +
+                          '" ng-model="content.thumbnail" transform="zoomcrop,220,220"></dynamic-image>' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && isString(content.thumbnail)" instance="' +
+                          $window.instanceMedia +
+                          '" ng-model="content.thumbnail"></dynamic-image>' +
                         '</div>' +
                       '</div>' +
                       '<div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll()" ng-if="!searchLoading && total != contents.length">' +
@@ -106,14 +110,16 @@
                           '" ng-model="selected.lastSelected" transform="thumbnail,220,220">' +
                         '</dynamic-image>' +
                       '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && !selected.lastSelected.thumb_image">' +
-                        '<dynamic-image autoscale="true" ng-model="selected.lastSelected" property="thumb"></dynamic-image>' +
+                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && !isString(selected.lastSelected.thumbnail)">' +
+                        '<dynamic-image autoscale="true" instance="' +
+                          $window.instanceMedia +
+                          '" ng-model="selected.lastSelected.thumbnail" transform="thumbnail,220,220">' +
+                        '</dynamic-image>' +
                       '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && selected.lastSelected.thumb_image">' +
-                        '<dynamic-image autoscale="true" instance="' + $window.instanceMedia + '" ng-model="selected.lastSelected.thumb_image"></dynamic-image>' +
-                      '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">' +
-                        '<dynamic-image autoscale="true" instance="' + $window.instanceMedia + '" ng-model="selected.lastSelected">' +
+                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && isString(selected.lastSelected.thumbnail)">' +
+                        '<dynamic-image autoscale="true" instance="' +
+                          $window.instanceMedia +
+                          '" ng-model="selected.lastSelected.thumbnail">' +
                         '</dynamic-image>' +
                       '</div>' +
                       '<ul class="media-information">' +
@@ -603,6 +609,25 @@
         };
 
         /**
+         * @function buildThumbnails
+         * @memberOf VideoListCtrl
+         *
+         * @description
+         *   Returns the thumbnail for a given content
+         */
+        $scope.buildThumbnails = function() {
+          $scope.contents.forEach(function(item) {
+            if (item.related_contents.length > 0) {
+              item.thumbnail = $scope.extra.related_contents[item.related_contents[0].target_id];
+            }
+
+            if (item.hasOwnProperty('information') && item.information.thumbnail) {
+              item.thumbnail = item.information.thumbnail;
+            }
+          });
+        };
+
+        /**
          * @function close
          * @memberof MediaPickerCtrl
          *
@@ -691,6 +716,21 @@
          */
         $scope.isFlash = function(item) {
           return DynamicImage.isFlash(item);
+        };
+
+        /**
+         * @function isString
+         * @memberof MediaPickerCtrl
+         *
+         * @description
+         *    Checks if a parameter is of type string.
+         *
+         * @param {Object|string} item The item to check.
+         *
+         * @return {boolean} True if the item is a string. False otherwise.
+         */
+        $scope.isString = function(item) {
+          return typeof item === 'string' || item instanceof String;
         };
 
         /**
@@ -810,15 +850,14 @@
             photo: {
               name: 'api_v1_backend_content_get_list',
               params:  { oql: oql }
+            },
+            video: {
+              name: 'api_v1_backend_video_get_list',
+              params: { oql: oql }
             }
           };
 
-          var oldRoute = {
-            name: 'backend_ws_picker_list',
-            params: data
-          };
-
-          var route = routes[data.content_type_name] ? routes[data.content_type_name] : oldRoute;
+          var route = routes[data.content_type_name];
 
           http.get(route)
             .then(function(response) {
@@ -836,6 +875,10 @@
 
               if (response.data.hasOwnProperty('extra')) {
                 $scope.extra = response.data.extra;
+              }
+
+              if (data.content_type_name.indexOf('video') !== -1) {
+                $scope.buildThumbnails();
               }
             });
         };
