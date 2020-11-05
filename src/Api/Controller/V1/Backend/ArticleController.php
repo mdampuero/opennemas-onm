@@ -146,7 +146,7 @@ class ArticleController extends Controller
         if (empty($article)) {
             return [];
         }
-        
+
         $service = $this->get('api.service.photo');
         $extra   = [];
         $keys    = [ 'img1', 'img2' ];
@@ -216,15 +216,24 @@ class ArticleController extends Controller
             return [];
         }
 
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $keys  = [ 'fk_video', 'fk_video2' ];
+        $service = $this->get('api.service.content');
+        $extra   = [];
+        $keys    = [ 'fk_video', 'fk_video2' ];
 
         foreach ($keys as $key) {
             if (!empty($article->{$key})) {
-                $extra[$key] = \Onm\StringUtils::convertToUtf8(
-                    $em->find('Video', $article->{$key})
-                );
+                try {
+                    $video = $service->getItem($article->{$key});
+
+                    if (!empty($video->related_contents[0])) {
+                        $video->thumbnail = $service->getItem($video->related_contents[0]['target_id']);
+                    } elseif (!empty($video->information)) {
+                        $video->thumbnail = $video->information['thumbnail'];
+                    }
+
+                    $extra[$key] = $service->responsify($video);
+                } catch (GetItemException $e) {
+                }
             }
         }
 
