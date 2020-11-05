@@ -57,8 +57,9 @@ class LocalizeFilter extends Filter
             foreach ($keys as $key) {
                 if (!empty($a[$key])) {
                     $a[$key] = $this->filterValue($a[$key]);
-                    return $a;
                 }
+
+                return $a;
             }
         }, $items);
     }
