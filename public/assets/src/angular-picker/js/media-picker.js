@@ -116,9 +116,9 @@
                         '<dynamic-image autoscale="true" instance="' + $window.instanceMedia + '" ng-model="selected.lastSelected">' +
                         '</dynamic-image>' +
                       '</div>' +
-                      '<ul class="media-information">' +
+                      '<ul class="media-information" ng-if="selected.lastSelected.content_type_name === \'photo\'">' +
                         '<li>' +
-                          '<a ng-href="[% routing.generate(\'backend_photo_show\', { id: selected.lastSelected.id}) %]">' +
+                          '<a ng-href="[% routing.generate(\'backend_photo_show\', { id: selected.lastSelected.pk_content}) %]">' +
                             '<strong>' +
                               '[% selected.lastSelected.title %]' +
                               '<i class="fa fa-edit"></i>' +
@@ -143,7 +143,28 @@
                                 '<i class="fa" ng-class="{ \'fa-circle-o-notch fa-spin\': saving, \'fa-check text-success\': saved, \'fa-times text-danger\': error }"></i>' +
                               '</div>' +
                             '</label>' +
-                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
+                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.pk_content)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
+                          '</div>' +
+                        '</li>' +
+                      '</ul>' +
+                      '<ul class="media-information" ng-if="selected.lastSelected.content_type_name === \'video\'">' +
+                        '<li>' +
+                          '<a ng-href="[% routing.generate(\'backend_video_show\', { id: selected.lastSelected.pk_content}) %]">' +
+                            '<strong>' +
+                              '[% selected.lastSelected.title %]' +
+                              '<i class="fa fa-edit"></i>' +
+                            '</strong>' +
+                          '</a>' +
+                        '</li>' +
+                        '<li>' +
+                          '<div class="form-group">' +
+                            '<label for="description">' +
+                              '[% picker.params.explore.description %]' +
+                              '<div class="pull-right">' +
+                                '<i class="fa" ng-class="{ \'fa-circle-o-notch fa-spin\': saving, \'fa-check text-success\': saved, \'fa-times text-danger\': error }"></i>' +
+                              '</div>' +
+                            '</label>' +
+                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.pk_content)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
                           '</div>' +
                         '</li>' +
                       '</ul>' +
