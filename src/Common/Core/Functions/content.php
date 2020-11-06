@@ -1,5 +1,7 @@
 <?php
 
+use Api\Exception\GetItemException;
+
 /**
  * Returns the content of specified type for the provided item.
  *
@@ -16,7 +18,11 @@ function get_content($item = null, $type = null)
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
     if (!is_object($item) && is_numeric($item) && !empty($type)) {
-        $item = getService('entity_repository')->find($type, $item);
+        try {
+            $item = getService('entity_repository')->find($type, $item);
+        } catch (GetItemException $e) {
+            return null;
+        }
     }
 
     if (!$item instanceof \Common\Model\Entity\Content

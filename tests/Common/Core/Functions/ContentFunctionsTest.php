@@ -9,6 +9,7 @@
  */
 namespace Tests\Common\Core\Functions;
 
+use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
 
 /**
@@ -99,6 +100,18 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull(get_content());
         $this->assertEquals($this->content, get_content($this->content));
+    }
+
+    /**
+     * Tests get_content when item is not found.
+     */
+    public function testGetContentWhenNotFound()
+    {
+        $this->em->expects($this->once())->method('find')
+            ->with('Photo', 43)
+            ->will($this->throwException(new GetItemException()));
+
+        $this->assertNull(get_content(43, 'Photo'));
     }
 
     /**
