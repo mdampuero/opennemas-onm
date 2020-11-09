@@ -185,11 +185,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
-            'type'              => 'cover'
+            'type'              => 'featured_frontpage'
         ] ];
 
         $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
     }
+
 
     /**
      * Tests get_featured_media when the featured media is a photo.
@@ -294,6 +295,19 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->content->img1_footer = 'Rhoncus pretium';
 
         $this->assertEquals('Rhoncus pretium', get_featured_media_caption($this->content, 'frontpage'));
+
+        $content = new Content([
+            'content_status'    => 1,
+            'content_type_name' => 'event',
+            'in_litter'         => 0,
+            'starttime'         => new \Datetime('2020-01-01 00:00:00'),
+            'related_contents'  => [
+                [ 'type' => 'featured_inner', 'caption' => 'glorp' ]
+            ]
+        ]);
+
+        $this->assertEmpty(get_featured_media_caption($content, 'frontpage'));
+        $this->assertEquals('glorp', get_featured_media_caption($content, 'inner'));
     }
 
     /**

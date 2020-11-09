@@ -876,32 +876,12 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests localizeItem when no frontend context.
-     */
-    public function testLocalizeItemWhenNoFrontendContext()
-    {
-        $item = new Entity([ 'name' => 'foobar' ]);
-
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('plugh');
-        $this->metadata->expects($this->once())->method('getL10nKeys')
-            ->willReturn([ 'title', 'name' ]);
-
-        $method = new \ReflectionMethod($this->service, 'localizeItem');
-        $method->setAccessible(true);
-
-        $this->assertEquals($item, $method->invokeArgs($this->service, [ $item ]));
-    }
-
-    /**
      * Tests localizeItem when keys provided and context is frontend.
      */
     public function testLocalizeItem()
     {
         $item = new Entity([ 'name' => [ 'en' => 'foobar', 'es' => 'fubar' ] ]);
 
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('frontend');
         $this->metadata->expects($this->any())->method('getL10nKeys')
             ->willReturn([ 'title', 'name' ]);
 

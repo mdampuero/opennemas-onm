@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf7830183d5a748ed34821f8e8237dc8",
+    "content-hash": "eebe5cfdb8598b0a43ca421bae4297ab",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2536,7 +2536,7 @@
                 "rest",
                 "server"
             ],
-            "time": "2020-02-13T18:25:17+00:00"
+            "time": "2015-06-12T07:33:40+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2808,11 +2808,11 @@
         },
         {
             "name": "opennemas/orm",
-            "version": "1.0.2",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/orm.git",
-                "reference": "72d079b97750cf1d7441b7e1771b3caaf121eaf8"
+                "reference": "21f064f1ebdd3f7a9480757ad79b2c43410527ac"
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.6",
@@ -2871,7 +2871,7 @@
                 "opennemas",
                 "orm"
             ],
-            "time": "2020-07-06T16:34:15+00:00"
+            "time": "2020-10-20T12:04:55+00:00"
         },
         {
             "name": "opennemas/task",
@@ -5813,16 +5813,16 @@
         },
         {
             "name": "vdb/uri",
-            "version": "v0.2.3",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mvdbos/vdb-uri.git",
-                "reference": "2540c4812dfaf4c2427e236f629de6538b7a761f"
+                "reference": "626d0f8963723506b0c20ea755bf47e883929343"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mvdbos/vdb-uri/zipball/2540c4812dfaf4c2427e236f629de6538b7a761f",
-                "reference": "2540c4812dfaf4c2427e236f629de6538b7a761f",
+                "url": "https://api.github.com/repos/mvdbos/vdb-uri/zipball/626d0f8963723506b0c20ea755bf47e883929343",
+                "reference": "626d0f8963723506b0c20ea755bf47e883929343",
                 "shasum": ""
             },
             "require": {
@@ -5833,9 +5833,8 @@
             },
             "type": "application",
             "autoload": {
-                "psr-0": {
-                    "VDB\\Uri": "src/",
-                    "VDB\\Uri\\Tests": "tests/"
+                "psr-4": {
+                    "VDB\\Uri\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5856,7 +5855,7 @@
                 "url",
                 "validator"
             ],
-            "time": "2020-04-17T19:48:30+00:00"
+            "time": "2020-10-07T09:20:02+00:00"
         },
         {
             "name": "willdurand/jsonp-callback-validator",

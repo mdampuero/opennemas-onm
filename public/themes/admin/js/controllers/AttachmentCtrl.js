@@ -108,6 +108,11 @@
          * @inheritdoc
          */
         $scope.validate = function() {
+          if ($scope.form && $scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
           if (!$('[name=form]')[0].checkValidity() || !$scope.item.path) {
             $('[name=form]')[0].reportValidity();
             return false;

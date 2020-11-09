@@ -106,4 +106,27 @@ class ContentService extends OrmService
 
         return array_merge($data, array_fill_keys($userFields, $currentUserId));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function localizeItem($item)
+    {
+        $keys = [
+            'related_contents' => [ 'caption' ]
+        ];
+
+        $item = parent::localizeItem($item);
+
+        foreach ($keys as $key => $value) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
+                    ->filter('localize', [ 'keys' => $value ])
+                    ->get();
+            }
+        }
+
+        return $item;
+    }
 }

@@ -33,6 +33,11 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
                 'id' => 'integer',
                 'name'                => 'string',
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'content_category',
