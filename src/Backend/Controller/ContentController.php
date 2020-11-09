@@ -12,6 +12,7 @@ namespace Backend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 
 /**
  * Handles common actions for contents.
@@ -246,26 +247,38 @@ class ContentController extends Controller
             $content    = $em->find($contentType, $id);
             $properties = $request->request->get('properties', null);
 
-            if ($content->id != null && $properties != null) {
-                foreach ($properties as $name => $value) {
-                    if (!empty($value)) {
-                        $content->setMetadata($name, $value);
-                    } else {
-                        $content->removeMetadata($name);
-                    }
+            if ($content instanceof Content) {
+                try {
+                    $this->container->get('api.service.content')->patchItem($id, $properties);
+
+                    $code    = 200;
+                    $message = "Done {$id}:" . serialize($properties) . " \n";
+                } catch (PatchItemException $e) {
+                    $code    = 404;
+                    $message = sprintf(_('Content or property not valid'), $id);
                 }
-
-                dispatchEventWithParams('content.update', [ 'item' => $content ]);
-                dispatchEventWithParams(
-                    $content->content_type_name . '.update',
-                    [ $content->content_type_name => $content ]
-                );
-
-                $code    = 200;
-                $message = "Done {$id}:" . serialize($properties) . " \n";
             } else {
-                $code    = 404;
-                $message = sprintf(_('Content or property not valid'), $id);
+                if ($content->id != null && $properties != null) {
+                    foreach ($properties as $name => $value) {
+                        if (!empty($value)) {
+                            $content->setMetadata($name, $value);
+                        } else {
+                            $content->removeMetadata($name);
+                        }
+                    }
+
+                    dispatchEventWithParams('content.update', [ 'item' => $content ]);
+                    dispatchEventWithParams(
+                        $content->content_type_name . '.update',
+                        [ $content->content_type_name => $content ]
+                    );
+
+                    $code    = 200;
+                    $message = "Done {$id}:" . serialize($properties) . " \n";
+                } else {
+                    $code    = 404;
+                    $message = sprintf(_('Content or property not valid'), $id);
+                }
             }
         } else {
             $code    = 400;

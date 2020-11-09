@@ -22,7 +22,7 @@ function smarty_function_getProperty($params, &$smarty)
             $output = " style =\"";
             $end    = "\"";
         }
-        foreach ($properties as $key => $property) {
+        foreach ($properties as $property) {
             $prop  = $property . "_" . $category;
             $value = $item->{$prop};
 
@@ -30,9 +30,11 @@ function smarty_function_getProperty($params, &$smarty)
                 if ($property == 'bgcolor') {
                     $output .= "background-color:{$value};";
                 } elseif ($property == 'title' && !empty($params['style'])) {
-                    foreach (json_decode($value, true) as $p => $v) {
-                        if (in_array($p, [ 'color', 'background-color' ])) {
-                            $output .= "$p: $v; ";
+                    if (!empty(json_decode($value, true))) {
+                        foreach (json_decode($value, true) as $p => $v) {
+                            if (in_array($p, [ 'color', 'background-color' ])) {
+                                $output .= "$p: $v; ";
+                            }
                         }
                     }
                 } else {

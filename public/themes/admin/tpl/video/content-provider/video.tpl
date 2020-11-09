@@ -1,16 +1,16 @@
-<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+<div data-content-id="{$content->id}" data-class="{$content->content_type_name|capitalize}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
-    class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
+    class="content-provider-element scheduled intime clearfix">
     <div class="description">
         <div class="checkbox check-default">
           <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            <span class="type">{$content->content_type_l10n_name}</span>
+            <span class="type">{$content->content_type_name|capitalize}</span>
             {$content->title}
         </div>
     </div>

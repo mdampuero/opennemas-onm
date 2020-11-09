@@ -67,47 +67,46 @@ class VideoController extends BackendController
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId         = $request->query->getDigits('category', 0);
-        $page               = $request->query->getDigits('page', 1);
-        $itemsPerPage       = 8;
-        $frontpageVersionId =
-            $request->query->getDigits('frontpage_version_id', null);
-        $frontpageVersionId = $frontpageVersionId === '' ?
-            null :
-            $frontpageVersionId;
+        $categoryId   = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = 8;
+        $oql          = 'content_type_name = "video" and in_litter = 0';
 
-        $em  = $this->get('entity_repository');
-        $ids = $this->get('api.service.frontpage_version')
-            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Video');
+        try {
+            $total = $this->get('api.service.content')->getList($oql)['total'];
 
-        $filters = [
-            'content_type_name' => [['value' => 'video']],
-            'content_status'    => [['value' => 1]],
-            'in_litter'         => [['value' => 1, 'operator' => '!=']],
-            'pk_content'        => [['value' => $ids, 'operator' => 'NOT IN']]
-        ];
+            if (!empty($categoryId)) {
+                $oql .= ' and category_id = ' . $categoryId;
+            }
 
-        $videos      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
-        $countVideos = $em->countBy($filters);
+            $oql .= ' order by created desc limit ' . $itemsPerPage;
 
-        $this->get('core.locale')->setContext('frontend');
+            if ($page > 1) {
+                $oql .= ' offset ' . ($page - 1) * $itemsPerPage;
+            }
 
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'page'        => $page,
-            'total'       => $countVideos,
-            'route'       => [
-                'name'   => 'backend_videos_content_provider',
-                'params' => [ 'category' => $categoryId ]
-            ],
-        ]);
+            $videos = $this->get('api.service.content')->getList($oql)['items'];
 
-        return $this->render('video/content-provider.tpl', [
-            'videos'     => $videos,
-            'pagination' => $pagination,
-        ]);
+            $this->get('core.locale')->setContext('frontend');
+
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => true,
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => [
+                    'name'   => 'backend_videos_content_provider',
+                    'params' => [ 'category' => $categoryId ]
+                ],
+            ]);
+
+            return $this->render('video/content-provider.tpl', [
+                'videos'     => $videos,
+                'pagination' => $pagination,
+            ]);
+        } catch (GetListException $e) {
+        }
     }
 }
