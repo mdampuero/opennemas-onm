@@ -42,7 +42,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
 
       for (var i = 0; i < photos.length; i++) {
         $scope.footers.push(photos[i].description);
-        $scope.ids.push(photos[i].id);
+        $scope.ids.push(photos[i].pk_content);
         $scope.photos.push(photos[i].photo);
       }
     };
@@ -64,7 +64,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
           items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+            id: nv[i].pk_content, position: i, content_type: nv[i].content_type_name
           });
         }
       }
@@ -80,7 +80,7 @@ angular.module('BackendApp.controllers').controller('SpecialCtrl', [
       if (nv instanceof Array) {
         for (var i = 0; i < nv.length; i++) {
           items.push({
-            id: nv[i].id, position: i, content_type: nv[i].content_type_name
+            id: nv[i].pk_content, position: i, content_type: nv[i].content_type_name
           });
         }
       }
