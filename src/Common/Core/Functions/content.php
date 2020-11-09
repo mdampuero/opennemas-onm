@@ -286,12 +286,6 @@ function get_related($item, string $type) : array
 
     return array_filter(array_map(function ($a) {
         $content = get_content($a['target_id'], $a['content_type_name']);
-
-        //TODO: Remove this on ticket ONM-6166
-        if ($content instanceof \Content) {
-            $content = $content->loadAttachedVideo();
-        }
-
         return !empty($content) ? $content : null;
     }, $items));
 }

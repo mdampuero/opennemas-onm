@@ -348,10 +348,6 @@ class FrontpagesController extends Controller
         list($positions, $advertisements) =
             \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
-        foreach ($contentsInHomepage as &$content) {
-            $content->loadAttachedVideo();
-        }
-
         // Fetch category layout
         $layout = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')

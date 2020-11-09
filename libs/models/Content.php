@@ -1377,29 +1377,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Loads the attached video's information for the content.
-     * If force param is true don't take care of attached images.
-     *
-     * @param boolean $force whether if force the property fetch
-     *
-     * @return Content the object with the video information loaded
-     */
-    public function loadAttachedVideo($force = false)
-    {
-        if (($force || empty($this->img1))
-            && !empty($this->fk_video)
-        ) {
-            $video = getService('entity_repository')
-                ->find('Video', $this->fk_video);
-
-            $this->video     = $video;
-            $this->obj_video = $video;
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets a metaproperty for the actual content
      *
      * @param string $property the name of the property
