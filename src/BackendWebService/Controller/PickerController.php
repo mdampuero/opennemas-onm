@@ -10,6 +10,7 @@
 namespace BackendWebService\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -111,6 +112,8 @@ class PickerController extends Controller
             'keys'      => ['title', 'name', 'description'],
             'locale'    => $languageData['default']
         ])->get();
+
+        $results      = $this->responsify($results);
         $results      = \Onm\StringUtils::convertToUtf8($results);
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
@@ -277,6 +280,7 @@ class PickerController extends Controller
             return $value->content_type_name != 'widget';
         });
 
+        $results = $this->responsify($results);
         $results = \Onm\StringUtils::convertToUtf8($results);
 
         $this->get('core.locale')->setContext('frontend');
@@ -306,5 +310,23 @@ class PickerController extends Controller
             'menuItem'    => _('Upload'),
             'upload'      => _('to upload')
         ];
+    }
+
+    /**
+     * Returns the array with the objects on the new ORM responsified.
+     *
+     * @param array The array of items.
+     *
+     * @return array The array with the items responsified.
+     */
+    private function responsify(Array $items)
+    {
+        return array_map(function ($a) {
+            if ($a instanceof Content) {
+                return $this->get('api.service.content')->responsify($a);
+            }
+
+            return $a;
+        }, $items);
     }
 }
