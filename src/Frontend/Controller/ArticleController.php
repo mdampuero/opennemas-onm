@@ -105,7 +105,6 @@ class ArticleController extends FrontendController
             'advertisements' => $advertisements,
             'cache_id'       => $cacheID,
             'ext'            => 1,
-            'videoInt'       => $article->videoInt,
             'x-cacheable'    => true,
             'x-tags'         => 'ext-article,' . $article->id
         ]);
@@ -148,29 +147,5 @@ class ArticleController extends FrontendController
             'article',
             $params['o_category']->id
         );
-
-        $em = $this->get('entity_repository');
-
-        if (!empty($params['content']->fk_video2)) {
-            $params['videoInt'] = $em->find('Video', $params['content']->fk_video2);
-        }
-    }
-
-    /**
-     * Updates the list of parameters and/or the item when the response for
-     * the current request is not cached.
-     *
-     * @param array $params The list of parameters already in set.
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-
-        $em = $this->get('entity_repository');
-
-        if (!empty($params['content']->fk_video2)) {
-            $videoInt = $em->find('Video', $params['content']->fk_video2);
-            $this->view->assign('videoInt', $videoInt);
-        }
     }
 }
