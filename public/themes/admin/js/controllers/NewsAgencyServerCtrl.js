@@ -218,6 +218,19 @@
             $scope.item.external_link = null;
           }
         }, true);
+
+        // Update external when external_link is not empty (for old agencies)
+        $scope.$watch('item.external_link', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if (nv && $scope.data && $scope.data.extra &&
+              !$scope.data.extra.instance &&
+              !($scope.item.external_link.length === 0)) {
+            $scope.item.external = 'redirect';
+          }
+        }, true);
       }
     ]);
 })();
