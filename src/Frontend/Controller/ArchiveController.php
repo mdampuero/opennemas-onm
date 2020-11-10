@@ -89,11 +89,6 @@ class ArchiveController extends Controller
                     $library[$content->category_id]->contents = [];
                 }
 
-                // Fetch video or image for article and opinions
-                if (!empty($content->fk_video)) {
-                    $content->video = $er->find('Video', $content->fk_video);
-                }
-
                 // Add contents to category group
                 $library[$content->category_id]->contents[] = $content;
             }
