@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 
 /**
  * Handles the actions for the newsletter
@@ -189,6 +190,10 @@ class NewsletterController extends Controller
                     classify($contentType),
                     $element['id']
                 );
+
+                if ($element instanceof Content) {
+                    $element = $this->get('api.service.content')->responsify($element);
+                }
             }
         }
 
