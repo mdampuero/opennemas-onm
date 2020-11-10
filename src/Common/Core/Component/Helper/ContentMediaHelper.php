@@ -2,6 +2,8 @@
 
 namespace Common\Core\Component\Helper;
 
+use Common\Model\Entity\Content;
+
 class ContentMediaHelper
 {
     /**
@@ -211,11 +213,35 @@ class ContentMediaHelper
                 return null;
             }
 
-            $video->url = $video->thumb;
+            $video->url = $this->getThumbnailUrl($video);
 
             return $video;
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Returns the url for the thumbnail of the video.
+     *
+     * @param Content $video The video object.
+     *
+     * @return string The video url.
+     */
+    protected function getThumbnailUrl(Content $video)
+    {
+        if (in_array($video->type, ['external', 'script'])) {
+            return $this->container->get('core.helper.url_generator')->generate(
+                $this->container->get('api.service.photo')->getItem($video->related_contents[0]['target_id'])
+            );
+        }
+
+        if (!empty($video->information) &&
+            is_array($video->information) &&
+            !empty($video->information['thumbnail'])) {
+            return $video->information['thumbnail'];
+        }
+
+        return null;
     }
 }

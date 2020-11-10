@@ -166,11 +166,6 @@ class NewsletterRenderer
             $content->author = $this->er->find('User', $content->fk_author);
         }
 
-        // Fetch video thumbnails
-        if ($content->content_type == '9') {
-            $content->thumb = $content->getThumb();
-        }
-
         return $content;
     }
 
