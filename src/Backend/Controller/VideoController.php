@@ -85,9 +85,12 @@ class VideoController extends BackendController
                 $oql .= ' offset ' . ($page - 1) * $itemsPerPage;
             }
 
+            $context = $this->get('core.locale')->getContext();
+            $this->get('core.locale')->setContext('frontend');
+
             $videos = $this->get('api.service.content')->getList($oql)['items'];
 
-            $this->get('core.locale')->setContext('frontend');
+            $this->get('core.locale')->setContext($context);
 
             // Build the pagination
             $pagination = $this->get('paginator')->get([
