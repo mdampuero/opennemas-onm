@@ -92,9 +92,29 @@
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.external_link }">
         <div class="form-group no-margin">
           <div class="controls">
-            <input class="form-control" id="external-link" name="external_link" ng-model="item.external_link" type="text">
+            <div class="radio">
+              <input class="form-control" id="external-none" ng-model="item.external" ng-value="'none'" type="radio"/>
+              <label for="external-none">
+                {t}None{/t}
+              </label>
+            </div>
+            <div class="radio">
+              <input class="form-control" id="external-original" ng-model="item.external" ng-value="'original'" type="radio"/>
+              <label for="external-original">
+                {t}Keep original URL{/t}
+              </label>
+            </div>
+            <div class="radio">
+              <input class="form-control" id="external-redirect" ng-model="item.external" ng-value="'redirect'" type="radio"/>
+              <label for="external-redirect">
+                {t}Redirect to{/t}
+              </label>
+            </div>
           </div>
-          <div class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+          <div class="controls" ng-if="item.external === 'redirect'">
+            {include file="ui/component/input/text.tpl" iClass="no-margin" iField="external_link" iRequired=true iValidation=true}
+          </div>
+          <div class="help m-l-3 m-t-5" ng-if="isHelpEnabled() && item.external === 'redirect'">
             <i class="fa fa-info-circle m-r-5 text-info"></i>
             {t}When importing assign an external link to the elements{/t}
           </div>
