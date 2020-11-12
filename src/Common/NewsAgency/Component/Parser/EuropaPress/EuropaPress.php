@@ -175,6 +175,18 @@ class EuropaPress extends Parser
     }
 
     /**
+     * Returns the href from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The resource href.
+     */
+    public function getHref($data)
+    {
+        return '';
+    }
+
+    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -255,6 +267,7 @@ class EuropaPress extends Parser
         $resource->title        = $this->getTitle($data);
         $resource->type         = 'text';
         $resource->urn          = $this->getUrn($data);
+        $resource->href         = $this->getHref($data);
 
         $contents[] = $resource;
 
