@@ -16,6 +16,11 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->em = $this->getMockBuilder('Repository\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'find' ])
+            ->getMock();
+
         $this->filter = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'set', 'filter', 'get' ])
@@ -54,6 +59,9 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
 
             case 'data.manager.filter':
                 return $this->filter;
+
+            case 'entity_repository':
+                return $this->em;
 
             default:
                 return null;
@@ -256,5 +264,39 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertTrue(has_video_path($video));
+    }
+
+    /**
+     * Tests get_video_thumbnail.
+     */
+    public function testGetVideoThumbnail()
+    {
+        $video = new Content(
+            [
+                'related_contents' => [
+                    [ 'content_type_name' => 'photo', 'type' => 'featured_frontpage', 'target_id' => 126 ]
+                ]
+            ]
+        );
+
+        $video2 = new Content(
+            [
+                'information' => [ 'baz' => 'glorp.xxzz/path.jpg' ]
+            ]
+        );
+
+        $photo = new Content(
+            [
+                'content_status' => 1,
+                'starttime'      => new \DateTime()
+            ]
+        );
+
+        $this->em->expects($this->at(0))->method('find')
+            ->with('photo', 126)
+            ->willReturn($photo);
+
+        $this->assertEquals($photo, get_video_thumbnail($video, 'glorp'));
+        $this->assertEquals('glorp.xxzz/path.jpg', get_video_thumbnail($video2, 'baz'));
     }
 }

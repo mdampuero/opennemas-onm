@@ -73,8 +73,7 @@ function get_featured_media($item, $type)
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
         ], 'video' => [
-            'frontpage' => [ 'thumbnail' ],
-            'inner'     => [ 'embedUrl' ]
+            'frontpage' => [ 'thumbnail' ]
         ], 'book' => [
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
@@ -109,7 +108,7 @@ function get_featured_media($item, $type)
         }
 
         $id = get_type($item) === 'video'
-            ? $item->information[$key]
+            ? get_video_thumbnail($item, $key)
             : $item->{$key};
 
         if (!is_numeric($id)) {
