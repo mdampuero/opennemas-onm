@@ -101,7 +101,8 @@ function get_featured_media($item, $type)
     foreach ($map[get_type($item)][$type] as $key) {
         if ((get_type($item) !== 'video'
                 && empty($item->{$key}))
-            || (!empty($item->information)
+            || (empty(get_related($item, 'featured_frontpage'))
+                && !empty($item->information)
                 && !array_key_exists($key, $item->information))
         ) {
             continue;
