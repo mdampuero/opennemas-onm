@@ -236,28 +236,28 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSchedulingStateWithNulledZeroedArticle()
     {
-        $now = '2012-08-22 03:03:12';
+        $timezone = getService('core.locale')->getTimeZone();
 
         $content            = new \Content();
         $content->starttime = null;
-        $content->endtime   = '2012-08-22 03:03:12';
-        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
+        $content->endtime   = (new \DateTime(null, $timezone))->format('Y-m-d H:i:s');
+        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState());
 
         $content->starttime = null;
-        $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
+        $content->endtime   = ((new \DateTime(null, $timezone))->sub(new \DateInterval('P1D')))->format('Y-m-d H:i:s');
+        $this->assertEquals(\Content::DUED, $content->getSchedulingState());
 
         $content->starttime = null;
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
+        $content->endtime   = ((new \DateTime(null, $timezone))->add(new \DateInterval('P1D')))->format('Y-m-d H:i:s');
+        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState());
 
         $content->starttime = null;
         $content->endtime   = null;
-        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
+        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState());
 
-        $content->starttime = '2012-08-23 03:03:12';
-        $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
+        $content->starttime = (new \DateTime(null, $timezone))->format('Y-m-d H:i:s');
+        $content->endtime   = (new \DateTime(null, $timezone))->format('Y-m-d H:i:s');
+        $this->assertEquals(\Content::IN_TIME, $content->getSchedulingState());
     }
 
     /**
@@ -348,11 +348,11 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $content->starttime = null;
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($method->invokeArgs($content, []));
+        $this->assertTrue($method->invokeArgs($content, []));
 
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertFalse($method->invokeArgs($content, []));
+        $this->assertTrue($method->invokeArgs($content, []));
     }
 
     /**
