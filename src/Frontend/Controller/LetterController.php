@@ -267,7 +267,7 @@ class LetterController extends Controller
                 //  Build the message
                 $text = \Swift_Message::newInstance();
                 $text
-                    ->setSubject($subject)
+                    ->setSubject('[' . _('Letter to the editor') . '] ' . $subject)
                     ->setBody($data['body'], 'text/html')
                     ->setTo([ $recipient => $recipient ])
                     ->setFrom([ $mailSender => $settings['site_name'] ])
