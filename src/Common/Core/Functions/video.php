@@ -37,7 +37,23 @@ function get_video_embed_url($item)
  */
 function get_video_html($item, $width = null, $height = null, $amp = false)
 {
-    $output = get_output($item, $width, $height);
+    $width  = $width ?? '560';
+    $height = $height ?? '320';
+    $output = '';
+
+    if ($item->type === 'script') {
+        $output = sprintf('<div>%s</div>', $item->body);
+    } else {
+        $tpl = !empty($item->information['source'])
+            ? 'video/render/external.tpl'
+            : 'video/render/web-source.tpl';
+
+        $output = getService('core.template.admin')->fetch($tpl, [
+            'info' => $item->information,
+            'height' => $height,
+            'width' => $width
+        ]);
+    }
 
     if ($amp) {
         $output = getService('data.manager.filter')
@@ -47,36 +63,6 @@ function get_video_html($item, $width = null, $height = null, $amp = false)
     }
 
     return $output;
-}
-
-/**
- * Returns the code output for the video.
- *
- * @param Content $item The item to get code for.
- * @param int $width    The width of the video.
- * @param int $height   The height of the video.
- *
- * @return string The html code.
- */
-function get_output($item, $width, $height)
-{
-    $width  = $width ?? '560';
-    $height = $height ?? '320';
-
-
-    if ($item->type === 'script') {
-        return sprintf('<div>%s</div>', $item->body);
-    }
-
-    $tpl = !empty($item->information['source'])
-        ? 'video/render/external.tpl'
-        : 'video/render/web-source.tpl';
-
-    return getService('core.template.admin')
-        ->fetch(
-            $tpl,
-            ['info' => $item->information, 'height' => $height, 'width' => $width]
-        );
 }
 
 /**
