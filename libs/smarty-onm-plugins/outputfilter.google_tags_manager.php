@@ -27,12 +27,18 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
-        && !preg_match('@\.amp\.html$@', $uri)
     ) {
-        $containerId = $smarty->getContainer()
-            ->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('google_tags_id');
+        if (!preg_match('@\.amp\.html$@', $uri)) {
+            $containerId = $smarty->getContainer()
+                ->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('google_tags_id');
+        } else {
+            $containerId = $smarty->getContainer()
+                ->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('google_tags_id_amp');
+        }
 
         if (empty($containerId)) {
             return $output;
