@@ -33,24 +33,34 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
                 ->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('google_tags_id');
+
+            if (empty($containerId)) {
+                return $output;
+            }
+
+            $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
+
+            $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
+            $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
+
+            $output = preg_replace('@(</head>)@', $headCode . '${1}', $output);
+            $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
         } else {
             $containerId = $smarty->getContainer()
                 ->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('google_tags_id_amp');
+
+            if (empty($containerId)) {
+                return $output;
+            }
+
+            $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
+
+            $bodyCode = $gtm->getGoogleTagsManagerBodyCodeAMP($containerId);
+
+            $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
         }
-
-        if (empty($containerId)) {
-            return $output;
-        }
-
-        $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
-
-        $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
-        $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
-
-        $output = preg_replace('@(</head>)@', $headCode . '${1}', $output);
-        $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
     }
 
     return $output;
