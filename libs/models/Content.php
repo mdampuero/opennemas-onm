@@ -1874,7 +1874,18 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     protected function isScheduled()
     {
-        return !(empty($this->starttime) && empty($this->endtime));
+        if (empty($this->starttime)) {
+            return false;
+        }
+
+        $start   = new \DateTime($this->starttime);
+        $created = new \DateTime($this->created);
+
+        if ($start->getTimeStamp() - $created->getTimeStamp() == 0) {
+            return !empty($this->endtime);
+        }
+
+        return true;
     }
 
     /**
