@@ -235,7 +235,7 @@
 
           // The call to angular.copy does not copy files
           if (data.avatar_img_id instanceof Object) {
-            data.avatar_img_id = data.avatar_img_id.pk_photo;
+            data.avatar_img_id = data.avatar_img_id.pk_content;
           }
 
           for (var key in data.user_groups) {

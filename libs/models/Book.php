@@ -78,24 +78,6 @@ class Book extends Content
     }
 
     /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
-     */
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        if (array_key_exists('pk_book', $properties)) {
-            $this->pk_book = (int) $properties['pk_book'];
-        }
-        if (array_key_exists('cover_id', $properties)) {
-            $this->cover_id  = (int) $properties['cover_id'];
-            $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
-        }
-    }
-
-    /**
      * Loads the book information given a book id
      *
      * @param int $id the book id to load

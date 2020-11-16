@@ -79,16 +79,18 @@
                     </hedline>
                     <rights>
                       <rights.agent>{setting name=site_name}</rights.agent>
-                      {if !empty($content->author)}
-                        <rights.owner>{$content->author->name}</rights.owner>
-                        {if $content->author->photo}
+                      {if has_author($content)}
+                        <rights.owner>{get_author_name($content)}</rights.owner>
+                        {if has_author_avatar($content)}
                           <rights.owner.photo>
-                            {$app.instance->getBaseUrl()}{$smarty.const.MEDIA_IMG_PATH_WEB}{$content->author->photo->path_img}
+                          {get_url(get_content(get_author_avatar($content), 'Photo'), [ '_absolute' => true ])}
                           </rights.owner.photo>
                         {/if}
-                        <rights.owner.url>
-                          {$app.instance->getBaseUrl()}{url name=frontend_author_frontpage slug=$content->author->username}
-                        </rights.owner.url>
+                        {if has_author_url($content)}
+                          <rights.owner.url>
+                            {get_url(get_author($content), [ '_absolute' => true ])}
+                          </rights.owner.url>
+                        {/if}
                       {else}
                         <rights.owner>{$content->agency|default:'Redacción'}</rights.owner>
                       {/if}
@@ -128,160 +130,87 @@
           </ContentItem>
         </NewsComponent>
       </NewsComponent>
-      {if !empty($photo) || !empty($photoInner)}
-        <!--Photo collection.-->
+      {if (has_featured_media($content, 'frontpage') && get_type(get_featured_media($content, 'frontpage')) === 'photo') || (has_featured_media($content, 'inner') && get_type(get_featured_media($content, 'inner')) === 'photo')}
         <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
-          {if !empty($photo)}
-            <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
-              <NewsLines>
-                <HeadLine>
-                  <![CDATA[{$content->title}]]>
-                </HeadLine>
-              </NewsLines>
-              <AdministrativeMetadata>
-                <Provider>
-                  <Party FormalName="{setting name=site_name}" />
-                </Provider>
-              </AdministrativeMetadata>
-              <DescriptiveMetadata>
-                <Language FormalName="es" />
-                <DateLineDate>{format_date date=$photo->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-                <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
-              </DescriptiveMetadata>
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
-                <Role FormalName="Main" />
-                <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
-                  <MediaType FormalName="PhotoFront" />
-                  <MimeType FormalName="image/{$photo->type_img}" />
-                  <Characteristics>
-                    <SizeInBytes>{$photo->size*1024}</SizeInBytes>
-                    <Property FormalName="Onm_Filename" Value="{$photo->name}" />
-                    <Property FormalName="Height" Value="{$photo->height}" />
-                    <Property FormalName="PixelDepth" Value="24" />
-                    <Property FormalName="Width" Value="{$photo->width}" />
-                  </Characteristics>
-                </ContentItem>
+          {foreach [ 'frontpage', 'inner' ] as $type}
+            {if has_featured_media($content, $type) && get_type(get_featured_media($content, $type)) === 'photo'}
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{get_property(get_featured_media($content, $type), 'pk_content')}" Euid="{get_property(get_featured_media($content, $type), 'pk_content')}">
+                <NewsLines>
+                  <HeadLine>
+                    <![CDATA[{$content->title}]]>
+                  </HeadLine>
+                </NewsLines>
+                <AdministrativeMetadata>
+                  <Provider>
+                    <Party FormalName="{setting name=site_name}" />
+                  </Provider>
+                </AdministrativeMetadata>
+                <DescriptiveMetadata>
+                  <Language FormalName="es" />
+                  <DateLineDate>{format_date date=get_property(get_featured_media($content, $type), 'created') type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
+                  <Property FormalName="Onm_IdRefObject" Value="{get_property(get_featured_media($content, $type), 'pk_content')}" />
+                </DescriptiveMetadata>
+                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{get_property(get_featured_media($content, $type), 'pk_content')}.file">
+                  <Role FormalName="Main" />
+                  <!-- The link to download image -->
+                  <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path(get_featured_media($content, $type))}">
+                    <MediaType FormalName="PhotoFront" />
+                    <MimeType FormalName="{get_photo_mime_type(get_featured_media($content, $type))}" />
+                    <Characteristics>
+                      <SizeInBytes>{get_photo_size(get_featured_media($content, $type)) * 1024}</SizeInBytes>
+                      <Property FormalName="Onm_Filename" Value="{basename(get_property(get_featured_media($content, $type), 'path'))}" />
+                      <Property FormalName="Height" Value="{get_photo_height(get_featured_media($content, $type))}" />
+                      <Property FormalName="PixelDepth" Value="24" />
+                      <Property FormalName="Width" Value="{get_photo_width(get_featured_media($content, $type))}" />
+                    </Characteristics>
+                  </ContentItem>
+                </NewsComponent>
+                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{get_property(get_featured_media($content, $type), 'pk_content')}.text">
+                  <Role FormalName="Caption" />
+                  <ContentItem>
+                    <MediaType FormalName="Text" />
+                    <Format FormalName="NITF" />
+                    <MimeType FormalName="text/vnd.IPTC.NITF" />
+                    <DataContent>
+                      <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                        <head>
+                          <title>
+                            <![CDATA[{get_title(get_featured_media($content, $type))}]]>
+                          </title>
+                          <docdata management-status="usable">
+                            <doc-id id-string="{get_property(get_featured_media($content, $type), 'pk_content')}" />
+                          </docdata>
+                        </head>
+                        <body>
+                          <body.head>
+                            <hedline>
+                              <hl1>
+                                <![CDATA[{get_title(get_featured_media($content, $type))}]]>
+                              </hl1>
+                            </hedline>
+                            <dateline>
+                              <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
+                                {format_date date=get_property(get_featured_media($content, $type), 'created') type="custom" format="yMMdd'T'HHmmssxxx"}
+                              </story.date>
+                            </dateline>
+                          </body.head>
+                          <body.content>
+                            <p>
+                              <![CDATA[{get_description(get_featured_media($content, $type))|htmlspecialchars_decode|trim}]]>
+                            </p>
+                          </body.content>
+                        </body>
+                      </nitf>
+                    </DataContent>
+                  </ContentItem>
+                </NewsComponent>
               </NewsComponent>
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.text">
-                <Role FormalName="Caption" />
-                <ContentItem>
-                  <MediaType FormalName="Text" />
-                  <Format FormalName="NITF" />
-                  <MimeType FormalName="text/vnd.IPTC.NITF" />
-                  <DataContent>
-                    <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
-                      <head>
-                        <title>
-                          <![CDATA[{$content->title}]]>
-                        </title>
-                        <docdata management-status="usable">
-                          <doc-id id-string="{$photo->id}" />
-                        </docdata>
-                      </head>
-                      <body>
-                        <body.head>
-                          <hedline>
-                            <hl1>
-                              <![CDATA[{$content->title}]]>
-                            </hl1>
-                          </hedline>
-                          <dateline>
-                            <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
-                              {format_date date=$photo->created type="custom" format="yMMdd'T'HHmmssxxx"}
-                            </story.date>
-                          </dateline>
-                        </body.head>
-                        <body.content>
-                          <p>
-                            <![CDATA[{$photo->description|htmlspecialchars_decode|trim}]]>
-                          </p>
-                        </body.content>
-                      </body>
-                    </nitf>
-                  </DataContent>
-                </ContentItem>
-              </NewsComponent>
-            </NewsComponent>
-          {/if}
-          {if !empty($photoInner) && (empty(photo) || (!empty(photo) && $photo->id !== $photoInner->id))}
-            <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}" Euid="{$photoInner->id}">
-              <NewsLines>
-                <HeadLine>
-                  <![CDATA[{$content->title}]]>
-                </HeadLine>
-              </NewsLines>
-              <AdministrativeMetadata>
-                <Provider>
-                  <Party FormalName="{setting name=site_name}" />
-                </Provider>
-              </AdministrativeMetadata>
-              <DescriptiveMetadata>
-                <Language FormalName="es" />
-                <DateLineDate>{format_date date=$photoInner->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-                <Property FormalName="Onm_IdRefObject" Value="{$photoInner->id}" />
-              </DescriptiveMetadata>
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.file">
-                <Role FormalName="Main" />
-                <!-- The link to download image -->
-                <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
-                  <MediaType FormalName="PhotoInner" />
-                  <MimeType FormalName="image/{$photoInner->type_img}" />
-                  <Characteristics>
-                    <SizeInBytes>{$photoInner->size*1024}</SizeInBytes>
-                    <Property FormalName="Onm_Filename" Value="{$photoInner->name}" />
-                    <Property FormalName="Height" Value="{$photoInner->height}" />
-                    <Property FormalName="PixelDepth" Value="24" />
-                    <Property FormalName="Width" Value="{$photoInner->width}" />
-                  </Characteristics>
-                </ContentItem>
-              </NewsComponent>
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photoInner->id}.text">
-                <Role FormalName="Caption" />
-                <ContentItem>
-                  <MediaType FormalName="Text" />
-                  <Format FormalName="NITF" />
-                  <MimeType FormalName="text/vnd.IPTC.NITF" />
-                  <DataContent>
-                    <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
-                      <head>
-                        <title>
-                          <![CDATA[{$content->title}]]>
-                        </title>
-                        <docdata management-status="usable">
-                          <doc-id id-string="{$photoInner->id}" />
-                        </docdata>
-                      </head>
-                      <body>
-                        <body.head>
-                          <hedline>
-                            <hl1>
-                              <![CDATA[{$content->title}]]>
-                            </hl1>
-                          </hedline>
-                          <dateline>
-                            <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
-                              {format_date date=$photoInner->created type="custom" format="yMMdd'T'HHmmssxxx"}
-                            </story.date>
-                          </dateline>
-                        </body.head>
-                        <body.content>
-                          <p>
-                            <![CDATA[{$photoInner->description|htmlspecialchars_decode|trim}]]>
-                          </p>
-                        </body.content>
-                      </body>
-                    </nitf>
-                  </DataContent>
-                </ContentItem>
-              </NewsComponent>
-            </NewsComponent>
-          {/if}
+            {/if}
+          {/foreach}
         </NewsComponent>
       {/if}
       {if isset($content->all_photos) && !empty($content->all_photos)}
-        <!--Photo collection.-->
         <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
           {foreach $content->all_photos as $photo}
@@ -305,15 +234,15 @@
                 <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
-                  <ContentItem Href="{$app.instance->getBaseUrl()}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+                  <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path($photo)}">
                     <MediaType FormalName="Photo" />
-                    <MimeType FormalName="image/{$photo->type_img}" />
+                    <MimeType FormalName="{get_photo_mime_type($photo)}" />
                     <Characteristics>
-                      <SizeInBytes>{$photo->size*1024}</SizeInBytes>
-                      <Property FormalName="Onm_Filename" Value="{$photo->name}" />
-                      <Property FormalName="Height" Value="{$photo->height}" />
+                      <SizeInBytes>{get_photo_size($photo)*1024}</SizeInBytes>
+                      <Property FormalName="Onm_Filename" Value="{$photo->title}" />
+                      <Property FormalName="Height" Value="{get_photo_height($photo)}" />
                       <Property FormalName="PixelDepth" Value="24" />
-                      <Property FormalName="Width" Value="{$photo->width}" />
+                      <Property FormalName="Width" Value="{get_photo_width($photo)}" />
                     </Characteristics>
                   </ContentItem>
                 </NewsComponent>

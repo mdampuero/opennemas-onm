@@ -2,6 +2,7 @@
 
 namespace Common\Core\Component\Filter;
 
+use Api\Exception\GetItemException;
 use Opennemas\Data\Filter\Filter;
 
 class ReplaceImagesUrlFilter extends Filter
@@ -21,14 +22,16 @@ class ReplaceImagesUrlFilter extends Filter
         preg_match_all($pattern, $str, $matches);
 
         foreach ($matches['slug'] as $slug) {
-            $translation = $this->container->get('core.redirector')
-                ->getTranslation($slug, 'photo');
+            try {
+                $translation = $this->container->get('core.redirector')
+                    ->getTranslation($slug, 'photo');
 
-            if ($translation) {
-                $photo = $this->container->get('entity_repository')
-                    ->find('Photo', $translation['pk_content']);
-
-                $str = str_replace($slug, $path . $photo->path_img, $str);
+                if (!empty($translation)) {
+                    $photo = $this->container->get('api.service.photo')->getItem($translation['pk_content']);
+                    $str   = str_replace($slug, $path . $photo->path, $str);
+                }
+            } catch (GetItemException $e) {
+                continue;
             }
         }
 

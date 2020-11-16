@@ -9,6 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Api\Exception\GetItemException;
 use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,8 +47,8 @@ class EventController extends ContentController
      */
     protected function getRelatedContents($content)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
+        $service = $this->get('api.service.photo');
+        $extra   = [];
 
         if (empty($content)) {
             return $extra;
@@ -66,12 +67,10 @@ class EventController extends ContentController
                 if (!preg_match('/featured_.*/', $relation['type'])) {
                     continue;
                 }
-
-                $photo = $em->find('Photo', $relation['target_id']);
-
-                if (!empty($photo)) {
-                    $extra[$relation['target_id']] =
-                        \Onm\StringUtils::convertToUtf8($photo);
+                try {
+                    $photo   = $service->getItem($relation['target_id']);
+                    $extra[$relation['target_id']] = $service->responsify($photo);
+                } catch (GetItemException $e) {
                 }
             }
         }

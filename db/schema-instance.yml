@@ -121,8 +121,8 @@ albums:
         -
             name: cover_id
             source_field: [ cover_id ]
-            target_table: photos
-            target_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 albums_photos:
     columns:
@@ -167,8 +167,8 @@ albums_photos:
         -
             name: photos_id_photo_id
             source_field: [ pk_photo ]
-            target_table: photos
-            target_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 articles:
     columns:
@@ -489,7 +489,7 @@ contentmeta:
     columns:
         fk_content:
             type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true }
         meta_name:
             type: string
             options: { length: 255 }
@@ -1099,46 +1099,6 @@ pclave:
             primary: true
             unique: true
             flags: {  }
-photos:
-    columns:
-        pk_photo:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        name:
-            type: string
-            options: { length: 255, default: null, notnull: false }
-        path_file:
-            type: string
-            options: { length: 150, default: null }
-        size:
-            type: decimal
-            options: { scale: 2, default: null, notnull: false }
-        width:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
-        height:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
-        author_name:
-            type: string
-            options: { length: 200, default: null, notnull: false}
-        address:
-            type: string
-            options: { length: 255, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_photo]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: photos_id_contents_id
-            source_field: [ pk_photo ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 poll_items:
     columns:
         pk_item:
@@ -1649,8 +1609,8 @@ users:
         -
             name: avatar_img_id
             source_field: [ avatar_img_id ]
-            target_table: photos
-            target_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 user_user_group:
     columns:

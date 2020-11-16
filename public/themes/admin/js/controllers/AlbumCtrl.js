@@ -267,7 +267,7 @@
             var photo = {
               position: $scope.data.item.photos.length,
               description: nv[i].description,
-              pk_photo: nv[i].pk_photo
+              pk_photo: nv[i].pk_content
             };
 
             $scope.data.item.photos.push(photo);
@@ -276,8 +276,8 @@
             $scope.item.photos.push($scope.localizePhoto(photo,
               $scope.item.photos.length));
 
-            if (!$scope.data.extra.photos[nv[i].pk_photo]) {
-              $scope.data.extra.photos[nv[i].pk_photo] = nv[i];
+            if (!$scope.data.extra.photos[nv[i].pk_content]) {
+              $scope.data.extra.photos[nv[i].pk_content] = nv[i];
             }
           }
 

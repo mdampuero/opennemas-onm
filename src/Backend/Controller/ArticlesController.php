@@ -244,7 +244,7 @@ class ArticlesController extends Controller
         $this->view->setCaching(0);
 
         foreach ($data as $key => $value) {
-            $article->{$key} = $value;
+            $article->{$key} = empty($value) ? null : $value;
         }
 
         $tags = [];
@@ -279,11 +279,6 @@ class ArticlesController extends Controller
 
         $er = $this->get('entity_repository');
 
-        // Fetch media associated to the article
-        if (isset($article->img2) && ($article->img2 != 0)) {
-            $params['photoInt'] = $er->find('Photo', $article->img2);
-        }
-
         if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
             $params['videoInt'] = $er->find('Video', $article->fk_video2);
         }
@@ -298,14 +293,11 @@ class ArticlesController extends Controller
         }
 
         if (!empty($article->category_id)) {
-            $suggested = $this->get('core.helper.content')->getSuggested(
+            $params['suggested'] = $this->get('core.helper.content')->getSuggested(
                 $article->pk_content,
                 'article',
                 $params['category']->id
             );
-
-            $params['suggested'] = $suggested[0];
-            $params['photos']    = $suggested[1];
         }
 
         $this->view->assign($params);

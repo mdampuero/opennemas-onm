@@ -317,9 +317,12 @@ class SettingController extends Controller
      */
     protected function saveFiles($files)
     {
-        $dir      = MEDIA_PATH . '/sections/';
         $msg      = $this->get('core.messenger');
         $settings = [];
+
+        $dir = $this->getParameter('core.paths.public')
+            . $this->get('core.instance')->getMediaShortPath()
+            . '/sections/';
 
         // Check if upload directory is already created
         if (!is_dir($dir)) {

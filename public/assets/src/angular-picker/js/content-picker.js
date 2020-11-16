@@ -577,11 +577,11 @@
             $scope.loadingMore = false;
 
             if (reset) {
-              $scope.contents      = response.data.results;
+              $scope.contents      = response.data.items;
               $scope.total         = response.data.total;
               $scope.searchLoading = false;
             } else {
-              $scope.contents = $scope.contents.concat(response.data.results);
+              $scope.contents = $scope.contents.concat(response.data.items);
             }
 
             $scope.categories    = response.data.categories;

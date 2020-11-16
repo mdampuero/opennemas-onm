@@ -9,6 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -145,20 +146,19 @@ class ArticleController extends Controller
         if (empty($article)) {
             return [];
         }
-
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $keys  = [ 'img1', 'img2' ];
+        
+        $service = $this->get('api.service.photo');
+        $extra   = [];
+        $keys    = [ 'img1', 'img2' ];
 
         foreach ($keys as $key) {
             if (empty($article->{$key})) {
                 continue;
             }
-
-            $photo = $em->find('Photo', $article->{$key});
-
-            if (!empty($photo)) {
-                $extra[$key] = \Onm\StringUtils::convertToUtf8($photo);
+            try {
+                $photo       = $service->getItem($article->{$key});
+                $extra[$key] = $service->responsify($photo);
+            } catch (GetItemException $e) {
             }
         }
 
@@ -168,11 +168,10 @@ class ArticleController extends Controller
         ) {
             return $extra;
         }
-
-        $photo = $em->find('Photo', $article->params['imageHome']);
-
-        if (!empty($photo)) {
-            $extra['imageHome'] = \Onm\StringUtils::convertToUtf8($photo);
+        try {
+            $photo              = $service->getItem($article->params['imageHome']);
+            $extra['imageHome'] = $service->responsify($photo);
+        } catch (GetItemException $e) {
         }
 
         return $extra;

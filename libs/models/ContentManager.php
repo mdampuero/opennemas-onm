@@ -900,13 +900,6 @@ class ContentManager
                 AND ' . $whereSQL . ' ' . $orderBy
             );
 
-            foreach ($rs as &$row) {
-                $photo = getService('entity_repository')
-                    ->find('Photo', $row['avatar_img_id']);
-
-                $row['path_img'] = $photo->getRelativePath();
-            }
-
             return $rs;
         } catch (\Exception $e) {
             getService('error.log')->error(

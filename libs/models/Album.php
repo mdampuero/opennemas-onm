@@ -84,26 +84,6 @@ class Album extends Content
     /**
      * {@inheritdoc}
      */
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        if (!empty($this->cover_id)) {
-            $this->cover_image = getService('entity_repository')
-                ->find('Photo', $this->cover_id);
-
-            if (!empty($this->cover_image)) {
-                $this->cover = $this->cover_image->path_file
-                    . $this->cover_image->name;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function read($id)
     {
         if (empty($id)) {

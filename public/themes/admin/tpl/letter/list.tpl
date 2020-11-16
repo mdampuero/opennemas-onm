@@ -144,12 +144,12 @@
                 </td>
                 <td class="center hidden-xs">
                   <span ng-if="content.image">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[content.photo].path_img" transform="thumbnail,120,120"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="extra.photos[content.photo].path" transform="thumbnail,120,120"></dynamic-image>
                   </span>
                 </td>
                 <td>
                   <span class="center visible-xs" ng-if="content.image" style="max-width:80px">
-                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.photo.path_img" transform="thumbnail,120,120"></dynamic-image>
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="content.photo.path" transform="thumbnail,120,120"></dynamic-image>
                   </span>
                   <span uib-tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
                   <div class="small-text">

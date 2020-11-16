@@ -19,8 +19,8 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class Frontpages
 {
     /*
-    * @url GET /frontpages/allcontentblog/:category_slug/:page
-    */
+     * @url GET /frontpages/allcontentblog/:category_slug/:page
+     */
     public function allContentBlog($categoryName, $page = 1)
     {
         try {

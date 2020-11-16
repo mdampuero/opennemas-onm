@@ -11,6 +11,7 @@
 
 namespace Repository;
 
+use \Common\Model\Entity\Content;
 use Onm\Cache\CacheInterface;
 
 /**
@@ -26,7 +27,7 @@ use Onm\Cache\CacheInterface;
 class EntityManager extends BaseManager
 {
     const ORM_CONTENT_TYPES = [
-        'kiosko'
+        'kiosko', 'photo'
     ];
 
     /**
@@ -72,13 +73,16 @@ class EntityManager extends BaseManager
      */
     private function findOne($contentType, $id, $isMulti = false)
     {
-        $entity      = null;
-        $contentType = \classify($contentType);
-        $cacheId     = \underscore($contentType) . $this->cacheSeparator . $id;
+        $entity = null;
 
         if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
-            return null;
+            $entity = getService('api.service.content')->getItem($id);
+
+            return $entity;
         }
+
+        $contentType = \classify($contentType);
+        $cacheId     = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!empty($id)
             && class_exists($contentType)
@@ -386,7 +390,9 @@ class EntityManager extends BaseManager
      */
     private function loadExtraDataToContents($saveInCacheIds, &$contents)
     {
-        if (empty($saveInCacheIds)) {
+        if (empty($saveInCacheIds)
+            || in_array(\underscore(array_values($contents)[0]->content_type_name), self::ORM_CONTENT_TYPES)
+        ) {
             return [];
         }
 

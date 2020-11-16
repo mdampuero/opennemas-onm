@@ -111,7 +111,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       // Assign the cover image
       var cover = $scope.data.extra.related_contents.filter(function(e) {
-        return e && e.pk_photo === parseInt($scope.item.information.thumbnail);
+        return e && e.pk_content === parseInt($scope.item.information.thumbnail);
       }).shift();
 
       if (cover) {
@@ -216,7 +216,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
 
       if (angular.isObject(nv)) {
-        $scope.item.information.thumbnail = nv.pk_photo;
+        $scope.item.information.thumbnail = nv.pk_content;
       } else {
         $scope.item.information.thumbnail = {};
       }

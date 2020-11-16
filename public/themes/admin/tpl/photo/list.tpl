@@ -84,10 +84,10 @@
     <div class="modal-body">
       <div class="resource">
         <span ng-if="template.selected.type_img == 'swf'">
-          <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$smarty.const.INSTANCE_MEDIA}/images[% template.selected.path_file %][% template.selected.name %]" swf-width="570"></swf-object>
+          <swf-object swf-params="{ wmode: 'opaque' }" swf-url="{$smarty.const.INSTANCE_MEDIA}[% template.selected.path %]" swf-width="570"></swf-object>
         </span>
         <span ng-if="template.selected.type_img !== 'swf'">
-          <img class="img-responsive" ng-src="{$smarty.const.INSTANCE_MEDIA}/images{$MEDIA_IMG_URL}[% template.selected.path_file + template.selected.name %]"/>
+          <img class="img-responsive" ng-src="{$smarty.const.INSTANCE_MEDIA}{$MEDIA_IMG_URL}[% template.selected.path %]"/>
         </span>
       </div>
     </div>

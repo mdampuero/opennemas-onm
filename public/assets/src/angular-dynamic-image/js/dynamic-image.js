@@ -12,7 +12,7 @@
    *   The `onm.dynamicImage` module provides a service and a directive to load
    *   images dynamically.
    */
-  angular.module('onm.dynamicImage', ['swfobject', 'onm.routing'])
+  angular.module('onm.dynamicImage', [ 'swfobject', 'onm.routing' ])
 
     /**
      * @ngdoc provider
@@ -56,7 +56,7 @@
          * @name     allowedAttributes
          * @type     {Array}
          */
-        this.allowedAttributes = ['class', 'height', 'width'];
+        this.allowedAttributes = [ 'class', 'height', 'width' ];
 
         /**
          * Path to the default image.
@@ -74,7 +74,7 @@
          * @name     property
          * @type     {String}
          */
-        this.property = 'path_img';
+        this.property = 'path';
 
         /**
          * The image folder name.
@@ -83,7 +83,7 @@
          * @name     property
          * @type     {String}
          */
-        this.imageFolder = 'images';
+        this.imageFolder = '';
 
         /**
          * @function generateUrl
@@ -114,6 +114,10 @@
             } else {
               image = image[this.property];
             }
+          }
+
+          if (!image) {
+            return this.brokenImage;
           }
 
           if (!/^http/.test(image) && !raw) {
@@ -375,23 +379,22 @@
                 attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
             }
 
+            var img = new Image();
+
+            img.onload = function() {
+              $scope.bg = this.src;
+              $scope.loading = false;
+
+              $scope.settings = DynamicImage.getSettings(this.height,
+                this.width, maxHeight, maxWidth);
+
+              $scope.$apply();
+            };
+
             $scope.$watch('src', function(nv) {
               if (!DynamicImage.isFlash(nv) || $scope.onlyImage) {
                 $scope.loading = true;
-
-                var img = new Image();
-
-                img.onload = function() {
-                  $scope.bg = nv;
-                  $scope.loading = false;
-
-                  $scope.settings = DynamicImage.getSettings(img.height,
-                    img.width, maxHeight, maxWidth);
-
-                  $scope.$apply();
-                };
-
-                img.src = nv;
+                img.src        = nv;
               }
             });
 

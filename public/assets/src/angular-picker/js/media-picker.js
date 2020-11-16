@@ -45,12 +45,12 @@
                             '<span class="input-group-addon">' +
                               '<i class="fa fa-search"></i>' +
                             '</span>' +
-                            '<input ng-model="$parent.title" placeholder="[% picker.params.explore.search %]" type="text"/>' +
+                            '<input ng-model="criteria.title" placeholder="[% picker.params.explore.search %]" type="text"/>' +
                           '</div>' +
                         '</div>' +
                       '</li>' +
                       '<li ng-if="picker.isTypeEnabled(\'photo\')">' +
-                        '<select name="month" ng-model="$parent.$parent.date">' +
+                        '<select name="month" ng-model="criteria.created">' +
                           '<option value="">[% picker.params.explore.allMonths %]</option>' +
                           '<optgroup label="[% year.name %]" ng-repeat="year in picker.params.explore.dates">' +
                             '<option value="[% month.value %]" ng-repeat="month in year.months">' +
@@ -118,9 +118,9 @@
                       '</div>' +
                       '<ul class="media-information">' +
                         '<li>' +
-                          '<a ng-href="[% routing.generate(\'backend_photo_show\', { id: selected.lastSelected.id}) %]">' +
+                          '<a ng-href="[% selected.lastSelected.content_type_name === \'photo\' ? routing.generate(\'backend_photo_show\', { id: selected.lastSelected.pk_content}) : routing.generate(\'backend_video_show\', { id: selected.lastSelected.pk_content})%]">' +
                             '<strong>' +
-                              '[% selected.lastSelected.name %]' +
+                              '[% selected.lastSelected.title %]' +
                               '<i class="fa fa-edit"></i>' +
                             '</strong>' +
                           '</a>' +
@@ -132,8 +132,8 @@
                           '</a>' +
                         '</li>' +
                         '<li>[% selected.lastSelected.created | moment %]</li>' +
-                        '<li>[% selected.lastSelected.size %] KB</li>' +
-                        '<li>[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>' +
+                        '<li ng-if="selected.lastSelected.content_type_name === \'photo\'">[% selected.lastSelected.size %] KB</li>' +
+                        '<li ng-if="selected.lastSelected.content_type_name === \'photo\'">[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>' +
                         '<li><span class="v-seperate"></span></li>' +
                         '<li>' +
                           '<div class="form-group">' +
@@ -143,7 +143,7 @@
                                 '<i class="fa" ng-class="{ \'fa-circle-o-notch fa-spin\': saving, \'fa-check text-success\': saved, \'fa-times text-danger\': error }"></i>' +
                               '</div>' +
                             '</label>' +
-                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.id)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
+                            '<textarea id="description" ng-blur="saveDescription(selected.lastSelected.pk_content)" ng-model="selected.lastSelected.description" cols="30" rows="2"></textarea>' +
                           '</div>' +
                         '</li>' +
                       '</ul>' +
@@ -456,7 +456,6 @@
                   $scope.picker.setType(types[i]);
                 }
               }
-
               if (attrs.mediaPickerTarget && $scope.mediaPickerTarget) {
                 var target = angular.copy($scope.mediaPickerTarget);
 
@@ -488,7 +487,7 @@
               };
 
               // Get the parameters for the media picker
-              http.post(route).then(function(response) {
+              http.put(route).then(function(response) {
                 $scope.loading = false;
                 $scope.picker.params = response.data;
 
@@ -519,14 +518,21 @@
      * @requires routing
      */
     .controller('MediaPickerCtrl', [
-      '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'http', 'routing',
-      function($rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, http, routing) {
+      '$rootScope', '$scope', '$timeout', '$window', 'FileUploader', 'DynamicImage', 'http', 'oqlEncoder', 'routing',
+      function($rootScope, $scope, $timeout, $window, FileUploader, DynamicImage, http, oqlEncoder, routing) {
         /**
          * The array of contents.
          *
          * @type {Array}
          */
         $scope.contents = [];
+
+        $scope.criteria = {
+          epp: $scope.epp,
+          in_litter: 0,
+          orderBy: { created:  'desc' },
+          page: $scope.page
+        };
 
         /**
          * The number of elements per page.
@@ -702,8 +708,8 @@
         $scope.isIgnored = function(item) {
           return $scope.mediaPickerIgnore &&
             $scope.mediaPickerIgnore.map(function(e) {
-              return e.pk_photo;
-            }).indexOf(item.id) !== -1;
+              return e.pk_content;
+            }).indexOf(item.pk_content) !== -1;
         };
 
         /**
@@ -721,8 +727,8 @@
           return $scope.picker.selection.enabled &&
             (!$scope.mediaPickerIgnore ||
             $scope.mediaPickerIgnore.map(function(e) {
-              return e.pk_photo;
-            }).indexOf(item.id) === -1);
+              return e.pk_content;
+            }).indexOf(item.pk_content) === -1);
         };
 
         /**
@@ -738,7 +744,7 @@
          *                 returns false.
          */
         $scope.isSelected = function(item) {
-          return $scope.selected.ids.indexOf(item.id) !== -1;
+          return $scope.selected.ids.indexOf(item.pk_content) !== -1;
         };
 
         /**
@@ -786,16 +792,44 @@
             data.to = $scope.to;
           }
 
-          http.get({ name: 'backend_ws_picker_list', params: data })
+          $scope.criteria.epp = $scope.epp;
+          $scope.criteria.page = $scope.page;
+          $scope.criteria.content_type_name = $scope.picker.types.enabled;
+
+          oqlEncoder.configure({
+            placeholder: {
+              title: '(title ~ "%[value]%")',
+              /* or description ~ "%[value]%" */
+              created: '[key] ~ "%[value]%"'
+            }
+          });
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+
+          var routes = {
+            photo: {
+              name: 'api_v1_backend_content_get_list',
+              params:  { oql: oql }
+            }
+          };
+
+          var oldRoute = {
+            name: 'backend_ws_picker_list',
+            params: data
+          };
+
+          var route = routes[data.content_type_name] ? routes[data.content_type_name] : oldRoute;
+
+          http.get(route)
             .then(function(response) {
               $scope.loadingMore = false;
 
               if (reset) {
-                $scope.contents      = response.data.results;
+                $scope.contents      = response.data.items;
                 $scope.total         = response.data.total;
                 $scope.searchLoading = false;
               } else {
-                $scope.contents = $scope.contents.concat(response.data.results);
+                $scope.contents = $scope.contents.concat(response.data.items);
               }
 
               $scope.total = response.data.total;
@@ -866,7 +900,6 @@
            */
           $scope.uploader.onWhenAddingFileFailed = function() {
             $scope.invalid = true;
-
             $timeout(function() {
               $scope.invalid = false;
             }, 5000);
@@ -877,24 +910,31 @@
            *
            * @param object fileItem The completed item.
            * @param object response The response content.
+           * @param object code     The response code.
            */
-          $scope.uploader.onCompleteItem = function(fileItem, response) {
+          $scope.uploader.onCompleteItem = function(fileItem, response, code, headers) {
             $timeout(function() {
               $scope.uploader.removeFromQueue(fileItem);
 
-              // Autoselect items uploaded
-              if (!response.id) {
+              if (code !== 201) {
                 $scope.uploadError = true;
                 return;
               }
+              var id = headers.location.substring(headers.location.lastIndexOf('/') + 1);
+              var route = {
+                name: 'api_v1_backend_photo_get_item',
+                params:  { id: id }
+              };
 
-              $scope.addItem(response);
-              $scope.selected.lastSelected = response;
+              http.get(route).then(function(response) {
+                $scope.addItem(response.data.item);
+                $scope.selected.lastSelected = response.data.item;
 
-              if ($scope.picker.selection.enabled) {
-                $scope.selected.ids.push(response.id);
-                $scope.selected.items.push(response);
-              }
+                if ($scope.picker.selection.enabled) {
+                  $scope.selected.ids.push(response.data.item.pk_content);
+                  $scope.selected.items.push(response.data.item);
+                }
+              });
             }, 500);
           };
         };
@@ -927,11 +967,11 @@
 
           var data = { description: $scope.selected.lastSelected.description };
           var route  = {
-            name:   'backend_ws_picker_save_description',
-            params: { id: $scope.selected.lastSelected.id }
+            name:   'api_v1_backend_photo_patch_item',
+            params: { id: $scope.selected.lastSelected.pk_content }
           };
 
-          http.post(route, data).then(function() {
+          http.put(route, data).then(function() {
             $scope.saving = false;
             $scope.saved = true;
 
@@ -1039,7 +1079,7 @@
             return;
           }
 
-          var index = $scope.selected.ids.indexOf(item.id);
+          var index = $scope.selected.ids.indexOf(item.pk_content);
 
           // Remove element
           if (index !== -1) {
@@ -1057,7 +1097,7 @@
 
           // Add element
           if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
-            $scope.selected.ids.push(item.id);
+            $scope.selected.ids.push(item.pk_content);
             $scope.selected.items.push(item);
           }
         };
@@ -1074,7 +1114,7 @@
           $scope.enhance = !$scope.enhance;
           var photoEditor = new window.OnmPhotoEditor({
             container: 'photoEditor',
-            image: $window.instanceMedia + '/images' + $scope.selected.lastSelected.path_img,
+            image: $window.instanceMedia + $scope.selected.lastSelected.path,
             closeCallBack: $scope.uploadMediaImg,
             maximunSize: { width: 800, height: 600 }
           }, photoEditorTranslations);
@@ -1120,7 +1160,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[category, date, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, criteria.created, criteria.title, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }

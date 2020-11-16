@@ -47,9 +47,6 @@ class Letter extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'photo':
-                return new \Photo($this->image);
-
             case 'summary':
                 $summary = substr(strip_tags($this->body), 0, 200);
                 $pos     = strripos($summary, ".");
@@ -77,10 +74,6 @@ class Letter extends Content
 
         if (is_array($this->params) && array_key_exists('ip', $this->params)) {
             $this->ip = $this->params['ip'];
-        }
-
-        if (!empty($this->image)) {
-            $this->photo = $this->image;
         }
     }
 

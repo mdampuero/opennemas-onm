@@ -9,6 +9,19 @@
   </div>
 {/block}
 
+{block name="commonColumnsHeader" prepend}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+  </th>
+{/block}
+
+{block name="commonColumnsBody" prepend}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
+    <div class="pointer" ng-model="item" ng-click="open('modal-image', item)">
+      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" transform="zoomcrop,220,220"></dynamic-image>
+    </div>
+  </td>
+{/block}
+
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-size" checklist-model="app.columns.selected" checklist-value="'size'" type="checkbox">
@@ -22,19 +35,6 @@
       {t}Resolution{/t}
     </label>
   </div>
-{/block}
-
-{block name="commonColumnsHeader" prepend}
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
-  </th>
-{/block}
-
-{block name="commonColumnsBody" prepend}
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <div class="pointer" ng-model="item" ng-click="open('modal-image', item)">
-      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" transform="zoomcrop,220,220"></dynamic-image>
-    </div>
-  </td>
 {/block}
 
 {block name="customColumnsHeader"}
@@ -91,7 +91,7 @@
     </button>
     <ul class="dropdown-menu no-padding">
       <li>
-        <a href="{$smarty.const.INSTANCE_MEDIA}images[% extra.paths.photo + item.path_img %]" target="_blank">
+        <a href="{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" target="_blank">
           <i class="fa fa-external-link m-r-5"></i>
           {t}Link{/t}
         </a>
