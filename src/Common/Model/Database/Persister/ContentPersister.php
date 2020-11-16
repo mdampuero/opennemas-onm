@@ -21,14 +21,12 @@ class ContentPersister extends BasePersister
      * @param Connection $conn     The database connection.
      * @param Metadata   $metadata The entity metadata.
      * @param Cache      $cache    The cache service.
-     * @param User       $user     The current user.
      */
-    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null, User $user)
+    public function __construct(Connection $conn, Metadata $metadata, ?Cache $cache)
     {
         $this->cache    = $cache;
         $this->conn     = $conn;
         $this->metadata = $metadata;
-        $this->user     = $user;
 
         $class = $metadata->getConverter()['class'];
 
