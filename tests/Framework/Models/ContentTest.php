@@ -257,7 +257,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $content->starttime = '2012-08-23 03:03:12';
         $content->endtime   = '2012-08-23 03:03:12';
-        $this->assertEquals(\Content::DUED, $content->getSchedulingState($now));
+        $this->assertEquals(\Content::NOT_SCHEDULED, $content->getSchedulingState($now));
     }
 
     /**
@@ -352,7 +352,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
 
         $content->starttime = '2012-08-21 03:03:12';
         $content->endtime   = '2012-08-21 03:03:12';
-        $this->assertTrue($method->invokeArgs($content, []));
+        $this->assertFalse($method->invokeArgs($content, []));
     }
 
     /**

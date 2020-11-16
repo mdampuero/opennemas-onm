@@ -1878,11 +1878,11 @@ class Content implements \JsonSerializable, CsvSerializable
             return false;
         }
 
-        $start   = new \DateTime($this->starttime);
-        $created = new \DateTime($this->created);
+        $start = new \DateTime($this->starttime);
+        $end   = new \DateTime($this->endtime);
 
-        if ($start->getTimeStamp() - $created->getTimeStamp() == 0) {
-            return !empty($this->endtime);
+        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
+            return false;
         }
 
         return true;
