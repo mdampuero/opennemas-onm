@@ -116,9 +116,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.summary.updateElement();
 
       var status = { starttime: null, endtime: null, content_status: 1 };
-      var item = Object.assign({}, $scope.item);
-
-      item = Object.assign(item, status);
+      var item   = Object.assign(Object.assign({}, $scope.item), status);
 
       var data = {
         item: JSON.stringify(cleaner.clean(item)),
