@@ -11,6 +11,7 @@
 
 namespace Repository;
 
+use Api\Exception\GetItemException;
 use \Common\Model\Entity\Content;
 use Onm\Cache\CacheInterface;
 
@@ -76,7 +77,11 @@ class EntityManager extends BaseManager
         $entity = null;
 
         if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
-            $entity = getService('api.service.content')->getItem($id);
+            try {
+                $entity = getService('api.service.content')->getItem($id);
+            } catch (GetItemException $e) {
+                return null;
+            }
 
             return $entity;
         }
