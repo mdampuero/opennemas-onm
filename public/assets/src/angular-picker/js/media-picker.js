@@ -76,11 +76,8 @@
                           '</div>' +
                         '</div>' +
                         '<div class="media-item"[selection] ng-repeat="content in contents track by $index" style="width: 120px;">' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
-                            $window.instanceMedia +
-                             '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && !content.thumb_image" path="[% content.thumb %]"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && content.thumb_image" instance="' + $window.instanceMedia + '" ng-model="content.thumb_image"></dynamic-image>' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" instance="' + $window.instanceMedia + '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" instance="" ng-if="content.content_type_name == \'video\'" path="[% content.thumb %]"></dynamic-image>' +
                         '</div>' +
                       '</div>' +
                       '<div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll()" ng-if="!searchLoading && total != contents.length">' +
@@ -106,11 +103,8 @@
                           '" ng-model="selected.lastSelected" transform="thumbnail,220,220">' +
                         '</dynamic-image>' +
                       '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && !selected.lastSelected.thumb_image">' +
-                        '<dynamic-image autoscale="true" ng-model="selected.lastSelected" property="thumb"></dynamic-image>' +
-                      '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && selected.lastSelected.thumb_image">' +
-                        '<dynamic-image autoscale="true" instance="' + $window.instanceMedia + '" ng-model="selected.lastSelected.thumb_image"></dynamic-image>' +
+                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\'">' +
+                        '<dynamic-image autoscale="true" instance="" ng-model="selected.lastSelected.thumb"></dynamic-image>' +
                       '</div>' +
                       '<div class="media-thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">' +
                         '<dynamic-image autoscale="true" instance="' + $window.instanceMedia + '" ng-model="selected.lastSelected">' +

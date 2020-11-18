@@ -43,11 +43,8 @@
     </div>
     <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Image details{/t}</h4>
     <div ng-if="selected.lastSelected">
-      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
+      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="!isFlash(selected.lastSelected)">
         <dynamic-image autoscale="true" class="img-thumbnail no-animate" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
-      </div>
-      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
-        <dynamic-image autoscale="true" class="img-thumbnail no-animate" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
       </div>
       <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="isFlash(selected.lastSelected)">
         <dynamic-image autoscale="true" class="img-thumbnail no-animate" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>

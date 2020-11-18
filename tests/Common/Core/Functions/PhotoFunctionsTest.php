@@ -132,14 +132,38 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $photo = new Content();
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
+        $this->ugh->expects($this->at(0))->method('generate')
+            ->with($photo)
+            ->willReturn('/glorp/xyzzy/foobar.jpg');
+
+        $this->ugh->expects($this->at(1))->method('generate')
+            ->with($photo, [ 'absolute' => true ])
+            ->willReturn('http://foo.bar/glorp/xyzzy/foobar.jpg');
+
+        $this->assertEquals(
+            'http://foo.bar/glorp/xyzzy/foobar.jpg',
+            get_photo_path($photo, null, [], true)
+        );
+    }
+
+    /**
+     * Tests get_photo_path when generating absolute URL for an image with transform.
+     */
+    public function testGetPhotoPathWhenAbsoluteAndTransform()
+    {
+        $photo = new Content();
+
+        $this->ugh->expects($this->at(0))->method('generate')
+            ->with($photo)
+            ->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->router->expects($this->once())->method('generate')
             ->with('asset_image', [
                 'params' => 'grault',
                 'path'   => '/glorp/xyzzy/foobar.jpg'
-            ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn('/glorp/xyzzy/foobar.jpg');
+            ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn(
+                '/glorp/xyzzy/foobar.jpg'
+            );
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault', [], true));
     }

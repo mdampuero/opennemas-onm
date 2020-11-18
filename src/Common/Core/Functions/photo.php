@@ -23,16 +23,21 @@ function get_photo_path($item, string $transform = null, array $params = [], $ab
         return $item;
     }
 
-    $absolute = $absolute
-        ? UrlGeneratorInterface::ABSOLUTE_URL
-        : UrlGeneratorInterface::ABSOLUTE_PATH;
-
     $url = getService('core.helper.url_generator')->generate($item);
 
     // Do not transform if empty or external photo
     if (empty($transform) || preg_match('/^https?.*/', $url)) {
+        if (!preg_match('/^https?.*/', $url) && $absolute) {
+            $url = getService('core.helper.url_generator')
+                ->generate($item, [ 'absolute' => true ]);
+        }
+
         return $url;
     }
+
+    $absolute = $absolute
+        ? UrlGeneratorInterface::ABSOLUTE_URL
+        : UrlGeneratorInterface::ABSOLUTE_PATH;
 
     return getService('router')->generate('asset_image', [
         'params' => implode(',', array_merge([ $transform ], $params)),
