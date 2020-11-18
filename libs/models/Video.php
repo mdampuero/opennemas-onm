@@ -271,7 +271,7 @@ class Video extends Content
                 $photo = getService('api.service.photo')
                     ->getItem($this->information['thumbnail']);
 
-                return get_photo_path($photo, null, [], true);
+                return get_photo_path($photo);
             } catch (GetItemException $e) {
             }
         }
