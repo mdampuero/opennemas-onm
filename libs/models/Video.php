@@ -99,7 +99,6 @@ class Video extends Content
             }
 
             $this->load($rs);
-            $this->information = unserialize($rs['information']);
 
             return $this;
         } catch (\Exception $e) {
@@ -260,28 +259,23 @@ class Video extends Content
      */
     public function getThumb()
     {
-        if (!is_array($this->information)) {
-            $information = unserialize($this->information);
-        } else {
-            $information = $this->information;
-        }
-
-        if (empty($information)
-            || !is_array($information)
-            || ! array_key_exists('thumbnail', $information)
+        if (empty($this->information)
+            || !is_array($this->information)
+            || ! array_key_exists('thumbnail', $this->information)
         ) {
             return null;
         }
 
         if ($this->author_name == 'external' || $this->author_name == 'script') {
             try {
-                $this->thumb_image = getService('api.service.photo')->getItem($information['thumbnail']);
+                $photo = getService('api.service.photo')
+                    ->getItem($this->information['thumbnail']);
 
-                return get_photo_path($this->thumb_image);
+                return get_photo_path($photo, null, [], true);
             } catch (GetItemException $e) {
             }
         }
 
-        return $information['thumbnail'];
+        return $this->information['thumbnail'];
     }
 }
