@@ -155,7 +155,6 @@ class OpinionController extends ContentOldController
             'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,
             'contentId'      => $opinion->id,
-            'photo'          => $photo,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($opinion->tags)['items']
         ];
@@ -163,7 +162,7 @@ class OpinionController extends ContentOldController
         $this->view->assign($params);
 
 
-        $template = ($opinion->author->is_blog == 1)
+        $template = (!empty($opinion->author) && $opinion->author->is_blog == 1)
             ? 'opinion/blog_inner.tpl'
             : 'opinion/opinion.tpl';
 
