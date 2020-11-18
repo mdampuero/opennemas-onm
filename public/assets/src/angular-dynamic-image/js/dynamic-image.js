@@ -121,10 +121,6 @@
           }
 
           if (!/^http/.test(image) && !raw) {
-            if (!instanceMedia) {
-              throw new Error('Invalid instance media folder path');
-            }
-
             prefix = instanceMedia + this.imageFolder;
           }
 
