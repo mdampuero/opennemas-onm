@@ -16,7 +16,7 @@
               </span>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-stack-overflow': content.content_type_name == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-camera': content.content_type_name == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% content.title %]
@@ -48,7 +48,7 @@
               </span>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-stack-overflow': content.content_type_name == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-camera': content.content_type_name == 'album'  }" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% content.title %]

@@ -28,7 +28,7 @@
     <i class="fa fa-lg fa-pie-chart" uib-tooltip="{t}Poll{/t}" ng-if="item.content_type_name === 'poll'"></i>
     <i class="fa fa-lg fa-puzzle-piece" uib-tooltip="{t}Widget{/t}" ng-if="item.content_type_name === 'widget'"></i>
     <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
-    <i class="fa fa-lg fa-stack-overflow" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
+    <i class="fa fa-lg fa-camera" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
     <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
   </td>
 {/block}

@@ -241,7 +241,7 @@ var newsletterTemplateTranslations = {
                       <span class="angular-ui-tree-icon"></span>
                     </span>
                     <span class="newsletter-item-type" ng-if="content.content_type !== 'list'">
-                      <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type == 'article', 'fa-quote-right': content.content_type == 'opinion', 'fa-pie-chart': content.content_type == 'poll', 'fa-file': content.content_type == 'static_page', 'fa-envelope': content.content_type == 'letter', 'fa-paperclip': content.content_type == 'attachment', 'fa-film': content.content_type == 'video', 'fa-stack-overflow': content.content_type == 'album' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                      <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type == 'article', 'fa-quote-right': content.content_type == 'opinion', 'fa-pie-chart': content.content_type == 'poll', 'fa-file': content.content_type == 'static_page', 'fa-envelope': content.content_type == 'letter', 'fa-paperclip': content.content_type == 'attachment', 'fa-film': content.content_type == 'video', 'fa-camera': content.content_type == 'album' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                     </span>
                     <span class="newsletter-item-type" ng-if="content.content_type === 'list'">
                       <span class="fa fa-search" tooltip-placement="right" uib-tooltip="{t}List of contents{/t}"></span>

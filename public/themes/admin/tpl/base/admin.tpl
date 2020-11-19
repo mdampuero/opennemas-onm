@@ -204,7 +204,7 @@
                         {acl isAllowed="ALBUM_CREATE"}
                           <div class="quick-item">
                             <a href="{url name=backend_album_create}">
-                              <i class="fa fa-stack-overflow"></i>
+                              <i class="fa fa-camera"></i>
                               <span class="title">{t}Album{/t}</span>
                             </a>
                           </div>
