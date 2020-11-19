@@ -1,7 +1,7 @@
 {extends file="common/extension/list.grid.tpl"}
 
 {block name="item"}
-  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.cover_id].path" transform="zoomcrop,400,400">
+  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="getFeaturedMedia(item, 'featured_frontpage').path" transform="zoomcrop,400,400">
     <div class="hidden-select" ng-click="toggleItem(item); xsOnly($event, toggle, item)"></div>
     <div class="thumbnail-actions ng-cloak">
       {acl isAllowed="ALBUM_UPDATE"}
