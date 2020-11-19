@@ -28,24 +28,10 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
     ) {
-        if (!preg_match('@\.amp\.html$@', $uri)) {
-            $containerId = $smarty->getContainer()
-                ->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('google_tags_id');
+        $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
 
-            if (empty($containerId)) {
-                return $output;
-            }
-
-            $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
-
-            $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
-            $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
-
-            $output = preg_replace('@(</head>)@', $headCode . '${1}', $output);
-            $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
-        } else {
+        // AMP pages
+        if (preg_match('@\.amp\.html$@', $uri)) {
             $containerId = $smarty->getContainer()
                 ->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -55,12 +41,25 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
                 return $output;
             }
 
-            $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
-
             $bodyCode = $gtm->getGoogleTagsManagerBodyCodeAMP($containerId);
 
-            $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
+            return preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
         }
+
+        $containerId = $smarty->getContainer()
+            ->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_tags_id');
+
+        if (empty($containerId)) {
+            return $output;
+        }
+
+        $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
+        $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
+
+        $output = preg_replace('@(</head>)@', $headCode . '${1}', $output);
+        $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
     }
 
     return $output;
