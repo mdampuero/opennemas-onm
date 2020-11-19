@@ -22,7 +22,7 @@
           controller: 'MediaPickerCtrl',
           restrict: 'A',
           scope: {
-            mediaPickerIgnore: '=',
+            mediaPickerIgnore: '@',
             mediaPickerTarget: '='
           },
           link: function($scope, elm, attrs) {
@@ -701,9 +701,7 @@
          */
         $scope.isIgnored = function(item) {
           return $scope.mediaPickerIgnore &&
-            $scope.mediaPickerIgnore.map(function(e) {
-              return e.pk_content;
-            }).indexOf(item.pk_content) !== -1;
+            $scope.mediaPickerIgnore.indexOf(item.pk_content) !== -1;
         };
 
         /**
@@ -720,9 +718,7 @@
         $scope.isSelectable = function(item) {
           return $scope.picker.selection.enabled &&
             (!$scope.mediaPickerIgnore ||
-            $scope.mediaPickerIgnore.map(function(e) {
-              return e.pk_content;
-            }).indexOf(item.pk_content) === -1);
+            $scope.mediaPickerIgnore.indexOf(item.pk_content) === -1);
         };
 
         /**
