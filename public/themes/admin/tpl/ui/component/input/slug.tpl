@@ -1,6 +1,6 @@
 <div class="form-group {$iClass}">
   {if $iTitle}
-    <label for="{$iField}" class="form-label">
+    <label for="{$iName}" class="form-label">
       {$iTitle}
     </label>
   {/if}
@@ -11,8 +11,8 @@
           <i class="fa" ng-class="{ 'fa-lock': flags.block.slug, 'fa-unlock-alt': !flags.block || !flags.block.slug }"></i>
         </button>
       </span>
-      <input class="form-control" id="{$iField}" name="{$iField}" ng-disabled="flags.block.slug" ng-model="item.{$iField}" {if $iRequired}required{/if} type="text">
-      {include file="ui/component/icon/status.tpl" iForm=$iField iClass="form-status-absolute"}
+      <input class="form-control" id="{$iName}" name="{$iName}" ng-disabled="flags.block.slug" ng-model="{$iNgModel}" {if $iRequired}required{/if} type="text">
+      {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iFlag="slug" iForm="form.slug" iNgModel="item.slug" iValidation=true}
     </div>
   </div>
 </div>

@@ -3,7 +3,7 @@
   {$iTitle}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$iName} }"></i>
   <span class="pull-right" ng-if="!expanded.{$iName}">
-    {include file="ui/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
+    {include file="common/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$iName} }">

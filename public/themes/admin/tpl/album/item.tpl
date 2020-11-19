@@ -92,7 +92,7 @@
         <button class="btn btn-link no-padding p-t-5 m-r-10" ng-click="setMode(app.mode === 'grid' ? 'list' : 'grid')" type="button">
           <i class="fa" ng-class="{ 'fa-th': app.mode === 'grid', 'fa-list': app.mode === 'list' }"></i>
         </button>
-        {include file="ui/component/icon/status.tpl" iNgModel="value.photos" iForm="form.photos" iValidation=true}
+        {include file="common/component/icon/status.tpl" iNgModel="value.photos" iForm="form.photos" iValidation=true}
       </div>
     </div>
     <div class="grid-body">
