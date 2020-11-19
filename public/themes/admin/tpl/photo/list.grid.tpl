@@ -15,7 +15,7 @@
           </a>
         {/acl}
         {acl isAllowed="PHOTO_DELETE"}
-          <div class="thumbnail-action" ng-click="delete(item.pk_photo)" uib-tooltip="{t}Delete{/t}" tooltip-class="tooltip-danger">
+          <div class="thumbnail-action" ng-click="delete(item.pk_content)" uib-tooltip="{t}Delete{/t}" tooltip-class="tooltip-danger">
             <i class="fa fa-trash-o fa-2x text-danger"></i>
           </div>
         {/acl}
@@ -43,18 +43,15 @@
     </div>
     <h4 class="ng-cloak" ng-show="selected.lastSelected">{t}Image details{/t}</h4>
     <div ng-if="selected.lastSelected">
-      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'photo' && !isFlash(selected.lastSelected)">
+      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="!isFlash(selected.lastSelected)">
         <dynamic-image autoscale="true" class="img-thumbnail no-animate" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true" transform="thumbnail,220,220"></dynamic-image>
-      </div>
-      <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="selected.lastSelected.content_type_name == 'video' && !selected.lastSelected.thumb_image">
-        <dynamic-image autoscale="true" class="img-thumbnail no-animate" ng-model="selected.lastSelected" only-image="true" property="thumb"></dynamic-image>
       </div>
       <div class="pointer thumbnail-wrapper" ng-click="open('modal-image', selected.lastSelected)" ng-if="isFlash(selected.lastSelected)">
         <dynamic-image autoscale="true" class="img-thumbnail no-animate" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="selected.lastSelected" only-image="true"></dynamic-image>
       </div>
       <ul class="media-information">
         <li>
-          <a class="btn btn-block btn-default" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.id}) %]">
+          <a class="btn btn-block btn-default" ng-href="[% routing.generate('backend_photo_show', { id: selected.lastSelected.pk_content}) %]">
               <i class="fa fa-edit ng-isolate-scope"></i>
               {t}Edit{/t}
           </a>
@@ -68,7 +65,7 @@
           </li>
         {/is_module_activated}
         <li>
-          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}images[% selected.lastSelected.path_img %]" target="_blank">
+          <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}[% selected.lastSelected.path %]" target="_blank">
             <i class="fa fa-external-link m-r-5"></i>
             {t}Link{/t}
           </a>
@@ -78,7 +75,7 @@
             {t}Name{/t}
           </label>
           <span class="m-l-10">
-            [% selected.lastSelected.name %]
+            [% selected.lastSelected.title %]
           </span>
         </li>
         <li>

@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,9 +101,11 @@ class LettersController extends Controller
         $id     = $request->query->getDigits('id', null);
         $letter = $this->get('entity_repository')->find('Letter', $id);
 
-        if (!empty($letter->image)) {
-            $photo1 = new \Photo($letter->image);
-            $this->view->assign('photo1', $photo1);
+        $service = $this->get('api.service.photo');
+        try {
+            $photo1 = $service->getItem($letter->image);
+            $this->view->assign('photo1', $service->responsify($photo1));
+        } catch (GetItemException $e) {
         }
 
         if (is_null($letter->id)) {

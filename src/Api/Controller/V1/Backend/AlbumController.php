@@ -9,6 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Request;
 
 class AlbumController extends ContentOldController
@@ -77,12 +78,46 @@ class AlbumController extends ContentOldController
             }, $item->photos)));
         }
 
-        $photos = $this->get('api.service.content_old')
-            ->getListByIds($ids)['items'];
+        try {
+            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
+            $photos = $this->get('data.manager.filter')
+                ->set($photos)
+                ->filter('mapify', [ 'key' => 'pk_content' ])
+                ->get();
 
-        return $this->get('data.manager.filter')
-            ->set($photos)
-            ->filter('mapify', [ 'key' => 'pk_photo' ])
-            ->get();
+            return $this->get('api.service.content')->responsify($photos);
+        } catch (GetItemException $e) {
+        }
+    }
+
+    /**
+     * Returns the list of contents related with items.
+     *
+     * @param Content $content The content.
+     *
+     * @return array The list of photos linked to the content.
+     */
+    protected function getRelatedContents($content)
+    {
+        $service = $this->get('api.service.photo');
+        $extra   = [];
+
+        if (empty($content)) {
+            return $extra;
+        }
+
+        if (is_object($content)) {
+            $content = [ $content ];
+        }
+
+        foreach ($content as $item) {
+            try {
+                $photo   = $service->getItem($item->cover_id);
+                $extra[$item->cover_id] = $service->responsify($photo);
+            } catch (GetItemException $e) {
+            }
+        }
+
+        return $extra;
     }
 }

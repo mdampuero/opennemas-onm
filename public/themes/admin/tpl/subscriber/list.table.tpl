@@ -26,7 +26,6 @@
 {block name="commonColumnsBody"}
   <td class="text-center v-align-middle">
     <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id]" ng-if="item.avatar_img_id"></dynamic-image>
-    <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
   </td>
   <td class="v-align-middle">
     <div class="table-text" ng-if="item.name">

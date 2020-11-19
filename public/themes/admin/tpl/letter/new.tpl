@@ -159,7 +159,7 @@
             </div>
             <div class="grid-body">
               <div class="row">
-                <div class="col-md-12" {if isset($photo1) && $photo1->name}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
+                <div class="col-md-12" {if isset($photo1)}ng-init="photo1 = {json_encode($photo1)|clear_json}"{/if}>
                   <div class="thumbnail-wrapper">
                     <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.photo1 }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.photo1 }">
@@ -195,6 +195,7 @@
                         <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1" media-picker-type="photo"></div>
                       </dynamic-image>
                       <input type="hidden" name="img1" ng-value="img1"/>
+                      <input type="hidden" name="img1" ng-value="photo1.pk_content"/>
                     </div>
                   </div>
                 </div>

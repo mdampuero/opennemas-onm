@@ -9,6 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,8 +132,8 @@ class VideoController extends ContentOldController
      */
     protected function getRelatedContents($content)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
+        $service = $this->get('api.service.photo');
+        $extra   = [];
 
         if (empty($content)) {
             return $extra;
@@ -144,15 +145,16 @@ class VideoController extends ContentOldController
 
         foreach ($content as $item) {
             if (is_array($item->information)
-                && !array_key_exists('thumbnail', $item->information)
-                || empty($item->information['thumbnail'])
+                && array_key_exists('thumbnail', $item->information)
+                && !empty($item->information['thumbnail'])
+                && is_numeric($item->information['thumbnail'])
             ) {
-                continue;
+                try {
+                    $photo   = $service->getItem($item->information['thumbnail']);
+                    $extra[] = $service->responsify($photo);
+                } catch (GetItemException $e) {
+                }
             }
-
-            $photo = $em->find('Photo', $item->information['thumbnail']);
-
-            $extra[] = \Onm\StringUtils::convertToUtf8($photo);
         }
 
         return $extra;

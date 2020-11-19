@@ -269,12 +269,6 @@ class BlogController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        foreach ($contents as &$blog) {
-            if (isset($blog->img1) && ($blog->img1 > 0)) {
-                $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
-            }
-        }
-
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $epp,
@@ -300,30 +294,6 @@ class BlogController extends FrontendController
     protected function hydrateShow(array &$params = []) : void
     {
         $params['tags'] = $this->getTags($params['content']);
-
-        // Associated media code
-        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
-            $params['photo'] = $this->get('opinion_repository')
-                ->find('Photo', $params['content']->img2);
-        }
-
         $params['blog'] = $params['content'];
-    }
-
-    /**
-     * Updates the list of parameters and/or the item when the response for
-     * the current request is not cached.
-     *
-     * @param array $params Thelist of parameters already in set.
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-
-        if (!empty($params['content']->img2)) {
-            $photoInt = $this->get('entity_repository')
-                ->find('Photo', $params['content']->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
     }
 }

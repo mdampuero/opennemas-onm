@@ -1,5 +1,7 @@
 <?php
 
+use Api\Exception\GetItemException;
+
 /**
  * Returns the content of specified type for the provided item.
  *
@@ -16,7 +18,11 @@ function get_content($item = null, $type = null)
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
     if (!is_object($item) && is_numeric($item) && !empty($type)) {
-        $item = getService('entity_repository')->find($type, $item);
+        try {
+            $item = getService('entity_repository')->find($type, $item);
+        } catch (GetItemException $e) {
+            return null;
+        }
     }
 
     if (!$item instanceof \Common\Model\Entity\Content
@@ -69,6 +75,12 @@ function get_featured_media($item, $type)
         ], 'video' => [
             'frontpage' => [ 'thumbnail' ],
             'inner'     => [ 'embedUrl' ]
+        ], 'book' => [
+            'frontpage' => [ 'cover_id' ],
+            'inner'     => []
+        ], 'special' => [
+            'frontpage' => [ 'img1' ],
+            'inner'     => [ ]
         ]
     ];
 
@@ -274,8 +286,13 @@ function get_related($item, string $type) : array
 
     return array_filter(array_map(function ($a) {
         $content = get_content($a['target_id'], $a['content_type_name']);
-        // TODO: Remove this provisional logic on ONM-6154
-        return !empty($content) ? $content->loadAttachedVideo() : null;
+
+        //TODO: Remove this on ticket ONM-6166
+        if ($content instanceof \Content) {
+            $content = $content->loadAttachedVideo();
+        }
+
+        return !empty($content) ? $content : null;
     }, $items));
 }
 

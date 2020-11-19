@@ -1,4 +1,7 @@
 <?php
+
+use Api\Exception\GetItemException;
+
 /**
  * This file is part of the Onm package.
  *
@@ -96,7 +99,6 @@ class Video extends Content
             }
 
             $this->load($rs);
-            $this->information = unserialize($rs['information']);
 
             return $this;
         } catch (\Exception $e) {
@@ -257,32 +259,23 @@ class Video extends Content
      */
     public function getThumb()
     {
-        if (!is_array($this->information)) {
-            $information = unserialize($this->information);
-        } else {
-            $information = $this->information;
-        }
-
-        if ($this->author_name == 'internal') {
-            return MEDIA_IMG_PATH_WEB . "/../" . $information['thumbnails']['normal'];
-        }
-
-        if (empty($information)
-            || !is_array($information)
-            || ! array_key_exists('thumbnail', $information)
+        if (empty($this->information)
+            || !is_array($this->information)
+            || ! array_key_exists('thumbnail', $this->information)
         ) {
             return null;
         }
 
         if ($this->author_name == 'external' || $this->author_name == 'script') {
-            $this->thumb_image = getService('entity_repository')
-                ->find('Photo', $information['thumbnail']);
+            try {
+                $photo = getService('api.service.photo')
+                    ->getItem($this->information['thumbnail']);
 
-            if (!empty($this->thumb_image->name)) {
-                return MEDIA_IMG_PATH_WEB . $this->thumb_image->getRelativePath();
+                return get_photo_path($photo);
+            } catch (GetItemException $e) {
             }
         }
 
-        return $information['thumbnail'];
+        return $this->information['thumbnail'];
     }
 }

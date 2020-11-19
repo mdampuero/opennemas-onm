@@ -39,6 +39,7 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
+      {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
     </div>
   </div>
@@ -48,9 +49,8 @@
   <div class="grid simple">
     <div class="grid-body">
       <div class="thumbnail-wrapper">
-        <div class="dynamic-image-placeholder ng-cloak" ng-if="item">
-          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" ng-if="item" only-image="false">
-          </dynamic-image>
+        <div class="dynamic-image-placeholder ng-cloak">
+          <dynamic-image autoscale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" only-image="false"></dynamic-image>
         </div>
       </div>
       <div class="m-b-30 m-t-15 text-center">
@@ -75,7 +75,7 @@
             {t}Original{/t}
           </strong>
           <span>
-            <a class="badge badge-default text-bold" href="{$smarty.const.INSTANCE_MEDIA}images[% extra.paths.photo + item.path_img %]" target="_blank">
+            <a class="badge badge-default text-bold" href="{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" target="_blank">
               <i class="fa fa-external-link m-r-5"></i>
               {t}Link{/t}
             </a>
@@ -84,7 +84,7 @@
       </div>
       <div class="form-group">
         {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-        {include file="ui/component/content-editor/textarea.tpl"  title="{t}Description{/t}" field="description" rows=20}
+        {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=20}
       </div>
     </div>
   </div>

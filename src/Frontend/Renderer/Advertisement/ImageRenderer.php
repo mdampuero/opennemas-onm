@@ -90,8 +90,7 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         try {
-            return $this->container->get('entity_repository')
-                ->find('Photo', $ad->path);
+            return $this->container->get('api.service.photo')->getItem($ad->path);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
         }

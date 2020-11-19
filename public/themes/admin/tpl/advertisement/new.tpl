@@ -99,7 +99,7 @@ jQuery(document).ready(function($) {
                   <div class="col-sm-3">
                     <div class="radio">
                       <input id="image" name="with_script" ng-model="with_script" type="radio" ng-value="0">
-                      <label for="image" title="{t}Image or Flash object{/t}">{t}Image or Flash object{/t}</label>
+                      <label for="image" title="{t}Image{/t}">{t}Image{/t}</label>
                     </div>
                   </div>
                   <div class="col-sm-3">

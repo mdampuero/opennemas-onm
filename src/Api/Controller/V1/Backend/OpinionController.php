@@ -9,6 +9,7 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,12 +135,6 @@ class OpinionController extends ContentOldController
         } catch (\Exception $e) {
         }
 
-        // Associated media code --------------------------------------
-        $photo = '';
-        if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-            $photo = new \Photo($opinion->img2);
-        }
-
         $otherOpinions = $cm->find(
             'Opinion',
             ' opinions.fk_author=' . (int) $opinion->fk_author
@@ -160,7 +155,6 @@ class OpinionController extends ContentOldController
             'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,
             'contentId'      => $opinion->id,
-            'photo'          => $photo,
             'tags'           => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($opinion->tags)['items']
         ];
@@ -168,7 +162,7 @@ class OpinionController extends ContentOldController
         $this->view->assign($params);
 
 
-        $template = ($opinion->author->is_blog == 1)
+        $template = (!empty($opinion->author) && $opinion->author->is_blog == 1)
             ? 'opinion/blog_inner.tpl'
             : 'opinion/opinion.tpl';
 
@@ -213,8 +207,8 @@ class OpinionController extends ContentOldController
      */
     protected function getRelatedContents($content)
     {
-        $em    = $this->get('entity_repository');
-        $extra = [];
+        $extra   = [];
+        $service = $this->get('api.service.photo');
 
         if (empty($content)) {
             return $extra;
@@ -227,10 +221,10 @@ class OpinionController extends ContentOldController
         foreach ($content as $element) {
             foreach (['img1', 'img2'] as $relation) {
                 if (!empty($element->{$relation})) {
-                    $photo = $em->find('Photo', $element->{$relation});
-
-                    if (is_object($photo)) {
-                        $extra[] = \Onm\StringUtils::convertToUtf8($photo);
+                    try {
+                        $photo   = $service->getItem($element->{$relation});
+                        $extra[] = $service->responsify($photo);
+                    } catch (GetItemException $e) {
                     }
                 }
             }

@@ -118,7 +118,7 @@ class ExportContentCommand extends Command
             $this->stats['article'],
             $this->stats['opinion'],
             $this->stats['album'],
-            $this->stats['video'],
+            $this->stats['video']
         ), true);
     }
 
@@ -211,8 +211,9 @@ class ExportContentCommand extends Command
                     ->getItem($content->fk_author);
 
                 if (!empty($content->author->avatar_img_id)) {
-                    $content->author->photo = $this->getContainer()->get('entity_repository')
-                        ->find('Photo', $content->author->avatar_img_id);
+                    $content->author->photo = $this->getContainer()
+                        ->get('api.service.photo')
+                        ->getItem($content->author->avatar_img_id);
                 }
             }
         } catch (\Exception $e) {
@@ -229,12 +230,11 @@ class ExportContentCommand extends Command
         $album->all_photos = [];
 
         foreach ($album->photos as $value) {
-            $photo = $this->er->find('Photo', $value['pk_photo']);
+            $photo = $this->getContainer()->get('api.service.photo')->getItem($value['pk_photo']);
 
             $photo->img_source =
                 $this->mediaPath . DS . 'images' .
-                $photo->path_file .
-                $photo->name;
+                $photo->path;
 
             $album->all_photos[] = $photo;
         }
@@ -298,15 +298,15 @@ class ExportContentCommand extends Command
      */
     protected function processFrontImage($content)
     {
-        $image = $this->er->find('Photo', $content->img1);
+        $image = $this->getContainer()->get('api.service.photo')->getItem($content->img1);
 
         if (is_null($image)) {
             $content->img1 = 0;
             return;
         }
 
-        // Load photo object on content
-        $content->loadFrontpageImageFromHydratedArray([ $image ]);
+        $content->img1_path = $image->path;
+        $content->img1      = $image;
 
         if (!mb_check_encoding($content->img1->description)) {
             $content->img1->description = utf8_encode($content->img1->description);
@@ -320,15 +320,15 @@ class ExportContentCommand extends Command
      */
     protected function processInnerImage($content)
     {
-        $image = $this->er->find('Photo', $content->img2);
+        $image = $this->getContainer()->get('api.service.photo')->getItem($content->img2);
 
         if (is_null($image)) {
             $content->img2 = 0;
             return;
         }
 
-        // Load photo object on content
-        $content->loadInnerImageFromHydratedArray([ $image ]);
+        $content->img2_path = $image->path;
+        $content->img2      = $image;
 
         if (!mb_check_encoding($content->img2->description)) {
             $content->img2->description = utf8_encode($content->img2->description);

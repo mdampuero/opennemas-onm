@@ -153,9 +153,12 @@ class Importer
             $ps   = $this->container->get('api.service.photo');
             $file = new \SplFileInfo($data['path']);
 
+            // Avoid uploading images with content_status = 0
+            $data['content_status'] = 1;
+
             unset($data['path']);
 
-            return $ps->createItem($file, $data, true);
+            return $ps->createItem($data, $file, true);
         }
 
         $target  = \classify($data['content_type_name']);

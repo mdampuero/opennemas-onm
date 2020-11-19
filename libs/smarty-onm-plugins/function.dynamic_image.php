@@ -12,14 +12,13 @@ function smarty_function_dynamic_image($params, &$smarty)
 {
     if (array_key_exists('id', $params) && !empty($params['id'])) {
         try {
-            $photo = $smarty->getContainer()->get('entity_repository')
-                ->find('Photo', $params['id']);
+            $photo = getService('api.service.photo')->getItem($params['id']);
 
             if (empty($photo)) {
                 return '';
             }
 
-            $params['src'] = $photo->getRelativePath();
+            $params['src'] = get_property($photo, 'path');
         } catch (\Exception $e) {
             return '';
         }
@@ -31,7 +30,7 @@ function smarty_function_dynamic_image($params, &$smarty)
 
     $baseUrl = array_key_exists('base_url', $params)
         ? $params['base_url'] . DS
-        : INSTANCE_MEDIA . 'images';
+        : INSTANCE_MEDIA;
 
     $resource = $baseUrl . $params['src'];
     $resource = preg_replace('@(?<!:)//@', '/', $resource);

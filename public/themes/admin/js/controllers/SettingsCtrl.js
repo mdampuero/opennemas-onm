@@ -216,7 +216,7 @@
           var oql = oqlEncoder.getOql({ title: query, in_litter: 0, epp: 10 });
 
           var route = {
-            name: 'api_v1_backend_attachments_list',
+            name: 'api_v1_backend_attachment_get_list',
             params: { oql: oql }
           };
 

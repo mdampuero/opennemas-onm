@@ -97,7 +97,7 @@ class ContentHelper
 
         $items = $this->cache->get($cacheId);
 
-        if (!empty($items) && !empty($items[0])) {
+        if (!empty($items)) {
             return $this->ignoreCurrent($contentId, $items, $epp);
         }
 
@@ -122,60 +122,37 @@ class ContentHelper
         }
 
         try {
-            $photos   = [];
-            $contents = $this->em->findBy($criteria, [
+            $items = $this->em->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
 
-            foreach ($contents as &$content) {
-                if (empty($content->img1)) {
-                    continue;
-                }
-
-                $photo = $this->em->find('Photo', $content->img1);
-
-                if (!empty($photo)) {
-                    $photos[$content->img1] = $photo;
-                }
-            }
-
-            $items = [ $contents, $photos ];
-
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
-            return [ [], [] ];
+            return [];
         }
 
         return $this->ignoreCurrent($contentId, $items, $epp);
     }
 
     /**
-     * Removes the current content and its photo from the list of suggested
+     * Removes the current content from the list of suggested
      * contents.
      *
      * @param int   $contentId The current content id.
-     * @param array $items     The list of suggested contents and photos for a
-     *                         category.
+     * @param array $items     The list of suggested contents for a category.
      * @param int   $epp       The maximum number of items to return.
      *
-     * @return array The list of suggested contents and their photos without
-     *               the current content.
+     * @return array The list of suggested contents.
      */
     protected function ignoreCurrent($contentId, $items, $epp)
     {
-        $current = array_filter($items[0], function ($a) use ($contentId) {
+        $current = array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content == $contentId;
         });
 
-        $items[0] = array_slice(array_filter($items[0], function ($a) use ($contentId) {
+        $items = array_slice(array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content != $contentId;
         }), 0, $epp);
-
-        if (!empty($current)) {
-            if (!empty($current[0]->img1)) {
-                unset($items[1][$current[0]->img1]);
-            }
-        }
 
         return $items;
     }

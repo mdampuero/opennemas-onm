@@ -47,7 +47,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
             'random'  => rand(0, 0x7fffffff),
             'date'    => date('d/m/Y'),
             'url'     => urlencode(SITE_URL),
-            'newsurl' => urlencode(SITE_URL . 'newsletter/' . date("Ymd")),
+            'newsurl' => urlencode(SITE_URL . '/newsletter/' . date("Ymd")),
             'relurl'  => urlencode('newsletter/' . date("Ymd")),
             'utma'    => '__utma%3D999.999.999.999.999.1%3B'
         ];

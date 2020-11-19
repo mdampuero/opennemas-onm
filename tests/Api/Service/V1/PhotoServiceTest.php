@@ -10,7 +10,9 @@
  */
 namespace Tests\Api\Service\V1;
 
+use Api\Service\V1\PhotoService;
 use Common\Model\Entity\Instance;
+
 use Mockery as m;
 
 /**
@@ -30,6 +32,19 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->converter = $this->getMockBuilder('Converter' . uniqid())
+            ->setMethods([ 'objectify', 'responsify' ])
+            ->getMock();
+
+        $this->dispatcher = $this->getMockBuilder('Common\Core\Component\EventDispatcher')
+            ->setMethods([ 'dispatch' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager' . uniqid())
+            ->setMethods(['getConverter', 'getMetadata', 'getRepository', 'persist' ])
+            ->getMock();
+
+
         $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
             ->disableOriginalConstructor()
             ->setMethods([ 'getInstance' ])
@@ -48,11 +63,21 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
+            ->getMock();
+
+        $this->em->expects($this->any())->method('getConverter')
+            ->willReturn($this->converter);
+
+        $this->em->expects($this->any())->method('getMetadata')
+            ->willReturn($this->metadata);
+
         $this->il->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\PhotoService')
-            ->setConstructorArgs([ $this->container, '\Photo' ])
+            ->setConstructorArgs([ $this->container, '\Common\Model\Entity\Content' ])
             ->setMethods([ 'getItem' ])
             ->getMock();
     }
@@ -67,8 +92,14 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.dispatcher':
+                return $this->dispatcher;
+
             case 'core.helper.image':
                 return $this->ih;
+
+            case 'orm.manager':
+                return $this->em;
 
             default:
                 return null;
@@ -97,6 +128,8 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
+        $data = [ 'title' => 'plugh' ];
+
         $externalPhoto = m::mock('overload:\Photo');
 
         $this->ih->expects($this->once())->method('generatePath')
@@ -105,11 +138,15 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
         $this->ih->expects($this->once())->method('exists')
             ->willReturn(false);
 
-        $this->ih->expects($this->once())->method('move');
+        $this->converter->expects($this->any())->method('objectify')
+            ->willReturn($data);
 
         $externalPhoto->shouldReceive('create')->once()->andReturn(null);
 
-        $this->service->createItem($file);
+        $this->metadata->expects($this->once())->method('getId')
+            ->will($this->throwException(new \Api\Exception\CreateItemException()));
+
+        $this->service->createItem($data, $file);
     }
 
     /**
@@ -124,13 +161,18 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
+        $data = [ 'title' => 'plugh' ];
+
         $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
         $this->ih->expects($this->once())->method('exists')
             ->willReturn(true);
 
-        $this->service->createItem($file);
+        $this->converter->expects($this->any())->method('objectify')
+            ->willReturn($data);
+
+        $this->service->createItem($data, $file);
     }
 
     /**
@@ -143,10 +185,20 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getClientOriginalName' ])
             ->getMock();
 
+        $data = [ 'title' => 'plugh' ];
+
         $externalPhoto = m::mock('overload:\Photo');
 
         $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->willReturn($data);
+
+        $this->em->expects($this->once())->method('persist');
+
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
 
         $this->ih->expects($this->once())->method('exists')
             ->willReturn(false);
@@ -155,6 +207,6 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $externalPhoto->shouldReceive('create')->once()->andReturn(1);
 
-        $this->service->createItem($file);
+        $this->service->createItem($data, $file);
     }
 }

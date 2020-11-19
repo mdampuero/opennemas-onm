@@ -57,11 +57,6 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        if (isset($content->img2) && ($content->img2 != 0)) {
-            $photoInt = $this->get('entity_repository')->find('Photo', $content->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
-
         // Setup templating cache layer
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('content', $contentID, 'print');
