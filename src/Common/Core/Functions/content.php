@@ -230,6 +230,20 @@ function get_property($item, string $name)
 }
 
 /**
+ * Returns the publication date for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content publication date.
+ */
+function get_publication_date($item = null) : ?\Datetime
+{
+    $value = get_property($item, 'starttime') ?? get_property($item, 'created');
+
+    return is_object($value) ? $value : new \Datetime($value);
+}
+
+/**
  * Returns the summary for the provided item.
  *
  * @param Content $item The item to get property from.

@@ -324,6 +324,30 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_publication_date.
+     */
+    public function testGetPublicationDate()
+    {
+        $this->assertTrue(new \Datetime() <= get_publication_date(new Content()));
+
+        $this->content->created   = new \Datetime('2010-10-10 10:00:00');
+        $this->content->starttime = null;
+
+        $this->assertEquals(
+            new \Datetime('2010-10-10 10:00:00'),
+            get_publication_date($this->content)
+        );
+
+        $this->content->created   = new \Datetime('2010-10-10 10:00:00');
+        $this->content->starttime = new \Datetime('2010-10-10 20:00:00');
+
+        $this->assertEquals(
+            new \Datetime('2010-10-10 20:00:00'),
+            get_publication_date($this->content)
+        );
+    }
+
+    /**
      * Tests get_type when a content is already provided as parameter.
      */
     public function testGetProperty()
