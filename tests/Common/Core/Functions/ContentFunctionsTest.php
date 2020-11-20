@@ -146,7 +146,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             new \Datetime('2010-10-10 10:00:00'),
-            get_creation_date( $this->content)
+            get_creation_date($this->content)
         );
     }
 
