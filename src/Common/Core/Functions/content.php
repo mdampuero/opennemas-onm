@@ -35,6 +35,20 @@ function get_content($item = null, $type = null)
 }
 
 /**
+ * Returns the creation date for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content creation date.
+ */
+function get_creation_date($item = null) : ?\Datetime
+{
+    $value = get_property($item, 'created');
+
+    return is_object($value) ? $value : new \Datetime($value);
+}
+
+/**
  * Returns the description for the provided item.
  *
  * @param Content $item The item to get property from.

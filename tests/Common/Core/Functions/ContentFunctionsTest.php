@@ -138,6 +138,19 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_creation_date.
+     */
+    public function testGetCreationDate()
+    {
+        $this->content->created = '2010-10-10 10:00:00';
+
+        $this->assertEquals(
+            new \Datetime('2010-10-10 10:00:00'),
+            get_creation_date( $this->content)
+        );
+    }
+
+    /**
      * Tests get_description.
      */
     public function testGetDescription()
