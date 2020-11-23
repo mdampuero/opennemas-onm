@@ -17,6 +17,13 @@ use Opennemas\Orm\Core\Entity;
 class Content extends Entity
 {
     /**
+     * The list of common l10n supported keys.
+     *
+     * @var array
+     */
+    protected static $l10nKeys = [ 'body', 'description', 'slug', 'title' ];
+
+    /**
      * Gets the value of the property from the raw data array.
      *
      * @param string $name The property name.
@@ -47,6 +54,16 @@ class Content extends Entity
     public function __isset($name)
     {
         return parent::__isset($name) || !empty($this->__get($name));
+    }
+
+    /**
+     * Returns the list of l10n keys.
+     *
+     * @return array The list of l10n keys.
+     */
+    public function getL10nKeys()
+    {
+        return static::$l10nKeys;
     }
 
     /**
