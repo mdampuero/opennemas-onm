@@ -53,10 +53,14 @@ function get_description($item = null) : ?string
  *
  * @param mixed  $item The item to get featured media for.
  * @param string $type The featured type.
+ * @param bool   $deep Whether to return the final featured media. Fox example,
+ *                     if the featured media is a video, with true, the
+ *                     function will return the thumbnail of the video but,
+ *                     with false, the function will return the video.
  *
  * @return Content The featured media.
  */
-function get_featured_media($item, $type)
+function get_featured_media($item, $type, $deep = true)
 {
     $item = get_content($item);
     $map  = [
@@ -129,7 +133,7 @@ function get_featured_media($item, $type)
         }
 
         if (!empty($featured)) {
-            if (get_type($featured) === 'video' && $type === 'frontpage') {
+            if ($deep && get_type($featured) === 'video' && $type === 'frontpage') {
                 return get_featured_media($featured, 'frontpage');
             }
 
