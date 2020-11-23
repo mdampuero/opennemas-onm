@@ -314,13 +314,17 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'event',
             'in_litter'         => 0,
             'starttime'         => new \Datetime('2020-01-01 00:00:00'),
-            'related_contents'  => [
-                [ 'type' => 'featured_inner', 'caption' => 'glorp' ]
-            ]
+            'related_contents'  => [ [
+                'type'    => 'featured_inner',
+                'caption' => 'glorp "foobar" <p>fubar</p>'
+            ] ]
         ]);
 
         $this->assertEmpty(get_featured_media_caption($content, 'frontpage'));
-        $this->assertEquals('glorp', get_featured_media_caption($content, 'inner'));
+        $this->assertEquals(
+            'glorp &quot;foobar&quot; &lt;p&gt;fubar&lt;/p&gt;',
+            get_featured_media_caption($content, 'inner')
+        );
     }
 
     /**
