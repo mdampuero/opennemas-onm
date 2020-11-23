@@ -113,7 +113,7 @@ vendor:
 ################################################################################
 clean:
 	rm -rf build && mkdir build
-	rm -rf public/assets/build && mkdir public/assets/build
+	rm -rf public/build/assets && mkdir public/build/assets
 	rm -rf tmp/cache && mkdir tmp/cache
 
 
