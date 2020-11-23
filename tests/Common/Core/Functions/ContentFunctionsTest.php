@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Functions;
 
 use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Tag;
 
 /**
  * Defines test cases for content functions.
@@ -54,6 +55,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getValue' ])
             ->getMock();
 
+        $this->ts = $this->getMockBuilder('Common\Api\Service\TagService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getListByIds' ])
+            ->getMock();
+
         $this->locale->expects($this->any())->method('getTimeZone')
             ->willReturn(new \DateTimeZone('UTC'));
 
@@ -76,6 +82,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.tag':
+                return $this->ts;
+
             case 'core.helper.subscription':
                 return $this->helper;
 
@@ -506,6 +515,26 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_tags.
+     */
+    public function testGetTags()
+    {
+        $this->assertEquals([], get_tags($this->content));
+
+        $this->content->tags = [];
+        $this->assertEquals([], get_tags($this->content));
+
+        $tags = [ new Tag([ 'id' => 917 ]), new Tag([ 'id' => 837 ]) ];
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->with([ 971, 837 ])
+            ->willReturn([ 'items' => $tags ]);
+
+        $this->content->tags = [ 971, 837 ];
+        $this->assertEquals($tags, get_tags($this->content));
+    }
+
+    /**
      * Tests get_title.
      */
     public function testGetTitle()
@@ -654,6 +683,26 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->content->summary = 'Percipit "mollis" at scriptorem usu.';
         $this->assertFalse(has_summary($this->content));
         $this->assertTrue(has_summary($this->content));
+    }
+
+    /**
+     * Tests has_tags.
+     */
+    public function testHasTags()
+    {
+        $this->assertFalse(has_tags($this->content));
+
+        $this->content->tags = [];
+        $this->assertFalse(has_tags($this->content));
+
+        $tags = [ new Tag([ 'id' => 917 ]), new Tag([ 'id' => 837 ]) ];
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->with([ 971, 837 ])
+            ->willReturn([ 'items' => $tags ]);
+
+        $this->content->tags = [ 971, 837 ];
+        $this->assertTrue(has_tags($this->content));
     }
 
     /**

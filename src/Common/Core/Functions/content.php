@@ -332,6 +332,28 @@ function get_related_contents($item, string $type) : array
 }
 
 /**
+ * Returns the list of tags for the provided item.
+ *
+ * @param Content $item The item to get tags from.
+ *
+ * @return array The list of tags.
+ */
+function get_tags($item = null) : array
+{
+    $value = get_property($item, 'tags');
+
+    if (empty($value)) {
+        return [];
+    }
+
+    try {
+        return getService('api.service.tag')->getListByIds($value)['items'];
+    } catch (\Exception $e) {
+        return [];
+    }
+}
+
+/**
  * Returns the internal type or human-readable type for the provided item.
  *
  * @param Content $item     The item to get content type for.
@@ -438,6 +460,18 @@ function has_summary($item) : bool
 
     return !empty(get_summary($item))
         && !getService('core.helper.subscription')->isHidden($token, 'summary');
+}
+
+/**
+ * Checks if the content has tags.
+ *
+ * @param Content $item The item to check tags for.
+ *
+ * @return bool True if the content has tags. False otherwise.
+ */
+function has_tags($item = null) : bool
+{
+    return !empty(get_tags($item));
 }
 
 /**
