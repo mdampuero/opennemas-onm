@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{$content->content_type_name|capitalize}"
+<div data-content-id="{$content->id}" data-class="{get_type($content, true)}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
@@ -10,7 +10,7 @@
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            <span class="type">{$content->content_type_name|capitalize}</span>
+            <span class="type">{get_type($content, true)}</span>
             {$content->title}
         </div>
     </div>
