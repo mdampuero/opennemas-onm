@@ -1165,6 +1165,14 @@
                                 <input class="form-control" id="google-tags-id" name="google-tags-id" ng-model="settings.google_tags_id" type="text">
                               </div>
                             </div>
+                            <div class="form-group">
+                              <label class="form-label" for="google-tags-id-amp">
+                                {t}Google Tags container Id for AMP{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="google-tags-id-amp" name="google-tags-id-amp" ng-model="settings.google_tags_id_amp" type="text">
+                              </div>
+                            </div>
                             <small class="help">
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
                               {t escape=off}You can get your Google <strong>Tags</strong> container Id from <a class="external-link" href="https://tagmanager.google.com/#/home" target="_blank" ng-click="$event.stopPropagation();">Google tags sign up website</a>.{/t}

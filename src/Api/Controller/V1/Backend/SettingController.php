@@ -50,6 +50,7 @@ class SettingController extends Controller
         'google_news_name',
         'google_page',
         'google_tags_id',
+        'google_tags_id_amp',
         'googleplus_page',
         'header_script',
         'instagram_page',
