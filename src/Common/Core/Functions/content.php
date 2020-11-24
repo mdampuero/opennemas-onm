@@ -184,12 +184,14 @@ function get_featured_media_caption($item, $type)
             return $a['type'] === $key;
         });
 
-        return !empty($related) ? array_shift($related)['caption'] : null;
+        return !empty($related)
+            ? htmlentities(array_shift($related)['caption'])
+            : null;
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
         if (!empty($item->{$key})) {
-            return $item->{$key};
+            return htmlentities($item->{$key});
         }
     }
 

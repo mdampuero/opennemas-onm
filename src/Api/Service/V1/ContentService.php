@@ -89,6 +89,16 @@ class ContentService extends OrmService
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function responsify($item)
+    {
+        $item = \Onm\StringUtils::convertToUtf8($item);
+
+        return parent::responsify($item);
+    }
+
+    /**
      * Assign the user data for content.
      *
      * @param array $data       The content data.

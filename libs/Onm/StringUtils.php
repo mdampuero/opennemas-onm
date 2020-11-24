@@ -9,6 +9,8 @@
  */
 namespace Onm;
 
+use Common\Model\Entity\Content;
+
 /**
  * The StringUtils class provides methods to transform strings.
  */
@@ -19,7 +21,7 @@ class StringUtils
      *
      * @var array
      */
-    static protected $trade = [
+    protected static $trade = [
         "'"  => ' ',
         "\n" => ' ',
         "\r" => ' ',
@@ -394,7 +396,7 @@ class StringUtils
      *
      * @var array
      */
-    static protected $shortWords = [
+    protected static $shortWords = [
         'a',
         'al',
         'ante',
@@ -664,12 +666,13 @@ class StringUtils
         if (is_object($input)) {
             $keys = array_keys(get_object_vars($input));
 
-            if ($input instanceof \Content) {
+            if ($input instanceof \Content || $input instanceof Content) {
                 $keys = array_merge($keys, $input->getL10nKeys());
             }
 
             foreach ($keys as $key) {
-                if ($input instanceof \Content
+                if (($input instanceof \Content
+                    || $input instanceof Content)
                     && is_array($input->{$key})
                     && in_array($key, $input->getL10nKeys())
                 ) {

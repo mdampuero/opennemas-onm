@@ -47,4 +47,19 @@ class GoogleTagsManager
 
         return $code;
     }
+
+    /**
+     * Generates Google Tags Manager body code for AMP
+     *
+     * @return String the generated code
+     */
+    public function getGoogleTagsManagerBodyCodeAMP($id)
+    {
+        $code = '<!-- Google Tag Manager AMP -->
+    <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $id . '"
+    data-credentials="include"></amp-analytics>
+    <!-- End Google Tag Manager AMP -->';
+
+        return $code;
+    }
 }

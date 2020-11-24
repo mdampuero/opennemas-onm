@@ -27,8 +27,25 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
-        && !preg_match('@\.amp\.html$@', $uri)
     ) {
+        $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
+
+        // AMP pages
+        if (preg_match('@\.amp\.html$@', $uri)) {
+            $containerId = $smarty->getContainer()
+                ->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('google_tags_id_amp');
+
+            if (empty($containerId)) {
+                return $output;
+            }
+
+            $bodyCode = $gtm->getGoogleTagsManagerBodyCodeAMP($containerId);
+
+            return preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
+        }
+
         $containerId = $smarty->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -37,8 +54,6 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         if (empty($containerId)) {
             return $output;
         }
-
-        $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
 
         $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
         $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
