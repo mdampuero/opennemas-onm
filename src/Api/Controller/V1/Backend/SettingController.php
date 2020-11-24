@@ -147,17 +147,6 @@ class SettingController extends Controller
             ->get($this->keys);
         $locale   = $this->get('core.locale');
 
-        if (array_key_exists('google_analytics', $settings)) {
-            // Decode base64 custom code for analytics
-            foreach ($settings['google_analytics'] as &$value) {
-                if (array_key_exists('custom_var', $value)
-                    && !empty($value['custom_var'])
-                ) {
-                    $value['custom_var'] = base64_decode($value['custom_var']);
-                }
-            }
-        }
-
         // Decode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
             if (array_key_exists($key, $settings)) {
@@ -247,19 +236,6 @@ class SettingController extends Controller
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_encode($settings[$key]);
-            }
-        }
-
-        // Encode Google Analytics custom vars
-        if (array_key_exists('google_analytics', $settings)
-            && is_array($settings['google_analytics'])
-        ) {
-            foreach ($settings['google_analytics'] as &$element) {
-                if (array_key_exists('custom_var', $element) &&
-                    !empty($element['custom_var'])
-                ) {
-                    $element['custom_var'] = base64_encode($element['custom_var']);
-                }
             }
         }
 
