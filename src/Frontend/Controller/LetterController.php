@@ -254,7 +254,7 @@ class LetterController extends Controller
         $letter = new \Letter();
 
         if ($letter->create($data)) {
-            $msg = "Su carta ha sido guardada y está pendiente de publicación.";
+            $msg = _("Your letter has been saved and is awaiting publication.");
 
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -293,8 +293,7 @@ class LetterController extends Controller
                 }
             }
         } else {
-            $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
-                . "correctamente todos los campos.";
+            $msg = _("Your letter has not been saved, make sure you fill in all the fields correctly.");
         }
 
         return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
