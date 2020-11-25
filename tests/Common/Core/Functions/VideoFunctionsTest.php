@@ -281,7 +281,7 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
 
         $video2 = new Content(
             [
-                'information' => [ 'baz' => 'glorp.xxzz/path.jpg' ]
+                'information' => [ 'thumbnail' => 'glorp.xxzz/path.jpg' ]
             ]
         );
 
@@ -297,6 +297,6 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
             ->willReturn($photo);
 
         $this->assertEquals($photo, get_video_thumbnail($video, 'glorp'));
-        $this->assertEquals('glorp.xxzz/path.jpg', get_video_thumbnail($video2, 'baz'));
+        $this->assertEquals('glorp.xxzz/path.jpg', get_video_thumbnail($video2, 'thumbnail'));
     }
 }

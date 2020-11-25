@@ -94,6 +94,25 @@ function get_video_path($item)
 }
 
 /**
+ * Returns the thumbnail for the provided item.
+ *
+ * @param Content $item The item to get thumbnail from.
+ *
+ * @return mixed The thumbnail id or the thumbnail string.
+ */
+function get_video_thumbnail($item)
+{
+    $related = get_related($item, 'featured_frontpage');
+
+    if (!empty($related)) {
+        return array_shift($related);
+    }
+
+    return !empty($item->information) && array_key_exists('thumbnail', $item->information) ?
+        $item->information['thumbnail'] : null;
+}
+
+/**
  * Returns if the video has embed html or not.
  *
  * @param Content $item The item to check if has embed html or not.
@@ -133,23 +152,4 @@ function has_video_path($item)
     $value = get_video_path($item);
 
     return !empty($value);
-}
-
-/**
- * Returns the thumbnail for the provided item.
- *
- * @param Content $item The item to get thumbnail from.
- *
- * @return mixed The thumbnail id or the thumbnail string.
- */
-function get_video_thumbnail($item, $key)
-{
-    $related = get_related($item, 'featured_frontpage');
-
-    if (!empty($related)) {
-        return array_shift($related);
-    }
-
-    return !empty($item->information) && array_key_exists($key, $item->information) ?
-        $item->information[$key] : null;
 }

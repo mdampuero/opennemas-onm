@@ -271,12 +271,18 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $video->content_status    = 1;
         $video->starttime         = '2020-01-01 00:00:00';
         $video->content_type_name = 'video';
-        $video->information       = [ 'thumbnail' => 893 ];
+        $video->related_contents  = [
+        [
+            'content_type_name' => 'photo',
+            'type' => 'featured_frontpage',
+            'target_id' => 893
+        ]
+    ];
 
         $this->em->expects($this->at(0))->method('find')
             ->with('Video', 779)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
-            ->with('Photo', 893)->willReturn($photo);
+            ->with('photo', 893)->willReturn($photo);
 
         $content                    = new \Content();
         $content->content_status    = 1;

@@ -1,6 +1,7 @@
 <?php
 
 use Api\Exception\GetItemException;
+use Repository\EntityManager;
 
 /**
  * Returns the content of specified type for the provided item.
@@ -67,10 +68,14 @@ function get_description($item = null) : ?string
  *
  * @param mixed  $item The item to get featured media for.
  * @param string $type The featured type.
+ * @param bool   $deep Whether to return the final featured media. Fox example,
+ *                     if the featured media is a video, with true, the
+ *                     function will return the thumbnail of the video but,
+ *                     with false, the function will return the video.
  *
  * @return Content The featured media.
  */
-function get_featured_media($item, $type)
+function get_featured_media($item, $type, $deep = true)
 {
     $item = get_content($item);
     $map  = [
@@ -104,46 +109,35 @@ function get_featured_media($item, $type)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content
-        && get_type($item) === 'event'
-    ) {
+    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
+        if (get_type($item) === 'video') {
+            return get_video_thumbnail($item);
+        }
+
         $media = get_related($item, $map[get_type($item)][$type][0]);
 
         return array_shift($media);
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
-        if ((get_type($item) !== 'video'
-                && empty($item->{$key}))
-            || (empty(get_related($item, 'featured_frontpage'))
-                && !empty($item->information)
-                && !array_key_exists($key, $item->information))
-        ) {
+        if (empty($item->{$key})) {
             continue;
-        }
-
-        $id = get_type($item) === 'video'
-            ? get_video_thumbnail($item, $key)
-            : $item->{$key};
-
-        if (!is_numeric($id)) {
-            return $id;
         }
 
         $featured = null;
 
         if ($item->external) {
             $related  = getService('core.template.frontend')->getValue('related', []);
-            $featured = array_key_exists($id, $related) ? $related[$id] : null;
+            $featured = array_key_exists($item->{$key}, $related) ? $related[$item->{$key}] : null;
         } else {
             $featured = get_content(
-                $id,
+                $item->{$key},
                 preg_match('/img|cover|thumbnail/', $key) ? 'Photo' : 'Video'
             );
         }
 
         if (!empty($featured)) {
-            if (get_type($featured) === 'video' && $type === 'frontpage') {
+            if ($deep && get_type($featured) === 'video' && $type === 'frontpage') {
                 return get_featured_media($featured, 'frontpage');
             }
 
@@ -179,6 +173,8 @@ function get_featured_media_caption($item, $type)
         ], 'event' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
+        ], 'video' => [
+            'frontpage' => [ 'featured_frontpage' ]
         ]
     ];
 
@@ -189,10 +185,8 @@ function get_featured_media_caption($item, $type)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content
-        && get_type($item) === 'event'
-    ) {
-        $key = array_shift($map['event'][$type]);
+    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
+        $key = array_shift($map[get_type($item)][$type]);
 
         $related = array_filter($item->related_contents, function ($a) use ($key) {
             return $a['type'] === $key;
