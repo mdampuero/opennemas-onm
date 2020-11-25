@@ -94,6 +94,8 @@ class NewsletterRenderer
                     if (!is_object($content) || is_null($content->id)) {
                         continue;
                     }
+
+                    $item = $content;
                 }
             }
 
