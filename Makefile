@@ -5,9 +5,13 @@ skanda slido tecnofisis televisionlr verbeia xaman
 
 www-data = $(shell id -u www-data > /dev/null 2>&1 && echo 'www-data' || echo 'http')
 
+dbhost = $(shell [ -f app/config/connections.yml ] && \
+	        grep 'host:' app/config/connections.yml | head -n 1 | sed -e "s/.*host:\s\+//g" || \
+		grep 'host:' app/config/parameters.yml | head -n 1 | sed -e "s/.*host:\s\+//g")
+
 dbuser = $(shell [ -f app/config/connections.yml ] && \
 		grep 'user:' app/config/connections.yml | head -n 1 | sed -e "s/.*user:\s\+//g" || \
-		grep 'user:' app/config/parameters.yml | sed -e "s/.*user:\s\+//g")
+		grep 'user:' app/config/parameters.yml | head -n 1 | sed -e "s/.*user:\s\+//g")
 
 dbpass = $(shell [ -f app/config/connections.yml ] && \
 		grep 'password:' app/config/connections.yml | head -n 1 | sed -e "s/.*password:\s\+//g" || \
@@ -85,17 +89,17 @@ components: public/assets/package.json
 
 # Create required databases to run opennemas
 database:
-	mysql -h mysql -u$(dbuser) -p$(dbpass) -e "show databases;" | \
+	mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) -e "show databases;" | \
 		grep -q "onm-instances" && return 0 || \
-		mysql -h mysql -u$(dbuser) -p$(dbpass) -e "create database \`onm-instances\`;" && \
-		mysql -h mysql -u$(dbuser) -p$(dbpass) onm-instances < db/onm-instances.sql
-	mysql -h mysql -u$(dbuser) -proot -e "show databases;" | \
+		mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) -e "create database \`onm-instances\`;" && \
+		mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) onm-instances < db/onm-instances.sql
+	mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) -e "show databases;" | \
 		grep -q "^1$$" && return 0 || \
-		mysql -h mysql -u$(dbuser) -p$(dbpass) -e "create database \`1\`;" && \
-		mysql -h mysql -u$(dbuser) -p$(dbpass) 1 < db/instance-default.sql
+		mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) -e "create database \`1\`;" && \
+		mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) 1 < db/instance-default.sql
 
 clean-database:
-	mysql -h mysql -u$(dbuser) -p$(dbpass) 1 -e "REPLACE INTO settings (name, value) \
+	mysql -h $(dbhost) -u$(dbuser) -p$(dbpass) 1 -e "REPLACE INTO settings (name, value) \
 		VALUES ('recaptcha', 'a:2:{s:10:\"public_key\";s:40:\"6LdWlgkUAAAAADzgu34FyZ-wBSB0xlCUc7UVFWGw\";s:11:\"private_key\";s:40:\"6LdWlgkUAAAAAOUnzzBwHNpPgTBIaLwfDjr6XaeQ\";}')"
 
 # Dumps Symfony routes to make them available in javascript
