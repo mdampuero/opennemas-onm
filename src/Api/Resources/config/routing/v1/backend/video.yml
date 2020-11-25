@@ -21,13 +21,6 @@ api_v1_backend_video_delete_list:
     options:
         expose: true
 
-api_v1_backend_video_get_config:
-    path:     /videos/config
-    defaults: { _controller: ApiBundle:V1/Backend/Video:getConfig }
-    methods:  [ GET ]
-    options:
-        expose: true
-
 api_v1_backend_video_get_info:
     path:     /videos/fetch-information
     defaults: { _controller: ApiBundle:V1/Backend/Video:getInformation }
@@ -63,13 +56,6 @@ api_v1_backend_video_patch_list:
     path:     /videos
     defaults: { _controller: ApiBundle:V1/Backend/Video:patchList }
     methods:  [ PATCH ]
-    options:
-        expose: true
-
-api_v1_backend_video_save_config:
-    path:     /videos/config
-    defaults: { _controller: ApiBundle:V1/Backend/Video:saveConfig }
-    methods:  [ PUT ]
     options:
         expose: true
 

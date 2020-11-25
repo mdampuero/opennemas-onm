@@ -44,20 +44,6 @@ class VideoController extends BackendController
     protected $resource = 'video';
 
     /**
-     * Handles the form for configure the video module.
-     *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_SETTINGS')")
-     */
-    public function configAction(Request $request)
-    {
-        return $this->render('video/config.tpl');
-    }
-
-    /**
      * Render the content provider for videos
      *
      * @param  Request $request The request object.
