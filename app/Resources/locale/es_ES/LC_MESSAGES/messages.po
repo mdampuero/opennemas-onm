@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-13 11:53+0000\n"
-"PO-Revision-Date: 2020-10-26 16:25+0100\n"
+"POT-Creation-Date: 2020-11-24 08:49+0000\n"
+"PO-Revision-Date: 2020-11-13 11:04+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -946,6 +946,9 @@ msgstr ""
 "El código de reCAPTCHA no fue escrito correctamente. Vuelva atrás y pruebe "
 "de nuevo."
 
+msgid "Contribute"
+msgstr "Participa"
+
 msgid "The information has been sent"
 msgstr "La información ha sido enviada"
 
@@ -960,6 +963,16 @@ msgstr "Nombre"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Your letter has been saved and is awaiting publication."
+msgstr "Su carta ha sido guardada y está pendiente de publicación."
+
+msgid ""
+"Your letter has not been saved, make sure you fill in all the fields "
+"correctly."
+msgstr ""
+"Su carta no ha sido guardada. Asegúrese de cumplimentar correctamente todos "
+"los campos."
 
 msgid "Check the form and try again"
 msgstr "Revisa el formulario e inténtalo de nuevo"
@@ -4098,6 +4111,9 @@ msgstr "Información de la instancia"
 
 msgid "Page"
 msgstr "Página"
+
+msgid "Letter"
+msgstr "Carta"
 
 msgid ""
 "There is not Internet at the moment,<br> please try to save in a few minutes."
