@@ -167,6 +167,42 @@
 
             $scope.article.params[keys[j]] = $scope.data.extra[keys[j]];
           }
+
+          // Mirror related contents in inner when frontpage changes
+          $scope.$watch('data.relatedFrontpage', function(nv, ov) {
+            if (!$scope.data) {
+              return;
+            }
+
+            var sourceIds = !angular.isArray(ov) ? [] : ov.map(function(e) {
+              return e.target_id;
+            });
+
+            var targetIds = !angular.isArray($scope.data.relatedInner) ? [] :
+              $scope.data.relatedInner.map(function(e) {
+                return e.target_id;
+              });
+
+            if (angular.equals(sourceIds, targetIds)) {
+              $scope.data.relatedInner = nv.map(function(e) {
+                e = angular.copy(e);
+                e.type = 'related_inner';
+                return e;
+              });
+            }
+          }, true);
+
+          // Updates data to send to server when related contents change
+          $scope.$watch('[ data.relatedFrontpage, data.relatedHome, ' +
+              'data.relatedInner, data.albumFrontpage, data.albumInner, ' +
+              'data.albumHome ]', function(nv) {
+            if (!$scope.data || !$scope.data.article) {
+              return;
+            }
+
+            $scope.data.article.related_contents = nv[0].concat(nv[1])
+              .concat(nv[2]).concat(nv[3]).concat(nv[4]).concat(nv[5]);
+          }, true);
         };
 
         /**
@@ -789,42 +825,6 @@
 
               $scope[name] = [];
             }
-          }
-        }, true);
-
-        // Updates data to send to server when related contents change
-        $scope.$watch('[ data.relatedFrontpage, data.relatedHome, ' +
-            'data.relatedInner, data.albumFrontpage, data.albumInner, ' +
-            'data.albumHome ]', function(nv) {
-          if (!$scope.data || !$scope.data.article) {
-            return;
-          }
-
-          $scope.data.article.related_contents = nv[0].concat(nv[1])
-            .concat(nv[2]).concat(nv[3]).concat(nv[4]).concat(nv[5]);
-        }, true);
-
-        // Mirror related contents in inner when frontpage changes
-        $scope.$watch('data.relatedFrontpage', function(nv, ov) {
-          if (!$scope.data) {
-            return;
-          }
-
-          var sourceIds = !angular.isArray(ov) ? [] : ov.map(function(e) {
-            return e.target_id;
-          });
-
-          var targetIds = !angular.isArray($scope.data.relatedInner) ? [] :
-            $scope.data.relatedInner.map(function(e) {
-              return e.target_id;
-            });
-
-          if (angular.equals(sourceIds, targetIds)) {
-            $scope.data.relatedInner = nv.map(function(e) {
-              e = angular.copy(e);
-              e.type = 'related_inner';
-              return e;
-            });
           }
         }, true);
 
