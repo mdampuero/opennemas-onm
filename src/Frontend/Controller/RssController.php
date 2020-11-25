@@ -266,17 +266,6 @@ class RssController extends FrontendController
 
             $contents = $er->findBy($filters, $order, $total, 1);
 
-            foreach ($contents as $key => $content) {
-                if (isset($content->img1) && ($content->img1 > 0)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img1);
-                }
-
-                // Get album cover photo
-                if ($content->fk_content_type == 7) {
-                    $contents[$key]->photo = $er->find('Photo', $content->cover_id);
-                }
-            }
-
             $this->view->assign(['contents' => $contents, 'rss_title' => $rssTitle]);
         }
 
@@ -319,16 +308,8 @@ class RssController extends FrontendController
             // Get last articles contents
             $contents = $this->getLatestContents('article', null, 50);
 
-            // Fetch photo for each article
             $er = $this->get('entity_repository');
             foreach ($contents as $key => $content) {
-                // Fetch photo for each content
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img1);
-                } elseif (isset($content->img2) && !empty($content->img2)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img2);
-                }
-
                 // Exclude articles with external link or without body from RSS
                 if ((isset($content->params['bodyLink'])
                     && !empty($content->params['bodyLink']))
@@ -353,7 +334,7 @@ class RssController extends FrontendController
                     $replacements  = [
                         '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
                         '<figure class="op-interactive">${2}</figure>${1}',
-                        'src="' . SITE_URL . 'media/'
+                        'src="' . SITE_URL . '/media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
@@ -552,17 +533,10 @@ class RssController extends FrontendController
      */
     protected function getRelatedContents(&$contents, $limit = null)
     {
-        // Fetch photo for each article
+        // Fetch extras for each article
         $er = $this->get('entity_repository');
 
         foreach ($contents as $key => $content) {
-            // Fetch photo for each content
-            if (isset($content->img1) && !empty($content->img1)) {
-                $contents[$key]->photo = $er->find('Photo', $content->img1);
-            } elseif (isset($content->img2) && !empty($content->img2)) {
-                $contents[$key]->photo = $er->find('Photo', $content->img2);
-            }
-
             if (isset($content->fk_video) && !empty($content->fk_video)) {
                 $contents[$key]->video = $er->find('Video', $content->fk_video);
             } elseif (isset($content->fk_video2) && !empty($content->fk_video2)) {

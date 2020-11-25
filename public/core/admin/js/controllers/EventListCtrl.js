@@ -78,7 +78,7 @@
           var cover = '';
 
           if (element.related_contents.length > 0) {
-            var coverId = element.related_contents[0].pk_content2;
+            var coverId = element.related_contents[0].target_id;
 
             cover = $scope.data.extra.related_contents[coverId];
           }

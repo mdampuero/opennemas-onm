@@ -9,7 +9,9 @@
  */
 namespace Tests\Common\Core\Components\Functions;
 
+use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Defines test cases for content functions.
@@ -39,6 +41,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getBaseUrl' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -46,6 +52,13 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->container);
 
         $GLOBALS['kernel'] = $this->kernel;
+
+        $this->content = new Content([
+            'content_type'   => 'photo',
+            'content_status' => 1,
+            'in_litter'      => 0,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
     }
 
     /**
@@ -64,6 +77,8 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             case 'router':
                 return $this->router;
 
+            case 'core.instance':
+                return $this->instance;
             default:
                 return null;
         }
@@ -108,5 +123,104 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ])->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault'));
+    }
+
+    /**
+     * Tests get_photo_path when generating absolute URL.
+     */
+    public function testGetPhotoPathWhenAbsolute()
+    {
+        $photo = new Content();
+
+        $this->ugh->expects($this->at(0))->method('generate')
+            ->with($photo)
+            ->willReturn('/glorp/xyzzy/foobar.jpg');
+
+        $this->ugh->expects($this->at(1))->method('generate')
+            ->with($photo, [ 'absolute' => true ])
+            ->willReturn('http://foo.bar/glorp/xyzzy/foobar.jpg');
+
+        $this->assertEquals(
+            'http://foo.bar/glorp/xyzzy/foobar.jpg',
+            get_photo_path($photo, null, [], true)
+        );
+    }
+
+    /**
+     * Tests get_photo_path when generating absolute URL for an image with transform.
+     */
+    public function testGetPhotoPathWhenAbsoluteAndTransform()
+    {
+        $photo = new Content();
+
+        $this->ugh->expects($this->at(0))->method('generate')
+            ->with($photo)
+            ->willReturn('/glorp/xyzzy/foobar.jpg');
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('asset_image', [
+                'params' => 'grault',
+                'path'   => '/glorp/xyzzy/foobar.jpg'
+            ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn(
+                '/glorp/xyzzy/foobar.jpg'
+            );
+
+        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault', [], true));
+    }
+
+    /**
+     * Tests get_size.
+     */
+    public function testGetPhotoSize()
+    {
+        $this->assertNull(get_photo_size($this->content));
+
+        $this->content->size = '222';
+        $this->assertEquals('222', get_photo_size($this->content));
+    }
+
+    /**
+     * Tests get_width.
+     */
+    public function testGetPhotoWidth()
+    {
+        $this->assertNull(get_photo_width($this->content));
+
+        $this->content->width = '222';
+        $this->assertEquals('222', get_photo_width($this->content));
+    }
+
+    /**
+     * Tests get_height.
+     */
+    public function testGetPhotoHeight()
+    {
+        $this->assertNull(get_photo_height($this->content));
+
+        $this->content->height = '222';
+        $this->assertEquals('222', get_photo_height($this->content));
+    }
+
+    /**
+     * Tests get_photo_mime_type.
+     */
+    public function testGetPhotoMimeType()
+    {
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://glorp.com/pp.jpg');
+
+        $this->content->path = '/glorp/xyzzy/foobar.jpg';
+        $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
+    }
+
+    /**
+     * Tests get_photo_mime_type when external photo.
+     */
+    public function testGetPhotoMimeTypeWhenExternal()
+    {
+        $this->content->path = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://glorp.com/ppp.jpg');
+        $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
     }
 }

@@ -10,10 +10,10 @@
 namespace Tests\Frontend\Renderer\Content;
 
 use Api\Exception\GetItemException;
-use Common\Model\Entity\User;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Content\ContentRenderer;
+use Common\Model\Entity\User;
 
 class ContentRendererTest extends TestCase
 {
@@ -116,7 +116,7 @@ class ContentRendererTest extends TestCase
     public function testGetTemplateWhenOpinion()
     {
         $opinion        = new \Opinion();
-        $author         = new \User();
+        $author         = new User();
         $author->meta   = [ 'is_blog' => 0 ];
         $params['item'] = $opinion;
         $tpl            = 'frontpage/contents/_opinion.tpl';

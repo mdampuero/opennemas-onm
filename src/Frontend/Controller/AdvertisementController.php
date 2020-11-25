@@ -176,7 +176,9 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $path = INSTANCE_MEDIA_PATH . FILE_DIR . $file->path;
+        $path = $this->getParameter('core.paths.public')
+            . $this->get('core.instance')->getFilesShortPath()
+            . $file->path;
 
         if (!file_exists($path) && !is_readable($path)) {
             throw new ResourceNotFoundException();

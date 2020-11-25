@@ -48,11 +48,9 @@ define('SYS_LOG_PATH', realpath(SITE_PATH . DS . '../tmp/logs'));
 
 $serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : 'console';
 define('SITE', $serverName);
-define('BASE_URL', '/');
 define('ADMIN_DIR', 'admin');
-define('SITE_URL', $protocol . SITE . BASE_URL);
+define('SITE_URL', $protocol . SITE);
 
-define('IMG_DIR', 'images');
 define('FILE_DIR', 'files');
 define('ITEMS_PAGE', '20'); // TODO: delete from application
 
@@ -66,9 +64,6 @@ $maxPost            = (int) (ini_get('post_max_size'));
 $memoryLimit        = (int) (ini_get('memory_limit'));
 $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
 define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
-
-$commonCachepath = APPLICATION_PATH . '/tmp/compiles';
-define('COMMON_CACHE_PATH', $commonCachepath);
 
 mb_internal_encoding('UTF-8');
 

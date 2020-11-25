@@ -7,6 +7,48 @@ jQuery(document).ready(function() {
   var commentVoteUrl  = body.data('urlcommentsvote');
   var params          = body.data();
 
+  /**
+   * @function getCookie
+   *
+   * @description
+   *   Returns the cookie value.
+   *
+   * @param {String} name The cookie name.
+   *
+   * @return {String} The cookie value.
+   */
+  function getCookie(name) {
+    var cookies = document.cookie.split(';');
+    var pattern = new RegExp('^' + name + '=.*');
+
+    cookies = cookies.filter(function(e) {
+      return pattern.test(e.trim());
+    });
+
+    if (cookies.length === 0) {
+      return null;
+    }
+
+    return cookies[0].trim().replace(name + '=', '');
+  }
+
+  /**
+   * @function loadUser
+   *
+   * @description
+   *   Initialize the name and email with the data from the cookie.
+   */
+  function loadUser() {
+    var onmuser = JSON.parse(decodeURIComponent(getCookie('__onm_user')));
+
+    if (onmuser) {
+      $('input[name=author-name]').attr('readonly', true);
+      $('input[name=author-name]').val(onmuser.name);
+      $('input[name=author-email]').attr('readonly', true);
+      $('input[name=author-email]').val(onmuser.email);
+    }
+  }
+
   // Show/Hide the auth section when focusing on the comment-form textarea
   $('.comment-form')
     .on('focus', '.textarea', function() {
@@ -60,11 +102,15 @@ jQuery(document).ready(function() {
           .slideDown()
           .fadeIn();
       }).always(function() {
+        loadUser();
+
         if (typeof grecaptcha !== 'undefined') {
           grecaptcha.reset();
         }
       });
   });
+
+  loadUser();
 
   // Autoresize textarea while its being filled
   $('textarea').autosize({ append: '\n' });

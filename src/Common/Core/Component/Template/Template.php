@@ -407,7 +407,7 @@ class Template extends \Smarty
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         $imageDir = !empty($this->theme)
-            ? SITE_URL . trim($this->theme->path, '/') . '/images/'
+            ? SITE_URL . '/' . trim($this->theme->path, '/') . '/images/'
             : null;
 
         $this->assign([

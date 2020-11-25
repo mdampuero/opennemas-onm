@@ -594,7 +594,9 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $properties['changed'] = date('Y-m-d H:i:s');
 
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
             $properties['fk_user_last_editor'] = (int) getService('core.user')->id;
         }
 
@@ -744,7 +746,9 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $data = [ 'in_litter' => 1, 'changed' => date("Y-m-d H:i:s") ];
 
-            if (!getService('core.security')->hasPermission('MASTER')) {
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -783,7 +787,9 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $data = [ 'in_litter' => 0, 'changed' => date("Y-m-d H:i:s") ];
 
-            if (!getService('core.security')->hasPermission('MASTER')) {
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -936,7 +942,9 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $lastEditor = $this->fk_user_last_editor;
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
@@ -1006,7 +1014,9 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $lastEditor = $this->fk_user_last_editor;
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
@@ -1117,7 +1127,9 @@ class Content implements \JsonSerializable, CsvSerializable
                 'changed'             => date("Y-m-d H:i:s")
             ];
 
-            if (!getService('core.security')->hasPermission('MASTER')) {
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -1362,56 +1374,6 @@ class Content implements \JsonSerializable, CsvSerializable
         return ($this->isInTime()
             && $this->content_status == 1
             && $this->in_litter == 0);
-    }
-
-    /**
-     * Loads all Frontpage attached images for this content given an array of images
-     *
-     * @param array $images list of Image object to hydrate the current content
-     *
-     * @return Content the object with the images loaded
-     */
-    public function loadFrontpageImageFromHydratedArray($images)
-    {
-        if (isset($this->img1)) {
-            // Buscar la imagen
-            if (!empty($images)) {
-                foreach ($images as $image) {
-                    if ($image->pk_content == $this->img1) {
-                        $this->img1_path = $image->path_file . $image->name;
-                        $this->img1      = $image;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Loads all inner attached images for this content given an array of images
-     *
-     * @param array $images list of Image object to hydrate the current content
-     *
-     * @return Content the object with the images loaded
-     */
-    public function loadInnerImageFromHydratedArray($images)
-    {
-        if (isset($this->img2)) {
-            // Buscar la imagen
-            if (!empty($images)) {
-                foreach ($images as $image) {
-                    if ($image->pk_content == $this->img2) {
-                        $this->img2_path = $image->path_file . $image->name;
-                        $this->img2      = $image;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $this;
     }
 
     /**
@@ -1937,7 +1899,9 @@ class Content implements \JsonSerializable, CsvSerializable
     protected function parseData(array $data, int $id = null) : array
     {
         $currentUserId = $this->fk_user_last_editor;
-        if (!getService('core.security')->hasPermission('MASTER')) {
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
             $currentUserId = (int) getService('core.user')->id;
         }
 

@@ -31,6 +31,11 @@ class InstanceRepositoryTest extends \PHPUnit\Framework\TestCase
                 'name'    => 'string',
                 'created' => 'datetime'
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'instances',

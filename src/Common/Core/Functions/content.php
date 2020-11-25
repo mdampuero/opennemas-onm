@@ -1,5 +1,7 @@
 <?php
 
+use Api\Exception\GetItemException;
+
 /**
  * Returns the content of specified type for the provided item.
  *
@@ -16,7 +18,11 @@ function get_content($item = null, $type = null)
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
     if (!is_object($item) && is_numeric($item) && !empty($type)) {
-        $item = getService('entity_repository')->find($type, $item);
+        try {
+            $item = getService('entity_repository')->find($type, $item);
+        } catch (GetItemException $e) {
+            return null;
+        }
     }
 
     if (!$item instanceof \Common\Model\Entity\Content
@@ -47,10 +53,14 @@ function get_description($item = null) : ?string
  *
  * @param mixed  $item The item to get featured media for.
  * @param string $type The featured type.
+ * @param bool   $deep Whether to return the final featured media. Fox example,
+ *                     if the featured media is a video, with true, the
+ *                     function will return the thumbnail of the video but,
+ *                     with false, the function will return the video.
  *
  * @return Content The featured media.
  */
-function get_featured_media($item, $type)
+function get_featured_media($item, $type, $deep = true)
 {
     $item = get_content($item);
     $map  = [
@@ -64,11 +74,17 @@ function get_featured_media($item, $type)
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
         ], 'event' => [
-            'frontpage' => [ 'cover' ],
-            'inner'     => [ 'cover' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'video' => [
             'frontpage' => [ 'thumbnail' ],
             'inner'     => [ 'embedUrl' ]
+        ], 'book' => [
+            'frontpage' => [ 'cover_id' ],
+            'inner'     => []
+        ], 'special' => [
+            'frontpage' => [ 'img1' ],
+            'inner'     => [ ]
         ]
     ];
 
@@ -82,9 +98,9 @@ function get_featured_media($item, $type)
     if ($item instanceof \Common\Model\Entity\Content
         && get_type($item) === 'event'
     ) {
-        $covers = get_related($item, $map[get_type($item)][$type][0]);
+        $media = get_related($item, $map[get_type($item)][$type][0]);
 
-        return array_shift($covers);
+        return array_shift($media);
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
@@ -117,7 +133,7 @@ function get_featured_media($item, $type)
         }
 
         if (!empty($featured)) {
-            if (get_type($featured) === 'video' && $type === 'frontpage') {
+            if ($deep && get_type($featured) === 'video' && $type === 'frontpage') {
                 return get_featured_media($featured, 'frontpage');
             }
 
@@ -150,6 +166,9 @@ function get_featured_media_caption($item, $type)
         ], 'album' => [
             'frontpage' => [],
             'inner'     => []
+        ], 'event' => [
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ]
     ];
 
@@ -160,9 +179,23 @@ function get_featured_media_caption($item, $type)
         return null;
     }
 
+    if ($item instanceof \Common\Model\Entity\Content
+        && get_type($item) === 'event'
+    ) {
+        $key = array_shift($map['event'][$type]);
+
+        $related = array_filter($item->related_contents, function ($a) use ($key) {
+            return $a['type'] === $key;
+        });
+
+        return !empty($related)
+            ? htmlentities(array_shift($related)['caption'])
+            : null;
+    }
+
     foreach ($map[get_type($item)][$type] as $key) {
         if (!empty($item->{$key})) {
-            return $item->{$key};
+            return htmlentities($item->{$key});
         }
     }
 
@@ -259,8 +292,13 @@ function get_related($item, string $type) : array
 
     return array_filter(array_map(function ($a) {
         $content = get_content($a['target_id'], $a['content_type_name']);
-        // TODO: Remove this provisional logic on ONM-6154
-        return !empty($content) ? $content->loadAttachedVideo() : null;
+
+        //TODO: Remove this on ticket ONM-6166
+        if ($content instanceof \Content) {
+            $content = $content->loadAttachedVideo();
+        }
+
+        return !empty($content) ? $content : null;
     }, $items));
 }
 

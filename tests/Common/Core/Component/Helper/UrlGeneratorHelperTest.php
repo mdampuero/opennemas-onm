@@ -517,7 +517,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
 
-        $author       = new \User();
+        $author       = new User();
         $author->name = 'Author name';
 
         $this->authorService->expects($this->any())->method('getItem')
@@ -547,7 +547,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
 
-        $author          = new \User();
+        $author          = new User();
         $author->name    = 'Author name';
         $author->is_blog = 1;
 
@@ -599,11 +599,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForPhoto()
     {
-        $content = new \Photo();
+        $content = new \Content();
 
         $content->content_type_name = 'photo';
-        $content->path_file         = 'route/to';
-        $content->name              = 'photo.file.name';
+        $content->path              = 'images/route/to/photo.file.name';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForPhoto');
         $method->setAccessible(true);
@@ -694,7 +693,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForUserBlogger()
     {
-        $user = new \Common\Model\Entity\User();
+        $user = new User();
 
         $user->id      = 252;
         $user->slug    = 'olga-gilbert';

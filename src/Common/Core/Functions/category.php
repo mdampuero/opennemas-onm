@@ -97,8 +97,8 @@ function get_category_logo($item = null) : ?string
 
     return empty($category) || empty($category->logo_path)
         ? null
-        : getService('core.instance')->getImagesShortPath()
-            . $category->logo_path;
+        : getService('core.instance')->getMediaShortPath()
+            . '/' . $category->logo_path;
 }
 
 /**

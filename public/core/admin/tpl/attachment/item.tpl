@@ -36,7 +36,7 @@
           {/acl}
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/category.tpl" field="item.category_id"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="category_id"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>

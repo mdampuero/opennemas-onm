@@ -59,18 +59,21 @@ class AuthorController extends ApiController
 
         $photos = [];
 
-        if (!empty($items)) {
-            $ids = array_filter(array_map(function ($a) {
-                return [ 'photo', $a->avatar_img_id ];
-            }, $items), function ($a) {
-                return !empty($a[1]);
-            });
+        $ids = array_filter(array_map(function ($user) {
+            return $user->avatar_img_id;
+        }, $items), function ($photo) {
+                return !empty($photo);
+        });
 
-            $photos = $this->get('entity_repository')->findMulti($ids);
+        try {
+            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
             $photos = $this->get('data.manager.filter')
                 ->set($photos)
-                ->filter('mapify', [ 'key' => 'pk_photo' ])
+                ->filter('mapify', [ 'key' => 'pk_content' ])
                 ->get();
+
+            return [ 'photos' => $this->get('api.service.content')->responsify($photos) ];
+        } catch (GetItemException $e) {
         }
 
         return [ 'photos' => $photos, ];

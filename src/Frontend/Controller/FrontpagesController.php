@@ -79,10 +79,6 @@ class FrontpagesController extends Controller
 
             // Get photo and video ids
             foreach ($contents as $content) {
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $relatedIds[] = $content->img1;
-                }
-
                 if (isset($content->fk_video) && !empty($content->fk_video)) {
                     $relatedIds[] = $content->fk_video;
                 }
@@ -118,14 +114,6 @@ class FrontpagesController extends Controller
             $tagsIds = [];
             foreach ($contents as &$content) {
                 $tagsIds = array_merge($content->tags, $tagsIds);
-                if (isset($content->img1) && !empty($content->img1)
-                    && !is_object($content->img1)
-                    && array_key_exists($content->img1, $related)
-                ) {
-                    $content->img1      = $related[$content->img1];
-                    $content->img1_path = $content->img1->path_file
-                        . $content->img1->name;
-                }
 
                 if (isset($content->fk_video) && !empty($content->fk_video)
                     && array_key_exists($content->fk_video, $related)

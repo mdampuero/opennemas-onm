@@ -167,6 +167,42 @@
 
             $scope.article.params[keys[j]] = $scope.data.extra[keys[j]];
           }
+
+          // Mirror related contents in inner when frontpage changes
+          $scope.$watch('data.relatedFrontpage', function(nv, ov) {
+            if (!$scope.data) {
+              return;
+            }
+
+            var sourceIds = !angular.isArray(ov) ? [] : ov.map(function(e) {
+              return e.target_id;
+            });
+
+            var targetIds = !angular.isArray($scope.data.relatedInner) ? [] :
+              $scope.data.relatedInner.map(function(e) {
+                return e.target_id;
+              });
+
+            if (angular.equals(sourceIds, targetIds)) {
+              $scope.data.relatedInner = nv.map(function(e) {
+                e = angular.copy(e);
+                e.type = 'related_inner';
+                return e;
+              });
+            }
+          }, true);
+
+          // Updates data to send to server when related contents change
+          $scope.$watch('[ data.relatedFrontpage, data.relatedHome, ' +
+              'data.relatedInner, data.albumFrontpage, data.albumInner, ' +
+              'data.albumHome ]', function(nv) {
+            if (!$scope.data || !$scope.data.article) {
+              return;
+            }
+
+            $scope.data.article.related_contents = nv[0].concat(nv[1])
+              .concat(nv[2]).concat(nv[3]).concat(nv[4]).concat(nv[5]);
+          }, true);
         };
 
         /**
@@ -546,8 +582,8 @@
          *   Saves tags and, then, saves the article.
          */
         $scope.submit = function() {
-          if (!$('[name=form]')[0].checkValidity()) {
-            $('[name=form]')[0].reportValidity();
+          if (!$scope.validate()) {
+            messenger.post(window.strings.forms.not_valid, 'error');
             return;
           }
 
@@ -672,6 +708,30 @@
           return $scope.article.title;
         };
 
+        /**
+         * @function validate
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Validates the form and/or the current item in the scope.
+         *
+         * @return {Boolean} True if the form and/or the item are valid. False
+         *                   otherwise.
+         */
+        $scope.validate = function() {
+          if ($scope.form && $scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          return true;
+        };
+
         // Update footers when photos change
         $scope.$watch('[ article.img1, article.img2, article.params.imageHome ]',
           function(nv, ov) {
@@ -765,42 +825,6 @@
 
               $scope[name] = [];
             }
-          }
-        }, true);
-
-        // Updates data to send to server when related contents change
-        $scope.$watch('[ data.relatedFrontpage, data.relatedHome, ' +
-            'data.relatedInner, data.albumFrontpage, data.albumInner, ' +
-            'data.albumHome ]', function(nv) {
-          if (!$scope.data || !$scope.data.article) {
-            return;
-          }
-
-          $scope.data.article.related_contents = nv[0].concat(nv[1])
-            .concat(nv[2]).concat(nv[3]).concat(nv[4]).concat(nv[5]);
-        }, true);
-
-        // Mirror related contents in inner when frontpage changes
-        $scope.$watch('data.relatedFrontpage', function(nv, ov) {
-          if (!$scope.data) {
-            return;
-          }
-
-          var sourceIds = !angular.isArray(ov) ? [] : ov.map(function(e) {
-            return e.target_id;
-          });
-
-          var targetIds = !angular.isArray($scope.data.relatedInner) ? [] :
-            $scope.data.relatedInner.map(function(e) {
-              return e.target_id;
-            });
-
-          if (angular.equals(sourceIds, targetIds)) {
-            $scope.data.relatedInner = nv.map(function(e) {
-              e = angular.copy(e);
-              e.type = 'related_inner';
-              return e;
-            });
           }
         }, true);
 

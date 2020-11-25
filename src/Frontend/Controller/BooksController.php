@@ -45,11 +45,6 @@ class BooksController extends Controller
                         'content_status=1',
                         'ORDER BY starttime DESC, pk_content DESC LIMIT 5'
                     );
-
-                foreach ($books[$category->id] as $book) {
-                    $book->cover_img = $this->get('entity_repository')
-                        ->find('Photo', $book->cover_id);
-                }
             }
 
             $this->view->assign([
@@ -95,8 +90,6 @@ class BooksController extends Controller
         if ($this->view->getCaching() === 0
             || (!$this->view->isCached('books/book_viewer.tpl', $cacheID))
         ) {
-            $content->cover_img = $this->get('entity_repository')->find('Photo', $content->cover_id);
-
             $contentManager = new \ContentManager();
             $books          = $contentManager->find_by_category(
                 'Book',
@@ -104,11 +97,6 @@ class BooksController extends Controller
                 'content_status=1 and pk_content != ' . $content->pk_content,
                 'ORDER BY starttime DESC, pk_content DESC LIMIT 5'
             );
-
-            foreach ($books as &$book) {
-                $book->cover_img = $this->get('entity_repository')
-                    ->find('Photo', $book->cover_id);
-            }
 
             $this->view->assign([
                 'books'    => $books,

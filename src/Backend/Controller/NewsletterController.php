@@ -89,6 +89,7 @@ class NewsletterController extends Controller
      */
     public function createAction()
     {
+        $this->get('core.locale')->setContext('frontend')->apply();
         $configurations = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('newsletter_maillist');

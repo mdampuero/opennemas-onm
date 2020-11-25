@@ -89,6 +89,16 @@ class ContentService extends OrmService
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function responsify($item)
+    {
+        $item = \Onm\StringUtils::convertToUtf8($item);
+
+        return parent::responsify($item);
+    }
+
+    /**
      * Assign the user data for content.
      *
      * @param array $data       The content data.
@@ -105,5 +115,28 @@ class ContentService extends OrmService
         $currentUserId = $this->container->get('core.user')->id ?? null;
 
         return array_merge($data, array_fill_keys($userFields, $currentUserId));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function localizeItem($item)
+    {
+        $keys = [
+            'related_contents' => [ 'caption' ]
+        ];
+
+        $item = parent::localizeItem($item);
+
+        foreach ($keys as $key => $value) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
+                    ->filter('localize', [ 'keys' => $value ])
+                    ->get();
+            }
+        }
+
+        return $item;
     }
 }

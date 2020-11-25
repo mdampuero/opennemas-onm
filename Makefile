@@ -130,9 +130,11 @@ vendor:
 # Prepare targets
 ################################################################################
 clean:
-	rm -rf build && mkdir build
-	rm -rf public/assets/build && mkdir public/assets/build
-	rm -rf tmp/cache && mkdir tmp/cache
+	rm -rf build
+	rm -rf public/build/assets
+	rm -rf node_modules
+	rm -rf vendor
+	rm -rf tmp/cache
 
 
 ################################################################################

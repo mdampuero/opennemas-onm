@@ -67,15 +67,11 @@ class Album extends Content
     {
         switch ($name) {
             case 'photos':
-                if (!getService('core.instance')->hasMultilanguage()
-                    || getService('core.locale')->getContext() !== 'backend'
-                ) {
-                    foreach ($this->photos as &$photo) {
-                        $photo['description'] = getService('data.manager.filter')
-                            ->set($photo['description'])
-                            ->filter('localize')
-                            ->get();
-                    }
+                foreach ($this->photos as &$photo) {
+                    $photo['description'] = getService('data.manager.filter')
+                        ->set($photo['description'])
+                        ->filter('localize')
+                        ->get();
                 }
 
                 return $this->photos;
@@ -83,26 +79,6 @@ class Album extends Content
             default:
                 return parent::__get($name);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        if (!empty($this->cover_id)) {
-            $this->cover_image = getService('entity_repository')
-                ->find('Photo', $this->cover_id);
-
-            if (!empty($this->cover_image)) {
-                $this->cover = $this->cover_image->path_file
-                    . $this->cover_image->name;
-            }
-        }
-
-        return $this;
     }
 
     /**

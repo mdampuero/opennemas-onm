@@ -882,103 +882,13 @@
                           <div class="panel-body">
                             <div ng-repeat="code in settings.google_analytics track by $index">
                               <div class="row" ng-model="settings.google_analytics[$index]">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                   <div class="form-group">
                                     <label class="form-label">
                                       {t}Google Analytics API key{/t}
                                     </label>
                                     <div class="controls">
                                       <input class="form-control" id="google-analytics-[% $index %]-api-key" name="google-analytics-[% $index %]-api-key" ng-model="code.api_key" type="text">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label class="form-label">
-                                      {t}Google Analytics Base domain{/t}
-                                    </label>
-                                    <div class="controls">
-                                      <input class="form-control" id="google_analytics-[% $index %]-base_domain" name="google_analytics-[% $index %]-base-domain" ng-model="code.base_domain" type="text">
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row" ng-show="{if $app.security->hasPermission('MASTER')}true{/if}">
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label class="form-label">
-                                      {t}Category targeting{/t}
-                                    </label>
-                                    <div class="row">
-                                      <div class="col-md-4">
-                                        <div class="help">
-                                          {t}Index{/t}
-                                        </div>
-                                        <div class="controls">
-                                          <input class="form-control" name="google_analytics[% $index %]-category-index" type="text" ng-model="code.category.index">
-                                        </div>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <div class="help">
-                                          {t}Key{/t}
-                                        </div>
-                                        <div class="controls">
-                                          <input class="form-control" name="google_analytics[% $index %]-category-key" type="text" ng-model="code.category.key">
-                                        </div>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <div class="help">
-                                          {t}Scope{/t}
-                                        </div>
-                                        <div class="controls">
-                                          <input class="form-control" name="google_analytics[% $index %]-category-scope" type="text" ng-model="code.category.scope">
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label class="form-label">
-                                      {t}Extension targeting{/t}
-                                    </label>
-                                    <div class="row">
-                                      <div class="col-md-4">
-                                        <div class="help">
-                                          {t}Index{/t}
-                                        </div>
-                                        <div class="controls">
-                                          <input class="form-control" name="google_analytics[% $index %]-extension-index" type="text" ng-model="code.extension.index">
-                                        </div>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <div class="help">
-                                          {t}Key{/t}
-                                        </div>
-                                        <div class="controls">
-                                          <input class="form-control" name="google_analytics[% $index %]-extension-key" type="text" ng-model="code.extension.key">
-                                        </div>
-                                      </div>
-                                      <div class="col-md-4">
-                                        <div class="help">
-                                          {t}Scope{/t}
-                                        </div>
-                                        <div class="controls">
-                                          <input class="form-control" name="google_analytics[% index %]-extension-scope" type="text" ng-model="code.extension.scp">
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row" ng-show="{if $app.security->hasPermission('MASTER')}true{/if}">
-                                <div class="col-md-12">
-                                  <div class="form-group">
-                                    <label class="form-label">
-                                      {t}Google Analytics Custom variables{/t}
-                                    </label>
-                                    <div class="controls">
-                                      <textarea class="form-control" name="google_analytics[[% $index %]][custom_var]" type="text" class="input-xlarge" ng-model="code.custom_var" value="[% code.custom_var %]"></textarea>
                                     </div>
                                   </div>
                                 </div>
@@ -1253,6 +1163,14 @@
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="google-tags-id" name="google-tags-id" ng-model="settings.google_tags_id" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="google-tags-id-amp">
+                                {t}Google Tags container Id for AMP{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="google-tags-id-amp" name="google-tags-id-amp" ng-model="settings.google_tags_id_amp" type="text">
                               </div>
                             </div>
                             <small class="help">

@@ -22,8 +22,7 @@
 
 {block name="commonColumnsBody"}
   <td class="text-center v-align-middle">
-    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path_img" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
-    <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.email" size="60" ng-if="!item.avatar_img_id || item.avatar_img_id == 0"></gravatar>
+    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
   </td>
   <td class="v-align-middle">
     <div class="table-text">

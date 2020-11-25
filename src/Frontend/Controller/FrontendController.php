@@ -568,12 +568,8 @@ class FrontendController extends Controller
             $params['o_category']->id ?? null
         );
 
-        $suggested = $suggestedContents[0];
-        $photos    = $suggestedContents[1];
-
         $this->view->assign([
-            'suggested' => $suggested,
-            'photos'    => $photos
+            'suggested' => $suggestedContents,
         ]);
     }
 

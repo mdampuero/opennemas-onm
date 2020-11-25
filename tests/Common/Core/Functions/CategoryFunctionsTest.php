@@ -200,7 +200,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCategoryLogo()
     {
-        $category = new Category([ 'logo_path' => '/bar/qux.jpg' ]);
+        $category = new Category([ 'logo_path' => 'images/bar/qux.jpg' ]);
 
         $this->assertNull(get_category_logo(131));
         $this->assertEquals(
@@ -261,7 +261,7 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasCategoryLogo()
     {
-        $category = new Category([ 'logo_path' => '/bar/qux.jpg' ]);
+        $category = new Category([ 'logo_path' => 'images/bar/qux.jpg' ]);
 
         $this->assertFalse(has_category_logo(131));
         $this->assertTrue(has_category_logo($category));

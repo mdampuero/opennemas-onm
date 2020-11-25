@@ -110,7 +110,7 @@ class FormController extends Controller
                 //  Build the message
                 $text = \Swift_Message::newInstance();
                 $text
-                    ->setSubject($subject)
+                    ->setSubject('[' . _('Contribute') . '] ' . $subject)
                     ->setBody($body, 'text/html')
                     ->setTo([ $settings['contact_email'] => $settings['contact_email'] ])
                     ->setFrom([ $mailSender => $settings['site_name'] ])

@@ -209,13 +209,6 @@ class OpinionController extends FrontendController
             'route'       => 'frontend_opinion_frontpage'
         ]);
 
-        foreach ($opinions as &$opinion) {
-            if ($opinion->img1 > 0) {
-                $opinion->img1 = $this->get('entity_repository')
-                    ->find('Photo', $opinion->img1);
-            }
-        }
-
         $params = array_merge($params, [
             'opinions'   => $opinions,
             'pagination' => $pagination,
@@ -277,13 +270,6 @@ class OpinionController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        foreach ($opinions as &$opinion) {
-            // Get opinion image
-            if (isset($opinion->img1) && ($opinion->img1 > 0)) {
-                $opinion->img1 = $this->get('entity_repository')->find('Photo', $opinion->img1);
-            }
-        }
-
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $epp,
@@ -312,28 +298,5 @@ class OpinionController extends FrontendController
     protected function hydrateShow(array &$params = []) : void
     {
         $params['tags'] = $this->getTags($params['content']);
-
-        // Associated media code
-        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
-            $params['photo'] = $this->get('opinion_repository')
-                ->find('Photo', $params['content']->img2);
-        }
-    }
-
-    /**
-     * Updates the list of parameters and/or the item when the response for
-     * the current request is not cached.
-     *
-     * @param array $params Thelist of parameters already in set.
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-
-        if (!empty($params['content']->img2)) {
-            $photoInt = $this->get('entity_repository')
-                ->find('Photo', $params['content']->img2);
-            $this->view->assign('photoInt', $photoInt);
-        }
     }
 }

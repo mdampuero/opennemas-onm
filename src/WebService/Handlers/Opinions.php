@@ -44,9 +44,6 @@ class Opinions
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);
 
-        // Get external media url
-        $opinion->externalMediaUrl = MEDIA_IMG_ABSOLUTE_URL;
-
         return serialize($opinion);
     }
 

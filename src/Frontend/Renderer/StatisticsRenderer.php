@@ -91,15 +91,15 @@ class StatisticsRenderer extends Renderer
 
         $uri = $request->getUri();
 
-        if (preg_match('@/newsletters/save-contents$@', $uri)) {
+        if (preg_match('@/newsletters/save-contents@', $uri)) {
             return 'image';
         }
 
-        if (preg_match('@/rss/facebook-instant-articles$@', $uri)) {
+        if (preg_match('@/rss/facebook-instant-articles@', $uri)) {
             return 'fia';
         }
 
-        if (preg_match('@\.amp\.html$@', $uri)) {
+        if (preg_match('@\.amp\.html@', $uri)) {
             return 'amp';
         }
 

@@ -33,6 +33,8 @@ class PickerController extends Controller
         $contentTypes = $request->query->filter('content_type_name', [], FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
+        $this->get('core.locale')->setContext('frontend');
+
         $filter = [ "in_litter = 0" ];
 
         if (!empty($contentTypes)) {
@@ -111,8 +113,6 @@ class PickerController extends Controller
         ])->get();
         $results      = \Onm\StringUtils::convertToUtf8($results);
 
-        $this->get('core.locale')->setContext('frontend');
-
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
         if (!empty($contentMap)) {
@@ -124,7 +124,7 @@ class PickerController extends Controller
         return new JsonResponse([
             'epp'        => $epp,
             'page'       => $page,
-            'results'    => $results,
+            'items'      => $results,
             'categories' => $this->get('api.service.category')
                 ->responsify($categories),
             'total'      => $total,
@@ -157,44 +157,6 @@ class PickerController extends Controller
         }
 
         return new JsonResponse($params);
-    }
-
-    /**
-     * Saved the description for a content.
-     *
-     * @param Request $request The request object.
-     * @param integer $id      The content id.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveDescriptionAction(Request $request, $id)
-    {
-        $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
-
-        try {
-            $photo = $this->get('entity_repository')->find('Photo', $id);
-
-            // Check if the photo exists
-            if (!is_object($photo)) {
-                return new JsonResponse('Photo doesnt exists', 404);
-            }
-
-            $this->get('orm.manager')->getConnection('instance')->executeUpdate(
-                "UPDATE contents SET `description`=? WHERE pk_content=?",
-                [ $description, $id ]
-            );
-
-            // Invalidate the cache for the photo
-            dispatchEventWithParams('content.update', [ 'item' => $photo ]);
-            dispatchEventWithParams(
-                $photo->content_type_name . '.update',
-                [ 'content' => $photo ]
-            );
-
-            return new JsonResponse('ok');
-        } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 500);
-        }
     }
 
     /**
@@ -322,7 +284,7 @@ class PickerController extends Controller
         return new JsonResponse([
             'epp'     => count($results),
             'page'    => 1,
-            'results' => array_values($results),
+            'items'   => array_values($results),
             'total'   => count($results)
         ]);
     }

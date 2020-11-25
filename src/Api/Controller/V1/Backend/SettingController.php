@@ -50,6 +50,7 @@ class SettingController extends Controller
         'google_news_name',
         'google_page',
         'google_tags_id',
+        'google_tags_id_amp',
         'googleplus_page',
         'header_script',
         'instagram_page',
@@ -147,17 +148,6 @@ class SettingController extends Controller
             ->get($this->keys);
         $locale   = $this->get('core.locale');
 
-        if (array_key_exists('google_analytics', $settings)) {
-            // Decode base64 custom code for analytics
-            foreach ($settings['google_analytics'] as &$value) {
-                if (array_key_exists('custom_var', $value)
-                    && !empty($value['custom_var'])
-                ) {
-                    $value['custom_var'] = base64_decode($value['custom_var']);
-                }
-            }
-        }
-
         // Decode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
             if (array_key_exists($key, $settings)) {
@@ -250,19 +240,6 @@ class SettingController extends Controller
             }
         }
 
-        // Encode Google Analytics custom vars
-        if (array_key_exists('google_analytics', $settings)
-            && is_array($settings['google_analytics'])
-        ) {
-            foreach ($settings['google_analytics'] as &$element) {
-                if (array_key_exists('custom_var', $element) &&
-                    !empty($element['custom_var'])
-                ) {
-                    $element['custom_var'] = base64_encode($element['custom_var']);
-                }
-            }
-        }
-
         // TODO: Remove this hack when frontend settings name are updated
         $settings = $this->updateOldSettingsName($settings);
 
@@ -317,9 +294,12 @@ class SettingController extends Controller
      */
     protected function saveFiles($files)
     {
-        $dir      = MEDIA_PATH . '/sections/';
         $msg      = $this->get('core.messenger');
         $settings = [];
+
+        $dir = $this->getParameter('core.paths.public')
+            . $this->get('core.instance')->getMediaShortPath()
+            . '/sections/';
 
         // Check if upload directory is already created
         if (!is_dir($dir)) {

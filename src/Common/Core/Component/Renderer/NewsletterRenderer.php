@@ -153,13 +153,8 @@ class NewsletterRenderer
         );
 
         // Fetch images of articles if exists
-        $content->photo = [];
-        if (!empty($content->img1)) {
-            $content->photo[] = $this->er->find('Photo', $content->img1);
-        } elseif (!empty($content->fk_video)) {
+        if (!empty($content->fk_video)) {
             $content->video = $this->er->find('Video', $content->fk_video);
-        } elseif (!empty($content->img2)) {
-            $content->photo[] = $this->er->find('Photo', $content->img2);
         }
 
         if (!isset($content->summary)) {

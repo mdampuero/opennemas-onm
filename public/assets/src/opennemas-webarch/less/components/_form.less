@@ -26,8 +26,6 @@ select.form-control {
 
 .form-group {
   .tooltip {
-    left: 0 !important;
-
     .tooltip-arrow {
       left: 15px;
     }
@@ -43,15 +41,15 @@ select.form-control {
       text-align: left;
     }
   }
+}
 
-  .tooltip-right {
+.tooltip-right {
+  left: auto !important;
+  right: 0 !important;
+
+  .tooltip-arrow {
     left: auto !important;
-    right: 0 !important;
-
-    .tooltip-arrow {
-      left: auto;
-      right: 10px;
-    }
+    right: 10px;
   }
 }
 

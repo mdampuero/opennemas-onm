@@ -50,7 +50,7 @@ orm:
                 related_contents:    array
             converters:
                 default:
-                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    class:     Common\Model\Database\Data\Converter\ContentConverter
                     arguments: [ '@orm.metadata.content' ]
             repositories:
                 instance:
@@ -59,7 +59,7 @@ orm:
             persisters:
                 instance:
                     class:     Common\Model\Database\Persister\ContentPersister
-                    arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance', '@core.user' ]
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.content', '@cache.connection.instance' ]
             mapping:
                 database:
                     table: contents

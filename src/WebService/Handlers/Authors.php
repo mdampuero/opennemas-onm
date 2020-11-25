@@ -48,8 +48,7 @@ class Authors
             );
 
             // Get photo object from avatar_img_id
-            $photo = getService('entity_repository')
-                ->find('Photo', $rs['avatar_img_id']);
+            $photo = getService('api.service.photo')->getItem($rs['avatar_img_id']);
 
             return $photo;
         } catch (\Exception $e) {
