@@ -94,6 +94,24 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_caption for objects and for items as related content.
+     */
+    public function testGetCaption()
+    {
+        $item = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
+
+        $this->assertNull(get_caption($item));
+        $this->assertEquals('Suas sonet appellantur patrioque', get_caption([
+            'item'     => $item,
+            'caption'  => 'Suas sonet appellantur patrioque',
+            'position' => 365
+        ]));
+    }
+
+    /**
      * Tests get_content when a content is already provided as parameter.
      */
     public function testGetContentFromParameter()
@@ -534,6 +552,24 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->content->content_type_name = 'static_page';
         $this->assertEquals('Static page', get_type($this->content, true));
+    }
+
+    /**
+     * Tests has_caption for objects and for items as related content.
+     */
+    public function testHasCaption()
+    {
+        $item = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
+
+        $this->assertFalse(has_caption($item));
+        $this->assertTrue(has_caption([
+            'item'     => $item,
+            'caption'  => 'Suas sonet appellantur patrioque',
+            'position' => 365
+        ]));
     }
 
     /**

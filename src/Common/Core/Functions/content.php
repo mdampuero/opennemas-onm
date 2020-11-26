@@ -3,6 +3,26 @@
 use Api\Exception\GetItemException;
 
 /**
+ * Returns the caption for an item.
+ *
+ * @param mixed $item The item to get caption from.
+ *
+ * @return string The item caption when the photo is provided as an array (with
+ *                the object, the position in the list of related contents of
+ *                the same type and the caption).
+ */
+function get_caption($item = null) : ?string
+{
+    if (!is_array($item)) {
+        return null;
+    }
+
+    return array_key_exists('caption', $item)
+        ? htmlentities($item['caption'])
+        : null;
+}
+
+/**
  * Returns the content of specified type for the provided item.
  *
  * @param mixed  $item The item to return or the id of the item to return. If
@@ -342,6 +362,20 @@ function get_type($item = null, bool $readable = false) : ?string
     return !empty($value)
         ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
         : null;
+}
+
+/**
+ * Checks if the item has a caption.
+ *
+ * @param mixed $item The item to get caption from.
+ *
+ * @return bool True if the item is provided as an array (with the object, the
+ *              position in the list of related contents of the same type and
+ *              the caption) and the caption is not empty.
+ */
+function has_caption($item = null) : bool
+{
+    return !empty(get_caption($item));
 }
 
 /**
