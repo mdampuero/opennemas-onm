@@ -56,8 +56,8 @@ class GoogleTagsManager
     public function getGoogleTagsManagerBodyCodeAMP($id)
     {
         $code = '<!-- Google Tag Manager AMP -->
-    <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $id . '"
-    data-credentials="include"></amp-analytics>
+    <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $id
+        . '&gtm.url=SOURCE_URL" data-credentials="include"></amp-analytics>
     <!-- End Google Tag Manager AMP -->';
 
         return $code;
