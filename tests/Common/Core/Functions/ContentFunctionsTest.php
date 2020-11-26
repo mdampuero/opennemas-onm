@@ -103,6 +103,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_content when the content is provided as an array with keys
+     * item, position and caption.
+     */
+    public function testGetContentForRelatedContent()
+    {
+        $this->assertNull(get_content());
+        $this->assertEquals($this->content, get_content([
+            'caption'  => 'Moderatius eum soleat omittantur massa usu oportere.',
+            'item'     => $this->content,
+            'position' => 0,
+        ]));
+    }
+
+    /**
      * Tests get_content when item is not found.
      */
     public function testGetContentWhenNotFound()
@@ -195,15 +209,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->content->content_type_name = 'event';
         $this->content->related_contents  = [ [
-            'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
-            'type'              => 'featured_frontpage'
+            'type'              => 'featured_frontpage',
+            'content_type_name' => 'photo',
+            'caption'           => 'Justo auctor vero probo pertinax',
+            'position'          => 9
         ] ];
 
-        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals([
+            'item'     => $photo,
+            'caption'  => 'Justo auctor vero probo pertinax',
+            'position' => 9
+        ], get_featured_media($this->content, 'frontpage'));
     }
-
 
     /**
      * Tests get_featured_media when the featured media is a photo.
@@ -369,33 +388,44 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRelated()
     {
-        $article                 = new \Content();
-        $article->id             = 893;
-        $article->content_status = 1;
-        $article->starttime      = '2020-01-01 00:00:00';
+        $articles = [ new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]), new Content([
+            'id'             => 704,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]) ];
 
-        $this->em->expects($this->once())->method('find')
-            ->with('article', 205)->willReturn($article);
+        $this->em->expects($this->at(0))->method('find')
+            ->with('article', 704)->willReturn($articles[1]);
 
-        $content                 = new \Content();
-        $content->content_status = 1;
-        $content->in_litter      = 0;
-        $content->starttime      = '2020-01-01 00:00:00';
+        $this->em->expects($this->at(1))->method('find')
+            ->with('article', 205)->willReturn($articles[0]);
 
-        $this->assertEmpty(get_related($content, 'inner'));
+        $this->assertEmpty(get_related($this->content, 'inner'));
 
-        $content->related_contents = [ [
+        $this->content->related_contents = [ [
+            'caption'           => 'Omnes possim dis mucius',
             'content_type_name' => 'article',
+            'position'          => 1,
             'target_id'         => 205,
             'type'              => 'related_inner'
-        ] ];
+        ], [
+            'caption'           => 'Ut erant arcu graeco',
+            'content_type_name' => 'article',
+            'position'          => 0,
+            'target_id'         => 704,
+            'type'              => 'related_inner'
+        ]  ];
 
-        $this->assertEmpty(get_related($content, 'inner'));
+        $this->assertEmpty(get_related($this->content, 'inner'));
 
-        $this->assertEquals(
-            [ $article ],
-            get_related($content, 'related_inner')
-        );
+        $related = get_related($this->content, 'related_inner');
+
+        $this->assertEquals($articles[1], $related[0]['item']);
+        $this->assertEquals($articles[0], $related[1]['item']);
     }
 
     /**
@@ -452,10 +482,16 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
+            'caption'           => null,
+            'position'          => 2
         ] ];
 
         $this->assertEmpty(get_related_contents($content, 'mumble'));
-        $this->assertEquals([ $article ], get_related_contents($content, 'inner'));
+        $this->assertEquals([ [
+            'item'     => $article,
+            'caption'  => null,
+            'position' => 2
+        ] ], get_related_contents($content, 'inner'));
     }
 
     /**
@@ -601,6 +637,8 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
+            'caption'           => null,
+            'position'          => 2
         ] ];
 
         $this->assertFalse(has_related_contents($content, 'mumble'));

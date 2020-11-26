@@ -17,6 +17,11 @@ function get_content($item = null, $type = null)
 {
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
+    // Item as a related content (array with item + caption + position)
+    if (is_array($item) && array_key_exists('item', $item)) {
+        $item = $item['item'];
+    }
+
     if (!is_object($item) && is_numeric($item) && !empty($type)) {
         try {
             $item = getService('entity_repository')->find($type, $item);
@@ -278,6 +283,10 @@ function get_related($item, string $type) : array
         return $a['type'] === $type;
     });
 
+    usort($items, function ($a, $b) {
+        return $a['position'] <=> $b['position'];
+    });
+
     if ($item->external) {
         $related = getService('core.template.frontend')->getValue('related');
 
@@ -294,7 +303,13 @@ function get_related($item, string $type) : array
             $content = $content->loadAttachedVideo();
         }
 
-        return !empty($content) ? $content : null;
+        return empty($content)
+            ? null
+            : [
+                'item' => $content,
+                'caption' => $a['caption'],
+                'position' => $a['position']
+            ];
     }, $items));
 }
 
