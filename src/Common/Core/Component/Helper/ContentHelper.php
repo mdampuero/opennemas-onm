@@ -135,6 +135,17 @@ class ContentHelper
     }
 
     /**
+     * Returns true if the content is suggested
+     *
+     * @return boolean true if the content is suggested
+     */
+    public function isSuggested($item)
+    {
+        return ($item->frontpage == 1);
+    }
+
+
+    /**
      * Removes the current content from the list of suggested
      * contents.
      *

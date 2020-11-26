@@ -1295,16 +1295,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Returns true if the content is suggested
-     *
-     * @return boolean true if the content is suggested
-     */
-    public function isSuggested()
-    {
-        return ($this->frontpage == 1);
-    }
-
-    /**
      * Return the content type name for this content
      *
      * @return string

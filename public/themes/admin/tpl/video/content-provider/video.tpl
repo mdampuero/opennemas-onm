@@ -3,7 +3,7 @@
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-format ='{getProperty item=$content category=$params['category'] property='format'}'
-    class="content-provider-element scheduled intime clearfix">
+    class="content-provider-element scheduled intime {suggested_class item=$content}clearfix">
     <div class="description">
         <div class="checkbox check-default">
           <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">

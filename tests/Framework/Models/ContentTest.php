@@ -431,19 +431,6 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Content::isSuggested
-     */
-    public function testIsSuggested()
-    {
-        $content            = new \Content();
-        $content->frontpage = 1;
-        $this->assertTrue($content->isSuggested());
-
-        $content->frontpage = 0;
-        $this->assertFalse($content->isSuggested());
-    }
-
-    /**
      * @covers Content::getContentTypeName
      */
     public function testGetContentTypeName()
