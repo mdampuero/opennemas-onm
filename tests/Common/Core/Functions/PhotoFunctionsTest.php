@@ -97,7 +97,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenNoTransform()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
@@ -111,7 +114,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenTransform()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
@@ -130,7 +136,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenAbsolute()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->at(0))->method('generate')
             ->with($photo)
@@ -151,7 +160,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenAbsoluteAndTransform()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->at(0))->method('generate')
             ->with($photo)
