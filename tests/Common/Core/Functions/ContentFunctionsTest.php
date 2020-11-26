@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Core\Functions;
 
 use Api\Exception\GetItemException;
@@ -402,7 +395,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_related when
+     * Tests get_related.
      */
     public function testGetRelated()
     {
