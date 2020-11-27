@@ -733,7 +733,7 @@ class ContentManager
         $filtered = [];
         if (is_array($items)) {
             $filtered = array_filter($items, function ($item) {
-                return $item->isInTime();
+                return getService('core.helper.content')->isIntime($item);
             });
         }
 

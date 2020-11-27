@@ -27,10 +27,12 @@ function smarty_function_render_ad_slot($params, &$smarty)
         return '';
     }
 
-    $ads = array_filter($ads, function ($ad) use ($position) {
+    $contentHelper = $smarty->getContainer()->get('core.helper.content');
+
+    $ads = array_filter($ads, function ($ad) use ($contentHelper, $position) {
         return is_array($ad->positions)
             && in_array($position, $ad->positions)
-            && $ad->isInTime();
+            && $contentHelper->isInTime($ad);
     });
 
     if (empty($ads)) {
