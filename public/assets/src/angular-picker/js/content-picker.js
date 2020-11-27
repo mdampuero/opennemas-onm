@@ -559,7 +559,7 @@
             category: $scope.criteria.category ?
               $scope.criteria.category : null,
             content_type_name: $scope.criteria.contentType ?
-            [ $scope.criteria.contentType ] : $scope.picker.types.enabled,
+              [ $scope.criteria.contentType ] : $scope.picker.types.enabled,
             epp:        $scope.epp,
             intime: $scope.picker.intime,
             page:       $scope.page,
