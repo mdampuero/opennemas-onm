@@ -32,6 +32,7 @@ class PickerController extends Controller
         $to           = $request->query->filter('to', '', FILTER_SANITIZE_STRING);
         $contentTypes = $request->query->filter('content_type_name', [], FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $intime       = $request->query->getBoolean('intime', false);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -60,6 +61,15 @@ class PickerController extends Controller
 
         if (!empty($to)) {
             $filter[] = "created <= '$to 00:00:00'";
+        }
+
+        if (!empty($intime)) {
+            $now  = new \DateTime();
+            $date = $now->format('Y-m-d H:i:s');
+
+            $filter[] = "content_status = 1 AND in_litter = 0";
+            $filter[] = "(starttime IS NULL OR '$date' > starttime)";
+            $filter[] = "(endtime IS NULL OR '$date' < endtime)";
         }
 
         if (!empty($title)) {
