@@ -235,7 +235,9 @@ class ArticlesController extends Controller
                 'pk_article'     => 0,
                 'id'             => 0,
                 'with_comment'   => 0,
-                'content_status' => 1
+                'content_status' => 1,
+                'starttime'      => null,
+                'endtime'        => null
             ]
         );
 

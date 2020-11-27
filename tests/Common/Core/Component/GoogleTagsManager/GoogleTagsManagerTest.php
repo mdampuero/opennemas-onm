@@ -54,4 +54,19 @@ class GoogleTagsManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($code, $this->object->getGoogleTagsManagerBodyCode($this->id));
     }
+
+    /**
+     * Generates Google Tags Manager body code for AMP
+     *
+     * @return String the generated code
+     */
+    public function testgetGoogleTagsManagerBodyCodeAMP()
+    {
+        $code = '<!-- Google Tag Manager AMP -->
+    <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $this->id
+        . '&gtm.url=SOURCE_URL" data-credentials="include"></amp-analytics>
+    <!-- End Google Tag Manager AMP -->';
+
+        $this->assertEquals($code, $this->object->getGoogleTagsManagerBodyCodeAMP($this->id));
+    }
 }

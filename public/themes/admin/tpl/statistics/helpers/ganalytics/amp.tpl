@@ -1,30 +1,24 @@
-{foreach $params as $key => $account}
-  <amp-analytics type="googleanalytics" id="analytics{$key}">
+{foreach $accounts as $key => $account}
+  <amp-analytics type="gtag" data-credentials="include" id="analytics{$key}">
     <script type="application/json">
     {
-      "vars": {
-        "account": "{trim($account['api_key'])}"
-      },
-      "triggers": {
-        "trackPageview": {
-          "on": "visible",
-          "request": "pageview"
+      "vars" : {
+        "gtag_id": "{$account}",
+        "config" : {
+          "{$account}": { "groups": "default" }
         }
       }
     }
     </script>
   </amp-analytics>
 {/foreach}
-<amp-analytics type="googleanalytics" id="analytics-onm">
+<amp-analytics type="gtag" data-credentials="include" id="analytics-onm">
   <script type="application/json">
   {
-    "vars": {
-      "account": "UA-40838799-5"
-    },
-    "triggers": {
-      "trackPageview": {
-        "on": "visible",
-        "request": "pageview"
+    "vars" : {
+      "gtag_id": "UA-40838799-5",
+      "config" : {
+        "UA-40838799-5": { "groups": "default" }
       }
     }
   }

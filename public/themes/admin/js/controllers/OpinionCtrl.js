@@ -115,8 +115,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.summary.updateElement();
 
+      var status = { starttime: null, endtime: null, content_status: 1 };
+      var item   = Object.assign(Object.assign({}, $scope.item), status);
+
       var data = {
-        item: JSON.stringify(cleaner.clean($scope.item)),
+        item: JSON.stringify(cleaner.clean(item)),
         locale: $scope.config.locale.selected
       };
 
