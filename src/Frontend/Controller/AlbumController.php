@@ -162,12 +162,4 @@ class AlbumController extends FrontendController
     {
         $params['tags'] = $this->getTags($params['content']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-    }
 }
