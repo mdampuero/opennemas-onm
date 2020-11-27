@@ -369,7 +369,7 @@ class FrontendController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        if (empty($item) || !$item->isReadyForPublish()) {
+        if (empty($item) || !$this->get('core.helper.content')->isReadyForPublish($item)) {
             throw new ResourceNotFoundException();
         }
 

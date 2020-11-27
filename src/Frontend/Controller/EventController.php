@@ -90,7 +90,7 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        if (!$item->isReadyForPublish()) {
+        if (!$this->get('core.helper.content')->isReadyForPublish($item)) {
             throw new ResourceNotFoundException();
         }
 

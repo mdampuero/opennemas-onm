@@ -13,7 +13,7 @@ services:
 
     content_url_matcher:
         class: Framework\Component\Routing\ContentUrlMatcher
-        arguments: [ '@entity_repository' ]
+        arguments: [ '@entity_repository', '@core.helper.content' ]
         public: true
 
     onm.event.authentication_success_listener:

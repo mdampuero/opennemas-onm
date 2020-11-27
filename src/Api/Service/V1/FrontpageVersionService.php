@@ -487,10 +487,11 @@ class FrontpageVersionService extends OrmService
      **/
     private function filterPublishedContents($contents)
     {
+        $contentHelper = $this->container->get('core.helper.content');
         $filteredContents = [];
 
         foreach ($contents as $key => $content) {
-            if ($content->isReadyForPublish()) {
+            if ($contentHelper->isReadyForPublish($content)) {
                 $filteredContents[$key] = $content;
             }
         }

@@ -21,6 +21,11 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isInTime'])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
@@ -51,6 +56,10 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'cache':
                 return $this->cache;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
+
             case 'core.locale':
                 return $this->locale;
         }
@@ -120,6 +129,19 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
         $content            = new \Content();
         $content->starttime = '2012-08-22 03:03:12';
         $content->endtime   = '3012-08-27 03:03:12';
+
+        $this->contentHelper->expects($this->at(0))->method('isInTime')
+            ->willReturn(true);
+        $this->contentHelper->expects($this->at(1))->method('isInTime')
+            ->willReturn(false);
+        $this->contentHelper->expects($this->at(2))->method('isInTime')
+            ->willReturn(false);
+        $this->contentHelper->expects($this->at(3))->method('isInTime')
+            ->willReturn(false);
+        $this->contentHelper->expects($this->at(4))->method('isInTime')
+            ->willReturn(true);
+        $this->contentHelper->expects($this->at(5))->method('isInTime')
+            ->willReturn(false);
 
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 

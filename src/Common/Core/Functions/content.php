@@ -16,6 +16,8 @@ use Repository\EntityManager;
  */
 function get_content($item = null, $type = null)
 {
+    $contentHelper = getService('core.helper.content');
+
     $item = $item ?? getService('core.template.frontend')->getValue('item');
 
     if (!is_object($item) && is_numeric($item) && !empty($type)) {
@@ -32,7 +34,7 @@ function get_content($item = null, $type = null)
         return null;
     }
 
-    return $item->isReadyForPublish() ? $item : null;
+    return $contentHelper->isReadyForPublish($item) ? $item : null;
 }
 
 /**

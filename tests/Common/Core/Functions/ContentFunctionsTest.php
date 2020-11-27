@@ -12,6 +12,7 @@ namespace Tests\Common\Core\Functions;
 use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Tag;
+use Common\Core\Component\Helper\ContentHelper;
 
 /**
  * Defines test cases for content functions.
@@ -32,6 +33,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'in_litter'      => 0,
             'starttime'      => new \Datetime('2020-01-01 00:00:00')
         ]);
+
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isReadyForPublish'])
+            ->getMock();
 
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
@@ -66,6 +72,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->contentHelper->expects($this->any())->method('isReadyForPublish')
+            ->willReturn(true);
+
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -84,6 +93,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.tag':
                 return $this->ts;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
 
             case 'core.helper.subscription':
                 return $this->helper;

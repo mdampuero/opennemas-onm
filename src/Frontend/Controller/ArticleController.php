@@ -94,7 +94,7 @@ class ArticleController extends FrontendController
         $this->view->setConfig('articles');
         $cacheID = $this->view->getCacheId('sync', 'content', $dirtyID);
 
-        if (!$article->isReadyForPublish()) {
+        if (!$this->get('core.helper.content')->isReadyForPublish($article)) {
             throw new ResourceNotFoundException();
         }
 

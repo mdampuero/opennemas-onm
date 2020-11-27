@@ -25,6 +25,11 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isInTime'])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -56,6 +61,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->contentHelper->expects($this->any())->method('isInTime')
+            ->willReturn(true);
+
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -80,6 +88,9 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.locale':
                 return $this->locale;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
 
             case 'frontend.renderer.advertisement':
                 return $this->renderer;
@@ -175,7 +186,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('ads_format')
             ->willReturn('baz');
 
@@ -216,7 +227,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(6))->method('getValue')
+        $this->smarty->expects($this->at(7))->method('getValue')
             ->with('app')
             ->willReturn([
                 'extension'          => 'foobar',
@@ -246,7 +257,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->with('advertisements')
             ->willReturn([ $ad ]);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(6))->method('getValue')
             ->with('app')
             ->willReturn([
                 'extension'          => 'foobar',
