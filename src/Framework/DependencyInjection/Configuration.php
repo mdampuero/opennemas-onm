@@ -33,14 +33,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('opennemas');
         $rootNode
             ->children()
-                ->arrayNode('paths')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('extensions_assets_path')
-                            ->defaultValue('/media/core/extensions')
-                        ->end()
-                    ->end()
-                ->end()
                 ->arrayNode('assetic')
                     ->addDefaultsIfNotSet()
                     ->children()
