@@ -21,18 +21,18 @@
         , "primaryImageOfPage":
           {include file='./structured_image_data.tpl'}
       {/if}
-      {if !empty($photos)}
+      {if !empty($content->photos)}
         , "associatedMedia": [
-          {foreach from=$photos item=photo name="photos"}
+          {foreach $content->photos as $photo}
             {
-              "url": "{get_url item=$photo absolute=true}",
-              "height": {$photo->height},
-              "width": {$photo->width}
-            }{if !$smarty.foreach.photos.last},{/if}
+              "url": "{get_photo_path(get_content($photo.pk_photo, 'Photo'), null, [], true)}",
+              "height": {get_photo_height(get_content($photo.pk_photo, 'Photo'))},
+              "width": {get_photo_width(get_content($photo.pk_photo, 'Photo'))}
+            }{if !$photo@last},{/if}
           {/foreach}
         ]},
-        {foreach from=$photos item=$image name="photos"}
-          {include file='./structured_image_data.tpl'}{if !$smarty.foreach.photos.last},{/if}
+        {foreach $content->photos as $photo}
+          {include file='./structured_image_data.tpl' image=get_content($photo.pk_photo, 'Photo')}{if !$photo@last},{/if}
         {/foreach}
       {else}
         }
