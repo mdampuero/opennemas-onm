@@ -18,7 +18,7 @@ class AssetBagTest extends \PHPUnit\Framework\TestCase
             'folders' => [
                 'bundles' => 'bundles',
                 'common'  => 'assets',
-                'themes'  => 'core',
+                'themes'  => 'core/themes',
             ]
         ];
 
@@ -82,7 +82,7 @@ class AssetBagTest extends \PHPUnit\Framework\TestCase
         ], $method->invokeArgs($this->bag, [ '@Common/js/admin.js' ]));
 
         $this->assertEquals([
-            SITE_PATH . 'core/foo/bar/baz.js'
+            SITE_PATH . 'core/themes/foo/bar/baz.js'
         ], $method->invokeArgs($this->bag, [ '@Theme/bar/baz.js' ]));
 
         $this->assertNotEmpty($method->invokeArgs($this->bag, [ '@AdminTheme/js/controllers/*' ]));
@@ -96,7 +96,7 @@ class AssetBagTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals(
-            SITE_PATH . 'core/foo',
+            SITE_PATH . 'core/themes/foo',
             $method->invokeArgs($this->bag, [ 'FooTheme' ])
         );
     }

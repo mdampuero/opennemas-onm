@@ -63,7 +63,7 @@ opennemas:
         build_path:  build/assets
         output_path: build/assets/dist
         folders:
-            themes: core
+            themes: core/themes
 
         # Template parameter
         asset_url: asset_url
