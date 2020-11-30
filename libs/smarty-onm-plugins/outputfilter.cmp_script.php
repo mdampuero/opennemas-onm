@@ -31,11 +31,35 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
-        && !preg_match('@\.amp\.html$@', $uri)
     ) {
+        $cmpType = $ds->get('cmp_type');
+        $cmpId   = $ds->get('cmp_id');
+
+        if (preg_match('@\.amp\.html$@', $uri)
+            && $cmpType !== 'default'
+            && !empty($cmpId)
+        ) {
+            $code = $smarty->getContainer()->get('core.template.admin')->fetch(
+                'common/helpers/cmp_' . $cmpType . '_amp.tpl',
+                [ 'id' => $cmpId ]
+            );
+
+            $output = preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
+            $output = preg_replace(
+                '@(</head>)@',
+                "\n"
+                . '<script async custom-element="amp-consent" '
+                . 'src="https://cdn.ampproject.org/v0/amp-consent-0.1.js"></script>'
+                . '${1}',
+                $output
+            );
+
+            return $output;
+        }
+
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
-            'common/helpers/cmp_' . $ds->get('cmp_type') . '.tpl',
-            [ 'id' => $ds->get('cmp_id') ]
+            'common/helpers/cmp_' . $cmpType . '.tpl',
+            [ 'id' => $cmpId ]
         );
 
         $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);
