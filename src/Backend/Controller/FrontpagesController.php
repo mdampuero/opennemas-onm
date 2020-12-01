@@ -350,6 +350,8 @@ class FrontpagesController extends Controller
 
         foreach ($contentsInHomepage as &$content) {
             $content->loadAttachedVideo();
+            $content->starttime = null;
+            $content->endtime   = null;
         }
 
         // Fetch category layout
