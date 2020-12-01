@@ -34,7 +34,7 @@ class CompileAssetsCommand extends Command
             $this->writeStatus('warning', 'IN PROGRESS', true);
         }
 
-        $themes = $this->getContainer()->getParameter('core.paths.public') . '/core';
+        $themes = $this->getContainer()->getParameter('core.paths.public') . '/core/themes';
         $paths  = [ $themes . '/admin', $themes . '/manager' ];
 
         $this->bag = $this->getContainer()->get('core.service.assetic.asset_bag');
