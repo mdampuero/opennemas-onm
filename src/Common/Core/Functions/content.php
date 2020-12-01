@@ -224,6 +224,20 @@ function get_featured_media_caption($item, $type)
 }
 
 /**
+ * Returns the id of an item.
+ *
+ * @param Content $content The content to get id from.
+ *
+ * @return int The content id.
+ */
+function get_id($item) : ?int
+{
+    $item = get_content($item);
+
+    return empty($item) ? null : $item->pk_content;
+}
+
+/**
  * Returns the pretitle for the provided item.
  *
  * @param Content $item The item to get property from.

@@ -369,6 +369,18 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_id.
+     */
+    public function testGetId()
+    {
+        $this->assertEmpty(get_id($this->content));
+
+        $this->content->pk_content = 690;
+
+        $this->assertEquals(690, get_id($this->content));
+    }
+
+    /**
      * Tests get_pretitle.
      */
     public function testGetPretitle()
