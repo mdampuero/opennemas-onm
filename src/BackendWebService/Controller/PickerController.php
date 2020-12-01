@@ -284,7 +284,8 @@ class PickerController extends Controller
             ->getContentsInCurrentVersionforCategory(0);
 
         $results = array_filter($results, function ($value) {
-            return $value->content_type_name != 'widget';
+            return $value->content_type_name != 'widget'
+                && $value->isReadyForPublish();
         });
 
         $results = \Onm\StringUtils::convertToUtf8($results);
