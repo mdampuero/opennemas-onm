@@ -76,8 +76,8 @@ jsdoc: node_modules
 		-t node_modules/openhost-jsdoc/template \
 		-d build/docs/javascript \
 		-r public/assets/src \
-		-r public/core/admin \
-		-r public/core/manager
+		-r public/core/themes/admin \
+		-r public/core/themes/manager
 
 ################################################################################
 # Installation targets
@@ -110,7 +110,7 @@ routes:
 media:
 	mkdir -p public/media
 
-	[ -d public/media/opennemas ] || cp -r public/core/default public/media/opennemas
+	[ -d public/media/opennemas ] || cp -r public/core/media/default public/media/opennemas
 
 # Install node dependencies
 node_modules: package.json
@@ -161,8 +161,8 @@ permissions:
 eslint: node_modules
 	node_modules/.bin/eslint -c .eslintrc --format=checkstyle \
 		public/assets/src \
-		public/core/admin \
-		public/core/manager -o build/logs/eslint.xml
+		public/core/themes/admin \
+		public/core/themes/manager -o build/logs/eslint.xml
 
 phplint:
 	find libs src -name *.php -print0 | xargs -0 -n1 -P0 php -l
