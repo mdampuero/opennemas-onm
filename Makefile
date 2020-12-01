@@ -147,12 +147,12 @@ clean:
 
 # Fix permissions for some folders
 permissions:
-	chmod 775 tmp/cache
-	chown $(www-data):$(www-data) -R tmp/cache
-	chmod 775 build
-	chown $(www-data):$(www-data) -R build
-	chmod 775 public/assets/build
-	chown $(www-data):$(www-data) -R public/assets/build
+	[ -d tmp/cache ] && chmod 775 tmp/cache
+	[ -d tmp/cache ] && chown $(www-data):$(www-data) -R tmp/cache
+	[ -d build ] && chmod 775 build
+	[ -d build ] && chown $(www-data):$(www-data) -R build
+	[ -d public/build/assets ] && chmod 775 public/build/assets
+	[ -d public/build/assets ] && chown $(www-data):$(www-data) -R public/build/assets
 
 
 ################################################################################
