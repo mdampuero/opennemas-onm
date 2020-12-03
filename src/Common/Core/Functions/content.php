@@ -92,7 +92,7 @@ function get_featured_media($item, $type)
             'frontpage' => [ 'img1' ],
             'inner'     => [ 'img2' ]
         ], 'album' => [
-            'frontpage' => [ 'cover_id' ],
+            'frontpage' => [ 'featured_frontpage' ],
             'inner'     => []
         ], 'event' => [
             'frontpage' => [ 'featured_frontpage' ],
@@ -116,9 +116,7 @@ function get_featured_media($item, $type)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content
-        && get_type($item) === 'event'
-    ) {
+    if ($item instanceof \Common\Model\Entity\Content) {
         $media = get_related($item, $map[get_type($item)][$type][0]);
 
         return array_shift($media);
