@@ -631,6 +631,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests has_comments_enabled.
+     */
+    public function testHasCommentsEnabled()
+    {
+        $item = new Content([
+            'with_comment'   => true,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+            ]);
+
+        $this->assertTrue(has_comments_enabled($item));
+    }
+
+    /**
      * Tests has_description.
      */
     public function testHasDescription()

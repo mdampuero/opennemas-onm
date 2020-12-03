@@ -429,6 +429,18 @@ function has_caption($item = null) : bool
 }
 
 /**
+ * Checks if the content has comments enabled or not.
+ *
+ * @param Content $item The item to get if comments are enabled.
+ *
+ * @return bool True if enabled, false otherwise.
+ */
+function has_comments_enabled($item = null) : bool
+{
+    return !empty(get_property($item, 'with_comment'));
+}
+
+/**
  * Check if the content has a description.
  *
  * @param Content $item The item to check description for.
