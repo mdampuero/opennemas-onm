@@ -117,10 +117,10 @@ class AlbumController extends FrontendController
             ? sprintf(' and category_id=%d', $category->id)
             : '';
 
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="album" and content_status=1 and in_litter=0 %s '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
