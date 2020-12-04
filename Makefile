@@ -151,6 +151,8 @@ permissions:
 	[ -d tmp/cache ] && chown $(www-data):$(www-data) -R tmp/cache
 	[ -d build ] && chmod 775 build
 	[ -d build ] && chown $(www-data):$(www-data) -R build
+	[ -d public/media ] && chmod 775 public/media
+	[ -d public/media ] && chown $(www-data):$(www-data) -R public/media
 	[ -d public/build/assets ] && chmod 775 public/build/assets
 	[ -d public/build/assets ] && chown $(www-data):$(www-data) -R public/build/assets
 
