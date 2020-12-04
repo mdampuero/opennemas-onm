@@ -299,4 +299,7 @@
     </div>
   </div>
 </div>
+<script type="text/ng-template" id="payment-help">
+  {include file="store/modal/_payment.tpl"}
+</script>
 {/block}
