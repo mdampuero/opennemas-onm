@@ -564,8 +564,13 @@ class FrontendController extends Controller
         // Get menu
         $mm      = $this->container->get('menu_repository');
         $ampMenu = $mm->findOneBy([ 'name' => [[ 'value' => 'amp' ]] ], null, 1, 1);
+        $ampMenu = !empty($ampMenu)
+            ? $ampMenu
+            : $mm->findOneBy([ 'name' => [[ 'value' => 'frontpage' ]] ], null, 1, 1);
 
-        $this->view->assign('menu', $ampMenu->name ?? 'frontpage');
+        if (!empty($ampMenu)) {
+            $this->view->assign('menu', $ampMenu->name);
+        }
 
         // Get suggested contents
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
