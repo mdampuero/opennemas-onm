@@ -348,6 +348,11 @@ class FrontpagesController extends Controller
         list($positions, $advertisements) =
             \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
+        foreach ($contentsInHomepage as &$content) {
+            $content->starttime = null;
+            $content->endtime   = null;
+        }
+
         // Fetch category layout
         $layout = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')

@@ -33,6 +33,7 @@ class PickerController extends Controller
         $to           = $request->query->filter('to', '', FILTER_SANITIZE_STRING);
         $contentTypes = $request->query->filter('content_type_name', [], FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $intime       = $request->query->getBoolean('intime', false);
 
         $this->get('core.locale')->setContext('frontend');
 
@@ -61,6 +62,15 @@ class PickerController extends Controller
 
         if (!empty($to)) {
             $filter[] = "created <= '$to 00:00:00'";
+        }
+
+        if (!empty($intime)) {
+            $now  = new \DateTime();
+            $date = $now->format('Y-m-d H:i:s');
+
+            $filter[] = "content_status = 1 AND in_litter = 0";
+            $filter[] = "(starttime IS NULL OR '$date' > starttime)";
+            $filter[] = "(endtime IS NULL OR '$date' < endtime)";
         }
 
         if (!empty($title)) {
@@ -113,8 +123,8 @@ class PickerController extends Controller
             'locale'    => $languageData['default']
         ])->get();
 
-        $results      = $this->responsify($results);
-        $results      = \Onm\StringUtils::convertToUtf8($results);
+        $results = $this->responsify($results);
+        $results = \Onm\StringUtils::convertToUtf8($results);
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
@@ -271,13 +281,16 @@ class PickerController extends Controller
      */
     private function listFrontpageContents()
     {
+        $contentHelper = $this->container->get('core.helper.content');
+
         // Get contents for this home
         list($frontpageVersion, $contentPositions, $results) = $this
             ->get('api.service.frontpage_version')
             ->getContentsInCurrentVersionforCategory(0);
 
-        $results = array_filter($results, function ($value) {
-            return $value->content_type_name != 'widget';
+        $results = array_filter($results, function ($value) use ($contentHelper) {
+            return $value->content_type_name != 'widget'
+                && $contentHelper->isReadyForPublish($value);
         });
 
         $results = $this->responsify($results);

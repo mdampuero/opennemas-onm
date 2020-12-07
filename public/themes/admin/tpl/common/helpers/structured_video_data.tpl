@@ -8,6 +8,7 @@
     "@id": "{$url}",
     "uploadDate": "{format_date date=$video->created format="y-MM-dd HH:mm:ss" type="custom"}",
     "thumbnailUrl": "{get_photo_path(get_featured_media($video, 'frontpage)}",
+    "contentUrl": "{$url}",
     "keywords": "{$videokeywords|escape:'html'}",
     "publisher": {
       "@type": "Organization",
