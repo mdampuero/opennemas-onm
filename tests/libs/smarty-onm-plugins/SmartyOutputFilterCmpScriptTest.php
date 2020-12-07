@@ -46,11 +46,6 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->locale = $this->getMockBuilder('Locale')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getLocaleShort' ])
-            ->getMock();
-
         $this->templateAdmin = $this->getMockBuilder('TemplateAdmin')
             ->setMethods([ 'fetch' ])
             ->getMock();
@@ -74,8 +69,6 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
             ->method('__get')
             ->with($this->equalTo('source'))
             ->will($this->returnValue($this->smartySource));
-
-        $this->smarty->source->resource = 'foo.tpl';
     }
 
     /**
@@ -88,9 +81,6 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.locale':
-                return $this->locale;
-
             case 'core.template.admin':
                 return $this->templateAdmin;
 
@@ -138,9 +128,9 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test CMP activated
+     * Test CMP activated default
      */
-    public function testCmpActivated()
+    public function testCmpActivatedWithDefault()
     {
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
@@ -173,9 +163,116 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test CMP activated
+     * Test CMP activated quantcast
      */
-    public function testCmpActivatedWithAMP()
+    public function testCmpActivatedWithQuantcast()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('http://console/thud/norf.html');
+
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('cookies')
+            ->willReturn('cmp');
+
+        $this->ds->expects($this->at(1))
+            ->method('get')
+            ->with('cmp_type')
+            ->willReturn('quantcast');
+
+        $this->ds->expects($this->at(2))
+            ->method('get')
+            ->with('cmp_id')
+            ->willReturn('qwert');
+
+        $returnvalue = "foo-bar-baz";
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('common/helpers/cmp_quantcast.tpl', [ 'id' => 'qwert' ])
+            ->willReturn($returnvalue);
+
+        $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
+
+        $this->assertEquals($output, smarty_outputfilter_cmp_script(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test CMP activated onetrust
+     */
+    public function testCmpActivatedWithOnetrust()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('http://console/thud/norf.html');
+
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('cookies')
+            ->willReturn('cmp');
+
+        $this->ds->expects($this->at(1))
+            ->method('get')
+            ->with('cmp_type')
+            ->willReturn('onetrust');
+
+        $this->ds->expects($this->at(2))
+            ->method('get')
+            ->with('cmp_id')
+            ->willReturn('qwert');
+
+        $returnvalue = "foo-bar-baz";
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('common/helpers/cmp_onetrust.tpl', [ 'id' => 'qwert' ])
+            ->willReturn($returnvalue);
+
+        $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
+
+        $this->assertEquals($output, smarty_outputfilter_cmp_script(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test CMP not configured for AMP
+     */
+    public function testCmpNotConfiguredForAMP()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('http://console/thud/norf.amp.html');
+
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('cookies')
+            ->willReturn('cmp');
+
+        $this->ds->expects($this->at(1))
+            ->method('get')
+            ->with('cmp_type')
+            ->willReturn('default');
+
+        $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test quantcast CMP activated AMP
+     */
+    public function testCmpActivatedQuantcastWithAMP()
     {
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
@@ -204,9 +301,48 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
             ->with('common/helpers/cmp_quantcast_amp.tpl', [ 'id' => 'qwert' ])
             ->willReturn($returnvalue);
 
-        $lib    = '<script async custom-element="amp-consent"'
-            . ' src="https://cdn.ampproject.org/v0/amp-consent-0.1.js"></script>';
-        $output = "<html><head>Hello World\n" . $lib . "</head><body>\n"
+        $output = "<html><head>Hello World</head><body>\n"
+            . $returnvalue . "</body></html>";
+
+        $this->assertEquals($output, smarty_outputfilter_cmp_script(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test Onetrust CMP activated AMP
+     */
+    public function testCmpActivatedOnetrustWithAMP()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('http://console/thud/norf.amp.html');
+
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('cookies')
+            ->willReturn('cmp');
+
+        $this->ds->expects($this->at(1))
+            ->method('get')
+            ->with('cmp_type')
+            ->willReturn('onetrust');
+
+        $this->ds->expects($this->at(2))
+            ->method('get')
+            ->with('cmp_id')
+            ->willReturn('qwert');
+
+        $returnvalue = "foo-bar-baz";
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('common/helpers/cmp_onetrust_amp.tpl', [ 'id' => 'qwert' ])
+            ->willReturn($returnvalue);
+
+        $output = "<html><head>Hello World</head><body>\n"
             . $returnvalue . "</body></html>";
 
         $this->assertEquals($output, smarty_outputfilter_cmp_script(

@@ -35,26 +35,18 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         $cmpType = $ds->get('cmp_type');
         $cmpId   = $ds->get('cmp_id');
 
-        if (preg_match('@\.amp\.html$@', $uri)
-            && $cmpType !== 'default'
-            && !empty($cmpId)
-        ) {
+        if (preg_match('@\.amp\.html$@', $uri)) {
+            // Do nothing if CMP not configured
+            if ($cmpType === 'default' || empty($cmpId)) {
+                return $output;
+            }
+
             $code = $smarty->getContainer()->get('core.template.admin')->fetch(
                 'common/helpers/cmp_' . $cmpType . '_amp.tpl',
                 [ 'id' => $cmpId ]
             );
 
-            $output = preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
-            $output = preg_replace(
-                '@(</head>)@',
-                "\n"
-                . '<script async custom-element="amp-consent" '
-                . 'src="https://cdn.ampproject.org/v0/amp-consent-0.1.js"></script>'
-                . '${1}',
-                $output
-            );
-
-            return $output;
+            return preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
         }
 
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
