@@ -251,6 +251,18 @@ class Nitf extends Parser
     }
 
     /**
+     * Returns the href from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The href.
+     */
+    public function getHref($data)
+    {
+        return '';
+    }
+
+    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -297,6 +309,7 @@ class Nitf extends Parser
         $content->title        = $this->getTitle($data);
         $content->type         = 'text';
         $content->urn          = $this->getUrn($data);
+        $content->href         = $this->getHref($data);
 
         return $content;
     }

@@ -355,29 +355,19 @@ class Importer
             'href'                => $resource->href,
         ]);
 
+        // If the source has an external link configured assign it as
+        // the external link in the content to import
+        if (array_key_exists('external_link', $this->config)
+            && !empty($this->config['external_link'])
+        ) {
+            $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
+        }
+
         if (array_key_exists('external', $this->config)
             && !empty($this->config['external'])
         ) {
             if ($this->config['external'] === 'original') {
                 $data['params'] = [ 'bodyLink' => $data['href'] ];
-            } elseif ($this->config['external'] === 'redirect') {
-                // If the source has an external link configured assign it as
-                // the external link in the content to import
-                if (array_key_exists('external_link', $this->config)
-                    && !empty($this->config['external_link'])
-                ) {
-                    $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
-                }
-            }
-        } elseif (!(array_key_exists('external', $this->config)
-            && !empty($this->config['external']))
-        ) {
-            // If the source has an external link configured assign it as
-            // the external link in the content to import
-            if (array_key_exists('external_link', $this->config)
-                && !empty($this->config['external_link'])
-            ) {
-                $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
             }
         }
 

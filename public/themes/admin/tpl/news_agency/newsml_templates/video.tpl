@@ -60,7 +60,7 @@
       <NewsComponent Duid="video_{$video->id}.video.text">
         <Role FormalName="Caption" />
         <ContentItem>
-          <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" Url="{$video->video_url}" />
+          <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" Url="{$video->video_url|escape:'html'}" />
           <MediaType FormalName="Text" />
           <Format FormalName="NITF" />
           <MimeType FormalName="text/vnd.IPTC.NITF" />
