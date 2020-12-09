@@ -97,7 +97,11 @@
     },
     "repositories": [
         {
-            "type": "vcs",
+            "type": "git",
+            "url":  "https://github.com/openhost/CometCultBraintreeBundle"
+        },
+        {
+            "type": "git",
             "url":  "https://github.com/openhost/jwt-authentication-bundle"
         },
         {

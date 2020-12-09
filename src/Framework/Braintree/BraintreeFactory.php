@@ -17,17 +17,18 @@ class BraintreeFactory
         $this->factory = $factory;
     }
 
-    public function get($serviceName, array $attributes = array())
+    public function get($serviceName, array $attributes = [])
     {
         try {
             return $this->factory->get($serviceName, $attributes);
         } catch (\Exception $e) {
-            $className = 'Braintree_' . ucfirst($serviceName);
+            $className = '\\Braintree\\' . ucfirst($serviceName);
+
             if (class_exists($className)) {
                 return $className;
-            } else {
-                throw $e;
             }
+
+            throw $e;
         }
     }
 }

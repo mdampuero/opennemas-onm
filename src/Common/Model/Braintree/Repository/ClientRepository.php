@@ -102,7 +102,7 @@ class ClientRepository extends BaseRepository
 
         foreach ($array as $key => $value) {
             $key        = \classify($key);
-            $criteria[] = \Braintree_CustomerSearch::{$key}()->is($value);
+            $criteria[] = \Braintree\CustomerSearch::{$key}()->is($value);
         }
 
         return $criteria;

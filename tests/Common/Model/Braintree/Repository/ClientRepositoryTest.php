@@ -83,7 +83,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testFindWithError()
     {
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('id')->once()->andThrow('\Braintree_Exception');
+        $bc->shouldReceive('id')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
@@ -141,7 +141,7 @@ class ClientRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testFindByWithError()
     {
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('search')->once()->andThrow('\Braintree_Exception');
+        $bc->shouldReceive('search')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
