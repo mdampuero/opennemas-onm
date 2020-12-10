@@ -1,11 +1,13 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# Opennemas Developers <developers@opennemas.com>, 2020.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-12 09:15+0000\n"
-"PO-Revision-Date: 2020-09-08 17:28+0200\n"
+"POT-Creation-Date: 2020-12-10 10:33+0000\n"
+"PO-Revision-Date: 2020-12-10 11:36+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -13,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Gtranslator 3.32.0\n"
 
 msgid "All"
 msgstr "Todos"
@@ -946,6 +948,9 @@ msgstr ""
 "El código de reCAPTCHA no fue escrito correctamente. Vuelva atrás y pruebe "
 "de nuevo."
 
+msgid "Contribute"
+msgstr "Contribuir"
+
 msgid "The information has been sent"
 msgstr "La información ha sido enviada"
 
@@ -960,6 +965,16 @@ msgstr "Nombre"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Your letter has been saved and is awaiting publication."
+msgstr "Tu carta ha sido guardada y está esperando publicación."
+
+msgid ""
+"Your letter has not been saved, make sure you fill in all the fields "
+"correctly."
+msgstr ""
+"Tu carta no ha sido guardada, asegúrate de rellenar todos los campos "
+"correctamente."
 
 msgid "Check the form and try again"
 msgstr "Revisa el formulario e inténtalo de nuevo"
@@ -1088,7 +1103,7 @@ msgstr "Petición incorrecta"
 
 #, php-format
 msgid "%s clients deleted successfully"
-msgstr "%d clientes eliminados correctamente"
+msgstr "%s clientes eliminados correctamente"
 
 msgid "Client saved successfully"
 msgstr "Cliente guardado con éxito"
@@ -1142,7 +1157,7 @@ msgstr "Gallego"
 
 #, php-format
 msgid "A module with the uuid '%s' already exists"
-msgstr "Ya existe un módulo con UUID '%d'"
+msgstr "Ya existe un módulo con UUID '%s'"
 
 msgid "Module deleted successfully."
 msgstr "Módulo eliminado con éxito."
@@ -1282,7 +1297,7 @@ msgstr "Grupo de usuario actualizado correctamente"
 
 #, php-format
 msgid "%s user groups saved successfully"
-msgstr "Grupo de usuarios actualizado correctamente"
+msgstr "%s grupo de usuarios actualizado correctamente"
 
 msgid "A new opennemas instance has been created"
 msgstr "Se ha creado una nueva instancia de OpenNemas"
@@ -2541,27 +2556,6 @@ msgstr "Google Analytics"
 msgid "Google Analytics API key"
 msgstr "Llave de la API de Google Analytics"
 
-msgid "Google Analytics Base domain"
-msgstr "Dominio base para Google Analytics"
-
-msgid "Category targeting"
-msgstr "Segmentación por categoría"
-
-msgid "Index"
-msgstr "Índice"
-
-msgid "Key"
-msgstr "Llave"
-
-msgid "Scope"
-msgstr "Ámbito"
-
-msgid "Extension targeting"
-msgstr "Segmentación por extensión"
-
-msgid "Google Analytics Custom variables"
-msgstr "Variables personalizadas de Google Analytics"
-
 msgid ""
 "You can get your Google Analytics Site ID from <a class=\"external-link\" "
 "href=\"https://www.google.com/analytics/\" target=\"_blank\" ng-click="
@@ -2687,6 +2681,9 @@ msgstr "Google Tags"
 
 msgid "Google Tags container Id"
 msgstr "Id de contenedor de Google Tags"
+
+msgid "Google Tags container Id for AMP"
+msgstr "Id de contenedor de Google Tags para AMP"
 
 msgid ""
 "You can get your Google <strong>Tags</strong> container Id from <a class="
@@ -3444,7 +3441,6 @@ msgstr "Enlace externo"
 msgid "Original:"
 msgstr "Original:"
 
-#, fuzzy
 msgid "Link to"
 msgstr "Enlace a"
 
@@ -3497,21 +3493,6 @@ msgstr "Añadir elementos"
 
 msgid "Use drag and drop to sort and nest elements."
 msgstr "Usa arrastrar y soltar para ordenar y anidar elementos"
-
-msgid "Flash based"
-msgstr "Basado en Flash"
-
-msgid "Override default click handler"
-msgstr "Sobrescribir el gestor de clic predeterminado"
-
-msgid ""
-"When you click in some Flash-based advertisements they redirect you to "
-"another web site. If you want to overlap that address with that specified by "
-"you above you should mark this."
-msgstr ""
-"Cuando clicas en un anuncio basado en Flash te redirige a otra página web. "
-"Si quieres sobreescribir esta dirección con la que especificaste más arriba "
-"debes marcar esta opción."
 
 msgid "Floating ads (for drop them into columns)"
 msgstr "Publicidades flotantes (para arrastrar en columnas)"
@@ -3810,9 +3791,6 @@ msgstr "Editando publicidad"
 
 msgid "Go back"
 msgstr "Atrás"
-
-msgid "Image or Flash object"
-msgstr "Imagen u objeto Flash"
 
 msgid "HTML or Javascript code"
 msgstr "Código HTML o Javascript"
@@ -4695,36 +4673,6 @@ msgstr ""
 "Esto quitará este contenido de <strong>TODAS LAS PORTADAS</strong> pero "
 "estará disponible para su lectura."
 
-msgid "Images assigned"
-msgstr "Imágenes asignadas"
-
-msgid "Image to show in frontpages"
-msgstr "Imagen a mostrar en portadas"
-
-msgid "Image to show in inner"
-msgstr "Imagen a mostrar en interior"
-
-msgid "Home image"
-msgstr "Imagen para portada principal"
-
-msgid "Video for frontpage"
-msgstr "Vídeo para portada"
-
-msgid "Pick a video"
-msgstr "Escoja un vídeo"
-
-msgid "File name"
-msgstr "Nombre del archivo"
-
-msgid "Creation date"
-msgstr "Fecha de creación"
-
-msgid "Footer text for inner video:"
-msgstr "Pie para el vídeo interior:"
-
-msgid "Video for inner article page"
-msgstr "Vídeo para artículo interior"
-
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
 
@@ -5179,6 +5127,9 @@ msgstr "Clave o patrón"
 msgid "Key or pattern will be automatically namespaced"
 msgstr "La clave o patrón se aplicará en el espacio de nombres actual"
 
+msgid "Key"
+msgstr "Llave"
+
 msgid "Key will be automatically namespaced"
 msgstr "La clave se aplicará en el espacio de nombres actual"
 
@@ -5381,8 +5332,8 @@ msgstr ""
 "Este contenido sólo estará disponible en el rango de tiempo especificado "
 "arriba."
 
-msgid "No image assigned"
-msgstr "Imagen no asignada"
+msgid "Caption"
+msgstr "Pie de foto"
 
 msgid "Insert image"
 msgstr "Insertar imagen"
@@ -5907,6 +5858,36 @@ msgstr "Título para la portada principal"
 msgid "Subtitle"
 msgstr "Subtítulo"
 
+msgid "Images assigned"
+msgstr "Imágenes asignadas"
+
+msgid "Image to show in frontpages"
+msgstr "Imagen a mostrar en portadas"
+
+msgid "Image to show in inner"
+msgstr "Imagen a mostrar en interior"
+
+msgid "Home image"
+msgstr "Imagen para portada principal"
+
+msgid "Video for frontpage"
+msgstr "Vídeo para portada"
+
+msgid "Pick a video"
+msgstr "Escoja un vídeo"
+
+msgid "File name"
+msgstr "Nombre del archivo"
+
+msgid "Creation date"
+msgstr "Fecha de creación"
+
+msgid "Footer text for inner video:"
+msgstr "Pie para el vídeo interior:"
+
+msgid "Video for inner article page"
+msgstr "Vídeo para artículo interior"
+
 msgid "Related in frontpage"
 msgstr "Relacionados en portada Sección."
 
@@ -5916,14 +5897,12 @@ msgstr "Relacionado en noticia interior"
 msgid "Related in home"
 msgstr "Relacionado en portada principal"
 
-#, fuzzy
 msgid "Album for frontpage"
 msgstr "Álbum: portadas"
 
 msgid "Only one album"
 msgstr "Solo un álbum"
 
-#, fuzzy
 msgid "Album for inner"
 msgstr "Álbum: interior"
 
@@ -6263,8 +6242,7 @@ msgstr "Volver a la lista"
 msgid "Add contents to groups by using the \"Add contents\" button"
 msgstr "Añade contenidos a los grupos usando el botón «Añadir contenidos»"
 
-#, fuzzy
-msgid "Click on \"Add\" button above or drop contents from other containers"
+msgid "Click on \"Add\" or drop contents from other containers"
 msgstr ""
 "Clique en el botón «Añadir contenidos» de arriba o arrastra contenidos de "
 "otros contenedores"
@@ -7155,6 +7133,45 @@ msgstr ""
 "'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
 "font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
 "<span style=\"color:#000000\">Equipo</span>"
+
+#~ msgid "Google Analytics Base domain"
+#~ msgstr "Dominio base para Google Analytics"
+
+#~ msgid "Category targeting"
+#~ msgstr "Segmentación por categoría"
+
+#~ msgid "Index"
+#~ msgstr "Índice"
+
+#~ msgid "Scope"
+#~ msgstr "Ámbito"
+
+#~ msgid "Extension targeting"
+#~ msgstr "Segmentación por extensión"
+
+#~ msgid "Google Analytics Custom variables"
+#~ msgstr "Variables personalizadas de Google Analytics"
+
+#~ msgid "Flash based"
+#~ msgstr "Basado en Flash"
+
+#~ msgid "Override default click handler"
+#~ msgstr "Sobrescribir el gestor de clic predeterminado"
+
+#~ msgid ""
+#~ "When you click in some Flash-based advertisements they redirect you to "
+#~ "another web site. If you want to overlap that address with that specified "
+#~ "by you above you should mark this."
+#~ msgstr ""
+#~ "Cuando clicas en un anuncio basado en Flash te redirige a otra página "
+#~ "web. Si quieres sobreescribir esta dirección con la que especificaste más "
+#~ "arriba debes marcar esta opción."
+
+#~ msgid "Image or Flash object"
+#~ msgstr "Imagen u objeto Flash"
+
+#~ msgid "No image assigned"
+#~ msgstr "Imagen no asignada"
 
 #~ msgid "Click here to add contents"
 #~ msgstr "Pulse para añadir contenidos"
