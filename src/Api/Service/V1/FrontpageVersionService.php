@@ -570,7 +570,6 @@ class FrontpageVersionService extends OrmService
         $contentPositions = $this->getContentPositions($categoryId, $versionId);
         $contents         = [];
 
-
         $context = $this->container->get('core.locale')->getContext();
         $this->container->get('core.locale')->setContext('frontend');
 
