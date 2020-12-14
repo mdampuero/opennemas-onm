@@ -9,10 +9,11 @@
  */
 namespace Backend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
+use Api\Exception\PatchItemException;
 use Common\Core\Controller\Controller;
 use Common\Model\Entity\Content;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Handles common actions for contents.
