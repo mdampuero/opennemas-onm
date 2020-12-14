@@ -13,11 +13,12 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         ->get('request_stack')
         ->getCurrentRequest();
 
-    $ds = $smarty->getContainer()
+    $config = $smarty->getContainer()
         ->get('orm.manager')
-        ->getDataSet('Settings', 'instance');
+        ->getDataSet('Settings', 'instance')
+        ->get([ 'cookies', 'cmp_type', 'cmp_id' ]);
 
-    if (is_null($request) || $ds->get('cookies') !== 'cmp') {
+    if (is_null($request) || $config['cookies'] !== 'cmp') {
         return $output;
     }
 
@@ -32,26 +33,24 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
     ) {
-        $cmpType = $ds->get('cmp_type');
-        $cmpId   = $ds->get('cmp_id');
-
+        // Check for AMP pages
         if (preg_match('@\.amp\.html$@', $uri)) {
             // Do nothing if CMP not configured
-            if ($cmpType === 'default' || empty($cmpId)) {
+            if ($config['cmp_type'] === 'default' || empty($config['cmp_id'])) {
                 return $output;
             }
 
             $code = $smarty->getContainer()->get('core.template.admin')->fetch(
-                'common/helpers/cmp_' . $cmpType . '_amp.tpl',
-                [ 'id' => $cmpId ]
+                'common/helpers/cmp_' . $config['cmp_type'] . '_amp.tpl',
+                [ 'id' => $config['cmp_id'] ]
             );
 
             return preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
         }
 
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
-            'common/helpers/cmp_' . $cmpType . '.tpl',
-            [ 'id' => $cmpId ]
+            'common/helpers/cmp_' . $config['cmp_type'] . '.tpl',
+            [ 'id' => $config['cmp_id'] ]
         );
 
         $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);

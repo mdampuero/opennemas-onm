@@ -118,8 +118,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('none');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => null,
+                'cmp_type' => null,
+                'cmp_id'   => null,
+            ]);
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
             $this->output,
@@ -138,15 +142,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://console/thud/norf.html');
 
-        $this->ds->expects($this->at(0))
+        $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('cmp');
-
-        $this->ds->expects($this->at(1))
-            ->method('get')
-            ->with('cmp_type')
-            ->willReturn('default');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => 'cmp',
+                'cmp_type' => 'default',
+                'cmp_id'   => null,
+            ]);
 
         $returnvalue = "foo-bar-baz";
 
@@ -173,20 +176,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://console/thud/norf.html');
 
-        $this->ds->expects($this->at(0))
+        $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('cmp');
-
-        $this->ds->expects($this->at(1))
-            ->method('get')
-            ->with('cmp_type')
-            ->willReturn('quantcast');
-
-        $this->ds->expects($this->at(2))
-            ->method('get')
-            ->with('cmp_id')
-            ->willReturn('qwert');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => 'cmp',
+                'cmp_type' => 'quantcast',
+                'cmp_id'   => 'qwert',
+            ]);
 
         $returnvalue = "foo-bar-baz";
 
@@ -213,20 +210,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://console/thud/norf.html');
 
-        $this->ds->expects($this->at(0))
+        $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('cmp');
-
-        $this->ds->expects($this->at(1))
-            ->method('get')
-            ->with('cmp_type')
-            ->willReturn('onetrust');
-
-        $this->ds->expects($this->at(2))
-            ->method('get')
-            ->with('cmp_id')
-            ->willReturn('qwert');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => 'cmp',
+                'cmp_type' => 'onetrust',
+                'cmp_id'   => 'qwert',
+            ]);
 
         $returnvalue = "foo-bar-baz";
 
@@ -253,15 +244,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://console/thud/norf.amp.html');
 
-        $this->ds->expects($this->at(0))
+        $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('cmp');
-
-        $this->ds->expects($this->at(1))
-            ->method('get')
-            ->with('cmp_type')
-            ->willReturn('default');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => 'cmp',
+                'cmp_type' => 'default',
+                'cmp_id'   => null,
+            ]);
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
             $this->output,
@@ -280,20 +270,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://console/thud/norf.amp.html');
 
-        $this->ds->expects($this->at(0))
+        $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('cmp');
-
-        $this->ds->expects($this->at(1))
-            ->method('get')
-            ->with('cmp_type')
-            ->willReturn('quantcast');
-
-        $this->ds->expects($this->at(2))
-            ->method('get')
-            ->with('cmp_id')
-            ->willReturn('qwert');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => 'cmp',
+                'cmp_type' => 'quantcast',
+                'cmp_id'   => 'qwert',
+            ]);
 
         $returnvalue = "foo-bar-baz";
 
@@ -321,20 +305,14 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->any())->method('getUri')
             ->willReturn('http://console/thud/norf.amp.html');
 
-        $this->ds->expects($this->at(0))
+        $this->ds->expects($this->any())
             ->method('get')
-            ->with('cookies')
-            ->willReturn('cmp');
-
-        $this->ds->expects($this->at(1))
-            ->method('get')
-            ->with('cmp_type')
-            ->willReturn('onetrust');
-
-        $this->ds->expects($this->at(2))
-            ->method('get')
-            ->with('cmp_id')
-            ->willReturn('qwert');
+            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->willReturn([
+                'cookies'  => 'cmp',
+                'cmp_type' => 'onetrust',
+                'cmp_id'   => 'qwert',
+            ]);
 
         $returnvalue = "foo-bar-baz";
 
