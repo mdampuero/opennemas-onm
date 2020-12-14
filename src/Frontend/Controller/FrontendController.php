@@ -401,6 +401,12 @@ class FrontendController extends Controller
             ? (int) $params['page']
             : 1;
 
+        if (empty($item)) {
+            $params['epp'] = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('items_per_page', 10);
+        }
+
         if (!empty($item)) {
             $params['content']   = $item;
             $params['contentId'] = $item->id;

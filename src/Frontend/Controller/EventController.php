@@ -143,33 +143,6 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function getParameters($request, $item = null)
-    {
-        $params = parent::getParameters($request, $item);
-
-        if (!array_key_exists('page', $params)) {
-            $params['page'] = 1;
-        }
-
-        $params['epp'] = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        // Prevent invalid page when page is not numeric
-        $params['page'] = (int) $params['page'];
-
-        list($positions, $advertisements) = $this->getAdvertisements($item);
-
-        return array_merge($this->params, $params, [
-            'cache_id'       => $this->getCacheId($params),
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function hydrateList(array &$params = []) : void
     {
         // Invalid page provided as parameter

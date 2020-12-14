@@ -77,22 +77,6 @@ class VideoController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function getParameters($request, $item = null)
-    {
-        $params = parent::getParameters($request, $item);
-
-        $params['epp'] = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        return array_merge($this->params, $params, [
-            'cache_id'       => $this->getCacheId($params)
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function hydrateList(array &$params = []): void
     {
         $category = $params['o_category'];
