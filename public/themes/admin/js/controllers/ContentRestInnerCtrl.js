@@ -2,12 +2,23 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'messenger', 'routing', '$timeout',
-  function($controller, $http, $uibModal, $rootScope, $scope, messenger, routing, $timeout) {
+  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'cleaner',
+  'messenger', 'routing', '$timeout',
+  function($controller, $http, $uibModal, $rootScope, $scope, cleaner,
+      messenger, routing, $timeout) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+
+    /**
+     * @inheritdoc
+     */
+    $scope.getData = function() {
+      var data = angular.extend({}, $scope.data.item);
+
+      return cleaner.clean(data);
+    };
 
     /**
      * @function getItemId
