@@ -75,116 +75,18 @@ class VideoController extends FrontendController
     ];
 
     /**
-     * Returns the item based on the slug.
-     *
-     * @param Request $request The request.
-     *
-     * @return Content The item to return.
-     */
-    protected function getItem(Request $request)
-    {
-        try {
-            $item = $this->get('api.service.content')
-                ->getItemBySlugAndContentType(
-                    $request->get('slug'),
-                    \ContentManager::getContentTypeIdFromName('video')
-                );
-        } catch (\Exception $e) {
-            throw new ResourceNotFoundException();
-        }
-
-        if (!$this->get('core.helper.content')->isReadyForPublish($item)) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $item;
-    }
-
-    /**
-     * Returns the list of items basing on a list of parameters.
-     *
-     * @param array $params The list of parameters.
-     *
-     * @return array The list of items.
-     */
-    protected function getItems($params)
-    {
-        $date     = date('Y-m-d H:i:s');
-        $offset   = $params['epp'] * ($params['page'] - 1);
-        $category = $params['o_category'];
-
-        $replacements = [
-                $date,
-                $date,
-                $params['epp'],
-                $offset
-            ];
-
-        $query = "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value AS type " .
-            "FROM contents join contentmeta " .
-            "on contents.pk_content = contentmeta.fk_content " .
-            "and contentmeta.meta_name = 'type' ";
-
-        if (!empty($category)) {
-            array_unshift($replacements, $category->name);
-            $query .= "JOIN content_category on contents.pk_content = content_category.content_id " .
-                "JOIN category on category.name = ? " .
-                "and content_category.category_id = category.id ";
-        }
-
-        $query .= "WHERE fk_content_type = 9 AND content_status = 1 and in_litter = 0 "
-            . "AND (starttime IS NULL OR starttime <= ? ) "
-            . "AND (endtime IS NULL OR endtime > ?) "
-            . " ORDER BY pk_content DESC LIMIT ? OFFSET ?";
-
-        $videoIds = $this->get('orm.manager')->getConnection('instance')
-            ->fetchAll(
-                $query,
-                $replacements
-            );
-
-        $sql = 'SELECT FOUND_ROWS()';
-
-        $total = $this->get('orm.manager')->getConnection('instance')
-            ->fetchAssoc($sql);
-
-        $total = array_pop($total);
-
-        $contents = $this->get('api.service.content')
-            ->getListByIds(array_map(function ($video) {
-                return $video['pk_content'];
-            }, $videoIds));
-
-        return [
-            $contents['items'],
-            $total
-        ];
-    }
-
-
-    /**
      * {@inheritdoc}
      */
     protected function getParameters($request, $item = null)
     {
         $params = parent::getParameters($request, $item);
 
-        if (!array_key_exists('page', $params)) {
-            $params['page'] = 1;
-        }
-
         $params['epp'] = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
-        // Prevent invalid page when page is not numeric
-        $params['page'] = (int) $params['page'];
-
-        list($positions, $advertisements) = $this->getAdvertisements($item);
 
         return array_merge($this->params, $params, [
-            'cache_id'       => $this->getCacheId($params),
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements
+            'cache_id'       => $this->getCacheId($params)
         ]);
     }
 
@@ -194,6 +96,7 @@ class VideoController extends FrontendController
     protected function hydrateList(array &$params = []): void
     {
         $category = $params['o_category'];
+        $date     = date('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -202,26 +105,37 @@ class VideoController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        list($contents, $total) = $this->getItems($params);
+        $categoryOQL = !empty($category)
+            ? sprintf(' and category_id=%d', $category->id)
+            : '';
 
-        $epp = (int) $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
+
+        $response = $this->get('api.service.content_old')->getList(sprintf(
+            'content_type_name="video" and content_status=1 and in_litter=0 %s '
+            . 'and (starttime IS NULL or starttime < "%s") '
+            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'order by starttime desc limit %d offset %d',
+            $categoryOQL,
+            $date,
+            $date,
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        ));
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($contents)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $params = array_merge($params, [
-            'videos'      => $contents,
+            'videos'      => $response['items'],
             'pagination'  => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $epp,
+                'epp'         => $params['epp'],
                 'page'        => $params['page'],
-                'total'       => $total,
+                'total'       => $response['total'],
                 'route'       => [
                     'name'   => (!$category)
                         ? 'frontend_video_frontpage'
