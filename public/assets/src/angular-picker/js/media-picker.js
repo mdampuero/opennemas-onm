@@ -461,7 +461,7 @@
                 }
 
                 for (var i = 0; i < target.length; i++) {
-                  $scope.selected.ids.push(target[i].id);
+                  $scope.selected.ids.push(target[i].pk_content);
                 }
 
                 $scope.selected.items = target;
@@ -1052,7 +1052,7 @@
             }
 
             if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
-              $scope.selected.ids.push($scope.contents[i].id);
+              $scope.selected.ids.push($scope.contents[i].pk_content);
               $scope.selected.items.push($scope.contents[i]);
               itemsToInsert--;
             }
