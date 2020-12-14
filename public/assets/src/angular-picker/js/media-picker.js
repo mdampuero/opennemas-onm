@@ -81,7 +81,7 @@
                              '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
                           '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\'" instance="' +
                           $window.instanceMedia +
-                          '" ng-model="content.thumbnail" transform="zoomcrop,120,120"></dynamic-image>' +
+                          '" ng-model="content.pk_content" transform="zoomcrop,120,120"></dynamic-image>' +
                         '</div>' +
                       '</div>' +
                       '<div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll()" ng-if="!searchLoading && total != contents.length">' +
@@ -98,7 +98,7 @@
                   '</div>' +
                   '<div class="picker-panel-sidebar">' +
                     '<div class="picker-panel-sidebar-header">' +
-                      '<h4>[% picker.params.explore.thumbnailDetails %]</h4>' +
+                      '<h4>[% picker.params.explore.pk_contentDetails %]</h4>' +
                     '</div>' +
                     '<div class="picker-panel-sidebar-body" ng-if="selected.lastSelected">' +
                       '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'photo\' && !isFlash(selected.lastSelected)">' +
@@ -110,7 +110,7 @@
                       '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\'">' +
                         '<dynamic-image autoscale="true" instance="' +
                           $window.instanceMedia +
-                          '" ng-model="selected.lastSelected.thumbnail" transform="thumbnail,220,220">' +
+                          '" ng-model="selected.lastSelected.pk_content" transform="thumbnail,220,220">' +
                         '</dynamic-image>' +
                       '</div>' +
                       '<ul class="media-information">' +
@@ -597,25 +597,6 @@
           if ($scope.picker.isTypeEnabled(item.content_type_name)) {
             $scope.contents.unshift(item);
           }
-        };
-
-        /**
-         * @function buildThumbnails
-         * @memberOf VideoListCtrl
-         *
-         * @description
-         *   Returns the thumbnail for a given content
-         */
-        $scope.buildThumbnails = function() {
-          $scope.contents.forEach(function(item) {
-            if (item.related_contents.length > 0) {
-              item.thumbnail = $scope.extra.related_contents[item.related_contents[0].target_id];
-            }
-
-            if (item.hasOwnProperty('information') && item.information.thumbnail) {
-              item.thumbnail = item.information.thumbnail;
-            }
-          });
         };
 
         /**

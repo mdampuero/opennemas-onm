@@ -210,8 +210,8 @@
                               <h5>{t}Pick a video{/t}</h5>
                             </div>
                           </div>
-                          <div class="dynamic-image-placeholder ng-cloak" ng-if="article.fk_video && article.fk_video.thumbnail">
-                            <dynamic-image autoscale="true" class="img-thumbnail" ng-model="article.fk_video.thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}">
+                          <div class="dynamic-image-placeholder ng-cloak" ng-if="article.fk_video">
+                            <dynamic-image autoscale="true" class="img-thumbnail" ng-model="article.fk_video.pk_content" instance="{$smarty.const.INSTANCE_MEDIA}">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
                                   <i class="fa fa-trash-o fa-2x"></i>
@@ -221,19 +221,6 @@
                                 </div>
                               </div>
                               <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video" ng-click="articleForm.$setDirty(true)"></div>
-                            </dynamic-image>
-                          </div>
-                          <div class="dynamic-image-placeholder ng-cloak" ng-if="article.fk_video && !article.fk_video.thumbnail">
-                            <dynamic-image autoscale="true" class="img-thumbnail" property="thumbnail" ng-model="article.fk_video">
-                              <div class="thumbnail-actions">
-                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video1')">
-                                  <i class="fa fa-trash-o fa-2x"></i>
-                                </div>
-                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video">
-                                  <i class="fa fa-film fa-2x"></i>
-                                </div>
-                              </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
                         </div>
@@ -277,8 +264,8 @@
                               <h5>Pick a video</h5>
                             </div>
                           </div>
-                          <div class="dynamic-image-placeholder ng-cloak" ng-if="article.fk_video2 && article.fk_video2.thumbnail">
-                            <dynamic-image autoscale="true" class="img-thumbnail" ng-model="article.fk_video2.thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}">
+                          <div class="dynamic-image-placeholder ng-cloak" ng-if="article.fk_video2">
+                            <dynamic-image autoscale="true" class="img-thumbnail" ng-model="article.fk_video2.pk_content" instance="{$smarty.const.INSTANCE_MEDIA}">
                               <div class="thumbnail-actions">
                                 <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
                                   <i class="fa fa-trash-o fa-2x"></i>
@@ -288,19 +275,6 @@
                                 </div>
                               </div>
                               <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video" ng-click="articleForm.$setDirty(true)"></div>
-                            </dynamic-image>
-                          </div>
-                          <div class="dynamic-image-placeholder ng-cloak" ng-if="article.fk_video2 && !article.fk_video2.thumbnail">
-                            <dynamic-image autoscale="true" class="img-thumbnail" property="thumbnail" ng-model="article.fk_video2">
-                              <div class="thumbnail-actions">
-                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('video2')">
-                                  <i class="fa fa-trash-o fa-2x"></i>
-                                </div>
-                                 <div class="thumbnail-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video">
-                                  <i class="fa fa-film fa-2x"></i>
-                                </div>
-                              </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore" media-picker-selection="true" media-picker-max-size="1" media-picker-target="article.fk_video2" media-picker-type="video"></div>
                             </dynamic-image>
                           </div>
                         </div>

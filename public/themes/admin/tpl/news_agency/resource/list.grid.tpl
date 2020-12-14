@@ -1,7 +1,7 @@
 {extends file="common/extension/list.grid.tpl"}
 
 {block name="item"}
-  <dynamic-image class="img-thumbnail" path="[% routing.generate(routes.getContent, { id: item.id }) %]" raw="true">
+  <dynamic-image class="img-thumbnail" ng-model="routing.generate(routes.getContent, { id: item.id })" raw="true">
     <div class="hidden-select" ng-click="toggleItem(item); xsOnly($event, toggle, item)"></div>
     <div class="thumbnail-actions ng-cloak" ng-class="{ 'thumbnail-actions-fixed': isImported(item) }">
       <div class="thumbnail-action ng-cloak" ng-click="preview(item)" uib-tooltip="{t}Preview{/t}" tooltip-placement="top">
