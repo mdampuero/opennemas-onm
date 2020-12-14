@@ -1,1 +1,3 @@
-<div class="video-container"><iframe width={$width} height={$height} src="{$info['embedUrl']}" frameborder="0" allowfullscreen></iframe></div>
+<div class="video-container">
+  <iframe allowfullscreen frameborder="0" height={$height} src="{$info['embedUrl']}" width={$width}></iframe>
+</div>
