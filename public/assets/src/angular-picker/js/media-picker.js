@@ -79,12 +79,9 @@
                           '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
                             $window.instanceMedia +
                              '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && !isString(content.thumbnail)" instance="' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\'" instance="' +
                           $window.instanceMedia +
-                          '" ng-model="content.thumbnail" transform="zoomcrop,220,220"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\' && isString(content.thumbnail)" instance="' +
-                          $window.instanceMedia +
-                          '" ng-model="content.thumbnail"></dynamic-image>' +
+                          '" ng-model="content.thumbnail" transform="zoomcrop,120,120"></dynamic-image>' +
                         '</div>' +
                       '</div>' +
                       '<div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll()" ng-if="!searchLoading && total != contents.length">' +
@@ -110,16 +107,10 @@
                           '" ng-model="selected.lastSelected" transform="thumbnail,220,220">' +
                         '</dynamic-image>' +
                       '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && !isString(selected.lastSelected.thumbnail)">' +
+                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\'">' +
                         '<dynamic-image autoscale="true" instance="' +
                           $window.instanceMedia +
                           '" ng-model="selected.lastSelected.thumbnail" transform="thumbnail,220,220">' +
-                        '</dynamic-image>' +
-                      '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\' && isString(selected.lastSelected.thumbnail)">' +
-                        '<dynamic-image autoscale="true" instance="' +
-                          $window.instanceMedia +
-                          '" ng-model="selected.lastSelected.thumbnail">' +
                         '</dynamic-image>' +
                       '</div>' +
                       '<ul class="media-information">' +
@@ -716,21 +707,6 @@
          */
         $scope.isFlash = function(item) {
           return DynamicImage.isFlash(item);
-        };
-
-        /**
-         * @function isString
-         * @memberof MediaPickerCtrl
-         *
-         * @description
-         *    Checks if a parameter is of type string.
-         *
-         * @param {Object|string} item The item to check.
-         *
-         * @return {boolean} True if the item is a string. False otherwise.
-         */
-        $scope.isString = function(item) {
-          return typeof item === 'string' || item instanceof String;
         };
 
         /**

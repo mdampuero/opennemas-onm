@@ -108,6 +108,10 @@
             return this.brokenImage;
           }
 
+          if (typeof image === 'string' || image instanceof String) {
+            return image;
+          }
+
           if (typeof image === 'object') {
             if (property) {
               image = image[property];
