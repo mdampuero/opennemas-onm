@@ -832,10 +832,6 @@
               if (response.data.hasOwnProperty('extra')) {
                 $scope.extra = response.data.extra;
               }
-
-              if (data.content_type_name.indexOf('video') !== -1) {
-                $scope.buildThumbnails();
-              }
             });
         };
 
