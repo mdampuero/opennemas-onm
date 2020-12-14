@@ -194,10 +194,10 @@ class ArticleController extends Controller
 
         $repository = $this->get('entity_repository');
         $contents   = array_filter(array_map(function ($a) use ($repository) {
-            return $repository->find($a['content_type_name'], $a['target_id']) instanceof Content ?
-                $this->get('api.service.content')
-                ->responsify($repository->find($a['content_type_name'], $a['target_id'])) :
-                $repository->find($a['content_type_name'], $a['target_id']);
+            $item = $repository->find($a['content_type_name'], $a['target_id']);
+            return $item instanceof Content ?
+                $this->get('api.service.content')->responsify($item) :
+                $item;
         }, $article->related_contents));
 
         $contents = $this->get('data.manager.filter')->set($contents)
