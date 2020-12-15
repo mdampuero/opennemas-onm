@@ -108,10 +108,6 @@
             return this.brokenImage;
           }
 
-          if (typeof image === 'string' || image instanceof String) {
-            return image;
-          }
-
           if (typeof image === 'object') {
             if (property) {
               image = image[property];
@@ -134,6 +130,10 @@
 
           if (!transform || /.*\.swf/.test(image)) {
             return prefix + image;
+          }
+
+          if (/^http/.test(image)) {
+            return image;
           }
 
           return routingProvider.generate('asset_image', {
@@ -331,8 +331,8 @@
      * </dynamic-image>
      */
     .directive('dynamicImage', [
-      '$compile', 'DynamicImage', 'http', 'oqlEncoder',
-      function($compile, DynamicImage, http, oqlEncoder) {
+      '$compile', 'DynamicImage', 'http',
+      function($compile, DynamicImage, http) {
         return {
           restrict: 'AE',
           scope: {
@@ -368,44 +368,54 @@
               }
             }
 
+            $scope.route = {
+              name: 'api_v1_backend_content_get_item'
+            };
+
+            $scope.getItem = function(item) {
+              if (typeof item === 'string' ||
+                    item instanceof String ||
+                    item.content_type_name === 'photo') {
+                return item;
+              }
+
+              if (item.content_type_name === 'video' &&
+                    item.hasOwnProperty('information') &&
+                    item.information.thumbnail) {
+                return item.information.thumbnail;
+              }
+
+              if (Number.isFinite(item)) {
+                $scope.route.params = { id: item };
+                return http.get($scope.route).then(function(response) {
+                  return $scope.getItem(response.data.item);
+                });
+              }
+
+              $scope.route.params = { id: item.related_contents.shift().target_id };
+
+              return http.get($scope.route).then(function(response) {
+                return $scope.getItem(response.data.item);
+              });
+            };
+
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
               if (!Number.isFinite(nv)) {
                 $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
               } else {
-                var oql      = oqlEncoder.getOql({ pk_content: nv });
-                var route    = {
-                  name: 'api_v1_backend_content_get_list',
-                  params: { oql: oql }
-                };
+                var image = $scope.getItem(nv);
 
-                http.get(route).then(function(response) {
-                  var image = response.data.items.shift();
-
-                  if (image.content_type_name === 'video' &&
-                    image.hasOwnProperty('information') &&
-                    image.information.thumbnail) {
-                    return image.information.thumbnail;
-                  }
-
-                  return image;
-                }).then(function(item) {
-                  if (typeof item === 'string' ||
-                    item instanceof String ||
-                    item.content_type_name === 'photo') {
+                if (typeof image.then === 'function') {
+                  image.then(function(item) {
                     $scope.src = DynamicImage.generateUrl(item, attrs.transform,
                       attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-                  } else {
-                    oql          = oqlEncoder.getOql({pk_content: item.related_contents.shift().target_id });
-                    route.params = { oql: oql };
-
-                    http.get(route).then(function(response) {
-                      $scope.src = DynamicImage.generateUrl(response.data.items.shift(), attrs.transform,
-                        attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-                    });
-                  }
-                });
+                  });
+                } else {
+                  $scope.src = DynamicImage.generateUrl(image, attrs.transform,
+                    attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
+                }
               }
             });
 
