@@ -401,21 +401,16 @@
 
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
-              if (!Number.isFinite(nv)) {
-                $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
-                  attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-              } else {
-                var image = $scope.getItem(nv);
+              var image = $scope.getItem(nv);
 
-                if (typeof image.then === 'function') {
-                  image.then(function(item) {
-                    $scope.src = DynamicImage.generateUrl(item, attrs.transform,
-                      attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-                  });
-                } else {
-                  $scope.src = DynamicImage.generateUrl(image, attrs.transform,
+              if (typeof image.then === 'function') {
+                image.then(function(item) {
+                  $scope.src = DynamicImage.generateUrl(item, attrs.transform,
                     attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-                }
+                });
+              } else {
+                $scope.src = DynamicImage.generateUrl(image, attrs.transform,
+                  attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
               }
             });
 
