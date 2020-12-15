@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7db56ca3ecf052acedf271785a2d5b53",
+    "content-hash": "74f4b629cfd5a15a0b3b2a12b775e457",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1372,33 +1372,26 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.13",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "9c5a03608a9220230769d59fcc8d8a938b213a59"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/9c5a03608a9220230769d59fcc8d8a938b213a59",
-                "reference": "9c5a03608a9220230769d59fcc8d8a938b213a59",
-                "shasum": ""
+                "url": "https://github.com/openhost/panorama-php",
+                "reference": "b9064569dd67c83360e6652ec4513190f20f4fc3"
             },
             "require": {
-                "php": ">=5.4"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "behat/behat": "2.5.*",
-                "phpdocumentor/phpdocumentor": "2.*",
+                "behat/behat": "*",
                 "phpunit/phpunit": "*"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "Panorama": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1409,11 +1402,11 @@
                 }
             ],
             "description": "Wrapper class for accessing video services information in a standarized way",
-            "homepage": "http://frandieguez.github.com/Panorama-PHP/",
+            "homepage": "http://frandieguez.github.com/panorama-php/",
             "keywords": [
                 "library"
             ],
-            "time": "2018-08-21T13:22:02+00:00"
+            "time": "2020-12-15T12:28:31+00:00"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -7881,6 +7874,7 @@
         "smarty-gettext/smarty-gettext": 0,
         "drexarj/disqus-php": 20,
         "cometcult/braintree-bundle": 20,
+        "frandieguez/panorama-php": 20,
         "rtconner/freshbooks-api": 20
     },
     "prefer-stable": false,
