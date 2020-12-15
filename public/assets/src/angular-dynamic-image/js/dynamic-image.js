@@ -370,43 +370,43 @@
 
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
-              var image = nv;
-
-              if (Number.isFinite(image)) {
-                var oql = oqlEncoder.getOql({ pk_content: image });
-                var route = {
+              if (!Number.isFinite(nv)) {
+                $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
+                  attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
+              } else {
+                var oql      = oqlEncoder.getOql({ pk_content: nv });
+                var route    = {
                   name: 'api_v1_backend_content_get_list',
                   params: { oql: oql }
                 };
 
                 http.get(route).then(function(response) {
-                  var item = response.data.items.shift();
+                  var image = response.data.items.shift();
 
-                  if (item.content_type_name === 'video') {
-                    if (item.hasOwnProperty('information') && item.information.thumbnail) {
-                      return item.information.thumbnail;
-                    }
+                  if (image.content_type_name === 'video' &&
+                    image.hasOwnProperty('information') &&
+                    image.information.thumbnail) {
+                    return image.information.thumbnail;
+                  }
 
-                    oql              = oqlEncoder.getOql({ pk_content: item.related_contents.shift().target_id });
-                    route.params.oql = oql;
+                  return image;
+                }).then(function(item) {
+                  if (typeof item === 'string' ||
+                    item instanceof String ||
+                    item.content_type_name === 'photo') {
+                    $scope.src = DynamicImage.generateUrl(item, attrs.transform,
+                      attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
+                  } else {
+                    oql          = oqlEncoder.getOql({pk_content: item.related_contents.shift().target_id });
+                    route.params = { oql: oql };
 
                     http.get(route).then(function(response) {
-                      return response.data.items.shift();
-                    }).then(function(item) {
-                      $scope.src = DynamicImage.generateUrl(item, attrs.transform,
+                      $scope.src = DynamicImage.generateUrl(response.data.items.shift(), attrs.transform,
                         attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
                     });
                   }
-
-                  return item;
-                }).then(function(item) {
-                  $scope.src = DynamicImage.generateUrl(item, attrs.transform,
-                    attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
                 });
               }
-
-              $scope.src = DynamicImage.generateUrl(nv, attrs.transform,
-                attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
             });
 
             var img = new Image();
@@ -422,6 +422,10 @@
             };
 
             $scope.$watch('src', function(nv) {
+              if (!nv) {
+                return;
+              }
+
               if (!DynamicImage.isFlash(nv) || $scope.onlyImage) {
                 $scope.loading = true;
                 img.src        = nv;
