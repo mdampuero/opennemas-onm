@@ -136,10 +136,10 @@
             return image;
           }
 
-          return routingProvider.generate('asset_image', {
+          return decodeURIComponent(routingProvider.generate('asset_image', {
             path:   prefix + image,
-            params: encodeURIComponent(transform),
-          });
+            params: transform,
+          }));
         };
 
         /**
@@ -407,7 +407,6 @@
               }, function() {
                 $scope.src = DynamicImage.generateUrl(null, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-                $scope.image = null;
               });
             });
 
