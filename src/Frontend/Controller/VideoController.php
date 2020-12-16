@@ -82,13 +82,6 @@ class VideoController extends FrontendController
         $category = $params['o_category'];
         $date     = date('Y-m-d H:i:s');
 
-        // Invalid page provided as parameter
-        if ($params['page'] <= 0
-            || $params['page'] > $this->getParameter('core.max_page')
-        ) {
-            throw new ResourceNotFoundException();
-        }
-
         $categoryOQL = !empty($category)
             ? sprintf(' and category_id=%d', $category->id)
             : '';
