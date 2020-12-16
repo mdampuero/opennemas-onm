@@ -372,6 +372,12 @@
               name: 'api_v1_backend_content_get_item'
             };
 
+            $scope.getFeaturedFrontpage = function(item) {
+              return item.related_contents.filter(function(related) {
+                return related.type === 'featured_frontpage';
+              }).shift().target_id;
+            };
+
             $scope.getItem = function(item) {
               if (!item) {
                 return null;
@@ -393,13 +399,17 @@
                 $scope.route.params = { id: item };
                 return http.get($scope.route).then(function(response) {
                   return $scope.getItem(response.data.item);
+                }, function() {
+                  return null;
                 });
               }
 
-              $scope.route.params = { id: item.related_contents.shift().target_id };
+              $scope.route.params = { id: $scope.getFeaturedFrontpage(item) };
 
               return http.get($scope.route).then(function(response) {
                 return $scope.getItem(response.data.item);
+              }, function() {
+                return null;
               });
             };
 
@@ -407,9 +417,6 @@
             $scope.$watch('ngModel', function(nv) {
               $q.when($scope.getItem(nv), function(item) {
                 $scope.src = DynamicImage.generateUrl(item, attrs.transform,
-                  attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-              }, function() {
-                $scope.src = DynamicImage.generateUrl(null, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
               });
             });
