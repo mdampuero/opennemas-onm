@@ -53,25 +53,6 @@
         };
 
         /**
-         * @function buildThumbnails
-         * @memberOf VideoListCtrl
-         *
-         * @description
-         *   Returns the thumbnail for a given content
-         */
-        $scope.buildThumbnails = function() {
-          $scope.items.forEach(function(item) {
-            if (item.related_contents.length > 0) {
-              item.thumbnail = $scope.data.extra.related_contents[item.related_contents[0].target_id];
-            }
-
-            if (item.hasOwnProperty('information') && item.information.thumbnail) {
-              item.thumbnail = item.information.thumbnail;
-            }
-          });
-        };
-
-        /**
          * @function getFrontendUrl
          * @memberOf VideoListCtrl
          *
@@ -143,7 +124,6 @@
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
           $scope.localize($scope.data.extra.categories, 'categories');
-          $scope.buildThumbnails();
         };
 
         // Update epp when mode changes

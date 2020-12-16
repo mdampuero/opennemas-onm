@@ -1,7 +1,7 @@
 {extends file="common/extension/list.grid.tpl"}
 
 {block name="item"}
-  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.thumbnail">
+  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item">
     <div class="hidden-select" ng-click="toggleItem(item); xsOnly($event, toggle, item)"></div>
     <div class="thumbnail-actions ng-cloak">
       {acl isAllowed="VIDEO_UPDATE"}
