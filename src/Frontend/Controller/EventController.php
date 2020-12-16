@@ -127,7 +127,7 @@ class EventController extends FrontendController
         ));
 
         // No first page and no contents
-        if ($params['page'] > 1 && $total < $params['epp'] * $params['page']) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
