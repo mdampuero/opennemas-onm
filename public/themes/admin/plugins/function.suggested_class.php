@@ -2,16 +2,9 @@
 
 function smarty_function_suggested_class($params, &$smarty)
 {
-    if (!isset($params['item'])) {
-        $smarty->trigger_error("schedule_class: missing 'item' parameter");
-        return;
+    if (!array_key_exists('item', $params) || empty($params['item'])) {
+        return '';
     }
 
-    $contentHelper = $smarty->getContainer()->get('core.helper.content');
-
-    if (!empty($params['item']) && $contentHelper->isSuggested($params['item'])) {
-        return ' suggested';
-    }
-
-    return '';
+    return $smarty->getContainer()->get('core.helper.content')->isSuggested($params['item']);;
 }
