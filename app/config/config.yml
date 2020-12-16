@@ -54,8 +54,6 @@ sensio_framework_extra:
     security: { annotations: true }
 
 opennemas:
-    paths:
-        extensions_assets_path: /media/core/extensions
     assetic:
         # Force compilation
         asset_compilation_in_dev: '%opennemas.assetic.asset_compilation_in_dev%'
@@ -64,6 +62,8 @@ opennemas:
         cache_path:  '%kernel.cache_dir%/assetic'
         build_path:  build/assets
         output_path: build/assets/dist
+        folders:
+            themes: core/themes
 
         # Template parameter
         asset_url: asset_url

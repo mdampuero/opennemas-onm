@@ -69,8 +69,8 @@ EOF
     {
         $output->writeln(" * Extracting strings");
         $tplFolders = [
-            'public/themes/admin/tpl',
-            'public/themes/manager/tpl',
+            'public/core/themes/admin/tpl',
+            'public/core/themes/manager/tpl',
         ];
 
         $output->writeln("\t- From admin/manager templates");

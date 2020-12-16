@@ -4,6 +4,7 @@ namespace Tests\Framework\Component\Assetic;
 
 use Framework\Component\Assetic\AssetBag;
 use Common\Model\Entity\Instance;
+use Common\Model\Entity\Theme;
 
 class AssetBagTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,21 +18,11 @@ class AssetBagTest extends \PHPUnit\Framework\TestCase
             'folders' => [
                 'bundles' => 'bundles',
                 'common'  => 'assets',
-                'themes'  => 'themes',
+                'themes'  => 'core/themes',
             ]
         ];
 
         $this->bag = new AssetBag($this->config, $instance);
-
-        $reflection = new \ReflectionClass(get_class($this->bag));
-
-        $this->methods['parseBundleName'] = $reflection->getMethod('parseBundleName');
-        $this->methods['parseThemeName']  = $reflection->getMethod('parseThemeName');
-        $this->methods['parsePath']       = $reflection->getMethod('parsePath');
-
-        foreach ($this->methods as $method) {
-            $method->setAccessible(true);
-        }
     }
 
     public function testAddLiteralStyle()
@@ -72,42 +63,42 @@ class AssetBagTest extends \PHPUnit\Framework\TestCase
 
     public function testParseBundleName()
     {
-        $bundle = $this->methods['parseBundleName']
-            ->invokeArgs($this->bag, [ 'FooBundle' ]);
+        $method = new \ReflectionMethod($this->bag, 'parseBundleName');
+        $method->setAccessible(true);
 
-        $this->assertEquals(realpath(__DIR__ . '/../../../../public/bundles/') . '/foo', $bundle);
+        $this->assertEquals(
+            SITE_PATH . 'bundles/foo',
+            $method->invokeArgs($this->bag, [ 'FooBundle' ])
+        );
     }
 
     public function testParsePath()
     {
-        $expected = SITE_PATH . $this->config['folders']['common'] . DS . 'js' . DS . 'admin.js';
-        $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@Common/js/admin.js' ]);
+        $method = new \ReflectionMethod($this->bag, 'parsePath');
+        $method->setAccessible(true);
 
-        $this->assertEquals([ $expected ], $path);
+        $this->assertEquals([
+            SITE_PATH . 'assets/js/admin.js'
+        ], $method->invokeArgs($this->bag, [ '@Common/js/admin.js' ]));
 
-        $expected = SITE_PATH . $this->config['folders']['themes'] . DS . 'foo' . DS . 'bar' . DS . 'baz.js';
-        $path     = $this->methods['parsePath']->invokeArgs($this->bag, [ '@Theme/bar/baz.js' ]);
+        $this->assertEquals([
+            SITE_PATH . 'core/themes/foo/bar/baz.js'
+        ], $method->invokeArgs($this->bag, [ '@Theme/bar/baz.js' ]));
 
-        $this->assertEquals([ $expected ], $path);
-
-        $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@AdminTheme/js/controllers/*' ]);
-
-        $this->assertNotEmpty($path);
-
-        $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@FosJsRoutingBundle/js/router.js' ]);
-
-        $this->assertNotEmpty($path);
-
-        $path = $this->methods['parsePath']->invokeArgs($this->bag, [ '@AddminTheme/js/foo/*' ]);
-        $this->assertEmpty($path);
+        $this->assertNotEmpty($method->invokeArgs($this->bag, [ '@AdminTheme/js/controllers/*' ]));
+        $this->assertNotEmpty($method->invokeArgs($this->bag, [ '@FosJsRoutingBundle/js/router.js' ]));
+        $this->assertEmpty($method->invokeArgs($this->bag, [ '@AddminTheme/js/foo/*' ]));
     }
 
     public function testParseThemeName()
     {
-        $theme = $this->methods['parseThemeName']
-            ->invokeArgs($this->bag, [ 'FooTheme' ]);
+        $method = new \ReflectionMethod($this->bag, 'parseThemeName');
+        $method->setAccessible(true);
 
-        $this->assertEquals(realpath(__DIR__ . '/../../../../public/themes/') . '/foo', $theme);
+        $this->assertEquals(
+            SITE_PATH . 'core/themes/foo',
+            $method->invokeArgs($this->bag, [ 'FooTheme' ])
+        );
     }
 
     public function testReset()

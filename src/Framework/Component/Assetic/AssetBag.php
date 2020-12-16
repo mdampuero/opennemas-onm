@@ -55,8 +55,8 @@ class AssetBag
      */
     public function __construct($config, $instance)
     {
-        $this->config       = $config;
-        $this->sitePath     = SITE_PATH;
+        $this->config   = $config;
+        $this->sitePath = SITE_PATH;
 
         if (!empty($instance)) {
             $this->currentTheme = $instance->settings['TEMPLATE_USER'];
@@ -216,20 +216,20 @@ class AssetBag
         }
 
         $theme = substr($src, 1, strpos($src, '/') - 1);
-        $asset = substr($src, strpos($src, '/'));
+        $asset = trim(substr($src, strpos($src, '/')), '/');
         $path  = '';
 
         if (strpos($theme, 'Theme') !== false) {
-            $path = $this->parseThemeName($theme) . $asset;
+            $path = $this->parseThemeName($theme) . '/' . $asset;
         }
 
         if ($theme === 'Common') {
             $path = $this->sitePath . $this->config['folders']['common']
-                . $asset;
+                . '/' . $asset;
         }
 
         if (strpos($theme, 'Bundle') !== false) {
-            $path = $this->parseBundleName($theme) . $asset;
+            $path = $this->parseBundleName($theme) . '/' . $asset;
         }
 
         if (strpos($asset, '*') !== false) {
@@ -244,7 +244,7 @@ class AssetBag
 
             $path = [];
             foreach ($finder as $file) {
-                $path[] = str_replace(DS . DS, DS, $file->getPathname());
+                $path[] = preg_replace('/\/+/', '/', $file->getPathname());
             }
 
             return $path;
@@ -256,20 +256,19 @@ class AssetBag
     /**
      * Parses the theme name and returns the theme folder name.
      *
-     * @param string $theme The theme name.
+     * @param string $name The theme name.
      *
      * @return string The theme folder name.
      */
-    private function parseThemeName($theme)
+    private function parseThemeName($name)
     {
-        if ($theme === 'Theme' && !empty($this->currentTheme)) {
-            $theme = $this->currentTheme;
+        if ($name === 'Theme' && !empty($this->currentTheme)) {
+            $name = $this->currentTheme;
         }
 
-        $theme = preg_replace('/[a-z]{2,63}\.[a-z0-9\-]+\.theme\./', '', $theme);
-        $theme = strtolower(preg_replace('/theme/i', '', $theme));
+        $name = preg_replace('/[a-z]{2,63}\.[a-z0-9\-]+\.theme\./', '', $name);
+        $name = strtolower(preg_replace('/theme/i', '', $name));
 
-        return $this->sitePath . $this->config['folders']['themes'] . DS
-                . $theme;
+        return $this->sitePath . $this->config['folders']['themes'] . DS . $name;
     }
 }

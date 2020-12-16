@@ -65,7 +65,7 @@
          * @name      brokenImage
          * @type      {String}
          */
-        this.brokenImage = '/themes/admin/images/img-not-found.jpg';
+        this.brokenImage = '/core/themes/admin/images/img-not-found.jpg';
 
         /**
          * Property with the path to the image.
@@ -373,6 +373,10 @@
             };
 
             $scope.getItem = function(item) {
+              if (!item) {
+                return null;
+              }
+
               if (typeof item === 'string' ||
                     item instanceof String ||
                     item.content_type_name === 'photo') {

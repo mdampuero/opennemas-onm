@@ -156,8 +156,8 @@ class InstanceCreator
      */
     public function copyDefaultAssets($instance)
     {
-        $mediaPath   = SITE_PATH . 'media' . DS . $instance;
-        $defaultPath = SITE_PATH . 'media' . DS . 'default';
+        $mediaPath   = SITE_PATH . 'media/' . $instance;
+        $defaultPath = SITE_PATH . 'core/media/default';
 
         $this->fs->mirror($defaultPath, $mediaPath);
     }
