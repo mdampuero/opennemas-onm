@@ -331,8 +331,8 @@
      * </dynamic-image>
      */
     .directive('dynamicImage', [
-      '$compile', 'DynamicImage', 'http',
-      function($compile, DynamicImage, http) {
+      '$compile', 'DynamicImage', 'http', '$q',
+      function($compile, DynamicImage, http, $q) {
         return {
           restrict: 'AE',
           scope: {
@@ -401,17 +401,14 @@
 
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
-              var image = $scope.getItem(nv);
-
-              if (typeof image.then === 'function') {
-                image.then(function(item) {
-                  $scope.src = DynamicImage.generateUrl(item, attrs.transform,
-                    attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-                });
-              } else {
-                $scope.src = DynamicImage.generateUrl(image, attrs.transform,
+              $q.when($scope.getItem(nv), function(item) {
+                $scope.src = DynamicImage.generateUrl(item, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
-              }
+              }, function() {
+                $scope.src = DynamicImage.generateUrl(null, attrs.transform,
+                  attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
+                $scope.image = null;
+              });
             });
 
             var img = new Image();
