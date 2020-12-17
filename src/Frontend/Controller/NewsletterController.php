@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,9 +35,9 @@ class NewsletterController extends Controller
      */
     public function showAction($id = null)
     {
-        $item = $this->get('api.service.newsletter')->getItem($id);
-
-        if (!is_object($item) || $item->type == 1) {
+        try {
+            $item = $this->get('api.service.newsletter')->getItem($id);
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 

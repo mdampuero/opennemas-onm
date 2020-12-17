@@ -57,11 +57,12 @@ class NewsletterRenderer
     /**
      * Renders the newsletter from a list of contents.
      *
-     * @param array $contents The list of the contents.
+     * @param array $contents   The list of the contents.
+     * @param int   $id         The id of the newsletter.
      *
      * @return string The generated html for the newsletter.
      */
-    public function render($contents)
+    public function render($id, $contents)
     {
         $newsletterContent = $contents;
 
@@ -127,6 +128,7 @@ class NewsletterRenderer
         ]);
 
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
+            'id'                => $id,
             'newsletterContent' => $newsletterContent,
             'menuFrontpage'     => $menu->items,
             'current_date'      => new \DateTime(),

@@ -234,7 +234,7 @@ class NewsletterController extends Controller
             ->get('site_name');
         $time         = new \DateTime();
         $defaultTitle = sprintf('%s [%s]', $siteTitle, $time->format('d/m/Y'));
-        $html         = $nm->render($containers);
+        $html         = $nm->render($id, $containers);
         $title        = $request->request
             ->filter('title', $defaultTitle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
