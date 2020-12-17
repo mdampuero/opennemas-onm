@@ -355,9 +355,9 @@ jQuery(function($) {
 
     if (title.length > 0) {
       try {
-        title = jQuery.parseJSON(title);
+        title = JSON.parse(title);
       } catch (exception) {
-        title = '';
+        title = [];
       }
     }
 
