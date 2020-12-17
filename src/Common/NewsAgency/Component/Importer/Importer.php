@@ -157,6 +157,7 @@ class Importer
             $data['content_status'] = 1;
 
             unset($data['path']);
+            unset($data['params']);
 
             return $ps->createItem($data, $file, true);
         }
