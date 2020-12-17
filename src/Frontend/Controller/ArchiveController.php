@@ -44,9 +44,39 @@ class ArchiveController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-            $er       = $this->get('entity_repository');
-            $order    = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
-            $criteria = [
+            $er    = $this->get('entity_repository');
+            $order = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
+
+            $criteria = [];
+
+            if ($categoryName != 'home') {
+                $criteria['join'] = [
+                    [
+                        'table' => 'content_category',
+                        'type'  => 'inner',
+                        'content_category.content_id' => [
+                            [
+                                'value'  => 'contents.pk_content',
+                                'field' => true
+                            ]
+                        ]
+                    ],
+                    [
+                        'table' => 'category',
+                        'type'  => 'inner',
+                        'category.id' => [
+                            [
+                                'value'  => 'content_category.category_id',
+                                'field' => true
+                            ]
+                        ]
+                    ]
+                ];
+
+                $criteria['name'] = [[ 'value' => $categoryName ]];
+            }
+
+            $criteria = array_merge($criteria, [
                 'in_litter'       => [[ 'value' => 0 ]],
                 'content_status'  => [[ 'value' => 1 ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -67,11 +97,7 @@ class ArchiveController extends Controller
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
-            ];
-
-            if ($categoryName != 'home') {
-                $criteria['name'] = [[ 'value' => $categoryName ]];
-            }
+            ]);
 
             $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
             $total    = $er->countBy($criteria);
