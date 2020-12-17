@@ -76,7 +76,7 @@
         "drexarj/disqus-php": "dev-master",
         "opennemas/cache": "1.0.*",
         "opennemas/data": "1.0.*",
-        "opennemas/orm": "1.1.3",
+        "opennemas/orm": "1.2.0",
         "opennemas/task": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "dev-master",

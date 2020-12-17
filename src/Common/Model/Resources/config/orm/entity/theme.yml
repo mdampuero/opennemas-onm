@@ -39,7 +39,7 @@ orm:
             repositories:
                 file:
                     class:     Opennemas\Orm\File\Repository\BaseRepository
-                    arguments: [ '@service_container', [ 'public/themes' ], [ 'node_modules', 'vendor' ], '@orm.metadata.theme', '@cache.connection.internal' ]
+                    arguments: [ '@service_container', [ 'public/themes', 'public/core/themes' ], [ 'node_modules', 'vendor' ], '@orm.metadata.theme', '@cache.connection.internal' ]
             persisters:
                 database:
                     class:     Opennemas\Orm\Database\Persister\BasePersister
