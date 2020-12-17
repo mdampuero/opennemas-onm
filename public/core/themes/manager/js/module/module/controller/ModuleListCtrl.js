@@ -183,7 +183,7 @@
          */
         $scope.getThumbnail = function(item) {
           return item.images && item.images.length > 0 ?
-            { path: '/' + item.images[0] } :
+            { path: item.images[0] } :
             { path: null };
         };
 
