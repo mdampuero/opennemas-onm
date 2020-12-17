@@ -45,7 +45,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
             'date'     => date('d/m/Y'),
             'url'      => urlencode(SITE_URL),
             'newsurl'  => urlencode(SITE_URL . '/newsletter/'),
-            'relurl'   => urlencode('/newsletter/'),
+            'relurl'   => urlencode('newsletter/'),
             'utma'     => '__utma%3D999.999.999.999.999.1%3B'
         ];
 
