@@ -79,7 +79,7 @@
         "opennemas/orm": "1.2.0",
         "opennemas/task": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
-        "frandieguez/panorama-php": "1.0.*",
+        "frandieguez/panorama-php": "dev-master",
         "google/recaptcha": "1.1.3",
         "rtconner/freshbooks-api": "dev-master",
         "vdb/php-spider": "^0.4.4"
@@ -97,12 +97,20 @@
     },
     "repositories": [
         {
-            "type": "vcs",
+            "type": "git",
+            "url":  "https://github.com/openhost/CometCultBraintreeBundle"
+        },
+        {
+            "type": "git",
             "url":  "https://github.com/openhost/jwt-authentication-bundle"
         },
         {
             "type": "git",
             "url": "https://github.com/openhost/NativeSession"
+        },
+        {
+            "type": "git",
+            "url":  "https://github.com/openhost/panorama-php"
         },
         {
             "type": "git",

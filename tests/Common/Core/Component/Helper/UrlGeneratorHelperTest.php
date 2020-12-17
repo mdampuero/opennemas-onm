@@ -239,25 +239,28 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance->expects($this->any())->method('getMainDomain')
-            ->willReturn('thud.opennemas.com');
-        $this->requestStack->expects($this->once())->method('getCurrentRequest')
+            ->willReturn('quux.com');
+        $this->requestStack->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
         $this->request->expects($this->once())->method('getSchemeAndHttpHost')
-            ->willReturn('http://quux.com');
+            ->willReturn('http://thud.opennemas.com');
 
-        $helper->expects($this->at(0))->method('getUriForContent')
-            ->with($content)->willReturn('wibble/fred');
-        $helper->expects($this->at(1))->method('getUriForContent')
+        $helper->expects($this->any())->method('getUriForContent')
             ->with($content)->willReturn('wibble/fred');
 
         $this->assertEquals(
             '/wibble/fred',
-            $helper->generate($content, ['absolute' => false  ])
+            $helper->generate($content, [ 'absolute' => false ])
         );
 
         $this->assertEquals(
-            'http://quux.com/wibble/fred',
+            'http://thud.opennemas.com/wibble/fred',
             $helper->generate($content, [ 'absolute' => true ])
+        );
+
+        $this->assertEquals(
+            '//quux.com/wibble/fred',
+            $helper->generate($content, [ 'absolute' => true, 'ignore_request' => true ])
         );
     }
 

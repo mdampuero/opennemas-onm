@@ -162,24 +162,4 @@ class AlbumController extends FrontendController
     {
         $params['tags'] = $this->getTags($params['content']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShowAmp(array &$params = []) : void
-    {
-        parent::hydrateShowAmp($params);
-
-        $cacheIds = array_map(function ($a) {
-            return [ 'photo', $a['pk_photo'] ];
-        }, $params['content']->photos);
-
-        $photos = $this->get('entity_repository')
-            ->findMulti($cacheIds);
-
-        $params['photos'] = $this->get('data.manager.filter')
-            ->set($photos)
-            ->filter('mapify', [ 'key' => 'pk_photo' ])
-            ->get();
-    }
 }

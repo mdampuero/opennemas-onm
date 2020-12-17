@@ -173,12 +173,8 @@ class StructuredData
             ->getMedia($content);
 
         $media = [
-            'image' =>
-                (is_object($mediaObject) && get_class($mediaObject) == 'Photo')
-                    ? $mediaObject : null,
-            'video' =>
-                (is_object($mediaObject) && get_class($mediaObject) == 'Video')
-                    ? $mediaObject : null,
+            'image' => $mediaObject->content_type_name === 'photo' ? $mediaObject : null,
+            'video' => $mediaObject->content_type_name === 'video' ? $mediaObject : null,
         ];
 
         return $media;
