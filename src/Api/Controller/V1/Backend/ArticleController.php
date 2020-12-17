@@ -227,15 +227,7 @@ class ArticleController extends Controller
         foreach ($keys as $key) {
             if (!empty($article->{$key})) {
                 try {
-                    $video = $service->getItem($article->{$key});
-
-                    if (!empty($video->related_contents[0])) {
-                        $video->thumbnail = $service->getItem($video->related_contents[0]['target_id']);
-                    } elseif (!empty($video->information)) {
-                        $video->thumbnail = $video->information['thumbnail'];
-                    }
-
-                    $extra[$key] = $service->responsify($video);
+                    $extra[$key] = $service->responsify($service->getItem($article->{$key}));
                 } catch (GetItemException $e) {
                 }
             }
