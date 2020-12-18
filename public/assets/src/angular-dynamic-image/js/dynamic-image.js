@@ -414,7 +414,7 @@
                 return null;
               }
 
-              $scope.route.params = { id: DynamicImage.getFeaturedFrontpage(item) };
+              $scope.route.params = { id: related };
 
               return http.get($scope.route).then(function(response) {
                 return DynamicImage.getItem(response.data.item);
