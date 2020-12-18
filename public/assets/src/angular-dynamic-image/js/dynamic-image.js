@@ -372,13 +372,17 @@
               name: 'api_v1_backend_content_get_item'
             };
 
-            $scope.getFeaturedFrontpage = function(item) {
+            DynamicImage.getFeaturedFrontpage = function(item) {
+              if (!Array.isArray(item.related_contents) || !item.related_contents.length) {
+                return null;
+              }
+
               return item.related_contents.filter(function(related) {
                 return related.type === 'featured_frontpage';
               }).shift().target_id;
             };
 
-            $scope.getItem = function(item) {
+            DynamicImage.getItem = function(item) {
               if (!item) {
                 return null;
               }
@@ -398,16 +402,22 @@
               if (Number.isFinite(item)) {
                 $scope.route.params = { id: item };
                 return http.get($scope.route).then(function(response) {
-                  return $scope.getItem(response.data.item);
+                  return DynamicImage.getItem(response.data.item);
                 }, function() {
                   return null;
                 });
               }
 
-              $scope.route.params = { id: $scope.getFeaturedFrontpage(item) };
+              var related = DynamicImage.getFeaturedFrontpage(item);
+
+              if (!related) {
+                return null;
+              }
+
+              $scope.route.params = { id: DynamicImage.getFeaturedFrontpage(item) };
 
               return http.get($scope.route).then(function(response) {
-                return $scope.getItem(response.data.item);
+                return DynamicImage.getItem(response.data.item);
               }, function() {
                 return null;
               });
@@ -415,7 +425,7 @@
 
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
-              $q.when($scope.getItem(nv), function(item) {
+              $q.when(DynamicImage.getItem(nv), function(item) {
                 $scope.src = DynamicImage.generateUrl(item, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
               });
