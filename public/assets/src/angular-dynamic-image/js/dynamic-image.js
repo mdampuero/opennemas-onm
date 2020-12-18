@@ -184,13 +184,19 @@
          * @return {int} The related content id.
          */
         this.getFeaturedFrontpage = function(item) {
-          if (!Array.isArray(item.related_contents) || !item.related_contents.length) {
+          if (!Array.isArray(item.related_contents)) {
             return null;
           }
 
-          return item.related_contents.filter(function(related) {
+          var related = item.related_contents.filter(function(related) {
             return related.type === 'featured_frontpage';
-          }).shift().target_id;
+          }).shift();
+
+          if (!related) {
+            return null;
+          }
+
+          return related.target_id;
         };
 
         /**
