@@ -18,14 +18,15 @@
      * @ngdoc provider
      * @name  DynamicImage
      *
-     * @requires routingProvider
+     * @requires routing
+     * @requires $http
      *
      * @description
      *   Service to load images from objects.
      */
-    .provider('DynamicImage', [
-      'routingProvider',
-      function(routingProvider) {
+    .service('DynamicImage', [
+      'routing', 'http',
+      function(routing, $http) {
         /**
          * Template for the dynamic image.
          *
@@ -86,6 +87,17 @@
         this.imageFolder = '';
 
         /**
+         * The route object to get a content.
+         *
+         * @memberof DynamicImage
+         * @name     property
+         * @type     {Object}
+         */
+        this.route = {
+          name: 'api_v1_backend_content_get_item'
+        };
+
+        /**
          * @function generateUrl
          * @memberof DynamicImage
          *
@@ -136,7 +148,7 @@
             return image;
           }
 
-          return decodeURIComponent(routingProvider.generate('asset_image', {
+          return decodeURIComponent(routing.generate('asset_image', {
             path:   prefix + image,
             params: transform,
           }));
@@ -158,6 +170,80 @@
             height: element.parent().width(),
             width: element.parent().width()
           };
+        };
+
+        /**
+         * @function getFeaturedFrontpage
+         * @memberof DynamicImage
+         *
+         * @description
+         *  Returns the related content id.
+         *
+         * @param {Object} item The item to get the related content id from.
+         *
+         * @return {int} The related content id.
+         */
+        this.getFeaturedFrontpage = function(item) {
+          if (!Array.isArray(item.related_contents) || !item.related_contents.length) {
+            return null;
+          }
+
+          return item.related_contents.filter(function(related) {
+            return related.type === 'featured_frontpage';
+          }).shift().target_id;
+        };
+
+        /**
+         * @function getItem
+         * @memberof DynamicImage
+         *
+         * @description
+         *  Returns the item to generate the url.
+         *
+         * @param {number|Object|string} The value to get the item from.
+         *
+         * @return {number|Object|Promise|string}
+         *  The item or a promise wich will return the item.
+         */
+        this.getItem = function(item) {
+          if (!item) {
+            return null;
+          }
+
+          if (typeof item === 'string' ||
+                item instanceof String ||
+                item.content_type_name === 'photo') {
+            return item;
+          }
+
+          if (item.content_type_name === 'video' &&
+                item.hasOwnProperty('information') &&
+                item.information.thumbnail) {
+            return item.information.thumbnail;
+          }
+
+          if (Number.isFinite(item)) {
+            this.route.params = { id: item };
+            return $http.get(this.route).then(function(response) {
+              return this.getItem(response.data.item);
+            }.bind(this), function() {
+              return null;
+            });
+          }
+
+          var related = this.getFeaturedFrontpage(item);
+
+          if (!related) {
+            return null;
+          }
+
+          this.route.params = { id: related };
+
+          return $http.get(this.route).then(function(response) {
+            return this.getItem(response.data.item);
+          }.bind(this), function() {
+            return null;
+          });
         };
 
         /**
@@ -331,8 +417,8 @@
      * </dynamic-image>
      */
     .directive('dynamicImage', [
-      '$compile', 'DynamicImage', 'http', '$q',
-      function($compile, DynamicImage, http, $q) {
+      '$compile', 'DynamicImage', '$q',
+      function($compile, DynamicImage, $q) {
         return {
           restrict: 'AE',
           scope: {
@@ -367,61 +453,6 @@
                 $scope.width  = settings.width;
               }
             }
-
-            $scope.route = {
-              name: 'api_v1_backend_content_get_item'
-            };
-
-            DynamicImage.getFeaturedFrontpage = function(item) {
-              if (!Array.isArray(item.related_contents) || !item.related_contents.length) {
-                return null;
-              }
-
-              return item.related_contents.filter(function(related) {
-                return related.type === 'featured_frontpage';
-              }).shift().target_id;
-            };
-
-            DynamicImage.getItem = function(item) {
-              if (!item) {
-                return null;
-              }
-
-              if (typeof item === 'string' ||
-                    item instanceof String ||
-                    item.content_type_name === 'photo') {
-                return item;
-              }
-
-              if (item.content_type_name === 'video' &&
-                    item.hasOwnProperty('information') &&
-                    item.information.thumbnail) {
-                return item.information.thumbnail;
-              }
-
-              if (Number.isFinite(item)) {
-                $scope.route.params = { id: item };
-                return http.get($scope.route).then(function(response) {
-                  return DynamicImage.getItem(response.data.item);
-                }, function() {
-                  return null;
-                });
-              }
-
-              var related = DynamicImage.getFeaturedFrontpage(item);
-
-              if (!related) {
-                return null;
-              }
-
-              $scope.route.params = { id: related };
-
-              return http.get($scope.route).then(function(response) {
-                return DynamicImage.getItem(response.data.item);
-              }, function() {
-                return null;
-              });
-            };
 
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
