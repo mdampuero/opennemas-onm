@@ -34,7 +34,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getMainDomain', 'hasMultilanguage' ])
+            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -185,6 +185,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container ])
             ->getMock();
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://thud.opennemas.com');
+
         $this->instance->expects($this->any())->method('getMainDomain')
             ->willReturn('thud.opennemas.com');
 
@@ -225,6 +228,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container ])
             ->getMock();
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://quux.com');
         $this->instance->expects($this->any())->method('getMainDomain')
             ->willReturn('quux.com');
 
