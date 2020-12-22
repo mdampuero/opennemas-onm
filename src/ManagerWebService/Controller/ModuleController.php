@@ -274,6 +274,7 @@ class ModuleController extends Controller
     public function saveAction(Request $request)
     {
         $params = [];
+
         foreach ($request->request->all() as $key => $value) {
             $params[$key] = $value;
 
@@ -298,9 +299,14 @@ class ModuleController extends Controller
         if (!empty($request->files->count())) {
             $module->images = [];
 
+            $publicPath   = $this->getParameter('core.paths.public');
+            $relativePath = $this->get('core.instance')->getImagesShortPath()
+                . '/extensions';
+
             $fs = new Filesystem();
-            if (!$fs->exists(SITE_PATH . 'media/core/modules')) {
-                $fs->mkdir(SITE_PATH . 'media/core/modules');
+
+            if (!$fs->exists($publicPath . $relativePath)) {
+                $fs->mkdir($publicPath . relativePath);
             }
 
             $i = 1;
@@ -308,8 +314,8 @@ class ModuleController extends Controller
                 $filename = $module->id . '_' . $i++ . '.'
                     . $file[0]->getClientOriginalExtension();
 
-                $module->images[] = '/media/core/modules/' . $filename;
-                $file[0]->move(SITE_PATH . '/media/core/modules', $filename);
+                $module->images[] = trim($relativePath, '/') . '/' . $filename;
+                $file[0]->move($publicPath . $relativePath, $filename);
             }
 
             $em->persist($module);
@@ -384,8 +390,11 @@ class ModuleController extends Controller
         $msg  = $this->get('core.messenger');
         $data = $em->getConverter('Extension')->objectify($params);
 
-        $module   = $em ->getRepository('Extension')->find($id);
-        $path     = $this->getParameter('paths.extensions_assets_path') . DS;
+        $module       = $em ->getRepository('Extension')->find($id);
+        $publicPath   = $this->getParameter('core.paths.public');
+        $relativePath = $this->get('core.instance')->getImagesShortPath()
+            . '/extensions';
+
         $toDelete = empty($module->images) ? [] : $module->images;
 
         $module->setData($data);
@@ -395,8 +404,9 @@ class ModuleController extends Controller
             $module->images = [];
 
             $fs = new Filesystem();
-            if (!$fs->exists(SITE_PATH . $path)) {
-                $fs->mkdir(SITE_PATH . $path);
+
+            if (!$fs->exists($publicPath . $relativePath)) {
+                $fs->mkdir($publicPath . $relativePath);
             }
 
             $i = 1;
@@ -404,8 +414,8 @@ class ModuleController extends Controller
                 $filename = $module->id . '_' . $i++ . '.'
                     . $file[0]->getClientOriginalExtension();
 
-                $module->images[] = $path . $filename;
-                $file[0]->move(SITE_PATH . $path, $filename);
+                $module->images[] = trim($relativePath, '/') . '/' . $filename;
+                $file[0]->move($publicPath . $relativePath, $filename);
             }
 
             if (!empty($module->images)) {
@@ -413,7 +423,7 @@ class ModuleController extends Controller
             }
 
             foreach ($toDelete as $image) {
-                $fs->remove(SITE_PATH . $image);
+                $fs->remove($publicPath . $relativePath . '/' . $image);
             }
         }
 

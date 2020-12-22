@@ -65,7 +65,7 @@
          * @name      brokenImage
          * @type      {String}
          */
-        this.brokenImage = '/themes/admin/images/img-not-found.jpg';
+        this.brokenImage = '/core/themes/admin/images/img-not-found.jpg';
 
         /**
          * Property with the path to the image.

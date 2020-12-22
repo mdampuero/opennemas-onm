@@ -97,7 +97,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
         $item = new Content();
 
         $this->ugh->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => false, '_format' => null, 'ignore_request' => false ])
+            ->with($item, [ 'absolute' => false, '_format' => null ])
             ->willReturn('/grault/fred');
 
         $this->lrh->expects($this->once())->method('localizeUrl')

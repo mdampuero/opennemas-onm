@@ -122,12 +122,12 @@ class ClientPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests create when API call fails.
      *
-     * @expectedException Braintree_Exception
+     * @expectedException \Braintree\Exception
      */
     public function testCreateWhenAPIFails()
     {
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('create')->once()->andThrow('Braintree_Exception');
+        $bc->shouldReceive('create')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
@@ -197,12 +197,12 @@ class ClientPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests remove when API call fails.
      *
-     * @expectedException Braintree_Exception
+     * @expectedException \Braintree\Exception
      */
     public function testRemoveWhenAPIFails()
     {
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('delete')->once()->andThrow('Braintree_Exception');
+        $bc->shouldReceive('delete')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
@@ -275,12 +275,12 @@ class ClientPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests update when API call fails.
      *
-     * @expectedException Braintree_Exception
+     * @expectedException \Braintree\Exception
      */
     public function testUpdateWhenAPIFails()
     {
         $bc = \Mockery::mock('Braintree_Customer_' . uniqid());
-        $bc->shouldReceive('update')->once()->andThrow('Braintree_Exception');
+        $bc->shouldReceive('update')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')

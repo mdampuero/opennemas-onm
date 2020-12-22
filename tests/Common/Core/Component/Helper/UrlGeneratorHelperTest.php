@@ -34,7 +34,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getMainDomain', 'hasMultilanguage' ])
+            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -43,13 +43,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->locale = $this->getMockBuilder('Locale')
             ->setMethods([ 'getContext', 'setContext' ])
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('Request')
-            ->setMethods(['getSchemeAndHttpHost'])->getMock();
-
-        $this->requestStack = $this->getMockBuilder('RequestStack')
-            ->setMethods(['getCurrentRequest'])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -102,9 +95,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.locale':
                 return $this->locale;
-
-            case 'request_stack':
-                return $this->requestStack;
 
             case 'router':
                 return $this->router;
@@ -195,11 +185,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container ])
             ->getMock();
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://thud.opennemas.com');
+
         $this->instance->expects($this->any())->method('getMainDomain')
             ->willReturn('thud.opennemas.com');
-
-        $this->requestStack->expects($this->any())->method('getCurrentRequest')
-            ->willReturn(null);
 
         $helper->expects($this->any())->method('getUriForContent')
             ->with($content)->willReturn('wibble/fred');
@@ -210,7 +200,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            '//thud.opennemas.com/wibble/fred',
+            'https://thud.opennemas.com/wibble/fred',
             $helper->generate($content, [ 'absolute' => true ])
         );
 
@@ -238,12 +228,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container ])
             ->getMock();
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://quux.com');
         $this->instance->expects($this->any())->method('getMainDomain')
             ->willReturn('quux.com');
-        $this->requestStack->expects($this->any())->method('getCurrentRequest')
-            ->willReturn($this->request);
-        $this->request->expects($this->once())->method('getSchemeAndHttpHost')
-            ->willReturn('http://thud.opennemas.com');
 
         $helper->expects($this->any())->method('getUriForContent')
             ->with($content)->willReturn('wibble/fred');
@@ -254,13 +242,8 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            'http://thud.opennemas.com/wibble/fred',
+            'https://quux.com/wibble/fred',
             $helper->generate($content, [ 'absolute' => true ])
-        );
-
-        $this->assertEquals(
-            '//quux.com/wibble/fred',
-            $helper->generate($content, [ 'absolute' => true, 'ignore_request' => true ])
         );
     }
 

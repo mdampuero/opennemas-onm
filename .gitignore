@@ -24,7 +24,7 @@ public/assets/js/routes.js
 public/build
 public/bundles
 public/media/
-public/themes/*
+public/themes
 
 # Not ignore
 !public/themes/admin
