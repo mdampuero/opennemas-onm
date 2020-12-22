@@ -365,11 +365,9 @@ class Importer
         }
 
         if (array_key_exists('external', $this->config)
-            && !empty($this->config['external'])
+            && $this->config['external'] === 'original'
         ) {
-            if ($this->config['external'] === 'original') {
-                $data['params'] = [ 'bodyLink' => $data['href'] ];
-            }
+            $data['params'] = [ 'bodyLink' => $data['href'] ];
         }
 
         $method = 'getDataFor' . ucfirst($data['content_type_name']);
