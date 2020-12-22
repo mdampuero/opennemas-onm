@@ -32,10 +32,19 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
+        $categorySlug = $request->query->filter('category_slug', null, FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $date         = "{$year}-{$month}-{$day}";
         $itemsPerPage = 20;
+
+        if (!empty($categorySlug)) {
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($categorySlug);
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('newslibrary');
@@ -49,31 +58,8 @@ class ArchiveController extends Controller
 
             $criteria = [];
 
-            if ($categoryName != 'home') {
-                $criteria['join'] = [
-                    [
-                        'table' => 'content_category',
-                        'type'  => 'inner',
-                        'content_category.content_id' => [
-                            [
-                                'value'  => 'contents.pk_content',
-                                'field' => true
-                            ]
-                        ]
-                    ],
-                    [
-                        'table' => 'category',
-                        'type'  => 'inner',
-                        'category.id' => [
-                            [
-                                'value'  => 'content_category.category_id',
-                                'field' => true
-                            ]
-                        ]
-                    ]
-                ];
-
-                $criteria['name'] = [[ 'value' => $categoryName ]];
+            if (!empty($category)) {
+                $criteria['category_id'] = [[ 'value' => $category->id ]];
             }
 
             $criteria = array_merge($criteria, [
@@ -160,7 +146,7 @@ class ArchiveController extends Controller
             'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
-            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categoryName,
+            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categorySlug,
             'x-cacheable'     => true,
         ]);
     }
