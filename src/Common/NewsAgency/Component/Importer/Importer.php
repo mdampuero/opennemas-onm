@@ -356,9 +356,10 @@ class Importer
             'href'                => $resource->href,
         ]);
 
-        // If the source has an external link configured assign it as
-        // the external link in the content to import
-        if (array_key_exists('external_link', $this->config)
+        // Check if the source has an external link configured
+        if (array_key_exists('external', $this->config)
+            && $this->config['external'] === 'redirect'
+            && array_key_exists('external_link', $this->config)
             && !empty($this->config['external_link'])
         ) {
             $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
