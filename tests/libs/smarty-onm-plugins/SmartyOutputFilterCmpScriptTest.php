@@ -118,11 +118,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => null,
                 'cmp_type' => null,
                 'cmp_id'   => null,
+                'cmp_amp'  => null,
             ]);
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
@@ -144,11 +145,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => 'cmp',
                 'cmp_type' => 'default',
                 'cmp_id'   => null,
+                'cmp_amp'  => null,
             ]);
 
         $returnvalue = "foo-bar-baz";
@@ -178,11 +180,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => 'cmp',
                 'cmp_type' => 'quantcast',
                 'cmp_id'   => 'qwert',
+                'cmp_amp'  => null,
             ]);
 
         $returnvalue = "foo-bar-baz";
@@ -212,11 +215,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => 'cmp',
                 'cmp_type' => 'onetrust',
                 'cmp_id'   => 'qwert',
+                'cmp_amp'  => null,
             ]);
 
         $returnvalue = "foo-bar-baz";
@@ -246,11 +250,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => 'cmp',
                 'cmp_type' => 'default',
                 'cmp_id'   => null,
+                'cmp_amp'  => null,
             ]);
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
@@ -272,11 +277,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => 'cmp',
                 'cmp_type' => 'quantcast',
                 'cmp_id'   => 'qwert',
+                'cmp_amp'  => 1,
             ]);
 
         $returnvalue = "foo-bar-baz";
@@ -307,11 +313,12 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
             ->willReturn([
                 'cookies'  => 'cmp',
                 'cmp_type' => 'onetrust',
                 'cmp_id'   => 'qwert',
+                'cmp_amp'  => 1,
             ]);
 
         $returnvalue = "foo-bar-baz";

@@ -535,7 +535,7 @@ class FrontendController extends Controller
     {
         $config = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ 'cookies', 'cmp_type', 'cmp_id', 'site_color', 'site_logo' ]);
+            ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color', 'site_logo' ]);
 
         // Get instance logo size
         if (!empty($config['site_logo'])) {
@@ -570,7 +570,8 @@ class FrontendController extends Controller
         // Check CMP
         $cmp = $config['cookies'] === 'cmp'
             && $config['cmp_type'] !== 'default'
-            && !empty($config['cmp_id']);
+            && !empty($config['cmp_id'])
+            && !empty($config['cmp_amp']);
 
         // Get suggested contents
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
