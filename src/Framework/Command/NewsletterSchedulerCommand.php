@@ -205,7 +205,7 @@ EOF
         }
 
         $template->title = sprintf('%s [%s]', $template->title, $time->format('d/m/Y'));
-        $template->html  = $this->newsletterRenderer->render($template->contents);
+        $template->html  = $this->newsletterRenderer->render($template);
 
         if ($output->isVerbose()) {
             $this->outputLine(sprintf("\t- <info>Sending newsletter</info>", $template->id));
