@@ -211,58 +211,47 @@ class NewsletterController extends Controller
      */
     public function saveContentsAction(Request $request)
     {
-        $id          = (int) $request->request->getDigits('id');
-        $contentsRAW = $request->request->get('content_ids');
-        $containers  = json_decode($contentsRAW);
+        $id    = (int) $request->request->getDigits('id');
+        $title = $this->getTitle($request);
 
-        $this->get('core.locale')->setContext('frontend')->apply();
+        $containers = $request->request->get('content_ids');
+        $containers = json_decode($containers);
+        $containers = empty($containers) ? [] : $containers;
 
         foreach ($containers as &$container) {
             foreach ($container->items as &$content) {
-                $content = [
-                    'content_type' => \classify($content->content_type),
-                    'id'           => $content->id,
-                ];
+                $content->content_type = \classify($content->content_type);
             }
         }
 
-        $ns = $this->get('api.service.newsletter');
-        $nm = $this->get('core.renderer.newsletter');
-
-        $siteTitle    = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('site_name');
-        $time         = new \DateTime();
-        $defaultTitle = sprintf('%s [%s]', $siteTitle, $time->format('d/m/Y'));
-        $html         = $nm->render($id, $containers);
-        $title        = $request->request
-            ->filter('title', $defaultTitle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-
-        $this->get('core.locale')->setContext('backend')->apply();
         try {
-            if ($id > 0) {
-                $newsletter = $ns->patchItem($id, [
+            $item = !empty($id)
+                ? $this->get('api.service.newsletter')->getItem($id)
+                : $this->get('api.service.newsletter')->createItem([
                     'status'   => 0,
                     'title'    => $title,
-                    'contents' => $containers,
-                    'html'     => $html,
-                    'updated'  => new \Datetime(),
-                ]);
-            } else {
-                $newsletter = $ns->createItem([
-                    'status'   => 0,
-                    'title'    => $title,
-                    'contents' => $containers,
+                    'contents' => [],
                     'sent'     => null,
-                    'html'     => $html,
+                    'html'     => null,
                 ]);
 
-                $id = $newsletter->id;
-            }
+            $item->contents = $containers;
+
+            $this->get('core.locale')->setContext('frontend')->apply();
+            $html = $this->get('core.renderer.newsletter')->render($item);
+            $this->get('core.locale')->setContext('backend')->apply();
+
+            $this->get('api.service.newsletter')->patchItem($item->id, [
+                'status'   => 0,
+                'title'    => $title,
+                'contents' => $containers,
+                'html'     => $html,
+                'updated'  => new \Datetime(),
+            ]);
 
             return $this->redirect($this->generateUrl(
                 'backend_newsletters_preview',
-                [ 'id' => $id ]
+                [ 'id' => $item->id ]
             ));
         } catch (\Exception $e) {
             $this->get('error.log')->error(sprintf(
@@ -515,5 +504,30 @@ class NewsletterController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     * Returns the title for the newsletter based on the instance settings and
+     * the current request.
+     *
+     * @param Request $request The current request.
+     *
+     * @return string The newsletter title.
+     */
+    protected function getTitle(Request $request)
+    {
+        $siteTitle = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('site_name');
+
+        $date    = new \DateTime();
+        $default = sprintf('%s [%s]', $siteTitle, $date->format('d/m/Y'));
+
+        return $request->request->filter(
+            'title',
+            $default,
+            FILTER_SANITIZE_STRING,
+            FILTER_FLAG_NO_ENCODE_QUOTES
+        );
     }
 }
