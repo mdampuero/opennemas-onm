@@ -561,16 +561,25 @@ class FrontendController extends Controller
             }
         }
 
-        //Get suggested contents
+        // Get menu
+        $mm      = $this->container->get('menu_repository');
+        $ampMenu = $mm->findOneBy([ 'name' => [[ 'value' => 'amp' ]] ], null, 1, 1);
+        $ampMenu = !empty($ampMenu)
+            ? $ampMenu
+            : $mm->findOneBy([ 'name' => [[ 'value' => 'frontpage' ]] ], null, 1, 1);
+
+        if (!empty($ampMenu)) {
+            $this->view->assign('menu', $ampMenu->name);
+        }
+
+        // Get suggested contents
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
             $params['content']->content_type_name,
             $params['o_category']->id ?? null
         );
 
-        $this->view->assign([
-            'suggested' => $suggestedContents,
-        ]);
+        $this->view->assign('suggested', $suggestedContents);
     }
 
     /**

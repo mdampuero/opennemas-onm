@@ -770,8 +770,8 @@
             data.category = $scope.category;
           }
 
-          if ($scope.title) {
-            data.title = $scope.title;
+          if ($scope.criteria.title) {
+            data.title = $scope.criteria.title;
           }
 
           if ($scope.date) {
@@ -1153,7 +1153,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[category, criteria.created, criteria.title, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, criteria.created, criteria.title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }

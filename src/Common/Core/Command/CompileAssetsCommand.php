@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -14,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-class CompileAssetsCommand extends ContainerAwareCommand
+class CompileAssetsCommand extends Command
 {
     /**
      * {@inheritdoc}
@@ -24,51 +17,75 @@ class CompileAssetsCommand extends ContainerAwareCommand
         $this
             ->setName('core:assets:compile')
             ->setDescription('Finds and compiles assets for backend');
+
+        $this->steps[] = 3;
+        $this->steps[] = 2;
+        $this->steps[] = 3;
     }
 
     /**
-     * {@inheritdoc}
+     * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function do()
     {
-        $themes = $this->getContainer()->getParameter('core.paths.themes');
+        $this->writeStep('Compiling themes');
+
+        if ($this->output->isVerbose()) {
+            $this->writeStatus('warning', 'IN PROGRESS', true);
+        }
+
+        $themes = $this->getContainer()->getParameter('core.paths.public') . '/core/themes';
         $paths  = [ $themes . '/admin', $themes . '/manager' ];
-        $step   = 1;
-        $steps  = 1 + count($paths);
 
-        $output->writeln("<options=bold>($step/$steps) Configuring services...</>");
-        $step++;
-
-        $this->bag = getService('core.service.assetic.asset_bag');
+        $this->bag = $this->getContainer()->get('core.service.assetic.asset_bag');
 
         foreach ($paths as $path) {
             $this->bag->reset();
 
             $theme = substr($path, strrpos($path, '/') + 1);
 
-            $output->writeln("<options=bold>($step/$steps) Compiling $theme theme...</>");
-            $step++;
 
-            if ($output->isVerbose()) {
-                $output->writeln("  <options=bold>==></> <fg=yellow>Extracting</> paths from <fg=blue>$path</>");
+            if ($this->output->isVerbose()) {
+                $this->writeStep("Compiling $theme theme", true, 2);
+                $this->writeStep('Extracting assets', false, 3);
             }
 
             $this->find($path);
 
-            if ($output->isVerbose()) {
-                $output->writeln("  <options=bold>==></> <fg=yellow>Compiling</> scripts...</>");
+            if ($this->output->isVerbose()) {
+                $this->writeStatus('success', 'DONE');
+                $this->writeStatus('info', sprintf(
+                    ' (%s scripts, %s stylesheets)',
+                    $this->count($this->bag->getScripts()),
+                    $this->count($this->bag->getStyles())
+                ), true);
             }
 
-            $this->writeScripts($output);
 
-            if ($output->isVerbose()) {
-                $output->writeln("  <options=bold>==></> <fg=yellow>Compiling</> stylesheets...</>");
+            if ($this->output->isVerbose()) {
+                $this->writeStep('Compiling scripts', false, 3);
             }
 
-            $this->writeStyles($output);
+            $this->writeScripts();
+
+            if ($this->output->isVerbose()) {
+                $this->writeStatus('success', 'DONE', true);
+                $this->writeStep('Compiling stylesheets', false, 3);
+            }
+
+            $this->writeStyles();
+
+            if ($this->output->isVerbose()) {
+                $this->writeStatus('success', 'DONE', true);
+            }
+
+            // Reset steps for level 3 for the next theme
+            $this->step[2] = 1;
         }
 
-        $output->writeln("<options=bold>DONE</>");
+        if (!$this->output->isVerbose()) {
+            $this->writeStatus('success', 'DONE', true);
+        }
     }
 
     /**
@@ -143,18 +160,11 @@ class CompileAssetsCommand extends ContainerAwareCommand
 
     /**
      * Writes compiled files for scripts included in templates.
-     *
-     * @param OutputInterface $output The output object.
      */
-    protected function writeScripts($output)
+    protected function writeScripts()
     {
-        $am       = $this->getContainer()->get('core.service.assetic.javascript_manager');
-        $scripts  = $this->bag->getScripts();
-        $progress = null;
-
-        if ($output->isVeryVerbose()) {
-            $output->writeln("      - {$this->count($scripts)} scripts to compile");
-        }
+        $am      = $this->getContainer()->get('core.service.assetic.javascript_manager');
+        $scripts = $this->bag->getScripts();
 
         foreach ($scripts as $bag => $files) {
             $am->writeAssets($files, $this->bag->getFilters(), $bag);
@@ -163,18 +173,11 @@ class CompileAssetsCommand extends ContainerAwareCommand
 
     /**
      * Writes compiled files for stylesheets included in templates.
-     *
-     * @param OutputInterface $output The output object.
      */
-    protected function writeStyles($output)
+    protected function writeStyles()
     {
-        $am       = $this->getContainer()->get('core.service.assetic.stylesheet_manager');
-        $styles   = $this->bag->getStyles();
-        $progress = null;
-
-        if ($output->isVeryVerbose()) {
-            $output->writeln("      - {$this->count($styles)} stylesheets to compile");
-        }
+        $am     = $this->getContainer()->get('core.service.assetic.stylesheet_manager');
+        $styles = $this->bag->getStyles();
 
         foreach ($styles as $bag => $files) {
             $am->writeAssets($files, $this->bag->getFilters(), $bag);
