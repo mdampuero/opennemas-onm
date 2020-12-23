@@ -471,9 +471,9 @@
                             <label class="form-label" for="cmp-amp">
                               {t}Use CMP on your AMP pages{/t}
                             </label>
-                          <span class="help">
-                            ({t}Beta version{/t})
-                          </span>
+                            <span class="badge badge-default text-bold text-uppercase">
+                              Beta
+                            </span>
                           </div>
                         </div>
                       </div>
