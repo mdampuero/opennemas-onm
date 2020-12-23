@@ -213,8 +213,7 @@
           }
 
           if (nv && $scope.data && $scope.data.extra &&
-              !$scope.data.extra.instance &&
-              !($scope.item.external === 'redirect')) {
+              $scope.item.external !== 'redirect') {
             $scope.item.external_link = null;
           }
         }, true);
