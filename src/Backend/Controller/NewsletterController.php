@@ -237,6 +237,7 @@ class NewsletterController extends Controller
 
             $item->contents = $containers;
 
+            $this->get('core.helper.url_generator')->forceHttp(true);
             $this->get('core.locale')->setContext('frontend')->apply();
             $html = $this->get('core.renderer.newsletter')->render($item);
             $this->get('core.locale')->setContext('backend')->apply();

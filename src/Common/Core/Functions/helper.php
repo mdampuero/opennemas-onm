@@ -17,10 +17,9 @@ function get_url($item = null, array $params = []) : ?string
         return $item->externalUri;
     }
 
-    $absolute      = array_key_exists('_absolute', $params) && $params['_absolute'];
-    $escape        = array_key_exists('_escape', $params) && $params['_escape'];
-    $isAmp         = array_key_exists('_amp', $params) && $params['_amp'];
-    $ignoreRequest = array_key_exists('_ignore_request', $params) && $params['_ignore_request'];
+    $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
+    $escape   = array_key_exists('_escape', $params) && $params['_escape'];
+    $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
 
     // Remove special parameters
     $params = array_filter($params, function ($a) {
@@ -36,9 +35,8 @@ function get_url($item = null, array $params = []) : ?string
                     ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
                     : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
             ) : getService('core.helper.url_generator')->generate($item, [
-                'absolute'       => $absolute,
-                '_format'        => $isAmp ? 'amp' : null,
-                'ignore_request' => $ignoreRequest
+                'absolute' => $absolute,
+                '_format'  => $isAmp ? 'amp' : null,
             ]);
 
         $url = getService('core.helper.l10n_route')->localizeUrl($url);
