@@ -217,7 +217,8 @@ class NewsletterRenderer
      */
     protected function hydrateContainers($newsletter)
     {
-        $containers = $newsletter->contents;
+        // TODO: Remove this hack to force object conversion ASAP
+        $containers = json_decode(json_encode($newsletter->contents), false);
 
         foreach ($containers as $index => &$container) {
             if (!property_exists($container, 'id')) {
@@ -235,6 +236,7 @@ class NewsletterRenderer
                     unset($container->items[$index]);
 
                     $container->items = array_merge($container->items, $contents);
+                    continue;
                 }
 
                 $content = $this->er->find(classify($item->content_type), $item->id);
