@@ -157,6 +157,7 @@ class Importer
             $data['content_status'] = 1;
 
             unset($data['path']);
+            unset($data['params']);
 
             return $ps->createItem($data, $file, true);
         }
@@ -352,14 +353,22 @@ class Importer
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'body'                => $resource->body,
+            'href'                => $resource->href,
         ]);
 
-        // If the source has an external link configured assign it as
-        // the external link in the content to import
-        if (array_key_exists('external_link', $this->config)
+        // Check if the source has an external link configured
+        if (array_key_exists('external', $this->config)
+            && $this->config['external'] === 'redirect'
+            && array_key_exists('external_link', $this->config)
             && !empty($this->config['external_link'])
         ) {
             $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
+        }
+
+        if (array_key_exists('external', $this->config)
+            && $this->config['external'] === 'original'
+        ) {
+            $data['params'] = [ 'bodyLink' => $data['href'] ];
         }
 
         $method = 'getDataFor' . ucfirst($data['content_type_name']);

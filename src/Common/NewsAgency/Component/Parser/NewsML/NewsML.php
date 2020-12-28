@@ -227,6 +227,24 @@ class NewsML extends Parser
     }
 
     /**
+     * Returns the href from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The href.
+     */
+    public function getHref($data)
+    {
+        $href = $data->xpath("//ContentItem");
+
+        if (is_array($href) && !empty($href)) {
+            return (string) $href[0]->attributes()->Href;
+        }
+
+        return '';
+    }
+
+    /**
      * Returns the type from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -281,6 +299,7 @@ class NewsML extends Parser
             ->format('Y-m-d H:i:s');
         $this->bag['id']           = $this->getId($data);
         $this->bag['priority']     = $this->getPriority($data);
+        $this->bag['href']         = $this->getHref($data);
 
         $items = $data->xpath('/NewsML/NewsItem');
 

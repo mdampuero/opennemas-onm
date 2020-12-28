@@ -213,7 +213,8 @@ class NewsMLTest extends TestCase
             'category'     => 'POL',
             'priority'     => 4,
             'flob'         => 'garply',
-            'norf'         => 6843
+            'norf'         => 6843,
+            'href'         => ''
         ], $this->parser->getBag());
     }
 }
