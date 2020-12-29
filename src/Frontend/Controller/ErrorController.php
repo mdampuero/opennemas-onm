@@ -133,7 +133,9 @@ class ErrorController extends Controller
         // Remove assets from bag from a previous run
         $this->get('core.service.assetic.asset_bag')->reset();
 
-        return $this->render('500.tpl');
+        return new Response(file_get_contents(
+            $this->getParameter('core.paths.public') . '/500.html'
+        ), 500);
     }
 
     /**
