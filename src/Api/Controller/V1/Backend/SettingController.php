@@ -30,6 +30,7 @@ class SettingController extends Controller
         'body_start_script',
         'browser_update',
         'chartbeat',
+        'cmp_amp',
         'cmp_id',
         'cmp_type',
         'comscore',

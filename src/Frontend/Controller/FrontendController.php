@@ -533,19 +533,14 @@ class FrontendController extends Controller
      */
     protected function hydrateShowAmp(array &$params = []) : void
     {
-        $siteColor = $this->get('orm.manager')
+        $config = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('site_color', '#005689');
-
-        $this->view->assign('site_color', $siteColor);
+            ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color', 'site_logo' ]);
 
         // Get instance logo size
-        $logo = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('site_logo');
-
-        if (!empty($logo)) {
-            $logoPath     = $this->get('core.instance')->getMediaShortPath() . '/sections/' . rawurlencode($logo);
+        if (!empty($config['site_logo'])) {
+            $logoPath     = $this->get('core.instance')->getMediaShortPath()
+                . '/sections/' . rawurlencode($config['site_logo']);
             $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
             $logoFilePath = SITE_PATH . $logoPath;
 
@@ -572,6 +567,12 @@ class FrontendController extends Controller
             $this->view->assign('menu', $ampMenu->name);
         }
 
+        // Check CMP
+        $cmp = $config['cookies'] === 'cmp'
+            && $config['cmp_type'] !== 'default'
+            && !empty($config['cmp_id'])
+            && !empty($config['cmp_amp']);
+
         // Get suggested contents
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
             $params['content']->pk_content,
@@ -579,7 +580,11 @@ class FrontendController extends Controller
             $params['o_category']->id ?? null
         );
 
-        $this->view->assign('suggested', $suggestedContents);
+        $this->view->assign([
+            'suggested'  => $suggestedContents,
+            'site_color' => $config['site_color'] ?? '#005689',
+            'cmp'        => $cmp,
+        ]);
     }
 
     /**
