@@ -69,7 +69,12 @@ class ActOnContactSubscriber implements EventSubscriberInterface
      */
     public function addContact(Event $event)
     {
-        if (!$event->hasArgument('item')) {
+        if (!$event->hasArgument('item')
+            || !in_array(
+                'es.openhost.module.acton',
+                $this->container->get('core.instance')->activated_modules
+            )
+        ) {
             return;
         }
 

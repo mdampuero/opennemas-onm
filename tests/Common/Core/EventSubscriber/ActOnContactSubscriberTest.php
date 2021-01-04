@@ -11,6 +11,7 @@ namespace Tests\Common\Core\EventSubscriber;
 
 use Common\Core\EventSubscriber\ActOnContactSubscriber;
 use Common\External\ActOn\Component\Exception\ActOnException;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for ActOnSubscriber class.
@@ -53,8 +54,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->ds);
 
         $this->container->expects($this->any())->method('get')
-            ->with('orm.manager')
-            ->willReturn($this->em);
+            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
         $this->actOn->expects($this->any())->method('getEndpoint')
             ->with('contact')
@@ -64,7 +64,26 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
+        $this->instance   = new Instance([ 'activated_modules' => [ 'es.openhost.module.acton' ] ]);
         $this->subscriber = new ActOnContactSubscriber($this->container, $this->actOn, $this->logger);
+    }
+
+    /**
+     * Returns a mocked service basing on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'orm.manager':
+                return $this->em;
+
+            case 'core.instance':
+                return $this->instance;
+        }
     }
 
     /**
@@ -82,6 +101,19 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $this->event->expects($this->at(0))->method('hasArgument')
             ->with('item')->willReturn(false);
+
+        $this->assertEmpty($this->subscriber->addContact($this->event));
+    }
+
+    /**
+     * Tests addContact when module not activated.
+     */
+    public function testAddContactWhenModuleNotActivated()
+    {
+        $this->event->expects($this->at(0))->method('hasArgument')
+            ->with('item')->willReturn(true);
+
+        $this->instance->activated_modules = [];
 
         $this->assertEmpty($this->subscriber->addContact($this->event));
     }
