@@ -101,12 +101,12 @@
     <div class="grid-body">
       <div class ="form-inline">
         <div class="form-group p-l-20">
-          <label class="form-label" for="config[add_acton_contact]">
+          <label class="form-label" for="config[acton_list]">
             <h5>
               {t}Act-on list where to import users who comment on the web{/t}:
             </h5>
           </label>
-          <input id="name" class="form-control" name="configs[add_acton_contact]" type="text"  value="{$configs['add_acton_contact']}">
+          <input id="name" class="form-control" name="configs[acton_list]" type="text"  value="{$configs['acton_list']}">
           <div class="help help-block">
             {t}Only approved comments and non repeated e-mails will create a new contact on Act-on list.{/t}
           </div>
