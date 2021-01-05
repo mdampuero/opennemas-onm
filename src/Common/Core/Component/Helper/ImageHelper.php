@@ -135,6 +135,26 @@ class ImageHelper extends FileHelper
     }
 
     /**
+     * @codeCoverageIgnore
+     *
+     * Removes an image basing on the path.
+     *
+     * @param string $path The path to the image to remove.
+     */
+    public function remove(string $path) : void
+    {
+        $path = preg_replace('/\/+/', '/', sprintf(
+            '%s/%s',
+            $this->publicDir,
+            $path
+        ));
+
+        if ($this->fs->exists($path) && is_file($path)) {
+            $this->fs->remove($path);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getPathForFile()
