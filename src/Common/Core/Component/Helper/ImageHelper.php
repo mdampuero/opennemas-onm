@@ -144,8 +144,9 @@ class ImageHelper extends FileHelper
     public function remove(string $path) : void
     {
         $path = preg_replace('/\/+/', '/', sprintf(
-            '%s/%s',
+            '%s/%s/%s',
             $this->publicDir,
+            $this->loader->getInstance()->getMediaShortPath(),
             $path
         ));
 
