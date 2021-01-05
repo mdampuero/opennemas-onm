@@ -280,34 +280,43 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
     /**
      * Tests get_video_thumbnail.
      */
-    public function testGetVideoThumbnail()
+    public function testGetVideoThumbnailWhenInternalPhoto()
     {
-        $video = new Content(
-            [
-                'related_contents' => [
-                    [ 'content_type_name' => 'photo', 'type' => 'featured_frontpage', 'target_id' => 126 ]
-                ]
-            ]
-        );
+        $video = new Content([
+            'related_contents' => [ [
+                'content_type_name' => 'photo',
+                'type'              => 'featured_frontpage',
+                'target_id'         => 126
+            ] ]
+        ]);
 
-        $video2 = new Content(
-            [
-                'information' => [ 'thumbnail' => 'glorp.xxzz/path.jpg' ]
-            ]
-        );
-
-        $photo = new Content(
-            [
-                'content_status' => 1,
-                'starttime'      => new \DateTime()
-            ]
-        );
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \DateTime()
+        ]);
 
         $this->em->expects($this->at(0))->method('find')
             ->with('photo', 126)
             ->willReturn($photo);
 
         $this->assertEquals($photo, get_video_thumbnail($video, 'glorp'));
-        $this->assertEquals('glorp.xxzz/path.jpg', get_video_thumbnail($video2, 'thumbnail'));
+    }
+
+    /**
+     * Tests get_video_thumbnail.
+     */
+    public function testGetVideoThumbnailWhenExternalPhoto()
+    {
+        $video = new Content([
+            'title'       => 'Aliquam viderer cu graeco ius.',
+            'information' => [ 'thumbnail' => 'http://glorp.xxzz/path.jpg' ]
+        ]);
+
+        $this->assertEquals(new Content([
+            'content_status'    => 1,
+            'content_type_name' => 'photo',
+            'description'       => 'Aliquam viderer cu graeco ius.',
+            'external_uri'      => 'http://glorp.xxzz/path.jpg'
+        ]), get_video_thumbnail($video, 'thumbnail'));
     }
 }

@@ -108,8 +108,18 @@ function get_video_thumbnail($item)
         return array_shift($related);
     }
 
-    return !empty($item->information) && array_key_exists('thumbnail', $item->information) ?
-        $item->information['thumbnail'] : null;
+    if (empty($item->information)
+        || !array_key_exists('thumbnail', $item->information)
+    ) {
+        return null;
+    }
+
+    return new Common\Model\Entity\Content([
+        'content_status'    => 1,
+        'content_type_name' => 'photo',
+        'description'       => $item->title,
+        'external_uri'      => $item->information['thumbnail']
+    ]);
 }
 
 /**

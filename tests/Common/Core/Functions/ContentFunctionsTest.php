@@ -312,12 +312,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaWhenFeaturedVideoWithUrl()
     {
-        $video                    = new \Content();
-        $video->id                = 779;
-        $video->content_status    = 1;
-        $video->starttime         = '2020-01-01 00:00:00';
-        $video->content_type_name = 'video';
-        $video->information       = [ 'thumbnail' => 'http://waldo/thud.jpg' ];
+        $video = new Content([
+            'content_status'    => 1,
+            'content_type_name' => 'video',
+            'information'       => [ 'thumbnail' => 'http://waldo/thud.jpg' ],
+            'pk_content'        => 779,
+            'starttime'         => new \Datetime('2020-01-01 00:00:00')
+        ]);
 
         $this->em->expects($this->once())->method('find')
             ->with('Video', 779)->willReturn($video);
@@ -329,7 +330,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $content->content_type_name = 'article';
         $content->fk_video          = 779;
 
-        $this->assertEquals('http://waldo/thud.jpg', get_featured_media($content, 'frontpage'));
+        $this->assertEquals(new Content([
+            'content_status'    => 1,
+            'content_type_name' => 'photo',
+            'description'       => null,
+            'external_uri'      => 'http://waldo/thud.jpg'
+        ]), get_featured_media($content, 'frontpage'));
     }
 
     /**
