@@ -250,7 +250,7 @@ EOF
         $this->outputLine(sprintf(
             " + <info>Newsletter send and registered (id: %s, sends: %s)",
             $newsletter->id,
-            $newsletter->sent_items
+            $data['sent_items']
         ));
 
         return $newsletter;
