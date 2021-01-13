@@ -125,17 +125,6 @@ class VideoController extends FrontendController
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []):void
-    {
-        $params = array_merge($params, [
-            'tags' => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($params['content']->tags)['items']
-        ]);
-    }
-
-    /**
      * {@inheritDoc}
      *
      * This func overrides the parent function just to
