@@ -48,7 +48,8 @@
           deleteList: 'api_v1_backend_opinion_delete_list',
           getList:    'api_v1_backend_opinion_get_list',
           patchItem:  'api_v1_backend_opinion_patch_item',
-          patchList:  'api_v1_backend_opinion_patch_list'
+          patchList:  'api_v1_backend_opinion_patch_list',
+          public:     'frontend_opinion_show'
         };
 
         /**
@@ -60,6 +61,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
+          $scope.app.columns.hidden = [ 'category' ];
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'

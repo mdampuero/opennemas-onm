@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$scope', '$uibModal', 'http', 'routing', 'cleaner',
-  function($controller, $scope, $uibModal, http, routing, cleaner) {
+  '$controller', '$scope', '$uibModal', 'http', 'linker', 'localizer', 'routing', 'cleaner',
+  function($controller, $scope, $uibModal, http, linker, localizer, routing, cleaner) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -42,21 +42,21 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
-     *  The photo1 object.
+     *  The map for related contents.
      *
      * @type {Object}
      */
-    $scope.photo1 = null;
-
-    /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     *  The photo2 object.
-     *
-     * @type {Object}
-     */
-    $scope.photo2 = null;
+    $scope.relatedMap = {
+      featured_frontpage: {
+        name:        'featuredFrontpage',
+        replicateOn: 'featured_inner',
+        simple:      true
+      },
+      featured_inner: {
+        name:   'featuredInner',
+        simple: true
+      },
+    };
 
     /**
      * @memberOf OpinionCtrl
@@ -77,32 +77,134 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       updateItem:  'api_v1_backend_opinion_update_item'
     };
 
+
+    /**
+     * @function buildRelated
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *   Initializes the scope with the list of related contents and
+     *   defines watchers to update the model on changes.
+     */
+    $scope.buildRelated = function() {
+      $scope.item.related_contents = [];
+
+      for (var i = 0; i < $scope.data.item.related_contents.length; i++) {
+        var related = $scope.data.item.related_contents[i];
+
+        $scope.item.related_contents.push($scope.localizeRelated(related, i));
+
+        var simple = $scope.relatedMap[related.type].simple;
+        var name   = $scope.relatedMap[related.type].name;
+        var item   = $scope.data.extra.related_contents[related.target_id];
+
+        if (!simple) {
+          if (!$scope.name) {
+            $scope[name] = [];
+          }
+
+          $scope[name].push(item);
+          continue;
+        }
+
+        $scope[name] = item;
+      }
+
+      // Updates related contents after insertion via content picker
+      $scope.$watch('[ featuredFrontpage, featuredInner ]', function(nv, ov) {
+        for (var i = 0; i < nv.length; i++) {
+          var type = Object.keys($scope.relatedMap)[i];
+
+          if (angular.equals(nv[i], ov[i])) {
+            continue;
+          }
+
+          var caption     = null;
+          var removedItem = null;
+
+          if ($scope.relatedMap[type].simple) {
+            if (ov[i]) {
+              // Try to keep caption from old item
+              removedItem = $scope.data.item.related_contents.filter(function(e) {
+                return e.type === type;
+              }).shift();
+
+              caption     = removedItem ? removedItem.caption : null;
+              removedItem = removedItem ?
+                $scope.data.extra.related_contents[removedItem.target_id] :
+                null;
+            }
+
+            // Remove from unlocalized
+            $scope.data.item.related_contents =
+              $scope.data.item.related_contents.filter(function(e) {
+                return e.type !== type;
+              });
+
+            // Remove from localized
+            $scope.item.related_contents =
+              $scope.item.related_contents.filter(function(e) {
+                return e.type !== type;
+              });
+          }
+
+          if (!nv[i]) {
+            continue;
+          }
+
+          var items = $scope.relatedMap[type].simple ? [ nv[i] ] : nv[i];
+
+          for (var j = 0; j < items.length; j++) {
+            // Add content to map of contents
+            if (!$scope.data.extra.related_contents[items[j].pk_content]) {
+              $scope.data.extra.related_contents[items[j].pk_content] = items[j];
+            }
+
+            /**
+             * Override caption when adding new item or when caption matches
+             * the removed item description
+             */
+            if (!removedItem || removedItem.description === caption) {
+              caption = items[j].description;
+            }
+
+            var related = {
+              caption:           caption,
+              content_type_name: items[j].content_type_name,
+              position:          j,
+              target_id:         items[j].pk_content,
+              type:              type
+            };
+
+            $scope.data.item.related_contents.push(related);
+            $scope.item.related_contents.push($scope.localizeRelated(related, j));
+          }
+
+          // Copy current item to another item
+          if ($scope.relatedMap[type].replicateOn) {
+            var replicated = $scope.relatedMap[$scope.relatedMap[type].replicateOn];
+
+            if (!$scope[replicated.name] ||
+                angular.equals($scope[replicated.name], ov[i])) {
+              $scope[replicated.name] = angular.copy(nv[i]);
+            }
+          }
+        }
+      }, true);
+    };
+
     /**
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      $scope.localize($scope.data.item, 'item', true);
+      $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
-      var img1 = $scope.data.extra.related_contents.filter(function(e) {
-        return parseInt(e.pk_content) === parseInt($scope.item.img1);
-      }).shift();
-
-      if (img1) {
-        $scope.photo1 = img1;
-      }
-
-      var img2 = $scope.data.extra.related_contents.filter(function(e) {
-        return parseInt(e.pk_content) === parseInt($scope.item.img2);
-      }).shift();
-
-      if (img2) {
-        $scope.photo2 = img2;
-      }
+      $scope.buildRelated();
     };
 
     /**
@@ -168,55 +270,51 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     };
 
     /**
-     * Updates scope when photo1 changes.
+     * @function getRelated
+     * @memberOf OpinionCtrl
      *
-     * @param array nv The new values.
-     * @param array ov The old values.
+     * @description
+     *   Returns the related content based on the type.
+     *
+     * @param {String} type The related type.
+     *
+     * @return {Object} The related content.
      */
-    $scope.$watch('photo1', function(nv, ov) {
-      if (angular.equals(nv, ov)) {
-        return;
-      }
-
-      if (!nv) {
-        $scope.item.img1        = null;
-        $scope.item.img1_footer = null;
-        return;
-      }
-
-      if (!$scope.item.id ||
-          parseInt($scope.item.img1) !== parseInt(nv.pk_content)) {
-        $scope.item.img1        = nv.pk_content;
-        $scope.item.img1_footer = nv.description;
-
-        if (angular.equals(ov, $scope.photo2)) {
-          $scope.photo2 = nv;
+    $scope.getRelated = function(type) {
+      for (var i = 0; i < $scope.item.related_contents.length; i++) {
+        if ($scope.item.related_contents[i].type === type) {
+          return $scope.item.related_contents[i];
         }
       }
-    }, true);
+
+      return null;
+    };
 
     /**
-     * Updates scope when photo2 changes.
+     * @function localizeRelated
+     * @memberOf OpinionCtrl
      *
-     * @param array nv The new values.
-     * @param array ov The old values.
+     * @description
+     *   Localizes a related content.
+     *
+     * @param {Object} original The content to localize.
+     *
+     * @return {Object} The localized content.
      */
-    $scope.$watch('photo2', function(nv, ov) {
-      if (angular.equals(nv, ov)) {
-        return;
-      }
+    $scope.localizeRelated = function(original, index) {
+      var localized = localizer.get($scope.config.locale).localize(original,
+        [ 'caption' ], $scope.config.locale);
 
-      if (!nv) {
-        $scope.item.img2        = null;
-        $scope.item.img2_footer = null;
-        return;
-      }
+      // Initialize linker
+      delete $scope.config.linkers[index];
+      $scope.config.linkers[index] = linker.get([ 'caption' ],
+        $scope.config.locale.default, $scope, true);
 
-      if (!$scope.item.id ||
-          parseInt($scope.item.img2) !== parseInt(nv.pk_content)) {
-        $scope.item.img2        = nv.pk_content;
-        $scope.item.img2_footer = nv.description;
-      }
-    }, true);
+      // Link original and localized items
+      $scope.config.linkers[index].setKey($scope.config.locale.selected);
+      $scope.config.linkers[index].link(original, localized);
+
+      return localized;
+    };
   }
 ]);

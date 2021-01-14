@@ -10,11 +10,12 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
+use Common\Model\Entity\Opinion;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class OpinionController extends ContentOldController
+class OpinionController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -29,7 +30,7 @@ class OpinionController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.opinion';
+    protected $service = 'api.service.content';
 
     /**
      * Get the tag config.
@@ -44,7 +45,7 @@ class OpinionController extends ContentOldController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
-            ->get(\Opinion::EXTRA_INFO_TYPE);
+            ->get(Opinion::EXTRA_INFO_TYPE);
 
         return new JsonResponse([ 'extrafields' => $settings ]);
     }
@@ -186,11 +187,12 @@ class OpinionController extends ContentOldController
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get(\Opinion::EXTRA_INFO_TYPE);
+                ->get(Opinion::EXTRA_INFO_TYPE);
         }
 
         return array_merge([
             'extra_fields' => $extraFields,
+            'tags'         => $this->getTags($items)
         ], $extra);
     }
 
@@ -207,8 +209,8 @@ class OpinionController extends ContentOldController
      */
     protected function getRelatedContents($content)
     {
-        $extra   = [];
         $service = $this->get('api.service.photo');
+        $extra   = [];
 
         if (empty($content)) {
             return $extra;
@@ -219,13 +221,18 @@ class OpinionController extends ContentOldController
         }
 
         foreach ($content as $element) {
-            foreach (['img1', 'img2'] as $relation) {
-                if (!empty($element->{$relation})) {
-                    try {
-                        $photo   = $service->getItem($element->{$relation});
-                        $extra[] = $service->responsify($photo);
-                    } catch (GetItemException $e) {
-                    }
+            if (!is_array($element->related_contents)) {
+                continue;
+            }
+
+            foreach ($element->related_contents as $relation) {
+                if (!preg_match('/featured_.*/', $relation['type'])) {
+                    continue;
+                }
+                try {
+                    $photo   = $service->getItem($relation['target_id']);
+                    $extra[$relation['target_id']] = $service->responsify($photo);
+                } catch (GetItemException $e) {
                 }
             }
         }
