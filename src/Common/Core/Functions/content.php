@@ -112,7 +112,7 @@ function get_featured_media($item, $type, $deep = true)
 
     if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
         if (get_type($item) === 'video') {
-            return get_video_thumbnail($item);
+            return $type === 'inner' ? $item : get_video_thumbnail($item);
         }
 
         $media = get_related($item, $map[get_type($item)][$type][0]);
