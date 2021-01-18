@@ -291,12 +291,4 @@ class OpinionController extends FrontendController
             'page'       => $params['page'],
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []) : void
-    {
-        $params['tags'] = $this->getTags($params['content']);
-    }
 }

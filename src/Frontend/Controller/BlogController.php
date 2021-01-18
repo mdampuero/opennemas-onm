@@ -293,7 +293,6 @@ class BlogController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['tags'] = $this->getTags($params['content']);
         $params['blog'] = $params['content'];
     }
 }

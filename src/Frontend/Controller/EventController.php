@@ -152,12 +152,4 @@ class EventController extends FrontendController
 
         $params['tags'] = $this->getTags($response['items']);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []) : void
-    {
-        $params['tags'] = $this->getTags($params['content']);
-    }
 }
