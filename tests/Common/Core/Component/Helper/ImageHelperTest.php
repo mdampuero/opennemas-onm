@@ -31,7 +31,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->fs = $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
-            ->setMethods([ 'copy' ])
+            ->setMethods([ 'copy', 'exists' ])
             ->getMock();
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
@@ -74,6 +74,20 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             '/\/waldo\/grault\/media\/bar\/images\/2010\/01\/01\/20100101152045[0-9]{5}.jpg/',
             $this->helper->generatePath($file, new \DateTime('2010-01-01 15:20:45'))
         );
+    }
+
+    /**
+     * Tests exists.
+     */
+    public function testExists()
+    {
+        $this->fs->expects($this->at(0))->method('exists')
+            ->with('/glork/quux.foo')->willReturn(true);
+        $this->fs->expects($this->at(1))->method('exists')
+            ->with('/foo/wobble.bar')->willReturn(false);
+
+        $this->assertTrue($this->helper->exists('/glork/quux.foo'));
+        $this->assertFalse($this->helper->exists('/foo/wobble.bar'));
     }
 
     /**

@@ -11,6 +11,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
+use Api\Exception\DeleteItemException;
 use Api\Exception\FileAlreadyExistsException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -78,6 +79,22 @@ class PhotoService extends ContentService
             return $item;
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     *{@inheritdoc}
+     */
+    public function deleteItem($id)
+    {
+        try {
+            $item = $this->getItem($id);
+
+            $this->container->get('core.helper.image')->remove($item->path);
+
+            parent::deleteItem($id);
+        } catch (\Exception $e) {
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
     }
 }
