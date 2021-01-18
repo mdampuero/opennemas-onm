@@ -67,7 +67,7 @@
                     <doc.rights agent="Opennemas"/>
                     <doc-id id-string="{$content->id}" />
                     <key-list>
-                      <keyword key="{renderMetaKeywords content=$content tags=$tags onlyTags=True }"/>
+                      <keyword key="{renderMetaKeywords content=$content onlyTags=True}"/>
                     </key-list>
                   </docdata>
                 </head>
