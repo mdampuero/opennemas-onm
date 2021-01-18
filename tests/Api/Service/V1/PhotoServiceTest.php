@@ -248,4 +248,107 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service->deleteItem(23);
     }
+
+    /**
+     * Tests deleteList when no error.
+     */
+    public function testDeleteList()
+    {
+        $itemA = new Entity([
+            'name' => 'wubble',
+            'path' => 'images/2010/01/01/plugh.wubble'
+        ]);
+        $itemB = new Entity([
+            'name' => 'xyzzy',
+            'path' => 'images/2010/01/01/plugh.xyzzy'
+        ]);
+
+        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+            ->willReturn([]);
+        $this->metadata->expects($this->at(2))->method('getId')
+            ->with($itemA)->willReturn([ 'id' => 1 ]);
+        $this->metadata->expects($this->at(3))->method('getId')
+            ->with($itemB)->willReturn([ 'id' => 2 ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
+            ->willReturn([ $itemA, $itemB ]);
+        $this->em->expects($this->exactly(2))->method('remove');
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('content.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
+
+        $this->dispatcher->expects($this->at(1))->method('dispatch')
+            ->with('content.deleteList', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
+
+        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when invalid list of ids provided.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenInvalidIds()
+    {
+        $this->service->deleteList('xyzzy');
+    }
+
+    /**
+     * Tests deleteList when one error happens while removing.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenOneErrorWhileRemoving()
+    {
+        $itemA = new Entity([
+            'name' => 'wubble',
+            'path' => 'images/2010/01/01/plugh.wubble'
+        ]);
+        $itemB = new Entity([
+            'name' => 'xyzzy',
+            'path' => 'images/2010/01/01/plugh.xyzzy'
+        ]);
+
+        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+            ->willReturn([]);
+        $this->metadata->expects($this->at(2))->method('getId')
+            ->with($itemA)->willReturn([ 'id' => 1 ]);
+
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
+            ->willReturn([ $itemA, $itemB ]);
+
+        $this->em->expects($this->at(3))->method('remove')->willReturn('foobar');
+        $this->em->expects($this->at(5))->method('remove')
+            ->will($this->throwException(new \Exception()));
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('content.getListByIds', [
+                'ids'   => [ 1, 2 ],
+                'items' => [ $itemA, $itemB ]
+            ]);
+
+        $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when an error happens while searching.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenErrorWhileSearching()
+    {
+        $this->repository->expects($this->once())->method('find')
+            ->with([ 1, 2 ])
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->deleteList([ 1, 2 ]);
+    }
 }
