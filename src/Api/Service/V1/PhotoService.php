@@ -118,9 +118,9 @@ class PhotoService extends ContentService
         $items   = [];
         foreach ($response['items'] as $item) {
             try {
-                $this->em->remove($item, $item->getOrigin());
-
                 $this->container->get('core.helper.image')->remove($item->path);
+
+                $this->em->remove($item, $item->getOrigin());
 
                 $id = $this->em->getMetadata($item)->getId($item);
 
