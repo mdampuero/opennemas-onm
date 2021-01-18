@@ -15,10 +15,8 @@ function smarty_function_renderTags($params, &$smarty)
         return '';
     }
 
-    $content = $params['content'];
-    $ids     = !empty($content->tags) ? $content->tags : [];
-
-    // Check and sanitize params: separator, class, limit
+    $content   = $params['content'];
+    $ids       = !empty($content->tags) ? $content->tags : [];
     $separator = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
     $output    = '';
 
