@@ -91,9 +91,8 @@ class ActOnContactSubscriber implements EventSubscriberInterface
 
         try {
             $endpoint = $this->actOnFactory->getEndpoint('contact');
-            $exists   = $endpoint->existContact($listId, $comment->author_email);
 
-            if ($exists) {
+            if ($endpoint->existContact($listId, $comment->author_email)) {
                 return;
             }
         } catch (\Exception $e) {
