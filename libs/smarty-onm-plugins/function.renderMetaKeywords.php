@@ -1,4 +1,7 @@
 <?php
+
+use Api\Exception\GetListException;
+
 /**
  * Used to generate links for tags depending on the selected method
  * twitter hashtag, onm internal tags, google search
