@@ -67,9 +67,9 @@ class ExtractImageFromBodyFilter extends Filter
                 } catch (\Exception $e) {
                     continue;
                 }
-            }
 
-            $ids[$key] = $photo->pk_content;
+                $ids[$key] = $photo->pk_content;
+            }
         }
 
         return $ids[0];
