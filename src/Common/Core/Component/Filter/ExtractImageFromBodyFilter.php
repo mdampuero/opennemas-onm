@@ -56,12 +56,12 @@ class ExtractImageFromBodyFilter extends Filter
 
             if (empty($id) && file_exists($filepath)) {
                 try {
-                    $photo = $ps->createItem(new \SplFileInfo($filepath), [
+                    $photo = $ps->createItem([
                         'created'     => $created->format('Y-m-d H:i:s'),
                         'description' => $file,
                         'path_file'   => $created->format('/Y/m/d/'),
                         'title'       => $file
-                    ], true);
+                    ], new \SplFileInfo($filepath), true);
 
                     $this->insertPhotoTranslation($photo->pk_content, $file);
                 } catch (\Exception $e) {
