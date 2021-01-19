@@ -104,8 +104,10 @@ class ActOnContactSubscriber implements EventSubscriberInterface
         }
 
         $sendingParams = [
-            'E-mail Address' => $comment->author_email,
-            'First Name'     => $comment->author,
+            'Correo electrónico' => $comment->author_email,
+            'Nombre Yomi'        => $comment->author,
+            'Boletin ECD'        => 'Y',
+            'Tema'               => 'Realizado Comentario ECD'
         ];
 
         try {

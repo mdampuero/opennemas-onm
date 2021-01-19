@@ -238,8 +238,10 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->ce->expects($this->at(1))->method('addContact')
             ->with(1, [ 'contact' => json_encode([
-                'E-mail Address' => $comment->author_email,
-                'First Name'     => $comment->author,
+                'Correo electrónico' => $comment->author_email,
+                'Nombre Yomi'        => $comment->author,
+                'Boletin ECD'        => 'Y',
+                'Tema'               => 'Realizado Comentario ECD'
             ])])
             ->willThrowException(new ActOnException());
 
@@ -274,8 +276,10 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->ce->expects($this->at(1))->method('addContact')
             ->with(1, [ 'contact' => json_encode([
-                'E-mail Address' => $comment->author_email,
-                'First Name'     => $comment->author,
+                'Correo electrónico' => $comment->author_email,
+                'Nombre Yomi'        => $comment->author,
+                'Boletin ECD'        => 'Y',
+                'Tema'               => 'Realizado Comentario ECD'
             ])])
             ->willReturn(false);
 
