@@ -22,6 +22,10 @@ function smarty_function_renderTags($params, &$smarty)
 
     try {
         $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
+
+        if (array_key_exists('limit', $params)) {
+            $tags = array_slice($tags, 0, $params['limit']);
+        }
     } catch (GetListException $e) {
         return '';
     }
