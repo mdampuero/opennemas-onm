@@ -766,7 +766,7 @@
           $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
           if ($scope.category) {
-            $scope.criteria.category_id       = $scope.category;
+            $scope.criteria.category_id = $scope.category;
           }
 
           oqlEncoder.configure({
@@ -776,7 +776,7 @@
             }
           });
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
+          var oql = oqlEncoder.getOql($scope.criteria);
 
           var routes = {
             photo: {
