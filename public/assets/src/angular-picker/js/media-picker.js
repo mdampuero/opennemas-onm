@@ -60,7 +60,7 @@
                         '</select>' +
                       '</li>' +
                       '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
-                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="criteria.category_id" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
+                        '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="$parent.$parent.category" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
                       '</li>' +
                     '</ul>' +
                   '</div>' +
@@ -761,37 +761,13 @@
             $scope.searchLoading = true;
           }
 
-          var data = {
-            content_type_name: $scope.picker.types.enabled,
-            epp: $scope.epp,
-            page: $scope.page,
-            sort_by: 'created',
-            sort_order: 'desc'
-          };
+          $scope.criteria.epp               = $scope.epp;
+          $scope.criteria.page              = $scope.page;
+          $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
           if ($scope.category) {
-            data.category = $scope.category;
+            $scope.criteria.category_id       = $scope.category;
           }
-
-          if ($scope.title) {
-            data.title = $scope.title;
-          }
-
-          if ($scope.date) {
-            data.date = $scope.date;
-          }
-
-          if ($scope.from) {
-            data.from = $scope.from;
-          }
-
-          if ($scope.to) {
-            data.to = $scope.to;
-          }
-
-          $scope.criteria.epp = $scope.epp;
-          $scope.criteria.page = $scope.page;
-          $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
           oqlEncoder.configure({
             placeholder: {
@@ -813,7 +789,7 @@
             }
           };
 
-          var route = routes[data.content_type_name];
+          var route = routes[$scope.criteria.content_type_name];
 
           http.get(route)
             .then(function(response) {
