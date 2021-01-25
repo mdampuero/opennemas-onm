@@ -4,6 +4,20 @@ use Api\Exception\GetItemException;
 use Repository\EntityManager;
 
 /**
+ * Returns the body for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content body.
+ */
+function get_body($item = null) : ?string
+{
+    $value = get_property($item, 'body');
+
+    return !empty($value) ? $value : null;
+}
+
+/**
  * Returns the content of specified type for the provided item.
  *
  * @param mixed  $item The item to return or the id of the item to return. If
@@ -366,6 +380,21 @@ function get_type($item = null, bool $readable = false) : ?string
     return !empty($value)
         ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
         : null;
+}
+
+/**
+ * Check if the content has a body.
+ *
+ * @param Content $item The item to check body for.
+ *
+ * @return bool True if the content has a body. False otherwise.
+ */
+function has_body($item = null) : bool
+{
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_body($item))
+        && !getService('core.helper.subscription')->isHidden($token, 'body');
 }
 
 /**
