@@ -47,6 +47,24 @@ parameters:
                                     - timezone
                                     - title
                                     - whenend
+            contact:
+                class: 'Common\External\ActOn\Component\Endpoint\ContactEndpoint'
+                config:
+                    actions:
+                        add_contact:
+                            path: '/api/1/list/{listId}/record'
+                            parameters:
+                                required:
+                                    - contact
+                                optional:
+                                    - returncontact
+                        get_contact:
+                            path: '/api/1/list/lookup/{listId}'
+                            parameters:
+                                required:
+                                    - email
+                                optional:
+                                    - cookieid
 services:
     external.act_on.provider.config:
         class:     'Common\External\ActOn\Component\Configuration\OrmConfigurationProvider'
@@ -64,4 +82,3 @@ services:
     external.act_on.http_client:
         class:   'GuzzleHttp\Client'
         factory: [ '@external.act_on.factory', 'getClient' ]
-
