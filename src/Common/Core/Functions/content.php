@@ -12,7 +12,8 @@ use Repository\EntityManager;
  */
 function get_body($item = null) : ?string
 {
-    $value = get_property($item, 'body');
+    $value = get_type($item) ? get_property($item, 'description') :
+        get_property($item, 'body');
 
     return !empty($value) ? $value : null;
 }
