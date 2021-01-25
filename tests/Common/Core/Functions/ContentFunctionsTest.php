@@ -115,6 +115,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+    * Tests get_body.
+    */
+    public function testGetBody()
+    {
+        $this->assertNull(get_body($this->content));
+
+        $this->content->body = 'His ridens eu sed quod ignota.';
+        $this->assertEquals('His ridens eu sed quod ignota.', get_body($this->content));
+
+        $this->content->body = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertEquals('Percipit "mollis" at scriptorem usu.', get_body($this->content));
+    }
+
+    /**
      * Tests get_content when a content is already provided as parameter.
      */
     public function testGetContentFromParameter()
@@ -588,6 +602,22 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->content->content_type_name = 'static_page';
         $this->assertEquals('Static page', get_type($this->content, true));
+    }
+
+    /**
+     * Tests has_body.
+     */
+    public function testHasBody()
+    {
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
+        $this->assertFalse(has_body($this->content));
+
+        $this->content->body = 'Percipit "mollis" at scriptorem usu.';
+
+        $this->assertFalse(has_body($this->content));
+        $this->assertTrue(has_body($this->content));
     }
 
     /**
