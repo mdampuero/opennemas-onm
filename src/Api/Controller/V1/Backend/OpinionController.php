@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
+use Common\Model\Entity\Content;
 use Common\Model\Entity\Opinion;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -108,9 +109,7 @@ class OpinionController extends ContentController
         $this->get('core.locale')->setContext('frontend')
             ->setRequestLocale($request->get('locale'));
 
-        $opinion     = new \Opinion();
-        $cm          = new \ContentManager();
-        $opinion->id = 0;
+        $opinion = new Content([ 'pk_content' => 0 ]);
 
         $data = $request->request->filter('item');
         $data = json_decode($data, true);
@@ -121,31 +120,25 @@ class OpinionController extends ContentController
             }
         }
 
-        $opinion->tags = [];
-
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 
         list($positions, $advertisements) = $this->getAdvertisements();
+
+        $otherOpinions = [];
 
         try {
             if (!empty($opinion->fk_author)) {
                 $opinion->author = $this->get('api.service.author')
                     ->getItem($opinion->fk_author);
             }
+
+            $otherOpinions = $this->get($this->service)->getList(sprintf(
+                'fk_author = %d and pk_content != %d and content_status = 1 order by created desc limit 10',
+                $opinion->fk_author,
+                $opinion->pk_content
+            ))['items'];
         } catch (\Exception $e) {
-        }
-
-        $otherOpinions = $cm->find(
-            'Opinion',
-            ' opinions.fk_author=' . (int) $opinion->fk_author
-            . ' AND `pk_opinion` <>' . $opinion->id . ' AND content_status=1',
-            ' ORDER BY created DESC LIMIT 0,9'
-        );
-
-        foreach ($otherOpinions as &$otOpinion) {
-            $otOpinion->author           = $opinion->author;
-            $otOpinion->author_name_slug = $opinion->author_name_slug;
         }
 
         $params = [
@@ -155,13 +148,10 @@ class OpinionController extends ContentController
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,
-            'contentId'      => $opinion->id,
-            'tags'           => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($opinion->tags)['items']
+            'contentId'      => $opinion->pk_content
         ];
 
         $this->view->assign($params);
-
 
         $template = (!empty($opinion->author) && $opinion->author->is_blog == 1)
             ? 'opinion/blog_inner.tpl'
@@ -230,7 +220,7 @@ class OpinionController extends ContentController
                     continue;
                 }
                 try {
-                    $photo   = $service->getItem($relation['target_id']);
+                    $photo                         = $service->getItem($relation['target_id']);
                     $extra[$relation['target_id']] = $service->responsify($photo);
                 } catch (GetItemException $e) {
                 }
