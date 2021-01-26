@@ -139,6 +139,7 @@ class NewsMLEuropaPress extends NewsML
         $this->bag['tags']         = $this->getTags($data);
         $this->bag['created_time'] = $this->getCreatedTime($data)
             ->format('Y-m-d H:i:s');
+        $this->bag['href']         = $this->getHref($data);
 
         $items = $data->xpath('/NewsML/NewsItem');
 

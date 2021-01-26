@@ -57,12 +57,13 @@ class EmailCampaignEndpoint extends Endpoint
     /**
      * Sends a new message in Act-On.
      *
-     * @param array $params The action parameters.
+     * @param string $id     The Act-on message id.
+     * @param array  $params The action parameters.
      *
      * @return array
      *
      * @throws \InvalidArgumentException If parameters are invalid.
-     * @throws ActOnException           If the action fails.
+     * @throws ActOnException            If the action fails.
      */
     public function sendMessage($id, $params)
     {

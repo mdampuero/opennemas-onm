@@ -231,6 +231,8 @@ class NewsletterController extends Controller
             }
         }
 
+        $this->get('core.helper.url_generator')->forceHttp(true);
+
         $ns = $this->get('api.service.newsletter');
         $nm = $this->get('core.renderer.newsletter');
 

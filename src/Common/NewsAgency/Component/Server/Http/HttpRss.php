@@ -154,6 +154,7 @@ class HttpRss extends Http
         $article->updated_datetime = new \DateTime($content->pubDate);
         $article->category_slug    = (string) $content->category_id;
         $article->tags             = [];
+        $article->externalUri      = (string) $content->link[0];
 
         return $article;
     }

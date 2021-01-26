@@ -121,12 +121,12 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests create when API call fails.
      *
-     * @expectedException Braintree_Exception
+     * @expectedException \Braintree\Exception
      */
     public function testCreateWhenAPIFails()
     {
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
-        $bc->shouldReceive('sale')->once()->andThrow('Braintree_Exception');
+        $bc->shouldReceive('sale')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')
@@ -196,12 +196,12 @@ class PaymentPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests remove when API call fails.
      *
-     * @expectedException Braintree_Exception
+     * @expectedException \Braintree\Exception
      */
     public function testRemoveWhenAPIFails()
     {
         $bc = \Mockery::mock('Braintree_Transaction_' . uniqid());
-        $bc->shouldReceive('void')->once()->andThrow('Braintree_Exception');
+        $bc->shouldReceive('void')->once()->andThrow('\Braintree\Exception');
 
         $factory = $this
             ->getMockBuilder('CometCult\BraintreeBundle\Factory\BraintreeFactory')

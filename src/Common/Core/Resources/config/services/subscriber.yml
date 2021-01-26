@@ -4,3 +4,9 @@ services:
         arguments: [ '@core.instance', '@task.service.queue' ]
         tags:
             - { name: kernel.event_subscriber }
+
+    core.subscriber.act_on:
+        class:     'Common\Core\EventSubscriber\ActOnContactSubscriber'
+        arguments: [ '@service_container', '@external.act_on.factory', '@error.log' ]
+        tags:
+            - { name: kernel.event_subscriber }

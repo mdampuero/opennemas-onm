@@ -11,6 +11,8 @@
 namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
+use Api\Exception\DeleteItemException;
+use Api\Exception\DeleteListException;
 use Api\Exception\FileAlreadyExistsException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -79,5 +81,61 @@ class PhotoService extends ContentService
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     *{@inheritdoc}
+     */
+    public function deleteItem($id)
+    {
+        try {
+            $item = $this->getItem($id);
+
+            $this->container->get('core.helper.image')->remove($item->path);
+
+            parent::deleteItem($id);
+        } catch (\Exception $e) {
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteList($ids)
+    {
+        if (!is_array($ids)) {
+            throw new DeleteListException('Invalid ids', 400);
+        }
+
+        try {
+            $response = $this->getListByIds($ids);
+        } catch (\Exception $e) {
+            throw new DeleteListException($e->getMessage(), $e->getCode());
+        }
+
+        $deleted = [];
+        $items   = [];
+        foreach ($response['items'] as $item) {
+            try {
+                $this->container->get('core.helper.image')->remove($item->path);
+
+                $this->em->remove($item, $item->getOrigin());
+
+                $id = $this->em->getMetadata($item)->getId($item);
+
+                $deleted[] = array_pop($id);
+                $items[]   = $item;
+            } catch (\Exception $e) {
+                throw new DeleteListException($e->getMessage(), $e->getCode());
+            }
+        }
+
+        $this->dispatcher->dispatch($this->getEventName('deleteList'), [
+            'ids'   => $deleted,
+            'items' => $items
+        ]);
+
+        return count($deleted);
     }
 }

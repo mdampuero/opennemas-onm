@@ -92,7 +92,7 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         $item = json_decode(json_encode([ 'id' => '1' ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true,'_format'  => null, 'ignore_request' => false ])
+            ->with($item, [ 'absolute' => true,'_format'  => null ])
             ->willReturn('http://grault.com/glorp/1');
 
         $this->helper->expects($this->once())->method('localizeUrl')
@@ -120,7 +120,7 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true, '_format' => 'amp', 'ignore_request' => false ])
+            ->with($item, [ 'absolute' => true, '_format' => 'amp' ])
             ->willReturn('http://grault.com/glorp.amp.html');
 
         $this->helper->expects($this->once())->method('localizeUrl')

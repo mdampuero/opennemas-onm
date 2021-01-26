@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7949ff3018c4ec4d579cdb60dd3de2c7",
+    "content-hash": "afce9faa6015837426c315d06ba0f25e",
     "packages": [
         {
             "name": "braintree/braintree_php",
-            "version": "3.40.0",
+            "version": "5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/braintree/braintree_php.git",
-                "reference": "840fc6ebf8d96756fed475cce94565fef178187d"
+                "reference": "17be7efd7a044a0608dde81f45652aec5ba673e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/840fc6ebf8d96756fed475cce94565fef178187d",
-                "reference": "840fc6ebf8d96756fed475cce94565fef178187d",
+                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/17be7efd7a044a0608dde81f45652aec5ba673e8",
+                "reference": "17be7efd7a044a0608dde81f45652aec5ba673e8",
                 "shasum": ""
             },
             "require": {
@@ -26,16 +26,13 @@
                 "ext-hash": "*",
                 "ext-openssl": "*",
                 "ext-xmlwriter": "*",
-                "php": ">=5.4.0"
+                "php": ">=7.2.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "^7.5"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Braintree": "lib/"
-                },
                 "psr-4": {
                     "Braintree\\": "lib/Braintree"
                 }
@@ -51,7 +48,11 @@
                 }
             ],
             "description": "Braintree PHP Client Library",
-            "time": "2019-03-28T23:16:53+00:00"
+            "support": {
+                "issues": "https://github.com/braintree/braintree_php/issues",
+                "source": "https://github.com/braintree/braintree_php/tree/5.4.0"
+            },
+            "time": "2020-11-09T22:03:24+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -111,41 +112,35 @@
             "target-dir": "CometCult/BraintreeBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cometcult/CometCultBraintreeBundle.git",
-                "reference": "ddd5d69db1eebe5f1143a53ef22bb6d2b3cc5139"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cometcult/CometCultBraintreeBundle/zipball/ddd5d69db1eebe5f1143a53ef22bb6d2b3cc5139",
-                "reference": "ddd5d69db1eebe5f1143a53ef22bb6d2b3cc5139",
-                "shasum": ""
+                "url": "https://github.com/openhost/CometCultBraintreeBundle",
+                "reference": "7ed49b241b56ddcede29a793ecc3821e2152c462"
             },
             "require": {
-                "braintree/braintree_php": "*",
+                "braintree/braintree_php": "5.4.0",
                 "php": ">=5.3.2"
             },
             "require-dev": {
-                "phpspec/phpspec": "dev-master",
+                "phpspec/phpspec": "3.4",
                 "symfony/framework-bundle": ">=2.2,<2.3-dev"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
                     "CometCult\\BraintreeBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Even André Fiskvik",
-                    "homepage": "https://about.me/grEvenX"
-                },
-                {
                     "name": "Karol Sójko",
                     "email": "karolsojko@gmail.com"
+                },
+                {
+                    "name": "Even André Fiskvik",
+                    "homepage": "https://about.me/grEvenX"
                 }
             ],
             "description": "Symfony 2 Bundle for Braintree's PHP client library",
@@ -157,7 +152,7 @@
                 "credit",
                 "payment"
             ],
-            "time": "2017-10-06T08:23:10+00:00"
+            "time": "2020-12-09T13:44:50+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1377,33 +1372,26 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.13",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "9c5a03608a9220230769d59fcc8d8a938b213a59"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/9c5a03608a9220230769d59fcc8d8a938b213a59",
-                "reference": "9c5a03608a9220230769d59fcc8d8a938b213a59",
-                "shasum": ""
+                "url": "https://github.com/openhost/panorama-php",
+                "reference": "b9064569dd67c83360e6652ec4513190f20f4fc3"
             },
             "require": {
-                "php": ">=5.4"
+                "php": ">=7.1"
             },
             "require-dev": {
-                "behat/behat": "2.5.*",
-                "phpdocumentor/phpdocumentor": "2.*",
+                "behat/behat": "*",
                 "phpunit/phpunit": "*"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "Panorama": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1414,11 +1402,11 @@
                 }
             ],
             "description": "Wrapper class for accessing video services information in a standarized way",
-            "homepage": "http://frandieguez.github.com/Panorama-PHP/",
+            "homepage": "http://frandieguez.github.com/panorama-php/",
             "keywords": [
                 "library"
             ],
-            "time": "2018-08-21T13:22:02+00:00"
+            "time": "2020-12-15T12:28:31+00:00"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -7886,6 +7874,7 @@
         "smarty-gettext/smarty-gettext": 0,
         "drexarj/disqus-php": 20,
         "cometcult/braintree-bundle": 20,
+        "frandieguez/panorama-php": 20,
         "rtconner/freshbooks-api": 20
     },
     "prefer-stable": false,

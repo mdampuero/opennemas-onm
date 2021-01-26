@@ -79,19 +79,9 @@ class UrlGeneratorHelper
             && $params['absolute']
         ) {
             // Absolute URL basing on the current instance
-            $uri = ($this->forceHttp ? 'http://' : '//')
-                . $this->instance->getMainDomain();
-
-            $request = $this->container->get('request_stack')
-                ->getCurrentRequest();
-
-            if (!empty($request)
-                && (!array_key_exists('ignore_request', $params)
-                    || $params['ignore_request'] === false)
-            ) {
-                // Absolute URL basing on the current request
-                $uri = $request->getSchemeAndHttpHost();
-            }
+            $uri = $this->forceHttp
+                ? 'http://' . $this->instance->getMainDomain()
+                : $this->instance->getbaseUrl();
         }
 
         // Force frontend context for multilanguage
