@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+<div data-content-id="{$content->id}" data-class="{$content->content_type_name|capitalize}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
@@ -13,7 +13,7 @@
             {if is_blog($content)}
               <strong>{t}Blog{/t}</strong>
             {else}
-              <span class="type">{$content->content_type_l10n_name}</span>
+              <span class="type">{get_type($content, true)}</span>
             {/if}
             {get_author_name($content)} - {$content->title}
         </div>
@@ -51,7 +51,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a href="{url name=backend_ws_content_send_to_trash id=$content->id contentType=$content->content_type_name}" title="{t}Delete{/t}" class="send-to-trash">
+                <a href="{url name=backend_ws_content_send_to_trash id=$content->id contentType=get_type($content)}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="fa fa-trash"></i> {t}Send to trash{/t}
                 </a>
             </li>
