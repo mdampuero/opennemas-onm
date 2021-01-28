@@ -68,6 +68,18 @@
       {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="featuredInner" footer="getRelated('featured_inner').caption"}
     </div>
   </div>
+  <div class="grid simple" ng-show="data.extra.extra_fields !== undefined && data.extra.extra_fields">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        <i class="fa fa-magic"></i>
+        {t}Additional data{/t}
+      </div>
+
+      <div class="grid-collapse-body expanded">
+        <autoform ng-model="item" fields-by-module="data.extra.extra_fields"/>
+      </div>
+    </div>
+  </div>
 {/block}
 
 {block name="leftColumn"}
