@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Common\Core\Controller\Controller;
 
 class BlogController extends FrontendController
 {
@@ -129,14 +128,10 @@ class BlogController extends FrontendController
      */
     protected function getParameters($params, $item = null)
     {
-        $locale = $this->get('core.locale')->getRequestLocale();
         $params = parent::getParameters($params, $item);
 
         if (!empty($item)) {
             $params[$item->content_type_name] = $item;
-
-            $params['tags'] = $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tags, $locale)['items'];
 
             if (array_key_exists('bodyLink', $item->params)) {
                 $params['o_external_link'] = $item->params['bodyLink'];
@@ -154,6 +149,8 @@ class BlogController extends FrontendController
      */
     public function hydrateList(array &$params = []) : void
     {
+        $date = date('Y-m-d H:i:s');
+
         // Invalid page provided as parameter
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')
@@ -161,57 +158,56 @@ class BlogController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
+        try {
+            $oqlBlog = '';
 
-        $authors = $this->get('api.service.author')
-            ->getList('is_blog = 1 order by name asc');
+            $bloggers = $this->get('api.service.author')
+                ->getList('is_blog = 1 order by name asc');
 
-        $authors = $this->get('data.manager.filter')
-            ->set($authors['items'])
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
+            if (!empty($bloggers['total'])) {
+                $oqlBlog = sprintf(
+                    'and fk_author in (%s)',
+                    implode(',', array_map(function ($a) {
+                        return $a->id;
+                    }, $bloggers['items']))
+                );
+            }
+        } catch (GetListException $e) {
+        }
 
-        $order   = [ 'starttime' => 'DESC' ];
-        $date    = date('Y-m-d H:i:s');
-        $filters = [
-            'content_type_name' => [[ 'value' => 'opinion' ]],
-            'blog'              => [[ 'value' => 1 ]],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS' ],
-                [ 'value' => $date, 'operator' => '<' ]
-            ],
-            'endtime'           => [
-                'union'   => 'OR',
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => $date, 'operator' => '>' ]
-            ],
-        ];
-
-        $em    = $this->get('opinion_repository');
-        $blogs = $em->findBy($filters, $order, $epp, $params['page']);
-        $total = $em->countBy($filters);
+        try {
+            $response = $this->get($this->service)->getListBySql(sprintf(
+                'select * from contents '
+                . 'where content_type_name="opinion" and content_status=1 and in_litter=0 %s '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by starttime desc limit %d offset %d',
+                $oqlBlog,
+                $date,
+                $date,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            ));
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($blogs)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $epp,
-            'total'       => $total,
+            'epp'         => $params['epp'],
+            'total'       => $response['total'],
             'page'        => $params['page'],
             'route'       => 'frontend_blog_frontpage',
         ]);
 
         $this->view->assign([
-            'opinions'   => $blogs,
-            'authors'    => $authors,
+            'opinions'   => $response['items'],
+            'authors'    => $bloggers['items'],
             'pagination' => $pagination,
             'page'       => $params['page']
         ]);
