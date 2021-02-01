@@ -269,6 +269,10 @@ class UrlGeneratorHelper
     {
         $type = 'opinion';
 
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
         try {
             $author = $this->container->get('api.service.author')
                 ->getItem($content->fk_author);
@@ -289,7 +293,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig($type, [
             'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($content->created)),
+            'date'     => date('YmdHis', strtotime($created)),
             'slug'     => urlencode($content->slug),
             'category' => urlencode($authorName),
         ]);
