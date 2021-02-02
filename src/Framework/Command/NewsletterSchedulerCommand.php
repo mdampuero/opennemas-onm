@@ -219,6 +219,7 @@ EOF
         try {
             $newsletter       = $this->newsletterService->createItem($data);
             $newsletter->html = $this->newsletterRenderer->render($newsletter);
+            $data             = $newsletter->getData();
 
             $data = array_merge($data, [
                 'html'       => $newsletter->html,
