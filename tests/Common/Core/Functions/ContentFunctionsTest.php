@@ -5,6 +5,7 @@ namespace Tests\Common\Core\Functions;
 use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Tag;
+use Common\Core\Component\Helper\ContentHelper;
 
 /**
  * Defines test cases for content functions.
@@ -25,6 +26,11 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'in_litter'      => 0,
             'starttime'      => new \Datetime('2020-01-01 00:00:00')
         ]);
+
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isReadyForPublish'])
+            ->getMock();
 
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
@@ -59,6 +65,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->contentHelper->expects($this->any())->method('isReadyForPublish')
+            ->willReturn(true);
+
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -78,6 +87,9 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             case 'api.service.tag':
                 return $this->ts;
 
+            case 'core.helper.content':
+                return $this->contentHelper;
+
             case 'core.helper.subscription':
                 return $this->helper;
 
@@ -93,6 +105,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             default:
                 return null;
         }
+    }
+
+    /**
+     * Tests get_body.
+     */
+    public function testGetBody()
+    {
+        $this->assertNull(get_body($this->content));
+
+        $this->content->body = 'His ridens eu sed quod ignota.';
+        $this->assertEquals('His ridens eu sed quod ignota.', get_body($this->content));
+
+        $this->content->body = 'Percipit "mollis" at scriptorem usu.';
+        $this->assertEquals('Percipit "mollis" at scriptorem usu.', get_body($this->content));
     }
 
     /**
@@ -172,6 +198,19 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_creation_date.
+     */
+    public function testGetCreationDate()
+    {
+        $this->content->created = '2010-10-10 10:00:00';
+
+        $this->assertEquals(
+            new \Datetime('2010-10-10 10:00:00'),
+            get_creation_date($this->content)
+        );
+    }
+
+    /**
      * Tests get_description.
      */
     public function testGetDescription()
@@ -229,10 +268,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->content->content_type_name = 'event';
         $this->content->related_contents  = [ [
+            'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
             'type'              => 'featured_frontpage',
-            'content_type_name' => 'photo',
             'caption'           => 'Justo auctor vero probo pertinax',
             'position'          => 9
         ] ];
@@ -288,12 +327,20 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $video->content_status    = 1;
         $video->starttime         = '2020-01-01 00:00:00';
         $video->content_type_name = 'video';
-        $video->information       = [ 'thumbnail' => 893 ];
+        $video->related_contents  = [
+            [
+                'content_type_name' => 'photo',
+                'type'              => 'featured_frontpage',
+                'target_id'         => 893,
+                'caption'           => null,
+                'position'          => 0
+            ]
+        ];
 
         $this->em->expects($this->at(0))->method('find')
             ->with('Video', 779)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
-            ->with('Photo', 893)->willReturn($photo);
+            ->with('photo', 893)->willReturn($photo);
 
         $content                    = new \Content();
         $content->content_status    = 1;
@@ -311,12 +358,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFeaturedMediaWhenFeaturedVideoWithUrl()
     {
-        $video                    = new \Content();
-        $video->id                = 779;
-        $video->content_status    = 1;
-        $video->starttime         = '2020-01-01 00:00:00';
-        $video->content_type_name = 'video';
-        $video->information       = [ 'thumbnail' => 'http://waldo/thud.jpg' ];
+        $video = new Content([
+            'content_status'    => 1,
+            'content_type_name' => 'video',
+            'information'       => [ 'thumbnail' => 'http://waldo/thud.jpg' ],
+            'pk_content'        => 779,
+            'starttime'         => new \Datetime('2020-01-01 00:00:00')
+        ]);
 
         $this->em->expects($this->once())->method('find')
             ->with('Video', 779)->willReturn($video);
@@ -328,7 +376,12 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $content->content_type_name = 'article';
         $content->fk_video          = 779;
 
-        $this->assertEquals('http://waldo/thud.jpg', get_featured_media($content, 'frontpage'));
+        $this->assertEquals(new Content([
+            'content_status'    => 1,
+            'content_type_name' => 'photo',
+            'description'       => null,
+            'external_uri'      => 'http://waldo/thud.jpg'
+        ]), get_featured_media($content, 'frontpage'));
     }
 
     /**
@@ -610,6 +663,22 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->content->content_type_name = 'static_page';
         $this->assertEquals('Static page', get_type($this->content, true));
+    }
+
+    /**
+     * Tests has_body.
+     */
+    public function testHasBody()
+    {
+        $this->helper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
+        $this->assertFalse(has_body($this->content));
+
+        $this->content->body = 'Percipit "mollis" at scriptorem usu.';
+
+        $this->assertFalse(has_body($this->content));
+        $this->assertTrue(has_body($this->content));
     }
 
     /**

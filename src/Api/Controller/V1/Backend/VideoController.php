@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
@@ -14,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class VideoController extends ContentOldController
+class VideoController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -29,24 +22,18 @@ class VideoController extends ContentOldController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.video';
+    protected $service = 'api.service.content';
 
     /**
-     * Get the tag config.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
+     * {@inheritDoc}
      */
-    public function getConfigAction()
+    protected function getExtraData($items = null)
     {
-        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
-
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings')
-            ->get('video_settings', []);
-
-        return new JsonResponse($settings);
+        return array_merge(parent::getExtraData($items), [
+            'authors'    => $this->getAuthors($items),
+            'categories' => $this->getCategories($items),
+            'tags'       => $this->getTags($items),
+        ]);
     }
 
     /**
@@ -83,51 +70,6 @@ class VideoController extends ContentOldController
     }
 
     /**
-     * Saves configuration for tags.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveConfigAction(Request $request)
-    {
-        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
-
-        $settings = [ 'video_settings' => $request->request->all() ];
-
-        $msg = $this->get('core.messenger');
-
-        try {
-            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
-            $msg->add(_('Item saved successfully'), 'success');
-        } catch (\Exception $e) {
-            $msg->add(_('Unable to save settings'), 'error');
-            $this->get('error.log')->error($e->getMessage());
-        }
-
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getExtraData($items = null)
-    {
-        return array_merge(parent::getExtraData($items), [
-            'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items),
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getL10nKeys()
-    {
-        return $this->get($this->service)->getL10nKeys('video');
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function getRelatedContents($content)
@@ -143,15 +85,18 @@ class VideoController extends ContentOldController
             $content = [ $content ];
         }
 
-        foreach ($content as $item) {
-            if (is_array($item->information)
-                && array_key_exists('thumbnail', $item->information)
-                && !empty($item->information['thumbnail'])
-                && is_numeric($item->information['thumbnail'])
-            ) {
+        foreach ($content as $element) {
+            if (!is_array($element->related_contents)) {
+                continue;
+            }
+
+            foreach ($element->related_contents as $relation) {
+                if (!preg_match('/featured_.*/', $relation['type'])) {
+                    continue;
+                }
                 try {
-                    $photo   = $service->getItem($item->information['thumbnail']);
-                    $extra[] = $service->responsify($photo);
+                    $photo = $service->getItem($relation['target_id']);
+                    $extra[$relation['target_id']] = $service->responsify($photo);
                 } catch (GetItemException $e) {
                 }
             }

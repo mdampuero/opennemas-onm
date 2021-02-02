@@ -1,6 +1,22 @@
 <?php
 
 use Api\Exception\GetItemException;
+use Repository\EntityManager;
+
+/**
+ * Returns the body for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content body.
+ */
+function get_body($item = null) : ?string
+{
+    $value = get_type($item) === 'video' ? get_property($item, 'description') :
+        get_property($item, 'body');
+
+    return !empty($value) ? $value : null;
+}
 
 /**
  * Returns the caption for an item.
@@ -56,7 +72,21 @@ function get_content($item = null, $type = null)
         return null;
     }
 
-    return $item->isReadyForPublish() ? $item : null;
+    return getService('core.helper.content')->isReadyForPublish($item) ? $item : null;
+}
+
+/**
+ * Returns the creation date for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content creation date.
+ */
+function get_creation_date($item = null) : ?\Datetime
+{
+    $value = get_property($item, 'created');
+
+    return is_object($value) ? $value : new \Datetime($value);
 }
 
 /**
@@ -78,10 +108,14 @@ function get_description($item = null) : ?string
  *
  * @param mixed  $item The item to get featured media for.
  * @param string $type The featured type.
+ * @param bool   $deep Whether to return the final featured media. Fox example,
+ *                     if the featured media is a video, with true, the
+ *                     function will return the thumbnail of the video but,
+ *                     with false, the function will return the video.
  *
  * @return Content The featured media.
  */
-function get_featured_media($item, $type)
+function get_featured_media($item, $type, $deep = true)
 {
     $item = get_content($item);
     $map  = [
@@ -98,8 +132,8 @@ function get_featured_media($item, $type)
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
         ], 'video' => [
-            'frontpage' => [ 'thumbnail' ],
-            'inner'     => [ 'embedUrl' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'book' => [
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
@@ -116,43 +150,35 @@ function get_featured_media($item, $type)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content) {
+    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
+        if (get_type($item) === 'video') {
+            return $type === 'inner' ? $item : get_video_thumbnail($item);
+        }
+
         $media = get_related($item, $map[get_type($item)][$type][0]);
 
         return array_shift($media);
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
-        if ((get_type($item) !== 'video'
-                && empty($item->{$key}))
-            || (!empty($item->information)
-                && !array_key_exists($key, $item->information))
-        ) {
+        if (empty($item->{$key})) {
             continue;
-        }
-
-        $id = get_type($item) === 'video'
-            ? $item->information[$key]
-            : $item->{$key};
-
-        if (!is_numeric($id)) {
-            return $id;
         }
 
         $featured = null;
 
         if ($item->external) {
             $related  = getService('core.template.frontend')->getValue('related', []);
-            $featured = array_key_exists($id, $related) ? $related[$id] : null;
+            $featured = array_key_exists($item->{$key}, $related) ? $related[$item->{$key}] : null;
         } else {
             $featured = get_content(
-                $id,
+                $item->{$key},
                 preg_match('/img|cover|thumbnail/', $key) ? 'Photo' : 'Video'
             );
         }
 
         if (!empty($featured)) {
-            if (get_type($featured) === 'video' && $type === 'frontpage') {
+            if ($deep && get_type($featured) === 'video' && $type === 'frontpage') {
                 return get_featured_media($featured, 'frontpage');
             }
 
@@ -188,6 +214,8 @@ function get_featured_media_caption($item, $type)
         ], 'event' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
+        ], 'video' => [
+            'frontpage' => [ 'featured_frontpage' ]
         ]
     ];
 
@@ -198,10 +226,8 @@ function get_featured_media_caption($item, $type)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content
-        && get_type($item) === 'event'
-    ) {
-        $key = array_shift($map['event'][$type]);
+    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
+        $key = array_shift($map[get_type($item)][$type]);
 
         $related = array_filter($item->related_contents, function ($a) use ($key) {
             return $a['type'] === $key;
@@ -236,20 +262,6 @@ function get_id($item) : ?int
 }
 
 /**
- * Returns the publication date for the provided item.
- *
- * @param Content $item The item to get property from.
- *
- * @return string The content publication date.
- */
-function get_publication_date($item = null) : ?\Datetime
-{
-    $value = get_property($item, 'starttime') ?? get_property($item, 'created');
-
-    return is_object($value) ? $value : new \Datetime($value);
-}
-
-/**
  * Returns the pretitle for the provided item.
  *
  * @param Content $item The item to get property from.
@@ -280,6 +292,20 @@ function get_property($item, string $name)
     }
 
     return !empty($item->{$name}) ? $item->{$name} : null;
+}
+
+/**
+ * Returns the publication date for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content publication date.
+ */
+function get_publication_date($item = null) : ?\Datetime
+{
+    $value = get_property($item, 'starttime') ?? get_property($item, 'created');
+
+    return is_object($value) ? $value : new \Datetime($value);
 }
 
 /**
@@ -344,11 +370,6 @@ function get_related($item, string $type) : array
     return array_filter(array_map(function ($a) {
         $content = get_content($a['target_id'], $a['content_type_name']);
 
-        //TODO: Remove this on ticket ONM-6166
-        if ($content instanceof \Content) {
-            $content = $content->loadAttachedVideo();
-        }
-
         return empty($content)
             ? null
             : [
@@ -410,6 +431,21 @@ function get_type($item = null, bool $readable = false) : ?string
     return !empty($value)
         ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
         : null;
+}
+
+/**
+ * Check if the content has a body.
+ *
+ * @param Content $item The item to check body for.
+ *
+ * @return bool True if the content has a body. False otherwise.
+ */
+function has_body($item = null) : bool
+{
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_body($item))
+        && !getService('core.helper.subscription')->isHidden($token, 'body');
 }
 
 /**

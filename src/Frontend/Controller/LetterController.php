@@ -223,7 +223,7 @@ class LetterController extends Controller
         $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
         $items   = $request->request->get('items');
 
-        $moreData = _("Name") . " {$name} \n " . _("Email") . "{$email} \n ";
+        $moreData = _("Name") . ": {$name} \n " . _("Email") . ": {$email} \n ";
         if (!empty($items)) {
             foreach ($items as $key => $value) {
                 if (!empty($key) && !empty($value)) {
@@ -254,7 +254,7 @@ class LetterController extends Controller
         $letter = new \Letter();
 
         if ($letter->create($data)) {
-            $msg = "Su carta ha sido guardada y está pendiente de publicación.";
+            $msg = _("Your letter has been saved and is awaiting publication.");
 
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -267,7 +267,7 @@ class LetterController extends Controller
                 //  Build the message
                 $text = \Swift_Message::newInstance();
                 $text
-                    ->setSubject($subject)
+                    ->setSubject('[' . _('Letter to the editor') . '] ' . $subject)
                     ->setBody($data['body'], 'text/html')
                     ->setTo([ $recipient => $recipient ])
                     ->setFrom([ $mailSender => $settings['site_name'] ])
@@ -293,8 +293,7 @@ class LetterController extends Controller
                 }
             }
         } else {
-            $msg = "Su carta no ha sido guardada.\nAsegúrese de cumplimentar "
-                . "correctamente todos los campos.";
+            $msg = _("Your letter has not been saved, make sure you fill in all the fields correctly.");
         }
 
         return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');

@@ -1217,7 +1217,7 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         $status          = $this->getStatus();
-        $schedulingState = $this->getSchedulingState();
+        $schedulingState = getService('core.helper.content')->getSchedulingState($this);
 
         return [
             'title'           => $this->__get('title'),
@@ -1230,51 +1230,6 @@ class Content implements \JsonSerializable, CsvSerializable
             'views'           => getService('content_views_repository')
                 ->getViews($this->id),
         ];
-    }
-
-    /**
-     * Returns the scheduling state.
-     *
-     * @return string The scheduling state.
-     */
-    public function getSchedulingState()
-    {
-        if ($this->isScheduled()) {
-            if ($this->isInTime()) {
-                return self::IN_TIME;
-            } elseif ($this->isDued()) {
-                return self::DUED;
-            } elseif ($this->isPostponed()) {
-                return self::POSTPONED;
-            }
-        }
-
-        return self::NOT_SCHEDULED;
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @return boolean
-     */
-    public function isInTime()
-    {
-        $timezone  = getService('core.locale')->getTimeZone();
-        $now       = new \DateTime(null, $timezone);
-        $starttime = new \DateTime($this->starttime, $timezone);
-        $endtime   = new \DateTime($this->endtime, $timezone);
-
-        $dued = (
-            !empty($this->endtime)
-            && $now->getTimestamp() > $endtime->getTimestamp()
-        );
-
-        $postponed = (
-            !empty($this->starttime)
-            && $now->getTimestamp() < $starttime->getTimestamp()
-        );
-
-        return (!$dued && !$postponed);
     }
 
     /**
@@ -1292,16 +1247,6 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         return false;
-    }
-
-    /**
-     * Returns true if the content is suggested
-     *
-     * @return boolean true if the content is suggested
-     */
-    public function isSuggested()
-    {
-        return ($this->frontpage == 1);
     }
 
     /**
@@ -1362,41 +1307,6 @@ class Content implements \JsonSerializable, CsvSerializable
 
             return false;
         }
-    }
-
-    /**
-     * Returns true if a match time constraints, is available and is not in trash
-     *
-     * @return boolean true if is ready
-     */
-    public function isReadyForPublish()
-    {
-        return ($this->isInTime()
-            && $this->content_status == 1
-            && $this->in_litter == 0);
-    }
-
-    /**
-     * Loads the attached video's information for the content.
-     * If force param is true don't take care of attached images.
-     *
-     * @param boolean $force whether if force the property fetch
-     *
-     * @return Content the object with the video information loaded
-     */
-    public function loadAttachedVideo($force = false)
-    {
-        if (($force || empty($this->img1))
-            && !empty($this->fk_video)
-        ) {
-            $video = getService('entity_repository')
-                ->find('Video', $this->fk_video);
-
-            $this->video     = $video;
-            $this->obj_video = $video;
-        }
-
-        return $this;
     }
 
     /**
@@ -1771,71 +1681,6 @@ class Content implements \JsonSerializable, CsvSerializable
             'pk_fk_content' => $this->id,
             'views'         => 0,
         ]);
-    }
-
-    /**
-     * Check if this content is dued
-     *       End      Now
-     * -------]--------|-----------
-     *
-     * @return bool
-     */
-    protected function isDued()
-    {
-        if (empty($this->endtime)) {
-            return false;
-        }
-
-        $timezone = getService('core.locale')->getTimeZone();
-
-        $end = new \DateTime($this->endtime, $timezone);
-        $now = new \DateTime(null, $timezone);
-
-        return $now->getTimeStamp() > $end->getTimeStamp();
-    }
-
-    /**
-     * Check if this content is postponed
-     *
-     *       Now     Start
-     * -------|--------[-----------
-     *
-     * @return bool
-     */
-    protected function isPostponed()
-    {
-        if (empty($this->starttime)) {
-            return false;
-        }
-
-        $timezone = getService('core.locale')->getTimeZone();
-
-        $start = new \DateTime($this->starttime, $timezone);
-        $now   = new \DateTime(null, $timezone);
-
-        return $now->getTimeStamp() < $start->getTimeStamp();
-    }
-
-    /**
-     * Check if this content is scheduled or, in others words, if this
-     * content has a starttime and/or endtime defined.
-     *
-     * @return bool
-     */
-    protected function isScheduled()
-    {
-        if (empty($this->starttime)) {
-            return false;
-        }
-
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
-
-        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

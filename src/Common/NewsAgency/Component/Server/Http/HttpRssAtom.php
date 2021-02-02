@@ -75,6 +75,7 @@ class HttpRssAtom extends HttpRss
         $article->updated_datetime = new \DateTime($content->updated);
         $article->summary          = (string) $content->summary;
         $article->tags             = [];
+        $article->externalUri      = (string) $content->link['href'];
 
         return $article;
     }

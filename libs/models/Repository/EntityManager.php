@@ -28,7 +28,7 @@ use Onm\Cache\CacheInterface;
 class EntityManager extends BaseManager
 {
     const ORM_CONTENT_TYPES = [
-        'kiosko', 'photo'
+        'album', 'kiosko', 'photo', 'video', 'event'
     ];
 
     /**

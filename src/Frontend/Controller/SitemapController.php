@@ -103,15 +103,8 @@ class SitemapController extends Controller
     {
         $tags     = [];
         $contents = $this->getContents();
-        $em       = $this->get('entity_repository');
 
         foreach ($contents as &$content) {
-            if (!empty($content->fk_video)) {
-                $content->video = $em->find('Video', $content->fk_video);
-            } elseif (!empty($content->fk_video2)) {
-                $content->video = $em->find('Video', $content->fk_video2);
-            }
-
             $tags = array_merge($content->tags, $tags);
         }
 

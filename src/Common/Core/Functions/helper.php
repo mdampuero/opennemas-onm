@@ -36,7 +36,7 @@ function get_url($item = null, array $params = []) : ?string
                     : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
             ) : getService('core.helper.url_generator')->generate($item, [
                 'absolute' => $absolute,
-                '_format'  => $isAmp ? 'amp' : null
+                '_format'  => $isAmp ? 'amp' : null,
             ]);
 
         $url = getService('core.helper.l10n_route')->localizeUrl($url);

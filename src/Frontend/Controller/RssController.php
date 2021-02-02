@@ -533,16 +533,7 @@ class RssController extends FrontendController
      */
     protected function getRelatedContents(&$contents, $limit = null)
     {
-        // Fetch extras for each article
-        $er = $this->get('entity_repository');
-
         foreach ($contents as $key => $content) {
-            if (isset($content->fk_video) && !empty($content->fk_video)) {
-                $contents[$key]->video = $er->find('Video', $content->fk_video);
-            } elseif (isset($content->fk_video2) && !empty($content->fk_video2)) {
-                $contents[$key]->video = $er->find('Video', $content->fk_video2);
-            }
-
             // Exclude articles with external link from RSS
             if (isset($content->params['bodyLink'])
                && !empty($content->params['bodyLink'])) {

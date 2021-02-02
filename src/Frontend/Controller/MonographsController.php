@@ -171,24 +171,15 @@ class MonographsController extends Controller
             $contents = $special->getContents($special->id);
             $columns  = [];
 
-            $er = $this->get('entity_repository');
             if (!empty($contents)) {
                 foreach ($contents as $item) {
                     $content = \Content::get($item['fk_content']);
-
-                    if (!empty($content->fk_video)) {
-                        $video              = $er->find('Video', $content->fk_video);
-                        $content->obj_video = $video;
-                    }
 
                     if (($item['position'] % 2) == 0) {
                         $content->placeholder = 'placeholder_0_1';
                     } else {
                         $content->placeholder = 'placeholder_1_1';
                     }
-
-                    // Load attached and related contents from array
-                    $content->loadAttachedVideo();
 
                     $columns[] = $content;
                 }

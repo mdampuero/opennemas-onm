@@ -71,16 +71,6 @@ class AuthorController extends Controller
             $contentsCount = $er->countBy($criteria);
             $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
-            foreach ($contents as &$item) {
-                if ($item->fk_content_type == 9) {
-                    $item->obj_video = $item;
-                    $item->summary   = $item->description;
-                }
-
-                if (isset($item->fk_video) && !empty($item->fk_video)) {
-                    $item->video = $er->find('Video', $item->fk_video2);
-                }
-            }
             // Build the pagination
             $pagination = $this->get('paginator')->get([
                 'directional' => true,

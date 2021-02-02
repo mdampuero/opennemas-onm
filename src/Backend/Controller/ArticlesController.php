@@ -279,12 +279,6 @@ class ArticlesController extends Controller
         $params['ads_positions']  = $positions;
         $params['advertisements'] = $advertisements;
 
-        $er = $this->get('entity_repository');
-
-        if (isset($article->fk_video2) && ($article->fk_video2 != 0)) {
-            $params['videoInt'] = $er->find('Video', $article->fk_video2);
-        }
-
         if (!empty($article->relatedInner)) {
             $ids = array_map(function ($a) {
                 return [ $a['type'],  $a['id'] ];

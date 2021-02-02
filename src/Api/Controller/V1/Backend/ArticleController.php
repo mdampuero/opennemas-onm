@@ -12,6 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -146,7 +147,7 @@ class ArticleController extends Controller
         if (empty($article)) {
             return [];
         }
-        
+
         $service = $this->get('api.service.photo');
         $extra   = [];
         $keys    = [ 'img1', 'img2' ];
@@ -193,7 +194,10 @@ class ArticleController extends Controller
 
         $repository = $this->get('entity_repository');
         $contents   = array_filter(array_map(function ($a) use ($repository) {
-            return $repository->find($a['content_type_name'], $a['target_id']);
+            $item = $repository->find($a['content_type_name'], $a['target_id']);
+            return $item instanceof Content ?
+                $this->get('api.service.content')->responsify($item) :
+                $item;
         }, $article->related_contents));
 
         $contents = $this->get('data.manager.filter')->set($contents)
@@ -216,15 +220,16 @@ class ArticleController extends Controller
             return [];
         }
 
-        $em    = $this->get('entity_repository');
-        $extra = [];
-        $keys  = [ 'fk_video', 'fk_video2' ];
+        $service = $this->get('api.service.content');
+        $extra   = [];
+        $keys    = [ 'fk_video', 'fk_video2' ];
 
         foreach ($keys as $key) {
             if (!empty($article->{$key})) {
-                $extra[$key] = \Onm\StringUtils::convertToUtf8(
-                    $em->find('Video', $article->{$key})
-                );
+                try {
+                    $extra[$key] = $service->responsify($service->getItem($article->{$key}));
+                } catch (GetItemException $e) {
+                }
             }
         }
 

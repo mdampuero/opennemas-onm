@@ -233,18 +233,6 @@ class TagController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        // TODO: review this piece of CRAP
-        foreach ($contents as &$item) {
-            if ($item->fk_content_type == 9) {
-                $item->obj_video = $item;
-                $item->summary   = $item->description;
-            }
-
-            if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                $item->video = $em->find('Video', $item->fk_video2);
-            }
-        }
-
         $params = array_merge($params, [
             'contents'   => $contents,
             'tag'        => $params['item'],

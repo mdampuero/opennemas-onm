@@ -35,10 +35,12 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $isSafeFrame = $smarty->getContainer()
         ->get('core.helper.advertisement')->isSafeFrameEnabled();
 
-    $adsPositions = $smarty->getValue('ads_positions') ?? [];
+    $adsPositions  = $smarty->getValue('ads_positions') ?? [];
+    $contentHelper = $smarty->getContainer()->get('core.helper.content');
+
     if (!$isSafeFrame) {
-        $ads = array_filter($ads, function ($a) {
-            return $a->isInTime();
+        $ads = array_filter($ads, function ($a) use ($contentHelper) {
+            return $contentHelper->isInTime($a);
         });
 
         $params = [

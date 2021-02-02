@@ -16,13 +16,12 @@ function smarty_function_get_url($params, &$smarty)
     $isAmp     = array_key_exists('amp', $params) && $params['amp'];
     $container = $smarty->getContainer();
 
-    $routeParams = [
-        'absolute' => $absolute,
-        '_format'  => $isAmp ? 'amp' : null
-    ];
-
     $url = $container->get('core.helper.url_generator')
-        ->generate($params['item'], $routeParams);
+        ->generate($params['item'], [
+            'absolute' => $absolute,
+            '_format'  => $isAmp ? 'amp' : null,
+        ]);
+
     $url = $container->get('core.helper.l10n_route')
         ->localizeUrl($url, '');
 

@@ -101,7 +101,7 @@ class Articles
         $ids = array_merge($ids, array_map(function ($a) {
             return $a['target_id'];
         }, array_filter($article->related_contents, function ($a) {
-            return $a['type'] === 'related_inner';
+            return preg_match('/.*_inner/', $a['type']);
         })));
 
         if (empty($ids)) {

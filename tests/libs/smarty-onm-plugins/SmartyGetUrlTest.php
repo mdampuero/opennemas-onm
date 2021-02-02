@@ -120,7 +120,7 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true, '_format' => 'amp', ])
+            ->with($item, [ 'absolute' => true, '_format' => 'amp' ])
             ->willReturn('http://grault.com/glorp.amp.html');
 
         $this->helper->expects($this->once())->method('localizeUrl')

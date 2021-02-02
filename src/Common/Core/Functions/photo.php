@@ -109,3 +109,15 @@ function get_photo_mime_type($item = null) : ?string
 
     return !empty($value) ? $value : null;
 }
+
+/**
+ * Returns if the provided photo has size or not.
+ *
+ * @param mixed $item The photo to get size from.
+ *
+ * @return boolean True if the photo has size. False otherwise.
+ */
+function has_photo_size($item = null)
+{
+    return !empty(get_photo_size($item));
+}
