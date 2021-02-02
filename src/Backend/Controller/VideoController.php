@@ -59,8 +59,6 @@ class VideoController extends BackendController
         $oql          = 'content_type_name = "video" and in_litter = 0';
 
         try {
-            $total = $this->get('api.service.content')->getList($oql)['total'];
-
             if (!empty($categoryId)) {
                 $oql .= ' and category_id = ' . $categoryId;
             }
@@ -74,7 +72,9 @@ class VideoController extends BackendController
             $context = $this->get('core.locale')->getContext();
             $this->get('core.locale')->setContext('frontend');
 
-            $videos = $this->get('api.service.content')->getList($oql)['items'];
+            $response = $this->get('api.service.content')->getList($oql);
+            $videos   = $response['items'];
+            $total    = $response['total'];
 
             $this->get('core.locale')->setContext($context);
 
