@@ -138,7 +138,6 @@ CREATE TABLE `instance_meta` (
 
 LOCK TABLES `instance_meta` WRITE;
 /*!40000 ALTER TABLE `instance_meta` DISABLE KEYS */;
-INSERT INTO `instance_meta` VALUES (1,'purchased','a:1:{i:0;s:23:\"es.openhost.theme.basic\";}');
 /*!40000 ALTER TABLE `instance_meta` ENABLE KEYS */;
 UNLOCK TABLES;
 
