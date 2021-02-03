@@ -1,6 +1,22 @@
 <?php
 
 use Api\Exception\GetItemException;
+use Repository\EntityManager;
+
+/**
+ * Returns the body for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content body.
+ */
+function get_body($item = null) : ?string
+{
+    $value = get_type($item) === 'video' ? get_property($item, 'description') :
+        get_property($item, 'body');
+
+    return !empty($value) ? $value : null;
+}
 
 /**
  * Returns the content of specified type for the provided item.
@@ -31,7 +47,21 @@ function get_content($item = null, $type = null)
         return null;
     }
 
-    return $item->isReadyForPublish() ? $item : null;
+    return getService('core.helper.content')->isReadyForPublish($item) ? $item : null;
+}
+
+/**
+ * Returns the creation date for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content creation date.
+ */
+function get_creation_date($item = null) : ?\Datetime
+{
+    $value = get_property($item, 'created');
+
+    return is_object($value) ? $value : new \Datetime($value);
 }
 
 /**
@@ -77,8 +107,8 @@ function get_featured_media($item, $type, $deep = true)
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
         ], 'video' => [
-            'frontpage' => [ 'thumbnail' ],
-            'inner'     => [ 'embedUrl' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'book' => [
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
@@ -95,39 +125,29 @@ function get_featured_media($item, $type, $deep = true)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content
-        && get_type($item) === 'event'
-    ) {
+    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
+        if (get_type($item) === 'video') {
+            return $type === 'inner' ? $item : get_video_thumbnail($item);
+        }
+
         $media = get_related($item, $map[get_type($item)][$type][0]);
 
         return array_shift($media);
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
-        if ((get_type($item) !== 'video'
-                && empty($item->{$key}))
-            || (!empty($item->information)
-                && !array_key_exists($key, $item->information))
-        ) {
+        if (empty($item->{$key})) {
             continue;
-        }
-
-        $id = get_type($item) === 'video'
-            ? $item->information[$key]
-            : $item->{$key};
-
-        if (!is_numeric($id)) {
-            return $id;
         }
 
         $featured = null;
 
         if ($item->external) {
             $related  = getService('core.template.frontend')->getValue('related', []);
-            $featured = array_key_exists($id, $related) ? $related[$id] : null;
+            $featured = array_key_exists($item->{$key}, $related) ? $related[$item->{$key}] : null;
         } else {
             $featured = get_content(
-                $id,
+                $item->{$key},
                 preg_match('/img|cover|thumbnail/', $key) ? 'Photo' : 'Video'
             );
         }
@@ -169,6 +189,8 @@ function get_featured_media_caption($item, $type)
         ], 'event' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
+        ], 'video' => [
+            'frontpage' => [ 'featured_frontpage' ]
         ]
     ];
 
@@ -179,10 +201,8 @@ function get_featured_media_caption($item, $type)
         return null;
     }
 
-    if ($item instanceof \Common\Model\Entity\Content
-        && get_type($item) === 'event'
-    ) {
-        $key = array_shift($map['event'][$type]);
+    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
+        $key = array_shift($map[get_type($item)][$type]);
 
         $related = array_filter($item->related_contents, function ($a) use ($key) {
             return $a['type'] === $key;
@@ -233,6 +253,20 @@ function get_property($item, string $name)
     }
 
     return !empty($item->{$name}) ? $item->{$name} : null;
+}
+
+/**
+ * Returns the publication date for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content publication date.
+ */
+function get_publication_date($item = null) : ?\Datetime
+{
+    $value = get_property($item, 'starttime') ?? get_property($item, 'created');
+
+    return is_object($value) ? $value : new \Datetime($value);
 }
 
 /**
@@ -292,12 +326,6 @@ function get_related($item, string $type) : array
 
     return array_filter(array_map(function ($a) {
         $content = get_content($a['target_id'], $a['content_type_name']);
-
-        //TODO: Remove this on ticket ONM-6166
-        if ($content instanceof \Content) {
-            $content = $content->loadAttachedVideo();
-        }
-
         return !empty($content) ? $content : null;
     }, $items));
 }
@@ -316,6 +344,28 @@ function get_related_contents($item, string $type) : array
 }
 
 /**
+ * Returns the list of tags for the provided item.
+ *
+ * @param Content $item The item to get tags from.
+ *
+ * @return array The list of tags.
+ */
+function get_tags($item = null) : array
+{
+    $value = get_property($item, 'tags');
+
+    if (empty($value)) {
+        return [];
+    }
+
+    try {
+        return getService('api.service.tag')->getListByIds($value)['items'];
+    } catch (\Exception $e) {
+        return [];
+    }
+}
+
+/**
  * Returns the internal type or human-readable type for the provided item.
  *
  * @param Content $item     The item to get content type for.
@@ -331,6 +381,21 @@ function get_type($item = null, bool $readable = false) : ?string
     return !empty($value)
         ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
         : null;
+}
+
+/**
+ * Check if the content has a body.
+ *
+ * @param Content $item The item to check body for.
+ *
+ * @return bool True if the content has a body. False otherwise.
+ */
+function has_body($item = null) : bool
+{
+    $token = getService('core.template.frontend')->getValue('o_token');
+
+    return !empty(get_body($item))
+        && !getService('core.helper.subscription')->isHidden($token, 'body');
 }
 
 /**
@@ -422,6 +487,18 @@ function has_summary($item) : bool
 
     return !empty(get_summary($item))
         && !getService('core.helper.subscription')->isHidden($token, 'summary');
+}
+
+/**
+ * Checks if the content has tags.
+ *
+ * @param Content $item The item to check tags for.
+ *
+ * @return bool True if the content has tags. False otherwise.
+ */
+function has_tags($item = null) : bool
+{
+    return !empty(get_tags($item));
 }
 
 /**

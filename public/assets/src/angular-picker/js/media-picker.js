@@ -76,8 +76,12 @@
                           '</div>' +
                         '</div>' +
                         '<div class="media-item"[selection] ng-repeat="content in contents track by $index" style="width: 120px;">' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" instance="' + $window.instanceMedia + '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
-                          '<dynamic-image only-image="true" class="img-thumbnail" instance="" ng-if="content.content_type_name == \'video\'" path="[% content.thumb %]"></dynamic-image>' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
+                            $window.instanceMedia +
+                             '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
+                          '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\'" instance="' +
+                          $window.instanceMedia +
+                          '" ng-model="content.pk_content" transform="zoomcrop,120,120"></dynamic-image>' +
                         '</div>' +
                       '</div>' +
                       '<div class="text-center m-b-30 p-t-15 p-b-30 pointer" ng-click="scroll()" ng-if="!searchLoading && total != contents.length">' +
@@ -94,7 +98,7 @@
                   '</div>' +
                   '<div class="picker-panel-sidebar">' +
                     '<div class="picker-panel-sidebar-header">' +
-                      '<h4>[% picker.params.explore.thumbnailDetails %]</h4>' +
+                      '<h4>[% picker.params.explore.pk_contentDetails %]</h4>' +
                     '</div>' +
                     '<div class="picker-panel-sidebar-body" ng-if="selected.lastSelected">' +
                       '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'photo\' && !isFlash(selected.lastSelected)">' +
@@ -104,10 +108,9 @@
                         '</dynamic-image>' +
                       '</div>' +
                       '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'video\'">' +
-                        '<dynamic-image autoscale="true" instance="" ng-model="selected.lastSelected.thumb"></dynamic-image>' +
-                      '</div>' +
-                      '<div class="media-thumbnail-wrapper" ng-if="isFlash(selected.lastSelected)">' +
-                        '<dynamic-image autoscale="true" instance="' + $window.instanceMedia + '" ng-model="selected.lastSelected">' +
+                        '<dynamic-image autoscale="true" instance="' +
+                          $window.instanceMedia +
+                          '" ng-model="selected.lastSelected.pk_content" transform="thumbnail,220,220">' +
                         '</dynamic-image>' +
                       '</div>' +
                       '<ul class="media-information">' +
@@ -458,7 +461,7 @@
                 }
 
                 for (var i = 0; i < target.length; i++) {
-                  $scope.selected.ids.push(target[i].id);
+                  $scope.selected.ids.push(target[i].pk_content);
                 }
 
                 $scope.selected.items = target;
@@ -758,37 +761,13 @@
             $scope.searchLoading = true;
           }
 
-          var data = {
-            content_type_name: $scope.picker.types.enabled,
-            epp: $scope.epp,
-            page: $scope.page,
-            sort_by: 'created',
-            sort_order: 'desc'
-          };
+          $scope.criteria.epp               = $scope.epp;
+          $scope.criteria.page              = $scope.page;
+          $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
           if ($scope.category) {
-            data.category = $scope.category;
+            $scope.criteria.category_id = $scope.category;
           }
-
-          if ($scope.criteria.title) {
-            data.title = $scope.criteria.title;
-          }
-
-          if ($scope.date) {
-            data.date = $scope.date;
-          }
-
-          if ($scope.from) {
-            data.from = $scope.from;
-          }
-
-          if ($scope.to) {
-            data.to = $scope.to;
-          }
-
-          $scope.criteria.epp = $scope.epp;
-          $scope.criteria.page = $scope.page;
-          $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
           oqlEncoder.configure({
             placeholder: {
@@ -797,21 +776,20 @@
             }
           });
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
+          var oql = oqlEncoder.getOql($scope.criteria);
 
           var routes = {
             photo: {
               name: 'api_v1_backend_content_get_list',
               params:  { oql: oql }
+            },
+            video: {
+              name: 'api_v1_backend_video_get_list',
+              params: { oql: oql }
             }
           };
 
-          var oldRoute = {
-            name: 'backend_ws_picker_list',
-            params: data
-          };
-
-          var route = routes[data.content_type_name] ? routes[data.content_type_name] : oldRoute;
+          var route = routes[$scope.criteria.content_type_name];
 
           http.get(route)
             .then(function(response) {
@@ -1027,7 +1005,7 @@
             }
 
             if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
-              $scope.selected.ids.push($scope.contents[i].id);
+              $scope.selected.ids.push($scope.contents[i].pk_content);
               $scope.selected.items.push($scope.contents[i]);
               itemsToInsert--;
             }
@@ -1153,7 +1131,7 @@
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[category, criteria.created, criteria.title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, criteria.created, criteria.title, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }

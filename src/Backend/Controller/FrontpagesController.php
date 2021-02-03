@@ -349,7 +349,6 @@ class FrontpagesController extends Controller
             \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
         foreach ($contentsInHomepage as &$content) {
-            $content->loadAttachedVideo();
             $content->starttime = null;
             $content->endtime   = null;
         }

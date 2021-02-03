@@ -10,8 +10,8 @@
 namespace Tests\Common\Core\Component\Routing;
 
 use Common\Core\Component\Routing\Redirector;
-use Common\Model\Entity\Category;
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Category;
 use Common\Model\Entity\Tag;
 use Common\Model\Entity\Url;
 use Common\Model\Entity\User;
@@ -53,6 +53,11 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'getParameter' ])
+            ->getMock();
+
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isReadyForPublish' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')->getMock();
@@ -142,6 +147,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.url_generator':
                 return $this->ugh;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
 
             case 'core.instance':
                 return $this->instance;
@@ -644,13 +652,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetForwardResponseWhenValidContentTarget()
     {
-        $content = $this->getMockBuilder('Content')
-            ->setMethods([ 'isReadyForPublish' ])
-            ->getMock();
+        $content = new \Content([ 'content_type_name' => 'article' ]);
 
-        $content->content_type_name = 'article';
-
-        $content->expects($this->once())->method('isReadyForPublish')
+        $this->contentHelper->expects($this->once())->method('isReadyForPublish')
             ->willReturn(true);
 
         $url = new Url([
@@ -696,17 +700,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetForwardResponseWhenValidMediaTarget()
     {
-        $content = $this->getMockBuilder('Content')
-            ->setMethods([ 'isReadyForPublish' ])
-            ->getMock();
+        $content = new \Content([ 'content_type_name' => 'attachment' ]);
 
-        $content->content_type_name = 'attachment';
-
-        $content->expects($this->once())->method('isReadyForPublish')
+        $this->contentHelper->expects($this->once())->method('isReadyForPublish')
             ->willReturn(true);
 
         $url = new Url([
-            'content_type' => 'article',
+            'content_type' => 'attachment',
             'enabled'      => true,
             'redirection'  => false,
             'source'       => 4796,
@@ -716,10 +716,16 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
-            ->setMethods([ 'getTarget', 'getMediaFileResponse' ])
+            ->setMethods([ 'getTarget', 'getMediaFileResponse', 'isMediaFile' ])
             ->getMock();
 
         $redirector->expects($this->once())->method('getTarget')
+            ->willReturn($content);
+
+        $redirector->expects($this->once())->method('isMediaFile')
+            ->willReturn(true);
+
+        $redirector->expects($this->once())->method('getMediaFileResponse')
             ->willReturn($content);
 
         $method = new \ReflectionMethod($redirector, 'getForwardResponse');
@@ -884,13 +890,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRedirectResponseWhenValidContentTarget()
     {
-        $content = $this->getMockBuilder('Content')
-            ->setMethods([ 'isReadyForPublish' ])
-            ->getMock();
+        $content = new \Content([ 'content_type_name' => 'article' ]);
 
-        $content->content_type_name = 'article';
-
-        $content->expects($this->once())->method('isReadyForPublish')
+        $this->contentHelper->expects($this->once())->method('isReadyForPublish')
             ->willReturn(true);
 
         $url = new Url([
@@ -1275,15 +1277,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsTargetValid()
     {
-        $content = $this->getMockBuilder('Content')
-            ->setMethods([ 'isReadyForPublish' ])
-            ->getMock();
+        $content = new \Content([ 'content_type_name' => 'photo' ]);
 
-        $content->content_type_name = 'photo';
-
-        $content->expects($this->at(0))->method('isReadyForPublish')
+        $this->contentHelper->expects($this->at(0))->method('isReadyForPublish')
+            ->with($content)
             ->willReturn(true);
-        $content->expects($this->at(1))->method('isReadyForPublish')
+        $this->contentHelper->expects($this->at(1))->method('isReadyForPublish')
+            ->with($content)
             ->willReturn(false);
 
         $method = new \ReflectionMethod($this->redirector, 'isTargetValid');

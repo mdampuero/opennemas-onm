@@ -32,7 +32,8 @@
             "src/Common/Core/Functions/content.php",
             "src/Common/Core/Functions/helper.php",
             "src/Common/Core/Functions/author.php",
-            "src/Common/Core/Functions/photo.php"
+            "src/Common/Core/Functions/photo.php",
+            "src/Common/Core/Functions/video.php"
         ]
     },
     "autoload-dev": {
@@ -76,7 +77,7 @@
         "drexarj/disqus-php": "dev-master",
         "opennemas/cache": "1.0.*",
         "opennemas/data": "1.0.*",
-        "opennemas/orm": "1.2.0",
+        "opennemas/orm": "1.2.1",
         "opennemas/task": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
         "frandieguez/panorama-php": "dev-master",

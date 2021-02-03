@@ -10,6 +10,7 @@
 namespace BackendWebService\Controller;
 
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -121,7 +122,9 @@ class PickerController extends Controller
             'keys'      => ['title', 'name', 'description'],
             'locale'    => $languageData['default']
         ])->get();
-        $results      = \Onm\StringUtils::convertToUtf8($results);
+
+        $results = $this->responsify($results);
+        $results = \Onm\StringUtils::convertToUtf8($results);
 
         $contentMap = $em->dbConn->executeQuery("SELECT count(1) as resultNumber " . $query)->fetchAll();
         $total      = 0;
@@ -278,16 +281,19 @@ class PickerController extends Controller
      */
     private function listFrontpageContents()
     {
+        $contentHelper = $this->container->get('core.helper.content');
+
         // Get contents for this home
         list($frontpageVersion, $contentPositions, $results) = $this
             ->get('api.service.frontpage_version')
             ->getContentsInCurrentVersionforCategory(0);
 
-        $results = array_filter($results, function ($value) {
+        $results = array_filter($results, function ($value) use ($contentHelper) {
             return $value->content_type_name != 'widget'
-                && $value->isReadyForPublish();
+                && $contentHelper->isReadyForPublish($value);
         });
 
+        $results = $this->responsify($results);
         $results = \Onm\StringUtils::convertToUtf8($results);
 
         $this->get('core.locale')->setContext('frontend');
@@ -317,5 +323,23 @@ class PickerController extends Controller
             'menuItem'    => _('Upload'),
             'upload'      => _('to upload')
         ];
+    }
+
+    /**
+     * Returns the array with the objects on the new ORM responsified.
+     *
+     * @param array The array of items.
+     *
+     * @return array The array with the items responsified.
+     */
+    private function responsify(Array $items)
+    {
+        return array_map(function ($a) {
+            if ($a instanceof Content) {
+                return $this->get('api.service.content')->responsify($a);
+            }
+
+            return $a;
+        }, $items);
     }
 }

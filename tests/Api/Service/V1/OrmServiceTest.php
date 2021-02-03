@@ -10,6 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\OrmService;
+use Common\Model\Entity\Content;
 use Opennemas\Orm\Core\Entity;
 
 /**
@@ -53,7 +54,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy' ])
+            ->setMethods([ 'countBy', 'find', 'findBy', 'findBySql' ])
             ->getMock();
 
         $this->validator = $this->getMockBuilder('Validator' . uniqid())
@@ -474,6 +475,37 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new \Exception()));
 
         $this->service->getList('order by title asc');
+    }
+
+    /**
+     * Tests getListBySql when no error.
+     */
+    public function testGetListBySql()
+    {
+        $sql    = 'select count(*) from glorp';
+        $items  = [ new Content()  ];
+        $result = [ 'items' => $items, 'total' => count($items) ];
+
+        $this->repository->expects($this->once())->method('findBySql')
+            ->with($sql)
+            ->willReturn($items);
+
+        $this->assertEquals($result, $this->service->getListBySql($sql));
+    }
+
+    /**
+     * Tests getListBySql when error.
+     *
+     * @expectedException \Api\Exception\GetListException
+     */
+    public function testGetListWhenException()
+    {
+        $sql = 'select count(*) from glorp';
+
+        $this->repository->expects($this->once())->method('findBySql')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->getListBySql($sql);
     }
 
     /**

@@ -46,7 +46,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       related_contents: [],
       tags: [],
       external_link: '',
-      video_url: '',
+      path: '',
       information: {}
     };
 
@@ -82,7 +82,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      switch ($scope.data.item.author_name) {
+      switch ($scope.data.item.type) {
         case 'script':
           $scope.setType('script');
           break;
@@ -92,11 +92,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
           var info = $scope.data.item.information.source;
 
-          $scope.data.item.type = info.flv ? 'flv' : 'html5';
+          $scope.html = info.flv ? 'flv' : 'html5';
           break;
 
         default:
-          if ($scope.data.item.video_url) {
+          if ($scope.data.item.path) {
             $scope.setType('web-source');
           }
           break;
@@ -109,10 +109,9 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
-      // Assign the cover image
-      var cover = $scope.data.extra.related_contents.filter(function(e) {
-        return e && e.pk_content === parseInt($scope.item.information.thumbnail);
-      }).shift();
+      if ($scope.item.related_contents.length > 0) {
+        var cover = $scope.data.extra.related_contents[$scope.item.related_contents[0].target_id];
+      }
 
       if (cover) {
         $scope.cover = cover;
@@ -132,7 +131,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
 
       if (type === 'external' || type === 'script') {
-        $scope.item.author_name = type;
+        $scope.item.type = type;
       }
 
       if (!$scope.item.type) {
@@ -153,7 +152,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.getVideoData = function() {
       var route = {
         name:   'api_v1_backend_video_get_info',
-        params: { url: $scope.item.video_url }
+        params: { url: $scope.item.path }
       };
 
       $scope.flags.http.fetch_video_info = true;
@@ -161,7 +160,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       http.get(route).then(
         function(response) {
           $scope.item.information     = response.data;
-          $scope.item.informationJson = JSON.stringify($scope.information);
 
           if ($scope.item.information.title && !$scope.item.title) {
             $scope.item.title = $scope.item.information.title;
@@ -169,7 +167,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
           $scope.flags.http.fetch_video_info = false;
 
-          $scope.item.author_name = $scope.item.information.service;
+          $scope.item.type = $scope.item.information.service;
 
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
@@ -209,17 +207,21 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       );
     };
 
-    // Update thumbnail information when cover object changes
+    // Update thumbnail when is updated
     $scope.$watch('cover', function(nv) {
-      if (!angular.isObject($scope.item.information)) {
-        $scope.item.information = {};
+      $scope.item.related_contents = [];
+
+      if (!nv) {
+        return;
       }
 
-      if (angular.isObject(nv)) {
-        $scope.item.information.thumbnail = nv.pk_content;
-      } else {
-        $scope.item.information.thumbnail = {};
-      }
+      $scope.item.related_contents.push({
+        target_id: nv.pk_content,
+        type: 'featured_frontpage',
+        content_type_name: 'photo',
+        caption: null,
+        position: 0
+      });
     }, true);
 
     // Mark preview URLs as trusted on change

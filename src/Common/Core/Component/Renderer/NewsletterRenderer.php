@@ -200,10 +200,6 @@ class NewsletterRenderer
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
 
-        foreach ($contents as &$content) {
-            $content = $this->hydrateContent($content);
-        }
-
         return $contents;
     }
 
@@ -246,49 +242,10 @@ class NewsletterRenderer
                     continue;
                 }
 
-                $item = $this->hydrateContent($content);
+                $item = $content;
             }
         }
 
         return $containers;
-    }
-
-    /**
-     * Completes the content information from an object from repository
-     *
-     * @param Content $item    The item to complete
-     * @param Content $content The content from the repository
-     *
-     * @return Content The complete item
-     */
-    protected function hydrateContent($content)
-    {
-        $content->name  = (isset($content->name)) ? $content->name : '';
-        $content->image = (isset($content->cover)) ? $content->cover : '';
-        $content->date  = date(
-            'Y-m-d',
-            strtotime(str_replace('/', '-', substr($content->created, 6)))
-        );
-
-        // Fetch images of articles if exists
-        if (!empty($content->fk_video)) {
-            $content->video = $this->er->find('Video', $content->fk_video);
-        }
-
-        if (!isset($content->summary)) {
-            $content->summary = substr(strip_tags($content->body), 0, 250) . '...';
-        }
-
-        // Fetch opinion author photos
-        if ($content->content_type == '4') {
-            $content->author = $this->er->find('User', $content->fk_author);
-        }
-
-        // Fetch video thumbnails
-        if ($content->content_type == '9') {
-            $content->thumb = $content->getThumb();
-        }
-
-        return $content;
     }
 }

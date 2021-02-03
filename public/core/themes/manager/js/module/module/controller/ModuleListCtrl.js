@@ -1,4 +1,4 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('ManagerApp.controllers')
@@ -38,8 +38,8 @@
          */
         $scope.columns = {
           collapsed: 1,
-          selected: [ 'enabled', 'created', 'image', 'l10n', 'name', 'updated',
-            'uuid'
+          selected: [
+            'enabled', 'created', 'image', 'l10n', 'name', 'updated', 'uuid'
           ]
         };
 
@@ -170,13 +170,31 @@
         };
 
         /**
+         * @function getThumbnail
+         * @memberOf ModuleListCtrl
+         *
+         * @description
+         *   Returns the module image as an object ready to use with
+         *   dynamic-image directive.
+         *
+         * @param {Object} item The item to get thumbnail from.
+         *
+         * @return {Object} The object to use with dynamic-image directive.
+         */
+        $scope.getThumbnail = function(item) {
+          return item.images && item.images.length > 0 ?
+            { path: item.images[0] } :
+            { path: null };
+        };
+
+        /**
          * @function list
          * @memberOf ModuleListCtrl
          *
          * @description
          *   Reloads the list.
          */
-        $scope.list = function () {
+        $scope.list = function() {
           $scope.loading = 1;
 
           oqlEncoder.configure({
@@ -258,12 +276,14 @@
         $scope.patchSelected = function(property, value) {
           for (var i = 0; i < $scope.items.length; i++) {
             var id = $scope.items[i].id;
+
             if ($scope.selected.items.indexOf(id) !== -1) {
               $scope.items[i][property + 'Loading'] = 1;
             }
           }
 
           var data = { ids: $scope.selected.items };
+
           data[property] = value;
 
           http.patch('manager_ws_modules_patch', data).then(function(response) {

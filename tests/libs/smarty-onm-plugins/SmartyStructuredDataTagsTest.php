@@ -10,6 +10,7 @@
 namespace Tests\Libs\Smarty;
 
 use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
 
 /**
  * Defines test cases for SmartyStructuredDataTagsTest class.
@@ -134,23 +135,26 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test smarty_function_structured_data_tags when the category assigned to
-     * the content can not be found.
+     * Test smarty_function_structured_data_tags when content
+     * Uses generateJsonLDCode
      */
-    public function testStructuredDataWhenContentNoCategory()
+    public function testStructuredDataWhenException()
     {
-        $content = new \Content();
+        $content = new Content([
+            'categories'        => [ 197 ],
+            'content_type_name' => 'video'
+        ]);
 
-        $this->smarty->expects($this->any())->method('hasValue')
+        $this->smarty->expects($this->at(0))->method('hasValue')
             ->willReturn(true);
-        $this->smarty->expects($this->any())->method('getValue')
+        $this->smarty->expects($this->at(1))->method('getValue')
             ->willReturn($content);
 
         $this->cs->expects($this->once())->method('getItem')
-            ->will($this->throwException(new \Exception()));
+            ->with(197)->will($this->throwException(new \Exception()));
 
         $this->assertEquals(
-            '',
+            'Structured-Data',
             smarty_function_structured_data_tags(null, $this->smarty)
         );
     }

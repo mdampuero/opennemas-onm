@@ -354,7 +354,11 @@ jQuery(function($) {
     var title = element.data('title');
 
     if (title.length > 0) {
-      title = jQuery.parseJSON(title);
+      try {
+        title = JSON.parse(title);
+      } catch (exception) {
+        title = [];
+      }
     }
 
     var modal = $('#modal-element-customize-content');

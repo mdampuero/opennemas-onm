@@ -97,6 +97,13 @@ class ExternalResource
     public $summary = '';
 
     /**
+     * The resource external href.
+     *
+     * @var string
+     */
+    public $href = '';
+
+    /**
      * The resource tags.
      *
      * @var string

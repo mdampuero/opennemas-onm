@@ -330,7 +330,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForContentWhenCreatedAsObject()
     {
-        $content = new \Video();
+        $content = new \Content();
         $date    = new \DateTime();
 
         $content->id                = 252;
@@ -604,7 +604,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForVideo()
     {
-        $content = new \Video();
+        $content = new \Content();
 
         $content->id                = 252;
         $content->category_slug     = 'actualidad';

@@ -41,14 +41,14 @@ class ContentRenderer extends Renderer
      */
     protected function getTemplate(&$params)
     {
-        $class   = strtolower(get_class($params['item']));
-        $default = 'frontpage/contents/_' . $class . '.tpl';
+        $contentType   = $params['item']->content_type_name;
+        $default = 'frontpage/contents/_' . $contentType . '.tpl';
 
-        if ($class == 'article' && !empty($params['tpl'])) {
+        if ($contentType == 'article' && !empty($params['tpl'])) {
             return $params['tpl'];
         }
 
-        if ($class == 'opinion') {
+        if ($contentType == 'opinion') {
             try {
                 $author = $this->container->get('api.service.author')->getItem($params['item']->fk_author);
 
@@ -59,7 +59,7 @@ class ContentRenderer extends Renderer
             }
         }
 
-        if ($class == 'letter') {
+        if ($contentType == 'letter') {
             return 'frontpage/contents/_content.tpl';
         }
 

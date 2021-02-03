@@ -9,6 +9,8 @@
  */
 namespace Test\Common\Core\Component\Helper;
 
+use Common\Model\Entity\Content;
+
 /**
  * Defines test cases for StructuredData class.
  */
@@ -114,12 +116,12 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['content']        = new \Content();
         $data['content']->tags  = [1,2,3,4];
         $data['content']->title = 'This is the title';
-        $data['video']          = new \Video();
+        $data['video']          = new Content();
         $data['video']->tags    = [1,2,3,4,5];
 
         $output                   = [];
         $output['content']        = new \Content();
-        $output['video']          = new \Video();
+        $output['video']          = new Content();
         $output['content']->tags  = [1,2,3,4];
         $output['video']->tags    = [1,2,3,4,5];
         $output['videokeywords']  = 'keywords,object,json,linking,data';
@@ -211,7 +213,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['changed']                    = '10-10-2010 00:00:00';
         $data['url']                        = 'http://console/';
         $data['author']                     = 'John Doe';
-        $data['video']                      = new \Video();
+        $data['video']                      = new Content();
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
@@ -314,7 +316,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $content = new \Content();
         $this->helper->expects($this->once())
             ->method('getMedia')
-            ->willReturn(new \Video());
+            ->willReturn(new Content());
 
         $method->invokeArgs($this->object, [ $content ]);
     }

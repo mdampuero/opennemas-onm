@@ -364,7 +364,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaForVideo()
     {
-        $video = new \Video();
+        $video = new Content();
 
         $video->pk_content = 343;
 
@@ -547,9 +547,22 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaFromVideo()
     {
-        $video = new \Video();
+        $video = new Content(
+            [
+                'type' => 'external',
+                'related_contents' => [ [ 'target_id' => 854 ] ]
+            ]
+        );
 
-        $video->thumb = 'https://i.ytimg.com/vi/qXYLOmqtZSA/sddefault.jpg';
+        $photo = new Content();
+
+        $this->ps->expects($this->once())->method('getItem')
+            ->with($video->related_contents[0]['target_id'])
+            ->willReturn($photo);
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($photo)
+            ->willReturn('/media/path/glorp');
 
         $this->em->expects($this->at(0))->method('find')
             ->with('Video', 540)->willReturn($video);
@@ -560,7 +573,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $media = $method->invokeArgs($this->helper, [ 540 ]);
 
         $this->assertEquals(
-            'https://i.ytimg.com/vi/qXYLOmqtZSA/sddefault.jpg',
+            '/media/path/glorp',
             $media->url
         );
     }
@@ -592,5 +605,33 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($method->invokeArgs($this->helper, [ null ]));
         $this->assertNull($method->invokeArgs($this->helper, [ 940 ]));
+    }
+
+    /**
+     * Tests getThumbnailUrl when video is not of type external or script.
+     */
+    public function testGetThumbnailUrl()
+    {
+        $video = new Content(
+            ['information' => [ 'thumbnail' => 'https://img.youtube.com/vi/glorp/1.jpg' ] ]
+        );
+
+        $method = new \ReflectionMethod($this->helper, 'getThumbnailUrl');
+        $method->setAccessible(true);
+
+        $this->assertEquals($video->information['thumbnail'], $method->invokeArgs($this->helper, [ $video ]));
+    }
+
+    /**
+     * Tests getThumbnilUrl when video doesn't have any thumbnail.
+     */
+    public function testGetThumbnailUrlWhenNoThumbnail()
+    {
+        $video = new Content();
+
+        $method = new \ReflectionMethod($this->helper, 'getThumbnailUrl');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invokeArgs($this->helper, [ $video ]));
     }
 }

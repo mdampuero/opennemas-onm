@@ -314,7 +314,7 @@
                 }
 
                 for (var z = 0; z < target.length; z++) {
-                  $scope.selected.ids.push(target[z].id);
+                  $scope.selected.ids.push(target[z].pk_content);
                 }
 
                 $scope.selected.items = target;
@@ -503,7 +503,7 @@
          */
         $scope.isIgnored = function(item) {
           return $scope.contentPickerIgnore &&
-            $scope.contentPickerIgnore.indexOf(item.id) !== -1;
+            $scope.contentPickerIgnore.indexOf(item.pk_content) !== -1;
         };
 
         /**
@@ -520,7 +520,7 @@
         $scope.isSelectable = function(item) {
           return $scope.picker.selection.enabled &&
             (!$scope.contentPickerIgnore ||
-            $scope.contentPickerIgnore.indexOf(item.id) === -1);
+            $scope.contentPickerIgnore.indexOf(item.pk_content) === -1);
         };
 
         /**
@@ -536,7 +536,7 @@
          *                 returns false.
          */
         $scope.isSelected = function(item) {
-          return $scope.selected.ids.indexOf(item.id) !== -1;
+          return $scope.selected.ids.indexOf(item.pk_content) !== -1;
         };
 
         /**
@@ -671,7 +671,7 @@
 
           while (itemsToInsert > 0 && i < $scope.contents.length) {
             if ($scope.selected.items.indexOf($scope.contents[i]) === -1) {
-              $scope.selected.ids.push($scope.contents[i].id);
+              $scope.selected.ids.push($scope.contents[i].pk_content);
               $scope.selected.items.push($scope.contents[i]);
               itemsToInsert--;
             }
@@ -717,7 +717,7 @@
           }
 
           // Remove element
-          var index = $scope.selected.ids.indexOf(item.id);
+          var index = $scope.selected.ids.indexOf(item.pk_content);
 
           if (index !== -1) {
             $scope.selected.ids.splice(index, 1);
@@ -733,7 +733,7 @@
 
           // Add element
           if ($scope.selected.items.length < $scope.picker.selection.maxSize) {
-            $scope.selected.ids.push(item.id);
+            $scope.selected.ids.push(item.pk_content);
             $scope.selected.items.push(item);
           }
         };

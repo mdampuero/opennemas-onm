@@ -54,7 +54,7 @@
         </div>
       </div>
       {include file="ui/component/content-editor/accordion/author.tpl"}
-      {include file="ui/component/content-editor/accordion/category.tpl" field="category_id"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}

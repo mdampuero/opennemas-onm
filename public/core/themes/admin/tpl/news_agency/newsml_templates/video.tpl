@@ -6,7 +6,7 @@
       </Party>
     </SentFrom>
     <DateAndTime>{format_date date=$video->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateAndTime>
-    <NewsProduct FormalName="{$video->author_name}" />
+    <NewsProduct FormalName="{$video->type}" />
   </NewsEnvelope>
   <NewsItem Duid="video_{$video->id}">
     <Comment FormalName="EfeNewsMLVersion">1.0.1</Comment>
@@ -60,7 +60,7 @@
       <NewsComponent Duid="video_{$video->id}.video.text">
         <Role FormalName="Caption" />
         <ContentItem>
-          <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" Url="{$video->video_url}" />
+          <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" Url="{$video->path|escape:'html'}" />
           <MediaType FormalName="Text" />
           <Format FormalName="NITF" />
           <MimeType FormalName="text/vnd.IPTC.NITF" />

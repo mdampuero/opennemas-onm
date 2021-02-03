@@ -1646,34 +1646,6 @@ user_user_group:
             target_table: user_groups
             target_field: [ pk_user_group ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-videos:
-    columns:
-        pk_video:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        video_url:
-            type: string
-            options: { length: 255, default: null }
-        information:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
-        author_name:
-            type: string
-            options: { length: 200, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_video]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: videos_id_contents_id
-            source_field: [ pk_video ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 votes:
     columns:
         pk_vote:

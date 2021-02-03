@@ -27,8 +27,18 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isReadyForPublish'])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->frontend = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getValue' ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -47,6 +57,9 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->contentHelper->expects($this->any())->method('isReadyForPublish')
+            ->willReturn(true);
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -74,11 +87,17 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.url_generator':
                 return $this->ugh;
 
+            case 'core.helper.content':
+                return $this->contentHelper;
+
             case 'router':
                 return $this->router;
 
             case 'core.instance':
                 return $this->instance;
+
+            case 'core.template.frontend':
+                return $this->frontend;
             default:
                 return null;
         }
@@ -222,5 +241,24 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('http://glorp.com/ppp.jpg');
         $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
+    }
+
+    /**
+     * Tests the method has_photo_size.
+     */
+    public function testHasPhotoSize()
+    {
+        $photo = new Content(
+            [
+                'content_status' => 1,
+                'starttime' => new \Datetime(),
+                'size' => 128
+            ]
+        );
+
+        $externalThumbnail = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
+
+        $this->assertTrue(has_photo_size($photo));
+        $this->assertFalse(has_photo_size($externalThumbnail));
     }
 }

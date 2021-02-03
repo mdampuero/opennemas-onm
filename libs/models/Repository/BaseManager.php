@@ -170,7 +170,7 @@ abstract class BaseManager
                 unset($join['type']);
             }
 
-            $sql = "$type JOIN $table ON " . $this->getFilterSQL($join);
+            $sql .= " $type JOIN $table ON " . $this->getFilterSQL($join);
         }
 
         return $sql;

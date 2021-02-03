@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays an video frontpage and video inner.
@@ -63,11 +64,6 @@ class VideoController extends FrontendController
     ];
 
     /**
-     * {@inheritdoc}
-     */
-    protected $service = 'api.service.video';
-
-    /**
      * The list of templates per action.
      *
      * @var array
@@ -86,31 +82,20 @@ class VideoController extends FrontendController
         $category = $params['o_category'];
         $date     = date('Y-m-d H:i:s');
 
-        // Invalid page provided as parameter
-        if ($params['page'] <= 0
-            || $params['page'] > $this->getParameter('core.max_page')
-        ) {
-            throw new ResourceNotFoundException();
-        }
-
-        $epp = (int) $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
         $categoryOQL = !empty($category)
             ? sprintf(' and category_id=%d', $category->id)
             : '';
 
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $response = $this->get('api.service.content')->getList(sprintf(
             'content_type_name="video" and content_status=1 and in_litter=0 %s '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
             $date,
-            $epp,
-            $epp * ($params['page'] - 1)
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
         ));
 
         // No first page and no contents
@@ -124,7 +109,7 @@ class VideoController extends FrontendController
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $epp,
+                'epp'         => $params['epp'],
                 'page'        => $params['page'],
                 'total'       => $response['total'],
                 'route'       => [
@@ -136,17 +121,6 @@ class VideoController extends FrontendController
                         : ['category_slug' => $category->name],
                 ],
             ]),
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []):void
-    {
-        $params = array_merge($params, [
-            'tags' => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($params['content']->tags)['items']
         ]);
     }
 

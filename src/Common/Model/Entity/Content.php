@@ -111,38 +111,4 @@ class Content extends Entity
             return $element['type'] == $name;
         })) > 0;
     }
-
-    /**
-     * Returns true if a match time constraints, is available and is not in trash
-     *
-     * @return boolean true if is ready
-     */
-    public function isReadyForPublish()
-    {
-        return ($this->isInTime()
-            && $this->content_status == 1
-            && $this->in_litter == 0);
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @return boolean
-     */
-    protected function isInTime()
-    {
-        $now = new \DateTime();
-
-        $dued = (
-            !empty($this->endtime)
-            && $now->getTimeStamp() > $this->endtime->getTimeStamp()
-        );
-
-        $postponed = (
-            !empty($this->starttime)
-            && $now->getTimeStamp() < $this->starttime->getTimeStamp()
-        );
-
-        return (!$dued && !$postponed);
-    }
 }

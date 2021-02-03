@@ -11,6 +11,7 @@ namespace Api\Service\V1;
 
 use Common\Model\Entity\FrontpageVersion;
 use Api\Exception\CreateItemException;
+use Api\Exception\GetItemException;
 
 class FrontpageVersionService extends OrmService
 {
@@ -217,7 +218,6 @@ class FrontpageVersionService extends OrmService
 
     public function getFrontpageWithCategory($categoryId)
     {
-        $this->container->get('core.locale')->setContext('frontend');
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
         $categories         = $this->container->get('api.service.category')
             ->getList();
@@ -487,20 +487,13 @@ class FrontpageVersionService extends OrmService
      **/
     private function filterPublishedContents($contents)
     {
-        $systemDateTz = new \DateTime(null, $this->locale->getTimeZone());
-        $systemDateTz = $systemDateTz->format('Y-m-d H:i:s');
-
+        $contentHelper = $this->container->get('core.helper.content');
         $filteredContents = [];
+
         foreach ($contents as $key => $content) {
-            if (!empty($content->starttime) && $content->starttime > $systemDateTz) {
-                continue;
+            if ($contentHelper->isReadyForPublish($content)) {
+                $filteredContents[$key] = $content;
             }
-
-            if (!empty($content->endtime) && $content->endtime < $systemDateTz) {
-                continue;
-            }
-
-            $filteredContents[$key] = $content;
         }
 
         return $filteredContents;
@@ -575,22 +568,19 @@ class FrontpageVersionService extends OrmService
     private function getContentPositionsAndContents($categoryId, $versionId)
     {
         $contentPositions = $this->getContentPositions($categoryId, $versionId);
-        $contentsMap      = [];
-        foreach ($contentPositions as $contentpositionOfPosition) {
-            foreach ($contentpositionOfPosition as $contentposition) {
-                if (array_key_exists($contentposition->pk_fk_content, $contentsMap)) {
-                    continue;
-                }
-                $contentsMap[$contentposition->pk_fk_content] =
-                    [$contentposition->content_type, $contentposition->pk_fk_content];
+        $contents         = [];
+
+        $context = $this->container->get('core.locale')->getContext();
+        $this->container->get('core.locale')->setContext('frontend');
+
+        foreach ($contentPositions as $placeholder) {
+            foreach ($placeholder as $content) {
+                $contents[$content->pk_fk_content] =
+                    $this->entityRepository->find($content->content_type, $content->pk_fk_content);
             }
         }
-        $contentsAux = $this->entityRepository->findMulti($contentsMap);
 
-        $contents = [];
-        foreach ($contentsAux as $content) {
-            $contents[$content->id] = $content;
-        }
+        $this->container->get('core.locale')->setContext($context);
 
         return [$contentPositions, $contents];
     }

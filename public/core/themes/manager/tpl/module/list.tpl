@@ -264,7 +264,7 @@
                 [% item.id %]
               </td>
               <td ng-show="isColumnEnabled('image')">
-                <dynamic-image class="img-thumbnail" path="[% item.images && item.images.length > 0 ? '/' + item.images[0] : null %]" raw="true"></dynamic-image>
+                <dynamic-image class="img-thumbnail" ng-model="getThumbnail(item).path" raw="true"></dynamic-image>
               </td>
               <td ng-show="isColumnEnabled('name')">
                 [% item.name['en'] %]

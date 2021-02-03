@@ -14,7 +14,9 @@
       },
       "datePublished": "{format_date date=$content->created format="y-MM-dd HH:mm:ss" type="custom"}",
       "dateModified": "{format_date date=$content->changed format="y-MM-dd HH:mm:ss" type="custom"}",
-      "articleSection": "{$category->title|escape:'html'}",
+      {if !empty($category)}
+        "articleSection": "{$category->title|escape:'html'}",
+      {/if}
       "keywords": "{$keywords|escape:'html'}",
       "url": "{$url}",
       "wordCount": {$wordCount},

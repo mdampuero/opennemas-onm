@@ -17,16 +17,6 @@
 {/block}
 
 {block name="primaryActions"}
-  {acl isAllowed="VIDEO_SETTINGS"}
-    <li class="quicklinks">
-      <a class="btn btn-link" href="{url name=backend_videos_config}" class="admin_add" title="{t}Config video module{/t}">
-        <span class="fa fa-cog fa-lg"></span>
-      </a>
-    </li>
-    <li class="quicklinks hidden-xs">
-      <span class="h-seperate"></span>
-    </li>
-  {/acl}
   {acl isAllowed="VIDEO_CREATE"}
     <li class="quicklinks">
       <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_videos_create}" accesskey="N" tabindex="1" id="create-button">

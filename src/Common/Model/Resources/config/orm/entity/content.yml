@@ -35,6 +35,7 @@ orm:
                 fk_publisher:        integer
                 fk_user_last_editor: integer
                 frontpage:           integer
+                information:         array
                 in_home:             boolean
                 in_litter:           boolean
                 params:              string
