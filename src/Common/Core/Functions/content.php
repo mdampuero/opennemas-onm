@@ -133,7 +133,7 @@ function get_featured_media($item, $type, $deep = true)
             'inner'     => [ 'featured_inner' ]
         ], 'video' => [
             'frontpage' => [ 'featured_frontpage' ],
-            'inner'     => [ 'featured_inner' ]
+            'inner'     => []
         ], 'book' => [
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
@@ -153,6 +153,10 @@ function get_featured_media($item, $type, $deep = true)
     if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
         if (get_type($item) === 'video') {
             return $type === 'inner' ? $item : get_video_thumbnail($item);
+        }
+
+        if (get_type($item) === 'album' && $type === 'inner') {
+            return $item;
         }
 
         $media = get_related($item, $map[get_type($item)][$type][0]);
