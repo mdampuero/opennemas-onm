@@ -9,7 +9,7 @@
  */
 function get_album_photos($item) : array
 {
-    return get_related($item, 'photo');
+    return get_related(get_content($item), 'photo');
 }
 
 /**
