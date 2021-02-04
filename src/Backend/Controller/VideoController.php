@@ -2,6 +2,7 @@
 
 namespace Backend\Controller;
 
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BackendController
