@@ -47,6 +47,15 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         }
       };
 
+      /**
+       * @function addToBag
+       * @memberOf related
+       *
+       * @description
+       *   Adds an item or a list of items to the current bag of related items.
+       *
+       * @param {Object} item The item or list of items.
+       */
       related.addToBag = function(item) {
         if (angular.isArray(item)) {
           for (let i = 0; i < item.length; ++i) {
