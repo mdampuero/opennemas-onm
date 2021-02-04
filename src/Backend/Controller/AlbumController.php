@@ -1,14 +1,8 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Backend\Controller;
 
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
 
 class AlbumController extends BackendController
@@ -51,47 +45,42 @@ class AlbumController extends BackendController
     {
         $this->checkSecurity($this->extension);
 
-        $categoryId         = $request->query->getDigits('category', 0);
-        $page               = $request->query->getDigits('page', 1);
-        $itemsPerPage       = 8;
-        $frontpageVersionId =
-            $request->query->getDigits('frontpage_version_id', null);
-        $frontpageVersionId = $frontpageVersionId === '' ?
-            null :
-            $frontpageVersionId;
+        $page = $request->query->getDigits('page', 1);
+        $epp  = 8;
+        $oql  = 'content_type_name = "album" and in_litter = 0'
+            . ' order by created desc limit ' . $epp;
 
-        $em  = $this->get('entity_repository');
-        $ids = $this->get('api.service.frontpage_version')
-            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Album');
+        if ($page > 1) {
+            $oql .= ' offset ' . ($page - 1) * $epp;
+        }
 
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'album' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
-            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
-        ];
+        try {
+            $context = $this->get('core.locale')->getContext();
+            $this->get('core.locale')->setContext('frontend');
 
-        $albums = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $total  = $em->countBy($filters);
+            $response = $this->get('api.service.content')->getList($oql);
+            $albums   = $response['items'];
+            $total    = $response['total'];
 
-        $this->get('core.locale')->setContext('frontend');
+            $this->get('core.locale')->setContext($context);
 
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => [
-                'name'   => 'backend_albums_content_provider',
-                'params' => ['category' => $categoryId]
-            ],
-        ]);
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => true,
+                'directional' => true,
+                'epp'         => $epp,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => [
+                    'name' => 'backend_albums_content_provider',
+                ],
+            ]);
 
-        return $this->render('album/content-provider.tpl', [
-            'albums'     => $albums,
-            'pagination' => $pagination,
-        ]);
+            return $this->render('album/content-provider.tpl', [
+                'albums'     => $albums,
+                'pagination' => $pagination,
+            ]);
+        } catch (GetListException $e) {
+        }
     }
 }
