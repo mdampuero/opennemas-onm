@@ -772,33 +772,6 @@ LOCK TABLES `newsletters` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `opinions`
---
-
-DROP TABLE IF EXISTS `opinions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `opinions` (
-  `pk_opinion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fk_content_categories` int(10) unsigned DEFAULT '7',
-  `fk_author` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pk_opinion`),
-  KEY `fk_author` (`fk_author`),
-  CONSTRAINT `opinions_id_contents_id` FOREIGN KEY (`pk_opinion`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=744 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `opinions`
---
-
-LOCK TABLES `opinions` WRITE;
-/*!40000 ALTER TABLE `opinions` DISABLE KEYS */;
-INSERT INTO `opinions` VALUES (595,7,9),(596,7,9),(598,7,10),(599,7,10),(601,7,11),(637,7,8),(638,7,8),(639,7,8),(640,7,8),(654,7,12),(658,7,12),(659,7,12),(660,7,12),(662,7,13),(663,7,13),(664,7,13),(732,7,9),(734,7,9),(736,7,9),(738,7,9),(740,7,14),(741,7,14),(742,7,14),(743,7,14);
-/*!40000 ALTER TABLE `opinions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `orders`
 --
 
@@ -1345,4 +1318,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-14 12:37:27
+-- Dump completed on 2021-02-04 15:12:08
