@@ -152,7 +152,7 @@ class Opinions
             return getService('api.service.content')->getList(
                 sprintf(
                     'content_type_name = "opinion" and content_status = 1 ' .
-                    'and fk_author = %d order by created desc %s ',
+                    'and in_litter = 0 and fk_author = %d order by created desc %s ',
                     $id,
                     $limit
                 )
