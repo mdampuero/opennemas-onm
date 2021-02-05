@@ -289,10 +289,10 @@ class UrlGeneratorHelper
             $type = 'blog';
         }
 
-        $authorName = $this->getAuthorName($content, $author);
+        $authorName = $this->getAuthorName($author);
 
         return $this->generateUriFromConfig($type, [
-            'id'       => sprintf('%06d', $content->id),
+            'id'       => sprintf('%06d', $content->pk_content),
             'date'     => date('YmdHis', strtotime($created)),
             'slug'     => urlencode($content->slug),
             'category' => urlencode($authorName),
@@ -391,11 +391,11 @@ class UrlGeneratorHelper
     /**
      * Returns the author name to use in the URI for an opinion.
      *
-     * @param Opinion $opinion The opinion.
+     * @param User $author The opinion's author.
      *
      * @return string The author name.
      */
-    protected function getAuthorName($opinion, $author)
+    protected function getAuthorName($author)
     {
         if (!empty($author)) {
             return $this->container->get('data.manager.filter')

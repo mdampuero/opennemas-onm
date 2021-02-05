@@ -247,10 +247,20 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaForOpinionWhenPhoto()
     {
-        $opinion = new \Opinion();
+        $opinion = new Content([
+            'content_type_name' => 'opinion',
+            'related_contents'  => [
+                [
+                    'source_id'         => 19,
+                    'target_id'         => 29,
+                    'type'              => 'featured_inner',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'caption'           => 'Featured inner caption'
+                ]
+            ]
+        ]);
         $photo   = new Content([ 'url' => '/route/to/file.name' ]);
-
-        $opinion->img2 = 662;
 
         $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
             ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
@@ -258,7 +268,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $helper->expects($this->once())->method('getMediaFromPhoto')
-            ->with(662)->willReturn($photo);
+            ->with(29)->willReturn($photo);
 
         $method = new \ReflectionMethod($helper, 'getMediaForOpinion');
         $method->setAccessible(true);
@@ -271,7 +281,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaForOpinionWhenAuthor()
     {
-        $opinion = new \Opinion();
+        $opinion = new Content([ 'content_type_name' => 'opinion']);
         $photo   = new Content([ 'url' => '/route/to/file.name' ]);
 
         $opinion->fk_author = 398;
@@ -296,7 +306,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaForOpinionWhenNoMedia()
     {
-        $opinion = new \Opinion();
+        $opinion = new Content([ 'content_type_name' => 'opinion']);
 
         $helper = $this
             ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')

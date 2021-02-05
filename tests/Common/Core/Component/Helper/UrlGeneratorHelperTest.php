@@ -7,6 +7,7 @@ use Common\Model\Entity\Category;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Tag;
 use Common\Model\Entity\User;
+use DateTime;
 
 class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 {
@@ -465,12 +466,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForOpinionWhenAuthorNotPresent()
     {
-        $content                    = new \Opinion();
-        $content->id                = 252;
-        $content->fk_author         = 1;
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'opinion';
-        $content->slug              = 'opinion-author-slug';
+        $content = new Content([
+            'created'           => '2015-01-14 23:49:40',
+            'fk_author'         => 1,
+            'pk_content'        => 252,
+            'slug'              => 'opinion-author-slug'
+        ]);
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
@@ -492,13 +493,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForOpinionWhenAuthorPresent()
     {
-        $content = new \Opinion();
-
-        $content->id                = 252;
-        $content->fk_author         = 1;
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'opinion';
-        $content->slug              = 'opinion-author-slug';
+        $content = new Content([
+            'created'           => DateTime::createFromFormat('Y-m-d H:i:s', '2015-01-14 23:49:40'),
+            'fk_author'         => 1,
+            'pk_content'        => 252,
+            'slug'              => 'opinion-author-slug'
+        ]);
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
@@ -525,17 +525,14 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForOpinionWhenBlog()
     {
-        $content = new \Opinion();
+        $content = new Content([
+            'created'           => '2015-01-14 23:49:40',
+            'fk_author'         => 1,
+            'pk_content'        => 252,
+            'slug'              => 'opinion-author-slug'
+        ]);
 
-        $content->id                = 252;
-        $content->fk_author         = 1;
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'opinion';
-        $content->slug              = 'opinion-author-slug';
-
-        $author          = new User();
-        $author->name    = 'Author name';
-        $author->is_blog = 1;
+        $author = new User([ 'name' => 'Jonh Doe', 'is_blog' => 1 ]);
 
         $this->authorService->expects($this->any())->method('getItem')
             ->willReturn($author);
@@ -550,32 +547,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'blog/author-name/opinion-author-slug/20150114234940000252.html',
-            $method->invokeArgs($this->urlGenerator, [ $content ])
-        );
-    }
-
-    /**
-     * Tests getUriForOpinion when the opinion has no author.
-     */
-    public function testGetUriForOpinionWhenNoAuthor()
-    {
-        $content = new \Opinion();
-
-        $content->id                = 252;
-        $content->fk_author         = 0;
-        $content->author            = 'My author';
-        $content->created           = '2015-01-14 23:49:40';
-        $content->content_type_name = 'opinion';
-        $content->slug              = 'opinion-author-slug';
-
-        $this->fm->expects($this->once())->method('get')
-            ->willReturn('opinion-author-slug');
-
-        $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
-        $method->setAccessible(true);
-
-        $this->assertEquals(
-            'opinion/author/opinion-author-slug/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
     }
