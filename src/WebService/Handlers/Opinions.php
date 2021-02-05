@@ -8,6 +8,7 @@
  */
 namespace WebService\Handlers;
 
+use Api\Exception\GetListException;
 use Luracast\Restler\RestException;
 
 /**
@@ -145,18 +146,20 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $cm = new \ContentManager();
+        $limit = ' limit ' . (($page - 1) * ITEMS_PAGE) . ',' . (ITEMS_PAGE);
 
-        $limit = ' LIMIT ' . (($page - 1) * ITEMS_PAGE) . ',' . (ITEMS_PAGE);
-
-        // Get the list articles for this author
-        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.fk_author=' . $id .
-            ' AND contents.content_status=1',
-            'ORDER BY created DESC ' . $limit
-        );
-
-        return $opinions;
+        try {
+            return getService('api.service.content')->getList(
+                sprintf(
+                    'content_type_name = "opinion" and content_status = 1 ' .
+                    'and fk_author = %d order by created desc %s ',
+                    $id,
+                    $limit
+                )
+            )['items'];
+        } catch (GetListException $e) {
+            return [];
+        }
     }
 
     /*
