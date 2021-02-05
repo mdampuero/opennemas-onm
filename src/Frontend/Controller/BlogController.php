@@ -235,30 +235,22 @@ class BlogController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $filters = [
-            'contents`.`fk_author' => [['value' => $author->id ]],
-            'content_status'    => [['value' => 1]],
-            'in_litter'         => [['value' => 0]],
-            'content_type_name' => [['value' => 'opinion']],
-            'starttime' => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS' ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '<' ]
-            ],
-            'endtime' => [
-                'union'   => 'OR',
-                [ 'value'  => null, 'operator'      => 'IS' ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '>' ]
-            ],
-        ];
-
-        $orderBy = ['created' => 'DESC'];
-
-        $total    = $this->get('opinion_repository')->countBy($filters);
-        $contents = $this->get('opinion_repository')
-            ->findBy($filters, $orderBy, $epp, $params['page']);
+        try {
+            $response = $this->get($this->service)->getList(sprintf(
+                'content_type_name="opinion" and content_status=1 and in_litter=0 '
+                . 'and fk_author = %d '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by starttime desc limit %d offset %d',
+                $author->id,
+                $date,
+                $date,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            ));
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {
@@ -269,7 +261,7 @@ class BlogController extends FrontendController
             'directional' => true,
             'epp'         => $epp,
             'page'        => $params['page'],
-            'total'       => $total,
+            'total'       => $response['total'],
             'route'       => [
                 'name'   => 'frontend_blog_author_frontpage',
                 'params' => [ 'author_slug' => $author->slug ]
@@ -278,7 +270,7 @@ class BlogController extends FrontendController
 
         $this->view->assign([
             'pagination' => $pagination,
-            'blogs'      => $contents,
+            'blogs'      => $response['items'],
             'author'     => $author,
             'page'       => $params['page'],
         ]);
