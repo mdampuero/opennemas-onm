@@ -18,6 +18,35 @@ use Frontend\Renderer\AdvertisementRenderer;
 class SmartRenderer extends AdvertisementRenderer
 {
     /**
+     * Returns the HTML for AMP advertisements.
+     *
+     * @param \Advertisement $ad     The advertisement to render.
+     * @param array          $params The list of parameters.
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderAmp(\Advertisement $ad, $params)
+    {
+        $size   = $this->getDeviceAdvertisementSize($ad, 'phone');
+        $config = $this->ds->get('smart_ad_server');
+
+        $content = $this->tpl->fetch('advertisement/helpers/amp/smart.tpl', [
+            'config'        => $config,
+            'format_id'     => $ad->params['smart_format_id'],
+            'page_id'       => $config['page_id']['other'],
+            'width'         => $size['width'],
+            'height'        => $size['height'],
+            'targetingCode' => $this->getTargeting(
+                $params['category'],
+                $params['extension'],
+                $params['content']->id
+            )
+        ]);
+
+        return $this->getSlot($ad, $content);
+    }
+
+    /**
      * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
@@ -52,6 +81,10 @@ class SmartRenderer extends AdvertisementRenderer
         $format = $params['ads_format'] ?? null;
         if ($format === 'fia') {
             return $this->renderFia($ad, $params);
+        }
+
+        if ($format === 'amp') {
+            return $this->renderAmp($ad, $params);
         }
 
         $config = $this->ds->get('smart_ad_server');

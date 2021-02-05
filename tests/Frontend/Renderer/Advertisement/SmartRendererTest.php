@@ -79,6 +79,81 @@ class SmartRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderAmp
+     */
+    public function testRenderAmp()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+        $ad->params  = [ 'smart_format_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $content     = new \stdClass();
+        $content->id = 123;
+
+        $params = [
+            'current_position' => 1051,
+            'category'         => 'foo',
+            'extension'        => 'bar',
+            'content'          => $content,
+        ];
+
+        $config = [
+            'domain'     => 'https://example.com',
+            'network_id' => 0000,
+            'site_id'    => 1234,
+            'page_id'    => [ 'other' => 111 ]
+        ];
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('smart_ad_server')
+            ->willReturn($config);
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('smart_ad_server')
+            ->willReturn([
+                'category_targeting' => 'cat',
+                'module_targeting'   => 'mod',
+                'url_targeting'      => 'url'
+            ]);
+
+        $output = '<amp-ad width="300" height="300"
+                data-block-on-consent="_auto_reject"
+                type="smartadserver"
+                data-call="std"
+                data-site="1234"
+                data-page="111"
+                data-format="321"
+                data-target="foo;bar;baz;"
+                data-domain="https://example.com">
+            </amp-ad>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/amp/smart.tpl', [
+                'config'        => $config,
+                'format_id'     => $ad->params['smart_format_id'],
+                'page_id'       => $config['page_id']['other'],
+                'width'         => 300,
+                'height'        => 300,
+                'targetingCode' => 'cat=foo;mod=bar;url=123;'
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+            . $output . '</div>',
+            $this->renderer->renderAmp($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderFia
      */
     public function testRenderFia()
@@ -223,6 +298,28 @@ class SmartRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     */
+    public function testRenderInlineWithAmp()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\SmartRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderAmp' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderAmp')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'amp'
+        ]));
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderSafeFrame
      */
     public function testRenderSafeFrame()
@@ -261,7 +358,7 @@ class SmartRendererTest extends TestCase
                 function () {
                   sas.call(
                     { siteId: 1234, pageId: 111, formatId: 321, tagId: "sas_321" },
-                    { networ7kId: 0000, domain: "https://example.com" /*, onNoad: function() {} */ }
+                    { networkId: 0000, domain: "https://example.com" /*, onNoad: function() {} */ }
                   );
                 }
               );
@@ -322,7 +419,7 @@ class SmartRendererTest extends TestCase
             var sas = sas || {};
             sas.cmd = sas.cmd || [];
             sas.cmd.push(function() {
-                sas.setup({ networkid: 0000, domain: "https://example.com", async: true });
+                sas.setup({ networkId: 0000, domain: "https://example.com", async: true });
             });
         </script>';
 
