@@ -63,8 +63,6 @@ class OpinionController extends BackendController
         $oql          = 'content_type_name = "opinion" and in_litter = 0';
 
         try {
-            $total = $this->get('api.service.content')->getList($oql)['total'];
-
             $oql .= ' order by created desc limit ' . $itemsPerPage;
 
             if ($page > 1) {
@@ -74,7 +72,7 @@ class OpinionController extends BackendController
             $context = $this->get('core.locale')->getContext();
             $this->get('core.locale')->setContext('frontend');
 
-            $opinions = $this->get('api.service.content')->getList($oql)['items'];
+            $response = $this->get('api.service.content')->getList($oql);
 
             $this->get('core.locale')->setContext($context);
 
@@ -84,14 +82,14 @@ class OpinionController extends BackendController
                 'directional' => true,
                 'epp'         => $itemsPerPage,
                 'page'        => $page,
-                'total'       => $total,
+                'total'       => $response['total'],
                 'route'       => [
                     'name'   => 'backend_opinions_content_provider'
                 ],
             ]);
 
             return $this->render('opinion/content-provider.tpl', [
-                'opinions'   => $opinions,
+                'opinions'   => $response['items'],
                 'pagination' => $pagination,
             ]);
         } catch (GetListException $e) {
