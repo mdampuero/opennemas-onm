@@ -599,7 +599,7 @@ class ImageRendererTest extends TestCase
             ->willReturn('/media/opennemas/images/path/foo.png');
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('advertisement/helpers/inline/image.amp.tpl', [
+            ->with('advertisement/helpers/amp/image.tpl', [
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => '/media/opennemas/images/path/foo.png',
