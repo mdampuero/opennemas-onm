@@ -44,8 +44,8 @@
       {include file="newsletter/partials/send_steps.tpl"}
       <div class="grid simple">
         <div class="grid-title">
-          <i class="fa fa-envelope-o"></i>
-          <h4>{t}Email subject{/t}</h4>
+          <i class="fa fa-envelope-o m-r-10"></i>
+          <h4>{t}Subject{/t}</h4>
         </div>
         <div class="grid-body">
           <div class="form-group">
@@ -56,7 +56,9 @@
       <div class="newsletter-contents">
         <div class="grid simple" >
           <div class="grid-title clearfix">
-            <div class="pull-left">{t}Add contents to groups by using the "Add contents" button{/t}</div>
+            <h4>
+              {t}Contents{/t}
+            </h4>
           </div>
           <div class="grid-body">
             <div ui-tree="treeOptions">

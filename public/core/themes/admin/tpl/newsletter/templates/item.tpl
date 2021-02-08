@@ -56,7 +56,8 @@ var newsletterTemplateTranslations = {
 
     <div class="grid simple ng-cloak">
       <div class="grid-title">
-        <i class="fa fa-envelope-o m-r-10"></i>{t}Subject{/t}
+        <i class="fa fa-envelope-o m-r-10"></i>
+        <h4>{t}Subject{/t}</h4>
       </div>
 
       <div class="grid-body">
@@ -83,7 +84,8 @@ var newsletterTemplateTranslations = {
       <div class="col-xs-12 col-sm-6">
         <div class="grid simple">
           <div class="grid-title">
-            <h5><i class="fa fa-calendar m-r-10"></i>{t}Schedule{/t}</h5>
+            <i class="fa fa-calendar m-r-10"></i>
+            <h4>{t}Schedule{/t}</h4>
           </div>
 
           <div class="grid-body">
@@ -115,7 +117,8 @@ var newsletterTemplateTranslations = {
       <div class="col-xs-12 col-sm-6">
         <div class="grid simple">
           <div class="grid-title">
-            <h5><i class="fa fa-users m-r-10"></i>{t}Recipients{/t}</h5>
+            <i class="fa fa-users m-r-10"></i>
+            <h4>{t}Recipients{/t}</h4>
           </div>
 
           <div class="grid-body">
