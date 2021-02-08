@@ -72,7 +72,6 @@ class Opinions
         ];
 
         $order = [
-            'position' => 'ASC',
             'starttime' => 'DESC'
         ];
         // Fetch all available opinions in home of authors
@@ -98,7 +97,6 @@ class Opinions
         ];
 
         $order = [
-            'position' => 'ASC',
             'starttime' => 'DESC'
         ];
         // Fetch all available opinions in home of authors
