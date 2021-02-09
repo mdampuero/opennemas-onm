@@ -131,7 +131,7 @@ class SmartRendererTest extends TestCase
                 data-site="1234"
                 data-page="111"
                 data-format="321"
-                data-target="foo;bar;baz;"
+                data-target="cat=foo;mod=bar;url=123;"
                 data-domain="https://example.com">
             </amp-ad>';
 
@@ -148,7 +148,7 @@ class SmartRendererTest extends TestCase
 
         $this->assertEquals(
             '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
-            . $output . '</div>',
+                . $output . '</div>',
             $this->renderer->renderAmp($ad, $params)
         );
     }
