@@ -162,7 +162,7 @@ class OpinionController extends FrontendController
 
             if (!empty($bloggers['total'])) {
                 $oqlBlog = sprintf(
-                    'and fk_author not in (%s)',
+                    'and fk_author !in [%s]',
                     implode(',', array_map(function ($a) {
                         return $a->id;
                     }, $bloggers['items']))
@@ -172,9 +172,8 @@ class OpinionController extends FrontendController
         }
 
         try {
-            $response = $this->get($this->service)->getListBySql(sprintf(
-                'select * from contents '
-                . 'where content_type_name="opinion" and content_status=1 and in_litter=0 %s '
+            $response = $this->get($this->service)->getList(sprintf(
+                'content_type_name="opinion" and content_status=1 and in_litter=0 %s '
                 . 'and (starttime is null or starttime < "%s") '
                 . 'and (endtime is null or endtime > "%s") '
                 . 'order by starttime desc limit %d offset %d',
