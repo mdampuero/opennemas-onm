@@ -31,7 +31,7 @@ class OpinionController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.content';
+    protected $service = 'api.service.opinion';
 
     /**
      * Get the tag config.
