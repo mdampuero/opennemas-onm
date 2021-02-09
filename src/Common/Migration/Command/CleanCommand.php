@@ -56,6 +56,7 @@ class CleanCommand extends Command
 
         $files = array_merge(
             $this->getPhotos($database),
+            $this->getKiosko($database),
             $this->getAttachments($database)
         );
 
@@ -77,10 +78,20 @@ class CleanCommand extends Command
 
         foreach ($finder->files()->in($path) as $file) {
             if ($this->output->isVerbose()) {
-                $this->writeStep('Checking ' . $file->getFilename(), false, 2);
+                $this->writeStep('Checking ' . $file->getPathName(), false, 2);
             }
 
-            if (in_array($file->getFilename(), $files)) {
+            if (preg_match('@.*/sections/.*@', $file->getPathName())) {
+                $notRemoved++;
+
+                if ($this->output->isVerbose()) {
+                    $this->writeStatus('warning', 'SKIP', true);
+                }
+
+                continue;
+            }
+
+            if (in_array(str_replace($path, '', $file->getPathName()), $files)) {
                 $notRemoved++;
 
                 if ($this->output->isVerbose()) {
@@ -127,7 +138,7 @@ class CleanCommand extends Command
         $rs = $conn->fetchAll('SELECT path FROM attachments');
 
         return !$rs ? [] : array_map(function ($a) {
-            return substr($a['path'], strrpos($a['path'], '/') + 1);
+            return 'files' . $a['path'];
         }, $rs);
     }
 
@@ -162,10 +173,34 @@ class CleanCommand extends Command
         $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $conn->selectDatabase($database);
 
-        $rs = $conn->fetchAll('SELECT `slug` FROM `contents` WHERE `content_type_name` = "photo"');
+        $rs = $conn->fetchAll('SELECT `meta_value` FROM `contentmeta` ' .
+            'INNER JOIN `contents` ON `pk_content` = `fk_content` ' .
+            'AND `content_type_name` = "photo" WHERE `meta_name` = "path"');
 
         return !$rs ? [] : array_map(function ($a) {
-            return $a['slug'];
+            return $a['meta_value'];
+        }, $rs);
+    }
+
+    /**
+     * Returns a list of kiosco filenames from database.
+     *
+     * @param string $database The database name.
+     *
+     * @return array The list of kiosco filenames.
+     */
+    protected function getKiosko(string $database) : array
+    {
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $conn->selectDatabase($database);
+
+        $rs = $conn->fetchAll('SELECT `meta_value` FROM `contentmeta` ' .
+            'INNER JOIN `contents` ON `pk_content` = `fk_content` ' .
+            'AND `content_type_name` = "kiosko" WHERE `meta_name` = "path" ' .
+            'OR `meta_name` = "thumbnail"');
+
+        return !$rs ? [] : array_map(function ($a) {
+            return 'kiosko/' . $a['meta_value'];
         }, $rs);
     }
 }
