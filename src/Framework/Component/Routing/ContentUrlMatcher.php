@@ -10,7 +10,6 @@
 namespace Framework\Component\Routing;
 
 use Common\Core\Component\Helper\ContentHelper;
-use DateTime;
 use Repository\EntityManager;
 
 class ContentUrlMatcher
@@ -74,7 +73,7 @@ class ContentUrlMatcher
 
         $content = $this->em->find(\classify($type), $id);
 
-        $created = $content->created instanceof DateTime ?
+        $created = $content->created instanceof \DateTime ?
             $content->created->format('Y-m-d H:i:s') :
             $content->created;
 
