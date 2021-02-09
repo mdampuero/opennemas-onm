@@ -162,10 +162,10 @@ class CleanCommand extends Command
         $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $conn->selectDatabase($database);
 
-        $rs = $conn->fetchAll('SELECT name FROM photos');
+        $rs = $conn->fetchAll('SELECT `slug` FROM `contents` WHERE `content_type_name` = "photo"');
 
         return !$rs ? [] : array_map(function ($a) {
-            return $a['name'];
+            return $a['slug'];
         }, $rs);
     }
 }
