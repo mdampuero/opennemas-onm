@@ -2,7 +2,7 @@
   <i class="fa fa-image m-r-10"></i>
   {$iTitle}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$iName} }"></i>
-  <span class="pull-right" ng-if="!expanded.{$iName}">
+  <span class="pull-right">
     {include file="common/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
   </span>
 </div>
@@ -42,7 +42,7 @@
         </dynamic-image>
       </div>
     </div>
-    <input name="{$iName}" ng-model="data.{$iName}" {if $iRequired}required{/if} type="hidden">
+    <input name="{$iName}" ng-model="data.{$iName}" {if $iRequired}ng-required="{$iRequired}"{/if} type="hidden">
     <div class="form-group ng-cloak m-t-15" ng-show="{$iName}">
       <label class="form-label" for="{$iName}">
         {t}Caption{/t}
