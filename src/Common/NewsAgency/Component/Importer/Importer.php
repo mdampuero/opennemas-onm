@@ -267,7 +267,10 @@ class Importer
                 $authors = array_filter(
                     $this->config['authors_map'],
                     function ($a) use ($resource) {
-                        return preg_match('/' . $a['slug'] . '/i', $resource->author);
+                        return preg_match(
+                            '/' . preg_quote($a['slug'], '/') . '/i',
+                            $resource->author
+                        );
                     }
                 );
 
