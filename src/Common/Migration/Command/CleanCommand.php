@@ -81,17 +81,8 @@ class CleanCommand extends Command
                 $this->writeStep('Checking ' . $file->getPathName(), false, 2);
             }
 
-            if (preg_match('@.*/sections/.*@', $file->getPathName())) {
-                $notRemoved++;
-
-                if ($this->output->isVerbose()) {
-                    $this->writeStatus('warning', 'SKIP', true);
-                }
-
-                continue;
-            }
-
-            if (in_array(str_replace($path, '', $file->getPathName()), $files)) {
+            if (preg_match('@.*/sections/.*@', $file->getPathName()) ||
+                in_array(str_replace($path, '', $file->getPathName()), $files)) {
                 $notRemoved++;
 
                 if ($this->output->isVerbose()) {
