@@ -277,6 +277,9 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 
     public function testNotMatchingEntriesWithContent()
     {
+        $this->em->expects($this->any())->method('find')
+            ->willReturn($this->content);
+
         // Not valid content type
         $return = $this->matcher->matchContentUrl(
             'opinion',
