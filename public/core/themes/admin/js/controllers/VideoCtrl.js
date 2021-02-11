@@ -171,6 +171,12 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
           $timeout(function() {
             angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
+
+            $scope.getSlug($scope.item.title, function(response) {
+              $scope.item.slug = response.data.slug;
+
+              $scope.flags.generate.slug = false;
+            });
           }, 250);
         },
         function(response) {
