@@ -12,7 +12,12 @@ use Repository\EntityManager;
  */
 function get_body($item = null) : ?string
 {
-    $value = get_type($item) === 'video' ? get_property($item, 'description') :
+    $map = [
+        'video' => 'description',
+        'album' => 'description'
+    ];
+
+    $value = array_key_exists(get_type($item), $map) ? get_property($item, $map[get_type($item)]) :
         get_property($item, 'body');
 
     return !empty($value) ? $value : null;
