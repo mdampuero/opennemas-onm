@@ -16,8 +16,8 @@
      * @requires http
      */
     .controller('WidgetCtrl', [
-      '$compile', '$controller', '$scope', 'http',
-      function($compile, $controller, $scope, http) {
+      '$compile', '$controller', '$scope', 'cleaner', 'http',
+      function($compile, $controller, $scope, cleaner, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -133,6 +133,15 @@
           }
 
           $scope.item.params = params;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.getData = function() {
+          var data = angular.extend({}, $scope.item);
+
+          return cleaner.clean(data);
         };
 
         /**
