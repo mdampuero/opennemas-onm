@@ -6,5 +6,5 @@ function smarty_function_suggested_class($params, &$smarty)
         return '';
     }
 
-    return $smarty->getContainer()->get('core.helper.content')->isSuggested($params['item']);;
+    return $smarty->getContainer()->get('core.helper.content')->isSuggested($params['item']);
 }

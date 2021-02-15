@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Controller\V1\Backend;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +21,6 @@ class PhotoController extends ContentController
      * {@inheritdoc}
      */
     protected $service = 'api.service.photo';
-
 
     /**
      * {@inheritdoc}
@@ -90,6 +82,8 @@ class PhotoController extends ContentController
             }
         }
 
-        return array_merge(parent::getExtraData($items), [ 'years' => array_values($years) ]);
+        return array_merge(parent::getExtraData($items), [
+            'years' => array_values($years)
+        ]);
     }
 }

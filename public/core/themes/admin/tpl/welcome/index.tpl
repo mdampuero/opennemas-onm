@@ -92,7 +92,7 @@
             {acl isAllowed="ALBUM_CREATE"}
             <div class="button">
               <a href="{url name=backend_album_create}" title="{t}Media manager{/t}" class="btn btn-white btn-large col-xs-12">
-                <i class="fa fa-stack-overflow"></i>{t}New Album{/t}
+                <i class="fa fa-camera"></i>{t}New Album{/t}
               </a>
             </div>
             {/acl}

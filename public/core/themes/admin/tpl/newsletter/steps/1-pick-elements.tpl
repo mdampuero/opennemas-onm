@@ -44,8 +44,8 @@
       {include file="newsletter/partials/send_steps.tpl"}
       <div class="grid simple">
         <div class="grid-title">
-          <i class="fa fa-envelope-o"></i>
-          <h4>{t}Email subject{/t}</h4>
+          <i class="fa fa-envelope-o m-r-10"></i>
+          <h4>{t}Subject{/t}</h4>
         </div>
         <div class="grid-body">
           <div class="form-group">
@@ -56,7 +56,9 @@
       <div class="newsletter-contents">
         <div class="grid simple" >
           <div class="grid-title clearfix">
-            <div class="pull-left">{t}Add contents to groups by using the "Add contents" button{/t}</div>
+            <h4>
+              {t}Contents{/t}
+            </h4>
           </div>
           <div class="grid-body">
             <div ui-tree="treeOptions">
@@ -71,7 +73,7 @@
                         <input class="form-control" ng-model="container.title" type="text">
                       </div>
                       <div class="col-sm-6 col-lg-8 m-b-10 m-t-15 text-right">
-                        <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-intime="true" content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,opinion,poll,video,special" type="button">
+                        <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-ignore="[% getItemIds(container.items) %]" content-picker-intime="true" content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,opinion,poll,video,special" type="button">
                           <i class="fa fa-plus m-r-5"></i>
                           {t}Add{/t}
                         </button>
@@ -96,7 +98,7 @@
                           <span class="angular-ui-tree-icon"></span>
                         </span>
                         <span class="newsletter-item-type">
-                          <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-stack-overflow': content.content_type_name == 'album' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                          <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type_name == 'article', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-envelope': content.content_type_name == 'letter', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-film': content.content_type_name == 'video', 'fa-camera': content.content_type_name == 'album' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                         </span>
                         <span class="newsletter-item-title">
                           [% content.title %]

@@ -11,6 +11,6 @@
       </span>
       <input class="form-control" datetime-picker {if $iFormat}datetime-picker-format="{$iFormat}"{/if} datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current="true" name="{$iField}" ng-model="item.{$iField}" {if $iRequired}required{/if} type="datetime">
     </div>
-    {include file="ui/component/icon/status.tpl" iForm=$iField iForm=$iField iClass="form-status-absolute"}
+    {include file="common/component/icon/status.tpl" iForm="form.$iField" iNgModel="item.$iField" iClass="form-status-absolute"}
   </div>
 </div>

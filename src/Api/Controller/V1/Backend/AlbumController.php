@@ -1,18 +1,11 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Request;
 
-class AlbumController extends ContentOldController
+class AlbumController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -36,7 +29,6 @@ class AlbumController extends ContentOldController
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
-            'photos'     => $this->getPhotos($items),
             'tags'       => $this->getTags($items)
         ]);
     }
@@ -50,52 +42,7 @@ class AlbumController extends ContentOldController
     }
 
     /**
-     * Returns the list of photos for an item or a list of items.
-     *
-     * @param mixed $items The item or the list of items to get photos for.
-     *
-     * @return array The list of photos.
-     */
-    protected function getPhotos($items = null)
-    {
-        if (empty($items)) {
-            return [];
-        }
-
-        if (!is_array($items)) {
-            $items = [ $items ];
-        }
-
-        $ids = [];
-
-        foreach ($items as $item) {
-            if (!empty($item->cover_id)) {
-                $ids[] = $item->cover_id;
-            }
-
-            $ids = array_unique(array_merge($ids, array_map(function ($photo) {
-                return $photo['pk_photo'];
-            }, $item->photos)));
-        }
-
-        try {
-            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
-            $photos = $this->get('data.manager.filter')
-                ->set($photos)
-                ->filter('mapify', [ 'key' => 'pk_content' ])
-                ->get();
-
-            return $this->get('api.service.content')->responsify($photos);
-        } catch (GetItemException $e) {
-        }
-    }
-
-    /**
-     * Returns the list of contents related with items.
-     *
-     * @param Content $content The content.
-     *
-     * @return array The list of photos linked to the content.
+     * {@inheritdoc}
      */
     protected function getRelatedContents($content)
     {
@@ -110,11 +57,22 @@ class AlbumController extends ContentOldController
             $content = [ $content ];
         }
 
-        foreach ($content as $item) {
-            try {
-                $photo   = $service->getItem($item->cover_id);
-                $extra[$item->cover_id] = $service->responsify($photo);
-            } catch (GetItemException $e) {
+        foreach ($content as $element) {
+            if (!is_array($element->related_contents)) {
+                continue;
+            }
+
+            foreach ($element->related_contents as $relation) {
+                if (!preg_match('/photo|featured_frontpage/', $relation['type'])) {
+                    continue;
+                }
+
+                try {
+                    $photo = $service->getItem($relation['target_id']);
+
+                    $extra[$relation['target_id']] = $service->responsify($photo);
+                } catch (GetItemException $e) {
+                }
             }
         }
 

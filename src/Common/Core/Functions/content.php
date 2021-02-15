@@ -12,10 +12,35 @@ use Repository\EntityManager;
  */
 function get_body($item = null) : ?string
 {
-    $value = get_type($item) === 'video' ? get_property($item, 'description') :
+    $map = [
+        'video' => 'description',
+        'album' => 'description'
+    ];
+
+    $value = array_key_exists(get_type($item), $map) ? get_property($item, $map[get_type($item)]) :
         get_property($item, 'body');
 
     return !empty($value) ? $value : null;
+}
+
+/**
+ * Returns the caption for an item.
+ *
+ * @param mixed $item The item to get caption from.
+ *
+ * @return string The item caption when the photo is provided as an array (with
+ *                the object, the position in the list of related contents of
+ *                the same type and the caption).
+ */
+function get_caption($item = null) : ?string
+{
+    if (!is_array($item)) {
+        return null;
+    }
+
+    return array_key_exists('caption', $item)
+        ? htmlentities($item['caption'])
+        : null;
 }
 
 /**
@@ -32,6 +57,11 @@ function get_body($item = null) : ?string
 function get_content($item = null, $type = null)
 {
     $item = $item ?? getService('core.template.frontend')->getValue('item');
+
+    // Item as a related content (array with item + caption + position)
+    if (is_array($item) && array_key_exists('item', $item)) {
+        $item = $item['item'];
+    }
 
     if (!is_object($item) && is_numeric($item) && !empty($type)) {
         try {
@@ -101,14 +131,14 @@ function get_featured_media($item, $type, $deep = true)
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
         ], 'album' => [
-            'frontpage' => [ 'cover_id' ],
+            'frontpage' => [ 'featured_frontpage' ],
             'inner'     => []
         ], 'event' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
         ], 'video' => [
             'frontpage' => [ 'featured_frontpage' ],
-            'inner'     => [ 'featured_inner' ]
+            'inner'     => []
         ], 'book' => [
             'frontpage' => [ 'cover_id' ],
             'inner'     => []
@@ -128,6 +158,10 @@ function get_featured_media($item, $type, $deep = true)
     if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
         if (get_type($item) === 'video') {
             return $type === 'inner' ? $item : get_video_thumbnail($item);
+        }
+
+        if (get_type($item) === 'album' && $type === 'inner') {
+            return $item;
         }
 
         $media = get_related($item, $map[get_type($item)][$type][0]);
@@ -220,6 +254,20 @@ function get_featured_media_caption($item, $type)
     }
 
     return null;
+}
+
+/**
+ * Returns the id of an item.
+ *
+ * @param Content $content The content to get id from.
+ *
+ * @return int The content id.
+ */
+function get_id($item) : ?int
+{
+    $item = get_content($item);
+
+    return empty($item) ? null : $item->pk_content;
 }
 
 /**
@@ -316,6 +364,10 @@ function get_related($item, string $type) : array
         return $a['type'] === $type;
     });
 
+    usort($items, function ($a, $b) {
+        return $a['position'] <=> $b['position'];
+    });
+
     if ($item->external) {
         $related = getService('core.template.frontend')->getValue('related');
 
@@ -326,7 +378,14 @@ function get_related($item, string $type) : array
 
     return array_filter(array_map(function ($a) {
         $content = get_content($a['target_id'], $a['content_type_name']);
-        return !empty($content) ? $content : null;
+
+        return empty($content)
+            ? null
+            : [
+                'item' => $content,
+                'caption' => $a['caption'],
+                'position' => $a['position']
+            ];
     }, $items));
 }
 
@@ -396,6 +455,32 @@ function has_body($item = null) : bool
 
     return !empty(get_body($item))
         && !getService('core.helper.subscription')->isHidden($token, 'body');
+}
+
+/**
+ * Checks if the item has a caption.
+ *
+ * @param mixed $item The item to get caption from.
+ *
+ * @return bool True if the item is provided as an array (with the object, the
+ *              position in the list of related contents of the same type and
+ *              the caption) and the caption is not empty.
+ */
+function has_caption($item = null) : bool
+{
+    return !empty(get_caption($item));
+}
+
+/**
+ * Checks if the content has comments enabled or not.
+ *
+ * @param Content $item The item to get if comments are enabled.
+ *
+ * @return bool True if enabled, false otherwise.
+ */
+function has_comments_enabled($item = null) : bool
+{
+    return !empty(get_property($item, 'with_comment'));
 }
 
 /**
