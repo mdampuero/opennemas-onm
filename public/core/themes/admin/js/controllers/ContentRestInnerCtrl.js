@@ -59,11 +59,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       $scope.$broadcast('onmTagsInput.save', {
         onError: $scope.errorCb,
         onSuccess: function(ids) {
-          $scope.item.tags = ids;
-
-          if ($scope.config.locale && $scope.config.locale.multilanguage) {
-            $scope.data.item.tags = ids;
-          }
+          $scope.item.tags      = ids;
+          $scope.data.item.tags = ids;
 
           $scope.save();
         }
