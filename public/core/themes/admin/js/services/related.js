@@ -121,7 +121,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
 
       /**
        * @function getRelated
-       * @memberOf AlbumCtrl
+       * @memberOf related
        *
        * @description
        *   Returns the related content based on the type.
