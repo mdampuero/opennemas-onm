@@ -301,8 +301,8 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
           }
 
           if (simple && (!related.scope.data[related.map[type].name] ||
-              related.scope.data[related.map[type].name].target_id ===
-              ov.target_id)) {
+              related.scope.data[related.map[type].name].target_id === ov.target_id &&
+              related.scope.data[related.map[type].name].caption === ov.caption)) {
             var item = angular.copy(nv);
 
             item.type = type;
@@ -313,12 +313,12 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
           }
 
           var oldIds = ov.map(function(e) {
-            return e.target_id;
+            return [ e.target_id, e.caption ];
           });
 
           var mirrorIds = !angular.isArray(related.scope[related.map[type].name]) ?
             [] : related.scope[related.map[type].name].map(function(e) {
-              return e.target_id;
+              return [ e.target_id, e.caption ];
             });
 
           if (angular.equals(oldIds, mirrorIds)) {
