@@ -222,6 +222,13 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         return localized;
       };
 
+      /**
+       * @function watch
+       * @memberOf related
+       *
+       * @description
+       *   Initializes watchers for every related content type.
+       */
       related.watch = function() {
         related.watchData();
 
