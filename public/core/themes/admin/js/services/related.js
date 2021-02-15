@@ -25,6 +25,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         bag: {},
         map: {
           featured_frontpage: {
+            mirror: 'featured_inner',
             name:   'featuredFrontpage',
             simple: true
           },
@@ -235,6 +236,11 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         for (var type in related.map) {
           related.watchValue(related.map[type].name, related.map[type].simple);
           related.watchScope(type, related.map[type].name, related.map[type].simple);
+
+          if (related.map[type].mirror) {
+            related.watchMirror(related.map[type].name,
+              related.map[type].mirror, related.map[type].simple);
+          }
         }
       };
 
@@ -269,6 +275,65 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
 
             related.scope.data.item.related_contents =
               related.scope.data.item.related_contents.concat(nv[i]);
+          }
+        }, true);
+      };
+
+      /**
+       * @function watchMirror
+       * @memberOf related
+       *
+       * @description
+       *   Mirrors a related content of a type in another related content.
+       *
+       * @param {String}  name   The name in the scope of the related content to
+       *                         mirror.
+       * @param {String}  type   The type of the mirrored related content.
+       * @param {Boolean} simple Whether to mirror a simple content or a list
+       *                         of contents.
+       *
+       * @return {type} description
+       */
+      related.watchMirror = function(name, type, simple) {
+        related.scope.$watch(name, function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+
+          if (simple && (!related.scope.data[related.map[type].name] ||
+              related.scope.data[related.map[type].name].target_id ===
+              ov.target_id)) {
+            var item = angular.copy(nv);
+
+            item.type = type;
+
+            related.scope.data[related.map[type].name] = item;
+            related.scope[related.map[type].name]      = related.localize(item, type);
+            return;
+          }
+
+          var oldIds = ov.map(function(e) {
+            return e.target_id;
+          });
+
+          var mirrorIds = !angular.isArray(related.scope[related.map[type].name]) ?
+            [] : related.scope[related.map[type].name].map(function(e) {
+              return e.target_id;
+            });
+
+          if (angular.equals(oldIds, mirrorIds)) {
+            related.scope.data[related.map[type].name] = [];
+            related.scope[related.map[type].name]      = [];
+
+            for (var i = 0; i < nv.length; i++) {
+              var item = angular.copy(nv[i]);
+
+              item.type = type;
+
+              related.scope.data[related.map[type].name].push(item);
+              related.scope[related.map[type].name].push(
+              related.localize(item, type + '_' + i));
+            }
           }
         }, true);
       };
