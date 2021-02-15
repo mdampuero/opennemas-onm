@@ -64,8 +64,8 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Frontpage image{/t}" field="featuredFrontpage" footer="getRelated('featured_frontpage').caption"}
-      {include file="ui/component/content-editor/accordion/image.tpl" title="{t}Inner image{/t}" field="featuredInner" footer="getRelated('featured_inner').caption"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Frontpage image{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Inner image{/t}"}
     </div>
   </div>
   <div class="grid simple" ng-show="data.extra.extra_fields !== undefined && data.extra.extra_fields">
