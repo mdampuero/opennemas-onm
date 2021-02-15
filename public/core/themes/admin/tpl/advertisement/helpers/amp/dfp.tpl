@@ -1,15 +1,1 @@
-<amp-ad
-  data-block-on-consent
-  data-npa-on-unknown-consent="true"
-  width="{$width}"
-  height="{$height}"
-  type="doubleclick"
-  data-slot="{$dfpId}"
-  {if !empty($sizes)}
-    data-multi-size="{$sizes}"
-    data-multi-size-validation="false"
-  {/if}
-  {if !empty($targetingCode)}
-    json={$targetingCode}
-  {/if}
-></amp-ad>
+<amp-ad data-block-on-consent data-npa-on-unknown-consent="true" width="{$width}" height="{$height}" type="doubleclick" data-slot="{$dfpId}" {if !empty($sizes)}data-multi-size="{$sizes}" data-multi-size-validation="false"{/if} {if !empty($targetingCode)}json={$targetingCode}{/if}></amp-ad>

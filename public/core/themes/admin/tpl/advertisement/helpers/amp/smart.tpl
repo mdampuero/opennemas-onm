@@ -1,10 +1,1 @@
-<amp-ad width={$width} height={$height}
-  data-block-on-consent="_auto_reject"
-  type="smartadserver"
-  data-call="std"
-  data-site="{$config['site_id']}"
-  data-page="{$page_id}"
-  data-format="{$format_id}"
-  data-target="{$targetingCode}"
-  data-domain="{$config['domain']}">
-</amp-ad>
+<amp-ad width={$width} height={$height} data-block-on-consent="_auto_reject" type="smartadserver" data-call="std" data-site="{$config['site_id']}" data-page="{$page_id}" data-format="{$format_id}" data-target="{$targetingCode}" data-domain="{$config['domain']}"></amp-ad>
