@@ -145,12 +145,13 @@
                 return { selected: $scope.photos.length };
               },
               success: function() {
-                return function(modalWindow) {
+                return function() {
                   return $timeout(function() {
                     $scope.photos      = [];
                     $scope.data.photos = [];
 
-                    modalWindow.close();
+                    // Fake response for ModalCtrl
+                    return { response: {}, headers: [], status: 200 };
                   });
                 };
               }
