@@ -31,12 +31,12 @@ class SmartRenderer extends AdvertisementRenderer
         $config = $this->ds->get('smart_ad_server');
 
         $content = $this->tpl->fetch('advertisement/helpers/amp/smart.tpl', [
-            'config'        => $config,
-            'format_id'     => $ad->params['smart_format_id'],
-            'page_id'       => $config['page_id']['other'],
-            'width'         => $size['width'],
-            'height'        => $size['height'],
-            'targetingCode' => $this->getTargeting(
+            'config'    => $config,
+            'format_id' => $ad->params['smart_format_id'],
+            'page_id'   => $config['page_id']['other'],
+            'width'     => $size['width'],
+            'height'    => $size['height'],
+            'targeting' => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
                 $params['content']->id
@@ -103,11 +103,11 @@ class SmartRenderer extends AdvertisementRenderer
 
         $content = $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
-                'config'        => $config,
-                'id'            => $ad->params['smart_format_id'],
-                'page_id'       => $config['page_id'][$params['advertisementGroup']],
-                'rand'          => rand(),
-                'targetingCode' => $this->getTargeting(
+                'config'    => $config,
+                'id'        => $ad->params['smart_format_id'],
+                'page_id'   => $config['page_id'][$params['advertisementGroup']],
+                'rand'      => rand(),
+                'targeting' => $this->getTargeting(
                     $params['category'],
                     $params['extension'],
                     $params['content']->id
@@ -134,9 +134,14 @@ class SmartRenderer extends AdvertisementRenderer
 
         $config = $this->ds->get('smart_ad_server');
         $params = [
-            'config'        => $config,
-            'page_id'       => $config['page_id'][$params['advertisementGroup']],
-            'format_id'     => (int) $ad->params['smart_format_id']
+            'config'    => $config,
+            'page_id'   => $config['page_id'][$params['advertisementGroup']],
+            'format_id' => (int) $ad->params['smart_format_id'],
+            'targeting' => $this->getTargeting(
+                $params['category'],
+                $params['extension'],
+                $params['contentId']
+            )
         ];
 
         return $this->tpl->fetch('advertisement/helpers/safeframe/smart.tpl', $params);
@@ -171,11 +176,11 @@ class SmartRenderer extends AdvertisementRenderer
 
         return $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
-                'config'        => $config,
-                'page_id'       => $config['page_id'][$params['advertisementGroup']],
-                'zones'         => $zones,
-                'customCode'    => $this->getCustomCode(),
-                'targetingCode' => $this->getTargeting(
+                'config'     => $config,
+                'page_id'    => $config['page_id'][$params['advertisementGroup']],
+                'zones'      => $zones,
+                'customCode' => $this->getCustomCode(),
+                'targeting'  => $this->getTargeting(
                     $params['category'],
                     $params['extension'],
                     $params['content']->id ?? null
@@ -212,28 +217,34 @@ class SmartRenderer extends AdvertisementRenderer
     {
         $config = $this->ds->get('smart_ad_server');
 
-        $targetingCode = '';
+        $targeting    = '';
+        $targetingMap = [];
         if (array_key_exists('category_targeting', $config)
             && !empty($config['category_targeting'])
             && !empty($category)
         ) {
-            $targetingCode .= $config['category_targeting'] . '=' . $category . ';';
+            $targetingMap[$config['category_targeting']] = $category;
         }
 
         if (array_key_exists('module_targeting', $config)
             && !empty($config['module_targeting'])
             && !empty($module)
         ) {
-            $targetingCode .= $config['module_targeting'] . '=' . $module . ';';
+            $targetingMap[$config['module_targeting']] = $module;
         }
 
         if (array_key_exists('url_targeting', $config)
             && !empty($config['url_targeting'])
             && !empty($contentId)
         ) {
-            $targetingCode .= $config['url_targeting'] . '=' . $contentId . ';';
+            $targetingMap[$config['url_targeting']] = $contentId;
         }
 
-        return $targetingCode;
+        // Format code for using in all smart helpers
+        foreach ($targetingMap as $key => $value) {
+            $targeting .= $key . '=' . $value . ';';
+        }
+
+        return $targeting;
     }
 }

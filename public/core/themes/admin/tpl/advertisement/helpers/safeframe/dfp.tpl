@@ -24,9 +24,11 @@
       </script>
       <script>
         googletag.cmd.push(function() {
-          googletag.defineSlot('{{$dfpId}}', {{$sizes}}, 'zone_{{$id}}').addService(googletag.pubads());
-          {{$targetingCode}}
-          {{$customCode}}
+          googletag.defineSlot('{$dfpId}', {$sizes}, 'zone_{$id}').addService(googletag.pubads());
+          {foreach $targeting as $key => $value}
+            googletag.pubads().setTargeting('{$key}', ['{$value}']);
+          {/foreach}
+          {$customCode}
           googletag.pubads().enableSingleRequest();
           googletag.pubads().collapseEmptyDivs();
           googletag.enableServices();

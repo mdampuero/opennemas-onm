@@ -98,10 +98,18 @@ class DfpRendererTest extends TestCase
         $content->id = 123;
 
         $params = [
-            'category'  => '',
-            'extension' => '',
+            'category'  => 'foo',
+            'extension' => 'bar',
             'content' => $content
         ];
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('dfp_options')
+            ->willReturn([
+                'target'     => 'cat',
+                'module'     => 'mod',
+                'content_id' => 'id'
+            ]);
 
         $output = '<amp-ad
             data-block-on-consent
@@ -114,11 +122,11 @@ class DfpRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/amp/dfp.tpl', [
-                'dfpId'         => 321,
-                'sizes'         => '',
-                'width'         => 300,
-                'height'        => 300,
-                'targetingCode' => ''
+                'dfpId'     => 321,
+                'sizes'     => '',
+                'width'     => 300,
+                'height'    => 300,
+                'targeting' => '{"targeting":{"cat":"foo","mod":"bar","id":123}}'
             ])
             ->willReturn($output);
 
@@ -293,7 +301,7 @@ class DfpRendererTest extends TestCase
         $params = [
             'category'  => '',
             'extension' => '',
-            'content' => $content
+            'contentId' => $content->id
         ];
 
         $output = '<html>
@@ -339,11 +347,11 @@ class DfpRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/safeframe/dfp.tpl', [
-                'id'            => 1,
-                'dfpId'         => 321,
-                'sizes'         => '[ [ 300, 300 ], [ 1, 1 ] ]',
-                'customCode'    => '',
-                'targetingCode' => ''
+                'id'         => 1,
+                'dfpId'      => 321,
+                'sizes'      => '[ [ 300, 300 ], [ 1, 1 ] ]',
+                'customCode' => '',
+                'targeting'  => ''
             ])
             ->willReturn($output);
 
@@ -409,12 +417,12 @@ class DfpRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/dfp.header.tpl', [
-                'category'      => $params['category'],
-                'extension'     => $params['extension'],
-                'customCode'    => '',
-                'options'       => null,
-                'targetingCode' => '',
-                'zones'         => $zones
+                'category'   => $params['category'],
+                'extension'  => $params['extension'],
+                'customCode' => '',
+                'options'    => null,
+                'targeting'  => '',
+                'zones'      => $zones
             ])
             ->willReturn($output);
 
@@ -467,42 +475,11 @@ class DfpRendererTest extends TestCase
         $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
-        $output = "googletag.pubads().setTargeting('cat', ['foo']);\n"
-            . "googletag.pubads().setTargeting('mod', ['bar']);\n"
-            . "googletag.pubads().setTargeting('id', ['baz']);\n";
-
-        $this->assertEquals(
-            $output,
-            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
-        );
-
-        $this->ds->expects($this->any())->method('get')
-            ->with('dfp_options')
-            ->willReturn(null);
-
-        $this->assertEquals(
-            '',
-            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
-        );
-    }
-
-    /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getTargetingAmp
-     */
-    public function testGetTargetingAmp()
-    {
-        $this->ds->expects($this->at(0))->method('get')
-            ->with('dfp_options')
-            ->willReturn([
-                'target'     => 'cat',
-                'module'     => 'mod',
-                'content_id' => 'id'
-            ]);
-
-        $method = new \ReflectionMethod($this->renderer, 'getTargetingAmp');
-        $method->setAccessible(true);
-
-        $output = '{"targeting":{"cat":"foo","mod":"bar","id":"baz"}}';
+        $output = [
+            'cat' => 'foo',
+            'mod' => 'bar',
+            'id'  => 'baz',
+        ];
 
         $this->assertEquals(
             $output,

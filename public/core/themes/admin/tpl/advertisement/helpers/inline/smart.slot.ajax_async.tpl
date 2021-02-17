@@ -1,6 +1,6 @@
 <div id="sas_{$id}_{$rand}"></div>
 <script type="application/javascript">
-  var targetingCode = '{$targetingCode}';
+  var targetingCode = '{$targeting}';
 
   sas.cmd.push(function() {
     sas.call("std", {

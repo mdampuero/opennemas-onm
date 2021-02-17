@@ -137,12 +137,12 @@ class SmartRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/amp/smart.tpl', [
-                'config'        => $config,
-                'format_id'     => $ad->params['smart_format_id'],
-                'page_id'       => $config['page_id']['other'],
-                'width'         => 300,
-                'height'        => 300,
-                'targetingCode' => 'cat=foo;mod=bar;url=123;'
+                'config'    => $config,
+                'format_id' => $ad->params['smart_format_id'],
+                'page_id'   => $config['page_id']['other'],
+                'width'     => 300,
+                'height'    => 300,
+                'targeting' => 'cat=foo;mod=bar;url=123;'
             ])
             ->willReturn($output);
 
@@ -329,7 +329,17 @@ class SmartRendererTest extends TestCase
         $ad->created = '2019-03-28 18:40:32';
         $ad->params  = [ 'smart_format_id' => 321 ];
 
-        $params = [ 'advertisementGroup' => 'foo', 'placeholder' => 'bar' ];
+        $content     = new \stdClass();
+        $content->id = 123;
+
+        $params = [
+            'advertisementGroup' => 'foo',
+            'category'           => '',
+            'extension'          => '',
+            'contentId'          => $content->id,
+            'placeholder'        => 'bar'
+        ];
+
         $output = '<html>
         <head>
           <style>
@@ -382,7 +392,8 @@ class SmartRendererTest extends TestCase
             ->with('advertisement/helpers/safeframe/smart.tpl', [
                 'config'    => $config,
                 'page_id'   => 111,
-                'format_id' => 321
+                'format_id' => 321,
+                'targeting' => null,
             ])
             ->willReturn($output);
 
@@ -450,11 +461,11 @@ class SmartRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/smart.header.ajax_async.tpl', [
-                'config'        => $config,
-                'page_id'       => 111,
-                'zones'         => $zones,
-                'customCode'    => '',
-                'targetingCode' => ''
+                'config'     => $config,
+                'page_id'    => 111,
+                'zones'      => $zones,
+                'customCode' => '',
+                'targeting'  => null
             ])
             ->willReturn($output);
 
