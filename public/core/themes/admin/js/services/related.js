@@ -59,7 +59,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        */
       related.addToBag = function(item) {
         if (angular.isArray(item)) {
-          for (let i = 0; i < item.length; ++i) {
+          for (var i = 0; i < item.length; ++i) {
             related.addToBag(item[i]);
           }
 
@@ -186,7 +186,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
 
           related.scope[name] = [];
 
-          for (let i = 0; i < item.length; i++) {
+          for (var i = 0; i < item.length; i++) {
             related.scope[name].push(related.localize(item[i],
               type + '-' + item[i].target_id));
           }
