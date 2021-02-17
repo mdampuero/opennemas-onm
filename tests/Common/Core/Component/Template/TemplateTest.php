@@ -42,6 +42,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getBaseUrl' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
     }
@@ -57,6 +61,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.manager':
                 return $this->ormManager;
+
+            case 'core.instance':
+                return $this->instance;
 
             case 'request_stack':
                 return $this->rs;
@@ -545,6 +552,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($template, 'setTemplateVars');
         $method->setAccessible(true);
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('http://console');
 
         $template->expects($this->once())->method('assign')
             ->with([
