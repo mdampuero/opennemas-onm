@@ -25,7 +25,7 @@
 
 {block name="primaryActions"}
   <li class="quicklinks">
-    <button class="btn btn-white" id="preview-button" ng-click="preview()" type="button" id="preview_button">
+    <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
       <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
       {t}Preview{/t}
     </button>
