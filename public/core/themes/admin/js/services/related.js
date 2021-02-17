@@ -332,34 +332,9 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
 
               related.scope.data[related.map[type].name].push(item);
               related.scope[related.map[type].name].push(
-              related.localize(item, type + '_' + i));
+                related.localize(item, type + '_' + i)
+              );
             }
-          }
-        }, true);
-      };
-
-      /**
-       * @function watchPositions
-       * @memberOf related
-       *
-       * @description
-       *   Defines a watcher to update positions in a list of related contents
-       *   when the list is re-ordered.
-       *
-       *   Note: Positions in related.data are updated via linkers.
-       *
-       * @params {String} name The name of the list of related contents.
-       */
-      related.watchPositions = function(name) {
-        related.scope.$watch(function() {
-          return related.scope[name];
-        }, function(nv, ov) {
-          if (!nv || angular.equals(nv, ov)) {
-            return;
-          }
-
-          for (var i = 0; i < nv.length; ++i) {
-            related.scope[name][i].position = i;
           }
         }, true);
       };
