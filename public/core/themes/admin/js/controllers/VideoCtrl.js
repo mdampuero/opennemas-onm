@@ -159,19 +159,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       http.get(route).then(
         function(response) {
-          $scope.item.information     = response.data;
+          $scope.item.information = response.data;
 
           if ($scope.item.information.title && !$scope.item.title) {
             $scope.item.title = $scope.item.information.title;
           }
 
           $scope.flags.http.fetch_video_info = false;
+          $scope.flags.generate.slug         = true;
 
           $scope.item.type = $scope.item.information.service;
-
-          $timeout(function() {
-            angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
-          }, 250);
         },
         function(response) {
           messenger.post(response.data.message);
