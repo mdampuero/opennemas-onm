@@ -13,8 +13,9 @@ use Repository\EntityManager;
 function get_body($item = null) : ?string
 {
     $map = [
-        'video' => 'description',
-        'album' => 'description'
+        'album' => 'description',
+        'poll'  => 'description',
+        'video' => 'description'
     ];
 
     $value = array_key_exists(get_type($item), $map) ? get_property($item, $map[get_type($item)]) :

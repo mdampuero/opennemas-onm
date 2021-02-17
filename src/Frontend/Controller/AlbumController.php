@@ -109,10 +109,6 @@ class AlbumController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = (int) $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
         $categoryOQL = !empty($category)
             ? sprintf(' and category_id=%d', $category->id)
             : '';
@@ -125,8 +121,8 @@ class AlbumController extends FrontendController
             $categoryOQL,
             $date,
             $date,
-            $epp,
-            $epp * ($params['page'] - 1)
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
         ));
 
         // No first page and no contents
@@ -140,7 +136,7 @@ class AlbumController extends FrontendController
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $epp,
+                'epp'         => $params['epp'],
                 'page'        => $params['page'],
                 'total'       => $response['total'],
                 'route'       => [

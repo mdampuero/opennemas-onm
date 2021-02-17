@@ -25,6 +25,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         bag: {},
         map: {
           featured_frontpage: {
+            mirror: 'featured_inner',
             name:   'featuredFrontpage',
             simple: true
           },
@@ -120,7 +121,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
 
       /**
        * @function getRelated
-       * @memberOf AlbumCtrl
+       * @memberOf related
        *
        * @description
        *   Returns the related content based on the type.
@@ -222,12 +223,24 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         return localized;
       };
 
+      /**
+       * @function watch
+       * @memberOf related
+       *
+       * @description
+       *   Initializes watchers for every related content type.
+       */
       related.watch = function() {
         related.watchData();
 
         for (var type in related.map) {
           related.watchValue(related.map[type].name, related.map[type].simple);
           related.watchScope(type, related.map[type].name, related.map[type].simple);
+
+          if (related.map[type].mirror) {
+            related.watchMirror(related.map[type].name,
+              related.map[type].mirror, related.map[type].simple);
+          }
         }
       };
 
@@ -267,27 +280,61 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
       };
 
       /**
-       * @function watchPositions
+       * @function watchMirror
        * @memberOf related
        *
        * @description
-       *   Defines a watcher to update positions in a list of related contents
-       *   when the list is re-ordered.
+       *   Mirrors a related content of a type in another related content.
        *
-       *   Note: Positions in related.data are updated via linkers.
+       * @param {String}  name   The name in the scope of the related content to
+       *                         mirror.
+       * @param {String}  type   The type of the mirrored related content.
+       * @param {Boolean} simple Whether to mirror a simple content or a list
+       *                         of contents.
        *
-       * @params {String} name The name of the list of related contents.
+       * @return {type} description
        */
-      related.watchPositions = function(name) {
-        related.scope.$watch(function() {
-          return related.scope[name];
-        }, function(nv, ov) {
-          if (!nv || angular.equals(nv, ov)) {
+      related.watchMirror = function(name, type, simple) {
+        related.scope.$watch(name, function(nv, ov) {
+          if (!nv) {
             return;
           }
 
-          for (var i = 0; i < nv.length; ++i) {
-            related.scope[name][i].position = i;
+          if (simple && (!related.scope.data[related.map[type].name] ||
+              related.scope.data[related.map[type].name].target_id === ov.target_id &&
+              related.scope.data[related.map[type].name].caption === ov.caption)) {
+            var item = angular.copy(nv);
+
+            item.type = type;
+
+            related.scope.data[related.map[type].name] = item;
+            related.scope[related.map[type].name]      = related.localize(item, type);
+            return;
+          }
+
+          var oldIds = ov.map(function(e) {
+            return [ e.target_id, e.caption ];
+          });
+
+          var mirrorIds = !angular.isArray(related.scope[related.map[type].name]) ?
+            [] : related.scope[related.map[type].name].map(function(e) {
+              return [ e.target_id, e.caption ];
+            });
+
+          if (angular.equals(oldIds, mirrorIds)) {
+            related.scope.data[related.map[type].name] = [];
+            related.scope[related.map[type].name]      = [];
+
+            for (var i = 0; i < nv.length; i++) {
+              var item = angular.copy(nv[i]);
+
+              item.type = type;
+
+              related.scope.data[related.map[type].name].push(item);
+              related.scope[related.map[type].name].push(
+                related.localize(item, type + '_' + i)
+              );
+            }
           }
         }, true);
       };
