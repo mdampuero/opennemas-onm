@@ -99,7 +99,7 @@ class StructuredData
         $output = $this->tpl->fetch('common/helpers/structured_article_data.tpl', $params);
         if ($params['content']->content_type_name == 'album') {
             $output = $this->tpl->fetch('common/helpers/structured_gallery_data.tpl', $params);
-        } elseif (!empty($params['video'])) {
+        } elseif ($params['content']->content_type_name == 'video') {
             $output = $this->tpl->fetch('common/helpers/structured_video_data.tpl', $params);
         }
 

@@ -200,7 +200,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
-     * for content of type video
+     * for content of type article with video
      */
     public function testGenerateJsonLDCodeWithVideo()
     {
@@ -225,8 +225,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturn($data);
 
-        $this->tpl->expects($this->at(1))->method('fetch')
-            ->with('common/helpers/structured_video_data.tpl', $data);
+        $this->tpl->expects($this->at(0))->method('fetch')
+            ->with('common/helpers/structured_article_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
     }

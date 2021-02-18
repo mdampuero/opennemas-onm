@@ -41,6 +41,22 @@
           }
         },
         {include file='./structured_image_data.tpl'}
+      {elseif !empty($video)}
+        , "video": {
+            "@type": "VideoObject",
+            "name": "{$video->title|escape:'html'}",
+            "description": "{$video->description|escape:'html'}",
+            "uploadDate": "{format_date date=$video->created format="y-MM-dd HH:mm:ss" type="custom"}",
+            "thumbnailUrl": "{get_photo_path(get_featured_media($video, 'frontpage'), '', [], true)}",
+            "contentUrl": "{get_url item=$video absolute=true}"
+          }
+        , "image": {
+            "@type": "ImageObject",
+            "url": "{get_photo_path(get_featured_media($video, 'frontpage'), '', [], true)}",
+            "height": {get_photo_height(get_featured_media($video, 'inner'))},
+            "width": {get_photo_width(get_featured_media($video, 'inner'))}
+          }
+        }
       {else}
         }
       {/if}
