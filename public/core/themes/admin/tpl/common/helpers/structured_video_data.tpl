@@ -7,7 +7,7 @@
     "description": "{$description|escape:'html'}",
     "@id": "{$url}",
     "uploadDate": "{format_date date=$video->created format="y-MM-dd HH:mm:ss" type="custom"}",
-    "thumbnailUrl": "{get_photo_path(get_featured_media($video, 'frontpage'))}",
+    "thumbnailUrl": "{get_photo_path(get_featured_media($video, 'frontpage'), '', [], true)}",
     "contentUrl": "{$url}",
     "keywords": "{$videokeywords|escape:'html'}",
     "publisher": {
