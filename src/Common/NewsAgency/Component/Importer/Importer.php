@@ -268,7 +268,7 @@ class Importer
                     $this->config['authors_map'],
                     function ($a) use ($resource) {
                         return preg_match(
-                            '/' . preg_quote($a['slug'], '/') . '/i',
+                            '/' . str_replace('/', '\/', $a['slug']) . '/i',
                             $resource->author
                         );
                     }
