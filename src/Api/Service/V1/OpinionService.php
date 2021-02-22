@@ -36,6 +36,12 @@ class OpinionService extends ContentService
                     ->addCondition(sprintf('fk_author %sin [%s]', $condition, implode(',', $ids)))
                     ->getOql();
             }
+
+            return empty($condition) ?
+                $this->container->get('orm.oql.fixer')->fix($oql)
+                ->addCondition(sprintf('pk_content = 0', $condition, implode(',', $ids)))
+                ->getOql() :
+                $oql;
         }
 
         return $oql;
