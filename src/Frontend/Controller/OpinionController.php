@@ -155,29 +155,11 @@ class OpinionController extends FrontendController
         }
 
         try {
-            $oqlBlog = '';
-
-            $bloggers = $this->get('api.service.author')
-                ->getList('is_blog = 1 order by name asc');
-
-            if (!empty($bloggers['total'])) {
-                $oqlBlog = sprintf(
-                    'and fk_author !in [%s]',
-                    implode(',', array_map(function ($a) {
-                        return $a->id;
-                    }, $bloggers['items']))
-                );
-            }
-        } catch (GetListException $e) {
-        }
-
-        try {
             $response = $this->get($this->service)->getList(sprintf(
-                'content_type_name="opinion" and content_status=1 and in_litter=0 %s '
-                . 'and (starttime is null or starttime < "%s") '
+                'content_type_name="opinion" and content_status=1 and in_litter=0 '
+                . 'and blog=0 and (starttime is null or starttime < "%s") '
                 . 'and (endtime is null or endtime > "%s") '
                 . 'order by starttime desc limit %d offset %d',
-                $oqlBlog,
                 $date,
                 $date,
                 $params['epp'],

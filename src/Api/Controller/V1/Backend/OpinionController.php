@@ -46,7 +46,7 @@ class OpinionController extends ContentController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
-            ->get(Opinion::EXTRA_INFO_TYPE);
+            ->get('extraInfoContents.OPINION_MANAGER');
 
         return new JsonResponse([ 'extrafields' => $settings ]);
     }
@@ -125,19 +125,11 @@ class OpinionController extends ContentController
 
         list($positions, $advertisements) = $this->getAdvertisements();
 
-        $otherOpinions = [];
-
         try {
             if (!empty($opinion->fk_author)) {
                 $opinion->author = $this->get('api.service.author')
                     ->getItem($opinion->fk_author);
             }
-
-            $otherOpinions = $this->get($this->service)->getList(sprintf(
-                'fk_author = %d and pk_content != %d and content_status = 1 order by created desc limit 10',
-                $opinion->fk_author,
-                $opinion->pk_content
-            ))['items'];
         } catch (\Exception $e) {
         }
 
@@ -146,7 +138,6 @@ class OpinionController extends ContentController
             'advertisements' => $advertisements,
             'item'           => $opinion,
             'content'        => $opinion,
-            'other_opinions' => $otherOpinions,
             'author'         => $opinion->author,
             'contentId'      => $opinion->pk_content
         ];
@@ -177,7 +168,7 @@ class OpinionController extends ContentController
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
-                ->get(Opinion::EXTRA_INFO_TYPE);
+                ->get('extraInfoContents.OPINION_MANAGER');
         }
 
         return array_merge([

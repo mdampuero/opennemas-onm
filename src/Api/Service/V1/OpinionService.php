@@ -12,7 +12,7 @@ class OpinionService extends ContentService
      */
     protected function getOqlForList($oql)
     {
-        preg_match('/blog=\"([01])\"/', $oql, $matches);
+        preg_match('/blog\\s*=\\s*\"?([01])\"?\\s*/', $oql, $matches);
 
         if (!empty($matches)) {
             // If blog = 0 negate the in condition in the oql
@@ -29,7 +29,7 @@ class OpinionService extends ContentService
                 return $oql;
             }
 
-            $oql = preg_replace('/and blog=\"[01]\"/', '', $oql);
+            $oql = preg_replace('/and blog\\s*=\\s*\"?[01]\"?\\s*/', '', $oql);
 
             return $this->container->get('orm.oql.fixer')->fix($oql)
                 ->addCondition(sprintf('fk_author %sin [%s]', $condition, implode(',', $ids)))

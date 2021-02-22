@@ -76,9 +76,9 @@ class ContentMediaHelper
 
             $featuredInner = array_shift($featured);
 
-            return !empty($featuredInner['target_id']) ?
-                $this->getMediaFromPhoto($featuredInner['target_id']) :
-                $this->getMediaFromAuthor($content->fk_author);
+            if (!empty($featuredInner)) {
+                return $this->getMediaFromPhoto($featuredInner['target_id']);
+            }
         }
 
         return $this->getMediaFromAuthor($content->fk_author);

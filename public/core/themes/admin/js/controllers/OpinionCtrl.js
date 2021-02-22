@@ -28,7 +28,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       created: new Date(),
       starttime: null,
       endtime: null,
-      thumbnail: null,
       title: '',
       type: 0,
       with_comment: 0,
@@ -93,7 +92,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.summary.updateElement();
 
       var status = { starttime: null, endtime: null, content_status: 1 };
-      var item   = Object.assign(Object.assign({}, $scope.data.item), status);
+      var item   = Object.assign({}, $scope.data.item, status);
 
       var data = {
         item: JSON.stringify(cleaner.clean(item)),
