@@ -39,7 +39,7 @@ class OpinionService extends ContentService
 
             return empty($condition) ?
                 $this->container->get('orm.oql.fixer')->fix($oql)
-                ->addCondition(sprintf('pk_content = 0', $condition, implode(',', $ids)))
+                ->addCondition('pk_content = 0')
                 ->getOql() :
                 $oql;
         }
