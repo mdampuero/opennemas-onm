@@ -31,9 +31,11 @@ class OpinionService extends ContentService
 
             $oql = preg_replace('/and blog\\s*=\\s*\"?[01]\"?\\s*/', '', $oql);
 
-            return $this->container->get('orm.oql.fixer')->fix($oql)
-                ->addCondition(sprintf('fk_author %sin [%s]', $condition, implode(',', $ids)))
-                ->getOql();
+            if (!empty($ids)) {
+                return $this->container->get('orm.oql.fixer')->fix($oql)
+                    ->addCondition(sprintf('fk_author %sin [%s]', $condition, implode(',', $ids)))
+                    ->getOql();
+            }
         }
 
         return $oql;
