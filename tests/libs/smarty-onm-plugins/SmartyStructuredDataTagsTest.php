@@ -40,11 +40,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->cs = $this->getMockBuilder('Api\Service\V1\CategoryService')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
-            ->getMock();
-
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
@@ -65,7 +60,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->request->expects($this->any())
             ->method('getUri')
-            ->willReturn('http://route/to/content.html');
+            ->willReturn('http://route/to/page');
 
         $this->structuredData = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
             ->disableOriginalConstructor()
@@ -89,9 +84,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'api.service.category':
-                return $this->cs;
-
             case 'request_stack':
                 return $this->requestStack;
 
@@ -103,32 +95,18 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test smarty_function_structured_data_tags when no content provided to the
-     * template.
+     * Test smarty_function_structured_data_tags when no content provided nor frontpage
      */
-    public function testStructuredDataWhenContentNotProvided()
+    public function testStructuredDataWhenNoContentNorFrontpage()
     {
-        $this->smarty->expects($this->any())->method('hasValue')
-            ->willReturn(false);
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('app')
+            ->willReturn(null);
 
+        $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
+            ->willReturn(null);
         $this->assertEquals(
-            '',
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
-    }
-
-    /**
-     * Test smarty_function_structured_data_tags when a content is provided to
-     * the template but it is unrecognized.
-     */
-    public function testStructuredDataWhenContentNotValid()
-    {
-        $this->smarty->expects($this->any())->method('hasValue')
-            ->willReturn(true);
-        $this->smarty->expects($this->any())->method('getValue')
-            ->willReturn([ 'content' => new Category([]) ]);
-
-        $this->assertEmpty(
             '',
             smarty_function_structured_data_tags(null, $this->smarty)
         );
@@ -138,20 +116,20 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
      * Test smarty_function_structured_data_tags when content
      * Uses generateJsonLDCode
      */
-    public function testStructuredDataWhenException()
+    public function testStructuredData()
     {
-        $content = new Content([
-            'categories'        => [ 197 ],
-            'content_type_name' => 'video'
-        ]);
+        $content  = new Content([ 'id' => 1 ]);
+        $category = new Category([ 'id' => 3750 ]);
 
-        $this->smarty->expects($this->at(0))->method('hasValue')
-            ->willReturn(true);
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('app')
+            ->willReturn(['extension' => 'article']);
         $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
             ->willReturn($content);
-
-        $this->cs->expects($this->once())->method('getItem')
-            ->with(197)->will($this->throwException(new \Exception()));
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('o_category')
+            ->willReturn($category);
 
         $this->assertEquals(
             'Structured-Data',
@@ -160,22 +138,29 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test smarty_function_structured_data_tags when content
+     * Test smarty_function_structured_data_tags when content album
      * Uses generateJsonLDCode
      */
     public function testStructuredDataWithAlbum()
     {
-        $content = new \Content();
+        $content  = new Content();
+        $category = new Category([ 'id' => 3750 ]);
 
-        $content->category_id       = 10633;
         $content->content_type_name = 'album';
 
-        $this->smarty->expects($this->at(0))->method('hasValue')
-            ->willReturn(true);
+
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('app')
+            ->willReturn(['extension' => 'article']);
         $this->smarty->expects($this->at(1))->method('getValue')
+            ->with('content')
             ->willReturn($content);
-        $this->smarty->expects($this->at(3))->method('getValue')
-            ->with('photos');
+        $this->smarty->expects($this->at(2))->method('getValue')
+            ->with('o_category')
+            ->willReturn($category);
+        // $this->smarty->expects($this->at(3))->method('getValue')
+        //     ->with('photos')
+        //     ->willReturn([]);
 
         $this->assertEquals(
             'Structured-Data',

@@ -31,12 +31,12 @@ class StructuredData
     public function __construct($container)
     {
         $this->container = $container;
+        $this->instance  = $this->container->get('core.instance');
         $this->tpl       = $this->container->get('core.template.admin');
         $this->ts        = $this->container->get('api.service.tag');
         $this->ds        = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
     }
-
 
     /**
      * Extract parameters from data.
@@ -47,40 +47,43 @@ class StructuredData
      */
     public function extractParamsFromData($data)
     {
-        $data['title'] = $data['content']->title;
-        // Get content summary, body or description. Otherwise use content title.
-        $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
-            current(array_filter([
-                $data['content']->seo_description,
-                $data['content']->summary,
-                $data['content']->description,
-                mb_substr($data['content']->body, 0, 250),
-                $data['content']->title
-            ]))
-        ))));
+        if (array_key_exists('content', $data)) {
+            $data['title'] = $data['content']->title;
+            // Get content summary, body or description. Otherwise use content title.
+            $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
+                current(array_filter([
+                    $data['content']->seo_description,
+                    $data['content']->summary,
+                    $data['content']->description,
+                    mb_substr($data['content']->body, 0, 250),
+                    $data['content']->title
+                ]))
+            ))));
 
-        // Count description data words
-        $data['wordCount'] = str_word_count($data['description']);
+            // Count description data words
+            $data['wordCount'] = str_word_count($data['description']);
 
-        // Logo, author and media information
-        $data['logo']   = $this->getLogoData();
-        $data['author'] = $this->getAuthorData($data['content']);
-        $media          = $this->getMediaData($data['content']);
-        $data['image']  = $media['image'];
-        $data['video']  = $media['video'];
+            // Author and media information
+            $data['author'] = $this->getAuthorData($data['content']);
+            $media          = $this->getMediaData($data['content']);
+            $data['image']  = $media['image'];
+            $data['video']  = $media['video'];
 
-        // Content keywords
-        $data['keywords'] = empty($data['content']->tags) ? ''
-            : $this->getTags($data['content']->tags);
+            // Content keywords
+            $data['keywords'] = empty($data['content']->tags) ? ''
+                : $this->getTags($data['content']->tags);
 
-        if (!empty($data['video'])) {
-            $data['videokeywords'] = empty($data['video']->tags) ? ''
-                : $this->getTags($data['video']->tags);
+            if (!empty($data['video'])) {
+                $data['videokeywords'] = empty($data['video']->tags) ? ''
+                    : $this->getTags($data['video']->tags);
+            }
         }
 
         // Site information
-        $data['sitename'] = $this->ds->get('site_name');
-        $data['siteurl']  = SITE_URL;
+        $data['logo']            = $this->getLogoData();
+        $data['sitename']        = $this->ds->get('site_name');
+        $data['siteurl']         = $this->instance->getBaseUrl();
+        $data['sitedescription'] = $this->ds->get('site_description');
 
         return $data;
     }
@@ -96,8 +99,10 @@ class StructuredData
     {
         $params = $this->extractParamsFromData($data);
 
-        $output = $this->tpl->fetch('common/helpers/structured_article_data.tpl', $params);
-        if ($params['content']->content_type_name == 'album') {
+        $output = $this->tpl->fetch('common/helpers/structured_frontpage_data.tpl', $params);
+        if ($params['content']->content_type_name == 'article') {
+            $output = $this->tpl->fetch('common/helpers/structured_article_data.tpl', $params);
+        } elseif ($params['content']->content_type_name == 'album') {
             $output = $this->tpl->fetch('common/helpers/structured_gallery_data.tpl', $params);
         } elseif ($params['content']->content_type_name == 'video') {
             $output = $this->tpl->fetch('common/helpers/structured_video_data.tpl', $params);
@@ -140,7 +145,8 @@ class StructuredData
     {
         // Default logo information
         $logo = [
-            'url'    => SITE_URL . '/assets/images/logos/opennemas-powered-horizontal.png',
+            'url'    => $this->instance->getBaseUrl()
+                 . '/assets/images/logos/opennemas-powered-horizontal.png',
             'width'  => '350',
             'height' => '60'
         ];
@@ -148,7 +154,7 @@ class StructuredData
         $siteLogo = $this->ds->get('site_logo');
         if (!empty($siteLogo)) {
             $logo = [
-                'url'    => SITE_URL
+                'url'    => $this->instance->getBaseUrl()
                     . '/asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
                     . $this->container->get('core.instance')->getMediaShortPath()
                     . '/sections/' . $siteLogo,
