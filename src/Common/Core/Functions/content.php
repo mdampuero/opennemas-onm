@@ -327,6 +327,10 @@ function get_publication_date($item = null) : ?\Datetime
  */
 function get_summary($item = null) : ?string
 {
+    if ($item->content_type_name === 'opinion') {
+        return get_property($item, 'description');
+    }
+
     $value = get_property($item, 'summary');
 
     return !empty($value) ? htmlentities($value) : null;

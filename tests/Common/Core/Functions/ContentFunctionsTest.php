@@ -615,6 +615,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->content->summary = 'Percipit "mollis" at scriptorem usu.';
         $this->assertEquals('Percipit &quot;mollis&quot; at scriptorem usu.', get_summary($this->content));
+
+        $this->content->content_type_name = 'opinion';
+        $this->content->description = 'Lorem ipsum, dolor sit amet consectetur';
+        $this->assertEquals('Lorem ipsum, dolor sit amet consectetur', get_summary($this->content));
     }
 
     /**
