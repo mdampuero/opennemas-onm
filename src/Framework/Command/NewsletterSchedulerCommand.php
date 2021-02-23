@@ -9,6 +9,8 @@
  */
 namespace Framework\Command;
 
+use Api\Exception\CreateItemException;
+use Api\Exception\UpdateItemException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -204,42 +206,55 @@ EOF
             $this->outputLine(sprintf("\t- <info>Rendering newsletter</info>", $template->id));
         }
 
-        $template->title = sprintf('%s [%s]', $template->title, $time->format('d/m/Y'));
-        $template->html  = $this->newsletterRenderer->render($template->contents);
-
-        if ($output->isVerbose()) {
-            $this->outputLine(sprintf("\t- <info>Sending newsletter</info>", $template->id));
-        }
-
-        // Send the schedule
-        $report = $this->newsletterSender->send($template, $template->recipients);
-
-        if ($output->isVerbose()) {
-            $this->outputLine(sprintf("\t- <info>Creating newsletter entry</info>", $template->id));
-        }
-
-        // Store the newsletter info
         $data = array_merge($template->getStored(), [
             'type'        => 0,
-            'title'       => $template->title,
-            'html'        => $template->html,
+            'title'       => sprintf('%s [%s]', $template->title, $time->format('d/m/Y')),
             'recipients'  => $template->recipients,
             'sent'        => new \Datetime(null, new \DateTimeZone('UTC')),
-            'sent_items'  => $report['total'],
             'template_id' => $template->id,
         ]);
 
         unset($data['id']);
 
-        $newItem = $this->newsletterService->createItem($data);
+        try {
+            $newsletter       = $this->newsletterService->createItem($data);
+            $newsletter->html = $this->newsletterRenderer->render($newsletter);
+            $data             = $newsletter->getData();
+
+            $data = array_merge($data, [
+                'html'       => $newsletter->html,
+                'sent_items' => $this->newsletterSender->send($newsletter, $newsletter->recipients)['total']
+            ]);
+
+            $this->newsletterService->updateItem($newsletter->id, $data);
+        } catch (CreateItemException $e) {
+            $this->outputLine(
+                sprintf(
+                    "<error>Error creating newsletter based on template with id: %s</error>",
+                    $template->id
+                )
+            );
+        } catch (UpdateItemException $e) {
+            $this->outputLine(
+                sprintf(
+                    "<error>Error updating newsletter based on template with id: %s</error>",
+                    $template->id
+                )
+            );
+        }
+
+        if ($output->isVerbose()) {
+            $this->outputLine(sprintf("\t- <info>Sending newsletter</info>", $template->id));
+            $this->outputLine(sprintf("\t- <info>Creating newsletter entry</info>", $template->id));
+        }
 
         $this->outputLine(sprintf(
             " + <info>Newsletter send and registered (id: %s, sends: %s)",
-            $newItem->id,
-            $report['total']
+            $newsletter->id,
+            $data['sent_items']
         ));
 
-        return $newItem;
+        return $newsletter;
     }
 
     /**

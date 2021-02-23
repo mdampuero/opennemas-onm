@@ -9,6 +9,7 @@
  */
 namespace Frontend\Renderer\Statistics;
 
+use Common\Model\Entity\Newsletter;
 use Frontend\Renderer\StatisticsRenderer;
 
 class GAnalyticsRenderer extends StatisticsRenderer
@@ -32,6 +33,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
     protected function getParameters($content = null)
     {
         $accounts = [];
+        $siteUrl  = $this->container->get('core.instance')->getBaseUrl();
 
         foreach ($this->config as $account) {
             if (array_key_exists('api_key', $account) && !empty(trim($account['api_key']))) {
@@ -41,16 +43,20 @@ class GAnalyticsRenderer extends StatisticsRenderer
 
         $params = [
             'accounts' => $accounts,
-            'random'   => rand(0, 0x7fffffff),
+            'content'  => $content,
             'date'     => date('d/m/Y'),
-            'url'      => urlencode(SITE_URL),
-            'newsurl'  => urlencode(SITE_URL . '/newsletter/' . date("Ymd")),
-            'relurl'   => urlencode('newsletter/' . date("Ymd")),
+            'random'   => rand(0, 0x7fffffff),
+            'url'      => urlencode($siteUrl),
             'utma'     => '__utma%3D999.999.999.999.999.1%3B'
         ];
 
-        if (!empty($content)) {
-            $params['content'] = $content;
+        if (!empty($content) && $content instanceof Newsletter) {
+            $relativeUrl = $this->container->get('router')->generate(
+                'frontend_newsletter_show',
+                [ 'id' => $content->id ]
+            );
+
+            $params['relurl'] = urlencode($relativeUrl);
         }
 
         return $params;

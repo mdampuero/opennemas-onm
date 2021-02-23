@@ -73,10 +73,14 @@ class ContentUrlMatcher
 
         $content = $this->em->find(\classify($type), $id);
 
+        $created = $content->created instanceof \DateTime ?
+            $content->created->format('Y-m-d H:i:s') :
+            $content->created;
+
         // Check if the content matches the info provided and is ready for publish.
         if (is_object($content)
             && $content->pk_content === $id
-            && $content->created === $date
+            && $created === $date
             && $content->content_type_name === $type
             && (is_null($slug) || (string) $slug === (string) $content->slug)
             && (is_null($category) || $category === get_category_slug($content))
