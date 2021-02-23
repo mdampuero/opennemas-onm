@@ -1,5 +1,37 @@
 <script type="application/ld+json">
-  [
+  [{
+    "@context": "http://schema.org/",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "item": {
+        "@id": "{$siteurl}",
+        "name": "{$sitename}",
+        "@type": "CollectionPage"
+      },
+      "position": 1
+    }
+    {if !empty($category)}
+      , {
+        "@type": "ListItem",
+        "item": {
+          "@id": "{get_url item=$category absolute=true}",
+          "name": "{$category->title}",
+          "@type": "CollectionPage"
+        },
+        "position": 2
+      }, {
+        "@type": "ListItem",
+        "item": {
+          "@id": "{$url}",
+          "name": "{$title|escape:'html'}",
+          "@type": "ItemPage"
+        },
+        "position": 3
+      }]},
+    {else}
+      ]},
+    {/if}
     {
       "@context": "http://schema.org",
       "@type": "NewsArticle",
