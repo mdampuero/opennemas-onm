@@ -333,7 +333,8 @@ function get_summary($item = null) : ?string
 
     $value = get_property($item, 'summary');
 
-    return !empty($value) ? htmlentities($value) : null;
+    //TODO: Recover use of htmlentities when possible
+    return !empty($value) ? $value : null;
 }
 
 /**
