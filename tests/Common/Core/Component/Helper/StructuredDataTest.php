@@ -124,11 +124,11 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['video']                    = new Content();
         $output['content']->tags            = [1,2,3,4];
         $output['video']->tags              = [1,2,3,4,5];
-        $output['videokeywords']            = 'keywords,object,json,linking,data';
+        $output['videoKeywords']            = 'keywords,object,json,linking,data';
         $output['keywords']                 = 'keywords,object,json,linking';
-        $output['sitename']                 = 'site name';
-        $output['siteurl']                  = 'http://opennemas.com';
-        $output['sitedescription']          = 'site description';
+        $output['siteName']                 = 'site name';
+        $output['siteUrl']                  = 'http://opennemas.com';
+        $output['siteDescription']          = 'site description';
         $output['content']->body            = null;
         $output['content']->seo_description = null;
         $output['content']->summary         = null;
@@ -204,7 +204,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
 
         $this->tpl->expects($this->at(1))->method('fetch')
-            ->with('common/helpers/structured_gallery_data.tpl', $data);
+            ->with('common/helpers/structured_album_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
     }

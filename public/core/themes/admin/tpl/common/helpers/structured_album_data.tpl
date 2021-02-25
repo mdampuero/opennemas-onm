@@ -5,8 +5,8 @@
     "itemListElement": [{
       "@type": "ListItem",
       "item": {
-        "@id": "{$siteurl}",
-        "name": "{$sitename}",
+        "@id": "{$siteUrl}",
+        "name": "{$siteName}",
         "@type": "CollectionPage"
       },
       "position": 1

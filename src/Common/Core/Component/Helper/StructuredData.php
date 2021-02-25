@@ -74,16 +74,16 @@ class StructuredData
                 : $this->getTags($data['content']->tags);
 
             if (!empty($data['video'])) {
-                $data['videokeywords'] = empty($data['video']->tags) ? ''
+                $data['videoKeywords'] = empty($data['video']->tags) ? ''
                     : $this->getTags($data['video']->tags);
             }
         }
 
         // Site information
         $data['logo']            = $this->getLogoData();
-        $data['sitename']        = $this->ds->get('site_name');
-        $data['siteurl']         = $this->instance->getBaseUrl();
-        $data['sitedescription'] = $this->ds->get('site_description');
+        $data['siteName']        = $this->ds->get('site_name');
+        $data['siteUrl']         = $this->instance->getBaseUrl();
+        $data['siteDescription'] = $this->ds->get('site_description');
 
         return $data;
     }
@@ -100,12 +100,13 @@ class StructuredData
         $params = $this->extractParamsFromData($data);
 
         $output = $this->tpl->fetch('common/helpers/structured_frontpage_data.tpl', $params);
-        if ($params['content']->content_type_name == 'article') {
-            $output = $this->tpl->fetch('common/helpers/structured_article_data.tpl', $params);
-        } elseif ($params['content']->content_type_name == 'album') {
-            $output = $this->tpl->fetch('common/helpers/structured_gallery_data.tpl', $params);
-        } elseif ($params['content']->content_type_name == 'video') {
-            $output = $this->tpl->fetch('common/helpers/structured_video_data.tpl', $params);
+        if (array_key_exists('content', $params)
+            && in_array($params['content']->content_type_name, ['article', 'album', 'video'])
+        ) {
+            $output = $this->tpl->fetch(
+                'common/helpers/structured_' . $params['content']->content_type_name . '_data.tpl',
+                $params
+            );
         }
 
         return $output;
