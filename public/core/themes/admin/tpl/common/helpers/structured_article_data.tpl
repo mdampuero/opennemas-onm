@@ -79,14 +79,14 @@
             "name": "{$video->title|escape:'html'}",
             "description": "{$video->description|escape:'html'}",
             "uploadDate": "{format_date date=$video->created format="y-MM-dd HH:mm:ss" type="custom"}",
-            "thumbnailUrl": "{get_photo_path(get_featured_media($video, 'frontpage'), '', [], true)}",
+            "thumbnailUrl": "{$video->url}",
             "contentUrl": "{get_url item=$video absolute=true}"
           }
         , "image": {
             "@type": "ImageObject",
-            "url": "{get_photo_path(get_featured_media($video, 'frontpage'), '', [], true)}",
-            "height": {get_photo_height(get_featured_media($video, 'inner'))},
-            "width": {get_photo_width(get_featured_media($video, 'inner'))}
+            "url": "{$video->url}",
+            "height": {get_photo_height(get_video_thumbnail($video))|default:360},
+            "width": {get_photo_width(get_video_thumbnail($video))|default:480}
           }
         }
       {else}
