@@ -9,6 +9,7 @@
  */
 namespace Common\NewsAgency\Component\Importer;
 
+use Common\Model\Entity\Content;
 use Common\NewsAgency\Component\Repository\LocalRepository;
 use Common\NewsAgency\Component\Resource\ExternalResource;
 use Common\Model\Entity\Instance;
@@ -160,6 +161,11 @@ class Importer
             unset($data['params']);
 
             return $ps->createItem($data, $file, true);
+        }
+
+        if ($data['content_type_name'] == 'opinion') {
+            return $this->container->get('api.service.opinion')
+                ->createItem($data);
         }
 
         $target  = \classify($data['content_type_name']);
@@ -469,8 +475,15 @@ class Importer
      */
     protected function getDataForOpinion(ExternalResource $resource, array $data) : array
     {
+        $date = new \DateTime();
         $data = array_merge($data, [
-            'summary' => $resource->summary,
+            'content_status' => 1,
+            'created' => $date->format('Y-m-d H:i:s'),
+            'fk_content_type' => 4,
+            'slug' => $this->container->get('data.manager.filter')
+                ->set($resource->title)
+                ->filter('slug')
+                ->get()
         ]);
 
         if (empty($resource->related)) {
@@ -492,17 +505,11 @@ class Importer
 
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
-                if (!array_key_exists('img1', $data)) {
-                    $data['img1']        = $content->pk_content;
-                    $data['img1_footer'] = $content->description;
-                }
-
-                if (!array_key_exists('img2', $data)
-                    || $data['img1'] == $data['img2']
-                ) {
-                    $data['img2']        = $content->pk_content;
-                    $data['img2_footer'] = $content->description;
-                }
+                $data['related_contents'] = $this->getRelated(
+                    $content,
+                    [ 'featured_frontpage', 'featured_inner' ]
+                );
+                break;
             }
         }
 
@@ -607,5 +614,31 @@ class Importer
         return array_map(function ($tag) {
             return $tag->id;
         }, $tags);
+    }
+
+    /**
+     * Returns a list of related contents.
+     *
+     * @param Content $content The content to push like related.
+     * @param array $relationships The array of the relationships.
+     * @param array $actual The array of actual related contents.
+     *
+     * @return array An array of related contents without source id.
+     */
+    protected function getRelated(Content $content, array $relationships, array $actual = []) : array
+    {
+        $new = [];
+
+        foreach ($relationships as $relationship) {
+            $new[] = [
+                'target_id' => $content->pk_content,
+                'type' => $relationship,
+                'content_type_name' => $content->content_type_name,
+                'caption' => $content->description,
+                'position' => 0
+            ];
+        }
+
+        return array_merge($actual, $new);
     }
 }
