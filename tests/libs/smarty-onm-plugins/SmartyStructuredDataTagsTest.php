@@ -32,6 +32,10 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -87,29 +91,14 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
             case 'request_stack':
                 return $this->requestStack;
 
+            case 'core.globals':
+                return $this->globals;
+
             case 'core.helper.structured_data':
                 return $this->structuredData;
         }
 
         return null;
-    }
-
-    /**
-     * Test smarty_function_structured_data_tags when no content provided nor frontpage
-     */
-    public function testStructuredDataWhenNoContentNorFrontpage()
-    {
-        $this->smarty->expects($this->at(0))->method('getValue')
-            ->with('app')
-            ->willReturn(null);
-
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('content')
-            ->willReturn(null);
-        $this->assertEquals(
-            '',
-            smarty_function_structured_data_tags(null, $this->smarty)
-        );
     }
 
     /**
@@ -122,9 +111,6 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $category = new Category([ 'id' => 3750 ]);
 
         $this->smarty->expects($this->at(0))->method('getValue')
-            ->with('app')
-            ->willReturn(['extension' => 'article']);
-        $this->smarty->expects($this->at(1))->method('getValue')
             ->with('content')
             ->willReturn($content);
         $this->smarty->expects($this->at(2))->method('getValue')
@@ -148,19 +134,12 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
 
         $content->content_type_name = 'album';
 
-
         $this->smarty->expects($this->at(0))->method('getValue')
-            ->with('app')
-            ->willReturn(['extension' => 'article']);
-        $this->smarty->expects($this->at(1))->method('getValue')
             ->with('content')
             ->willReturn($content);
         $this->smarty->expects($this->at(2))->method('getValue')
             ->with('o_category')
             ->willReturn($category);
-        // $this->smarty->expects($this->at(3))->method('getValue')
-        //     ->with('photos')
-        //     ->willReturn([]);
 
         $this->assertEquals(
             'Structured-Data',
