@@ -619,9 +619,9 @@ class Importer
     /**
      * Returns a list of related contents.
      *
-     * @param Content $content The content to push like related.
+     * @param Content $content       The content to push like related.
      * @param array   $relationships The array of the relationships.
-     * @param array   $actual The array of actual related contents.
+     * @param array   $actual        The array of actual related contents.
      *
      * @return array An array of related contents without source id.
      */
