@@ -5,8 +5,8 @@
     "itemListElement": [{
       "@type": "ListItem",
       "item": {
-        "@id": "{$siteurl}",
-        "name": "{$sitename}",
+        "@id": "{$siteUrl}",
+        "name": "{$siteName}",
         "@type": "CollectionPage"
       },
       "position": 1
@@ -55,14 +55,14 @@
       "description": "{$description|escape:'html'}",
       "publisher": {
         "@type": "Organization",
-        "name": "{$sitename|escape:'html'}",
+        "name": "{$siteName}",
         "logo": {
             "@type": "ImageObject",
             "url": "{$logo['url']}",
             "width": {$logo['width']},
             "height": {$logo['height']}
         },
-        "url": "{$siteurl}"
+        "url": "{$siteUrl}"
       }
       {if !empty($image)}
         , "image": {

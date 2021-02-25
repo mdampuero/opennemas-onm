@@ -5,8 +5,8 @@
     "itemListElement": [{
       "@type": "ListItem",
       "item": {
-        "@id": "{$siteurl}",
-        "name": "{$sitename}",
+        "@id": "{$siteUrl}",
+        "name": "{$siteName}",
         "@type": "CollectionPage"
       },
       "position": 1
@@ -42,17 +42,17 @@
     "uploadDate": "{format_date date=$video->created format="y-MM-dd HH:mm:ss" type="custom"}",
     "thumbnailUrl": "{get_photo_path(get_featured_media($video, 'frontpage'), '', [], true)}",
     "contentUrl": "{$url}",
-    "keywords": "{$videokeywords|escape:'html'}",
+    "keywords": "{$videoKeywords|escape:'html'}",
     "publisher": {
       "@type": "Organization",
-      "name": "{$sitename|escape:'html'}",
+      "name": "{$siteName|escape:'html'}",
       "logo": {
         "@type": "ImageObject",
         "url": "{$logo['url']}",
         "width": {$logo['width']},
         "height": {$logo['height']}
       },
-      "url": "{$siteurl}"
+      "url": "{$siteUrl}"
     }
   }]
 </script>

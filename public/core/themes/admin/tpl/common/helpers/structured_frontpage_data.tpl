@@ -5,8 +5,8 @@
     "itemListElement": [{
       "@type": "ListItem",
       "item": {
-        "@id": "{$siteurl}",
-        "name": "{$sitename}"
+        "@id": "{$siteUrl}",
+        "name": "{$siteName}"
       },
       "position": 1
     }
@@ -61,15 +61,15 @@
   {
     "@context": "http://schema.org",
     "@type": "WebSite",
-    "name": "{$sitename}",
-    "description": "{$sitedescription}",
+    "name": "{$siteName}",
+    "description": "{$siteDescription}",
     "image": {
       "@type": "ImageObject",
       "url": "{$logo['url']}",
       "width": {$logo['width']},
       "height": {$logo['height']}
     },
-    "url": "{$siteurl}",
+    "url": "{$siteUrl}",
     "creator": {
       "@type": "Organization"
     }
@@ -81,8 +81,8 @@
       "description": "{$category->description|default:$category->title}",
       "url": "{$url}",
     {else}
-      "name": "{$sitename}",
-      "description": "{$sitedescription}",
+      "name": "{$siteName}",
+      "description": "{$siteDescription}",
       "url": "{$url}",
     {/if}
     "image": {
