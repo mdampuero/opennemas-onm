@@ -46,11 +46,11 @@ class ExtractImageFromBodyFilter extends Filter
     {
         $path     = $this->getParameter('path');
         $basename = $this->getParameter('basename', true);
-        $ids[0]   = null;
+        $ids      = [];
         $created  = new \Datetime($created);
         $ps       = $this->container->get('api.service.photo');
 
-        foreach ($files as $key => $file) {
+        foreach ($files as $file) {
             $filepath = $basename ? $path . basename($file) : $path . $file;
             $id       = $this->checkPhotoExists($file);
 
@@ -64,15 +64,19 @@ class ExtractImageFromBodyFilter extends Filter
                     ], new \SplFileInfo($filepath), true);
 
                     $this->insertPhotoTranslation($photo->pk_content, $file);
+
+                    $id = $photo->pk_content;
                 } catch (\Exception $e) {
                     continue;
                 }
+            }
 
-                $ids[$key] = $photo->pk_content;
+            if (!empty($id)) {
+                $ids[] = $id;
             }
         }
 
-        return $ids[0];
+        return array_pop($ids);
     }
 
     /**
