@@ -99,7 +99,7 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
-        // String with iframe with withespaces between opcen/close
+        // String with iframe with withespaces between open/close
         $str      = '<iframe src="http://whatever.com">  </iframe>';
         $expected = '<amp-iframe width=518 height=291 sandbox="allow-scripts '
                 . 'allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms" '
