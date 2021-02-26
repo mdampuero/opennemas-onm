@@ -178,6 +178,88 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests configure
+     */
+    public function testConfigure()
+    {
+        $this->ds->expects($this->any())->method('get')
+            ->with('comments_config')
+            ->willReturn([ 'with_comments' => 0 ]);
+
+        $this->assertEquals(
+            $this->importer,
+            $this->importer->configure($this->config)
+        );
+    }
+
+    /**
+     * Tests import when is already imported.
+     */
+    public function testImportWhenAlreadyImported()
+    {
+        $resource = new ExternalResource([ 'urn' => 'baz:x-foo' ]);
+        $content  = new Content([ 'urn_source' => 'baz:x-foo' ]);
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with([ 'urn_source' => [ [ 'value' => [ $resource->urn ], 'operator' => 'IN' ] ] ], [])
+            ->willReturn(1);
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with([ 'urn_source' => [ [ 'value' => [ $resource->urn ], 'operator' => 'IN' ] ] ], [])
+            ->willReturn([ $content->urn_source => $content ]);
+
+        $this->assertEquals($content, $this->importer->import($resource, []));
+    }
+
+    /**
+     * Tests import when resource of type opinion.
+     */
+    public function testImportWhenOpinion()
+    {
+        $resource = new ExternalResource([ 'type' => 'opinion' ]);
+        $content  = new Content([ 'content_type_name' => 'opinion']);
+
+        $importer = $this->getMockBuilder(get_class($this->importer))
+            ->setConstructorArgs([ $this->container, $this->config ])
+            ->setMethods([ 'getData' ])
+            ->getMock();
+
+        $importer->expects($this->once())->method('getData')
+            ->with($resource, [])
+            ->willReturn([ 'content_type_name' => 'opinion' ]);
+
+        $this->os->expects($this->once())->method('createItem')
+            ->with([ 'content_type_name' => 'opinion' ])
+            ->willReturn($content);
+
+        $this->assertEquals($content, $importer->import($resource, []));
+    }
+
+    /**
+     * Tests import when resource of type photo.
+     */
+    public function testImportWhenPhoto()
+    {
+        $resource = new ExternalResource([ 'type' => 'photo' ]);
+        $content  = new Content([ 'content_type_name' => 'photo']);
+
+        $importer = $this->getMockBuilder(get_class($this->importer))
+            ->setConstructorArgs([ $this->container, $this->config ])
+            ->setMethods([ 'getData' ])
+            ->getMock();
+
+        $importer->expects($this->once())->method('getData')
+            ->with($resource, [])
+            ->willReturn([ 'path' => '/foo/baz/glorp', 'params' => [] ]);
+
+        $this->ps->expects($this->once())->method('createItem')
+            ->with([ 'content_status' => 1 ], new \SplFileInfo('/foo/baz/glorp'), true)
+            ->willReturn($content);
+
+        $this->assertEquals($content, $importer->import($resource, []));
+    }
+
+    /**
      * Tests isImported.
      */
     public function testIsImported()
@@ -207,113 +289,151 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTags.
+     * Tests getAuthor with author
      */
-    public function testGetTags()
+    public function testGetAuthorWithAuthor()
     {
-        $resource = new ExternalResource([ 'tags' => [ 'glorp', 'foo', 'baz' ] ]);
-        $tags     = [
-            'items' => [
-                new Tag([ 'id' => 1 ]),
-                new Tag([ 'id' => 2 ]),
-                new Tag([ 'id' => 3 ])
-            ]
-        ];
-
-        $method = new \ReflectionMethod(
-            get_class($this->importer),
-            'getTags'
-        );
+        $method = new \ReflectionMethod($this->importer, 'getAuthor');
         $method->setAccessible(true);
 
-        $this->ts->expects($this->once())->method('getListByString')
-            ->with([ 'glorp', 'foo', 'baz' ])
-            ->willReturn($tags);
+        $resource = new ExternalResource();
 
-        $this->assertEquals([ 1, 2, 3 ], $method->invokeArgs($this->importer, [ $resource ]));
+        $data = [ 'fk_author' => 1 ];
+
+        $this->assertEquals(
+            1,
+            $method->invokeArgs($this->importer, [ $resource, $data ])
+        );
     }
 
     /**
-     * Tests getRelated.
+     * Tests getAuthor without author
      */
-    public function testGetRelated()
+    public function testGetAuthorWithoutAuthor()
     {
-        $actual = [
-            [
-                'caption'           => 'Facilis, aperiam!',
-                'content_type_name' => 'photo',
-                'position'          => 0,
-                'source_id'         => 10,
-                'target_id'         => 20,
-                'type'              => 'photo'
-            ]
-        ];
-
-        $content = new Content([
-            'pk_content'        => 1,
-            'content_type_name' => 'photo',
-            'description'       => 'Lorem ipsum dolor sit amet.'
-         ]);
-
-         $relationships = [ 'featured_frontpage', 'featured_inner' ];
-
-        $result = [
-                [
-                    'caption'           => 'Facilis, aperiam!',
-                    'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'source_id'         => 10,
-                    'target_id'         => 20,
-                    'type'              => 'photo'
-                ],
-                [
-                    'caption'           => 'Lorem ipsum dolor sit amet.',
-                    'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'target_id'         => 1,
-                    'type'              => 'featured_frontpage'
-                ],
-                [
-                    'caption'           => 'Lorem ipsum dolor sit amet.',
-                    'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'target_id'         => 1,
-                    'type'              => 'featured_inner'
-                ]
-            ];
-
-        $method = new \ReflectionMethod(
-            get_class($this->importer),
-            'getRelated'
-        );
+        $method = new \ReflectionMethod($this->importer, 'getAuthor');
         $method->setAccessible(true);
 
-        $this->assertEquals($result, $method->invokeArgs($this->importer, [ $content, $relationships, $actual ]));
+        $resource = new ExternalResource();
+
+        $this->assertEmpty(
+            $method->invokeArgs($this->importer, [ $resource, [] ])
+        );
     }
 
     /**
-     * Tests getImported.
+     * Tests getAuthor with auto import no map
      */
-    public function testGetImported()
+    public function testGetAuthorWithAutoImportNoMap()
     {
-        $urn     = 'foo:x-baz';
-        $content = new Content([ 'urn_source' => 'foo:x-baz' ]);
-        $result  = [
-            $content->urn_source => $content
-        ];
-
-        $this->repository->expects($this->any())->method('findBy')
-            ->with([ 'urn_source' => [ ['value' => [ $urn ], 'operator' => 'IN' ] ] ], [])
-            ->willReturn([ $content ]);
-
-        $method = new \ReflectionMethod(
-            get_class($this->importer),
-            'getImported'
-        );
+        $method = new \ReflectionMethod($this->importer, 'getAuthor');
         $method->setAccessible(true);
 
-        $this->assertEquals($result, $method->invokeArgs($this->importer, [ [ $urn ] ]));
+        $this->config['author'] = 1;
+
+        $importer = $this->getMockBuilder(get_class($this->importer))
+            ->setConstructorArgs([ $this->container, $this->config ])
+            ->setMethods([ 'isAutoImportEnabled' ])
+            ->getMock();
+
+        $importer->expects($this->any())->method('isAutoImportEnabled')
+            ->willReturn(true);
+
+        $resource         = new ExternalResource();
+        $resource->author = 'waldo | bar/foo';
+
+        $this->assertEquals(
+            1,
+            $method->invokeArgs($importer, [ $resource, [] ])
+        );
     }
+
+    /**
+     * Tests getAuthor with auto import using map
+     */
+    public function testGetAuthorWithAutoImportMap()
+    {
+        $method = new \ReflectionMethod($this->importer, 'getAuthor');
+        $method->setAccessible(true);
+
+        $this->config['auto_import'] = true;
+        $this->config['authors_map'] = [
+            [ 'slug' => 'waldo.*', 'id' => 1 ],
+            [ 'slug' => 'qwert.*/foo', 'id' => 2 ],
+            [ 'slug' => 'thud', 'id' => 3 ],
+        ];
+
+        $importer = $this->getMockBuilder(get_class($this->importer))
+            ->setConstructorArgs([ $this->container, $this->config ])
+            ->setMethods([ 'isAutoImportEnabled' ])
+            ->getMock();
+
+        $importer->expects($this->any())->method('isAutoImportEnabled')
+            ->willReturn(true);
+
+        $resource         = new ExternalResource();
+        $resource->author = 'waldo | bar/foo';
+
+        $this->assertEquals(
+            1,
+            $method->invokeArgs($importer, [ $resource, [] ])
+        );
+
+        $resource->author = 'qWert | bar/foo';
+        $this->assertEquals(
+            2,
+            $method->invokeArgs($importer, [ $resource, [] ])
+        );
+
+        $resource->author = 'bar ThUD | bar/foo - baz';
+        $this->assertEquals(
+            3,
+            $method->invokeArgs($importer, [ $resource, [] ])
+        );
+    }
+
+    /**
+     * Tests getCategory.
+     */
+    public function testGetCategory()
+    {
+        $resource = new ExternalResource();
+
+        $method = new \ReflectionMethod(get_class($this->importer), 'getCategory');
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            14,
+            $method->invokeArgs($this->importer, [ $resource, [ 'fk_content_category' => '14' ] ])
+        );
+
+        $resource->category = 'baz';
+
+        $params = [
+            'category'       => 20,
+            'auto_import'    => true,
+            'categories_map' => [
+                [ 'id' => 12, 'slug' => 'glorp' ],
+                [ 'id' => 13, 'slug' => 'baz' ],
+                [ 'id' => 14, 'slug' => 'foo' ]
+            ]
+        ];
+
+        $config = new \ReflectionProperty(get_class($this->importer), 'config');
+        $config->setAccessible(true);
+        $config->setValue($this->importer, array_merge($config->getValue($this->importer), $params));
+
+        $this->assertEquals(13, $method->invokeArgs($this->importer, [ $resource, [] ]));
+
+        $resource->category = 'unknown';
+
+        $this->assertEquals(20, $method->invokeArgs($this->importer, [ $resource, [] ]));
+
+        $config->setValue($this->importer, []);
+
+        $this->assertNull($method->invokeArgs($this->importer, [ $resource, [] ]));
+    }
+
 
     /**
      * Tests getDataForPhoto.
@@ -401,231 +521,111 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests import when is already imported.
+     * Tests getImported.
      */
-    public function testImportWhenAlreadyImported()
+    public function testGetImported()
     {
-        $resource = new ExternalResource([ 'urn' => 'baz:x-foo' ]);
-        $content  = new Content([ 'urn_source' => 'baz:x-foo' ]);
+        $urn     = 'foo:x-baz';
+        $content = new Content([ 'urn_source' => 'foo:x-baz' ]);
+        $result  = [
+            $content->urn_source => $content
+        ];
 
-        $this->repository->expects($this->once())->method('countBy')
-            ->with([ 'urn_source' => [ [ 'value' => [ $resource->urn ], 'operator' => 'IN' ] ] ], [])
-            ->willReturn(1);
+        $this->repository->expects($this->any())->method('findBy')
+            ->with([ 'urn_source' => [ ['value' => [ $urn ], 'operator' => 'IN' ] ] ], [])
+            ->willReturn([ $content ]);
 
-        $this->repository->expects($this->once())->method('findBy')
-            ->with([ 'urn_source' => [ [ 'value' => [ $resource->urn ], 'operator' => 'IN' ] ] ], [])
-            ->willReturn([ $content->urn_source => $content ]);
-
-        $this->assertEquals($content, $this->importer->import($resource, []));
-    }
-
-    /**
-     * Tests import when resource of type photo.
-     */
-    public function testImportWhenPhoto()
-    {
-        $resource = new ExternalResource([ 'type' => 'photo' ]);
-        $content  = new Content([ 'content_type_name' => 'photo']);
-
-        $importer = $this->getMockBuilder(get_class($this->importer))
-            ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'getData' ])
-            ->getMock();
-
-        $importer->expects($this->once())->method('getData')
-            ->with($resource, [])
-            ->willReturn([ 'path' => '/foo/baz/glorp', 'params' => [] ]);
-
-        $this->ps->expects($this->once())->method('createItem')
-            ->with([ 'content_status' => 1 ], new \SplFileInfo('/foo/baz/glorp'), true)
-            ->willReturn($content);
-
-        $this->assertEquals($content, $importer->import($resource, []));
-    }
-
-    /**
-     * Tests import when resource of type opinion.
-     */
-    public function testImportWhenOpinion()
-    {
-        $resource = new ExternalResource([ 'type' => 'opinion' ]);
-        $content  = new Content([ 'content_type_name' => 'opinion']);
-
-        $importer = $this->getMockBuilder(get_class($this->importer))
-            ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'getData' ])
-            ->getMock();
-
-        $importer->expects($this->once())->method('getData')
-            ->with($resource, [])
-            ->willReturn([ 'content_type_name' => 'opinion' ]);
-
-        $this->os->expects($this->once())->method('createItem')
-            ->with([ 'content_type_name' => 'opinion' ])
-            ->willReturn($content);
-
-        $this->assertEquals($content, $importer->import($resource, []));
-    }
-
-    /**
-     * Tests getCategory.
-     */
-    public function testGetCategory()
-    {
-        $resource = new ExternalResource();
-
-        $method = new \ReflectionMethod(get_class($this->importer), 'getCategory');
+        $method = new \ReflectionMethod(
+            get_class($this->importer),
+            'getImported'
+        );
         $method->setAccessible(true);
 
-        $this->assertEquals(
-            14,
-            $method->invokeArgs($this->importer, [ $resource, [ 'fk_content_category' => '14' ] ])
-        );
+        $this->assertEquals($result, $method->invokeArgs($this->importer, [ [ $urn ] ]));
+    }
 
-        $resource->category = 'baz';
-
-        $params = [
-            'category'       => 20,
-            'auto_import'    => true,
-            'categories_map' => [
-                [ 'id' => 12, 'slug' => 'glorp' ],
-                [ 'id' => 13, 'slug' => 'baz' ],
-                [ 'id' => 14, 'slug' => 'foo' ]
+    /**
+     * Tests getRelated.
+     */
+    public function testGetRelated()
+    {
+        $actual = [
+            [
+                'caption'           => 'Facilis, aperiam!',
+                'content_type_name' => 'photo',
+                'position'          => 0,
+                'source_id'         => 10,
+                'target_id'         => 20,
+                'type'              => 'photo'
             ]
         ];
 
-        $config = new \ReflectionProperty(get_class($this->importer), 'config');
-        $config->setAccessible(true);
-        $config->setValue($this->importer, array_merge($config->getValue($this->importer), $params));
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'photo',
+            'description'       => 'Lorem ipsum dolor sit amet.'
+         ]);
 
-        $this->assertEquals(13, $method->invokeArgs($this->importer, [ $resource, [] ]));
+         $relationships = [ 'featured_frontpage', 'featured_inner' ];
 
-        $resource->category = 'unknown';
+        $result = [
+                [
+                    'caption'           => 'Facilis, aperiam!',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'source_id'         => 10,
+                    'target_id'         => 20,
+                    'type'              => 'photo'
+                ],
+                [
+                    'caption'           => 'Lorem ipsum dolor sit amet.',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'target_id'         => 1,
+                    'type'              => 'featured_frontpage'
+                ],
+                [
+                    'caption'           => 'Lorem ipsum dolor sit amet.',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'target_id'         => 1,
+                    'type'              => 'featured_inner'
+                ]
+            ];
 
-        $this->assertEquals(20, $method->invokeArgs($this->importer, [ $resource, [] ]));
-
-        $config->setValue($this->importer, []);
-
-        $this->assertNull($method->invokeArgs($this->importer, [ $resource, [] ]));
-    }
-
-    /**
-     * Tests configure
-     */
-    public function testConfigure()
-    {
-        $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
-            ->willReturn([ 'with_comments' => 0 ]);
-
-        $this->assertEquals(
-            $this->importer,
-            $this->importer->configure($this->config)
+        $method = new \ReflectionMethod(
+            get_class($this->importer),
+            'getRelated'
         );
-    }
-
-    /**
-     * Tests getAuthor with author
-     */
-    public function testGetAuthorWithAuthor()
-    {
-        $method = new \ReflectionMethod($this->importer, 'getAuthor');
         $method->setAccessible(true);
 
-        $resource = new ExternalResource();
-
-        $data = [ 'fk_author' => 1 ];
-
-        $this->assertEquals(
-            1,
-            $method->invokeArgs($this->importer, [ $resource, $data ])
-        );
+        $this->assertEquals($result, $method->invokeArgs($this->importer, [ $content, $relationships, $actual ]));
     }
 
     /**
-     * Tests getAuthor without author
+     * Tests getTags.
      */
-    public function testGetAuthorWithoutAuthor()
+    public function testGetTags()
     {
-        $method = new \ReflectionMethod($this->importer, 'getAuthor');
-        $method->setAccessible(true);
-
-        $resource = new ExternalResource();
-
-        $this->assertEmpty(
-            $method->invokeArgs($this->importer, [ $resource, [] ])
-        );
-    }
-
-    /**
-     * Tests getAuthor with auto import no map
-     */
-    public function testGetAuthorWithAutoImportNoMap()
-    {
-        $method = new \ReflectionMethod($this->importer, 'getAuthor');
-        $method->setAccessible(true);
-
-        $this->config['author'] = 1;
-
-        $importer = $this->getMockBuilder(get_class($this->importer))
-            ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'isAutoImportEnabled' ])
-            ->getMock();
-
-        $importer->expects($this->any())->method('isAutoImportEnabled')
-            ->willReturn(true);
-
-        $resource         = new ExternalResource();
-        $resource->author = 'waldo | bar/foo';
-
-        $this->assertEquals(
-            1,
-            $method->invokeArgs($importer, [ $resource, [] ])
-        );
-    }
-
-
-    /**
-     * Tests getAuthor with auto import using map
-     */
-    public function testGetAuthorWithAutoImportMap()
-    {
-        $method = new \ReflectionMethod($this->importer, 'getAuthor');
-        $method->setAccessible(true);
-
-        $this->config['auto_import'] = true;
-        $this->config['authors_map'] = [
-            [ 'slug' => 'waldo.*', 'id' => 1 ],
-            [ 'slug' => 'qwert.*/foo', 'id' => 2 ],
-            [ 'slug' => 'thud', 'id' => 3 ],
+        $resource = new ExternalResource([ 'tags' => [ 'glorp', 'foo', 'baz' ] ]);
+        $tags     = [
+            'items' => [
+                new Tag([ 'id' => 1 ]),
+                new Tag([ 'id' => 2 ]),
+                new Tag([ 'id' => 3 ])
+            ]
         ];
 
-        $importer = $this->getMockBuilder(get_class($this->importer))
-            ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'isAutoImportEnabled' ])
-            ->getMock();
-
-        $importer->expects($this->any())->method('isAutoImportEnabled')
-            ->willReturn(true);
-
-        $resource         = new ExternalResource();
-        $resource->author = 'waldo | bar/foo';
-
-        $this->assertEquals(
-            1,
-            $method->invokeArgs($importer, [ $resource, [] ])
+        $method = new \ReflectionMethod(
+            get_class($this->importer),
+            'getTags'
         );
+        $method->setAccessible(true);
 
-        $resource->author = 'qWert | bar/foo';
-        $this->assertEquals(
-            2,
-            $method->invokeArgs($importer, [ $resource, [] ])
-        );
+        $this->ts->expects($this->once())->method('getListByString')
+            ->with([ 'glorp', 'foo', 'baz' ])
+            ->willReturn($tags);
 
-        $resource->author = 'bar ThUD | bar/foo - baz';
-        $this->assertEquals(
-            3,
-            $method->invokeArgs($importer, [ $resource, [] ])
-        );
+        $this->assertEquals([ 1, 2, 3 ], $method->invokeArgs($this->importer, [ $resource ]));
     }
 }
