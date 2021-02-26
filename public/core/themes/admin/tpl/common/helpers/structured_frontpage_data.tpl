@@ -10,48 +10,12 @@
       },
       "position": 1
     }
-    {if !empty($category)}
+    {if !empty($category) || (!empty($app['extension']) && $app['extension'] !== 'frontpages')}
       , {
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$category->title}"
-        },
-        "position": 2
-      }]},
-    {elseif $app['extension'] === 'video'}
-      , {
-        "@type": "ListItem",
-        "item": {
-          "@id": "{$url}",
-          "name": "{t}Videos{/t}"
-        },
-        "position": 2
-      }]},
-    {elseif $app['extension'] === 'album'}
-      , {
-        "@type": "ListItem",
-        "item": {
-          "@id": "{$url}",
-          "name": "{t}Albums{/t}"
-        },
-        "position": 2
-      }]},
-    {elseif $app['extension'] === 'opinion'}
-      , {
-        "@type": "ListItem",
-        "item": {
-          "@id": "{$url}",
-          "name": "{t}Opinions{/t}"
-        },
-        "position": 2
-      }]},
-    {elseif $app['extension'] === 'staticpage'}
-      , {
-        "@type": "ListItem",
-        "item": {
-          "@id": "{$url}",
-          "name": "{$title|escape:'html'}"
+          "name": "{if !empty($title)}{$title}{elseif !empty($category)}{$category->title}{elseif $app['extension'] === 'video'}{t}Videos{/t}{elseif $app['extension'] === 'album'}{t}Albums{/t}{elseif $app['extension'] === 'opinion'}{t}Opinions{/t}{elseif $app['extension'] === 'poll'}{t}Polls{/t}{elseif $app['extension'] === 'staticpage'}{$title|escape:'html'}{else}{$app['extension']}{/if}"
         },
         "position": 2
       }]},
