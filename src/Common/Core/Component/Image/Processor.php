@@ -86,6 +86,16 @@ class Processor
     }
 
     /**
+     * Clears all resources associated to Imagick object.
+     */
+    public function close()
+    {
+        if (!empty($this->image)) {
+            $this->image->getImagick()->clear();
+        }
+    }
+
+    /**
      * Sets parameters for an image.
      *
      * @param array $params The list of parameters.
