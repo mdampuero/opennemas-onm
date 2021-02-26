@@ -36,7 +36,8 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
-                'getDescription', 'getHeight', 'getSize', 'getWidth', 'open', 'optimize', 'save'
+                'close', 'getDescription', 'getHeight', 'getSize', 'getWidth',
+                'open', 'optimize', 'save'
             ])->getMock();
 
         $this->il->expects($this->any())->method('getInstance')
@@ -103,6 +104,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn(400);
         $this->processor->expects($this->once())->method('getDescription')
             ->willReturn('gorp');
+        $this->processor->expects($this->once())->method('close');
 
         $this->assertEquals([
             'size'        => 23920 / 1024,

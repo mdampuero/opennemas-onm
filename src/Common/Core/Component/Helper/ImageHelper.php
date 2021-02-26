@@ -107,6 +107,8 @@ class ImageHelper extends FileHelper
             $information['description'] = $description;
         }
 
+        $this->processor->close();
+
         return $information;
     }
 
