@@ -28,7 +28,7 @@ class AmpFilter extends Filter
 
             // Transformed tags
             '@<video([^>]+>)(?s)(.*?)<\/video>@',
-            '@<iframe.*src="[http:|https:]*(.*?)".*><\/iframe>@',
+            '@<iframe.*src="[http:|https:]*(.*?)".*>.*?<\/iframe>@',
             '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
             '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)?\/.*?>(?s).*?<\/blockquote>@',
             '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
@@ -37,7 +37,7 @@ class AmpFilter extends Filter
 
             // Invalid tags
             '@<object[^>]*>(?s).*?<\/object>@',
-            '@<(script|embed|object|frameset|frame|style|form)[^>]*>(?s).*?<\/\1>@i',
+            '@<(script|embed|object|frameset|iframe|frame|style|form)[^>]*>(?s).*?<\/\1>@i',
             '@<(link|meta|input)[^>]+>@i',
 
             // Clean attributes
