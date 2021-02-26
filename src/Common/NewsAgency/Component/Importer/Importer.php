@@ -151,7 +151,6 @@ class Importer
         $data = $this->getData($resource, $data);
 
         if ($resource->type === 'photo') {
-            $ps   = $this->container->get('api.service.photo');
             $file = new \SplFileInfo($data['path']);
 
             // Avoid uploading images with content_status = 0
@@ -160,7 +159,8 @@ class Importer
             unset($data['path']);
             unset($data['params']);
 
-            return $ps->createItem($data, $file, true);
+            return $this->container->get('api.service.photo')
+                ->createItem($data, $file, true);
         }
 
         if ($data['content_type_name'] == 'opinion') {
@@ -548,10 +548,6 @@ class Importer
      */
     protected function getImported(array $urns) : array
     {
-        if (!is_array($urns)) {
-            $urns = [ $urns ];
-        }
-
         $criteria = [
             'urn_source' => [
                 [ 'value' => $urns, 'operator' => 'IN' ]
@@ -630,13 +626,13 @@ class Importer
         $new = [];
 
         foreach ($relationships as $relationship) {
-            $new[] = [
+            array_push($new, [
                 'target_id' => $content->pk_content,
                 'type' => $relationship,
                 'content_type_name' => $content->content_type_name,
                 'caption' => $content->description,
                 'position' => 0
-            ];
+            ]);
         }
 
         return array_merge($actual, $new);
