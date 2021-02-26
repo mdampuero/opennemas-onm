@@ -113,7 +113,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->at(0))->method('getValue')
             ->with('content')
             ->willReturn($content);
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(1))->method('getValue')
             ->with('o_category')
             ->willReturn($category);
 
@@ -137,7 +137,7 @@ class SmartyStructuredDataTagsTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->at(0))->method('getValue')
             ->with('content')
             ->willReturn($content);
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(1))->method('getValue')
             ->with('o_category')
             ->willReturn($category);
 

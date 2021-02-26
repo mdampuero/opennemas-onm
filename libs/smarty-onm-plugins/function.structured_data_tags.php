@@ -5,7 +5,6 @@ function smarty_function_structured_data_tags($params, &$smarty)
     $content = $smarty->getValue('content');
 
     $data = [
-        'app'      => $smarty->getContainer()->get('core.globals'),
         'category' => $smarty->getValue('o_category'),
         'url'      => $smarty->getContainer()->get('request_stack')
             ->getCurrentRequest()->getUri(),
