@@ -3,7 +3,7 @@
   <script type="text/javascript" src="//tagmanager.smartadserver.com/{$config['network_id']}/{$config['site_id']}/smart.prebid.js" async></script>
 {/if}
 <script type="application/javascript">
-  var targetingCode = '{$targetingCode}';
+  var targetingCode = '{$targeting}';
 
   {$customCode}
 

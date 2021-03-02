@@ -18,6 +18,35 @@ use Frontend\Renderer\AdvertisementRenderer;
 class DfpRenderer extends AdvertisementRenderer
 {
     /**
+     * Returns the HTML for AMP advertisements.
+     *
+     * @param \Advertisement $ad The advertisement to render.
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderAmp($ad, $params)
+    {
+        $size      = $this->getDeviceAdvertisementSize($ad, 'phone');
+        $targeting = $this->getTargeting(
+            $params['category'],
+            $params['extension'],
+            $params['content']->id
+        );
+
+        $content = $this->tpl->fetch('advertisement/helpers/amp/dfp.tpl', [
+            'dfpId'     => $ad->params['googledfp_unit_id'],
+            'sizes'     => $this->getAmpMultiSizes($ad),
+            'width'     => $size['width'],
+            'height'    => $size['height'],
+            'targeting' => !empty($targeting)
+                ? json_encode([ 'targeting' => $targeting ])
+                : null,
+        ]);
+
+        return $this->getSlot($ad, $content);
+    }
+
+    /**
      * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
@@ -53,6 +82,10 @@ class DfpRenderer extends AdvertisementRenderer
             return $this->renderFia($ad, $params);
         }
 
+        if ($format === 'amp') {
+            return $this->renderAmp($ad, $params);
+        }
+
         $content = $this->tpl->fetch('advertisement/helpers/inline/dfp.slot.tpl', [
             'id' => $ad->id
         ]);
@@ -71,11 +104,11 @@ class DfpRenderer extends AdvertisementRenderer
     public function renderSafeFrame(\Advertisement $ad, $params)
     {
         $params = [
-            'id'            => $ad->id,
-            'dfpId'         => $ad->params['googledfp_unit_id'],
-            'sizes'         => $ad->getSizes($ad->normalizeSizes($ad->params)),
-            'customCode'    => $this->getCustomCode(),
-            'targetingCode' => $this->getTargeting(
+            'id'         => $ad->id,
+            'dfpId'      => $ad->params['googledfp_unit_id'],
+            'sizes'      => $ad->getSizes($ad->normalizeSizes($ad->params)),
+            'customCode' => $this->getCustomCode(),
+            'targeting'  => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
                 $params['contentId']
@@ -104,22 +137,17 @@ class DfpRenderer extends AdvertisementRenderer
             ];
         }
 
-        $targetingCode = $this->getTargeting(
-            $params['category'],
-            $params['extension'],
-            $params['content']->id
-        );
-
-        $options    = $this->ds->get('dfp_options');
-        $customCode = $this->getCustomCode();
-
         return $this->tpl->fetch('advertisement/helpers/inline/dfp.header.tpl', [
-            'category'      => $params['category'],
-            'extension'     => $params['extension'],
-            'customCode'    => $customCode,
-            'options'       => $options,
-            'targetingCode' => $targetingCode,
-            'zones'         => $zones
+            'category'   => $params['category'],
+            'extension'  => $params['extension'],
+            'customCode' => $this->getCustomCode(),
+            'options'    => $this->ds->get('dfp_options'),
+            'zones'      => $zones,
+            'targeting'  => $this->getTargeting(
+                $params['category'],
+                $params['extension'],
+                $params['content']->id
+            ),
         ]);
     }
 
@@ -158,25 +186,44 @@ class DfpRenderer extends AdvertisementRenderer
 
         $module = $module === 'frontpages' ? 'home' : $module;
 
-        $targetingCode = '';
+        $targetingMap = [];
         if (array_key_exists('target', $options) && !empty($options['target'])) {
-            $targetingCode .=
-                "googletag.pubads().setTargeting('{$options['target']}', ['{$category}']);\n";
+            $targetingMap[$options['target']] = $category;
         }
 
         if (array_key_exists('module', $options) && !empty($options['module'])) {
-            $targetingCode .=
-                "googletag.pubads().setTargeting('{$options['module']}', ['{$module}']);\n";
+            $targetingMap[$options['module']] = $module;
         }
 
         if (array_key_exists('content_id', $options)
             && !empty($options['content_id'])
             && !empty($contentId)
         ) {
-            $targetingCode .=
-                "googletag.pubads().setTargeting('{$options['content_id']}', ['{$contentId}']);\n";
+            $targetingMap[$options['content_id']] = $contentId;
         }
 
-        return $targetingCode;
+        return $targetingMap;
+    }
+
+    /**
+     * Returns the list of AMP multi-size for Google DFP.
+     *
+     * @param \Advertisement $ad The ad to render.
+     *
+     * @return string The list of AMP multi-size for Google DFP.
+     */
+    protected function getAmpMultiSizes(\Advertisement $ad)
+    {
+        $nomalizedSizes = $ad->normalizeSizes();
+
+        $sizes = array_filter($nomalizedSizes, function ($a) {
+            return !array_key_exists('device', $a);
+        });
+
+        $sizes = array_map(function ($a) {
+            return "{$a['width']}x{$a['height']}";
+        }, $sizes);
+
+        return implode(',', $sizes);
     }
 }

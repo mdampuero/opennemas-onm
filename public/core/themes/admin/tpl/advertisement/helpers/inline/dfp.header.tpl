@@ -6,10 +6,13 @@
 <script>
   googletag.cmd.push(function() {
     {foreach $zones as $zone}
-    googletag.defineSlot('{$zone['dfpId']}', {$zone['sizes']}, 'zone_{$zone['id']}').addService(googletag.pubads());
+      googletag.defineSlot('{$zone['dfpId']}', {$zone['sizes']}, 'zone_{$zone['id']}').addService(googletag.pubads());
     {/foreach}
 
-    {$targetingCode}
+    {foreach $targeting as $key => $value}
+      googletag.pubads().setTargeting('{$key}', ['{$value}']);
+    {/foreach}
+
     {$customCode}
     googletag.pubads().enableSingleRequest();
     googletag.pubads().collapseEmptyDivs();

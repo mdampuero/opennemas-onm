@@ -122,7 +122,7 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         if ($format === 'amp') {
-            $template = 'advertisement/helpers/inline/image.amp.tpl';
+            $template = 'advertisement/helpers/amp/image.tpl';
         }
 
         $isAbsolute = $format === 'newsletter' ? true : false;
