@@ -78,12 +78,12 @@
           "name": "{$video->title|escape:'html'}",
           "description": "{$video->description|escape:'html'}",
           "uploadDate": "{format_date date=$video->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
-          "thumbnailUrl": "{$video->url}",
+          "thumbnailUrl": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
           "contentUrl": "{get_url item=$video absolute=true}"
         }
       , "image": {
           "@type": "ImageObject",
-          "url": "{$video->url}",
+          "url": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
           "height": {get_photo_height(get_video_thumbnail($video))|default:360},
           "width": {get_photo_width(get_video_thumbnail($video))|default:480}
         }
