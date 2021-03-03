@@ -241,6 +241,25 @@ class PClave
     }
 
     /**
+     * Counts terms given a filter.
+     *
+     * @param array $filter The filter used to search.
+     *
+     * @return integer The number of found terms.
+     */
+    public function count($filter)
+    {
+        $sql = 'SELECT COUNT(*) as total FROM `pclave`';
+        if (!empty($filter)) {
+            $sql = 'SELECT COUNT(*) as total FROM `pclave` WHERE ' . $filter;
+        }
+
+        $result = getService('dbal_connection')->fetchAll($sql);
+
+        return $result[0]['total'];
+    }
+
+    /**
      * Replaces the appearances of all the keywords by their replacements
      *
      * @param string $text the text to change
