@@ -47,43 +47,45 @@ class StructuredData
      */
     public function extractParamsFromData($data)
     {
-        if (array_key_exists('content', $data)) {
-            $data['title'] = $data['content']->title;
-            // Get content summary, body or description. Otherwise use content title.
-            $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
-                current(array_filter([
-                    $data['content']->seo_description,
-                    $data['content']->summary,
-                    $data['content']->description,
-                    mb_substr($data['content']->body, 0, 250),
-                    $data['content']->title
-                ]))
-            ))));
-
-            // Count description data words
-            $data['wordCount'] = str_word_count($data['description']);
-
-            // Author and media information
-            $data['author'] = $this->getAuthorData($data['content']);
-            $media          = $this->getMediaData($data['content']);
-            $data['image']  = $media['image'];
-            $data['video']  = $media['video'];
-
-            // Content keywords
-            $data['keywords'] = empty($data['content']->tags) ? ''
-                : $this->getTags($data['content']->tags);
-
-            if (!empty($data['video'])) {
-                $data['videoKeywords'] = empty($data['video']->tags) ? ''
-                    : $this->getTags($data['video']->tags);
-            }
-        }
-
         // Site information
         $data['logo']            = $this->getLogoData();
         $data['siteName']        = $this->ds->get('site_name');
         $data['siteUrl']         = $this->instance->getBaseUrl();
         $data['siteDescription'] = $this->ds->get('site_description');
+
+        if (!array_key_exists('content', $data)) {
+            return $data;
+        }
+
+        $data['title'] = $data['content']->title;
+        // Get content summary, body or description. Otherwise use content title.
+        $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
+            current(array_filter([
+                $data['content']->seo_description,
+                $data['content']->summary,
+                $data['content']->description,
+                mb_substr($data['content']->body, 0, 250),
+                $data['content']->title
+            ]))
+        ))));
+
+        // Count description data words
+        $data['wordCount'] = str_word_count($data['description']);
+
+        // Author and media information
+        $data['author'] = $this->getAuthorData($data['content']);
+        $media          = $this->getMediaData($data['content']);
+        $data['image']  = $media['image'];
+        $data['video']  = $media['video'];
+
+        // Content keywords
+        $data['keywords'] = empty($data['content']->tags) ? ''
+            : $this->getTags($data['content']->tags);
+
+        if (!empty($data['video'])) {
+            $data['videoKeywords'] = empty($data['video']->tags) ? ''
+                : $this->getTags($data['video']->tags);
+        }
 
         return $data;
     }

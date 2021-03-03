@@ -147,17 +147,18 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getTags', 'getLogoData', 'getAuthorData', 'getMediaData' ])
             ->getMock();
 
-        $object->expects($this->at(0))->method('getAuthorData')->willReturn('author');
-        $object->expects($this->at(1))->method('getMediaData')
+        $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
+        $object->expects($this->at(1))->method('getAuthorData')->willReturn('author');
+        $object->expects($this->at(2))->method('getMediaData')
             ->willReturn([
                 'image' => null,
                 'video' => $data['video']
             ]);
 
-        $object->expects($this->at(2))->method('getTags')
+        $object->expects($this->at(3))->method('getTags')
             ->with($data['content']->tags)
             ->willReturn('keywords,object,json,linking');
-        $object->expects($this->at(3))->method('getTags')
+        $object->expects($this->at(4))->method('getTags')
             ->with($data['video']->tags)
             ->willReturn('keywords,object,json,linking,data');
 
@@ -175,6 +176,39 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('site description');
 
         $this->assertEquals($output, $object->extractParamsFromData($data));
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * without content
+     */
+    public function testExtractParamsFromDataWithoutContent()
+    {
+        $output['logo']            = 'logo';
+        $output['siteName']        = 'site name';
+        $output['siteUrl']         = 'http://opennemas.com';
+        $output['siteDescription'] = 'site description';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getLogoData'])
+            ->getMock();
+
+        $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
+
+        $this->instance->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('http://opennemas.com');
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('site_name')
+            ->willReturn('site name');
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('site_description')
+            ->willReturn('site description');
+
+        $this->assertEquals($output, $object->extractParamsFromData([]));
     }
 
     /**
