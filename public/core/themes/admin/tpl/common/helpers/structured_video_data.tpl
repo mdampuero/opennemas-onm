@@ -28,10 +28,9 @@
           "@type": "ItemPage"
         },
         "position": 3
-      }]},
-    {else}
-      ]},
+      }
     {/if}
+  ]},
   {
     "@context": "http://schema.org/",
     "@type": "VideoObject",

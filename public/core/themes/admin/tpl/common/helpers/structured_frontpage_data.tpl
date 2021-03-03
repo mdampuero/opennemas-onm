@@ -18,10 +18,9 @@
           "name": "{if !empty($title)}{$title}{elseif !empty($category)}{$category->title}{elseif $app['extension'] === 'video'}{t}Videos{/t}{elseif $app['extension'] === 'album'}{t}Albums{/t}{elseif $app['extension'] === 'opinion'}{t}Opinions{/t}{elseif $app['extension'] === 'poll'}{t}Polls{/t}{elseif $app['extension'] === 'staticpage'}{$title|escape:'html'}{else}{$app['extension']}{/if}"
         },
         "position": 2
-      }]},
-    {else}
-      ]},
+      }
     {/if}
+  ]},
   {
     "@context": "http://schema.org",
     "@type": "WebSite",
