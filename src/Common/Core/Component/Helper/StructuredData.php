@@ -57,17 +57,8 @@ class StructuredData
             return $data;
         }
 
-        $data['title'] = $data['content']->title;
-        // Get content summary, body or description. Otherwise use content title.
-        $data['description'] = trim(preg_replace('/\s+/', ' ', (strip_tags(
-            current(array_filter([
-                $data['content']->seo_description,
-                $data['content']->summary,
-                $data['content']->description,
-                mb_substr($data['content']->body, 0, 250),
-                $data['content']->title
-            ]))
-        ))));
+        $data['title']       = $data['content']->title;
+        $data['description'] = $this->getDescription($data['content']);
 
         // Count description data words
         $data['wordCount'] = str_word_count($data['description']);
@@ -137,6 +128,30 @@ class StructuredData
         }
 
         return $author;
+    }
+
+    /**
+     * Method to retrieve the description for a content.
+     *
+     * @param \Content $content The content object.
+     *
+     * @return string The description.
+     */
+    protected function getDescription($content)
+    {
+        // Get content summary, description or body.
+        $description = trim(preg_replace('/\s+/', ' ', (strip_tags(
+            current(array_filter([
+                $content->seo_description,
+                $content->summary,
+                $content->description,
+                mb_substr($content->body, 0, 250)
+            ]))
+        ))));
+
+        return !empty($description)
+            ? $description
+            : $this->ds->get('site_description');
     }
 
     /**

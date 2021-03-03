@@ -119,50 +119,45 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['video']          = new Content();
         $data['video']->tags    = [1,2,3,4,5];
 
-        $output                             = [];
-        $output['content']                  = new Content();
-        $output['video']                    = new Content();
-        $output['content']->tags            = [1,2,3,4];
-        $output['video']->tags              = [1,2,3,4,5];
-        $output['videoKeywords']            = 'keywords,object,json,linking,data';
-        $output['keywords']                 = 'keywords,object,json,linking';
-        $output['siteName']                 = 'site name';
-        $output['siteUrl']                  = 'http://opennemas.com';
-        $output['siteDescription']          = 'site description';
-        $output['content']->body            = null;
-        $output['content']->seo_description = null;
-        $output['content']->summary         = null;
-        $output['content']->description     = null;
-        $output['content']->title           = 'This is the title';
-        $output['title']                    = 'This is the title';
-        $output['description']              = 'This is the title';
-        $output['wordCount']                = 4;
-        $output['logo']                     = 'logo';
-        $output['author']                   = 'author';
-        $output['image']                    = null;
+        $output                    = [];
+        $output['content']         = new Content();
+        $output['video']           = new Content();
+        $output['content']->tags   = [1,2,3,4];
+        $output['video']->tags     = [1,2,3,4,5];
+        $output['videoKeywords']   = 'keywords,object,json,linking,data';
+        $output['keywords']        = 'keywords,object,json,linking';
+        $output['siteName']        = 'site name';
+        $output['siteUrl']         = 'http://opennemas.com';
+        $output['siteDescription'] = 'site description';
+        $output['content']->title  = 'This is the title';
+        $output['title']           = 'This is the title';
+        $output['description']     = 'This is the description';
+        $output['wordCount']       = 4;
+        $output['logo']            = 'logo';
+        $output['author']          = 'author';
+        $output['image']           = null;
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getTags', 'getLogoData', 'getAuthorData', 'getMediaData' ])
+            ->setMethods([ 'getTags', 'getLogoData', 'getDescription', 'getAuthorData', 'getMediaData' ])
             ->getMock();
 
         $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
-        $object->expects($this->at(1))->method('getAuthorData')->willReturn('author');
-        $object->expects($this->at(2))->method('getMediaData')
+        $object->expects($this->at(1))->method('getDescription')->willReturn('This is the description');
+        $object->expects($this->at(2))->method('getAuthorData')->willReturn('author');
+        $object->expects($this->at(3))->method('getMediaData')
             ->willReturn([
                 'image' => null,
                 'video' => $data['video']
             ]);
 
-        $object->expects($this->at(3))->method('getTags')
+        $object->expects($this->at(4))->method('getTags')
             ->with($data['content']->tags)
             ->willReturn('keywords,object,json,linking');
-        $object->expects($this->at(4))->method('getTags')
+        $object->expects($this->at(5))->method('getTags')
             ->with($data['video']->tags)
             ->willReturn('keywords,object,json,linking,data');
-
-        $object->expects($this->at(4))->method('getLogoData')->willReturn('logo');
 
         $this->instance->expects($this->once())
             ->method('getBaseUrl')
@@ -345,6 +340,35 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('site name');
 
         $method->invokeArgs($this->object, [ $content ]);
+    }
+
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getDescription
+     */
+    public function testGetDescription()
+    {
+        $method = new \ReflectionMethod($this->object, 'getDescription');
+        $method->setAccessible(true);
+
+        $content              = new \Content();
+        $content->description = 'Foo bar baz';
+
+        $this->assertEquals(
+            $content->description,
+            $method->invokeArgs($this->object, [ $content ])
+        );
+
+        $content->description = '';
+
+        $this->ds->expects($this->once())->method('get')
+            ->with('site_description')
+            ->willReturn('Site description');
+
+        $this->assertEquals(
+            'Site description',
+            $method->invokeArgs($this->object, [ $content ])
+        );
     }
 
     /**
