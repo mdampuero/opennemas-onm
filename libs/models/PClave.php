@@ -243,7 +243,7 @@ class PClave
     /**
      * Counts terms given a filter.
      *
-     * @param array $filter The filter used to search.
+     * @param string $filter The filter used to search.
      *
      * @return integer The number of found terms.
      */
