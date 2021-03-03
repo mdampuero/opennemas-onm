@@ -44,8 +44,8 @@
         "@type": "Person",
         "name": "{$author|escape:'html'}"
       },
-      "datePublished": "{format_date date=$content->created format="y-MM-dd HH:mm:ss" type="custom"}",
-      "dateModified": "{format_date date=$content->changed format="y-MM-dd HH:mm:ss" type="custom"}",
+      "datePublished": "{format_date date=$content->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+      "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd HH:mm:ss" type="custom"}",
       {if !empty($category)}
         "articleSection": "{$category->title|escape:'html'}",
       {/if}
@@ -78,7 +78,7 @@
             "@type": "VideoObject",
             "name": "{$video->title|escape:'html'}",
             "description": "{$video->description|escape:'html'}",
-            "uploadDate": "{format_date date=$video->created format="y-MM-dd HH:mm:ss" type="custom"}",
+            "uploadDate": "{format_date date=$video->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
             "thumbnailUrl": "{$video->url}",
             "contentUrl": "{get_url item=$video absolute=true}"
           }
