@@ -36,7 +36,7 @@
     "@type": "VideoObject",
     "author": "{$author|escape:'html'}",
     "name": "{$video->title|escape:'html'}",
-    "description": "{$description|default:$video->title|escape:'html'}",
+    "description": "{$description|escape:'html'}",
     "@id": "{$url}",
     "uploadDate": "{format_date date=$video->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
     "thumbnailUrl": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
