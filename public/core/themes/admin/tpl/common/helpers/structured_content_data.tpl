@@ -51,7 +51,7 @@
   ]},
   {
     "@context": "http://schema.org",
-    "@type": "NewsArticle",
+    "@type": {if $content->content_type_name === 'opinion'}["NewsArticle", "OpinionNewsArticle"]{else}"NewsArticle"{/if},
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "{$url}"
