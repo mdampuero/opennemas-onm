@@ -41,7 +41,7 @@
     "@type": "WebPage",
     {if !empty($category)}
       "name": "{$category->title}",
-      "description": "{$category->description|default:$category->title}",
+      "description": "{$category->description|default:$category->title|escape:'html'}",
       "url": "{$url}",
     {else}
       "name": "{$siteName}",
