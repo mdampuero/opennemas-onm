@@ -92,17 +92,16 @@ class StructuredData
     {
         $params = $this->extractParamsFromData($data);
 
-        $output = $this->tpl->fetch('common/helpers/structured_frontpage_data.tpl', $params);
-        if (array_key_exists('content', $params)
-            && in_array($params['content']->content_type_name, ['article', 'album', 'video'])
-        ) {
-            $output = $this->tpl->fetch(
-                'common/helpers/structured_' . $params['content']->content_type_name . '_data.tpl',
-                $params
-            );
+        $template = 'common/helpers/structured_frontpage_data.tpl';
+        if (array_key_exists('content', $params)) {
+            $template = 'common/helpers/structured_content_data.tpl';
+            if (in_array($params['content']->content_type_name, ['album', 'video'])) {
+                $template = 'common/helpers/structured_'
+                    . $params['content']->content_type_name . '_data.tpl';
+            }
         }
 
-        return $output;
+        return $this->tpl->fetch($template, $params);
     }
 
     /**

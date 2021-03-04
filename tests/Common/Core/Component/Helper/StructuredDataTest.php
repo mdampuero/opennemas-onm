@@ -232,7 +232,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturn($data);
 
-        $this->tpl->expects($this->at(1))->method('fetch')
+        $this->tpl->expects($this->at(0))->method('fetch')
             ->with('common/helpers/structured_album_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
@@ -265,7 +265,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturn($data);
 
-        $this->tpl->expects($this->at(1))->method('fetch')
+        $this->tpl->expects($this->at(0))->method('fetch')
             ->with('common/helpers/structured_content_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
@@ -298,7 +298,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturn($data);
 
-        $this->tpl->expects($this->at(1))->method('fetch')
+        $this->tpl->expects($this->at(0))->method('fetch')
             ->with('common/helpers/structured_video_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
