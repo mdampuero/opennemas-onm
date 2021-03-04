@@ -266,7 +266,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data);
 
         $this->tpl->expects($this->at(1))->method('fetch')
-            ->with('common/helpers/structured_article_data.tpl', $data);
+            ->with('common/helpers/structured_content_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
     }

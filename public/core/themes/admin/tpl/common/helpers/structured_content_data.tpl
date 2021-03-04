@@ -29,6 +29,24 @@
         },
         "position": 3
       }
+    {elseif $content->content_type_name === 'opinion'}
+      , {
+        "@type": "ListItem",
+        "item": {
+          "@id": "{url name=frontend_opinion_frontpage absolute=true}",
+          "name": "{t}Opinion{/t}",
+          "@type": "CollectionPage"
+        },
+        "position": 2
+      }, {
+        "@type": "ListItem",
+        "item": {
+          "@id": "{$url}",
+          "name": "{$title|escape:'html'}",
+          "@type": "ItemPage"
+        },
+        "position": 3
+      }
     {/if}
   ]},
   {
@@ -76,7 +94,7 @@
       , "video": {
           "@type": "VideoObject",
           "name": "{$video->title|escape:'html'}",
-          "description": "{$video->description|escape:'html'}",
+          "description": "{$video->description|default:$video->title|escape:'html'}",
           "uploadDate": "{format_date date=$video->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
           "thumbnailUrl": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
           "contentUrl": "{get_url item=$video absolute=true}"
