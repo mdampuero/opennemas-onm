@@ -30,6 +30,13 @@ class AdvertisementRenderer extends Renderer
     protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart' ];
 
     /**
+     * The available advertisement types.
+     *
+     * @var array
+     */
+    protected $requestedAd = [];
+
+    /**
      * Initializes the AdvertisementRenderer
      *
      * @param ServiceContainer $container The service container.
@@ -108,6 +115,16 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Get the requested advertisement
+     *
+     * @return array The requested advertisement to render.
+     */
+    public function getRequestedAd()
+    {
+        return $this->requestedAd;
+    }
+
+    /**
      * Renders an advertisement given the advertisement and parameters.
      *
      * @param \Advertisement $ad     The advertisement to render.
@@ -120,6 +137,8 @@ class AdvertisementRenderer extends Renderer
         // Get renderer class and ad format
         $renderer  = $this->getRendererClass($ad->with_script);
         $adsFormat = $params['ads_format'] ?? null;
+
+        $this->setRequestedAd($ad);
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
@@ -350,5 +369,15 @@ class AdvertisementRenderer extends Renderer
         return !empty($ads)
             ? $this->getRendererClass(4)->renderInlineHeader($ads, $params)
             : '';
+    }
+
+    /**
+     * Set the requested advertisement
+     *
+     * @param \Advertisement $ad The advertisement to render.
+     */
+    protected function setRequestedAd($ad)
+    {
+        return array_push($this->requestedAd, $ad);
     }
 }

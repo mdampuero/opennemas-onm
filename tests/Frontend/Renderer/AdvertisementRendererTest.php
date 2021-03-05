@@ -190,6 +190,36 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getRequestedAd
+     */
+    public function testGetRequestedAd()
+    {
+        $ad = new \Advertisement();
+
+        $method = new \ReflectionMethod($this->renderer, 'setRequestedAd');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->renderer, [ $ad ]);
+
+        $this->assertEquals([ $ad ], $this->renderer->getRequestedAd());
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::setRequestedAd
+     */
+    public function testSetRequestedAd()
+    {
+        $ad       = new \Advertisement();
+        $property = new \ReflectionProperty($this->renderer, 'requestedAd');
+        $property->setAccessible(true);
+
+        $method = new \ReflectionMethod($this->renderer, 'setRequestedAd');
+        $method->setAccessible(true);
+        $method->invokeArgs($this->renderer, [ $ad ]);
+
+        $this->assertEquals([ $ad ], $property->getValue($this->renderer));
+    }
+
+    /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
      */
     public function testGetSlot()
