@@ -9,8 +9,9 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-    $ads = $smarty->getValue('advertisements');
-    $app = $smarty->getValue('app');
+    $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    $ads         = $adsRenderer->getRequestedAd();
+    $app         = $smarty->getValue('app');
 
     if (!is_array($ads)
         || empty($ads)
@@ -20,8 +21,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     }
 
     // Do not render the ads headers for AMP pages.
-    $adsFormat   = $smarty->getValue('ads_format');
-    $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    $adsFormat = $smarty->getValue('ads_format');
     if (in_array($adsFormat, $adsRenderer->getInlineFormats())) {
         return $output;
     }
