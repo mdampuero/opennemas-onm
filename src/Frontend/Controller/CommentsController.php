@@ -115,7 +115,7 @@ class CommentsController extends Controller
 
         return new Response(json_encode([
             'contents' => $contents,
-            'more'     => $total < ($epp * $offset),
+            'more'     => $total > ($epp * $offset),
         ]), 200);
     }
 
