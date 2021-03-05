@@ -94,7 +94,7 @@
       , "video": {
           "@type": "VideoObject",
           "name": "{$video->title|escape:'html'}",
-          "description": "{$video->description|default:$description|escape:'html'}",
+          "description": "{$video->description|default:$video->title|escape:'html'}",
           "uploadDate": "{format_date date=$video->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
           "thumbnailUrl": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
           "contentUrl": "{get_url item=$video absolute=true}"
