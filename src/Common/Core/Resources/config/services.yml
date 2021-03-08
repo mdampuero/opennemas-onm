@@ -32,6 +32,10 @@ services:
                 template: '@Core/collector/brand.html.twig'
                 priority: 2000
 
+    core.data.layer:
+        class:     Common\Core\Component\DataLayer\DataLayer
+        public:    true
+
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
