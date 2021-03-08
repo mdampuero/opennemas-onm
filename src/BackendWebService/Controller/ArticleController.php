@@ -45,7 +45,7 @@ class ArticleController extends Controller
             _('Article successfully created.')
         );
 
-        $url = $this->generateUrl('admin_articles');
+        $url = $this->generateUrl('backend_articles_list');
 
         // Return user to list if has no update acl
         if (!empty($article->pk_content)

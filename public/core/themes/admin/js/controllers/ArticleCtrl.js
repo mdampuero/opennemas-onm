@@ -309,7 +309,7 @@
           $scope.flags.loading = 1;
 
           var route = !id ? 'api_v1_backend_article_create' :
-            { name: 'api_v1_backend_article_show', params: { id: id } };
+            { name: 'api_v1_backend_article_get_item', params: { id: id } };
 
           http.get(route).then(function(response) {
             $scope.disableFlags();

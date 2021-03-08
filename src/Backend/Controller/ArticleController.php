@@ -12,12 +12,11 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
 /**
  * Handles the actions for managing articles
  */
-class ArticlesController extends Controller
+class ArticleController extends BackendController
 {
     /**
      * {@inheritdoc}
@@ -39,6 +38,11 @@ class ArticlesController extends Controller
     ];
 
     /**
+     * The resource name.
+     */
+    protected $resource = 'article';
+
+    /**
      * Lists articles in the system
      *
      * @return Response the response object
@@ -47,7 +51,7 @@ class ArticlesController extends Controller
      *     and hasPermission('ARTICLE_ADMIN')
      *     and hasPermission('ARTICLE_PENDINGS')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         return $this->render('article/list.tpl');
     }
@@ -64,7 +68,7 @@ class ArticlesController extends Controller
      */
     public function createAction(Request $request)
     {
-        return $this->render('article/new.tpl', [
+        return $this->render('article/item.tpl', [
             'commentsConfig' => $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('comments_config'),
@@ -87,7 +91,7 @@ class ArticlesController extends Controller
      */
     public function showAction(Request $request, $id)
     {
-        return $this->render('article/new.tpl', [
+        return $this->render('article/item.tpl', [
             'commentsConfig' => $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('comments_config'),
@@ -141,7 +145,7 @@ class ArticlesController extends Controller
             'page'        => $page,
             'total'       => $total,
             'route'       => [
-                'name'   => 'admin_articles_content_provider_suggested',
+                'name'   => 'backend_articles_content_provider_suggested',
                 'params' => ['category' => $category]
             ],
         ]);
@@ -198,7 +202,7 @@ class ArticlesController extends Controller
             'page'        => $page,
             'total'       => $total,
             'route'       => [
-                'name'   => 'admin_articles_content_provider_category',
+                'name'   => 'backend_articles_content_provider_category',
                 'params' => [
                     'category' => $categoryId
                 ]

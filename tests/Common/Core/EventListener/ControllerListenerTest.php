@@ -43,7 +43,7 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnKernelController()
     {
-        $controller = new \Backend\Controller\ArticlesController();
+        $controller = new \Backend\Controller\ArticleController();
 
         $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterControllerEvent')
             ->disableOriginalConstructor()
@@ -56,7 +56,7 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
         $this->listener->onKernelController($event);
 
         $this->assertEquals('list', $this->globals->getAction());
-        $this->assertEquals('articles', $this->globals->getExtension());
+        $this->assertEquals('article', $this->globals->getExtension());
         $this->assertEquals('backend', $this->locale->getContext());
         $this->assertEmpty($this->globals->getEndpoint());
     }

@@ -63,7 +63,7 @@
             {is_module_activated name="ARTICLE_MANAGER"}
             {acl isAllowed="ARTICLE_CREATE"}
             <div class="button">
-              <a href="{url name=admin_article_create}" title="{t}New article{/t}" class="btn btn-white btn-large col-xs-12">
+              <a href="{url name=backend_article_create}" title="{t}New article{/t}" class="btn btn-white btn-large col-xs-12">
                 <i class="fa fa-file-o"></i>{t}New article{/t}
               </a>
             </div>

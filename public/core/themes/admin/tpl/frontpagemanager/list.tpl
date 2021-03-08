@@ -267,16 +267,16 @@
           {is_module_activated name="ARTICLE_MANAGER"}
           {if $category_id eq 0}
           <li>
-            <a href="{url name=admin_articles_content_provider_suggested category=$category_id frontpage_version_id=$version_id_pro}">{t}Suggested{/t}</a>
+            <a href="{url name=backend_articles_content_provider_suggested category=$category_id frontpage_version_id=$version_id_pro}">{t}Suggested{/t}</a>
           </li>
           {else}
           <li>
-            <a href="{url name=admin_articles_content_provider_category category=$category_id frontpage_version_id=$version_id_pro}">{t}Others in category{/t}</a>
+            <a href="{url name=backend_articles_content_provider_category category=$category_id frontpage_version_id=$version_id_pro}">{t}Others in category{/t}</a>
           </li>
           {/if}
           {/is_module_activated}
           <li>
-            <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
+            <a href="{url name=backend_articles_content_provider_category}">{t}Latest articles{/t}</a>
           </li>
           {is_module_activated name="WIDGET_MANAGER"}
           <li>
