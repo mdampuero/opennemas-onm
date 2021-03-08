@@ -48,6 +48,31 @@ function get_url($item = null, array $params = []) : ?string
 }
 
 /**
+ * Returns the path to image folder for the active theme.
+ *
+  * @param bool  $absolute If the directory has to be absolute
+ *
+* @return string The path to image folder for the active theme.
+ */
+function getImageDir($absolute = false) : ?string
+{
+    $instance = getService('core.instance');
+    $theme    = getService('core.theme');
+
+    if ($absolute) {
+        $imageDir = !empty($theme)
+        ? $instance->getBaseUrl() . '/' . trim($theme->path, '/') . '/images/'
+        : null;
+    } else {
+        $imageDir = !empty($theme)
+        ? '/' . trim($theme->path, '/') . '/images/'
+        : null;
+    }
+
+    return $imageDir;
+}
+
+/**
  * Checks if a flag is present in a list of flags.
  *
  * @param string $flag  The flag to check.

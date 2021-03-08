@@ -20,7 +20,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
-
         $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -34,8 +33,11 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getMediaShortPath' ])
+            ->setMethods([ 'getMediaShortPath', 'getBaseUrl' ])
             ->getMock();
+
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('thud.opennemas.com');
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
@@ -127,7 +129,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['videokeywords']  = 'keywords,object,json,linking,data';
         $output['keywords']       = 'keywords,object,json,linking';
         $output['sitename']       = 'site name';
-        $output['siteurl']        = 'http://console';
+        $output['siteurl']        = 'thud.opennemas.com';
         $output['content']->body  = '';
         $output['content']->title = 'This is the title';
         $output['title']          = 'This is the title';
@@ -179,7 +181,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['summary']                    = 'This is a test summary';
         $data['created']                    = '10-10-2010 00:00:00';
         $data['changed']                    = '10-10-2010 00:00:00';
-        $data['url']                        = 'http://console/';
+        $data['url']                        = 'thud.opennemas.com';
         $data['author']                     = 'John Doe';
 
 
@@ -211,7 +213,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['summary']                    = 'This is a test summary';
         $data['created']                    = '10-10-2010 00:00:00';
         $data['changed']                    = '10-10-2010 00:00:00';
-        $data['url']                        = 'http://console/';
+        $data['url']                        = 'thud.opennemas.com';
         $data['author']                     = 'John Doe';
         $data['video']                      = new Content();
 

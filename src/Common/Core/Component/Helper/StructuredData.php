@@ -80,7 +80,7 @@ class StructuredData
 
         // Site information
         $data['sitename'] = $this->ds->get('site_name');
-        $data['siteurl']  = SITE_URL;
+        $data['siteurl']  = $this->container->get('core.instance')->getBaseUrl();
 
         return $data;
     }
@@ -140,7 +140,8 @@ class StructuredData
     {
         // Default logo information
         $logo = [
-            'url'    => SITE_URL . '/assets/images/logos/opennemas-powered-horizontal.png',
+            'url'    => $this->container->get('core.instance')->getBaseUrl()
+                . '/assets/images/logos/opennemas-powered-horizontal.png',
             'width'  => '350',
             'height' => '60'
         ];
@@ -148,7 +149,7 @@ class StructuredData
         $siteLogo = $this->ds->get('site_logo');
         if (!empty($siteLogo)) {
             $logo = [
-                'url'    => SITE_URL
+                'url'    => $this->container->get('core.instance')->getBaseUrl()
                     . '/asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
                     . $this->container->get('core.instance')->getMediaShortPath()
                     . '/sections/' . $siteLogo,

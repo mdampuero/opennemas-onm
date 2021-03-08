@@ -20,6 +20,7 @@ class Ads
     */
     public function frontpage($category)
     {
+        $siteUrl  = getService('core.instance')->getBaseUrl();
         $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get frontpage positions
@@ -30,10 +31,10 @@ class Ads
             ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
-            $ad->extWsUrl    = SITE_URL;
-            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
+            $ad->extWsUrl    = $siteUrl;
+            $ad->extUrl      = $siteUrl . '/ads/' . date('YmdHis', strtotime($ad->created))
                 . sprintf('%06d', $ad->pk_advertisement) . '.html';
-            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
+            $ad->extMediaUrl = $siteUrl . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
@@ -44,6 +45,7 @@ class Ads
     */
     public function article($category)
     {
+        $siteUrl  = getService('core.instance')->getBaseUrl();
         $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get article_inner positions
@@ -54,10 +56,10 @@ class Ads
             ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
-            $ad->extWsUrl    = SITE_URL;
-            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
+            $ad->extWsUrl    = $siteUrl;
+            $ad->extUrl      = $siteUrl . '/ads/' . date('YmdHis', strtotime($ad->created))
                 . sprintf('%06d', $ad->pk_advertisement) . '.html';
-            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
+            $ad->extMediaUrl = $siteUrl . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
@@ -68,6 +70,7 @@ class Ads
     */
     public function opinion($category)
     {
+        $siteUrl  = getService('core.instance')->getBaseUrl();
         $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get opinion positions
@@ -78,10 +81,10 @@ class Ads
             ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
-            $ad->extWsUrl    = SITE_URL;
-            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
+            $ad->extWsUrl    = $siteUrl;
+            $ad->extUrl      = $siteUrl . '/ads/' . date('YmdHis', strtotime($ad->created))
                       . sprintf('%06d', $ad->pk_advertisement) . '.html';
-            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
+            $ad->extMediaUrl = $siteUrl . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
