@@ -79,6 +79,65 @@ class DfpRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderAmp
+     */
+    public function testRenderAmp()
+    {
+        $ad         = new \Advertisement();
+        $ad->params = [ 'googledfp_unit_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $content     = new \stdClass();
+        $content->id = 123;
+
+        $params = [
+            'category'  => 'foo',
+            'extension' => 'bar',
+            'content' => $content
+        ];
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('dfp_options')
+            ->willReturn([
+                'target'     => 'cat',
+                'module'     => 'mod',
+                'content_id' => 'id'
+            ]);
+
+        $output = '<amp-ad
+            data-block-on-consent
+            data-npa-on-unknown-consent="true"
+            width="300"
+            height="300"
+            type="doubleclick"
+            data-slot="321"
+        ></amp-ad>';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/amp/dfp.tpl', [
+                'dfpId'     => 321,
+                'sizes'     => '',
+                'width'     => 300,
+                'height'    => 300,
+                'targeting' => '{"targeting":{"cat":"foo","mod":"bar","id":123}}'
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+                . $output . '</div>',
+            $this->renderer->renderAmp($ad, $params)
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderFia
      */
     public function testRenderFia()
@@ -171,6 +230,28 @@ class DfpRendererTest extends TestCase
     /**
      * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
      */
+    public function testRenderInlineWithAmp()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderAmp' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderAmp')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'amp'
+        ]));
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     */
     public function testRenderInlineWithFia()
     {
         $ad          = new \Advertisement();
@@ -214,10 +295,13 @@ class DfpRendererTest extends TestCase
             ]
         ];
 
+        $content     = new \stdClass();
+        $content->id = 123;
+
         $params = [
             'category'  => '',
             'extension' => '',
-            'contentId' => ''
+            'contentId' => $content->id
         ];
 
         $output = '<html>
@@ -263,11 +347,11 @@ class DfpRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/safeframe/dfp.tpl', [
-                'id'            => 1,
-                'dfpId'         => 321,
-                'sizes'         => '[ [ 300, 300 ], [ 1, 1 ] ]',
-                'customCode'    => '',
-                'targetingCode' => ''
+                'id'         => 1,
+                'dfpId'      => 321,
+                'sizes'      => '[ [ 300, 300 ], [ 1, 1 ] ]',
+                'customCode' => '',
+                'targeting'  => ''
             ])
             ->willReturn($output);
 
@@ -333,12 +417,12 @@ class DfpRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/dfp.header.tpl', [
-                'category'      => $params['category'],
-                'extension'     => $params['extension'],
-                'customCode'    => '',
-                'options'       => null,
-                'targetingCode' => '',
-                'zones'         => $zones
+                'category'   => $params['category'],
+                'extension'  => $params['extension'],
+                'customCode' => '',
+                'options'    => null,
+                'targeting'  => '',
+                'zones'      => $zones
             ])
             ->willReturn($output);
 
@@ -391,9 +475,11 @@ class DfpRendererTest extends TestCase
         $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
-        $output = "googletag.pubads().setTargeting('cat', ['foo']);\n"
-            . "googletag.pubads().setTargeting('mod', ['bar']);\n"
-            . "googletag.pubads().setTargeting('id', ['baz']);\n";
+        $output = [
+            'cat' => 'foo',
+            'mod' => 'bar',
+            'id'  => 'baz',
+        ];
 
         $this->assertEquals(
             $output,
@@ -407,6 +493,33 @@ class DfpRendererTest extends TestCase
         $this->assertEquals(
             '',
             $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getAmpMultiSizes
+     */
+    public function testGetAmpMultiSizes()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getAmpMultiSizes');
+        $method->setAccessible(true);
+
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'phone'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+            ]
+        ];
+
+        $this->assertEquals(
+            "300x250",
+            $method->invokeArgs($this->renderer, [ $ad, 'phone' ])
         );
     }
 }
