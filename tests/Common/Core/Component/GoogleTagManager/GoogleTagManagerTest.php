@@ -7,27 +7,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\Core\Component\GoogleTagsManager;
+namespace Test\Common\Core\Component\GoogleTagManager;
 
-use Common\Core\Component\GoogleTagsManager\GoogleTagsManager;
+use Common\Core\Component\GoogleTagManager\GoogleTagManager;
 
 /**
- * Defines test cases for GoogleTagsManager class.
+ * Defines test cases for GoogleTagManager class.
  */
-class GoogleTagsManagerTest extends \PHPUnit\Framework\TestCase
+class GoogleTagManagerTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
         $this->id = "GMT-0000000";
 
-        $this->object = new GoogleTagsManager();
+        $this->object = new GoogleTagManager();
     }
     /**
      * Generates Google Tags Manager head code
      *
      * @return String the generated code
      */
-    public function testGetGoogleTagsManagerHeadCode()
+    public function testGetGoogleTagManagerHeadCode()
     {
         $code = "<!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -37,7 +37,7 @@ class GoogleTagsManagerTest extends \PHPUnit\Framework\TestCase
     })(window,document,'script','dataLayer','" . $this->id . "');</script>
     <!-- End Google Tag Manager -->";
 
-        $this->assertEquals($code, $this->object->getGoogleTagsManagerHeadCode($this->id));
+        $this->assertEquals($code, $this->object->getGoogleTagManagerHeadCode($this->id));
     }
 
     /**
@@ -45,14 +45,14 @@ class GoogleTagsManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @return String the generated code
      */
-    public function testGetGoogleTagsManagerBodyCode()
+    public function testGetGoogleTagManagerBodyCode()
     {
         $code = '<!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $this->id . '"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->';
 
-        $this->assertEquals($code, $this->object->getGoogleTagsManagerBodyCode($this->id));
+        $this->assertEquals($code, $this->object->getGoogleTagManagerBodyCode($this->id));
     }
 
     /**
@@ -60,13 +60,13 @@ class GoogleTagsManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @return String the generated code
      */
-    public function testgetGoogleTagsManagerBodyCodeAMP()
+    public function testgetGoogleTagManagerBodyCodeAMP()
     {
         $code = '<!-- Google Tag Manager AMP -->
     <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $this->id
         . '&gtm.url=SOURCE_URL" data-credentials="include"></amp-analytics>
     <!-- End Google Tag Manager AMP -->';
 
-        $this->assertEquals($code, $this->object->getGoogleTagsManagerBodyCodeAMP($this->id));
+        $this->assertEquals($code, $this->object->getGoogleTagManagerBodyCodeAMP($this->id));
     }
 }

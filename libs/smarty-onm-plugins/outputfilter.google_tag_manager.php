@@ -7,7 +7,7 @@
  *
  * @return string
  */
-function smarty_outputfilter_google_tags_manager($output, $smarty)
+function smarty_outputfilter_google_tag_manager($output, $smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
 
@@ -28,7 +28,7 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
     ) {
-        $gtm = new \Common\Core\Component\GoogleTagsManager\GoogleTagsManager();
+        $gtm = new \Common\Core\Component\GoogleTagManager\GoogleTagManager();
 
         // AMP pages
         if (preg_match('@\.amp\.html$@', $uri)) {
@@ -41,7 +41,7 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
                 return $output;
             }
 
-            $bodyCode = $gtm->getGoogleTagsManagerBodyCodeAMP($containerId);
+            $bodyCode = $gtm->getGoogleTagManagerBodyCodeAMP($containerId);
 
             return preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);
         }
@@ -55,8 +55,8 @@ function smarty_outputfilter_google_tags_manager($output, $smarty)
             return $output;
         }
 
-        $headCode = $gtm->getGoogleTagsManagerHeadCode($containerId);
-        $bodyCode = $gtm->getGoogleTagsManagerBodyCode($containerId);
+        $headCode = $gtm->getGoogleTagManagerHeadCode($containerId);
+        $bodyCode = $gtm->getGoogleTagManagerBodyCode($containerId);
 
         $output = preg_replace('@(</head>)@', $headCode . '${1}', $output);
         $output = preg_replace('@(<body.*>)@', '${1}' . "\n" . $bodyCode, $output);

@@ -7,20 +7,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\GoogleTagsManager;
+namespace Common\Core\Component\GoogleTagManager;
 
 /**
  * Generates Google tags manager code
  * See more: https://www.google.com/analytics/tag-manager/
  */
-class GoogleTagsManager
+class GoogleTagManager
 {
     /**
-     * Generates Google Tags Manager head code
+     * Generates Google Tags Manager head code.
      *
-     * @return String the generated code
+     * @param String  $id   The Google Tags Manager id.
+     *
+     * @return String $code The generated code.
      */
-    public function getGoogleTagsManagerHeadCode($id)
+    public function getGoogleTagManagerHeadCode($id)
     {
         $code = "<!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -34,11 +36,13 @@ class GoogleTagsManager
     }
 
     /**
-     * Generates Google Tags Manager body code
+     * Generates Google Tags Manager body code.
      *
-     * @return String the generated code
+     * @param String  $id   The Google Tags Manager id.
+     *
+     * @return String $code The generated code.
      */
-    public function getGoogleTagsManagerBodyCode($id)
+    public function getGoogleTagManagerBodyCode($id)
     {
         $code = '<!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $id . '"
@@ -49,11 +53,13 @@ class GoogleTagsManager
     }
 
     /**
-     * Generates Google Tags Manager body code for AMP
+     * Generates Google Tags Manager body code for AMP.
      *
-     * @return String the generated code
+     * @param String  $id   The Google Tags Manager id.
+     *
+     * @return String $code The generated code.
      */
-    public function getGoogleTagsManagerBodyCodeAMP($id)
+    public function getGoogleTagManagerBodyCodeAMP($id)
     {
         $code = '<!-- Google Tag Manager AMP -->
     <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $id

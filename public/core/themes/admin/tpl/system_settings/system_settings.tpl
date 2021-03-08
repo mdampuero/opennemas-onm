@@ -1162,7 +1162,7 @@
                           <h4 class="panel-title">
                             <a class="collapsed" data-parent="#panel-group-google-tags" data-toggle="collapse" href="#google-tags">
                               <i class="fa fa-tag"></i>
-                              {t}Google Tags{/t}
+                              {t}Google Tag Manager{/t}
                             </a>
                           </h4>
                         </div>
@@ -1170,7 +1170,7 @@
                           <div class="panel-body">
                             <div class="form-group">
                               <label class="form-label" for="google-tags-id">
-                                {t}Google Tags container Id{/t}
+                                {t}Google Tag Manager container Id{/t}
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="google-tags-id" name="google-tags-id" ng-model="settings.google_tags_id" type="text">
@@ -1178,7 +1178,7 @@
                             </div>
                             <div class="form-group">
                               <label class="form-label" for="google-tags-id-amp">
-                                {t}Google Tags container Id for AMP{/t}
+                                {t}Google Tag Manager container Id for AMP{/t}
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="google-tags-id-amp" name="google-tags-id-amp" ng-model="settings.google_tags_id_amp" type="text">
