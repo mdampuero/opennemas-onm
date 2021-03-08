@@ -37,6 +37,7 @@ class SettingController extends Controller
         'contact_email',
         'cookies',
         'cookies_hint_url',
+        'data_layer',
         'dynamic_css',
         'elements_in_rss',
         'facebook',

@@ -1192,6 +1192,50 @@
                         </div>
                       </div>
                     </div>
+                    <div class="panel-group" data-toggle="collapse" id="panel-group-data-layer">
+                      <div class="panel panel-default">
+                        <div class="panel-heading collapsed">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-parent="#panel-group-data-layer" data-toggle="collapse" href="#data-layer">
+                              <i class="fa fa-cubes"></i>
+                              {t}Data Layer{/t}
+                            </a>
+                          </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="data-layer">
+                          <div class="panel-body">
+                            <div class="form-group">
+                              <div class="controls">
+                                <div class="row" ng-repeat="variables in settings.data_layer track by $index">
+                                  <div class="col-lg-6 col-md-9 col-sm-5 col-xs-6 m-b-15">
+                                    <input class="form-control" ng-model="variables.key" placeholder="{t}Variable key{/t}" type="text">
+                                  </div>
+                                  <div class="col-lg-4 col-md-9 col-sm-5 col-xs-6 m-b-15">
+                                    <select name="value" ng-model="variables.value" required>
+                                      <option value="">{t}Select a value...{/t}</option>
+                                      <option value="[% value %]" ng-repeat="value in extra.data_types" ng-selected="[% value === variables.value %]">[% value %]</option>
+                                    </select>
+                                  </div>
+                                  <div class="col-lg-2 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-2 col-sm-offset-0 col-xs-4 col-xs-offset-4">
+                                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeDatalayerVariable($index)" type="button">
+                                      <i class="fa fa-trash-o"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                                <button class="btn btn-block btn-default" ng-click="addDatalayerVariable()" type="button">
+                                  <i class="fa fa-plus"></i>
+                                  {t}Add{/t}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     {is_module_activated name="es.openhost.module.acton"}
                     <div class="panel-group" data-toggle="collapse" id="panel-group-acton">
                       <div class="panel panel-default">
