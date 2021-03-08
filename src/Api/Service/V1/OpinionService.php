@@ -17,7 +17,7 @@ class OpinionService extends ContentService
         if (!empty($matches)) {
             $cleanOql = preg_replace('/and blog\\s*=\\s*\"?[01]\"?\\s*/', '', $oql);
             // If blog = 0 negate the in condition in the oql
-            $condition = (boolean) array_pop($matches) ? '' : '!';
+            $operator = (boolean) array_pop($matches) ? '' : '!';
 
             $authors = $this->container->get('api.service.author')
                 ->getList(sprintf('is_blog = 1'))['items'];
@@ -26,12 +26,20 @@ class OpinionService extends ContentService
                 return $a->id;
             }, $authors);
 
+            // No bloggers found
             if (empty($ids)) {
-                return empty($condition) ? $oql : $cleanOql;
+                // Return all when searching by blog = 0
+                if (!empty($operator)) {
+                    return $cleanOql;
+                }
+
+                // Force an empty result with invalid user id when searching by
+                // blog = 1
+                $ids = [ 0 ];
             }
 
             return $this->container->get('orm.oql.fixer')->fix($cleanOql)
-                ->addCondition(sprintf('fk_author %sin [%s]', $condition, implode(',', $ids)))
+                ->addCondition(sprintf('fk_author %sin [%s]', $operator, implode(',', $ids)))
                 ->getOql();
         }
 

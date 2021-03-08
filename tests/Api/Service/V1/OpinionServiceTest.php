@@ -66,15 +66,41 @@ class OpinionServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getOqlForList when there are no bloggers.
      */
-    public function testGetOqlForListWhenNoBloggers()
+    public function testGetOqlForListWhenSearchingBlogsAndNoBloggers()
+    {
+        $this->authorService->expects($this->once())->method('getList')
+            ->with('is_blog = 1')
+            ->willReturn([ 'items' => [] ]);
+
+        $this->oqlFixer->expects($this->once())->method('fix')
+            ->with('glorp = 1 ')
+            ->willReturn($this->oqlFixer);
+
+        $this->oqlFixer->expects($this->once())->method('addCondition')
+            ->with('fk_author in [0]')
+            ->willReturn($this->oqlFixer);
+
+        $this->oqlFixer->expects($this->once())->method('getOql')
+            ->willReturn('glorp = 1 and fk_author in [0]');
+
+        $this->assertEquals(
+            'glorp = 1 and fk_author in [0]',
+            $this->method->invokeArgs($this->service, [ 'glorp = 1 and blog = 1' ])
+        );
+    }
+
+    /**
+     * Tests getOqlForList when there are no bloggers.
+     */
+    public function testGetOqlForListWhenSearchingOpinionsAndNoBloggers()
     {
         $this->authorService->expects($this->once())->method('getList')
             ->with('is_blog = 1')
             ->willReturn([ 'items' => [] ]);
 
         $this->assertEquals(
-            'glorp = 1 and blog = 1',
-            $this->method->invokeArgs($this->service, [ 'glorp = 1 and blog = 1' ])
+            'glorp = 1 ',
+            $this->method->invokeArgs($this->service, [ 'glorp = 1 and blog = 0' ])
         );
     }
 
