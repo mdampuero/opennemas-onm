@@ -64,21 +64,6 @@ class OpinionServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getOqlForList when there is an error in the api service query.
-     */
-    public function testGetOqlForListWhenError()
-    {
-        $this->authorService->expects($this->once())->method('getList')
-            ->with('is_blog = 1')
-            ->will($this->throwException(new GetListException()));
-
-        $this->assertEquals(
-            'glorp = 1 and blog = 0',
-            $this->method->invokeArgs($this->service, [ 'glorp = 1 and blog = 0' ])
-        );
-    }
-
-    /**
      * Tests getOqlForList when there are no bloggers.
      */
     public function testGetOqlForListWhenNoBloggers()

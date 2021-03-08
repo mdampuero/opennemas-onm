@@ -19,19 +19,15 @@ class OpinionService extends ContentService
             // If blog = 0 negate the in condition in the oql
             $condition = (boolean) array_pop($matches) ? '' : '!';
 
-            try {
-                $authors = $this->container->get('api.service.author')
-                    ->getList(sprintf('is_blog = 1'))['items'];
+            $authors = $this->container->get('api.service.author')
+                ->getList(sprintf('is_blog = 1'))['items'];
 
-                $ids = array_map(function ($a) {
-                    return $a->id;
-                }, $authors);
+            $ids = array_map(function ($a) {
+                return $a->id;
+            }, $authors);
 
-                if (empty($ids)) {
-                    return empty($condition) ? $oql : $cleanOql;
-                }
-            } catch (GetListException $e) {
-                return $oql;
+            if (empty($ids)) {
+                return empty($condition) ? $oql : $cleanOql;
             }
 
             return $this->container->get('orm.oql.fixer')->fix($cleanOql)

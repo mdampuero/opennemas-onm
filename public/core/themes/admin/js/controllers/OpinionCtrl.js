@@ -89,7 +89,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       // Force ckeditor
       CKEDITOR.instances.body.updateElement();
-      CKEDITOR.instances.summary.updateElement();
+      CKEDITOR.instances.description.updateElement();
 
       var status = { starttime: null, endtime: null, content_status: 1 };
       var item   = Object.assign({}, $scope.data.item, status);
