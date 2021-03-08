@@ -4,6 +4,7 @@ parameters:
             - meta_amphtml
             - noindex
             - canonical_url
+            - data_layer
             - cmp_script
             - ads_generator
             - ads_scripts
