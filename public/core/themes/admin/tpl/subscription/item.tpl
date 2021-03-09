@@ -89,7 +89,7 @@
         <label for="name" class="form-label">{t}Name{/t}</label>
         <div class="controls controls-validation">
           <input class="form-control" id="name" name="name" ng-model="item.name" required type="text">
-          {include file="ui/component/icon/status.tpl" iClass="form-status-absolute" iFlag="name" iField="name" iForm="name" iRequired=true iValidation=true}
+          {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iFlag="name" iForm="form.name" iNgModel="item.name" iRequired=true iValidation=true}
         </div>
       </div>
     </div>

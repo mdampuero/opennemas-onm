@@ -19,7 +19,7 @@
               </span>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
@@ -53,7 +53,7 @@
               </span>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
@@ -90,7 +90,7 @@
               </span>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
@@ -124,7 +124,7 @@
             <div class="related-item" ng-repeat="r in data.albumFrontpage" ui-tree-node>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
@@ -156,7 +156,7 @@
             <div class="related-item" ng-repeat="r in data.albumInner" ui-tree-node>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% related[r.target_id].title %]
@@ -188,7 +188,7 @@
             <div class="related-item" ng-repeat="r in data.albumHome" ui-tree-node>
               <div class="related-item-info">
                 <span class="related-item-type">
-                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-stack-overflow': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+                  <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
                 </span>
                 <span class="related-item-title">
                   [% related[r.target_id].title %]

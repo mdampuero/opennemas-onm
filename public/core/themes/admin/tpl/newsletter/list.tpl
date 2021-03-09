@@ -175,7 +175,7 @@
                   <td class="hidden-xs">
                     <span class="days">
                       Days:
-                      <span ng-show="item.schedule.days.length > 0" class="badge badge-default m-r-10" ng-repeat="day in item.schedule.days">[% data.extra.days[day] %]</span>
+                      <span ng-show="item.schedule.days.length > 0" class="badge badge-default m-r-10" ng-repeat="day in item.schedule.days">[% data.extra.days[day - 1] %]</span>
                       <span ng-show="item.schedule.days.length <= 0" class="badge badge-default">{t}Not set{/t}</span>
                     </span>
                     <br>

@@ -286,7 +286,9 @@ class VideoFunctionsTests extends \PHPUnit\Framework\TestCase
             'related_contents' => [ [
                 'content_type_name' => 'photo',
                 'type'              => 'featured_frontpage',
-                'target_id'         => 126
+                'target_id'         => 126,
+                'caption'           => null,
+                'position'          => 0
             ] ]
         ]);
 

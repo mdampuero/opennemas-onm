@@ -43,15 +43,6 @@
         };
 
         /**
-         * @inheritdoc
-         */
-        $scope.getData = function() {
-          var data = angular.extend({}, $scope.item);
-
-          return cleaner.clean(data);
-        };
-
-        /**
          * @function isValid
          * @memberOf TagCtrl
          *

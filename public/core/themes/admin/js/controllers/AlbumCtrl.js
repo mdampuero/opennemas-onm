@@ -9,16 +9,15 @@
      *
      * @requires $controller
      * @requires $scope
+     * @requires $timeout
      * @requires $uibModal
      * @requires $window
-     * @requires linker
-     * @requires localizer
-     * @requires messenger
+     * @requires related
      * @requires routing
      */
     .controller('AlbumCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'linker', 'localizer', 'messenger', 'routing',
-      function($controller, $scope, $timeout, $uibModal, $window, linker, localizer, messenger, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'related', 'routing',
+      function($controller, $scope, $timeout, $uibModal, $window, related, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -59,6 +58,16 @@
          * @memberOf AlbumCtrl
          *
          * @description
+         *  The related contents service
+         *
+         * @type {Object}
+         */
+        $scope.related = related;
+
+        /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}
@@ -74,33 +83,49 @@
         };
 
         /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
+         *  The options for ui-tree directive.
+         *
+         * @type {Object}
+         */
+        $scope.treeOptions = {
+          /**
+           * Sorts the list of original items when the list of localized items
+           * is re-ordered.
+           *
+           * @param {Object} e The event object.
+           */
+          dropped: function(e) {
+            var model  = e.dest.nodesScope.$parent.$parent.data.photos;
+            var source = e.source.index;
+            var target = e.dest.index;
+
+            var item = model[e.source.index];
+
+            // Remove item
+            model.splice(source, 1);
+
+            // Add item
+            model.splice(target, 0, item);
+          }
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.localize($scope.data.item, 'item', true, [ 'photos' ]);
+          $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
-          // Check if item is new (created) or existing for use default value or not
+          // Use default value for new items
           if (!$scope.data.item.pk_content) {
-            $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+            $scope.data.item.with_comment =
+              $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
-          // Remove unexisting photos from response data
-          $scope.data.item.photos = $scope.data.item.photos.filter(function(e) {
-            return $scope.data.extra.photos[e.pk_photo];
-          });
-
-          $scope.item.photos = [];
-
-          for (var i = 0; i < $scope.data.item.photos.length; i++) {
-            // Localize photos 1 by 1
-            $scope.item.photos.push($scope.localizePhoto(
-              $scope.data.item.photos[i], $scope.item.photos.length));
-          }
-
-          if ($scope.data.extra.photos &&
-              $scope.data.extra.photos[$scope.item.cover_id]) {
-            $scope.cover = $scope.data.extra.photos[$scope.item.cover_id];
-          }
+          related.init($scope);
+          related.watch();
         };
 
         /**
@@ -117,15 +142,16 @@
             controller: 'ModalCtrl',
             resolve: {
               template: function() {
-                return { selected: $scope.item.photos.length };
+                return { selected: $scope.photos.length };
               },
               success: function() {
-                return function(modalWindow) {
+                return function() {
                   return $timeout(function() {
-                    $scope.item.photos      = [];
-                    $scope.data.item.photos = [];
+                    $scope.photos      = [];
+                    $scope.data.photos = [];
 
-                    modalWindow.close();
+                    // Fake response for ModalCtrl
+                    return { response: {}, headers: [], status: 200 };
                   });
                 };
               }
@@ -160,40 +186,9 @@
         };
 
         /**
-         * @function localizePhoto
-         * @memberOf AlbumCtrl
-         *
-         * @description
-         *   Localizes a photo in the array of photos.
-         *
-         * @param {Object}  original The photo to localize.
-         * @param {Integer} index    The index in the array of photos to use as
-         *                           linker name.
-         */
-        $scope.localizePhoto = function(original, index) {
-          var localized = localizer.get($scope.config.locale).localize(original,
-            [ 'description' ], $scope.config.locale);
-
-          // Initialize linker
-          delete $scope.config.linkers[index];
-          $scope.config.linkers[index] = linker.get([ 'description' ],
-            $scope.config.locale.default, $scope, true);
-
-          // Link original and localized items
-          $scope.config.linkers[index].setKey($scope.config.locale.selected);
-          $scope.config.linkers[index].link(original, localized);
-
-          return localized;
-        };
-
-        /**
          * @inheritdoc
          */
         $scope.validate = function() {
-          if (!$scope.validatePhotosAndCover()) {
-            return false;
-          }
-
           if ($scope.form && $scope.form.$invalid) {
             $('[name=form]')[0].reportValidity();
             return false;
@@ -206,83 +201,6 @@
 
           return true;
         };
-
-        /**
-         * Shows a warning in a modal when cover and/or photos are missing.
-         */
-        $scope.validatePhotosAndCover = function() {
-          if ($scope.item.photos && $scope.item.photos.length > 0 &&
-              $scope.item.cover_id) {
-            return true;
-          }
-
-          $uibModal.open({
-            templateUrl: 'modal-edit-album-error',
-            backdrop: 'static',
-            controller: 'ModalCtrl',
-            resolve: {
-              template: function() {
-                return null;
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          return false;
-        };
-
-        // Update the cover in the item when cover changes
-        $scope.$watch('cover', function(nv) {
-          $scope.item.cover_id = null;
-
-          if (nv) {
-            $scope.item.cover_id = nv.pk_content;
-          }
-        }, true);
-
-        // Update photos order when it changes
-        $scope.$watch('item.photos', function(nv, ov) {
-          if (!nv || nv === ov) {
-            return;
-          }
-
-          var ids = nv.map(function(e) {
-            return e.pk_photo;
-          });
-
-          $scope.data.item.photos.sort(function(a, b) {
-            return ids.indexOf(a.pk_photo) - ids.indexOf(b.pk_photo);
-          });
-        }, true);
-
-        // Update the ids and footers when photos change
-        $scope.$watch('photos', function(nv, ov) {
-          if (!nv || nv === ov) {
-            return;
-          }
-
-          for (var i = 0; i < nv.length; i++) {
-            var photo = {
-              position: $scope.data.item.photos.length,
-              description: nv[i].description,
-              pk_photo: nv[i].pk_content
-            };
-
-            $scope.data.item.photos.push(photo);
-
-            // Localize and add new photo to localized item
-            $scope.item.photos.push($scope.localizePhoto(photo,
-              $scope.item.photos.length));
-
-            if (!$scope.data.extra.photos[nv[i].pk_content]) {
-              $scope.data.extra.photos[nv[i].pk_content] = nv[i];
-            }
-          }
-
-          $scope.photos = [];
-        }, true);
       }
     ]);
 })();

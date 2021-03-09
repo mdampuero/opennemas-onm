@@ -83,6 +83,8 @@
           updateItem: 'api_v1_backend_newsletter_template_update'
         };
 
+        $scope.target = [];
+
         /**
          * @memberOf NewsletterTemplateCtrl
          *
@@ -141,6 +143,29 @@
               return item;
             });
           }
+        };
+
+        /**
+         * @function getItemIds
+         * @memberOf NewsletterCtrl
+         *
+         * @description
+         *   Returns the list of ids for items added to a container.
+         *
+         * @param {Array} items The list of items in a container.
+         *
+         * @return {Array} The list of ids.
+         */
+        $scope.getItemIds = function(items) {
+          if (!items || !(items instanceof Array)) {
+            return [];
+          }
+
+          return items.filter(function(e) {
+            return e.content_type !== 'list';
+          }).map(function(e) {
+            return e.id;
+          });
         };
 
         /**

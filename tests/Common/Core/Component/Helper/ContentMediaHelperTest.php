@@ -316,17 +316,31 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaForAlbum()
     {
-        $album = new \Album();
+        $album = new Content([
+            'pk_content'        => 21,
+            'content_type_name' => 'album',
+            'related_contents'  => [
+                [
+                    'source_id' => 21,
+                    'target_id' => 902,
+                    'type'      => 'featured_frontpage',
+                    'caption'   => 'Viverra comprehensam.',
+                    'position'  => 0
+                ],
+                [
+                    'source_id' => 21,
+                    'target_id' => 911,
+                    'type'      => 'photo',
+                    'caption'   => 'Usu modus an nusquam.',
+                    'position'  => 0
+                ],
+            ]
+        ]);
+
         $photo = new Content();
 
         $method = new \ReflectionMethod($this->helper, 'getMediaForAlbum');
         $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ '' ]));
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
-        $this->assertNull($method->invokeArgs($this->helper, [ $album ]));
-
-        $album->cover_id = 902;
 
         $this->ps->expects($this->once())->method('getItem')
             ->with(902)->willReturn($photo);
@@ -346,9 +360,26 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaForAlbumWhenError()
     {
-        $album = new \Album();
-
-        $album->cover_id = 413;
+        $album = new Content([
+            'pk_content'        => 21,
+            'content_type_name' => 'album',
+            'related_contents'  => [
+                [
+                    'source_id' => 21,
+                    'target_id' => 902,
+                    'type'      => 'featured_frontpage',
+                    'caption'   => 'Viverra comprehensam.',
+                    'position'  => 0
+                ],
+                [
+                    'source_id' => 21,
+                    'target_id' => 911,
+                    'type'      => 'photo',
+                    'caption'   => 'Usu modus an nusquam.',
+                    'position'  => 0
+                ],
+            ]
+        ]);
 
         $this->ps->expects($this->once())->method('getItem')
             ->will($this->throwException(new \Exception()));
