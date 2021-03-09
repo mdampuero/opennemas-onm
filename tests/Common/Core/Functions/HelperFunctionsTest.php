@@ -19,6 +19,10 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
+        $this->ch = $this->getMockBuilder('Common\Core\Helper\ContentHelper')
+            ->setMethods([ 'isReadyForPublish' ])
+            ->getMock();
+
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
             ->setMethods([ 'getRequest', 'getTheme' ])
@@ -47,6 +51,9 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->ch->expects($this->any())->method('isReadyForPublish')
+            ->willReturn(true);
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -71,6 +78,9 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.globals':
                 return $this->globals;
+
+            case 'core.helper.content':
+                return $this->ch;
 
             case 'core.helper.l10n_route':
                 return $this->lrh;
@@ -104,6 +114,27 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->with('/grault/fred')->willReturn('/en/grault/fred');
 
         $this->assertEquals('/en/grault/fred', get_url($item, [ 'flob' => 'grault' ]));
+    }
+
+    /**
+     * Tests get_url when the provided content has a related content (an array
+     * with item, type, caption and position).
+     */
+    public function testGetUrlForRelatedContent()
+    {
+        $item = new Content();
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with($item, [ 'absolute' => false, '_format' => null ])
+            ->willReturn('/grault/fred');
+
+        $this->lrh->expects($this->once())->method('localizeUrl')
+            ->with('/grault/fred')->willReturn('/en/grault/fred');
+
+        $this->assertEquals(
+            '/en/grault/fred',
+            get_url([ 'item' => $item ], [ 'flob' => 'grault' ])
+        );
     }
 
     /**

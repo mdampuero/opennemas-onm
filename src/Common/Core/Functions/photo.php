@@ -15,12 +15,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 function get_photo_path($item, string $transform = null, array $params = [], $absolute = false)
 {
-    if (empty($item)) {
-        return null;
+    if (is_string($item) || empty($item)) {
+        return $item;
     }
 
-    if (is_string($item)) {
-        return $item;
+    $item = get_content($item);
+
+    if (empty($item)) {
+        return null;
     }
 
     $url = getService('core.helper.url_generator')->generate($item);
@@ -54,7 +56,7 @@ function get_photo_path($item, string $transform = null, array $params = [], $ab
  */
 function get_photo_size($item = null) : ?string
 {
-    $value = get_property($item, 'size');
+    $value = get_property(get_content($item), 'size');
 
     return !empty($value) ? $value : null;
 }
@@ -68,7 +70,7 @@ function get_photo_size($item = null) : ?string
  */
 function get_photo_width($item = null) : ?string
 {
-    $value = get_property($item, 'width');
+    $value = get_property(get_content($item), 'width');
 
     return !empty($value) ? $value : null;
 }
@@ -82,7 +84,7 @@ function get_photo_width($item = null) : ?string
  */
 function get_photo_height($item = null) : ?string
 {
-    $value = get_property($item, 'height');
+    $value = get_property(get_content($item), 'height');
 
     return !empty($value) ? $value : null;
 }
@@ -96,12 +98,13 @@ function get_photo_height($item = null) : ?string
  */
 function get_photo_mime_type($item = null) : ?string
 {
-    $path = get_photo_path($item);
+    $path = get_photo_path(get_content($item));
 
     if (!preg_match('/^http?.*/', $path)) {
         $instance = getService('core.instance');
         $path     = $instance->getBaseUrl() . $path;
     }
+
     $value = MimeTypeTool::getMimeType($path);
 
     return !empty($value) ? $value : null;

@@ -154,7 +154,6 @@
 
     a {
       border-radius: 4px;
-      // color: @header-color;
       color: darken(@header-color, 5%);
       display: block;
       padding-top: 15px;
@@ -163,6 +162,7 @@
 
       &:hover {
         background-color: fade(@info-color, 10%);
+        text-decoration: none;
       }
     }
 
@@ -180,7 +180,7 @@
       position: absolute;
       text-overflow: ellipsis;
       white-space: nowrap;
-      width: 70px;
+      width: 100%;
 
       color: darken(@header-color, 25%);
     }

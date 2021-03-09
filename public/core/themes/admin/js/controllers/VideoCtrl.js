@@ -2,8 +2,8 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger',
-  function($controller, $scope, $timeout, $window, http, routing, messenger) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing',
+  function($controller, $scope, $timeout, $window, http, messenger, related, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -109,13 +109,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
-      if ($scope.item.related_contents.length > 0) {
-        var cover = $scope.data.extra.related_contents[$scope.item.related_contents[0].target_id];
-      }
-
-      if (cover) {
-        $scope.cover = cover;
-      }
+      related.init($scope);
+      related.watch();
     };
 
     /**
@@ -203,23 +198,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         })
       );
     };
-
-    // Update thumbnail when is updated
-    $scope.$watch('cover', function(nv) {
-      $scope.item.related_contents = [];
-
-      if (!nv) {
-        return;
-      }
-
-      $scope.item.related_contents.push({
-        target_id: nv.pk_content,
-        type: 'featured_frontpage',
-        content_type_name: 'photo',
-        caption: null,
-        position: 0
-      });
-    }, true);
 
     // Mark preview URLs as trusted on change
     $scope.$watch('item.information.source', function(nv) {

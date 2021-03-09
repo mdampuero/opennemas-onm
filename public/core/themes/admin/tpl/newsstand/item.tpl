@@ -52,7 +52,7 @@
         {t}Date{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.slug }"></i>
         <span class="pull-right" ng-if="!expanded.date">
-          {include file="ui/component/icon/status.tpl" iFlag="date" iField="date" iForm="date" iRequired=true iValidation=true}
+          {include file="common/component/icon/status.tpl" iFlag="date" iForm="form.date" iNgModel="item.date" iRequired=true iValidation=true}
         </span>
         <span class="badge badge-default m-r-10 pull-right text-bold" ng-show="!expanded.date && item.date">
           [% item.date | moment : 'YYYY-MM-DD' %]

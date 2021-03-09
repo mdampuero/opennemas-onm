@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{$content->content_type_name|capitalize}"
+<div data-content-id="{$content->id}" data-class="{$content->content_type_name}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
@@ -45,7 +45,7 @@
             <li class="divider"></li>
             <li>
                 <a href="{url name=backend_ws_content_send_to_trash id=$content->id contentType=$content->content_type_name}" title="{t}Delete{/t}" class="send-to-trash">
-                    <i class="fa fa-trash"></i> {t}Send to trash{/t}
+                    <i class="fa fa-trash-o"></i> {t}Send to trash{/t}
                 </a>
             </li>
         </ul>
