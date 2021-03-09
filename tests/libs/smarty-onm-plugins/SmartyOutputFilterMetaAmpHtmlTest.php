@@ -114,11 +114,20 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaAmpHtmlWithoutAmp()
     {
+        $content = new \Content();
+        $content->load([
+            'pk_content'        => 27616,
+            'category_slug'     => 'gorp',
+            'created'           => '1999-12-31 23:59:59',
+            'content_type_name' => 'opinion',
+            'slug'              => 'foobar-thud'
+        ]);
+
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
         $this->smarty->expects($this->once())->method('getValue')
-            ->willReturn(new \Content());
+            ->willReturn($content);
 
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(false);
@@ -134,11 +143,20 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaAmpHtmlWhenAlreadyInAmp()
     {
+        $content = new \Content();
+        $content->load([
+            'pk_content'        => 27616,
+            'category_slug'     => 'gorp',
+            'created'           => '1999-12-31 23:59:59',
+            'content_type_name' => 'opinion',
+            'slug'              => 'foobar-thud'
+        ]);
+
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
         $this->smarty->expects($this->once())->method('getValue')
-            ->willReturn(new \Content());
+            ->willReturn($content);
 
         $this->security->expects($this->once())->method('hasExtension')
             ->with('AMP_MODULE')->willReturn(true);
@@ -202,9 +220,6 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->rs->expects($this->any())
             ->method('getCurrentRequest')
             ->willReturn($this->request);
-
-        $this->security->expects($this->once())->method('hasExtension')
-            ->with('AMP_MODULE')->willReturn(true);
 
         $this->request->expects($this->any())->method('getRequestUri')
             ->willReturn('http://t.co/wibble.html');
