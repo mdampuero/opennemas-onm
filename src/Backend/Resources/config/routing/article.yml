@@ -1,39 +1,29 @@
 
 # Article controller routes
+backend_articles_config:
+    path:     /articles/config
+    defaults: { _controller: BackendBundle:Article:config }
+
+backend_articles_content_provider_category:
+    path:     /articles/content-provider-category
+    defaults: { _controller: BackendBundle:Article:contentProviderCategory }
+
+backend_articles_content_provider_suggested:
+    path:     /articles/content-provider-suggested
+    defaults: { _controller: BackendBundle:Article:contentProviderSuggested }
+
+backend_article_create:
+    path:     /articles/create
+    defaults: { _controller: BackendBundle:Article:create }
+
 backend_articles_list:
     path:     /articles
     defaults: { _controller: BackendBundle:Article:list }
     options:
         expose: true
 
-backend_article_create:
-    path:     /articles/create
-    defaults: { _controller: BackendBundle:Article:create }
-
 backend_article_show:
     path:     /articles/{id}/show
     defaults: { _controller: BackendBundle:Article:show }
     options:
         expose: true
-
-backend_article_update:
-    path:     /articles/{id}/update
-    defaults: { _controller: BackendBundle:Article:update }
-
-backend_article_preview:
-    path:     /articles/preview
-    defaults: { _controller: BackendBundle:Article:preview }
-    options:
-        expose: true
-
-backend_articles_content_provider_suggested:
-    path:     /articles/content-provider-suggested
-    defaults: { _controller: BackendBundle:Article:contentProviderSuggested }
-
-backend_articles_content_provider_category:
-    path:     /articles/content-provider-category
-    defaults: { _controller: BackendBundle:Article:contentProviderCategory }
-
-backend_articles_config:
-    path:     /articles/config
-    defaults: { _controller: BackendBundle:Article:config }
