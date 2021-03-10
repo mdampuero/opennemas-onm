@@ -3,9 +3,10 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
-use Common\Core\Annotation\Security;
+use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends ContentController
 {
@@ -71,6 +72,14 @@ class ArticleController extends ContentController
     /**
      * {@inheritdoc}
      */
+    public function getL10nKeys()
+    {
+        return $this->get($this->service)->getL10nKeys('article');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getRelatedContents($content)
     {
         $service = $this->get('api.service.photo');
@@ -102,5 +111,70 @@ class ArticleController extends ContentController
         }
 
         return $extra;
+    }
+
+    /**
+     * Description of this action.
+     *
+     * @return Response The response object.
+     */
+    public function getPreviewAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $session = $this->get('session');
+        $content = $session->get('last_preview');
+
+        $session->remove('last_preview');
+
+        return new Response($content);
+    }
+
+    /**
+     * Previews an article in frontend by sending the article info by POST.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function savePreviewAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $this->get('core.locale')->setContext('frontend')
+            ->setRequestLocale($request->get('locale'));
+
+        $article = new Content([ 'pk_content' => 0 ]);
+
+        $data = $request->request->filter('item');
+        $data = json_decode($data, true);
+
+        foreach ($data as $key => $value) {
+            if (isset($value) && !empty($value)) {
+                $article->{$key} = $value;
+            }
+        }
+
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
+
+        list($positions, $advertisements) = $this->getAdvertisements();
+
+        $params = [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'item'           => $article,
+            'content'        => $article,
+            'contentId'      => $article->pk_content
+        ];
+
+        $this->view->assign($params);
+
+        $this->get('session')->set(
+            'last_preview',
+            $this->view->fetch('article/article.tpl')
+        );
+
+        return new Response('OK');
     }
 }

@@ -64,7 +64,7 @@ api_v1_backend_article_save_preview:
         expose: true
 
 api_v1_backend_article_update_item:
-    path:    /articles
+    path:    /articles/{id}
     methods: [ PUT ]
     defaults: { _controller: ApiBundle:V1/Backend/Article:updateItem }
     options:
