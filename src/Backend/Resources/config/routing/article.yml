@@ -3,6 +3,8 @@
 backend_articles_list:
     path:     /articles
     defaults: { _controller: BackendBundle:Article:list }
+    options:
+        expose: true
 
 backend_article_create:
     path:     /articles/create

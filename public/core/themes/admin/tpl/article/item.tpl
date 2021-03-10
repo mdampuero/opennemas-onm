@@ -38,16 +38,14 @@
       <div class="grid-collapse-title">
         {include file="ui/component/content-editor/accordion/published.tpl"}
         <div class="m-t-5">
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="in_home" title="{t}Home{/t}"}
-        </div>
-        <div class="m-t-5">
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="favorite" title="{t}Favorite{/t}"}
-        </div>
-        <div class="m-t-5">
           {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+        </div>
+        <div class="m-t-5">
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="in_home" title="{t}Suggested for frontpage{/t}"}
         </div>
       </div>
       {include file="ui/component/content-editor/accordion/author.tpl"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
@@ -82,8 +80,8 @@
       {/is_module_activated}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Frontpage image{/t}"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Inner image{/t}"}
-      {include file="common/component/related-contents/_related-content.tpl" iName="data.relatedFrontpage" iNameTarget="relatedFrontpage" iTitle="{t}Related in frontpage{/t}"}
-      {include file="common/component/related-contents/_related-content.tpl" iName="data.relatedInner" iNameTarget="relatedInner" iTitle="{t}Related in inner{/t}"}
+      {include file="common/component/related-contents/_related-content.tpl" iName="relatedFrontpage" iTitle="{t}Related in frontpage{/t}"}
+      {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}
     </div>
   </div>
   <div class="grid simple" ng-show="data.extra.extra_fields !== undefined && data.extra.extra_fields">

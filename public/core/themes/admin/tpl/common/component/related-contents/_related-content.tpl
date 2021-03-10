@@ -7,18 +7,18 @@
   <div>
     <div class="ng-cloak" data-max-depth="1" ui-tree="treeOptions">
       <div class="related" ui-tree-nodes="" ng-model="{$iName}">
-        <div class="related-item" ng-repeat="r in {$iName}" ui-tree-node>
+        <div class="related-item" ng-repeat="related in {$iName}" ui-tree-node>
           <span ui-tree-handle>
             <span class="angular-ui-tree-icon"></span>
           </span>
           <div class="related-item-info">
             <span class="related-item-type">
-              <span class="fa" ng-class="{ 'fa-file-text-o': related[r.target_id].content_type_name == 'article', 'fa-quote-right': related[r.target_id].content_type_name == 'opinion', 'fa-pie-chart': related[r.target_id].content_type_name == 'poll', 'fa-file': related[r.target_id].content_type_name == 'static_page', 'fa-envelope': related[r.target_id].content_type_name == 'letter', 'fa-paperclip': related[r.target_id].content_type_name == 'attachment', 'fa-film': related[r.target_id].content_type_name == 'video', 'fa-camera': related[r.target_id].content_type_name == 'album'  }" uib-tooltip="[% related[r.target_id].content_type_l10n_name %]"></span>
+              <span class="fa" ng-class="{ 'fa-file-text-o': related.content_type_name == 'article', 'fa-quote-right': related.content_type_name == 'opinion', 'fa-pie-chart': related.content_type_name == 'poll', 'fa-file': related.content_type_name == 'static_page', 'fa-envelope': related.content_type_name == 'letter', 'fa-paperclip': related.content_type_name == 'attachment', 'fa-film': related.content_type_name == 'video', 'fa-camera': related.content_type_name == 'album'  }" uib-tooltip="[% related.content_type_l10n_name %]"></span>
             </span>
             <span class="related-item-title">
-              [% related[r.target_id].title %]
+              [% related.title %]
             </span>
-            <span class="related-item-status" ng-if="related[r.target_id].content_status == 0">
+            <span class="related-item-status" ng-if="related.content_status == 0">
               ({t}No published{/t})
             </span>
           </div>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="text-center">
-      <button class="btn btn-default" content-picker content-picker-ignore="[% getRelatedIds({$iName}) %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="{$iNameTarget}" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+      <button class="btn btn-default" content-picker content-picker-ignore="[% getRelatedIds({$iName}) %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="{$iName}" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
         <i class="fa fa-plus m-r-5"></i>
         {t}Add{/t}
       </button>

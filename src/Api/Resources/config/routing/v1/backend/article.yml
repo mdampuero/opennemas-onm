@@ -1,4 +1,4 @@
-api_v1_backend_article_create:
+api_v1_backend_article_create_item:
     path:    /articles/new
     methods: [ GET ]
     defaults: { _controller: ApiBundle:V1/Backend/Article:create }
@@ -41,3 +41,34 @@ api_v1_backend_article_patch_list:
     methods:  [ PATCH ]
     options:
         expose: true
+
+api_v1_backend_article_save_config:
+    path:     /articles/config
+    defaults: { _controller: ApiBundle:V1/Backend/Article:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_article_save_item:
+    path:    /articles
+    methods: [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Article:saveItem }
+    options:
+        expose: true
+
+api_v1_backend_article_save_preview:
+    path:     /articles/preview
+    defaults: { _controller: ApiBundle:V1/Backend/Article:savePreview }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_article_update_item:
+    path:    /articles
+    methods: [ PUT ]
+    defaults: { _controller: ApiBundle:V1/Backend/Article:updateItem }
+    options:
+        expose: true
+    requirements:
+        id: \d+
+

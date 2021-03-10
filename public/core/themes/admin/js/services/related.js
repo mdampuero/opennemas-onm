@@ -39,11 +39,11 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
           },
           related_frontpage: {
             name:   'relatedFrontpage',
-            simple: true
+            simple: false
           },
           related_inner: {
             name:   'relatedInner',
-            simple: true
+            simple: false
           },
         },
         mirrored: {}
