@@ -1,5 +1,5 @@
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.{$iName} = !expanded.{$iName}">
-  <i class="fa fa-list m-r-10"></i>
+  <i class="fa fa-navicon m-r-10"></i>
   {$iTitle}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$iName} }"></i>
 </div>

@@ -17,6 +17,12 @@
   <i class="fa fa-file-text m-r-10"></i>
 {/block}
 
+{block name="title"}
+  <a class="no-padding" href="{url name=backend_opinions_list}">
+    {t}Articles{/t}
+  </a>
+{/block}
+
 {block name="primaryActions"}
   <li class="quicklinks">
     <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
@@ -102,7 +108,11 @@
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
       {include file="ui/component/input/text.tpl" iCounter=true iField="title_int" iRequired=true iTitle="{t}Inner title{/t}" iValidation=true}
-      {include file="ui/component/input/text.tpl" iCounter=true iField="agency" iTitle="{t}Signature{/t}"}
+      <div class="row">
+        <div class="col-sm-6">
+          {include file="ui/component/input/text.tpl" iCounter=true iField="agency" iTitle="{t}Signature{/t}"}
+        </div>
+      </div>
       {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}"}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
