@@ -215,25 +215,24 @@
         };
 
         /**
-         * @function preview
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Opens a modal with the preview of the article.
-         *
-         * @param {String} previewUrl    The URL to generate the preview.
-         * @param {String} getPreviewUrl The URL to get the preview.
+         * Opens a modal with the preview of the article.
          */
-        $scope.preview = function(previewUrl, getPreviewUrl) {
-          $scope.flags.preview = true;
+        $scope.preview = function() {
+          $scope.flags.http.generating_preview = true;
 
-          var data = $scope.clean($scope.article);
+          // Force ckeditor
+          CKEDITOR.instances.body.updateElement();
+          CKEDITOR.instances.description.updateElement();
 
-          data = cleaner.clean(data);
+          var status = { starttime: null, endtime: null, content_status: 1 };
+          var item   = Object.assign({}, $scope.data.item, status);
 
-          var postData = { article: data, locale: $scope.config.locale.selected };
+          var data = {
+            item: JSON.stringify(cleaner.clean(item)),
+            locale: $scope.config.locale.selected
+          };
 
-          http.post(previewUrl, postData).then(function() {
+          http.put($scope.routes.savePreview, data).then(function() {
             $uibModal.open({
               templateUrl: 'modal-preview',
               windowClass: 'modal-fullscreen',
@@ -241,7 +240,7 @@
               resolve: {
                 template: function() {
                   return {
-                    src: $scope.routing.generate(getPreviewUrl)
+                    src: routing.generate($scope.routes.getPreview)
                   };
                 },
                 success: function() {
@@ -250,9 +249,9 @@
               }
             });
 
-            $scope.disableFlags();
+            $scope.flags.http.generating_preview = false;
           }, function() {
-            $scope.disableFlags();
+            $scope.flags.http.generating_preview = false;
           });
         };
 

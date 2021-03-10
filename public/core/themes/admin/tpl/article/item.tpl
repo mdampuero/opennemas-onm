@@ -74,7 +74,7 @@
           </div>
           <div class="form-group no-margin" ng-show="data.extra.subscriptions && data.extra.subscriptions.length > 0">
             <div class="checkbox m-b-5" ng-repeat="subscription in data.extra.subscriptions">
-              <input checklist-model="article.subscriptions" checklist-value="subscription.pk_user_group" id="checkbox-[% $index %]" type="checkbox">
+              <input checklist-model="item.subscriptions" checklist-value="subscription.pk_user_group" id="checkbox-[% $index %]" type="checkbox">
               <label for="checkbox-[% $index %]">[% subscription.name %]</label>
             </div>
             <div class="help m-l-3" ng-if="isHelpEnabled()">
