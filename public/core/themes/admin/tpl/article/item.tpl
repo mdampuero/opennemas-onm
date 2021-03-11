@@ -18,7 +18,7 @@
 {/block}
 
 {block name="title"}
-  <a class="no-padding" href="{url name=backend_opinions_list}">
+  <a class="no-padding" href="{url name=backend_articles_list}">
     {t}Articles{/t}
   </a>
 {/block}
@@ -47,7 +47,7 @@
           {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
         </div>
         <div class="m-t-5">
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="in_home" title="{t}Suggested for frontpage{/t}"}
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="frontpage" title="{t}Suggested for frontpage{/t}"}
         </div>
       </div>
       {include file="ui/component/content-editor/accordion/author.tpl"}
@@ -84,8 +84,8 @@
           </div>
         </div>
       {/is_module_activated}
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Frontpage image{/t}"}
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Inner image{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured frontpage{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured inner{/t}"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedFrontpage" iTitle="{t}Related in frontpage{/t}"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}
     </div>
