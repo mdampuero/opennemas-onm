@@ -65,7 +65,7 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired="type == 'script' || type == 'external'" iTitle="{t}Frontpage image{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired="type == 'script' || type == 'external'" iTitle="{t}Featured frontpage{/t}"}
     </div>
   </div>
 {/block}
