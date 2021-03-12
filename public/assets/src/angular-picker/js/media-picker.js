@@ -796,6 +796,10 @@
 
           $scope.criteria.category_id = $scope.category && $scope.criteria.content_type_name !== 'photo' ? $scope.category : null;
 
+          if ($scope.criteria.content_type_name !== 'photo') {
+            $scope.criteria.created = null;
+          }
+
           oqlEncoder.configure({
             placeholder: {
               title: '(title ~ "%[value]%" or description ~ "%[value]%")',
@@ -1143,22 +1147,6 @@
             return false;
           });
         };
-
-        /**
-         * Reset the parameters when the content_type_name changes.
-         *
-         * @param {String} nv The new content_type_name.
-         * @param {String} ov The old content_type_name.
-         */
-        $scope.$watch('criteria.content_type_name', function(nv, ov) {
-          if (!nv || nv === ov) {
-            return;
-          }
-
-          if (ov === 'photo') {
-            $scope.criteria.created = null;
-          }
-        });
 
         /**
          * Refresh the list when the criteria changes.
