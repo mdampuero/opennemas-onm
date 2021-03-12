@@ -57,6 +57,7 @@ class ArticleController extends ContentController
         $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
+
         $subscriptions = $this->get('api.service.subscription')->responsify(
             $this->get('api.service.subscription')->getList('enabled = 1 order by name asc')['items']
         );
@@ -82,8 +83,7 @@ class ArticleController extends ContentController
      */
     protected function getRelatedContents($content)
     {
-        $service = $this->get('api.service.photo');
-        $extra   = [];
+        $extra = [];
 
         if (empty($content)) {
             return $extra;
@@ -99,12 +99,16 @@ class ArticleController extends ContentController
             }
 
             foreach ($element->related_contents as $relation) {
-                if (!preg_match('/featured_.*/', $relation['type'])) {
+                if (!preg_match('/.*_.*/', $relation['type'])) {
                     continue;
                 }
                 try {
-                    $photo                         = $service->getItem($relation['target_id']);
-                    $extra[$relation['target_id']] = $service->responsify($photo);
+                    $er      = $this->container->get('entity_repository');
+                    $content = $er->find($relation['content_type_name'], $relation['target_id']);
+
+                    $extra[$relation['target_id']] = in_array($relation['content_type_name'], $er::ORM_CONTENT_TYPES) ?
+                            $this->container->get('api.service.content')->responsify($content) :
+                            $content;
                 } catch (GetItemException $e) {
                 }
             }

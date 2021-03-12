@@ -13,23 +13,23 @@
           </span>
           <div class="related-item-info">
             <span class="related-item-type">
-              <span class="fa" ng-class="{ 'fa-file-text-o': related.content_type_name == 'article', 'fa-quote-right': related.content_type_name == 'opinion', 'fa-pie-chart': related.content_type_name == 'poll', 'fa-file': related.content_type_name == 'static_page', 'fa-envelope': related.content_type_name == 'letter', 'fa-paperclip': related.content_type_name == 'attachment', 'fa-film': related.content_type_name == 'video', 'fa-camera': related.content_type_name == 'album'  }" uib-tooltip="[% related.content_type_l10n_name %]"></span>
+              <span class="fa" ng-class="{ 'fa-file-text-o': data.extra.related_contents[related.target_id].content_type_name == 'article', 'fa-quote-right': data.extra.related_contents[related.target_id].content_type_name == 'opinion', 'fa-pie-chart': data.extra.related_contents[related.target_id].content_type_name == 'poll', 'fa-file': data.extra.related_contents[related.target_id].content_type_name == 'static_page', 'fa-envelope': data.extra.related_contents[related.target_id].content_type_name == 'letter', 'fa-paperclip': data.extra.related_contents[related.target_id].content_type_name == 'attachment', 'fa-film': data.extra.related_contents[related.target_id].content_type_name == 'video', 'fa-camera': data.extra.related_contents[related.target_id].content_type_name == 'album'  }" uib-tooltip="[% data.extra.related_contents[related.target_id].content_type_l10n_name %]"></span>
             </span>
             <span class="related-item-title">
-              [% related.title %]
+              [% data.extra.related_contents[related.target_id].title %]
             </span>
             <span class="related-item-status" ng-if="related.content_status == 0">
               ({t}No published{/t})
             </span>
           </div>
-          <button class="btn btn-danger" data-nodrag ng-click="removeItem('{$iName}', $index)">
+          <button class="btn btn-danger" data-nodrag ng-click="removeItem('data.{$iName}', $index); removeItem('{$iName}', $index)">
             <i class="fa fa-trash-o"></i>
           </button>
         </div>
       </div>
     </div>
     <div class="text-center">
-      <button class="btn btn-default" content-picker content-picker-ignore="[% getRelatedIds({$iName}) %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="{$iName}" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+      <button class="btn btn-default" content-picker content-picker-ignore="[% related.getIds('{$iName}') %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="target.{$iName}" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
         <i class="fa fa-plus m-r-5"></i>
         {t}Add{/t}
       </button>

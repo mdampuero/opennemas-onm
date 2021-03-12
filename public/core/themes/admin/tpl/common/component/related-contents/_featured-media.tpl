@@ -2,8 +2,10 @@
   <i class="fa fa-image m-r-10"></i>
   {$iTitle}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$iName} }"></i>
-  <span class="pull-right">
-    {include file="common/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
+  <span ng-if="data.extra.related_contents[{$iName}.target_id]" class="pull-right">
+    <a class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-href="[% getFeaturedMediaUrl(data.extra.related_contents[{$iName}.target_id]) %]" ng-click="$event.stopPropagation()" target="_blank">
+      <i ng-class="{ 'fa fa-image' : data.extra.related_contents[{$iName}.target_id].content_type_name === 'photo', 'fa fa-camera' :  data.extra.related_contents[{$iName}.target_id].content_type_name === 'album', 'fa fa-film' : data.extra.related_contents[{$iName}.target_id].content_type_name === 'video' }"></i>
+    </a>
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$iName} }">
@@ -35,7 +37,7 @@
             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('{$iName}')">
               <i class="fa fa-trash-o fa-2x"></i>
             </div>
-            <div class="thumbnail-action" media-picker media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="photo">
+            <div class="thumbnail-action" media-picker media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="photo,video,album">
               <i class="fa fa-camera fa-2x"></i>
             </div>
           </div>

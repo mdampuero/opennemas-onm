@@ -38,6 +38,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             simple: false
           },
           related_frontpage: {
+            mirror: 'relatedInner',
             name:   'relatedFrontpage',
             simple: false
           },

@@ -91,6 +91,27 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return true;
     };
 
+    /**
+     * @function getFeaturedMediaUrl
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Generates the backend url of the featured media associated to the article.
+     *
+     * @param {Object} item The featured media object.
+     *
+     * @return {String} The url for the featured media object.
+     */
+    $scope.getFeaturedMediaUrl = function(item) {
+      var routes = {
+        photo: 'backend_photo_show',
+        video: 'backend_video_show',
+        album: 'backend_album_show'
+      };
+
+      return routing.generate(routes[item.content_type_name], { id: item.pk_content });
+    };
+
     // Generates slug when flag changes
     $scope.$watch('flags.generate.slug', function(nv) {
       if ($scope.item.slug || !nv || !$scope.item.title) {

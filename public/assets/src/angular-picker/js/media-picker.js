@@ -49,7 +49,12 @@
                           '</div>' +
                         '</div>' +
                       '</li>' +
-                      '<li ng-if="picker.isTypeEnabled(\'photo\')">' +
+                      '<li>' +
+                        '<select name="content_type_name" ng-model="criteria.content_type_name" ng-init="criteria.content_type_name = picker.types.enabled[0]">' +
+                          '<option ng-repeat="type in picker.types.enabled" value="[% type %]">[% getContentTypeTranslation(type) %]</option>' +
+                        '</select>' +
+                      '</li>' +
+                      '<li ng-if="criteria.content_type_name === \'photo\'">' +
                         '<select name="month" ng-model="criteria.created">' +
                           '<option value="">[% picker.params.explore.allMonths %]</option>' +
                           '<optgroup label="[% year.name %]" ng-repeat="year in picker.params.explore.dates">' +
@@ -59,7 +64,7 @@
                           '</optgroup>' +
                         '</select>' +
                       '</li>' +
-                      '<li class="hidden-xs" ng-if="picker.isTypeEnabled(\'video\')">' +
+                      '<li class="hidden-xs" ng-if="[\'album\', \'video\'].includes(criteria.content_type_name)">' +
                         '<onm-category-selector default-value-text="[% picker.params.explore.any %]" label-text="[% picker.params.explore.category %]" ng-model="$parent.$parent.category" placeholder="[% picker.params.explore.any %]"></onm-category-selector>' +
                       '</li>' +
                     '</ul>' +
@@ -78,7 +83,7 @@
                         '<div class="media-item"[selection] ng-repeat="content in contents track by $index" style="width: 120px;">' +
                           '<dynamic-image only-image="true" class="img-thumbnail" instance="' +
                             $window.instanceMedia +
-                             '" ng-if="content.content_type_name == \'photo\'" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
+                             '" ng-if="[\'photo\', \'album\'].includes(content.content_type_name)" ng-model="content" width="80" transform="zoomcrop,120,120,center,center"></dynamic-image>' +
                           '<dynamic-image only-image="true" class="img-thumbnail" ng-if="content.content_type_name == \'video\'" instance="' +
                           $window.instanceMedia +
                           '" ng-model="content.pk_content" transform="zoomcrop,120,120"></dynamic-image>' +
@@ -101,7 +106,7 @@
                       '<h4>[% picker.params.explore.pk_contentDetails %]</h4>' +
                     '</div>' +
                     '<div class="picker-panel-sidebar-body" ng-if="selected.lastSelected">' +
-                      '<div class="media-thumbnail-wrapper" ng-if="selected.lastSelected.content_type_name == \'photo\' && !isFlash(selected.lastSelected)">' +
+                      '<div class="media-thumbnail-wrapper" ng-if="[\'photo\', \'album\'].includes(selected.lastSelected.content_type_name) && !isFlash(selected.lastSelected)">' +
                         '<dynamic-image autoscale="true" instance="' +
                           $window.instanceMedia +
                           '" ng-model="selected.lastSelected" transform="thumbnail,220,220">' +
@@ -114,8 +119,8 @@
                         '</dynamic-image>' +
                       '</div>' +
                       '<ul class="media-information">' +
-                        '<li>' +
-                          '<a ng-href="[% selected.lastSelected.content_type_name === \'photo\' ? routing.generate(\'backend_photo_show\', { id: selected.lastSelected.pk_content}) : routing.generate(\'backend_video_show\', { id: selected.lastSelected.pk_content})%]">' +
+                        '<li ng-if="selected.lastSelected.content_type_name === \'photo\'">' +
+                          '<a ng-href="[% routing.generate(\'backend_photo_show\', { id: selected.lastSelected.pk_content}) %]">' +
                             '<strong>' +
                               '[% selected.lastSelected.title %]' +
                               '<i class="fa fa-edit"></i>' +
@@ -126,6 +131,22 @@
                           '<a class="btn btn-primary ng-isolate-scope" ng-click="enhanceAction()">' +
                               '<i class="fa fa-sliders"></i>' +
                               '[% picker.params.explore.enhance %]' +
+                          '</a>' +
+                        '</li>' +
+                        '<li ng-if="selected.lastSelected.content_type_name === \'video\'">' +
+                          '<a ng-href="[% routing.generate(\'backend_video_show\', { id: selected.lastSelected.pk_content}) %]">' +
+                            '<strong>' +
+                              '[% selected.lastSelected.title %]' +
+                              '<i class="fa fa-edit"></i>' +
+                            '</strong>' +
+                          '</a>' +
+                        '</li>' +
+                        '<li ng-if="selected.lastSelected.content_type_name === \'album\'">' +
+                          '<a ng-href="[% routing.generate(\'backend_album_show\', { id: selected.lastSelected.pk_content}) %]">' +
+                            '<strong>' +
+                              '[% selected.lastSelected.title %]' +
+                              '<i class="fa fa-edit"></i>' +
+                            '</strong>' +
                           '</a>' +
                         '</li>' +
                         '<li>[% selected.lastSelected.created | moment %]</li>' +
@@ -287,7 +308,7 @@
               target: attrs.mediaPickerTarget,
               types: {
                 enabled:   [ 'photo' ],
-                available: [ 'photo', 'video' ]
+                available: [ 'photo', 'video', 'album' ]
               },
               photoEditorEnabled: attrs.photoEditorEnabled && attrs.photoEditorEnabled === 'true',
 
@@ -444,8 +465,8 @@
               }
 
               // Initialize the media picker available types
-              if (attrs.mediaPickerType) {
-                var types = attrs.mediaPickerType.split(',');
+              if (attrs.mediaPickerTypes) {
+                var types = attrs.mediaPickerTypes.split(',');
 
                 $scope.picker.types.enabled = [];
 
@@ -597,6 +618,19 @@
           if ($scope.picker.isTypeEnabled(item.content_type_name)) {
             $scope.contents.unshift(item);
           }
+        };
+
+        /**
+         * @function getContentTypeTranslation
+         * @memberof MediaPickerCtrl
+         *
+         * @description
+         *  Returns content_type_name translated string.
+         *
+         * @param {String} type The type to search in the array of the translated strings.
+         */
+        $scope.getContentTypeTranslation = function(type) {
+          return $scope.picker.params.explore.contentTypes.filter((element) => element.name === type).shift().title;
         };
 
         /**
@@ -759,11 +793,8 @@
 
           $scope.criteria.epp               = $scope.epp;
           $scope.criteria.page              = $scope.page;
-          $scope.criteria.content_type_name = $scope.picker.types.enabled;
 
-          if ($scope.category) {
-            $scope.criteria.category_id = $scope.category;
-          }
+          $scope.criteria.category_id = $scope.category && $scope.criteria.content_type_name !== 'photo' ? $scope.category : null;
 
           oqlEncoder.configure({
             placeholder: {
@@ -774,18 +805,10 @@
 
           var oql = oqlEncoder.getOql($scope.criteria);
 
-          var routes = {
-            photo: {
-              name: 'api_v1_backend_content_get_list',
-              params:  { oql: oql }
-            },
-            video: {
-              name: 'api_v1_backend_video_get_list',
-              params: { oql: oql }
-            }
+          var route = {
+            name: 'api_v1_backend_content_get_list',
+            params: { oql: oql }
           };
-
-          var route = routes[$scope.criteria.content_type_name];
 
           http.get(route)
             .then(function(response) {
@@ -1122,12 +1145,28 @@
         };
 
         /**
+         * Reset the parameters when the content_type_name changes.
+         *
+         * @param {String} nv The new content_type_name.
+         * @param {String} ov The old content_type_name.
+         */
+        $scope.$watch('criteria.content_type_name', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+
+          if (ov === 'photo') {
+            $scope.criteria.created = null;
+          }
+        });
+
+        /**
          * Refresh the list when the criteria changes.
          *
          * @param array nv The new values.
          * @param array ov The old values.
          */
-        $scope.$watch('[category, criteria.created, criteria.title, title, from, to]', function(nv, ov) {
+        $scope.$watch('[category, criteria.created, criteria.content_type_name, criteria.title, title, from, to]', function(nv, ov) {
           if (nv === ov) {
             return;
           }
