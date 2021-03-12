@@ -69,7 +69,7 @@
         <i class="fa fa-cog m-r-10"></i>
         {t}Parameters{/t}
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured frontpage{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured frontpage{/t}" types="photo"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" title="{t}Agency{/t}"}
     </div>
   </div>
@@ -143,7 +143,7 @@
         </div>
       </div>
       <div class="text-center">
-        <button class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="target.photos" type="button">
+        <button class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="target.photos" media-picker-types="photo" type="button">
           <i class="fa fa-plus m-r-5"></i>
           {t}Add{/t}
         </button>

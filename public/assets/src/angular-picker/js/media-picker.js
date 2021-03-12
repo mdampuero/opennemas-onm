@@ -50,7 +50,7 @@
                         '</div>' +
                       '</li>' +
                       '<li>' +
-                        '<select name="content_type_name" ng-model="criteria.content_type_name" ng-init="criteria.content_type_name = picker.types.enabled[0]">' +
+                        '<select ng-if="picker.types.enabled.length > 1" name="content_type_name" ng-model="criteria.content_type_name" ng-init="criteria.content_type_name = picker.types.enabled[0]">' +
                           '<option ng-repeat="type in picker.types.enabled" value="[% type %]">[% getContentTypeTranslation(type) %]</option>' +
                         '</select>' +
                       '</li>' +
@@ -546,6 +546,7 @@
         $scope.contents = [];
 
         $scope.criteria = {
+          content_type_name: 'photo',
           epp: $scope.epp,
           in_litter: 0,
           orderBy: { created:  'desc' },

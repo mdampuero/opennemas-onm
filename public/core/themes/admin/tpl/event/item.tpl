@@ -136,8 +136,8 @@
           </div>
         </div>
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured frontpage{/t}"}
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured inner{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured frontpage{/t}" types="photo,video,album"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured inner{/t}" types="photo,video,album"}
     </div>
   </div>
 {/block}
