@@ -55,6 +55,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.google.tagmanager:
+        class:     Common\Core\Component\GoogleTagManager\GoogleTagManager
+        arguments:   [ '@core.data.layer' ]
+        public:    true
+
     core.image.processor:
         class:     Common\Core\Component\Image\Processor
         public:    true
