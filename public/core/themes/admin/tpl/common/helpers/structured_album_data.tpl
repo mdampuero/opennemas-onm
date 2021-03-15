@@ -52,18 +52,18 @@
       , "primaryImageOfPage":
         {include file='./structured_image_data.tpl'}
     {/if}
-    {if !empty($content->photos)}
+    {if has_album_photos($content)}
       , "associatedMedia": [
-        {foreach $content->photos as $photo}
+        {foreach get_album_photos($content) as $photo}
           {
-            "url": "{get_photo_path(get_content($photo.pk_photo, 'Photo'), null, [], true)}",
-            "height": {get_photo_height(get_content($photo.pk_photo, 'Photo'))},
-            "width": {get_photo_width(get_content($photo.pk_photo, 'Photo'))}
+            "url": "{get_photo_path(get_content($photo->pk_content, 'Photo'), null, [], true)}",
+            "height": {get_photo_height(get_content($photo->pk_content, 'Photo'))},
+            "width": {get_photo_width(get_content($photo->pk_content, 'Photo'))}
           }{if !$photo@last},{/if}
         {/foreach}
       ]},
-      {foreach $content->photos as $photo}
-        {include file='./structured_image_data.tpl' image=get_content($photo.pk_photo, 'Photo')}{if !$photo@last},{/if}
+      {foreach get_album_photos($content) as $photo}
+        {include file='./structured_image_data.tpl' image=get_content($photo->pk_content, 'Photo')}{if !$photo@last},{/if}
       {/foreach}
     {else}
       }
