@@ -56,14 +56,14 @@
       , "associatedMedia": [
         {foreach get_album_photos($content) as $photo}
           {
-            "url": "{get_photo_path(get_content($photo->pk_content, 'Photo'), null, [], true)}",
-            "height": {get_photo_height(get_content($photo->pk_content, 'Photo'))},
-            "width": {get_photo_width(get_content($photo->pk_content, 'Photo'))}
+            "url": "{get_photo_path(get_content($photo, 'Photo'), null, [], true)}",
+            "height": {get_photo_height(get_content($photo, 'Photo'))},
+            "width": {get_photo_width(get_content($photo, 'Photo'))}
           }{if !$photo@last},{/if}
         {/foreach}
       ]},
       {foreach get_album_photos($content) as $photo}
-        {include file='./structured_image_data.tpl' image=get_content($photo->pk_content, 'Photo')}{if !$photo@last},{/if}
+        {include file='./structured_image_data.tpl' image=get_content($photo, 'Photo')}{if !$photo@last},{/if}
       {/foreach}
     {else}
       }
