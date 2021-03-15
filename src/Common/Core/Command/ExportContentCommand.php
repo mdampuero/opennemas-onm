@@ -229,7 +229,7 @@ class ExportContentCommand extends Command
     {
         $album->all_photos = [];
 
-        foreach ($album->photos as $value) {
+        foreach (get_album_photos($album) as $value) {
             $photo = $this->getContainer()->get('api.service.photo')->getItem($value['pk_photo']);
 
             $photo->img_source =
