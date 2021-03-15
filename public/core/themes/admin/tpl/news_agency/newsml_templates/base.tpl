@@ -210,12 +210,12 @@
           {/foreach}
         </NewsComponent>
       {/if}
-      {if isset($content->all_photos) && !empty($content->all_photos)}
+      {if has_album_photos($content)}
         <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
-          {foreach $content->all_photos as $photo}
-            {if $photo->id}
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
+          {foreach get_album_photos($content) as $photo}
+            {if $photo->pk_content}
+              <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{$photo->pk_content}" Euid="{$photo->pk_content}">
                 <NewsLines>
                   <HeadLine>
                     <![CDATA[{$content->title}]]>
@@ -229,9 +229,9 @@
                 <DescriptiveMetadata>
                   <Language FormalName="es" />
                   <DateLineDate>{format_date date=$photo->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-                  <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
+                  <Property FormalName="Onm_IdRefObject" Value="{$photo->pk_content}" />
                 </DescriptiveMetadata>
-                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
+                <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{$photo->pk_content}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
                   <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path($photo)}">
@@ -246,7 +246,7 @@
                     </Characteristics>
                   </ContentItem>
                 </NewsComponent>
-                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.text">
+                <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{$photo->pk_content}.text">
                   <Role FormalName="Caption" />
                   <ContentItem>
                     <MediaType FormalName="Text" />
@@ -259,7 +259,7 @@
                             <![CDATA[{$content->title}]]>
                           </title>
                           <docdata management-status="usable">
-                            <doc-id id-string="{$photo->id}" />
+                            <doc-id id-string="{$photo->pk_content}" />
                           </docdata>
                         </head>
                         <body>

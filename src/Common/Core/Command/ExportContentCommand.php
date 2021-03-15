@@ -221,26 +221,6 @@ class ExportContentCommand extends Command
     }
 
     /**
-     * Processes an album.
-     *
-     * @param \Album $album Album to process.
-     */
-    protected function processAlbum($album)
-    {
-        $album->all_photos = [];
-
-        foreach (get_album_photos($album) as $value) {
-            $photo = $this->getContainer()->get('api.service.photo')->getItem($value['pk_photo']);
-
-            $photo->img_source =
-                $this->mediaPath . DS . 'images' .
-                $photo->path;
-
-            $album->all_photos[] = $photo;
-        }
-    }
-
-    /**
      * Processes an article.
      *
      * @param \Article $article Article to process.
