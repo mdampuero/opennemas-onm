@@ -53,6 +53,11 @@ class GAnalyticsRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
+            ->disableOriginalConstructor()
+            ->setMethods(['getDataLayerAMPCodeGA'])
+            ->getMock();
+
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->setMethods([ 'generate' ])
@@ -81,6 +86,9 @@ class GAnalyticsRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.data.layer':
+                return $this->dl;
+
             case 'core.globals':
                 return $this->global;
 
@@ -115,6 +123,9 @@ class GAnalyticsRendererTest extends TestCase
 
         $method = new \ReflectionMethod($this->renderer, 'getParameters');
         $method->setAccessible(true);
+
+        $this->dl->expects($this->any())->method('getDataLayerAMPCodeGA')
+            ->willReturn('foo');
 
         $params = $method->invokeArgs($this->renderer, [ $content ]);
 

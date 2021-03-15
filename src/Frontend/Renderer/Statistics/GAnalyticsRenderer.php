@@ -42,12 +42,13 @@ class GAnalyticsRenderer extends StatisticsRenderer
         }
 
         $params = [
-            'accounts' => $accounts,
-            'content'  => $content,
-            'date'     => date('d/m/Y'),
-            'random'   => rand(0, 0x7fffffff),
-            'url'      => urlencode($siteUrl),
-            'utma'     => '__utma%3D999.999.999.999.999.1%3B'
+            'accounts'  => $accounts,
+            'content'   => $content,
+            'dataLayer' => $this->container->get('core.data.layer')->getDataLayerAMPCodeGA(),
+            'date'      => date('d/m/Y'),
+            'random'    => rand(0, 0x7fffffff),
+            'url'       => urlencode($siteUrl),
+            'utma'      => '__utma%3D999.999.999.999.999.1%3B'
         ];
 
         if (!empty($content) && $content instanceof Newsletter) {
