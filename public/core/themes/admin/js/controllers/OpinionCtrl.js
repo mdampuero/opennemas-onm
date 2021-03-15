@@ -118,7 +118,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
         $scope.flags.http.generating_preview = false;
       }, function() {
-        $scope.flats.http.generating_preview = false;
+        $scope.flags.http.generating_preview = false;
       });
     };
 

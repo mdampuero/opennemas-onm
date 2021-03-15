@@ -120,6 +120,10 @@ class OpinionController extends ContentController
             }
         }
 
+        $opinion = $this->get('data.manager.filter')->set($opinion)
+            ->filter('localize', [ 'keys'   => $this->get($this->service)->getL10nKeys('opinion') ])
+            ->get();
+
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 
