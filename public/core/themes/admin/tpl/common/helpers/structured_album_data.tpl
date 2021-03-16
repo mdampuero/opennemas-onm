@@ -57,8 +57,8 @@
         {foreach get_album_photos($content) as $photo}
           {
             "url": "{get_photo_path(get_content($photo, 'Photo'), null, [], true)}",
-            "height": {get_photo_height(get_content($photo, 'Photo'))},
-            "width": {get_photo_width(get_content($photo, 'Photo'))}
+            "height": {get_photo_height($photo, 'Photo')},
+            "width": {get_photo_width($photo, 'Photo')}
           }{if !$photo@last},{/if}
         {/foreach}
       ]},
