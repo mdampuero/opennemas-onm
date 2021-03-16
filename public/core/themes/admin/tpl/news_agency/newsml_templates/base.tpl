@@ -239,7 +239,7 @@
                     <MimeType FormalName="{get_photo_mime_type($photo)}" />
                     <Characteristics>
                       <SizeInBytes>{get_photo_size($photo)*1024}</SizeInBytes>
-                      <Property FormalName="Onm_Filename" Value="{get_title($photo)}" />
+                      <Property FormalName="Onm_Filename" Value="{basename(get_property($photo, 'path'))}" />
                       <Property FormalName="Height" Value="{get_photo_height($photo)}" />
                       <Property FormalName="PixelDepth" Value="24" />
                       <Property FormalName="Width" Value="{get_photo_width($photo)}" />
