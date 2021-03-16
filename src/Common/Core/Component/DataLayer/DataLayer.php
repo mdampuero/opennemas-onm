@@ -17,17 +17,27 @@ use function GuzzleHttp\json_encode;
  */
 class DataLayer
 {
-
     /**
      * The available advertisement types.
      *
      * @var array
      */
     protected $types = [
-        'category', 'instance_name', 'extension', 'author_name', 'author_id',
-        'last_modify', 'keywords', 'published_time', 'content_id', 'media_type',
-         'seotag', 'device', 'user_id', 'ga_id', 'subscription'
+        'authorId', 'authorName', 'blank', 'canonicalUrl', 'categoryId',
+        'categoryName', 'contentId', 'device', 'extension', 'format', 'hostName',
+        'instanceName', 'tags', 'language', 'lastAuthorId', 'lastAuthorName',
+        'mediaType', 'publishedDate', 'seoTags', 'subscription', 'updateDate',
     ];
+
+    /**
+     * Initializes the DataLayer.
+     *
+     * @param ServiceContainer $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Generates Data Layer code.
@@ -36,19 +46,26 @@ class DataLayer
      *
      * @return String $code The generated code.
      */
-    public function getDataLayerCode($data)
+    public function getDataLayerCode()
     {
-        $data = $this->parseDataMap($data);
+        $data = $this->parseDataMap();
 
         if (empty($data)) {
             return '';
         }
 
+        $device = '';
+        if (array_key_exists('device', $data)) {
+            $device = 'dataLayer.push({ "device":device });';
+        }
+
         $code = '<script>
-            dataLayer = [{
-                ' . json_encode($data) . '
-            }];
-        </script>';
+            var device = (window.innerWidth || document.documentElement.clientWidth '
+            . '|| document.body.clientWidth) < 768 ? "phone" : '
+            . '((window.innerWidth || document.documentElement.clientWidth '
+            . '|| document.body.clientWidth) < 992 ? "tablet" : "desktop");
+            dataLayer = [' . json_encode($data) . '];'
+            . $device . '</script>';
 
         return $code;
     }
@@ -60,20 +77,16 @@ class DataLayer
      *
      * @return String $code The generated code.
      */
-    public function getDataLayerAMPCodeGTM($data)
+    public function getDataLayerAMPCodeGTM()
     {
-        $data = $this->parseDataMap($data);
+        $data = $this->parseDataMap();
 
         if (empty($data)) {
             return '';
         }
 
-        $code = '<script type="application/json ">
-            {
-                "vars" : {
-                    ' . json_encode($data) . '
-                }
-            }
+        $code = '<script type="application/json">
+            { "vars" : ' . json_encode($data) . ' }
         </script>';
 
         return $code;
@@ -86,21 +99,15 @@ class DataLayer
      *
      * @return String $code The generated code.
      */
-    public function getDataLayerAMPCodeGA($data)
+    public function getDataLayerAMPCodeGA()
     {
-        $data = $this->parseDataMap($data);
+        $data = $this->parseDataMap();
 
         if (empty($data)) {
             return '';
         }
 
-        $code = '<script type="application/json ">
-            {
-                "vars" : {
-                    ' . json_encode($data) . '
-                }
-            }
-        </script>';
+        $code = '"vars" : ' . json_encode($data);
 
         return $code;
     }
@@ -112,6 +119,19 @@ class DataLayer
      */
     public function getTypes()
     {
+        // Add types translation
+        $typesTranslated = [
+            _('Author Id'), _('Author name'), _('Blank'), _('Canonical url'),
+            _('Category Id'), _('Category name'), _('Content Id'), _('Devices'),
+            _('Page type'), _('Page format'), _('Hostname'), _('Instance name'),
+            _('Tags'), _('Language'), _('Last editor Id'), _('Last editor name'),
+            _('Media element'), _('Published date'), _('Seo tags'),
+            _('Subscription'), _('Updated date'),
+        ];
+
+
+        $this->types = array_combine($this->types, $typesTranslated);
+
         return $this->types;
     }
 
@@ -120,16 +140,22 @@ class DataLayer
      *
      * @return Array The parsed data map.
      */
-    protected function parseDataMap($data)
+    protected function parseDataMap()
     {
-        if (empty($data)) {
+        $dataLayerMap = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('data_layer');
+
+        if (empty($dataLayerMap)) {
             return null;
         }
 
         $variables = [];
-        foreach ($data as $value) {
+        foreach ($dataLayerMap as $value) {
             // Proccess values before generate json elements
-            $variables[$value['key']] = $value['value'];
+            $variables[$value['key']] = $this->container
+                ->get('core.variables.extractor')
+                ->get($value['value']);
         }
 
         return $variables;
