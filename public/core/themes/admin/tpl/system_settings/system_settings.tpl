@@ -1208,12 +1208,12 @@
                               <div class="controls">
                                 <div class="row" ng-repeat="variables in settings.data_layer track by $index">
                                   <div class="col-lg-6 col-md-9 col-sm-5 col-xs-6 m-b-15">
-                                    <input class="form-control" ng-model="variables.key" placeholder="{t}Variable key{/t}" type="text">
+                                    <input class="form-control" ng-model="variables.key" placeholder="{t}Variable key{/t}" type="text" required>
                                   </div>
                                   <div class="col-lg-4 col-md-9 col-sm-5 col-xs-6 m-b-15">
                                     <select name="value" ng-model="variables.value" required>
                                       <option value="">{t}Select a value...{/t}</option>
-                                      <option value="[% value %]" ng-repeat="value in extra.data_types" ng-selected="[% value === variables.value %]">[% value %]</option>
+                                      <option value="[% key %]" ng-repeat="(key,value) in extra.data_types" ng-selected="[% key === variables.value %]">[% value %]</option>
                                     </select>
                                   </div>
                                   <div class="col-lg-2 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-2 col-sm-offset-0 col-xs-4 col-xs-offset-4">
