@@ -49,6 +49,7 @@ orm:
                 categories:          array
                 tags:                array
                 related_contents:    array
+                subscriptions:       array
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter
