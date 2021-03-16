@@ -1,0 +1,823 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Tests\Common\Core\Component\Core;
+
+use Api\Exception\GetListException;
+use Common\Core\Component\Core\VariablesExtractor;
+use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
+use Common\Model\Entity\User;
+use Common\Model\Entity\Tag;
+
+/**
+ * Defines test cases for GlobalVariables class.
+ */
+class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * Configures the testing environment.
+     */
+    public function setUp()
+    {
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
+        $this->rs = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
+        $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getListByIds' ])
+            ->getMock();
+
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getExtension', 'getInstance', 'getLocale', 'getSubscription' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getLocaleShort' ])
+            ->getMock();
+
+        $this->sh = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isRestricted' ])
+            ->getMock();
+
+        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->setMethods([ 'getUri', 'getHost' ])
+            ->getMock();
+
+        $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getValue', 'hasValue' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isReadyForPublish'])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
+        $this->extractor = new VariablesExtractor($this->globals, $this->container, $this->template);
+    }
+
+    /**
+     * Returns a mocked service based on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'api.service.author':
+                return $this->as;
+
+            case 'api.service.tag':
+                return $this->ts;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
+
+            case 'core.template':
+                return $this->template;
+
+            case 'core.template.frontend':
+                return $this->template;
+
+            case 'request_stack':
+                return $this->rs;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Tests get.
+     */
+    public function testGet()
+    {
+        $this->assertEquals('device', $this->extractor->get('device'));
+        $this->assertEmpty($this->extractor->get('wobble'));
+    }
+
+    /**
+     * Tests getAuthorId without content.
+     */
+    public function testGetAuthorIdWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getAuthorId');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getAuthorId with content.
+     */
+    public function testGetAuthorId()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getAuthorId');
+        $method->setAccessible(true);
+
+        $content            = new Content();
+        $content->fk_author = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $author = new User([ 'id' => 1 ]);
+        $this->as->expects($this->any())->method('getItem')
+            ->with($content->fk_author)
+            ->willReturn($author);
+
+        $this->assertEquals(1, $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getAuthorId when exception.
+     */
+    public function testGetAuthorIdWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getAuthorId');
+        $method->setAccessible(true);
+
+        $content            = new Content();
+        $content->fk_author = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetListException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getAuthorName without content.
+     */
+    public function testGetAuthorNameWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getAuthorName');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getAuthorName with content.
+     */
+    public function testGetAuthorName()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getAuthorName');
+        $method->setAccessible(true);
+
+        $content            = new Content();
+        $content->fk_author = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $author = new User([ 'id' => 1, 'name' => 'John Doe' ]);
+        $this->as->expects($this->any())->method('getItem')
+            ->with($content->fk_author)
+            ->willReturn($author);
+
+        $this->assertEquals('John Doe', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getAuthorName when exception.
+     */
+    public function testGetAuthorNameWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getAuthorName');
+        $method->setAccessible(true);
+
+        $content            = new Content();
+        $content->fk_author = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetListException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getCanonicalUrl.
+     */
+    public function testGetCanonicalUrl()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getCanonicalUrl');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_canonical')
+            ->willReturn('http://www.foo.bar/baz');
+
+        $this->assertEquals(
+            'http://www.foo.bar/baz',
+            $method->invokeArgs($this->extractor, [])
+        );
+    }
+
+    /**
+     * Tests getCategoryId.
+     */
+    public function testGetCategoryId()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getCategoryId');
+        $method->setAccessible(true);
+
+        $category = new Category([ 'id' => 1, 'name' => 'Thud' ]);
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_category')
+            ->willReturn($category);
+
+        $this->assertEquals(1, $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getCategoryName.
+     */
+    public function testGetCategoryName()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getCategoryName');
+        $method->setAccessible(true);
+
+        $category = new Category([ 'id' => 1, 'name' => 'Thud' ]);
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_category')
+            ->willReturn($category);
+
+        $this->assertEquals('Thud', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getContentId.
+     */
+    public function testGetContentId()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getContentId');
+        $method->setAccessible(true);
+
+        $content = new Content([ 'pk_content' => 123 ]);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->assertEquals(123, $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getExtension.
+     */
+    public function testGetExtension()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getExtension');
+        $method->setAccessible(true);
+
+        $this->globals->expects($this->once())->method('getExtension')
+            ->willReturn('waldo');
+
+        $this->assertEquals('waldo', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getFormat.
+     */
+    public function testGetFormat()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getFormat');
+        $method->setAccessible(true);
+
+        $this->rs->expects($this->once())->method('getCurrentRequest')
+            ->willReturn($this->request);
+        $this->request->expects($this->once())->method('getUri')
+            ->willReturn('http://www.foo.bar/baz');
+
+        $this->assertEquals('web', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getFormat with AMP.
+     */
+    public function testGetFormatWithAMP()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getFormat');
+        $method->setAccessible(true);
+
+        $this->rs->expects($this->once())->method('getCurrentRequest')
+            ->willReturn($this->request);
+        $this->request->expects($this->once())->method('getUri')
+            ->willReturn('http://www.foo.bar/baz.amp.html');
+
+        $this->assertEquals('amp', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getHostName.
+     */
+    public function testGetHostName()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getHostName');
+        $method->setAccessible(true);
+
+        $this->rs->expects($this->once())->method('getCurrentRequest')
+            ->willReturn($this->request);
+        $this->request->expects($this->once())->method('getHost')
+            ->willReturn('www.foo.bar');
+
+        $this->assertEquals('www.foo.bar', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getInstanceName.
+     */
+    public function testGetInstanceName()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getInstanceName');
+        $method->setAccessible(true);
+
+        $instance = new Instance([ 'internal_name' => 'flob' ]);
+        $this->globals->expects($this->once())->method('getInstance')
+            ->willReturn($instance);
+
+        $this->assertEquals('flob', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getTags with content.
+     */
+    public function testGetTags()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getTags');
+        $method->setAccessible(true);
+
+        $content       = new Content();
+        $content->tags = [ 971, 837 ];
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $tags = [
+            new Tag([ 'id' => 917, 'name' => 'foo' ]),
+            new Tag([ 'id' => 837, 'name' => 'bar' ])
+        ];
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->with([ 971, 837 ])
+            ->willReturn([ 'items' => $tags ]);
+
+        $this->assertEquals('foo,bar', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getTags when exception.
+     */
+    public function testGetTagsWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getTags');
+        $method->setAccessible(true);
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->will($this->throwException(new GetListException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLanguage.
+     */
+    public function testGetLanguage()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLanguage');
+        $method->setAccessible(true);
+
+        $this->globals->expects($this->once())->method('getLocale')
+            ->willReturn($this->locale);
+        $this->locale->expects($this->once())->method('getLocaleShort')
+            ->with('frontend')
+            ->willReturn('en');
+
+        $this->assertEquals('en', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLastAuthorId without content.
+     */
+    public function testGetLastAuthorIdWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLastAuthorId');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLastAuthorId with content.
+     */
+    public function testGetLastAuthorId()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLastAuthorId');
+        $method->setAccessible(true);
+
+        $content                      = new Content();
+        $content->fk_user_last_editor = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $author = new User([ 'id' => 1 ]);
+        $this->as->expects($this->any())->method('getItem')
+            ->with($content->fk_user_last_editor)
+            ->willReturn($author);
+
+        $this->assertEquals(1, $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLastAuthorId when exception.
+     */
+    public function testGetLastAuthorIdWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLastAuthorId');
+        $method->setAccessible(true);
+
+        $content                      = new Content();
+        $content->fk_user_last_editor = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetListException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLastAuthorName without content.
+     */
+    public function testGetLastAuthorNameWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLastAuthorName');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLastAuthorName with content.
+     */
+    public function testGetLastAuthorName()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLastAuthorName');
+        $method->setAccessible(true);
+
+        $content                      = new Content();
+        $content->fk_user_last_editor = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $author = new User([ 'id' => 1, 'name' => 'John Doe' ]);
+        $this->as->expects($this->any())->method('getItem')
+            ->with($content->fk_user_last_editor)
+            ->willReturn($author);
+
+        $this->assertEquals('John Doe', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getLastAuthorName when exception.
+     */
+    public function testGetLastAuthorNameWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getLastAuthorName');
+        $method->setAccessible(true);
+
+        $content                      = new Content();
+        $content->fk_user_last_editor = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetListException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getMediaType when no content.
+     */
+    public function testGetMediaTypeWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getMediaType');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getMediaType.
+     */
+    // public function testGetMediaType()
+    // {
+    //     $method = new \ReflectionMethod($this->extractor, 'getMediaType');
+    //     $method->setAccessible(true);
+
+    //     $photo = new Content([
+    //         'id'             => 704,
+    //         'content_status' => 1,
+    //         'starttime'      => new \Datetime('2020-01-01 00:00:00')
+    //     ]);
+    //     $content = new Content([
+    //         'content_status' => 1,
+    //         'in_litter'      => 0,
+    //         'starttime'      => new \Datetime('2020-01-01 00:00:00'),
+    //         'img2'           => $photo
+    //     ]);
+
+    //     $content->related_contents = [ [
+    //         'caption'           => 'Omnes possim dis mucius',
+    //         'content_type_name' => 'article',
+    //         'position'          => 0,
+    //         'target_id'         => 205,
+    //         'type'              => 'related_inner'
+    //     ], [
+    //         'caption'           => 'Ut erant arcu graeco',
+    //         'content_type_name' => 'article',
+    //         'position'          => 1,
+    //         'target_id'         => 704,
+    //         'type'              => 'photo'
+    //     ]  ];
+
+
+
+    //     $this->template->expects($this->at(0))->method('getValue')
+    //         ->with('o_content')
+    //         ->willReturn($content);
+
+    //     $this->contentHelper->expects($this->any())->method('isReadyForPublish')
+    //         ->with()->willReturn(true);
+
+    //     $this->template->expects($this->at(1))->method('getValue')
+    //         ->with('o_content')
+    //         ->willReturn($content);
+
+    //     $this->assertEquals('photo', $method->invokeArgs($this->extractor, []));
+    // }
+
+    /**
+     * Tests getPublishedDate when no content.
+     */
+    public function testGetPublishedDateWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublishedDate');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublishedDate.
+     */
+    public function testGetPublishedDate()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublishedDate');
+        $method->setAccessible(true);
+
+        $content            = new Content();
+        $content->starttime = '2020-01-01';
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->assertEquals('2020-01-01 00:00:00', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublishedDate when exception.
+     *
+     * @expectedException Exception
+     */
+    public function testGetPublishedDateWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublishedDate');
+        $method->setAccessible(true);
+
+        $content            = new Content();
+        $content->starttime = 'foobar';
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getSeoTags with content.
+     */
+    public function testGetSeoTags()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getSeoTags');
+        $method->setAccessible(true);
+
+        $content       = new Content();
+        $content->tags = [ 971, 837 ];
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $tags = [
+            new Tag([ 'id' => 917, 'slug' => 'foo' ]),
+            new Tag([ 'id' => 837, 'slug' => 'bar' ])
+        ];
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->with([ 971, 837 ])
+            ->willReturn([ 'items' => $tags ]);
+
+        $this->assertEquals('foo,bar', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getSeoTags when exception.
+     */
+    public function testGetSeoTagsWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getSeoTags');
+        $method->setAccessible(true);
+
+        $content       = new Content();
+        $content->tags = [ 971, 837 ];
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->will($this->throwException(new GetListException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getSubscription.
+     */
+    public function testGetSubscription()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getSubscription');
+        $method->setAccessible(true);
+
+        $content = new Content();
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->globals->expects($this->once())->method('getSubscription')
+            ->willReturn($this->sh);
+
+        $this->sh->expects($this->once())->method('isRestricted')
+            ->willReturn(false);
+
+        $this->assertFalse($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getSubscription when no content.
+     */
+    public function testGetSubscriptionWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getSubscription');
+        $method->setAccessible(true);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getUpdateDate when no content.
+     */
+    public function testGetUpdateDateWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getUpdateDate');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getUpdateDate.
+     */
+    public function testGetUpdatedDate()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getUpdateDate');
+        $method->setAccessible(true);
+
+        $content          = new Content();
+        $content->changed = '2020-01-01';
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->assertEquals('2020-01-01 00:00:00', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getUpdateDate when exception.
+     *
+     * @expectedException Exception
+     */
+    public function testGetUpdateDateWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getUpdateDate');
+        $method->setAccessible(true);
+
+        $content          = new Content();
+        $content->changed = 'foobar';
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+}
