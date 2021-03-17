@@ -117,14 +117,6 @@ class ArticleController extends FrontendController
     {
         $params = parent::getParameters($params, $item);
 
-        if (array_key_exists('o_category', $params) && !empty($params['o_category'])) {
-            $params['o_layout'] = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')->get(
-                    'frontpage_layout_' . $params['o_category']->id,
-                    'default'
-                );
-        }
-
         if (!empty($item)) {
             $params[$item->content_type_name] = $item;
 
