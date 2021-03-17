@@ -63,7 +63,6 @@ class NewsletterRenderer
      */
     public function render($newsletter)
     {
-
         $newsletterContent = $this->hydrateContainers($newsletter);
 
         $menu = new \Menu();
@@ -218,18 +217,11 @@ class NewsletterRenderer
         $containers = $newsletter->contents;
 
         foreach ($containers as $index => &$container) {
-
-            //if (!property_exists($container, 'id')) {
-            //    $container['id'] = $index + 1;
-           // }
-
-            if (!array_key_exists('id', $container)){
+            if (!array_key_exists('id', $container)) {
                 $container['id'] = $index + 1;
             }
 
-
             foreach ($container['items'] as $index => &$item) {
-
                 // If current item do not fullfill the required format then skip it
                 if ($item['content_type'] === 'label') {
                     continue;
@@ -247,13 +239,10 @@ class NewsletterRenderer
 
                 // if is not a real content, skip this element
                 if (!is_object($content) || is_null($content->id)) {
-
                     continue;
                 }
 
                 $item['content'] = $content;
-
-
             }
         }
 

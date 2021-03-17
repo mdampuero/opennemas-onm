@@ -224,7 +224,6 @@ class NewsletterController extends Controller
         $containers = empty($containers) ? [] : $containers;
 
         foreach ($containers as &$container) {
-
             foreach ($container['items'] as &$content) {
                 $content['content_type'] = \classify($content['content_type']);
             }
@@ -244,6 +243,7 @@ class NewsletterController extends Controller
 
             $this->get('core.helper.url_generator')->forceHttp(true);
             $this->get('core.locale')->setContext('frontend')->apply();
+
             $html = $this->get('core.renderer.newsletter')->render($item);
 
             $this->get('core.locale')->setContext('backend')->apply();
