@@ -126,8 +126,8 @@ function get_featured_media($item, $type, $deep = true)
     $item = get_content($item);
     $map  = [
         'article' => [
-            'frontpage' => [ 'fk_video', 'img1' ],
-            'inner'     => [ 'fk_video2', 'img2' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'opinion' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]
@@ -165,9 +165,17 @@ function get_featured_media($item, $type, $deep = true)
             return $item;
         }
 
-        $media = get_related($item, $map[get_type($item)][$type][0]);
+        $related = get_related($item, $map[get_type($item)][$type][0]);
+        $media   = get_content(array_shift($related));
 
-        return array_shift($media);
+        if ($deep &&
+            in_array(get_type($media), [ 'video', 'album' ]) &&
+            $type === 'frontpage'
+            ) {
+            return get_featured_media($media, 'frontpage');
+        }
+
+        return $media;
     }
 
     foreach ($map[get_type($item)][$type] as $key) {
@@ -186,17 +194,9 @@ function get_featured_media($item, $type, $deep = true)
                 preg_match('/img|cover|thumbnail/', $key) ? 'Photo' : 'Video'
             );
         }
-
-        if (!empty($featured)) {
-            if ($deep && get_type($featured) === 'video' && $type === 'frontpage') {
-                return get_featured_media($featured, 'frontpage');
-            }
-
-            return $featured;
-        }
     }
 
-    return null;
+    return !empty($featured) ? $featured : null;
 }
 
 /**
@@ -213,8 +213,8 @@ function get_featured_media_caption($item, $type)
     $item = get_content($item);
     $map  = [
         'article' => [
-            'frontpage' => [ 'footer_video1', 'img1_footer' ],
-            'inner'     => [ 'footer_video2', 'img2_footer' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'opinion' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => [ 'featured_inner' ]

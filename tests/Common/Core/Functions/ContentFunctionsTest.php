@@ -245,8 +245,8 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $content->content_status    = 1;
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
-        $content->content_type_name = 'article';
-        $content->img1              = 893;
+        $content->content_type_name = 'book';
+        $content->cover_id          = 893;
         $content->external          = 1;
 
         $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
@@ -276,11 +276,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'position'          => 9
         ] ];
 
-        $this->assertEquals([
-            'item'     => $photo,
-            'caption'  => 'Justo auctor vero probo pertinax',
-            'position' => 9
-        ], get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
     }
 
     /**
@@ -304,8 +300,8 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $content->content_status    = 1;
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
-        $content->content_type_name = 'article';
-        $content->img1              = 893;
+        $content->content_type_name = 'book';
+        $content->cover_id          = 893;
 
         $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
     }
@@ -338,7 +334,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->em->expects($this->at(0))->method('find')
-            ->with('Video', 779)->willReturn($video);
+            ->with('video', 779)->willReturn($video);
         $this->em->expects($this->at(1))->method('find')
             ->with('photo', 893)->willReturn($photo);
 
@@ -347,7 +343,15 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->fk_video          = 779;
+        $content->related_contents  = [
+            [
+                'type'              => 'featured_frontpage',
+                'target_id'         => 779,
+                'content_type_name' => 'video',
+                'caption'           => 'Lorem ipsum dolor sit amet.',
+                'position'          => 0
+            ]
+        ];
 
         $this->assertEquals($photo, get_featured_media($content, 'frontpage'));
     }
@@ -367,14 +371,22 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->em->expects($this->once())->method('find')
-            ->with('Video', 779)->willReturn($video);
+            ->with('video', 779)->willReturn($video);
 
         $content                    = new \Content();
         $content->content_status    = 1;
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->fk_video          = 779;
+        $content->related_contents  = [
+            [
+                'type'              => 'featured_frontpage',
+                'target_id'         => 779,
+                'content_type_name' => 'video',
+                'caption'           => 'Lorem ipsum dolor sit amet.',
+                'position'          => 0
+            ]
+        ];
 
         $this->assertEquals(new Content([
             'content_status'    => 1,
@@ -392,12 +404,13 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(get_featured_media_caption($this->content, 'baz'));
         $this->assertNull(get_featured_media_caption($this->content, 'inner'));
 
-
         $this->content->content_type_name = 'article';
+
+        $this->content->related_contents = [];
 
         $this->assertNull(get_featured_media_caption($this->content, 'frontpage'));
 
-        $this->content->img1_footer = 'Rhoncus pretium';
+        $this->content->related_contents = [ [ 'type' => 'featured_frontpage', 'caption' => 'Rhoncus pretium' ] ];
 
         $this->assertEquals('Rhoncus pretium', get_featured_media_caption($this->content, 'frontpage'));
 
@@ -617,7 +630,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Percipit "mollis" at scriptorem usu.', get_summary($this->content));
 
         $this->content->content_type_name = 'opinion';
-        $this->content->description = 'Lorem ipsum, dolor sit amet consectetur';
+        $this->content->description       = 'Lorem ipsum, dolor sit amet consectetur';
         $this->assertEquals('Lorem ipsum, dolor sit amet consectetur', get_summary($this->content));
     }
 
@@ -741,7 +754,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $photo->content_type_name = 'photo';
 
         $this->em->expects($this->once())->method('find')
-            ->with('Photo', 893)->willReturn($photo);
+            ->with('photo', 893)->willReturn($photo);
 
         $this->assertNull(get_featured_media($this->content, 'baz'));
         $this->assertNull(get_featured_media($this->content, 'inner'));
@@ -751,10 +764,18 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->img1              = 893;
+        $content->related_contents  = [
+            [
+                'type'              => 'featured_frontpage',
+                'target_id'         => 893,
+                'content_type_name' => 'photo',
+                'caption'           => 'Lorem ipsum dolor sit amet.',
+                'position'          => 0
+            ]
+        ];
 
         $this->em->expects($this->once())->method('find')
-            ->with('Photo', 893)->willReturn($photo);
+            ->with('photo', 893)->willReturn($photo);
 
         $this->assertFalse(has_featured_media($content, 'baz'));
         $this->assertFalse(has_featured_media($content, 'inner'));
@@ -767,7 +788,7 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     public function testHasFeaturedMediaCaption()
     {
         $this->content->content_type_name = 'article';
-        $this->content->img1_footer       = 'Rhoncus pretium';
+        $this->content->related_contents  = [ [ 'type' => 'featured_frontpage', 'caption' => 'Rhoncus pretium' ] ];
 
         $this->helper->expects($this->at(0))->method('isHidden')
             ->willReturn(true);
