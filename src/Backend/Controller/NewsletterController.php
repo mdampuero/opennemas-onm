@@ -248,7 +248,6 @@ class NewsletterController extends Controller
 
             $this->get('core.locale')->setContext('backend')->apply();
 
-
             $this->get('api.service.newsletter')->patchItem($item->id, [
                 'status'   => 0,
                 'title'    => $title,
