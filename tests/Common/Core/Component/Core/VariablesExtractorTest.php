@@ -635,6 +635,38 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     // }
 
     /**
+     * Tests getPretitle when no content.
+     */
+    public function testGetPretitleWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPretitle');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->once())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPretitle.
+     */
+    public function testGetPretitle()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPretitle');
+        $method->setAccessible(true);
+
+        $content = new Content([ 'pretitle' => 'wobble' ]);
+
+        $this->template->expects($this->once())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->assertEquals('wobble', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
      * Tests getPublishedDate when no content.
      */
     public function testGetPublishedDateWhenNoContent()

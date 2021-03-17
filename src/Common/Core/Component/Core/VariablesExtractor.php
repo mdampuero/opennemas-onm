@@ -289,6 +289,22 @@ class VariablesExtractor
     }
 
     /**
+     * Get the content pretitle.
+     *
+     * @return String The content pretitle.
+     */
+    protected function getPretitle()
+    {
+        $content = $this->tpl->getValue('o_content') ?? null;
+
+        if (empty($content)) {
+            return '';
+        }
+
+        return $content->pretitle ?? '';
+    }
+
+    /**
      * Get the content published date.
      *
      * @return String The content published date.
