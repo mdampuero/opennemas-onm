@@ -15,11 +15,9 @@ function smarty_outputfilter_data_layer($output, $smarty)
         return $output;
     }
 
-    $uri     = $request->getUri();
-    $referer = $request->headers->get('referer');
+    $uri = $request->getUri();
 
     if (!preg_match('/newsletter/', $smarty->source->resource)
-        && !preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/share-by-email/', $uri)
