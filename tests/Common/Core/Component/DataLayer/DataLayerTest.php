@@ -187,6 +187,7 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
             'lastAuthorId'   => _('Last editor Id'),
             'lastAuthorName' => _('Last editor name'),
             'mediaType'      => _('Media element'),
+            'pretitle'       => _('Pretitle'),
             'publishedDate'  => _('Published date'),
             'seoTags'        => _('Seo tags'),
             'subscription'   => _('Subscription'),
