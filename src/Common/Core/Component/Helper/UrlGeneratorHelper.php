@@ -164,9 +164,13 @@ class UrlGeneratorHelper
      */
     protected function getUriForArticle($content)
     {
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
         try {
             $category = $this->container->get('api.service.category')
-                ->getItem($content->category_id);
+                ->getItem($content->categories[0]);
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
@@ -174,10 +178,10 @@ class UrlGeneratorHelper
         }
 
         return $this->generateUriFromConfig('article', [
-            'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($content->created)),
-            'category' => urlencode($categorySlug),
-            'slug'     => urlencode($content->slug),
+            'id'            => sprintf('%06d', $content->id),
+            'date'          => date('YmdHis', strtotime($created)),
+            'category'      => urlencode($categorySlug),
+            'slug'          => urlencode($content->slug),
         ]);
     }
 
