@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -281,7 +282,11 @@ class CategoryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        list($contents, $total) = $this->getItems($params);
+        try {
+            list($contents, $total) = $this->getItems($params);
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {
