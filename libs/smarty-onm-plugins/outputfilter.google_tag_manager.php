@@ -29,7 +29,7 @@ function smarty_outputfilter_google_tag_manager($output, $smarty)
         $gtm = $smarty->getContainer()->get('core.google.tagmanager');
 
         // AMP pages
-        if (preg_match('@\.amp\.html$@', $uri)) {
+        if (preg_match('@\.amp\.html@', $uri)) {
             $containerId = $smarty->getContainer()
                 ->get('orm.manager')
                 ->getDataSet('Settings', 'instance')

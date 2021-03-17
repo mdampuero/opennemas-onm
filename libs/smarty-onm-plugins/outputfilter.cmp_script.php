@@ -34,7 +34,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/rss/', $uri)
     ) {
         // Check for AMP pages
-        if (preg_match('@\.amp\.html$@', $uri)) {
+        if (preg_match('@\.amp\.html@', $uri)) {
             // Do nothing if CMP not configured
             if ($config['cmp_type'] === 'default'
                 || empty($config['cmp_id'])

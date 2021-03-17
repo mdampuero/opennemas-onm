@@ -26,7 +26,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
-        && !preg_match('@\.amp\.html$@', $uri)
+        && !preg_match('@\.amp\.html@', $uri)
     ) {
         $settings = $smarty->getContainer()
             ->get('orm.manager')
