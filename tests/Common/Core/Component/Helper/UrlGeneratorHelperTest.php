@@ -137,9 +137,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateForArticleWithAmp()
     {
-        $content = new \Article();
+        $content = new Content();
 
-        $content->id                = 252;
+        $content->pk_content        = 252;
         $content->category_slug     = 'actualidad';
         $content->categories        = [ 28618 ];
         $content->created           = '2015-01-14 23:49:40';
@@ -303,9 +303,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForArticle()
     {
-        $content = new \Article();
+        $content = new Content();
 
-        $content->id                = 252;
+        $content->pk_content        = 252;
         $content->category_slug     = 'actualidad';
         $content->categories        = [ 24845 ];
         $content->created           = '2015-01-14 23:49:40';
