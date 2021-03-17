@@ -38,7 +38,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             simple: false
           },
           related_frontpage: {
-            mirror: 'relatedInner',
+            mirror: 'related_inner',
             name:   'relatedFrontpage',
             simple: false
           },
@@ -316,6 +316,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             related.scope[related.map[type].name]      = related.localize(item, type);
 
             related.mirrored[name] = true;
+            return;
+          }
+
+          if (nv === ov) {
             return;
           }
 
