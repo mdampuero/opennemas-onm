@@ -63,6 +63,7 @@ class NewsletterRenderer
      */
     public function render($newsletter)
     {
+
         $newsletterContent = $this->hydrateContainers($newsletter);
 
         $menu = new \Menu();
@@ -214,35 +215,45 @@ class NewsletterRenderer
     protected function hydrateContainers($newsletter)
     {
         // TODO: Remove this hack to force object conversion ASAP
-        $containers = json_decode(json_encode($newsletter->contents), false);
+        $containers = $newsletter->contents;
 
         foreach ($containers as $index => &$container) {
-            if (!property_exists($container, 'id')) {
-                $container->id = $index + 1;
+
+            //if (!property_exists($container, 'id')) {
+            //    $container['id'] = $index + 1;
+           // }
+
+            if (!array_key_exists('id', $container)){
+                $container['id'] = $index + 1;
             }
 
-            foreach ($container->items as $index => &$item) {
+
+            foreach ($container['items'] as $index => &$item) {
+
                 // If current item do not fullfill the required format then skip it
-                if ($item->content_type === 'label') {
+                if ($item['content_type'] === 'label') {
                     continue;
                 }
 
-                if ($item->content_type === 'list') {
-                    $contents = $this->getContents($item->criteria);
-                    unset($container->items[$index]);
+                if ($item['content_type'] === 'list') {
+                    $contents = $this->getContents($item['criteria']);
+                    unset($container['items'][$index]);
 
-                    $container->items = array_merge($container->items, $contents);
+                    $container['items'] = array_merge($container['items'], $contents);
                     continue;
                 }
 
-                $content = $this->er->find(classify($item->content_type), $item->id);
+                $content = $this->er->find(classify($item['content_type']), $item['id']);
 
                 // if is not a real content, skip this element
                 if (!is_object($content) || is_null($content->id)) {
+
                     continue;
                 }
 
-                $item = $content;
+                $item['content'] = $content;
+
+
             }
         }
 

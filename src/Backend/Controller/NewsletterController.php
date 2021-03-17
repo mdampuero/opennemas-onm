@@ -220,15 +220,15 @@ class NewsletterController extends Controller
         $title = $this->getTitle($request);
 
         $containers = $request->request->get('content_ids');
-        $containers = json_decode($containers);
+        $containers = json_decode($containers, true);
         $containers = empty($containers) ? [] : $containers;
 
         foreach ($containers as &$container) {
-            foreach ($container->items as &$content) {
-                $content->content_type = \classify($content->content_type);
+
+            foreach ($container['items'] as &$content) {
+                $content['content_type'] = \classify($content['content_type']);
             }
         }
-
         try {
             $item = !empty($id)
                 ? $this->get('api.service.newsletter')->getItem($id)
@@ -245,7 +245,9 @@ class NewsletterController extends Controller
             $this->get('core.helper.url_generator')->forceHttp(true);
             $this->get('core.locale')->setContext('frontend')->apply();
             $html = $this->get('core.renderer.newsletter')->render($item);
+
             $this->get('core.locale')->setContext('backend')->apply();
+
 
             $this->get('api.service.newsletter')->patchItem($item->id, [
                 'status'   => 0,
