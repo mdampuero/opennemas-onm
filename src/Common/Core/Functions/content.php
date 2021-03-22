@@ -166,7 +166,12 @@ function get_featured_media($item, $type, $deep = true)
         }
 
         $related = get_related($item, $map[get_type($item)][$type][0]);
-        $media   = get_content(array_shift($related));
+
+        if (empty($related)) {
+            return null;
+        }
+
+        $media = get_content(array_shift($related));
 
         if ($deep &&
             in_array(get_type($media), [ 'video', 'album' ]) &&

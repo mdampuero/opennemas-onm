@@ -159,6 +159,10 @@ class ArticleController extends ContentController
             }
         }
 
+        $article = $this->get('data.manager.filter')->set($article)
+            ->filter('localize', [ 'keys'   => $this->get($this->service)->getL10nKeys('article') ])
+            ->get();
+
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
 

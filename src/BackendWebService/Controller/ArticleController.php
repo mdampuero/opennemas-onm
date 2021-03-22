@@ -61,7 +61,7 @@ class ArticleController extends Controller
                 $params['locale'] = $request->get('locale');
             }
 
-            $url = $this->generateUrl('admin_article_show', $params);
+            $url = $this->generateUrl('backend_article_show', $params);
         }
 
         $response = new JsonResponse('', 201);
