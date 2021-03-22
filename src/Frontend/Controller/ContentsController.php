@@ -50,7 +50,7 @@ class ContentsController extends Controller
 
         $content = new \Content($contentID);
 
-        return $this->redirect($this->container->get('core.helper.url_generator')->generate($content),301);
+        return $this->redirect($this->container->get('core.helper.url_generator')->generate($content), 301);
     }
 
     /**
