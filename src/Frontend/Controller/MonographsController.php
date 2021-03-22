@@ -173,7 +173,7 @@ class MonographsController extends Controller
 
             if (!empty($contents)) {
                 foreach ($contents as $item) {
-                    $content = \Content::get($item['fk_content']);
+                    $content = $this->get('entity_repository')->find($item['type_content'], $item['fk_content']);
 
                     if (($item['position'] % 2) == 0) {
                         $content->placeholder = 'placeholder_0_1';

@@ -92,10 +92,6 @@
         $scope.getData = function() {
           var data = angular.extend({}, $scope.item);
 
-          if ($scope.hasMultilanguage()) {
-            data = angular.extend({}, $scope.data.item);
-          }
-
           return cleaner.clean(data);
         };
 

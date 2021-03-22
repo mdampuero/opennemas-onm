@@ -20,6 +20,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
+
         $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -35,9 +36,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'getMediaShortPath', 'getBaseUrl' ])
             ->getMock();
-
-        $this->instance->expects($this->any())->method('getBaseUrl')
-            ->willReturn('thud.opennemas.com');
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
@@ -115,57 +113,97 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     public function testExtractParamsFromData()
     {
         $data                   = [];
-        $data['content']        = new \Content();
+        $data['content']        = new Content();
         $data['content']->tags  = [1,2,3,4];
         $data['content']->title = 'This is the title';
         $data['video']          = new Content();
         $data['video']->tags    = [1,2,3,4,5];
 
-        $output                   = [];
-        $output['content']        = new \Content();
-        $output['video']          = new Content();
-        $output['content']->tags  = [1,2,3,4];
-        $output['video']->tags    = [1,2,3,4,5];
-        $output['videokeywords']  = 'keywords,object,json,linking,data';
-        $output['keywords']       = 'keywords,object,json,linking';
-        $output['sitename']       = 'site name';
-        $output['siteurl']        = 'thud.opennemas.com';
-        $output['content']->body  = '';
-        $output['content']->title = 'This is the title';
-        $output['title']          = 'This is the title';
-        $output['description']    = 'This is the title';
-        $output['wordCount']      = 4;
-        $output['logo']           = 'logo';
-        $output['author']         = 'author';
-        $output['image']          = null;
+        $output                    = [];
+        $output['content']         = new Content();
+        $output['video']           = new Content();
+        $output['content']->tags   = [1,2,3,4];
+        $output['video']->tags     = [1,2,3,4,5];
+        $output['videoKeywords']   = 'keywords,object,json,linking,data';
+        $output['keywords']        = 'keywords,object,json,linking';
+        $output['siteName']        = 'site name';
+        $output['siteUrl']         = 'http://opennemas.com';
+        $output['siteDescription'] = 'site description';
+        $output['content']->title  = 'This is the title';
+        $output['title']           = 'This is the title';
+        $output['description']     = 'This is the description';
+        $output['wordCount']       = 4;
+        $output['logo']            = 'logo';
+        $output['author']          = 'author';
+        $output['image']           = null;
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getTags', 'getLogoData', 'getAuthorData', 'getMediaData' ])
+            ->setMethods([ 'getTags', 'getLogoData', 'getDescription', 'getAuthorData', 'getMediaData' ])
             ->getMock();
 
         $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
-        $object->expects($this->at(1))->method('getAuthorData')->willReturn('author');
-        $object->expects($this->at(2))->method('getMediaData')
+        $object->expects($this->at(1))->method('getDescription')->willReturn('This is the description');
+        $object->expects($this->at(2))->method('getAuthorData')->willReturn('author');
+        $object->expects($this->at(3))->method('getMediaData')
             ->willReturn([
                 'image' => null,
                 'video' => $data['video']
             ]);
 
-        $object->expects($this->at(3))->method('getTags')
+        $object->expects($this->at(4))->method('getTags')
             ->with($data['content']->tags)
             ->willReturn('keywords,object,json,linking');
-
-        $object->expects($this->at(4))->method('getTags')
+        $object->expects($this->at(5))->method('getTags')
             ->with($data['video']->tags)
             ->willReturn('keywords,object,json,linking,data');
 
-        $this->ds->expects($this->once())->method('get')
+        $this->instance->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('http://opennemas.com');
+
+        $this->ds->expects($this->at(0))->method('get')
             ->with('site_name')
             ->willReturn('site name');
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('site_description')
+            ->willReturn('site description');
 
         $this->assertEquals($output, $object->extractParamsFromData($data));
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
+     * without content
+     */
+    public function testExtractParamsFromDataWithoutContent()
+    {
+        $output['logo']            = 'logo';
+        $output['siteName']        = 'site name';
+        $output['siteUrl']         = 'http://opennemas.com';
+        $output['siteDescription'] = 'site description';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getLogoData'])
+            ->getMock();
+
+        $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
+
+        $this->instance->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('http://opennemas.com');
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('site_name')
+            ->willReturn('site name');
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('site_description')
+            ->willReturn('site description');
+
+        $this->assertEquals($output, $object->extractParamsFromData([]));
     }
 
     /**
@@ -181,7 +219,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['summary']                    = 'This is a test summary';
         $data['created']                    = '10-10-2010 00:00:00';
         $data['changed']                    = '10-10-2010 00:00:00';
-        $data['url']                        = 'thud.opennemas.com';
+        $data['url']                        = 'http://console/';
         $data['author']                     = 'John Doe';
 
 
@@ -194,17 +232,17 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturn($data);
 
-        $this->tpl->expects($this->at(1))->method('fetch')
-            ->with('common/helpers/structured_gallery_data.tpl', $data);
+        $this->tpl->expects($this->at(0))->method('fetch')
+            ->with('common/helpers/structured_album_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
     }
 
     /**
      * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
-     * for content of type video
+     * for content of type article with video
      */
-    public function testGenerateJsonLDCodeWithVideo()
+    public function testGenerateJsonLDCodeArticleWithVideo()
     {
         $data                               = [];
         $data['content']                    = new \Content();
@@ -213,7 +251,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['summary']                    = 'This is a test summary';
         $data['created']                    = '10-10-2010 00:00:00';
         $data['changed']                    = '10-10-2010 00:00:00';
-        $data['url']                        = 'thud.opennemas.com';
+        $data['url']                        = 'http://console/';
         $data['author']                     = 'John Doe';
         $data['video']                      = new Content();
 
@@ -227,7 +265,40 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($data)
             ->willReturn($data);
 
-        $this->tpl->expects($this->at(1))->method('fetch')
+        $this->tpl->expects($this->at(0))->method('fetch')
+            ->with('common/helpers/structured_content_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
+     * for content of type video
+     */
+    public function testGenerateJsonLDCodeWithVideo()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'video';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+        $data['video']                      = new Content();
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->at(0))->method('fetch')
             ->with('common/helpers/structured_video_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
@@ -269,6 +340,35 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('site name');
 
         $method->invokeArgs($this->object, [ $content ]);
+    }
+
+
+    /**
+     * @covers \Common\Core\Component\Helper\StructuredData::getDescription
+     */
+    public function testGetDescription()
+    {
+        $method = new \ReflectionMethod($this->object, 'getDescription');
+        $method->setAccessible(true);
+
+        $content              = new \Content();
+        $content->description = 'Foo bar baz';
+
+        $this->assertEquals(
+            $content->description,
+            $method->invokeArgs($this->object, [ $content ])
+        );
+
+        $content->description = '';
+
+        $this->ds->expects($this->once())->method('get')
+            ->with('site_description')
+            ->willReturn('Site description');
+
+        $this->assertEquals(
+            'Site description',
+            $method->invokeArgs($this->object, [ $content ])
+        );
     }
 
     /**

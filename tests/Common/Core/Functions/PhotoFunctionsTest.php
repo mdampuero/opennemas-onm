@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Core\Components\Functions;
 
 use Common\Model\Entity\Instance;
@@ -14,7 +7,7 @@ use Common\Model\Entity\Content;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Defines test cases for content functions.
+ * Defines test cases for photo functions.
  */
 class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -116,7 +109,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenNoTransform()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
@@ -130,7 +126,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenTransform()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
@@ -149,7 +148,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenAbsolute()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->at(0))->method('generate')
             ->with($photo)
@@ -170,7 +172,10 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenAbsoluteAndTransform()
     {
-        $photo = new Content();
+        $photo = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
 
         $this->ugh->expects($this->at(0))->method('generate')
             ->with($photo)

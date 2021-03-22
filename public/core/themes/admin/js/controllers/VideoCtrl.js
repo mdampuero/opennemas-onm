@@ -2,8 +2,8 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', '$window', 'http', 'routing', 'messenger',
-  function($controller, $scope, $timeout, $window, http, routing, messenger) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing',
+  function($controller, $scope, $timeout, $window, http, messenger, related, routing) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -109,13 +109,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
-      if ($scope.item.related_contents.length > 0) {
-        var cover = $scope.data.extra.related_contents[$scope.item.related_contents[0].target_id];
-      }
-
-      if (cover) {
-        $scope.cover = cover;
-      }
+      related.init($scope);
+      related.watch();
     };
 
     /**
@@ -159,19 +154,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       http.get(route).then(
         function(response) {
-          $scope.item.information     = response.data;
+          $scope.item.information = response.data;
 
           if ($scope.item.information.title && !$scope.item.title) {
             $scope.item.title = $scope.item.information.title;
           }
 
           $scope.flags.http.fetch_video_info = false;
+          $scope.flags.generate.slug         = true;
 
           $scope.item.type = $scope.item.information.service;
-
-          $timeout(function() {
-            angular.element('.tags-input-buttons .btn-info').triggerHandler('click');
-          }, 250);
         },
         function(response) {
           messenger.post(response.data.message);
@@ -206,23 +198,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         })
       );
     };
-
-    // Update thumbnail when is updated
-    $scope.$watch('cover', function(nv) {
-      $scope.item.related_contents = [];
-
-      if (!nv) {
-        return;
-      }
-
-      $scope.item.related_contents.push({
-        target_id: nv.pk_content,
-        type: 'featured_frontpage',
-        content_type_name: 'photo',
-        caption: null,
-        position: 0
-      });
-    }, true);
 
     // Mark preview URLs as trusted on change
     $scope.$watch('item.information.source', function(nv) {

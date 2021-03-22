@@ -20,16 +20,26 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
      */
     $scope.containerTarget = null;
 
-    $scope.source = {
-      items: [],
-      selected: []
-    };
-
     $scope.recipients = {
       all: false,
       items: [],
       selected: []
     };
+
+    $scope.source = {
+      items: [],
+      selected: []
+    };
+
+    /**
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *  The object to store content-picker selection.
+     *
+     * @type {Array}
+     */
+    $scope.target = [];
 
     /**
      * @memberOf NewsletterCtrl
@@ -46,6 +56,27 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
           !source.$modelValue.pk_content &&
           target.$element.attr('type') !== 'content';
       }
+    };
+
+    /**
+     * @function getItemIds
+     * @memberOf NewsletterCtrl
+     *
+     * @description
+     *   Returns the list of ids for items added to a container.
+     *
+     * @param {Array} items The list of items in a container.
+     *
+     * @return {Array} The list of ids.
+     */
+    $scope.getItemIds = function(items) {
+      if (!items || !(items instanceof Array)) {
+        return [];
+      }
+
+      return items.map(function(e) {
+        return e.pk_content;
+      });
     };
 
     /**

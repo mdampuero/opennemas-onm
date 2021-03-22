@@ -107,6 +107,8 @@ class ImageHelper extends FileHelper
             $information['description'] = $description;
         }
 
+        $this->processor->close();
+
         return $information;
     }
 
@@ -143,12 +145,14 @@ class ImageHelper extends FileHelper
      */
     public function remove(string $path) : void
     {
-        $path = preg_replace('/\/+/', '/', sprintf(
-            '%s/%s/%s',
-            $this->publicDir,
-            $this->loader->getInstance()->getMediaShortPath(),
-            $path
-        ));
+        if (strpos($path, $this->publicDir) === false) {
+            $path = preg_replace('/\/+/', '/', sprintf(
+                '%s/%s/%s',
+                $this->publicDir,
+                $this->loader->getInstance()->getMediaShortPath(),
+                $path
+            ));
+        }
 
         if ($this->fs->exists($path) && is_file($path)) {
             $this->fs->remove($path);

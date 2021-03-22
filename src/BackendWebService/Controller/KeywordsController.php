@@ -49,7 +49,7 @@ class KeywordsController extends Controller
         return new JsonResponse([
             'extra'   => [ 'types' => \PClave::getTypes() ],
             'results' => $keywords,
-            'total'   => count($keywords),
+            'total'   => $km->count($criteria),
         ]);
     }
 

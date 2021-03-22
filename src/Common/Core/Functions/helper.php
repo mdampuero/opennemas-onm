@@ -13,6 +13,8 @@ function get_url($item = null, array $params = []) : ?string
         return null;
     }
 
+    $item = is_string($item) ? $item : get_content($item);
+
     if (!empty($item->externalUri)) {
         return $item->externalUri;
     }

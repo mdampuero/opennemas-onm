@@ -25,8 +25,8 @@
         sas.cmd.push(
           function () {
             sas.call(
-              { siteId: {$config['site_id']}, pageId: {$page_id}, formatId: {$format_id}, tagId: "sas_{$format_id}" },
-              { networkId: {$config['network_id']}, domain: "{$config['domain']}" /*, onNoad: function() {} */ }
+              { siteId: {$config['site_id']}, pageId: {$page_id}, formatId: {$format_id}, {if !empty($targeting)}target: "{$targeting}",{/if} tagId: "sas_{$format_id}" },
+              { networkId: {$config['network_id']}, domain: "{$config['domain']}" }
             );
           }
         );

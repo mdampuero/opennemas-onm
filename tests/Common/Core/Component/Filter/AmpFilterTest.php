@@ -99,7 +99,32 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
-        // String with iframe
+        // String with iframe with withespaces between open/close
+        $str      = '<iframe src="http://whatever.com">  </iframe>';
+        $expected = '<amp-iframe width=518 height=291 sandbox="allow-scripts '
+                . 'allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms" '
+                . 'layout="responsive" frameborder="0" src="https://whatever.com"> '
+                . '<amp-img layout="fill" src="/assets/images/lazy-bg.png" placeholder></amp-img></amp-iframe>';
+
+        $this->assertEquals($expected, $this->filter->filter($str));
+
+        // String with iframe with newlines between open/close
+        $str      = '<iframe src="http://whatever.com">
+
+            </iframe>';
+        $expected = '<amp-iframe width=518 height=291 sandbox="allow-scripts '
+                    . 'allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms" '
+                    . 'layout="responsive" frameborder="0" src="https://whatever.com"> '
+                    . '<amp-img layout="fill" src="/assets/images/lazy-bg.png" placeholder></amp-img></amp-iframe>';
+
+            $this->assertEquals($expected, $this->filter->filter($str));
+        // String with iframe without src
+        $str      = '<iframe id="foo/bar/baz"></iframe>';
+        $expected = '';
+
+        $this->assertEquals($expected, $this->filter->filter($str));
+
+        // String with facebook
         $str      = '<div class="fb-post" data-href="{your-post-url}"></div>';
         $expected = '<amp-facebook width=486 height=657 layout="responsive" '
             . 'data-embed-as="post" data-href="{your-post-url}"></amp-facebook>';

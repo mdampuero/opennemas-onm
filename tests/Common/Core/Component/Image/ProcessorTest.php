@@ -35,7 +35,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->imagick = $this->getMockBuilder('Imagick')
             ->setMethods([
-                'getImageFilename', 'getImageFormat', 'getImageLength',
+                'clear', 'getImageFilename', 'getImageFormat', 'getImageLength',
                 'getImageMimeType', 'getImageProperties'
             ])->getMock();
 
@@ -110,6 +110,16 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testApplyWhenMethodNotExists()
     {
         $this->im->apply('glorp', [ 'flob', 22474 ]);
+    }
+
+    /**
+     * Tests close.
+     */
+    public function testClose()
+    {
+        $this->imagick->expects($this->once())->method('clear');
+
+        $this->im->close();
     }
 
     /**

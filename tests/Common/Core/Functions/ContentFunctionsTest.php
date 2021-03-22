@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Core\Functions;
 
 use Api\Exception\GetItemException;
@@ -115,8 +108,8 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-    * Tests get_body.
-    */
+     * Tests get_body.
+     */
     public function testGetBody()
     {
         $this->assertNull(get_body($this->content));
@@ -129,12 +122,44 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_caption for objects and for items as related content.
+     */
+    public function testGetCaption()
+    {
+        $item = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
+
+        $this->assertNull(get_caption($item));
+        $this->assertEquals('Suas sonet appellantur patrioque', get_caption([
+            'item'     => $item,
+            'caption'  => 'Suas sonet appellantur patrioque',
+            'position' => 365
+        ]));
+    }
+
+    /**
      * Tests get_content when a content is already provided as parameter.
      */
     public function testGetContentFromParameter()
     {
         $this->assertNull(get_content());
         $this->assertEquals($this->content, get_content($this->content));
+    }
+
+    /**
+     * Tests get_content when the content is provided as an array with keys
+     * item, position and caption.
+     */
+    public function testGetContentForRelatedContent()
+    {
+        $this->assertNull(get_content());
+        $this->assertEquals($this->content, get_content([
+            'caption'  => 'Moderatius eum soleat omittantur massa usu oportere.',
+            'item'     => $this->content,
+            'position' => 0,
+        ]));
     }
 
     /**
@@ -246,12 +271,17 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'photo',
             'source_id'         => 485,
             'target_id'         => 893,
-            'type'              => 'featured_frontpage'
+            'type'              => 'featured_frontpage',
+            'caption'           => 'Justo auctor vero probo pertinax',
+            'position'          => 9
         ] ];
 
-        $this->assertEquals($photo, get_featured_media($this->content, 'frontpage'));
+        $this->assertEquals([
+            'item'     => $photo,
+            'caption'  => 'Justo auctor vero probo pertinax',
+            'position' => 9
+        ], get_featured_media($this->content, 'frontpage'));
     }
-
 
     /**
      * Tests get_featured_media when the featured media is a photo.
@@ -300,8 +330,10 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
         $video->related_contents  = [
             [
                 'content_type_name' => 'photo',
-                'type' => 'featured_frontpage',
-                'target_id' => 893
+                'type'              => 'featured_frontpage',
+                'target_id'         => 893,
+                'caption'           => null,
+                'position'          => 0
             ]
         ];
 
@@ -388,6 +420,29 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_type when a content is already provided as parameter.
+     */
+    public function testGetProperty()
+    {
+        $this->content->wobble = 'wubble';
+
+        $this->assertNull(get_property($this->content, 'corge'));
+        $this->assertEquals('wubble', get_property($this->content, 'wobble'));
+    }
+
+    /**
+     * Tests get_id.
+     */
+    public function testGetId()
+    {
+        $this->assertEmpty(get_id($this->content));
+
+        $this->content->pk_content = 690;
+
+        $this->assertEquals(690, get_id($this->content));
+    }
+
+    /**
      * Tests get_publication_date.
      */
     public function testGetPublicationDate()
@@ -409,17 +464,6 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             new \Datetime('2010-10-10 20:00:00'),
             get_publication_date($this->content)
         );
-    }
-
-    /**
-     * Tests get_type when a content is already provided as parameter.
-     */
-    public function testGetProperty()
-    {
-        $this->content->wobble = 'wubble';
-
-        $this->assertNull(get_property($this->content, 'corge'));
-        $this->assertEquals('wubble', get_property($this->content, 'wobble'));
     }
 
     /**
@@ -449,37 +493,48 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_related when
+     * Tests get_related.
      */
     public function testGetRelated()
     {
-        $article                 = new \Content();
-        $article->id             = 893;
-        $article->content_status = 1;
-        $article->starttime      = '2020-01-01 00:00:00';
+        $articles = [ new Content([
+            'id'             => 893,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]), new Content([
+            'id'             => 704,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]) ];
 
-        $this->em->expects($this->once())->method('find')
-            ->with('article', 205)->willReturn($article);
+        $this->em->expects($this->at(0))->method('find')
+            ->with('article', 704)->willReturn($articles[1]);
 
-        $content                 = new \Content();
-        $content->content_status = 1;
-        $content->in_litter      = 0;
-        $content->starttime      = '2020-01-01 00:00:00';
+        $this->em->expects($this->at(1))->method('find')
+            ->with('article', 205)->willReturn($articles[0]);
 
-        $this->assertEmpty(get_related($content, 'inner'));
+        $this->assertEmpty(get_related($this->content, 'inner'));
 
-        $content->related_contents = [ [
+        $this->content->related_contents = [ [
+            'caption'           => 'Omnes possim dis mucius',
             'content_type_name' => 'article',
+            'position'          => 1,
             'target_id'         => 205,
             'type'              => 'related_inner'
-        ] ];
+        ], [
+            'caption'           => 'Ut erant arcu graeco',
+            'content_type_name' => 'article',
+            'position'          => 0,
+            'target_id'         => 704,
+            'type'              => 'related_inner'
+        ]  ];
 
-        $this->assertEmpty(get_related($content, 'inner'));
+        $this->assertEmpty(get_related($this->content, 'inner'));
 
-        $this->assertEquals(
-            [ $article ],
-            get_related($content, 'related_inner')
-        );
+        $related = get_related($this->content, 'related_inner');
+
+        $this->assertEquals($articles[1], $related[0]['item']);
+        $this->assertEquals($articles[0], $related[1]['item']);
     }
 
     /**
@@ -536,10 +591,16 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
+            'caption'           => null,
+            'position'          => 2
         ] ];
 
         $this->assertEmpty(get_related_contents($content, 'mumble'));
-        $this->assertEquals([ $article ], get_related_contents($content, 'inner'));
+        $this->assertEquals([ [
+            'item'     => $article,
+            'caption'  => null,
+            'position' => 2
+        ] ], get_related_contents($content, 'inner'));
     }
 
     /**
@@ -618,6 +679,38 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse(has_body($this->content));
         $this->assertTrue(has_body($this->content));
+    }
+
+    /**
+     * Tests has_caption for objects and for items as related content.
+     */
+    public function testHasCaption()
+    {
+        $item = new Content([
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+        ]);
+
+        $this->assertFalse(has_caption($item));
+        $this->assertTrue(has_caption([
+            'item'     => $item,
+            'caption'  => 'Suas sonet appellantur patrioque',
+            'position' => 365
+        ]));
+    }
+
+    /**
+     * Tests has_comments_enabled.
+     */
+    public function testHasCommentsEnabled()
+    {
+        $item = new Content([
+            'with_comment'   => true,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2000-01-01 00:00:00')
+            ]);
+
+        $this->assertTrue(has_comments_enabled($item));
     }
 
     /**
@@ -721,6 +814,8 @@ class ContentFunctionsTest extends \PHPUnit\Framework\TestCase
             'content_type_name' => 'article',
             'target_id'         => 205,
             'type'              => 'related_inner',
+            'caption'           => null,
+            'position'          => 2
         ] ];
 
         $this->assertFalse(has_related_contents($content, 'mumble'));

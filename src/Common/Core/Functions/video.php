@@ -105,7 +105,8 @@ function get_video_thumbnail($item)
     $related = get_related($item, 'featured_frontpage');
 
     if (!empty($related)) {
-        return array_shift($related);
+        $thumbnail = array_shift($related);
+        return get_content($thumbnail);
     }
 
     if (empty($item->information)

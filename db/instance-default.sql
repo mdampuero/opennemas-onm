@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.32, for Linux (x86_64)
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.23-log
+-- Server version	5.7.32-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -101,65 +101,6 @@ LOCK TABLES `advertisements_positions` WRITE;
 /*!40000 ALTER TABLE `advertisements_positions` DISABLE KEYS */;
 INSERT INTO `advertisements_positions` VALUES (128,2),(128,202),(128,402),(128,602),(128,802),(130,37),(130,1107),(130,1214),(130,1707),(133,3),(137,101),(137,301),(137,501),(137,701),(137,901),(141,109),(141,309),(141,509),(141,709),(141,909),(143,110),(143,310),(143,510),(143,710),(143,910),(145,5),(145,209),(145,409),(145,609),(145,809),(157,1),(157,201),(157,401),(157,601),(157,801),(224,37),(224,105),(224,405),(224,605),(224,705),(224,805),(239,193),(239,793),(508,103),(508,203),(508,303),(508,403),(508,503),(508,603),(508,703),(508,803),(508,903),(618,37),(618,1211),(618,2201),(618,3201),(621,104),(621,704),(625,1212),(625,2203),(625,3203),(630,91),(630,191),(630,291),(630,391),(630,491),(630,591),(630,691),(630,791),(630,891),(630,991),(824,92),(824,192),(824,292),(824,392),(824,492),(824,592),(824,692),(824,792),(824,892),(824,992),(827,11),(827,21),(827,31),(827,34),(828,33);
 /*!40000 ALTER TABLE `advertisements_positions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `albums`
---
-
-DROP TABLE IF EXISTS `albums`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `albums` (
-  `pk_album` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `subtitle` varchar(250) DEFAULT NULL,
-  `agency` varchar(250) DEFAULT NULL,
-  `cover_id` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pk_album`),
-  KEY `cover_id` (`cover_id`),
-  CONSTRAINT `album_id_contents_id` FOREIGN KEY (`pk_album`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `cover_id` FOREIGN KEY (`cover_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=821 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `albums`
---
-
-LOCK TABLES `albums` WRITE;
-/*!40000 ALTER TABLE `albums` DISABLE KEYS */;
-INSERT INTO `albums` VALUES (583,'0','',713),(584,'0','',689),(585,'0','',677),(820,'0','',788);
-/*!40000 ALTER TABLE `albums` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `albums_photos`
---
-
-DROP TABLE IF EXISTS `albums_photos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `albums_photos` (
-  `pk_album` bigint(20) unsigned NOT NULL,
-  `pk_photo` bigint(20) unsigned NOT NULL,
-  `position` int(10) unsigned DEFAULT '1',
-  `description` text,
-  KEY `index_album_photo` (`pk_album`,`pk_photo`),
-  KEY `pk_album` (`pk_album`),
-  KEY `pk_photo` (`pk_photo`),
-  CONSTRAINT `photos_id_album_id` FOREIGN KEY (`pk_album`) REFERENCES `albums` (`pk_album`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `photos_id_content_id` FOREIGN KEY (`pk_photo`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `albums_photos`
---
-
-LOCK TABLES `albums_photos` WRITE;
-/*!40000 ALTER TABLE `albums_photos` DISABLE KEYS */;
-INSERT INTO `albums_photos` VALUES (583,735,0,'Pablo Iglesias, lÃ­der de Unidos Podemos'),(583,731,1,'Nadia CalvinÌƒo'),(583,713,2,'La reina Letizia (EFE)'),(583,707,3,'La reina SofÃ­a en su visita a Santiago de Compostela (Lavandeira Jr. EFE)'),(583,701,4,'JosÃ© Coronado, en una foto de archivo (AEP)'),(583,685,5,'Donald Trump y Kim Jong Un'),(583,675,6,'Ignacio GonzÃ¡lez. JAVIER LIZÃ“N (EFE)'),(583,681,7,'El presidente galo, Emmanuel Macron. SEBASTIEN NOGIER (EFE)'),(583,679,8,'El papa Francisco. CLAUDIO PERI (EFE)'),(583,673,9,'El ministro de Asuntos Exteriores, Josep Borrell. FERNANDO ALVARADO (EFE)'),(820,788,0,'La duquesa de Sussex'),(820,786,1,'Julio Iglesias cumple 75 aÃ±os entre la incertidumbre sobre su carrera'),(820,766,2,'La socialista recordÃ³ que la polÃ­tica es tener principios y coherencia (Javier Etxezarreta)'),(820,763,3,'El secretario general de Podemos, Pablo Iglesias'),(820,761,4,'La socialista Isabel RodrÃ­guez preside la comisiÃ³n de Justicia del Congreso'),(820,776,5,'Pedro SÃ¡nchez'),(820,717,6,'Rafa Nadal, Premio Nacional 2017'),(820,809,7,'Pere AragonÃ©s'),(820,753,8,'Guillermo del Toro, director de &#39;La forma del agua&#39;'),(820,679,9,'El papa Francisco. CLAUDIO PERI (EFE)'),(585,719,0,'El triatleta espaÃ±ol Mario Mola consigue su tercer tÃ­tulo mundial consecutivo'),(585,723,1,'Cristiano Ronaldo, futbolista (RRSS)'),(585,691,2,'Golovkin se defiende de Canelo en un momento del combate'),(585,673,3,'El ministro de Asuntos Exteriores, Josep Borrell. FERNANDO ALVARADO (EFE)'),(585,683,4,'Moon Jae-in (izquierda) y Kim Jong-un, este martes en Pyongyang. PYOENGYANG PRESS CORPS'),(585,685,5,'Donald Trump y Kim Jong Un'),(585,677,6,'Derrumbe en el Ritz. (EFE)'),(585,650,7,'Donald Trump y Pedro SÃ¡nchez'),(584,723,0,'Cristiano Ronaldo, futbolista (RRSS)'),(584,721,1,'Antoine Griezmann y Diego Costa celebrando el gol del AtlÃ©tico de Madrid. / Twitter @Atleti'),(584,719,2,'El triatleta espaÃ±ol Mario Mola consigue su tercer tÃ­tulo mundial consecutivo'),(584,717,3,'Rafa Nadal, Premio Nacional 2017'),(584,715,4,'Valverde saca oro en AlmadÃ©n y Molard aguanta lÃ­der de La Vuelta'),(584,697,5,'Los jugadores de la selecciÃ³n celebran el primer gol del equipo marcado por Saul Ã‘iguez (Morell/EFE)'),(584,703,6,'Momento en el que Cristiano Ronaldo, cuando era jugador del Real Madrid, realizÃ³ la chilena que finalizÃ³ en gol ante la Juventus, su actual equipo (EFE)'),(584,693,7,'El atacante argentino, el mejor del encuentro ante el Huesca (EFE)'),(584,695,8,'Luis Enrique gesticula mientras da indicaciones a sus jugadores'),(584,691,9,'Golovkin se defiende de Canelo en un momento del combate'),(584,689,10,'Novak Djokovic besando el trofeo otra vez mÃ¡s'),(584,687,11,'Scariolo estÃ¡ muy contento de por contar con su tocayo del CSKA');
-/*!40000 ALTER TABLE `albums_photos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -413,6 +354,7 @@ CREATE TABLE `content_content` (
 
 LOCK TABLES `content_content` WRITE;
 /*!40000 ALTER TABLE `content_content` DISABLE KEYS */;
+INSERT INTO `content_content` VALUES (583,673,'photo','photo','El ministro de Asuntos Exteriores, Josep Borrell. FERNANDO ALVARADO (EFE)',9),(583,675,'photo','photo','Ignacio GonzÃ¡lez. JAVIER LIZÃ“N (EFE)',6),(583,679,'photo','photo','El papa Francisco. CLAUDIO PERI (EFE)',8),(583,681,'photo','photo','El presidente galo, Emmanuel Macron. SEBASTIEN NOGIER (EFE)',7),(583,685,'photo','photo','Donald Trump y Kim Jong Un',5),(583,701,'photo','photo','JosÃ© Coronado, en una foto de archivo (AEP)',4),(583,707,'photo','photo','La reina SofÃ­a en su visita a Santiago de Compostela (Lavandeira Jr. EFE)',3),(583,713,'featured_frontpage','photo',NULL,0),(583,713,'photo','photo','La reina Letizia (EFE)',2),(583,731,'photo','photo','Nadia CalvinÌƒo',1),(583,735,'photo','photo','Pablo Iglesias, lÃ­der de Unidos Podemos',0),(584,687,'photo','photo','Scariolo estÃ¡ muy contento de por contar con su tocayo del CSKA',11),(584,689,'featured_frontpage','photo',NULL,0),(584,689,'photo','photo','Novak Djokovic besando el trofeo otra vez mÃ¡s',10),(584,691,'photo','photo','Golovkin se defiende de Canelo en un momento del combate',9),(584,693,'photo','photo','El atacante argentino, el mejor del encuentro ante el Huesca (EFE)',7),(584,695,'photo','photo','Luis Enrique gesticula mientras da indicaciones a sus jugadores',8),(584,697,'photo','photo','Los jugadores de la selecciÃ³n celebran el primer gol del equipo marcado por Saul Ã‘iguez (Morell/EFE)',5),(584,703,'photo','photo','Momento en el que Cristiano Ronaldo, cuando era jugador del Real Madrid, realizÃ³ la chilena que finalizÃ³ en gol ante la Juventus, su actual equipo (EFE)',6),(584,715,'photo','photo','Valverde saca oro en AlmadÃ©n y Molard aguanta lÃ­der de La Vuelta',4),(584,717,'photo','photo','Rafa Nadal, Premio Nacional 2017',3),(584,719,'photo','photo','El triatleta espaÃ±ol Mario Mola consigue su tercer tÃ­tulo mundial consecutivo',2),(584,721,'photo','photo','Antoine Griezmann y Diego Costa celebrando el gol del AtlÃ©tico de Madrid. / Twitter @Atleti',1),(584,723,'photo','photo','Cristiano Ronaldo, futbolista (RRSS)',0),(585,650,'photo','photo','Donald Trump y Pedro SÃ¡nchez',7),(585,673,'photo','photo','El ministro de Asuntos Exteriores, Josep Borrell. FERNANDO ALVARADO (EFE)',3),(585,677,'featured_frontpage','photo',NULL,0),(585,677,'photo','photo','Derrumbe en el Ritz. (EFE)',6),(585,683,'photo','photo','Moon Jae-in (izquierda) y Kim Jong-un, este martes en Pyongyang. PYOENGYANG PRESS CORPS',4),(585,685,'photo','photo','Donald Trump y Kim Jong Un',5),(585,691,'photo','photo','Golovkin se defiende de Canelo en un momento del combate',2),(585,719,'photo','photo','El triatleta espaÃ±ol Mario Mola consigue su tercer tÃ­tulo mundial consecutivo',0),(585,723,'photo','photo','Cristiano Ronaldo, futbolista (RRSS)',1),(820,679,'photo','photo','El papa Francisco. CLAUDIO PERI (EFE)',9),(820,717,'photo','photo','Rafa Nadal, Premio Nacional 2017',6),(820,753,'photo','photo','Guillermo del Toro, director de &#39;La forma del agua&#39;',8),(820,761,'photo','photo','La socialista Isabel RodrÃ­guez preside la comisiÃ³n de Justicia del Congreso',4),(820,763,'photo','photo','El secretario general de Podemos, Pablo Iglesias',3),(820,766,'photo','photo','La socialista recordÃ³ que la polÃ­tica es tener principios y coherencia (Javier Etxezarreta)',2),(820,776,'photo','photo','Pedro SÃ¡nchez',5),(820,786,'photo','photo','Julio Iglesias cumple 75 aÃ±os entre la incertidumbre sobre su carrera',1),(820,788,'featured_frontpage','photo',NULL,0),(820,788,'photo','photo','La duquesa de Sussex',0),(820,809,'photo','photo','Pere AragonÃ©s',7);
 /*!40000 ALTER TABLE `content_content` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1344,4 +1286,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-03  9:44:03
+-- Dump completed on 2021-02-15 12:12:08

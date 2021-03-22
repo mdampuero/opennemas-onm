@@ -109,24 +109,20 @@ class AlbumController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = (int) $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
         $categoryOQL = !empty($category)
             ? sprintf(' and category_id=%d', $category->id)
             : '';
 
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="album" and content_status=1 and in_litter=0 %s '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
             $date,
-            $epp,
-            $epp * ($params['page'] - 1)
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
         ));
 
         // No first page and no contents
@@ -140,7 +136,7 @@ class AlbumController extends FrontendController
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $epp,
+                'epp'         => $params['epp'],
                 'page'        => $params['page'],
                 'total'       => $response['total'],
                 'route'       => [

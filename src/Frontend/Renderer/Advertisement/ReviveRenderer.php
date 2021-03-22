@@ -18,6 +18,25 @@ use Frontend\Renderer\AdvertisementRenderer;
 class ReviveRenderer extends AdvertisementRenderer
 {
     /**
+     * Returns the HTML for AMP advertisements.
+     *
+     * @param \Advertisement $ad The advertisement to render.
+     *
+     * @return string The HTML for the advertisement.
+     */
+    public function renderAmp($ad, $params)
+    {
+        $size = $this->getDeviceAdvertisementSize($ad, 'phone');
+
+        return $this->tpl->fetch('advertisement/helpers/amp/revive.tpl', [
+            'openXId'  => $ad->params['openx_zone_id'],
+            'url'      => $this->ds->get('revive_ad_server')['url'],
+            'width'    => $size['width'],
+            'height'   => $size['height'],
+        ]);
+    }
+
+    /**
      * Returns the HTML for instant articles advertisements.
      *
      * @param \Advertisement $ad The advertisement to render.
@@ -52,6 +71,10 @@ class ReviveRenderer extends AdvertisementRenderer
         $format = $params['ads_format'] ?? null;
         if ($format === 'fia') {
             return $this->renderFia($ad, $params);
+        }
+
+        if ($format === 'amp') {
+            return $this->renderAmp($ad, $params);
         }
 
         $iframe = in_array($ad->positions, [ 50, 150, 250, 350, 450, 550 ]);
