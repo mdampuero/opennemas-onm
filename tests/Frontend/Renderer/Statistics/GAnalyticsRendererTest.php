@@ -118,7 +118,7 @@ class GAnalyticsRendererTest extends TestCase
         $method->setAccessible(true);
 
         $this->dl->expects($this->any())->method('getDataLayerArray')
-            ->willReturn('foo');
+            ->willReturn([ 'foo' => 'bar']);
 
         $params = $method->invokeArgs($this->renderer, [ $content ]);
 

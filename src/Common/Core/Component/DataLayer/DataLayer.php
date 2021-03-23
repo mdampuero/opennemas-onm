@@ -50,12 +50,18 @@ class DataLayer
             $device = 'dataLayer.push({ "device":device });';
         }
 
+        $data = json_encode(
+            array_map(function ($a) {
+                return $a === null ? '' : $a;
+            }, $data)
+        );
+
         $code = '<script>
             var device = (window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 768 ? "phone" : '
             . '((window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 992 ? "tablet" : "desktop");
-            dataLayer = [' . json_encode($data) . '];'
+            dataLayer = [' . $data . '];'
             . $device . '</script>';
 
         return $code;

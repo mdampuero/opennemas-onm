@@ -37,7 +37,11 @@ class GAnalyticsRenderer extends StatisticsRenderer
         }
 
         if (!empty($data)) {
-            $dataLayer = '"vars" : ' . json_encode($data);
+            $dataLayer = '"vars" : ' . json_encode(
+                array_map(function ($a) {
+                    return $a === null ? '' : $a;
+                }, $data)
+            );
         }
 
         $params = [

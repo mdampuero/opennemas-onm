@@ -64,8 +64,14 @@ class TagManager
         $dataLayer = '';
 
         if (!empty($data)) {
+            $data = json_encode(
+                array_map(function ($a) {
+                    return $a === null ? '' : $a;
+                }, $data)
+            );
+
             $dataLayer = '<script type="application/json">
-                { "vars" : ' . json_encode($data) . ' }
+                { "vars" : ' . $data . ' }
             </script>';
         }
 
