@@ -24,7 +24,7 @@ class DataLayer
         'authorId', 'authorName', 'blank', 'canonicalUrl', 'categoryId',
         'categoryName', 'contentId', 'device', 'extension', 'format', 'hostName',
         'instanceName', 'isRestricted', 'language', 'lastAuthorId', 'lastAuthorName',
-        'mediaType', 'pretitle', 'publishedDate', 'tagsName', 'tagsSlug', 'updateDate',
+        'mediaType', 'pretitle', 'publicationDate', 'tagsName', 'tagsSlug', 'updateDate',
     ];
 
     /**
