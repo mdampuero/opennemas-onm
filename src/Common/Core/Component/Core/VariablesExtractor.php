@@ -159,7 +159,7 @@ class VariablesExtractor
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
-        return preg_match('@\.amp\.html@', $request->getUri()) ? 'amp' : 'web';
+        return preg_match('@\.amp\.html@', $request->getUri()) ? 'amp' : 'html';
     }
 
     /**

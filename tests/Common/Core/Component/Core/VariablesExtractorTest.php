@@ -344,7 +344,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://www.foo.bar/baz');
 
-        $this->assertEquals('web', $method->invokeArgs($this->extractor, []));
+        $this->assertEquals('html', $method->invokeArgs($this->extractor, []));
     }
 
     /**
