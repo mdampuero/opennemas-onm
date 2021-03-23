@@ -26,16 +26,6 @@ class ArticleController extends ContentController
     protected $service = 'api.service.article';
 
     /**
-     * Returns the list of paramters needed to create a new article.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function createAction()
-    {
-        return new JsonResponse([ 'extra' => $this->getExtraData() ]);
-    }
-
-    /**
      * Loads extra data related to the given contents.
      *
      * @param array $items The items array
@@ -76,45 +66,6 @@ class ArticleController extends ContentController
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('article');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRelatedContents($content)
-    {
-        $extra = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $element) {
-            if (!is_array($element->related_contents)) {
-                continue;
-            }
-
-            foreach ($element->related_contents as $relation) {
-                if (!preg_match('/.*_.*/', $relation['type'])) {
-                    continue;
-                }
-                try {
-                    $er      = $this->container->get('entity_repository');
-                    $content = $er->find($relation['content_type_name'], $relation['target_id']);
-
-                    $extra[$relation['target_id']] = in_array($relation['content_type_name'], $er::ORM_CONTENT_TYPES) ?
-                            $this->container->get('api.service.content')->responsify($content) :
-                            $content;
-                } catch (GetItemException $e) {
-                }
-            }
-        }
-
-        return $extra;
     }
 
     /**

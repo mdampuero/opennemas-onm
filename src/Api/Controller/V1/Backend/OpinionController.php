@@ -188,40 +188,4 @@ class OpinionController extends ContentController
     {
         return $this->get($this->service)->getL10nKeys('opinion');
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRelatedContents($content)
-    {
-        $service = $this->get('api.service.photo');
-        $extra   = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $element) {
-            if (!is_array($element->related_contents)) {
-                continue;
-            }
-
-            foreach ($element->related_contents as $relation) {
-                if (!preg_match('/featured_.*/', $relation['type'])) {
-                    continue;
-                }
-                try {
-                    $photo                         = $service->getItem($relation['target_id']);
-                    $extra[$relation['target_id']] = $service->responsify($photo);
-                } catch (GetItemException $e) {
-                }
-            }
-        }
-
-        return $extra;
-    }
 }
