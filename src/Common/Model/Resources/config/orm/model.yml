@@ -5,7 +5,6 @@ parameters:
         - 'google_analytics'
         - 'locale'
         - 'ojd'
-        - 'piwik'
         - 'site_color'
         - 'site_description'
         - 'site_footer'

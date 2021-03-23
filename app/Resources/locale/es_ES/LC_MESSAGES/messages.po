@@ -6514,18 +6514,8 @@ msgstr "Fuerte"
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de emails enviados al mes"
 
-msgid "Piwik Statistics"
-msgstr "Estadísticas de Piwik"
-
 msgid "Page ID:"
 msgstr "Identificador del sitio:"
-
-msgid ""
-"You can get your Piwik Site information from <a href=\"https://piwik."
-"openhost.es/admin\">our Piwik server</a>."
-msgstr ""
-"Puede obtener información del sitio de Piwik desde <a href=\"https://piwik."
-"openhost.es/admin\">nuestro servidor de Piwik</a>."
 
 msgid "Contact"
 msgstr "Contacto"

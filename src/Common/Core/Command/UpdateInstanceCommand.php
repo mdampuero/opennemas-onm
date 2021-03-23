@@ -42,12 +42,6 @@ class UpdateInstanceCommand extends Command
                 's',
                 InputOption::VALUE_NONE,
                 'If set, the command will gather content, users, sent emails info.'
-            )
-            ->addOption(
-                'views',
-                'p',
-                InputOption::VALUE_NONE,
-                'If set, the command will gather the page views from Piwik.'
             );
 
         // Define 4 steps for level 1
@@ -60,7 +54,7 @@ class UpdateInstanceCommand extends Command
     protected function do()
     {
         $this->writeStep('Checking parameters');
-        list($ids, $media, $stats, $views) = $this->getParameters($this->input);
+        list($ids, $media, $stats) = $this->getParameters($this->input);
         $this->writeStatus('success', 'DONE', true);
 
         // Define as many steps as instances for level 2
@@ -84,7 +78,7 @@ class UpdateInstanceCommand extends Command
             $this->getContainer()->get('core.globals')->setInstance($instance);
             $this->writeStep("Updating instance $instance->internal_name", true, 2);
 
-            foreach ([ 'stats', 'media', 'views' ] as $stage) {
+            foreach ([ 'stats', 'media' ] as $stage) {
                 $method = 'get' . $stage;
 
                 if (!method_exists($this, $method) || empty($$stage)) {
@@ -166,9 +160,8 @@ class UpdateInstanceCommand extends Command
     {
         $media = $this->input->getOption('media');
         $stats = $this->input->getOption('stats');
-        $views = $this->input->getOption('views');
 
-        if (empty($media) && empty($stats) && empty($views)) {
+        if (empty($media) && empty($stats)) {
             throw new \InvalidArgumentException('No option specified');
         }
 
@@ -180,7 +173,7 @@ class UpdateInstanceCommand extends Command
 
         $instances = $this->getInstances($instances);
 
-        return [ $instances, $media, $stats, $views ];
+        return [ $instances, $media, $stats ];
     }
 
     /**
@@ -214,25 +207,5 @@ class UpdateInstanceCommand extends Command
         $instance->contents = array_sum($contents);
 
         $this->writeStatus('success', 'DONE', true);
-    }
-
-    /**
-     * Updates the page views for the provided instance.
-     *
-     * @param Instance $instance The instance to update.
-     */
-    protected function getViews(Instance &$instance) : void
-    {
-        $this->writePad('- Requesting page views');
-
-        $instance->page_views = $this->getContainer()
-            ->get('core.helper.instance')
-            ->getPageViews($instance);
-
-        $this->writeStatus('success', 'DONE', true);
-        $this->writeStatus('info', sprintf(
-            ' (%s views)',
-            $instance->page_views
-        ), true);
     }
 }

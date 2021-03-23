@@ -8331,15 +8331,7 @@ msgstr ""
 msgid "Maximun number of emails sent by month"
 msgstr ""
 
-msgid "Piwik Statistics"
-msgstr ""
-
 msgid "Page ID:"
-msgstr ""
-
-msgid ""
-"You can get your Piwik Site information from <a href=\"https://piwik."
-"openhost.es/admin\">our Piwik server</a>."
 msgstr ""
 
 msgid "Server url"
