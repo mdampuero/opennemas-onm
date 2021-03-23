@@ -25,7 +25,7 @@ class DataLayer
     protected $types = [
         'authorId', 'authorName', 'blank', 'canonicalUrl', 'categoryId',
         'categoryName', 'contentId', 'device', 'extension', 'format', 'hostName',
-        'instanceName', 'tags', 'language', 'lastAuthorId', 'lastAuthorName',
+        'instanceName', 'tagsName', 'language', 'lastAuthorId', 'lastAuthorName',
         'mediaType', 'pretitle', 'publishedDate', 'seoTags', 'subscription', 'updateDate',
     ];
 

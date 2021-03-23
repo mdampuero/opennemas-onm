@@ -395,11 +395,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTags with content.
+     * Tests getTagsName with content.
      */
-    public function testGetTags()
+    public function testGetTagsName()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getTags');
+        $method = new \ReflectionMethod($this->extractor, 'getTagsName');
         $method->setAccessible(true);
 
         $content       = new Content();
@@ -422,11 +422,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTags when exception.
+     * Tests getTagsName when exception.
      */
-    public function testGetTagsWhenException()
+    public function testGetTagsNameWhenException()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getTags');
+        $method = new \ReflectionMethod($this->extractor, 'getTagsName');
         $method->setAccessible(true);
 
         $this->ts->expects($this->once())->method('getListByIds')

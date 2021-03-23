@@ -339,11 +339,11 @@ class VariablesExtractor
     }
 
     /**
-     * Get the available content tags.
+     * Get the available content tags name.
      *
-     * @return String The content tags.
+     * @return String The content tags name.
      */
-    protected function getTags()
+    protected function getTagsName()
     {
         $ids = $this->tpl->getValue('o_content')->tags ?? null;
 
