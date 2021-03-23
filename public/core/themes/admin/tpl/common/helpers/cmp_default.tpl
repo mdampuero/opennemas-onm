@@ -7,14 +7,12 @@
         function addCmpBuilderFeatures() {
             var existingCmpFeaturesScript = document.getElementById('cmp-builder-features-script');
             if (!existingCmpFeaturesScript) {
-              console.log("IF");
                 let  div= document.createElement("div");
                 div.className += "overlay";
                 div.id = "overlay-cookies";
                 document.body.appendChild(div);
                 var cmpFeaturesScript = document.createElement('script'),
                     script1 = document.getElementsByTagName('script')[0];
-                console.log(cmpFeaturesScript);
                 cmpFeaturesScript.src = "https://cmp-cdn.cookielaw.org/consent/cmp-features/cmp-features.js";
                 cmpFeaturesScript.setAttribute('id', 'cmp-builder-features-script');
                 cmpFeaturesScript.async = false;
