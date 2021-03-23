@@ -849,7 +849,7 @@
               }
 
               var types = [
-                'bmp', 'flv', 'gif', 'ico', 'jpeg', 'jpg', 'ogm', 'pdf', 'png',
+                'bmp', 'gif', 'jpeg', 'jpg', 'png', 'ico',
                 'svg', 'svgz', 'swf',
               ];
 
