@@ -160,4 +160,7 @@
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
+  </script>
 {/block}

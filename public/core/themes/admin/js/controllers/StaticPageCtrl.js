@@ -24,6 +24,36 @@
          * @memberOf StaticPageCtrl
          *
          * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf StaticPageCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'static-page-draft';
+
+        /**
+         * @memberOf StaticPageCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf StaticPageCtrl
+         *
+         * @description
          *  The static page object.
          *
          * @type {Object}
@@ -70,6 +100,8 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+
+          $scope.checkDraft();
         };
 
         /**

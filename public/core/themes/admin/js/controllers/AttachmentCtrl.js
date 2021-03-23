@@ -25,6 +25,36 @@
          * @memberOf AttachmentCtrl
          *
          * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf AttachmentCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'attachment-draft';
+
+        /**
+         * @memberOf AttachmentCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf AttachmentCtrl
+         *
+         * @description
          *  The item object.
          *
          * @type {Object}
@@ -91,6 +121,8 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
+
+          $scope.checkDraft();
         };
 
         /**

@@ -13,6 +13,36 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
+     *  Flag to enabled or disable drafts.
+     *
+     * @type {Boolean}
+     */
+    $scope.draftEnabled = true;
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The draft key.
+     *
+     * @type {String}
+     */
+    $scope.draftKey = 'opinion-draft';
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
+     *  The timeout function for draft.
+     *
+     * @type {Function}
+     */
+    $scope.dtm = null;
+
+    /**
+     * @memberOf OpinionCtrl
+     *
+     * @description
      *  The cover object.
      *
      * @type {Object}
@@ -77,6 +107,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
+      $scope.checkDraft();
       related.init($scope);
       related.watch();
     };

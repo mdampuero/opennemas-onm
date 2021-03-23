@@ -22,6 +22,36 @@
          * @memberOf NewsstandCtrl
          *
          * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf NewsstandCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'kiosko-draft';
+
+        /**
+         * @memberOf NewsstandCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf NewsstandCtrl
+         *
+         * @description
          *   The item.
          *
          * @type {Object}
@@ -70,6 +100,8 @@
             $scope.preview = $scope.data.extra.paths.newsstand + '/' +
               $scope.item.thumbnail;
           }
+
+          $scope.checkDraft();
         };
 
         /**

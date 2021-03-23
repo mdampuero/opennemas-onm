@@ -23,6 +23,36 @@
          * @memberOf EventCtrl
          *
          * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf EventCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'event-draft';
+
+        /**
+         * @memberOf EventCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf EventCtrl
+         *
+         * @description
          *  The cover object.
          *
          * @type {Object}
@@ -93,6 +123,7 @@
               $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
+          $scope.checkDraft();
           related.init($scope);
           related.watch();
         };

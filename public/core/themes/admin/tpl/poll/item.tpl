@@ -146,3 +146,9 @@
     </div>
   </div>
 {/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
+  </script>
+{/block}

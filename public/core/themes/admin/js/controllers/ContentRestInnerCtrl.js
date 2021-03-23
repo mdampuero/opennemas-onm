@@ -3,13 +3,98 @@
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
   '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'cleaner',
-  'messenger', 'routing', '$timeout',
+  'messenger', 'routing', '$timeout', 'webStorage', '$window',
   function($controller, $http, $uibModal, $rootScope, $scope, cleaner,
-      messenger, routing, $timeout) {
+      messenger, routing, $timeout, webStorage, $window) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+
+    // Saves a draft 2.5s after the last change
+    $scope.$watch('item', function(nv, ov) {
+      if (!nv || ov === nv) {
+        return;
+      }
+
+      // Show a message when leaving before saving
+      $($window).bind('beforeunload', function() {
+        if ($scope.form.$dirty) {
+          return $window.leaveMessage;
+        }
+      });
+
+      $scope.form.$setDirty(true);
+
+      if ($scope.draftEnabled) {
+        $scope.draftSaved = null;
+
+        if ($scope.dtm) {
+          $timeout.cancel($scope.dtm);
+        }
+
+        $scope.dtm = $timeout(function() {
+          webStorage.session.set($scope.draftKey, $scope.data.item);
+
+          $scope.draftSaved = $window.moment().format('HH:mm');
+        }, 2500);
+      }
+    }, true);
+
+    /**
+     * @function checkDraft
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Checks if there is a draft from the previous content.
+     */
+    $scope.checkDraft = function() {
+      if (!webStorage.session.has($scope.draftKey)) {
+        return;
+      }
+
+      $uibModal.open({
+        backdrop:    true,
+        backdropClass: 'modal-backdrop-transparent',
+        controller:  'YesNoModalCtrl',
+        openedClass: 'modal-relative-open',
+        templateUrl: 'modal-draft',
+        windowClass: 'modal-right modal-small modal-top',
+        resolve: {
+          template: function() {
+            return {};
+          },
+          yes: function() {
+            return function(modalWindow) {
+              $scope.data.item = webStorage.session.get($scope.draftKey);
+
+              if ($scope.config.linkers.item) {
+                $scope.config.linkers.item.link(
+                  $scope.data.item, $scope.item);
+                $scope.config.linkers.item.update();
+              } else {
+                $scope.item = $scope.data.item;
+              }
+
+              modalWindow.close({ response: true, success: true });
+
+              [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
+                if ($scope.item[dateField]) {
+                  $scope.item[dateField] = $window.moment($scope.item[dateField])
+                    .format('YYYY-MM-DD HH:mm:ss');
+                }
+              });
+            };
+          },
+          no: function() {
+            return function(modalWindow) {
+              webStorage.session.remove($scope.draftKey);
+              modalWindow.close({ response: false, success: true });
+            };
+          }
+        }
+      });
+    };
 
     /**
      * @inheritdoc

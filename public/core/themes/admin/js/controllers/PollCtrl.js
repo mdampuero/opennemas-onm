@@ -24,6 +24,36 @@
          * @memberOf PollCtrl
          *
          * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf PollCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'poll-draft';
+
+        /**
+         * @memberOf PollCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf PollCtrl
+         *
+         * @description
          *  The item object.
          *
          * @type {Object}
@@ -100,6 +130,8 @@
             $scope.item.items.push($scope.localizeOption(
               $scope.data.item.items[i], $scope.item.items.length));
           }
+
+          $scope.checkDraft();
         };
 
         /**

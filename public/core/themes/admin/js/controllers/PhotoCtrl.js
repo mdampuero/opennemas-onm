@@ -13,6 +13,36 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      * @memberOf PhotoCtrl
      *
      * @description
+     *  Flag to enabled or disable drafts.
+     *
+     * @type {Boolean}
+     */
+    $scope.draftEnabled = true;
+
+    /**
+     * @memberOf PhotoCtrl
+     *
+     * @description
+     *  The draft key.
+     *
+     * @type {String}
+     */
+    $scope.draftKey = 'photo-draft';
+
+    /**
+     * @memberOf PhotoCtrl
+     *
+     * @description
+     *  The timeout function for draft.
+     *
+     * @type {Function}
+     */
+    $scope.dtm = null;
+
+    /**
+     * @memberOf PhotoCtrl
+     *
+     * @description
      *  The list of routes for the controller.
      *
      * @type {Object}
@@ -31,6 +61,8 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item');
+
+      $scope.checkDraft();
     };
 
     /**

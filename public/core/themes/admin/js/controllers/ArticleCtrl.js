@@ -24,11 +24,41 @@
      */
     .controller('ArticleCtrl', [
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
-      'http', 'related', 'routing', 'webStorage',
+      'http', 'related', 'routing',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner,
-          http, related, routing, webStorage) {
+          http, related, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'article-draft';
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
 
         /**
          * @memberOf ArticleCtrl
@@ -57,36 +87,6 @@
           external_link: '',
           agency: '',
         };
-
-        /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *  Flag to enabled or disable drafts.
-         *
-         * @type {Boolean}
-         */
-        $scope.draftEnabled = false;
-
-        /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *  The draft key.
-         *
-         * @type {String}
-         */
-        $scope.draftKey = 'article-draft';
-
-        /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *  The timeout function for draft.
-         *
-         * @type {Function}
-         */
-        $scope.dtm = null;
 
         /**
          * @memberOf ArticleCtrl
@@ -129,63 +129,9 @@
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
+          $scope.checkDraft();
           related.init($scope);
           related.watch();
-        };
-
-        /**
-         * @function checkDraft
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Checks if there is a draft from a previous article.
-         */
-        $scope.checkDraft = function() {
-          if (!webStorage.session.has($scope.draftKey)) {
-            return;
-          }
-
-          $uibModal.open({
-            backdrop:    true,
-            backdropClass: 'modal-backdrop-transparent',
-            controller:  'YesNoModalCtrl',
-            openedClass: 'modal-relative-open',
-            templateUrl: 'modal-draft',
-            windowClass: 'modal-right modal-small modal-top',
-            resolve: {
-              template: function() {
-                return {};
-              },
-              yes: function() {
-                return function(modalWindow) {
-                  $scope.data.article = webStorage.session.get($scope.draftKey);
-
-                  if ($scope.config.linkers.article) {
-                    $scope.config.linkers.article.link(
-                      $scope.data.article, $scope.article);
-                    $scope.config.linkers.article.update();
-                  } else {
-                    $scope.article = $scope.data.article;
-                  }
-
-                  modalWindow.close({ response: true, success: true });
-
-                  [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
-                    if ($scope.article[dateField]) {
-                      $scope.article[dateField] = $window.moment($scope.article[dateField])
-                        .format('YYYY-MM-DD HH:mm:ss');
-                    }
-                  });
-                };
-              },
-              no: function() {
-                return function(modalWindow) {
-                  webStorage.session.remove($scope.draftKey);
-                  modalWindow.close({ response: false, success: true });
-                };
-              }
-            }
-          });
         };
 
         /**
@@ -254,6 +200,27 @@
             $scope.flags.http.generating_preview = false;
           });
         };
+
+        // Update title_int when title changes
+        $scope.$watch('item.title', function(nv, ov) {
+          if (!nv && !ov) {
+            return;
+          }
+
+          if (!$scope.item.title_int || ov === $scope.item.title_int) {
+            $scope.item.title_int = nv;
+          }
+
+          if (!$scope.item.pk_content) {
+            if ($scope.tm) {
+              $timeout.cancel($scope.tm);
+            }
+
+            if (!nv) {
+              $scope.item.slug = '';
+            }
+          }
+        }, true);
 
         // Enable drafts after 5s to grant CKEditor initialization
         $timeout(function() {

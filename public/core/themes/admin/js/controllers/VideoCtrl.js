@@ -13,6 +13,36 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
+     *  Flag to enabled or disable drafts.
+     *
+     * @type {Boolean}
+     */
+    $scope.draftEnabled = true;
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The draft key.
+     *
+     * @type {String}
+     */
+    $scope.draftKey = 'video-draft';
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The timeout function for draft.
+     *
+     * @type {Function}
+     */
+    $scope.dtm = null;
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
      *  The list of external video properties.
      *
      * @type {Array}
@@ -109,6 +139,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
+      $scope.checkDraft();
       related.init($scope);
       related.watch();
     };

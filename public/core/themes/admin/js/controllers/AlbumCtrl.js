@@ -25,6 +25,36 @@
          * @memberOf AlbumCtrl
          *
          * @description
+         *  Flag to enabled or disable drafts.
+         *
+         * @type {Boolean}
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
+         *  The draft key.
+         *
+         * @type {String}
+         */
+        $scope.draftKey = 'album-draft';
+
+        /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
+         *  The timeout function for draft.
+         *
+         * @type {Function}
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf AlbumCtrl
+         *
+         * @description
          *  The item object.
          *
          * @type {Object}
@@ -124,6 +154,7 @@
               $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
+          $scope.checkDraft();
           related.init($scope);
           related.watch();
         };

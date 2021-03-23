@@ -95,13 +95,16 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-preview">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
-        <h4 class="modal-title">
-          {t}Preview{/t}
-        </h4>
-      </div>
-      <div class="modal-body clearfix no-padding">
-        <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
-      </div>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+      <h4 class="modal-title">
+        {t}Preview{/t}
+      </h4>
+    </div>
+    <div class="modal-body clearfix no-padding">
+      <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
+    </div>
+  </script>
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
   </script>
 {/block}
