@@ -67,10 +67,19 @@ class TagManager
      */
     public function getGoogleTagManagerBodyCodeAMP($id)
     {
+        $data      = $this->dataLayer->getDataLayerArray();
+        $dataLayer = '';
+
+        if (!empty($data)) {
+            $dataLayer = '<script type="application/json">
+                { "vars" : ' . json_encode($data) . ' }
+            </script>';
+        }
+
         return '<!-- Google Tag Manager AMP -->
             <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $id
                 . '&gtm.url=SOURCE_URL" data-credentials="include">'
-                . $this->dataLayer->getDataLayerAMPCodeGTM()
+                . $dataLayer
                 . '</amp-analytics>
             <!-- End Google Tag Manager AMP -->';
     }

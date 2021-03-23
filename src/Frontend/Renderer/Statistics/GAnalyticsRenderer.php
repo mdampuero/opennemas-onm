@@ -32,8 +32,10 @@ class GAnalyticsRenderer extends StatisticsRenderer
      */
     protected function getParameters($content = null)
     {
-        $accounts = [];
-        $siteUrl  = $this->container->get('core.instance')->getBaseUrl();
+        $accounts  = [];
+        $siteUrl   = $this->container->get('core.instance')->getBaseUrl();
+        $data      = $this->container->get('core.data.layer')->getDataLayerArray();
+        $dataLayer = '';
 
         foreach ($this->config as $account) {
             if (array_key_exists('api_key', $account) && !empty(trim($account['api_key']))) {
@@ -41,10 +43,14 @@ class GAnalyticsRenderer extends StatisticsRenderer
             }
         }
 
+        if (!empty($data)) {
+            $dataLayer = '"vars" : ' . json_encode($data);
+        }
+
         $params = [
             'accounts'  => $accounts,
             'content'   => $content,
-            'dataLayer' => $this->container->get('core.data.layer')->getDataLayerAMPCodeGA(),
+            'dataLayer' => $dataLayer,
             'date'      => date('d/m/Y'),
             'random'    => rand(0, 0x7fffffff),
             'url'       => urlencode($siteUrl),

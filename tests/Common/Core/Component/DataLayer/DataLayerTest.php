@@ -105,17 +105,17 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getDataLayerAMPCodeGTM when no data.
+     * Tests getDataLayerArray when no data.
      */
-    public function testGetDataLayerAMPCodeGTMNoData()
+    public function testGetDataLayerArrayNoData()
     {
-        $this->assertEmpty($this->dl->getDataLayerAMPCodeGTM());
+        $this->assertEmpty($this->dl->getDataLayerArray());
     }
 
     /**
-     * Tests getDataLayerAMPCodeGTM.
+     * Tests getDataLayerArray.
      */
-    public function testGetDataLayerAMPCodeGTM()
+    public function testGetDataLayerArray()
     {
         $dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
@@ -125,42 +125,9 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
         $dl->expects($this->any())->method('parseDataMap')
             ->willReturn($this->data);
 
-        $output = '<script type="application/json">
-            { "vars" : ' . json_encode($this->data) . ' }
-        </script>';
-
         $this->assertEquals(
-            $output,
-            $dl->getDataLayerAMPCodeGTM()
-        );
-    }
-
-    /**
-     * Tests getDataLayerAMPCodeGA when no data.
-     */
-    public function testGetDataLayerAMPCodeGANoData()
-    {
-        $this->assertEmpty($this->dl->getDataLayerAMPCodeGA());
-    }
-
-    /**
-     * Tests getDataLayerAMPCodeGA.
-     */
-    public function testGetDataLayerAMPCodeGA()
-    {
-        $dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
-            ->disableOriginalConstructor()
-            ->setMethods(['parseDataMap'])
-            ->getMock();
-
-        $dl->expects($this->any())->method('parseDataMap')
-            ->willReturn($this->data);
-
-        $output = '"vars" : ' . json_encode($this->data);
-
-        $this->assertEquals(
-            $output,
-            $dl->getDataLayerAMPCodeGA()
+            $this->data,
+            $dl->getDataLayerArray()
         );
     }
 

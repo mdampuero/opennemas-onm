@@ -9,8 +9,6 @@
  */
 namespace Common\Core\Component\DataLayer;
 
-use function GuzzleHttp\json_encode;
-
 /**
  * Generates Data Layer code
  * See more: https://developers.google.com/tag-manager/devguide#datalayer
@@ -71,45 +69,13 @@ class DataLayer
     }
 
     /**
-     * Generates Data Layer code for AMP pages using Google TagManager.
+     * Get Data Layer parsed array.
      *
-     * @param Array   $data The Data Layer data.
-     *
-     * @return String $code The generated code.
+     * @return array $data The Data layer array.
      */
-    public function getDataLayerAMPCodeGTM()
+    public function getDataLayerArray()
     {
-        $data = $this->parseDataMap();
-
-        if (empty($data)) {
-            return '';
-        }
-
-        $code = '<script type="application/json">
-            { "vars" : ' . json_encode($data) . ' }
-        </script>';
-
-        return $code;
-    }
-
-    /**
-     * Generates Data Layer code for AMP pages using Google Analytics.
-     *
-     * @param Array   $data The Data Layer data.
-     *
-     * @return String $code The generated code.
-     */
-    public function getDataLayerAMPCodeGA()
-    {
-        $data = $this->parseDataMap();
-
-        if (empty($data)) {
-            return '';
-        }
-
-        $code = '"vars" : ' . json_encode($data);
-
-        return $code;
+        return $this->parseDataMap();
     }
 
     /**

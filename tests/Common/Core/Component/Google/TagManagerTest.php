@@ -22,15 +22,14 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
-            ->setMethods(['getDataLayerAMPCodeGTM'])
+            ->setMethods(['getDataLayerArray'])
             ->getMock();
 
         $this->object = new TagManager($this->dl);
     }
+
     /**
-     * Generates Google Tags Manager head code
-     *
-     * @return String the generated code
+     * Tests getGoogleTagManagerHeadCode.
      */
     public function testGetGoogleTagManagerHeadCode()
     {
@@ -46,9 +45,7 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Generates Google Tags Manager body code
-     *
-     * @return String the generated code
+     * Tests getGoogleTagManagerBodyCode.
      */
     public function testGetGoogleTagManagerBodyCode()
     {
@@ -61,13 +58,29 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Generates Google Tags Manager body code for AMP
-     *
-     * @return String the generated code
+     * Tests getGoogleTagManagerBodyCodeAMP.
      */
-    public function testgetGoogleTagManagerBodyCodeAMP()
+    public function testGetGoogleTagManagerBodyCodeAMP()
     {
-        $this->dl->expects($this->any())->method('getDataLayerAMPCodeGTM')
+        $this->dl->expects($this->any())->method('getDataLayerArray')
+            ->willReturn(['foo' => 'bar', 'waldo' => 'wobble']);
+
+        $code = '<!-- Google Tag Manager AMP -->
+            <amp-analytics config="https://www.googletagmanager.com/amp.json?id=' . $this->id
+                . '&gtm.url=SOURCE_URL" data-credentials="include"><script type="application/json">
+                { "vars" : {"foo":"bar","waldo":"wobble"} }
+            </script></amp-analytics>
+            <!-- End Google Tag Manager AMP -->';
+
+        $this->assertEquals($code, $this->object->getGoogleTagManagerBodyCodeAMP($this->id));
+    }
+
+    /**
+     * Tests getGoogleTagManagerBodyCodeAMP when no data layer
+     */
+    public function testGetGoogleTagManagerBodyCodeAMPNoDataLayer()
+    {
+        $this->dl->expects($this->any())->method('getDataLayerArray')
             ->willReturn('');
 
         $code = '<!-- Google Tag Manager AMP -->
