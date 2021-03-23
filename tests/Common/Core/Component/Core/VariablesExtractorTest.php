@@ -768,11 +768,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getSubscription.
+     * Tests getIsRestricted.
      */
-    public function testGetSubscription()
+    public function testGetIsRestricted()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getSubscription');
+        $method = new \ReflectionMethod($this->extractor, 'getIsRestricted');
         $method->setAccessible(true);
 
         $content = new Content();
@@ -791,11 +791,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getSubscription when no content.
+     * Tests getIsRestricted when no content.
      */
-    public function testGetSubscriptionWhenNoContent()
+    public function testGetIsRestrictedWhenNoContent()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getSubscription');
+        $method = new \ReflectionMethod($this->extractor, 'getIsRestricted');
         $method->setAccessible(true);
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));

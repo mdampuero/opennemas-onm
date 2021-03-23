@@ -185,6 +185,22 @@ class VariablesExtractor
     }
 
     /**
+     * Get the content and chack if it's under subscription.
+     *
+     * @return Boolean True if the content is restricted.
+     */
+    protected function getIsRestricted()
+    {
+        $content = $this->tpl->getValue('o_content') ?? null;
+
+        if (empty($content)) {
+            return null;
+        }
+
+        return $this->globals->getSubscription()->isRestricted($content);
+    }
+
+    /**
      * Get the Instance language.
      *
      * @return String The Instance language.
@@ -298,22 +314,6 @@ class VariablesExtractor
         } catch (Exception $e) {
             return null;
         }
-    }
-
-    /**
-     * Get the content and chack if it's under subscription.
-     *
-     * @return Boolean True if the content is restricted.
-     */
-    protected function getSubscription()
-    {
-        $content = $this->tpl->getValue('o_content') ?? null;
-
-        if (empty($content)) {
-            return null;
-        }
-
-        return $this->globals->getSubscription()->isRestricted($content);
     }
 
     /**
