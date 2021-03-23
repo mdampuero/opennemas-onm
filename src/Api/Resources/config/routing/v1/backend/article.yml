@@ -1,7 +1,7 @@
 api_v1_backend_article_create_item:
     path:    /articles/new
     methods: [ GET ]
-    defaults: { _controller: ApiBundle:V1/Backend/Article:create }
+    defaults: { _controller: ApiBundle:V1/Backend/Article:createItem }
     options:
         expose: true
 
@@ -11,6 +11,8 @@ api_v1_backend_article_get_item:
     defaults: { _controller: ApiBundle:V1/Backend/Article:getItem }
     options:
         expose: true
+    requirements:
+        id: \d+
 
 api_v1_backend_article_get_list:
     path:    /articles
