@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Core\Component\GoogleTagManager;
+namespace Common\Core\Component\Google;
 
 /**
  * Generates Google tags manager code
  * See more: https://www.google.com/analytics/tag-manager/
  */
-class GoogleTagManager
+class TagManager
 {
     /**
      * Initializes the GoogleTagManager.

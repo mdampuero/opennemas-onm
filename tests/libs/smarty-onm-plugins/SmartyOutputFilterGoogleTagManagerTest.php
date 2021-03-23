@@ -46,7 +46,7 @@ class SmartyOutputFilterGoogleTagManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->gtm = $this->getMockBuilder('GoogleTagManager')
+        $this->gtm = $this->getMockBuilder('TagManager')
             ->setMethods([
                 'getGoogleTagManagerBodyCodeAMP',
                 'getGoogleTagManagerHeadCode',
@@ -84,7 +84,7 @@ class SmartyOutputFilterGoogleTagManagerTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.google.tagmanager':
+            case 'core.google.tag_manager':
                 return $this->gtm;
 
             case 'orm.manager':

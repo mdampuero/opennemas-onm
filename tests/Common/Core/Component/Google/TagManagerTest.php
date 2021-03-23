@@ -7,14 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Test\Common\Core\Component\GoogleTagManager;
+namespace Test\Common\Core\Component\Google;
 
-use Common\Core\Component\GoogleTagManager\GoogleTagManager;
+use Common\Core\Component\Google\TagManager;
 
 /**
  * Defines test cases for GoogleTagManager class.
  */
-class GoogleTagManagerTest extends \PHPUnit\Framework\TestCase
+class TagManagerTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -25,7 +25,7 @@ class GoogleTagManagerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getDataLayerAMPCodeGTM'])
             ->getMock();
 
-        $this->object = new GoogleTagManager($this->dl);
+        $this->object = new TagManager($this->dl);
     }
     /**
      * Generates Google Tags Manager head code
