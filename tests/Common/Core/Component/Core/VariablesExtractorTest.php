@@ -668,11 +668,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getPublishedDate when no content.
+     * Tests getPublicationDate when no content.
      */
-    public function testGetPublishedDateWhenNoContent()
+    public function testGetPublicationDateWhenNoContent()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getPublishedDate');
+        $method = new \ReflectionMethod($this->extractor, 'getPublicationDate');
         $method->setAccessible(true);
 
         $this->template->expects($this->any())->method('getValue')
@@ -683,11 +683,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getPublishedDate.
+     * Tests getPublicationDate.
      */
-    public function testGetPublishedDate()
+    public function testGetPublicationDate()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getPublishedDate');
+        $method = new \ReflectionMethod($this->extractor, 'getPublicationDate');
         $method->setAccessible(true);
 
         $content            = new Content();
@@ -701,13 +701,13 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getPublishedDate when exception.
+     * Tests getPublicationDate when exception.
      *
      * @expectedException Exception
      */
-    public function testGetPublishedDateWhenException()
+    public function testGetPublicationDateWhenException()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getPublishedDate');
+        $method = new \ReflectionMethod($this->extractor, 'getPublicationDate');
         $method->setAccessible(true);
 
         $content            = new Content();

@@ -277,11 +277,11 @@ class VariablesExtractor
     }
 
     /**
-     * Get the content published date.
+     * Get the content publication date.
      *
-     * @return String The content published date.
+     * @return String The content publication date.
      */
-    protected function getPublishedDate()
+    protected function getPublicationDate()
     {
         $content = $this->tpl->getValue('o_content') ?? null;
 
