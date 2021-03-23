@@ -182,15 +182,15 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
             'format'         => _('Page format'),
             'hostName'       => _('Hostname'),
             'instanceName'   => _('Instance name'),
-            'tagsName'       => _('Tags'),
             'language'       => _('Language'),
             'lastAuthorId'   => _('Last editor Id'),
             'lastAuthorName' => _('Last editor name'),
             'mediaType'      => _('Media element'),
             'pretitle'       => _('Pretitle'),
             'publishedDate'  => _('Published date'),
-            'seoTags'        => _('Seo tags'),
             'subscription'   => _('Subscription'),
+            'tagsSlug'       => _('Seo tags'),
+            'tagsName'       => _('Tags'),
             'updateDate'     => _('Updated date'),
         ];
 

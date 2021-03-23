@@ -301,28 +301,6 @@ class VariablesExtractor
     }
 
     /**
-     * Get the available keywords slugs.
-     *
-     * @return String The Instance name.
-     */
-    protected function getSeoTags()
-    {
-        $ids = $this->tpl->getValue('o_content')->tags ?? null;
-
-        try {
-            $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
-        } catch (GetListException $e) {
-            return null;
-        }
-
-        $tags = array_map(function ($tag) {
-            return $tag->slug;
-        }, $tags);
-
-        return implode(',', $tags);
-    }
-
-    /**
      * Get the content and chack if it's under subscription.
      *
      * @return Boolean True if the content is restricted.
@@ -355,6 +333,28 @@ class VariablesExtractor
 
         $tags = array_map(function ($tag) {
             return $tag->name;
+        }, $tags);
+
+        return implode(',', $tags);
+    }
+
+    /**
+     * Get the available content tags slug.
+     *
+     * @return String The content tags slug.
+     */
+    protected function getTagsSlug()
+    {
+        $ids = $this->tpl->getValue('o_content')->tags ?? null;
+
+        try {
+            $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
+        } catch (GetListException $e) {
+            return null;
+        }
+
+        $tags = array_map(function ($tag) {
+            return $tag->slug;
         }, $tags);
 
         return implode(',', $tags);

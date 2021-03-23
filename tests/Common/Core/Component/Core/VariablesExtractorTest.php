@@ -721,11 +721,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getSeoTags with content.
+     * Tests getTagsSlug with content.
      */
-    public function testGetSeoTags()
+    public function testGetTagsSlug()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getSeoTags');
+        $method = new \ReflectionMethod($this->extractor, 'getTagsSlug');
         $method->setAccessible(true);
 
         $content       = new Content();
@@ -748,11 +748,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getSeoTags when exception.
+     * Tests getTagsSlug when exception.
      */
-    public function testGetSeoTagsWhenException()
+    public function testGetTagsSlugWhenException()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getSeoTags');
+        $method = new \ReflectionMethod($this->extractor, 'getTagsSlug');
         $method->setAccessible(true);
 
         $content       = new Content();

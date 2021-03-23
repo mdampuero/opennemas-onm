@@ -25,8 +25,9 @@ class DataLayer
     protected $types = [
         'authorId', 'authorName', 'blank', 'canonicalUrl', 'categoryId',
         'categoryName', 'contentId', 'device', 'extension', 'format', 'hostName',
-        'instanceName', 'tagsName', 'language', 'lastAuthorId', 'lastAuthorName',
-        'mediaType', 'pretitle', 'publishedDate', 'seoTags', 'subscription', 'updateDate',
+        'instanceName', 'language', 'lastAuthorId', 'lastAuthorName',
+        'mediaType', 'pretitle', 'publishedDate', 'subscription', 'tagsName',
+        'tagsSlug', 'updateDate',
     ];
 
     /**
@@ -124,9 +125,9 @@ class DataLayer
             _('Author Id'), _('Author name'), _('Blank'), _('Canonical url'),
             _('Category Id'), _('Category name'), _('Content Id'), _('Devices'),
             _('Page type'), _('Page format'), _('Hostname'), _('Instance name'),
-            _('Tags'), _('Language'), _('Last editor Id'), _('Last editor name'),
-            _('Media element'), _('Pretitle'), _('Published date'), _('Seo tags'),
-            _('Subscription'), _('Updated date'),
+            _('Language'), _('Last editor Id'), _('Last editor name'),
+            _('Media element'), _('Pretitle'), _('Published date'), _('Subscription'),
+            _('Tags'), _('Seo tags'), _('Updated date'),
         ];
 
 
