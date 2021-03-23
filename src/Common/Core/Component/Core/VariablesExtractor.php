@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Component\Core;
 
 use Api\Exception\GetListException;
@@ -191,28 +184,6 @@ class VariablesExtractor
     }
 
     /**
-     * Get the available content tags.
-     *
-     * @return String The content tags.
-     */
-    protected function getTags()
-    {
-        $ids = $this->tpl->getValue('o_content')->tags ?? null;
-
-        try {
-            $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
-        } catch (GetListException $e) {
-            return '';
-        }
-
-        $tags = array_map(function ($tag) {
-            return $tag->name;
-        }, $tags);
-
-        return implode(',', $tags);
-    }
-
-    /**
      * Get the Instance language.
      *
      * @return String The Instance language.
@@ -364,6 +335,28 @@ class VariablesExtractor
         }
 
         return $this->globals->getSubscription()->isRestricted($content);
+    }
+
+    /**
+     * Get the available content tags.
+     *
+     * @return String The content tags.
+     */
+    protected function getTags()
+    {
+        $ids = $this->tpl->getValue('o_content')->tags ?? null;
+
+        try {
+            $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
+        } catch (GetListException $e) {
+            return '';
+        }
+
+        $tags = array_map(function ($tag) {
+            return $tag->name;
+        }, $tags);
+
+        return implode(',', $tags);
     }
 
     /**
