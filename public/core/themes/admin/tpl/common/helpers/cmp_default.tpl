@@ -7,13 +7,26 @@
         function addCmpBuilderFeatures() {
             var existingCmpFeaturesScript = document.getElementById('cmp-builder-features-script');
             if (!existingCmpFeaturesScript) {
+              console.log("IF");
+                let  div= document.createElement("div");
+                div.className += "overlay";
+                div.id = "overlay-cookies";
+                document.body.appendChild(div);
                 var cmpFeaturesScript = document.createElement('script'),
                     script1 = document.getElementsByTagName('script')[0];
+                console.log(cmpFeaturesScript);
                 cmpFeaturesScript.src = "https://cmp-cdn.cookielaw.org/consent/cmp-features/cmp-features.js";
                 cmpFeaturesScript.setAttribute('id', 'cmp-builder-features-script');
                 cmpFeaturesScript.async = false;
                 cmpFeaturesScript.type = 'text/javascript';
                 script1.parentNode.insertBefore(cmpFeaturesScript, script1);
+            }
+            let divsdk = document.getElementById("onetrust-banner-sdk");
+            if (!divsdk || divsdk.style.visibility == "hidden"){
+                let div = document.getElementById("overlay-cookies");
+                if(div){
+                  document.body.removeChild(div);
+                }
             }
         }
     }
@@ -24,4 +37,16 @@
   button#onetrust-reject-all-handler {
     display: none !important;
   }
+
+  .overlay {
+    background-color:#EFEFEF;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    top: 0px;
+    left: 0px;
+    opacity: .5; /* in FireFox */
+    filter: alpha(opacity=50); /* in IE */
+}
 </style>
