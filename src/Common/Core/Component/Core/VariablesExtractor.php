@@ -163,15 +163,13 @@ class VariablesExtractor
     }
 
     /**
-     * Get the host name.
+     * Get the instance main domain.
      *
-     * @return String The host name.
+     * @return String The main domain.
      */
-    protected function getHostName()
+    protected function getMainDomain()
     {
-        return $this->container->get('request_stack')
-            ->getCurrentRequest()
-            ->getHost();
+        return $this->globals->getInstance()->getMainDomain();
     }
 
     /**

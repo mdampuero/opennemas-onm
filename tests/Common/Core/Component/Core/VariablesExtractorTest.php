@@ -59,6 +59,10 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri', 'getHost' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getMainDomain' ])
+            ->getMock();
+
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'getValue', 'hasValue' ])
@@ -381,22 +385,6 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getHostName.
-     */
-    public function testGetHostName()
-    {
-        $method = new \ReflectionMethod($this->extractor, 'getHostName');
-        $method->setAccessible(true);
-
-        $this->rs->expects($this->once())->method('getCurrentRequest')
-            ->willReturn($this->request);
-        $this->request->expects($this->once())->method('getHost')
-            ->willReturn('www.foo.bar');
-
-        $this->assertEquals('www.foo.bar', $method->invokeArgs($this->extractor, []));
-    }
-
-    /**
      * Tests getInstanceName.
      */
     public function testGetInstanceName()
@@ -585,6 +573,25 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getMainDomain.
+     */
+    public function testGetMainDomain()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getMainDomain');
+        $method->setAccessible(true);
+
+        $this->globals->expects($this->once())->method('getInstance')
+            ->willReturn($this->instance);
+        $this->instance->expects($this->any())->method('getMainDomain')
+            ->willReturn('thud.opennemas.com');
+
+        $this->assertEquals(
+            'thud.opennemas.com',
+            $method->invokeArgs($this->extractor, [])
+        );
     }
 
     /**

@@ -15,9 +15,10 @@ class DataLayer
      */
     protected $types = [
         'authorId', 'authorName', 'blank', 'canonicalUrl', 'categoryId',
-        'categoryName', 'contentId', 'device', 'extension', 'format', 'hostName',
-        'instanceName', 'isRestricted', 'language', 'lastAuthorId', 'lastAuthorName',
-        'mediaType', 'pretitle', 'publicationDate', 'tagsName', 'tagsSlug', 'updateDate',
+        'categoryName', 'contentId', 'device', 'extension', 'format',
+        'instanceName', 'isRestricted', 'language', 'lastAuthorId',
+        'lastAuthorName', 'mainDomain', 'mediaType', 'pretitle',
+        'publicationDate', 'tagsName', 'tagsSlug', 'updateDate',
     ];
 
     /**
@@ -88,10 +89,10 @@ class DataLayer
         $typesTranslated = [
             _('Author Id'), _('Author name'), _('Blank'), _('Canonical url'),
             _('Category Id'), _('Category name'), _('Content Id'), _('Devices'),
-            _('Page type'), _('Page format'), _('Hostname'), _('Instance name'),
-            _('Subscription'), _('Language'), _('Last editor Id'), _('Last editor name'),
-            _('Media element'), _('Pretitle'), _('Published date'), _('Tags'),
-            _('Seo tags'), _('Updated date'),
+            _('Page type'), _('Page format'), _('Instance name'), _('Subscription'),
+            _('Language'), _('Last editor Id'), _('Last editor name'),
+            _('Hostname'), _('Media element'), _('Pretitle'), _('Published date'),
+            _('Tags'), _('Seo tags'), _('Updated date'),
         ];
 
 
