@@ -121,7 +121,15 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet()
     {
-        $this->assertEquals('device', $this->extractor->get('device'));
+        $extractor = $this->getMockBuilder('Common\Core\Component\Core\VariablesExtractor')
+            ->disableOriginalConstructor()
+            ->setMethods(['getFooBar'])
+            ->getMock();
+
+        $extractor->expects($this->once())->method('getFooBar')
+            ->willReturn(null);
+
+        $this->assertEmpty($extractor->get('fooBar'));
         $this->assertEmpty($this->extractor->get('wobble'));
     }
 
@@ -308,6 +316,22 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $this->assertEquals(123, $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getDevice.
+     */
+    public function testGetDevice()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getDevice');
+        $method->setAccessible(true);
+
+        $this->rs->expects($this->once())->method('getCurrentRequest')
+            ->willReturn($this->request);
+        $this->request->expects($this->once())->method('getUri')
+            ->willReturn('http://www.foo.bar/baz');
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
     }
 
     /**
