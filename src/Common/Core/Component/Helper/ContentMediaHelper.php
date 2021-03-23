@@ -234,7 +234,7 @@ class ContentMediaHelper
     }
 
     /**
-     * Returns the url for the thumbnail of the video.
+     * Returns the absolute url for the video thumbnail.
      *
      * @param Content $video The video object.
      *
@@ -244,7 +244,8 @@ class ContentMediaHelper
     {
         if (in_array($video->type, ['external', 'script'])) {
             return $this->container->get('core.helper.url_generator')->generate(
-                $this->container->get('api.service.photo')->getItem($video->related_contents[0]['target_id'])
+                $this->container->get('api.service.photo')->getItem($video->related_contents[0]['target_id']),
+                [ 'absolute' => true ]
             );
         }
 

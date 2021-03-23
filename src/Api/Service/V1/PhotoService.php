@@ -44,8 +44,7 @@ class PhotoService extends ContentService
                 throw new FileAlreadyExistsException();
             }
 
-            $filename = basename($path);
-            $ih->move($file, $path, $copy);
+            $filename         = basename($path);
             $originalFilename = pathinfo(
                 $file instanceof UploadedFile ?
                     $file->getClientOriginalName() : $file->getFilename(),
@@ -60,7 +59,7 @@ class PhotoService extends ContentService
                 'path'           => 'images' . $date->format('/Y/m/d/') . $filename,
                 'title'          => $filename,
                 'slug'           => $filename,
-            ], $data, $ih->getInformation($path));
+            ], $data, $ih->getInformation($file->getPathname()));
 
             $data = $this->em->getConverter($this->entity)
                 ->objectify(array_merge($this->defaults, $data));
@@ -77,8 +76,11 @@ class PhotoService extends ContentService
                 'item' => $item
             ]);
 
+            $ih->move($file, $path, $copy);
+
             return $item;
         } catch (\Exception $e) {
+            $ih->remove($path);
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
     }
