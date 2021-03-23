@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Core;
 
 use Api\Exception\GetListException;
+use Api\Exception\GetItemException;
 use Common\Core\Component\Core\VariablesExtractor;
 use Common\Model\Entity\Category;
 use Common\Model\Entity\Content;
@@ -185,7 +186,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $this->as->expects($this->once())->method('getItem')
-            ->will($this->throwException(new GetListException()));
+            ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
     }
@@ -244,7 +245,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $this->as->expects($this->once())->method('getItem')
-            ->will($this->throwException(new GetListException()));
+            ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
     }
@@ -505,7 +506,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $this->as->expects($this->once())->method('getItem')
-            ->will($this->throwException(new GetListException()));
+            ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
     }
@@ -564,7 +565,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $this->as->expects($this->once())->method('getItem')
-            ->will($this->throwException(new GetListException()));
+            ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
     }

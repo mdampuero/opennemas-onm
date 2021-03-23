@@ -3,6 +3,7 @@
 namespace Common\Core\Component\Core;
 
 use Api\Exception\GetListException;
+use Api\Exception\GetItemException;
 
 class VariablesExtractor
 {
@@ -29,7 +30,7 @@ class VariablesExtractor
      */
     public function get($type)
     {
-        $value  = '';
+        $value  = null;
         $method = 'get' . ucfirst($type);
 
         if (method_exists($this, $method)) {
@@ -49,7 +50,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         try {
@@ -57,11 +58,11 @@ class VariablesExtractor
                 $author = $this->container->get('api.service.author')
                     ->getItem($content->fk_author);
             }
-        } catch (\Exception $e) {
-            return '';
+        } catch (GetItemException $e) {
+            return null;
         }
 
-        return $author->id ?? '';
+        return $author->id ?? null;
     }
 
     /**
@@ -74,7 +75,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         try {
@@ -82,11 +83,11 @@ class VariablesExtractor
                 $author = $this->container->get('api.service.author')
                     ->getItem($content->fk_author);
             }
-        } catch (\Exception $e) {
-            return '';
+        } catch (GetItemException $e) {
+            return null;
         }
 
-        return $author->name ?? '';
+        return $author->name ?? null;
     }
 
     /**
@@ -106,7 +107,7 @@ class VariablesExtractor
      */
     protected function getCategoryId()
     {
-        return $this->tpl->getValue('o_category')->id ?? '';
+        return $this->tpl->getValue('o_category')->id ?? null;
     }
 
     /**
@@ -116,7 +117,7 @@ class VariablesExtractor
      */
     protected function getCategoryName()
     {
-        return $this->tpl->getValue('o_category')->name ?? '';
+        return $this->tpl->getValue('o_category')->name ?? null;
     }
 
     /**
@@ -126,7 +127,7 @@ class VariablesExtractor
      */
     protected function getContentId()
     {
-        return $this->tpl->getValue('o_content')->id ?? '';
+        return $this->tpl->getValue('o_content')->id ?? null;
     }
 
     /**
@@ -203,7 +204,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         try {
@@ -211,11 +212,11 @@ class VariablesExtractor
                 $author = $this->container->get('api.service.author')
                     ->getItem($content->fk_user_last_editor);
             }
-        } catch (\Exception $e) {
-            return '';
+        } catch (GetItemException $e) {
+            return null;
         }
 
-        return $author->id ?? '';
+        return $author->id ?? null;
     }
 
     /**
@@ -228,7 +229,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         try {
@@ -236,11 +237,11 @@ class VariablesExtractor
                 $author = $this->container->get('api.service.author')
                     ->getItem($content->fk_user_last_editor);
             }
-        } catch (\Exception $e) {
-            return '';
+        } catch (GetItemException $e) {
+            return null;
         }
 
-        return $author->name ?? '';
+        return $author->name ?? null;
     }
 
     /**
@@ -253,10 +254,10 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
-        return get_type(get_featured_media($content, 'inner')) ?? '';
+        return get_type(get_featured_media($content, 'inner')) ?? null;
     }
 
     /**
@@ -269,10 +270,10 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
-        return $content->pretitle ?? '';
+        return $content->pretitle ?? null;
     }
 
     /**
@@ -285,7 +286,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         try {
@@ -295,7 +296,7 @@ class VariablesExtractor
 
             return $content->starttime->format('Y-m-d H:i:s');
         } catch (Exception $e) {
-            return '';
+            return null;
         }
     }
 
@@ -311,7 +312,7 @@ class VariablesExtractor
         try {
             $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
         } catch (GetListException $e) {
-            return '';
+            return null;
         }
 
         $tags = array_map(function ($tag) {
@@ -331,7 +332,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         return $this->globals->getSubscription()->isRestricted($content);
@@ -349,7 +350,7 @@ class VariablesExtractor
         try {
             $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
         } catch (GetListException $e) {
-            return '';
+            return null;
         }
 
         $tags = array_map(function ($tag) {
@@ -369,7 +370,7 @@ class VariablesExtractor
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
-            return '';
+            return null;
         }
 
         try {
@@ -379,7 +380,7 @@ class VariablesExtractor
 
             return $content->changed->format('Y-m-d H:i:s');
         } catch (Exception $e) {
-            return '';
+            return null;
         }
     }
 }
