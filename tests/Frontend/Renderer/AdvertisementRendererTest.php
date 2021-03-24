@@ -115,6 +115,23 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * Tests get and set methods for advertisement.
+     */
+    public function testGetAndSetAdvertisements()
+    {
+        $this->renderer->setAdvertisements(['foo', 'bar']);
+        $this->assertEquals(['foo', 'bar'], $this->renderer->getAdvertisements());
+    }
+    /**
+     * Tests get and set methods for advertisement.
+     */
+    public function testGetAndSetPositions()
+    {
+        $this->renderer->setPositions([ 111, 234, 789 ]);
+        $this->assertEquals([ 111, 234, 789 ], $this->renderer->getPositions());
+    }
+
+    /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::getInlineFormats
      */
     public function testGetInlineFormats()
@@ -187,36 +204,6 @@ class AdvertisementRendererTest extends TestCase
             ->willReturn([ 'default_mark' => 'Custom mark']);
 
         $this->assertEquals('Custom mark', $this->renderer->getMark($ad));
-    }
-
-    /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getRequestedAd
-     */
-    public function testGetRequestedAd()
-    {
-        $ad = new \Advertisement();
-
-        $method = new \ReflectionMethod($this->renderer, 'setRequestedAd');
-        $method->setAccessible(true);
-        $method->invokeArgs($this->renderer, [ $ad ]);
-
-        $this->assertEquals([ $ad ], $this->renderer->getRequestedAd());
-    }
-
-    /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::setRequestedAd
-     */
-    public function testSetRequestedAd()
-    {
-        $ad       = new \Advertisement();
-        $property = new \ReflectionProperty($this->renderer, 'requestedAd');
-        $property->setAccessible(true);
-
-        $method = new \ReflectionMethod($this->renderer, 'setRequestedAd');
-        $method->setAccessible(true);
-        $method->invokeArgs($this->renderer, [ $ad ]);
-
-        $this->assertEquals([ $ad ], $property->getValue($this->renderer));
     }
 
     /**

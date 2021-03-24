@@ -15,6 +15,14 @@ namespace Frontend\Renderer;
  */
 class AdvertisementRenderer extends Renderer
 {
+
+    /**
+     * The list of advertisements for a page.
+     *
+     * @var array
+     */
+    protected $advertisements = [];
+
     /**
      * The available inline formats.
      *
@@ -23,18 +31,18 @@ class AdvertisementRenderer extends Renderer
     protected $inlineFormats = [ 'amp', 'fia', 'newsletter' ];
 
     /**
-     * The available advertisement types.
+     * The advertisements positions for a page.
      *
      * @var array
      */
-    protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart' ];
+    protected $positions = [];
 
     /**
      * The available advertisement types.
      *
      * @var array
      */
-    protected $requestedAd = [];
+    protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart' ];
 
     /**
      * Initializes the AdvertisementRenderer
@@ -49,6 +57,16 @@ class AdvertisementRenderer extends Renderer
         $this->instance = $this->container->get('core.instance');
         $this->ds       = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
+    }
+
+    /**
+     * Get available advertisements.
+     *
+     * @return array The available advertisements.
+     */
+    public function getAdvertisements()
+    {
+        return $this->advertisements;
     }
 
     /**
@@ -115,13 +133,13 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
-     * Get the requested advertisement
+     * Get available advertisements positions.
      *
-     * @return array The requested advertisement to render.
+     * @return array The available advertisements positions.
      */
-    public function getRequestedAd()
+    public function getPositions()
     {
-        return $this->requestedAd;
+        return $this->postions;
     }
 
     /**
@@ -137,8 +155,6 @@ class AdvertisementRenderer extends Renderer
         // Get renderer class and ad format
         $renderer  = $this->getRendererClass($ad->with_script);
         $adsFormat = $params['ads_format'] ?? null;
-
-        $this->setRequestedAd($ad);
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
@@ -221,6 +237,30 @@ class AdvertisementRenderer extends Renderer
                 'content'     => $renderer->renderInline($ad, $params)
             ]
         );
+    }
+
+    /**
+     * Set all advertisements from controller for a page.
+     *
+     * @param array $advertisements The array of advertisements to render.
+     */
+    public function setAdvertisements($advertisements)
+    {
+        $this->advertisements = $advertisements;
+
+        return $this;
+    }
+
+    /**
+     * Set all advertisements positions from controller for a page.
+     *
+     * @param array $postions The array of advertisements postions to render.
+     */
+    public function setPositions($postions)
+    {
+        $this->postions = $postions;
+
+        return $this;
     }
 
     /**
@@ -369,15 +409,5 @@ class AdvertisementRenderer extends Renderer
         return !empty($ads)
             ? $this->getRendererClass(4)->renderInlineHeader($ads, $params)
             : '';
-    }
-
-    /**
-     * Set the requested advertisement
-     *
-     * @param \Advertisement $ad The advertisement to render.
-     */
-    protected function setRequestedAd($ad)
-    {
-        return array_push($this->requestedAd, $ad);
     }
 }
