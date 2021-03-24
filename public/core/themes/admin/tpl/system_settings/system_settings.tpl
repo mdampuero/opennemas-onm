@@ -1563,73 +1563,119 @@
                           </div>
                         </div>
                       </div>
-
                       <div class="row">
-                        <div class="col-md-6">
-                          <h3>
-                            <i class="fa fa-code"></i>
-                            Scripts
-                          </h3>
-                          <div class="form-group">
-                            <label class="form-label" for="header-script">
-                              {t}Scripts in header{/t}
-                              <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="header-script" name="header-script" ng-model="settings.header_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="body-start-script">
-                              {t}Scripts at body start{/t}
-                              <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="body-start-script" name="body-start-script" ng-model="settings.body_start_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="body-end-script">
-                              {t}Scripts at body end{/t}
-                              <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <h4>
-                            <i class="fa fa-paint-brush"></i>
-                            {t}Style{/t}
-                          </h4>
-                          <div class="form-group" ng-if="extra.theme_skins.length !== 0">
-                            <label class="form-label" for="site-color">
-                              {t}Default skin{/t}
-                            </label>
-                            <span class="help">
-                              {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
-                            </span>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
-                                  <option value="[% code %]" ng-repeat="(code,style) in extra.theme_skins" ng-selected="[% code === settings.theme_skin || settings.theme_skin == undefined %]">[% style.name %]</option>
-                                </select>
+                        <uib-tabset class="nav-onlymaster">
+                          <uib-tab>
+                              <uib-tab-heading>
+                                <i class="fa fa-code"></i>
+                                {t}Scripts{/t} Web
+                              </uib-tab-heading>
+                              <div class="col-md-12">
+
+                                <div class="form-group">
+                                  <label class="form-label" for="header-script">
+                                    <i class="fa fa-globe"></i> {t}Scripts in header{/t}
+                                    <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                                  </label>
+                                  <div class="controls">
+                                    <textarea class="form-control" id="header-script" name="header-script" ng-model="settings.header_script" rows="6"></textarea>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="body-start-script">
+                                    <i class="fa fa-globe"></i> {t}Scripts at body start{/t}
+                                    <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                                  </label>
+                                  <div class="controls">
+                                    <textarea class="form-control" id="body-start-script" name="body-start-script" ng-model="settings.body_start_script" rows="6"></textarea>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="body-end-script">
+                                    <i class="fa fa-globe"></i> {t}Scripts at body end{/t}
+                                    <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                                  </label>
+                                  <div class="controls">
+                                    <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                          </uib-tab>
+                          <uib-tab>
+                            <uib-tab-heading>
+                              <i class="fa fa-code"></i>
+                              {t}Scripts{/t} AMP
+                            </uib-tab-heading>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label class="form-label" for="header-script-amp">
+                                  <i class="fa fa-mobile"></i> {t}Scripts in header{/t}
+                                  <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="header-script-amp" name="header-script-amp" ng-model="settings.header_script_amp" rows="6"></textarea>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="form-label" for="body-start-script-amp">
+                                   <i class="fa fa-mobile"></i> {t}Scripts at body start{/t}
+                                  <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="body-start-script-amp" name="body-start-script-amp" ng-model="settings.body_start_script_amp" rows="6"></textarea>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="form-label" for="body-end-script-amp">
+                                   <i class="fa fa-mobile"></i> {t}Scripts at body end{/t}
+                                  <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="body-end-script-amp" name="body-end-script-amp" ng-model="settings.body_end_script_amp" rows="6"></textarea>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="custom-css">
-                              {t}Custom CSS{/t}
-                              <span class="help">{t}This sripts will be included in the global.css file.{/t}</span>
-                              <span class="text-danger">Not functional for now</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="custom-css" name="custom_css" ng-model="settings.custom_css" disabled="disabled" readonly="readonly"></textarea>
+                          </uib-tab>
+                          <uib-tab class="nav-disable ">
+                            <uib-tab-heading>
+                            <i class="fa fa-paint-brush"></i>
+                            {t}Style{/t}
+                            </uib-tab-heading>
+                            <div class="col-md-12">
+                              <h4>
+                                <i class="fa fa-paint-brush"></i>
+                                {t}Style{/t}
+                              </h4>
+                              <div class="form-group" ng-if="extra.theme_skins.length !== 0">
+                                <label class="form-label" for="site-color">
+                                  {t}Default skin{/t}
+                                </label>
+                                <span class="help">
+                                  {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
+                                </span>
+                                <div class="controls">
+                                  <div class="input-group">
+                                    <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
+                                      <option value="[% code %]" ng-repeat="(code,style) in extra.theme_skins" ng-selected="[% code === settings.theme_skin || settings.theme_skin == undefined %]">[% style.name %]</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="form-label" for="custom-css">
+                                  {t}Custom CSS{/t}
+                                  <span class="help">{t}This sripts will be included in the global.css file.{/t}</span>
+                                  <span class="text-danger">Not functional for now</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="custom-css" name="custom_css" ng-model="settings.custom_css" disabled="disabled" readonly="readonly"></textarea>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
+                          </uib-tab>
+                        </uib-tabset>
                       </div>
+
                     </div>
                   </div>
                 </div>

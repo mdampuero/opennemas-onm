@@ -27,7 +27,9 @@ class SettingController extends Controller
     protected $keys = [
         'actOn.authentication',
         'body_end_script',
+        'body_end_script_amp',
         'body_start_script',
+        'body_start_script_amp',
         'browser_update',
         'chartbeat',
         'cmp_amp',
@@ -54,6 +56,7 @@ class SettingController extends Controller
         'google_tags_id_amp',
         'googleplus_page',
         'header_script',
+        'header_script_amp',
         'instagram_page',
         'items_in_blog',
         'items_per_page',
@@ -98,6 +101,7 @@ class SettingController extends Controller
      */
     protected $onlyMasters = [
         'body_end_script', 'body_start_script', 'custom_css', 'header_script',
+        'body_end_script_amp', 'body_start_script_amp', 'header_script_amp',
         'robots_txt_rules'
     ];
 
@@ -151,6 +155,12 @@ class SettingController extends Controller
 
         // Decode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
+            if (array_key_exists($key, $settings)) {
+                $settings[$key] = base64_decode($settings[$key]);
+            }
+        }
+
+        foreach ([ 'body_end_script_amp', 'body_start_script_amp', 'header_script_amp' ] as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_decode($settings[$key]);
             }
@@ -236,6 +246,12 @@ class SettingController extends Controller
 
         // Encode scripts
         foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
+            if (array_key_exists($key, $settings)) {
+                $settings[$key] = base64_encode($settings[$key]);
+            }
+        }
+
+        foreach ([ 'body_end_script_amp', 'body_start_script_amp', 'header_script_amp' ] as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_encode($settings[$key]);
             }
