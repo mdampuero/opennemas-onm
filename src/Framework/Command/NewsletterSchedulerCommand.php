@@ -69,12 +69,13 @@ EOF
             ->getDataSet('Settings', 'instance')
             ->get('time_zone');
 
-        $this->getContainer()->get('core.locale')->setTimeZone($timezone);
-        $this->getContainer()->get('core.security')->setInstance($instance);
-
+        $this->localeService      = $this->getContainer()->get('core.locale');
         $this->newsletterSender   = $this->getContainer()->get('core.helper.newsletter_sender');
         $this->newsletterService  = $this->getContainer()->get('api.service.newsletter');
         $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
+
+        $this->localeService->setTimeZone($timezone);
+        $this->getContainer()->get('core.security')->setInstance($instance);
 
         if (!is_object($instance)) {
             throw new InstanceNotFoundException();
@@ -91,7 +92,7 @@ EOF
             $instance->internal_name
         ));
 
-        $time = new \DateTime(null, $this->getContainer()->get('core.locale')->getTimeZone());
+        $time = new \DateTime(null, $this->localeService->getTimeZone());
 
         // Fetch the newsletter template configuration
         $templates = $this->newsletterService->getList(
@@ -218,7 +219,9 @@ EOF
 
         try {
             $newsletter       = $this->newsletterService->createItem($data);
+            $this->localeService->setContext('frontend')->apply();
             $newsletter->html = $this->newsletterRenderer->render($newsletter);
+            $this->localeService->setContext('backend')->apply();
             $data             = $newsletter->getData();
 
             $data = array_merge($data, [
