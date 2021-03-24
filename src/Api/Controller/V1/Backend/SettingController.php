@@ -100,7 +100,7 @@ class SettingController extends Controller
      * @var array
      */
     protected $onlyMasters = [
-        'body_end_script', 'body_start_script', 'custom_css', 'header_script',
+        'body_end_script', 'body_start_script', 'header_script',
         'body_end_script_amp', 'body_start_script_amp', 'header_script_amp',
         'robots_txt_rules'
     ];
