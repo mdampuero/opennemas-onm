@@ -45,8 +45,17 @@ class OpenTradTranslator extends Translator
             return '';
         }
 
-        $from   = empty($from) ? $this->from : $from;
-        $to     = empty($to) ? $this->to : $to;
+        $from = empty($from) ? $this->from : $from;
+        $to   = empty($to) ? $this->to : $to;
+
+        if (strpos($from, '_')) {
+            $from = substr($from, 0, strpos($from, '_'));
+        }
+
+        if (strpos($to, '_')) {
+            $to = substr($to, 0, strpos($to, '_'));
+        }
+
         $client = $this->getClient();
 
         if (empty($client)

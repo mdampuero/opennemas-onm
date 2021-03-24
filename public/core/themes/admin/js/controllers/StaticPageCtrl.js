@@ -15,8 +15,8 @@
      * @requires routing
      */
     .controller('StaticPageCtrl', [
-      '$controller', '$scope', 'routing',
-      function($controller, $scope, routing) {
+      '$controller', '$scope', 'routing', 'translator',
+      function($controller, $scope, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -102,6 +102,7 @@
           $scope.localize($scope.data.item, 'item', true);
 
           $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

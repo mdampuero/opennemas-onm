@@ -14,8 +14,8 @@
      * @requires routing
      */
     .controller('NewsstandCtrl', [
-      '$controller', '$scope', '$timeout', '$window', 'routing',
-      function($controller, $scope, $timeout, $window, routing) {
+      '$controller', '$scope', '$timeout', '$window', 'routing', 'translator',
+      function($controller, $scope, $timeout, $window, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -102,6 +102,7 @@
           }
 
           $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

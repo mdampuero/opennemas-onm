@@ -2,8 +2,8 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing',
-  function($controller, $scope, $timeout, $window, http, messenger, related, routing) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing', 'translator',
+  function($controller, $scope, $timeout, $window, http, messenger, related, routing, translator) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -142,6 +142,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.checkDraft();
       related.init($scope);
       related.watch();
+      translator.init($scope);
     };
 
     /**

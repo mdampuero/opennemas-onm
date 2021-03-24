@@ -16,8 +16,8 @@
      * @requires routing
      */
     .controller('AlbumCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'related', 'routing',
-      function($controller, $scope, $timeout, $uibModal, $window, related, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'related', 'routing', 'translator',
+      function($controller, $scope, $timeout, $uibModal, $window, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -157,6 +157,7 @@
           $scope.checkDraft();
           related.init($scope);
           related.watch();
+          translator.init($scope);
         };
 
         /**

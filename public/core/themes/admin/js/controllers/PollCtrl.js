@@ -15,8 +15,8 @@
      * @requires routing
      */
     .controller('PollCtrl', [
-      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing',
-      function($controller, $scope, $window, linker, localizer, routing) {
+      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing', 'translator',
+      function($controller, $scope, $window, linker, localizer, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -132,6 +132,7 @@
           }
 
           $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

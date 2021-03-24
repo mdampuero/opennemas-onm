@@ -24,9 +24,9 @@
      */
     .controller('ArticleCtrl', [
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
-      'http', 'related', 'routing',
+      'http', 'related', 'routing', 'translator',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner,
-          http, related, routing) {
+          http, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -132,6 +132,7 @@
           $scope.checkDraft();
           related.init($scope);
           related.watch();
+          translator.init($scope);
         };
 
         /**
@@ -221,11 +222,6 @@
             }
           }
         }, true);
-
-        // Enable drafts after 5s to grant CKEditor initialization
-        $timeout(function() {
-          $scope.draftEnabled = true;
-        }, 5000);
 
         /**
          * @inheritdoc

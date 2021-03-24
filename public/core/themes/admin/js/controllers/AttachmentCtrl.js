@@ -16,8 +16,8 @@
      * @requires routing
      */
     .controller('AttachmentCtrl', [
-      '$controller', '$scope',
-      function($controller, $scope) {
+      '$controller', '$scope', 'translator',
+      function($controller, $scope, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -123,6 +123,7 @@
           $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
 
           $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

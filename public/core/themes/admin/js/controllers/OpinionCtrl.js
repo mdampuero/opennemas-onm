@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$scope', '$uibModal', 'http', 'related', 'routing', 'cleaner',
-  function($controller, $scope, $uibModal, http, related, routing, cleaner) {
+  '$controller', '$scope', '$uibModal', 'http', 'related', 'routing', 'cleaner', 'translator',
+  function($controller, $scope, $uibModal, http, related, routing, cleaner, translator) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -110,6 +110,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       $scope.checkDraft();
       related.init($scope);
       related.watch();
+      translator.init($scope);
     };
 
     /**
