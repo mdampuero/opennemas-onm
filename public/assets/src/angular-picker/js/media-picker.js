@@ -849,8 +849,7 @@
               }
 
               var types = [
-                'bmp', 'gif', 'jpeg', 'jpg', 'png', 'ico',
-                'svg', 'svgz', 'swf',
+                'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'svg', 'svgz',
               ];
 
               return types.indexOf(type) !== -1;
