@@ -10,7 +10,7 @@
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $ads         = $adsRenderer->getRequestedAd();
+    $ads         = $adsRenderer->getAdvertisements();
     $app         = $smarty->getValue('app');
 
     if (!is_array($ads)

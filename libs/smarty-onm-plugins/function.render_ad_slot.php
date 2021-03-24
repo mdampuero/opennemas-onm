@@ -13,16 +13,17 @@ function smarty_function_render_ad_slot($params, &$smarty)
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings')['safe_frame'];
 
-    $tpl   = '<div class="ad-slot oat%s">%s</div>';
-    $class = '" data-position="' . $position;
+    $tpl      = '<div class="ad-slot oat%s">%s</div>';
+    $class    = '" data-position="' . $position;
+    $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
 
     // Filter advertisement by position
-    $adsPositions = $smarty->getValue('ads_positions');
+    $adsPositions = $renderer->getPositions('ads_positions');
     if (empty($adsPositions) || !in_array($position, $adsPositions)) {
         return '';
     }
 
-    $ads = $smarty->getValue('advertisements');
+    $ads = $renderer->getAdvertisements();
     if (!is_array($ads)) {
         return '';
     }
@@ -43,10 +44,9 @@ function smarty_function_render_ad_slot($params, &$smarty)
     if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
         $ad = array_pop($ads);
 
-        $smarty->setValue('advertisements', $ads);
+        $renderer->setAdvertisements($ads);
     }
 
-    $renderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $adsFormat = $smarty->getValue('ads_format');
     if ($safeframeEnabled && !in_array($adsFormat, $renderer->getInlineFormats())) {
         return sprintf($tpl, $class, '');
