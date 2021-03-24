@@ -352,16 +352,22 @@ class RssController extends FrontendController
             $this->view->assign('contents', $contents);
         }
 
-        list($adsPositions, $advertisements) = $this->getAds();
+        // Loads the list of positions and advertisements on renderer service.
+        $positions      = $this->get('core.helper.advertisement')
+            ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
 
         $response = $this->render('rss/fb_instant_articles.tpl', [
-            'advertisements' => $advertisements,
-            'ads_positions'  => $adsPositions,
-            'ads_format'     => 'fia',
-            'cache_id'       => $cacheID,
-            'x-cacheable'    => true,
-            'x-cache-for'    => $expire,
-            'x-tags'         => 'rss,instant-articles'
+            'ads_format'  => 'fia',
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => 'rss,instant-articles'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -430,26 +436,6 @@ class RssController extends FrontendController
         $contents = $cm->filterBlocked($contents);
 
         return $contents;
-    }
-
-    /**
-     * Fetches advertisements for Instant article.
-     *
-     * @param string category The category identifier.
-     *
-     * @return array The list of advertisements for this page.
-     */
-    protected function getAds($category = 'home')
-    {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
-
-        $positions = $this->get('core.helper.advertisement')
-            ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
-
-        $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
-
-        return [ $positions, $advertisements ];
     }
 
     /**

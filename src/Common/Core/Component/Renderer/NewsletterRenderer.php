@@ -68,14 +68,14 @@ class NewsletterRenderer
         $menu = new \Menu();
         $menu = $menu->getMenu('frontpage');
 
-        $positions = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
-        $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
+        $positions      = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
+        $advertisements = $this->ar->findByPositionsAndCategory($positions, 0);
 
-        $this->tpl->assign([
-            'advertisements' => $ads,
-            'ads_positions'  => $positions,
-            'ads_format'     => 'newsletter',
-        ]);
+        getService('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
+
+        $this->tpl->assign('ads_format', 'newsletter');
 
         // Process public URL for images and links
         $publicUrl = preg_replace(

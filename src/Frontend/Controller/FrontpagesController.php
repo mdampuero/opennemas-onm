@@ -97,20 +97,18 @@ class FrontpagesController extends Controller
             );
         }
 
-        list($adsPositions, $advertisements) = $this->getAds($categoryId, $contents);
+        $this->getAds($categoryId, $contents);
 
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
 
         return $this->render('frontpage/frontpage.tpl', [
-            'ads_positions'  => $adsPositions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheId,
-            'category'       => $category,
-            'o_category'     => $category,
-            'time'           => $systemDate->getTimestamp(),
-            'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
-            'x-cacheable'    => true,
-            'x-tags'         => 'frontpage-page,' . $categoryName
+            'cache_id'    => $cacheId,
+            'category'    => $category,
+            'o_category'  => $category,
+            'time'        => $systemDate->getTimestamp(),
+            'x-cache-for' => $invalidationDt->format('Y-m-d H: i: s'),
+            'x-cacheable' => true,
+            'x-tags'      => 'frontpage-page,' . $categoryName
         ]);
     }
 
@@ -151,6 +149,8 @@ class FrontpagesController extends Controller
             }
         }
 
-        return [ $positions, $advertisements ];
+        getService('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 }

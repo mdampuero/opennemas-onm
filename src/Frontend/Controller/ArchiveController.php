@@ -134,11 +134,9 @@ class ArchiveController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('archive/archive.tpl', [
-            'ads_positions'   => $positions,
-            'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
             'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categorySlug,
@@ -189,20 +187,17 @@ class ArchiveController extends Controller
     }
 
     /**
-     * Returns the advertisements for the archive template
-     *
-     * @return array the list of advertisement objects
+     * Loads the list of positions and advertisements on renderer service.
      */
     public function getAds()
     {
-        $category = 0;
-
-        // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
+            ->findByPositionsAndCategory($positions);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 }

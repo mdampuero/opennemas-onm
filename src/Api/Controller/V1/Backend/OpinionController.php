@@ -124,8 +124,7 @@ class OpinionController extends ContentOldController
 
         $this->view = $this->get('core.template');
         $this->view->setCaching(0);
-
-        list($positions, $advertisements) = $this->getAdvertisements();
+        $this->getAdvertisements();
 
         try {
             if (!empty($opinion->fk_author)) {
@@ -148,8 +147,6 @@ class OpinionController extends ContentOldController
         }
 
         $params = [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
             'item'           => $opinion,
             'content'        => $opinion,
             'other_opinions' => $otherOpinions,

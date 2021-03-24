@@ -345,8 +345,7 @@ class FrontpagesController extends Controller
         }
 
         // Fetch ads
-        list($positions, $advertisements) =
-            \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
+        \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
 
         foreach ($contentsInHomepage as &$content) {
             $content->starttime = null;
@@ -359,8 +358,6 @@ class FrontpagesController extends Controller
             ->get('frontpage_layout_' . $id, 'default');
 
         $this->view->assign([
-            'ads_positions'        => $positions,
-            'advertisements'       => $advertisements,
             'column'               => $contentsInHomepage,
             'contentPositionByPos' => $contentPositionMap,
             'layoutFile'           => 'layouts/' . $layout . '.tpl',
