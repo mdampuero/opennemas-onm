@@ -9,19 +9,6 @@ namespace Common\Core\Component\DataLayer;
 class DataLayer
 {
     /**
-     * The available advertisement types.
-     *
-     * @var array
-     */
-    protected $types = [
-        'authorId', 'authorName', 'blank', 'canonicalUrl', 'categoryId',
-        'categoryName', 'contentId', 'device', 'extension', 'format',
-        'instanceName', 'isRestricted', 'language', 'lastAuthorId',
-        'lastAuthorName', 'mainDomain', 'mediaType', 'pretitle',
-        'publicationDate', 'tagNames', 'tagSlugs', 'updateDate',
-    ];
-
-    /**
      * Initializes the DataLayer.
      *
      * @param ServiceContainer $container The service container.
@@ -101,18 +88,29 @@ class DataLayer
      */
     public function getTypes()
     {
-        // Add types translation
-        $typesTranslated = [
-            _('Author Id'), _('Author name'), _('Blank'), _('Canonical url'),
-            _('Category Id'), _('Category name'), _('Content Id'), _('Devices'),
-            _('Page type'), _('Page format'), _('Instance name'), _('Subscription'),
-            _('Language'), _('Last editor Id'), _('Last editor name'),
-            _('Hostname'), _('Media element'), _('Pretitle'), _('Published date'),
-            _('Tag Names'), _('Tag Slugs'), _('Updated date'),
+        return [
+            'authorId'        => _('Author id'),
+            'authorName'      => _('Author name'),
+            'blank'           => _('Blank'),
+            'canonicalUrl'    => _('Canonical url'),
+            'categoryId'      => _('Category id'),
+            'categoryName'    => _('Category name'),
+            'contentId'       => _('Content id'),
+            'device'          => _('Devices'),
+            'extension'       => _('Page type'),
+            'format'          => _('Page format'),
+            'instanceName'    => _('Instance name'),
+            'isRestricted'    => _('Restricted'),
+            'language'        => _('Language'),
+            'lastAuthorId'    => _('Last editor id'),
+            'lastAuthorName'  => _('Last editor name'),
+            'mainDomain'      => _('Main domain'),
+            'mediaType'       => _('Media element'),
+            'pretitle'        => _('Pretitle'),
+            'publicationDate' => _('Published date'),
+            'tagNames'        => _('Tag names'),
+            'tagSlugs'        => _('Tag slugs'),
+            'updateDate'      => _('Updated date'),
         ];
-
-        $this->types = array_combine($this->types, $typesTranslated);
-
-        return $this->types;
     }
 }
