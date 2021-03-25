@@ -127,7 +127,7 @@ class VariablesExtractor
      */
     protected function getContentId()
     {
-        return $this->tpl->getValue('o_content')->id ?? null;
+        return $this->tpl->getValue('o_content')->pk_content ?? null;
     }
 
     /**
