@@ -26,6 +26,9 @@
                   document.body.removeChild(div);
                 }
             }
+            else {
+              divsdk.style.zIndex = 2147483647;
+           }
         }
     }
 </script>
@@ -41,7 +44,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 2147483647;
+    z-index: 2147483640;
     top: 0px;
     left: 0px;
     opacity: .5;
