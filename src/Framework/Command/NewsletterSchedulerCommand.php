@@ -9,6 +9,7 @@
  */
 namespace Framework\Command;
 
+use Common\Core\Command\Command;
 use Api\Exception\CreateItemException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewsletterSchedulerCommand extends ContainerAwareCommand
+class NewsletterSchedulerCommand extends Command
 {
     protected function configure()
     {
@@ -25,7 +26,7 @@ class NewsletterSchedulerCommand extends ContainerAwareCommand
             ->setName('newsletter:scheduler')
             ->setDescription('Sends scheduled newsletters')
             ->setDefinition([
-                new InputArgument('instance', InputArgument::REQUIRED, 'The instance internal name.'),
+                new InputArgument('instance', InputArgument::OPTIONAL, 'The instance internal name.'),
             ])
             ->setHelp(
                 <<<EOF
@@ -33,6 +34,10 @@ The <info>newsletter:scheduler</info> checks for newsletter schedules and if it 
 right time it sends them.
 
 Put this as a cron action:
+
+<info>php app/console newsletter:scheduler</info>
+
+Use this action if you want to launch the newsletter of a specific instance:
 
 <info>php app/console newsletter:scheduler <instance_name></info>
 
@@ -44,77 +49,110 @@ EOF
     {
         $this->output = $output;
 
-        $instanceName = $input->getArgument('instance');
-
-        $this->getContainer()->get('core.loader')
-            ->load($instanceName)
-            ->onlyEnabled()
-            ->init();
-
-        $instance = $this->getContainer()->get('core.instance');
-
-        // Set base url from instance information to fix url generation
-        $context = $this->getContainer()->get('router')->getContext();
-        $context->setHost($instance->getMainDomain());
-        $context->setScheme(
-            in_array(
-                'es.openhost.module.frontendSsl',
-                $instance->activated_modules
-            ) ? 'https' : 'http'
-        );
-
-        $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
-
-        $timezone = $this->getContainer()->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('time_zone');
-
-        $this->getContainer()->get('core.locale')->setTimeZone($timezone);
-        $this->getContainer()->get('core.security')->setInstance($instance);
-
-        $this->newsletterSender   = $this->getContainer()->get('core.helper.newsletter_sender');
-        $this->newsletterService  = $this->getContainer()->get('api.service.newsletter');
-        $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
-
-        if (!is_object($instance)) {
-            throw new InstanceNotFoundException();
-        }
-
-        if ($instance->activated != '1') {
-            $message = _('Instance not activated');
-            throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
-        }
-        $this->instanceName = $instance->internal_name;
-
-        $this->outputLine(sprintf(
-            "Sending scheduled newsletters for instance %s",
-            $instance->internal_name
+        $this->start();
+        $output->writeln(sprintf(
+            str_pad('<options=bold>Starting command', 50, '.')
+                . '<fg=green;options=bold>DONE</>'
+                . ' <fg=blue;options=bold>(%s)</></>',
+            date('Y-m-d H:i:s', $this->started)
         ));
 
-        $time = new \DateTime(null, $this->getContainer()->get('core.locale')->getTimeZone());
+        $instanceName = $input->getArgument('instance');
 
-        // Fetch the newsletter template configuration
-        $templates = $this->newsletterService->getList(
-            'type=1 and status=1 order by created desc'
-        );
+        $instaceArray = [];
 
-        if ($templates['total'] <= 0) {
-            $this->outputLine(sprintf("  - <info>No templates available</info>"));
+        if (empty($instanceName)) {
+            $instances = $this->getInstances();
+            foreach ($instances as $instance) {
+                if (in_array('es.openhost.module.newsletter_scheduling', $instance->activated_modules)) {
+                    array_push($instaceArray, $instance->getData()['internal_name']);
+                }
+            }
+        } else {
+            array_push($instaceArray, $instanceName);
         }
 
-        foreach ($templates['items'] as $template) {
-            $this->outputLine(sprintf(" - Newsletter template %s - %s", $template->id, $template->title));
+        foreach ($instaceArray as $name) {
+            $this->getContainer()->get('core.loader')
+                ->load($name)
+                ->onlyEnabled()
+                ->init();
 
-            list($canWeSend, $errors) = $this->canWeSendTemplate($template, $time);
+            $instance = $this->getContainer()->get('core.instance');
 
-            if ($canWeSend) {
-                $this->outputLine(sprintf("  + <info>Generating newsletter %s</info>", $template->id));
+            // Set base url from instance information to fix url generation
+            $context = $this->getContainer()->get('router')->getContext();
+            $context->setHost($instance->getMainDomain());
+            $context->setScheme(
+                in_array(
+                    'es.openhost.module.frontendSsl',
+                    $instance->activated_modules
+                ) ? 'https' : 'http'
+            );
 
-                $this->sendScheduledTemplate($template, $output, $time);
-            } else {
-                $this->outputLine(sprintf("  + <info>%s</info>", $errors));
+            $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
+
+            $timezone = $this->getContainer()->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('time_zone');
+
+            $this->getContainer()->get('core.locale')->setTimeZone($timezone);
+            $this->getContainer()->get('core.security')->setInstance($instance);
+
+            $this->newsletterSender   = $this->getContainer()->get('core.helper.newsletter_sender');
+            $this->newsletterService  = $this->getContainer()->get('api.service.newsletter');
+            $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
+
+            if (!is_object($instance)) {
+                throw new InstanceNotFoundException();
+            }
+
+            if ($instance->activated != '1') {
+                $message = _('Instance not activated');
+                throw new \Common\Core\Component\Exception\InstanceNotActivatedException($message);
+            }
+            $this->instanceName = $name;
+
+            $this->outputLine(sprintf(
+                "Sending scheduled newsletters for instance %s",
+                $name
+            ));
+
+            $time = new \DateTime(null, $this->getContainer()->get('core.locale')->getTimeZone());
+
+            // Fetch the newsletter template configuration
+            $templates = $this->newsletterService->getList(
+                'type=1 and status=1 order by created desc'
+            );
+
+            if ($templates['total'] <= 0) {
+                $this->outputLine(sprintf("  - <info>No templates available</info>"));
+            }
+
+            foreach ($templates['items'] as $template) {
+                $this->outputLine(sprintf(" - Newsletter template %s - %s", $template->id, $template->title));
+
+                list($canWeSend, $errors) = $this->canWeSendTemplate($template, $time);
+
+                if ($canWeSend) {
+                    $this->outputLine(sprintf("  + <info>Generating newsletter %s</info>", $template->id));
+
+                    $this->sendScheduledTemplate($template, $output, $time);
+                } else {
+                    $this->outputLine(sprintf("  + <info>%s</info>", $errors));
+                }
             }
         }
+
+        $this->end();
+        $output->writeln(sprintf(
+            str_pad('<options=bold>Ending command', 50, '.')
+                . '<fg=green;options=bold>DONE</>'
+                . ' <fg=blue;options=bold>(%s)</>'
+                . ' <fg=yellow;options=bold>(%s)</></>',
+            date('Y-m-d H:i:s', $this->ended),
+            $this->getDuration()
+        ));
     }
 
     /**
@@ -264,8 +302,22 @@ EOF
      */
     private function outputLine($line)
     {
-        $fullLine = sprintf('[Instance %s] %s', $this->instanceName, $line);
+        $fullLine = sprintf('<options=bold>[Instance %s] <fg=green>%s</></>', $this->instanceName, $line);
 
         $this->output->writeln($fullLine);
+    }
+
+
+    /**
+     * Returns the list of active instances.
+
+     * @return array The list of instances.
+     */
+    protected function getInstances() : array
+    {
+        $oql = 'activated = 1';
+
+        return $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy($oql);
     }
 }
