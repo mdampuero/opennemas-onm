@@ -32,6 +32,32 @@ class DataLayer
     }
 
     /**
+     * Get Data Layer parsed array.
+     *
+     * @return array $data The Data layer array.
+     */
+    public function getDataLayer()
+    {
+        $dataLayerMap = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('data_layer');
+
+        if (empty($dataLayerMap)) {
+            return null;
+        }
+
+        $variables = [];
+
+        foreach ($dataLayerMap as $value) {
+            $variables[$value['key']] = $this->container
+                ->get('core.variables.extractor')
+                ->get($value['value']);
+        }
+
+        return $variables;
+    }
+
+    /**
      * Generates Data Layer code.
      *
      * @param Array   $data The Data Layer data.
@@ -69,32 +95,6 @@ class DataLayer
     }
 
     /**
-     * Get Data Layer parsed array.
-     *
-     * @return array $data The Data layer array.
-     */
-    public function getDataLayer()
-    {
-        $dataLayerMap = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('data_layer');
-
-        if (empty($dataLayerMap)) {
-            return null;
-        }
-
-        $variables = [];
-        foreach ($dataLayerMap as $value) {
-            // Proccess values before generate json elements
-            $variables[$value['key']] = $this->container
-                ->get('core.variables.extractor')
-                ->get($value['value']);
-        }
-
-        return $variables;
-    }
-
-    /**
      * Get the available types for data layer.
      *
      * @return Array The available types.
@@ -110,7 +110,6 @@ class DataLayer
             _('Hostname'), _('Media element'), _('Pretitle'), _('Published date'),
             _('Tag Names'), _('Tag Slugs'), _('Updated date'),
         ];
-
 
         $this->types = array_combine($this->types, $typesTranslated);
 
