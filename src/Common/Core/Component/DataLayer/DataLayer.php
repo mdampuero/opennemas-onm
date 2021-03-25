@@ -18,7 +18,7 @@ class DataLayer
         'categoryName', 'contentId', 'device', 'extension', 'format',
         'instanceName', 'isRestricted', 'language', 'lastAuthorId',
         'lastAuthorName', 'mainDomain', 'mediaType', 'pretitle',
-        'publicationDate', 'tagsName', 'tagsSlug', 'updateDate',
+        'publicationDate', 'tagNames', 'tagSlugs', 'updateDate',
     ];
 
     /**
@@ -108,7 +108,7 @@ class DataLayer
             _('Page type'), _('Page format'), _('Instance name'), _('Subscription'),
             _('Language'), _('Last editor Id'), _('Last editor name'),
             _('Hostname'), _('Media element'), _('Pretitle'), _('Published date'),
-            _('Tags'), _('Seo tags'), _('Updated date'),
+            _('Tag Names'), _('Tag Slugs'), _('Updated date'),
         ];
 
 

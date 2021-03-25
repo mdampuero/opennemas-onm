@@ -400,11 +400,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTagsName with content.
+     * Tests getTagNames with content.
      */
-    public function testGetTagsName()
+    public function testGetTagNames()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getTagsName');
+        $method = new \ReflectionMethod($this->extractor, 'getTagNames');
         $method->setAccessible(true);
 
         $content       = new Content();
@@ -427,11 +427,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTagsName when exception.
+     * Tests getTagNames when exception.
      */
-    public function testGetTagsNameWhenException()
+    public function testGetTagNamesWhenException()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getTagsName');
+        $method = new \ReflectionMethod($this->extractor, 'getTagNames');
         $method->setAccessible(true);
 
         $this->ts->expects($this->once())->method('getListByIds')
@@ -745,11 +745,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTagsSlug with content.
+     * Tests getTagSlugs with content.
      */
-    public function testGetTagsSlug()
+    public function testGetTagSlugs()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getTagsSlug');
+        $method = new \ReflectionMethod($this->extractor, 'getTagSlugs');
         $method->setAccessible(true);
 
         $content       = new Content();
@@ -772,11 +772,11 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getTagsSlug when exception.
+     * Tests getTagSlugs when exception.
      */
-    public function testGetTagsSlugWhenException()
+    public function testGetTagSlugsWhenException()
     {
-        $method = new \ReflectionMethod($this->extractor, 'getTagsSlug');
+        $method = new \ReflectionMethod($this->extractor, 'getTagSlugs');
         $method->setAccessible(true);
 
         $content       = new Content();

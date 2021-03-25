@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-16 16:50+0000\n"
-"PO-Revision-Date: 2021-03-16 17:43+0100\n"
+"POT-Creation-Date: 2021-03-25 08:20+0000\n"
+"PO-Revision-Date: 2021-03-25 09:22+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1530,11 +1530,11 @@ msgstr "Tipo de página"
 msgid "Page format"
 msgstr "Formato de página"
 
-msgid "Hostname"
-msgstr "Nombre de host"
-
 msgid "Instance name"
 msgstr "Nombre de instancia"
+
+msgid "Subscription"
+msgstr "Suscripción"
 
 msgid "Language"
 msgstr "Idioma"
@@ -1545,17 +1545,23 @@ msgstr "Id del último editor"
 msgid "Last editor name"
 msgstr "Nombre del último editor"
 
+msgid "Hostname"
+msgstr "Nombre de host"
+
 msgid "Media element"
 msgstr "Elemento multimedia"
+
+msgid "Pretitle"
+msgstr "Antetítulo"
 
 msgid "Published date"
 msgstr "Fecha de publicación"
 
-msgid "Seo tags"
-msgstr "Etiquetas SEO"
+msgid "Tag Names"
+msgstr "Nombres de etiquetas"
 
-msgid "Subscription"
-msgstr "Suscripción"
+msgid "Tag Slugs"
+msgstr "Slugs de etiquetas"
 
 msgid "Updated date"
 msgstr "Fecha de actualización"
@@ -3829,9 +3835,6 @@ msgstr "Editar este contenido"
 
 msgid "Are you sure that do you want remove \"%1\"?"
 msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
-
-msgid "Pretitle"
-msgstr "Antetítulo"
 
 msgid "Favorite"
 msgstr "Favorito"
@@ -7187,6 +7190,9 @@ msgstr "¿Estás seguro de que quieres eliminar la notificación?"
 msgid "Do you want to delete the selected notifications?"
 msgstr ""
 "¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
+
+#~ msgid "Seo tags"
+#~ msgstr "Etiquetas SEO"
 
 #~ msgid "Complete all the required album information before save it"
 #~ msgstr ""

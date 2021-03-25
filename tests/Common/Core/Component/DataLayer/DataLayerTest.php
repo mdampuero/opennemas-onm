@@ -160,8 +160,8 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
             'mediaType'       => _('Media element'),
             'pretitle'        => _('Pretitle'),
             'publicationDate' => _('Published date'),
-            'tagsSlug'        => _('Seo tags'),
-            'tagsName'        => _('Tags'),
+            'tagNames'        => _('Tag Names'),
+            'tagSlugs'        => _('Tag Slugs'),
             'updateDate'      => _('Updated date'),
         ];
 
