@@ -59,24 +59,20 @@ class DataLayer
             return '';
         }
 
-        $device = '';
-        if (array_key_exists('device', $data)) {
-            $device = 'dataLayer.push({ "device":device });';
-        }
-
-        $data = json_encode(
+        $json = json_encode(
             array_map(function ($a) {
                 return $a === null ? '' : $a;
             }, $data)
         );
+
+        $json = str_replace('"%device%"', 'device', $json);
 
         $code = '<script>
             var device = (window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 768 ? "phone" : '
             . '((window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 992 ? "tablet" : "desktop");
-            dataLayer = [' . $data . '];'
-            . $device . '</script>';
+            dataLayer = [' . $json . '];</script>';
 
         return $code;
     }

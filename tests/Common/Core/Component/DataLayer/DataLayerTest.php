@@ -38,10 +38,7 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->dataset);
 
-        $this->dl   = new DataLayer($this->container);
-        $this->data = [
-            'device' => true
-        ];
+        $this->dl = new DataLayer($this->container);
     }
 
     /**
@@ -75,21 +72,22 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDataLayerCode()
     {
+        $data = [ 'glork' => '%device%' ];
+
         $dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
             ->setMethods(['getDataLayer'])
             ->getMock();
 
         $dl->expects($this->any())->method('getDataLayer')
-            ->willReturn($this->data);
+            ->willReturn($data);
 
         $output = '<script>
             var device = (window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 768 ? "phone" : '
             . '((window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 992 ? "tablet" : "desktop");
-            dataLayer = [' . json_encode($this->data) . '];'
-            . 'dataLayer.push({ "device":device });</script>';
+            dataLayer = [{"glork":device}];</script>';
 
         $this->assertEquals(
             $output,

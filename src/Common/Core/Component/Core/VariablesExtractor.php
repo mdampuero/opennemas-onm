@@ -137,7 +137,7 @@ class VariablesExtractor
      */
     protected function getDevice()
     {
-        return $this->getFormat() === 'amp' ? 'phone' : '';
+        return $this->getFormat() === 'amp' ? 'phone' : '%device%';
     }
 
     /**
