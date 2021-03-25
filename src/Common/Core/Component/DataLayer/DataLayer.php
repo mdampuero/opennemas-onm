@@ -40,7 +40,7 @@ class DataLayer
      */
     public function getDataLayerCode()
     {
-        $data = $this->parseDataMap();
+        $data = $this->getDataLayer();
 
         if (empty($data)) {
             return '';
@@ -73,9 +73,25 @@ class DataLayer
      *
      * @return array $data The Data layer array.
      */
-    public function getDataLayerArray()
+    public function getDataLayer()
     {
-        return $this->parseDataMap();
+        $dataLayerMap = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('data_layer');
+
+        if (empty($dataLayerMap)) {
+            return null;
+        }
+
+        $variables = [];
+        foreach ($dataLayerMap as $value) {
+            // Proccess values before generate json elements
+            $variables[$value['key']] = $this->container
+                ->get('core.variables.extractor')
+                ->get($value['value']);
+        }
+
+        return $variables;
     }
 
     /**
@@ -99,31 +115,5 @@ class DataLayer
         $this->types = array_combine($this->types, $typesTranslated);
 
         return $this->types;
-    }
-
-    /**
-     * Parse data map.
-     *
-     * @return Array The parsed data map.
-     */
-    protected function parseDataMap()
-    {
-        $dataLayerMap = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('data_layer');
-
-        if (empty($dataLayerMap)) {
-            return null;
-        }
-
-        $variables = [];
-        foreach ($dataLayerMap as $value) {
-            // Proccess values before generate json elements
-            $variables[$value['key']] = $this->container
-                ->get('core.variables.extractor')
-                ->get($value['value']);
-        }
-
-        return $variables;
     }
 }

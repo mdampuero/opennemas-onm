@@ -60,7 +60,7 @@ class TagManager
      */
     public function getGoogleTagManagerBodyCodeAMP($id)
     {
-        $data      = $this->dataLayer->getDataLayerArray();
+        $data      = $this->dataLayer->getDataLayer();
         $dataLayer = '';
 
         if (!empty($data)) {

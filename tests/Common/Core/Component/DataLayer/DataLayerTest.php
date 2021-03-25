@@ -77,10 +77,10 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
     {
         $dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
-            ->setMethods(['parseDataMap'])
+            ->setMethods(['getDataLayer'])
             ->getMock();
 
-        $dl->expects($this->any())->method('parseDataMap')
+        $dl->expects($this->any())->method('getDataLayer')
             ->willReturn($this->data);
 
         $output = '<script>
@@ -98,29 +98,40 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getDataLayerArray when no data.
+     * Tests getDataLayer when no data.
      */
-    public function testGetDataLayerArrayNoData()
+    public function testGetDataLayerNoData()
     {
-        $this->assertEmpty($this->dl->getDataLayerArray());
+        $method = new \ReflectionMethod($this->dl, 'getDataLayer');
+        $method->setAccessible(true);
+
+        $this->dataset->expects($this->any())->method('get')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->dl, []));
     }
 
     /**
-     * Tests getDataLayerArray.
+     * Tests getDataLayer.
      */
-    public function testGetDataLayerArray()
+    public function testGetDataLayer()
     {
-        $dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
-            ->disableOriginalConstructor()
-            ->setMethods(['parseDataMap'])
-            ->getMock();
+        $method = new \ReflectionMethod($this->dl, 'getDataLayer');
+        $method->setAccessible(true);
 
-        $dl->expects($this->any())->method('parseDataMap')
-            ->willReturn($this->data);
+        $this->dataset->expects($this->any())->method('get')
+            ->willReturn([
+                [ 'key' => 'foo', 'value' => 'thud' ],
+                [ 'key' => 'bar', 'value' => 'wobble' ],
+                [ 'key' => 'baz', 'value' => 'waldo' ],
+            ]);
+
+        $this->extractor->expects($this->any())->method('get')
+            ->willReturn('gorp');
 
         $this->assertEquals(
-            $this->data,
-            $dl->getDataLayerArray()
+            [ 'foo' => 'gorp', 'bar' => 'gorp', 'baz' => 'gorp' ],
+            $method->invokeArgs($this->dl, [])
         );
     }
 
@@ -155,43 +166,5 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertEquals($output, $this->dl->getTypes());
-    }
-
-    /**
-     * Tests parseDataMap when no data.
-     */
-    public function testParseDataMapWhenNoData()
-    {
-        $method = new \ReflectionMethod($this->dl, 'parseDataMap');
-        $method->setAccessible(true);
-
-        $this->dataset->expects($this->any())->method('get')
-            ->willReturn(null);
-
-        $this->assertEmpty($method->invokeArgs($this->dl, []));
-    }
-
-    /**
-     * Tests parseDataMap.
-     */
-    public function testParseDataMap()
-    {
-        $method = new \ReflectionMethod($this->dl, 'parseDataMap');
-        $method->setAccessible(true);
-
-        $this->dataset->expects($this->any())->method('get')
-            ->willReturn([
-                [ 'key' => 'foo', 'value' => 'thud' ],
-                [ 'key' => 'bar', 'value' => 'wobble' ],
-                [ 'key' => 'baz', 'value' => 'waldo' ],
-            ]);
-
-        $this->extractor->expects($this->any())->method('get')
-            ->willReturn('gorp');
-
-        $this->assertEquals(
-            [ 'foo' => 'gorp', 'bar' => 'gorp', 'baz' => 'gorp' ],
-            $method->invokeArgs($this->dl, [])
-        );
     }
 }

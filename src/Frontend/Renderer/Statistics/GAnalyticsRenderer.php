@@ -27,7 +27,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
     {
         $accounts  = [];
         $siteUrl   = $this->container->get('core.instance')->getBaseUrl();
-        $data      = $this->container->get('core.data.layer')->getDataLayerArray();
+        $data      = $this->container->get('core.data.layer')->getDataLayer();
         $dataLayer = '';
 
         foreach ($this->config as $account) {

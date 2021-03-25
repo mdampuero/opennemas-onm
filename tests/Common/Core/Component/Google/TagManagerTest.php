@@ -15,7 +15,7 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
-            ->setMethods(['getDataLayerArray'])
+            ->setMethods(['getDataLayer'])
             ->getMock();
 
         $this->object = new TagManager($this->dl);
@@ -55,7 +55,7 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGoogleTagManagerBodyCodeAMP()
     {
-        $this->dl->expects($this->any())->method('getDataLayerArray')
+        $this->dl->expects($this->any())->method('getDataLayer')
             ->willReturn(['foo' => 'bar', 'waldo' => 'wobble']);
 
         $code = '<!-- Google Tag Manager AMP -->
@@ -73,7 +73,7 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGoogleTagManagerBodyCodeAMPNoDataLayer()
     {
-        $this->dl->expects($this->any())->method('getDataLayerArray')
+        $this->dl->expects($this->any())->method('getDataLayer')
             ->willReturn('');
 
         $code = '<!-- Google Tag Manager AMP -->

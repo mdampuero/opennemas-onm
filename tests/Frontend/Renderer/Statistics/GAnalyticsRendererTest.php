@@ -48,7 +48,7 @@ class GAnalyticsRendererTest extends TestCase
 
         $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
-            ->setMethods(['getDataLayerArray'])
+            ->setMethods(['getDataLayer'])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
@@ -117,7 +117,7 @@ class GAnalyticsRendererTest extends TestCase
         $method = new \ReflectionMethod($this->renderer, 'getParameters');
         $method->setAccessible(true);
 
-        $this->dl->expects($this->any())->method('getDataLayerArray')
+        $this->dl->expects($this->any())->method('getDataLayer')
             ->willReturn([ 'foo' => 'bar']);
 
         $params = $method->invokeArgs($this->renderer, [ $content ]);
