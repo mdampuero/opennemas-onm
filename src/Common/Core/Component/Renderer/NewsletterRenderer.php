@@ -213,7 +213,6 @@ class NewsletterRenderer
      */
     protected function hydrateContainers($newsletter)
     {
-        // TODO: Remove this hack to force object conversion ASAP
         $containers = $newsletter->contents;
 
         foreach ($containers as $index => &$container) {
