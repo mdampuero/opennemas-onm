@@ -163,16 +163,6 @@ class VariablesExtractor
     }
 
     /**
-     * Get the instance main domain.
-     *
-     * @return String The main domain.
-     */
-    protected function getMainDomain()
-    {
-        return $this->globals->getInstance()->getMainDomain();
-    }
-
-    /**
      * Get the Instance name.
      *
      * @return String The Instance name.
@@ -256,6 +246,16 @@ class VariablesExtractor
         }
 
         return $author->name ?? null;
+    }
+
+    /**
+     * Get the instance main domain.
+     *
+     * @return String The main domain.
+     */
+    protected function getMainDomain()
+    {
+        return $this->globals->getInstance()->getMainDomain();
     }
 
     /**
