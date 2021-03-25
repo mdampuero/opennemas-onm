@@ -46,9 +46,7 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $contentID = $matches['id'];
-
-        $content = new \Content($contentID);
+        $content = $this->container->get('api.service.content_old')->getItem($matches['id']);
 
         return $this->redirect($this->container->get('core.helper.url_generator')->generate($content), 301);
     }
