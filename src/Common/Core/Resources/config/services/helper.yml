@@ -56,6 +56,11 @@ services:
         arguments: [ '@core.loader.instance', '%core.paths.public%', '@core.image.processor' ]
         public:    true
 
+    core.helper.instance:
+        class:     Common\Core\Component\Helper\InstanceHelper
+        arguments: [ '@orm.connection.instance', '%core.paths.media%' ]
+        public:    true
+
     core.helper.instance_sync:
         class:     Common\Core\Component\Helper\InstanceSyncHelper
         arguments: [ '@service_container' ]
