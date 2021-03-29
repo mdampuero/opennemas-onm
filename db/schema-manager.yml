@@ -106,19 +106,6 @@ instances:
             primary: false
             unique: false
             flags: { fulltext: true }
-        -
-            name: owner_id
-            columns: [ owner_id ]
-            primary: false
-            unique: false
-            flags: { }
-    foreign_keys:
-        -
-            name: instances_ownerid_users_id
-            source_field: [ owner_id ]
-            target_table: users
-            target_field: [ id ]
-            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 instance_meta:
     columns:
         instance_id:
@@ -353,19 +340,6 @@ user_groups_privileges:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: pk_fk_user_group
-            columns: [ pk_fk_user_group ]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: usergroups_privileges_groupid_usergroups_id
-            target_table: user_groups
-            source_field: [ pk_fk_user_group ]
-            target_field: [ pk_user_group ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 usermeta:
     columns:
         user_id:
@@ -661,16 +635,3 @@ user_notification:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: notification_id
-            columns: [notification_id]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: usernotification_id_notification_id
-            source_field: [ notification_id ]
-            target_table: notification
-            target_field: [ id ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
