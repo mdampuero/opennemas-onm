@@ -18,7 +18,6 @@ use Api\Exception\PatchItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ContentOldService implements Service
 {
@@ -189,7 +188,7 @@ class ContentOldService implements Service
                 ]);
 
             if (empty($item)) {
-                throw new ResourceNotFoundException();
+                throw new \Exception(sprintf('Unable to find an element with id %s', $id));
             }
 
             $item = is_array($item) ? array_pop($item) : $item;
@@ -202,7 +201,7 @@ class ContentOldService implements Service
             ]);
 
             return $item;
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Exception $e) {
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }
