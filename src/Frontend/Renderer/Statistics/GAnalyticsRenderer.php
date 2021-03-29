@@ -27,7 +27,6 @@ class GAnalyticsRenderer extends StatisticsRenderer
     {
         $accounts  = [];
         $siteUrl   = $this->container->get('core.instance')->getBaseUrl();
-        $data      = $this->container->get('core.data.layer')->getDataLayer();
         $dataLayer = '';
 
         foreach ($this->config as $account) {
@@ -36,12 +35,15 @@ class GAnalyticsRenderer extends StatisticsRenderer
             }
         }
 
-        if (!empty($data)) {
-            $dataLayer = '"vars" : ' . json_encode(
-                array_map(function ($a) {
-                    return $a === null ? '' : $a;
-                }, $data)
-            );
+        if (!$content instanceof Newsletter) {
+            $data = $this->container->get('core.data.layer')->getDataLayer();
+            if (!empty($data)) {
+                $dataLayer = '"vars" : ' . json_encode(
+                    array_map(function ($a) {
+                        return $a === null ? '' : $a;
+                    }, $data)
+                );
+            }
         }
 
         $params = [
