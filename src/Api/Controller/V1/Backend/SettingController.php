@@ -20,6 +20,20 @@ use Common\Core\Controller\Controller;
 class SettingController extends Controller
 {
     /**
+     * The list of settings that must be base64 encoded/decoded.
+     *
+     * @var array
+     */
+    protected $base64Encoded = [
+        'body_end_script',
+        'body_end_script_amp',
+        'body_start_script',
+        'body_start_script_amp',
+        'header_script',
+        'header_script_amp',
+    ];
+
+    /**
      * The list of settings that can be saved.
      *
      * @var array
@@ -100,8 +114,12 @@ class SettingController extends Controller
      * @var array
      */
     protected $onlyMasters = [
-        'body_end_script', 'body_start_script', 'header_script',
-        'body_end_script_amp', 'body_start_script_amp', 'header_script_amp',
+        'body_end_script',
+        'body_end_script_amp',
+        'body_start_script',
+        'body_start_script_amp',
+        'header_script',
+        'header_script_amp',
         'robots_txt_rules'
     ];
 
@@ -154,8 +172,7 @@ class SettingController extends Controller
         $locale   = $this->get('core.locale');
 
         // Decode scripts
-        foreach ([ 'body_end_script', 'body_start_script', 'header_script',
-                'body_end_script_amp', 'body_start_script_amp', 'header_script_amp' ] as $key) {
+        foreach ($this->base64Encoded as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_decode($settings[$key]);
             }
@@ -240,8 +257,7 @@ class SettingController extends Controller
         }
 
         // Encode scripts
-        foreach ([ 'body_end_script', 'body_start_script', 'header_script',
-                'body_end_script_amp', 'body_start_script_amp', 'header_script_amp' ] as $key) {
+        foreach ($this->base64Encoded as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_encode($settings[$key]);
             }
