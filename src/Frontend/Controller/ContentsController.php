@@ -14,6 +14,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\BotDetector;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +47,11 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $content = $this->container->get('api.service.content_old')->getItem($matches['id']);
+        try {
+            $content = $this->container->get('api.service.content_old')->getItem($matches['id']);
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         return $this->redirect($this->container->get('core.helper.url_generator')->generate($content), 301);
     }
