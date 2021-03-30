@@ -103,12 +103,13 @@ class NewsletterRenderer
     public function getContents($criteria)
     {
         $contents = [];
-        if (!is_object($criteria)) {
+        if (empty($criteria)) {
             return $contents;
         }
 
-        $total   = ($criteria->epp > 0) ? $criteria->epp : 5;
+        $total   = ($criteria['epp'] > 0) ? $criteria['epp'] : 5;
         $orderBy = [ 'starttime' => 'desc' ];
+        $date    = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
 
         $searchCriteria = [
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -127,23 +128,19 @@ class NewsletterRenderer
             ]
         ];
 
-        if ($criteria->filter === 'in_last_day') {
-            $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
-            $yesterday->sub(new \DateInterval('P1D'));
+        if ($criteria['filter'] === 'in_last_day') {
+            $date->sub(new \DateInterval('P1D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'starttime'         => [
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                    [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                    [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
-
-            $orderBy = [ 'starttime' => 'desc' ];
         }
 
-        if ($criteria->filter === 'most_viewed') {
-            $threeDaysAgo = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
-            $threeDaysAgo->sub(new \DateInterval('P3D'));
+        if ($criteria['filter'] === 'most_viewed') {
+            $date->sub(new \DateInterval('P3D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [
@@ -157,7 +154,7 @@ class NewsletterRenderer
                 ],
                 'starttime' => [
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                    [ 'value' => $threeDaysAgo->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                    [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
 
@@ -165,31 +162,25 @@ class NewsletterRenderer
         }
 
         // article, attachment, opinion, album, video, poll, static_page, kiosko, letter
-        $searchCriteria['fk_content_type'] = [
-            [ 'value' => [ 1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]
-        ];
+        $searchCriteria['fk_content_type'] = !empty($criteria['content_type']) ?
+            [[ 'value' => [ (int) \ContentManager::getContentTypeIdFromName($criteria['content_type'])]]] :
+            [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];
 
-        if (!empty($criteria->content_type)) {
-            $searchCriteria['fk_content_type'] = [
-                [ 'value' => (int) \ContentManager::getContentTypeIdFromName($criteria->content_type) ]
-            ];
-        }
-
-        if (!empty($criteria->category)
-            && !in_array($criteria->content_type, [ 'opinion', 'letter', 'static_page' ])
+        if (!empty($criteria['category'])
+            && !in_array($criteria['content_type'], [ 'opinion', 'letter', 'static_page' ])
         ) {
             $searchCriteria['category_id'] = [
-                [ 'value' => $criteria->category, 'operator' => 'IN' ]
+                [ 'value' => $criteria['category'], 'operator' => 'IN' ]
             ];
         }
 
-        if ($criteria->content_type === 'opinion' && !empty($criteria->opinion_type)) {
+        if ($criteria['content_type'] === 'opinion' && !empty($criteria['opinion_type'])) {
             $bloggers   = $this->as->getList('is_blog=1')['items'];
             $bloggersId = array_map(function ($item) {
                 return $item->id;
             }, $bloggers);
 
-            $operator = $criteria->opinion_type === 'blog' ? 'IN' : 'NOT IN';
+            $operator = $criteria['opinion_type'] === 'blog' ? 'IN' : 'NOT IN';
 
             if (!empty($bloggersId)) {
                 $searchCriteria['contents.fk_author'] = [
@@ -198,9 +189,15 @@ class NewsletterRenderer
             }
         }
 
-        $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
-
-        return $contents;
+        return array_map(function ($a) {
+            return [
+                'id'                        => $a->id,
+                'content_type'              => $a->content_type,
+                'content_type_l10n_name'    => $a->content_type_l10n_name,
+                'tittle'                    => $a->tittle,
+                'content'                   => $a
+            ];
+        }, $this->er->findBy($searchCriteria, $orderBy, $total, 1));
     }
 
     /**
