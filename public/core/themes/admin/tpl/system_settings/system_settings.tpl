@@ -1562,6 +1562,24 @@
                             </div>
                           </div>
                         </div>
+                        <div class="form-group" ng-if="extra.theme_skins.length !== 0">
+                            <label class="form-label" for="site-color">
+                              <h4>
+                                <i class="fa fa-paint-brush"></i>
+                                {t}Default skin{/t}
+                              </h4>
+                                            <span class="help">
+                              {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
+                            </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
+                                  <option value="[% code %]" ng-repeat="(code,style) in extra.theme_skins" ng-selected="[% code === settings.theme_skin || settings.theme_skin == undefined %]">[% style.name %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
                       </div>
                       <div class="row">
                               <div class="col-md-6">
