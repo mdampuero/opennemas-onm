@@ -24,23 +24,12 @@ class NewsletterSchedulerCommand extends Command
             ->setName('newsletter:scheduler')
             ->setDescription('Sends scheduled newsletters')
             ->setDefinition([
-                new InputArgument('instance', InputArgument::OPTIONAL, 'The instance internal name.'),
-            ])
-            ->setHelp(
-                <<<EOF
-The <info>newsletter:scheduler</info> checks for newsletter schedules and if it is the
-right time it sends them.
-
-Put this as a cron action:
-
-<info>php app/console newsletter:scheduler</info>
-
-Use this action if you want to launch the newsletter of a specific instance:
-
-<info>php app/console newsletter:scheduler <instance_name></info>
-
-EOF
-            );
+                new InputArgument(
+                    'instance',
+                    InputArgument::IS_ARRAY,
+                    'The list of instances to synchronize (e.g. norf quux).'
+                ),
+            ]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -282,7 +271,7 @@ EOF
         } catch (CreateItemException $e) {
             throw new \Exception(sprintf("Error creating newsletter based on template with id: %s", $template->id));
         } catch (UpdateItemException $e) {
-            throw new \Exception(sprintf("Error updating newsletter based on template with id: %s/", $template->id));
+            throw new \Exception(sprintf("Error updating newsletter based on template with id: %s", $template->id));
         }
 
         if ($output->isVerbose()) {
@@ -304,17 +293,17 @@ EOF
 
      * @return array The list of instances.
      */
-    protected function getInstances($name = null) : array
+    protected function getInstances(?array $names = []) : array
     {
         $oql = sprintf(
             'activated = 1 and activated_modules ~ "%s"',
             'es.openhost.module.newsletter_scheduling'
         );
 
-        if (!empty($name)) {
+        if (!empty($names)) {
             $oql .= sprintf(
                 ' and internal_name in ["%s"]',
-                $name
+                implode('","', $names)
             );
         }
 
