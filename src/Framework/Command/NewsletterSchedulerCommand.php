@@ -25,7 +25,7 @@ class NewsletterSchedulerCommand extends Command
             ->setDescription('Sends scheduled newsletters')
             ->setDefinition([
                 new InputArgument(
-                    'instance',
+                    'instances',
                     InputArgument::IS_ARRAY,
                     'The list of instances to synchronize (e.g. norf quux).'
                 ),
@@ -44,7 +44,7 @@ class NewsletterSchedulerCommand extends Command
             date('Y-m-d H:i:s', $this->started)
         ));
 
-        $instances = $this->getInstances($input->getArgument('instance'));
+        $instances = $this->getInstances($input->getArgument('instances'));
 
         $output->writeln(sprintf(
             str_pad('<options=bold>(2/3) Processing instances', 43, '.')
