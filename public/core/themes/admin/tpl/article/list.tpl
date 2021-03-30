@@ -40,23 +40,6 @@
 {/block}
 
 {block name="selectedActions"}
-  {acl isAllowed="ARTICLE_UPDATE"}
-    <li class="quicklinks" ng-if="config.locale.multilanguage">
-      <div class="dropdown">
-        <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Translate selected{/t}" tooltip-placement="bottom">
-          <i class="fa fa-globe fa-lg"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right no-padding" aria-labelledby="dropdownMenuButton">
-          <li ng-repeat="(locale_key, locale_name) in data.extra.options.available" ng-show="locale_key != data.extra.locale" class="dropdown-item" ng-class="{ 'disabled': selectedItemsAreTranslatedTo(locale_key) }">
-          <a href="#" ng-click="!selectedItemsAreTranslatedTo(locale_key) && translateSelected(locale_key)" >{t 1="[% locale_name %]"}Translate into %1{/t}</a>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <li class="quicklinks">
-      <span class="h-seperate"></span>
-    </li>
-  {/acl}
   {acl isAllowed="ARTICLE_AVAILABLE"}
     <li class="quicklinks">
       <button class="btn btn-link" ng-click="patchSelected('content_status', 1)" uib-tooltip="{t}Publish{/t}" tooltip-placement="bottom" type="button">
