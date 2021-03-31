@@ -28,7 +28,7 @@ function smarty_outputfilter_adsense_validator($output, $smarty)
         && !preg_match('/\/admin/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
-        && !preg_match('@\.amp\.html$@', $uri)
+        && !preg_match('@\.amp\.html@', $uri)
     ) {
         $adsenseId = $smarty->getContainer()->get('orm.manager')
             ->getDataSet('Settings', 'instance')

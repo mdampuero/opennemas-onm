@@ -37,6 +37,7 @@ class SettingController extends Controller
         'contact_email',
         'cookies',
         'cookies_hint_url',
+        'data_layer',
         'dynamic_css',
         'elements_in_rss',
         'facebook',
@@ -183,7 +184,8 @@ class SettingController extends Controller
                     . '/sections/',
                 'translation_services' =>
                     $this->get('core.factory.translator')->getTranslatorsData(),
-                'theme_skins' => $this->get('core.theme')->getSkins()
+                'theme_skins' => $this->get('core.theme')->getSkins(),
+                'data_types'  => $this->get('core.data.layer')->getTypes()
             ],
             'settings' => $settings,
         ]);
