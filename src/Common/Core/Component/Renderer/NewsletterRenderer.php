@@ -162,9 +162,9 @@ class NewsletterRenderer
         }
 
         // article, attachment, opinion, album, video, poll, static_page, kiosko, letter
-        $searchCriteria['fk_content_type'] = !empty($criteria['content_type']) ?
-            [[ 'value' => [ (int) \ContentManager::getContentTypeIdFromName($criteria['content_type'])]]] :
-            [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];
+        $searchCriteria['fk_content_type'] = !empty($criteria['content_type'])
+            ? [[ 'value' => [ (int) \ContentManager::getContentTypeIdFromName($criteria['content_type'])]]]
+            : [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];
 
         if (!empty($criteria['category'])
             && !in_array($criteria['content_type'], [ 'opinion', 'letter', 'static_page' ])
@@ -194,7 +194,7 @@ class NewsletterRenderer
                 'id'                        => $a->id,
                 'content_type'              => $a->content_type,
                 'content_type_l10n_name'    => $a->content_type_l10n_name,
-                'tittle'                    => $a->tittle,
+                'title'                     => $a->title,
                 'content'                   => $a
             ];
         }, $this->er->findBy($searchCriteria, $orderBy, $total, 1));
