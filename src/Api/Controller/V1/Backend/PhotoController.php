@@ -62,24 +62,24 @@ class PhotoController extends ContentController
      */
     protected function getExtraData($items = null)
     {
-        $years   = [];
-        $conn    = $this->get('orm.manager')->getConnection('instance');
-        $results = $conn->fetchAll(
-            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%m')) as date_month FROM contents
-            WHERE fk_content_type = 8 AND created IS NOT NULL ORDER BY date_month DESC"
-        );
+        $years = [];
+        $fmt   = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+
+        $results = $this->get('orm.manager')->getConnection('instance')
+            ->fetchAll(
+                'SELECT DISTINCT(DATE_FORMAT(created, "%Y-%m")) as date FROM contents'
+                . ' WHERE fk_content_type = 8 AND created IS NOT NULL'
+                . ' ORDER BY date DESC'
+            );
 
         foreach ($results as $value) {
-            $date = \DateTime::createFromFormat('!Y-m', $value['date_month']);
-            $fmt  = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+            $date = \DateTime::createFromFormat('!Y-m', $value['date']);
 
-            if (!is_null($fmt)) {
-                $years[$date->format('Y')]['name']     = $date->format('Y');
-                $years[$date->format('Y')]['months'][] = [
-                    'name'  => ucfirst($fmt->format($date)),
-                    'value' => $value['date_month']
-                ];
-            }
+            $years[$date->format('Y')]['name']     = $date->format('Y');
+            $years[$date->format('Y')]['months'][] = [
+                'name'  => !is_null($fmt) ? $fmt->format($date) : $date->format('F'),
+                'value' => $value['date']
+            ];
         }
 
         return array_merge(parent::getExtraData($items), [
