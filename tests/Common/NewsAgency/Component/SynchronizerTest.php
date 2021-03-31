@@ -234,6 +234,21 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests isLocked when .lock file is and is not found.
+     */
+    public function testIsLocked()
+    {
+        $this->fs->expects($this->at(0))->method('exists')
+            ->willReturn(false);
+
+        $this->fs->expects($this->at(1))->method('exists')
+            ->willReturn(true);
+
+        $this->assertFalse($this->synchronizer->isLocked());
+        $this->assertTrue($this->synchronizer->isLocked());
+    }
+
+    /**
      * Tests resetStats.
      */
     public function testResetStats()

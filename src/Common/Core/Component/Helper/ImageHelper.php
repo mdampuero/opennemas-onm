@@ -107,6 +107,8 @@ class ImageHelper extends FileHelper
             $information['description'] = $description;
         }
 
+        $this->processor->close();
+
         return $information;
     }
 
@@ -132,6 +134,29 @@ class ImageHelper extends FileHelper
     public function optimize(string $path) : void
     {
         $this->processor->open($path)->optimize()->save($path);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * Removes an image basing on the path.
+     *
+     * @param string $path The path to the image to remove.
+     */
+    public function remove(string $path) : void
+    {
+        if (strpos($path, $this->publicDir) === false) {
+            $path = preg_replace('/\/+/', '/', sprintf(
+                '%s/%s/%s',
+                $this->publicDir,
+                $this->loader->getInstance()->getMediaShortPath(),
+                $path
+            ));
+        }
+
+        if ($this->fs->exists($path) && is_file($path)) {
+            $this->fs->remove($path);
+        }
     }
 
     /**

@@ -8,6 +8,7 @@
  */
 namespace WebService\Handlers;
 
+use Api\Exception\GetItemException;
 use Luracast\Restler\RestException;
 
 /**
@@ -17,8 +18,6 @@ use Luracast\Restler\RestException;
  */
 class Images
 {
-    public $restler;
-
     /*
     * @url GET /images/id/:id
     */
@@ -26,8 +25,11 @@ class Images
     {
         $this->validateInt(func_get_args());
 
-        $er = getService('entity_repository');
-        $image = $er->find('Photo', $id);
+        try {
+            $image = getService('api.service.photo')->getItem($id);
+        } catch (GetItemException $e) {
+            throw new RestException(400, 'Photo not found');
+        }
 
         return $image;
     }

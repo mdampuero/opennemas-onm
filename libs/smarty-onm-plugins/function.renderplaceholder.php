@@ -15,7 +15,7 @@ function smarty_function_renderplaceholder($params, &$smarty)
     }
 
     // Assign smarty variables to params
-    $params['category_name'] = $smarty->getTemplateVars('category_name');
+    $params['category_slug'] = $smarty->getTemplateVars('category_slug');
     $contentPositionByPos    = $smarty->getTemplateVars('contentPositionByPos');
 
     if (!is_array($contentPositionByPos) || empty($contentPositionByPos)) {

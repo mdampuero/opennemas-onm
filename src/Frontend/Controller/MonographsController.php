@@ -38,13 +38,13 @@ class MonographsController extends Controller
         $this->category     = 0;
         $this->categoryName = $this->get('request_stack')
             ->getCurrentRequest()
-            ->query->get('category_name', '');
+            ->query->get('category_slug', '');
 
         if (!empty($this->categoryName)) {
             $category = $this->get('api.service.category')
                 ->getItemBySlug($this->categoryName);
 
-            $this->category = $category->pk_content_category;
+            $this->category = $category->id;
         }
 
         $this->view->assign([
@@ -102,7 +102,7 @@ class MonographsController extends Controller
             ];
 
             if ($this->category != 0) {
-                $filters['pk_fk_content_category'] = [ [ 'value' => $this->category ] ];
+                $filters['category_id'] = [ [ 'value' => $this->category ] ];
             }
 
             $monographs = $em->findBy($filters, $order, $epp, $page);
@@ -112,13 +112,6 @@ class MonographsController extends Controller
             if (!empty($monographs)) {
                 foreach ($monographs as &$monograph) {
                     $tagsIds = array_merge($monograph->tags, $tagsIds);
-                    if (!empty($monograph->img1)) {
-                        $img = $this->get('entity_repository')
-                            ->find('Photo', $monograph->img1);
-                        // Generate image path
-                        $monograph->img1_path = $img->path_file . $img->name;
-                        $monograph->img       = $img;
-                    }
                 }
 
                 $pagination = $this->get('paginator')->get([
@@ -159,7 +152,7 @@ class MonographsController extends Controller
     {
         $dirtyID      = $request->get('special_id', '');
         $urlSlug      = $request->get('slug', '');
-        $categoryName = $request->get('category_name', '');
+        $categoryName = $request->get('category_slug', '');
 
         $special = $this->get('content_url_matcher')
             ->matchContentUrl('special', $dirtyID, $urlSlug, $categoryName);
@@ -178,21 +171,9 @@ class MonographsController extends Controller
             $contents = $special->getContents($special->id);
             $columns  = [];
 
-            $er = $this->get('entity_repository');
             if (!empty($contents)) {
                 foreach ($contents as $item) {
-                    $content = \Content::get($item['fk_content']);
-
-                    if (!empty($content->img1)) {
-                        $photo              = $er->find('Photo', $content->img1);
-                        $content->img1_path = $photo->path_file . $photo->name;
-                        $content->img1      = $photo;
-                    }
-
-                    if (!empty($content->fk_video)) {
-                        $video              = $er->find('Video', $content->fk_video);
-                        $content->obj_video = $video;
-                    }
+                    $content = $this->get('entity_repository')->find($item['type_content'], $item['fk_content']);
 
                     if (($item['position'] % 2) == 0) {
                         $content->placeholder = 'placeholder_0_1';
@@ -200,18 +181,8 @@ class MonographsController extends Controller
                         $content->placeholder = 'placeholder_1_1';
                     }
 
-                        // Load attached and related contents from array
-                    $content->loadAttachedVideo()
-                        ->loadRelatedContents($this->categoryName);
-
                     $columns[] = $content;
                 }
-            }
-
-            if (!empty($special->img1)) {
-                $photo             = $er->find('Photo', $special->img1);
-                $special->path_img = $photo->path_file . $photo->name;
-                $special->img      = $photo;
             }
 
             $this->view->assign(['columns' => $columns]);

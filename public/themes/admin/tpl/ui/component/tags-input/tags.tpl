@@ -1,1 +1,0 @@
-<onm-tags-input generate-from="generateTagsFrom" ignore-locale="!hasMultilanguage()" locale="config.locale" max-results="{setting name="tags_maxResults" default="10"}" max-tags="{setting name="tags_maxItems" default="5"}" ng-model="{$ngModel}" placeholder="{t}Add a tag...{/t}" required="true" selection-only="{if !$app.security->hasPermission('TAG_CREATE')}true{else}false{/if}"/>

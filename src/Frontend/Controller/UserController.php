@@ -86,16 +86,10 @@ class UserController extends Controller
      */
     public function showAction()
     {
-        $photo     = null;
         $countries = array_merge(
             [ '' => _('Select a country') . '...' ],
             $this->get('core.geo')->getCountries()
         );
-
-        if (!empty($this->get('core.user')->avatar_img_id)) {
-            $photo = $this->get('entity_repository')
-                ->find('Photo', $this->get('core.user')->avatar_img_id);
-        }
 
         $userGroups = array_filter(
             $this->get('core.user')->user_groups,
@@ -106,7 +100,6 @@ class UserController extends Controller
 
         return $this->render('user/show.tpl', [
             'countries'     => $countries,
-            'photo'         => $photo,
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
             'user'          => $this->get('core.user'),

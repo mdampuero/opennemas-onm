@@ -527,7 +527,7 @@ class ContentController extends Controller
         $content = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
-            $content->setAvailable($status, $this->getUser()->id);
+            $content->setAvailable($status);
 
             if ($status) {
                 $message = _('Item published successfully');
@@ -590,10 +590,7 @@ class ContentController extends Controller
 
             if (!is_null($content->id)) {
                 try {
-                    $content->setAvailable(
-                        $available,
-                        $this->getUser()->id
-                    );
+                    $content->setAvailable($available);
 
                     $updated[] = $id;
                 } catch (\Exception $e) {
@@ -937,7 +934,7 @@ class ContentController extends Controller
         $this->get('core.locale')->setContext('backend');
 
         foreach ($response['items'] as $item) {
-            $extra['categories'][$item->pk_content_category] = $item->title;
+            $extra['categories'][$item->id] = $item->title;
         }
 
         $extra['paths'] = [

@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\UrlGeneratorHelper;
@@ -41,7 +34,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getMainDomain', 'hasMultilanguage' ])
+            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -50,13 +43,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->locale = $this->getMockBuilder('Locale')
             ->setMethods([ 'getContext', 'setContext' ])
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('Request')
-            ->setMethods(['getSchemeAndHttpHost'])->getMock();
-
-        $this->requestStack = $this->getMockBuilder('RequestStack')
-            ->setMethods(['getCurrentRequest'])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -110,9 +96,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
-            case 'request_stack':
-                return $this->requestStack;
-
             case 'router':
                 return $this->router;
         }
@@ -139,7 +122,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $category = new Category([ 'name' => 'garply' ]);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('category_frontpage', [ 'category_name' => 'garply' ])
+            ->with('category_frontpage', [ 'category_slug' => 'garply' ])
             ->willReturn('blog/section/garply');
 
         $this->assertEquals(
@@ -155,12 +138,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Article();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 28618;
-        $content->created                = '2015-01-14 23:49:40';
-        $content->content_type_name      = 'article';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_slug     = 'actualidad';
+        $content->category_id       = 28618;
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'article';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $this->cs->expects($this->once())->method('getItem')
             ->with(28618)->willReturn(new Category([ 'name' => 'actualidad' ]));
@@ -202,11 +185,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container ])
             ->getMock();
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://thud.opennemas.com');
+
         $this->instance->expects($this->any())->method('getMainDomain')
             ->willReturn('thud.opennemas.com');
-
-        $this->requestStack->expects($this->any())->method('getCurrentRequest')
-            ->willReturn(null);
 
         $helper->expects($this->any())->method('getUriForContent')
             ->with($content)->willReturn('wibble/fred');
@@ -217,7 +200,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            '//thud.opennemas.com/wibble/fred',
+            'https://thud.opennemas.com/wibble/fred',
             $helper->generate($content, [ 'absolute' => true ])
         );
 
@@ -245,25 +228,21 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([ $this->container ])
             ->getMock();
 
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://quux.com');
         $this->instance->expects($this->any())->method('getMainDomain')
-            ->willReturn('thud.opennemas.com');
-        $this->requestStack->expects($this->once())->method('getCurrentRequest')
-            ->willReturn($this->request);
-        $this->request->expects($this->once())->method('getSchemeAndHttpHost')
-            ->willReturn('http://quux.com');
+            ->willReturn('quux.com');
 
-        $helper->expects($this->at(0))->method('getUriForContent')
-            ->with($content)->willReturn('wibble/fred');
-        $helper->expects($this->at(1))->method('getUriForContent')
+        $helper->expects($this->any())->method('getUriForContent')
             ->with($content)->willReturn('wibble/fred');
 
         $this->assertEquals(
             '/wibble/fred',
-            $helper->generate($content, ['absolute' => false  ])
+            $helper->generate($content, [ 'absolute' => false ])
         );
 
         $this->assertEquals(
-            'http://quux.com/wibble/fred',
+            'https://quux.com/wibble/fred',
             $helper->generate($content, [ 'absolute' => true ])
         );
     }
@@ -325,12 +304,12 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Article();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 24845;
-        $content->created                = '2015-01-14 23:49:40';
-        $content->content_type_name      = 'article';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_slug     = 'actualidad';
+        $content->category_id       = 24845;
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'article';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForArticle');
         $method->setAccessible(true);
@@ -341,7 +320,6 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->any(2))->method('get')
             ->willReturn('alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena');
         $this->assertEquals(
-
             'articulo/actualidad/alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena/20150114234940000252.html',
             $method->invokeArgs($this->urlGenerator, [ $content ])
         );
@@ -352,15 +330,15 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForContentWhenCreatedAsObject()
     {
-        $content = new \Video();
+        $content = new \Content();
         $date    = new \DateTime();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 6458;
-        $content->created                = $date;
-        $content->content_type_name      = 'video';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_slug     = 'actualidad';
+        $content->category_id       = 6458;
+        $content->created           = $date;
+        $content->content_type_name = 'video';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);
@@ -388,7 +366,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content = new Content([
             'pk_content'        => 252,
-            'category_name'     => 'actualidad',
+            'category_slug'     => 'actualidad',
             'categories'        => [ 6458 ],
             'created'           => $date,
             'content_type_name' => 'video',
@@ -525,7 +503,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
 
-        $author       = new \User();
+        $author       = new User();
         $author->name = 'Author name';
 
         $this->authorService->expects($this->any())->method('getItem')
@@ -555,7 +533,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content->content_type_name = 'opinion';
         $content->slug              = 'opinion-author-slug';
 
-        $author          = new \User();
+        $author          = new User();
         $author->name    = 'Author name';
         $author->is_blog = 1;
 
@@ -607,11 +585,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForPhoto()
     {
-        $content = new \Photo();
+        $content = new \Content();
 
         $content->content_type_name = 'photo';
-        $content->path_file         = 'route/to';
-        $content->name              = 'photo.file.name';
+        $content->path              = 'images/route/to/photo.file.name';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForPhoto');
         $method->setAccessible(true);
@@ -627,14 +604,14 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForVideo()
     {
-        $content = new \Video();
+        $content = new \Content();
 
-        $content->id                     = 252;
-        $content->category_name          = 'actualidad';
-        $content->pk_fk_content_category = 28618;
-        $content->created                = '2015-01-14 23:49:40';
-        $content->content_type_name      = 'video';
-        $content->slug                   = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
+        $content->id                = 252;
+        $content->category_slug     = 'actualidad';
+        $content->category_id       = 28618;
+        $content->created           = '2015-01-14 23:49:40';
+        $content->content_type_name = 'video';
+        $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
         $this->cs->expects($this->once())->method('getItem')
             ->with(28618)->willReturn(new Category([ 'name' => 'actualidad' ]));
@@ -679,17 +656,20 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $user = new User();
 
         $user->id   = 252;
-        $user->name = 'pepito';
+        $user->name = 'Karl Woods';
+        $user->slug = 'karl-woods';
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
         $method->setAccessible(true);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_opinion_author_frontpage', [ 'author_slug' => $user->name, 'author_id' => $user->id ])
-            ->willReturn('opinion/autor/252/pepito');
+            ->with('frontend_opinion_author_frontpage', [
+                'author_slug' => $user->slug,
+                'author_id'   => $user->id
+            ])->willReturn('opinion/autor/252/karl-woods');
 
         $this->assertEquals(
-            'opinion/autor/252/pepito',
+            'opinion/autor/252/karl-woods',
             $method->invokeArgs($this->urlGenerator, [ $user ])
         );
     }
@@ -699,21 +679,21 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForUserBlogger()
     {
-        $user = new \Common\Model\Entity\User();
+        $user = new User();
 
-        $user->id       = 252;
-        $user->username = 'pepito';
-        $user->is_blog  = 1;
+        $user->id      = 252;
+        $user->slug    = 'olga-gilbert';
+        $user->is_blog = 1;
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForUser');
         $method->setAccessible(true);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_blog_author_frontpage', [ 'author_slug' => $user->username ])
-            ->willReturn('opinion/autor/252/pepito');
+            ->with('frontend_blog_author_frontpage', [ 'author_slug' => $user->slug ])
+            ->willReturn('opinion/autor/252/olga-gilbert');
 
         $this->assertEquals(
-            'opinion/autor/252/pepito',
+            'opinion/autor/252/olga-gilbert',
             $method->invokeArgs($this->urlGenerator, [ $user ])
         );
     }

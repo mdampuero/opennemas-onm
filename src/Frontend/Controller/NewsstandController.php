@@ -99,11 +99,12 @@ class NewsstandController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $now  = date('Y-m-d H:i:s');
-        $page = (int) ($params['page'] ?? 1);
+        $now = date('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
-        if ($page <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
@@ -119,7 +120,7 @@ class NewsstandController extends FrontendController
             $now,
             $now,
             $epp,
-            $epp * ($page - 1)
+            $epp * ($params['page'] - 1)
         );
 
         if (array_key_exists('year', $params)) {
@@ -137,14 +138,14 @@ class NewsstandController extends FrontendController
                 $start,
                 $end,
                 $epp,
-                $epp * ($page - 1)
+                $epp * ($params['page'] - 1)
             );
         }
 
         $response = $this->get($this->service)->getList($oql);
 
         // No first page and no contents
-        if ($page > 1 && empty($response['items'])) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
@@ -155,7 +156,7 @@ class NewsstandController extends FrontendController
                 'directional' => true,
                 'maxLinks'    => 0,
                 'epp'         => $epp,
-                'page'        => $page,
+                'page'        => $params['page'],
                 'total'       => $response['total'],
                 'route'       => [
                     'name'   => empty($params['year'])

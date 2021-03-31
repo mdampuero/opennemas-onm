@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +57,7 @@ class BooksController extends Controller
                 ->filter('editorial', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->filter('description', ''),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->getInt('category', 0),
+            'category_id'    => $request->request->getInt('category', 0),
             'content_status' => $request->request->getInt('content_status', 0),
             'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)
@@ -119,6 +120,12 @@ class BooksController extends Controller
             );
 
             return $this->redirect($this->generateUrl('admin_books'));
+        }
+        $service = $this->get('api.service.photo');
+        try {
+            $photo           = $service->getItem($book->cover_id);
+            $book->cover_img = $service->responsify($photo);
+        } catch (GetItemException $e) {
         }
 
         return $this->render('book/new.tpl', [
@@ -183,7 +190,7 @@ class BooksController extends Controller
             'cover_id'       => $request->request->getInt('book_cover_id'),
             'description'    => $request->request->filter('description', ''),
             'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->getInt('category', 0),
+            'category_id'    => $request->request->getInt('category', 0),
             'content_status' => $request->request->getInt('content_status', 0),
             'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'tags'           => json_decode($request->request->get('tags', ''), true)

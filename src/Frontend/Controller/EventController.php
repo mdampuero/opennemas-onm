@@ -90,7 +90,7 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        if (!$item->isReadyForPublish()) {
+        if (!$this->get('core.helper.content')->isReadyForPublish($item)) {
             throw new ResourceNotFoundException();
         }
 
@@ -98,89 +98,36 @@ class EventController extends FrontendController
     }
 
     /**
-     * Returns the list of items basing on a list of parameters.
-     *
-     * @param array $params The list of parameters.
-     *
-     * @return array The list of items.
-     */
-    protected function getItems($params)
-    {
-        $date   = date('Y-m-d H:i:s');
-        $offset = $params['epp'] * ($params['page'] - 1);
-
-        $eventIds = $this->get('orm.manager')->getConnection('instance')
-            ->fetchAll(
-                "SELECT SQL_CALC_FOUND_ROWS DISTINCT pk_content, contentmeta.meta_value as event_start_date "
-                . "FROM contents join contentmeta "
-                . "ON contentmeta.meta_name = 'event_start_date' "
-                . "AND contents.pk_content = contentmeta.fk_content "
-                . "WHERE fk_content_type = 5 AND content_status = 1 and in_litter = 0 "
-                . "AND (starttime IS NULL OR starttime <= ? ) "
-                . "AND (endtime IS NULL OR endtime > ?) "
-                . " ORDER BY event_start_date DESC LIMIT ? OFFSET ?",
-                [ $date, $date, $params['epp'], $offset ]
-            );
-
-        $sql = 'SELECT FOUND_ROWS()';
-
-        $total = $this->get('orm.manager')->getConnection('instance')
-            ->fetchAssoc($sql);
-
-        $total = array_pop($total);
-
-        $contents = $this->get('api.service.content')
-            ->getListByIds(array_map(function ($event) {
-                return $event['pk_content'];
-            }, $eventIds));
-
-        return [
-            $contents['items'],
-            $total
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getParameters($request, $item = null)
-    {
-        $params = parent::getParameters($request, $item);
-
-        if (!array_key_exists('page', $params)) {
-            $params['page'] = 1;
-        }
-
-        $params['epp'] = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        // Prevent invalid page when page is not numeric
-        $params['page'] = (int) $params['page'];
-
-        list($positions, $advertisements) = $this->getAdvertisements($item);
-
-        return array_merge($this->params, $params, [
-            'cache_id'       => $this->getCacheId($params),
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements
-        ]);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
     {
+        $date = date('Y-m-d H:i:s');
+
         // Invalid page provided as parameter
-        if ($params['page'] <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
-        list($contents, $total) = $this->getItems($params);
+        $response = $this->get('api.service.content')->getListBySql(sprintf(
+            'select * from contents '
+            . 'inner join contentmeta '
+            . 'on contents.pk_content = contentmeta.fk_content '
+            . 'and contentmeta.meta_name = "event_start_date"'
+            . 'where content_type_name="event" and content_status=1 and in_litter=0 '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
+            . 'order by meta_value desc limit %d offset %d',
+            $date,
+            $date,
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        ));
 
         // No first page and no contents
-        if ($params['page'] > 1 && $total < $params['epp'] * $params['page']) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
@@ -192,66 +139,17 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $params['contents']    = $contents;
-        $params['pagination']  = $this->get('paginator')->get([
+        $params['contents']   = $response['items'];
+        $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'boundary'    => false,
             'epp'         => $params['epp'],
             'maxLinks'    => 5,
             'page'        => $params['page'],
-            'total'       => $total,
+            'total'       => $response['total'],
             'route'       => 'frontend_events',
         ]);
 
-        $params['related_contents'] = $this->getRelations($contents);
-        $params['tags']             = $this->getTags($contents);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []) : void
-    {
-        $params['related_contents'] = $this->getRelations($params['content']);
-        $params['tags']             = $this->getTags($params['content']);
-    }
-
-    /**
-     * Returns the list of covers
-     *
-     * @param array $coverIds the list of contents to fetch related from
-     *
-     * @return array
-     */
-    public function getRelations($contents)
-    {
-        if (!is_array($contents)) {
-            $contents = [ $contents ];
-        }
-
-        $ids = [];
-        foreach ($contents as $content) {
-            if (!$content->hasRelated('cover')) {
-                continue;
-            }
-
-            $ids[] = $content->getMedia('cover');
-        }
-
-        if (empty($ids)) {
-            return [];
-        }
-
-        $relations = $this->get('entity_repository')->findBy([
-            'content_type_name' => [[ 'value' => 'photo', ]],
-            'pk_content'        => [[ 'value' => array_unique($ids), 'operator' => 'IN', 'value']],
-        ]);
-
-        $relations = $this->get('data.manager.filter')
-            ->set($relations)
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
-
-        return $relations;
+        $params['tags'] = $this->getTags($response['items']);
     }
 }

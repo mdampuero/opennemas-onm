@@ -11,6 +11,8 @@
 
 namespace Repository;
 
+use Api\Exception\GetItemException;
+use \Common\Model\Entity\Content;
 use Onm\Cache\CacheInterface;
 
 /**
@@ -25,6 +27,10 @@ use Onm\Cache\CacheInterface;
  */
 class EntityManager extends BaseManager
 {
+    const ORM_CONTENT_TYPES = [
+        'album', 'kiosko', 'photo', 'video', 'event'
+    ];
+
     /**
      * Initializes the entity manager.
      *
@@ -70,7 +76,18 @@ class EntityManager extends BaseManager
     {
         $entity = null;
 
-        $cacheId = \underscore($contentType) . $this->cacheSeparator . $id;
+        if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
+            try {
+                $entity = getService('api.service.content')->getItem($id);
+            } catch (GetItemException $e) {
+                return null;
+            }
+
+            return $entity;
+        }
+
+        $contentType = \classify($contentType);
+        $cacheId     = \underscore($contentType) . $this->cacheSeparator . $id;
 
         if (!empty($id)
             && class_exists($contentType)
@@ -269,19 +286,19 @@ class EntityManager extends BaseManager
      */
     protected function hasCategoryFilter($filters)
     {
-        return strpos($filters, 'pk_fk_content_category') !== false;
+        return strpos($filters, 'category_id') !== false;
     }
 
     /**
      * Parse category condition and transforms it in a condition with a subquery
-     * in the contents_categories table.
+     * in the content_category table.
      *
      * @param string $filters The filters to parse.
      */
     protected function parseCategory(string &$filters)
     {
-        $pattern = '/pk_fk_content_category\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
-            . '|pk_fk_content_category\s*((not|NOT)\s+)?(in|IN)\s*\([\'"0-9, ]+\)/';
+        $pattern = '/category_id\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
+            . '|category_id\s*((not|NOT)\s+)?(in|IN)\s*\([\'"0-9, ]+\)/';
 
         preg_match_all($pattern, $filters, $matches);
 
@@ -289,7 +306,7 @@ class EntityManager extends BaseManager
             $filters = str_replace(
                 $match,
                 sprintf(
-                    'pk_content IN (SELECT pk_fk_content FROM contents_categories WHERE %s)',
+                    'pk_content IN (SELECT content_id FROM content_category WHERE %s)',
                     $match
                 ),
                 $filters
@@ -378,7 +395,9 @@ class EntityManager extends BaseManager
      */
     private function loadExtraDataToContents($saveInCacheIds, &$contents)
     {
-        if (empty($saveInCacheIds)) {
+        if (empty($saveInCacheIds)
+            || in_array(\underscore(array_values($contents)[0]->content_type_name), self::ORM_CONTENT_TYPES)
+        ) {
             return [];
         }
 

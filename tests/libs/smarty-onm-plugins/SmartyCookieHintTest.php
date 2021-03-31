@@ -79,6 +79,11 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
      */
     public function testCookieHintWhenNoUrl()
     {
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('cookies')
+            ->willReturn('default');
+
         $this->ds->expects($this->at(1))
             ->method('get')
             ->with('cookies_hint_url')
@@ -95,6 +100,11 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
      */
     public function testCookieHintWhenUrl()
     {
+        $this->ds->expects($this->at(0))
+            ->method('get')
+            ->with('cookies')
+            ->willReturn('default');
+
         $this->ds->expects($this->at(1))
             ->method('get')
             ->with('cookies_hint_url')
@@ -107,14 +117,14 @@ class SmartyCookieHintTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_cookie_hint when CMP is activated.
+     * Tests smarty_function_cookie_hint when it is not activated.
      */
-    public function testCookieHintWhenCmpIsActivated()
+    public function testCookieHintNotActivated()
     {
         $this->ds->expects($this->at(0))
             ->method('get')
-            ->with('cmp_script')
-            ->willReturn(1);
+            ->with('cookies')
+            ->willReturn('none');
 
         $this->assertEmpty(smarty_function_cookie_hint(null, $this->smarty));
     }

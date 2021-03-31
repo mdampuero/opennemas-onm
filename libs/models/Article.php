@@ -134,9 +134,6 @@ class Article extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'author':
-                return $this->getAuthor();
-
             default:
                 return parent::__get($name);
         }
@@ -172,7 +169,7 @@ class Article extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN articles ON pk_content = pk_article WHERE pk_content = ?',
                 [ $id ]
             );
@@ -249,41 +246,24 @@ class Article extends Content
                 'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
                     ? null : $data['title_int'],
                 'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
-                    ? '0' : $data['img1'],
+                    ? null : $data['img1'],
                 'img1_footer'   => (!array_key_exists('img1_footer', $data) || is_null($data['img1_footer']))
                     ? null : $data['img1_footer'],
                 'img2'   => (!array_key_exists('img2', $data) || empty($data['img2']))
-                    ? '0' : $data['img2'],
+                    ? null : $data['img2'],
                 'img2_footer'   => (!array_key_exists('img2_footer', $data) || is_null($data['img2_footer']))
                     ? null : $data['img2_footer'],
                 'fk_video'   => (!array_key_exists('fk_video', $data) || empty($data['fk_video']))
-                    ? '0' : $data['fk_video'],
+                    ? null : $data['fk_video'],
                 'footer_video1'   => (!array_key_exists('footer_video1', $data) || empty($data['footer_video1']))
                     ? null : $data['footer_video1'],
                 'fk_video2'   => (!array_key_exists('fk_video2', $data) || empty($data['fk_video2']))
-                    ? '0' : $data['fk_video2'],
+                    ? null : $data['fk_video2'],
                 'footer_video2'   => (!array_key_exists('footer_video2', $data) || empty($data['footer_video2']))
                     ? null : $data['footer_video2'],
             ]);
 
             $conn->commit();
-
-            // Moving related contents saving code out of transaction due to ONM-1368
-            if (!empty($data['relatedFront'])) {
-                $this->saveRelated($data['relatedFront'], $this->id, 'setRelationPosition');
-            }
-
-            if (!empty($data['relatedInner'])) {
-                $this->saveRelated($data['relatedInner'], $this->id, 'setRelationPositionForInner');
-            }
-
-            if (!empty($data['relatedHome'])) {
-                $this->saveRelated($data['relatedHome'], $this->id, 'setHomeRelations');
-            }
-
-            $this->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
-
-            return $this->id;
         } catch (\Exception $e) {
             getService('error.log')->error(
                 'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
@@ -292,6 +272,20 @@ class Article extends Content
 
             $conn->rollback();
 
+            return false;
+        }
+
+        try {
+            // Moving related contents saving code out of transaction due to ONM-1638
+            $this->saveRelated($data)
+                ->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
+
+            return $this->id;
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                'Error creating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
             return false;
         }
     }
@@ -321,19 +315,19 @@ class Article extends Content
             'title_int'   => (!array_key_exists('title_int', $data) || empty($data['title_int']))
                 ? null : $data['title_int'],
             'img1'   => (!array_key_exists('img1', $data) || empty($data['img1']))
-                ? '0' : $data['img1'],
+                ? null : $data['img1'],
             'img1_footer'   => (!array_key_exists('img1_footer', $data) || is_null($data['img1_footer']))
                 ? null : $data['img1_footer'],
             'img2'   => (!array_key_exists('img2', $data) || empty($data['img2']))
-                ? '0' : $data['img2'],
+                ? null : $data['img2'],
             'img2_footer'   => (!array_key_exists('img2_footer', $data) || is_null($data['img2_footer']))
                 ? null : $data['img2_footer'],
             'fk_video'   => (!array_key_exists('fk_video', $data) || empty($data['fk_video']))
-                ? '0' : $data['fk_video'],
+                ? null : $data['fk_video'],
             'footer_video1'   => (!array_key_exists('footer_video1', $data) || empty($data['footer_video1']))
                 ? null : $data['footer_video1'],
             'fk_video2'   => (!array_key_exists('fk_video2', $data) || empty($data['fk_video2']))
-                ? '0' : $data['fk_video2'],
+                ? null : $data['fk_video2'],
             'footer_video2'   => (!array_key_exists('footer_video2', $data) || empty($data['footer_video2']))
                 ? null : $data['footer_video2'],
         ];
@@ -352,37 +346,19 @@ class Article extends Content
             );
 
             $conn->commit();
+        } catch (\Exception $e) {
+            getService('error.log')->error(
+                'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
+                ' Stack Trace: ' . $e->getTraceAsString()
+            );
+            $conn->rollback();
+            return false;
+        }
 
-            // Moving related contents saving code out of transaction due to ONM-1368
-            // Drop related and insert new ones
-            getService('related_contents')->delete($data['id']);
-
-            // Insert new related contents
-            if (!empty($data['relatedFront'])) {
-                $this->saveRelated(
-                    $data['relatedFront'],
-                    $data['id'],
-                    'setRelationPosition'
-                );
-            }
-
-            if (!empty($data['relatedInner'])) {
-                $this->saveRelated(
-                    $data['relatedInner'],
-                    $data['id'],
-                    'setRelationPositionForInner'
-                );
-            }
-
-            if (!empty($data['relatedHome'])) {
-                $this->saveRelated(
-                    $data['relatedHome'],
-                    $this->id,
-                    'setHomeRelations'
-                );
-            }
-
-            $this->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
+        try {
+            // Moving related contents saving code out of transaction due to ONM-1638
+            $this->saveRelated($data)
+                ->saveMetadataFields($data, Article::EXTRA_INFO_TYPE);
 
             return true;
         } catch (\Exception $e) {
@@ -390,7 +366,6 @@ class Article extends Content
                 'Error updating article (ID:' . $this->id . '): ' . $e->getMessage() .
                 ' Stack Trace: ' . $e->getTraceAsString()
             );
-            $conn->rollback();
             return false;
         }
     }
@@ -423,11 +398,6 @@ class Article extends Content
             getService('comment_repository')->deleteFromFilter(['content_id' => $id]);
             $conn->commit();
 
-            // Delete related
-            // Moved out of transaction due to problems with foreign key
-            // If db has fk on related relation is deleted on cascade
-            getService('related_contents')->delete($id);
-
             return true;
         } catch (\Exception $e) {
             $conn->rollback();
@@ -438,37 +408,5 @@ class Article extends Content
 
             return false;
         }
-    }
-
-    /**
-     * Relates a list of content ids to another one
-     *
-     * @param string $data   list of related content IDs
-     * @param int    $id     the id of the content we want to relate other contents
-     * @param string $method the method to bind related contents
-     */
-    public function saveRelated($data, $id, $method)
-    {
-        $rel = getService('related_contents');
-
-        if (is_array($data) && count($data) > 0) {
-            for ($i = 0; $i < count($data); $i++) {
-                $rel->{$method}($id, $i, $data[$i]);
-            }
-        }
-    }
-
-    /**
-     * Returns the author object of this article
-     *
-     * @return array the author data
-     */
-    private function getAuthor()
-    {
-        if (empty($this->author)) {
-            $this->author = getService('user_repository')->find($this->fk_author);
-        }
-
-        return $this->author;
     }
 }

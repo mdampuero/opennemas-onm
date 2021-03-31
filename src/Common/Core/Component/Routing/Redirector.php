@@ -5,6 +5,7 @@ namespace Common\Core\Component\Routing;
 use Api\Service\Service;
 use Opennemas\Cache\Core\Cache;
 use Common\Model\Entity\Category;
+use Common\Model\Entity\Content;
 use Common\Model\Entity\Url;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Framework\Component\MIME\MimeTypeTool;
@@ -94,7 +95,7 @@ class Redirector
      */
     public function getUrl($source, $contentType = [])
     {
-        if (empty($source)) {
+        if (is_null($source) || $source === '') {
             throw new \InvalidArgumentException();
         }
 
@@ -541,13 +542,15 @@ class Redirector
      */
     protected function isTargetValid($request, $url, $target)
     {
+        $contentHelper = $this->container->get('core.helper.content');
+
         if (empty($target)) {
             return empty($url->target);
         }
 
         if (is_object($target)) {
-            if ($target instanceof \Content) {
-                return $target->isReadyForPublish();
+            if ($target instanceof \Content || $target instanceof Content) {
+                return $contentHelper->isReadyForPublish($target);
             }
 
             if ($target instanceof Category) {

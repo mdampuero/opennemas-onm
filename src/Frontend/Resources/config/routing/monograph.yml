@@ -7,19 +7,19 @@ frontend_monograph_frontpage:
         l10n: true
 
 frontend_monograph_frontpage_category:
-    path: /especiales/{category_name}/{page}
+    path: /especiales/{category_slug}/{page}
     defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
         page         : '([0-9]+)?'
     options:
         l10n: true
 
 frontend_monograph_show:
-    path: /especiales/{category_name}/{slug}/{special_id}.{_format}
+    path: /especiales/{category_slug}/{slug}/{special_id}.{_format}
     defaults: { _controller: FrontendBundle:Monographs:show, _format: html, page: 1 }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
         slug         : '[^/]+'
         special_id   : '([0-9]+)'
     options:

@@ -49,7 +49,7 @@ class FrontpageManager extends EntityManager
         $rs = $this->dbConn->fetchAll($sql);
 
         foreach ($rs as $resultElement) {
-            $contents[] = $resultElement['pk_fk_content'];
+            $contents[] = $resultElement['content_id'];
         }
 
         return $contents;

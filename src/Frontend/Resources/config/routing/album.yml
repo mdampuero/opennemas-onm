@@ -5,21 +5,32 @@ frontend_album_frontpage:
         l10n: true
 
 frontend_album_frontpage_category:
-    path:     /album/{category_name}
+    path:     /album/{category_slug}
     defaults: { _controller: FrontendBundle:Album:list }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
     options:
         l10n: true
 
 frontend_album_show:
-    path:     /album/{category_name}/{slug}/{created}{id}.html
+    path:     /album/{category_slug}/{slug}/{created}{id}.html
     defaults: { _controller: FrontendBundle:Album:show }
+    requirements:
+        category_slug: '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+        slug:          '[^/]+'
+    options:
+        expose: true
+        l10n: true
+
+frontend_album_show_amp:
+    path:     /album/{category_name}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Album:showAmp, _format: amp }
     requirements:
         category_name: '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
         slug:          '[^/]+'
     options:
-        expose: true
         l10n: true

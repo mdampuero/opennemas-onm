@@ -193,7 +193,7 @@ class Controller extends SymfonyController
             return [ [], [] ];
         }
 
-        $categoryId = empty($category) ? 0 : $category->pk_content_category;
+        $categoryId = empty($category) ? 0 : $category->id;
         $action     = $this->get('core.globals')->getAction();
         $group      = $this->getAdvertisementGroup($action);
 
@@ -219,6 +219,9 @@ class Controller extends SymfonyController
             ->getRepository('Category')
             ->findBy('order by name asc');
 
+        $context = $this->get('core.locale')->getContext();
+        $this->get('core.locale')->setContext('frontend');
+
         $categories = array_map(function ($a) {
             // Sometimes category is array. When create & update advertisement
             $a = $this->get('data.manager.filter')->set($a)->filter('localize', [
@@ -227,11 +230,13 @@ class Controller extends SymfonyController
             ])->get();
 
             return [
-                'id'     => (int) $a->pk_content_category,
+                'id'     => (int) $a->id,
                 'name'   => $a->title,
-                'parent' => (int) $a->fk_content_category
+                'parent' => (int) $a->parent_id
             ];
         }, $categories);
+
+        $this->get('core.locale')->setContext($context);
 
         array_unshift(
             $categories,

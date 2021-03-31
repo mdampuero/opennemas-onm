@@ -1,6 +1,6 @@
 frontend_archive_content:
-    path: /archive/content/{year}/{month}/{day}/{category_name}
-    defaults: { _controller: FrontendBundle:Archive:archive, category_name: home }
+    path: /archive/content/{year}/{month}/{day}/{category_slug}
+    defaults: { _controller: FrontendBundle:Archive:archive, category_slug: null }
     requirements:
         year      : '[0-9]+'
         month     : '[0-9]+'
@@ -9,10 +9,10 @@ frontend_archive_content:
         l10n: true
 
 frontend_digital_frontpage:
-    path: /archive/digital/{year}/{month}/{day}/{category_name}.{_format}
+    path: /archive/digital/{year}/{month}/{day}/{category_slug}.{_format}
     defaults: { _controller: FrontendBundle:Archive:digitalFrontpage, _format: html, page: 1 }
     requirements:
-        category_name: '[^/\.]+'
+        category_slug: '[^/\.]+'
         year      : '([0-9]+)'
         month     : '([0-9]+)'
         day       : '([0-9]+)'

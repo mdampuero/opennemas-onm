@@ -18,6 +18,8 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
+        $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
+
         return parent::createItem($data);
     }
 
@@ -57,6 +59,8 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
+        $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
+
         parent::patchItem($id, $data);
     }
 
@@ -66,6 +70,8 @@ class ContentService extends OrmService
     public function patchList($ids, $data)
     {
         $data['changed'] = new \DateTime();
+
+        $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
 
         return parent::patchList($ids, $data);
     }
@@ -77,6 +83,60 @@ class ContentService extends OrmService
     {
         $data['changed'] = new \DateTime();
 
+        $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
+
         parent::updateItem($id, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function responsify($item)
+    {
+        $item = \Onm\StringUtils::convertToUtf8($item);
+
+        return parent::responsify($item);
+    }
+
+    /**
+     * Assign the user data for content.
+     *
+     * @param array $data       The content data.
+     * @param array $userFields The user data fields to update.
+     *
+     * @return Content The content.
+     */
+    protected function assignUser($data, $userFields = [])
+    {
+        if ($this->container->get('core.security')->hasPermission('MASTER')) {
+            return $data;
+        }
+
+        $currentUserId = $this->container->get('core.user')->id ?? null;
+
+        return array_merge($data, array_fill_keys($userFields, $currentUserId));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function localizeItem($item)
+    {
+        $keys = [
+            'related_contents' => [ 'caption' ]
+        ];
+
+        $item = parent::localizeItem($item);
+
+        foreach ($keys as $key => $value) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
+                    ->filter('localize', [ 'keys' => $value ])
+                    ->get();
+            }
+        }
+
+        return $item;
     }
 }

@@ -8,5 +8,5 @@ services:
 
     manager_ws.security.user.provider:
         class:     Common\Core\Component\Security\User\UserProvider
-        arguments: [ '@orm.manager', [ 'manager' ] ]
+        arguments: [ '@orm.manager', '@cache.manager', [ 'manager' ] ]
         public: true

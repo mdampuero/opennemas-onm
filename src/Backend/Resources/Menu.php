@@ -210,7 +210,7 @@ $menuXml = [
             [
                 'id'          => 'album_manager',
                 'title'       => _('Albums'),
-                'icon'        => 'fa fa-stack-overflow',
+                'icon'        => 'fa fa-camera',
                 'link'        => url('backend_albums_list'),
                 'module_name' => 'ALBUM_MANAGER',
                 'privilege'   => 'ALBUM_ADMIN',
@@ -300,40 +300,6 @@ $menuXml = [
                 'link'        => url('admin_keywords'),
                 'module_name' => 'KEYWORD_MANAGER',
                 'privilege'   => 'PCLAVE_ADMIN',
-            ],
-            [
-                'id'          => 'paywall',
-                'title'       => _('Paywall'),
-                'icon'        => 'fa fa-paypal',
-                'link'        => '#',
-                'module_name' => 'PAYWALL',
-                'privilege'   => 'PAYWALL',
-                'submenu' => [
-                    [
-                        'id'          => 'paywall_stats',
-                        'title'       => _('Statistics'),
-                        'icon'        => 'fa fa-bar-chart',
-                        'link'        => url('admin_paywall'),
-                        'module_name' => 'PAYWALL',
-                        'privilege'   => 'PAYWALL',
-                    ],
-                    [
-                        'id'          => 'paywall_users',
-                        'title'       => _('Paywall users'),
-                        'icon'        => 'fa fa-users',
-                        'link'        => url('admin_paywall_users'),
-                        'module_name' => 'PAYWALL',
-                        'privilege'   => 'PAYWALL',
-                    ],
-                    [
-                        'id'          => 'paywall_purchases',
-                        'title'       => _('Paywall purchases'),
-                        'icon'        => 'fa fa-shopping-cart',
-                        'link'        => url('admin_paywall_purchases'),
-                        'module_name' => 'PAYWALL',
-                        'privilege'   => 'PAYWALL',
-                    ],
-                ]
             ],
             [
                 'id'          => 'sync_manager',

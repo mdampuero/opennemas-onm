@@ -4,12 +4,13 @@ parameters:
             - meta_amphtml
             - noindex
             - canonical_url
+            - data_layer
+            - cmp_script
             - ads_generator
             - ads_scripts
             - adsense_validator
             - browser_update
-            - cmp_script
-            - google_tags_manager
+            - google_tag_manager
             - css_includes
             - generate_fb_admin_tag
             - generate_fb_pages_tag

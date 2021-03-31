@@ -15,27 +15,25 @@ namespace WebService\Handlers;
  */
 class Ads
 {
-    public $restler;
-
     /*
     * @url GET /ads/frontpage/:categoryId
     */
     public function frontpage($category)
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get frontpage positions
         $positionManager = getService('core.helper.advertisement');
-        $positions = $positionManager->getPositionsForGroup('frontpage');
+        $positions       = $positionManager->getPositionsForGroup('frontpage');
 
         $ads = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
-            $ad->extWsUrl = SITE_URL;
-            $ad->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($ad->created))
-                      .sprintf('%06d', $ad->pk_advertisement).'.html';
-            $ad->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+            $ad->extWsUrl    = SITE_URL;
+            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
+                . sprintf('%06d', $ad->pk_advertisement) . '.html';
+            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
@@ -46,20 +44,20 @@ class Ads
     */
     public function article($category)
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get article_inner positions
         $positionManager = getService('core.helper.advertisement');
-        $positions = $positionManager->getPositionsForGroup('article_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('article_inner', [7, 9]);
 
         $ads = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
-            $ad->extWsUrl = SITE_URL;
-            $ad->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($ad->created))
-                      .sprintf('%06d', $ad->pk_advertisement).'.html';
-            $ad->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+            $ad->extWsUrl    = SITE_URL;
+            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
+                . sprintf('%06d', $ad->pk_advertisement) . '.html';
+            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);
@@ -70,20 +68,20 @@ class Ads
     */
     public function opinion($category)
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
 
         // Get opinion positions
         $positionManager = getService('core.helper.advertisement');
-        $positions = $positionManager->getPositionsForGroup('opinion_inner', array(7, 9));
+        $positions       = $positionManager->getPositionsForGroup('opinion_inner', [7, 9]);
 
         $ads = getService('advertisement_repository')
             ->findByPositionsAndCategory($positions, $category);
 
         foreach ($ads as &$ad) {
-            $ad->extWsUrl = SITE_URL;
-            $ad->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($ad->created))
-                      .sprintf('%06d', $ad->pk_advertisement).'.html';
-            $ad->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+            $ad->extWsUrl    = SITE_URL;
+            $ad->extUrl      = SITE_URL . '/ads/' . date('YmdHis', strtotime($ad->created))
+                      . sprintf('%06d', $ad->pk_advertisement) . '.html';
+            $ad->extMediaUrl = SITE_URL . '/media/' . INSTANCE_UNIQUE_NAME;
         }
 
         return serialize($ads);

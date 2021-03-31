@@ -36,8 +36,7 @@ class WebServiceController extends Controller
 
         Defaults::$smartAutoRouting = false;
 
-        $r            = new Restler();
-        $r->container = $this->container;
+        $r = new Restler();
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
         $r->addAPIClass('WebService\Handlers\Ads');
         $r->addAPIClass('WebService\Handlers\Agency');
@@ -48,7 +47,6 @@ class WebServiceController extends Controller
         $r->addAPIClass('WebService\Handlers\Contents');
         $r->addAPIClass('WebService\Handlers\Frontpages');
         $r->addAPIClass('WebService\Handlers\Images');
-        $r->addAPIClass('WebService\Handlers\Instances');
         $r->addAPIClass('WebService\Handlers\Opinions');
         $r->addAPIClass('WebService\Handlers\Videos');
 

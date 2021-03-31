@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +56,7 @@ class SpecialsController extends Controller
                 ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description'    => $request->request->get('description', ''),
             'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-            'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+            'category_id'    => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
             'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
             'favorite'       => $request->request->filter('favorite', 0, FILTER_SANITIZE_STRING),
@@ -107,10 +108,12 @@ class SpecialsController extends Controller
         }
 
         $contents = $special->getContents($id);
+        $service  = $this->get('api.service.photo');
+        try {
+            $photo1 = $service->getItem($special->img1);
 
-        if (!empty($special->img1)) {
-            $photo1 = new \Photo($special->img1);
-            $this->view->assign('photo1', $photo1);
+            $this->view->assign('photo1', $service->responsify($photo1));
+        } catch (GetItemException $e) {
         }
 
         $contentsLeft  = [];
@@ -134,7 +137,7 @@ class SpecialsController extends Controller
         $ls = $this->get('core.locale');
         return $this->render('special/new.tpl', [
             'special'  => $special,
-            'category' => $special->category,
+            'category' => $special->category_id,
             'locale'   => $ls->getRequestLocale('frontend'),
         ]);
     }
@@ -174,7 +177,7 @@ class SpecialsController extends Controller
                     ->filter('pretitle', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
                 'description'    => $request->request->get('description', ''),
                 'slug'           => $request->request->filter('slug', '', FILTER_SANITIZE_STRING),
-                'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+                'category_id'    => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
                 'in_home'        => $request->request->filter('in_home', 0, FILTER_SANITIZE_STRING),
                 'favorite'       => $request->request->filter('favorite', 0, FILTER_SANITIZE_STRING),
@@ -216,13 +219,13 @@ class SpecialsController extends Controller
     public function deleteAction(Request $request)
     {
         $id       = $request->query->getDigits('id');
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category_id', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
             $special = new \Special($id);
 
-            $special->delete($id, $this->getUser()->id);
+            $special->delete($id);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _("Special deleted successfully.")

@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Component\Helper;
 
 class UrlGeneratorHelper
@@ -86,16 +79,9 @@ class UrlGeneratorHelper
             && $params['absolute']
         ) {
             // Absolute URL basing on the current instance
-            $uri = ($this->forceHttp ? 'http://' : '//')
-                . $this->instance->getMainDomain();
-
-            $request = $this->container->get('request_stack')
-                ->getCurrentRequest();
-
-            if (!empty($request)) {
-                // Absolute URL basing on the current request
-                $uri = $request->getSchemeAndHttpHost();
-            }
+            $uri = $this->forceHttp
+                ? 'http://' . $this->instance->getMainDomain()
+                : $this->instance->getbaseUrl();
         }
 
         // Force frontend context for multilanguage
@@ -180,7 +166,7 @@ class UrlGeneratorHelper
     {
         try {
             $category = $this->container->get('api.service.category')
-                ->getItem($content->pk_fk_content_category);
+                ->getItem($content->category_id);
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
@@ -205,7 +191,7 @@ class UrlGeneratorHelper
     protected function getUriForCategory($category)
     {
         $uri = $this->container->get('router')->generate('category_frontpage', [
-            'category_name' => $category->name
+            'category_slug' => $category->name
         ]);
 
         return trim($uri, '/');
@@ -229,7 +215,7 @@ class UrlGeneratorHelper
         try {
             $categoryId = !empty($content->categories)
                 ? $content->categories[0]
-                : $content->pk_fk_content_category;
+                : $content->category_id;
 
             $category = $this->container->get('api.service.category')
                 ->getItem($categoryId);
@@ -318,15 +304,12 @@ class UrlGeneratorHelper
      */
     protected function getUriForPhoto($content)
     {
-        $pathFile    = trim(rtrim($content->path_file, DS), DS);
-        $contentName = trim(rtrim($content->name, DS), DS);
+        $pathFile = trim(rtrim($content->path, DS), DS);
 
         return implode(DS, [
             "media",
             $this->instance->internal_name,
-            'images',
-            $pathFile,
-            $contentName
+            $pathFile
         ]);
     }
 
@@ -356,18 +339,13 @@ class UrlGeneratorHelper
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
-            'author_slug' => \Onm\StringUtils::generateSlug($user->name),
+            'author_slug' => $user->slug,
             'author_id'   => $user->id,
         ];
 
-        if ($user->is_blog
-            || (is_array($user->meta)
-                && array_key_exists('is_blog', $user->meta)
-                && $user->meta['is_blog']
-            )
-        ) {
+        if ($user->is_blog) {
             $routeName   = 'frontend_blog_author_frontpage';
-            $routeParams = [ 'author_slug' => $user->username ];
+            $routeParams = [ 'author_slug' => $user->slug ];
         }
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);

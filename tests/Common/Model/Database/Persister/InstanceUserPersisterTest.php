@@ -35,6 +35,11 @@ class InstanceUserPersisterTest extends \PHPUnit\Framework\TestCase
                 'name'       => 'string',
                 'categories' => 'array'
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'users',

@@ -56,7 +56,7 @@ class CategoryService extends OrmService
             $response = $this->getListByIds($ids);
 
             $toDelete = array_map(function ($a) {
-                return $a->pk_content_category;
+                return $a->id;
             }, $response['items']);
 
             $this->em->getRepository($this->entity, $this->origin)
@@ -137,7 +137,7 @@ class CategoryService extends OrmService
             $target   = $this->getItem($to);
 
             $toMove = array_map(function ($a) {
-                return $a->pk_content_category;
+                return $a->id;
             }, $response['items']);
 
             $moved = $this->em->getRepository($this->entity, $this->origin)
@@ -176,7 +176,7 @@ class CategoryService extends OrmService
         }
 
         $ids = array_map(function ($a) {
-            return $a->pk_content_category;
+            return $a->id;
         }, $items);
 
         try {
@@ -199,11 +199,11 @@ class CategoryService extends OrmService
     {
         try {
             $contents = $this->em->getRepository($this->entity, $this->origin)
-                ->countContents($item->pk_content_category);
+                ->countContents($item->id);
 
             if (!empty($contents)
-                && array_key_exists((int) $item->pk_content_category, $contents)
-                && !empty($contents[$item->pk_content_category])
+                && array_key_exists((int) $item->id, $contents)
+                && !empty($contents[$item->id])
             ) {
                 return false;
             }

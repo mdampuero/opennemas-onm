@@ -17,6 +17,13 @@ use Opennemas\Orm\Core\Entity;
 class Content extends Entity
 {
     /**
+     * The list of common l10n supported keys.
+     *
+     * @var array
+     */
+    protected static $l10nKeys = [ 'body', 'description', 'slug', 'title' ];
+
+    /**
      * Gets the value of the property from the raw data array.
      *
      * @param string $name The property name.
@@ -50,6 +57,16 @@ class Content extends Entity
     }
 
     /**
+     * Returns the list of l10n keys.
+     *
+     * @return array The list of l10n keys.
+     */
+    public function getL10nKeys()
+    {
+        return static::$l10nKeys;
+    }
+
+    /**
      * Returns one media object to an specific position name
      *
      * @param string $name The position name
@@ -73,9 +90,9 @@ class Content extends Entity
     public function getRelated($name)
     {
         $related = array_map(function ($el) {
-            return $el['pk_content2'];
+            return $el['target_id'];
         }, array_filter($this->related_contents, function ($element) use ($name) {
-            return $element['relationship'] == $name;
+            return $element['type'] == $name;
         }));
 
         return $related;
@@ -91,43 +108,7 @@ class Content extends Entity
     public function hasRelated($name)
     {
         return count(array_filter($this->related_contents, function ($element) use ($name) {
-            return $element['relationship'] == $name;
+            return $element['type'] == $name;
         })) > 0;
-    }
-
-    /**
-     * Returns true if a match time constraints, is available and is not in trash
-     *
-     * @return boolean true if is ready
-     */
-    public function isReadyForPublish()
-    {
-        return ($this->isInTime()
-            && $this->content_status == 1
-            && $this->in_litter == 0);
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     */
-    protected function isInTime($now = null)
-    {
-        $now = new \DateTime($now);
-
-        $dued = (
-            !empty($this->endtime)
-            && $now->getTimeStamp() > $this->endtime->getTimeStamp()
-        );
-
-        $postponed = (
-            !empty($this->starttime)
-            && $now->getTimeStamp() < $this->starttime->getTimeStamp()
-        );
-
-        return (!$dued && !$postponed);
     }
 }

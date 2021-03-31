@@ -35,7 +35,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->imagick = $this->getMockBuilder('Imagick')
             ->setMethods([
-                'getImageFilename', 'getImageFormat', 'getImageLength',
+                'clear', 'getImageFilename', 'getImageFormat', 'getImageLength',
                 'getImageMimeType', 'getImageProperties'
             ])->getMock();
 
@@ -110,6 +110,16 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testApplyWhenMethodNotExists()
     {
         $this->im->apply('glorp', [ 'flob', 22474 ]);
+    }
+
+    /**
+     * Tests close.
+     */
+    public function testClose()
+    {
+        $this->imagick->expects($this->once())->method('clear');
+
+        $this->im->close();
     }
 
     /**
@@ -189,7 +199,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getHeight.
+     * Tests getSize.
      */
     public function testGetSize()
     {
@@ -242,6 +252,21 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->with('xyzzy/grault.flob')->willReturn(false);
 
          $this->im->open('xyzzy/grault.flob');
+    }
+
+    /**
+     * Tests open when exception.
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testOpenWhenException()
+    {
+        $this->fs->expects($this->once())->method('exists')
+            ->with('xyzzy/grault.flob')->willReturn(true);
+        $this->imagine->expects($this->once())->method('open')
+            ->will($this->throwException(new \Exception()));
+
+        $this->im->open('xyzzy/grault.flob');
     }
 
     /**

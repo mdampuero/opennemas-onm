@@ -212,36 +212,26 @@ class ToolController extends Controller
      */
     private function saveContent($content, $propertiesToUpdate)
     {
-        $relatedSrv = $this->get('related_contents');
-
         $data = [
-            'agency'         => $content->agency,
-            'category'       => $content->category,
-            'content_status' => $content->content_status,
-            'description'    => $content->description,
-            'endtime'        => $content->endtime,
-            'fk_author'      => $content->fk_author,
-            'fk_video'       => $content->fk_video,
-            'fk_video2'      => $content->fk_video2,
-            'footer_video'   => $content->footer_video,
-            'footer_video2'  => $content->footer_video2,
-            'frontpage'      => $content->frontpage,
-            'id'             => $content->id,
-            'img1'           => $content->img1,
-            'img2'           => $content->img2,
-            'relatedFront'   => array_map(function ($el) {
-                return $el[1];
-            }, $relatedSrv->getRelations($content->id, 'frontpage')),
-            'relatedHome'    => array_map(function ($el) {
-                return $el[1];
-            }, $relatedSrv->getRelations($content->id, 'home')),
-            'relatedInner'   => array_map(function ($el) {
-                return $el[1];
-            }, $relatedSrv->getRelations($content->id, 'inner')),
-            'slug'           => $content->slug,
-            'starttime'      => $content->starttime,
-            'with_comment'   => $content->with_comment,
-            'params'         => $content->params,
+            'agency'           => $content->agency,
+            'category'         => $content->category_id,
+            'content_status'   => $content->content_status,
+            'description'      => $content->description,
+            'endtime'          => $content->endtime,
+            'fk_author'        => $content->fk_author,
+            'fk_video'         => $content->fk_video,
+            'fk_video2'        => $content->fk_video2,
+            'footer_video'     => $content->footer_video,
+            'footer_video2'    => $content->footer_video2,
+            'frontpage'        => $content->frontpage,
+            'id'               => $content->id,
+            'img1'             => $content->img1,
+            'img2'             => $content->img2,
+            'related_contents' => $content->related_contents,
+            'slug'             => $content->slug,
+            'starttime'        => $content->starttime,
+            'with_comment'     => $content->with_comment,
+            'params'           => $content->params,
         ];
 
         $data = array_merge($data, $propertiesToUpdate);

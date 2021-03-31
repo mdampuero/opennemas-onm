@@ -1,13 +1,8 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Component\Helper;
+
+use Common\Model\Entity\Content;
 
 class ContentMediaHelper
 {
@@ -17,46 +12,38 @@ class ContentMediaHelper
      * @param EntityManager $em The entity manager.
      * @param EntityManager $er The entity repository service.
      */
-    public function __construct($container, $em, $er)
+    public function __construct($container, $em)
     {
         $this->container = $container;
         $this->ds        = $em->getDataSet('Settings', 'instance');
-        $this->er        = $er;
-        $this->mediaUrl  = MEDIA_IMG_ABSOLUTE_URL;
     }
 
     /**
      * Get image url for a given content
      *
      * @param object $content The content object.
-     * @param array $params An array with the image url passed from template.
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getContentMediaObject($content, $params = null)
+    public function getMedia($content)
     {
-        // Generate method name with object content_type
-        $method = 'getMediaObjectFor' . ucfirst($content->content_type_name);
+        $method = 'getMediaFor' . ucfirst($content->content_type_name);
+        $media  = null;
 
-        $mediaObject = null;
-        if (method_exists($this, $method)) {
-            $mediaObject = $this->$method($content);
+        if (!empty($content) && method_exists($this, $method)) {
+            $media = $this->$method($content);
         }
 
-        // The content does not have associated media so return empty object.
-        $mediaObject = (is_object($mediaObject)) ? $mediaObject : new \StdClass();
-
-        if (!isset($mediaObject->url) && $this->ds->get('logo_enabled')) {
-            $mediaObject = $this->getDefaultMediaObject($mediaObject);
+        if (empty($media) && $this->ds->get('logo_enabled')) {
+            $media = $this->getMediaFromLogo();
         }
 
-        // Overload object image size
-        $mediaObject->width  = (isset($mediaObject->width) && !empty($mediaObject->width))
-            ? $mediaObject->width : 700;
-        $mediaObject->height = (isset($mediaObject->height) && !empty($mediaObject->height))
-            ? $mediaObject->height : 450;
+        if (is_object($media)) {
+            $media->width  = $media->width ?? 700;
+            $media->height = $media->height ?? 450;
+        }
 
-        return $mediaObject;
+        return $media;
     }
 
     /**
@@ -66,27 +53,11 @@ class ContentMediaHelper
      *
      * @return Object  $mediaObject The media object.
      */
-    protected function getMediaObjectForArticle($content)
+    protected function getMediaForArticle($content)
     {
-        // Check images
-        $mediaObject = $this->getImageMediaObject($content);
-
-        if (empty($mediaObject)
-            && isset($content->fk_video2)
-            && $content->fk_video2 > 0
-        ) {
-            // Articles with inner video
-            $mediaObject = $this->er->find('Video', $content->fk_video2);
-            if (!empty($mediaObject)) {
-                if (strpos($mediaObject->thumb, 'http') === false) {
-                    $mediaObject->thumb = SITE_URL . $mediaObject->thumb;
-                }
-
-                $mediaObject->url = $mediaObject->thumb;
-            }
-        }
-
-        return $mediaObject;
+        return empty($content->fk_video2)
+            ? $this->getMediaFromPhoto($content->img2)
+            : $this->getMediaFromVideo($content->fk_video2);
     }
 
     /**
@@ -96,27 +67,11 @@ class ContentMediaHelper
      *
      * @return Object  $mediaObject The media object.
      */
-    protected function getMediaObjectForOpinion($content)
+    protected function getMediaForOpinion($content)
     {
-        // Check images
-        $mediaObject = $this->getImageMediaObject($content);
-
-        // Check author
-        $authorPhoto = null;
-        if (isset($content->author) && is_object($content->author)) {
-            $authorPhoto = $content->author->photo;
-        }
-
-        if (empty($mediaObject)
-            && !empty($authorPhoto)
-        ) {
-            // Photo author
-            $mediaObject      = $authorPhoto;
-            $mediaObject->url = $this->mediaUrl . '/'
-                . ltrim($mediaObject->path_img, '/');
-        }
-
-        return $mediaObject;
+        return empty($content->img2)
+            ? $this->getMediaFromAuthor($content->fk_author)
+            : $this->getMediaFromPhoto($content->img2);
     }
 
     /**
@@ -126,17 +81,15 @@ class ContentMediaHelper
      *
      * @return Object  $mediaObject The media object.
      */
-    protected function getMediaObjectForAlbum($content)
+    protected function getMediaForAlbum($content)
     {
-        if (isset($content->cover_image) && !empty($content->cover_image)) {
-            $mediaObject      = $content->cover_image;
-            $mediaObject->url = $this->mediaUrl . '/'
-                . ltrim($content->cover_image->path_img, '/');
+        $featured = array_filter($content->related_contents, function ($a) {
+            return $a['type'] === 'featured_frontpage';
+        });
 
-            return $mediaObject;
-        }
-
-        return null;
+        return !empty($featured)
+            ? $this->getMediaFromPhoto(array_pop($featured)['target_id'])
+            : null;
     }
 
     /**
@@ -146,88 +99,154 @@ class ContentMediaHelper
      *
      * @return Object $mediaObject The media object.
      */
-    protected function getMediaObjectForVideo($content)
+    protected function getMediaForVideo($content)
     {
-        if (isset($content->thumb) && !empty($content->thumb)) {
-            if (strpos($content->thumb, 'http') === false) {
-                $content->thumb = SITE_URL . $content->thumb;
+        return $this->getMediaFromVideo($content->pk_content);
+    }
+
+    /**
+     * Returns the author's photo.
+     *
+     * @param Object  $content The content object.
+     *
+     * @return Object $authorPhoto The author photo object.
+     */
+    protected function getMediaFromAuthor(?int $id)
+    {
+        if (empty($id)) {
+            return null;
+        }
+
+        try {
+            $author = $this->container->get('api.service.author')
+                ->getItem($id);
+
+            return !empty($author->avatar_img_id)
+                ? $this->getMediaFromPhoto($author->avatar_img_id)
+                : null;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns default media object for content
+     *
+     * @return object  $mediaObject The media object.
+     */
+    protected function getMediaFromLogo()
+    {
+        $instance = $this->container->get('core.instance');
+
+        $mediapath = $instance->getMediaShortPath() . '/sections/';
+        $filepath  = $this->container->getParameter('core.paths.public')
+            . $mediapath;
+
+        $logos = $this->ds->get([ 'sn_default_img', 'mobile_logo', 'site_logo' ]);
+
+        foreach ($logos as $logo) {
+            if (empty($logo)) {
+                continue;
             }
 
-            $mediaObject      = $content;
-            $mediaObject->url = $content->thumb;
+            try {
+                $information = $this->container->get('core.helper.image')
+                    ->getInformation($filepath . $logo);
 
-            return $mediaObject;
+                $media = new \stdClass();
+
+                $media->url    = $instance->getBaseUrl() . $mediapath . $logo;
+                $media->width  = $information['width'];
+                $media->height = $information['height'];
+
+                return $media;
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
         return null;
     }
 
+
+
     /**
-     * Returns default media object for content
+     * Returns media for a photo based on the photo id.
      *
-     * @param object $mediaObject The media object.
+     * @param int $id The photo id.
      *
-     * @return object  $mediaObject The media object.
+     * @return Content The media object.
      */
-    protected function getDefaultMediaObject($mediaObject)
+    protected function getMediaFromPhoto(?int $id)
     {
-        $ih       = $this->container->get('core.helper.image');
-        $instance = $this->container->get('core.instance');
-
-        $mediapath = $instance->getMediaShortPath() . '/sections/';
-        $baseUrl   = $instance->getBaseUrl() . $mediapath;
-        $filepath  = $this->container->getParameter('core.paths.public') . $mediapath;
-
-        // Default image for social networks
-        $defaultLogo = '';
-        if ($this->ds->get('sn_default_img')) {
-            $defaultLogo = $this->ds->get('sn_default_img');
-        } elseif ($this->ds->get('mobile_logo')) {
-            $defaultLogo = $this->ds->get('mobile_logo');
-        } elseif ($this->ds->get('site_logo')) {
-            $defaultLogo = $this->ds->get('site_logo');
+        if (empty($id)) {
+            return null;
         }
 
-        if (!empty($defaultLogo)) {
-            try {
-                $information         = $ih->getInformation($filepath . $defaultLogo);
-                $mediaObject->url    = $baseUrl . $defaultLogo;
-                $mediaObject->width  = $information['width'];
-                $mediaObject->height = $information['height'];
-            } catch (\Exception $e) {
-                $this->container->get('error.log')->error(sprintf(
-                    'Error trying to get image information: %s',
-                    $e->getMessage()
-                ));
-            }
-        }
+        try {
+            $photo = $this->container->get('api.service.photo')
+                ->getItem($id);
 
-        return $mediaObject;
+            $photo->url = $this->container->get('core.helper.url_generator')
+                ->generate($photo, [ 'absolute' => true ]);
+
+            return $photo;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
-     * Returns default media object for content
+     * Returns media for a video based on the video id.
      *
-     * @param array $params An array with the image url passed from template.
-     * @param object $mediaObject The media object.
+     * @param int $id The video id.
      *
-     * @return object  $mediaObject The media object.
+     * @return Video The media object.
      */
-    protected function getImageMediaObject($content)
+    protected function getMediaFromVideo(?int $id)
     {
-        $photo = null;
-        if (isset($content->img2) && ($content->img2 > 0)) {
-            // Inner photo
-            $photo = $this->er->find('Photo', $content->img2);
-        } elseif (isset($content->img1) && ($content->img1 > 0)) {
-            // Front photo
-            $photo = $this->er->find('Photo', $content->img1);
+        if (empty($id)) {
+            return null;
         }
 
-        if (!empty($photo)) {
-            $photo->url = $this->mediaUrl . $photo->path_file . $photo->name;
+        try {
+            $video = $this->container->get('entity_repository')
+                ->find('Video', $id);
+
+            if (empty($video)) {
+                return null;
+            }
+
+            $video->url = $this->getThumbnailUrl($video);
+
+            return $video;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the absolute url for the video thumbnail.
+     *
+     * @param Content $video The video object.
+     *
+     * @return string The video url.
+     */
+    protected function getThumbnailUrl(Content $video)
+    {
+        if (in_array($video->type, ['external', 'script'])) {
+            return $this->container->get('core.helper.url_generator')->generate(
+                $this->container->get('api.service.photo')->getItem($video->related_contents[0]['target_id']),
+                [ 'absolute' => true ]
+            );
         }
 
-        return $photo;
+        if (!empty($video->information) &&
+            is_array($video->information) &&
+            !empty($video->information['thumbnail'])) {
+            return $video->information['thumbnail'];
+        }
+
+        return null;
     }
 }

@@ -25,6 +25,11 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['isInTime'])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -45,6 +50,13 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->helper = $this->getMockBuilder('AdvertisementHelper')
             ->setMethods([ 'isSafeFrameEnabled' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Locale' . uniqid())
+            ->setMethods([ 'getTimeZone' ])->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
@@ -71,6 +83,17 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
+        $this->contentHelper->expects($this->any())->method('isInTime')
+            ->willReturn(true);
+
+        $this->locale->expects($this->any())->method('getTimeZone')
+            ->willReturn(new \DateTimeZone('UTC'));
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
         $this->smartySource = $this->getMockBuilder('Smarty_Template_Source')
             ->disableOriginalConstructor()
             ->getMock();
@@ -93,6 +116,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.helper.content':
+                return $this->contentHelper;
+
             case 'core.security':
                 return $this->security;
 
@@ -104,6 +130,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.advertisement':
                 return $this->helper;
+
+            case 'core.locale':
+                return $this->locale;
 
             case 'core.template.admin':
                 return $this->templateAdmin;

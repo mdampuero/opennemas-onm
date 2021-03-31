@@ -1,30 +1,3 @@
-action_counters:
-    columns:
-        id:
-            type: integer
-            options: { unsigned: true, autoincrement: true }
-        action_name:
-            type: string
-            options: { length: 255, default: null }
-        date:
-            type: datetime
-            options: { default: CURRENT_TIMESTAMP }
-        counter:
-            type: integer
-            options: { unsigned: true, default: 0 }
-    index:
-        -
-            name: PRIMARY
-            columns: [id]
-            primary: true
-            unique: true
-            flags: {  }
-        -
-            name: action_name
-            columns: [action_name]
-            primary: false
-            unique: false
-            flags: {  }
 advertisements:
     columns:
         pk_advertisement:
@@ -148,8 +121,8 @@ albums:
         -
             name: cover_id
             source_field: [ cover_id ]
-            target_table: photos
-            target_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 albums_photos:
     columns:
@@ -194,8 +167,8 @@ albums_photos:
         -
             name: photos_id_photo_id
             source_field: [ pk_photo ]
-            target_table: photos
-            target_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 articles:
     columns:
@@ -409,9 +382,9 @@ commentsmeta:
             target_table: comments
             target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-content_categories:
+category:
     columns:
-        pk_content_category:
+        id:
             type: bigint
             options: { length: 20, unsigned: true, autoincrement: true }
         title:
@@ -423,13 +396,16 @@ content_categories:
         description:
             type: text
             options: { default: null, length: 65532, notnull: false }
-        archived:
+        visible:
             type: boolean
             options: { unsigned: true, default: 0, notnull: false }
         enabled:
             type: boolean
             options: { unsigned: true, default: 0, notnull: false }
-        fk_content_category:
+        rss:
+            type: boolean
+            options: { unsigned: true, default: 0, notnull: false }
+        parent_id:
             type: bigint
             options: { length: 20, unsigned: true, default: null, notnull: false }
         params:
@@ -444,7 +420,7 @@ content_categories:
     index:
         -
             name: PRIMARY
-            columns: [pk_content_category]
+            columns: [id]
             primary: true
             unique: true
             flags: {  }
@@ -513,7 +489,7 @@ contentmeta:
     columns:
         fk_content:
             type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
+            options: { length: 20, unsigned: true }
         meta_name:
             type: string
             options: { length: 255 }
@@ -608,9 +584,6 @@ contents:
         params:
             type: text
             options: { length: 65532, default: null, notnull: false }
-        category_name:
-            type: string
-            options: { length: 255, default: null }
         favorite:
             type: boolean
             options: { default: null, notnull: false }
@@ -692,59 +665,46 @@ contents:
             name: content_type_name
             columns: [content_type_name]
             unique: false
-        -
-            name: category_name
-            columns: [category_name]
-            unique: false
 
-contents_categories:
+content_category:
     columns:
-        pk_fk_content:
+        content_id:
             type: bigint
             options: { length: 20, unsigned: true }
-        pk_fk_content_category:
+        category_id:
             type: bigint
             options: { unsigned: true }
-        catName:
-            type: string
-            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
-            columns: [pk_fk_content, pk_fk_content_category]
+            columns: [category_id, content_id]
             primary: true
             unique: true
             flags: {  }
         -
-            name: pk_fk_content
-            columns: [pk_fk_content]
+            name: content_category_content_id
+            columns: [content_id]
             primary: false
             unique: false
             flags: {  }
         -
-            name: pk_fk_content_category
-            columns: [pk_fk_content_category]
-            primary: false
-            unique: false
-            flags: {  }
-        -
-            name: content_categories_catname
-            columns: [catName]
+            name: content_category_category_id
+            columns: [category_id]
             primary: false
             unique: false
             flags: {  }
     foreign_keys:
         -
-            name: contentcategory_contentid_contents_id
-            source_field: [ pk_fk_content ]
+            name: content_category_content_content_id
+            source_field: [ content_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
         -
-            name: contentcategory_category_category_id
-            source_field: [ pk_fk_content_category ]
-            target_table: content_categories
-            target_field: [ pk_content_category ]
+            name: content_category_category_category_id
+            source_field: [ category_id ]
+            target_table: category
+            target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 contents_tags:
     columns:
@@ -1118,36 +1078,6 @@ orders:
             primary: true
             unique: true
             flags: {  }
-pc_users:
-    columns:
-        pk_pc_user:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        email:
-            type: string
-            options: { length: 255, default: null }
-        name:
-            type: string
-            options: { length: 255, default: null }
-        firstname:
-            type: string
-            options: { length: 255, default: null }
-        lastname:
-            type: string
-            options: { length: 255, default: null }
-        status:
-            type: integer
-            options: { default: null }
-        subscription:
-            type: integer
-            options: { default: null }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_pc_user]
-            primary: true
-            unique: true
-            flags: {  }
 pclave:
     columns:
         id:
@@ -1169,46 +1099,6 @@ pclave:
             primary: true
             unique: true
             flags: {  }
-photos:
-    columns:
-        pk_photo:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        name:
-            type: string
-            options: { length: 255, default: null, notnull: false }
-        path_file:
-            type: string
-            options: { length: 150, default: null }
-        size:
-            type: decimal
-            options: { scale: 2, default: null, notnull: false }
-        width:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
-        height:
-            type: integer
-            options: { unsigned: true, default: null, notnull: false }
-        author_name:
-            type: string
-            options: { length: 200, default: null, notnull: false}
-        address:
-            type: string
-            options: { length: 255, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_photo]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: photos_id_contents_id
-            source_field: [ pk_photo ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 poll_items:
     columns:
         pk_item:
@@ -1298,61 +1188,55 @@ ratings:
             primary: true
             unique: true
             flags: {  }
-related_contents:
+content_content:
     columns:
-        pk_content1:
-            type: bigint
+        source_id:
+            type:    bigint
             options: { length: 20, unsigned: true }
-        pk_content2:
-            type: bigint
+        target_id:
+            type:    bigint
             options: { length: 20, unsigned: true }
-        relationship:
-            type: string
-            options: { length: 50, default: null, notnull: false }
-        text:
-            type: string
-            options: { length: 50, default: null, notnull: false }
+        type:
+            type:    string
+            options: { length: 50, default: null }
+        content_type_name:
+            type:    string
+            options: { length: 20, default: null }
+        caption:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
         position:
-            type: integer
-            options: { default: 0 }
-        posinterior:
-            type: integer
-            options: { default: 0 }
-        verportada:
-            type: integer
-            options: { default: 0 }
-        verinterior:
-            type: integer
-            options: { default: 0 }
+            type:    integer
+            options: { default: 0, unsigned: true }
     index:
         -
-            name: pk_content1
-            columns: [pk_content1]
-            primary: false
-            unique: false
-            flags: {  }
+            name:    PRIMARY
+            columns: [ source_id, target_id, type ]
+            primary: true
+            unique:  false
+            flags:   {}
         -
-            name: pk_content2
-            columns: [pk_content2]
+            name:    source_id
+            columns: [ source_id ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {}
         -
-            name: verportada
-            columns: [verportada]
+            name:    target_id
+            columns: [ target_id ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {}
     foreign_keys:
         -
-            name: related_contents_content1_contents_id
-            source_field: [ pk_content1 ]
+            name:         related_contents_source_id_pk_content
+            source_field: [ source_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
         -
-            name: related_contents_content2_contents_id
-            source_field: [ pk_content2 ]
+            name:         related_contents_target_id_pk_content
+            source_field: [ target_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
@@ -1612,8 +1496,8 @@ user_groups_privileges:
 usermeta:
     columns:
         user_id:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
+            type:    integer
+            options: { default: null, notnull: true, unsigned: true  }
         meta_key:
             type: string
             options: { length: 255 }
@@ -1641,7 +1525,7 @@ usermeta:
             flags: {  }
     foreign_keys:
         -
-            name: usermeta_userid_users_id
+            name:         usermeta_user_id_users_id
             source_field: [ user_id ]
             target_table: users
             target_field: [ id ]
@@ -1649,80 +1533,89 @@ usermeta:
 users:
     columns:
         id:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
+            type:    integer
+            options: { autoincrement: true, default: null, length: 20, unsigned: true, }
         username:
-            type: string
-            options: { length: 100, default: null, notnull: false }
+            type:    string
+            options: { default: null, length: 100, notnull: false }
         password:
-            type: string
-            options: { length: 50, default: null, notnull: false }
+            type:    string
+            options: { default: null, length: 50, notnull: false }
         url:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type:    string
+            options: { default: null, length: 255, notnull: false }
         bio:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
         avatar_img_id:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type:    bigint
+            options: { default: null, length: 20, notnull: false, unsigned: true }
         email:
-            type: string
-            options: { length: 255, default: null, notnull: false }
+            type:    string
+            options: { default: null, length: 255, notnull: false }
         name:
-            type: string
-            options: { length: 100, default: null, notnull: false }
+            type:    string
+            options: { default: null, length: 100, notnull: false }
+        slug:
+            type:    string
+            options: { default: null, length: 100, notnull: false }
         type:
-            type: integer
-            options: { unsigned: true, default: 1, notnull: true, comment: '0 backend - 1 frontend' }
+            type:    integer
+            options: { comment: '0 backend - 1 frontend', default: 1, notnull: true, unsigned: true }
         token:
-            type: string
-            options: { length: 50, default: null, notnull: false }
+            type:    string
+            options: { default: null, length: 32, notnull: false }
         activated:
-            type: integer
-            options: { unsigned: true, default: 0, notnull: true, comment: '1 activated - 0 deactivated' }
+            type:    integer
+            options: { default: 0, notnull: true, unsigned: true }
     index:
         -
-            name: PRIMARY
+            name:    PRIMARY
             columns: [id]
             primary: true
-            unique: true
-            flags: {  }
+            unique:  true
+            flags:   {  }
         -
-            name: user_username
+            name:    avatar_img_id
+            columns: [ avatar_img_id ]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_username
             columns: [username]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
         -
-            name: user_email
+            name:    user_email
             columns: [email]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
         -
-            name: avatar_img_id
-            columns: [avatar_img_id]
+            name:    user_slug
+            columns: [ slug ]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
         -
-            name: user_type
+            name:    user_type
             columns: [type]
             primary: false
-            unique: false
-            flags: {  }
+            unique:  false
+            flags:   {  }
     foreign_keys:
         -
             name: avatar_img_id
             source_field: [ avatar_img_id ]
-            target_table: photos
-            target_field: [ pk_photo ]
+            target_table: contents
+            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 user_user_group:
     columns:
         user_id:
-            type: bigint
+            type: integer
             options: { default: null, unsigned: true }
         user_group_id:
             type: integer
@@ -1752,34 +1645,6 @@ user_user_group:
             source_field: [ user_group_id ]
             target_table: user_groups
             target_field: [ pk_user_group ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-videos:
-    columns:
-        pk_video:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        video_url:
-            type: string
-            options: { length: 255, default: null }
-        information:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
-        author_name:
-            type: string
-            options: { length: 200, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_video]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: videos_id_contents_id
-            source_field: [ pk_video ]
-            target_table: contents
-            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 votes:
     columns:

@@ -9,7 +9,9 @@
  */
 namespace Frontend\Renderer\Statistics;
 
+use Common\Model\Entity\Newsletter;
 use Frontend\Renderer\StatisticsRenderer;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PiwikRenderer extends StatisticsRenderer
 {
@@ -35,16 +37,26 @@ class PiwikRenderer extends StatisticsRenderer
     protected function getParameters($content = null)
     {
         $httpsHost = preg_replace("/http:/", "https:", $this->config['server_url']);
-        $newsUrl   = urlencode(SITE_URL . 'newsletter/' . date("YmdHis"));
         $ampHost   = preg_replace("/^https?:/", "", $this->config['server_url']);
 
-        return [
+        $params = [
             'content'   => $content,
             'config'    => $this->config,
             'httpsHost' => $httpsHost,
-            'newsurl'   => $newsUrl,
             'ampHost'   => $ampHost
         ];
+
+        if (!empty($content) && $content instanceof Newsletter) {
+            $url = $this->container->get('router')->generate(
+                'frontend_newsletter_show',
+                [ 'id' => $content->id, ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
+            $params['newsurl'] = urlencode($url);
+        }
+
+        return $params;
     }
 
     /**

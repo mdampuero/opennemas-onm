@@ -1,21 +1,13 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Handles the actions for the public RSS
- */
 class RssController extends FrontendController
 {
     /**
@@ -33,9 +25,9 @@ class RssController extends FrontendController
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            // Get categories with enabled = 1 and archived = 0
+            // Get categories with enabled = 1 and rss = 1
             $categories = $this->get('api.service.category')
-                ->getList('enabled = 1 and archived = 0');
+                ->getList('enabled = 1 and rss = 1');
 
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
@@ -70,35 +62,34 @@ class RssController extends FrontendController
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
         $this->setViewExpireDate($expire);
 
-        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryName);
+        $categoryID = 0;
+        $rssTitle   = _('Homepage News');
+
+        if (!empty($categoryName)) {
+            try {
+                $oql = sprintf(
+                    'enabled = 1 and rss = 1'
+                    . ' and name regexp "(%%\"|^)%s(\"%%|$)"',
+                    $categoryName
+                );
+
+                $category   = $this->get('api.service.category')
+                    ->getItemBy($oql);
+                $categoryID = $category->id;
+                $rssTitle   = $category->name;
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
+
+        $cacheID = $this->view->getCacheId('rss', 'frontpage', $categoryID);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            $id       = 0;
-            $rssTitle = _('Homepage News');
-
-            if (!empty($categoryName)) {
-                try {
-                    $oql = sprintf(
-                        'enabled = 1 and archived = 0'
-                        . 'and name regexp "(%%\"|^)%s(\"%%|$)"',
-                        $categoryName
-                    );
-
-                    $c = $this->get('api.service.category')
-                        ->getItemBy($oql);
-
-                    $id       = $c->id;
-                    $rssTitle = $c->title;
-                } catch (\Exception $e) {
-                    throw new ResourceNotFoundException();
-                }
-            }
-
             list($contentPositions, $contents, , ) =
                 $this->get('api.service.frontpage')
-                ->getCurrentVersionForCategory($id);
+                ->getCurrentVersionForCategory($categoryID);
 
             // Remove advertisements and widgets
             $contents = array_filter(
@@ -125,7 +116,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,frontpage-' . $categoryName
+            'x-tags'      => 'rss,frontpage-' . $categoryID
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -158,32 +149,34 @@ class RssController extends FrontendController
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
         $this->setViewExpireDate($expire);
 
-        $cacheID = $this->view->getCacheId('rss', $type, $slug);
+        $rssTitle = $titles[$type];
+
+        if (!empty($slug)) {
+            try {
+                $oql = sprintf(
+                    'enabled = 1 and rss = 1 '
+                    . 'and name regexp "(.*\"|^)%s(\".*|$)"',
+                    $slug
+                );
+
+                $category = $this->get('api.service.category')
+                    ->getItemBy($oql);
+
+                $id       = $category->id;
+                $slug     = $category->name;
+                $rssTitle = $rssTitle . ' - ' . $category->title;
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
+
+        $cacheID = empty($id) ?
+            $this->view->getCacheId('rss', $type, '') :
+            $this->view->getCacheId('rss', $type, $id);
 
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            $rssTitle = $titles[$type];
-
-            if (!empty($slug)) {
-                try {
-                    $oql = sprintf(
-                        'enabled = 1 and archived = 0 '
-                        . 'and name regexp "(.*\"|^)%s(\".*|$)"',
-                        $slug
-                    );
-
-                    $category = $this->get('api.service.category')
-                        ->getItemBy($oql);
-
-                    $id       = $category->pk_content_category;
-                    $slug     = $category->name;
-                    $rssTitle = $rssTitle . ' - ' . $category->title;
-                } catch (\Exception $e) {
-                    throw new ResourceNotFoundException();
-                }
-            }
-
             $total = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('elements_in_rss', 10);
@@ -220,8 +213,23 @@ class RssController extends FrontendController
      */
     public function authorRSSAction(Request $request)
     {
-        $slug  = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $slug  = $request->get('author_slug', null);
         $total = 10;
+
+        // Get user by slug
+        try {
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expected = $this->get('router')
+            ->generate('frontend_rss_author', [ 'author_slug' => $user->slug ]);
+
+        if ($request->getPathInfo() !== $expected) {
+            return new RedirectResponse($expected);
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
@@ -234,20 +242,9 @@ class RssController extends FrontendController
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
-            // Get user by slug
-            $user = $this->get('user_repository')->findOneBy(
-                [ 'username' => [[ 'value' => $slug ]] ],
-                ''
-            );
-
-            if (is_null($user)) {
-                throw new ResourceNotFoundException();
-            }
-
             $rssTitle = sprintf('RSS de «%s»', $user->name);
             // Get entity repository
-            $er          = $this->get('entity_repository');
-            $user->photo = $er->find('Photo', $user->avatar_img_id);
+            $er = $this->get('entity_repository');
 
             $order   = ['starttime' => 'DESC' ];
             $filters = [
@@ -268,18 +265,6 @@ class RssController extends FrontendController
             ];
 
             $contents = $er->findBy($filters, $order, $total, 1);
-
-            foreach ($contents as $key => $content) {
-                $contents[$key]->author = $user;
-                if (isset($content->img1) && ($content->img1 > 0)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img1);
-                }
-
-                // Get album cover photo
-                if ($content->fk_content_type == 7) {
-                    $contents[$key]->photo = $er->find('Photo', $content->cover_id);
-                }
-            }
 
             $this->view->assign(['contents' => $contents, 'rss_title' => $rssTitle]);
         }
@@ -323,16 +308,8 @@ class RssController extends FrontendController
             // Get last articles contents
             $contents = $this->getLatestContents('article', null, 50);
 
-            // Fetch photo for each article
             $er = $this->get('entity_repository');
             foreach ($contents as $key => $content) {
-                // Fetch photo for each content
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img1);
-                } elseif (isset($content->img2) && !empty($content->img2)) {
-                    $contents[$key]->photo = $er->find('Photo', $content->img2);
-                }
-
                 // Exclude articles with external link or without body from RSS
                 if ((isset($content->params['bodyLink'])
                     && !empty($content->params['bodyLink']))
@@ -357,7 +334,7 @@ class RssController extends FrontendController
                     $replacements  = [
                         '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
                         '<figure class="op-interactive">${2}</figure>${1}',
-                        'src="' . SITE_URL . 'media/'
+                        'src="' . SITE_URL . '/media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
@@ -426,24 +403,24 @@ class RssController extends FrontendController
             ]
         ];
 
-        // Get categories with enabled = 1 and archived = 0
+        // Get categories with enabled = 1 and rss = 1
         $categories = $this->get('api.service.category')
-            ->getList('enabled = 1 and archived = 0');
+            ->getList('enabled = 1 and rss = 1');
 
         $ids = array_map(function ($a) {
-            return $a->pk_content_category;
+            return $a->id;
         }, $categories['items']);
 
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
         if ($contentType !== 'opinion') {
-            $filters['pk_fk_content_category'] = [
+            $filters['category_id'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
 
             if (!empty($category)) {
-                $filters['pk_fk_content_category'] = [ [ 'value' => $category ] ];
+                $filters['category_id'] = [ [ 'value' => $category ] ];
             }
         }
 
@@ -524,7 +501,7 @@ class RssController extends FrontendController
             $category = $this->get('api.service.category')
                 ->getItemBySlug($name);
 
-            $setting = 'frontpage_layout_' . $category->pk_content_category;
+            $setting = 'frontpage_layout_' . $category->id;
         } catch (\Exception $e) {
             $setting = 'frontpage_layout_0';
         }
@@ -556,49 +533,11 @@ class RssController extends FrontendController
      */
     protected function getRelatedContents(&$contents, $limit = null)
     {
-        // Fetch photo for each article
-        $er = $this->get('entity_repository');
-
         foreach ($contents as $key => $content) {
-            // Fetch photo for each content
-            if (isset($content->img1) && !empty($content->img1)) {
-                $contents[$key]->photo = $er->find('Photo', $content->img1);
-            } elseif (isset($content->img2) && !empty($content->img2)) {
-                $contents[$key]->photo = $er->find('Photo', $content->img2);
-            }
-
-            if (isset($content->fk_video) && !empty($content->fk_video)) {
-                $contents[$key]->video = $er->find('Video', $content->fk_video);
-            } elseif (isset($content->fk_video2) && !empty($content->fk_video2)) {
-                $contents[$key]->video = $er->find('Video', $content->fk_video2);
-            }
-
             // Exclude articles with external link from RSS
             if (isset($content->params['bodyLink'])
                && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
-            }
-
-            $relations = $this->get('related_contents')
-                ->getRelations($content->id, 'inner', $limit);
-            if (!empty($relations)) {
-                $relatedContents = [];
-                $relateds        = $this->get('entity_repository')->findMulti($relations);
-
-                // Filter out not ready for publish contents.
-                foreach ($relateds as $related) {
-                    if ($related->isReadyForPublish()) {
-                        if ($related->content_type == 1 && !empty($related->img1)) {
-                            $related->photo = $er->find('Photo', $related->img1);
-                        } elseif ($related->content_type == 1 && !empty($related->fk_video)) {
-                            $related->video = $er->find('Video', $related->fk_video);
-                        }
-
-                        $relatedContents[] = $related;
-                    }
-                }
-
-                $content->related = $relatedContents;
             }
         }
     }

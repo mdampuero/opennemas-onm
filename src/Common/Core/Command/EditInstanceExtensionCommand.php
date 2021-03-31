@@ -29,7 +29,7 @@ class EditInstanceExtensionCommand extends ContainerAwareCommand
                 <<<EOF
 Adds/removes an extension from the list of purchased extensions.
 
-If `activated` flag enabled, the extension is also enabled.
+If `activated` flag enabled, the extension is also enabled (Added to activated modules).
 
 EOF
             )->addArgument(
@@ -72,6 +72,9 @@ EOF
 
         $this->getContainer()->get('core.loader')->configureInstance($instance);
 
+        $instance->purchased         = $instance->purchased ?? [];
+        $instance->activated_modules = $instance->activated_modules ?? [];
+
         $before = count($instance->purchased)
             + count($instance->activated_modules);
 
@@ -84,11 +87,14 @@ EOF
         }
 
         if ($remove) {
-            $instance->purchased = array_diff($instance->purchased, [ $uuid ]);
+            $instance->purchased = array_values(
+                array_diff($instance->purchased, [ $uuid ])
+            );
 
             if ($activate) {
-                $instance->activated_modules =
-                    array_diff($instance->activated_modules, [ $uuid ]);
+                $instance->activated_modules = array_values(
+                    array_diff($instance->activated_modules, [ $uuid ])
+                );
             }
         }
 

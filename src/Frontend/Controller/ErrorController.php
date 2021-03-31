@@ -49,6 +49,7 @@ class ErrorController extends Controller
             case 'ConnectionException':
             case 'FatalThrowableError':
             case 'SmartyException':
+            case 'BadRequestHttpException':
                 return $this->getFatalErrorResponse(
                     $class->getShortName(),
                     $exception->getMessage()
@@ -112,7 +113,7 @@ class ErrorController extends Controller
      *
      * This will return a 500 error page without any information about the
      * error. It should be used only when the error can not be reported to
-     * the user from some reason.
+     * the user for some reason.
      *
      * @param string $class   The short class name.
      * @param string $message The error message.
@@ -132,10 +133,9 @@ class ErrorController extends Controller
         // Remove assets from bag from a previous run
         $this->get('core.service.assetic.asset_bag')->reset();
 
-        return new Response(
-            $this->get('core.template.admin')->fetch('error/500.tpl'),
-            500
-        );
+        return new Response(file_get_contents(
+            $this->getParameter('core.paths.public') . '/500.html'
+        ), 500);
     }
 
     /**

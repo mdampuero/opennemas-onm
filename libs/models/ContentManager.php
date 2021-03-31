@@ -198,10 +198,10 @@ class ContentManager
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 'SELECT ' . $fields
-                . ' FROM `contents`, `' . $table . '`, `contents_categories` '
+                . ' FROM `contents`, `' . $table . '`, `content_category` '
                 . ' WHERE ' . $where
                 . ' AND `contents`.`pk_content`= `' . $table . '` . `pk_' . $contentType . '` '
-                . ' AND `contents`.`pk_content`= `contents_categories`.`pk_fk_content` ' . $orderBy
+                . ' AND `contents`.`pk_content`= `content_category`.`content_id` ' . $orderBy
             );
 
             return $this->loadObject($rs, $contentType);
@@ -463,7 +463,7 @@ class ContentManager
                 $category = [$category];
             }
 
-            $criteria['pk_fk_content_category'] = [['value' => $category, 'operator' => 'IN']];
+            $criteria['category_id'] = [['value' => $category, 'operator' => 'IN']];
         }
 
         if ($author) {
@@ -540,7 +540,6 @@ class ContentManager
                     'num'        => $content->num_comments,
                     'title'      => $content->title,
                     'permalink'  => $content->slug,
-                    'uri'        => $content->uri
                 ];
             }
 
@@ -611,10 +610,10 @@ class ContentManager
         }
 
         if (intval($category) > 0) {
-            $tables .= ', `contents_categories` ';
+            $tables .= ', `content_category` ';
 
-            $tablesRelationSQL .= ' AND  `contents_categories`.pk_fk_content = `contents`.pk_content '
-                . 'AND `contents_categories`.pk_fk_content_category=' . $category . ' ';
+            $tablesRelationSQL .= ' AND  `content_category`.contend_id = `contents`.pk_content '
+                . 'AND `content_category`.category_id=' . $category . ' ';
         }
 
         $sql = 'SELECT * FROM ' . $tables
@@ -701,8 +700,8 @@ class ContentManager
         if ($category) {
             $category = getService('api.service.category')->getItem($category);
 
-            $criteria['pk_fk_content_category'] = [
-                [ 'value' => $category->pk_content_category ]
+            $criteria['category_id'] = [
+                [ 'value' => $category->id ]
             ];
         }
 
@@ -733,54 +732,12 @@ class ContentManager
     {
         $filtered = [];
         if (is_array($items)) {
-            $filtered = array_filter(
-                $items,
-                function ($item) {
-                    if (is_object($item)) {
-                        return $item->isInTime();
-                    } else {
-                        return self::isInTime($item['starttime'], $item['endtime']);
-                    }
-                }
-            );
+            $filtered = array_filter($items, function ($item) {
+                return getService('core.helper.content')->isIntime($item);
+            });
         }
 
         return array_values($filtered);
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $starttime the initial time from it will be available
-     * @param string $endtime   the initial time until it will be available
-     *
-     * @return boolean
-     */
-    public static function isInTime($starttime = null, $endtime = null)
-    {
-        $start       = !empty($starttime) ? strtotime($starttime) : null;
-        $end         = !empty($endtime) ? strtotime($endtime) : null;
-        $currentTime = time();
-
-        // If $start and $end not defined or they are equals  => is in time
-        if ((empty($start) && empty($end))
-            || $start == $end
-        ) {
-            return true;
-        }
-
-        // only setted $end -> check endttime
-        if (empty($start)) {
-            return $currentTime < $end;
-        }
-
-        // only setted $start -> check startime
-        if (empty($end) || $end <= 0) {
-            return $currentTime > $start;
-        }
-
-        // $start < $currentTime < $end
-        return ($currentTime < $end) && ($currentTime > $start);
     }
 
     /**
@@ -820,7 +777,7 @@ class ContentManager
      *
      * @param string $contentType the contentType to search for
      * @param string $filter the SQL WHERE sentence to filter contents with
-     * @param int $pk_fk_content_category the category id to search for
+     * @param int    $categoryID the category id to search for
      *
      * @return int the number of contents that match the filter
      */
@@ -836,10 +793,10 @@ class ContentManager
 
         if (intval($categoryID) > 0) {
             $sql = 'SELECT COUNT(contents.pk_content) '
-                 . 'FROM `contents_categories`, `contents`, ' . $table . '  '
-                 . ' WHERE `contents_categories`.`pk_fk_content_category`=' . $categoryID
+                 . 'FROM `content_category`, `contents`, ' . $table . '  '
+                 . ' WHERE `content_category`.`category_id`=' . $categoryID
                  . '  AND pk_content=`' . $table . '`.`pk_' . $contentType
-                 . '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . '` AND  `content_category`.`content_id` = `contents`.`pk_content` '
                  . $whereSQL;
         } else {
             $sql = 'SELECT COUNT(contents.pk_content) AS total '
@@ -889,11 +846,11 @@ class ContentManager
         }
 
         if (intval($categoryID) > 0) {
-            $sql = 'SELECT * FROM contents_categories, contents, ' . $table . '  '
+            $sql = 'SELECT * FROM content_category, contents, ' . $table . '  '
                  . 'WHERE ' . $whereSQL
-                 . ' AND `contents_categories`.`pk_fk_content_category`=' . $categoryID
+                 . ' AND `content_category`.`category_id`=' . $categoryID
                  . ' AND `contents`.`pk_content`=`' . $table . '`.`pk_' . $contentType . '` '
-                 . ' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                 . ' AND  `content_category`.`content_id` = `contents`.`pk_content` '
                  . $orderBy;
         } else {
             return [];
@@ -913,7 +870,7 @@ class ContentManager
     }
 
     /**
-     * Returns the title, catName and slugs of last headlines from a given category
+     * Returns the title and slugs of last headlines from a given category
      *
      * @param string $filter the SQL WHERE sentence to filter the contents
      * @param string $orderBy the ORDER BY sentence to sort the contents
@@ -942,13 +899,6 @@ class ContentManager
                 AND contents.pk_content=opinions.pk_opinion
                 AND ' . $whereSQL . ' ' . $orderBy
             );
-
-            foreach ($rs as &$row) {
-                $photo = getService('entity_repository')
-                    ->find('Photo', $row['avatar_img_id']);
-
-                $row['path_img'] = $photo->getRelativePath();
-            }
 
             return $rs;
         } catch (\Exception $e) {
@@ -1267,50 +1217,13 @@ class ContentManager
     }
 
     /**
-     * Returns a list of metaproperty values from a list of contents
+     * Sets a metaproperty for the actual content.
      *
-     * @param string $property the property name to fetch
+     * @param string $id       The id of the content.
+     * @param string $property The name of the property.
+     * @param mixed  $value    The value of the property.
      *
-     * @return boolean true if it is in the category
-     */
-    public static function getMultipleProperties($propertyMap)
-    {
-        if (empty($propertyMap)) {
-            return [];
-        }
-
-        $map = $values = [];
-        foreach ($propertyMap as $property) {
-            $map[]    = '(fk_content=? AND `meta_name`=?)';
-            $values[] = $property[0];
-            $values[] = $property[1];
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT `fk_content`, `meta_name`, `meta_value` '
-                . 'FROM `contentmeta` WHERE (' . implode(' OR ', $map) . ')',
-                $values
-            );
-
-            return $rs;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return false;
-        }
-    }
-
-    /**
-     * Sets a metaproperty for the actual content
-     *
-     * @param string $id the id of the content
-     * @param string $property the name of the property
-     * @param mixed $value     the value of the property
-     *
-     * @return boolean true if the property was setted
+     * @return boolean true If the property was setted.
      */
     public static function setContentMetadata($id, $property, $value)
     {

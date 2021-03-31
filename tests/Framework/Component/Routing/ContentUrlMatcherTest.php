@@ -23,6 +23,11 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isReadyForPublish' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
@@ -78,9 +83,9 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'content_status'    => '1',
             'in_litter'         => 0,
         ]);
-        $this->content->category_name = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
+        $this->content->category_slug = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
 
-        $this->matcher = new ContentUrlMatcher($this->em);
+        $this->matcher = new ContentUrlMatcher($this->em, $this->contentHelper);
     }
 
     public function serviceContainerCallback($name)
@@ -88,6 +93,9 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'cache':
                 return $this->cache;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
 
             case 'core.locale':
                 return $this->locale;
@@ -114,11 +122,13 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->at(2))->method('get')
             ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
 
+        $this->contentHelper->expects($this->once())->method('isReadyForPublish')
+            ->willReturn(true);
+
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
-            'ciencia'
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
 
         $this->assertTrue(is_object($return));
@@ -132,11 +142,13 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->at(2))->method('get')
             ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
 
+        $this->contentHelper->expects($this->once())->method('isReadyForPublish')
+            ->willReturn(true);
+
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016184',
-            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto',
-            'ciencia'
+            'subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto'
         );
 
         $this->assertTrue(is_object($return));
@@ -160,11 +172,16 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('find')
             ->willReturn($this->content);
 
+
+        $this->contentHelper->expects($this->any())->method('isReadyForPublish')
+            ->willReturn(true);
+
         // Not valid category
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184'
         );
+
         $this->assertTrue(is_object($return));
 
         $this->fm->expects($this->at(2))->method('get')
@@ -190,8 +207,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $return = $this->matcher->matchContentUrl(
             'article',
             '20150114235016000184',
-            null,
-            'ciencia'
+            null
         );
         $this->assertTrue(is_object($return));
     }
@@ -261,6 +277,9 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 
     public function testNotMatchingEntriesWithContent()
     {
+        $this->em->expects($this->any())->method('find')
+            ->willReturn($this->content);
+
         // Not valid content type
         $return = $this->matcher->matchContentUrl(
             'opinion',

@@ -53,7 +53,7 @@ class AlbumController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list'    => [ 'page', 'category_name' ],
+        'list'    => [ 'page', 'category_slug' ],
         'showamp' => [ '_format' ],
     ];
 
@@ -87,7 +87,7 @@ class AlbumController extends FrontendController
      */
     protected function getRoute($action, $params = [])
     {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
+        if ($action == 'list' && array_key_exists('category_slug', $params)) {
             return 'frontend_album_frontpage_category';
         }
 
@@ -101,35 +101,32 @@ class AlbumController extends FrontendController
     {
         $category = $params['o_category'];
         $date     = date('Y-m-d H:i:s');
-        $page     = (int) ($params['page'] ?? 1);
 
         // Invalid page provided as parameter
-        if ($page <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
-        $epp = (int) $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
         $categoryOQL = !empty($category)
-            ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
+            ? sprintf(' and category_id=%d', $category->id)
             : '';
 
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="album" and content_status=1 and in_litter=0 %s '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
             $date,
-            $epp,
-            $epp * ($page - 1)
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
         ));
 
         // No first page and no contents
-        if ($page > 1 && empty($response['items'])) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
@@ -139,40 +136,18 @@ class AlbumController extends FrontendController
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $epp,
-                'page'        => $page,
+                'epp'         => $params['epp'],
+                'page'        => $params['page'],
                 'total'       => $response['total'],
                 'route'       => [
                     'name'   => empty($category)
                         ? 'frontend_album_frontpage'
                         : 'frontend_album_frontpage_category',
                     'params' => !empty($category)
-                        ? [ 'category_name' => $category->name ]
+                        ? [ 'category_slug' => $category->name ]
                         : []
                 ]
             ])
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []) : void
-    {
-        $params['tags']   = $this->getTags($params['content']);
-        $params['author'] = $this->get('user_repository')
-            ->find($params['content']->fk_author);
-
-        $cacheIds = array_map(function ($a) {
-            return [ 'photo', $a['pk_photo'] ];
-        }, $params['content']->photos);
-
-        $photos = $this->get('entity_repository')
-            ->findMulti($cacheIds);
-
-        $params['photos'] = $this->get('data.manager.filter')
-            ->set($photos)
-            ->filter('mapify', [ 'key' => 'pk_photo' ])
-            ->get();
     }
 }

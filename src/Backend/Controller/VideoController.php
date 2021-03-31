@@ -1,17 +1,8 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BackendController
@@ -44,70 +35,52 @@ class VideoController extends BackendController
     protected $resource = 'video';
 
     /**
-     * Handles the form for configure the video module.
+     * Render the content provider for videos.
      *
-     * @param  Request  $request The request object.
-     * @return Response          The response object.
+     * @param Request $request The request object.
      *
-     * @Security("hasExtension('VIDEO_MANAGER')
-     *     and hasPermission('VIDEO_SETTINGS')")
-     */
-    public function configAction(Request $request)
-    {
-        return $this->render('video/config.tpl');
-    }
-
-    /**
-     * Render the content provider for videos
-     *
-     * @param  Request $request The request object.
-     * @return Response         The response object.
-     *
-     * @Security("hasExtension('VIDEO_MANAGER')")
+     * @return Response The response object.
      */
     public function contentProviderAction(Request $request)
     {
-        $categoryId         = $request->query->getDigits('category', 0);
-        $page               = $request->query->getDigits('page', 1);
-        $itemsPerPage       = 8;
-        $frontpageVersionId =
-            $request->query->getDigits('frontpage_version_id', null);
-        $frontpageVersionId = $frontpageVersionId === '' ?
-            null :
-            $frontpageVersionId;
+        $this->checkSecurity($this->extension);
 
-        $em  = $this->get('entity_repository');
-        $ids = $this->get('api.service.frontpage_version')
-            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Video');
+        $page = $request->query->getDigits('page', 1);
+        $epp  = 8;
+        $oql  = 'content_type_name = "video" and in_litter = 0'
+            . ' order by created desc limit ' . $epp;
 
-        $filters = [
-            'content_type_name' => [['value' => 'video']],
-            'content_status'    => [['value' => 1]],
-            'in_litter'         => [['value' => 1, 'operator' => '!=']],
-            'pk_content'        => [['value' => $ids, 'operator' => 'NOT IN']]
-        ];
+        if ($page > 1) {
+            $oql .= ' offset ' . ($page - 1) * $epp;
+        }
 
-        $videos      = $em->findBy($filters, ['created' => 'desc'], $itemsPerPage, $page);
-        $countVideos = $em->countBy($filters);
+        try {
+            $context = $this->get('core.locale')->getContext();
+            $this->get('core.locale')->setContext('frontend');
 
-        $this->get('core.locale')->setContext('frontend');
+            $response = $this->get('api.service.content')->getList($oql);
+            $videos   = $response['items'];
+            $total    = $response['total'];
 
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'page'        => $page,
-            'total'       => $countVideos,
-            'route'       => [
-                'name'   => 'backend_videos_content_provider',
-                'params' => [ 'category' => $categoryId ]
-            ],
-        ]);
+            $this->get('core.locale')->setContext($context);
 
-        return $this->render('video/content-provider.tpl', [
-            'videos'     => $videos,
-            'pagination' => $pagination,
-        ]);
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => true,
+                'directional' => true,
+                'epp'         => $epp,
+                'page'        => $page,
+                'total'       => $total,
+                'route'       => [
+                    'name' => 'backend_videos_content_provider',
+                ],
+            ]);
+
+            return $this->render('video/content-provider.tpl', [
+                'videos'     => $videos,
+                'pagination' => $pagination,
+            ]);
+        } catch (GetListException $e) {
+        }
     }
 }

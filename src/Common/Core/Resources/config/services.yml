@@ -32,6 +32,11 @@ services:
                 template: '@Core/collector/brand.html.twig'
                 priority: 2000
 
+    core.data.layer:
+        class:     Common\Core\Component\DataLayer\DataLayer
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
@@ -49,6 +54,11 @@ services:
     core.globals:
         class:     Common\Core\Component\Core\GlobalVariables
         arguments: [ '@service_container' ]
+        public:    true
+
+    core.google.tag_manager:
+        class:     Common\Core\Component\Google\TagManager
+        arguments:   [ '@core.data.layer' ]
         public:    true
 
     core.image.processor:
@@ -137,7 +147,7 @@ services:
 
     core.security.user.provider:
         class:     Common\Core\Component\Security\User\UserProvider
-        arguments: [ '@orm.manager', [ 'instance' ] ]
+        arguments: [ '@orm.manager', '@cache.manager', [ 'instance' ] ]
         public:    true
 
     core.security.user.oauth_provider:
@@ -158,6 +168,11 @@ services:
     core.validator:
         class:      Common\Core\Component\Validator\Validator
         arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
+        public:    true
+
+    core.variables.extractor:
+        class:     Common\Core\Component\Core\VariablesExtractor
+        arguments:   [ '@core.globals', '@service_container', '@core.template.frontend' ]
         public:    true
 
     core.varnish:

@@ -59,7 +59,7 @@ class RedirectorSubscriberTest extends \PHPUnit\Framework\TestCase
             ->with(new ServiceTask(
                 'cache.connection.instance',
                 'removeByPattern',
-                [ '*mumble_redirector*' ]
+                [ 'redirector*' ]
             ));
 
         $this->subscriber->removeUrlsFromCache();

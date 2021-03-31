@@ -54,7 +54,7 @@ class CategoryValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Category([
             'name'                => 'flob',
-            'pk_content_category' => 1
+            'id' => 1
         ]);
 
         $this->categoryService->expects($this->any())->method('getItemBySlug')
@@ -77,12 +77,12 @@ class CategoryValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Category([
             'name'                => 'flob',
-            'pk_content_category' => 1
+            'id' => 1
         ]);
 
         $category = new Category([
             'name'                => 'flob',
-            'pk_content_category' => 2
+            'id' => 2
         ]);
 
         $this->categoryService->expects($this->any())->method('getItemBySlug')

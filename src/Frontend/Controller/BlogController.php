@@ -1,30 +1,14 @@
 <?php
-/**
- * Defines the frontend controller for the opinion-blog content type
- *
- * @package Frontend_Controllers
- */
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for advertisements
- *
- * @package Frontend_Controllers
- */
 class BlogController extends FrontendController
 {
     /**
@@ -93,26 +77,6 @@ class BlogController extends FrontendController
     ];
 
     /**
-     * Returns a content basing on the parameters in the current request and
-     * the current controller.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Content The content.
-     */
-    protected function getItem(Request $request)
-    {
-        $content = parent::getItem($request);
-
-        if (!empty($content)) {
-            $content->author = $this->get('user_repository')
-                ->find((int) $content->fk_author);
-        }
-
-        return $content;
-    }
-
-    /**
      * Renders the opinion author's frontpage
      *
      * @param Request $request the request object
@@ -125,21 +89,19 @@ class BlogController extends FrontendController
 
         $slug = $request->get('author_slug', null);
 
-        $criteria = [ 'username' => [ [ 'value' => $slug] ] ];
-        $author   = $this->get('user_repository')->findOneBy($criteria);
-
-        if (is_null($author)) {
+        try {
+            $author = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 
-        if (array_key_exists('is_blog', $author->meta)
-            && $author->meta['is_blog'] == 0
-        ) {
+        if ($author->is_blog == 0) {
             return new RedirectResponse(
-                $this->generateUrl(
-                    'frontend_blog_author_frontpage',
-                    ['author_slug' => $author->username]
-                )
+                $this->generateUrl('frontend_opinion_author_frontpage', [
+                    'author_id'   => $author->id,
+                    'author_slug' => $author->slug
+                ])
             );
         }
 
@@ -147,10 +109,6 @@ class BlogController extends FrontendController
 
         $expected = $this->get('core.helper.url_generator')->generate($author);
         $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
-
-        if (!$this->get('core.security')->hasExtension($this->extension)) {
-            throw new ResourceNotFoundException();
-        }
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
@@ -196,11 +154,10 @@ class BlogController extends FrontendController
      */
     public function hydrateList(array &$params = []) : void
     {
-        $date = date('Y-m-d H:i:s');
-        $page = (int) ($params['page'] ?? 1);
-
         // Invalid page provided as parameter
-        if ($page <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
@@ -217,6 +174,7 @@ class BlogController extends FrontendController
             ->get();
 
         $order   = [ 'starttime' => 'DESC' ];
+        $date    = date('Y-m-d H:i:s');
         $filters = [
             'content_type_name' => [[ 'value' => 'opinion' ]],
             'blog'              => [[ 'value' => 1 ]],
@@ -230,18 +188,16 @@ class BlogController extends FrontendController
             'endtime'           => [
                 'union'   => 'OR',
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
                 [ 'value' => $date, 'operator' => '>' ]
             ],
         ];
 
-        $em     = $this->get('opinion_repository');
-        $blogs  = $em->findBy($filters, $order, $epp, $page);
-        $total  = $em->countBy($filters);
-        $photos = $this->get('core.helper.user')->getPhotos($authors);
+        $em    = $this->get('opinion_repository');
+        $blogs = $em->findBy($filters, $order, $epp, $params['page']);
+        $total = $em->countBy($filters);
 
         // No first page and no contents
-        if ($page > 1 && empty($blogs)) {
+        if ($params['page'] > 1 && empty($blogs)) {
             throw new ResourceNotFoundException();
         }
 
@@ -249,43 +205,15 @@ class BlogController extends FrontendController
             'directional' => true,
             'epp'         => $epp,
             'total'       => $total,
-            'page'        => $page,
+            'page'        => $params['page'],
             'route'       => 'frontend_blog_frontpage',
         ]);
-
-        foreach ($blogs as &$blog) {
-            if (!array_key_exists($blog->fk_author, $authors)) {
-                continue;
-            }
-
-            $blog->author           = $authors[$blog->fk_author];
-            $blog->name             = $blog->author->name;
-            $blog->author_name_slug = $blog->author->username;
-
-            if (array_key_exists($blog->author->avatar_img_id, $photos)) {
-                $blog->author->photo =
-                    $photos[$blog->author->avatar_img_id];
-            }
-
-            if (isset($blog->img1) && !empty($blog->img1)) {
-                $blog->img1 = $this->get('entity_repository')
-                    ->find('Photo', $blog->img1);
-            }
-
-            $blog->author->uri = \Uri::generate(
-                'frontend_blog_author_frontpage',
-                [
-                    'slug' => urlencode($blog->author->username),
-                    'id'   => $blog->author->id
-                ]
-            );
-        }
 
         $this->view->assign([
             'opinions'   => $blogs,
             'authors'    => $authors,
             'pagination' => $pagination,
-            'page'       => $page
+            'page'       => $params['page']
         ]);
     }
 
@@ -299,10 +227,11 @@ class BlogController extends FrontendController
     public function hydrateListAuthor(array &$params, $author) : void
     {
         $date = date('Y-m-d H:i:s');
-        $page = (int) ($params['page'] ?? 1);
 
         // Invalid page provided as parameter
-        if ($page <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
@@ -331,33 +260,19 @@ class BlogController extends FrontendController
 
         $orderBy = ['created' => 'DESC'];
 
-        $author->slug  = $author->username;
-        $author->photo = $this->get('entity_repository')->find('Photo', $author->avatar_img_id);
-        $author->getMeta();
-
         $total    = $this->get('opinion_repository')->countBy($filters);
-        $contents = $this->get('opinion_repository')->findBy($filters, $orderBy, $epp, $page);
+        $contents = $this->get('opinion_repository')
+            ->findBy($filters, $orderBy, $epp, $params['page']);
 
         // No first page and no contents
-        if ($page > 1 && empty($contents)) {
+        if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
-        }
-
-        foreach ($contents as &$blog) {
-            if (isset($blog->img1) && ($blog->img1 > 0)) {
-                $blog->img1 = $this->get('entity_repository')->find('Photo', $blog->img1);
-            }
-            $blog->author           = $author;
-            $blog->author_name_slug = $author->slug;
-
-            // Generate author uri
-            $blog->author_uri = $this->get('core.helper.url_generator')->generate($author);
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $epp,
-            'page'        => $page,
+            'page'        => $params['page'],
             'total'       => $total,
             'route'       => [
                 'name'   => 'frontend_blog_author_frontpage',
@@ -369,7 +284,7 @@ class BlogController extends FrontendController
             'pagination' => $pagination,
             'blogs'      => $contents,
             'author'     => $author,
-            'page'       => $page,
+            'page'       => $params['page'],
         ]);
     }
 
@@ -378,19 +293,6 @@ class BlogController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['tags'] = $this->getTags($params['content']);
-
-        // Associated media code
-        if (isset($params['content']->img2) && ($params['content']->img2 > 0)) {
-            $params['photo'] = $this->get('opinion_repository')
-                ->find('Photo', $params['content']->img2);
-        }
-
-        $params['blog']   = $params['content'];
-        $params['author'] = $params['content']->author;
-
-        // TODO: Remove this ASAP
-        $params['content']->author_name_slug =
-            \Onm\StringUtils::generateSlug($params['content']->name);
+        $params['blog'] = $params['content'];
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Opennemas\Data\Type\Str;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PlaygroundController extends Controller
 {
@@ -18,40 +20,77 @@ class PlaygroundController extends Controller
     public function defaultAction(Request $request)
     {
         $action = $request->query->get('action', null);
+        $action = Str::camelCase($action);
 
-        if (!is_null($action)) {
-            $response = $this->{$action}($request);
-            return new Response($response, 200);
-        } else {
-            return new Response('not valid action', 400);
+        if (empty($action) || !method_exists($this, $action)) {
+            return new Response('Not a valid action', 400);
         }
+
+        return $this->{$action}($request);
     }
 
     /**
-     * Tests for session in container
+     * Returns a fake JSON response with the message and the status code
+     * specified as parameters.
      *
-     * @return Response the response object
+     * @param Request $request The request object.
+     *
+     * @return JsonRseponse The response object.
      */
-    public function session()
+    private function jsonResponse($request)
     {
-        $this->get('session')->getFlashBag()->add(
-            'notice',
-            'Your changes were saved!'
-        );
+        $message = $request->get('message');
+        $code    = $request->get('code', 200);
 
-        foreach ($this->get('session')->getFlashBag()->get('notice', array()) as $message) {
-            echo "<div class='flash-notice'>$message</div>";
-        }
+        return new JsonResponse([
+            'code'    => $code,
+            'message' => $message
+        ], $code);
     }
 
     /**
-     * Displays the base/playground.tpl content.
+     * Returns a fake response with the message and the status code specified
+     * as parameters.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Rseponse The response object.
+     */
+    private function response($request)
+    {
+        $message = $request->get('message');
+        $code    = $request->get('code', 200);
+
+        return new Response($message, $code);
+    }
+
+    /**
+     * Tests for session in container.
      *
      * @return Response The response object.
      */
-    public function template()
+    private function session()
     {
-        return $this->render('playground.tpl');
+        $this->get('session')->getFlashBag()
+            ->add('notice', 'Your changes were saved!');
+
+        $html = '';
+
+        foreach ($this->get('session')->getFlashBag()->get('notice', []) as $message) {
+            $html .= "<div class='flash-notice'>$message</div>";
+        }
+
+        return new Response($html, 200);
+    }
+
+    /**
+     * Displays the playground.tpl content.
+     *
+     * @return Response The response object.
+     */
+    private function template()
+    {
+        return new Response($this->render('playground.tpl'), 200);
     }
 
     /**
@@ -61,7 +100,7 @@ class PlaygroundController extends Controller
      *
      * @param Response The response object.
      */
-    public function widget(Request $request)
+    private function widget(Request $request)
     {
         $name = $request->query->get('name');
         $id   = $request->query->get('id');
@@ -78,7 +117,7 @@ class PlaygroundController extends Controller
         if (!empty($id)) {
             $widget = $this->get('entity_repository')->find('Widget', $id);
 
-            return $widget->render($params);
+            return $this->get('frontend.renderer')->render($widget, $params);
         }
 
         $criteria = [
@@ -97,9 +136,12 @@ class PlaygroundController extends Controller
         $widget = $this->get('entity_repository')->findOneBy($criteria);
 
         if (empty($widget)) {
-            return;
+            return new Response('Widget not found', 404);
         }
 
-        return $widget->render($params);
+        return new Response(
+            getService('frontend.renderer.widget')->render($widget, $params),
+            200
+        );
     }
 }

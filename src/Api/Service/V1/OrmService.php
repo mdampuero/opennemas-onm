@@ -106,7 +106,7 @@ class OrmService implements Service
     {
         try {
             $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
+                ->objectify($this->parseData($data));
 
             $item = new $this->class($data);
 
@@ -300,6 +300,26 @@ class OrmService implements Service
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getListBySql($sql = '')
+    {
+        try {
+            $repository = $this->em->getRepository($this->entity, $this->origin);
+
+            $items = $repository->findBySql($sql);
+
+            $response = [ 'items' => $items, 'total' => count($items) ];
+
+            $this->localizeList($response['items']);
+
+            return $response;
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
      * Returns the list of properties that support localization in this service.
      *
      * @return array The list of properties that support localization.
@@ -353,7 +373,8 @@ class OrmService implements Service
             throw new PatchListException('Invalid ids', 400);
         }
 
-        $data = $this->em->getConverter($this->entity)->objectify($data);
+        $data = $this->em->getConverter($this->entity)
+            ->objectify($data);
 
         try {
             $response = $this->getListByIds($ids);
@@ -499,17 +520,14 @@ class OrmService implements Service
      */
     protected function localizeItem($item)
     {
-        if (empty($this->getL10nKeys())
-            || $this->container->get('core.locale')->getContext() !== 'frontend'
-        ) {
+        if (empty($this->getL10nKeys())) {
             return $item;
         }
 
-        $fm = $this->container->get('data.manager.filter');
-
         foreach ($this->getL10nKeys() as $key) {
             if (!empty($item->{$key})) {
-                $item->{$key} = $fm->set($item->{$key})
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
                     ->filter('localize')
                     ->get();
             }
@@ -533,6 +551,18 @@ class OrmService implements Service
         }
 
         return $items;
+    }
+
+    /**
+     * Parses the content data array.
+     *
+     * @param array $data The content data array.
+     *
+     * @return array The parsed data array.
+     */
+    protected function parseData($data)
+    {
+        return array_merge($this->defaults, $data);
     }
 
     /**

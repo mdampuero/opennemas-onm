@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Articles
 {
-    public $restler;
-
     /**
      * Get a complete article
      *
@@ -39,66 +37,30 @@ class Articles
             throw new RestException(404, 'Page not found');
         }
 
-        $er       = getService('entity_repository');
-        $this->cm = new \ContentManager();
+        try {
+            $author = getService('api.service.author')
+                ->getItem($article->fk_author);
 
-        // Assigned media_url used with author photo & related or machine articles with photo
-        $article->media_url = MEDIA_IMG_ABSOLUTE_URL;
+            $article->agency = !empty($author) ? $author->name : $article->agency;
 
-        // Get inner image for this article
-        if (isset($article->img2) && ($article->img2 != 0)) {
-            $photoInt = $er->find('Photo', $article->img2);
-            if (!empty($photoInt)) {
-                $photoInt->media_url = MEDIA_IMG_ABSOLUTE_URL;
-                $article->photoInt   = $photoInt;
-            }
+            // Prevent errors when trying to search authors in target
+            $article->fk_author = null;
+        } catch (\Exception $e) {
         }
 
-        if (is_object($article->author) && !empty($article->author)) {
-            if (!empty($article->author->avatar_img_id)) {
-                $article->author->photo = $article->author->getPhoto();
-            }
-        }
+        $article->external    = 1;
+        $article->externalUri = getService('router')
+            ->generate('frontend_external_article_show', [
+                'category_slug' => get_category_slug($article),
+                'slug'          => $article->slug,
+                'article_id'    => date('YmdHis', strtotime($article->created)) .
+                sprintf('%06d', $article->pk_content),
+            ]);
 
-        // Get inner video for this article
-        if (isset($article->fk_video2)) {
-            $videoInt          = $er->find('Video', $article->fk_video2);
-            $article->videoInt = $videoInt;
-        }
 
-        // Related contents code ---------------------------------------
-        $relations       = getService('related_contents')->getRelations($article->id, 'inner');
-        $relatedContents = [];
-        if (!empty($relations)) {
-            $relatedObjects = getService('entity_repository')->findMulti($relations);
+        $related = $this->getRelated($article);
 
-            // Filter out not ready for publish contents.
-            foreach ($relatedObjects as $content) {
-                if (!$content->isReadyForPublish()) {
-                    continue;
-                }
-
-                // Generate content uri if it's not an attachment
-                if ($content->fk_content_type == '4') {
-                    $content->uri = "ext" . preg_replace('@//@', '/author/', $content->uri);
-                } elseif ($content->fk_content_type == 3) {
-                    // Get instance media
-                    $basePath = INSTANCE_MEDIA;
-
-                    // Get file path for attachments
-                    $filePath = \ContentManager::getFilePathFromId($content->id);
-
-                    // Compose the full url to the file
-                    $content->fullFilePath = $basePath . FILE_DIR . $filePath;
-                } else {
-                    $content->uri = "ext" . $content->uri;
-                }
-                $relatedContents[] = $content;
-            }
-        }
-        $article->relatedContents = $relatedContents;
-
-        return serialize($article);
+        return serialize([ $article, $related ]);
     }
 
     /**
@@ -118,5 +80,49 @@ class Articles
         if (is_infinite($number)) {
             throw new RestException(400, 'parameter is not finite');
         }
+    }
+
+    /**
+     * Returns the list of contents related to the provided contents.
+     *
+     * @param Content $article The article to get related contents for.
+     *
+     * @return array The list of related contents.
+     */
+    protected function getRelated($article)
+    {
+        $ids = [];
+        if (!empty($article->fk_video2) || !empty($article->img2)) {
+            $ids[] = !empty($article->fk_video2)
+                ? $article->fk_video2
+                : $article->img2;
+        }
+
+        $ids = array_merge($ids, array_map(function ($a) {
+            return $a['target_id'];
+        }, array_filter($article->related_contents, function ($a) {
+            return preg_match('/.*_inner/', $a['type']);
+        })));
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        $related = getService('entity_repository')->findBy([
+            'pk_content' => [[ 'value' => $ids, 'operator' => 'IN' ]],
+        ], [ 'starttime' => 'DESC' ]);
+
+        $related = getService('data.manager.filter')
+            ->set($related)
+            ->filter('mapify', [ 'key' => 'pk_content' ])
+            ->get($related);
+
+        foreach ($related as $r) {
+            $r->external    = 1;
+            $r->externalUri = getService('core.helper.url_generator')
+                ->generate($r, [ 'absolute' => true ]);
+        }
+
+        return $related;
     }
 }

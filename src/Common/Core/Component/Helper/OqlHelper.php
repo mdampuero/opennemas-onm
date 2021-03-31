@@ -69,19 +69,15 @@ class OqlHelper
             return;
         }
 
-        $bloggers = $this->container->get('user_repository')->findByUserMeta([
-            'meta_key' => [ [ 'value' => 'is_blog' ] ],
-            'meta_value' => [ [ 'value' => '1' ] ]
-        ], [ 'username' => 'asc' ]);
+        $bloggers = $this->container->get('api.service.author')
+            ->getList('is_blog = 1 order by id asc');
 
         $ids = array_map(function ($a) {
             return $a->id;
-        }, $bloggers);
+        }, $bloggers['items']);
 
         if (empty($ids)) {
-            $this->oql = preg_replace('/blog\s*=\s*"?(1|0)"?/', '', $this->oql);
-
-            return;
+            $ids = [0];
         }
 
         $operator = (int) $matches[1][0] === 0 ? 'NOT IN' : 'IN';

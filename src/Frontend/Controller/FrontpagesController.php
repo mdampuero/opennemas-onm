@@ -30,10 +30,9 @@ class FrontpagesController extends Controller
      */
     public function showAction(Request $request)
     {
-        $categoryName  = $request->query->get('category', 'home');
-        $category      = null;
-        $categoryId    = 0;
-        $categoryTitle = 0;
+        $categoryName = $request->query->get('category', 'home');
+        $category     = null;
+        $categoryId   = 0;
 
         if (!empty($categoryName) && $categoryName !== 'home') {
             try {
@@ -47,8 +46,7 @@ class FrontpagesController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            $categoryId    = $category->pk_content_category;
-            $categoryTitle = $category->title;
+            $categoryId    = $category->id;
             $categoryName  = $category->name;
         }
 
@@ -67,89 +65,17 @@ class FrontpagesController extends Controller
             }
         }
 
-        $cacheId = $this->view->getCacheId('frontpage', $categoryName, $lastSaved);
+        $cacheId = $categoryName == 'home'
+            ? $this->view->getCacheId('frontpage', 'category', $categoryName, $lastSaved)
+            : $this->view->getCacheId('frontpage', 'category', $categoryId, $lastSaved);
 
         if ($this->view->getCaching() === 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheId)
         ) {
-            $ids        = array_keys($contents);
-            $relatedIds = [];
-
-            // Get photo and video ids
-            foreach ($contents as $content) {
-                if (isset($content->img1) && !empty($content->img1)) {
-                    $relatedIds[] = $content->img1;
-                }
-
-                if (isset($content->fk_video) && !empty($content->fk_video)) {
-                    $relatedIds[] = $content->fk_video;
-                }
-            }
-
-            // Get related content ids
-            $relatedMap = $this->get('related_contents')
-                ->getRelatedContents($ids, $categoryId);
-
-            foreach ($relatedMap as $ids) {
-                $relatedIds = array_merge($relatedIds, $ids);
-            }
-
-            $relatedIds = array_unique($relatedIds);
-            $date       = date('Y-m-d H:i:s');
-
-            if (!empty($relatedIds)) {
-                $data = $this->get('entity_repository')->findBy([
-                    'pk_content' => [ [ 'value' => $relatedIds, 'operator' => 'in' ] ],
-                    'starttime' => [
-                        'union' => 'OR',
-                        [ 'value' => null, 'operator' => 'is', 'field' => true ],
-                        [ 'value' => '0000-00-00 00:00:00' ],
-                        [ 'value' => $date, 'operator' => '<=' ],
-                    ],
-                    'endtime' => [
-                        'union' => 'OR',
-                        [ 'value' => null, 'operator' => 'is', 'field' => true ],
-                        [ 'value' => '0000-00-00 00:00:00' ],
-                        [ 'value' => $date, 'operator' => '>' ],
-                    ]
-                ]);
-
-                $related = [];
-                foreach ($data as $content) {
-                    $related[(string) $content->pk_content] = $content;
-                }
-            }
-
             // Overloading information for contents
             $tagsIds = [];
             foreach ($contents as &$content) {
                 $tagsIds = array_merge($content->tags, $tagsIds);
-                if (isset($content->img1) && !empty($content->img1)
-                    && !is_object($content->img1)
-                    && array_key_exists($content->img1, $related)
-                ) {
-                    $content->img1      = $related[$content->img1];
-                    $content->img1_path = $content->img1->path_file
-                        . $content->img1->name;
-                }
-
-                if (isset($content->fk_video) && !empty($content->fk_video)
-                    && array_key_exists($content->fk_video, $related)
-                ) {
-                    $content->obj_video = $related[$content->fk_video];
-                }
-
-                if (array_key_exists($content->pk_content, $relatedMap)) {
-                    $content->related_contents = [];
-
-                    $keys = $relatedMap[$content->pk_content];
-
-                    foreach ($keys as $key) {
-                        if (array_key_exists($key, $related)) {
-                            $content->related_contents[] = $related[$key];
-                        }
-                    }
-                }
             }
 
             $layout = $this->get('orm.manager')
@@ -185,78 +111,6 @@ class FrontpagesController extends Controller
             'x-cache-for'    => $invalidationDt->format('Y-m-d H:i:s'),
             'x-cacheable'    => true,
             'x-tags'         => 'frontpage-page,' . $categoryName
-        ]);
-    }
-
-    /**
-     * Displays an external frontpage.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function extShowAction(Request $request)
-    {
-        $categoryName = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-
-        $wsUrl = $this->get('core.helper.instance_sync')
-            ->getSyncUrl($categoryName);
-
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $cm = new \ContentManager();
-
-        // Setup templating cache layer
-        $this->view->setConfig('frontpages');
-        $cacheID = $this->view->getCacheId('sync', 'frontpage', $categoryName);
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
-        ) {
-            $category = unserialize(
-                $cm->getUrlContent(
-                    $wsUrl . '/ws/categories/object/' . $categoryName,
-                    true
-                )
-            );
-
-            if (empty($category)) {
-                throw new ResourceNotFoundException();
-            }
-
-            // Get all contents for this frontpage
-            $contents = $cm->getUrlContent(
-                $wsUrl . '/ws/frontpages/allcontent/' . $categoryName,
-                true
-            );
-
-            $this->view->assign('column', unserialize(utf8_decode(
-                htmlspecialchars_decode($contents)
-            )));
-
-            // Fetch layout for categories
-            $layout = $cm->getUrlContent($wsUrl . '/ws/categories/layout/' . $categoryName, true);
-
-            if (!$layout) {
-                $layout = 'default';
-            }
-
-            $this->view->assign([ 'layoutFile' => 'layouts/' . $layout . '.tpl' ]);
-        }
-
-        $ads = unserialize($cm->getUrlContent(
-            $wsUrl . '/ws/ads/frontpage/' . $category->pk_content_category,
-            true
-        ));
-
-        return $this->render('frontpage/frontpage.tpl', [
-            'advertisements' => $ads,
-            'cache_id'       => $cacheID,
-            'x-tags'         => 'frontpage-page,frontpage-page-external,' . $categoryName,
-            'x-cache-for'    => '+3 hour',
-            'x-cacheable'    => true,
         ]);
     }
 

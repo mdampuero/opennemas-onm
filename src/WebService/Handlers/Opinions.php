@@ -17,8 +17,6 @@ use Luracast\Restler\RestException;
  */
 class Opinions
 {
-    public $restler;
-
     /*
     * @url GET /opinions/complete/:id
     */
@@ -33,19 +31,18 @@ class Opinions
             throw new RestException(404, 'Page not found');
         }
 
-        // Get author information
-        $ur = getService('user_repository');
-        $author = $ur->find($opinion->fk_author);
-        $opinion->author = $author;
+        try {
+            // Get author information
+            $author          = getService('api.service.author')->getItem($opinion->fk_author);
+            $opinion->author = $author;
 
-        // Get author name slug
-        $opinion->author_name_slug = \Onm\StringUtils::generateSlug($opinion->name);
+            // Get author name slug
+            $opinion->author_name_slug = \Onm\StringUtils::generateSlug($author->name);
+        } catch (\Exception $e) {
+        }
 
         //Fetch the other opinions for this author
         $opinion->otherOpinions = $this->others($opinion->id);
-
-        // Get external media url
-        $opinion->externalMediaUrl = MEDIA_IMG_ABSOLUTE_URL;
 
         return serialize($opinion);
     }
@@ -69,20 +66,19 @@ class Opinions
     {
         $or = getService('opinion_repository');
 
-        $filters = array(
-            'in_home'        => array(array('value' => 1)),
-            'content_status' => array(array('value' => 1)),
-        );
+        $filters = [
+            'in_home'        => [ [ 'value' => 1 ] ],
+            'content_status' => [ [ 'value' => 1 ] ],
+        ];
 
-        $order = array(
-            'position' => 'ASC',
+        $order = [
             'starttime' => 'DESC'
-        );
+        ];
         // Fetch all available opinions in home of authors
         $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
+            $opinion->externalUri = 'ext' . get_url($opinion);
         }
 
         return $opinions;
@@ -95,20 +91,19 @@ class Opinions
     {
         $or = getService('opinion_repository');
 
-        $filters = array(
-            'in_home'        => array(array('value' => 0)),
-            'content_status' => array(array('value' => 1)),
-        );
+        $filters = [
+            'in_home'        => [ [ 'value' => 0 ] ],
+            'content_status' => [ [ 'value' => 1 ] ],
+        ];
 
-        $order = array(
-            'position' => 'ASC',
+        $order = [
             'starttime' => 'DESC'
-        );
+        ];
         // Fetch all available opinions in home of authors
         $opinions = $or->findBy($filters, $order);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
+            $opinion->externalUri = 'ext' . get_url($opinion);
         }
 
         return $opinions;
@@ -123,19 +118,19 @@ class Opinions
 
         $or = getService('opinion_repository');
 
-        $filters = array(
-            'in_home'        => array(array('value' => 0)),
-            'content_status' => array(array('value' => 1)),
-        );
+        $filters = [
+            'in_home'        => [ [ 'value' => 0 ] ],
+            'content_status' => [ [ 'value' => 1 ] ],
+        ];
 
-        $order = array(
+        $order = [
             'starttime' => 'DESC'
-        );
+        ];
         // Fetch all available opinions in home of authors
         $opinions = $or->findBy($filters, $order, 20, $page);
 
         foreach ($opinions as &$opinion) {
-            $opinion->uri = 'ext'.$opinion->uri;
+            $opinion->externalUri = 'ext' . get_url($opinion);
         }
 
         return $opinions;
@@ -150,13 +145,13 @@ class Opinions
 
         $cm = new \ContentManager();
 
-        $limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
+        $limit = ' LIMIT ' . (($page - 1) * ITEMS_PAGE) . ',' . (ITEMS_PAGE);
 
         // Get the list articles for this author
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.fk_author='.$id.
+            'opinions.fk_author=' . $id .
             ' AND contents.content_status=1',
-            'ORDER BY created DESC '.$limit
+            'ORDER BY created DESC ' . $limit
         );
 
         return $opinions;
@@ -169,10 +164,10 @@ class Opinions
     {
         $or = getService('opinion_repository');
 
-        $filters = array(
-            'in_home'        => array(array('value' => 0)),
-            'content_status' => array(array('value' => 1)),
-        );
+        $filters = [
+            'in_home'        => [ [ 'value' => 0 ] ],
+            'content_status' => [ [ 'value' => 1 ] ],
+        ];
 
         $numOpinions = $or->countBy($filters);
 
@@ -186,11 +181,12 @@ class Opinions
     {
         $or = getService('opinion_repository');
 
-        $filters = array(
-            'in_home'        => array(array('value' => 0)),
-            'fk_author'      => array(array('value' => $id)),
-            'content_status' => array(array('value' => 1)),
-        );
+        $filters = [
+            'in_home'        => [ [ 'value' => 0 ] ],
+            'fk_author'      => [ [ 'value' => $id ] ],
+            'content_status' => [ [ 'value' => 1 ] ],
+        ];
+
 
         $numOpinions = $or->countBy($filters);
 
@@ -204,27 +200,27 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $or = getService('opinion_repository');
+        $or      = getService('opinion_repository');
         $opinion = $or->find('Opinion', $id);
 
-        $filters = array();
-        $filters['opinions`.`fk_author'] = array(
-            array('value' => $opinion->fk_author)
-        );
+        $filters                         = [];
+        $filters['opinions`.`fk_author'] = [
+            [ 'value' => $opinion->fk_author ]
+        ];
 
 
-        $filters['pk_opinion']     = array(array('value' => $id, 'operator' => '<>'));
-        $filters['content_status'] = array(array('value' => 1));
+        $filters['pk_opinion']     = [ [ 'value' => $id, 'operator' => '<>' ] ];
+        $filters['content_status'] = [ [ 'value' => 1 ] ];
 
-        $order = array(
+        $order = [
             'starttime' => 'DESC'
-        );
+        ];
         // Fetch all available opinions in home of authors
         $otherOpinions = $or->findBy($filters, $order, 9);
 
         foreach ($otherOpinions as &$otherOpinion) {
-            $otherOpinion->author_name_slug  = $opinion->author_name_slug;
-            $otherOpinion->uri = 'ext'.$otherOpinion->uri;
+            $otherOpinion->author_name_slug = $opinion->author_name_slug;
+            $otherOpinion->externalUri      = 'ext' . get_url($otherOpinion);
         }
 
         return $otherOpinions;

@@ -11,6 +11,7 @@ namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\ContentService;
 use Common\Model\Entity\Content;
+use Opennemas\Orm\Core\Entity;
 
 /**
  * Defines test cases for CategoryService class.
@@ -43,6 +44,11 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['filter', 'get', 'set'])
+            ->getMock();
+
         $this->logger = $this->getMockBuilder('Logger')
             ->setMethods([ 'error' ])
             ->getMock();
@@ -51,6 +57,18 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([
                 'countContents', 'moveContents', 'removeContents'
             ])->getMock();
+
+        $this->security = $this->getMockBuilder('Sercurity')
+            ->setMethods([ 'hasPermission' ])
+            ->getMock();
+
+        $this->user = new Entity([
+            'email'    => 'flob@garply.com',
+            'id'       => 1,
+            'name'     => 'flob',
+            'password' => 'quux',
+            'type'     => 1
+        ]);
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -63,7 +81,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
-            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds' ])
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->getMock();
     }
@@ -79,6 +97,15 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.security':
+                return $this->security;
+
+            case 'core.user':
+                return $this->user;
+
+            case 'data.manager.filter':
+                return $this->fm;
         }
 
         return null;
@@ -89,11 +116,15 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateItem()
     {
-        $data = [ 'name' => 'flob' ];
+        $data = [ 'name' => 'flob', 'changed' => 'foo' ];
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'flob', 'changed' => 'foo', 'bar' => 1 ]);
 
         $this->converter->expects($this->any())->method('objectify')
             ->with($this->arrayHasKey('changed'))
             ->will($this->returnArgument(0));
+
         $this->em->expects($this->once())->method('persist');
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('content.createItem');
@@ -145,14 +176,18 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     public function testPatchItem()
     {
         $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $data = [ 'name' => 'mumble', 'changed' => 'foo' ];
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->service->expects($this->once())->method('getItem')
             ->with(1)->willReturn($item);
 
-        $this->converter->expects($this->once())->method('objectify')
-            ->with($this->arrayHasKey('changed'))
-            ->will($this->returnArgument(0));
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
@@ -174,14 +209,18 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     public function testPatchList()
     {
         $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $data = [ 'name' => 'mumble', 'changed' => 'foo' ];
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->service->expects($this->once())->method('getListByIds')
             ->with([ 1 ])->willReturn([ 'items' => [ $item ], 'total' => 1 ]);
 
-        $this->converter->expects($this->once())->method('objectify')
-            ->with($this->arrayHasKey('changed'))
-            ->will($this->returnArgument(0));
         $this->em->expects($this->once())->method('persist')
             ->with($item);
         $this->metadata->expects($this->once())->method('getId')
@@ -205,14 +244,18 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     public function testUpdateItem()
     {
         $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $data = [ 'name' => 'flob', 'changed' => 'foo' ];
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
 
         $this->service->expects($this->once())->method('getItem')
             ->with(1)->willReturn($item);
 
-        $this->converter->expects($this->once())->method('objectify')
-            ->with($this->arrayHasKey('changed'))
-            ->will($this->returnArgument(0));
         $this->em->expects($this->once())->method('persist')
             ->with($item);
 
@@ -226,5 +269,76 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('mumble', $item->name);
         $this->assertNotEmpty($item->changed);
+    }
+
+    /**
+     * Tests assignUser.
+     */
+    public function testAssignUser()
+    {
+        $this->service = new ContentService($this->container, 'Common\Model\Entity\Content');
+
+        $method = new \ReflectionMethod($this->service, 'assignUser');
+        $method->setAccessible(true);
+
+        $data = [ 'name' => 'mumble' ];
+
+        $this->security->expects($this->any())->method('hasPermission')
+            ->willReturn(false);
+
+        $this->assertEquals(
+            [ 'name' => 'mumble', 'foo' => 1, 'baz' => 1 ],
+            $method->invokeArgs($this->service, [ $data, [ 'foo', 'baz' ] ])
+        );
+    }
+
+    /**
+     * Tests assignUser with Master.
+     */
+    public function testAssignUserWithMaster()
+    {
+        $this->service = new ContentService($this->container, 'Common\Model\Entity\Content');
+
+        $method = new \ReflectionMethod($this->service, 'assignUser');
+        $method->setAccessible(true);
+
+        $data = [ 'name' => 'mumble' ];
+
+        $this->security->expects($this->any())->method('hasPermission')
+            ->willReturn(true);
+
+        $this->assertEquals(
+            $data,
+            $method->invokeArgs($this->service, [ $data, [ 'foo', 'baz' ] ])
+        );
+    }
+
+    /**
+     * Tests localizeItem.
+     */
+    public function testLocalizeItem()
+    {
+        $item = new \Content();
+
+        $item->related_contents = [ [ 'caption' => [ 'es_ES' => 'glorp', 'en_US' => 'baz' ] ] ];
+
+        $result                   = $item;
+        $result->related_contents = [ 'caption' => 'glorp' ];
+
+        $method = new \ReflectionMethod($this->service, 'localizeItem');
+        $method->setAccessible(true);
+
+        $this->fm->expects($this->any())->method('set')
+            ->with($item->related_contents)
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->any())->method('filter')
+            ->with('localize', [ 'keys' => [ 'caption' ] ])
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($result->related_contents);
+
+        $this->assertEquals($result, $method->invokeArgs($this->service, [ $item ]));
     }
 }

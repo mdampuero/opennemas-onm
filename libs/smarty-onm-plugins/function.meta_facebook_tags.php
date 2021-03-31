@@ -45,7 +45,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
     $image = $smarty->getContainer()->get('core.helper.content_media')
-        ->getContentMediaObject($content, $params);
+        ->getMedia($content, $params);
 
     // Populate the media element if exists
     if (is_object($image)

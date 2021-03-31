@@ -32,10 +32,10 @@ class CategoryRepository extends BaseRepository
             $ids = [ $ids ];
         }
 
-        $sql = 'SELECT pk_fk_content_category AS "id", COUNT(1) AS "contents" '
-            . 'FROM contents_categories '
-            . 'WHERE pk_fk_content_category IN (?) '
-            . 'GROUP BY pk_fk_content_category';
+        $sql = 'SELECT category_id AS "id", COUNT(1) AS "contents" '
+            . 'FROM content_category '
+            . 'WHERE category_id IN (?) '
+            . 'GROUP BY category_id';
 
         $data = $this->conn->fetchAll(
             $sql,
@@ -73,9 +73,9 @@ class CategoryRepository extends BaseRepository
 
         $sql = 'SELECT pk_content AS "id", content_type_name AS "type" '
             . 'FROM contents '
-            . 'LEFT JOIN contents_categories '
-            . 'ON pk_content = pk_fk_content '
-            . 'WHERE pk_fk_content_category IN (?)';
+            . 'LEFT JOIN content_category '
+            . 'ON pk_content = content_id '
+            . 'WHERE category_id IN (?)';
 
         return $this->conn->fetchAll(
             $sql,
@@ -103,11 +103,11 @@ class CategoryRepository extends BaseRepository
             $ids = [ $ids ];
         }
 
-        $sql = 'SELECT pk_fk_content AS "id", content_type_name AS "type"'
-            . ' FROM contents_categories'
+        $sql = 'SELECT content_id AS "id", content_type_name AS "type"'
+            . ' FROM content_category'
             . ' INNER JOIN contents'
-            . ' ON contents_categories.pk_fk_content = contents.pk_content'
-            . ' WHERE pk_fk_content_category IN (?)';
+            . ' ON content_category.content_id = contents.pk_content'
+            . ' WHERE category_id IN (?)';
 
         $contents = $this->conn->fetchAll(
             $sql,
@@ -119,8 +119,8 @@ class CategoryRepository extends BaseRepository
             return [];
         }
 
-        $sql = 'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
-            . ' WHERE pk_fk_content_category IN (?)';
+        $sql = 'UPDATE IGNORE content_category SET category_id = ?'
+            . ' WHERE category_id IN (?)';
 
         $this->conn->executeQuery(
             $sql,
@@ -128,7 +128,7 @@ class CategoryRepository extends BaseRepository
             [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
         );
 
-        $sql = 'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)';
+        $sql = 'DELETE FROM content_category WHERE category_id IN (?)';
 
         $this->conn->executeQuery(
             $sql,
@@ -158,8 +158,8 @@ class CategoryRepository extends BaseRepository
         }
 
         $sql = 'DELETE FROM contents WHERE pk_content IN ('
-            . 'SELECT pk_fk_content FROM contents_categories '
-            . 'WHERE pk_fk_content_category IN (?))';
+            . 'SELECT content_id FROM content_category '
+            . 'WHERE category_id IN (?))';
 
         $this->conn->executeQuery(
             $sql,

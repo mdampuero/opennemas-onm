@@ -9,6 +9,7 @@
  */
 namespace Backend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -179,9 +180,11 @@ class AdvertisementsController extends Controller
         }
 
         // If the advertisement has photo assigned retrieve it
-        if (!empty($advertisement->path)) {
-            $photo1 = new \Photo($advertisement->path);
-            $this->view->assign('photo1', $photo1);
+        $service = $this->get('api.service.photo');
+        try {
+            $photo1 = $service->getItem($advertisement->path);
+            $this->view->assign('photo1', $service->responsify($photo1));
+        } catch (GetItemException $e) {
         }
 
         return $this->render('advertisement/new.tpl', array_merge(

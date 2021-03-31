@@ -30,7 +30,7 @@ class CategoryValidator extends Validator
                     ->getItemBySlug($name);
 
                 // Update action
-                if ($category->pk_content_category == $item->pk_content_category) {
+                if ($category->id == $item->id) {
                     continue;
                 }
             } catch (\Exception $e) {

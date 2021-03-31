@@ -22,19 +22,14 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->um = $this->getMockBuilder('UserManager')
-            ->setMethods([ 'findByUserMeta' ])
+        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getList' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
             ->getMock();
-
-        $this->um->expects($this->any())->method('findByUserMeta')
-            ->willReturn([ new User([ 'id' => 1 ]), new User([ 'id' => 2 ]) ]);
-
-        $this->container->expects($this->any())->method('get')
-            ->willReturn($this->um);
 
         $this->helper = new OqlHelper($this->container);
     }
@@ -44,6 +39,15 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFiltersFromOql()
     {
+        $this->as->expects($this->any())->method('getList')
+            ->willReturn([
+                2,
+                'items' => [new User([ 'id' => 1 ]), new User([ 'id' => 2 ])]
+            ]);
+
+        $this->container->expects($this->any())->method('get')
+            ->willReturn($this->as);
+
         $this->assertEquals([ '', '', 10, 1 ], $this->helper->getFiltersFromOql());
         $this->assertEquals(
             [ '', '', 30, 1 ],
@@ -72,6 +76,23 @@ class OqlHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [ 'fk_author IN (1,2)', 'flob desc, foo asc', 10, 1 ],
+            $this->helper->getFiltersFromOql('blog = "1" order by flob desc, foo asc')
+        );
+    }
+
+    /**
+     * Tests getFiltersFromOql when no bloggers provided.
+     */
+    public function testGetFiltersFromOqlWhenNoBloggersProvided()
+    {
+        $this->as->expects($this->any())->method('getList')
+            ->willReturn([ 'items' => [], 0 ]);
+
+        $this->container->expects($this->any())->method('get')
+            ->willReturn($this->as);
+
+        $this->assertEquals(
+            [ 'fk_author IN (0)', 'flob desc, foo asc', 10, 1 ],
             $this->helper->getFiltersFromOql('blog = "1" order by flob desc, foo asc')
         );
     }

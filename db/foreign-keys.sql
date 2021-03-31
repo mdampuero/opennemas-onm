@@ -69,7 +69,6 @@ DELETE FROM `videos` WHERE `pk_video` NOT IN (SELECT `pk_content` FROM `contents
 DELETE FROM `widgets` WHERE `pk_widget` NOT IN (SELECT `pk_content` FROM `contents`);
 
 # Update of content types (taked from May 5th, 2016 database changes)
-ALTER TABLE action_counters CHANGE date date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE albums_photos CHANGE description description TEXT DEFAULT NULL;
 CREATE INDEX pk_album ON albums_photos (pk_album);
 CREATE INDEX pk_photo ON albums_photos (pk_photo);

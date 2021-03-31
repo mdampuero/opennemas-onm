@@ -239,18 +239,10 @@ class AdvertisementManager extends EntityManager
         }
 
         $advertisements = $this->findMulti($result);
+        $contentHelper  = getService('core.helper.content');
 
-        return array_filter($advertisements, function ($a) {
-            if (!is_object($a)
-                || (!$a->isInTime()
-                && $a->type_medida == 'DATE')
-                || $a->content_status != 1
-                || $a->in_litter != 0
-            ) {
-                return false;
-            }
-
-            return true;
+        return array_filter($advertisements, function ($a) use ($contentHelper) {
+            return $contentHelper->isReadyForPublish($a);
         });
     }
 

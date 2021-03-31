@@ -157,7 +157,7 @@ class Advertisement extends Content
 
         // Check if it contains a flash element
         if ($this->with_script == 0) {
-            $img = getService('entity_repository')->find('Photo', $this->path);
+            $img = getService('api.service.photo')->getItem($this->path);
 
             $this->is_flash = !empty($img) && $img->type_img == "swf";
         }
@@ -204,7 +204,7 @@ class Advertisement extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN advertisements ON pk_content = pk_advertisement WHERE pk_content=?',
                 [ $id ]
             );

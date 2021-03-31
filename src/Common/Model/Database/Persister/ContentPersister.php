@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Model\Database\Persister;
 
 use Common\Model\Entity\User;
@@ -29,13 +22,15 @@ class ContentPersister extends BasePersister
      * @param Metadata   $metadata The entity metadata.
      * @param Cache      $cache    The cache service.
      */
-    public function __construct(Connection $conn, Metadata $metadata, Cache $cache = null, User $user)
+    public function __construct(Connection $conn, Metadata $metadata, ?Cache $cache)
     {
-        $this->cache     = $cache;
-        $this->conn      = $conn;
-        $this->converter = new BaseConverter($metadata);
-        $this->metadata  = $metadata;
-        $this->user      = $user;
+        $this->cache    = $cache;
+        $this->conn     = $conn;
+        $this->metadata = $metadata;
+
+        $class = $metadata->getConverter()['class'];
+
+        $this->converter = new $class($metadata);
     }
 
     /**
@@ -46,9 +41,6 @@ class ContentPersister extends BasePersister
         if (empty($entity->starttime)) {
             $entity->starttime = new \DateTime();
         }
-
-        $entity->fk_user_last_editor = $this->user->id;
-        $entity->fk_publisher        = $this->user->id;
 
         $categories = [];
         if (!empty($entity->categories)) {
@@ -99,9 +91,6 @@ class ContentPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        $entity->fk_user_last_editor = $this->user->id;
-        $entity->fk_publisher        = $this->user->id;
-
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tags       = $entity->tags;
@@ -214,7 +203,7 @@ class ContentPersister extends BasePersister
      */
     protected function removeCategories($id)
     {
-        $sql      = "delete from contents_categories where pk_fk_content = ?";
+        $sql      = "delete from content_category where content_id = ?";
         $params[] = $id['pk_content'];
         $types[]  = is_string($id['pk_content']) ?
             \PDO::PARAM_STR : \PDO::PARAM_INT;
@@ -234,8 +223,8 @@ class ContentPersister extends BasePersister
             return;
         }
 
-        $sql = "replace into contents_categories"
-            . "(pk_fk_content, pk_fk_content_category) values "
+        $sql = "replace into content_category"
+            . "(content_id, category_id) values "
             . str_repeat(
                 '(?,?),',
                 count($categories)
@@ -349,7 +338,7 @@ class ContentPersister extends BasePersister
         }
 
         // Remove old relations
-        $this->removeRelations($id, array_values($relations));
+        $this->removeRelations($id);
 
         // Update relations
         $this->saveRelations($id, $relations);
@@ -362,7 +351,7 @@ class ContentPersister extends BasePersister
      */
     protected function removeRelations($id)
     {
-        $sql      = "delete from related_contents where pk_content1 = ?";
+        $sql      = "delete from content_content where source_id = ?";
         $params[] = $id['pk_content'];
         $types[]  = \PDO::PARAM_INT;
 
@@ -381,26 +370,36 @@ class ContentPersister extends BasePersister
             return;
         }
 
-        $sql = "replace into related_contents"
-            . "(pk_content1, pk_content2, relationship, position) values "
+        $relations = $this->converter->databasifyRelated($relations);
+
+        $sql = "insert into content_content"
+            . "(source_id, target_id, type, content_type_name, caption, position) values "
             . str_repeat(
-                '(?,?,?,?),',
+                '(?,?,?,?,?,?),',
                 count($relations)
             );
 
+        $id     = array_values($id);
         $sql    = rtrim($sql, ',');
         $params = [];
         $types  = [];
         foreach ($relations as $value) {
-            $params = array_merge(
-                $params,
-                array_merge(array_values($id), array_values($value))
-            );
+            $params = array_merge($params, array_merge($id, [
+                (int) $value['target_id'],
+                $value['type'],
+                $value['content_type_name'],
+                $value['caption'],
+                (int) $value['position'],
+            ]));
 
-            $types = array_merge(
-                $types,
-                [ \PDO::PARAM_INT, \PDO::PARAM_INT, \PDO::PARAM_STR, \PDO::PARAM_INT ]
-            );
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+                empty($value['caption']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                \PDO::PARAM_INT
+            ]);
         }
 
         $this->conn->executeQuery($sql, $params, $types);

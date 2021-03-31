@@ -1,11 +1,5 @@
 <?php
-/**
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace WebService\Handlers;
 
 use Luracast\Restler\Format\XmlFormat;
@@ -18,8 +12,6 @@ use Luracast\Restler\RestException;
  */
 class Agency
 {
-    public $restler;
-
     /**
     * Get instance for contentManager
     * This is used in some actions at lists function
@@ -100,51 +92,10 @@ class Agency
 
         $tpl = getService('view')->get('backend');
 
-        if (!empty($article->img1)) {
-            $image[] = $er->find('Photo', $article->img1);
-
-            // Load attached and related contents from array
-            $article->loadFrontpageImageFromHydratedArray($image);
-
-            if (!mb_check_encoding($article->img1->description)) {
-                $article->img1->description = utf8_encode($article->img1->description);
-            }
-        }
-
-        if (!empty($article->img2)) {
-            $image[] = $er->find('Photo', $article->img2);
-
-            // Load attached and related contents from array
-            $article->loadInnerImageFromHydratedArray($image);
-
-            if (!mb_check_encoding($article->img2->description)) {
-                $article->img2->description = utf8_encode($article->img2->description);
-            }
-        }
-
-        // Get author obj
-        try {
-            if (!empty($article->fk_author)) {
-                $article->author = getService('api.service.author')
-                    ->getItem($article->fk_author);
-
-                if (!empty($article->author->avatar_img_id)) {
-                    $article->author->photo = $er->find('Photo', $article->author->avatar_img_id);
-                }
-            }
-        } catch (\Exception $e) {
-            getService('application.log')->error(
-                'Unable to fetch author with id '
-                . $article->fk_author . ' :' . $e->getMessage()
-            );
-        }
-
         $locale = getService('core.locale')->getRequestLocale();
 
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
             'content'     => $article,
-            'photo'       => $article->img1,
-            'photoInner'  => $article->img2,
             'tags'        => getService('api.service.tag')
                 ->getListByIdsKeyMapped($article->tags, $locale)['items']
         ]);
@@ -154,6 +105,7 @@ class Agency
 
         libxml_use_internal_errors(true);
 
+        $output = html_entity_decode($output);
         $output = simplexml_load_string($output);
 
         if (!empty(libxml_get_errors())) {

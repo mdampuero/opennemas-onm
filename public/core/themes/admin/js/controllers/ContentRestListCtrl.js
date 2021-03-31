@@ -1,0 +1,143 @@
+(function() {
+  'use strict';
+
+  angular.module('BackendApp.controllers')
+
+    /**
+     * @ngdoc controller
+     * @name  ContentRestListCtrl
+     *
+     * @requires $controller
+     * @requires $scope
+     * @requires $uibModal
+     *
+     * @description
+     *   Handles all actions in user groups list.
+     */
+    .controller('ContentRestListCtrl', [
+      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', '$timeout',
+      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, $timeout) {
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.getItemId = function(item) {
+          return item.pk_content;
+        };
+
+        /**
+         * @function getFeaturedMedia
+         * @memberOf ContentRestListCtrl
+         *
+         * @description
+         *   Returns the featured media of type for an item.
+         *
+         * @param {Object} The item to get featured media for.
+         * @param {String} The featured media type.
+         */
+        $scope.getFeaturedMedia = function(item, type) {
+          var featured = item.related_contents.filter(function(e) {
+            return e.type === type;
+          });
+
+          if (featured.length === 0 ||
+              !$scope.data.extra.related_contents[featured[0].target_id]) {
+            return { path: null };
+          }
+
+          return $scope.data.extra.related_contents[featured[0].target_id];
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return $scope.config && $scope.config.locale &&
+            $scope.config.locale.multilanguage;
+        };
+
+        /**
+         * @function sendToTrash
+         * @memberOf UserCtrl
+         *
+         * @description
+         *   Shows a modal to confirm user update.
+         */
+        $scope.sendToTrash = function(item) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-delete',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  name:     $scope.id ? 'update' : 'create',
+                  selected: $scope.selected.items.length,
+                  value:    1,
+                };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              if (item) {
+                $scope.patch(item, 'in_litter', 1)
+                  .then(function() {
+                    $scope.list();
+                  });
+                return;
+              }
+
+              $scope.patchSelected('in_litter', 1)
+                .then(function() {
+                  $scope.list();
+                });
+            }
+          });
+        };
+
+        /**
+         * Reloads the image list on media picker close event.
+         */
+        $scope.$on('MediaPicker.close', function() {
+          if ($scope.criteria.content_type_name === 'photo') {
+            $scope.list($scope.route, true);
+          }
+        });
+
+        /**
+         * Updates the array of contents.
+         */
+        $scope.list = function() {
+          if (!$scope.isModeSupported() || $scope.app.mode === 'list') {
+            $scope.flags.http.loading = 1;
+          } else {
+            $scope.flags.http.loadingMore = 1;
+          }
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: $scope.routes.getList,
+            params: { oql: oql }
+          };
+
+          $location.search('oql', oql);
+
+          return http.get(route).then(function(response) {
+            $scope.data = response.data;
+            $scope.parseList(response.data);
+            $scope.disableFlags('http');
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.disableFlags('http');
+            $scope.data = {};
+          });
+        };
+      }
+    ]);
+})();

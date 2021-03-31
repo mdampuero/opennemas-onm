@@ -51,7 +51,7 @@ class CategoryCacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteItem()
     {
-        $category = new Category([ 'pk_content_category' => 203 ]);
+        $category = new Category([ 'id' => 203 ]);
 
         $this->queue->expects($this->at(0))->method('push')
             ->with(new ServiceTask('core.template.cache', 'delete', [

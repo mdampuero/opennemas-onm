@@ -65,6 +65,7 @@ class InstanceController extends Controller
             $creator->backupAssets($assetFolder);
             $creator->backupDatabase($database);
             $creator->backupInstance($instance->id);
+            $creator->backupInstanceMetas($instance->id);
             $creator->deleteDatabase($database);
             $creator->deleteAssets($instance->internal_name);
 

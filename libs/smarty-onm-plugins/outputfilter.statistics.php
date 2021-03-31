@@ -12,7 +12,8 @@ function smarty_outputfilter_statistics($output, $smarty)
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
     $content = $smarty->getValue('content');
 
-    if (is_null($request)) {
+    if (is_null($request)
+        || stripos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 
@@ -31,7 +32,10 @@ function smarty_outputfilter_statistics($output, $smarty)
     ) {
         $output = $smarty->getContainer()->get('frontend.renderer')->render(
             $content,
-            [ 'types' => ['Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics'], 'output' => $output ]
+            [
+                'types'  => [ 'Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics' ],
+                'output' => $output
+            ]
         );
     }
 

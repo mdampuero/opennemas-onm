@@ -180,10 +180,15 @@ class TagController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $page = (int) ($params['page'] ?? 1);
-        $epp  = $this->get('orm.manager')
+        $epp = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
+
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
+            throw new ResourceNotFoundException();
+        }
 
         $ids = array_map(function ($a) {
             return $a->id;
@@ -220,34 +225,12 @@ class TagController extends FrontendController
         ];
 
         $em       = $this->get('entity_repository');
-        $contents = $em->findBy($criteria, 'starttime DESC', $epp, $page);
+        $contents = $em->findBy($criteria, 'starttime DESC', $epp, $params['page']);
         $total    = $em->countBy($criteria);
 
         // No first page and no contents
-        if ($page > 1 && empty($contents)) {
+        if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
-        }
-
-        // TODO: review this piece of CRAP
-        foreach ($contents as &$item) {
-            if (isset($item->img1) && ($item->img1 > 0)) {
-                $image = $em->find('Photo', $item->img1);
-                if (is_object($image) && !is_null($image->id)) {
-                    $item->img1_path = $image->path_file . $image->name;
-                    $item->img1      = $image;
-                }
-            } elseif ($item->fk_content_type == 7) {
-                $image           = $em->find('Photo', $item->cover_id);
-                $item->img1_path = $image->path_file . $image->name;
-                $item->img1      = $image;
-            } elseif ($item->fk_content_type == 9) {
-                $item->obj_video = $item;
-                $item->summary   = $item->description;
-            }
-
-            if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                $item->video = $em->find('Video', $item->fk_video2);
-            }
         }
 
         $params = array_merge($params, [
@@ -257,7 +240,7 @@ class TagController extends FrontendController
                 'directional' => true,
                 'epp'         => $epp,
                 'maxLinks'    => 0,
-                'page'        => $page,
+                'page'        => $params['page'],
                 'total'       => $total,
                 'route'       => [
                     'name'   => 'frontend_tag_frontpage',

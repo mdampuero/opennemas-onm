@@ -66,11 +66,6 @@ class Attachment extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = "media" . DS . INSTANCE_UNIQUE_NAME . DS . FILE_DIR . $this->path;
-
-                return ($uri !== '') ? $uri : $this->permalink;
-
             case 'slug':
                 return \Onm\StringUtils::generateSlug($this->title);
 
@@ -98,7 +93,7 @@ class Attachment extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN attachments ON pk_content = pk_attachment WHERE pk_content = ?',
                 [ $id ]
             );
@@ -131,6 +126,8 @@ class Attachment extends Content
         if ($this->exists($data['path']) && !array_key_exists('no_path', $data)) {
             return false;
         }
+
+        $data['category'] = $data['category_id'];
 
         // all the data is ready to save into the database,
         // so create the general entry for this content
@@ -177,6 +174,8 @@ class Attachment extends Content
      */
     public function update($data)
     {
+        $data['category'] = $data['category_id'];
+
         parent::update($data);
 
         try {
@@ -184,7 +183,8 @@ class Attachment extends Content
 
             getService('dbal_connection')->update('attachments', [
                 'title'    => $data['title'],
-                'path'     => $data['path']
+                'path'     => $data['path'],
+                'category' => $data['category']
             ], [ 'pk_attachment' => (int) $data['id'] ]);
 
             return true;
@@ -209,7 +209,9 @@ class Attachment extends Content
             return false;
         }
 
-        $filename = MEDIA_PATH . DS . FILE_DIR . $this->path;
+        $filename = getService('service_container')->getParameter('core.paths.public')
+            . getService('core.instance')->getFilesShortPath()
+            . $this->path;
 
         try {
             parent::remove($id);
@@ -246,44 +248,6 @@ class Attachment extends Content
             );
 
             return intval($rs) > 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error($e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Removes files given its id
-     *
-     * @param array $arrayId the photo ids to delete
-     *
-     * @return boolean true if the photo was deleted
-     */
-    public static function batchDelete($arrayIds)
-    {
-        try {
-            $contents = implode(', ', array_map(function ($item) {
-                return (int) $item;
-            }, $arrayIds));
-
-            $paths = getService('dbal_connection')->fetchAll(
-                'SELECT path FROM attachments WHERE pk_attachment IN (' . $contents . ')'
-            );
-
-            getService('dbal_connection')->executeUpdate(
-                'DELETE FROM attachments WHERE `pk_attachment` IN (' . $contents . ')'
-            );
-
-            foreach ($paths as $path) {
-                $file = MEDIA_PATH . DS . FILE_DIR . DS . $path['path'];
-                if (file_exists($file)) {
-                    echo $path . "\n";
-                    // @unlink($file);
-                }
-            }
-
-            return true;
         } catch (\Exception $e) {
             getService('error.log')->error($e->getMessage());
 

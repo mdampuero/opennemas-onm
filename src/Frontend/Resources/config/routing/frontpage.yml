@@ -11,9 +11,3 @@ frontend_frontpage_category:
         l10n: true
     requirements:
         category: '[^/]+'
-
-frontend_externalfrontpage_category:
-    path: /extseccion/{category}
-    defaults: { _controller: FrontendBundle:Frontpages:extShow, category: home }
-    requirements:
-        category : '[^/]+'

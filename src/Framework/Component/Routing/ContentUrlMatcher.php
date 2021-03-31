@@ -9,6 +9,7 @@
  */
 namespace Framework\Component\Routing;
 
+use Common\Core\Component\Helper\ContentHelper;
 use Repository\EntityManager;
 
 class ContentUrlMatcher
@@ -21,13 +22,22 @@ class ContentUrlMatcher
     protected $em;
 
     /**
+     * The content helper.
+     *
+     * @var ContentHelper
+     */
+    protected $contentHelper;
+
+    /**
      * Initializes the ContentUrlMatcher
      *
      * @param EntityManager $entityManager The entity manager.
+     * @param ContentHelper $contentHelper The content helper.
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, ContentHelper $contentHelper)
     {
-        $this->em = $em;
+        $this->em            = $em;
+        $this->contentHelper = $contentHelper;
     }
 
     /**
@@ -63,14 +73,18 @@ class ContentUrlMatcher
 
         $content = $this->em->find(\classify($type), $id);
 
+        $created = $content->created instanceof \DateTime ?
+            $content->created->format('Y-m-d H:i:s') :
+            $content->created;
+
         // Check if the content matches the info provided and is ready for publish.
         if (is_object($content)
             && $content->pk_content === $id
-            && $content->created === $date
+            && $created === $date
             && $content->content_type_name === $type
             && (is_null($slug) || (string) $slug === (string) $content->slug)
-            && (is_null($category) || $category === $content->category_name)
-            && $content->isReadyForPublish()
+            && (is_null($category) || $category === get_category_slug($content))
+            && $this->contentHelper->isReadyForPublish($content)
         ) {
             return $content;
         }

@@ -142,7 +142,7 @@ class AdvertisementController extends Controller
                 $category = $this->get('api.service.category')
                     ->getItemBySlug($category);
 
-                $id = $category->pk_content_category;
+                $id = $category->id;
             } catch (\Exception $e) {
                 return [];
             }

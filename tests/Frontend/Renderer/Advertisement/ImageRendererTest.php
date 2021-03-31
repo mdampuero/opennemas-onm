@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer\Advertisement;
 
+use Api\Exception\GetItemException;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Advertisement\ImageRenderer;
 
@@ -38,6 +39,11 @@ class ImageRendererTest extends TestCase
 
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet', 'find' ])
+            ->getMock();
+
+        $this->servicePhoto = $this->getMockBuilder('Api\Service\V1\PhotoService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
             ->getMock();
 
         $this->logger = $this->getMockBuilder('Logger')
@@ -102,6 +108,9 @@ class ImageRendererTest extends TestCase
             case 'entity_repository':
                 return $this->em;
 
+            case 'api.service.photo':
+                return $this->servicePhoto;
+
             case 'router':
                 return $this->router;
 
@@ -130,7 +139,7 @@ class ImageRendererTest extends TestCase
             ],
         ];
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -227,7 +236,7 @@ class ImageRendererTest extends TestCase
             ->getMock();
 
         $renderer->expects($this->once())->method('getImage')
-            ->willReturn(new \Photo());
+            ->willReturn(new \Content());
 
         $renderer->expects($this->once())->method('renderSafeFrameImage')
             ->willReturn('foo');
@@ -254,7 +263,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo           = new \Photo();
+        $photo           = new \Content();
         $photo->width    = 300;
         $photo->height   = 300;
         $photo->type_img = 'swf';
@@ -333,7 +342,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -394,7 +403,7 @@ class ImageRendererTest extends TestCase
      */
     public function testGetImage()
     {
-        $photo    = new \Photo();
+        $photo    = new \Content();
         $ad       = new \Advertisement();
         $ad->path = 0;
 
@@ -406,8 +415,8 @@ class ImageRendererTest extends TestCase
         // Not empty image
         $ad->path = 1;
 
-        $this->em->expects($this->any())->method('find')
-            ->with('Photo', $ad->path)
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with($ad->path)
             ->willReturn($photo);
 
         $this->assertEquals(
@@ -415,9 +424,9 @@ class ImageRendererTest extends TestCase
             $method->invokeArgs($this->renderer, [ $ad ])
         );
 
-        $this->em->expects($this->any())->method('find')
-            ->with('Photo', $ad->path)
-            ->will($this->throwException(new \Exception()));
+        $this->servicePhoto->expects($this->any())->method('getItem')
+            ->with($ad->path)
+            ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->renderer, [ $ad ]));
     }
@@ -431,7 +440,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -504,7 +513,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo           = new \Photo();
+        $photo           = new \Content();
         $photo->width    = 300;
         $photo->height   = 300;
         $photo->type_img = 'swf';
@@ -561,7 +570,7 @@ class ImageRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
-        $photo         = new \Photo();
+        $photo         = new \Content();
         $photo->width  = 300;
         $photo->height = 300;
 
@@ -590,7 +599,7 @@ class ImageRendererTest extends TestCase
             ->willReturn('/media/opennemas/images/path/foo.png');
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('advertisement/helpers/inline/image.amp.tpl', [
+            ->with('advertisement/helpers/amp/image.tpl', [
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => '/media/opennemas/images/path/foo.png',

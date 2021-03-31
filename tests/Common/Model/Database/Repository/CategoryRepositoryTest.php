@@ -30,14 +30,19 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->metadata = new Metadata([
             'name' => 'Category',
             'properties' => [
-                'pk_content_category' => 'integer',
+                'id' => 'integer',
                 'name'                => 'string',
+            ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
             ],
             'mapping' => [
                 'database' => [
-                    'table' => 'contents_categories',
+                    'table' => 'content_category',
                     'columns' => [
-                        'pk_content_category' => [
+                        'id' => [
                             'type'    => 'integer',
                             'options' => [ 'default' => null ]
                         ],
@@ -49,7 +54,7 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
                     'index' => [
                         [
                             'primary' => true,
-                            'columns' => [ 'pk_content_category' ]
+                            'columns' => [ 'id' ]
                         ]
                     ]
                 ]
@@ -71,10 +76,10 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(
-                'SELECT pk_fk_content_category AS "id", COUNT(1) AS "contents" '
-                    . 'FROM contents_categories '
-                    . 'WHERE pk_fk_content_category IN (?) '
-                    . 'GROUP BY pk_fk_content_category',
+                'SELECT category_id AS "id", COUNT(1) AS "contents" '
+                    . 'FROM content_category '
+                    . 'WHERE category_id IN (?) '
+                    . 'GROUP BY category_id',
                 [ [ 1 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([
@@ -94,10 +99,10 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(
-                'SELECT pk_fk_content_category AS "id", COUNT(1) AS "contents" '
-                    . 'FROM contents_categories '
-                    . 'WHERE pk_fk_content_category IN (?) '
-                    . 'GROUP BY pk_fk_content_category',
+                'SELECT category_id AS "id", COUNT(1) AS "contents" '
+                    . 'FROM content_category '
+                    . 'WHERE category_id IN (?) '
+                    . 'GROUP BY category_id',
                 [ [ 1, 2, 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([
@@ -128,10 +133,10 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->once())->method('fetchAll')
             ->with(
-                'SELECT pk_fk_content_category AS "id", COUNT(1) AS "contents" '
-                    . 'FROM contents_categories '
-                    . 'WHERE pk_fk_content_category IN (?) '
-                    . 'GROUP BY pk_fk_content_category',
+                'SELECT category_id AS "id", COUNT(1) AS "contents" '
+                    . 'FROM content_category '
+                    . 'WHERE category_id IN (?) '
+                    . 'GROUP BY category_id',
                 [ [ 1, 2, 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([]);
@@ -148,9 +153,9 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'SELECT pk_content AS "id", content_type_name AS "type" '
                     . 'FROM contents '
-                    . 'LEFT JOIN contents_categories '
-                    . 'ON pk_content = pk_fk_content '
-                    . 'WHERE pk_fk_content_category IN (?)',
+                    . 'LEFT JOIN content_category '
+                    . 'ON pk_content = content_id '
+                    . 'WHERE category_id IN (?)',
                 [ [ 1 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([ [ 'id' => 1, 'type' => 'flob' ] ]);
@@ -175,9 +180,9 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'SELECT pk_content AS "id", content_type_name AS "type" '
                     . 'FROM contents '
-                    . 'LEFT JOIN contents_categories '
-                    . 'ON pk_content = pk_fk_content '
-                    . 'WHERE pk_fk_content_category IN (?)',
+                    . 'LEFT JOIN content_category '
+                    . 'ON pk_content = content_id '
+                    . 'WHERE category_id IN (?)',
                 [ [ 1, 2, 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn($contents);
@@ -204,9 +209,9 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'SELECT pk_content AS "id", content_type_name AS "type" '
                     . 'FROM contents '
-                    . 'LEFT JOIN contents_categories '
-                    . 'ON pk_content = pk_fk_content '
-                    . 'WHERE pk_fk_content_category IN (?)',
+                    . 'LEFT JOIN content_category '
+                    . 'ON pk_content = content_id '
+                    . 'WHERE category_id IN (?)',
                 [ [ 1, 2, 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([]);
@@ -223,25 +228,25 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(0))->method('fetchAll')
             ->with(
-                'SELECT pk_fk_content AS "id", content_type_name AS "type"'
-                    . ' FROM contents_categories INNER JOIN contents'
-                    . ' ON contents_categories.pk_fk_content = contents.pk_content'
-                    . ' WHERE pk_fk_content_category IN (?)',
+                'SELECT content_id AS "id", content_type_name AS "type"'
+                    . ' FROM content_category INNER JOIN contents'
+                    . ' ON content_category.content_id = contents.pk_content'
+                    . ' WHERE category_id IN (?)',
                 [ [ 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn($contents);
 
         $this->conn->expects($this->at(1))->method('executeQuery')
             ->with(
-                'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
-                    . ' WHERE pk_fk_content_category IN (?)',
+                'UPDATE IGNORE content_category SET category_id = ?'
+                    . ' WHERE category_id IN (?)',
                 [ 7, [ 4 ] ],
                 [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
         $this->conn->expects($this->at(2))->method('executeQuery')
             ->with(
-                'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)',
+                'DELETE FROM content_category WHERE category_id IN (?)',
                 [ [ 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
@@ -261,10 +266,10 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(0))->method('fetchAll')
             ->with(
-                'SELECT pk_fk_content AS "id", content_type_name AS "type"'
-                    . ' FROM contents_categories INNER JOIN contents'
-                    . ' ON contents_categories.pk_fk_content = contents.pk_content'
-                    . ' WHERE pk_fk_content_category IN (?)',
+                'SELECT content_id AS "id", content_type_name AS "type"'
+                    . ' FROM content_category INNER JOIN contents'
+                    . ' ON content_category.content_id = contents.pk_content'
+                    . ' WHERE category_id IN (?)',
                 [ [ 4, 5 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn($contents);
@@ -272,15 +277,15 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(1))->method('executeQuery')
             ->with(
-                'UPDATE IGNORE contents_categories SET pk_fk_content_category = ?'
-                    . ' WHERE pk_fk_content_category IN (?)',
+                'UPDATE IGNORE content_category SET category_id = ?'
+                    . ' WHERE category_id IN (?)',
                 [ 7, [ 4, 5 ] ],
                 [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
 
         $this->conn->expects($this->at(2))->method('executeQuery')
             ->with(
-                'DELETE FROM contents_categories WHERE pk_fk_content_category IN (?)',
+                'DELETE FROM content_category WHERE category_id IN (?)',
                 [ [ 4, 5 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
@@ -296,10 +301,10 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->at(0))->method('fetchAll')
             ->with(
-                'SELECT pk_fk_content AS "id", content_type_name AS "type"'
-                    . ' FROM contents_categories INNER JOIN contents'
-                    . ' ON contents_categories.pk_fk_content = contents.pk_content'
-                    . ' WHERE pk_fk_content_category IN (?)',
+                'SELECT content_id AS "id", content_type_name AS "type"'
+                    . ' FROM content_category INNER JOIN contents'
+                    . ' ON content_category.content_id = contents.pk_content'
+                    . ' WHERE category_id IN (?)',
                 [ [ 4, 5 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             )->willReturn([]);
@@ -324,8 +329,8 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
-                'DELETE FROM contents WHERE pk_content IN (SELECT pk_fk_content'
-                . ' FROM contents_categories WHERE pk_fk_content_category IN (?))',
+                'DELETE FROM contents WHERE pk_content IN (SELECT content_id'
+                . ' FROM content_category WHERE category_id IN (?))',
                 [ [ 4 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );
@@ -340,8 +345,8 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->once())->method('executeQuery')
             ->with(
-                'DELETE FROM contents WHERE pk_content IN (SELECT pk_fk_content'
-                . ' FROM contents_categories WHERE pk_fk_content_category IN (?))',
+                'DELETE FROM contents WHERE pk_content IN (SELECT content_id'
+                . ' FROM content_category WHERE category_id IN (?))',
                 [ [ 4, 5 ] ],
                 [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
             );

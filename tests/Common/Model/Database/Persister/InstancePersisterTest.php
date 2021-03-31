@@ -32,6 +32,11 @@ class InstancePersisterTest extends \PHPUnit\Framework\TestCase
                 'name'    => 'string',
                 'domains' => 'array'
             ],
+            'converters' => [
+                'default' => [
+                    'class' => 'Opennemas\Orm\Database\Data\Converter\BaseConverter'
+                ]
+            ],
             'mapping' => [
                 'database' => [
                     'table' => 'instances',

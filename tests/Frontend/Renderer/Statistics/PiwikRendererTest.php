@@ -10,8 +10,10 @@
 namespace Tests\Frontend\Renderer;
 
 use Common\Model\Entity\Content;
-use PHPUnit\Framework\TestCase;
+use Common\Model\Entity\Newsletter;
 use Frontend\Renderer\Statistics\PiwikRenderer;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Defines test cases for PiwikRenderer class.
@@ -44,6 +46,11 @@ class PiwikRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
+            ->getMock();
+
         $this->smarty = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
@@ -67,23 +74,30 @@ class PiwikRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'orm.manager':
-                return $this->em;
             case 'core.globals':
                 return $this->global;
+
+            case 'orm.manager':
+                return $this->em;
+
             case 'core.template.admin':
                 return $this->tpl;
+
             case 'core.template.frontend':
                 return $this->smarty;
+
             case 'request_stack':
                 return $this->stack;
+
+            case 'router':
+                return $this->router;
         }
 
         return null;
     }
 
     /**
-     * Tests getParameters.
+     * Tests getParameters when the provided content is not a newsletter.
      */
     public function testGetParameters()
     {
@@ -93,6 +107,33 @@ class PiwikRendererTest extends TestCase
         $method->setAccessible(true);
 
         $this->assertIsArray($method->invokeArgs($this->renderer, [ $content ]));
+    }
+
+    /**
+     * Tests getParameters when the provided content is a newsletter.
+     */
+    public function testGetParametersForNewsletter()
+    {
+        $content = new Newsletter([ 'id' => 950 ]);
+
+        $method = new \ReflectionMethod($this->renderer, 'getParameters');
+        $method->setAccessible(true);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with(
+                'frontend_newsletter_show',
+                [ 'id' => 950 ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            )->willReturn('http://thud.com/newsletter/950');
+
+        $params = $method->invokeArgs($this->renderer, [ $content ]);
+
+        $this->assertIsArray($params);
+        $this->assertArrayHasKey('newsurl', $params);
+        $this->assertEquals(
+            'http%3A%2F%2Fthud.com%2Fnewsletter%2F950',
+            $params['newsurl']
+        );
     }
 
     /**

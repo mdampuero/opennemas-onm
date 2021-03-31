@@ -157,8 +157,7 @@ class DomainController extends Controller
             $ph->enable();
 
             $this->get('application.log')->info(
-                'The user ' . $this->getUser()->username
-                . '(' . $this->getUser()->id . ') has purchased '
+                'The user ' . $this->getUser()->id . ' has purchased '
                 . json_encode($purchase->details)
             );
         } catch (\Exception $e) {

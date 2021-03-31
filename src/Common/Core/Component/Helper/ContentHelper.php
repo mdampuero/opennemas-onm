@@ -81,6 +81,26 @@ class ContentHelper
     }
 
     /**
+     * Returns the scheduling state.
+     *
+     * @return string The scheduling state.
+     */
+    public function getSchedulingState($item)
+    {
+        if ($this->isScheduled($item)) {
+            if ($this->isInTime($item)) {
+                return \Content::IN_TIME;
+            } elseif ($this->isDued($item)) {
+                return \Content::DUED;
+            } elseif ($this->isPostponed($item)) {
+                return \Content::POSTPONED;
+            }
+        }
+
+        return \Content::NOT_SCHEDULED;
+    }
+
+    /**
      * Returns a list of contents related with a content type and category.
      *
      * @param string $contentTypeName  Content types required.
@@ -97,7 +117,7 @@ class ContentHelper
 
         $items = $this->cache->get($cacheId);
 
-        if (!empty($items) && !empty($items[0])) {
+        if (!empty($items)) {
             return $this->ignoreCurrent($contentId, $items, $epp);
         }
 
@@ -118,65 +138,166 @@ class ContentHelper
         ];
 
         if (!empty($categoryId)) {
-            $criteria['pk_fk_content_category'] = [ [ 'value' => $categoryId ] ];
+            $criteria['category_id'] = [ [ 'value' => $categoryId ] ];
         }
 
         try {
-            $photos   = [];
-            $contents = $this->em->findBy($criteria, [
+            $items = $this->em->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
 
-            foreach ($contents as &$content) {
-                if (empty($content->img1)) {
-                    continue;
-                }
-
-                $photo = $this->em->find('Photo', $content->img1);
-
-                if (!empty($photo)) {
-                    $photos[$content->img1] = $photo;
-                }
-            }
-
-            $items = [ $contents, $photos ];
-
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
-            return [ [], [] ];
+            return [];
         }
 
         return $this->ignoreCurrent($contentId, $items, $epp);
     }
 
     /**
-     * Removes the current content and its photo from the list of suggested
+     * Check if a content is in time for publishing
+     *
+     * @return boolean
+     */
+    public function isInTime($item)
+    {
+        $timezone  = getService('core.locale')->getTimeZone();
+        $now       = new \DateTime(null, $timezone);
+        $starttime = !$item->starttime instanceof \DateTime ?
+            new \DateTime($item->starttime, $timezone) :
+            $item->starttime;
+        $endtime   = !$item->endtime instanceof \DateTime ?
+            new \DateTime($item->endtime, $timezone) :
+            $item->endtime;
+
+        $dued = (
+            !empty($item->endtime)
+            && $now->getTimestamp() > $endtime->getTimestamp()
+        );
+
+        $postponed = (
+            !empty($item->starttime)
+            && $now->getTimestamp() < $starttime->getTimestamp()
+        );
+
+        return (!$dued && !$postponed);
+    }
+
+    /**
+     * Returns true if a match time constraints, is available and is not in trash
+     *
+     * @return boolean true if is ready
+     */
+    public function isReadyForPublish($item)
+    {
+        return ($this->isInTime($item)
+            && $item->content_status == 1
+            && $item->in_litter == 0);
+    }
+
+    /**
+     * Returns true if the content is suggested
+     *
+     * @return boolean true if the content is suggested
+     */
+    public function isSuggested($item)
+    {
+        return ($item->frontpage == 1);
+    }
+
+    /**
+     * Removes the current content from the list of suggested
      * contents.
      *
      * @param int   $contentId The current content id.
-     * @param array $items     The list of suggested contents and photos for a
-     *                         category.
+     * @param array $items     The list of suggested contents for a category.
      * @param int   $epp       The maximum number of items to return.
      *
-     * @return array The list of suggested contents and their photos without
-     *               the current content.
+     * @return array The list of suggested contents.
      */
     protected function ignoreCurrent($contentId, $items, $epp)
     {
-        $current = array_filter($items[0], function ($a) use ($contentId) {
+        $current = array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content == $contentId;
         });
 
-        $items[0] = array_slice(array_filter($items[0], function ($a) use ($contentId) {
+        $items = array_slice(array_filter($items, function ($a) use ($contentId) {
             return $a->pk_content != $contentId;
         }), 0, $epp);
 
-        if (!empty($current)) {
-            if (!empty($current[0]->img1)) {
-                unset($items[1][$current[0]->img1]);
-            }
+        return $items;
+    }
+
+    /**
+     * Check if this content is dued
+     *       End      Now
+     * -------]--------|-----------
+     *
+     * @return bool
+     */
+    protected function isDued($item)
+    {
+        if (empty($item->endtime)) {
+            return false;
         }
 
-        return $items;
+        $timezone = getService('core.locale')->getTimeZone();
+
+        $end = !$item->endtime instanceof \DateTime ?
+            new \DateTime($item->endtime, $timezone) :
+            $item->endtime;
+        $now = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() > $end->getTimeStamp();
+    }
+
+    /**
+     * Check if this content is postponed
+     *
+     *       Now     Start
+     * -------|--------[-----------
+     *
+     * @return bool
+     */
+    protected function isPostponed($item)
+    {
+        if (empty($item->starttime)) {
+            return false;
+        }
+
+        $timezone = getService('core.locale')->getTimeZone();
+
+        $start = !$item->starttime instanceof \DateTime ?
+            new \DateTime($item->starttime, $timezone) :
+            $item->starttime;
+        $now   = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() < $start->getTimeStamp();
+    }
+
+    /**
+     * Check if this content is scheduled or, in others words, if this
+     * content has a starttime and/or endtime defined.
+     *
+     * @return bool
+     */
+    protected function isScheduled($item)
+    {
+        if (empty($item->starttime)) {
+            return false;
+        }
+
+        $start = !$item->starttime instanceof \Datetime ?
+            new \DateTime($item->starttime) :
+            $item->starttime;
+        $end   = !$item->endtime instanceof \DateTime ?
+            new \DateTime($item->endtime) :
+            $item->endtime;
+
+        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
+            return false;
+        }
+
+        return true;
     }
 }

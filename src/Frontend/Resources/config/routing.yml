@@ -76,9 +76,6 @@ frontend_opinion:
 frontend_password:
     resource: '@FrontendBundle/Resources/config/routing/password.yml'
 
-frontend_paywall:
-    resource: '@FrontendBundle/Resources/config/routing/paywall.yml'
-
 frontend_poll:
     resource: '@FrontendBundle/Resources/config/routing/poll.yml'
 

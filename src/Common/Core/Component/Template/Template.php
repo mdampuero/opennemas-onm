@@ -38,15 +38,6 @@ class Template extends \Smarty
     protected $filters = [];
 
     /**
-     * The path to image directory.
-     *
-     * @var string
-     *
-     * TODO: Make this variable protected
-     */
-    public $image_dir = null;
-
-    /**
      * The active instance.
      *
      * @var Instance
@@ -415,14 +406,14 @@ class Template extends \Smarty
         // Keep this to ignore notice
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
-        if (!empty($this->theme)) {
-            $this->image_dir = substr(SITE_URL, 0, -1) . $this->theme->path . 'images/';
-        }
+        $imageDir = !empty($this->theme)
+            ? SITE_URL . '/' . trim($this->theme->path, '/') . '/images/'
+            : null;
 
         $this->assign([
             'app'       => $this->container->get('core.globals'),
             '_template' => $this,
-            'params'    => [ 'IMAGE_DIR' => $this->image_dir ]
+            'params'    => [ 'IMAGE_DIR' => $imageDir ]
         ]);
     }
 
@@ -509,8 +500,7 @@ class Template extends \Smarty
      */
     protected function setupPlugins($theme)
     {
-        $path = $this->container->getParameter('core.paths.themes') . '/'
-            . str_replace('es.openhost.theme.', '', $theme->uuid) . '/plugins';
+        $path = $theme->realpath . '/plugins';
 
         $this->addPluginsDir($path);
         $this->addPluginsDir(SITE_LIBS_PATH . '/smarty-onm-plugins/');

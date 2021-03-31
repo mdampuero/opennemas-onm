@@ -1,18 +1,11 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Controller\V1\Backend;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class PhotoController extends ContentOldController
+class PhotoController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -29,21 +22,31 @@ class PhotoController extends ContentOldController
      */
     protected $service = 'api.service.photo';
 
-
     /**
      * {@inheritdoc}
      */
     public function saveItemAction(Request $request)
     {
-        try {
-            $this->checkSecurity($this->extension, $this->getActionPermission('save'));
-            $files = $request->files->all();
-            $file  = array_pop($files);
-            $item  = $this->get($this->service)->createItem($file);
-            return new JsonResponse($item, 201);
-        } catch (\Exception $e) {
-            return new JsonResponse($e->getMessage(), 400);
+        $msg = $this->get('core.messenger');
+
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+        $files = $request->files->all();
+        $file  = array_pop($files);
+        $data  = $request->request->all();
+        $item  = $this->get($this->service)->createItem($data, $file);
+
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                [ 'id' => $this->getItemId($item) ]
+            ));
         }
+
+        return $response;
     }
 
     /**
@@ -79,6 +82,8 @@ class PhotoController extends ContentOldController
             }
         }
 
-        return array_merge(parent::getExtraData($items), [ 'years' => array_values($years) ]);
+        return array_merge(parent::getExtraData($items), [
+            'years' => array_values($years)
+        ]);
     }
 }

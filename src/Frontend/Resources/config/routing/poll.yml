@@ -6,18 +6,18 @@ frontend_poll_frontpage:
         l10n: true
 
 frontend_poll_frontpage_category:
-    path:     /encuesta/{category_name}
+    path:     /encuesta/{category_slug}
     defaults: { _controller: FrontendBundle:Poll:list, page: 1 }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
     options:
         l10n: true
 
 frontend_poll_show:
-    path: /encuesta/{category_name}/{slug}/{created}{id}.html
+    path: /encuesta/{category_slug}/{slug}/{created}{id}.html
     defaults: { _controller: FrontendBundle:Poll:show }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
         slug:          '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'

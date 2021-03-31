@@ -10,6 +10,7 @@
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\OrmService;
+use Common\Model\Entity\Content;
 use Opennemas\Orm\Core\Entity;
 
 /**
@@ -53,7 +54,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy' ])
+            ->setMethods([ 'countBy', 'find', 'findBy', 'findBySql' ])
             ->getMock();
 
         $this->validator = $this->getMockBuilder('Validator' . uniqid())
@@ -477,6 +478,37 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getListBySql when no error.
+     */
+    public function testGetListBySql()
+    {
+        $sql    = 'select count(*) from glorp';
+        $items  = [ new Content()  ];
+        $result = [ 'items' => $items, 'total' => count($items) ];
+
+        $this->repository->expects($this->once())->method('findBySql')
+            ->with($sql)
+            ->willReturn($items);
+
+        $this->assertEquals($result, $this->service->getListBySql($sql));
+    }
+
+    /**
+     * Tests getListBySql when error.
+     *
+     * @expectedException \Api\Exception\GetListException
+     */
+    public function testGetListWhenException()
+    {
+        $sql = 'select count(*) from glorp';
+
+        $this->repository->expects($this->once())->method('findBySql')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->getListBySql($sql);
+    }
+
+    /**
      * Tests getListByIds when no error.
      */
     public function testGetListByIds()
@@ -876,32 +908,12 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests localizeItem when no frontend context.
-     */
-    public function testLocalizeItemWhenNoFrontendContext()
-    {
-        $item = new Entity([ 'name' => 'foobar' ]);
-
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('plugh');
-        $this->metadata->expects($this->once())->method('getL10nKeys')
-            ->willReturn([ 'title', 'name' ]);
-
-        $method = new \ReflectionMethod($this->service, 'localizeItem');
-        $method->setAccessible(true);
-
-        $this->assertEquals($item, $method->invokeArgs($this->service, [ $item ]));
-    }
-
-    /**
      * Tests localizeItem when keys provided and context is frontend.
      */
     public function testLocalizeItem()
     {
         $item = new Entity([ 'name' => [ 'en' => 'foobar', 'es' => 'fubar' ] ]);
 
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('frontend');
         $this->metadata->expects($this->any())->method('getL10nKeys')
             ->willReturn([ 'title', 'name' ]);
 

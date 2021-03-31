@@ -90,8 +90,7 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         try {
-            return $this->container->get('entity_repository')
-                ->find('Photo', $ad->path);
+            return $this->container->get('api.service.photo')->getItem($ad->path);
         } catch (\Exception $e) {
             $this->container->get('error.log')->error($e->getMessage());
         }
@@ -123,7 +122,7 @@ class ImageRenderer extends AdvertisementRenderer
         }
 
         if ($format === 'amp') {
-            $template = 'advertisement/helpers/inline/image.amp.tpl';
+            $template = 'advertisement/helpers/amp/image.tpl';
         }
 
         $isAbsolute = $format === 'newsletter' ? true : false;

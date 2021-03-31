@@ -150,14 +150,41 @@ class InstanceCreator
     }
 
     /**
+     * Backup data of the instance metas.
+     *
+     * @param integer $id The id of the instance.
+     *
+     * @throws BackupException In case of error.
+     */
+    public function backupInstanceMetas($id)
+    {
+        $target   = $this->getBackupPath() . "instance_meta.sql";
+        $database = $this->conn->dbname;
+
+        $cmd = "mysqldump -u{$this->conn->user}"
+            . " -p{$this->conn->password}"
+            . " -h{$this->conn->host}"
+            . ' --no-create-info --where \'instance_id=' . $id . '\' '
+            . $database . ' instance_meta > ' . $target;
+
+        exec($cmd, $output, $result);
+
+        $this->logCommand($cmd, $output, $result);
+
+        if ($result != 0) {
+            throw new BackupException("Cannot backup the instance with id $id");
+        }
+    }
+
+    /**
      * Copies the default assets for the new instance given its internal name.
      *
      * @param string $instance The instance internal name.
      */
     public function copyDefaultAssets($instance)
     {
-        $mediaPath   = SITE_PATH . 'media' . DS . $instance;
-        $defaultPath = SITE_PATH . 'media' . DS . 'default';
+        $mediaPath   = SITE_PATH . 'media/' . $instance;
+        $defaultPath = SITE_PATH . 'core/media/default';
 
         $this->fs->mirror($defaultPath, $mediaPath);
     }

@@ -23,5 +23,5 @@ function smarty_function_renderContentClass($params, &$smarty)
     $element    = 'format_' . $category;
     $properties = $item->{$element};
 
-    return "type-{$item->content_type} category-{$item->category} $properties";
+    return "type-{$item->content_type} category-{$item->category_id} $properties";
 }

@@ -27,7 +27,14 @@
             "app/AppCache.php"
         ],
         "files": [
-            "libs/functions.php"
+            "libs/functions.php",
+            "src/Common/Core/Functions/category.php",
+            "src/Common/Core/Functions/content.php",
+            "src/Common/Core/Functions/helper.php",
+            "src/Common/Core/Functions/album.php",
+            "src/Common/Core/Functions/author.php",
+            "src/Common/Core/Functions/photo.php",
+            "src/Common/Core/Functions/video.php"
         ]
     },
     "autoload-dev": {
@@ -71,14 +78,13 @@
         "drexarj/disqus-php": "dev-master",
         "opennemas/cache": "1.0.*",
         "opennemas/data": "1.0.*",
-        "opennemas/orm": "1.0.2",
+        "opennemas/orm": "1.2.1",
         "opennemas/task": "1.0.*",
         "cometcult/braintree-bundle": "dev-master",
-        "frandieguez/panorama-php": "1.0.*",
+        "frandieguez/panorama-php": "dev-master",
         "google/recaptcha": "1.1.3",
-        "paypal/adaptivepayments-sdk-php": "v3.9.2",
-        "paypal/merchant-sdk-php": "v3.9.1",
-        "rtconner/freshbooks-api": "dev-master"
+        "rtconner/freshbooks-api": "dev-master",
+        "vdb/php-spider": "^0.4.4"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",
@@ -93,12 +99,20 @@
     },
     "repositories": [
         {
-            "type": "vcs",
+            "type": "git",
+            "url":  "https://github.com/openhost/CometCultBraintreeBundle"
+        },
+        {
+            "type": "git",
             "url":  "https://github.com/openhost/jwt-authentication-bundle"
         },
         {
             "type": "git",
             "url": "https://github.com/openhost/NativeSession"
+        },
+        {
+            "type": "git",
+            "url":  "https://github.com/openhost/panorama-php"
         },
         {
             "type": "git",

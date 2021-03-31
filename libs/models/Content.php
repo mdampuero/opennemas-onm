@@ -17,7 +17,7 @@ class Content implements \JsonSerializable, CsvSerializable
     const NOT_SCHEDULED      = 'not-scheduled';
     const SCHEDULED          = 'scheduled';
     const DUED               = 'dued';
-    const IN_TIME            = 'in-time';
+    const IN_TIME            = 'intime';
     const POSTPONED          = 'postponed';
     const L10N_CONTENT_TYPES = [
         'album', 'article', 'attachment' ,'opinion', 'poll', 'video'
@@ -43,20 +43,6 @@ class Content implements \JsonSerializable, CsvSerializable
      * @var string
      */
     protected $body = '';
-
-    /**
-     * The category id this content belongs to
-     *
-     * @var int
-     */
-    public $category = null;
-
-    /**
-     * DEPRECATED: The category name this content belongs to
-     *
-     * @var string
-     */
-    public $category_name = null;
 
     /**
      * Status of this content
@@ -249,9 +235,6 @@ class Content implements \JsonSerializable, CsvSerializable
     public function __get($name)
     {
         switch ($name) {
-            case 'category_title':
-                return $this->loadCategoryTitle();
-
             case 'comments':
                 return 0;
 
@@ -269,14 +252,7 @@ class Content implements \JsonSerializable, CsvSerializable
             case 'ratings':
                 return 0;
 
-            case 'uri':
-                return $this->getUri();
-
             default:
-                if ($name === 'slug' && empty($this->slug)) {
-                    $this->slug = \Onm\StringUtils::generateSlug($this->title);
-                }
-
                 if (in_array($this->content_type_name, self::L10N_CONTENT_TYPES)
                     && in_array($name, $this->getL10nKeys())
                 ) {
@@ -383,8 +359,6 @@ class Content implements \JsonSerializable, CsvSerializable
             $data[$key] = $this->__get($key);
         }
 
-        $data['uri'] = $this->uri;
-
         return $data;
     }
 
@@ -396,10 +370,6 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function load($properties)
     {
-        if (array_key_exists('catName', $properties)) {
-            unset($properties['catName']);
-        }
-
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 $this->{$propertyName} = $this->parseProperty($propertyValue);
@@ -418,8 +388,7 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->id = null;
         }
 
-        // Load contentmeta properties
-        $this->loadContentMetadata($this->id);
+        $this->loadMetas()->loadRelated();
 
         if (isset($this->fk_content_type)) {
             $this->content_type = $this->fk_content_type;
@@ -430,28 +399,12 @@ class Content implements \JsonSerializable, CsvSerializable
             $this->content_type = null;
         }
 
-        if (!isset($this->starttime)
-            || empty($this->starttime)
-            || $this->starttime === '0000-00-00 00:00:00'
-        ) {
+        if (!isset($this->starttime) || empty($this->starttime)) {
             $this->starttime = null;
         }
 
-        if (!isset($this->endtime)
-            || empty($this->endtime)
-            || $this->endtime === '0000-00-00 00:00:00'
-        ) {
+        if (!isset($this->endtime) || empty($this->endtime)) {
             $this->endtime = null;
-        }
-
-        if (isset($this->pk_fk_content_category)) {
-            $this->category = $this->pk_fk_content_category;
-        }
-
-        if (empty($this->category_name)
-            && !empty($this->pk_fk_content_category)
-        ) {
-            $this->loadCategoryName();
         }
 
         if (!empty($this->params) && is_string($this->params)) {
@@ -476,8 +429,8 @@ class Content implements \JsonSerializable, CsvSerializable
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories'
-                . ' ON pk_content = pk_fk_content WHERE pk_content = ?',
+                'SELECT * FROM contents LEFT JOIN content_category'
+                . ' ON pk_content = content_id WHERE pk_content = ?',
                 [ (int) $id ]
             );
 
@@ -540,14 +493,13 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function create($data)
     {
-        $categoryId = array_key_exists('category', $data) ?
-            (int) $data['category'] : null;
+        $categoryId = array_key_exists('category_id', $data) ?
+            (int) $data['category_id'] : null;
 
         $tags = $data['tags'] ?? [];
         $data = $this->parseData($data);
 
         $this
-            ->generateCategoryName($data, $categoryId)
             ->generateStarttime($data)
             ->generateSlug($data)
             ->serializeParams($data)
@@ -593,8 +545,8 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function update($data)
     {
-        $categoryId = array_key_exists('category', $data) ?
-            (int) $data['category'] : null;
+        $categoryId = array_key_exists('category_id', $data) ?
+            (int) $data['category_id'] : null;
 
         $tags = array_key_exists('tags', $data) && !empty($data['tags'])
             ? $data['tags'] : [];
@@ -602,7 +554,6 @@ class Content implements \JsonSerializable, CsvSerializable
         $data = $this->parseData($data, $this->id);
 
         $this
-            ->generateCategoryName($data, $categoryId)
             ->generateStarttime($data)
             ->generateSlug($data)
             ->serializeParams($data)
@@ -643,9 +594,10 @@ class Content implements \JsonSerializable, CsvSerializable
     {
         $properties['changed'] = date('Y-m-d H:i:s');
 
-        if (!empty(getService('core.user'))) {
-            $properties['fk_user_last_editor'] =
-                (int) getService('core.user')->id;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
+            $properties['fk_user_last_editor'] = (int) getService('core.user')->id;
         }
 
         if (array_key_exists('content_status', $properties)
@@ -690,7 +642,7 @@ class Content implements \JsonSerializable, CsvSerializable
         $conn->beginTransaction();
         try {
             $conn->delete('contents', [ 'pk_content' => $id ]);
-            $conn->delete('contents_categories', [ 'pk_fk_content' => $id ]);
+            $conn->delete('content_category', [ 'content_id' => $id ]);
             $conn->delete('content_positions', [ 'pk_fk_content' => $id ]);
             $conn->commit();
 
@@ -714,22 +666,19 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Make unavailable one content, but without deleting it
-     *
-     * This simulates a trash system by setting their available flag to false
+     * Make unavailable one content, but without deleting it.
+     * This simulates a trash system by setting their available flag to false.
      *
      * @param integer $id
-     * @param integer $lastEditor
      *
-     * @return null
+     * @return boolean true If the action was executed
      */
-    public function delete($id, $lastEditor = null)
+    public function delete($id)
     {
         try {
             getService('dbal_connection')->update(
                 'contents',
                 [
-                    'fk_user_last_editor' => $lastEditor,
                     'in_litter' => 1,
                     'content_status' => 0,
                     'changed' => date("Y-m-d H:i:s"),
@@ -784,40 +733,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Returns the URI for this content
-     *
-     * @return string|array the uri
-     */
-    public function getUri()
-    {
-        $type     = $this->content_type_name;
-        $id       = sprintf('%06d', $this->id);
-        $date     = date('YmdHis', strtotime($this->created));
-        $category = urlencode($this->category_name);
-        $slug     = $this->__get('slug');
-
-        if (is_array($slug)) {
-            return array_map(function ($a) use ($type, $id, $date, $category) {
-                return Uri::generate(strtolower($type), [
-                    'id'       => $id,
-                    'date'     => $date,
-                    'category' => $category,
-                    'slug'     => urlencode($a),
-                ]);
-            }, $slug);
-        }
-
-        $uri = Uri::generate(strtolower($this->content_type_name), [
-            'id'       => $id,
-            'date'     => $date,
-            'category' => $category,
-            'slug'     => urlencode($slug),
-        ]);
-
-        return !empty($uri) ? $uri : $this->permalink;
-    }
-
-    /**
      * Sets the state of this content to the trash
      *
      * @return boolean|\Content true if all went well
@@ -831,9 +746,10 @@ class Content implements \JsonSerializable, CsvSerializable
         try {
             $data = [ 'in_litter' => 1, 'changed' => date("Y-m-d H:i:s") ];
 
-            if (!empty(getService('core.user'))) {
-                $data['fk_user_last_editor'] =
-                    (int) getService('core.user')->id;
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
+                $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
             getService('dbal_connection')->update('contents', $data, [
@@ -869,16 +785,17 @@ class Content implements \JsonSerializable, CsvSerializable
     public function restoreFromTrash()
     {
         try {
-            getService('dbal_connection')->update(
-                'contents',
-                [
-                    'in_litter' => 0,
-                    'changed'    => date("Y-m-d H:i:s"),
-                ],
-                [ 'pk_content' => $this->id ]
-            );
+            $data = [ 'in_litter' => 0, 'changed' => date("Y-m-d H:i:s") ];
 
-            $this->in_litter = 0;
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
+                $data['fk_user_last_editor'] = (int) getService('core.user')->id;
+            }
+
+            getService('dbal_connection')->update('contents', $data, [
+                'pk_content' => $this->id
+            ]);
 
             /* Notice log of this action */
             logContentEvent(__METHOD__, $this);
@@ -891,7 +808,7 @@ class Content implements \JsonSerializable, CsvSerializable
             return $this;
         } catch (\Exception $e) {
             getService('error.log')->error(
-                'Error removing content (ID:' . $this->id . '):' . $e->getMessage()
+                'Error restoring content (ID:' . $this->id . '):' . $e->getMessage()
             );
             return false;
         }
@@ -1012,28 +929,28 @@ class Content implements \JsonSerializable, CsvSerializable
 
     /**
      * TODO: review functionality, the is_array thing could be wrong
-     * Change the current value of available content_status property
+     * Change the current value of available content_status property.
      *
-     * @param int $status the available value
-     * @param int $lastEditor the author id that performs the action
+     * @param int $status The available value.
      *
-     * @return boolean true if it was changed successfully
+     * @return boolean true If it was changed successfully.
      */
-    public function setAvailable($status = 1, $lastEditor = null)
+    public function setAvailable($status = 1)
     {
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
 
-        if ($lastEditor == null && !empty(getService('core.user'))) {
+        $lastEditor = $this->fk_user_last_editor;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
             $lastEditor = (int) getService('core.user')->id;
         }
 
         try {
             if (!is_array($status)) {
-                if ($status == 1
-                    && ($this->starttime == '0000-00-00 00:00:00' || empty($this->starttime))
-                ) {
+                if ($status == 1 && empty($this->starttime)) {
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
@@ -1096,11 +1013,16 @@ class Content implements \JsonSerializable, CsvSerializable
             return false;
         }
 
+        $lastEditor = $this->fk_user_last_editor;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
+            $lastEditor = (int) getService('core.user')->id;
+        }
+
         try {
             if (!is_array($status)) {
-                if (($status == 1)
-                    && ($this->starttime == '0000-00-00 00:00:00' || $this->starttime == null)
-                ) {
+                if ($status == 1 && empty($this->starttime)) {
                     $this->starttime = date("Y-m-d H:i:s");
                 }
 
@@ -1205,7 +1127,9 @@ class Content implements \JsonSerializable, CsvSerializable
                 'changed'             => date("Y-m-d H:i:s")
             ];
 
-            if (!empty(getService('core.user'))) {
+            if (!empty(getService('core.user')
+                && !getService('core.security')->hasPermission('MASTER'))
+            ) {
                 $data['fk_user_last_editor'] = (int) getService('core.user')->id;
             }
 
@@ -1280,240 +1204,32 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
+        if (empty($this->id)) {
+            return;
+        }
+
         if (!empty($this->fk_user_last_editor)) {
-            $author = getService('user_repository')->find($this->fk_user_last_editor);
-        } else {
-            $author = getService('user_repository')->find($this->fk_author);
-        }
-
-        $authorName = (is_object($author)) ? $author->name : '';
-
-        if ($this->id !== null) {
-            if (is_null($this->views)) {
-                $this->views = getService('content_views_repository')->getViews($this->id);
-            }
-
-            $status          = $this->getStatus();
-            $schedulingState = $this->getSchedulingState();
-
-            return [
-                'title'           => $this->__get('title'),
-                'category'        => $this->category_name,
-                'views'           => $this->views,
-                'starttime'       => $this->starttime,
-                'endtime'         => $this->endtime,
-                'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
-                'state'           => $this->getL10nStatus($status),
-                'last_author'     => $authorName,
-            ];
-        }
-    }
-
-    /**
-     * TODO: Move to ContentCategory class
-     *
-     * Loads the category name for a given content id
-     *
-     * @return string the category name
-     */
-    public function loadCategoryName()
-    {
-        try {
-            $category = getService('api.service.category')
-                ->getItem($this->pk_fk_content_category);
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        $this->category_name = $category->name;
-
-        return $this->category_name;
-    }
-
-    /**
-     * TODO: Move to ContentCategory class
-     *
-     * Loads the category title for a given content id
-     *
-     * @return string the category title
-     */
-    public function loadCategoryTitle()
-    {
-        try {
-            $category = getService('api.service.category')
-                ->getItem($this->pk_fk_content_category);
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        return $category->title;
-    }
-
-    /**
-     * Returns the scheduling state
-     *
-     * @param string $now string that represents the actual
-     *                    time, useful for testing purposes
-     *
-     * @return string the scheduling state
-     */
-    public function getSchedulingState($now = null)
-    {
-        if ($this->isScheduled($now)) {
-            if ($this->isInTime($now)) {
-                return self::IN_TIME;
-            } elseif ($this->isDued($now)) {
-                return self::DUED;
-            } elseif ($this->isPostponed($now)) {
-                return self::POSTPONED;
+            try {
+                $user = getService('orm.manager')->getRepository('User')
+                    ->find($this->fk_user_last_editor);
+            } catch (\Exception $e) {
             }
         }
 
-        return self::NOT_SCHEDULED;
-    }
+        $status          = $this->getStatus();
+        $schedulingState = getService('core.helper.content')->getSchedulingState($this);
 
-    /**
-     * Returns the scheduling state translated
-     *
-     * @param string $state the state string
-     *
-     * @return string the scheduling state translated
-     */
-    public function getL10nSchedulingState($state = null)
-    {
-        switch ($state) {
-            case 'not-scheduled':
-                $state = _('not scheduled');
-                break;
-            case 'scheduled':
-                $state = _('scheduled');
-                break;
-            case 'dued':
-                $state = _('dued');
-                break;
-            case 'in-time':
-                $state = _('in time');
-                break;
-            case 'postponed':
-                $state = _('postponed');
-                break;
-        }
-
-        return $state;
-    }
-
-    /**
-     * Check if a content is in time for publishing
-     *
-     * @param string $now the current time
-     *
-     * @return boolean
-     */
-    public function isInTime($now = null)
-    {
-        return $this->isScheduled($now)
-                && !$this->isDued($now)
-                && !$this->isPostponed($now);
-    }
-
-    /**
-     * Check if this content is scheduled or, in others words, if this
-     * content has a starttime and/or endtime defined
-     *
-     * @param string $now string that represents the actual
-     *                    time, useful for testing purposes
-     *
-     * @return boolean
-    */
-    public function isScheduled($now = null)
-    {
-        if (empty($this->starttime)) {
-            return false;
-        }
-
-        $start = new \DateTime($this->starttime);
-        $end   = new \DateTime($this->endtime);
-
-        // If the starttime is equals to and endtime (wrong values), this is not scheduled
-        //
-        // TODO: Remove this checking when values fixed in database
-        if ($start->getTimeStamp() - $end->getTimeStamp() == 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if a content start time for publishing
-     * don't check Content::endtime
-     *
-     * @param string $now the current date
-     *
-     * @return boolean
-    */
-    public function isStarted($now = null)
-    {
-        if ($this->starttime == null || $this->starttime == '0000-00-00 00:00:00') {
-            return true;
-        }
-
-        $start = new \DateTime($this->starttime);
-        $now   = new \DateTime($now);
-
-        // If $start isn't defined then return true
-        if ($start->getTimeStamp() > 0) {
-            return ($now->getTimeStamp() > $start->getTimeStamp());
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if this content is postponed
-     *
-     *       Now     Start
-     * -------|--------[-----------
-     *
-     * @param string $now the current date
-     *
-     * @return boolean
-     */
-    public function isPostponed($now = null)
-    {
-        if (empty($this->starttime) || $this->starttime == '0000-00-00 00:00:00') {
-            return false;
-        }
-
-        $timezone = getService('core.locale')->getTimeZone();
-
-        $start = new \DateTime($this->starttime, $timezone);
-        $now   = new \DateTime($now, $timezone);
-
-        return ($now->getTimeStamp() < $start->getTimeStamp());
-    }
-
-    /**
-     * Check if this content is dued
-     *       End      Now
-     * -------]--------|-----------
-     *
-     * @param string $now the current date
-     *
-     * @return boolean
-     */
-    public function isDued($now = null)
-    {
-        if (empty($this->endtime) || $this->endtime == '0000-00-00 00:00:00') {
-            return false;
-        }
-
-        $timezone = getService('core.locale')->getTimeZone();
-
-        $end = new \DateTime($this->endtime, $timezone);
-        $now = new \DateTime($now, $timezone);
-
-        return ($now->getTimeStamp() > $end->getTimeStamp());
+        return [
+            'title'           => $this->__get('title'),
+            'category'        => get_category_name($this),
+            'starttime'       => $this->starttime,
+            'endtime'         => $this->endtime,
+            'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
+            'state'           => $this->getL10nStatus($status),
+            'last_editor'     => $user->name ?? '',
+            'views'           => getService('content_views_repository')
+                ->getViews($this->id),
+        ];
     }
 
     /**
@@ -1531,16 +1247,6 @@ class Content implements \JsonSerializable, CsvSerializable
         }
 
         return false;
-    }
-
-    /**
-     * Returns true if the content is suggested
-     *
-     * @return boolean true if the content is suggested
-     */
-    public function isSuggested()
-    {
-        return ($this->frontpage == 1);
     }
 
     /**
@@ -1597,193 +1303,6 @@ class Content implements \JsonSerializable, CsvSerializable
         } catch (\Exception $e) {
             getService('error.log')->error(
                 'Error on Content::dropFromAllHomePages:' . $e->getMessage()
-            );
-
-            return false;
-        }
-    }
-
-    /**
-     * Returns true if a match time constraints, is available and is not in trash
-     *
-     * @return boolean true if is ready
-     */
-    public function isReadyForPublish()
-    {
-        return ($this->isInTime()
-            && $this->content_status == 1
-            && $this->in_litter == 0);
-    }
-
-    /**
-     * TODO: improve performance, it uses Content::get instead of the entity service
-     * Loads all the related contents for this content
-     *
-     * @param string $categoryName the category where fetching related contents from
-     *
-     * @return Content the content object
-     */
-    public function loadRelatedContents($categoryName = '')
-    {
-        $this->related_contents = [];
-
-        $relationsHandler = getService('related_contents');
-
-        if (getService('core.security')->hasExtension('CRONICAS_MODULES')
-            && $categoryName == 'home'
-        ) {
-            $relations = $relationsHandler->getRelations($this->id, 'home');
-        } else {
-            $relations = $relationsHandler->getRelations($this->id, 'frontpage');
-        }
-
-        if (count($relations) > 0) {
-            $relatedContents = getService('entity_repository')->findMulti($relations);
-
-            // Filter out not ready for publish contents.
-            foreach ($relatedContents as $content) {
-                if (!$content->isReadyForPublish()
-                    && $content->fk_content_type !== 4
-                ) {
-                    continue;
-                }
-
-                $this->related_contents[] = $content;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Loads all Frontpage attached images for this content given an array of images
-     *
-     * @param array $images list of Image object to hydrate the current content
-     *
-     * @return Content the object with the images loaded
-     */
-    public function loadFrontpageImageFromHydratedArray($images)
-    {
-        if (isset($this->img1)) {
-            // Buscar la imagen
-            if (!empty($images)) {
-                foreach ($images as $image) {
-                    if ($image->pk_content == $this->img1) {
-                        $this->img1_path = $image->path_file . $image->name;
-                        $this->img1      = $image;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Loads all inner attached images for this content given an array of images
-     *
-     * @param array $images list of Image object to hydrate the current content
-     *
-     * @return Content the object with the images loaded
-     */
-    public function loadInnerImageFromHydratedArray($images)
-    {
-        if (isset($this->img2)) {
-            // Buscar la imagen
-            if (!empty($images)) {
-                foreach ($images as $image) {
-                    if ($image->pk_content == $this->img2) {
-                        $this->img2_path = $image->path_file . $image->name;
-                        $this->img2      = $image;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns true if this content is only available from paywall
-     *
-     * @return boolean true if only avilable for subscribers
-     */
-    public function isOnlyAvailableForSubscribers()
-    {
-        $onlySubscribers = false;
-        if (is_array($this->params) && array_key_exists('only_subscribers', $this->params)) {
-            $onlySubscribers = ($this->params['only_subscribers'] == true);
-        }
-
-        return $onlySubscribers;
-    }
-
-    /**
-     * Checks if the content is only available for registered users.
-     *
-     * @return boolean True if content is only available for registered users.
-     */
-    public function isOnlyAvailableForRegistered()
-    {
-        $available = false;
-
-        if (is_array($this->params)
-            && array_key_exists('only_registered', $this->params)
-        ) {
-            $available = ($this->params['only_registered'] == true);
-        }
-
-        return $available;
-    }
-
-    /**
-     * Loads the attached video's information for the content.
-     * If force param is true don't take care of attached images.
-     *
-     * @param boolean $force whether if force the property fetch
-     *
-     * @return Content the object with the video information loaded
-     */
-    public function loadAttachedVideo($force = false)
-    {
-        if (($force || empty($this->img1))
-            && !empty($this->fk_video)
-        ) {
-            $video = getService('entity_repository')
-                ->find('Video', $this->fk_video);
-
-            $this->video     = $video;
-            $this->obj_video = $video;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Checks if this content is in one category frontpage given the category id
-     *
-     * @param int $categoryID the category id
-     *
-     * @return boolean true if it is in the category
-     */
-    public function isInFrontpageOfCategory($categoryID = null)
-    {
-        if ($categoryID === null) {
-            $categoryID = $this->category;
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchColumn(
-                'SELECT count(*) FROM content_positions WHERE pk_fk_content=? AND fk_category=?',
-                [ $this->id, $categoryID ]
-            );
-
-            return $rs > 0;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                'Error on Content::isInFrontpageOfCategory (ID:' . $categoryID . ')'
             );
 
             return false;
@@ -1876,39 +1395,6 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Load content properties given the content id.
-     *
-     * @param int $id The id of the content.
-     *
-     * @return Content The content object
-     */
-    public function loadContentMetadata($id = null)
-    {
-        if (empty($id)) {
-            return $this;
-        }
-
-        try {
-            $metadatas = getService('dbal_connection')->fetchAll(
-                'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
-                [ (int) $id ]
-            );
-
-            if (!empty($metadatas)) {
-                foreach ($metadatas as $metadata) {
-                    $this->{$metadata['meta_name']} = $this->parseProperty($metadata['meta_value']);
-                }
-            }
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                'Error on Content:loadContentMetadata: ' . $e->getMessage()
-            );
-        }
-
-        return $this;
-    }
-
-    /**
      * Returns the list of properties that support multiple languages.
      *
      * @param boolean $exclusive The list of article's exclusive properties
@@ -1931,6 +1417,8 @@ class Content implements \JsonSerializable, CsvSerializable
      *
      *  @param mixed  $data the data to load in the object
      *  @param string $type type of the extra field
+     *
+     * @return Content The current content for method chaining.
      */
     public function saveMetadataFields($data, $type)
     {
@@ -1965,7 +1453,10 @@ class Content implements \JsonSerializable, CsvSerializable
                 $emptyKeys[] = $field['key'];
             }
         }
+
         $this->removeMetadata($emptyKeys);
+
+        return $this;
     }
 
     /**
@@ -2086,16 +1577,17 @@ class Content implements \JsonSerializable, CsvSerializable
         $conn = getService('dbal_connection');
 
         if ($delete) {
-            $conn->delete('contents_categories', [
-                'pk_fk_content' => $this->id
+            $conn->delete('content_category', [
+                'content_id' => $this->id
             ]);
         }
 
-        $conn->insert('contents_categories', [
-            'pk_fk_content'          => $this->id,
-            'pk_fk_content_category' => $id,
-            'catName'                => null
+        $conn->insert('content_category', [
+            'content_id'  => $this->id,
+            'category_id' => $id
         ]);
+
+        $this->category_id = $id;
     }
 
     /**
@@ -2115,28 +1607,19 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Returns the category name basing on the information used in create or
-     * update method.
+     * Generates the slug for the content basing on the provided slug or the
+     * title.
      *
      * @param array $data The content information.
-     * @param int   $id   The category id.
      *
      * @return Content The current content.
      */
-    protected function generateCategoryName(array &$data, ?int $id) : Content
+    protected function generateSlug(array &$data) : Content
     {
-        $data['category_name'] = '';
-
-        if (empty($id)) {
-            return $this;
-        }
-
-        getService('core.locale')->setContext('frontend');
-
-        $data['category_name'] = getService('api.service.category')
-            ->getItem($id)->name;
-
-        getService('core.locale')->setContext('backend');
+        $data['slug'] = getService('data.manager.filter')
+            ->set(empty($data['slug']) ? $data['title'] : $data['slug'])
+            ->filter('slug')
+            ->get();
 
         return $this;
     }
@@ -2160,21 +1643,33 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
-     * Generates the slug for the content basing on the provided slug or the
-     * title.
+     * Returns the scheduling state translated
      *
-     * @param array $data The content information.
+     * @param string $state the state string
      *
-     * @return Content The current content.
+     * @return string the scheduling state translated
      */
-    protected function generateSlug(array &$data) : Content
+    protected function getL10nSchedulingState($state = null)
     {
-        $data['slug'] = getService('data.manager.filter')
-            ->set(empty($data['slug']) ? $data['title'] : $data['slug'])
-            ->filter('slug')
-            ->get();
+        switch ($state) {
+            case 'not-scheduled':
+                $state = _('not scheduled');
+                break;
+            case 'scheduled':
+                $state = _('scheduled');
+                break;
+            case 'dued':
+                $state = _('dued');
+                break;
+            case 'intime':
+                $state = _('in time');
+                break;
+            case 'postponed':
+                $state = _('postponed');
+                break;
+        }
 
-        return $this;
+        return $state;
     }
 
     /**
@@ -2189,6 +1684,56 @@ class Content implements \JsonSerializable, CsvSerializable
     }
 
     /**
+     * Load content properties given the content id.
+     *
+     * @return Content The current content.
+     */
+    protected function loadMetas()
+    {
+        try {
+            $metadatas = getService('dbal_connection')->fetchAll(
+                'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?',
+                [ (int) $this->pk_content ]
+            );
+
+            foreach ($metadatas as $metadata) {
+                $this->{$metadata['meta_name']} =
+                    $this->parseProperty($metadata['meta_value']);
+            }
+        } catch (\Exception $e) {
+            getService('error.log')
+                ->error('Error on Content:loadMetas: ' . $e->getMessage());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Loads all the related contents for this content.
+     *
+     * @return Content The current object.
+     */
+    protected function loadRelated()
+    {
+        $this->related_contents = [];
+
+        try {
+            $this->related_contents = getService('dbal_connection')->fetchAll(
+                'SELECT `target_id`, `type`, `caption`, `content_type_name`'
+                . 'FROM `content_content` '
+                . 'WHERE source_id=? '
+                . 'ORDER BY `type` ASC, `content_content`.`position` ASC',
+                [ (int) $this->pk_content ]
+            );
+        } catch (\Exception $e) {
+            getService('error.log')
+                ->error('Error on Content:loadRelated: ' . $e->getMessage());
+        }
+
+        return $this;
+    }
+
+    /**
      * Parses the content information before trying to save/update.
      *
      * @param array $data The information to parse.
@@ -2198,8 +1743,12 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     protected function parseData(array $data, int $id = null) : array
     {
-        $currentUserId = !empty(getService('core.user'))
-            ? getService('core.user')->id : null;
+        $currentUserId = $this->fk_user_last_editor;
+        if (!empty(getService('core.user')
+            && !getService('core.security')->hasPermission('MASTER'))
+        ) {
+            $currentUserId = (int) getService('core.user')->id;
+        }
 
         $overrides = [
             'changed'             => date('Y-m-d H:i:s'),
@@ -2221,7 +1770,7 @@ class Content implements \JsonSerializable, CsvSerializable
             'favorite'       => $data['favorite'] ?? 0,
             'fk_author'      => !empty($data['fk_author']) ?
                 (int) $data['fk_author'] : null,
-            'fk_publisher'   => $currentUserId,
+            'fk_publisher'   => $this->fk_publisher ?? $currentUserId,
             'frontpage'      => $data['frontpage'] ?? 0,
             'in_home'        => $data['in_home'] ?? 0,
             'params'         => $data['params'] ?? null,
@@ -2257,6 +1806,58 @@ class Content implements \JsonSerializable, CsvSerializable
 
         return $value;
     }
+
+    /**
+     * Saves the list of related contents.
+     *
+     * @param array $data The information for the article.
+     *
+     * @return Article The current article for method chaining.
+     */
+    protected function saveRelated($data)
+    {
+        $conn = getService('dbal_connection');
+
+        $conn->executeQuery(
+            'DELETE FROM content_content WHERE source_id = ?',
+            [ $this->pk_content ]
+        );
+
+        if (!array_key_exists('related_contents', $data)
+            || empty($data['related_contents'])
+        ) {
+            return $this;
+        }
+
+        $related  = [];
+        $position = 0;
+
+        for ($i = 0; $i < count($data['related_contents']); $i++) {
+            if ($i > 0
+                && $data['related_contents'][$i]['type']
+                    !== $data['related_contents'][$i - 1]['type']
+            ) {
+                $position = 0;
+            }
+
+            $related[] = $this->pk_content;
+            $related[] = $data['related_contents'][$i]['target_id'];
+            $related[] = $data['related_contents'][$i]['type'];
+            $related[] = $data['related_contents'][$i]['content_type_name'];
+            $related[] = !empty($data['related_contents'][$i]['caption'])
+                ? $data['related_contents'][$i]['caption'] : null;
+            $related[] = $position++;
+        }
+
+        $sql = 'INSERT INTO content_content '
+            . '(source_id, target_id, type, content_type_name, caption, position) VALUES '
+            . str_repeat('(?,?,?,?,?,?),', count($data['related_contents']));
+
+        $conn->executeQuery(trim($sql, ','), $related);
+
+        return $this;
+    }
+
 
     /**
      * Serializes the l10n properties before trying to save/update the current

@@ -55,52 +55,15 @@ class NewsletterRenderer
     }
 
     /**
-     * Renders the newsletter from a list of contents.
+     * Returns the HTML for a newsletter.
      *
-     * @param array $contents The list of the contents.
+     * @param Newsletter $item The newsletter to render.
      *
-     * @return string The generated html for the newsletter.
+     * @return string The HTML for the newsletter.
      */
-    public function render($contents)
+    public function render($newsletter)
     {
-        $newsletterContent = $contents;
-
-        if (empty($newsletterContent)) {
-            $newsletterContent = [];
-        }
-
-        // HACK: Force object conversion, not proud of this, please look other side
-        $newsletterContent = json_decode(json_encode($newsletterContent), false);
-
-        $index = 1;
-        foreach ($newsletterContent as &$container) {
-            if (!property_exists($container, 'id')) {
-                $container->id = $index;
-            }
-
-            foreach ($container->items as $index => &$item) {
-                // If current item do not fullfill the required format then skip it
-                if ($item->content_type === 'label') {
-                    continue;
-                } elseif ($item->content_type === 'list') {
-                    $contents = $this->getContents($item->criteria);
-                    unset($container->items[$index]);
-
-                    $container->items = array_merge($container->items, $contents);
-                } else {
-                    $content = $this->er->find(classify($item->content_type), $item->id);
-
-                    // if is not a real content, skip this element
-                    if (!is_object($content) || is_null($content->id)) {
-                        continue;
-                    }
-
-                    $item = $this->hydrateContent($content);
-                }
-            }
-
-            $index++;
-        }
+        $newsletterContent = $this->hydrateContainers($newsletter);
 
         $menu = new \Menu();
         $menu = $menu->getMenu('frontpage');
@@ -121,64 +84,13 @@ class NewsletterRenderer
             $this->instance->getMainDomain()
         );
 
-        $configurations = $this->ds->get([
-            'newsletter_maillist',
-            'newsletter_subscriptionType',
-        ]);
-
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
+            'item'              => $newsletter,
             'newsletterContent' => $newsletterContent,
             'menuFrontpage'     => $menu->items,
             'current_date'      => new \DateTime(),
-            'conf'              => $configurations,
             'URL_PUBLIC'        => 'http://' . $publicUrl,
         ]);
-    }
-
-    /**
-     * Completes the content information from an object from repository
-     *
-     * @param Content $item    The item to complete
-     * @param Content $content The content from the repository
-     *
-     * @return Content The complete item
-     */
-    public function hydrateContent($content)
-    {
-        $content->cat    = $content->category_name;
-        $content->name   = (isset($content->name)) ? $content->name : '';
-        $content->image  = (isset($content->cover)) ? $content->cover : '';
-        $content->agency = $content->params['agencyBulletin'] ?? '';
-        $content->date   = date(
-            'Y-m-d',
-            strtotime(str_replace('/', '-', substr($content->created, 6)))
-        );
-
-        // Fetch images of articles if exists
-        $content->photo = [];
-        if (!empty($content->img1)) {
-            $content->photo[] = $this->er->find('Photo', $content->img1);
-        } elseif (!empty($content->fk_video)) {
-            $content->video = $this->er->find('Video', $content->fk_video);
-        } elseif (!empty($content->img2)) {
-            $content->photo[] = $this->er->find('Photo', $content->img2);
-        }
-
-        if (!isset($content->summary)) {
-            $content->summary = substr(strip_tags($content->body), 0, 250) . '...';
-        }
-
-        // Fetch opinion author photos
-        if ($content->content_type == '4') {
-            $content->author = $this->er->find('User', $content->fk_author);
-        }
-
-        // Fetch video thumbnails
-        if ($content->content_type == '9') {
-            $content->thumb = $content->getThumb();
-        }
-
-        return $content;
     }
 
     /**
@@ -266,7 +178,7 @@ class NewsletterRenderer
         if (!empty($criteria->category)
             && !in_array($criteria->content_type, [ 'opinion', 'letter', 'static_page' ])
         ) {
-            $searchCriteria['pk_fk_content_category'] = [
+            $searchCriteria['category_id'] = [
                 [ 'value' => $criteria->category, 'operator' => 'IN' ]
             ];
         }
@@ -288,10 +200,52 @@ class NewsletterRenderer
 
         $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
 
-        foreach ($contents as &$content) {
-            $content = $this->hydrateContent($content);
+        return $contents;
+    }
+
+    /**
+     * Returns the list of containers and contents based on the newsletter
+     * configuration.
+     *
+     * @param Newsletter $newsletter The newsletter.
+     *
+     * @return array The list of containers and contents.
+     */
+    protected function hydrateContainers($newsletter)
+    {
+        // TODO: Remove this hack to force object conversion ASAP
+        $containers = json_decode(json_encode($newsletter->contents), false);
+
+        foreach ($containers as $index => &$container) {
+            if (!property_exists($container, 'id')) {
+                $container->id = $index + 1;
+            }
+
+            foreach ($container->items as $index => &$item) {
+                // If current item do not fullfill the required format then skip it
+                if ($item->content_type === 'label') {
+                    continue;
+                }
+
+                if ($item->content_type === 'list') {
+                    $contents = $this->getContents($item->criteria);
+                    unset($container->items[$index]);
+
+                    $container->items = array_merge($container->items, $contents);
+                    continue;
+                }
+
+                $content = $this->er->find(classify($item->content_type), $item->id);
+
+                // if is not a real content, skip this element
+                if (!is_object($content) || is_null($content->id)) {
+                    continue;
+                }
+
+                $item = $content;
+            }
         }
 
-        return $contents;
+        return $containers;
     }
 }

@@ -1,21 +1,13 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 
-/**
- * Handles the actions for the user profile.
- */
 class AuthorController extends Controller
 {
     /**
@@ -28,12 +20,21 @@ class AuthorController extends Controller
     public function authorFrontpageAction(Request $request)
     {
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
+        $page         = (int) $request->get('page', 1);
         $itemsPerPage = 12;
 
-        $user = $this->get('user_repository')->findOneBy("username='{$slug}'");
-        if (empty($user)) {
+        try {
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
+        }
+
+        $expected = $this->get('router')
+            ->generate('frontend_author_frontpage', [ 'slug' => $user->slug ]);
+
+        if ($request->getPathInfo() !== $expected) {
+            return new RedirectResponse($expected);
         }
 
         // Setup templating cache layer
@@ -43,7 +44,9 @@ class AuthorController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
         ) {
-            $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
+            if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+                throw new ResourceNotFoundException();
+            }
 
             $criteria = [
                 'fk_author'       => [[ 'value' => $user->id ]],
@@ -68,37 +71,6 @@ class AuthorController extends Controller
             $contentsCount = $er->countBy($criteria);
             $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
-            foreach ($contents as &$item) {
-                $item         = $item->get($item->id);
-                $item->author = $user;
-
-                if (isset($item->img1) && !empty($item->img1)) {
-                    $image = $er->find('Photo', $item->img1);
-
-                    if (is_object($image) && !is_null($image->id)) {
-                        $item->img1_path = $image->path_file . $image->name;
-                        $item->img1      = $image;
-                    }
-                }
-
-                if ($item->fk_content_type == 7 && !empty($item->cover_id)) {
-                    $image = $er->find('Photo', $item->cover_id);
-
-                    if (is_object($image) && !is_null($image->id)) {
-                        $item->img1_path = $image->path_file . $image->name;
-                        $item->img1      = $image;
-                    }
-                }
-
-                if ($item->fk_content_type == 9) {
-                    $item->obj_video = $item;
-                    $item->summary   = $item->description;
-                }
-
-                if (isset($item->fk_video) && !empty($item->fk_video)) {
-                    $item->video = $er->find('Video', $item->fk_video2);
-                }
-            }
             // Build the pagination
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
@@ -138,15 +110,11 @@ class AuthorController extends Controller
      */
     public function extAuthorFrontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
-        if (empty($wsUrl)) {
-            throw new ResourceNotFoundException();
-        }
-
         if (empty($wsUrl)) {
             throw new ResourceNotFoundException();
         }
@@ -169,6 +137,10 @@ class AuthorController extends Controller
             ->get('items_in_blog', 10);
 
         $offset = ($page - 1) * $itemsPerPage;
+
+        if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+            throw new ResourceNotFoundException();
+        }
 
         // Redirect to first page
         if ($page < 1) {
@@ -220,12 +192,6 @@ class AuthorController extends Controller
 
             foreach ($items as &$item) {
                 $author = $authors[$item['id']];
-
-                // Fetch user avatar if exists
-                if (!empty($author->avatar_img_id)) {
-                    $author->photo = $this->get('entity_repository')
-                        ->find('Photo', $author->avatar_img_id);
-                }
 
                 $author->total_contents = $item['total'];
 

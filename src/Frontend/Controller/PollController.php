@@ -56,7 +56,7 @@ class PollController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list'    => [ 'page', 'category_name' ],
+        'list'    => [ 'page', 'category_slug' ],
         'showamp' => [ '_format' ],
     ];
 
@@ -197,7 +197,7 @@ class PollController extends FrontendController
      */
     protected function getRoute($action, $params = [])
     {
-        if ($action == 'list' && array_key_exists('category_name', $params)) {
+        if ($action == 'list' && array_key_exists('category_slug', $params)) {
             return 'frontend_poll_frontpage_category';
         }
 
@@ -210,11 +210,12 @@ class PollController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $category = $params['o_category'];
-        $page     = (int) ($params['page'] ?? 1);
         $date     = date('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
-        if ($page <= 0) {
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
@@ -223,7 +224,7 @@ class PollController extends FrontendController
             ->get('items_per_page', 10);
 
         $categoryOQL = !empty($category)
-            ? sprintf(' and pk_fk_content_category=%d', $category->pk_content_category)
+            ? sprintf(' and category_id=%d', $category->id)
             : '';
 
         $response = $this->get('api.service.content_old')->getList(sprintf(
@@ -235,11 +236,11 @@ class PollController extends FrontendController
             $date,
             $date,
             $epp,
-            $epp * ($page - 1)
+            $epp * ($params['page'] - 1)
         ));
 
         // No first page and no contents
-        if ($page > 1 && empty($response['items'])) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
@@ -250,7 +251,7 @@ class PollController extends FrontendController
                 'directional' => true,
                 'maxLinks'    => 0,
                 'epp'         => $epp,
-                'page'        => $page,
+                'page'        => $params['page'],
                 'total'       => $response['total'],
                 'route'       => [
                     'name'   => empty($category)
@@ -258,19 +259,10 @@ class PollController extends FrontendController
                         : 'frontend_poll_frontpage_category',
                     'params' => empty($category)
                         ? []
-                        : [ 'category_name' => $category->name ],
+                        : [ 'category_slug' => $category->name ],
                 ]
 
             ])
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function hydrateShow(array &$params = []) : void
-    {
-        $params['author'] = $this->get('user_repository')
-            ->find($params['content']->fk_author);
     }
 }

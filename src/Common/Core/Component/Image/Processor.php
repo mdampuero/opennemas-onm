@@ -86,6 +86,16 @@ class Processor
     }
 
     /**
+     * Clears all resources associated to Imagick object.
+     */
+    public function close()
+    {
+        if (!empty($this->image)) {
+            $this->image->getImagick()->clear();
+        }
+    }
+
+    /**
      * Sets parameters for an image.
      *
      * @param array $params The list of parameters.
@@ -177,8 +187,12 @@ class Processor
             throw new \InvalidArgumentException();
         }
 
-        $this->imagine = $this->getImagine();
-        $this->image   = $this->imagine->open($path);
+        try {
+            $this->imagine = $this->getImagine();
+            $this->image   = $this->imagine->open($path);
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException();
+        }
 
         return $this;
     }

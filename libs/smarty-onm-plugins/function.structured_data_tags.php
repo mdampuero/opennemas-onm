@@ -2,32 +2,23 @@
 
 function smarty_function_structured_data_tags($params, &$smarty)
 {
-    // Only generate tags if is a content page
-    if (!$smarty->hasValue('content')) {
-        return '';
-    }
-
-    $content    = $smarty->getValue('content');
-    $container  = $smarty->getContainer();
-    $url        = $container->get('request_stack')->getCurrentRequest()->getUri();
-    $structData = $container->get('core.helper.structured_data');
-
-    try {
-        $category = $container->get('api.service.category')
-            ->getItem($content->pk_fk_content_category);
-    } catch (\Exception $e) {
-        return '';
-    }
+    $content = $smarty->getValue('content');
 
     $data = [
-        'content'  => $content,
-        'url'      => $url,
-        'category' => $category,
+        'category' => $smarty->getValue('o_category'),
+        'url'      => $smarty->getContainer()->get('request_stack')
+            ->getCurrentRequest()->getUri(),
     ];
 
-    if ($content->content_type_name == 'album') {
-        $data['photos'] = $smarty->getValue('photos');
+    if (!empty($content)) {
+        $data['content'] = $content;
+
+        if ($content->content_type_name == 'album') {
+            $data['photos'] = $smarty->getValue('photos');
+        }
     }
 
-    return $structData->generateJsonLDCode($data);
+    return $smarty->getContainer()
+        ->get('core.helper.structured_data')
+        ->generateJsonLDCode($data);
 }

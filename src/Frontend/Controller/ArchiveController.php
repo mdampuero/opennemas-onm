@@ -32,10 +32,19 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categorySlug = $request->query->filter('category_slug', null, FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $date         = "{$year}-{$month}-{$day}";
         $itemsPerPage = 20;
+
+        if (!empty($categorySlug)) {
+            try {
+                $category = $this->get('api.service.category')
+                    ->getItemBySlug($categorySlug);
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
+        }
 
         // Setup templating cache layer
         $this->view->setConfig('newslibrary');
@@ -44,9 +53,16 @@ class ArchiveController extends Controller
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('archive/archive.tpl', $cacheID))
         ) {
-            $er       = $this->get('entity_repository');
-            $order    = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
-            $criteria = [
+            $er    = $this->get('entity_repository');
+            $order = [ 'fk_content_type' => 'asc', 'starttime' => 'desc' ];
+
+            $criteria = [];
+
+            if (!empty($category)) {
+                $criteria['category_id'] = [[ 'value' => $category->id ]];
+            }
+
+            $criteria = array_merge($criteria, [
                 'in_litter'       => [[ 'value' => 0 ]],
                 'content_status'  => [[ 'value' => 1 ]],
                 'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
@@ -67,11 +83,7 @@ class ArchiveController extends Controller
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
-            ];
-
-            if ($categoryName != 'home') {
-                $criteria['category_name'] = [[ 'value' => $categoryName ]];
-            }
+            ]);
 
             $contents = $er->findBy($criteria, $order, $itemsPerPage, $page);
             $total    = $er->countBy($criteria);
@@ -79,25 +91,18 @@ class ArchiveController extends Controller
 
             foreach ($contents as $content) {
                 // Create category group
-                if (!isset($library[$content->pk_fk_content_category])
-                    && !empty($content->pk_fk_content_category)
+                if (!isset($library[$content->category_id])
+                    && !empty($content->category_id)
                 ) {
-                    $library[$content->pk_fk_content_category] = $this
+                    $library[$content->category_id] = $this
                         ->get('api.service.category')
-                        ->getItem($content->pk_fk_content_category);
+                        ->getItem($content->category_id);
 
-                    $library[$content->pk_fk_content_category]->contents = [];
-                }
-
-                // Fetch video or image for article and opinions
-                if (!empty($content->fk_video)) {
-                    $content->video = $er->find('Video', $content->fk_video);
-                } elseif (!empty($content->img1)) {
-                    $content->image = $er->find('Photo', $content->img1);
+                    $library[$content->category_id]->contents = [];
                 }
 
                 // Add contents to category group
-                $library[$content->pk_fk_content_category]->contents[] = $content;
+                $library[$content->category_id]->contents[] = $content;
             }
 
             // Pagination for block more videos
@@ -136,7 +141,7 @@ class ArchiveController extends Controller
             'advertisements'  => $advertisements,
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
-            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categoryName,
+            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categorySlug,
             'x-cacheable'     => true,
         ]);
     }
@@ -158,11 +163,14 @@ class ArchiveController extends Controller
         $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
         $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
         $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName = $request->query->filter('category_slug', 'home', FILTER_SANITIZE_STRING);
         $path         = "{$year}/{$month}/{$day}";
         $html         = '';
-        $file         = MEDIA_PATH . "/library/{$path}/{$categoryName}.html";
         $url          = "/archive/content/{$path}/";
+
+        $file = $this->getParameter('core.paths.public')
+            . $this->get('core.instance')->getMediaShortPath()
+            . "/library/$path/$categoryName.html";
 
         if (file_exists($file) && is_readable($file)) {
             $html = file_get_contents($file);

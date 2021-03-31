@@ -153,9 +153,13 @@ class Importer
             $ps   = $this->container->get('api.service.photo');
             $file = new \SplFileInfo($data['path']);
 
-            unset($data['path']);
+            // Avoid uploading images with content_status = 0
+            $data['content_status'] = 1;
 
-            return $ps->createItem($file, $data, true);
+            unset($data['path']);
+            unset($data['params']);
+
+            return $ps->createItem($data, $file, true);
         }
 
         $target  = \classify($data['content_type_name']);
@@ -263,7 +267,10 @@ class Importer
                 $authors = array_filter(
                     $this->config['authors_map'],
                     function ($a) use ($resource) {
-                        return $a['slug'] == $resource->author;
+                        return preg_match(
+                            '/' . str_replace('/', '\/', $a['slug']) . '/i',
+                            $resource->author
+                        );
                     }
                 );
 
@@ -349,14 +356,22 @@ class Importer
             'title'               => $resource->title,
             'urn_source'          => $resource->urn,
             'body'                => $resource->body,
+            'href'                => $resource->href,
         ]);
 
-        // If the source has an external link configured assign it as
-        // the external link in the content to import
-        if (array_key_exists('external_link', $this->config)
+        // Check if the source has an external link configured
+        if (array_key_exists('external', $this->config)
+            && $this->config['external'] === 'redirect'
+            && array_key_exists('external_link', $this->config)
             && !empty($this->config['external_link'])
         ) {
             $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
+        }
+
+        if (array_key_exists('external', $this->config)
+            && $this->config['external'] === 'original'
+        ) {
+            $data['params'] = [ 'bodyLink' => $data['href'] ];
         }
 
         $method = 'getDataFor' . ucfirst($data['content_type_name']);
@@ -381,7 +396,7 @@ class Importer
     protected function getDataForArticle(ExternalResource $resource, array $data) : array
     {
         $data = array_merge($data, [
-            'category'  => $this->getCategory($resource, $data),
+            'category_id'  => $this->getCategory($resource, $data),
             'agency'    => !empty($resource->signature)
                 ? $resource->signature
                 : array_key_exists('agency_string', $this->config)

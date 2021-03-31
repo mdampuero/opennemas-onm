@@ -84,7 +84,7 @@ class RedirectorSubscriber implements EventSubscriberInterface
      */
     public function removeUrlsFromCache()
     {
-        $pattern = '*' . $this->instance->internal_name . '_redirector*';
+        $pattern = 'redirector*';
 
         $this->queue->push(new ServiceTask(
             'cache.connection.instance',

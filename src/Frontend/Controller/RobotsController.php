@@ -35,10 +35,10 @@ class RobotsController extends Controller
             . "Disallow: " . ($disableRobots ? "/" : "/admin") . "\n"
             . (!empty($rules) ? "\n" . $rules : "") . "\n"
             . "\n"
-            . "Sitemap: " . SITE_URL . "sitemapnews.xml.gz\n"
-            . "Sitemap: " . SITE_URL . "sitemapweb.xml.gz\n"
-            . "Sitemap: " . SITE_URL . "sitemapvideo.xml.gz\n"
-            . "Sitemap: " . SITE_URL . "sitemapimage.xml.gz";
+            . "Sitemap: " . SITE_URL . "/sitemapnews.xml.gz\n"
+            . "Sitemap: " . SITE_URL . "/sitemapweb.xml.gz\n"
+            . "Sitemap: " . SITE_URL . "/sitemapvideo.xml.gz\n"
+            . "Sitemap: " . SITE_URL . "/sitemapimage.xml.gz";
 
         return new Response($content, 200, [
             'Content-Type' => 'text/plain',

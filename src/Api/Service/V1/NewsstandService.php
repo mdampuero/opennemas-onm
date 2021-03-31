@@ -25,8 +25,13 @@ class NewsstandService extends ContentService
         }
 
         try {
+            $data = $this->assignUser(
+                $data,
+                [ 'fk_user_last_editor', 'fk_publisher' ]
+            );
+
             $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
+                ->objectify($this->parseData($data));
 
             $item = new $this->class($data);
 
@@ -70,8 +75,9 @@ class NewsstandService extends ContentService
         }
 
         try {
+            $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
             $data = $this->em->getConverter($this->entity)
-                ->objectify(array_merge($this->defaults, $data));
+                ->objectify($data);
 
             $item = $this->getItem($id);
             $item->setData($data);

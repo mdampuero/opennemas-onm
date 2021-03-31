@@ -36,7 +36,7 @@
             defaultValueText: '@',
             exclude: '=?',
             exportModel: '=?',
-            showArchived: '@',
+            showVisible: '@',
             labelText: '@',
             locale: '=',
             multiple: '@',
@@ -47,7 +47,7 @@
             selectedText: '@'
           },
           template: function() {
-            return '<ui-select class="[% cssClass %]" ng-required="required" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
+            return '<ui-select class="[% cssClass %]" ng-if="!multiple" ng-model="$parent.$parent.exportModel" theme="select2">' +
               '<ui-select-match placeholder="[% $parent.placeholder %]">' +
               '  <strong ng-if="labelText">[% labelText %]: </strong>[% $select.selected.title %]' +
               '</ui-select-match>' +
@@ -73,7 +73,7 @@
                   '[% defaultValueText %]' +
                 '</a>' +
                 '<ul class="ui-select-choices select2-results">' +
-                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'fk_content_category\'">' +
+                  '<li class="ui-select-choices-group select2-result-with-children" ng-repeat="(key, items) in categories | groupBy: \'parent_id\'">' +
                     '<div class="ui-select-choices-group-label select2-result-label" ng-show="groupCategories(items[0])">' +
                       '[% groupCategories(items[0]) %]' +
                     '</div>' +
@@ -88,7 +88,7 @@
                 '</ul>' +
               '</div>' +
             '</div>' +
-            '<input id="category" name="category" type="hidden" value="[% ngModel %]">';
+            '<input id="category" name="category" ng-model="ngModel" ng-required="required" type="hidden" value="[% ngModel %]">';
           },
           link: function($scope, elem, $attrs) {
             $scope.cssClass     = $attrs.class ? $attrs.class : '';
@@ -113,17 +113,17 @@
 
             var route = {
               name: 'api_v1_backend_category_get_list',
-              params: { oql: 'archived = 0' }
+              params: { oql: 'visible = 1' }
             };
 
-            if ($scope.showArchived) {
+            if ($scope.showVisible) {
               delete route.params;
             }
 
             http.get(route).then(function(response) {
               response.data.items = response.data.items.filter(function(e) {
                 return !$scope.exclude || $scope.exclude.length === 0 ||
-                  $scope.exclude.indexOf(e.pk_content_category) === -1;
+                  $scope.exclude.indexOf(e.id) === -1;
               });
 
               $scope.data = response.data;
@@ -146,9 +146,9 @@
              */
             $scope.addDefaultValue = function(items) {
               if (angular.isArray(items) && items.length > 0 &&
-                  items[0].pk_content_category !== null) {
+                  items[0].id !== null) {
                 items.unshift({
-                  pk_content_category: null,
+                  id: null,
                   title: $scope.defaultValueText
                 });
               }
@@ -164,7 +164,7 @@
              */
             $scope.cleanModel = function() {
               var ids = $scope.categories.map(function(e) {
-                return e.pk_content_category;
+                return e.id;
               });
 
               // Reset ngModel as id is not found in the list of categories
@@ -207,7 +207,7 @@
                 $scope.ngModel : [ $scope.ngModel ];
 
               var ids = $scope.categories.map(function(e) {
-                return e.pk_content_category;
+                return e.id;
               });
 
               var missed = model.filter(function(e) {
@@ -233,7 +233,7 @@
               }
 
               $q.all(missing).then(function(items) {
-                $scope.data.items = $scope.data.items[0].pk_content_category === null ?
+                $scope.data.items = $scope.data.items[0].id === null ?
                   [ $scope.data.items.shift() ].concat(items, $scope.data.items) :
                   items.concat($scope.data.items);
 
@@ -263,10 +263,10 @@
               }
 
               var category = $scope.categories.filter(function(e) {
-                return e.pk_content_category === item.fk_content_category;
+                return e.id === item.parent_id;
               });
 
-              if (category.length > 0 && category[0].pk_content_category) {
+              if (category.length > 0 && category[0].id) {
                 return category[0].title;
               }
 
@@ -289,9 +289,9 @@
                 return false;
               }
 
-              return $scope.ngModel.indexOf(item.pk_content_category) !== -1 ||
+              return $scope.ngModel.indexOf(item.id) !== -1 ||
                 $scope.ngModel.indexOf(
-                  item.pk_content_category.toString()) !== -1;
+                  item.id.toString()) !== -1;
             };
 
             /**
@@ -335,10 +335,10 @@
                 $scope.ngModel = [];
               }
 
-              var position = $scope.ngModel.indexOf(item.pk_content_category);
+              var position = $scope.ngModel.indexOf(item.id);
 
               if (position < 0) {
-                $scope.ngModel.push(item.pk_content_category);
+                $scope.ngModel.push(item.id);
                 $scope.exportModel.push(item);
               } else {
                 $scope.ngModel.splice(position, 1);
@@ -378,9 +378,9 @@
               }
 
               var newValue = !$scope.multiple ?
-                $scope.exportModel.pk_content_category :
+                $scope.exportModel.id :
                 $scope.exportModel.map(function(e) {
-                  return e.pk_content_category;
+                  return e.id;
                 });
 
               // Do not update if both values are null/undefined or equal
@@ -418,7 +418,7 @@
               }
 
               var found = $scope.categories.filter(function(e) {
-                return needle.indexOf(e.pk_content_category) !== -1;
+                return needle.indexOf(e.id) !== -1;
               });
 
               if (found.length === 0) {

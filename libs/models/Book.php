@@ -72,38 +72,8 @@ class Book extends Content
     public function __get($name)
     {
         switch ($name) {
-            case 'uri':
-                $uri = Uri::generate(
-                    'book',
-                    [
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'slug'     => urlencode($this->slug),
-                        'category' => urlencode($this->category_name),
-                    ]
-                );
-
-                return ($uri !== '') ? $uri : $this->permalink;
             default:
                 return parent::__get($name);
-        }
-    }
-
-    /**
-     * Overloads the object properties with an array of the new ones
-     *
-     * @param array $properties the list of properties to load
-     */
-    public function load($properties)
-    {
-        parent::load($properties);
-
-        if (array_key_exists('pk_book', $properties)) {
-            $this->pk_book = (int) $properties['pk_book'];
-        }
-        if (array_key_exists('cover_id', $properties)) {
-            $this->cover_id  = (int) $properties['cover_id'];
-            $this->cover_img = getService('entity_repository')->find('Photo', $properties['cover_id']);
         }
     }
 
@@ -123,7 +93,7 @@ class Book extends Content
 
         try {
             $rs = getService('dbal_connection')->fetchAssoc(
-                'SELECT * FROM contents LEFT JOIN contents_categories ON pk_content = pk_fk_content '
+                'SELECT * FROM contents LEFT JOIN content_category ON pk_content = content_id '
                 . 'LEFT JOIN books ON pk_content = pk_book WHERE pk_content = ?',
                 [ $id ]
             );

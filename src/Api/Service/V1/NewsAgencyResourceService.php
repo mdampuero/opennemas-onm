@@ -73,12 +73,13 @@ class NewsAgencyResourceService implements Service
      */
     public function __construct($container)
     {
-        $this->container  = $container;
-        $this->dispatcher = $container->get('core.dispatcher');
-        $this->finder     = new Finder();
-        $this->importer   = $this->container->get('news_agency.service.importer');
-        $this->repository = new LocalRepository();
-        $this->path       = sprintf(
+        $this->container    = $container;
+        $this->dispatcher   = $container->get('core.dispatcher');
+        $this->finder       = new Finder();
+        $this->importer     = $this->container->get('news_agency.service.importer');
+        $this->repository   = new LocalRepository();
+        $this->synchronizer = $this->container->get('news_agency.service.synchronizer');
+        $this->path         = sprintf(
             '%s/%s/importers',
             $container->getParameter('core.paths.cache'),
             $container->get('core.instance')->internal_name
@@ -132,7 +133,7 @@ class NewsAgencyResourceService implements Service
             throw new ApiException($e->getMessage(), $e->getCode());
         }
 
-        throw new ApiException('File not found', 404);
+        throw new ApiException(_('Item not found'), 404);
     }
 
     /**
@@ -140,6 +141,8 @@ class NewsAgencyResourceService implements Service
      */
     public function getItem($id)
     {
+        $this->checkSynchronizer();
+
         try {
             if (empty($id)) {
                 throw new \InvalidArgumentException();
@@ -163,6 +166,8 @@ class NewsAgencyResourceService implements Service
      */
     public function getList($oql = '')
     {
+        $this->checkSynchronizer();
+
         try {
             list($criteria, $order, $epp, $page) = $this->getCriteriaFromOql($oql);
 
@@ -185,8 +190,10 @@ class NewsAgencyResourceService implements Service
      */
     public function getListByIds($ids)
     {
+        $this->checkSynchronizer();
+
         if (!is_array($ids)) {
-            throw new GetListException('Invalid ids', 400);
+            throw new GetListException(_('Invalid argument'), 400);
         }
 
         if (empty($ids)) {
@@ -225,13 +232,14 @@ class NewsAgencyResourceService implements Service
      */
     public function importItem(string $id, array $data) : int
     {
+        $this->checkSynchronizer();
         $this->checkParameters($data);
 
         try {
             $resource = $this->repository->find($id);
 
             if ($this->importer->isImported($resource)) {
-                throw new ApiException('The item is already imported', 409);
+                throw new ApiException(_('The item is already imported'), 409);
             }
 
             $server = $this->container->get('api.service.news_agency.server')
@@ -262,6 +270,7 @@ class NewsAgencyResourceService implements Service
      */
     public function importList(array $ids, array $data) : int
     {
+        $this->checkSynchronizer();
         $this->checkParameters($data);
 
         try {
@@ -345,7 +354,22 @@ class NewsAgencyResourceService implements Service
             || ($params['content_type_name'] === 'opinion'
                 && !array_key_exists('fk_author', $params))
         ) {
-            throw new ApiException('Invalid arguments', 400);
+            throw new ApiException(_('Invalid argument'), 400);
+        }
+    }
+
+    /**
+     * Checks if there is a synchronization in progress.
+     *
+     * @throws ApiException If there is a synchronization in progress.
+     */
+    protected function checkSynchronizer()
+    {
+        if ($this->synchronizer->isLocked()) {
+            throw new ApiException(
+                _('The synchronization is already in progress. Try again later.'),
+                409
+            );
         }
     }
 

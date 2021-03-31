@@ -52,7 +52,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     $output[] = '<meta name="twitter:domain" content="' . $url . '">';
 
     $image = $smarty->getContainer()->get('core.helper.content_media')
-        ->getContentMediaObject($content, $params);
+        ->getMedia($content, $params);
 
     // Populate the media element if exists
     if (is_object($image)
