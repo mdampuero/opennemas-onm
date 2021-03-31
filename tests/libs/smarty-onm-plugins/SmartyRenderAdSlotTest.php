@@ -111,7 +111,6 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'safe_frame' => 0 ]);
 
         $this->renderer->expects($this->at(0))->method('getPositions')
-            ->with('ads_positions')
             ->willReturn([ 111, 222, 333 ]);
 
         $this->assertEmpty(

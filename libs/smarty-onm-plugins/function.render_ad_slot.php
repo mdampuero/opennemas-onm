@@ -18,7 +18,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
     $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
 
     // Filter advertisement by position
-    $adsPositions = $renderer->getPositions('ads_positions');
+    $adsPositions = $renderer->getPositions();
     if (empty($adsPositions) || !in_array($position, $adsPositions)) {
         return '';
     }
