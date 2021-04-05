@@ -39,7 +39,7 @@
               return;
             }
 
-            if (translator.valid(nv)) {
+            if (translator.valid(ov, nv)) {
               // Raise a modal to indicate that background translation is being executed
               $uibModal.open({
                 backdrop: 'static',
@@ -88,7 +88,7 @@
          * @return {Boolean} True if the string has the locale, false otherwise.
          */
         translator.hasLocale = function(strings, locale) {
-          return strings.some((string) => string && string !== {} && string.hasOwnProperty(locale));
+          return strings.some((string) => string && string.hasOwnProperty(locale) && string[locale]);
         };
 
         /**
@@ -102,9 +102,9 @@
          */
         translator.translate = function() {
           var params = {
-            data: this.stringsToTranslate.map((string) => string[this.selectedTranslator.from]),
-            from: this.selectedTranslator.from,
-            to: this.selectedTranslator.to,
+            data: translator.stringsToTranslate.map((string) => string[translator.selectedTranslator.from]),
+            from: translator.selectedTranslator.from,
+            to: translator.selectedTranslator.to,
             translator: 0
           };
 
@@ -122,27 +122,31 @@
          *
          * @return {Boolean} True if the strings can be translated to the locale, false otherwise.
          */
-        translator.valid = function(locale) {
-          if (!this.extractStrings) {
+        translator.valid = function(from, to) {
+          if (!translator.extractStrings) {
             return false;
           }
 
-          this.locale             = locale;
-          this.stringsToTranslate = this.extractStrings(this.scope);
+          translator.locale             = to;
+          translator.stringsToTranslate = translator.extractStrings(translator.scope);
 
-          if (this.hasLocale(this.stringsToTranslate, locale)) {
+          if (translator.hasLocale(translator.stringsToTranslate, to)) {
             return false;
           }
 
-          var translators = this.config.locale.translators.filter(function(translator) {
-            return translator.to === locale && this.hasLocale(this.stringsToTranslate, translator.from);
-          }.bind(this));
+          var translators = translator.config.locale.translators.filter(function(item) {
+            return item.to === to &&
+              (
+                translator.hasLocale(translator.stringsToTranslate, item.from) ||
+                from === translator.config.locale.default
+              );
+          });
 
           if (translators.length === 0) {
             return false;
           }
 
-          this.selectedTranslator = translators.shift();
+          translator.selectedTranslator = translators.shift();
 
           return true;
         };
