@@ -155,7 +155,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
     $scope.loadStrings = function(strings, scope, locale) {
       scope.data.extra.keys.forEach(function(key, index) {
-        scope.data.item[key][locale] = strings[index] !== 'undefined' ? strings[index] : null;
+        if (typeof scope.data.item[key] === 'object') {
+          scope.data.item[key][locale] = strings[index] !== 'undefined' ? strings[index] : null;
+        }
       });
     };
 
