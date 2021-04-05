@@ -49,8 +49,6 @@
             $scope.cover =
               $scope.data.item.logo_path.replace($window.instanceMedia, '');
           }
-
-          translator.init($scope);
         };
 
         /**
