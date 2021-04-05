@@ -127,6 +127,39 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @function extractStrings
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Returns all the strings of the content that can be translated.
+     *
+     * @param {Object} item The item to get strings from.
+     *
+     * @return {array} The array of strings that can be translated.
+     */
+    $scope.extractStrings = function(scope) {
+      return scope.data.extra.keys.map(function(key) {
+        return scope.data.item[key];
+      });
+    };
+
+    /**
+     * @function loadStrings
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Loads all the translated strings to the item.
+     *
+     * @param {array}  strings The array translated strings.
+     * @param {Object} item    The item to load strings on.
+     */
+    $scope.loadStrings = function(strings, scope, locale) {
+      scope.data.extra.keys.forEach(function(key, index) {
+        scope.data.item[key][locale] = strings[index] !== 'undefined' ? strings[index] : null;
+      });
+    };
+
+    /**
      * @function submit
      * @memberOf StaticPageCtrl
      *

@@ -6,164 +6,141 @@
     .service('translator', [
       'http', '$uibModal',
       function(http, $uibModal) {
-      /**
-       * @memberOf translator
-       *
-       * @description
-       *  The translator service.
-       *
-       * @type {Object}
-       */
-        var translator = {};
+        /**
+         * @memberOf translator
+         *
+         * @description
+         *  The translator service.
+         */
+        var translator = {
+          stringsToTranslate: []
+        };
 
         /**
          * @function init
-         * @memberOf Translator
+         * @memberOf translator
          *
          * @description
-         *  Initializes the Translator's scope to the actual scope.
-         *
-         * @param {Object} scope The actual scope.
+         *  Initializes the translator.
          */
         translator.init = function(scope) {
-          translator.scope = scope;
+          translator.scope          = scope;
+          translator.extractStrings = scope.extractStrings;
+          translator.loadStrings    = scope.loadStrings;
+          translator.config         = scope.config;
 
-          // Shows a modal window to translate content automatically
+          // Define watcher to execute translation when locale changes
           translator.scope.$watch('config.locale.selected', function(nv, ov) {
-            if (!nv || nv === ov ||
-              translator.isTranslated(translator.scope.data.item,
-                translator.scope.data.extra.keys, nv)) {
+            if (!nv) {
               return;
             }
 
-            // Filter for selected locale and translated in original language
-            var translators = translator.scope.config.locale.translators.filter(function(e) {
-              return e.to === nv && translator.isTranslated(translator.scope.data.item,
-                translator.scope.data.extra.keys, e.from);
-            });
-
-            if (translators.length === 0) {
+            if (nv === ov) {
               return;
             }
 
-            var config = {
-              locales: translator.scope.config.locale.available,
-              translators: translators
-            };
+            if (translator.valid(nv)) {
+              // Raise a modal to indicate that background translation is being executed
+              $uibModal.open({
+                backdrop: 'static',
+                keyboard: false,
+                backdropClass: 'modal-backdrop-dark',
+                controller:  'TranslatorCtrl',
+                openedClass: 'modal-relative-open',
+                templateUrl: 'modal-translate',
+                resolve: {
+                  template: function() {
+                    return {
+                      config: translator.config,
+                      translating: false,
+                      translator: translator
+                    };
+                  },
+                  callback: function() {
+                    return function(modal, template) {
+                      template.translating = true;
 
-            translator.translate(nv, config);
+                      translator.translate().then(function(response) {
+                        translator.loadStrings(response.data, translator.scope, translator.locale);
+                        template.translating      = false;
+                        template.translation_done = true;
+                      }, function() {
+                        modal.close({ response: true, error: true });
+                      });
+                    };
+                  }
+                }
+              });
+            }
           }, true);
         };
 
         /**
-         * @function isTranslated
-         * @memberOf Translator
+         * @function hasLocale
+         * @memberOf translator
          *
          * @description
-         *   Checks if the item is translated to the locale.
+         *  Check if an array of strings has the specific locale.
          *
-         * @param {String} locale The locale to check.
+         * @param {array}  strings An array of objects with the strings to check.
+         * @param {String} locale  The locale to check.
          *
-         * @return {Boolean} True if the item is translated. False otherwise.
+         * @return {Boolean} True if the string has the locale, false otherwise.
          */
-        translator.isTranslated = function(item, keys, locale) {
-          return keys.some((key) => item[key] && item[key][locale]);
+        translator.hasLocale = function(strings, locale) {
+          return strings.some((string) => string && string !== {} && string.hasOwnProperty(locale));
         };
 
         /**
          * @function translate
-         * @memberOf Translator
+         * @memberOf translator
          *
          * @description
-         *   Shows a modal to translate a content automatically.
+         *  Make the call to the translation service and return a promise.
          *
-         * @param {String} to     The locale to translate to.
-         * @param {Object} config The locale-related configuration.
-         *
-         * @return {type} description
+         * @return {Promise} The thenable object with the call to the server.
          */
-        translator.translate = function(to, configParam) {
-          var config = {
-            translateFrom:  translator.scope.data.extra.locale,
-            translateTo: to,
-            locales: configParam.locales,
-            translators: configParam.translators,
-            translatorSelected: 0,
+        translator.translate = function() {
+          var params = {
+            data: this.stringsToTranslate.map((string) => string[this.selectedTranslator.from]),
+            from: this.selectedTranslator.from,
+            to: this.selectedTranslator.to,
+            translator: 0
           };
 
-          // Pick the default translator
-          config.translators.forEach(function(el, index) {
-            if (el.from === config.translateFrom &&
-              el.to === config.translateTo &&
-              el.default === true || el.default === 'true') {
-              config.translatorSelected = index;
-            }
-          });
+          return http.post('api_v1_backend_tools_translate_string', params);
+        };
 
-          // Raise a modal to indicate that background translation is being executed
-          $uibModal.open({
-            backdrop: 'static',
-            keyboard: false,
-            backdropClass: 'modal-backdrop-dark',
-            controller:  'BackgroundTaskModalCtrl',
-            openedClass: 'modal-relative-open',
-            templateUrl: 'modal-translate',
-            resolve: {
-              template: function() {
-                return {
-                  config: config,
-                  translating: false,
-                };
-              },
-              callback: function() {
-                return function(modal, template) {
-                  var translatorItem = config.translators[config.translatorSelected];
+        /**
+         * @function valid
+         * @memberOf translator
+         *
+         * @description
+         *  Return true if the strings can be translated, false otherwise.
+         *
+         * @param {String} locale The selected locale.
+         *
+         * @return {Boolean} True if the strings can be translated to the locale, false otherwise.
+         */
+        translator.valid = function(locale) {
+          this.locale             = locale;
+          this.stringsToTranslate = this.extractStrings(this.scope);
 
-                  // If no default translator dont call the server
-                  if (!translatorItem) {
-                    return;
-                  }
+          if (this.hasLocale(this.stringsToTranslate, locale)) {
+            return false;
+          }
 
-                  template.translating = true;
-                  template.translation_done = false;
+          var translators = this.config.locale.translators.filter(function(translator) {
+            return translator.to === locale && this.hasLocale(this.stringsToTranslate, translator.from);
+          }.bind(this));
 
-                  var params = {
-                    data: {},
-                    from: translatorItem.from,
-                    to: translatorItem.to,
-                    translator: config.translatorSelected,
-                  };
+          if (translators.length === 0) {
+            return false;
+          }
 
-                  for (var i = 0; i < translator.scope.data.extra.keys.length; i++) {
-                    var key = translator.scope.data.extra.keys[i];
+          this.selectedTranslator = translators.shift();
 
-                    if (translator.scope.data.item[key] &&
-                        angular.isObject(translator.scope.data.item[key]) &&
-                        translator.scope.data.item[key][params.from]) {
-                      params.data[key] = translator.scope.data.item[key][params.from];
-                    }
-                  }
-
-                  template.translating = true;
-                  template.translation_done = false;
-
-                  http.post('api_v1_backend_tools_translate_string', params)
-                    .then(function(response) {
-                      for (var i = 0; i < translator.scope.data.extra.keys.length; i++) {
-                        var key = translator.scope.data.extra.keys[i];
-
-                        translator.scope.item[key] = response.data[key];
-                      }
-
-                      template.translating = false;
-                      template.translation_done = true;
-                    }, function() {
-                      modal.close({ response: true, error: true });
-                    });
-                };
-              }
-            }
-          });
+          return true;
         };
 
         return translator;
@@ -216,37 +193,7 @@
                     ' href="{{link + \'?locale=\' + language.value}}" ng-repeat="language in languages">' +
                   '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>{{language.name}}' +
                 '</a>' +
-              '</div>' +
-              '<script type="text/ng-template" id="modal-translate">' +
-                '<div class="modal-body">' +
-                  '<button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">' +
-                    '<i class="fa fa-times"></i>' +
-                  '</button>' +
-                  '<div ng-hide="template.config.translators.length > 0" class="text-center m-t-50 p-t-30">' +
-                    '<i class="fa fa-4x fa-warning text-warning"></i>' +
-                      '<h4>{t escape=off 1="[% template.config.locales[template.config.translateFrom] %]" 2="[% template.config.locales[template.config.translateTo] %]"}No available translators for "%1&rarr;%2"{/t}</h4>' +
-                      '<p class="m-b-50">{t escape=off}Please go to the <a href="{url name=admin_system_settings}">Settings page</a> and configure your <br> translators for all the languages.{/t}</p>' +
-                  '</div>' +
-                  '<div ng-show="template.translating">' +
-                    '<div class="spinner-wrapper" class="text-center m-t-50 p-t-30">' +
-                      '<div class="loading-spinner"></div>' +
-                      '<h4 class="text-center">{t 1="[% template.config.locales[template.config.translateTo] %]"}Translating content into "%1"{/t}</h4>' +
-                    '</div>' +
-                  '</div>' +
-                  '<div ng-show="template.translation_done">' +
-                    '<div class="text-center m-t-50 p-t-30">' +
-                      '<i class="fa fa-4x fa-globe"></i>' +
-                      '<h4>{t 1="[% template.config.locales[template.config.translateTo] %]"}Content translated properly into "%1".{/t}</h4>' +
-                    '</div>' +
-                    '<button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">' +
-                      '<h4 class="text-uppercase text-white">' +
-                        '<i class="fa fa-check"></i>' +
-                        '<strong>{t}Ok{/t}</strong>' +
-                      '</h4>' +
-                    '</button>' +
-                  '</div>' +
-                '</div>' +
-              '</script>';
+              '</div>';
             }
 
             return '<div class="translator btn-group">' +
@@ -263,37 +210,7 @@
                   '</a>' +
                 '</li>' +
               '</ul>' +
-            '</div>' +
-            '<script type="text/ng-template" id="modal-translate">' +
-            '<div class="modal-body">' +
-              '<button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">' +
-                '<i class="fa fa-times"></i>' +
-              '</button>' +
-              '<div ng-hide="template.config.translators.length > 0" class="text-center m-t-50 p-t-30">' +
-                '<i class="fa fa-4x fa-warning text-warning"></i>' +
-                  '<h4>{t escape=off 1="[% template.config.locales[template.config.translateFrom] %]" 2="[% template.config.locales[template.config.translateTo] %]"}No available translators for "%1&rarr;%2"{/t}</h4>' +
-                  '<p class="m-b-50">{t escape=off}Please go to the <a href="{url name=admin_system_settings}">Settings page</a> and configure your <br> translators for all the languages.{/t}</p>' +
-              '</div>' +
-              '<div ng-show="template.translating">' +
-                '<div class="spinner-wrapper" class="text-center m-t-50 p-t-30">' +
-                  '<div class="loading-spinner"></div>' +
-                  '<h4 class="text-center">{t 1="[% template.config.locales[template.config.translateTo] %]"}Translating content into "%1"{/t}</h4>' +
-                '</div>' +
-              '</div>' +
-              '<div ng-show="template.translation_done">' +
-                '<div class="text-center m-t-50 p-t-30">' +
-                  '<i class="fa fa-4x fa-globe"></i>' +
-                  '<h4>{t 1="[% template.config.locales[template.config.translateTo] %]"}Content translated properly into "%1".{/t}</h4>' +
-                '</div>' +
-                '<button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">' +
-                  '<h4 class="text-uppercase text-white">' +
-                    '<i class="fa fa-check"></i>' +
-                    '<strong>{t}Ok{/t}</strong>' +
-                  '</h4>' +
-                '</button>' +
-              '</div>' +
-            '</div>' +
-          '</script>';
+            '</div>';
           },
           link: function($scope) {
             $scope.max           = 0;
@@ -365,6 +282,39 @@
             });
           },
         };
+      }
+    ])
+
+    .controller('TranslatorCtrl', [
+      '$uibModalInstance', '$scope', 'template', 'callback',
+      function($uibModalInstance, $scope, template, callback) {
+        /**
+         * @memberOf TranslatorCtrl
+         *
+         * @description
+         *   The template parameters.
+         *
+         * @type {Object}
+         */
+        $scope.template = template;
+
+        callback($uibModalInstance, template);
+
+        /**
+         * @function dismiss
+         * @memberOf TranslatorCtrl
+         *
+         * @description
+         *   Close the modal without executing any action.
+         */
+        $scope.dismiss = function() {
+          $uibModalInstance.dismiss();
+        };
+
+        // Frees up memory before controller destroy event
+        $scope.$on('$destroy', function() {
+          $scope.template = null;
+        });
       }
     ]);
 })();
