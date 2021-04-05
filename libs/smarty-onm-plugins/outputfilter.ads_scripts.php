@@ -25,7 +25,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
         $headerScript    = 'header_script';
         $bodyStartScript = 'body_start_script';
