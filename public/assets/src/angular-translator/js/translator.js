@@ -123,6 +123,10 @@
          * @return {Boolean} True if the strings can be translated to the locale, false otherwise.
          */
         translator.valid = function(locale) {
+          if (!this.extractStrings) {
+            return false;
+          }
+
           this.locale             = locale;
           this.stringsToTranslate = this.extractStrings(this.scope);
 
