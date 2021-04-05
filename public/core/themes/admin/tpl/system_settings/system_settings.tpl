@@ -1563,14 +1563,14 @@
                           </div>
                         </div>
                         <div class="form-group" ng-if="extra.theme_skins.length !== 0">
-                            <label class="form-label" for="site-color">
+                            <label class="form-label" for="theme-style">
                               <h4>
                                 <i class="fa fa-paint-brush"></i>
                                 {t}Default skin{/t}
                               </h4>
-                                            <span class="help">
-                              {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
-                            </span>
+                              <span class="help">
+                                {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
+                              </span>
                             </label>
                             <div class="controls">
                               <div class="input-group">
