@@ -117,7 +117,7 @@
                         {foreach get_related_contents($content, 'inner') as $related}
                           <p>
                             <a href="{get_url($related)}">
-                              {get_title($related)}
+                              <![CDATA[{get_title($related)}]]>
                             </a>
                           </p>
                         {/foreach}
@@ -210,12 +210,12 @@
           {/foreach}
         </NewsComponent>
       {/if}
-      {if isset($content->all_photos) && !empty($content->all_photos)}
+      {if has_album_photos($content)}
         <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
-          {foreach $content->all_photos as $photo}
-            {if $photo->id}
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
+          {foreach get_album_photos($content) as $photo}
+            {if get_id($photo)}
+              <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{get_id($photo)}" Euid="{get_id($photo)}">
                 <NewsLines>
                   <HeadLine>
                     <![CDATA[{$content->title}]]>
@@ -228,10 +228,10 @@
                 </AdministrativeMetadata>
                 <DescriptiveMetadata>
                   <Language FormalName="es" />
-                  <DateLineDate>{format_date date=$photo->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-                  <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
+                  <DateLineDate>{format_date date=get_creation_date($photo) type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
+                  <Property FormalName="Onm_IdRefObject" Value="{get_id($photo)}" />
                 </DescriptiveMetadata>
-                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.file">
+                <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{get_id($photo)}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
                   <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path($photo)}">
@@ -239,14 +239,14 @@
                     <MimeType FormalName="{get_photo_mime_type($photo)}" />
                     <Characteristics>
                       <SizeInBytes>{get_photo_size($photo)*1024}</SizeInBytes>
-                      <Property FormalName="Onm_Filename" Value="{$photo->title}" />
+                      <Property FormalName="Onm_Filename" Value="{basename(get_property($photo, 'path'))}" />
                       <Property FormalName="Height" Value="{get_photo_height($photo)}" />
                       <Property FormalName="PixelDepth" Value="24" />
                       <Property FormalName="Width" Value="{get_photo_width($photo)}" />
                     </Characteristics>
                   </ContentItem>
                 </NewsComponent>
-                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$photo->id}.text">
+                <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{get_id($photo)}.text">
                   <Role FormalName="Caption" />
                   <ContentItem>
                     <MediaType FormalName="Text" />
@@ -259,7 +259,7 @@
                             <![CDATA[{$content->title}]]>
                           </title>
                           <docdata management-status="usable">
-                            <doc-id id-string="{$photo->id}" />
+                            <doc-id id-string="{get_id($photo)}" />
                           </docdata>
                         </head>
                         <body>
@@ -271,13 +271,13 @@
                             </hedline>
                             <dateline>
                               <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
-                                {format_date date=$photo->created type="custom" format="yMMdd'T'HHmmssxxx"}
+                                {format_date date=get_creation_date($photo) type="custom" format="yMMdd'T'HHmmssxxx"}
                               </story.date>
                             </dateline>
                           </body.head>
                           <body.content>
                             <p>
-                              <![CDATA[{$photo->description|htmlspecialchars_decode|trim}]]>
+                              <![CDATA[{get_caption($photo)|htmlspecialchars_decode|trim}]]>
                             </p>
                           </body.content>
                         </body>

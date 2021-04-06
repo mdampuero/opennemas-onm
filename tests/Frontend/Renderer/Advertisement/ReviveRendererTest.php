@@ -106,6 +106,51 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderAmp
+     */
+    public function testRenderAmp()
+    {
+        $ad         = new \Advertisement();
+        $ad->params = [ 'openx_zone_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 300,
+                'device' => 'phone'
+            ],
+        ];
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('revive_ad_server')
+            ->willReturn([ 'url' => 'https://revive.com' ]);
+
+        $output = '<amp-iframe
+            width="300"
+            height="300"
+            sandbox="allow-scripts allow-same-origin"
+            layout="responsive"
+            frameborder="0"
+            src="https://revive.com/www/delivery/afr.php?zoneid=321">
+        </amp-iframe>
+        ';
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('advertisement/helpers/amp/revive.tpl', [
+                'openXId'  => $ad->params['openx_zone_id'],
+                'url'      => 'https://revive.com',
+                'width'    => 300,
+                'height'   => 300,
+            ])
+            ->willReturn($output);
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->renderAmp($ad, [])
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderFia
      */
     public function testRenderFia()
@@ -195,6 +240,28 @@ class ReviveRendererTest extends TestCase
             $output,
             $this->renderer->renderInline($ad, [])
         );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     */
+    public function testRenderInlineWithAmp()
+    {
+        $ad          = new \Advertisement();
+        $ad->id      = 1;
+        $ad->created = '2019-03-28 18:40:32';
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ReviveRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderAmp' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderAmp')
+            ->willReturn('foo');
+
+        $this->assertEquals('foo', $renderer->renderInline($ad, [
+            'ads_format' => 'amp'
+        ]));
     }
 
     /**

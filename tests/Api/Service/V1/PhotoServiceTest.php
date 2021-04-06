@@ -62,7 +62,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ih = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
             ->setConstructorArgs([ $this->il, '/wibble/flob', $this->processor ])
-            ->setMethods([ 'generatePath', 'exists', 'move', 'remove' ])
+            ->setMethods([ 'generatePath', 'exists', 'move', 'remove', 'getInformation' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -151,9 +151,6 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $externalPhoto->shouldReceive('create')->once()->andReturn(null);
 
-        $this->metadata->expects($this->once())->method('getId')
-            ->will($this->throwException(new \Api\Exception\CreateItemException()));
-
         $this->service->createItem($data, $file);
     }
 
@@ -200,6 +197,12 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
         $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
+        $this->ih->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->ih->expects($this->once())->method('getInformation')
+            ->willReturn([]);
+
         $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
 
@@ -207,9 +210,6 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->metadata->expects($this->once())->method('getId')
             ->willReturn([ 'id' => 1 ]);
-
-        $this->ih->expects($this->once())->method('exists')
-            ->willReturn(false);
 
         $this->ih->expects($this->once())->method('move');
 

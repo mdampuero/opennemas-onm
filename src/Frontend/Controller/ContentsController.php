@@ -14,6 +14,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Annotation\BotDetector;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,6 @@ class ContentsController extends Controller
     public function printAction(Request $request)
     {
         $dirtyID = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
-        $urlSlug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve content ID, we dont know which type the content is so we have to
         // perform some calculations
@@ -47,28 +47,13 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $contentID = $matches['id'];
-
-        $content = new \Content($contentID);
-        $content = $this->get('content_url_matcher')
-            ->matchContentUrl($content->content_type_name, $dirtyID, $urlSlug);
-
-        if (empty($content)) {
+        try {
+            $content = $this->container->get('api.service.content_old')->getItem($matches['id']);
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('content', $contentID, 'print');
-
-        return $this->render('article/article_printer.tpl', [
-            'cache_id'    => $cacheID,
-            'content'     => $content,
-            'article'     => $content,
-            'o_content'   => $content,
-            'x-tags'      => 'content-print,' . $contentID,
-            'x-cacheable' => true,
-        ]);
+        return $this->redirect($this->container->get('core.helper.url_generator')->generate($content), 301);
     }
 
     /**
