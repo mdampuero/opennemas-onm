@@ -121,7 +121,7 @@ function get_description($item = null) : ?string
  *
  * @return Content The featured media.
  */
-function get_featured_media($item, $type, $deep = true, $icon = false)
+function get_featured_media($item, $type, $deep = true)
 {
     $item = get_content($item);
     $map  = [
@@ -172,10 +172,6 @@ function get_featured_media($item, $type, $deep = true, $icon = false)
         }
 
         $media = get_content(array_shift($related));
-
-        if (get_type($media) === 'video' && $type === 'frontpage' && !$icon) {
-            $deep = true;
-        }
 
         if ($deep &&
                 in_array(get_type($media), [ 'video', 'album' ]) &&
