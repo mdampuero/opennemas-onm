@@ -3,8 +3,8 @@
   {$iTitle}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$iName} }"></i>
   <span ng-if="data.extra.related_contents[{$iName}.target_id]" class="pull-right">
-    <a class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-href="[% getFeaturedMediaUrl(data.extra.related_contents[{$iName}.target_id]) %]" ng-click="$event.stopPropagation()" target="_blank">
-      <i ng-class="{ 'fa fa-image' : data.extra.related_contents[{$iName}.target_id].content_type_name === 'photo', 'fa fa-camera' :  data.extra.related_contents[{$iName}.target_id].content_type_name === 'album', 'fa fa-film' : data.extra.related_contents[{$iName}.target_id].content_type_name === 'video' }"></i>
+    <a class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-href="[% getFeaturedMediaUrl(data.extra.related_contents[{$iName}.target_id]) %]" ng-click="$event.stopPropagation()" target="_blank" uib-tooltip="{t}Edit{/t}">
+      {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[{$iName}.target_id]" iFlagName=true iFlagIcon=true}
     </a>
   </span>
 </div>

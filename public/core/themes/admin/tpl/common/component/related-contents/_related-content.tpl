@@ -13,7 +13,7 @@
           </span>
           <div class="related-item-info">
             <span class="related-item-type">
-              <span class="fa" ng-class="{ 'fa-file-text-o': data.extra.related_contents[related.target_id].content_type_name == 'article', 'fa-quote-right': data.extra.related_contents[related.target_id].content_type_name == 'opinion', 'fa-pie-chart': data.extra.related_contents[related.target_id].content_type_name == 'poll', 'fa-file': data.extra.related_contents[related.target_id].content_type_name == 'static_page', 'fa-envelope': data.extra.related_contents[related.target_id].content_type_name == 'letter', 'fa-paperclip': data.extra.related_contents[related.target_id].content_type_name == 'attachment', 'fa-film': data.extra.related_contents[related.target_id].content_type_name == 'video', 'fa-camera': data.extra.related_contents[related.target_id].content_type_name == 'album'  }" uib-tooltip="[% data.extra.related_contents[related.target_id].content_type_l10n_name %]"></span>
+              {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[related.target_id]" iFlagIcon=true}
             </span>
             <span class="related-item-title">
               [% data.extra.related_contents[related.target_id].title %]
