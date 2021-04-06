@@ -164,7 +164,6 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
                 return $this->conn;
 
             case 'entity_repository':
-            case 'opinion_repository':
                 return $this->repository;
 
             case 'kernel':
@@ -833,23 +832,6 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 1234 ]));
         $this->assertEquals($url, $method->invokeArgs($this->redirector, [ 1234, [ 'thud', 'bar' ] ]));
-    }
-
-    /**
-     * Tests getOpinion when an opinion is and is not found.
-     */
-    public function testGetOpinion()
-    {
-        $method = new \ReflectionMethod($this->redirector, 'getOpinion');
-        $method->setAccessible(true);
-
-        $this->repository->expects($this->at(0))->method('find')
-            ->with('Opinion', 2341)->willReturn(null);
-        $this->repository->expects($this->at(1))->method('find')
-            ->with('Opinion', 1467)->willReturn('plugh');
-
-        $this->assertEmpty($method->invokeArgs($this->redirector, [ 2341 ]));
-        $this->assertEquals('plugh', $method->invokeArgs($this->redirector, [ 1467 ]));
     }
 
     /**

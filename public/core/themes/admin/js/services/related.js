@@ -45,7 +45,8 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             name:   'relatedInner',
             simple: true
           },
-        }
+        },
+        mirrored: {}
       };
 
       /**
@@ -220,6 +221,9 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         // Link original and localized items
         related.scope.config.linkers[name].link(item, localized);
 
+        // Update linker to force caption of the selected language
+        related.scope.config.linkers[name].update();
+
         return localized;
       };
 
@@ -296,19 +300,21 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        */
       related.watchMirror = function(name, type, simple) {
         related.scope.$watch(name, function(nv, ov) {
-          if (!nv) {
+          // Return if empty or item already mirrored
+          if (!nv || related.mirrored[name]) {
             return;
           }
 
-          if (simple && (!related.scope.data[related.map[type].name] ||
-              related.scope.data[related.map[type].name].target_id === ov.target_id &&
-              related.scope.data[related.map[type].name].caption === ov.caption)) {
+          // Copy item when mirror is empty
+          if (simple && !related.scope.data[related.map[type].name]) {
             var item = angular.copy(nv);
 
             item.type = type;
 
             related.scope.data[related.map[type].name] = item;
             related.scope[related.map[type].name]      = related.localize(item, type);
+
+            related.mirrored[name] = true;
             return;
           }
 
@@ -335,6 +341,8 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
                 related.localize(item, type + '_' + i)
               );
             }
+
+            related.mirrored[name] = true;
           }
         }, true);
       };
