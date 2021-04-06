@@ -211,10 +211,6 @@ class BlogController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
         try {
             $response = $this->get($this->service)->getList(sprintf(
                 'content_type_name="opinion" and content_status=1 and in_litter=0 '
@@ -233,13 +229,13 @@ class BlogController extends FrontendController
         }
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($contents)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $epp,
+            'epp'         => $params['epp'],
             'page'        => $params['page'],
             'total'       => $response['total'],
             'route'       => [
