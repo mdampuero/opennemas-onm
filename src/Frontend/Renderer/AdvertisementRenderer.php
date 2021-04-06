@@ -38,6 +38,13 @@ class AdvertisementRenderer extends Renderer
     protected $positions = [];
 
     /**
+     * The list of requested advertisements.
+     *
+     * @var array
+     */
+    protected $requestedAds = [];
+
+    /**
      * The available advertisement types.
      *
      * @var array
@@ -57,6 +64,40 @@ class AdvertisementRenderer extends Renderer
         $this->instance = $this->container->get('core.instance');
         $this->ds       = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
+    }
+
+    /**
+     * Get specific advertisement based on position.
+     *
+     * @return \Advertisement The specific advertisement.
+     */
+    public function getAdvertisement($position)
+    {
+        $contentHelper  = $this->container->get('core.helper.content');
+        $advertisements = array_udiff(
+            $this->getAdvertisements(),
+            $this->getRequestedAds(),
+            function ($a, $b) {
+                return $a->id - $b->id;
+            }
+        );
+
+        $advertisements = array_filter(
+            $advertisements,
+            function ($ad) use ($contentHelper, $position) {
+                return is_array($ad->positions)
+                    && in_array($position, $ad->positions)
+                    && $contentHelper->isInTime($ad);
+            }
+        );
+
+        if (empty($advertisements)) {
+            return null;
+        }
+
+        $ad = $advertisements[array_rand($advertisements)];
+
+        return $ad;
     }
 
     /**
@@ -143,6 +184,16 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Get list of requested advertisements.
+     *
+     * @return array The requested advertisements.
+     */
+    public function getRequestedAds()
+    {
+        return $this->requestedAds;
+    }
+
+    /**
      * Renders an advertisement given the advertisement and parameters.
      *
      * @param \Advertisement $ad     The advertisement to render.
@@ -155,6 +206,10 @@ class AdvertisementRenderer extends Renderer
         // Get renderer class and ad format
         $renderer  = $this->getRendererClass($ad->with_script);
         $adsFormat = $params['ads_format'] ?? null;
+
+        if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
+            $this->setRequestedAds($ad);
+        }
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
@@ -261,6 +316,16 @@ class AdvertisementRenderer extends Renderer
         $this->postions = $postions;
 
         return $this;
+    }
+
+    /**
+     * Add an advertisement to the list of requested.
+     *
+     * @param \Advertisement $advertisement The requested advertisement.
+     */
+    public function setRequestedAds($advertisement)
+    {
+        $this->requestedAds[] = $advertisement;
     }
 
     /**

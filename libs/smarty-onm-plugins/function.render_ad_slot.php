@@ -23,28 +23,9 @@ function smarty_function_render_ad_slot($params, &$smarty)
         return '';
     }
 
-    $ads = $renderer->getAdvertisements();
-    if (!is_array($ads)) {
+    $advertisement = $renderer->getAdvertisement($position);
+    if (empty($advertisement)) {
         return '';
-    }
-
-    $contentHelper = $smarty->getContainer()->get('core.helper.content');
-
-    $ads = array_filter($ads, function ($ad) use ($contentHelper, $position) {
-        return is_array($ad->positions)
-            && in_array($position, $ad->positions)
-            && $contentHelper->isInTime($ad);
-    });
-
-    if (empty($ads)) {
-        return '';
-    }
-
-    $ad = $ads[array_rand($ads)];
-    if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
-        $ad = array_pop($ads);
-
-        $renderer->setAdvertisements($ads);
     }
 
     $adsFormat = $smarty->getValue('ads_format');
@@ -62,5 +43,5 @@ function smarty_function_render_ad_slot($params, &$smarty)
         'ads_format'         => $adsFormat ?? null,
     ]);
 
-    return $renderer->render($ad, $params);
+    return $renderer->render($advertisement, $params);
 }
