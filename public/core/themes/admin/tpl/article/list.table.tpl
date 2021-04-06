@@ -2,21 +2,34 @@
 
 {block name="commonColumns" prepend}
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-media" checklist-model="app.columns.selected" checklist-value="'media'" type="checkbox">
-    <label for="checkbox-media">
-      {t}Media{/t}
+    <input id="checkbox-featured-frontpage" checklist-model="app.columns.selected" checklist-value="'featured_frontpage'" type="checkbox">
+    <label for="checkbox-featured-frontpage">
+      {t}Featured frontpage{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-inner" checklist-model="app.columns.selected" checklist-value="'featured_inner'" type="checkbox">
+    <label for="checkbox-featured-inner">
+      {t}Featured inner{/t}
     </label>
   </div>
 {/block}
 
 {block name="commonColumnsHeader" prepend}
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')" width="120">
+    {t}Featured frontpage{/t}
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
+    {t}Featured inner{/t}
   </th>
 {/block}
 
 {block name="commonColumnsBody" prepend}
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')">
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_frontpage" ng-model="item" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')">
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_inner" ng-model="item" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
   </td>
 {/block}
 
