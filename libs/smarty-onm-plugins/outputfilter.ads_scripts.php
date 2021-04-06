@@ -31,7 +31,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         $bodyStartScript = 'body_start_script';
         $bodyEndScript   = 'body_end_script';
 
-        if (preg_match('@\.amp\.html$@', $uri)) {
+        if (preg_match('@\.amp\.html@', $uri)) {
             $headerScript    .= '_amp';
             $bodyStartScript .= '_amp';
             $bodyEndScript   .= '_amp';
