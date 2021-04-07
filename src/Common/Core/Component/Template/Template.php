@@ -406,16 +406,9 @@ class Template extends \Smarty
         // Keep this to ignore notice
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
-        $instance = $this->getContainer()->get('core.instance');
-
-        $imageDir = !empty($this->theme)
-            ? $instance->getBaseUrl() . '/' . trim($this->theme->path, '/') . '/images/'
-            : null;
-
         $this->assign([
             'app'       => $this->container->get('core.globals'),
-            '_template' => $this,
-            'params'    => [ 'IMAGE_DIR' => $imageDir ]
+            '_template' => $this
         ]);
     }
 

@@ -552,16 +552,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($template, 'setTemplateVars');
         $method->setAccessible(true);
 
-        $this->instance->expects($this->any())->method('getBaseUrl')
-            ->willReturn('http://console');
-
         $template->expects($this->once())->method('assign')
             ->with([
                 'app'       => null,
-                '_template' => $template,
-                'params'    => [
-                    'IMAGE_DIR' => 'http://console/themes/foobar/images/'
-                ]
+                '_template' => $template
             ]);
 
         $method->invokeArgs($template, []);
