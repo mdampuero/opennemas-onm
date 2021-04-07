@@ -46,6 +46,11 @@ class AdvertisementRendererTest extends TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isInTime' ])
+            ->getMock();
+
         $this->templateAdmin = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
@@ -62,6 +67,8 @@ class AdvertisementRendererTest extends TestCase
 
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('thud.opennemas.com');
+        $this->contentHelper->expects($this->any())->method('isInTime')
+            ->willReturn(true);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->em->expects($this->any())->method('getDataSet')
@@ -86,6 +93,9 @@ class AdvertisementRendererTest extends TestCase
 
             case 'core.instance':
                 return $this->instance;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
 
             case 'orm.manager':
                 return $this->em;
@@ -115,6 +125,44 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * Tests getAdvertisement method when no ad.
+     */
+    public function testGetAdvertisementWhenNoAd()
+    {
+        $this->assertEmpty($this->renderer->getAdvertisement('', []));
+    }
+
+    /**
+     * Tests getAdvertisement method when no ad.
+     */
+    public function testGetAdvertisementWhenConsume()
+    {
+        $this->assertEmpty($this->renderer->getAdvertisement('', [ 'mode' => 'consume' ]));
+    }
+
+    /**
+     * Tests getAdvertisement.
+     */
+    public function testGetAdvertisement()
+    {
+        $ad1            = new \Advertisement();
+        $ad1->id        = 1;
+        $ad1->positions = [ 1, 2, 3 ];
+
+        $ad2            = new \Advertisement();
+        $ad2->id        = 2;
+        $ad2->positions = [ 1, 2, 3 ];
+
+        $this->renderer->setAdvertisements([$ad1]);
+        $this->renderer->setRequestedAds($ad2);
+
+        $this->assertEquals(
+            $ad1,
+            $this->renderer->getAdvertisement(2, [ 'mode' => 'consume' ])
+        );
+    }
+
+    /**
      * Tests get and set methods for advertisement.
      */
     public function testGetAndSetAdvertisements()
@@ -122,6 +170,17 @@ class AdvertisementRendererTest extends TestCase
         $this->renderer->setAdvertisements(['foo', 'bar']);
         $this->assertEquals(['foo', 'bar'], $this->renderer->getAdvertisements());
     }
+
+    /**
+     * Tests get and set methods for requested advertisement.
+     */
+    public function testGetAndSetRequestedAdvertisements()
+    {
+        $this->renderer->setRequestedAds('foo');
+        $this->renderer->setRequestedAds('bar');
+        $this->assertEquals(['foo', 'bar'], $this->renderer->getRequestedAds());
+    }
+
     /**
      * Tests get and set methods for advertisement.
      */
@@ -474,6 +533,8 @@ class AdvertisementRendererTest extends TestCase
             . '</div>'
         . '</div>';
 
+        $this->renderer->setAdvertisements([$ad]);
+
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderInline' ])
@@ -498,7 +559,7 @@ class AdvertisementRendererTest extends TestCase
 
         $this->assertEquals(
             $output,
-            $this->renderer->renderInlineInterstitial([ $ad ], [])
+            $this->renderer->renderInlineInterstitial([])
         );
     }
 
@@ -512,8 +573,10 @@ class AdvertisementRendererTest extends TestCase
         $ad->params['sizes']  = [];
         $ad->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
+        $this->renderer->setAdvertisements([$ad]);
+
         $this->assertEmpty(
-            $this->renderer->renderInlineInterstitial([ $ad ], [])
+            $this->renderer->renderInlineInterstitial([])
         );
     }
 
@@ -522,22 +585,21 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
-        $ads = [ ];
-
         $returnValue = '';
         $this->assertEquals(
             $returnValue,
-            $this->renderer->renderInlineInterstitial($ads, [])
+            $this->renderer->renderInlineInterstitial([])
         );
 
         $ad1            = new \Advertisement();
         $ad1->positions = [ 1, 2 ];
-        $ads            = [ $ad1 ];
+
+        $this->renderer->setAdvertisements([$ad1]);
 
         $returnValue = '';
         $this->assertEquals(
             $returnValue,
-            $this->renderer->renderInlineInterstitial($ads, [])
+            $this->renderer->renderInlineInterstitial([])
         );
     }
 

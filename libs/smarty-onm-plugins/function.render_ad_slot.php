@@ -23,7 +23,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
         return '';
     }
 
-    $advertisement = $renderer->getAdvertisement($position);
+    $advertisement = $renderer->getAdvertisement($position, $params);
     if (empty($advertisement)) {
         return '';
     }

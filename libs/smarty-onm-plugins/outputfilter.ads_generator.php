@@ -10,7 +10,7 @@
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $ads         = $adsRenderer->getAdvertisements();
+    $ads         = $adsRenderer->getRequestedAds();
     $app         = $smarty->getValue('app');
 
     if (!is_array($ads)
@@ -52,7 +52,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         ];
 
         $adsOutput    = $adsRenderer->renderInlineHeaders($ads, $params);
-        $interstitial = $adsRenderer->renderInlineInterstitial($ads, $params);
+        $interstitial = $adsRenderer->renderInlineInterstitial($params);
         $devices      = $smarty->getContainer()->get('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
 

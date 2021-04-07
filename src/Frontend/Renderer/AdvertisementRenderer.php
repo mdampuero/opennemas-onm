@@ -71,16 +71,20 @@ class AdvertisementRenderer extends Renderer
      *
      * @return \Advertisement The specific advertisement.
      */
-    public function getAdvertisement($position)
+    public function getAdvertisement($position, $params)
     {
         $contentHelper  = $this->container->get('core.helper.content');
-        $advertisements = array_udiff(
-            $this->getAdvertisements(),
-            $this->getRequestedAds(),
-            function ($a, $b) {
-                return $a->id - $b->id;
-            }
-        );
+        $advertisements = $this->getAdvertisements();
+
+        if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
+            $advertisements = array_udiff(
+                $this->getAdvertisements(),
+                $this->getRequestedAds(),
+                function ($a, $b) {
+                    return $a->id - $b->id;
+                }
+            );
+        }
 
         $advertisements = array_filter(
             $advertisements,
@@ -207,9 +211,7 @@ class AdvertisementRenderer extends Renderer
         $renderer  = $this->getRendererClass($ad->with_script);
         $adsFormat = $params['ads_format'] ?? null;
 
-        if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
-            $this->setRequestedAds($ad);
-        }
+        $this->setRequestedAds($ad);
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
@@ -253,8 +255,9 @@ class AdvertisementRenderer extends Renderer
      *
      * @return string The HTML code for Interstitial .
      */
-    public function renderInlineInterstitial($ads, $params)
+    public function renderInlineInterstitial($params)
     {
+        $ads = $this->getAdvertisements();
         if (empty($ads)) {
             return '';
         }
