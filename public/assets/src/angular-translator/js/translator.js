@@ -4,17 +4,15 @@
   angular.module('onm.translator', [])
 
     .service('translator', [
-      'http', '$uibModal',
-      function(http, $uibModal) {
+      'http',
+      function(http) {
         /**
          * @memberOf translator
          *
          * @description
          *  The translator service.
          */
-        var translator = {
-          stringsToTranslate: []
-        };
+        var translator = {};
 
         /**
          * @function init
@@ -28,51 +26,6 @@
           translator.extractStrings = scope.extractStrings;
           translator.loadStrings    = scope.loadStrings;
           translator.config         = scope.config;
-
-          // Define watcher to execute translation when locale changes
-          translator.scope.$watch('config.locale.selected', function(nv, ov) {
-            if (!nv) {
-              return;
-            }
-
-            if (nv === ov) {
-              return;
-            }
-
-            if (translator.valid(ov, nv)) {
-              // Raise a modal to indicate that background translation is being executed
-              $uibModal.open({
-                backdrop: 'static',
-                keyboard: false,
-                backdropClass: 'modal-backdrop-dark',
-                controller:  'TranslatorCtrl',
-                openedClass: 'modal-relative-open',
-                templateUrl: 'modal-translate',
-                resolve: {
-                  template: function() {
-                    return {
-                      config: translator.config,
-                      translating: false,
-                      translator: translator
-                    };
-                  },
-                  callback: function() {
-                    return function(modal, template) {
-                      template.translating = true;
-
-                      translator.translate().then(function(response) {
-                        translator.loadStrings(response.data, translator.scope, translator.locale);
-                        template.translating      = false;
-                        template.translation_done = true;
-                      }, function() {
-                        modal.close({ response: true, error: true });
-                      });
-                    };
-                  }
-                }
-              });
-            }
-          }, true);
         };
 
         /**
@@ -88,7 +41,9 @@
          * @return {Boolean} True if the string has the locale, false otherwise.
          */
         translator.hasLocale = function(strings, locale) {
-          return strings.some((string) => string && string.hasOwnProperty(locale) && string[locale]);
+          return strings.some(function(string) {
+            return string && string.hasOwnProperty(locale) && string[locale];
+          });
         };
 
         /**
@@ -98,13 +53,19 @@
          * @description
          *  Make the call to the translation service and return a promise.
          *
+         * @param {Object} selectedTranslator The translator to perform the translation.
+         *
          * @return {Promise} The thenable object with the call to the server.
          */
-        translator.translate = function() {
+        translator.translate = function(selectedTranslator) {
+          var strings = translator.extractStrings(translator.scope).map(function(string) {
+            return string[selectedTranslator.from] ? string[selectedTranslator.from] : null;
+          });
+
           var params = {
-            data: translator.stringsToTranslate.map((string) => string[translator.selectedTranslator.from]),
-            from: translator.selectedTranslator.from,
-            to: translator.selectedTranslator.to,
+            data: strings,
+            from: selectedTranslator.from,
+            to: selectedTranslator.to,
             translator: 0
           };
 
@@ -112,7 +73,37 @@
         };
 
         /**
-         * @function valid
+         * @function getTranslatorItem
+         * @memberOf translator
+         *
+         * @description
+         *  Returns a translator object or null if no exists.
+         *
+         * @param {String} from The locale to translate from.
+         * @param {String} to   The locale to translato to.
+         *
+         * @return {null|Object} The translator object or null.
+         */
+        translator.getTranslatorItem = function(from, to) {
+          var strings = translator.extractStrings(translator.scope);
+
+          var translators = translator.config.locale.translators.filter(function(item) {
+            return item.to === to &&
+              (
+                translator.hasLocale(strings, item.from) ||
+                from === translator.config.locale.default
+              );
+          });
+
+          if (translators.length > 0) {
+            return translators.shift();
+          }
+
+          return null;
+        };
+
+        /**
+         * @function isTranslatable
          * @memberOf translator
          *
          * @description
@@ -122,31 +113,22 @@
          *
          * @return {Boolean} True if the strings can be translated to the locale, false otherwise.
          */
-        translator.valid = function(from, to) {
+        translator.isTranslatable = function(from, to) {
           if (!translator.extractStrings) {
             return false;
           }
 
-          translator.locale             = to;
-          translator.stringsToTranslate = translator.extractStrings(translator.scope);
+          var strings = translator.extractStrings(translator.scope);
 
-          if (translator.hasLocale(translator.stringsToTranslate, to)) {
+          if (translator.hasLocale(strings, to)) {
             return false;
           }
 
-          var translators = translator.config.locale.translators.filter(function(item) {
-            return item.to === to &&
-              (
-                translator.hasLocale(translator.stringsToTranslate, item.from) ||
-                from === translator.config.locale.default
-              );
-          });
+          var selectedTranslator = translator.getTranslatorItem(from, to);
 
-          if (translators.length === 0) {
+          if (!selectedTranslator) {
             return false;
           }
-
-          translator.selectedTranslator = translators.shift();
 
           return true;
         };
@@ -294,8 +276,8 @@
     ])
 
     .controller('TranslatorCtrl', [
-      '$uibModalInstance', '$scope', 'template', 'callback',
-      function($uibModalInstance, $scope, template, callback) {
+      '$uibModalInstance', '$scope', 'template', 'callback', 'translator',
+      function($uibModalInstance, $scope, template, callback, translator) {
         /**
          * @memberOf TranslatorCtrl
          *
@@ -306,7 +288,7 @@
          */
         $scope.template = template;
 
-        callback($uibModalInstance, template);
+        callback(template);
 
         /**
          * @function dismiss
@@ -317,6 +299,26 @@
          */
         $scope.dismiss = function() {
           $uibModalInstance.dismiss();
+        };
+
+        /**
+         * @function confirm
+         * @memberOf TranslatorCtrl
+         *
+         * @description
+         *  Confirm and executes the translation.
+         */
+        $scope.confirm = function() {
+          template.confirm = false;
+          template.translating = true;
+
+          translator.translate(template.selectedTranslator).then(function(response) {
+            translator.loadStrings(response.data, translator.scope, template.selectedTranslator.to);
+            template.translating      = false;
+            template.translation_done = true;
+          }, function() {
+            $uibModalInstance.close({ response: true, error: true });
+          });
         };
 
         // Frees up memory before controller destroy event

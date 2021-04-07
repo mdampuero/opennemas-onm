@@ -3,9 +3,9 @@
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
   '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'cleaner',
-  'messenger', 'routing', '$timeout', 'webStorage', '$window',
+  'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
   function($controller, $http, $uibModal, $rootScope, $scope, cleaner,
-      messenger, routing, $timeout, webStorage, $window) {
+      messenger, routing, $timeout, webStorage, $window, translator) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -156,7 +156,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     $scope.loadStrings = function(strings, scope, locale) {
       scope.data.extra.keys.forEach(function(key, index) {
         if (typeof scope.data.item[key] === 'object') {
-          scope.data.item[key][locale] = strings[index] !== 'undefined' ? strings[index] : null;
+          scope.data.item[key][locale] = strings[index];
         }
       });
     };
@@ -253,6 +253,43 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.form.slug.$setDirty(true);
         });
       }, 250);
+    }, true);
+
+    // Define watcher to execute translation when locale changes
+    $scope.$watch('config.locale.selected', function(nv, ov) {
+      if (!nv) {
+        return;
+      }
+
+      if (nv === ov) {
+        return;
+      }
+
+      if (translator.isTranslatable(ov, nv)) {
+        // Raise a modal to indicate that background translation is being executed
+        $uibModal.open({
+          backdrop: 'static',
+          keyboard: false,
+          backdropClass: 'modal-backdrop-dark',
+          controller:  'TranslatorCtrl',
+          openedClass: 'modal-relative-open',
+          templateUrl: 'modal-translate',
+          resolve: {
+            template: function() {
+              return {
+                config: translator.config,
+                translating: false,
+                selectedTranslator: translator.getTranslatorItem(ov, nv),
+              };
+            },
+            callback: function() {
+              return function(template) {
+                template.confirm = true;
+              };
+            }
+          }
+        });
+      }
     }, true);
   }
 ]);
