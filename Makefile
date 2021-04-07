@@ -125,9 +125,9 @@ themes:
 	mkdir -p public/themes
 
 	for theme in $(themes); do \
-		[ -d public/themes/$$theme ] && continue \
-			|| git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme \
-				&& git -C public/themes/$$theme checkout $(branch); \
+		[ -d public/themes/$$theme ] || git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme; \
+		git -C public/themes/$$theme checkout $(branch); \
+		git -C public/themes/$$theme pull; \
 	done
 
 # Install php dependencies
