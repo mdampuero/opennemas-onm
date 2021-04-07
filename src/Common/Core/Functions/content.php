@@ -129,8 +129,8 @@ function get_featured_media($item, $type, $deep = true)
             'frontpage' => [ 'fk_video', 'img1' ],
             'inner'     => [ 'fk_video2', 'img2' ]
         ], 'opinion' => [
-            'frontpage' => [ 'img1' ],
-            'inner'     => [ 'img2' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'album' => [
             'frontpage' => [ 'featured_frontpage' ],
             'inner'     => []
@@ -216,8 +216,8 @@ function get_featured_media_caption($item, $type)
             'frontpage' => [ 'footer_video1', 'img1_footer' ],
             'inner'     => [ 'footer_video2', 'img2_footer' ]
         ], 'opinion' => [
-            'frontpage' => [ 'img1_footer' ],
-            'inner'     => [ 'img2_footer' ]
+            'frontpage' => [ 'featured_frontpage' ],
+            'inner'     => [ 'featured_inner' ]
         ], 'album' => [
             'frontpage' => [],
             'inner'     => []
@@ -327,9 +327,14 @@ function get_publication_date($item = null) : ?\Datetime
  */
 function get_summary($item = null) : ?string
 {
+    if ($item->content_type_name === 'opinion') {
+        return get_property($item, 'description');
+    }
+
     $value = get_property($item, 'summary');
 
-    return !empty($value) ? htmlentities($value) : null;
+    //TODO: Recover use of htmlentities when possible
+    return !empty($value) ? $value : null;
 }
 
 /**

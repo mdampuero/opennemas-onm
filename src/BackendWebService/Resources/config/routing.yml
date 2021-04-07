@@ -29,10 +29,6 @@ backend_ws_menus:
     resource: '@BackendWebServiceBundle/Resources/config/routing/menus.yml'
     prefix:   /
 
-backend_ws_opinions:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/opinions.yml'
-    prefix:   /
-
 backend_ws_picker:
     resource: '@BackendWebServiceBundle/Resources/config/routing/picker.yml'
     prefix:   /

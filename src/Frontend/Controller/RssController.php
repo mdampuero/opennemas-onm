@@ -388,10 +388,6 @@ class RssController extends FrontendController
     {
         $em = $this->get('entity_repository');
 
-        if ($contentType === 'opinion') {
-            $em = $this->get('opinion_repository');
-        }
-
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
             'content_type_name' => [[ 'value' => $contentType ]],

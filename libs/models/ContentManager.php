@@ -870,47 +870,6 @@ class ContentManager
     }
 
     /**
-     * Returns the title and slugs of last headlines from a given category
-     *
-     * @param string $filter the SQL WHERE sentence to filter the contents
-     * @param string $orderBy the ORDER BY sentence to sort the contents
-     *
-     * @return the list of opinions
-     */
-    public function getOpinionArticlesWithAuthorInfo($filter = null, $orderBy = 'ORDER BY 1')
-    {
-        $whereSQL = 'in_litter=0';
-        if (!is_null($filter) && $filter == 'in_litter=1') {
-            $whereSQL = $filter;
-        } elseif (!is_null($filter)) {
-            $whereSQL = $filter . ' AND in_litter=0';
-        }
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                'SELECT contents.pk_content, contents.position, users.avatar_img_id,
-                    opinions.pk_opinion as id, users.name, users.bio, contents.title,
-                    contents.slug, contents.body,
-                    contents.changed, contents.created, contents.with_comment,
-                    contents.starttime, contents.endtime
-                FROM contents, opinions
-                LEFT JOIN users ON (users.id=opinions.fk_author)
-                WHERE `contents`.`fk_content_type`=4
-                AND contents.pk_content=opinions.pk_opinion
-                AND ' . $whereSQL . ' ' . $orderBy
-            );
-
-            return $rs;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return [];
-        }
-    }
-
-    /**
      * Fetches available content types.
      *
      * @return array an array with each content type with id, name and title.
