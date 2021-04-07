@@ -85,7 +85,6 @@ class SettingController extends Controller
         'onm_digest_user',
         'paypal_mail',
         'pinterest_page',
-        'piwik',
         'recaptcha',
         'redirection',
         'refresh_interval',

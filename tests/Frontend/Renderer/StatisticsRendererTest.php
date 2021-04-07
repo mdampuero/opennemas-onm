@@ -189,7 +189,7 @@ class StatisticsRendererTest extends TestCase
     public function testRenderWhenNoTemplate()
     {
         $output = '<head></head>';
-        $types  = [ 'GAnalytics', 'Piwik' ];
+        $types  = [ 'GAnalytics' ];
 
         $this->renderer->expects($this->at(0))->method('getCodeType')
             ->willReturn('script');
