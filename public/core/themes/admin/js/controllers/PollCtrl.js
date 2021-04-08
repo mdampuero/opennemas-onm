@@ -21,32 +21,17 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf PollCtrl
-         *
-         * @description
-         *  Flag to enabled or disable drafts.
-         *
-         * @type {Boolean}
+         * @inheritdoc
          */
         $scope.draftEnabled = true;
 
         /**
-         * @memberOf PollCtrl
-         *
-         * @description
-         *  The draft key.
-         *
-         * @type {String}
+         * @inheritdoc
          */
         $scope.draftKey = 'poll-draft';
 
         /**
-         * @memberOf PollCtrl
-         *
-         * @description
-         *  The timeout function for draft.
-         *
-         * @type {Function}
+         * @inheritdoc
          */
         $scope.dtm = null;
 
@@ -129,6 +114,10 @@
           for (var i = 0; i < $scope.data.item.items.length; i++) {
             $scope.item.items.push($scope.localizeOption(
               $scope.data.item.items[i], $scope.item.items.length));
+          }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'poll-' + $scope.data.item.pk_content + '-draft';
           }
 
           $scope.checkDraft();

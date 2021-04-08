@@ -21,32 +21,17 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf StaticPageCtrl
-         *
-         * @description
-         *  Flag to enabled or disable drafts.
-         *
-         * @type {Boolean}
+         * @inheritdoc
          */
         $scope.draftEnabled = true;
 
         /**
-         * @memberOf StaticPageCtrl
-         *
-         * @description
-         *  The draft key.
-         *
-         * @type {String}
+         * @inheritdoc
          */
         $scope.draftKey = 'static-page-draft';
 
         /**
-         * @memberOf StaticPageCtrl
-         *
-         * @description
-         *  The timeout function for draft.
-         *
-         * @type {Function}
+         * @inheritdoc
          */
         $scope.dtm = null;
 
@@ -100,6 +85,10 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'static-page-' + $scope.data.item.pk_content + '-draft';
+          }
 
           $scope.checkDraft();
           translator.init($scope);

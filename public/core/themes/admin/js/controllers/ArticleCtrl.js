@@ -31,32 +31,17 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *  Flag to enabled or disable drafts.
-         *
-         * @type {Boolean}
+         * @inheritdoc
          */
         $scope.draftEnabled = true;
 
         /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *  The draft key.
-         *
-         * @type {String}
+         * @inheritdoc
          */
         $scope.draftKey = 'article-draft';
 
         /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *  The timeout function for draft.
-         *
-         * @type {Function}
+         * @inheritdoc
          */
         $scope.dtm = null;
 
@@ -127,6 +112,10 @@
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+          }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'article-' + $scope.data.item.pk_content + '-draft';
           }
 
           $scope.checkDraft();

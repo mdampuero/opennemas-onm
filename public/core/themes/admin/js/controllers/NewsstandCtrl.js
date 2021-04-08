@@ -19,32 +19,17 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf NewsstandCtrl
-         *
-         * @description
-         *  Flag to enabled or disable drafts.
-         *
-         * @type {Boolean}
+         * @inheritdoc
          */
         $scope.draftEnabled = true;
 
         /**
-         * @memberOf NewsstandCtrl
-         *
-         * @description
-         *  The draft key.
-         *
-         * @type {String}
+         * @inheritdoc
          */
         $scope.draftKey = 'kiosko-draft';
 
         /**
-         * @memberOf NewsstandCtrl
-         *
-         * @description
-         *  The timeout function for draft.
-         *
-         * @type {Function}
+         * @inheritdoc
          */
         $scope.dtm = null;
 
@@ -99,6 +84,10 @@
           if ($scope.item.thumbnail) {
             $scope.preview = $scope.data.extra.paths.newsstand + '/' +
               $scope.item.thumbnail;
+          }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'kiosko-' + $scope.data.item.pk_content + '-draft';
           }
 
           $scope.checkDraft();

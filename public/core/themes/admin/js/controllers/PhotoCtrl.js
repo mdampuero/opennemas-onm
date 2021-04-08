@@ -10,32 +10,17 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @memberOf PhotoCtrl
-     *
-     * @description
-     *  Flag to enabled or disable drafts.
-     *
-     * @type {Boolean}
+     * @inheritdoc
      */
     $scope.draftEnabled = true;
 
     /**
-     * @memberOf PhotoCtrl
-     *
-     * @description
-     *  The draft key.
-     *
-     * @type {String}
+     * @inheritdoc
      */
     $scope.draftKey = 'photo-draft';
 
     /**
-     * @memberOf PhotoCtrl
-     *
-     * @description
-     *  The timeout function for draft.
-     *
-     * @type {Function}
+     * @inheritdoc
      */
     $scope.dtm = null;
 
@@ -61,6 +46,10 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item');
+
+      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+        $scope.draftKey = 'photo-' + $scope.data.item.pk_content + '-draft';
+      }
 
       $scope.checkDraft();
     };

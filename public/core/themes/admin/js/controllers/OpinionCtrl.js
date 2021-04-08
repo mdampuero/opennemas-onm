@@ -10,32 +10,17 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     *  Flag to enabled or disable drafts.
-     *
-     * @type {Boolean}
+     * @inheritdoc
      */
     $scope.draftEnabled = true;
 
     /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     *  The draft key.
-     *
-     * @type {String}
+     * @inheritdoc
      */
     $scope.draftKey = 'opinion-draft';
 
     /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     *  The timeout function for draft.
-     *
-     * @type {Function}
+     * @inheritdoc
      */
     $scope.dtm = null;
 
@@ -105,6 +90,10 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+      }
+
+      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+        $scope.draftKey = 'opinion-' + $scope.data.item.pk_content + '-draft';
       }
 
       $scope.checkDraft();

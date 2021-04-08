@@ -22,32 +22,17 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf AlbumCtrl
-         *
-         * @description
-         *  Flag to enabled or disable drafts.
-         *
-         * @type {Boolean}
+         * @inheritdoc
          */
         $scope.draftEnabled = true;
 
         /**
-         * @memberOf AlbumCtrl
-         *
-         * @description
-         *  The draft key.
-         *
-         * @type {String}
+         * @inheritdoc
          */
         $scope.draftKey = 'album-draft';
 
         /**
-         * @memberOf AlbumCtrl
-         *
-         * @description
-         *  The timeout function for draft.
-         *
-         * @type {Function}
+         * @inheritdoc
          */
         $scope.dtm = null;
 
@@ -152,6 +137,10 @@
           if (!$scope.data.item.pk_content) {
             $scope.data.item.with_comment =
               $scope.data.extra.comments_enabled ? 1 : 0;
+          }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'album-' + $scope.data.item.pk_content + '-draft';
           }
 
           $scope.checkDraft();

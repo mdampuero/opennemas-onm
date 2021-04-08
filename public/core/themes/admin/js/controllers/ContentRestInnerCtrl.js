@@ -11,35 +11,35 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
-    // Saves a draft 2.5s after the last change
-    $scope.$watch('item', function(nv, ov) {
-      if (!nv || ov === nv) {
-        return;
-      }
+    /**
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Flag to enabled or disable drafts
+     *
+     * @type {Boolean}
+     */
+    $scope.draftEnabled = false;
 
-      // Show a message when leaving before saving
-      $($window).bind('beforeunload', function() {
-        if ($scope.form.$dirty) {
-          return $window.leaveMessage;
-        }
-      });
+    /**
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  The draft key.
+     *
+     * @type {String}
+     */
+    $scope.draftKey = null;
 
-      $scope.form.$setDirty(true);
-
-      if ($scope.draftEnabled) {
-        $scope.draftSaved = null;
-
-        if ($scope.dtm) {
-          $timeout.cancel($scope.dtm);
-        }
-
-        $scope.dtm = $timeout(function() {
-          webStorage.session.set($scope.draftKey, $scope.data.item);
-
-          $scope.draftSaved = $window.moment().format('HH:mm');
-        }, 2500);
-      }
-    }, true);
+    /**
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  The timeout function for draft.
+     *
+     * @type {Function}
+     */
+    $scope.dtm = null;
 
     /**
      * @function checkDraft
@@ -291,5 +291,38 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         });
       }
     }, true);
+
+    // Defines a watcher after 5 seconds
+    $timeout(function() {
+      // Saves a draft 2.5s after the last change
+      $scope.$watch('item', function(nv, ov) {
+        if (!nv || ov === nv) {
+          return;
+        }
+
+        // Show a message when leaving before saving
+        $($window).bind('beforeunload', function() {
+          if ($scope.form.$dirty) {
+            return $window.leaveMessage;
+          }
+        });
+
+        $scope.form.$setDirty(true);
+
+        if ($scope.draftKey !== null) {
+          $scope.draftSaved = null;
+
+          if ($scope.dtm) {
+            $timeout.cancel($scope.dtm);
+          }
+
+          $scope.dtm = $timeout(function() {
+            webStorage.session.set($scope.draftKey, $scope.data.item);
+
+            $scope.draftSaved = $window.moment().format('HH:mm');
+          }, 2500);
+        }
+      }, true);
+    }, 5000);
   }
 ]);

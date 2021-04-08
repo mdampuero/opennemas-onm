@@ -10,32 +10,17 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
-     * @memberOf VideoCtrl
-     *
-     * @description
-     *  Flag to enabled or disable drafts.
-     *
-     * @type {Boolean}
+     * @inheritdoc
      */
     $scope.draftEnabled = true;
 
     /**
-     * @memberOf VideoCtrl
-     *
-     * @description
-     *  The draft key.
-     *
-     * @type {String}
+     * @inheritdoc
      */
     $scope.draftKey = 'video-draft';
 
     /**
-     * @memberOf VideoCtrl
-     *
-     * @description
-     *  The timeout function for draft.
-     *
-     * @type {Function}
+     * @inheritdoc
      */
     $scope.dtm = null;
 
@@ -137,6 +122,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+      }
+
+      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+        $scope.draftKey = 'video-' + $scope.data.item.pk_content + '-draft';
       }
 
       $scope.checkDraft();

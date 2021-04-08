@@ -21,8 +21,10 @@
      *   Provides generic actions to edit, save and update items.
      */
     .controller('RestInnerCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window',
+      'cleaner', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $scope, $timeout, $uibModal, $window,
+          cleaner, http, messenger, routing, webStorage) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
@@ -220,6 +222,7 @@
               }, 500);
             }
 
+            webStorage.session.remove($scope.draftKey);
             messenger.post(response.data);
           };
 
