@@ -4481,6 +4481,13 @@ form legend,
 .datepicker-inline {
   width: auto;
 }
+.dynamic-image-wrapper div.badge {
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  border-radius: 0;
+}
 .error {
   font-size: 12px;
   color: #f35958;

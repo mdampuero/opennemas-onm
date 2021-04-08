@@ -26,16 +26,18 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_frontpage" ng-model="item" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
-    <div ng-if="hasFeaturedMedia(item, 'featured_frontpage')" class="badge badge-default text-bold text-uppercase">
-      {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_frontpage')" iFlagName=true iFlagIcon=true}
-    </div>
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_frontpage" ng-model="item" only-image="true" transform="zoomcrop,220,220">
+      <div class="badge badge-default text-bold text-uppercase">
+        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_frontpage')" iFlagName=true iFlagIcon=true}
+      </div>
+    </dynamic-image>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_inner" ng-model="item" only-image="true" transform="zoomcrop,220,220"></dynamic-image>
-    <div ng-if="hasFeaturedMedia(item, 'featured_inner')" class="badge badge-default text-bold text-uppercase">
-      {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_inner')" iFlagName=true iFlagIcon=true}
-    </div>
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_inner" ng-model="item" only-image="true" transform="zoomcrop,220,220">
+      <div class="badge badge-default text-bold text-uppercase">
+        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_inner')" iFlagName=true iFlagIcon=true}
+      </div>
+    </dynamic-image>
   </td>
 {/block}
 
