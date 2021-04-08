@@ -24,6 +24,14 @@
 {/block}
 
 {block name="primaryActions"}
+  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+    <h5>
+      <i class="p-r-15">
+        <i class="fa fa-check"></i>
+        {t}Draft saved at {/t}[% draftSaved %]
+      </i>
+    </h5>
+  </li>
   <li class="quicklinks">
     <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
       <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>

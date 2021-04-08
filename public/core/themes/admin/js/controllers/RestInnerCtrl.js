@@ -222,7 +222,11 @@
               }, 500);
             }
 
-            webStorage.session.remove($scope.draftKey);
+            if ($scope.draftKey !== null) {
+              $scope.draftSaved = null;
+              webStorage.session.remove($scope.draftKey);
+            }
+
             messenger.post(response.data);
           };
 
