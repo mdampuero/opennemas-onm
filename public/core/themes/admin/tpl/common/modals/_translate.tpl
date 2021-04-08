@@ -13,18 +13,18 @@
       <h4>{t 1="[% template.config.locale.available[template.selectedTranslator.to] %]"}Do you want to translate to "%1"?{/t}</h4>
       <div class="modal-footer row">
         <div class="col-xs-6">
-          <button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="confirm();" type="button">
-            <h4 class="text-uppercase text-white">
-              <i class="fa fa-check"></i>
-              <strong>{t}Yes{/t}</strong>
-            </h4>
-          </button>
-        </div>
-        <div class="col-xs-6">
           <button class="btn btn-danger btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
             <h4 class="text-uppercase text-white">
               <i class="fa fa-times"></i>
               <strong>{t}No{/t}</strong>
+            </h4>
+          </button>
+        </div>
+        <div class="col-xs-6">
+          <button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="confirm();" type="button">
+            <h4 class="text-uppercase text-white">
+              <i class="fa fa-check"></i>
+              <strong>{t}Yes{/t}</strong>
             </h4>
           </button>
         </div>
