@@ -11,18 +11,24 @@
     <div class="text-center m-t-50 p-t-30">
       <i class="fa fa-4x fa-globe"></i>
       <h4>{t 1="[% template.config.locale.available[template.selectedTranslator.to] %]"}Do you want to translate to "%1"?{/t}</h4>
-      <button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="confirm();" type="button">
-        <h4 class="text-uppercase text-white">
-          <i class="fa fa-check"></i>
-          <strong>{t}Yes{/t}</strong>
-        </h4>
-      </button>
-      <button class="btn btn-danger btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
-        <h4 class="text-uppercase text-white">
-          <i class="fa fa-times"></i>
-          <strong>{t}No{/t}</strong>
-        </h4>
-      </button>
+      <div class="modal-footer row">
+        <div class="col-xs-6">
+          <button class="btn btn-success btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="confirm();" type="button">
+            <h4 class="text-uppercase text-white">
+              <i class="fa fa-check"></i>
+              <strong>{t}Yes{/t}</strong>
+            </h4>
+          </button>
+        </div>
+        <div class="col-xs-6">
+          <button class="btn btn-danger btn-block m-t-50" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
+            <h4 class="text-uppercase text-white">
+              <i class="fa fa-times"></i>
+              <strong>{t}No{/t}</strong>
+            </h4>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div ng-show="template.translating">
