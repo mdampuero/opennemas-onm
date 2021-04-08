@@ -4,8 +4,8 @@
   </button>
   <div ng-hide="template.selectedTranslator" class="text-center m-t-50 p-t-30">
     <i class="fa fa-4x fa-warning text-warning"></i>
-    <h4>{t escape=off 1="[% template.config.locale.available[template.selectedTranslator.from] %]" 2="[% template.config.locale.available[template.selectedTranslator.to] %]"}No available selectedTranslators for "%1&rarr;%2"{/t}</h4>
-    <p class="m-b-50">{t escape=off}Please go to the <a href="{url name=admin_system_settings}">Settings page</a> and configure your <br> selectedTranslators for all the languages.{/t}</p>
+    <h4>{t escape=off 1="[% template.config.locale.available[template.selectedTranslator.from] %]" 2="[% template.config.locale.available[template.selectedTranslator.to] %]"}No available translators for "%1&rarr;%2"{/t}</h4>
+    <p class="m-b-50">{t escape=off}Please go to the <a href="{url name=admin_system_settings}">Settings page</a> and configure your <br> translators for all the languages.{/t}</p>
   </div>
   <div ng-hide="!template.confirm">
     <div class="text-center m-t-50 p-t-30">
