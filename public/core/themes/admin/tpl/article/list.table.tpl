@@ -17,10 +17,10 @@
 
 {block name="commonColumnsHeader" prepend}
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')" width="120">
-    {t}Featured frontpage{/t}
+    {t}Frontpage{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
-    {t}Featured inner{/t}
+    {t}Inner{/t}
   </th>
 {/block}
 
