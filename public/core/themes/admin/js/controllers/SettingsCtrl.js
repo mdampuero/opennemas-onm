@@ -77,7 +77,8 @@
           theme_skin: 'default',
           translators: [],
           cookies: 'none',
-          cmp_type: 'default'
+          cmp_type: 'default',
+          data_layer: []
         };
 
         /**
@@ -107,6 +108,17 @@
               base_domain: '',
               custom_var: ''
             });
+        };
+
+        /**
+         * @function addDatalayerVariable
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Adds new pair key:value to Datalayer.
+         */
+        $scope.addDatalayerVariable = function() {
+          $scope.settings.data_layer.push({ key: null, value: null });
         };
 
         /**
@@ -318,10 +330,23 @@
          * @description
          *   Removes a ga tracking code input.
          *
-         * @param {Integer } index The index of the input to remove.
+         * @param {Integer} index The index of the input to remove.
          */
         $scope.removeGanalytics = function(index) {
           $scope.settings.google_analytics.splice(index, 1);
+        };
+
+        /**
+         * @function removeDatalayerVariable
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes a data layer variable input.
+         *
+         * @param {Integer} index The index of the input to remove.
+         */
+        $scope.removeDatalayerVariable = function(index) {
+          $scope.settings.data_layer.splice(index, 1);
         };
 
         /**

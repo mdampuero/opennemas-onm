@@ -106,19 +106,6 @@ instances:
             primary: false
             unique: false
             flags: { fulltext: true }
-        -
-            name: owner_id
-            columns: [ owner_id ]
-            primary: false
-            unique: false
-            flags: { }
-    foreign_keys:
-        -
-            name: instances_ownerid_users_id
-            source_field: [ owner_id ]
-            target_table: users
-            target_field: [ id ]
-            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 instance_meta:
     columns:
         instance_id:
@@ -342,10 +329,10 @@ user_groups_privileges:
     columns:
         pk_fk_user_group:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { unsigned: true, default: null }
         pk_fk_privilege:
             type: integer
-            options: { default: null, unsigned: true }
+            options: { unsigned: true, default: null }
     index:
         -
             name: PRIMARY
@@ -353,52 +340,39 @@ user_groups_privileges:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: pk_fk_user_group
-            columns: [ pk_fk_user_group ]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: usergroupsprivilesges_usergroupid_usergroups_id
-            source_field: [ pk_fk_user_group ]
-            target_table: user_groups
-            target_field: [ pk_user_group ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 usermeta:
     columns:
         user_id:
-            type: bigint
-            options: { default: null, unsigned: true }
+            type:    integer
+            options: { default: null, notnull: true, unsigned: true  }
         meta_key:
             type: string
-            options: { default: '', length: 255 }
+            options: { length: 255 }
         meta_value:
             type: text
-            options: { default: null, length: 65532, notnull: false }
+            options: { length: 65532, default: null, notnull: false }
     index:
         -
             name: PRIMARY
-            columns: [ user_id, meta_key ]
+            columns: [user_id, meta_key]
             primary: true
             unique: true
             flags: {  }
         -
             name: user_id
-            columns: [ user_id ]
+            columns: [user_id]
             primary: false
             unique: false
             flags: {  }
         -
             name: meta_key
-            columns: [ meta_key ]
+            columns: [meta_key]
             primary: false
             unique: false
             flags: {  }
     foreign_keys:
         -
-            name: usermeta_userid_users_id
+            name:         usermeta_user_id_users_id
             source_field: [ user_id ]
             target_table: users
             target_field: [ id ]
@@ -406,49 +380,82 @@ usermeta:
 users:
     columns:
         id:
-            type: bigint
-            options: { default: null, unsigned: true, autoincrement: true }
+            type:    integer
+            options: { autoincrement: true, default: null, length: 20, unsigned: true, }
         username:
-            type: string
-            options: { default: null, notnull: false, length: 100 }
+            type:    string
+            options: { default: null, length: 100, notnull: false }
         password:
-            type: string
-            options: { default: null, notnull: false, length: 50 }
+            type:    string
+            options: { default: null, length: 50, notnull: false }
         url:
-            type: string
-            options: { default: '', notnull: false, length: 255 }
+            type:    string
+            options: { default: null, length: 255, notnull: false }
         bio:
-            type: text
+            type:    text
             options: { default: null, length: 65532, notnull: false }
         avatar_img_id:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type:    bigint
+            options: { default: null, length: 20, notnull: false, unsigned: true }
         email:
-            type: string
-            options: { default: null, notnull: false, length: 255 }
+            type:    string
+            options: { default: null, length: 255, notnull: false }
         name:
-            type: string
-            options: { default: null, notnull: false, length: 100 }
+            type:    string
+            options: { default: null, length: 100, notnull: false }
+        slug:
+            type:    string
+            options: { default: null, length: 100, notnull: false }
         type:
-            type: boolean
-            options: { default: '0', comment: '0-backend, 1-frontend' }
+            type:    integer
+            options: { comment: '0 backend - 1 frontend', default: 1, notnull: true, unsigned: true }
         token:
-            type: string
-            options: { default: null, notnull: false, length: 50 }
+            type:    string
+            options: { default: null, length: 32, notnull: false }
         activated:
-            type: boolean
-            options: { default: '1', comment: '1 activated - 0 deactivated' }
+            type:    integer
+            options: { default: 0, notnull: true, unsigned: true }
     index:
         -
-            name: PRIMARY
-            columns: [ id ]
+            name:    PRIMARY
+            columns: [id]
             primary: true
-            unique: true
-            flags: {  }
+            unique:  true
+            flags:   {  }
+        -
+            name:    avatar_img_id
+            columns: [avatar_img_id]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_username
+            columns: [username]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_email
+            columns: [email]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_slug
+            columns: [slug]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_type
+            columns: [type]
+            primary: false
+            unique:  false
+            flags:   {  }
 user_user_group:
     columns:
         user_id:
-            type: bigint
+            type: integer
             options: { default: null, unsigned: true }
         user_group_id:
             type: integer
@@ -628,16 +635,3 @@ user_notification:
             primary: true
             unique: true
             flags: {  }
-        -
-            name: notification_id
-            columns: [notification_id]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: usernotification_id_notification_id
-            source_field: [ notification_id ]
-            target_table: notification
-            target_field: [ id ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }

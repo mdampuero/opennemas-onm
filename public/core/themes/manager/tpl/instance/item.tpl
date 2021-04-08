@@ -456,24 +456,6 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" ng-if="security.hasPermission('MASTER')">
-        <div class="grid simple">
-          <div class="grid-title">
-            <h4>External services</h4>
-          </div>
-          <div class="grid-body">
-            <div class="form-group">
-              <label class="form-label" for="piwik-page-id">{t}Piwik Statistics{/t} - {t}Page ID:{/t}</label>
-              <div class="controls">
-                <input class="form-control" id="piwik-page-id" ng-model="settings.piwik.page_id" type="text">
-                <div class="help-block">
-                  {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </form>
 </div>
