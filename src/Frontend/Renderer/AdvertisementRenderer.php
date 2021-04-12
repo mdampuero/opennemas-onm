@@ -184,7 +184,7 @@ class AdvertisementRenderer extends Renderer
      */
     public function getPositions()
     {
-        return $this->postions;
+        return $this->positions;
     }
 
     /**
@@ -312,11 +312,11 @@ class AdvertisementRenderer extends Renderer
     /**
      * Set all advertisements positions from controller for a page.
      *
-     * @param array $postions The array of advertisements postions to render.
+     * @param array $positions The array of advertisements positions to render.
      */
-    public function setPositions($postions)
+    public function setPositions($positions)
     {
-        $this->postions = $postions;
+        $this->positions = $positions;
 
         return $this;
     }
