@@ -211,7 +211,7 @@ class AdvertisementRenderer extends Renderer
         $renderer  = $this->getRendererClass($advertisement->with_script);
         $adsFormat = $params['ads_format'] ?? null;
 
-        $this->setRequested($advertisement);
+        $this->requested[] = $advertisement;
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
@@ -319,16 +319,6 @@ class AdvertisementRenderer extends Renderer
         $this->positions = $positions;
 
         return $this;
-    }
-
-    /**
-     * Add an advertisement to the list of requested.
-     *
-     * @param \Advertisement $advertisement The requested advertisement.
-     */
-    public function setRequested($advertisement)
-    {
-        $this->requested[] = $advertisement;
     }
 
     /**

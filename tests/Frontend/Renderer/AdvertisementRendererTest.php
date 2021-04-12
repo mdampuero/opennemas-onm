@@ -154,7 +154,11 @@ class AdvertisementRendererTest extends TestCase
         $ad2->positions  = [ 1, 2, 3 ];
 
         $this->renderer->setAdvertisements([$ad1]);
-        $this->renderer->setRequested($ad2);
+
+        $reflection = new \ReflectionClass($this->renderer);
+        $requested  = $reflection->getProperty('requested');
+        $requested->setAccessible(true);
+        $requested->setValue($this->renderer, [$ad2]);
 
         $this->assertEquals(
             $ad1,
@@ -172,12 +176,15 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * Tests get and set methods for requested advertisement.
+     * Tests get requested advertisement.
      */
-    public function testGetAndSetRequested()
+    public function testGetRequested()
     {
-        $this->renderer->setRequested('foo');
-        $this->renderer->setRequested('bar');
+        $reflection = new \ReflectionClass($this->renderer);
+        $requested  = $reflection->getProperty('requested');
+        $requested->setAccessible(true);
+        $requested->setValue($this->renderer, ['foo', 'bar']);
+
         $this->assertEquals(['foo', 'bar'], $this->renderer->getRequested());
     }
 
