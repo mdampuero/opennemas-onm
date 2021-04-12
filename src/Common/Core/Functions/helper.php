@@ -52,26 +52,24 @@ function get_url($item = null, array $params = []) : ?string
 /**
  * Returns the path to image folder for the active theme.
  *
-  * @param bool  $absolute If the directory has to be absolute
+ * @param bool  $absolute If the directory has to be absolute
  *
-* @return string The path to image folder for the active theme.
+ * @return string The path to image folder for the active theme.
  */
 function getImageDir($absolute = false) : ?string
 {
     $instance = getService('core.instance');
     $theme    = getService('core.theme');
 
-    if ($absolute) {
-        $imageDir = !empty($theme)
-        ? $instance->getBaseUrl() . '/' . trim($theme->path, '/') . '/images/'
-        : null;
-    } else {
-        $imageDir = !empty($theme)
-        ? '/' . trim($theme->path, '/') . '/images/'
-        : null;
+    if (empty($theme)) {
+        return null;
     }
 
-    return $imageDir;
+    if ($absolute) {
+        return $instance->getBaseUrl() . '/' . trim($theme->path, '/') . '/images';
+    }
+
+    return '/' . trim($theme->path, '/') . '/images';
 }
 
 /**
