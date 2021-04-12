@@ -81,7 +81,7 @@ class AdvertisementRenderer extends Renderer
                 $this->getAdvertisements(),
                 $this->getRequested(),
                 function ($a, $b) {
-                    return $a->id - $b->id;
+                    return $a->pk_content - $b->pk_content;
                 }
             );
         }
@@ -452,7 +452,7 @@ class AdvertisementRenderer extends Renderer
     protected function renderSafeFrameSlot(\Advertisement $advertisement)
     {
         $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
-        $id   = $advertisement->id;
+        $id   = $advertisement->pk_content;
         $type = 37; // Floating banner type
 
         return sprintf($html, $id, $type);

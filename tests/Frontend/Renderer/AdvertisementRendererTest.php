@@ -145,13 +145,13 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testGetAdvertisement()
     {
-        $ad1            = new \Advertisement();
-        $ad1->id        = 1;
-        $ad1->positions = [ 1, 2, 3 ];
+        $ad1             = new \Advertisement();
+        $ad1->pk_content = 1;
+        $ad1->positions  = [ 1, 2, 3 ];
 
-        $ad2            = new \Advertisement();
-        $ad2->id        = 2;
-        $ad2->positions = [ 1, 2, 3 ];
+        $ad2             = new \Advertisement();
+        $ad2->pk_content = 2;
+        $ad2->positions  = [ 1, 2, 3 ];
 
         $this->renderer->setAdvertisements([$ad1]);
         $this->renderer->setRequested($ad2);
@@ -275,7 +275,6 @@ class AdvertisementRendererTest extends TestCase
 
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
-        $ad->id         = 123;
         $ad->positions  = [ 37 ];
         $ad->params     = [ 'width' => 300, 'floating' => true ];
 
@@ -297,7 +296,6 @@ class AdvertisementRendererTest extends TestCase
     {
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
-        $ad->id         = 123;
         $ad->positions  = [ 37 ];
         $ad->params     = [ 'placeholder' => 'placeholder1_1' ];
 
@@ -321,7 +319,6 @@ class AdvertisementRendererTest extends TestCase
     {
         $ad              = new \Advertisement();
         $ad->pk_content  = 123;
-        $ad->id          = 123;
         $ad->positions   = [ 37 ];
         $ad->params      = [ 'width' => 300, 'floating' => true ];
         $ad->with_script = 3;
@@ -644,8 +641,8 @@ class AdvertisementRendererTest extends TestCase
         $method = new \ReflectionMethod($this->renderer, 'renderSafeFrameSlot');
         $method->setAccessible(true);
 
-        $ad     = new \Advertisement();
-        $ad->id = 123;
+        $ad             = new \Advertisement();
+        $ad->pk_content = 123;
 
         $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
         $this->assertEquals(
