@@ -20,6 +20,13 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 class FrontpagesController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'show'    => 'frontpage'
+    ];
+
+    /**
      * Shows the frontpage.
      *
      * @param Request $request The request object.
@@ -46,8 +53,8 @@ class FrontpagesController extends Controller
                 throw new ResourceNotFoundException();
             }
 
-            $categoryId    = $category->id;
-            $categoryName  = $category->name;
+            $categoryId   = $category->id;
+            $categoryName = $category->name;
         }
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
@@ -97,7 +104,7 @@ class FrontpagesController extends Controller
             );
         }
 
-        $this->getAds($categoryId, $contents);
+        $this->getAdvertisements($category);
 
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
 
@@ -110,47 +117,5 @@ class FrontpagesController extends Controller
             'x-cacheable' => true,
             'x-tags'      => 'frontpage-page,' . $categoryName
         ]);
-    }
-
-    /**
-     * Gets advertisements for the frontpage.
-     *
-     * @param string $category The category name.
-     * @param array  $contents The list of contents that are in the frontpage.
-     *
-     * @return array The list of advertisement objects.
-     *
-     * TODO: Make this function non-static
-     */
-    public static function getAds($category, $contents)
-    {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
-
-        // TODO: Use $this->get when the function changes to non-static
-        $positions        = getService('core.helper.advertisement')
-            ->getPositionsForGroup('frontpage');
-        $positionsToFetch = $positions;
-
-        // We have to remove the floating ads from the positions because
-        // we will add them later from the $contents array
-        unset($positionsToFetch[array_search(37, $positionsToFetch)]);
-
-        $advertisements = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positionsToFetch, $category);
-
-        // Get all the ads and add them to the advertisements list
-        if (is_array($contents)) {
-            foreach ($contents as $content) {
-                if ($content->content_type_name == 'advertisement'
-                    && $content->content_status == 1
-                ) {
-                    $advertisements[] = $content;
-                }
-            }
-        }
-
-        getService('frontend.renderer.advertisement')
-            ->setPositions($positions)
-            ->setAdvertisements($advertisements);
     }
 }
