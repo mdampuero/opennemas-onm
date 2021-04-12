@@ -42,7 +42,7 @@ class AdvertisementRenderer extends Renderer
      *
      * @var array
      */
-    protected $requestedAds = [];
+    protected $requested = [];
 
     /**
      * The available advertisement types.
@@ -79,7 +79,7 @@ class AdvertisementRenderer extends Renderer
         if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
             $advertisements = array_udiff(
                 $this->getAdvertisements(),
-                $this->getRequestedAds(),
+                $this->getRequested(),
                 function ($a, $b) {
                     return $a->id - $b->id;
                 }
@@ -192,9 +192,9 @@ class AdvertisementRenderer extends Renderer
      *
      * @return array The requested advertisements.
      */
-    public function getRequestedAds()
+    public function getRequested()
     {
-        return $this->requestedAds;
+        return $this->requested;
     }
 
     /**
@@ -211,7 +211,7 @@ class AdvertisementRenderer extends Renderer
         $renderer  = $this->getRendererClass($ad->with_script);
         $adsFormat = $params['ads_format'] ?? null;
 
-        $this->setRequestedAds($ad);
+        $this->setRequested($ad);
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
@@ -326,9 +326,9 @@ class AdvertisementRenderer extends Renderer
      *
      * @param \Advertisement $advertisement The requested advertisement.
      */
-    public function setRequestedAds($advertisement)
+    public function setRequested($advertisement)
     {
-        $this->requestedAds[] = $advertisement;
+        $this->requested[] = $advertisement;
     }
 
     /**

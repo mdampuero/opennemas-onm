@@ -154,7 +154,7 @@ class AdvertisementRendererTest extends TestCase
         $ad2->positions = [ 1, 2, 3 ];
 
         $this->renderer->setAdvertisements([$ad1]);
-        $this->renderer->setRequestedAds($ad2);
+        $this->renderer->setRequested($ad2);
 
         $this->assertEquals(
             $ad1,
@@ -174,11 +174,11 @@ class AdvertisementRendererTest extends TestCase
     /**
      * Tests get and set methods for requested advertisement.
      */
-    public function testGetAndSetRequestedAdvertisements()
+    public function testGetAndSetRequested()
     {
-        $this->renderer->setRequestedAds('foo');
-        $this->renderer->setRequestedAds('bar');
-        $this->assertEquals(['foo', 'bar'], $this->renderer->getRequestedAds());
+        $this->renderer->setRequested('foo');
+        $this->renderer->setRequested('bar');
+        $this->assertEquals(['foo', 'bar'], $this->renderer->getRequested());
     }
 
     /**

@@ -62,7 +62,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([
                 'renderInlineHeaders', 'renderInlineInterstitial',
-                'getInlineFormats', 'getRequestedAds', 'getPositions'
+                'getInlineFormats', 'getRequested', 'getPositions'
             ])
             ->getMock();
 
@@ -151,7 +151,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $output = '<html><head></head><body></body></html>';
 
-        $this->renderer->expects($this->once())->method('getRequestedAds')
+        $this->renderer->expects($this->once())->method('getRequested')
             ->willReturn([]);
 
         $this->assertEquals($output, smarty_outputfilter_ads_generator(
@@ -168,7 +168,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $ad     = new \Advertisement();
         $output = '<html><head></head><body></body></html>';
 
-        $this->renderer->expects($this->once())->method('getRequestedAds')
+        $this->renderer->expects($this->once())->method('getRequested')
             ->willReturn([$ad]);
 
         $this->smarty->expects($this->at(3))->method('getValue')
@@ -191,7 +191,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $ad = new \Advertisement();
 
-        $this->renderer->expects($this->at(0))->method('getRequestedAds')
+        $this->renderer->expects($this->at(0))->method('getRequested')
             ->willReturn([$ad]);
 
         $params = [
@@ -274,7 +274,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $ad = new \Advertisement();
 
-        $this->renderer->expects($this->once())->method('getRequestedAds')
+        $this->renderer->expects($this->once())->method('getRequested')
             ->willReturn([$ad]);
 
         $params = [
@@ -346,7 +346,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $ad = new \Advertisement();
 
-        $this->renderer->expects($this->at(0))->method('getRequestedAds')
+        $this->renderer->expects($this->at(0))->method('getRequested')
             ->willReturn([$ad]);
 
         $params = [
