@@ -87,14 +87,7 @@ services:
 
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
-        arguments:
-            - '@core.template.frontend'
-            - '@entity_repository'
-            - '@api.service.author'
-            - '@orm.manager'
-            - '@core.helper.advertisement'
-            - '@advertisement_repository'
-            - '@core.instance'
+        arguments: [ '@service_container' ]
         public:    true
 
     core.recaptcha:
