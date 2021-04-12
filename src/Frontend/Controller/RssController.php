@@ -352,15 +352,7 @@ class RssController extends FrontendController
             $this->view->assign('contents', $contents);
         }
 
-        // Loads the list of positions and advertisements on renderer service.
-        $positions      = $this->get('core.helper.advertisement')
-            ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
-        $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions);
-
-        $this->get('frontend.renderer.advertisement')
-            ->setPositions($positions)
-            ->setAdvertisements($advertisements);
+        $this->getAds();
 
         $response = $this->render('rss/fb_instant_articles.tpl', [
             'ads_format'  => 'fia',
@@ -432,6 +424,22 @@ class RssController extends FrontendController
         $contents = $cm->filterBlocked($contents);
 
         return $contents;
+    }
+
+    /**
+     * Loads the list of positions and advertisements on renderer service.
+     */
+    protected function getAds()
+    {
+        $positions = $this->get('core.helper.advertisement')
+            ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**
