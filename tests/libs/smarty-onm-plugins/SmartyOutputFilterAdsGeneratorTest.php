@@ -215,9 +215,6 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(1))->method('getInlineFormats')
             ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
-        $this->renderer->expects($this->at(2))->method('getPositions')
-            ->willReturn([]);
-
         $this->smarty->expects($this->at(4))->method('getValue')
             ->with('content')
             ->willReturn($content);
@@ -229,11 +226,14 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())->method('isSafeFrameEnabled')
             ->willReturn(false);
 
-        $this->renderer->expects($this->at(3))->method('renderInlineHeaders')
+        $this->renderer->expects($this->at(2))->method('renderInlineHeaders')
             ->willReturn('<script>AdsHeaders</script>');
 
-        $this->renderer->expects($this->at(4))->method('renderInlineInterstitial')
+        $this->renderer->expects($this->at(3))->method('renderInlineInterstitial')
             ->willReturn('<script>Intersticial</script>');
+
+        $this->renderer->expects($this->at(4))->method('getPositions')
+            ->willReturn([]);
 
         $this->router->expects($this->once())->method('generate')
             ->with('api_v1_advertisements_list')

@@ -73,12 +73,12 @@ class AdvertisementRenderer extends Renderer
      */
     public function getAdvertisement($position, $params)
     {
-        $contentHelper  = $this->container->get('core.helper.content');
         $advertisements = $this->getAdvertisements();
 
+        // Remove already requested advertisements from advertisements array
         if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
             $advertisements = array_udiff(
-                $this->getAdvertisements(),
+                $advertisements,
                 $this->getRequested(),
                 function ($a, $b) {
                     return $a->pk_content - $b->pk_content;
@@ -88,10 +88,9 @@ class AdvertisementRenderer extends Renderer
 
         $advertisements = array_filter(
             $advertisements,
-            function ($advertisement) use ($contentHelper, $position) {
+            function ($advertisement) use ($position) {
                 return is_array($advertisement->positions)
-                    && in_array($position, $advertisement->positions)
-                    && $contentHelper->isInTime($advertisement);
+                    && in_array($position, $advertisement->positions);
             }
         );
 
@@ -109,7 +108,14 @@ class AdvertisementRenderer extends Renderer
      */
     public function getAdvertisements()
     {
-        return $this->advertisements;
+        $contentHelper = $this->container->get('core.helper.content');
+
+        return array_filter(
+            $this->advertisements,
+            function ($advertisement) use ($contentHelper) {
+                return $contentHelper->isInTime($advertisement);
+            }
+        );
     }
 
     /**

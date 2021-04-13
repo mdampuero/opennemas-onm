@@ -133,7 +133,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * Tests getAdvertisement method when no ad.
+     * Tests getAdvertisement method when consume.
      */
     public function testGetAdvertisementWhenConsume()
     {
@@ -357,7 +357,7 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testRenderInlineHeadersWithNoAds()
     {
-        $this->assertEmpty($this->renderer->renderInlineHeaders([], []));
+        $this->assertEmpty($this->renderer->renderInlineHeaders([]));
     }
 
     /**
@@ -369,33 +369,39 @@ class AdvertisementRendererTest extends TestCase
 
         $rendererDfp = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderDfpHeaders' ])
+            ->setMethods([ 'renderDfpHeaders', 'getAdvertisements' ])
             ->getMock();
 
+        $rendererDfp->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
         $rendererDfp->expects($this->any())->method('renderDfpHeaders')
             ->willReturn('foo');
 
-        $this->assertEquals('foo', $rendererDfp->renderInlineHeaders([ $ad ], []));
+        $this->assertEquals('foo', $rendererDfp->renderInlineHeaders([]));
 
         $rendererRevive = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderReviveHeaders' ])
+            ->setMethods([ 'renderReviveHeaders', 'getAdvertisements' ])
             ->getMock();
 
+        $rendererRevive->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
         $rendererRevive->expects($this->any())->method('renderReviveHeaders')
             ->willReturn('bar');
 
-        $this->assertEquals('bar', $rendererRevive->renderInlineHeaders([ $ad ], []));
+        $this->assertEquals('bar', $rendererRevive->renderInlineHeaders([]));
 
         $rendererSmart = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderSmartHeaders' ])
+            ->setMethods([ 'renderSmartHeaders', 'getAdvertisements' ])
             ->getMock();
 
+        $rendererSmart->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
         $rendererSmart->expects($this->any())->method('renderSmartHeaders')
             ->willReturn('baz');
 
-        $this->assertEquals('baz', $rendererSmart->renderInlineHeaders([ $ad ], []));
+        $this->assertEquals('baz', $rendererSmart->renderInlineHeaders([]));
     }
 
     /**

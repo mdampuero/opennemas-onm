@@ -35,14 +35,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $isSafeFrame = $smarty->getContainer()
         ->get('core.helper.advertisement')->isSafeFrameEnabled();
 
-    $adsPositions  = $adsRenderer->getPositions();
-    $contentHelper = $smarty->getContainer()->get('core.helper.content');
-
     if (!$isSafeFrame) {
-        $ads = array_filter($ads, function ($a) use ($contentHelper) {
-            return $contentHelper->isInTime($a);
-        });
-
         $params = [
             'category'           => $app['section'],
             'extension'          => $app['extension'],
@@ -62,6 +55,8 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
     }
+
+    $adsPositions = $adsRenderer->getPositions();
 
     $content = $smarty->getContainer()->get('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
