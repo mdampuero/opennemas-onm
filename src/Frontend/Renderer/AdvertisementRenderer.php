@@ -99,9 +99,7 @@ class AdvertisementRenderer extends Renderer
             return null;
         }
 
-        $advertisement = $advertisements[array_rand($advertisements)];
-
-        return $advertisement;
+        return $advertisements[array_rand($advertisements)];
     }
 
     /**
