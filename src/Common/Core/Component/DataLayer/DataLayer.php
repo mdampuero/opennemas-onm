@@ -104,6 +104,8 @@ class DataLayer
             'mediaType'       => _('Media element'),
             'pretitle'        => _('Pretitle'),
             'publicationDate' => _('Published date'),
+            'publisherId'     => _('Publisher id'),
+            'publisherName'   => _('Publisher name'),
             'tagNames'        => _('Tag names'),
             'tagSlugs'        => _('Tag slugs'),
             'updateDate'      => _('Updated date'),
