@@ -2,8 +2,8 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$scope', '$uibModal', 'http', 'routing', 'cleaner',
-  function($controller, $scope, $uibModal, http, routing, cleaner) {
+  '$controller', '$scope', '$uibModal', 'http', 'related', 'routing', 'cleaner',
+  function($controller, $scope, $uibModal, http, related, routing, cleaner) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -28,7 +28,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       created: new Date(),
       starttime: null,
       endtime: null,
-      thumbnail: null,
       title: '',
       type: 0,
       with_comment: 0,
@@ -42,21 +41,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
-     *  The photo1 object.
+     *  The related contents service
      *
      * @type {Object}
      */
-    $scope.photo1 = null;
-
-    /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
-     *  The photo2 object.
-     *
-     * @type {Object}
-     */
-    $scope.photo2 = null;
+    $scope.related = related;
 
     /**
      * @memberOf OpinionCtrl
@@ -81,28 +70,15 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      $scope.localize($scope.data.item, 'item', true);
+      $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
-      var img1 = $scope.data.extra.related_contents.filter(function(e) {
-        return parseInt(e.pk_content) === parseInt($scope.item.img1);
-      }).shift();
-
-      if (img1) {
-        $scope.photo1 = img1;
-      }
-
-      var img2 = $scope.data.extra.related_contents.filter(function(e) {
-        return parseInt(e.pk_content) === parseInt($scope.item.img2);
-      }).shift();
-
-      if (img2) {
-        $scope.photo2 = img2;
-      }
+      related.init($scope);
+      related.watch();
     };
 
     /**
@@ -113,10 +89,10 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       // Force ckeditor
       CKEDITOR.instances.body.updateElement();
-      CKEDITOR.instances.summary.updateElement();
+      CKEDITOR.instances.description.updateElement();
 
       var status = { starttime: null, endtime: null, content_status: 1 };
-      var item   = Object.assign(Object.assign({}, $scope.item), status);
+      var item   = Object.assign({}, $scope.data.item, status);
 
       var data = {
         item: JSON.stringify(cleaner.clean(item)),
@@ -142,7 +118,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
         $scope.flags.http.generating_preview = false;
       }, function() {
-        $scope.flats.http.generating_preview = false;
+        $scope.flags.http.generating_preview = false;
       });
     };
 
@@ -166,57 +142,5 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         })
       );
     };
-
-    /**
-     * Updates scope when photo1 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('photo1', function(nv, ov) {
-      if (angular.equals(nv, ov)) {
-        return;
-      }
-
-      if (!nv) {
-        $scope.item.img1        = null;
-        $scope.item.img1_footer = null;
-        return;
-      }
-
-      if (!$scope.item.id ||
-          parseInt($scope.item.img1) !== parseInt(nv.pk_content)) {
-        $scope.item.img1        = nv.pk_content;
-        $scope.item.img1_footer = nv.description;
-
-        if (angular.equals(ov, $scope.photo2)) {
-          $scope.photo2 = nv;
-        }
-      }
-    }, true);
-
-    /**
-     * Updates scope when photo2 changes.
-     *
-     * @param array nv The new values.
-     * @param array ov The old values.
-     */
-    $scope.$watch('photo2', function(nv, ov) {
-      if (angular.equals(nv, ov)) {
-        return;
-      }
-
-      if (!nv) {
-        $scope.item.img2        = null;
-        $scope.item.img2_footer = null;
-        return;
-      }
-
-      if (!$scope.item.id ||
-          parseInt($scope.item.img2) !== parseInt(nv.pk_content)) {
-        $scope.item.img2        = nv.pk_content;
-        $scope.item.img2_footer = nv.description;
-      }
-    }, true);
   }
 ]);

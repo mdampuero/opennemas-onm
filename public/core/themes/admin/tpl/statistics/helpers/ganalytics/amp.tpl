@@ -5,7 +5,12 @@
       "vars" : {
         "gtag_id": "{$account}",
         "config" : {
-          "{$account}": { "groups": "default" }
+          "{$account}": {
+            "groups": "default"
+            {if $dataLayer}
+              , {$dataLayer}
+            {/if}
+          }
         }
       }
     }
@@ -18,7 +23,12 @@
     "vars" : {
       "gtag_id": "UA-40838799-5",
       "config" : {
-        "UA-40838799-5": { "groups": "default" }
+        "UA-40838799-5": {
+          "groups": "default"
+          {if $dataLayer}
+            , {$dataLayer}
+          {/if}
+        }
       }
     }
   }

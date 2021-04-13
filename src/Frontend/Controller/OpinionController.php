@@ -3,7 +3,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
-use Common\Core\Controller\Controller;
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -154,63 +154,36 @@ class OpinionController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        $filters = [
-            'content_status' => [['value' => 1]],
-            'in_litter'      => [['value' => 0]],
-            'starttime' => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => $date, 'operator' => '<=' ],
-            ],
-            'endtime' => [
-                'union'   => 'OR',
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '>' ]
-            ],
-        ];
-
-        $order['starttime'] = 'DESC';
-
-        $em = $this->get('opinion_repository');
-
-        $bloggers = $this->get('api.service.author')
-            ->getList('is_blog = 1 order by name asc');
-
-        if (!empty($bloggers['total'])) {
-            $filters = array_merge($filters, [
-                'opinions`.`fk_author' => [ [
-                    'value' => array_map(function ($author) {
-                        return $author->id;
-                    }, $bloggers['items']),
-                    'operator' => 'NOT IN'
-                    ] ]
-            ]);
+        try {
+            $response = $this->get($this->service)->getList(sprintf(
+                'content_type_name="opinion" and content_status=1 and in_litter=0 '
+                . 'and blog=0 and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by starttime desc limit %d offset %d',
+                $date,
+                $date,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            ));
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
         }
 
-        $opinions = $em->findBy($filters, $order, $epp, $params['page']);
-        $total    = $em->countBy($filters);
-
         // No first page and no contents
-        if ($params['page'] > 1 && empty($opinions)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $epp,
+            'epp'         => $params['epp'],
             'page'        => $params['page'],
-            'total'       => $total,
+            'total'       => $response['total'],
             'route'       => 'frontend_opinion_frontpage'
         ]);
 
         $params = array_merge($params, [
-            'opinions'   => $opinions,
+            'opinions'   => $response['items'],
             'pagination' => $pagination,
             'page'       => $params['page']
         ]);
@@ -234,47 +207,33 @@ class OpinionController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        // Total opinions per page
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page');
-
-        $filters = [
-            'content_status'       => [['value' => 1]],
-            'in_litter'            => [['value' => 0]],
-            'content_type_name'    => [['value' => 'opinion']],
-            'opinions`.`fk_author' => [['value' => $author->id]],
-            'starttime' => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS' ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '<' ]
-            ],
-            'endtime' => [
-                'union'   => 'OR',
-                [ 'value'  => null, 'operator'      => 'IS' ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '>' ]
-            ],
-        ];
-
-        $orderBy = ['created' => 'DESC'];
-
-        // Get the number of total opinions for this author for pagination purposes
-        $total    = $this->get('opinion_repository')->countBy($filters);
-        $opinions = $this->get('opinion_repository')
-            ->findBy($filters, $orderBy, $epp, $params['page']);
+        try {
+            $response = $this->get($this->service)->getList(sprintf(
+                'content_type_name="opinion" and content_status=1 and in_litter=0 '
+                . 'and fk_author=%d '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by starttime desc limit %d offset %d',
+                $author->id,
+                $date,
+                $date,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            ));
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($opinions)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $epp,
+            'epp'         => $params['epp'],
             'page'        => $params['page'],
-            'total'       => $total,
+            'total'       => $response['total'],
             'route'       => [
                 'name'   => 'frontend_opinion_author_frontpage',
                 'params' => [
@@ -286,7 +245,7 @@ class OpinionController extends FrontendController
 
         $this->view->assign([
             'pagination' => $pagination,
-            'opinions'   => $opinions,
+            'opinions'   => $response['items'],
             'author'     => $author,
             'page'       => $params['page'],
         ]);

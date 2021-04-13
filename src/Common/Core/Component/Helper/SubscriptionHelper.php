@@ -100,7 +100,7 @@ class SubscriptionHelper
      *
      * @param Content $content The content.
      *
-     * @return strign The subscription token.
+     * @return string The subscription token.
      */
     public function getToken($content)
     {

@@ -10,6 +10,7 @@
 namespace Tests\Frontend\Renderer\Content;
 
 use Api\Exception\GetItemException;
+use Common\Model\Entity\Content;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Content\ContentRenderer;
@@ -115,9 +116,8 @@ class ContentRendererTest extends TestCase
      */
     public function testGetTemplateWhenOpinion()
     {
-        $opinion        = new \Opinion();
-        $author         = new User();
-        $author->meta   = [ 'is_blog' => 0 ];
+        $opinion        = new Content([ 'content_type_name' => 'opinion' ]);
+        $author         = new User([ 'is_blog' => 0 ]);
         $params['item'] = $opinion;
         $tpl            = 'frontpage/contents/_opinion.tpl';
 
@@ -136,10 +136,13 @@ class ContentRendererTest extends TestCase
      */
     public function testGetTemplateWhenInvalidOpinion()
     {
-        $opinion            = new \Opinion();
-        $opinion->fk_author = 1;
-        $params             = [ 'item' => $opinion ];
-        $tpl                = 'frontpage/contents/_opinion.tpl';
+        $opinion = new Content([
+            'content_type_name' => 'opinion',
+            'fk_author'         => 1
+        ]);
+
+        $params = [ 'item' => $opinion ];
+        $tpl    = 'frontpage/contents/_opinion.tpl';
 
         $renderer = new ContentRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getTemplate');
@@ -156,11 +159,10 @@ class ContentRendererTest extends TestCase
      */
     public function testGetTemplateWhenBlog()
     {
-        $opinion         = new \Opinion();
-        $author          = new User();
-        $author->is_blog = 1;
-        $params['item']  = $opinion;
-        $tpl             = 'frontpage/contents/_blog.tpl';
+        $opinion        = new Content([ 'content_type_name' => 'opinion' ]);
+        $author         = new User([ 'is_blog' => 1 ]);
+        $params['item'] = $opinion;
+        $tpl            = 'frontpage/contents/_blog.tpl';
 
         $renderer = new ContentRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getTemplate');

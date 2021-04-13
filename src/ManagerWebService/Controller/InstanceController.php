@@ -22,7 +22,7 @@ class InstanceController extends Controller
      *
      * @var array
      */
-    protected $keys = [ 'max_mailing', 'pass_level', 'piwik' ];
+    protected $keys = [ 'max_mailing', 'pass_level' ];
 
     /**
      * Deletes an instance.
@@ -559,7 +559,7 @@ class InstanceController extends Controller
         $instance->settings['TEMPLATE_USER'] = 'es.openhost.theme.'
             . str_replace('es.openhost.theme.', '', $instance->settings['TEMPLATE_USER']);
 
-        $settings = $ds->get([ 'max_mailing', 'pass_level', 'piwik', 'locale' ]);
+        $settings = $ds->get([ 'max_mailing', 'pass_level', 'locale' ]);
         $template = $this->getTemplateParams($instance->id);
 
         if (!empty($instance->getClient())) {

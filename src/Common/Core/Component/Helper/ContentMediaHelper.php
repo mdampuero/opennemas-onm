@@ -69,9 +69,19 @@ class ContentMediaHelper
      */
     protected function getMediaForOpinion($content)
     {
-        return empty($content->img2)
-            ? $this->getMediaFromAuthor($content->fk_author)
-            : $this->getMediaFromPhoto($content->img2);
+        if (!empty($content->related_contents)) {
+            $featured = array_filter($content->related_contents, function ($a) {
+                return $a['type'] === 'featured_inner';
+            });
+
+            $featuredInner = array_shift($featured);
+
+            if (!empty($featuredInner)) {
+                return $this->getMediaFromPhoto($featuredInner['target_id']);
+            }
+        }
+
+        return $this->getMediaFromAuthor($content->fk_author);
     }
 
     /**
@@ -167,8 +177,6 @@ class ContentMediaHelper
 
         return null;
     }
-
-
 
     /**
      * Returns media for a photo based on the photo id.

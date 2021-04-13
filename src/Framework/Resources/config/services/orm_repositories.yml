@@ -29,11 +29,6 @@ services:
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
         public: true
 
-    opinion_repository:
-        class: Repository\OpinionManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
-        public: true
-
     widget_repository:
         class: Repository\WidgetManager
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]

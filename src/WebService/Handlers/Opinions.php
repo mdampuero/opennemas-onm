@@ -8,6 +8,8 @@
  */
 namespace WebService\Handlers;
 
+use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Luracast\Restler\RestException;
 
 /**
@@ -54,7 +56,11 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $opinion = getService('opinion_repository')->find('Opinion', $id);
+        try {
+            $opinion = getService('api.service.opinion')->getItem($id);
+        } catch (GetItemException $e) {
+            return null;
+        }
 
         return $opinion;
     }
@@ -64,24 +70,20 @@ class Opinions
     */
     public function authorsInHome()
     {
-        $or = getService('opinion_repository');
+        try {
+            $opinions = getService('api.service.opinion')
+                ->getList(
+                    'content_type_name = "opinion" and in_home = 1 '
+                    . 'and content_status = 1 order by starttime asc'
+                )['items'];
 
-        $filters = [
-            'in_home'        => [ [ 'value' => 1 ] ],
-            'content_status' => [ [ 'value' => 1 ] ],
-        ];
-
-        $order = [
-            'starttime' => 'DESC'
-        ];
-        // Fetch all available opinions in home of authors
-        $opinions = $or->findBy($filters, $order);
-
-        foreach ($opinions as &$opinion) {
-            $opinion->externalUri = 'ext' . get_url($opinion);
+            foreach ($opinions as &$opinion) {
+                $opinion->externalUri = 'ext' . get_url($opinion);
+            }
+            return $opinions;
+        } catch (GetListException $e) {
+            return [];
         }
-
-        return $opinions;
     }
 
     /*
@@ -89,24 +91,20 @@ class Opinions
     */
     public function authorsNotInHome()
     {
-        $or = getService('opinion_repository');
+        try {
+            $opinions = getService('api.service.opinion')
+                ->getList(
+                    'content_type_name = "opinion" and in_home = 0 and '
+                    . 'content_status = 1 order by starttime asc'
+                )['items'];
 
-        $filters = [
-            'in_home'        => [ [ 'value' => 0 ] ],
-            'content_status' => [ [ 'value' => 1 ] ],
-        ];
-
-        $order = [
-            'starttime' => 'DESC'
-        ];
-        // Fetch all available opinions in home of authors
-        $opinions = $or->findBy($filters, $order);
-
-        foreach ($opinions as &$opinion) {
-            $opinion->externalUri = 'ext' . get_url($opinion);
+            foreach ($opinions as &$opinion) {
+                $opinion->externalUri = 'ext' . get_url($opinion);
+            }
+            return $opinions;
+        } catch (GetListException $e) {
+            return [];
         }
-
-        return $opinions;
     }
 
     /*
@@ -116,24 +114,22 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $or = getService('opinion_repository');
+        try {
+            $opinions = getService('api.service.opinion')->getList(
+                sprintf(
+                    'content_type_name = "opinion" in_home = 0 and content_status = 1 limit %s',
+                    ($page - 1) * 20 . ',' . (20)
+                )
+            )['items'];
 
-        $filters = [
-            'in_home'        => [ [ 'value' => 0 ] ],
-            'content_status' => [ [ 'value' => 1 ] ],
-        ];
+            foreach ($opinions as &$opinion) {
+                $opinion->externalUri = 'ext' . get_url($opinion);
+            }
 
-        $order = [
-            'starttime' => 'DESC'
-        ];
-        // Fetch all available opinions in home of authors
-        $opinions = $or->findBy($filters, $order, 20, $page);
-
-        foreach ($opinions as &$opinion) {
-            $opinion->externalUri = 'ext' . get_url($opinion);
+            return $opinions;
+        } catch (GetListException $e) {
+            return [];
         }
-
-        return $opinions;
     }
 
     /*
@@ -143,18 +139,20 @@ class Opinions
     {
         $this->validateInt($page);
 
-        $cm = new \ContentManager();
+        $limit = ' limit ' . (($page - 1) * ITEMS_PAGE) . ',' . (ITEMS_PAGE);
 
-        $limit = ' LIMIT ' . (($page - 1) * ITEMS_PAGE) . ',' . (ITEMS_PAGE);
-
-        // Get the list articles for this author
-        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'opinions.fk_author=' . $id .
-            ' AND contents.content_status=1',
-            'ORDER BY created DESC ' . $limit
-        );
-
-        return $opinions;
+        try {
+            return getService('api.service.opinion')->getList(
+                sprintf(
+                    'content_type_name = "opinion" and content_status = 1 ' .
+                    'and in_litter = 0 and fk_author = %d order by created desc %s ',
+                    $id,
+                    $limit
+                )
+            )['items'];
+        } catch (GetListException $e) {
+            return [];
+        }
     }
 
     /*
@@ -162,16 +160,15 @@ class Opinions
     */
     public function countAuthorsNotInHome()
     {
-        $or = getService('opinion_repository');
-
-        $filters = [
-            'in_home'        => [ [ 'value' => 0 ] ],
-            'content_status' => [ [ 'value' => 1 ] ],
-        ];
-
-        $numOpinions = $or->countBy($filters);
-
-        return $numOpinions;
+        try {
+            return getService('api.service.opinion')
+                ->getList(
+                    'content_type_name = "opinion" and in_home = 0 '
+                    . 'and content_status = 1 order by starttime asc'
+                )['total'];
+        } catch (GetListException $e) {
+            return 0;
+        }
     }
 
     /*
@@ -179,18 +176,17 @@ class Opinions
     */
     public function countAuthorOpinions($id = null)
     {
-        $or = getService('opinion_repository');
-
-        $filters = [
-            'in_home'        => [ [ 'value' => 0 ] ],
-            'fk_author'      => [ [ 'value' => $id ] ],
-            'content_status' => [ [ 'value' => 1 ] ],
-        ];
-
-
-        $numOpinions = $or->countBy($filters);
-
-        return $numOpinions;
+        try {
+            return getService('api.service.opinion')->getList(
+                sprintf(
+                    'content_type_name = "opinion" and in_home = 0 '
+                    . 'and fk_author = %d and content_status = 1',
+                    $id
+                )
+            )['total'];
+        } catch (GetListException $e) {
+            return 0;
+        }
     }
 
     /*
@@ -200,23 +196,20 @@ class Opinions
     {
         $this->validateInt($id);
 
-        $or      = getService('opinion_repository');
-        $opinion = $or->find('Opinion', $id);
+        try {
+            $opinion = getService('api.service.opinion')->getItem($id);
 
-        $filters                         = [];
-        $filters['opinions`.`fk_author'] = [
-            [ 'value' => $opinion->fk_author ]
-        ];
-
-
-        $filters['pk_opinion']     = [ [ 'value' => $id, 'operator' => '<>' ] ];
-        $filters['content_status'] = [ [ 'value' => 1 ] ];
-
-        $order = [
-            'starttime' => 'DESC'
-        ];
-        // Fetch all available opinions in home of authors
-        $otherOpinions = $or->findBy($filters, $order, 9);
+            $otherOpinions = getService('api.service.opinion')->getList(
+                sprintf(
+                    'content_type_name = "opinion" and content_status = 1 and pk_content != %d ' .
+                    'and fk_author = %d order by starttime desc',
+                    $id,
+                    $opinion->fk_author
+                )
+            )['items'];
+        } catch (GetListException $e) {
+            return [];
+        }
 
         foreach ($otherOpinions as &$otherOpinion) {
             $otherOpinion->author_name_slug = $opinion->author_name_slug;

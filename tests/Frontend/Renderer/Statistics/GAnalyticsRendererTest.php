@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Tests\Frontend\Renderer;
 
 use Common\Model\Entity\Content;
@@ -53,6 +46,11 @@ class GAnalyticsRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
+            ->disableOriginalConstructor()
+            ->setMethods(['getDataLayer'])
+            ->getMock();
+
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->setMethods([ 'generate' ])
@@ -81,6 +79,9 @@ class GAnalyticsRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.data.layer':
+                return $this->dl;
+
             case 'core.globals':
                 return $this->global;
 
@@ -115,6 +116,9 @@ class GAnalyticsRendererTest extends TestCase
 
         $method = new \ReflectionMethod($this->renderer, 'getParameters');
         $method->setAccessible(true);
+
+        $this->dl->expects($this->any())->method('getDataLayer')
+            ->willReturn([ 'foo' => 'bar']);
 
         $params = $method->invokeArgs($this->renderer, [ $content ]);
 

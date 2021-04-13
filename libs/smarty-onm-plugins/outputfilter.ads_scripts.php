@@ -25,40 +25,49 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
-        && !preg_match('@\.amp\.html$@', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
+        $headerScript    = 'header_script';
+        $bodyStartScript = 'body_start_script';
+        $bodyEndScript   = 'body_end_script';
+
+        if (preg_match('@\.amp\.html@', $uri)) {
+            $headerScript    .= '_amp';
+            $bodyStartScript .= '_amp';
+            $bodyEndScript   .= '_amp';
+        }
+
         $settings = $smarty->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ 'header_script', 'body_start_script', 'body_end_script' ]);
+            ->get([ $headerScript, $bodyStartScript, $bodyEndScript ]);
 
-        if (array_key_exists('header_script', $settings)
-            && !empty($settings['header_script'])
+        if (array_key_exists($headerScript, $settings)
+            && !empty($settings[$headerScript])
         ) {
             $output = preg_replace(
                 '@(</head>)@',
-                "\n" . base64_decode($settings['header_script']) . "\n" . '${1}',
+                "\n" . base64_decode($settings[$headerScript]) . "\n" . '${1}',
                 $output
             );
         }
 
-        if (array_key_exists('body_start_script', $settings)
-            && !empty($settings['body_start_script'])
+        if (array_key_exists($bodyStartScript, $settings)
+            && !empty($settings[$bodyStartScript])
         ) {
             $output = preg_replace(
                 '@(<body.*>)@',
-                '${1}' . "\n" . base64_decode($settings['body_start_script']) . "\n",
+                '${1}' . "\n" . base64_decode($settings[$bodyStartScript]) . "\n",
                 $output
             );
         }
 
-        if (array_key_exists('body_end_script', $settings)
-            && !empty($settings['body_end_script'])
+        if (array_key_exists($bodyEndScript, $settings)
+            && !empty($settings[$bodyEndScript])
         ) {
             $output = preg_replace(
                 '@(</body.*>)@',
-                "\n" . base64_decode($settings['body_end_script']) . "\n" . '${1}',
+                "\n" . base64_decode($settings[$bodyEndScript]) . "\n" . '${1}',
                 $output
             );
         }
