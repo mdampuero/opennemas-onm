@@ -30,13 +30,19 @@ class CleanCommand extends Command
             ->addOption(
                 'database',
                 'd',
-                InputOption::VALUE_REQUIRED,
+                InputOption::VALUE_OPTIONAL,
                 'Database name'
+            )
+            ->addOption(
+                'instance',
+                'i',
+                InputOption::VALUE_OPTIONAL,
+                'Instance name'
             )
             ->addOption(
                 'path',
                 'p',
-                Inputoption::VALUE_REQUIRED,
+                InputOption::VALUE_REQUIRED,
                 'Full path to the media directory'
             );
 
@@ -141,12 +147,26 @@ class CleanCommand extends Command
     protected function getParameters() : array
     {
         $database = $this->input->getOption('database');
+        $instance = $this->input->getOption('instance');
         $path     = $this->input->getOption('path');
 
-        if (empty($database) || empty($path)) {
+        if ((empty($database) && empty($instance)) || empty($path)) {
             throw new \InvalidArgumentException(
-                'No option specified (`database` and `path` required)'
+                'No option specified (`database`/`instance` and `path` required)'
             );
+        }
+
+        if (!empty($database)) {
+            return [ $database, $path ];
+        }
+
+        if (!empty($instance)) {
+            $oql = sprintf('internal_name = "%s"', $instance);
+
+            $instances = $this->getContainer()->get('orm.manager')
+                ->getRepository('Instance')->findBy($oql);
+
+            $database = $instances[0]->getDatabaseName();
         }
 
         return [ $database, $path ];
