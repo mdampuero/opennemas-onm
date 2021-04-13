@@ -225,13 +225,13 @@ class AdvertisementRenderer extends Renderer
     /**
      * Returns the generic headers HTML for inline Adservers advertisements.
      *
-     * @param array $advertisements Array of advertisements.
-     * @param array $params         Array of parameters to render the advertisement header.
+     * @param array $params Array of parameters to render the advertisement header.
      *
      * @return string The HTML content for the header advertisement.
      */
-    public function renderInlineHeaders($advertisements, $params)
+    public function renderInlineHeaders($params)
     {
+        $advertisements = $this->getAdvertisements();
         if (empty($advertisements)) {
             return '';
         }
@@ -248,8 +248,7 @@ class AdvertisementRenderer extends Renderer
     /**
      * Selects and renders an interstitial from a list of advertisements.
      *
-     * @param array $advertisements The list of advertisements.
-     * @param array $params         The list of parameters to render the advertisement header.
+     * @param array $params The list of parameters to render the interstitial advertisement.
      *
      * @return string The HTML code for Interstitial .
      */

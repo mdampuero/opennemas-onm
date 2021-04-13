@@ -51,7 +51,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
-        $adsOutput    = $adsRenderer->renderInlineHeaders($ads, $params);
+        $adsOutput    = $adsRenderer->renderInlineHeaders($params);
         $interstitial = $adsRenderer->renderInlineInterstitial($params);
         $devices      = $smarty->getContainer()->get('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
