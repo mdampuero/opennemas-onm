@@ -320,18 +320,6 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
-     * Returns if advertisement is floating or not.
-     *
-     * @param Array $params The array of parameters.
-     *
-     * @return boolean      True if it is floating, False if it isn't.
-     */
-    protected function isFloating($params)
-    {
-        return array_key_exists('placeholder', $params);
-    }
-
-    /**
      * Returns the advertisement width and height for a specific device.
      *
      * @param \Advertisement $advertisement The advertisement to render.
@@ -386,6 +374,18 @@ class AdvertisementRenderer extends Renderer
             'top' : $advertisement->params['orientation'];
 
         return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
+    }
+
+    /**
+     * Returns if advertisement is floating or not.
+     *
+     * @param Array $params The array of parameters.
+     *
+     * @return boolean      True if it is floating, False if it isn't.
+     */
+    protected function isFloating($params)
+    {
+        return array_key_exists('placeholder', $params);
     }
 
     /**
