@@ -206,19 +206,19 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getImageDir
+     * Tests get_image_dir
      */
     public function testGetImageDir()
     {
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('https://opennemas.com');
 
-        $this->assertEquals('/theme/fred/images', getImageDir());
-        $this->assertEquals('https://opennemas.com/theme/fred/images', getImageDir(true));
+        $this->assertEquals('/theme/fred/images', get_image_dir());
+        $this->assertEquals('https://opennemas.com/theme/fred/images', get_image_dir(true));
 
         $this->theme = null;
-        $this->assertEquals(null, getImageDir());
-        $this->assertEquals(null, getImageDir(true));
+        $this->assertEquals(null, get_image_dir());
+        $this->assertEquals(null, get_image_dir(true));
     }
 
     /**

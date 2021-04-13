@@ -56,7 +56,7 @@ function get_url($item = null, array $params = []) : ?string
  *
  * @return string The path to image folder for the active theme.
  */
-function getImageDir($absolute = false) : ?string
+function get_image_dir($absolute = false) : ?string
 {
     $instance = getService('core.instance');
     $theme    = getService('core.theme');
