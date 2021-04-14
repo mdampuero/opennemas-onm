@@ -364,6 +364,7 @@ class VariablesExtractor
 
         return $author->name ?? null;
     }
+
     /**
      * Get the available content tag names.
      *
