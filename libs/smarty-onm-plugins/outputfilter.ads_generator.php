@@ -10,7 +10,8 @@
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $ads         = $adsRenderer->getRequested();
+    $isSafeFrame = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
+    $ads         = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
     $app         = $smarty->getValue('app');
 
     if (!is_array($ads)
@@ -31,9 +32,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings');
-
-    $isSafeFrame = $smarty->getContainer()
-        ->get('core.helper.advertisement')->isSafeFrameEnabled();
 
     if (!$isSafeFrame) {
         $params = [
