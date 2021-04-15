@@ -31,7 +31,7 @@
           {include file="ui/component/input/text.tpl" iField="name" iFlag="validating" iNgActions="ng-blur=\"generate()\" ng-change=\"isValid()\"" iRequired="true" iTitle="{t}Name{/t}" iValidation=true}
         </div>
         <div class="col-md-6">
-          {include file="ui/component/input/slug.tpl" iField="slug" iFlag="slug" iRequired="true" iTitle="{t}Slug{/t}" iValidation=true}
+          {include file="ui/component/input/slug.tpl" iField="slug" iFlag="slug" iNgModel="item.slug" iRequired="true" iTitle="{t}Slug{/t}" iValidation=true}
         </div>
       </div>
       <div class="row">
