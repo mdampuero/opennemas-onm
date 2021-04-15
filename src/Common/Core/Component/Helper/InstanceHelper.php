@@ -45,27 +45,20 @@ class InstanceHelper
      */
     protected $mediaPath;
 
-    /**
-     * The piwik parameters.
-     *
-     * @var array
-     */
-    protected $piwik;
+
 
     /**
      * Initializes the InstanceHelper.
      *
      * @param Connection $conn      The database connection.
      * @param string     $mediaPath The path to public/media folder.
-     * @param array      $piwik     The list of piwik parameters.
      */
-    public function __construct(Connection $conn, string $mediaPath, array $piwik)
+    public function __construct(Connection $conn, string $mediaPath)
     {
         $this->client    = new Client();
         $this->conn      = $conn;
         $this->fs        = new Filesystem();
         $this->mediaPath = $mediaPath;
-        $this->piwik     = $piwik;
     }
 
     /**
@@ -188,68 +181,6 @@ class InstanceHelper
     }
 
     /**
-     * Returns the number of page views for the instance.
-     *
-     * @param Instance $instance The instance.
-     *
-     * @return int The number of page views.
-     *
-     * @throws \Exception When the request fails or there is no valid result.
-     *
-     * @throws \InvalidArgumentException When there is no valid piwik
-     *         configuration.
-     */
-    public function getPageViews(Instance $instance) : int
-    {
-        $piwik = $this->getPiwikSettings($instance);
-
-        if (empty($piwik)
-            || !is_array($piwik)
-            || !array_key_exists('page_id', $piwik)
-            || empty($piwik['page_id'])
-        ) {
-            throw new \InvalidArgumentException('No valid piwik configuration');
-        }
-
-        $from = new \DateTime('now');
-
-        if ($from->format('d') <= '27') {
-            $from->modify('-1 month');
-        }
-
-        $from->setDate($from->format('Y'), $from->format('m'), 27);
-
-        $from = $from->format('Y-m-d');
-        $to   = date('Y-m-d');
-
-        $url = sprintf(
-            '%s?module=API&method=API.get'
-            . '&apiModule=VisitsSummary&apiAction=get'
-            . '&idSite=%s'
-            . '&period=range&date=%s,%s'
-            . '&format=json'
-            . '&showColumns=nb_pageviews'
-            . '&token_auth=%s',
-            $this->piwik['url'],
-            $piwik['page_id'],
-            $from,
-            $to,
-            $this->piwik['token']
-        );
-
-        $response = $this->client->get($url);
-        $body     = json_decode($response->getBody(), true);
-
-        if (!array_key_exists('value', $body)) {
-            throw new \Exception(
-                array_key_exists('message', $body) ? $body['message'] : ''
-            );
-        }
-
-        return (int) $body['value'];
-    }
-
-    /**
      * Returns the date of the last successful authentication action.
      *
      * @param Instance $instance The current instance.
@@ -300,33 +231,6 @@ class InstanceHelper
             $created->setTimeZone(new \DateTimeZone('UTC'));
 
             return $created;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the piwik setting for the instance.
-     *
-     * @param Instance $instance The instance.
-     *
-     * @return array The piwik settings.
-     */
-    protected function getPiwikSettings(Instance $instance) : ?array
-    {
-        try {
-            $this->conn->selectDatabase($instance->getDatabaseName());
-
-            $sql   = 'select value from settings where name = "piwik"';
-            $piwik = $this->conn->fetchAssoc($sql);
-
-            if (!is_array($piwik) || !array_key_exists('value', $piwik)) {
-                return null;
-            }
-
-            $value = PhpSerializer::unserialize($piwik['value']);
-
-            return is_array($value) ? $value : null;
         } catch (\Exception $e) {
             return null;
         }

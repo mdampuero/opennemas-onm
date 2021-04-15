@@ -33,7 +33,7 @@ function smarty_outputfilter_statistics($output, $smarty)
         $output = $smarty->getContainer()->get('frontend.renderer')->render(
             $content,
             [
-                'types'  => [ 'Default', 'Chartbeat', 'Piwik', 'Comscore', 'Ojd', 'GAnalytics' ],
+                'types'  => [ 'Default', 'Chartbeat', 'Comscore', 'Ojd', 'GAnalytics' ],
                 'output' => $output
             ]
         );
