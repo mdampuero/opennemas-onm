@@ -42,7 +42,7 @@ class AdvertisementRenderer extends Renderer
      *
      * @var array
      */
-    protected $requestedAds = [];
+    protected $requested = [];
 
     /**
      * The available advertisement types.
@@ -73,25 +73,24 @@ class AdvertisementRenderer extends Renderer
      */
     public function getAdvertisement($position, $params)
     {
-        $contentHelper  = $this->container->get('core.helper.content');
         $advertisements = $this->getAdvertisements();
 
+        // Remove already requested advertisements from advertisements array
         if (array_key_exists('mode', $params) && $params['mode'] === 'consume') {
             $advertisements = array_udiff(
-                $this->getAdvertisements(),
-                $this->getRequestedAds(),
+                $advertisements,
+                $this->getRequested(),
                 function ($a, $b) {
-                    return $a->id - $b->id;
+                    return $a->pk_content - $b->pk_content;
                 }
             );
         }
 
         $advertisements = array_filter(
             $advertisements,
-            function ($ad) use ($contentHelper, $position) {
-                return is_array($ad->positions)
-                    && in_array($position, $ad->positions)
-                    && $contentHelper->isInTime($ad);
+            function ($advertisement) use ($position) {
+                return is_array($advertisement->positions)
+                    && in_array($position, $advertisement->positions);
             }
         );
 
@@ -99,9 +98,7 @@ class AdvertisementRenderer extends Renderer
             return null;
         }
 
-        $ad = $advertisements[array_rand($advertisements)];
-
-        return $ad;
+        return $advertisements[array_rand($advertisements)];
     }
 
     /**
@@ -111,24 +108,31 @@ class AdvertisementRenderer extends Renderer
      */
     public function getAdvertisements()
     {
-        return $this->advertisements;
+        $contentHelper = $this->container->get('core.helper.content');
+
+        return array_filter(
+            $this->advertisements,
+            function ($advertisement) use ($contentHelper) {
+                return $contentHelper->isInTime($advertisement);
+            }
+        );
     }
 
     /**
      * Returns the list of CSS classes according to device restrictions.
      *
-     * @param \Advertisement $ad The advertisement to get restrictions from.
+     * @param \Advertisement $advertisement The advertisement to get restrictions from.
      *
      * @return string The css classes to apply.
      */
-    public function getDeviceCSSClasses(\Advertisement $ad)
+    public function getDeviceCSSClasses(\Advertisement $advertisement)
     {
-        if (!array_key_exists('devices', $ad->params)) {
+        if (!array_key_exists('devices', $advertisement->params)) {
             return '';
         }
 
         $cssClasses = [];
-        foreach ($ad->params['devices'] as $device => $status) {
+        foreach ($advertisement->params['devices'] as $device => $status) {
             if ($status === 0) {
                 $cssClasses[] = 'hidden-' . $device;
             }
@@ -148,20 +152,20 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
-     * Returns the string that depicts the default mark shown alongside ads.
+     * Returns the string that depicts the default mark shown alongside advertisements.
      *
-     * @param \Advertisement $ad The advertisement object where to search for the mark.
+     * @param \Advertisement $advertisement The advertisement object where to search for the mark.
      *
      * @return string The default mark for the advertisements.
      */
-    public function getMark(\Advertisement $ad = null)
+    public function getMark(\Advertisement $advertisement = null)
     {
         // If the mark for the advertisement is not empty then return it
-        if (is_object($ad)
-            && array_key_exists('mark_text', $ad->params)
-            && !empty($ad->params['mark_text'])
+        if (is_object($advertisement)
+            && array_key_exists('mark_text', $advertisement->params)
+            && !empty($advertisement->params['mark_text'])
         ) {
-            return $ad->params['mark_text'];
+            return $advertisement->params['mark_text'];
         }
 
         // If the mark is not valid then use the default one.
@@ -184,7 +188,7 @@ class AdvertisementRenderer extends Renderer
      */
     public function getPositions()
     {
-        return $this->postions;
+        return $this->positions;
     }
 
     /**
@@ -192,56 +196,56 @@ class AdvertisementRenderer extends Renderer
      *
      * @return array The requested advertisements.
      */
-    public function getRequestedAds()
+    public function getRequested()
     {
-        return $this->requestedAds;
+        return $this->requested;
     }
 
     /**
      * Renders an advertisement given the advertisement and parameters.
      *
-     * @param \Advertisement $ad     The advertisement to render.
-     * @param array          $params Array of parameters to render the ad.
+     * @param \Advertisement $advertisement The advertisement to render.
+     * @param array          $params        Array of parameters to render the advertisement.
      *
      * @return string The HTML content for the advertisement.
      */
-    public function render($ad, $params)
+    public function render($advertisement, $params)
     {
-        // Get renderer class and ad format
-        $renderer  = $this->getRendererClass($ad->with_script);
+        // Get renderer class and advertisement format
+        $renderer  = $this->getRendererClass($advertisement->with_script);
         $adsFormat = $params['ads_format'] ?? null;
 
-        $this->setRequestedAds($ad);
+        $this->requested[] = $advertisement;
 
         // Check for safeframe
         $isSafeFrame = $this->ds->get('ads_settings')['safe_frame'];
         if ($isSafeFrame && !in_array($adsFormat, $this->inlineFormats)) {
             return $this->isFloating($params)
-                    ? $this->renderSafeFrameSlot($ad)
-                    : $renderer->renderSafeFrame($ad, $params);
+                    ? $this->renderSafeFrameSlot($advertisement)
+                    : $renderer->renderSafeFrame($advertisement, $params);
         }
 
-        return $renderer->renderInline($ad, $params);
+        return $renderer->renderInline($advertisement, $params);
     }
 
     /**
      * Returns the generic headers HTML for inline Adservers advertisements.
      *
-     * @param array $ads    Array of advertisements.
-     * @param array $params Array of parameters to render the ad header.
+     * @param array $params Array of parameters to render the advertisement header.
      *
      * @return string The HTML content for the header advertisement.
      */
-    public function renderInlineHeaders($ads, $params)
+    public function renderInlineHeaders($params)
     {
-        if (empty($ads)) {
+        $advertisements = $this->getAdvertisements();
+        if (empty($advertisements)) {
             return '';
         }
 
         $headers = '';
         foreach (array_slice($this->types, -3) as $type) {
             $method   = 'render' . $type . 'Headers';
-            $headers .= $this->{$method}($ads, $params);
+            $headers .= $this->{$method}($advertisements, $params);
         }
 
         return $headers;
@@ -250,19 +254,18 @@ class AdvertisementRenderer extends Renderer
     /**
      * Selects and renders an interstitial from a list of advertisements.
      *
-     * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters to render the ad header.
+     * @param array $params The list of parameters to render the interstitial advertisement.
      *
      * @return string The HTML code for Interstitial .
      */
     public function renderInlineInterstitial($params)
     {
-        $ads = $this->getAdvertisements();
-        if (empty($ads)) {
+        $advertisements = $this->getAdvertisements();
+        if (empty($advertisements)) {
             return '';
         }
 
-        $interstitials = array_filter($ads, function ($a) {
+        $interstitials = array_filter($advertisements, function ($a) {
             $hasInterstitial = array_filter($a->positions, function ($pos) {
                 return ($pos + 50) % 100 == 0;
             });
@@ -274,25 +277,25 @@ class AdvertisementRenderer extends Renderer
             return '';
         }
 
-        $ad = $interstitials[array_rand($interstitials)];
+        $advertisement = $interstitials[array_rand($interstitials)];
 
-        $orientation = empty($ad->params['orientation'])
-            ? 'top' : $ad->params['orientation'];
+        $orientation = empty($advertisement->params['orientation'])
+            ? 'top' : $advertisement->params['orientation'];
 
-        $size = $this->getDeviceAdvertisementSize($ad, 'desktop');
+        $size = $this->getDeviceAdvertisementSize($advertisement, 'desktop');
         if (empty($size)) {
             return '';
         }
 
-        $renderer = $this->getRendererClass($ad->with_script);
+        $renderer = $this->getRendererClass($advertisement->with_script);
 
         return $this->tpl->fetch(
             'advertisement/helpers/inline/interstitial.tpl',
             [
                 'size'        => $size,
                 'orientation' => $orientation,
-                'ad'          => $ad,
-                'content'     => $renderer->renderInline($ad, $params)
+                'ad'          => $advertisement,
+                'content'     => $renderer->renderInline($advertisement, $params)
             ]
         );
     }
@@ -312,48 +315,26 @@ class AdvertisementRenderer extends Renderer
     /**
      * Set all advertisements positions from controller for a page.
      *
-     * @param array $postions The array of advertisements postions to render.
+     * @param array $positions The array of advertisements positions to render.
      */
-    public function setPositions($postions)
+    public function setPositions($positions)
     {
-        $this->postions = $postions;
+        $this->positions = $positions;
 
         return $this;
     }
 
     /**
-     * Add an advertisement to the list of requested.
-     *
-     * @param \Advertisement $advertisement The requested advertisement.
-     */
-    public function setRequestedAds($advertisement)
-    {
-        $this->requestedAds[] = $advertisement;
-    }
-
-    /**
-     * Returns if advertisement is floating or not.
-     *
-     * @param Array          $params The array of parameters.
-     *
-     * @return boolean True if it is floating, False if it isn't.
-     */
-    protected function isFloating($params)
-    {
-        return array_key_exists('placeholder', $params);
-    }
-
-    /**
      * Returns the advertisement width and height for a specific device.
      *
-     * @param \Advertisement $ad     The advertisement to render.
-     * @param string         $device The device to get sizes from.
+     * @param \Advertisement $advertisement The advertisement to render.
+     * @param string         $device        The device to get sizes from.
      *
      * @return array Array with advertisement width and height.
      */
-    protected function getDeviceAdvertisementSize($ad, $device)
+    protected function getDeviceAdvertisementSize($advertisement, $device)
     {
-        $nomalizedSizes = $ad->normalizeSizes($ad->params);
+        $nomalizedSizes = $advertisement->normalizeSizes($advertisement->params);
 
         $sizes = array_filter($nomalizedSizes, function ($a) use ($device) {
             return $a['device'] === $device;
@@ -365,9 +346,9 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
-     * Returns the HTML for a safe frame ad slot
+     * Returns the HTML for a safe frame advertisement slot
      *
-     * @param int $type The ad script type.
+     * @param int $type The advertisement script type.
      * 0 -> Image, 1 -> Html, 2 -> Revive, 3 -> DFP, 4 -> Smart.
      *
      * @return \AdvertisementRenderer The advertisement renderer object.
@@ -383,99 +364,111 @@ class AdvertisementRenderer extends Renderer
     /**
      * Wraps an advertisement rendered content in ad-slot template.
      *
-     * @param \Advertisement $ad      The advertisement to render.
-     * @param string         $content The advertisement rendered content.
+     * @param \Advertisement $advertisement The advertisement to render.
+     * @param string         $content       The advertisement rendered content.
      *
      * @return string The advertisement rendered content wrapped in ad-slot template.
      */
-    protected function getSlot($ad, $content)
+    protected function getSlot($advertisement, $content)
     {
         $tpl  = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
-        $mark = $this->getMark($ad);
+        $mark = $this->getMark($advertisement);
 
-        $deviceClasses = $this->getDeviceCSSClasses($ad);
-        $orientation   = empty($ad->params['orientation']) ?
-            'top' : $ad->params['orientation'];
+        $deviceClasses = $this->getDeviceCSSClasses($advertisement);
+        $orientation   = empty($advertisement->params['orientation']) ?
+            'top' : $advertisement->params['orientation'];
 
         return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
     }
 
     /**
-     * Returns the HTML header section for the DFP ads.
+     * Returns if advertisement is floating or not.
      *
-     * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters to render the ad header.
+     * @param Array $params The array of parameters.
+     *
+     * @return boolean      True if it is floating, False if it isn't.
+     */
+    protected function isFloating($params)
+    {
+        return array_key_exists('placeholder', $params);
+    }
+
+    /**
+     * Returns the HTML header section for the DFP advertisements.
+     *
+     * @param array $advertisements    The list of advertisements.
+     * @param array $params The list of parameters to render the advertisement header.
      *
      * @return string HTML for the DFP header.
      */
-    protected function renderDfpHeaders($ads, $params)
+    protected function renderDfpHeaders($advertisements, $params)
     {
-        $ads = array_filter($ads, function ($a) {
+        $advertisements = array_filter($advertisements, function ($a) {
             return $a->with_script == 3
                 && array_key_exists('googledfp_unit_id', $a->params)
                 && !empty($a->params['googledfp_unit_id']);
         });
 
-        return !empty($ads)
-            ? $this->getRendererClass(3)->renderInlineHeader($ads, $params)
+        return !empty($advertisements)
+            ? $this->getRendererClass(3)->renderInlineHeader($advertisements, $params)
             : '';
     }
 
     /**
-     * Returns the HTML header section for the Revive ads.
+     * Returns the HTML header section for the Revive advertisements.
      *
-     * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters to render the ad header.
+     * @param array $advertisements    The list of advertisements.
+     * @param array $params The list of parameters to render the advertisement header.
      *
      * @return string HTML for the Revive header.
      */
-    protected function renderReviveHeaders($ads, $params)
+    protected function renderReviveHeaders($advertisements, $params)
     {
-        $ads = array_filter($ads, function ($a) {
+        $advertisements = array_filter($advertisements, function ($a) {
             return $a->with_script == 2
                 && array_key_exists('openx_zone_id', $a->params)
                 && !empty($a->params['openx_zone_id']);
         });
 
-        return !empty($ads)
-            ? $this->getRendererClass(2)->renderInlineHeader($ads, $params)
+        return !empty($advertisements)
+            ? $this->getRendererClass(2)->renderInlineHeader($advertisements, $params)
             : '';
     }
 
     /**
-     * Returns the HTML for a safe frame ad slot.
+     * Returns the HTML for a safe frame advertisement slot.
      *
-     * @param \Advertisement $ad The ad to render.
+     * @param \Advertisement $advertisement The advertisement to render.
      *
      * @return string The HTML generated.
      */
-    protected function renderSafeFrameSlot(\Advertisement $ad)
+    protected function renderSafeFrameSlot(\Advertisement $advertisement)
     {
         $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
-        $id   = $ad->id;
+        $id   = $advertisement->pk_content;
         $type = 37; // Floating banner type
 
         return sprintf($html, $id, $type);
     }
 
     /**
-     * Returns the HTML header section for the Smart ads.
+     * Returns the HTML header section for the Smart advertisements.
      *
-     * @param array $ads    The list of advertisements.
-     * @param array $params The list of parameters to render the ad header.
+     * @param array $advertisements    The list of advertisements.
+     * @param array $params The list of parameters to render the advertisement header.
      *
      * @return string HTML for the Smart header.
      */
-    protected function renderSmartHeaders($ads, $params)
+    protected function renderSmartHeaders($advertisements, $params)
     {
-        $ads = array_filter($ads, function ($a) {
+        $advertisements = array_filter($advertisements, function ($a) {
             return $a->with_script == 4
                 && array_key_exists('smart_format_id', $a->params)
                 && !empty($a->params['smart_format_id']);
         });
 
-        return !empty($ads)
-            ? $this->getRendererClass(4)->renderInlineHeader($ads, $params)
+        return !empty($advertisements)
+            ? $this->getRendererClass(4)->renderInlineHeader($advertisements, $params)
             : '';
     }
 }

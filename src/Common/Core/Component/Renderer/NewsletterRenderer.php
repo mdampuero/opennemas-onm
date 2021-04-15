@@ -28,30 +28,12 @@ class NewsletterRenderer
     /**
      * Initializes the newsletter renderer.
      *
-     * @param Template            $template        The template service.
-     * @param EntityRepository    $entityManager   The entity manager.
-     * @param AuthorService       $authorService   The author service.
-     * @param SettingRepository   $settinManager   The settings repository.
-     * @param AdvertisementHelper $adsHelper       The advertisement helper.
-     * @param adsRepository       $adsRepository   The advertisement repository.
-     * @param Instance            $instance        The current instance.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct(
-        $tpl,
-        EntityManager $entityManager,
-        AuthorService $authorService,
-        $em,
-        $adsHelper,
-        $adsRepository,
-        $instance
-    ) {
-        $this->tpl      = $tpl;
-        $this->er       = $entityManager;
-        $this->as       = $authorService;
-        $this->ds       = $em->getDataSet('Settings', 'instance');
-        $this->adHelper = $adsHelper;
-        $this->ar       = $adsRepository;
-        $this->instance = $instance;
+    public function __construct($container)
+    {
+        $this->container = $container;
+        $this->tpl       = $container->get('core.template.frontend');
     }
 
     /**
@@ -68,10 +50,12 @@ class NewsletterRenderer
         $menu = new \Menu();
         $menu = $menu->getMenu('frontpage');
 
-        $positions      = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
-        $advertisements = $this->ar->findByPositionsAndCategory($positions, 0);
+        $positions      = $this->container->get('core.helper.advertisement')
+            ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
+        $advertisements = $this->container->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 0);
 
-        getService('frontend.renderer.advertisement')
+        $this->container->get('frontend.renderer.advertisement')
             ->setPositions($positions)
             ->setAdvertisements($advertisements);
 
@@ -81,7 +65,7 @@ class NewsletterRenderer
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
-            $this->instance->getMainDomain()
+            $this->container->get('core.instance')->getMainDomain()
         );
 
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
@@ -109,7 +93,8 @@ class NewsletterRenderer
 
         $total   = ($criteria['epp'] > 0) ? $criteria['epp'] : 5;
         $orderBy = [ 'starttime' => 'desc' ];
-        $date    = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
+        $date    = new \DateTime(null, $this->container->get('core.locale')
+            ->getTimeZone('frontend'));
 
         $searchCriteria = [
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -175,7 +160,7 @@ class NewsletterRenderer
         }
 
         if ($criteria['content_type'] === 'opinion' && !empty($criteria['opinion_type'])) {
-            $bloggers   = $this->as->getList('is_blog=1')['items'];
+            $bloggers   = $this->container->get('api.service.author')->getList('is_blog=1')['items'];
             $bloggersId = array_map(function ($item) {
                 return $item->id;
             }, $bloggers);
@@ -197,7 +182,8 @@ class NewsletterRenderer
                 'title'                     => $a->title,
                 'content'                   => $a
             ];
-        }, $this->er->findBy($searchCriteria, $orderBy, $total, 1));
+        }, $this->container->get('entity_repository')
+            ->findBy($searchCriteria, $orderBy, $total, 1));
     }
 
     /**
@@ -231,7 +217,8 @@ class NewsletterRenderer
                     continue;
                 }
 
-                $content = $this->er->find(classify($item['content_type']), $item['id']);
+                $content = $this->container->get('entity_repository')
+                    ->find(classify($item['content_type']), $item['id']);
 
                 // if is not a real content, skip this element
                 if (!is_object($content) || is_null($content->id)) {

@@ -10,7 +10,8 @@
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
     $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $ads         = $adsRenderer->getRequestedAds();
+    $isSafeFrame = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
+    $ads         = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
     $app         = $smarty->getValue('app');
 
     if (!is_array($ads)
@@ -32,17 +33,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings');
 
-    $isSafeFrame = $smarty->getContainer()
-        ->get('core.helper.advertisement')->isSafeFrameEnabled();
-
-    $adsPositions  = $adsRenderer->getPositions();
-    $contentHelper = $smarty->getContainer()->get('core.helper.content');
-
     if (!$isSafeFrame) {
-        $ads = array_filter($ads, function ($a) use ($contentHelper) {
-            return $contentHelper->isInTime($a);
-        });
-
         $params = [
             'category'           => $app['section'],
             'extension'          => $app['extension'],
@@ -51,7 +42,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
-        $adsOutput    = $adsRenderer->renderInlineHeaders($ads, $params);
+        $adsOutput    = $adsRenderer->renderInlineHeaders($params);
         $interstitial = $adsRenderer->renderInlineInterstitial($params);
         $devices      = $smarty->getContainer()->get('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
@@ -62,6 +53,8 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
     }
+
+    $adsPositions = $adsRenderer->getPositions();
 
     $content = $smarty->getContainer()->get('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [

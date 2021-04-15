@@ -274,7 +274,8 @@ class ArticlesController extends Controller
             'tags'      => $tags
         ];
 
-        $this->getAdvertisements();
+        $this->getAdvertisements($category, $this->get('core.helper.subscription')
+            ->getToken($article));
 
         if (!empty($article->relatedInner)) {
             $ids = array_map(function ($a) {
