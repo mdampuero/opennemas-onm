@@ -12,7 +12,7 @@ namespace Framework\Command;
 use Common\Core\Command\Command;
 use Api\Exception\CreateItemException;
 use Api\Exception\UpdateItemException;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -23,13 +23,12 @@ class NewsletterSchedulerCommand extends Command
         $this
             ->setName('newsletter:scheduler')
             ->setDescription('Sends scheduled newsletters')
-            ->setDefinition([
-                new InputArgument(
-                    'instances',
-                    InputArgument::IS_ARRAY,
-                    'The list of instances to synchronize (e.g. norf quux).'
-                ),
-            ]);
+            ->addOption(
+                'instances',
+                'i',
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'The list of instances to send newsletter from (e.g. norf quux)'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -44,7 +43,7 @@ class NewsletterSchedulerCommand extends Command
             date('Y-m-d H:i:s', $this->started)
         ));
 
-        $instances = $this->getInstances($input->getArgument('instances'));
+        $instances = $this->getInstances($input->getOption('instances'));
 
         $output->writeln(sprintf(
             str_pad('<options=bold>(2/3) Processing instances', 43, '.')
@@ -56,7 +55,7 @@ class NewsletterSchedulerCommand extends Command
         $i = 1;
         foreach ($instances as $instance) {
             $output->write(sprintf(
-                '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance [%s] </>',
+                '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
                 $i++,
                 count($instances),
                 $instance->internal_name
