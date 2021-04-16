@@ -229,6 +229,19 @@ class SmartRendererTest extends TestCase
         $ad->created = '2019-03-28 18:40:32';
         $ad->params  = [ 'smart_format_id' => 321 ];
 
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
+
         $content     = new \stdClass();
         $content->id = 123;
 
@@ -267,7 +280,8 @@ class SmartRendererTest extends TestCase
             ->with('advertisement/helpers/inline/smart.slot.onecall_async.tpl')
             ->willReturn($output);
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height:600px;width:300px;">'
             . $output . '</div>';
         $this->assertEquals(
             $output,

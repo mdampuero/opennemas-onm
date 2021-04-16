@@ -215,6 +215,19 @@ class ReviveRendererTest extends TestCase
         $ad->positions = [ 50 ];
         $ad->params    = [];
 
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
+
         $url    = '/ads/get/123';
         $output = '<iframe src="' . $url . '"></iframe>
             <script data-id="{$id}">
@@ -233,7 +246,8 @@ class ReviveRendererTest extends TestCase
             ])
             ->willReturn($output);
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height:600px;width:300px;">'
             . $output . '</div>';
 
         $this->assertEquals(

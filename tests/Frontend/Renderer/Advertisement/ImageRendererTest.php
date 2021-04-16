@@ -184,7 +184,19 @@ class ImageRendererTest extends TestCase
      */
     public function testRenderInline()
     {
-        $ad = new \Advertisement();
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ImageRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -195,7 +207,8 @@ class ImageRendererTest extends TestCase
             ->willReturn('foo');
 
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">foo</div>';
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height:600px;width:300px;">foo</div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
     }

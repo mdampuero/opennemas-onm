@@ -283,16 +283,49 @@ class AdvertisementRendererTest extends TestCase
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'width' => 300, 'floating' => true ];
+        $ad->params     = [ 'height' => 600, 'width' => 300, 'floating' => true ];
 
         $output = '<div class="ad-slot oat oat-visible oat-top "'
-            . ' data-mark="Advertisement">foo</div>';
+            . ' data-mark="Advertisement" style="height:600px;width:300px;">foo</div>';
 
         $content = 'foo';
 
         $this->assertEquals(
             $output,
             $method->invokeArgs($this->renderer, [ $ad, $content ])
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlotSizeStyle
+     */
+    public function testGetSlotSizeStyle()
+    {
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
+
+        $output = ' style="height:600px;width:980px;"';
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->getSlotSizeStyle($ad, $ad->params)
         );
     }
 
@@ -304,10 +337,14 @@ class AdvertisementRendererTest extends TestCase
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'placeholder' => 'placeholder1_1' ];
+        $ad->params     = [
+            'height' => 600,
+            'width' => 300,
+            'placeholder' => 'placeholder1_1'
+        ];
 
         $returnValue = '<div class="ad-slot oat" data-id="123"'
-            . ' data-type="37"></div>';
+            . ' data-type="37" style="height:600px;width:300px;"></div>';
 
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
@@ -654,10 +691,29 @@ class AdvertisementRendererTest extends TestCase
         $method = new \ReflectionMethod($this->renderer, 'renderSafeFrameSlot');
         $method->setAccessible(true);
 
-        $ad             = new \Advertisement();
-        $ad->pk_content = 123;
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
 
-        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
+        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37" '
+            . 'style="height:250px;width:980px;"></div>';
+
         $this->assertEquals(
             $returnValue,
             $method->invokeArgs($this->renderer, [ $ad ])

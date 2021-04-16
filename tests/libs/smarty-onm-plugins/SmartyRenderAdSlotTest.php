@@ -43,7 +43,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'render', 'getInlineFormats', 'getAdvertisement', 'getPositions' ])
+            ->setMethods([ 'render', 'getInlineFormats', 'getAdvertisement', 'getPositions', 'getSlotSizeStyle' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
@@ -147,8 +147,11 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(2))->method('getInlineFormats')
             ->willReturn([ 'foo', 'gorp', 'wibble' ]);
 
+        $this->renderer->expects($this->at(3))->method('getSlotSizeStyle')
+            ->willReturn(' foo');
+
         $this->assertEquals(
-            '<div class="ad-slot oat" data-position="123" data-mode="consume"></div>',
+            '<div class="ad-slot oat" data-position="123" data-mode="consume" foo></div>',
             smarty_function_render_ad_slot([
                 'mode'     => 'consume',
                 'position' => 123

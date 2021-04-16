@@ -59,6 +59,11 @@ class DfpRendererTest extends TestCase
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
 
+        $this->adRenderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getRendererClass' ])
+            ->getMock();
+
         $this->renderer = new DfpRenderer($this->container);
     }
 
@@ -206,6 +211,19 @@ class DfpRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
+
         $output = '<div id="zone_1">
             <script>
             googletag.cmd.push(function() { googletag.display(\'zone_1\'); });
@@ -218,7 +236,8 @@ class DfpRendererTest extends TestCase
             ])
             ->willReturn($output);
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height:600px;width:300px;">'
             . $output . '</div>';
 
         $this->assertEquals(

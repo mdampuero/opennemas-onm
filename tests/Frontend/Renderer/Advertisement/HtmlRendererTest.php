@@ -131,7 +131,19 @@ class HtmlRendererTest extends TestCase
      */
     public function testRenderInline()
     {
-        $ad = new \Advertisement();
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\HtmlRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -142,7 +154,8 @@ class HtmlRendererTest extends TestCase
             ->willReturn('<script>foo bar baz</script>');
 
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height:600px;width:300px;">'
             . '<script>foo bar baz</script></div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
