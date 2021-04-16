@@ -202,6 +202,21 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Generate the ad-slot style based on advertisement maximum sizes
+     *
+     * @param \Advertisement $advertisement The advertisement to render.
+     *
+     * @return string The advertisement ad-slot style.
+     */
+    public function getSlotSizeStyle($advertisement)
+    {
+        $height = max(array_column($advertisement->normalizeSizes(), 'height'));
+        $width  = max(array_column($advertisement->normalizeSizes(), 'width'));
+
+        return ' style="height:' . $height . 'px;width:' . $width . 'px;"';
+    }
+
+    /**
      * Renders an advertisement given the advertisement and parameters.
      *
      * @param \Advertisement $advertisement The advertisement to render.
@@ -366,19 +381,21 @@ class AdvertisementRenderer extends Renderer
      *
      * @param \Advertisement $advertisement The advertisement to render.
      * @param string         $content       The advertisement rendered content.
+     * @param boolean        $size          If the slot will have size or not.
      *
      * @return string The advertisement rendered content wrapped in ad-slot template.
      */
-    protected function getSlot($advertisement, $content)
+    protected function getSlot($advertisement, $content, $size = true)
     {
-        $tpl  = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s">%s</div>';
-        $mark = $this->getMark($advertisement);
+        $mark  = $this->getMark($advertisement);
+        $style = $size ? $this->getSlotSizeStyle($advertisement) : '';
+        $tpl   = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s"%s>%s</div>';
 
         $deviceClasses = $this->getDeviceCSSClasses($advertisement);
         $orientation   = empty($advertisement->params['orientation']) ?
             'top' : $advertisement->params['orientation'];
 
-        return sprintf($tpl, $orientation, $deviceClasses, $mark, $content);
+        return sprintf($tpl, $orientation, $deviceClasses, $mark, $style, $content);
     }
 
     /**
@@ -444,11 +461,12 @@ class AdvertisementRenderer extends Renderer
      */
     protected function renderSafeFrameSlot(\Advertisement $advertisement)
     {
-        $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
+        $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"%s></div>';
         $id   = $advertisement->pk_content;
+        $size = $this->getSlotSizeStyle($advertisement);
         $type = 37; // Floating banner type
 
-        return sprintf($html, $id, $type);
+        return sprintf($html, $id, $type, $size);
     }
 
     /**

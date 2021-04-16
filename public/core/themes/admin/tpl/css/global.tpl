@@ -77,11 +77,11 @@
 
 .oat {
   clear: both;
-  display: none;
+  margin: 0 auto 15px auto;
+  max-width: 100%;
   overflow: hidden;
   position: relative;
   text-align: center;
-  visibility: hidden;
 }
 
 .oat:before {
@@ -94,6 +94,7 @@
   position: absolute;
   text-align: center;
   text-transform: uppercase;
+  top: 0;
   width: 100%;
 }
 
@@ -126,7 +127,8 @@
 }
 
 .oat-visible {
-  display: block;
+  align-items: center;
+  display: grid;
   visibility: visible;
 }
 
