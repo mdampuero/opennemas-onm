@@ -3,6 +3,7 @@
 namespace Test\Common\Core\Component\Google;
 
 use Common\Core\Component\Google\TagManager;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for GoogleTagManager class.
@@ -13,12 +14,42 @@ class TagManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->id = "GMT-0000000";
 
+        $this->instance = new Instance([
+            'activated_modules' => [],
+            'domains'           => [ 'grault.opennemas.com', 'grault.com' ],
+            'internal_name'     => 'grault',
+            'main_domain'       => 1
+        ]);
+
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
             ->setMethods(['getDataLayer'])
             ->getMock();
 
-        $this->object = new TagManager($this->dl);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->object = new TagManager($this->container);
+    }
+
+    /**
+     * Callback function to return custom service based on the name.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.instance':
+                return $this->instance;
+
+            case 'core.service.data_layer':
+                return $this->dl;
+        }
+
+        return null;
     }
 
     /**

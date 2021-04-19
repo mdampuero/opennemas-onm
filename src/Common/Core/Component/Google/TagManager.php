@@ -11,11 +11,11 @@ class TagManager
     /**
      * Initializes the GoogleTagManager.
      *
-     * @param DataLayer $dataLayer The Data Layer service.
+     * @param Container $container The container service.
      */
-    public function __construct($dataLayer)
+    public function __construct($container)
     {
-        $this->dataLayer = $dataLayer;
+        $this->container = $container;
     }
 
     /**
@@ -60,7 +60,13 @@ class TagManager
      */
     public function getGoogleTagManagerBodyCodeAMP($id)
     {
-        $data      = $this->dataLayer->getDataLayer();
+        $modules = $this->container->get('core.instance')->activated_modules;
+
+        $service = in_array('es.openhost.module.dataLayerHenneo', $modules)
+            ? 'core.service.data_layer.henneo'
+            : 'core.service.data_layer';
+
+        $data      = $this->container->get($service)->getDataLayer();
         $dataLayer = '';
 
         if (!empty($data)) {
