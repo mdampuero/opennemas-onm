@@ -32,11 +32,6 @@ services:
                 template: '@Core/collector/brand.html.twig'
                 priority: 2000
 
-    core.service.data_layer:
-        class:     Common\Core\Component\DataLayer\DataLayer
-        arguments: [ '@service_container' ]
-        public:    true
-
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
@@ -153,6 +148,16 @@ services:
     core.security.user.oauth_provider:
         class:     Common\Core\Component\Security\User\OAuthUserProvider
         arguments: [ '@orm.manager', '@security.token_storage', [ 'instance' ] ]
+        public:    true
+
+    core.service.data_layer:
+        class:     Common\Core\Component\DataLayer\DataLayer
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.service.data_layer.henneo:
+        class:     Common\Core\Component\DataLayer\DataLayerHenneo
+        arguments: [ '@service_container' ]
         public:    true
 
     core.theme:
