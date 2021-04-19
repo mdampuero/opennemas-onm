@@ -10,12 +10,21 @@
 namespace Common\Migration\Command;
 
 use Common\Core\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 class CleanCommand extends Command
 {
+    /**
+     * The Filesystem component.
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
     /**
      * {@inheritdoc}
      */
@@ -52,10 +61,18 @@ class CleanCommand extends Command
     /**
      * Executes the command.
      */
-    protected function do()
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->input  = $input;
+        $this->output = $output;
+
+        $this->start();
+        $this->writeStep('Starting command');
+        $this->writeStatus('success', 'DONE ');
+        $this->writeStatus('info', date('(Y-m-d H:i:s)', $this->started), true);
+
         $this->writeStep('Checking parameters');
-        list($database, $path) = $this->getParameters($this->input);
+        list($database, $path) = $this->getParameters($input);
         $this->writeStatus('success', 'DONE', true);
 
         $this->writeStep('Getting files from database');
@@ -77,13 +94,11 @@ class CleanCommand extends Command
             $this->writeStatus('warning', 'IN PROGRESS', true);
         }
 
-        $finder     = new Finder();
-        $fs         = new FileSystem();
         $removed    = 0;
         $notRemoved = 0;
 
-        foreach ($finder->files()->in($path) as $file) {
-            if ($this->output->isVerbose()) {
+        foreach ($this->getFinder()->in($path)->files() as $file) {
+            if ($output->isVerbose()) {
                 $this->writeStep('Checking ' . $file->getPathName(), false, 2);
             }
 
@@ -91,20 +106,22 @@ class CleanCommand extends Command
                 in_array(str_replace($path, '', $file->getPathName()), $files)) {
                 $notRemoved++;
 
-                if ($this->output->isVerbose()) {
-                    $this->writeStatus('warning', 'SKIP', true);
+                if ($output->isVerbose()) {
+                    $this->writeStatus('warning', ' SKIP', true);
                 }
 
                 continue;
             }
 
             try {
-                $fs->remove($file->getPathName());
+                $this->getFileSystem()->remove($file->getPathName());
                 $removed++;
-                $this->writeStatus('success', 'DONE', true);
+                if ($output->isVerbose()) {
+                    $this->writeStatus('success', ' DONE', true);
+                }
             } catch (\Exception $e) {
-                if ($this->output->isVerbose()) {
-                    $this->writeStatus('warning', sprintf('FAIL (%s)', $e->getMessage()), true);
+                if ($output->isVerbose()) {
+                    $this->writeStatus('warning', sprintf(' FAIL (%s)', $e->getMessage()), true);
                 }
             }
         }
@@ -118,25 +135,32 @@ class CleanCommand extends Command
             $removed,
             $notRemoved
         ), true);
+
+        $this->end();
+        $this->writeStep('Ending command');
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', date(' (Y-m-d H:i:s)', $this->ended));
+        $this->writeStatus('warning', " ({$this->getDuration()})", true);
     }
 
     /**
-     * Returns a list of attachment filenames from database.
+     * Returns a new Finder.
      *
-     * @param string $database The database name.
-     *
-     * @return array The list of attachment filenames.
+     * @return Finder The finder.
      */
-    protected function getAttachments(string $database) : array
+    protected function getFinder() : Finder
     {
-        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
-        $conn->selectDatabase($database);
+        return new Finder();
+    }
 
-        $rs = $conn->fetchAll('SELECT path FROM attachments');
-
-        return !$rs ? [] : array_map(function ($a) {
-            return 'files' . $a['path'];
-        }, $rs);
+    /**
+     * Returns a new FileSystem.
+     *
+     * @return FileSystem The fileSystem.
+     */
+    protected function getFileSystem() : FileSystem
+    {
+        return new FileSystem();
     }
 
     /**
@@ -144,11 +168,11 @@ class CleanCommand extends Command
      *
      * @return array The list of parameters.
      */
-    protected function getParameters() : array
+    protected function getParameters(InputInterface $input) : array
     {
-        $database = $this->input->getOption('database');
-        $instance = $this->input->getOption('instance');
-        $path     = $this->input->getOption('path');
+        $database = $input->getOption('database');
+        $instance = $input->getOption('instance');
+        $path     = $input->getOption('path');
 
         if ((empty($database) && empty($instance)) || empty($path)) {
             throw new \InvalidArgumentException(
@@ -170,6 +194,25 @@ class CleanCommand extends Command
         }
 
         return [ $database, $path ];
+    }
+
+    /**
+     * Returns a list of attachment filenames from database.
+     *
+     * @param string $database The database name.
+     *
+     * @return array The list of attachment filenames.
+     */
+    protected function getAttachments(string $database) : array
+    {
+        $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
+        $conn->selectDatabase($database);
+
+        $rs = $conn->fetchAll('SELECT path FROM attachments');
+
+        return !$rs ? [] : array_map(function ($a) {
+            return 'files' . $a['path'];
+        }, $rs);
     }
 
     /**
