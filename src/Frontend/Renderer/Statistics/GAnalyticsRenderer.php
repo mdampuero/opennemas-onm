@@ -36,7 +36,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
         }
 
         if (!$content instanceof Newsletter) {
-            $data = $this->container->get('core.data.layer')->getDataLayer();
+            $data = $this->container->get('core.service.data_layer')->getDataLayer();
             if (!empty($data)) {
                 $dataLayer = trim(json_encode(
                     array_map(function ($a) {

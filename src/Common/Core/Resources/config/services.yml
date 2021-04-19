@@ -32,7 +32,7 @@ services:
                 template: '@Core/collector/brand.html.twig'
                 priority: 2000
 
-    core.data.layer:
+    core.service.data_layer:
         class:     Common\Core\Component\DataLayer\DataLayer
         arguments: [ '@service_container' ]
         public:    true
@@ -58,7 +58,7 @@ services:
 
     core.google.tag_manager:
         class:     Common\Core\Component\Google\TagManager
-        arguments:   [ '@core.data.layer' ]
+        arguments:   [ '@core.service.data_layer' ]
         public:    true
 
     core.image.processor:

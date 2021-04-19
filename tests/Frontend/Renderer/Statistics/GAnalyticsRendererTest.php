@@ -79,7 +79,7 @@ class GAnalyticsRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.data.layer':
+            case 'core.service.data_layer':
                 return $this->dl;
 
             case 'core.globals':

@@ -85,7 +85,7 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
             case 'request_stack':
                 return $this->requestStack;
 
-            case 'core.data.layer':
+            case 'core.service.data_layer':
                 return $this->dl;
 
             case 'request_stack':
