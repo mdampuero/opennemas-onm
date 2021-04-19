@@ -36,7 +36,13 @@ function smarty_outputfilter_data_layer($output, $smarty)
             return $output;
         }
 
-        $code = $smarty->getContainer()->get('core.service.data_layer')
+        $modules = $smarty->getContainer()->get('core.instance')->activated_modules;
+
+        $service = in_array('es.openhost.module.dataLayerHenneo', $modules)
+            ? 'core.service.data_layer.henneo'
+            : 'core.service.data_layer';
+
+        $code = $smarty->getContainer()->get($service)
             ->getDataLayerCode($dataLayerMap);
 
         $output = preg_replace('@(</head>)@', $code . '${1}', $output);

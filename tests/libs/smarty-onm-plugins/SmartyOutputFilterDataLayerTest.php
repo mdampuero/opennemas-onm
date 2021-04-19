@@ -9,6 +9,8 @@
  */
 namespace Tests\Libs\Smarty;
 
+use Common\Model\Entity\Instance;
+
 /**
  * Defines test cases for SmartyOutputFilterDataLayerTest class.
  */
@@ -42,6 +44,11 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataLayerCode' ])
             ->getMock();
 
+        $this->dlh = $this->getMockBuilder('Common\Core\Component\DataLayer\DataLayerHenneo')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDataLayerCode' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -69,6 +76,8 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
+        $this->instance = new Instance([ 'activated_modules' => [ 'es.openhost.module.dataLayerHenneo' ] ]);
+
         $this->output = '<html><head></head><body></body></html>';
     }
 
@@ -85,8 +94,14 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
             case 'request_stack':
                 return $this->requestStack;
 
+            case 'core.instance':
+                return $this->instance;
+
             case 'core.service.data_layer':
                 return $this->dl;
+
+            case 'core.service.data_layer.henneo':
+                return $this->dlh;
 
             case 'request_stack':
                 return $this->stack;
@@ -151,7 +166,7 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
             ->with('data_layer')
             ->willReturn(['foo', 'bar']);
 
-        $this->dl->expects($this->once())->method('getDataLayerCode')
+        $this->dlh->expects($this->once())->method('getDataLayerCode')
             ->willReturn('<script>Data Layer Code</script>');
 
         $output = '<html><head><script>Data Layer Code</script></head><body></body></html>';
