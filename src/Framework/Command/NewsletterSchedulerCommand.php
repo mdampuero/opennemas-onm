@@ -137,6 +137,7 @@ class NewsletterSchedulerCommand extends Command
 
                     $this->sendScheduledTemplate($template, $output, $time);
                 } catch (\Exception $e) {
+
                     $output->writeln(sprintf(
                         '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
                         $e->getMessage()
@@ -172,11 +173,12 @@ class NewsletterSchedulerCommand extends Command
         // Check if it is the right day of the week to send the newsletter
         $todaysDayWeekNumber = (int) $time->format('N');
         if (!in_array($todaysDayWeekNumber, $template->schedule['days'])) {
-            return [false, sprintf(
+            $message = sprintf(
                 'Nothing to execute at current day (current:%d, valid: %s)',
                 $todaysDayWeekNumber,
                 implode(', ', $template->schedule['days'])
-            )];
+            );
+            throw new \Exception($message);
         }
 
         // Check if it is the right hour of the week to send the newsletter
@@ -184,14 +186,12 @@ class NewsletterSchedulerCommand extends Command
         $currentHour = sprintf('%02d:00', (int) $newDate->format('H'));
 
         if (!in_array($currentHour, $template->schedule['hours'])) {
-            return [
-                false,
-                sprintf(
-                    'Nothing to execute at current hour (current:%s, valid: %s)',
-                    $currentHour,
-                    implode(', ', $template->schedule['hours'])
-                )
-            ];
+            $message = sprintf(
+                'Nothing to execute at current hour (current:%s, valid: %s)',
+                $currentHour,
+                implode(', ', $template->schedule['hours'])
+            );
+            throw new \Exception($message);
         }
 
         // check that there are no other newsletters sent for this hour and day
