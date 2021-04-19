@@ -17,8 +17,8 @@
      *   Controller for opinion list.
      */
     .controller('OpinionListCtrl', [
-      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $location, $scope, http, messenger, oqlEncoder) {
+      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder', 'routing',
+      function($controller, $location, $scope, http, messenger, oqlEncoder, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -48,7 +48,8 @@
           deleteList: 'api_v1_backend_opinion_delete_list',
           getList:    'api_v1_backend_opinion_get_list',
           patchItem:  'api_v1_backend_opinion_patch_item',
-          patchList:  'api_v1_backend_opinion_patch_list'
+          patchList:  'api_v1_backend_opinion_patch_list',
+          public:     'frontend_opinion_show'
         };
 
         /**
@@ -60,12 +61,34 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
+          $scope.app.columns.hidden = [ 'category' ];
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"'
           } });
 
           $scope.list();
+        };
+
+        /**
+         * Returns the frontend url for the content given its object.
+         *
+         * @param {String} item  The object item to generate the url from.
+         *
+         * @return {String} The frontend URL.
+         */
+        $scope.getFrontendUrl = function(item) {
+          var date = item.created;
+
+          var formattedDate = moment(date).format('YYYYMMDDHHmmss');
+
+          return $scope.getL10nUrl(
+            routing.generate('frontend_opinion_show', {
+              id: item.pk_content,
+              created: formattedDate,
+              opinion_title: item.slug
+            })
+          );
         };
 
         /**

@@ -1162,7 +1162,7 @@
                           <h4 class="panel-title">
                             <a class="collapsed" data-parent="#panel-group-google-tags" data-toggle="collapse" href="#google-tags">
                               <i class="fa fa-tag"></i>
-                              {t}Google Tags{/t}
+                              {t}Google Tag Manager{/t}
                             </a>
                           </h4>
                         </div>
@@ -1170,7 +1170,7 @@
                           <div class="panel-body">
                             <div class="form-group">
                               <label class="form-label" for="google-tags-id">
-                                {t}Google Tags container Id{/t}
+                                {t}Google Tag Manager container Id{/t}
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="google-tags-id" name="google-tags-id" ng-model="settings.google_tags_id" type="text">
@@ -1178,7 +1178,7 @@
                             </div>
                             <div class="form-group">
                               <label class="form-label" for="google-tags-id-amp">
-                                {t}Google Tags container Id for AMP{/t}
+                                {t}Google Tag Manager container Id for AMP{/t}
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="google-tags-id-amp" name="google-tags-id-amp" ng-model="settings.google_tags_id_amp" type="text">
@@ -1188,6 +1188,50 @@
                               <i class="fa fa-info-circle m-r-5 text-info"></i>
                               {t escape=off}You can get your Google <strong>Tags</strong> container Id from <a class="external-link" href="https://tagmanager.google.com/#/home" target="_blank" ng-click="$event.stopPropagation();">Google tags sign up website</a>.{/t}
                             </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel-group" data-toggle="collapse" id="panel-group-data-layer">
+                      <div class="panel panel-default">
+                        <div class="panel-heading collapsed">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-parent="#panel-group-data-layer" data-toggle="collapse" href="#data-layer">
+                              <i class="fa fa-cubes"></i>
+                              {t}Data Layer{/t}
+                            </a>
+                          </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="data-layer">
+                          <div class="panel-body">
+                            <div class="form-group">
+                              <div class="controls">
+                                <div class="row" ng-repeat="variables in settings.data_layer track by $index">
+                                  <div class="col-lg-6 col-md-9 col-sm-5 col-xs-6 m-b-15">
+                                    <input class="form-control" ng-model="variables.key" placeholder="{t}Variable key{/t}" type="text" required>
+                                  </div>
+                                  <div class="col-lg-4 col-md-9 col-sm-5 col-xs-6 m-b-15">
+                                    <select name="value" ng-model="variables.value" required>
+                                      <option value="">{t}Select a value...{/t}</option>
+                                      <option value="[% key %]" ng-repeat="(key,value) in extra.data_types" ng-selected="[% key === variables.value %]">[% value %]</option>
+                                    </select>
+                                  </div>
+                                  <div class="col-lg-2 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-2 col-sm-offset-0 col-xs-4 col-xs-offset-4">
+                                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeDatalayerVariable($index)" type="button">
+                                      <i class="fa fa-trash-o"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                                <button class="btn btn-block btn-default" ng-click="addDatalayerVariable()" type="button">
+                                  <i class="fa fa-plus"></i>
+                                  {t}Add{/t}
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1562,54 +1606,16 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-6">
-                          <h3>
-                            <i class="fa fa-code"></i>
-                            Scripts
-                          </h3>
-                          <div class="form-group">
-                            <label class="form-label" for="header-script">
-                              {t}Scripts in header{/t}
-                              <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                        <div class="form-group" ng-if="extra.theme_skins.length !== 0">
+                            <label class="form-label" for="theme-style">
+                              <h4>
+                                <i class="fa fa-paint-brush"></i>
+                                {t}Default skin{/t}
+                              </h4>
+                              <span class="help">
+                                {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
+                              </span>
                             </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="header-script" name="header-script" ng-model="settings.header_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="body-start-script">
-                              {t}Scripts at body start{/t}
-                              <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="body-start-script" name="body-start-script" ng-model="settings.body_start_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="form-label" for="body-end-script">
-                              {t}Scripts at body end{/t}
-                              <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <h4>
-                            <i class="fa fa-paint-brush"></i>
-                            {t}Style{/t}
-                          </h4>
-                          <div class="form-group" ng-if="extra.theme_skins.length !== 0">
-                            <label class="form-label" for="site-color">
-                              {t}Default skin{/t}
-                            </label>
-                            <span class="help">
-                              {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
-                            </span>
                             <div class="controls">
                               <div class="input-group">
                                 <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
@@ -1618,17 +1624,74 @@
                               </div>
                             </div>
                           </div>
-                          <div class="form-group">
-                            <label class="form-label" for="custom-css">
-                              {t}Custom CSS{/t}
-                              <span class="help">{t}This sripts will be included in the global.css file.{/t}</span>
-                              <span class="text-danger">Not functional for now</span>
-                            </label>
-                            <div class="controls">
-                              <textarea class="form-control" id="custom-css" name="custom_css" ng-model="settings.custom_css" disabled="disabled" readonly="readonly"></textarea>
+                      </div>
+                      <div class="row">
+                              <div class="col-md-6">
+                                <h4>
+                                  <i class="fa fa-code"></i>
+                                   {t}Scripts{/t} Web
+                                </h4>
+                                <div class="form-group">
+                                  <label class="form-label" for="header-script">
+                                    {t}Scripts in header{/t}
+                                    <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                                  </label>
+                                  <div class="controls">
+                                    <textarea class="form-control" id="header-script" name="header-script" ng-model="settings.header_script" rows="6"></textarea>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="body-start-script">
+                                    {t}Scripts at body start{/t}
+                                    <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                                  </label>
+                                  <div class="controls">
+                                    <textarea class="form-control" id="body-start-script" name="body-start-script" ng-model="settings.body_start_script" rows="6"></textarea>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="form-label" for="body-end-script">
+                                    {t}Scripts at body end{/t}
+                                    <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                                  </label>
+                                  <div class="controls">
+                                    <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                            <div class="col-md-6">
+                              <h4>
+                                <i class="fa fa-code"></i>
+                                  {t}Scripts{/t} AMP
+                              </h4>
+                              <div class="form-group">
+                                <label class="form-label" for="header-script-amp">
+                                  {t}Scripts in header{/t}
+                                  <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="header-script-amp" name="header-script-amp" ng-model="settings.header_script_amp" rows="6"></textarea>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="form-label" for="body-start-script-amp">
+                                  {t}Scripts at body start{/t}
+                                  <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="body-start-script-amp" name="body-start-script-amp" ng-model="settings.body_start_script_amp" rows="6"></textarea>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="form-label" for="body-end-script-amp">
+                                  {t}Scripts at body end{/t}
+                                  <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                                </label>
+                                <div class="controls">
+                                  <textarea class="form-control" id="body-end-script-amp" name="body-end-script-amp" ng-model="settings.body_end_script_amp" rows="6"></textarea>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>

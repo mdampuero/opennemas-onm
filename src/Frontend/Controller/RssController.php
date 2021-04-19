@@ -334,7 +334,7 @@ class RssController extends FrontendController
                     $replacements  = [
                         '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
                         '<figure class="op-interactive">${2}</figure>${1}',
-                        'src="' . SITE_URL . '/media/'
+                        'src="' . $this->container->get('core.instance')->getBaseUrl() . '/media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
@@ -381,10 +381,6 @@ class RssController extends FrontendController
     public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
         $em = $this->get('entity_repository');
-
-        if ($contentType === 'opinion') {
-            $em = $this->get('opinion_repository');
-        }
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [

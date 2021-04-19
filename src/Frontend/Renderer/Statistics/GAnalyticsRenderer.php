@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Frontend\Renderer\Statistics;
 
 use Common\Model\Entity\Newsletter;
@@ -32,8 +25,9 @@ class GAnalyticsRenderer extends StatisticsRenderer
      */
     protected function getParameters($content = null)
     {
-        $accounts = [];
-        $siteUrl  = $this->container->get('core.instance')->getBaseUrl();
+        $accounts  = [];
+        $siteUrl   = $this->container->get('core.instance')->getBaseUrl();
+        $dataLayer = '';
 
         foreach ($this->config as $account) {
             if (array_key_exists('api_key', $account) && !empty(trim($account['api_key']))) {
@@ -41,13 +35,25 @@ class GAnalyticsRenderer extends StatisticsRenderer
             }
         }
 
+        if (!$content instanceof Newsletter) {
+            $data = $this->container->get('core.data.layer')->getDataLayer();
+            if (!empty($data)) {
+                $dataLayer = trim(json_encode(
+                    array_map(function ($a) {
+                        return $a === null ? '' : $a;
+                    }, $data)
+                ), '{}');
+            }
+        }
+
         $params = [
-            'accounts' => $accounts,
-            'content'  => $content,
-            'date'     => date('d/m/Y'),
-            'random'   => rand(0, 0x7fffffff),
-            'url'      => urlencode($siteUrl),
-            'utma'     => '__utma%3D999.999.999.999.999.1%3B'
+            'accounts'  => $accounts,
+            'content'   => $content,
+            'dataLayer' => $dataLayer,
+            'date'      => date('d/m/Y'),
+            'random'    => rand(0, 0x7fffffff),
+            'url'       => urlencode($siteUrl),
+            'utma'      => '__utma%3D999.999.999.999.999.1%3B'
         ];
 
         if (!empty($content) && $content instanceof Newsletter) {

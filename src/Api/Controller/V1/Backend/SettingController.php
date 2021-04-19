@@ -20,6 +20,20 @@ use Common\Core\Controller\Controller;
 class SettingController extends Controller
 {
     /**
+     * The list of settings that must be base64 encoded/decoded.
+     *
+     * @var array
+     */
+    protected $base64Encoded = [
+        'body_end_script',
+        'body_end_script_amp',
+        'body_start_script',
+        'body_start_script_amp',
+        'header_script',
+        'header_script_amp',
+    ];
+
+    /**
      * The list of settings that can be saved.
      *
      * @var array
@@ -27,7 +41,9 @@ class SettingController extends Controller
     protected $keys = [
         'actOn.authentication',
         'body_end_script',
+        'body_end_script_amp',
         'body_start_script',
+        'body_start_script_amp',
         'browser_update',
         'chartbeat',
         'cmp_amp',
@@ -37,6 +53,7 @@ class SettingController extends Controller
         'contact_email',
         'cookies',
         'cookies_hint_url',
+        'data_layer',
         'dynamic_css',
         'elements_in_rss',
         'facebook',
@@ -54,6 +71,7 @@ class SettingController extends Controller
         'google_tags_id_amp',
         'googleplus_page',
         'header_script',
+        'header_script_amp',
         'instagram_page',
         'items_in_blog',
         'items_per_page',
@@ -67,7 +85,6 @@ class SettingController extends Controller
         'onm_digest_user',
         'paypal_mail',
         'pinterest_page',
-        'piwik',
         'recaptcha',
         'redirection',
         'refresh_interval',
@@ -97,7 +114,12 @@ class SettingController extends Controller
      * @var array
      */
     protected $onlyMasters = [
-        'body_end_script', 'body_start_script', 'custom_css', 'header_script',
+        'body_end_script',
+        'body_end_script_amp',
+        'body_start_script',
+        'body_start_script_amp',
+        'header_script',
+        'header_script_amp',
         'robots_txt_rules'
     ];
 
@@ -150,7 +172,7 @@ class SettingController extends Controller
         $locale   = $this->get('core.locale');
 
         // Decode scripts
-        foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
+        foreach ($this->base64Encoded as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_decode($settings[$key]);
             }
@@ -184,7 +206,8 @@ class SettingController extends Controller
                     . '/sections/',
                 'translation_services' =>
                     $this->get('core.factory.translator')->getTranslatorsData(),
-                'theme_skins' => $this->get('core.theme')->getSkins()
+                'theme_skins' => $this->get('core.theme')->getSkins(),
+                'data_types'  => $this->get('core.data.layer')->getTypes()
             ],
             'settings' => $settings,
         ]);
@@ -235,7 +258,7 @@ class SettingController extends Controller
         }
 
         // Encode scripts
-        foreach ([ 'body_end_script', 'body_start_script', 'header_script' ] as $key) {
+        foreach ($this->base64Encoded as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_encode($settings[$key]);
             }

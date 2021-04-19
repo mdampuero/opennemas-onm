@@ -2,6 +2,7 @@
 
 namespace Common\Core\Component\Routing;
 
+use Api\Exception\GetItemException;
 use Api\Service\Service;
 use Opennemas\Cache\Core\Cache;
 use Common\Model\Entity\Category;
@@ -366,19 +367,6 @@ class Redirector
         $response->headers->set('Content-Type', MimeTypeTool::getMimeType($path));
 
         return $response;
-    }
-
-    /**
-     * Returns an opinion by id.
-     *
-     * @param integer $id The opinion id.
-     *
-     * @return Opinion The opinion.
-     */
-    protected function getOpinion($id)
-    {
-        return $this->container->get('opinion_repository')
-            ->find('Opinion', $id);
     }
 
     /**

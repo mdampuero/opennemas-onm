@@ -32,12 +32,6 @@ frontend_opinion_author_frontpage:
     options:
         l10n: true
 
-frontend_opinion_editorial_frontpage:
-    path: /editorial
-    defaults: { _controller: FrontendBundle:Opinion:listAuthor, author_slug: editorial, author_id: 1 }
-    options:
-        l10n: true
-
 frontend_opinion_frontpage:
     path: /opinion
     defaults: { _controller: FrontendBundle:Opinion:list }

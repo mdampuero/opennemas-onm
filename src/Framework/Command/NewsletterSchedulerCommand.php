@@ -67,12 +67,14 @@ class NewsletterSchedulerCommand extends Command
 
                 $instance = $this->getContainer()->get('core.instance');
 
+
                 $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
 
                 // Set base url from instance information to fix url generation
                 $context = $this->getContainer()->get('router')->getContext();
 
                 $context->setHost($instance->getMainDomain());
+
 
                 $context->setScheme(
                     in_array(
@@ -86,7 +88,6 @@ class NewsletterSchedulerCommand extends Command
                     ->get('time_zone');
 
                 $this->getContainer()->get('core.locale')->setTimeZone($timezone);
-
 
                 $this->newsletterSender   = $this->getContainer()->get('core.helper.newsletter_sender');
                 $this->newsletterService  = $this->getContainer()->get('api.service.newsletter');
@@ -258,7 +259,9 @@ class NewsletterSchedulerCommand extends Command
 
         try {
             $newsletter       = $this->newsletterService->createItem($data);
+            $this->getContainer()->get('core.locale')->setContext('frontend')->apply();
             $newsletter->html = $this->newsletterRenderer->render($newsletter);
+            $this->getContainer()->get('core.locale')->setContext('backend')->apply();
             $data             = $newsletter->getData();
 
             $data = array_merge($data, [
