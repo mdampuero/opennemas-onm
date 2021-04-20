@@ -38,16 +38,14 @@ class FormController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('static_pages/form.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'recaptcha'      => $this->get('core.recaptcha')
+            'recaptcha'   => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
-            'x-tags'         => 'frontpage-form',
-            'x-cacheable'    => true,
+            'x-tags'      => 'frontpage-form',
+            'x-cacheable' => true,
         ]);
     }
 
@@ -180,18 +178,17 @@ class FormController extends Controller
     }
 
     /**
-     * Returns the advertisements for the form frontpage.
-     *
-     * @return array The list of advertisemnets.
+     * Loads the list of positions and advertisements on renderer service.
      */
     public function getAds()
     {
-        // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
+            ->findByPositionsAndCategory($positions);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 }

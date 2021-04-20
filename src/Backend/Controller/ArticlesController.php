@@ -260,24 +260,22 @@ class ArticlesController extends Controller
                 ->getListByIdsKeyMapped($article->tags)['items'];
         }
 
+        // Fetch article category name
+        if (!empty($article->category_id)) {
+            $category = $this->getCategory($article->category_id);
+        }
+
         $params = [
             'article'   => $article,
+            'category'  => $category,
             'content'   => $article,
             'contentId' => $article->id,
             'item'      => $article,
             'tags'      => $tags
         ];
 
-        // Fetch article category name
-        if (!empty($article->category_id)) {
-            $category = $this->getCategory($article->category_id);
-        }
-
-        list($positions, $advertisements) = $this->getAdvertisements($category);
-
-        $params['category']       = $category;
-        $params['ads_positions']  = $positions;
-        $params['advertisements'] = $advertisements;
+        $this->getAdvertisements($category, $this->get('core.helper.subscription')
+            ->getToken($article));
 
         if (!empty($article->relatedInner)) {
             $ids = array_map(function ($a) {

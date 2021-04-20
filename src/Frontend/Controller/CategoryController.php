@@ -139,15 +139,13 @@ class CategoryController extends FrontendController
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAdvertisements();
+        $this->getAdvertisements();
 
         return $this->render('blog/blog.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheId,
-            'x-cache-for'    => '+3 hour',
-            'x-cacheable'    => true,
-            'x-tags'         => 'ext-category,' . $slug . ',' . $page
+            'cache_id'    => $cacheId,
+            'x-cache-for' => '+3 hour',
+            'x-cacheable' => true,
+            'x-tags'      => 'ext-category,' . $slug . ',' . $page
         ]);
     }
 
@@ -171,7 +169,9 @@ class CategoryController extends FrontendController
         $advertisements = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $categoryId);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**
@@ -266,13 +266,11 @@ class CategoryController extends FrontendController
         // Prevent invalid page when page is not numeric
         $params['page'] = (int) $params['page'];
 
-        list($positions, $advertisements) = $this->getAdvertisements($item);
+        $this->getAdvertisements($item);
 
         return array_merge($this->params, $params, [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $this->getCacheId($params),
-            'o_canonical'    => $this->getCanonicalUrl($action, $params)
+            'cache_id'    => $this->getCacheId($params),
+            'o_canonical' => $this->getCanonicalUrl($action, $params)
         ]);
     }
 

@@ -443,15 +443,12 @@ class FrontendController extends Controller
             $params['ads_format'] = 'amp';
         }
 
-        list($positions, $advertisements) =
-            $this->getAdvertisements($params['o_category'], $params['o_token']);
+        $this->getAdvertisements($params['o_category'], $params['o_token']);
 
         return array_merge($this->params, $params, [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $this->getCacheId($params),
-            'o_canonical'    => $this->getCanonicalUrl($action, $params),
-            'x-tags'         => implode(',', $params['x-tags'])
+            'cache_id'    => $this->getCacheId($params),
+            'o_canonical' => $this->getCanonicalUrl($action, $params),
+            'x-tags'      => implode(',', $params['x-tags'])
         ]);
     }
 
