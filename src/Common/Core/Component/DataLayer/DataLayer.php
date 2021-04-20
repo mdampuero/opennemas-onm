@@ -9,13 +9,38 @@ namespace Common\Core\Component\DataLayer;
 class DataLayer
 {
     /**
+     * The service container.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * The datalayer map.
+     *
+     * @var array
+     */
+    protected $dataLayerMap = [];
+
+    /**
+     * The variables extractor.
+     *
+     * @var VariablesExtractor
+     */
+    protected $variablesExtractor;
+
+    /**
      * Initializes the DataLayer.
      *
      * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
-        $this->container = $container;
+        $this->container          = $container;
+        $this->dataLayerMap       = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('data_layer');
+        $this->variablesExtractor = $this->container->get('core.variables.extractor');
     }
 
     /**
@@ -25,20 +50,14 @@ class DataLayer
      */
     public function getDataLayer()
     {
-        $dataLayerMap = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('data_layer');
-
-        if (empty($dataLayerMap)) {
+        if (empty($this->dataLayerMap)) {
             return null;
         }
 
         $variables = [];
 
-        foreach ($dataLayerMap as $value) {
-            $variables[$value['key']] = $this->container
-                ->get('core.variables.extractor')
-                ->get($value['value']);
+        foreach ($this->dataLayerMap as $value) {
+            $variables[$value['key']] = $this->variablesExtractor->get($value['value']);
         }
 
         return $variables;

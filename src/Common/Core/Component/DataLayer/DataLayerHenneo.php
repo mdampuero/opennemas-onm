@@ -8,84 +8,87 @@ namespace Common\Core\Component\DataLayer;
 class DataLayerHenneo extends DataLayer
 {
     /**
-     * The array of custom variables for henneo.
-     *
-     * @var array
-     */
-    const CUSTOM_VARIABLES = [ 'extension', 'format', 'publicationDate', 'updateDate' ];
-
-    /**
-     * The array of replacements for extension value.
-     *
-     * @var array
-     */
-    const EXTENSION_REPLACEMENTS = [
-        'article'    => 'articulo',
-        'frontpages' => 'home',
-        'category'   => 'subhome',
-        'album'      => 'galeria',
-        'opinion'    => 'articulo_opinion',
-        'blog'       => 'blogpost',
-        'poll'       => 'encuesta'
-    ];
-
-    /**
      * {@inheritdoc}
      */
     public function getDataLayer()
     {
-        $dataLayerMap = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('data_layer');
+        $variables = parent::getDataLayer();
 
-        if (empty($dataLayerMap)) {
-            return null;
-        }
+        for ($i = 0; $i < count($this->dataLayerMap); $i++) {
+            $method = sprintf('customize%s', ucfirst($this->dataLayerMap[$i]['value']));
 
-        $variables = [];
-
-        foreach ($dataLayerMap as $value) {
-            $variables[$value['key']] = in_array($value['value'], self::CUSTOM_VARIABLES)
-                ? $this->customize($value)
-                : $this->container->get('core.variables.extractor')->get($value['value']);
+            if (method_exists($this, $method)) {
+                $variables[$this->dataLayerMap[$i]['key']] =
+                    $this->{$method}($variables[$this->dataLayerMap[$i]['key']]);
+            }
         }
 
         return $variables;
     }
 
     /**
-     * Returns the customized value for the variable.
+     * Returns the customization for the extension.
      *
-     * @param array $data The data to customize.
+     * @param string $extension The extension to customize.
      *
-     * @return string The customized value.
+     * @return string The customized extension.
      */
-    protected function customize(array $data)
+    protected function customizeExtension(string $extension)
     {
-        $value = $this->container
-            ->get('core.variables.extractor')
-            ->get($data['value']);
+        $replacements = [
+            'article'    => 'articulo',
+            'frontpages' => 'home',
+            'category'   => 'subhome',
+            'album'      => 'galeria',
+            'opinion'    => 'articulo_opinion',
+            'blog'       => 'blogpost',
+            'poll'       => 'encuesta'
+        ];
 
-        if ($data['value'] === 'extension') {
-            if ($value === 'frontpages') {
-                $category = $this->container
-                    ->get('core.variables.extractor')
-                    ->get('categoryId');
+        if ($extension === 'frontpages') {
+            $category = $this->variablesExtractor->get('categoryId');
 
-                if (!empty($category)) {
-                    return 'subhome';
-                }
+            if (!empty($category)) {
+                return 'subhome';
             }
-
-            return !empty(self::EXTENSION_REPLACEMENTS[$value])
-                ? self::EXTENSION_REPLACEMENTS[$value]
-                : $value;
         }
 
-        if ($data['value'] === 'format') {
-            return $value === 'html' ? 'web' : $value;
-        }
+        return $replacements[$extension];
+    }
 
-        return !empty($value) ? date('Ymd', strtotime($value)) : '';
+    /**
+     * Returns the customization for the publicationDate.
+     *
+     * @param null|string $date The date to customize.
+     *
+     * @return null|string The customized date.
+     */
+    protected function customizePublicationDate(?string $date)
+    {
+        return !empty($date) ? date('Ymd', strtotime($date)) : null;
+    }
+
+    /**
+     * Returns the customization for the updateDate.
+     *
+     * @param null|string $date The date to customize.
+     *
+     * @return null|string The customized date.
+     */
+    protected function customizeUpdateDate(?string $date)
+    {
+        return $this->customizePublicationDate($date);
+    }
+
+    /**
+     * Returns the customization for the format.
+     *
+     * @param string $format The format to customize.
+     *
+     * @return string The customized format.
+     */
+    protected function customizeFormat(string $format)
+    {
+        return $format === 'html' ? 'web' : $format;
     }
 }

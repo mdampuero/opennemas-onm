@@ -3,7 +3,6 @@
 namespace Tests\Common\Core\Component\DataLayer;
 
 use Common\Core\Component\DataLayer\DataLayerHenneo;
-use ReflectionMethod;
 
 /**
  * Defines test cases for henneo data layer.
@@ -38,8 +37,6 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
 
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->dataset);
-
-        $this->dl = new DataLayerHenneo($this->container);
     }
 
     /**
@@ -67,9 +64,10 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
     {
         $this->dataset->expects($this->once())->method('get')
             ->with('data_layer')
-            ->willReturn(null);
+            ->willReturn([]);
 
-        $this->assertNull($this->dl->getDataLayer());
+        $dlh = new DataLayerHenneo($this->container);
+        $this->assertNull($dlh->getDataLayer());
     }
 
     /**
@@ -78,15 +76,17 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
     public function testGetDataLayer()
     {
         $settings = [
-            [ 'key' => 'author_id', 'value' => 'authorId' ],
-            [ 'key' => 'author_name', 'value' => 'authorName'],
-            [ 'key' => 'extension', 'value' => 'extension']
+            [ 'key' => 'extension',  'value' => 'extension'],
+            [ 'key' => 'date',       'value' => 'publicationDate' ],
+            [ 'key' => 'updateDate', 'value' => 'updateDate'],
+            [ 'key' => 'format',     'value' => 'format']
         ];
 
         $result = [
-            'author_id'   => 1,
-            'author_name' => 'Baz Glorp',
-            'extension'   => 'subhome'
+            'extension'  => 'blogpost',
+            'date'       => '20210213',
+            'updateDate' => '20210213',
+            'format'     => 'web'
         ];
 
         $this->dataset->expects($this->once())->method('get')
@@ -94,75 +94,49 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
             ->willReturn($settings);
 
         $this->extractor->expects($this->at(0))->method('get')
-            ->with('authorId')
-            ->willReturn(1);
-
-        $this->extractor->expects($this->at(1))->method('get')
-            ->with('authorName')
-            ->willReturn('Baz Glorp');
-
-        $this->extractor->expects($this->at(2))->method('get')
-            ->with('extension')
-            ->willReturn('frontpages');
-
-        $this->extractor->expects($this->at(3))->method('get')
-            ->with('categoryId')
-            ->willReturn(1);
-
-        $this->assertEquals($result, $this->dl->getDataLayer());
-    }
-
-    /**
-     * Tests customize when performs a standard extension replacement.
-     */
-    public function testCustomizeWhenExtension()
-    {
-        $method = new ReflectionMethod(get_class($this->dl), 'customize');
-        $method->setAccessible(true);
-
-        $this->extractor->expects($this->once())->method('get')
             ->with('extension')
             ->willReturn('blog');
 
-        $this->assertEquals(
-            'blogpost',
-            $method->invokeArgs($this->dl, [ [ 'key' => 'extension', 'value' => 'extension' ] ])
-        );
-    }
+        $this->extractor->expects($this->at(1))->method('get')
+            ->with('publicationDate')
+            ->willReturn('2021-02-13 00:00:00');
 
-    /**
-     * Tests customize when performs a format replacement.
-     */
-    public function testCustomizeWhenFormat()
-    {
-        $method = new ReflectionMethod(get_class($this->dl), 'customize');
-        $method->setAccessible(true);
+        $this->extractor->expects($this->at(2))->method('get')
+            ->with('updateDate')
+            ->willReturn('2021-02-13 00:00:00');
 
-        $this->extractor->expects($this->once())->method('get')
+        $this->extractor->expects($this->at(3))->method('get')
             ->with('format')
             ->willReturn('html');
 
-        $this->assertEquals(
-            'web',
-            $method->invokeArgs($this->dl, [ [ 'key' => 'format', 'value' => 'format' ] ])
-        );
+        $dlh = new DataLayerHenneo($this->container);
+        $this->assertEquals($result, $dlh->getDataLayer());
     }
 
     /**
-     * Tests customize when performs a date replacement.
+     * Tests getDataLayer when manual frontpage.
      */
-    public function testCustomizeWhenDate()
+    public function testGetDataLayerWhenManualFrontpage()
     {
-        $method = new ReflectionMethod(get_class($this->dl), 'customize');
-        $method->setAccessible(true);
+        $settings = [
+            [ 'key' => 'extension', 'value' => 'extension'],
+        ];
 
-        $this->extractor->expects($this->once())->method('get')
-            ->with('publicationDate')
-            ->willReturn('2021-04-19 11:35:45');
+        $result = [ 'extension' => 'subhome' ];
 
-        $this->assertEquals(
-            '20210419',
-            $method->invokeArgs($this->dl, [ [ 'key' => 'date', 'value' => 'publicationDate' ] ])
-        );
+        $this->dataset->expects($this->once())->method('get')
+            ->with('data_layer')
+            ->willReturn($settings);
+
+        $this->extractor->expects($this->at(0))->method('get')
+            ->with('extension')
+            ->willReturn('frontpages');
+
+        $this->extractor->expects($this->at(1))->method('get')
+            ->with('categoryId')
+            ->willReturn(1);
+
+        $dlh = new DataLayerHenneo($this->container);
+        $this->assertEquals($result, $dlh->getDataLayer());
     }
 }

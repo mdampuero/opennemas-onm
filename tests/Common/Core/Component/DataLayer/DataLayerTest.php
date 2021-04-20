@@ -100,13 +100,10 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDataLayerNoData()
     {
-        $method = new \ReflectionMethod($this->dl, 'getDataLayer');
-        $method->setAccessible(true);
-
         $this->dataset->expects($this->any())->method('get')
             ->willReturn(null);
 
-        $this->assertEmpty($method->invokeArgs($this->dl, []));
+        $this->assertEmpty($this->dl->getDataLayer());
     }
 
     /**
@@ -114,22 +111,21 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDataLayer()
     {
-        $method = new \ReflectionMethod($this->dl, 'getDataLayer');
-        $method->setAccessible(true);
-
         $this->dataset->expects($this->any())->method('get')
             ->willReturn([
                 [ 'key' => 'foo', 'value' => 'thud' ],
                 [ 'key' => 'bar', 'value' => 'wobble' ],
                 [ 'key' => 'baz', 'value' => 'waldo' ],
-            ]);
+                ]);
 
         $this->extractor->expects($this->any())->method('get')
             ->willReturn('gorp');
 
+        $dl = new DataLayer($this->container);
+
         $this->assertEquals(
             [ 'foo' => 'gorp', 'bar' => 'gorp', 'baz' => 'gorp' ],
-            $method->invokeArgs($this->dl, [])
+            $dl->getDataLayer()
         );
     }
 
