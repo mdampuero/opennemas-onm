@@ -133,11 +133,14 @@ class NewsletterSchedulerCommand extends Command
                 try {
                     $output->write(str_pad(' - Newsletter send and registered ', 50, '.'));
 
-                    $this->canWeSendTemplate($template, $time);
-
-                    $this->sendScheduledTemplate($template, $output, $time);
+                    if ($this->canWeSendTemplate($template, $time)) {
+                        $this->sendScheduledTemplate($template, $output, $time);
+                    } else {
+                        $output->writeln(sprintf(
+                            '<fg=yellow;options=bold>SKIP</> <fg=blue;options=bold>(Nothing to send)</>'
+                        ));
+                    }
                 } catch (\Exception $e) {
-
                     $output->writeln(sprintf(
                         '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
                         $e->getMessage()
@@ -173,12 +176,7 @@ class NewsletterSchedulerCommand extends Command
         // Check if it is the right day of the week to send the newsletter
         $todaysDayWeekNumber = (int) $time->format('N');
         if (!in_array($todaysDayWeekNumber, $template->schedule['days'])) {
-            $message = sprintf(
-                'Nothing to execute at current day (current:%d, valid: %s)',
-                $todaysDayWeekNumber,
-                implode(', ', $template->schedule['days'])
-            );
-            throw new \Exception($message);
+            return false;
         }
 
         // Check if it is the right hour of the week to send the newsletter
@@ -186,12 +184,7 @@ class NewsletterSchedulerCommand extends Command
         $currentHour = sprintf('%02d:00', (int) $newDate->format('H'));
 
         if (!in_array($currentHour, $template->schedule['hours'])) {
-            $message = sprintf(
-                'Nothing to execute at current hour (current:%s, valid: %s)',
-                $currentHour,
-                implode(', ', $template->schedule['hours'])
-            );
-            throw new \Exception($message);
+            return false;
         }
 
         // check that there are no other newsletters sent for this hour and day
@@ -218,17 +211,11 @@ class NewsletterSchedulerCommand extends Command
                 && (int) $newDate->format('h') !== (int) $sentNewsletters['items'][0]->sent->format('h')
             );
 
-        $message = 'Go ahead';
         if (!$canSend) {
-            $message = sprintf(
-                'Unable to send the newsletter, latest sent collissions (id: %s, sent: %s UTC)',
-                $sentNewsletters['items'][0]->id,
-                $sentNewsletters['items'][0]->sent->format('Y-m-d H:i:s')
-            );
-            throw new \Exception($message);
+            return false;
         }
 
-        return [$canSend, $message];
+        return true;
     }
 
     /**
