@@ -53,7 +53,7 @@ class DataLayerHenneo extends DataLayer
             }
         }
 
-        return $replacements[$extension];
+        return !empty($replacements[$extension]) ? $replacements[$extension] : $extension;
     }
 
     /**
