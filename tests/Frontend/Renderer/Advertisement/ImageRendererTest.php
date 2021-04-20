@@ -208,7 +208,7 @@ class ImageRendererTest extends TestCase
 
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height:600px;width:300px;">foo</div>';
+            . 'style="height:600px;">foo</div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
     }

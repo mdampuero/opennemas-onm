@@ -211,9 +211,8 @@ class AdvertisementRenderer extends Renderer
     public function getSlotSizeStyle($advertisement)
     {
         $height = max(array_column($advertisement->normalizeSizes(), 'height'));
-        $width  = max(array_column($advertisement->normalizeSizes(), 'width'));
 
-        return ' style="height:' . $height . 'px;width:' . $width . 'px;"';
+        return ' style="height:' . $height . 'px;"';
     }
 
     /**

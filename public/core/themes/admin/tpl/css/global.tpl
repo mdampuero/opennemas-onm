@@ -77,6 +77,7 @@
 
 .oat {
   clear: both;
+  justify-content: center;
   margin: 0 auto 15px auto;
   max-width: 100%;
   overflow: hidden;
