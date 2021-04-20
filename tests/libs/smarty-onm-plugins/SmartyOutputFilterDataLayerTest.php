@@ -44,11 +44,6 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataLayerCode' ])
             ->getMock();
 
-        $this->dlh = $this->getMockBuilder('Common\Core\Component\DataLayer\DataLayerHenneo')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getDataLayerCode' ])
-            ->getMock();
-
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -166,7 +161,7 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
             ->with('data_layer')
             ->willReturn(['foo', 'bar']);
 
-        $this->dlh->expects($this->once())->method('getDataLayerCode')
+        $this->dl->expects($this->once())->method('getDataLayerCode')
             ->willReturn('<script>Data Layer Code</script>');
 
         $output = '<html><head><script>Data Layer Code</script></head><body></body></html>';

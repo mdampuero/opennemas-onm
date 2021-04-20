@@ -37,11 +37,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
         }
 
         if (!$content instanceof Newsletter) {
-            $service = in_array('es.openhost.module.dataLayerHenneo', $instance->activated_modules)
-                ? 'core.service.data_layer.henneo'
-                : 'core.service.data_layer';
-
-            $data = $this->container->get($service)->getDataLayer();
+            $data = $this->container->get('core.service.data_layer')->getDataLayer();
             if (!empty($data)) {
                 $dataLayer = trim(json_encode(
                     array_map(function ($a) {

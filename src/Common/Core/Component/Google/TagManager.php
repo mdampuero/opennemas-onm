@@ -60,13 +60,7 @@ class TagManager
      */
     public function getGoogleTagManagerBodyCodeAMP($id)
     {
-        $modules = $this->container->get('core.instance')->activated_modules;
-
-        $service = in_array('es.openhost.module.dataLayerHenneo', $modules)
-            ? 'core.service.data_layer.henneo'
-            : 'core.service.data_layer';
-
-        $data      = $this->container->get($service)->getDataLayer();
+        $data      = $this->container->get('core.service.data_layer')->getDataLayer();
         $dataLayer = '';
 
         if (!empty($data)) {
