@@ -193,7 +193,7 @@
             <span class="help m-l-5">
               {t}Source{/t} - {t}Target{/t}
             </span>
-            <div class="controls">
+            <div class="controls grid-500-v-scroll">
               <div class="row m-t-15" ng-repeat="author in item.authors_map track by $index">
                 <div class="col-lg-5 col-md-9 col-sm-5 col-xs-6 m-b-15">
                   <input class="form-control" ng-model="author.slug" placeholder="{t}Author name from source{/t}" required type="text">
@@ -245,7 +245,7 @@
             <span class="help m-l-5">
               {t}Source{/t} - {t}Target{/t}
             </span>
-            <div class="controls">
+            <div class="controls grid-500-v-scroll">
               <div class="row m-t-15" ng-repeat="category in item.categories_map track by $index">
                 <div class="col-lg-5 col-md-9 col-sm-5 col-xs-6 m-b-15">
                   <input class="form-control" ng-model="category.slug" placeholder="{t}Category name from source{/t}" type="text">

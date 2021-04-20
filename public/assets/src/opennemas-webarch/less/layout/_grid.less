@@ -45,9 +45,9 @@
 }
 
 .grid .grid-collapse-body.expanded {
-  max-height: 500px;
+  max-height: 1000px;
   opacity: 1;
-  overflow: auto;
+  overflow: visible;
   padding-bottom: 15px;
   visibility: visible;
 }
@@ -169,4 +169,10 @@
   display: block;
   width: 15px;
   margin: 3px auto;
+}
+
+.grid-500-v-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
 }
