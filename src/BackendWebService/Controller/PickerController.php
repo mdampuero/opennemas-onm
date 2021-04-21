@@ -83,10 +83,15 @@ class PickerController extends Controller
                 ->get();
 
             if (!empty($tagSearcheableWord)) {
+                $titleSql .= ' OR pk_content IN (SELECT contents_tags.content_id FROM tags' .
+                    ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
+                    " WHERE tags.slug LIKE '%$tagSearcheableWord%')";
+            }
+           /*if (!empty($tagSearcheableWord)) {
                 $titleSql .= ' OR EXISTS(SELECT 1 FROM tags' .
                     ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
                     " WHERE contents_tags.content_id = contents.pk_content AND tags.slug LIKE '%$tagSearcheableWord%')";
-            }
+            }*/
             $titleSql .= ')';
             $filter[]  = $titleSql;
         }
@@ -95,7 +100,7 @@ class PickerController extends Controller
             $filter[] = "content_category.category_id = $category";
         }
 
-        $filter[] = "in_litter != 1";
+        //$filter[] = "in_litter = 0";
 
         $em = $this->get('entity_repository');
 
