@@ -212,7 +212,7 @@ class AdvertisementRenderer extends Renderer
     {
         $height = max(array_column($advertisement->normalizeSizes(), 'height'));
 
-        return ' style="height:' . $height . 'px;"';
+        return ' style="height: ' . $height . 'px;"';
     }
 
     /**

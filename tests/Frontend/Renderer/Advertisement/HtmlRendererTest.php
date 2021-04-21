@@ -155,7 +155,7 @@ class HtmlRendererTest extends TestCase
 
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height:600px;">'
+            . 'style="height: 600px;">'
             . '<script>foo bar baz</script></div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
