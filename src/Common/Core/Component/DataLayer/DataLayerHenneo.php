@@ -35,6 +35,16 @@ class DataLayerHenneo extends DataLayer
      */
     protected function customizeExtension(string $extension)
     {
+        $contentTypes = [
+            'album',
+            'blog',
+            'event',
+            'letter',
+            'opinion',
+            'poll',
+            'video',
+        ];
+
         $replacements = [
             'article'    => 'articulo',
             'frontpages' => 'home',
@@ -44,6 +54,12 @@ class DataLayerHenneo extends DataLayer
             'blog'       => 'blogpost',
             'poll'       => 'encuesta'
         ];
+
+        if (in_array($extension, $contentTypes)) {
+            if (empty($this->variablesExtractor->get('contentId'))) {
+                return 'subhome';
+            }
+        }
 
         if ($extension === 'frontpages') {
             $category = $this->variablesExtractor->get('categoryId');
@@ -65,7 +81,9 @@ class DataLayerHenneo extends DataLayer
      */
     protected function customizePublicationDate(?string $date)
     {
-        return !empty($date) ? date('Ymd', strtotime($date)) : null;
+        $date = new \DateTime($date);
+
+        return !empty($date) ? $date->format('Ymd') : null;
     }
 
     /**

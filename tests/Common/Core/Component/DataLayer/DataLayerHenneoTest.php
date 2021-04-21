@@ -109,6 +109,33 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
             ->with('format')
             ->willReturn('html');
 
+        $this->extractor->expects($this->at(4))->method('get')
+            ->with('contentId')
+            ->willReturn(1);
+
+        $dlh = new DataLayerHenneo($this->container);
+        $this->assertEquals($result, $dlh->getDataLayer());
+    }
+
+    /**
+     * Tests getDataLayer when content frontpage.
+     */
+    public function testGetDataLayerWhenContentFrontpage()
+    {
+        $settings = [
+            [ 'key' => 'extension',  'value' => 'extension']
+        ];
+
+        $this->dataset->expects($this->once())->method('get')
+            ->with('data_layer')
+            ->willReturn($settings);
+
+        $this->extractor->expects($this->at(0))->method('get')
+            ->with('extension')
+            ->willReturn('blog');
+
+        $result = [ 'extension' => 'subhome' ];
+
         $dlh = new DataLayerHenneo($this->container);
         $this->assertEquals($result, $dlh->getDataLayer());
     }

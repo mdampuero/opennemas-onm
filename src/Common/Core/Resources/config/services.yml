@@ -53,7 +53,7 @@ services:
 
     core.google.tag_manager:
         class:     Common\Core\Component\Google\TagManager
-        arguments:   [ '@core.instance' ]
+        arguments:   [ '@service_container' ]
         public:    true
 
     core.image.processor:
