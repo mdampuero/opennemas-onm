@@ -2,6 +2,7 @@
 
 namespace Tests\Common\Core\Functions;
 
+use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Theme;
 
@@ -51,6 +52,14 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUrl' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getBaseUrl' ])
+            ->getMock();
+
+        $this->theme = $this->getMockBuilder('Theme')->getMock();
+
+        $this->theme->path = '/theme/fred';
+
         $this->ch->expects($this->any())->method('isReadyForPublish')
             ->willReturn(true);
 
@@ -94,6 +103,12 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             case 'router':
                 return $this->router;
 
+            case 'core.instance':
+                return $this->instance;
+
+            case 'core.theme':
+                return $this->theme;
+
             default:
                 return null;
         }
@@ -108,6 +123,22 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->with(new Content());
 
         get_url(new Content());
+    }
+
+    /**
+     * Tests get_image_dir
+     */
+    public function testGetImageDir()
+    {
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://opennemas.com');
+
+        $this->assertEquals('/theme/fred/images', get_image_dir());
+        $this->assertEquals('https://opennemas.com/theme/fred/images', get_image_dir(true));
+
+        $this->theme = null;
+        $this->assertEquals(null, get_image_dir());
+        $this->assertEquals(null, get_image_dir(true));
     }
 
     /**
