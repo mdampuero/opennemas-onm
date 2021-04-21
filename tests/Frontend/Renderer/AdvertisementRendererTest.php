@@ -114,7 +114,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::__construct
+     * Tests __construct.
      */
     public function testConstruct()
     {
@@ -198,7 +198,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getInlineFormats
+     * Tests getInlineFormats.
      */
     public function testGetInlineFormats()
     {
@@ -209,7 +209,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceCSSClasses
+     * Tests getDeviceCSSClasses.
      */
     public function testGetDeviceCSSClasses()
     {
@@ -239,7 +239,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
+     * Tests getMark.
      */
     public function testGetMark()
     {
@@ -258,7 +258,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
+     * Tests getMark with custom.
      */
     public function testGetMarkWithCustomDefaultMark()
     {
@@ -273,7 +273,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMarkOrientation
+     * Tests getMarkOrientation.
      */
     public function testGetMarkOrientation()
     {
@@ -290,7 +290,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMarkOrientation
+     * Tests getMarkOrientation when empty.
      */
     public function testGetMarkOrientationWhenEmpty()
     {
@@ -306,7 +306,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
+     * Tests getSlot.
      */
     public function testGetSlot()
     {
@@ -330,7 +330,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlotSizeStyle
+     * Tests getSlotSizeStyle.
      */
     public function testGetSlotSizeStyle()
     {
@@ -363,7 +363,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * Tests render with safeframe.
      */
     public function testRenderWithSafeFrameMode()
     {
@@ -390,7 +390,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * Tests render with inline mode.
      */
     public function testRenderWithInlineMode()
     {
@@ -423,7 +423,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * Tests renderInlineHeaders without ads.
      */
     public function testRenderInlineHeadersWithNoAds()
     {
@@ -431,7 +431,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * Tests renderInlineHeaders.
      */
     public function testRenderInlineHeaders()
     {
@@ -475,7 +475,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderDfpHeaders
+     * Tests renderDfpHeaders.
      */
     public function testRenderDfpHeaders()
     {
@@ -505,7 +505,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderReviveHeaders
+     * Tests renderReviveHeaders.
      */
     public function testRenderReviveHeaders()
     {
@@ -535,7 +535,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSmartHeaders
+     * Tests renderSmartHeaders.
      */
     public function testRenderSmartHeaders()
     {
@@ -565,7 +565,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial.
      */
     public function testRenderInlineInterstitial()
     {
@@ -644,7 +644,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial with empty sizes.
      */
     public function testRenderInlineInterstitialWithEmptySizes()
     {
@@ -661,7 +661,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial when no ad.
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
@@ -684,7 +684,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceAdvertisementSize
+     * Tests getDeviceAdvertisementSize.
      */
     public function testGetDeviceAdvertisementSize()
     {
@@ -717,7 +717,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrameSlot
+     * Tests renderSafeFrameSlot.
      */
     public function testRenderSafeFrameSlot()
     {
@@ -754,7 +754,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getRendererClass
+     * Tests getRendererClass.
      */
     public function testGetRendererClass()
     {
@@ -794,7 +794,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * Tests isFloating when is a floating advertisement.
+     * Tests isFloating when is no floating advertisement.
      */
     public function testIsFloatingWhenFalse()
     {

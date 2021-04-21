@@ -86,7 +86,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -127,7 +127,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -162,7 +162,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -182,7 +182,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::RenderSafeFrame
+     * Tests RenderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -207,7 +207,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::getHtml
+     * Tests getHtml.
      */
     public function testGetHtml()
     {

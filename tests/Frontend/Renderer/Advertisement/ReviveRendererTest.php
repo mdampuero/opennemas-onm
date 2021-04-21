@@ -106,7 +106,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderAmp
+     * Tests renderAmp.
      */
     public function testRenderAmp()
     {
@@ -151,7 +151,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -206,7 +206,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -257,7 +257,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     * Tests renderInline with AMP.
      */
     public function testRenderInlineWithAmp()
     {
@@ -279,7 +279,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -301,7 +301,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderSafeFrame
+     * Tests renderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -369,7 +369,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInlineHeader
+     * Tests renderInlineHeader.
      */
     public function testRenderInlineHeader()
     {

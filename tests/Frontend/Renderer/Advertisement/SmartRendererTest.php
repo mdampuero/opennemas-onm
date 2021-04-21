@@ -79,7 +79,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderAmp
+     * @Tests renderAmp.
      */
     public function testRenderAmp()
     {
@@ -154,7 +154,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderFia
+     * @Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -220,7 +220,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     * @Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -290,7 +290,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     * @Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -312,7 +312,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     * @Tests renderInline with AMP.
      */
     public function testRenderInlineWithAmp()
     {
@@ -334,7 +334,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderSafeFrame
+     * @Tests renderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -418,7 +418,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInlineHeader
+     * @Tests renderInlineHeader.
      */
     public function testRenderInlineHeader()
     {
@@ -489,7 +489,7 @@ class SmartRendererTest extends TestCase
         );
     }
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getCustomCode
+     * @Tests getCustomCode.
      */
     public function testGetCustomCode()
     {
@@ -516,7 +516,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getTargeting
+     * @Tests getTargeting.
      */
     public function testGetTargeting()
     {

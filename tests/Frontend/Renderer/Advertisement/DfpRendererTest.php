@@ -84,7 +84,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderAmp
+     * Tests renderAmp.
      */
     public function testRenderAmp()
     {
@@ -143,7 +143,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -203,7 +203,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -247,7 +247,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     * Tests renderInline with AMP.
      */
     public function testRenderInlineWithAmp()
     {
@@ -269,7 +269,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -291,7 +291,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderSafeFrame
+     * Tests renderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -381,7 +381,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInlineHeader
+     * Tests renderInlineHeader.
      */
     public function testRenderInlineHeader()
     {
@@ -452,7 +452,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getCustomCode
+     * Tests getCustomCode.
      */
     public function testGetCustomCode()
     {
@@ -479,7 +479,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getTargeting
+     * Tests getTargeting.
      */
     public function testGetTargeting()
     {
@@ -516,7 +516,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getAmpMultiSizes
+     * Tests getAmpMultiSizes.
      */
     public function testGetAmpMultiSizes()
     {

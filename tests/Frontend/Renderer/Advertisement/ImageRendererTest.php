@@ -122,7 +122,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -180,7 +180,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -214,7 +214,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -234,7 +234,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderSafeFrame
+     * Tests renderSafeFrame.
      */
     public function testRenderSafeFrameWithImage()
     {
@@ -258,7 +258,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderSafeFrame
+     * Tests renderSafeFrame with empty image.
      */
     public function testRenderSafeFrameWithEmptyImage()
     {
@@ -268,7 +268,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::RenderSafeFrameImage
+     * Tests RenderSafeFrameImage with flash.
      */
     public function testRenderSafeFrameImageWithFlash()
     {
@@ -347,7 +347,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::RenderSafeFrameImage
+     * Tests RenderSafeFrameImage.
      */
     public function testRenderSafeFrameImage()
     {
@@ -412,7 +412,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImage
+     * Tests getImage.
      */
     public function testGetImage()
     {
@@ -445,7 +445,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml.
      */
     public function testGetImageHtml()
     {
@@ -496,7 +496,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml without image.
      */
     public function testGetImageHtmlWithoutImage()
     {
@@ -518,7 +518,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml with flash.
      */
     public function testGetImageHtmlWithFlash()
     {
@@ -575,7 +575,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml with AMP.
      */
     public function testGetImageHtmlWithAMP()
     {
