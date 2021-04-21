@@ -49,10 +49,13 @@ class HtmlRenderer extends AdvertisementRenderer
         $format = $params['ads_format'] ?? null;
 
         // Generate slot without size for inline formats (AMP, Newsletter and FIA)
-        $isSized = !in_array($format, $this->inlineFormats);
         return $format === 'fia'
             ? $this->renderFia($ad, $params)
-            : $this->getSlot($ad, $this->getHtml($ad), $isSized);
+            : $this->getSlot(
+                $ad,
+                $this->getHtml($ad),
+                !in_array($format, $this->inlineFormats)
+            );
     }
 
     /**
