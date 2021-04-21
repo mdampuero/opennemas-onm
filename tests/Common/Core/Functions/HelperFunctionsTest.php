@@ -48,7 +48,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'generate' ])
+            ->setMethods([ 'getUrl' ])
             ->getMock();
 
         $this->ch->expects($this->any())->method('isReadyForPublish')
@@ -104,90 +104,10 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUrlForContent()
     {
-        $item = new Content();
+        $this->ugh->expects($this->once())->method('getUrl')
+            ->with(new Content());
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => false, '_format' => null ])
-            ->willReturn('/grault/fred');
-
-        $this->lrh->expects($this->once())->method('localizeUrl')
-            ->with('/grault/fred')->willReturn('/en/grault/fred');
-
-        $this->assertEquals('/en/grault/fred', get_url($item, [ 'flob' => 'grault' ]));
-    }
-
-    /**
-     * Tests get_url when the provided content has a related content (an array
-     * with item, type, caption and position).
-     */
-    public function testGetUrlForRelatedContent()
-    {
-        $item = new Content();
-
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => false, '_format' => null ])
-            ->willReturn('/grault/fred');
-
-        $this->lrh->expects($this->once())->method('localizeUrl')
-            ->with('/grault/fred')->willReturn('/en/grault/fred');
-
-        $this->assertEquals(
-            '/en/grault/fred',
-            get_url([ 'item' => $item ], [ 'flob' => 'grault' ])
-        );
-    }
-
-    /**
-     * Tests get_url for contents from external data source.
-     */
-    public function testGetUrlForExternalContent()
-    {
-        $item = new Content();
-
-        $item->externalUri = '/xyzzy/plugh';
-
-        $this->assertEquals('/xyzzy/plugh', get_url($item));
-    }
-
-    /**
-     * Tests get_url when the provided parameter is a route name.
-     */
-    public function testGetUrlForRoute()
-    {
-        $this->router->expects($this->exactly(2))->method('generate')
-            ->with('wibble', [ 'flob' => 'grault' ])
-            ->willReturn('/grault/fred');
-
-        $this->lrh->expects($this->exactly(2))->method('localizeUrl')
-            ->with('/grault/fred')->willReturn('/en/grault/fred');
-
-        $this->assertEquals('/en/grault/fred', get_url('wibble', [
-            'flob' => 'grault'
-        ]));
-
-        $this->assertEquals('/en/grault/fred', get_url('wibble', [
-            '_absolute' => true,
-            'flob' => 'grault'
-        ]));
-    }
-
-    /**
-     * Tests get_url when the provided parameter is empty.
-     */
-    public function testGetUrlWhenEmpty()
-    {
-        $this->assertEmpty(get_url(null));
-    }
-
-    /**
-     * Tests get_url when an error is thrown.
-     */
-    public function testGetUrlWhenError()
-    {
-        $this->router->expects($this->once())->method('generate')
-            ->will($this->throwException(new \Exception()));
-
-        $this->assertEmpty(get_url('garply'));
+        get_url(new Content());
     }
 
     /**

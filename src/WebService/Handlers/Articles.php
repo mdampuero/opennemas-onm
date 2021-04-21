@@ -51,7 +51,7 @@ class Articles
         $article->external    = 1;
         $article->externalUri = getService('router')
             ->generate('frontend_external_article_show', [
-                'category_slug' => get_category_slug($article),
+                'category_slug' => getService('core.helper.category')->getCategorySlug($article),
                 'slug'          => $article->slug,
                 'article_id'    => date('YmdHis', strtotime($article->created)) .
                 sprintf('%06d', $article->pk_content),
