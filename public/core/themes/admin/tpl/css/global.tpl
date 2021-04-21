@@ -78,7 +78,6 @@
 .oat {
   clear: both;
   justify-content: center;
-  margin: 0 auto 15px auto;
   max-width: 100%;
   overflow: hidden;
   position: relative;
@@ -95,7 +94,6 @@
   position: absolute;
   text-align: center;
   text-transform: uppercase;
-  top: 0;
   width: 100%;
 }
 
@@ -156,22 +154,25 @@
 }
 
 .oat-left:before {
-  left: 0;
-  margin-left: -35px;
-  margin-top: -10px;
+  left: -50%;
+  margin-left: 7.5px;
   position: absolute;
   top: 50%;
   transform: rotate(-90deg);
 }
 
 .oat-right:before {
-  right: 0;
-  margin-left: auto;
-  margin-right: -35px;
-  margin-top: -10px;
+  right: -50%;
+  margin-right: 7.5px;
   position: absolute;
   top: 50%;
   transform: rotate(90deg);
+}
+
+.oat-top:before {
+  position: absolute;
+  margin-bottom: 0;
+  top: 0;
 }
 
 .recaptcha {

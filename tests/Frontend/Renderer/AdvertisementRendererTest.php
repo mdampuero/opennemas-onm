@@ -273,6 +273,39 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getMarkOrientation
+     */
+    public function testGetMarkOrientation()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getMarkOrientation');
+        $method->setAccessible(true);
+
+        $ad         = new \Advertisement();
+        $ad->params = [ 'orientation' => 'waldo' ];
+
+        $this->assertEquals(
+            'waldo',
+            $method->invokeArgs($this->renderer, [ $ad ])
+        );
+    }
+
+    /**
+     * @covers \Frontend\Renderer\AdvertisementRenderer::getMarkOrientation
+     */
+    public function testGetMarkOrientationWhenEmpty()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getMarkOrientation');
+        $method->setAccessible(true);
+
+        $ad = new \Advertisement();
+
+        $this->assertEquals(
+            'top',
+            $method->invokeArgs($this->renderer, [ $ad ])
+        );
+    }
+
+    /**
      * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
      */
     public function testGetSlot()
@@ -286,7 +319,7 @@ class AdvertisementRendererTest extends TestCase
         $ad->params     = [ 'height' => 600, 'width' => 300, 'floating' => true ];
 
         $output = '<div class="ad-slot oat oat-visible oat-top "'
-            . ' data-mark="Advertisement" style="height: 600px;">foo</div>';
+            . ' data-mark="Advertisement" style="height: 615px;">foo</div>';
 
         $content = 'foo';
 
@@ -321,7 +354,7 @@ class AdvertisementRendererTest extends TestCase
             ]
         ];
 
-        $output = ' style="height: 600px;"';
+        $output = ' style="height: 615px;"';
 
         $this->assertEquals(
             $output,
@@ -344,7 +377,7 @@ class AdvertisementRendererTest extends TestCase
         ];
 
         $returnValue = '<div class="ad-slot oat" data-id="123"'
-            . ' data-type="37" style="height: 600px;"></div>';
+            . ' data-type="37" style="height: 615px;"></div>';
 
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
@@ -712,7 +745,7 @@ class AdvertisementRendererTest extends TestCase
         ];
 
         $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37" '
-            . 'style="height: 250px;"></div>';
+            . 'style="height: 265px;"></div>';
 
         $this->assertEquals(
             $returnValue,

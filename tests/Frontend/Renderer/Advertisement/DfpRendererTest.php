@@ -237,7 +237,7 @@ class DfpRendererTest extends TestCase
             ->willReturn($output);
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height: 600px;">'
+            . 'style="height: 615px;">'
             . $output . '</div>';
 
         $this->assertEquals(

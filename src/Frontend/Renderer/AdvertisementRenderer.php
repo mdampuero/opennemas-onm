@@ -202,7 +202,7 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
-     * Generate the ad-slot style based on advertisement maximum sizes
+     * Generate the ad-slot style based on advertisement maximum sizes and mark size
      *
      * @param \Advertisement $advertisement The advertisement to render.
      *
@@ -210,9 +210,14 @@ class AdvertisementRenderer extends Renderer
      */
     public function getSlotSizeStyle($advertisement)
     {
-        $height = max(array_column($advertisement->normalizeSizes(), 'height'));
+        $advertisementHeight = max(array_column($advertisement->normalizeSizes(), 'height'));
 
-        return ' style="height: ' . $height . 'px;"';
+        // If orientation is not right or left add mark height to the slot height
+        $slotHeight = !in_array($this->getMarkOrientation($advertisement), ['left', 'right'])
+            ? $advertisementHeight + 15
+            : $advertisementHeight;
+
+        return ' style="height: ' . $slotHeight . 'px;"';
     }
 
     /**
@@ -293,9 +298,6 @@ class AdvertisementRenderer extends Renderer
 
         $advertisement = $interstitials[array_rand($interstitials)];
 
-        $orientation = empty($advertisement->params['orientation'])
-            ? 'top' : $advertisement->params['orientation'];
-
         $size = $this->getDeviceAdvertisementSize($advertisement, 'desktop');
         if (empty($size)) {
             return '';
@@ -307,7 +309,7 @@ class AdvertisementRenderer extends Renderer
             'advertisement/helpers/inline/interstitial.tpl',
             [
                 'size'        => $size,
-                'orientation' => $orientation,
+                'orientation' => $this->getMarkOrientation($advertisement),
                 'ad'          => $advertisement,
                 'content'     => $renderer->renderInline($advertisement, $params)
             ]
@@ -360,6 +362,17 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Returns the advertisement mark orientation.
+     *
+     * @param \Advertisement $advertisement The advertisement to render.
+     * @return string                       The advertisement mark orientation.
+     */
+    protected function getMarkOrientation($advertisement)
+    {
+        return $advertisement->params['orientation'] ?? 'top';
+    }
+
+    /**
      * Returns the HTML for a safe frame advertisement slot
      *
      * @param int $type The advertisement script type.
@@ -391,8 +404,7 @@ class AdvertisementRenderer extends Renderer
         $tpl   = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s"%s>%s</div>';
 
         $deviceClasses = $this->getDeviceCSSClasses($advertisement);
-        $orientation   = empty($advertisement->params['orientation']) ?
-            'top' : $advertisement->params['orientation'];
+        $orientation   = $this->getMarkOrientation($advertisement);
 
         return sprintf($tpl, $orientation, $deviceClasses, $mark, $style, $content);
     }
