@@ -68,7 +68,7 @@ class ArticleController extends BackendController
         }
 
         try {
-            $oql .= ' order by created desc limit ' . $itemsPerPage;
+            $oql .= 'order by created desc limit ' . $itemsPerPage;
 
             if ($page > 1) {
                 $oql .= ' offset ' . ($page - 1) * $itemsPerPage;
