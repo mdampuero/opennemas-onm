@@ -25,6 +25,11 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['isReadyForPublish'])
             ->getMock();
 
+        $this->relatedHelper = $this->getMockBuilder('Common\Core\Component\Helper\RelatedHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['getRelated'])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
@@ -53,7 +58,7 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->helper = new VideoHelper($this->contentHelper, $this->template, $this->filter);
+        $this->helper = new VideoHelper($this->contentHelper, $this->relatedHelper, $this->template, $this->filter);
 
         $GLOBALS['kernel'] = $this->kernel;
     }
@@ -73,6 +78,9 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.content':
                 return $this->contentHelper;
+
+            case 'core.helper.related':
+                return $this->relatedHelper;
 
             case 'data.manager.filter':
                 return $this->filter;
@@ -311,9 +319,12 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
 
         $property->setValue($this->contentHelper, $this->em);
 
-        $this->em->expects($this->at(0))->method('find')
-            ->with('photo', 126)
-            ->willReturn($photo);
+        $this->relatedHelper->expects($this->once())->method('getRelated')
+            ->willReturn([
+                'item' => $photo,
+                'caption' => 'Lorem ipsum dolor sit amet.',
+                'position' => 0
+            ]);
 
         $this->assertEquals($photo, $this->helper->getVideoThumbnail($video, 'glorp'));
     }

@@ -39,6 +39,10 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'isHidden' ])
             ->getMock();
 
+        $this->relatedHelper = $this->getMockBuilder('Common\Core\Component\Helper\RelatedHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRelated' ])
+            ->getMock();
 
         $this->videoHelper = $this->getMockBuilder('Common\Core\Component\Helper\VideoHelper')
             ->disableOriginalConstructor()
@@ -75,6 +79,7 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->helper = new FeaturedMediaHelper(
             $this->contentHelper,
+            $this->relatedHelper,
             $this->subscriptionHelper,
             $this->template,
             $this->videoHelper
@@ -98,6 +103,9 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.content':
                 return $this->contentHelper;
+
+            case 'core.helper.related':
+                return $this->relatedHelper;
 
             case 'core.helper.subscription':
                 return $this->subscriptionHelper;
@@ -155,9 +163,6 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
         $photo->starttime         = '2020-01-01 00:00:00';
         $photo->content_type_name = 'photo';
 
-        $this->em->expects($this->once())->method('find')
-            ->with('photo', 893)->willReturn($photo);
-
         $this->content->content_type_name = 'event';
         $this->content->related_contents  = [ [
             'content_type_name' => 'photo',
@@ -167,6 +172,13 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
             'caption'           => 'Justo auctor vero probo pertinax',
             'position'          => 9
         ] ];
+
+        $this->relatedHelper->expects($this->once())->method('getRelated')
+            ->willReturn([ [
+                'item'     => $photo,
+                'caption'  => 'Justo auctor vero probo pertinax',
+                'position' => 9
+            ] ]);
 
         $this->assertEquals([
             'item'     => $photo,

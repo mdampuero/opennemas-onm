@@ -18,6 +18,13 @@ class FeaturedMediaHelper
     protected $contentHelper;
 
     /**
+     * The related helper.
+     *
+     * @var RelatedHelper
+     */
+    protected $relatedHelper;
+
+    /**
      * The subscription helper.
      *
      * @var SubscriptionHelper
@@ -47,11 +54,13 @@ class FeaturedMediaHelper
      */
     public function __construct(
         ContentHelper $contentHelper,
+        RelatedHelper $relatedHelper,
         SubscriptionHelper $subscriptionHelper,
         Template $template,
         VideoHelper $videoHelper
     ) {
             $this->contentHelper      = $contentHelper;
+            $this->relatedHelper      = $relatedHelper;
             $this->subscriptionHelper = $subscriptionHelper;
             $this->template           = $template;
             $this->videoHelper        = $videoHelper;
@@ -113,7 +122,7 @@ class FeaturedMediaHelper
                 return $item;
             }
 
-            $media = $this->contentHelper->getRelated($item, $map[$this->contentHelper->getType($item)][$type][0]);
+            $media = $this->relatedHelper->getRelated($item, $map[$this->contentHelper->getType($item)][$type][0]);
 
             return array_shift($media);
         }

@@ -27,14 +27,39 @@ class AlbumHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
-            ->setMethods(['isReadyForPublish', 'getRelated', 'getContent'])
+            ->setMethods(['isReadyForPublish', 'getContent'])
+            ->getMock();
+
+        $this->relatedHelper = $this->getMockBuilder('Common\Core\Component\Helper\RelatedHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['getRelated'])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
-            ->with('core.helper.content')
-            ->willReturn($this->contentHelper);
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->helper = new AlbumHelper($this->contentHelper);
+        $this->helper = new AlbumHelper($this->contentHelper, $this->relatedHelper);
+    }
+
+    /**
+    * Returns a mocked service based on the service name.
+    *
+    * @param string $name The service name.
+    *
+    * @return mixed The mocked service.
+    */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.helper.content':
+                return $this->contentHelper;
+
+            case 'core.helper.related':
+                return $this->relatedHelper;
+
+            default:
+                return null;
+        }
     }
 
     /**
@@ -52,7 +77,7 @@ class AlbumHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->content)
             ->willReturn($this->content);
 
-        $this->contentHelper->expects($this->at(1))->method('getRelated')
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
             ->with($this->content, 'photo')
             ->willReturn([]);
 
@@ -82,7 +107,7 @@ class AlbumHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->content)
             ->willReturn($this->content);
 
-        $this->contentHelper->expects($this->at(1))->method('getRelated')
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
             ->with($this->content, 'photo')
             ->willReturn($related);
 
@@ -104,7 +129,7 @@ class AlbumHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->content)
             ->willReturn($this->content);
 
-        $this->contentHelper->expects($this->at(1))->method('getRelated')
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
             ->with($this->content, 'photo')
             ->willReturn([]);
 
@@ -134,7 +159,7 @@ class AlbumHelperTest extends \PHPUnit\Framework\TestCase
             ->with($this->content)
             ->willReturn($this->content);
 
-        $this->contentHelper->expects($this->at(1))->method('getRelated')
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
             ->with($this->content, 'photo')
             ->willReturn($related);
 

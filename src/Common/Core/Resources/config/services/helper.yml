@@ -59,7 +59,12 @@ services:
 
     core.helper.featured_media:
         class:     Common\Core\Component\Helper\FeaturedMediaHelper
-        arguments: [ '@core.helper.content', '@core.helper.subscription', '@core.template.frontend', '@core.helper.video' ]
+        arguments:
+            - '@core.helper.content'
+            - '@core.helper.related'
+            - '@core.helper.subscription'
+            - '@core.template.frontend'
+            - '@core.helper.video'
         public:    true
 
     core.helper.http_fetcher:
@@ -135,6 +140,11 @@ services:
         arguments: [ '@core.helper.content', '@core.instance', '@router', '@core.helper.url_generator' ]
         public:    true
 
+    core.helper.related:
+        class:     Common\Core\Component\Helper\RelatedHelper
+        arguments: [ '@core.helper.content', '@core.helper.subscription', '@core.template.frontend' ]
+        public:    true
+
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@service_container' ]
@@ -161,5 +171,5 @@ services:
 
     core.helper.video:
         class:      Common\Core\Component\Helper\VideoHelper
-        arguments:  [ '@core.helper.content', '@core.template.admin', '@data.manager.filter' ]
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
         public:     true

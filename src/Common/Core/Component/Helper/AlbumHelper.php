@@ -15,13 +15,21 @@ class AlbumHelper
     protected $contentHelper;
 
     /**
+     * The related helper.
+     *
+     * @var RelatedHelper
+     */
+    protected $relatedHelper;
+
+    /**
      * Initializes the AlbumHelper.
      *
      * @param ContentHelper $contentHelper The content helper.
      */
-    public function __construct(ContentHelper $contentHelper)
+    public function __construct(ContentHelper $contentHelper, RelatedHelper $relatedHelper)
     {
         $this->contentHelper = $contentHelper;
+        $this->relatedHelper = $relatedHelper;
     }
     /**
      * Returns the list of photos of the album.
@@ -32,7 +40,7 @@ class AlbumHelper
      */
     public function getAlbumPhotos($item) : array
     {
-        return $this->contentHelper->getRelated($this->contentHelper->getContent($item), 'photo');
+        return $this->relatedHelper->getRelated($this->contentHelper->getContent($item), 'photo');
     }
 
     /**

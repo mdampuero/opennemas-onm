@@ -19,6 +19,13 @@ class VideoHelper
     protected $contentHelper;
 
     /**
+     * The related helper.
+     *
+     * @var RelatedHelper
+     */
+    protected $relatedHelper;
+
+    /**
      * The data filter.
      *
      * @var FilterManager
@@ -39,9 +46,14 @@ class VideoHelper
      * @param Template      $template      The admin template.
      * @param FilterManager $filter        The data filter.
      */
-    public function __construct(ContentHelper $contentHelper, Template $template, FilterManager $filter)
-    {
+    public function __construct(
+        ContentHelper $contentHelper,
+        RelatedHelper $relatedHelper,
+        Template $template,
+        FilterManager $filter
+    ) {
         $this->contentHelper = $contentHelper;
+        $this->relatedHelper = $relatedHelper;
         $this->filter        = $filter;
         $this->template      = $template;
     }
@@ -145,7 +157,7 @@ class VideoHelper
      */
     public function getVideoThumbnail($item)
     {
-        $related = $this->contentHelper->getRelated($item, 'featured_frontpage');
+        $related = $this->relatedHelper->getRelated($item, 'featured_frontpage');
 
         if (!empty($related)) {
             $thumbnail = array_shift($related);

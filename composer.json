@@ -35,6 +35,7 @@
             "src/Common/Core/Functions/helper.php",
             "src/Common/Core/Functions/author.php",
             "src/Common/Core/Functions/photo.php",
+            "src/Common/Core/Functions/related.php",
             "src/Common/Core/Functions/video.php"
         ]
     },
