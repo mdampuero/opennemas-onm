@@ -31,7 +31,7 @@ class AttachmentService extends ContentOldService
             $path = $fh->generatePath($file, new \DateTime($data['created'] ?? null));
 
             if ($fh->exists($path)) {
-                throw new CreateItemException('File already exists');
+                throw new FileAlreadyExistsException('File already exists');
             }
 
             $data['path'] = '/' . $fh->getRelativePath($path);
