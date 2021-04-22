@@ -61,18 +61,14 @@ class CleanCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function do()
     {
-        $this->input  = $input;
-        $this->output = $output;
-
-        $this->start();
         $this->writeStep('Starting command');
         $this->writeStatus('success', 'DONE ');
         $this->writeStatus('info', date('(Y-m-d H:i:s)', $this->started), true);
 
         $this->writeStep('Checking parameters');
-        list($database, $path) = $this->getParameters($input);
+        list($database, $path) = $this->getParameters($this->input);
         $this->writeStatus('success', 'DONE', true);
 
         $this->writeStep('Getting files from database');
@@ -98,7 +94,7 @@ class CleanCommand extends Command
         $notRemoved = 0;
 
         foreach ($this->getFinder()->in($path)->files() as $file) {
-            if ($output->isVerbose()) {
+            if ($this->output->isVerbose()) {
                 $this->writeStep('Checking ' . $file->getPathName(), false, 2);
             }
 
@@ -106,8 +102,8 @@ class CleanCommand extends Command
                 in_array(str_replace($path, '', $file->getPathName()), $files)) {
                 $notRemoved++;
 
-                if ($output->isVerbose()) {
-                    $this->writeStatus('warning', ' SKIP', true);
+                if ($this->output->isVerbose()) {
+                    $this->writeStatus('warning', 'SKIP', true);
                 }
 
                 continue;
@@ -116,12 +112,12 @@ class CleanCommand extends Command
             try {
                 $this->getFileSystem()->remove($file->getPathName());
                 $removed++;
-                if ($output->isVerbose()) {
-                    $this->writeStatus('success', ' DONE', true);
+                if ($this->output->isVerbose()) {
+                    $this->writeStatus('success', 'DONE', true);
                 }
             } catch (\Exception $e) {
-                if ($output->isVerbose()) {
-                    $this->writeStatus('warning', sprintf(' FAIL (%s)', $e->getMessage()), true);
+                if ($this->output->isVerbose()) {
+                    $this->writeStatus('warning', sprintf('FAIL (%s)', $e->getMessage()), true);
                 }
             }
         }
@@ -136,7 +132,6 @@ class CleanCommand extends Command
             $notRemoved
         ), true);
 
-        $this->end();
         $this->writeStep('Ending command');
         $this->writeStatus('success', 'DONE');
         $this->writeStatus('info', date(' (Y-m-d H:i:s)', $this->ended));

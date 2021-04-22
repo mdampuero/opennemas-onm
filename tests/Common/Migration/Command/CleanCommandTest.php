@@ -80,7 +80,7 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->command = $this->getMockBuilder('Common\Migration\Command\CleanCommand')
             ->setMethods([
-                'execute',
+                'do',
                 'getFinder',
                 'getAttachments',
                 'getParameters',
@@ -111,11 +111,11 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests execute for no path.
+     * Tests do for no path.
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testExecuteWhenNoPath()
+    public function testDoWhenNoPath()
     {
         $command = new CleanCommand();
 
@@ -131,9 +131,9 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests execute when skip
+     * Tests do when skip
      */
-    public function testExecuteWhenSkip()
+    public function testDoWhenSkip()
     {
         $command = $this->getMockBuilder('Common\Migration\Command\CleanCommand')
             ->setMethods([ 'getFinder', 'getFileSystem', 'getParameters', 'getPhotos', 'getKiosko', 'getAttachments' ])
@@ -186,9 +186,9 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests execute when skip & verbose
+     * Tests do when skip & verbose
      */
-    public function testExecuteWhenSkipVerbose()
+    public function testDoWhenSkipVerbose()
     {
         $command = $this->getMockBuilder('Common\Migration\Command\CleanCommand')
             ->setMethods([ 'getFinder', 'getFileSystem', 'getParameters', 'getPhotos', 'getKiosko', 'getAttachments' ])
@@ -244,9 +244,9 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests execute when done
+     * Tests do when done
      */
-    public function testExecuteWhenDone()
+    public function testDoWhenDone()
     {
         $command = $this->getMockBuilder('Common\Migration\Command\CleanCommand')
             ->setMethods([ 'getFinder', 'getFileSystem', 'getParameters', 'getPhotos', 'getKiosko', 'getAttachments' ])
@@ -299,9 +299,9 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests execute when fail
+     * Tests do when fail
      */
-    public function testExecuteWhenFail()
+    public function testDoWhenFail()
     {
         $command = $this->getMockBuilder('Common\Migration\Command\CleanCommand')
             ->setMethods([ 'getFinder', 'getFileSystem', 'getParameters', 'getPhotos', 'getKiosko', 'getAttachments' ])
