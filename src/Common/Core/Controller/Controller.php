@@ -119,10 +119,11 @@ class Controller extends SymfonyController
      *
      * @param string $extension  The required extension.
      * @param string $permission The required permission.
+     * @param string $content    The content that are trying to update.
      *
      * @throws AccessDeniedException If the action can not be executed.
      */
-    protected function checkSecurity($extension, $permission = null)
+    protected function checkSecurity($extension, $permission = null, $content = null)
     {
         if (!empty($extension)
             && !$this->get('core.security')->hasExtension($extension)
@@ -132,6 +133,13 @@ class Controller extends SymfonyController
 
         if (!empty($permission)
             && !$this->get('core.security')->hasPermission($permission)
+        ) {
+            throw new AccessDeniedException();
+        }
+
+        if (!empty($content)
+            && !$this->get('core.security')->hasPermission($permission)
+            && !$content->isOwner($this->getUser()->id)
         ) {
             throw new AccessDeniedException();
         }

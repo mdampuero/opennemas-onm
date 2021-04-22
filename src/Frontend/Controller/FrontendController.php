@@ -189,7 +189,7 @@ class FrontendController extends Controller
      *
      * @throws ResourceNotFoundException If the action can not be executed.
      */
-    protected function checkSecurity($extension, $permission = null)
+    protected function checkSecurity($extension, $permission = null, $content = null)
     {
         if (!empty($extension)
             && !$this->get('core.security')->hasExtension($extension)) {

@@ -59,6 +59,12 @@ class ApiController extends Controller
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
 
+        $this->checkSecurity(
+            $this->extension,
+            $this->getActionPermission('CONTENT_OTHER_DELETE'),
+            $this->get($this->service)->getItem($id)
+        );
+
         $msg = $this->get('core.messenger');
 
         $this->get($this->service)->deleteItem($id);
@@ -240,6 +246,12 @@ class ApiController extends Controller
     public function updateItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+
+        $this->checkSecurity(
+            $this->extension,
+            $this->getActionPermission('CONTENT_OTHER_UPDATE'),
+            $this->get($this->service)->getItem($id)
+        );
 
         $msg = $this->get('core.messenger');
 

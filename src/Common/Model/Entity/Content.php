@@ -111,4 +111,22 @@ class Content extends Entity
             return $element['type'] == $name;
         })) > 0;
     }
+
+    /**
+     * Returns true if the user is the owner of the content.
+     *
+     * @param int $id The id of the user.
+     *
+     * @return boolean True if the user is the owner of the content, false otherwise.
+     */
+    public function isOwner($userId)
+    {
+        if ($this->fk_publisher == $userId
+            || $this->fk_author == $userId
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
