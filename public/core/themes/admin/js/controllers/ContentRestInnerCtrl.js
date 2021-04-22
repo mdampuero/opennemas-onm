@@ -182,6 +182,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.item.tags      = ids;
           $scope.data.item.tags = ids;
 
+          $scope.draftEnabled = false;
+
           $scope.save();
         }
       });
@@ -296,6 +298,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     $timeout(function() {
       // Saves a draft 2.5s after the last change
       $scope.$watch('item', function(nv, ov) {
+        if (!$scope.draftEnabled) {
+          return;
+        }
+
         if (!nv || ov === nv) {
           return;
         }
