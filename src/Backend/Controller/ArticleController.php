@@ -20,9 +20,23 @@ use Symfony\Component\HttpFoundation\Request;
 class ArticleController extends BackendController
 {
     /**
-     * {@inheritdoc}
+     * The extension name required by this controller.
+     *
+     * @var string
      */
-    protected $extension = 'article';
+    protected $extension = 'ARTICLE_MANAGER';
+
+    /**
+     * The list of permissions for every action.
+     *
+     * @var type
+     */
+    protected $permissions = [
+        'create' => 'ARTICLE_CREATE',
+        'update' => 'ARTICLE_UPDATE',
+        'list'   => 'ARTICLE_ADMIN',
+        'show'   => 'ARTICLE_UPDATE',
+    ];
 
     /**
      * {@inheritdoc}
