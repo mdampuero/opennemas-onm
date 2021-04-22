@@ -80,7 +80,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
               [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
                 if ($scope.item[dateField]) {
-                  $scope.item[dateField] = $window.moment($scope.item[dateField])
+                  $scope.data.item[dateField] = $window.moment($scope.item[dateField])
                     .format('YYYY-MM-DD HH:mm:ss');
                 }
               });
