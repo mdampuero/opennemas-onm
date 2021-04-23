@@ -121,7 +121,8 @@ class Content extends Entity
      */
     public function isOwner($userId)
     {
-        if ($this->fk_publisher == $userId
+        if (empty($this->fk_publisher)
+            || $this->fk_publisher == $userId
             || $this->fk_author == $userId
         ) {
             return true;
