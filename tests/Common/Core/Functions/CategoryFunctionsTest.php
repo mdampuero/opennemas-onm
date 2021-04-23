@@ -129,6 +129,18 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests get_category_name.
+     */
+    public function testGetCategoryName()
+    {
+        $this->helper->expects($this->once())->method('getCategoryName')
+            ->with($this->content)
+            ->willReturn($this->category->name);
+
+        $this->assertEquals($this->category->name, get_category_name($this->content));
+    }
+
+    /**
      * Tests get_category_slug.
      */
     public function testGetCategorySlug()
