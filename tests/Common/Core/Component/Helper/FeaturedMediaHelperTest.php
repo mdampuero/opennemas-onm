@@ -5,9 +5,7 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\ContentHelper;
 use Common\Core\Component\Helper\FeaturedMediaHelper;
-use Common\Core\Component\Helper\VideoHelper;
 use Common\Model\Entity\Content;
-use Opennemas\Data\Filter\FilterManager;
 
 /**
  * Defines test cases for ContentMediaHelper class.
@@ -327,5 +325,54 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
             'glorp &quot;foobar&quot; &lt;p&gt;fubar&lt;/p&gt;',
             $this->helper->getFeaturedMediaCaption($content, 'inner')
         );
+    }
+
+    /**
+     * Tests hasFeaturedMedia.
+     */
+    public function testHasFeaturedMedia()
+    {
+        $photo                    = new \Content();
+        $photo->id                = 893;
+        $photo->content_status    = 1;
+        $photo->in_litter         = 0;
+        $photo->starttime         = '2020-01-01 00:00:00';
+        $photo->content_type_name = 'photo';
+
+        $this->em->expects($this->once())->method('find')
+            ->with('Photo', 893)->willReturn($photo);
+
+        $this->assertNull($this->helper->getFeaturedMedia($this->content, 'baz'));
+        $this->assertNull($this->helper->getFeaturedMedia($this->content, 'inner'));
+
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->img1              = 893;
+
+        $this->em->expects($this->once())->method('find')
+            ->with('Photo', 893)->willReturn($photo);
+
+        $this->assertFalse($this->helper->hasFeaturedMedia($content, 'baz'));
+        $this->assertFalse($this->helper->hasFeaturedMedia($content, 'inner'));
+        $this->assertTrue($this->helper->hasFeaturedMedia($content, 'frontpage'));
+    }
+
+    /**
+     * Tests hasFeaturedMediaCaption.
+     */
+    public function testHasFeaturedMediaCaption()
+    {
+        $this->content->content_type_name = 'article';
+        $this->content->img1_footer       = 'Rhoncus pretium';
+
+        $this->subscriptionHelper->expects($this->at(0))->method('isHidden')
+            ->willReturn(true);
+
+        $this->assertFalse($this->helper->hasFeaturedMediaCaption($this->content, 'baz'));
+        $this->assertFalse($this->helper->hasFeaturedMediaCaption($this->content, 'frontpage'));
+        $this->assertTrue($this->helper->hasFeaturedMediaCaption($this->content, 'frontpage'));
     }
 }

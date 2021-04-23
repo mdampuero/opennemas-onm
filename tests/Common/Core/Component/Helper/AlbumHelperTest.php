@@ -6,7 +6,7 @@ use Common\Core\Component\Helper\AlbumHelper;
 use Common\Model\Entity\Content;
 
 /**
- * Defines test cases for ContentMediaHelper class.
+ * Defines test cases for AlbumHelper class.
  */
 class AlbumHelperTest extends \PHPUnit\Framework\TestCase
 {
