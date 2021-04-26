@@ -63,10 +63,6 @@ class CleanCommand extends Command
      */
     protected function do()
     {
-        $this->writeStep('Starting command');
-        $this->writeStatus('success', 'DONE ');
-        $this->writeStatus('info', date('(Y-m-d H:i:s)', $this->started), true);
-
         $this->writeStep('Checking parameters');
         list($database, $path) = $this->getParameters($this->input);
         $this->writeStatus('success', 'DONE', true);
@@ -131,11 +127,6 @@ class CleanCommand extends Command
             $removed,
             $notRemoved
         ), true);
-
-        $this->writeStep('Ending command');
-        $this->writeStatus('success', 'DONE');
-        $this->writeStatus('info', date(' (Y-m-d H:i:s)', $this->ended));
-        $this->writeStatus('warning', " ({$this->getDuration()})", true);
     }
 
     /**
