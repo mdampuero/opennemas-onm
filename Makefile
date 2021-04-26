@@ -18,7 +18,7 @@ dbpass = $(shell [ -f app/config/connections.yml ] && \
 		grep 'password:' app/config/parameters.yml | head -n 1 | sed -e "s/.*password:\s\+//g")
 
 ifndef $(branch)
-branch = $(shell git rev-parse --abbrev-ref HEAD)
+    branch = $(shell git rev-parse --abbrev-ref HEAD)
 endif
 
 .PHONY: assets clean clean-database components database dev doc install \
