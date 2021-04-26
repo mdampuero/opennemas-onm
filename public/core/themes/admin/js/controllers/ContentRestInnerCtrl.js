@@ -66,7 +66,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           },
           yes: function() {
             return function(modalWindow) {
-              $scope.data.item = webStorage.session.get($scope.draftKey);
+              $scope.data.item = webStorage.session.get($scope.draftKey).item;
+
+              [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
+                if ($scope.item[dateField]) {
+                  $scope.data.item[dateField] = $window.moment($scope.item[dateField])
+                    .format('YYYY-MM-DD HH:mm:ss');
+                }
+              });
 
               if ($scope.config.linkers.item) {
                 $scope.config.linkers.item.link(
@@ -76,14 +83,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
                 $scope.item = $scope.data.item;
               }
 
-              modalWindow.close({ response: true, success: true });
+              $scope.data.extra.related_contents = webStorage.session.get($scope.draftKey).related;
+              $scope.related.init($scope);
 
-              [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
-                if ($scope.item[dateField]) {
-                  $scope.data.item[dateField] = $window.moment($scope.item[dateField])
-                    .format('YYYY-MM-DD HH:mm:ss');
-                }
-              });
+              modalWindow.close({ response: true, success: true });
             };
           },
           no: function() {
@@ -323,7 +326,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           }
 
           $scope.dtm = $timeout(function() {
-            webStorage.session.set($scope.draftKey, $scope.data.item);
+            webStorage.session.set(
+              $scope.draftKey,
+              { item: $scope.data.item, related: $scope.related.exportRelated() }
+            );
 
             $scope.draftSaved = $window.moment().format('HH:mm');
           }, 2500);

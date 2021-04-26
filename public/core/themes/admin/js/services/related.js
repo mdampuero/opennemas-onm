@@ -149,6 +149,29 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
       };
 
       /**
+       * @function exportRelated
+       * @memberOf related
+       *
+       * @description
+       *  Returns an object with the related contents.
+       *
+       * @return {Object} An object with the related contents.
+       */
+      related.exportRelated = function() {
+        var relatedObject = {};
+
+        var filteredBag = related.bag.filter(function(item) {
+          return item !== null;
+        });
+
+        filteredBag.forEach(function(item) {
+          relatedObject[item.pk_content] = item;
+        });
+
+        return relatedObject;
+      };
+
+      /**
        * @function init
        * @memberOf related
        *
