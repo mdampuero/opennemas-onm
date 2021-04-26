@@ -158,6 +158,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        * @return {Object} An object with the related contents.
        */
       related.exportRelated = function() {
+        if (!Array.isArray(related.bag)) {
+          return related.bag;
+        }
+
         var relatedObject = {};
 
         var filteredBag = related.bag.filter(function(item) {
