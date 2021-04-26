@@ -62,7 +62,9 @@ class NewsletterSchedulerCommand extends Command
             ));
 
             try {
-                $this->getContainer()->get('core.loader')->load($instance->internal_name);
+                $this->getContainer()->get('core.loader')
+                    ->load($instance->internal_name)
+                    ->init();
                 $this->getContainer()->get('core.security')->setInstance($instance);
 
                 $instance = $this->getContainer()->get('core.instance');
