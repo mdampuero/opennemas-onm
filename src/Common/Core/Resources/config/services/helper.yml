@@ -10,7 +10,7 @@ parameters:
 services:
     core.helper.album:
         class:      Common\Core\Component\Helper\AlbumHelper
-        arguments:  [ '@core.helper.content', '@core.template.admin', '@data.manager.filter' ]
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
         public:     true
 
     core.helper.advertisement:
