@@ -10,9 +10,7 @@
 namespace Common\Migration\Command;
 
 use Common\Core\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -64,7 +62,7 @@ class CleanCommand extends Command
     protected function do()
     {
         $this->writeStep('Checking parameters');
-        list($database, $path) = $this->getParameters($this->input);
+        list($database, $path) = $this->getParameters();
         $this->writeStatus('success', 'DONE', true);
 
         $this->writeStep('Getting files from database');
@@ -154,11 +152,11 @@ class CleanCommand extends Command
      *
      * @return array The list of parameters.
      */
-    protected function getParameters(InputInterface $input) : array
+    protected function getParameters() : array
     {
-        $database = $input->getOption('database');
-        $instance = $input->getOption('instance');
-        $path     = $input->getOption('path');
+        $database = $this->input->getOption('database');
+        $instance = $this->input->getOption('instance');
+        $path     = $this->input->getOption('path');
 
         if ((empty($database) && empty($instance)) || empty($path)) {
             throw new \InvalidArgumentException(

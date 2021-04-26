@@ -12,7 +12,6 @@ namespace Tests\Common\Migration\Command;
 use Common\Migration\Command\CleanCommand;
 use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -143,7 +142,6 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $command->expects($this->any())->method('getParameters')
-            ->with($this->input)
             ->willReturn([ 1, '/home/opennemas/current/public/media/opennemas/' ]);
 
         $command->expects($this->any())->method('getPhotos')
@@ -198,7 +196,6 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $command->expects($this->any())->method('getParameters')
-            ->with($this->input)
             ->willReturn([ 1, '/home/opennemas/current/public/media/opennemas/' ]);
 
         $command->expects($this->any())->method('getPhotos')
@@ -256,7 +253,6 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $command->expects($this->any())->method('getParameters')
-            ->with($this->input)
             ->willReturn([ 1, '/home/opennemas/current/public/media/opennemas/' ]);
 
         $command->expects($this->any())->method('getPhotos')
@@ -311,7 +307,6 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $command->expects($this->any())->method('getParameters')
-            ->with($this->input)
             ->willReturn([ 1, '/home/opennemas/current/public/media/opennemas/' ]);
 
         $command->expects($this->any())->method('getPhotos')
@@ -398,6 +393,15 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $database = 1;
         $instance = 'openenemas';
 
+        $command = new CleanCommand();
+
+        $method = new \ReflectionMethod($command, 'getParameters');
+        $method->setAccessible(true);
+
+        $property = new \ReflectionProperty($command, 'input');
+        $property->setAccessible(true);
+        $property->setValue($command, $this->input);
+
         $this->input->expects($this->at(0))->method('getOption')
             ->with('database')
             ->willReturn($database);
@@ -408,12 +412,7 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
             ->with('path')
             ->willReturn(null);
 
-        $command = new CleanCommand();
-
-        $method = new \ReflectionMethod($command, 'getParameters');
-        $method->setAccessible(true);
-
-        $method->invokeArgs($command, [ $this->input ]);
+        $method->invokeArgs($command, []);
     }
 
     /**
@@ -425,6 +424,15 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $instance = 'openenemas';
         $path     = '/home/opennemas/current/public/media/openenmas/';
 
+        $command = new CleanCommand();
+
+        $method = new \ReflectionMethod($command, 'getParameters');
+        $method->setAccessible(true);
+
+        $property = new \ReflectionProperty($command, 'input');
+        $property->setAccessible(true);
+        $property->setValue($command, $this->input);
+
         $this->input->expects($this->at(0))->method('getOption')
             ->with('database')
             ->willReturn($database);
@@ -435,12 +443,7 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
             ->with('path')
             ->willReturn($path);
 
-        $command = new CleanCommand();
-
-        $method = new \ReflectionMethod($command, 'getParameters');
-        $method->setAccessible(true);
-
-        $method->invokeArgs($command, [ $this->input ]);
+        $method->invokeArgs($command, []);
     }
 
     /**
@@ -452,19 +455,26 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $instanceName = 'openenemas';
         $path         = '/home/opennemas/current/public/media/openenmas/';
 
-        $this->input->expects($this->at(1))->method('getOption')
-            ->with('instance')
-            ->willReturn($instanceName);
-        $this->input->expects($this->at(2))->method('getOption')
-            ->with('path')
-            ->willReturn($path);
-
         $command = $this->getMockBuilder('Common\Migration\Command\CleanCommand')
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
         $command->expects($this->once())->method('getContainer')
             ->willReturn($this->container);
+
+        $method = new \ReflectionMethod($command, 'getParameters');
+        $method->setAccessible(true);
+
+        $property = new \ReflectionProperty($command, 'input');
+        $property->setAccessible(true);
+        $property->setValue($command, $this->input);
+
+        $this->input->expects($this->at(1))->method('getOption')
+            ->with('instance')
+            ->willReturn($instanceName);
+        $this->input->expects($this->at(2))->method('getOption')
+            ->with('path')
+            ->willReturn($path);
 
         $this->em->expects($this->once())->method('getRepository')
             ->with('Instance')
@@ -475,10 +485,7 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
             ->with($oql)
             ->willReturn([ $instance ]);
 
-        $method = new \ReflectionMethod($command, 'getParameters');
-        $method->setAccessible(true);
-
-        $this->assertEquals([ 1, $path], $method->invokeArgs($command, [ $this->input ]));
+        $this->assertEquals([ 1, $path], $method->invokeArgs($command, []));
     }
 
     /**
