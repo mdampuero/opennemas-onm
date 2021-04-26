@@ -170,11 +170,11 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->any())->method('getPathName')
             ->willReturn('images/2021/04/16/photo.jpg');
 
-        $this->finder->expects($this->any())->method('in')
-            ->with('/home/opennemas/current/public/media/opennemas/')
+        $this->finder->expects($this->any())->method('files')
             ->willReturn($this->finder);
 
-        $this->finder->expects($this->any())->method('files')
+        $this->finder->expects($this->any())->method('in')
+            ->with('/home/opennemas/current/public/media/opennemas/')
             ->willReturn([ $file ]);
 
         $this->fs->expects($this->any())->method('remove')
@@ -225,11 +225,11 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->any())->method('getPathName')
             ->willReturn('images/2021/04/16/photo.jpg');
 
-        $this->finder->expects($this->any())->method('in')
-            ->with('/home/opennemas/current/public/media/opennemas/')
+        $this->finder->expects($this->any())->method('files')
             ->willReturn($this->finder);
 
-        $this->finder->expects($this->any())->method('files')
+        $this->finder->expects($this->any())->method('in')
+            ->with('/home/opennemas/current/public/media/opennemas/')
             ->willReturn([ $file ]);
 
         $this->output->expects($this->any())->method('isVerbose')
@@ -283,11 +283,11 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->any())->method('getPathName')
             ->willReturn('images/2021/04/17/photo.jpg');
 
-        $this->finder->expects($this->any())->method('in')
-            ->with('/home/opennemas/current/public/media/opennemas/')
+        $this->finder->expects($this->any())->method('files')
             ->willReturn($this->finder);
 
-        $this->finder->expects($this->any())->method('files')
+        $this->finder->expects($this->any())->method('in')
+            ->with('/home/opennemas/current/public/media/opennemas/')
             ->willReturn([ $file ]);
 
         $this->output->expects($this->any())->method('isVerbose')
@@ -338,11 +338,11 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
         $file->expects($this->any())->method('getPathName')
             ->willReturn('images/2021/04/17/photo.jpg');
 
-        $this->finder->expects($this->any())->method('in')
-            ->with('/home/opennemas/current/public/media/opennemas/')
+        $this->finder->expects($this->any())->method('files')
             ->willReturn($this->finder);
 
-        $this->finder->expects($this->any())->method('files')
+        $this->finder->expects($this->any())->method('in')
+            ->with('/home/opennemas/current/public/media/opennemas/')
             ->willReturn([ $file ]);
 
         $this->output->expects($this->any())->method('isVerbose')

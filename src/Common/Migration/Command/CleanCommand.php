@@ -89,7 +89,7 @@ class CleanCommand extends Command
         $removed    = 0;
         $notRemoved = 0;
 
-        foreach ($this->getFinder()->in($path)->files() as $file) {
+        foreach ($this->getFinder()->files()->in($path) as $file) {
             if ($this->output->isVerbose()) {
                 $this->writeStep('Checking ' . $file->getPathName(), false, 2);
             }
