@@ -86,7 +86,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\PhotoService')
             ->setConstructorArgs([ $this->container, '\Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getItem', 'assignUser' ])
             ->getMock();
     }
 
@@ -214,6 +214,9 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
         $this->ih->expects($this->once())->method('move');
 
         $externalPhoto->shouldReceive('create')->once()->andReturn(1);
+
+        $this->service->expects($this->once())->method('assignUser')
+            ->willReturn($data);
 
         $this->service->createItem($data, $file);
     }

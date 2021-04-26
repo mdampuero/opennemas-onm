@@ -104,7 +104,7 @@ class ContentService extends OrmService
      * @param array $data       The content data.
      * @param array $userFields The user data fields to update.
      *
-     * @return Content The content.
+     * @return array The data with the current user on user fields.
      */
     protected function assignUser($data, $userFields = [])
     {
