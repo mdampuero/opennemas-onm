@@ -26,14 +26,24 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
             'starttime'      => new \Datetime('2020-01-01 00:00:00')
         ]);
 
+        $this->cache = $this->getMockBuilder('Cache' . uniqid())
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get', 'set' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods([ 'find' ])
+            ->setMethods([ 'find', 'findBy' ])
             ->getMock();
 
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'isHidden' ])
+            ->getMock();
+
+        $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItemBy' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -77,8 +87,14 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'api.service.content':
+                return $this->service;
+
             case 'api.service.tag':
                 return $this->ts;
+
+            case 'cache.connection.instance':
+                return $this->cache;
 
             case 'core.helper.content':
                 return $this->contentHelper;
@@ -112,6 +128,45 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->content->body = 'Percipit "mollis" at scriptorem usu.';
         $this->assertEquals('Percipit "mollis" at scriptorem usu.', $this->contentHelper->getBody($this->content));
+    }
+
+    /**
+     * Tests getBody when the content has a custom body.
+     */
+    public function testGetBodyWhenCustom()
+    {
+        $this->content->description       = 'Lorem, ipsum dolor.';
+        $this->content->content_type_name = 'video';
+
+        $this->assertEquals($this->content->description, $this->contentHelper->getBody($this->content));
+    }
+
+    /**
+     * Tests getCacheExpireDate when there is an error.
+     */
+    public function testGetCacheExpireDateWhenError()
+    {
+        $this->service->expects($this->at(0))->method('getItemBy')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->expects($this->at(1))->method('getItemBy')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertNull($this->contentHelper->getCacheExpireDate());
+    }
+
+    /**
+     * Tests getCacheExpireDate.
+     */
+    public function testGetCacheExpireDate()
+    {
+        $this->service->expects($this->any())->method('getItemBy')
+            ->willReturn($this->content);
+
+        $this->assertEquals(
+            $this->content->starttime->format('Y-m-d H:i:s'),
+            $this->contentHelper->getCacheExpireDate()
+        );
     }
 
     /**
@@ -297,6 +352,57 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getScheduling state.
+     */
+    public function testGetSchedulingState()
+    {
+        $this->content->starttime = null;
+
+        $this->assertEquals(\Content::NOT_SCHEDULED, $this->contentHelper->getSchedulingState($this->content));
+
+        $this->content->starttime = new \Datetime('2020-01-01 00:00:00');
+
+        $this->assertEquals(\Content::IN_TIME, $this->contentHelper->getSchedulingState($this->content));
+
+        $this->content->endtime = new \Datetime('2020-01-02 00:00:00');
+
+        $this->assertEquals(\Content::DUED, $this->contentHelper->getSchedulingState($this->content));
+
+        $this->content->starttime = new \DateTime('9999-01-02 00:00:00');
+        $this->content->endtime   = null;
+
+        $this->assertEquals(\Content::POSTPONED, $this->contentHelper->getSchedulingState($this->content));
+    }
+
+    /**
+     * Tests getSuggested.
+     */
+    public function testGetSuggested()
+    {
+        $this->cache->expects($this->at(0))->method('get')
+            ->with('suggested_contents_' . md5(implode(',', ['article', 2, 4])))
+            ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
+
+        $this->assertEquals(
+            [ new Content([ 'pk_content' => 2 ]) ],
+            $this->contentHelper->getSuggested(1, 'article', 2)
+        );
+
+        $this->em->expects($this->at(0))->method('findBy')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals([], $this->contentHelper->getSuggested(1, 'article', 2));
+
+        $this->em->expects($this->at(0))->method('findBy')
+            ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
+
+        $this->assertEquals(
+            [ new Content([ 'pk_content' => 2 ]) ],
+            $this->contentHelper->getSuggested(1, 'article', 2)
+        );
+    }
+
+    /**
      * Tests getSummary.
      */
     public function testGetSummary()
@@ -338,6 +444,20 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->content->tags = [ 971, 837 ];
         $this->assertEquals($tags, $this->contentHelper->getTags($this->content));
+    }
+
+    /**
+     * Tests getTags when there is an error.
+     */
+    public function testGetTagsWhenError()
+    {
+        $this->content->tags = [ new Tag([ 'id' => 917 ]), new Tag([ 'id' => 837 ]) ];
+
+        $this->ts->expects($this->once())->method('getListByIds')
+            ->with($this->content->tags)
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals([], $this->contentHelper->getTags($this->content));
     }
 
     /**
@@ -493,5 +613,17 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
         $this->content->title = 'Percipit "mollis" at scriptorem usu.';
         $this->assertFalse($this->contentHelper->hasTitle($this->content));
         $this->assertTrue($this->contentHelper->hasTitle($this->content));
+    }
+
+    /**
+     * Tests isSuggested.
+     */
+    public function testIsSuggested()
+    {
+        $this->content->frontpage = 1;
+        $this->assertTrue($this->contentHelper->isSuggested($this->content));
+
+        $this->content->frontpage = 0;
+        $this->assertFalse($this->contentHelper->isSuggested($this->content));
     }
 }
