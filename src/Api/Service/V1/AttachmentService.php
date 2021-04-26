@@ -59,7 +59,7 @@ class AttachmentService extends ContentOldService
     public function updateItem($id, $data, $file = null)
     {
         if (empty($file) && empty($data['path'])) {
-            throw new CreateItemException(_('No file provided'));
+            throw new UpdateItemException(_('No file provided'));
         }
 
         try {
@@ -74,7 +74,9 @@ class AttachmentService extends ContentOldService
                 if ($fh->exists($path)
                     && $item->getRelativePath() !== $data['path']
                 ) {
-                    throw new FileAlreadyExistsException(_('A file with the same name has already been uploaded today'));
+                    throw new FileAlreadyExistsException(
+                        _('A file with the same name has already been uploaded today')
+                    );
                 }
 
                 if (!empty($item->getRelativePath())) {
