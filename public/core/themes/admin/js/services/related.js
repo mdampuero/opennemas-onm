@@ -350,6 +350,11 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             return;
           }
 
+          if (!ov && related.scope[related.map[type].name]) {
+            related.mirrored[name] = true;
+            return;
+          }
+
           var oldIds = ov.map(function(e) {
             return [ e.target_id, e.caption ];
           });
