@@ -127,8 +127,12 @@
 
 .oat-visible {
   align-items: center;
-  display: grid;
+  display: flex;
   visibility: visible;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .oat-bottom > * {
