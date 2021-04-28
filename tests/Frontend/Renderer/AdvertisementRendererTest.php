@@ -376,8 +376,7 @@ class AdvertisementRendererTest extends TestCase
             'placeholder' => 'placeholder1_1'
         ];
 
-        $returnValue = '<div class="ad-slot oat" data-id="123"'
-            . ' data-type="37" style="height: 615px;"></div>';
+        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
 
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
@@ -744,8 +743,7 @@ class AdvertisementRendererTest extends TestCase
             ]
         ];
 
-        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37" '
-            . 'style="height: 265px;"></div>';
+        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
 
         $this->assertEquals(
             $returnValue,

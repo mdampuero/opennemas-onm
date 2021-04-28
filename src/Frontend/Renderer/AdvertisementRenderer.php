@@ -472,12 +472,11 @@ class AdvertisementRenderer extends Renderer
      */
     protected function renderSafeFrameSlot(\Advertisement $advertisement)
     {
-        $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"%s></div>';
+        $html = '<div class="ad-slot oat" data-id="%s" data-type="%s"></div>';
         $id   = $advertisement->pk_content;
-        $size = $this->getSlotSizeStyle($advertisement);
         $type = 37; // Floating banner type
 
-        return sprintf($html, $id, $type, $size);
+        return sprintf($html, $id, $type);
     }
 
     /**

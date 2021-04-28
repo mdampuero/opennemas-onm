@@ -13,7 +13,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings')['safe_frame'];
 
-    $tpl      = '<div class="ad-slot oat%s"%s%s>%s</div>';
+    $tpl      = '<div class="ad-slot oat%s"%s>%s</div>';
     $class    = '" data-position="' . $position;
     $mode     = '';
     $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
@@ -35,8 +35,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
 
     $adsFormat = $smarty->getValue('ads_format');
     if ($safeframeEnabled && !in_array($adsFormat, $renderer->getInlineFormats())) {
-        $size = $renderer->getSlotSizeStyle($advertisement);
-        return sprintf($tpl, $class, $mode, $size, '');
+        return sprintf($tpl, $class, $mode, '');
     }
 
     // Get targeting parameters for advertising renderers
