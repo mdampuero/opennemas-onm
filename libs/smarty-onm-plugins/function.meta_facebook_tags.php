@@ -47,11 +47,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $image = $smarty->getContainer()->get('core.helper.content_media')
         ->getMedia($content, $params);
 
-    // Populate the media element if exists
-    if (is_object($image)
-        && !empty($image->url)
-    ) {
-        $output[] = '<meta property="og:image" content="' . $image->url . '" />';
+    $photoHelper = $smarty->getContainer()->get('core.helper.photo');
+
+    if ($photoHelper->hasPhotoPath($image)) {
+        $output[] = '<meta property="og:image" content="' . $photoHelper->getPhotoPath($image, null, [], true) . '" />';
         $output[] = '<meta property="og:image:width" content="' . $image->width . '"/>';
         $output[] = '<meta property="og:image:height" content="' . $image->height . '"/>';
     }

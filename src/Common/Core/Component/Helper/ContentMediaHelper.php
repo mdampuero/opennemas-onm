@@ -3,19 +3,74 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
+use Symfony\Component\DependencyInjection\Container;
 
 class ContentMediaHelper
 {
     /**
+     * The helper to retrieve author data.
+     *
+     * @var AuthorHelper
+     */
+    protected $authorHelper;
+
+    /**
+     * The service container.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * The helper to retrieve content data.
+     *
+     * @var ContentHelper
+     */
+    protected $contentHelper;
+
+    /**
+     * The dataset to get the settings of the instance.
+     *
+     * @var DataSet
+     */
+    protected $ds;
+
+    /**
+     * The helper to retrieve featured media data.
+     *
+     * @var FeaturedMediaHelper
+     */
+    protected $featuredHelper;
+
+    /**
+     * The helper to retrieve image information.
+     *
+     * @var ImageHelper
+     */
+    protected $imageHelper;
+
+    /**
+     * The current instance.
+     *
+     * @var Instance
+     */
+    protected $instance;
+
+    /**
      * Initializes ContentMedia
      *
-     * @param EntityManager $em The entity manager.
-     * @param EntityManager $er The entity repository service.
+     * @param Container $container The service container.
      */
-    public function __construct($container, $em)
+    public function __construct(Container $container)
     {
-        $this->container = $container;
-        $this->ds        = $em->getDataSet('Settings', 'instance');
+        $this->container      = $container;
+        $this->authorHelper   = $this->container->get('core.helper.author');
+        $this->contentHelper  = $this->container->get('core.helper.content');
+        $this->ds             = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
+        $this->featuredHelper = $this->container->get('core.helper.featured_media');
+        $this->imageHelper    = $this->container->get('core.helper.image');
+        $this->instance       = $this->container->get('core.instance');
     }
 
     /**
@@ -27,16 +82,7 @@ class ContentMediaHelper
      */
     public function getMedia($content)
     {
-        $method = 'getMediaFor' . ucfirst($content->content_type_name);
-        $media  = null;
-
-        if (!empty($content) && method_exists($this, $method)) {
-            $media = $this->$method($content);
-        }
-
-        if (empty($media) && $this->ds->get('logo_enabled')) {
-            $media = $this->getMediaFromLogo();
-        }
+        $media = $this->contentHelper->getContent($this->getMediaObject($content), 'photo');
 
         if (is_object($media)) {
             $media->width  = $media->width ?? 700;
@@ -47,96 +93,27 @@ class ContentMediaHelper
     }
 
     /**
-     * Returns media object for Article content
+     * Returns the media object.
      *
-     * @param  Object  $content The content object.
+     * @param Content $content The content object.
      *
-     * @return Object  $mediaObject The media object.
+     * @return Content The media object for the specific content.
      */
-    protected function getMediaForArticle($content)
+    protected function getMediaObject($content)
     {
-        return empty($content->fk_video2)
-            ? $this->getMediaFromPhoto($content->img2)
-            : $this->getMediaFromVideo($content->fk_video2);
-    }
-
-    /**
-     * Returns media object for Opinion content
-     *
-     * @param  Object  $content The content object.
-     *
-     * @return Object  $mediaObject The media object.
-     */
-    protected function getMediaForOpinion($content)
-    {
-        if (!empty($content->related_contents)) {
-            $featured = array_filter($content->related_contents, function ($a) {
-                return $a['type'] === 'featured_inner';
-            });
-
-            $featuredInner = array_shift($featured);
-
-            if (!empty($featuredInner)) {
-                return $this->getMediaFromPhoto($featuredInner['target_id']);
-            }
+        if ($this->featuredHelper->hasFeaturedMedia($content, 'inner')) {
+            return $this->featuredHelper->getFeaturedMedia($content, 'inner');
         }
 
-        return $this->getMediaFromAuthor($content->fk_author);
-    }
-
-    /**
-     * Returns media object for Album content
-     *
-     * @param  Object  $content The content object.
-     *
-     * @return Object  $mediaObject The media object.
-     */
-    protected function getMediaForAlbum($content)
-    {
-        $featured = array_filter($content->related_contents, function ($a) {
-            return $a['type'] === 'featured_frontpage';
-        });
-
-        return !empty($featured)
-            ? $this->getMediaFromPhoto(array_pop($featured)['target_id'])
-            : null;
-    }
-
-    /**
-     * Returns media object for Video content
-     *
-     * @param Object $content The content object.
-     *
-     * @return Object $mediaObject The media object.
-     */
-    protected function getMediaForVideo($content)
-    {
-        return $this->getMediaFromVideo($content->pk_content);
-    }
-
-    /**
-     * Returns the author's photo.
-     *
-     * @param Object  $content The content object.
-     *
-     * @return Object $authorPhoto The author photo object.
-     */
-    protected function getMediaFromAuthor(?int $id)
-    {
-        if (empty($id)) {
-            return null;
+        if ($this->authorHelper->hasAuthorAvatar($content)) {
+            return $this->authorHelper->getAuthorAvatar($content);
         }
 
-        try {
-            $author = $this->container->get('api.service.author')
-                ->getItem($id);
-
-            return !empty($author->avatar_img_id)
-                ? $this->getMediaFromPhoto($author->avatar_img_id)
-                : null;
-        } catch (\Exception $e) {
-            return null;
+        if ($this->ds->get('logo_enabled')) {
+            return $this->getMediaFromLogo();
         }
+
+        return null;
     }
 
     /**
@@ -146,113 +123,26 @@ class ContentMediaHelper
      */
     protected function getMediaFromLogo()
     {
-        $instance = $this->container->get('core.instance');
+        $filepath = $this->container->getParameter('core.paths.public')
+            . $this->instance->getMediaShortPath() . '/sections/';
 
-        $mediapath = $instance->getMediaShortPath() . '/sections/';
-        $filepath  = $this->container->getParameter('core.paths.public')
-            . $mediapath;
+        $logo = $this->ds->get('sn_default_img');
 
-        $logos = $this->ds->get([ 'sn_default_img', 'mobile_logo', 'site_logo' ]);
-
-        foreach ($logos as $logo) {
-            if (empty($logo)) {
-                continue;
-            }
-
+        if (!empty($logo)) {
             try {
-                $information = $this->container->get('core.helper.image')
-                    ->getInformation($filepath . $logo);
+                $information = $this->imageHelper->getInformation($filepath . $logo);
 
-                $media = new \stdClass();
-
-                $media->url    = $instance->getBaseUrl() . $mediapath . $logo;
-                $media->width  = $information['width'];
-                $media->height = $information['height'];
-
-                return $media;
+                return new Content([
+                    'path'              => 'sections/' . $logo,
+                    'width'             => $information['width'],
+                    'height'            => $information['height'],
+                    'content_type_name' => 'photo',
+                    'content_status'    => 1,
+                    'in_litter'         => 0
+                ]);
             } catch (\Exception $e) {
-                continue;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns media for a photo based on the photo id.
-     *
-     * @param int $id The photo id.
-     *
-     * @return Content The media object.
-     */
-    protected function getMediaFromPhoto(?int $id)
-    {
-        if (empty($id)) {
-            return null;
-        }
-
-        try {
-            $photo = $this->container->get('api.service.photo')
-                ->getItem($id);
-
-            $photo->url = $this->container->get('core.helper.url_generator')
-                ->generate($photo, [ 'absolute' => true ]);
-
-            return $photo;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * Returns media for a video based on the video id.
-     *
-     * @param int $id The video id.
-     *
-     * @return Video The media object.
-     */
-    protected function getMediaFromVideo(?int $id)
-    {
-        if (empty($id)) {
-            return null;
-        }
-
-        try {
-            $video = $this->container->get('entity_repository')
-                ->find('Video', $id);
-
-            if (empty($video)) {
                 return null;
             }
-
-            $video->url = $this->getThumbnailUrl($video);
-
-            return $video;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the absolute url for the video thumbnail.
-     *
-     * @param Content $video The video object.
-     *
-     * @return string The video url.
-     */
-    protected function getThumbnailUrl(Content $video)
-    {
-        if (in_array($video->type, ['external', 'script'])) {
-            return $this->container->get('core.helper.url_generator')->generate(
-                $this->container->get('api.service.photo')->getItem($video->related_contents[0]['target_id']),
-                [ 'absolute' => true ]
-            );
-        }
-
-        if (!empty($video->information) &&
-            is_array($video->information) &&
-            !empty($video->information['thumbnail'])) {
-            return $video->information['thumbnail'];
         }
 
         return null;
