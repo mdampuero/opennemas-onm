@@ -18,6 +18,16 @@ class ArticleController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'ARTICLE_CREATE',
+        'update' => 'ARTICLE_UPDATE',
+        'list'   => 'ARTICLE_ADMIN',
+        'show'   => 'ARTICLE_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $getItemRoute = 'api_v1_backend_article_get_item';
 
     /**
