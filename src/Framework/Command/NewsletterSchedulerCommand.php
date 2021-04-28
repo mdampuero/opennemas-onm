@@ -71,8 +71,9 @@ class NewsletterSchedulerCommand extends Command
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
 
-                $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
-                $this->getContainer()->get('core.helper.url_generator')->setInstance($instance);
+                $this->getContainer()->get('core.helper.url_generator')
+                    ->forceHttp(true)
+                    ->setInstance($instance);
 
                 // Set base url from instance information to fix url generation
                 $context = $this->getContainer()->get('router')->getContext();
