@@ -64,6 +64,18 @@ function get_photo_mime_type($item = null) : ?string
 }
 
 /**
+ * Returns if the provided photo has path or not.
+ *
+ * @param mixed $item The photo to get path from.
+ *
+ * @return boolean True if the photo has path. False otherwise.
+ */
+function has_photo_path($item = null)
+{
+    return getService('core.helper.photo')->hasPhotoPath($item);
+}
+
+/**
  * Returns if the provided photo has size or not.
  *
  * @param mixed $item The photo to get size from.

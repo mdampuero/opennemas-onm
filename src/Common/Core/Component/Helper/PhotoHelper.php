@@ -162,6 +162,18 @@ class PhotoHelper
     }
 
     /**
+     * Returns true if the item has photo path.
+     *
+     * @param mixed $item The photo to get path from.
+     *
+     * @return boolean True if the photo has path. False otherwise.
+     */
+    public function hasPhotoPath($item = null)
+    {
+        return !empty($this->getPhotoPath($item));
+    }
+
+    /**
      * Returns if the provided photo has size or not.
      *
      * @param mixed $item The photo to get size from.
