@@ -58,7 +58,7 @@ function get_url($item = null, array $params = []) : ?string
  */
 function get_image_dir($absolute = false) : ?string
 {
-    $instance = getService('core.instance');
+    $instance = getService('core.globals')->getInstance();
     $theme    = getService('core.theme');
 
     if (empty($theme)) {
@@ -70,6 +70,17 @@ function get_image_dir($absolute = false) : ?string
     }
 
     return '/' . trim($theme->path, '/') . '/images';
+}
+
+/**
+ * Returns the path to image folder for the active instance.
+ *
+ * @return string The path to image folder for the active instance.
+ */
+function get_instance_media() : ?string
+{
+    $instance = getService('core.globals')->getInstance();
+    return 'media/' . $instance->internal_name . '/';
 }
 
 /**

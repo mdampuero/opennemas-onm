@@ -26,7 +26,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getRequest', 'getTheme' ])
+            ->setMethods([ 'getRequest', 'getTheme', 'getInstance' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -68,6 +68,9 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->globals->expects($this->any())->method('getTheme')
             ->willReturn(new Theme([ 'path' => 'wibble/bar' ]));
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -219,6 +222,15 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->theme = null;
         $this->assertEquals(null, get_image_dir());
         $this->assertEquals(null, get_image_dir(true));
+    }
+
+    /**
+     * Tests get_instance_media
+     */
+    public function testGetInstanceMedia()
+    {
+        $this->instance->internal_name = 'opennemas';
+        $this->assertEquals('media/opennemas/', get_instance_media());
     }
 
     /**
