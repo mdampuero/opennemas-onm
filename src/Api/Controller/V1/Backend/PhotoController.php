@@ -20,6 +20,19 @@ class PhotoController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'PHOTO_CREATE',
+        'delete' => 'PHOTO_DELETE',
+        'patch'  => 'PHOTO_UPDATE',
+        'update' => 'PHOTO_UPDATE',
+        'list'   => 'PHOTO_ADMIN',
+        'save'   => 'PHOTO_CREATE',
+        'show'   => 'PHOTO_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.photo';
 
     /**

@@ -31,6 +31,19 @@ class OpinionController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'OPINION_CREATE',
+        'delete' => 'OPINION_DELETE',
+        'patch'  => 'OPINION_UPDATE',
+        'update' => 'OPINION_UPDATE',
+        'list'   => 'OPINION_ADMIN',
+        'save'   => 'OPINION_CREATE',
+        'show'   => 'OPINION_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.opinion';
 
     /**

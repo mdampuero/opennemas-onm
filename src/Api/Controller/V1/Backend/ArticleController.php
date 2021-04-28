@@ -20,8 +20,11 @@ class ArticleController extends ContentController
      */
     protected $permissions = [
         'create' => 'ARTICLE_CREATE',
+        'delete' => 'ARTICLE_DELETE',
+        'patch'  => 'ARTICLE_UPDATE',
         'update' => 'ARTICLE_UPDATE',
         'list'   => 'ARTICLE_ADMIN',
+        'save'   => 'ARTICLE_CREATE',
         'show'   => 'ARTICLE_UPDATE',
     ];
 

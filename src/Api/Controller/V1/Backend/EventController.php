@@ -29,6 +29,19 @@ class EventController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'EVENT_CREATE',
+        'delete' => 'EVENT_DELETE',
+        'patch'  => 'EVENT_UPDATE',
+        'update' => 'EVENT_UPDATE',
+        'list'   => 'EVENT_ADMIN',
+        'save'   => 'EVENT_CREATE',
+        'show'   => 'EVENT_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.content';
 
     /**

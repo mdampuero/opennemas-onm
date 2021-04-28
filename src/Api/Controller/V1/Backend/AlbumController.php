@@ -20,6 +20,19 @@ class AlbumController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'ALBUM_CREATE',
+        'delete' => 'ALBUM_DELETE',
+        'patch'  => 'ALBUM_UPDATE',
+        'update' => 'ALBUM_UPDATE',
+        'list'   => 'ALBUM_ADMIN',
+        'save'   => 'ALBUM_CREATE',
+        'show'   => 'ALBUM_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.album';
 
     /**

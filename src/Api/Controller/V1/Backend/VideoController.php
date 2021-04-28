@@ -22,6 +22,19 @@ class VideoController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'VIDEO_CREATE',
+        'delete' => 'VIDEO_DELETE',
+        'patch'  => 'VIDEO_UPDATE',
+        'update' => 'VIDEO_UPDATE',
+        'list'   => 'VIDEO_ADMIN',
+        'save'   => 'VIDEO_CREATE',
+        'show'   => 'VIDEO_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.content';
 
     /**

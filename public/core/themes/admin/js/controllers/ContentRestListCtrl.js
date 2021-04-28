@@ -153,7 +153,8 @@
           }, function(response) {
             messenger.post(response.data);
             $scope.disableFlags('http');
-            $scope.data = {};
+            $scope.data  = {};
+            $scope.items = [];
           });
         };
       }

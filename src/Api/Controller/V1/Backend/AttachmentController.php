@@ -27,6 +27,19 @@ class AttachmentController extends ContentOldController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'ATTACHMENT_CREATE',
+        'delete' => 'ATTACHMENT_DELETE',
+        'patch'  => 'ATTACHMENT_UPDATE',
+        'update' => 'ATTACHMENT_UPDATE',
+        'list'   => 'ATTACHMENT_ADMIN',
+        'save'   => 'ATTACHMENT_CREATE',
+        'show'   => 'ATTACHMENT_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.attachment';
 
     /**
