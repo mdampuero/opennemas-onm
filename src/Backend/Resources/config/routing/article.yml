@@ -19,7 +19,7 @@ backend_articles_list:
         expose: true
 
 backend_article_show:
-    path:     /articles/{id}/show
+    path:     /articles/{id}
     defaults: { _controller: BackendBundle:Article:show }
     options:
         expose: true
