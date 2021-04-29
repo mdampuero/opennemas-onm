@@ -16,6 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -94,6 +95,11 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
 
         if ($exception instanceof AuthenticationException) {
             $event->setResponse(new JsonResponse('', 401));
+            return;
+        }
+
+        if ($exception instanceof AccessDeniedException) {
+            $event->setResponse(new JsonResponse(_('You don\'t has permission to perform this action'), 403));
             return;
         }
 
