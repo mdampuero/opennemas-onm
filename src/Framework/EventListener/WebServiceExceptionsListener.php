@@ -99,7 +99,7 @@ class WebServiceExceptionsListener implements EventSubscriberInterface
         }
 
         if ($exception instanceof AccessDeniedException) {
-            $event->setResponse(new JsonResponse(_('You don\'t has permission to perform this action'), 403));
+            $event->setResponse(new JsonResponse(_('You don\'t have permission to perform this action'), 403));
             return;
         }
 
