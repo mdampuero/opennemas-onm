@@ -52,7 +52,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
 
         $this->photoHelper = $this->getMockBuilder('Common\Core\Component\Helper\PhotoHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getPhotoPath', 'hasPhotoPath' ])
+            ->setMethods([ 'getPhotoPath' ])
             ->getMock();
 
         $this->requestStack = $this->getMockBuilder('RequestStack')
@@ -302,10 +302,6 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
-
-        $this->photoHelper->expects($this->once())->method('hasPhotoPath')
-            ->with($photo)
-            ->willReturn(true);
 
         $this->photoHelper->expects($this->once())->method('getPhotoPath')
             ->with($photo, null, [], true)

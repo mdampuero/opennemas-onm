@@ -52,7 +52,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->photoHelper = $this->getMockBuilder('Common\Core\Component\Helper\PhotoHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getPhotoPath', 'hasPhotoPath' ])
+            ->setMethods([ 'getPhotoPath' ])
             ->getMock();
 
         $this->requestStack = $this->getMockBuilder('RequestStack')
@@ -305,10 +305,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
 
-        $this->photoHelper->expects($this->once())->method('hasPhotoPath')
-            ->with($photo)
-            ->willReturn(true);
-
         $this->photoHelper->expects($this->once())->method('getPhotoPath')
             ->with($photo, null, [], true)
             ->willReturn('http://route/to/file.name');
@@ -321,7 +317,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             . "<meta property=\"og:image\" content=\"http://route/to/file.name\" />\n"
             . "<meta property=\"og:image:width\" content=\"600\"/>\n"
             . "<meta property=\"og:image:height\" content=\"400\"/>";
-
 
         $this->assertEquals(
             $output,
