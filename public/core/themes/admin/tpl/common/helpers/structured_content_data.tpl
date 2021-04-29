@@ -84,7 +84,7 @@
     {if !empty($image)}
       , "image": {
           "@type": "ImageObject",
-          "url": "{get_url item=$image absolute=true}",
+          "url": "{get_photo_path($image, null, [], true)}",
           "height": {$image->height},
           "width": {$image->width}
         }
