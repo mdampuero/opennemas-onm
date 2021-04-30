@@ -631,7 +631,10 @@
          * @param {String} type The type to search in the array of the translated strings.
          */
         $scope.getContentTypeTranslation = function(type) {
-          return $scope.picker.params.explore.contentTypes.filter((element) => element.name === type).shift().title;
+          return $scope.picker.params.explore.contentTypes.filter(
+            function(element) {
+              return element.name === type;
+            }).shift().title;
         };
 
         /**
