@@ -43,6 +43,7 @@ class VideoHelper
      * Initializes the video helper
      *
      * @param ContentHelper $contentHelper The content helper.
+     * @param RelatedHelper $relatedHelper The related helper.
      * @param Template      $template      The admin template.
      * @param FilterManager $filter        The data filter.
      */

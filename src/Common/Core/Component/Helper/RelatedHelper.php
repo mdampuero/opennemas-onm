@@ -31,6 +31,10 @@ class RelatedHelper
 
     /**
      * Initializes the related helper.
+     *
+     * @param ContentHelper      The content helper.
+     * @param SubscriptionHelper The subscription helper.
+     * @param Template           The frontend template.
      */
     public function __construct(
         ContentHelper $contentHelper,

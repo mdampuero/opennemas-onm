@@ -49,8 +49,10 @@ class FeaturedMediaHelper
      * Initializes the featured media helper
      *
      * @param ContentHelper      $contentHelper      The content helper.
+     * @param RelatedHelper      $relatedHelper      The related helper.
      * @param SubscriptionHelper $subscriptionHelper The subscription helper.
      * @param Template           $template           The frontend template.
+     * @param VideoHelper        $videoHelper        The video helper.
      */
     public function __construct(
         ContentHelper $contentHelper,

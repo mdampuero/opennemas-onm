@@ -25,6 +25,7 @@ class AlbumHelper
      * Initializes the AlbumHelper.
      *
      * @param ContentHelper $contentHelper The content helper.
+     * @param RelatedHelper $relatedHelper The related helper.
      */
     public function __construct(ContentHelper $contentHelper, RelatedHelper $relatedHelper)
     {
