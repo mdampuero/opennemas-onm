@@ -17,6 +17,13 @@ use Symfony\Component\Finder\Finder;
 class CleanCommand extends Command
 {
     /**
+     * The Filesystem component.
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -30,13 +37,19 @@ class CleanCommand extends Command
             ->addOption(
                 'database',
                 'd',
-                InputOption::VALUE_REQUIRED,
+                InputOption::VALUE_OPTIONAL,
                 'Database name'
+            )
+            ->addOption(
+                'instance',
+                'i',
+                InputOption::VALUE_OPTIONAL,
+                'Instance name'
             )
             ->addOption(
                 'path',
                 'p',
-                Inputoption::VALUE_REQUIRED,
+                InputOption::VALUE_REQUIRED,
                 'Full path to the media directory'
             );
 
@@ -49,7 +62,7 @@ class CleanCommand extends Command
     protected function do()
     {
         $this->writeStep('Checking parameters');
-        list($database, $path) = $this->getParameters($this->input);
+        list($database, $path) = $this->getParameters();
         $this->writeStatus('success', 'DONE', true);
 
         $this->writeStep('Getting files from database');
@@ -71,12 +84,10 @@ class CleanCommand extends Command
             $this->writeStatus('warning', 'IN PROGRESS', true);
         }
 
-        $finder     = new Finder();
-        $fs         = new FileSystem();
         $removed    = 0;
         $notRemoved = 0;
 
-        foreach ($finder->files()->in($path) as $file) {
+        foreach ($this->getFinder()->files()->in($path) as $file) {
             if ($this->output->isVerbose()) {
                 $this->writeStep('Checking ' . $file->getPathName(), false, 2);
             }
@@ -93,9 +104,11 @@ class CleanCommand extends Command
             }
 
             try {
-                $fs->remove($file->getPathName());
+                $this->getFileSystem()->remove($file->getPathName());
                 $removed++;
-                $this->writeStatus('success', 'DONE', true);
+                if ($this->output->isVerbose()) {
+                    $this->writeStatus('success', 'DONE', true);
+                }
             } catch (\Exception $e) {
                 if ($this->output->isVerbose()) {
                     $this->writeStatus('warning', sprintf('FAIL (%s)', $e->getMessage()), true);
@@ -115,6 +128,59 @@ class CleanCommand extends Command
     }
 
     /**
+     * Returns a new Finder.
+     *
+     * @return Finder The finder.
+     */
+    protected function getFinder() : Finder
+    {
+        return new Finder();
+    }
+
+    /**
+     * Returns a new FileSystem.
+     *
+     * @return FileSystem The fileSystem.
+     */
+    protected function getFileSystem() : FileSystem
+    {
+        return new FileSystem();
+    }
+
+    /**
+     * Returns the list of parameters for the command based on the input.
+     *
+     * @return array The list of parameters.
+     */
+    protected function getParameters() : array
+    {
+        $database = $this->input->getOption('database');
+        $instance = $this->input->getOption('instance');
+        $path     = $this->input->getOption('path');
+
+        if ((empty($database) && empty($instance)) || empty($path)) {
+            throw new \InvalidArgumentException(
+                'No option specified (`database`/`instance` and `path` required)'
+            );
+        }
+
+        if (!empty($database)) {
+            return [ $database, $path ];
+        }
+
+        if (!empty($instance)) {
+            $oql = sprintf('internal_name = "%s"', $instance);
+
+            $instances = $this->getContainer()->get('orm.manager')
+                ->getRepository('Instance')->findBy($oql);
+
+            $database = $instances[0]->getDatabaseName();
+        }
+
+        return [ $database, $path ];
+    }
+
+    /**
      * Returns a list of attachment filenames from database.
      *
      * @param string $database The database name.
@@ -131,25 +197,6 @@ class CleanCommand extends Command
         return !$rs ? [] : array_map(function ($a) {
             return 'files' . $a['path'];
         }, $rs);
-    }
-
-    /**
-     * Returns the list of parameters for the command based on the input.
-     *
-     * @return array The list of parameters.
-     */
-    protected function getParameters() : array
-    {
-        $database = $this->input->getOption('database');
-        $path     = $this->input->getOption('path');
-
-        if (empty($database) || empty($path)) {
-            throw new \InvalidArgumentException(
-                'No option specified (`database` and `path` required)'
-            );
-        }
-
-        return [ $database, $path ];
     }
 
     /**
