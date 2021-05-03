@@ -8,15 +8,15 @@ parameters:
         moderation_autoaccept: false
         required_email: false
 services:
-    core.helper.album:
-        class:      Common\Core\Component\Helper\AlbumHelper
-        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
-        public:     true
-
     core.helper.advertisement:
         class:     Common\Core\Component\Helper\AdvertisementHelper
         arguments: [ '@service_container' ]
         public:    true
+
+    core.helper.album:
+        class:      Common\Core\Component\Helper\AlbumHelper
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        public:     true
 
     core.helper.attachment:
         class:     Common\Core\Component\Helper\AttachmentHelper
@@ -28,16 +28,6 @@ services:
         arguments:  [ '@api.service.author', '@router', '@core.template.frontend', '@core.helper.url_generator' ]
         public:     true
 
-    core.helper.comment:
-        class:     Common\Core\Component\Helper\CommentHelper
-        arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
-        public:    true
-
-    core.helper.content:
-        class:      Common\Core\Component\Helper\ContentHelper
-        arguments: [ '@service_container' ]
-        public:     true
-
     core.helper.category:
         class:      Common\Core\Component\Helper\CategoryHelper
         arguments:  [ '@api.service.category', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]
@@ -47,6 +37,16 @@ services:
         class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
         public:    true
+
+    core.helper.comment:
+        class:     Common\Core\Component\Helper\CommentHelper
+        arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
+        public:    true
+
+    core.helper.content:
+        class:      Common\Core\Component\Helper\ContentHelper
+        arguments: [ '@service_container' ]
+        public:     true
 
     core.helper.content_media:
         class:     Common\Core\Component\Helper\ContentMediaHelper
@@ -91,14 +91,14 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
-    core.helper.locale:
-        class:     Common\Core\Component\Helper\LocaleHelper
-        arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
-        public:    true
-
     core.helper.l10n_route:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.locale:
+        class:     Common\Core\Component\Helper\LocaleHelper
+        arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
         public:    true
 
     core.helper.newsletter:
