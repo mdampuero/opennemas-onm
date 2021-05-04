@@ -332,7 +332,7 @@ function get_publication_date($item = null) : ?\Datetime
  */
 function get_summary($item = null) : ?string
 {
-    if ($item->content_type_name === 'opinion') {
+    if (in_array($item->content_type_name, [ 'article', 'opinion' ])) {
         return get_property($item, 'description');
     }
 
