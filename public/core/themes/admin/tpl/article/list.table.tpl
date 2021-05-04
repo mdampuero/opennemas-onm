@@ -4,13 +4,13 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-frontpage" checklist-model="app.columns.selected" checklist-value="'featured_frontpage'" type="checkbox">
     <label for="checkbox-featured-frontpage">
-      {t}Featured frontpage{/t}
+      {t}Featured in frontpage{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-inner" checklist-model="app.columns.selected" checklist-value="'featured_inner'" type="checkbox">
     <label for="checkbox-featured-inner">
-      {t}Featured inner{/t}
+      {t}Featured in inner{/t}
     </label>
   </div>
 {/block}
