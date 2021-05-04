@@ -27,6 +27,15 @@
      */
     this.config = {};
 
+    /**
+     * @memberOf OAM
+     *
+     * @description
+     *   The list of already requested advertisements in consume mode.
+     *
+     */
+    this.requested = [];
+
     var that = this;
 
     // Initializes the advertisement manager.
@@ -270,6 +279,7 @@
       }
 
       var id   = parseInt(slot.getAttribute('data-id'));
+      var mode = slot.getAttribute('data-mode');
 
       var available = ads.filter(function(e) { // eslint-disable-line no-loop-func
         return that.isVisible(e, type, id);
@@ -284,7 +294,12 @@
         continue;
       }
 
-      var ad   = that.getAdvertisement(available);
+      var ad = that.getAdvertisement(available, mode);
+
+      if (!ad) {
+        return;
+      }
+
       var size = that.getSize(ad);
       var div  = document.createElement('div');
 
@@ -356,12 +371,28 @@
    *   Returns an advertisement from a list of available advertisements or the
    *   advertisement with the given id if present.
    *
-   * @param {Object}  advertisements The list of available advertisements.
+   * @param {Object} advertisements The list of available advertisements.
+   * @param {String} mode           The advertisement mode (normal/consume)
    *
    * @return {Object} The selected advertisement.
    */
-  OAM.prototype.getAdvertisement = function(advertisements) {
-    return advertisements[Math.floor(Math.random() * advertisements.length)];
+  OAM.prototype.getAdvertisement = function(advertisements, mode) {
+    var that = this;
+
+    if (mode === 'consume') {
+      advertisements = advertisements.filter(function(e) {
+        return that.requested.indexOf(e) === -1;
+      });
+    }
+
+    var advertisement =
+      advertisements[Math.floor(Math.random() * advertisements.length)];
+
+    if (mode === 'consume' && advertisement) {
+      that.requested.push(advertisement);
+    }
+
+    return advertisement;
   };
 
   /**

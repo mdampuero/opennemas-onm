@@ -314,6 +314,57 @@ class VariablesExtractor
         }
     }
 
+
+    /**
+     * Get the content publisher Id.
+     *
+     * @return Integer The content publisher Id.
+     */
+    protected function getPublisherId()
+    {
+        $content = $this->tpl->getValue('o_content') ?? null;
+
+        if (empty($content)) {
+            return null;
+        }
+
+        try {
+            if (!empty($content->fk_publisher)) {
+                $author = $this->container->get('api.service.author')
+                    ->getItem($content->fk_publisher);
+            }
+        } catch (GetItemException $e) {
+            return null;
+        }
+
+        return $author->id ?? null;
+    }
+
+    /**
+     * Get the content publisher name.
+     *
+     * @return Integer The content publisher name.
+     */
+    protected function getPublisherName()
+    {
+        $content = $this->tpl->getValue('o_content') ?? null;
+
+        if (empty($content)) {
+            return null;
+        }
+
+        try {
+            if (!empty($content->fk_publisher)) {
+                $author = $this->container->get('api.service.author')
+                    ->getItem($content->fk_publisher);
+            }
+        } catch (GetItemException $e) {
+            return null;
+        }
+
+        return $author->name ?? null;
+    }
+
     /**
      * Get the available content tag names.
      *

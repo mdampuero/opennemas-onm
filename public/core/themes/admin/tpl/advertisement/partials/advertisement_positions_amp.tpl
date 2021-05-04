@@ -1,13 +1,9 @@
 <div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1058"}
+</div>
+<hr>
+<div class="col-md-12">
   {include file="advertisement/partials/ad_position_selector.tpl" position_id="1051"}
-</div>
-<hr>
-<div class="col-md-12">
-  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1052"}
-</div>
-<hr>
-<div class="col-md-12">
-  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1053"}
 </div>
 <hr>
 <div class="col-md-12">
@@ -45,3 +41,28 @@
 <div class="col-md-12">
   {include file="advertisement/partials/ad_position_selector.tpl" position_id="1069"}
 </div>
+<hr>
+<div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1052"}
+</div>
+<hr>
+<div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1053"}
+</div>
+<hr>
+<div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1054"}
+</div>
+<hr>
+<div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1055"}
+</div>
+<hr>
+<div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1056"}
+</div>
+<hr>
+<div class="col-md-12">
+  {include file="advertisement/partials/ad_position_selector.tpl" position_id="1057"}
+</div>
+<hr>

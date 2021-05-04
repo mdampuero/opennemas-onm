@@ -98,15 +98,13 @@ class ArticleController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        list($positions, $advertisements) = $this->getAdvertisements();
+        $this->getAdvertisements();
 
         return $this->render('article/article.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheID,
-            'ext'            => 1,
-            'x-cacheable'    => true,
-            'x-tags'         => 'ext-article,' . $article->id
+            'cache_id'    => $cacheID,
+            'ext'         => 1,
+            'x-cacheable' => true,
+            'x-tags'      => 'ext-article,' . $article->id
         ]);
     }
 

@@ -20,6 +20,13 @@ use Common\Model\Entity\ContentPosition;
 class FrontpagesController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'preview'    => 'frontpage'
+    ];
+
+    /**
      * Displays the frontpage elements for a given frontpage id
      *
      * @param Request $request the request object
@@ -301,13 +308,12 @@ class FrontpagesController extends Controller
     {
         $this->get('core.locale')->setContext('frontend');
 
-        $id           = $request->request->get('category', 0, FILTER_SANITIZE_STRING);
-        $categoryName = 'home';
-        $this->view   = $this->get('core.template');
+        $id         = $request->request->get('category', 0, FILTER_SANITIZE_STRING);
+        $category   = null;
+        $this->view = $this->get('core.template');
 
         try {
-            $category     = $this->get('api.service.category')->getItem($id);
-            $categoryName = $category->name;
+            $category = $this->get('api.service.category')->getItem($id);
         } catch (\Exception $e) {
         }
 
@@ -344,9 +350,7 @@ class FrontpagesController extends Controller
             $contentsInHomepage[$content->id] = $content;
         }
 
-        // Fetch ads
-        list($positions, $advertisements) =
-            \Frontend\Controller\FrontpagesController::getAds($id, $contentsInHomepage);
+        $this->getAdvertisements($category);
 
         foreach ($contentsInHomepage as &$content) {
             $content->starttime = null;
@@ -359,8 +363,6 @@ class FrontpagesController extends Controller
             ->get('frontpage_layout_' . $id, 'default');
 
         $this->view->assign([
-            'ads_positions'        => $positions,
-            'advertisements'       => $advertisements,
             'column'               => $contentsInHomepage,
             'contentPositionByPos' => $contentPositionMap,
             'layoutFile'           => 'layouts/' . $layout . '.tpl',

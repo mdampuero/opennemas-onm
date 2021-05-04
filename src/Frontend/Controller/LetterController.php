@@ -88,17 +88,15 @@ class LetterController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('letter/letter_frontpage.tpl', [
-            'cache_id'       => $cacheID,
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'recaptcha'      => $this->get('core.recaptcha')
+            'cache_id'    => $cacheID,
+            'recaptcha'   => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
-            'x-tags'         => 'letter-frontpage',
-            'x-cacheable'    => true,
+            'x-tags'      => 'letter-frontpage',
+            'x-cacheable' => true,
         ]);
     }
 
@@ -150,19 +148,17 @@ class LetterController extends Controller
             $this->view->assign(['otherLetters' => $otherLetters]);
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('letter/letter.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheID,
-            'content'        => $letter,
-            'contentId'      => $letter->id,
-            'letter'         => $letter,
-            'o_content'      => $letter,
-            'x-tags'         => 'letter,' . $letter->id,
-            'x-cacheable'    => true,
-            'tags'                   => $this->get('api.service.tag')
+            'cache_id'    => $cacheID,
+            'content'     => $letter,
+            'contentId'   => $letter->id,
+            'letter'      => $letter,
+            'o_content'   => $letter,
+            'x-tags'      => 'letter,' . $letter->id,
+            'x-cacheable' => true,
+            'tags'        => $this->get('api.service.tag')
                 ->getListByIdsKeyMapped($letter->tags)['items']
         ]);
     }
@@ -174,12 +170,10 @@ class LetterController extends Controller
      */
     public function showFormAction()
     {
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('letter/letter_form.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'recaptcha'      => $this->get('core.recaptcha')
+            'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml()
         ]);
@@ -324,18 +318,17 @@ class LetterController extends Controller
     }
 
     /**
-     * Returns the advertisements for the letters frontpage.
-     *
-     * @return array The list of advertisements.
+     * Loads the list of positions and advertisements on renderer service.
      */
     public function getAds()
     {
-        // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
         $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
+            ->findByPositionsAndCategory($positions);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 }

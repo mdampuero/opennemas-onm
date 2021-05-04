@@ -189,16 +189,15 @@ class Controller extends SymfonyController
     }
 
     /**
-     * Returns an array with the list of positions and advertisements.
+     * Loads the list of positions and advertisements on renderer service.
      *
      * @param Category $category The category object.
-     *
-     * @return array The list of positions and advertisements.
+     * @param string   $token    The subscription token.
      */
     protected function getAdvertisements($category = null, $token = null)
     {
         if (!$this->get('core.helper.subscription')->hasAdvertisements($token)) {
-            return [ [], [] ];
+            return;
         }
 
         $categoryId = empty($category) ? 0 : $category->id;
@@ -213,7 +212,9 @@ class Controller extends SymfonyController
         $advertisements = $this->get('advertisement_repository')
             ->findByPositionsAndCategory($positions, $categoryId);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**
@@ -221,7 +222,7 @@ class Controller extends SymfonyController
      *
      * @return array The list of categories.
      */
-    protected function getCategories($items = null)
+    protected function getCategories()
     {
         $categories = $this->get('orm.manager')
             ->getRepository('Category')

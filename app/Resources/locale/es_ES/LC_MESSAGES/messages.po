@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 07:31+0000\n"
-"PO-Revision-Date: 2021-05-04 09:34+0200\n"
+"POT-Creation-Date: 2021-05-04 11:07+0000\n"
+"PO-Revision-Date: 2021-05-04 13:08+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1297,6 +1297,12 @@ msgstr "Error al crear una nueva instancia"
 msgid "%s items deleted successfully"
 msgstr "%s elementos eliminados correctamente"
 
+msgid "No file provided"
+msgstr "No se proporcionó ningún archivo"
+
+msgid "A file with the same name has already been uploaded today"
+msgstr "Ya se ha subido un fichero con el mismo nombre en el día de hoy"
+
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Has excedido el límite de versiones. Elimina una para crear una nueva"
 
@@ -1536,6 +1542,12 @@ msgstr "Antetítulo"
 
 msgid "Published date"
 msgstr "Fecha de publicación"
+
+msgid "Publisher id"
+msgstr "Id del editor"
+
+msgid "Publisher name"
+msgstr "Nombre del editor"
 
 msgid "Tag names"
 msgstr "Nombres de etiquetas"

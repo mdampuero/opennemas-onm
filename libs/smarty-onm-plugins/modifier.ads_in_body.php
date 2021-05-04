@@ -17,9 +17,10 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         return !in_array(trim($a), ['<p>&nbsp;</p>', '<p></p>']);
     });
 
-    $id     = $contentType === 'amp' ? 1060 : ($contentType === 'opinion' ? 3200 : 2200);
-    $smarty = getService('core.template');
-    $ads    = $smarty->getValue('advertisements');
+    $id       = $contentType === 'amp' ? 1060 : ($contentType === 'opinion' ? 3200 : 2200);
+    $smarty   = getService('core.template');
+    $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    $ads      = $renderer->getAdvertisements();
 
     if (empty($ads)) {
         return $body;
@@ -47,7 +48,6 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     sort($slots);
 
     $html      = '<div class="ad-slot oat" data-type="%s"></div>';
-    $renderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $safeFrame = $smarty->getContainer()->get('core.helper.advertisement')
         ->isSafeFrameEnabled();
 

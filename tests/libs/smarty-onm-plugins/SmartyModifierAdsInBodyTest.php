@@ -40,7 +40,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'render' ])
+            ->setMethods([ 'render', 'getAdvertisements' ])
             ->getMock();
 
         $this->kernel->expects($this->any())->method('getContainer')
@@ -81,8 +81,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $ad2            = new \Advertisement();
         $ad2->positions = [ 2203 ];
 
-        $this->smarty->expects($this->at(0))->method('getValue')
-            ->with('advertisements')
+        $this->renderer->expects($this->at(0))->method('getAdvertisements')
             ->willReturn([ $ad1, $ad2 ]);
 
         $this->smarty->expects($this->at(1))->method('getValue')
@@ -96,7 +95,9 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->at(0))->method('isSafeFrameEnabled')
             ->willReturn(false);
 
-        $this->renderer->expects($this->any())->method('render')
+        $this->renderer->expects($this->at(1))->method('render')
+            ->willReturn('<ad>');
+        $this->renderer->expects($this->at(2))->method('render')
             ->willReturn('<ad>');
 
         $body        = '<p>foo bar baz</p><p>thud qwer asdf</p>';
@@ -112,8 +113,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
      */
     public function testAdsInBodyWhenEmpty()
     {
-        $this->smarty->expects($this->at(0))->method('getValue')
-            ->with('advertisements')
+        $this->renderer->expects($this->at(0))->method('getAdvertisements')
             ->willReturn(null);
 
         $body = '<p>foo bar baz</p><p>thud qwer asdf</p>';

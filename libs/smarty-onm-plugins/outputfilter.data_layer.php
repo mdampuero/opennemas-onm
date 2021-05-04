@@ -36,7 +36,7 @@ function smarty_outputfilter_data_layer($output, $smarty)
             return $output;
         }
 
-        $code = $smarty->getContainer()->get('core.data.layer')
+        $code = $smarty->getContainer()->get('core.service.data_layer')
             ->getDataLayerCode($dataLayerMap);
 
         $output = preg_replace('@(</head>)@', $code . '${1}', $output);

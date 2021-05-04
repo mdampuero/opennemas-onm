@@ -745,6 +745,124 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getPublisherId without content.
+     */
+    public function testGetPublisherIdWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublisherId');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublisherId with content.
+     */
+    public function testGetPublisherId()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublisherId');
+        $method->setAccessible(true);
+
+        $content               = new Content();
+        $content->fk_publisher = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $author = new User([ 'id' => 1 ]);
+        $this->as->expects($this->any())->method('getItem')
+            ->with($content->fk_publisher)
+            ->willReturn($author);
+
+        $this->assertEquals(1, $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublisherId when exception.
+     */
+    public function testGetPublisherIdWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublisherId');
+        $method->setAccessible(true);
+
+        $content               = new Content();
+        $content->fk_publisher = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetItemException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublisherName without content.
+     */
+    public function testGetPublisherNameWhenNoContent()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublisherName');
+        $method->setAccessible(true);
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn(null);
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublisherName with content.
+     */
+    public function testGetPublisherName()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublisherName');
+        $method->setAccessible(true);
+
+        $content               = new Content();
+        $content->fk_publisher = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $author = new User([ 'id' => 1, 'name' => 'John Doe' ]);
+        $this->as->expects($this->any())->method('getItem')
+            ->with($content->fk_publisher)
+            ->willReturn($author);
+
+        $this->assertEquals('John Doe', $method->invokeArgs($this->extractor, []));
+    }
+
+    /**
+     * Tests getPublisherName when exception.
+     */
+    public function testGetPublisherNameWhenException()
+    {
+        $method = new \ReflectionMethod($this->extractor, 'getPublisherName');
+        $method->setAccessible(true);
+
+        $content               = new Content();
+        $content->fk_publisher = 1;
+
+        $this->template->expects($this->any())->method('getValue')
+            ->with('o_content')
+            ->willReturn($content);
+
+        $this->as->expects($this->once())->method('getItem')
+            ->will($this->throwException(new GetItemException()));
+
+        $this->assertEmpty($method->invokeArgs($this->extractor, []));
+    }
+
+    /**
      * Tests getTagSlugs with content.
      */
     public function testGetTagSlugs()

@@ -32,11 +32,6 @@ services:
                 template: '@Core/collector/brand.html.twig'
                 priority: 2000
 
-    core.data.layer:
-        class:     Common\Core\Component\DataLayer\DataLayer
-        arguments: [ '@service_container' ]
-        public:    true
-
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
@@ -58,7 +53,7 @@ services:
 
     core.google.tag_manager:
         class:     Common\Core\Component\Google\TagManager
-        arguments:   [ '@core.data.layer' ]
+        arguments:   [ '@service_container' ]
         public:    true
 
     core.image.processor:
@@ -87,14 +82,7 @@ services:
 
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
-        arguments:
-            - '@core.template.frontend'
-            - '@entity_repository'
-            - '@api.service.author'
-            - '@orm.manager'
-            - '@core.helper.advertisement'
-            - '@advertisement_repository'
-            - '@core.instance'
+        arguments: [ '@service_container' ]
         public:    true
 
     core.recaptcha:
@@ -153,6 +141,16 @@ services:
     core.security.user.oauth_provider:
         class:     Common\Core\Component\Security\User\OAuthUserProvider
         arguments: [ '@orm.manager', '@security.token_storage', [ 'instance' ] ]
+        public:    true
+
+    core.service.data_layer:
+        class:     Common\Core\Component\DataLayer\DataLayer
+        factory:   [ '@core.service.data_layer_factory', 'getDataLayer' ]
+        public:    true
+
+    core.service.data_layer_factory:
+        class:     Common\Core\Component\DataLayer\DataLayerFactory
+        arguments: [ '@service_container' ]
         public:    true
 
     core.theme:

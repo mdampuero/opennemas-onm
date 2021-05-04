@@ -22,7 +22,7 @@ class RobotsController extends Controller
     public function indexAction()
     {
         $disableRobots = $this->getParameter('disable_robots');
-        $instanceName  = $this->get('core.instance')->internal_name;
+        $siteUrl       = $this->get('core.instance')->getBaseUrl();
 
         $rules = $this->get('orm.manager')->getDataSet('Settings')
             ->get('robots_txt_rules', '');
@@ -35,10 +35,10 @@ class RobotsController extends Controller
             . "Disallow: " . ($disableRobots ? "/" : "/admin") . "\n"
             . (!empty($rules) ? "\n" . $rules : "") . "\n"
             . "\n"
-            . "Sitemap: " . SITE_URL . "/sitemapnews.xml.gz\n"
-            . "Sitemap: " . SITE_URL . "/sitemapweb.xml.gz\n"
-            . "Sitemap: " . SITE_URL . "/sitemapvideo.xml.gz\n"
-            . "Sitemap: " . SITE_URL . "/sitemapimage.xml.gz";
+            . "Sitemap: " . $siteUrl . "/sitemapnews.xml.gz\n"
+            . "Sitemap: " . $siteUrl . "/sitemapweb.xml.gz\n"
+            . "Sitemap: " . $siteUrl . "/sitemapvideo.xml.gz\n"
+            . "Sitemap: " . $siteUrl . "/sitemapimage.xml.gz";
 
         return new Response($content, 200, [
             'Content-Type' => 'text/plain',

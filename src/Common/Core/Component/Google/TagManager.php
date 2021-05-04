@@ -11,11 +11,11 @@ class TagManager
     /**
      * Initializes the GoogleTagManager.
      *
-     * @param DataLayer $dataLayer The Data Layer service.
+     * @param Container $container The container service.
      */
-    public function __construct($dataLayer)
+    public function __construct($container)
     {
-        $this->dataLayer = $dataLayer;
+        $this->container = $container;
     }
 
     /**
@@ -60,7 +60,7 @@ class TagManager
      */
     public function getGoogleTagManagerBodyCodeAMP($id)
     {
-        $data      = $this->dataLayer->getDataLayer();
+        $data      = $this->container->get('core.service.data_layer')->getDataLayer();
         $dataLayer = '';
 
         if (!empty($data)) {

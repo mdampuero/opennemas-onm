@@ -26,7 +26,8 @@ class GAnalyticsRenderer extends StatisticsRenderer
     protected function getParameters($content = null)
     {
         $accounts  = [];
-        $siteUrl   = $this->container->get('core.instance')->getBaseUrl();
+        $instance  = $this->container->get('core.instance');
+        $siteUrl   = $instance->getBaseUrl();
         $dataLayer = '';
 
         foreach ($this->config as $account) {
@@ -36,13 +37,13 @@ class GAnalyticsRenderer extends StatisticsRenderer
         }
 
         if (!$content instanceof Newsletter) {
-            $data = $this->container->get('core.data.layer')->getDataLayer();
+            $data = $this->container->get('core.service.data_layer')->getDataLayer();
             if (!empty($data)) {
-                $dataLayer = '"vars" : ' . json_encode(
+                $dataLayer = trim(json_encode(
                     array_map(function ($a) {
                         return $a === null ? '' : $a;
                     }, $data)
-                );
+                ), '{}');
             }
         }
 

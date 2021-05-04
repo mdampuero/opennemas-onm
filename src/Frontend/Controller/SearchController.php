@@ -43,13 +43,11 @@ class SearchController extends Controller
      */
     public function googleAction()
     {
-        list($positions, $advertisements) = $this->getAdvertisements();
+        $this->getAdvertisements();
 
         return $this->render('search/search.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'x-tags'         => 'google-search',
-            'x-cacheable'    => true,
+            'x-tags'      => 'google-search',
+            'x-cacheable' => true,
         ]);
     }
 

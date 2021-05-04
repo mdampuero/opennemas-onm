@@ -25,11 +25,6 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
-            ->disableOriginalConstructor()
-            ->setMethods(['isInTime'])
-            ->getMock();
-
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -48,11 +43,11 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'render', 'getInlineFormats' ])
+            ->setMethods([ 'render', 'getInlineFormats', 'getAdvertisement', 'getPositions' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', 'getValue', 'setValue' ])
+            ->setMethods([ 'getContainer', 'getValue' ])
             ->getMock();
 
         $this->em->expects($this->any())->method('getDataSet')
@@ -61,14 +56,8 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->contentHelper->expects($this->any())->method('isInTime')
-            ->willReturn(true);
-
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
-
-        $this->locale->expects($this->any())->method('getTimeZone')
-            ->willReturn(new \DateTimeZone('UTC'));
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -86,12 +75,6 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.locale':
-                return $this->locale;
-
-            case 'core.helper.content':
-                return $this->contentHelper;
-
             case 'frontend.renderer.advertisement':
                 return $this->renderer;
 
@@ -110,8 +93,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
+        $this->renderer->expects($this->at(0))->method('getPositions')
             ->willReturn([ 111, 222, 333 ]);
 
         $this->assertEmpty(
@@ -120,47 +102,18 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests smarty_function_render_ad_slot when not array.
+     * Tests smarty_function_render_ad_slot when no ad.
      */
-    public function testRenderAdSlotWhenNotArray()
+    public function testRenderAdSlotWhenNoAd()
     {
-        $ad            = new \Advertisement();
-        $ad->positions = [ 123 ];
-
         $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
+        $this->renderer->expects($this->at(0))->method('getPositions')
             ->willReturn([ 123 ]);
 
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
+        $this->renderer->expects($this->at(1))->method('getAdvertisement')
             ->willReturn(null);
-
-        $this->assertEmpty(
-            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
-        );
-    }
-
-    /**
-     * Tests smarty_function_render_ad_slot when no ads.
-     */
-    public function testRenderAdSlotWhenNoAds()
-    {
-        $ad            = new \Advertisement();
-        $ad->positions = [ 111 ];
-
-        $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
-            ->willReturn([ 'safe_frame' => 0 ]);
-
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
-            ->willReturn([ 123 ]);
-
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
-            ->willReturn([ $ad ]);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
@@ -178,64 +131,28 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $ad->starttime          = '2000-01-01 00:00:00';
         $ad->endtime            = null;
 
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
+        $this->renderer->expects($this->at(0))->method('getPositions')
             ->willReturn([ 123 ]);
 
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
-            ->willReturn([ $ad ]);
+        $this->renderer->expects($this->at(1))->method('getAdvertisement')
+            ->willReturn($ad);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(2))->method('getValue')
             ->with('ads_format')
             ->willReturn('baz');
 
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 1 ]);
 
-        $this->renderer->expects($this->at(0))->method('getInlineFormats')
+        $this->renderer->expects($this->at(2))->method('getInlineFormats')
             ->willReturn([ 'foo', 'gorp', 'wibble' ]);
 
         $this->assertEquals(
-            '<div class="ad-slot oat" data-position="123"></div>',
-            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
-        );
-    }
-
-    /**
-     * Tests smarty_function_render_ad_slot mode consume is enabled.
-     */
-    public function testRenderAdSlotWhenModeConsume()
-    {
-        $ad            = new \Advertisement();
-        $ad->starttime = '2000-01-01 00:00:00';
-        $ad->positions = [ 123 ];
-
-        $params = [
-            'position' => 123,
-            'mode'     => 'consume',
-        ];
-
-        $this->ds->expects($this->at(0))->method('get')->with('ads_settings')
-            ->willReturn([ 'safe_frame' => 0 ]);
-
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
-            ->willReturn([ 123 ]);
-
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
-            ->willReturn([ $ad ]);
-
-        $this->smarty->expects($this->at(7))->method('getValue')
-            ->with('app')
-            ->willReturn([
-                'extension'          => 'foobar',
-                'advertisementGroup' => 'gulp'
-            ]);
-
-        $this->assertEmpty(
-            smarty_function_render_ad_slot($params, $this->smarty)
+            '<div class="ad-slot oat" data-position="123" data-mode="consume"></div>',
+            smarty_function_render_ad_slot([
+                'mode'     => 'consume',
+                'position' => 123
+            ], $this->smarty)
         );
     }
 
@@ -249,15 +166,13 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $ad->starttime = '2000-01-01 00:00:00';
         $ad->endtime   = null;
 
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('ads_positions')
+        $this->renderer->expects($this->at(0))->method('getPositions')
             ->willReturn([ 123 ]);
 
-        $this->smarty->expects($this->at(2))->method('getValue')
-            ->with('advertisements')
-            ->willReturn([ $ad ]);
+        $this->renderer->expects($this->at(1))->method('getAdvertisement')
+            ->willReturn($ad);
 
-        $this->smarty->expects($this->at(6))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('app')
             ->willReturn([
                 'extension'          => 'foobar',
@@ -267,7 +182,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->once())->method('get')->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 
-        $this->renderer->expects($this->any())->method('render')
+        $this->renderer->expects($this->at(2))->method('render')
             ->willReturn('Ad output');
 
         $this->assertEquals(
