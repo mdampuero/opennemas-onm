@@ -406,7 +406,7 @@ class Importer
                     ? $this->config['agency_string']
                     : null,
             'pretitle'        => $resource->pretitle,
-            'summary'         => $resource->summary,
+            'description'     => $resource->summary,
             'title_int'       => $resource->title,
             'slug'            => $this->container->get('data.manager.filter')
                 ->set($resource->title)

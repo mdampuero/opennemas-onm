@@ -9,6 +9,7 @@
  */
 namespace Tests\Libs\Smarty;
 
+use Common\Model\Entity\Content;
 use Common\Model\Entity\Instance;
 
 /**
@@ -31,6 +32,11 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->contentHelper = $this->getMockBuilder('ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getSummary' ])
             ->getMock();
 
         $this->ds = $this->getMockBuilder('DataSet')
@@ -105,6 +111,9 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.content_media':
                 return $this->helper;
 
+            case 'core.helper.content':
+                return $this->contentHelper;
+
             case 'core.instance':
                 return $this->instance;
 
@@ -176,6 +185,10 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
+        $this->contentHelper->expects($this->once())->method('getSummary')
+            ->with($content)
+            ->willReturn($content->summary);
+
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
             . "<meta property=\"og:description\" content=\"This is the summary\" />\n"
@@ -228,7 +241,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaFacebookWhenContentIsVideo()
     {
-        $content                    = new \Content();
+        $content                    = new Content();
         $content->content_type      = 9;
         $content->content_type_name = 'video';
         $content->title             = 'This is the title';
@@ -246,10 +259,9 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_name')
             ->willReturn('Site Name');
 
-        $this->fm->expects($this->at(2))->method('get')
-            ->willReturn('This is the title');
-        $this->fm->expects($this->at(5))->method('get')
-            ->willReturn('This is the description');
+        $this->contentHelper->expects($this->once())->method('getSummary')
+            ->with($content)
+            ->willReturn($content->description);
 
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
@@ -296,6 +308,9 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
+
+        $this->contentHelper->expects($this->once())->method('getSummary')
+            ->willReturn($content->summary);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"

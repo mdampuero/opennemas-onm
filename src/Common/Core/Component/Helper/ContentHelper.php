@@ -11,9 +11,8 @@
 
 namespace Common\Core\Component\Helper;
 
-use Opennemas\Cache\Core\Cache;
-use Repository\EntityManager;
-use Api\Service\Service;
+use Api\Exception\GetItemException;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
 * Perform searches in Database related with one content
@@ -21,17 +20,91 @@ use Api\Service\Service;
 class ContentHelper
 {
     /**
+     * The services container.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * The content service.
+     *
+     * @var ContentService
+     */
+    protected $service;
+
+    /**
+     * The frontend template.
+     *
+     * @var Template
+     */
+    protected $template;
+
+    /**
+     * The entity repository.
+     *
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * The cache service.
+     *
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
+     * The tags service.
+     *
+     * @var TagService
+     */
+    protected $tagService;
+
+    /**
+     * The subscriptions helper.
+     *
+     * @var SubscriptionHelper
+     */
+    protected $subscriptionHelper;
+
+    /**
      * Initializes the ContentHelper.
      *
-     * @param EntityManager  $em      The entity manager.
-     * @param Service        $service The API service for content.
-     * @param Cache          $cache   The cache service.
+     * @param Container $container The service container.
      */
-    public function __construct(EntityManager $em, Service $service, Cache $cache)
+    public function __construct($container)
     {
-        $this->cache   = $cache;
-        $this->service = $service;
-        $this->em      = $em;
+        $this->container          = $container;
+        $this->service            = $this->container->get('api.service.content');
+        $this->template           = $this->container->get('core.template.frontend');
+        $this->entityManager      = $this->container->get('entity_repository');
+        $this->cache              = $this->container->get('cache.connection.instance');
+        $this->tagService         = $this->container->get('api.service.tag');
+        $this->subscriptionHelper = $this->container->get('core.helper.subscription');
+        $this->locale             = $this->container->get('core.locale');
+    }
+
+    /**
+     * Returns the body for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content body.
+     */
+    public function getBody($item = null) : ?string
+    {
+        $map = [
+            'album' => 'description',
+            'poll'  => 'description',
+            'video' => 'description'
+        ];
+
+        $value = array_key_exists($this->getType($item), $map)
+            ? $this->getProperty($item, $map[$this->getType($item)])
+            : $this->getProperty($item, 'body');
+
+        return !empty($value) ? $value : null;
     }
 
     /**
@@ -78,6 +151,152 @@ class ContentHelper
             ? $end->endtime->format('Y-m-d H:i:s') : null;
 
         return min(array_filter([ $starttime, $endtime ]));
+    }
+
+    /**
+     * Returns the caption for an item.
+     *
+     * @param mixed $item The item to get caption from.
+     *
+     * @return string The item caption when the photo is provided as an array (with
+     *                the object, the position in the list of related contents of
+     *                the same type and the caption).
+     */
+    public function getCaption($item = null) : ?string
+    {
+        if (!is_array($item)) {
+            return null;
+        }
+
+        return array_key_exists('caption', $item)
+            ? htmlentities($item['caption'])
+            : null;
+    }
+
+    /**
+     * Returns the content of specified type for the provided item.
+     *
+     * @param mixed  $item The item to return or the id of the item to return. If
+     *                     not provided, the function will try to search the item in
+     *                     the template.
+     * @param string $type Content type used to find the content when an id
+     *                     provided as first parameter.
+     *
+     * @return Content The content.
+     */
+    public function getContent($item = null, $type = null)
+    {
+        $item = $item ?? $this->template->getValue('item');
+
+        // Item as a related content (array with item + caption + position)
+        if (is_array($item) && array_key_exists('item', $item)) {
+            $item = $item['item'];
+        }
+
+        if (!is_object($item) && is_numeric($item) && !empty($type)) {
+            try {
+                $item = $this->entityManager->find($type, $item);
+            } catch (GetItemException $e) {
+                return null;
+            }
+        }
+
+        if (!$item instanceof \Common\Model\Entity\Content
+            && !$item instanceof \Content
+        ) {
+            return null;
+        }
+
+        return $this->isReadyForPublish($item) ? $item : null;
+    }
+
+    /**
+     * Returns the creation date for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content creation date.
+     */
+    public function getCreationDate($item = null) : ?\Datetime
+    {
+        $value = $this->getProperty($item, 'created');
+
+        return is_object($value) ? $value : new \Datetime($value);
+    }
+
+    /**
+     * Returns the description for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content description.
+     */
+    public function getDescription($item = null) : ?string
+    {
+        $value = $this->getProperty($item, 'description');
+
+        return !empty($value) ? htmlentities($value) : null;
+    }
+
+    /**
+     * Returns the id of an item.
+     *
+     * @param Content $content The content to get id from.
+     *
+     * @return int The content id.
+     */
+    public function getId($item) : ?int
+    {
+        $item = $this->getContent($item);
+
+        return empty($item) ? null : $item->pk_content;
+    }
+
+    /**
+     * Returns the pretitle for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content pretitle.
+     */
+    public function getPretitle($item = null) : ?string
+    {
+        $value = $this->getProperty($item, 'pretitle');
+
+        return !empty($value) ? htmlentities($value) : null;
+    }
+
+    /**
+     * Returns a property for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     * @param string  $name The property name.
+     *
+     * @return mixed The property value.
+     */
+    public function getProperty($item, string $name)
+    {
+        $item = $this->getContent($item);
+
+        if (empty($item)) {
+            return null;
+        }
+
+        return !empty($item->{$name}) ? $item->{$name} : null;
+    }
+
+    /**
+     * Returns the publication date for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content publication date.
+     */
+    public function getPublicationDate($item = null) : ?\Datetime
+    {
+        $value = $this->getProperty($item, 'starttime') ?? $this->getProperty($item, 'created');
+
+        return is_object($value) ? $value : new \Datetime($value);
     }
 
     /**
@@ -142,7 +361,7 @@ class ContentHelper
         }
 
         try {
-            $items = $this->em->findBy($criteria, [
+            $items = $this->entityManager->findBy($criteria, [
                 'starttime' => 'desc'
             ], $epp + 1, 1);
 
@@ -155,13 +374,196 @@ class ContentHelper
     }
 
     /**
+     * Returns the summary for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content summary.
+     */
+    public function getSummary($item = null) : ?string
+    {
+        if (in_array($item->content_type_name, [ 'article', 'opinion', 'video' ])) {
+            return $this->getProperty($item, 'description');
+        }
+
+        $value = $this->getProperty($item, 'summary');
+
+        //TODO: Recover use of htmlentities when possible
+        return !empty($value) ? $value : null;
+    }
+
+    /**
+     * Returns the title for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content title.
+     */
+    public function getTitle($item = null) : ?string
+    {
+        $value = $this->getProperty($item, 'title');
+
+        return !empty($value) ? htmlentities($value) : null;
+    }
+
+    /**
+     * Returns the list of tags for the provided item.
+     *
+     * @param Content $item The item to get tags from.
+     *
+     * @return array The list of tags.
+     */
+    public function getTags($item = null) : array
+    {
+        $value = $this->getProperty($item, 'tags');
+
+        if (empty($value)) {
+            return [];
+        }
+
+        try {
+            return $this->tagService->getListByIds($value)['items'];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Returns the internal type or human-readable type for the provided item.
+     *
+     * @param Content $item     The item to get content type for.
+     * @param bool    $readable True if the instance and item have comments enabled. False
+     *                          otherwise.
+     *
+     * @param string The internal or human-readable type.
+     */
+    public function getType($item = null, bool $readable = false) : ?string
+    {
+        $value = $this->getProperty($item, 'content_type_name');
+
+        return !empty($value)
+            ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
+            : null;
+    }
+
+    /**
+     * Check if the content has a body.
+     *
+     * @param Content $item The item to check body for.
+     *
+     * @return bool True if the content has a body. False otherwise.
+     */
+    public function hasBody($item = null) : bool
+    {
+        $token = $this->template->getValue('o_token');
+
+        return !empty($this->getBody($item))
+            && !$this->subscriptionHelper->isHidden($token, 'body');
+    }
+
+    /**
+     * Checks if the item has a caption.
+     *
+     * @param mixed $item The item to get caption from.
+     *
+     * @return bool True if the item is provided as an array (with the object, the
+     *              position in the list of related contents of the same type and
+     *              the caption) and the caption is not empty.
+     */
+    public function hasCaption($item = null) : bool
+    {
+        return !empty($this->getCaption($item));
+    }
+
+    /**
+     * Checks if the content has comments enabled or not.
+     *
+     * @param Content $item The item to get if comments are enabled.
+     *
+     * @return bool True if enabled, false otherwise.
+     */
+    public function hasCommentsEnabled($item = null) : bool
+    {
+        return !empty($this->getProperty($item, 'with_comment'));
+    }
+
+    /**
+     * Check if the content has a description.
+     *
+     * @param Content $item The item to check description for.
+     *
+     * @return bool True if the content has a description. False otherwise.
+     */
+    public function hasDescription($item) : bool
+    {
+        return !empty($this->getDescription($item));
+    }
+
+    /**
+     * Check if the content has a pretitle.
+     *
+     * @param Content $item The item to check pretitle for.
+     *
+     * @return bool True if the content has a pretitle. False otherwise.
+     */
+    public function hasPretitle($item) : bool
+    {
+        $token = $this->template->getValue('o_token');
+
+        return !empty($this->getPretitle($item))
+            && !$this->subscriptionHelper->isHidden($token, 'pretitle');
+    }
+
+    /**
+     * Checks if the content has a summary.
+     *
+     * @param Content $item The item to check summary for.
+     *
+     * @return bool True if the content has a summary. False otherwise.
+     */
+    public function hasSummary($item) : bool
+    {
+        $token = $this->template->getValue('o_token');
+
+        return !empty($this->getSummary($item))
+            && !$this->subscriptionHelper->isHidden($token, 'summary');
+    }
+
+    /**
+     * Checks if the content has tags.
+     *
+     * @param Content $item The item to check tags for.
+     *
+     * @return bool True if the content has tags. False otherwise.
+     */
+    public function hasTags($item = null) : bool
+    {
+        return !empty($this->getTags($item));
+    }
+
+    /**
+     * Checks if the content has a title.
+     *
+     * @param Content $item The item to check title for.
+     *
+     * @return bool True if the content has a title. False otherwise.
+     */
+    public function hasTitle($item) : bool
+    {
+        $token = $this->template->getValue('o_token');
+
+        return !empty($this->getTitle($item))
+            && !$this->subscriptionHelper->isHidden($token, 'title');
+    }
+
+    /**
      * Check if a content is in time for publishing
      *
      * @return boolean
      */
     public function isInTime($item)
     {
-        $timezone  = getService('core.locale')->getTimeZone();
+        $timezone  = $this->locale->getTimeZone();
         $now       = new \DateTime(null, $timezone);
         $starttime = !$item->starttime instanceof \DateTime ?
             new \DateTime($item->starttime, $timezone) :
@@ -241,7 +643,7 @@ class ContentHelper
             return false;
         }
 
-        $timezone = getService('core.locale')->getTimeZone();
+        $timezone = $this->locale->getTimeZone();
 
         $end = !$item->endtime instanceof \DateTime ?
             new \DateTime($item->endtime, $timezone) :
@@ -265,7 +667,7 @@ class ContentHelper
             return false;
         }
 
-        $timezone = getService('core.locale')->getTimeZone();
+        $timezone = $this->locale->getTimeZone();
 
         $start = !$item->starttime instanceof \DateTime ?
             new \DateTime($item->starttime, $timezone) :
