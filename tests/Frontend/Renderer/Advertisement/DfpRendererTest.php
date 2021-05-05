@@ -50,6 +50,10 @@ class DfpRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -73,6 +77,9 @@ class DfpRendererTest extends TestCase
 
             case 'view':
                 return $this->view;
+
+            case 'core.globals':
+                return $this->globals;
         }
 
         return null;

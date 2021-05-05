@@ -73,6 +73,10 @@ class ImageRendererTest extends TestCase
             ->setMethods([ 'getBaseUrl' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('thud.opennemas.com');
         $this->container->expects($this->any())->method('get')
@@ -83,6 +87,9 @@ class ImageRendererTest extends TestCase
 
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->renderer = new ImageRenderer($this->container);
     }
@@ -98,6 +105,9 @@ class ImageRendererTest extends TestCase
 
             case 'core.instance':
                 return $this->instance;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'core.helper.url_generator':
                 return $this->ugh;

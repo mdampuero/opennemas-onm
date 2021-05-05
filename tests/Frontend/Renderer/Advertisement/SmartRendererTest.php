@@ -50,6 +50,10 @@ class SmartRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -67,6 +71,9 @@ class SmartRendererTest extends TestCase
         switch ($name) {
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'entity_repository':
                 return $this->em;

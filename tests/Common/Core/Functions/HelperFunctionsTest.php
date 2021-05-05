@@ -53,7 +53,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl' ])
+            ->setMethods([ 'getBaseUrl', 'getMediaShortPath' ])
             ->getMock();
 
         $this->theme = $this->getMockBuilder('Theme')->getMock();
@@ -229,8 +229,28 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInstanceMedia()
     {
+        $this->instance->expects($this->any())->method('getMediaShortPath')
+            ->willReturn('media/opennemas');
+
         $this->instance->internal_name = 'opennemas';
         $this->assertEquals('media/opennemas/', get_instance_media());
+    }
+
+    /**
+     * Tests get_media_dir
+     */
+    public function testGetMediaDir()
+    {
+        $this->instance->internal_name = 'opennemas';
+        $this->assertEquals('opennemas', get_media_dir());
+    }
+
+        /**
+     * Tests get_media_url
+     */
+    public function testGetMediaUrl()
+    {
+        $this->assertEquals('/media/', get_media_url());
     }
 
     /**

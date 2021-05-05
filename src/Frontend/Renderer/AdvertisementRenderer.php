@@ -61,7 +61,7 @@ class AdvertisementRenderer extends Renderer
         parent::__construct($container);
         $this->router   = $this->container->get('router');
         $this->tpl      = $this->container->get('view')->get('backend');
-        $this->instance = $this->container->get('core.instance');
+        $this->instance = $this->container->get('core.globals')->getInstance();
         $this->ds       = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance');
     }

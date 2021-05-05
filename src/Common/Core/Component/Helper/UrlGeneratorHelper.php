@@ -40,7 +40,7 @@ class UrlGeneratorHelper
     public function __construct($container)
     {
         $this->container = $container;
-        $this->instance  = $this->container->get('core.instance');
+        $this->instance  = $this->container->get('core.globals')->getInstance();
         $this->locale    = $this->container->get('core.locale');
     }
 

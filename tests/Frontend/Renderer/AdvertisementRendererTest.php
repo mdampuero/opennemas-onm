@@ -65,6 +65,10 @@ class AdvertisementRendererTest extends TestCase
             ->setMethods([ 'getBaseUrl' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('thud.opennemas.com');
         $this->contentHelper->expects($this->any())->method('isInTime')
@@ -75,6 +79,9 @@ class AdvertisementRendererTest extends TestCase
             ->with('Settings', 'instance')->willReturn($this->ds);
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
+        $this->globals->expects($this->any())
+            ->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -91,8 +98,8 @@ class AdvertisementRendererTest extends TestCase
             case 'error.log':
                 return $this->logger;
 
-            case 'core.instance':
-                return $this->instance;
+            case 'core.globals':
+                return $this->globals;
 
             case 'core.helper.content':
                 return $this->contentHelper;

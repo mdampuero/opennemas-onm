@@ -62,6 +62,10 @@ class ReviveRendererTest extends TestCase
             ->setMethods([ 'getBaseUrl' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('thud.opennemas.com');
 
@@ -73,6 +77,9 @@ class ReviveRendererTest extends TestCase
 
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->renderer = new ReviveRenderer($this->container);
     }
@@ -88,6 +95,9 @@ class ReviveRendererTest extends TestCase
 
             case 'core.instance':
                 return $this->instance;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'orm.manager':
                 return $this->em;

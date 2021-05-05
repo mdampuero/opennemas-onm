@@ -55,8 +55,7 @@ class NewsletterSchedulerCommand extends Command
         $i = 1;
 
         foreach ($instances as $instance) {
-            $this->getContainer()->get('cache.connection.instance')
-                ->init();
+            $this->getContainer()->get('cache.connection.instance')->init();
 
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
@@ -67,6 +66,7 @@ class NewsletterSchedulerCommand extends Command
 
             try {
                 $this->getContainer()->get('core.loader')
+                    ->resetTemplateDir()
                     ->load($instance->internal_name);
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
