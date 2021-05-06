@@ -114,7 +114,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::__construct
+     * Tests __construct.
      */
     public function testConstruct()
     {
@@ -198,7 +198,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getInlineFormats
+     * Tests getInlineFormats.
      */
     public function testGetInlineFormats()
     {
@@ -209,7 +209,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceCSSClasses
+     * Tests getDeviceCSSClasses.
      */
     public function testGetDeviceCSSClasses()
     {
@@ -239,7 +239,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
+     * Tests getMark.
      */
     public function testGetMark()
     {
@@ -258,7 +258,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
+     * Tests getMark with custom.
      */
     public function testGetMarkWithCustomDefaultMark()
     {
@@ -273,7 +273,40 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
+     * Tests getMarkOrientation.
+     */
+    public function testGetMarkOrientation()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getMarkOrientation');
+        $method->setAccessible(true);
+
+        $ad         = new \Advertisement();
+        $ad->params = [ 'orientation' => 'waldo' ];
+
+        $this->assertEquals(
+            'waldo',
+            $method->invokeArgs($this->renderer, [ $ad ])
+        );
+    }
+
+    /**
+     * Tests getMarkOrientation when empty.
+     */
+    public function testGetMarkOrientationWhenEmpty()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getMarkOrientation');
+        $method->setAccessible(true);
+
+        $ad = new \Advertisement();
+
+        $this->assertEquals(
+            'top',
+            $method->invokeArgs($this->renderer, [ $ad ])
+        );
+    }
+
+    /**
+     * Tests getSlot.
      */
     public function testGetSlot()
     {
@@ -283,10 +316,10 @@ class AdvertisementRendererTest extends TestCase
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'width' => 300, 'floating' => true ];
+        $ad->params     = [ 'height' => 600, 'width' => 300, 'floating' => true ];
 
         $output = '<div class="ad-slot oat oat-visible oat-top "'
-            . ' data-mark="Advertisement">foo</div>';
+            . ' data-mark="Advertisement" style="height: 615px;">foo</div>';
 
         $content = 'foo';
 
@@ -297,17 +330,53 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * Tests getSlotSizeStyle.
+     */
+    public function testGetSlotSizeStyle()
+    {
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
+
+        $output = ' style="height: 615px;"';
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->getSlotSizeStyle($ad, $ad->params)
+        );
+    }
+
+    /**
+     * Tests render with safeframe.
      */
     public function testRenderWithSafeFrameMode()
     {
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'placeholder' => 'placeholder1_1' ];
+        $ad->params     = [
+            'height' => 600,
+            'width' => 300,
+            'placeholder' => 'placeholder1_1'
+        ];
 
-        $returnValue = '<div class="ad-slot oat" data-id="123"'
-            . ' data-type="37"></div>';
+        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
 
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
@@ -320,7 +389,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * Tests render with inline mode.
      */
     public function testRenderWithInlineMode()
     {
@@ -353,7 +422,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * Tests renderInlineHeaders without ads.
      */
     public function testRenderInlineHeadersWithNoAds()
     {
@@ -361,7 +430,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * Tests renderInlineHeaders.
      */
     public function testRenderInlineHeaders()
     {
@@ -405,7 +474,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderDfpHeaders
+     * Tests renderDfpHeaders.
      */
     public function testRenderDfpHeaders()
     {
@@ -435,7 +504,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderReviveHeaders
+     * Tests renderReviveHeaders.
      */
     public function testRenderReviveHeaders()
     {
@@ -465,7 +534,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSmartHeaders
+     * Tests renderSmartHeaders.
      */
     public function testRenderSmartHeaders()
     {
@@ -495,7 +564,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial.
      */
     public function testRenderInlineInterstitial()
     {
@@ -574,7 +643,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial with empty sizes.
      */
     public function testRenderInlineInterstitialWithEmptySizes()
     {
@@ -591,7 +660,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial when no ad.
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
@@ -614,7 +683,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceAdvertisementSize
+     * Tests getDeviceAdvertisementSize.
      */
     public function testGetDeviceAdvertisementSize()
     {
@@ -647,17 +716,35 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrameSlot
+     * Tests renderSafeFrameSlot.
      */
     public function testRenderSafeFrameSlot()
     {
         $method = new \ReflectionMethod($this->renderer, 'renderSafeFrameSlot');
         $method->setAccessible(true);
 
-        $ad             = new \Advertisement();
-        $ad->pk_content = 123;
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
 
         $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
+
         $this->assertEquals(
             $returnValue,
             $method->invokeArgs($this->renderer, [ $ad ])
@@ -665,7 +752,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getRendererClass
+     * Tests getRendererClass.
      */
     public function testGetRendererClass()
     {
@@ -705,7 +792,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * Tests isFloating when is a floating advertisement.
+     * Tests isFloating when is no floating advertisement.
      */
     public function testIsFloatingWhenFalse()
     {

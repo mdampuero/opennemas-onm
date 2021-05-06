@@ -79,7 +79,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderAmp
+     * @Tests renderAmp.
      */
     public function testRenderAmp()
     {
@@ -154,7 +154,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderFia
+     * @Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -220,7 +220,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     * @Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -228,6 +228,19 @@ class SmartRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
         $ad->params  = [ 'smart_format_id' => 321 ];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $content     = new \stdClass();
         $content->id = 123;
@@ -267,7 +280,8 @@ class SmartRendererTest extends TestCase
             ->with('advertisement/helpers/inline/smart.slot.onecall_async.tpl')
             ->willReturn($output);
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height: 615px;">'
             . $output . '</div>';
         $this->assertEquals(
             $output,
@@ -276,7 +290,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     * @Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -298,7 +312,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInline
+     * @Tests renderInline with AMP.
      */
     public function testRenderInlineWithAmp()
     {
@@ -320,7 +334,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderSafeFrame
+     * @Tests renderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -404,7 +418,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::renderInlineHeader
+     * @Tests renderInlineHeader.
      */
     public function testRenderInlineHeader()
     {
@@ -475,7 +489,7 @@ class SmartRendererTest extends TestCase
         );
     }
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getCustomCode
+     * @Tests getCustomCode.
      */
     public function testGetCustomCode()
     {
@@ -502,7 +516,7 @@ class SmartRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\SmartRenderer::getTargeting
+     * @Tests getTargeting.
      */
     public function testGetTargeting()
     {
