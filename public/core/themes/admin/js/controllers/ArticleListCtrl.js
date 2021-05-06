@@ -98,6 +98,9 @@
          *   Configures and initializes the list.
          */
         $scope.init = function() {
+          $scope.backup.criteria    = $scope.criteria;
+          $scope.app.columns.hidden = [];
+
           oqlEncoder.configure({
             placeholder: {
               title: 'title ~ "%[value]%"'
