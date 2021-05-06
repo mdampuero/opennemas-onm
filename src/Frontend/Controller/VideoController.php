@@ -105,6 +105,7 @@ class VideoController extends FrontendController
 
         $params = array_merge($params, [
             'videos'      => $response['items'],
+            'total'       => $response['total'],
             'pagination'  => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
