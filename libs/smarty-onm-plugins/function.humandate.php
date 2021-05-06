@@ -8,7 +8,9 @@ function smarty_function_humandate($params, &$smarty)
     $updated = $params['updated'];
 
     $article   = isset($params['article']) ? $params['article'] : null;
-    $starttime = strtotime($article->starttime);
+    $starttime = $article->starttime instanceof \DateTime
+        ? $article->starttime->getTimestamp()
+        : strtotime($article->starttime);
 
 
     if (array_key_exists('date', $params) && $params['date'] instanceof \DateTime) {
