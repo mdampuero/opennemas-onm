@@ -28,7 +28,7 @@
       <div class="img-thumbnail" ng-show="!{$iName}">
         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}">
           <i class="fa fa-picture-o fa-2x"></i>
-          <h5>{t}Pick an image{/t}</h5>
+          <h5>{t}Select an element{/t}</h5>
         </div>
       </div>
       <div class="dynamic-image-placeholder" ng-show="{$iName}">

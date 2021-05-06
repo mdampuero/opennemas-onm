@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-04 11:07+0000\n"
-"PO-Revision-Date: 2021-05-04 13:08+0200\n"
+"POT-Creation-Date: 2021-05-06 13:49+0000\n"
+"PO-Revision-Date: 2021-05-06 15:50+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -4986,6 +4986,9 @@ msgstr ""
 
 msgid "No available contents"
 msgstr "No hay contenidos disponibles"
+
+msgid "Select an element"
+msgstr "Selecciona un elemento"
 
 #, fuzzy
 msgid "Attachment"

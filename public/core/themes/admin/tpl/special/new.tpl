@@ -129,7 +129,7 @@
                         <div class="img-thumbnail" ng-if="!photo1">
                           <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="photo1">
                             <i class="fa fa-picture-o fa-2x"></i>
-                            <h5>no que esta{t}Pick an image{/t}</h5>
+                            <h5>{t}Pick an image{/t}</h5>
                           </div>
                         </div>
                         <div class="dynamic-image-placeholder" ng-if="photo1">
