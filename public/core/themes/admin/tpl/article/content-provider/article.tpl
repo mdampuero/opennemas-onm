@@ -11,7 +11,7 @@
         </div>
         <div class="title">
             <i class="fa fa-star content-icon-suggested"></i>
-            <span class="type">{get_type($content, true)}</span>
+            <span class="type">{get_type($content, true, true)}</span>
             {$content->title}
         </div>
     </div>

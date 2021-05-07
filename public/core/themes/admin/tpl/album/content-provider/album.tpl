@@ -9,7 +9,7 @@
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            <span class="type">{get_type($content, true)}</span>
+            <span class="type">{get_type($content, true, true)}</span>
             {$content->title}
         </div>
     </div>
