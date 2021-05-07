@@ -58,7 +58,7 @@ class DeviceDetectorListenerTest extends \PHPUnit\Framework\TestCase
     public function testOnKernelControllerWhenTablet()
     {
         $this->detector->expects($this->once())->method('isTablet')
-            ->willReturn('tablet');
+            ->willReturn(true);
 
         $this->listener->onKernelController();
 
@@ -71,10 +71,10 @@ class DeviceDetectorListenerTest extends \PHPUnit\Framework\TestCase
     public function testOnKernelControllerWhenMobile()
     {
         $this->detector->expects($this->once())->method('isMobile')
-            ->willReturn('mobile');
+            ->willReturn(true);
 
         $this->listener->onKernelController();
 
-        $this->assertEquals('mobile', $this->globals->getDevice());
+        $this->assertEquals('phone', $this->globals->getDevice());
     }
 }

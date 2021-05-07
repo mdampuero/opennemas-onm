@@ -46,7 +46,7 @@ class DeviceDetectorListener
         if ($this->detector->isTablet()) {
             $device = 'tablet';
         } elseif ($this->detector->isMobile()) {
-            $device = 'mobile';
+            $device = 'phone';
         }
 
         $this->globals->setDevice($device);
