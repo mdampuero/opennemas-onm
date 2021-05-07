@@ -86,11 +86,14 @@ class AdvertisementRenderer extends Renderer
             );
         }
 
+        $device = $this->container->get('core.globals')->getDevice();
+
         $advertisements = array_filter(
             $advertisements,
-            function ($advertisement) use ($position) {
+            function ($advertisement) use ($position, $device) {
                 return is_array($advertisement->positions)
-                    && in_array($position, $advertisement->positions);
+                    && in_array($position, $advertisement->positions)
+                    && $advertisement->params['devices'][$device] === 1;
             }
         );
 
@@ -202,7 +205,7 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
-     * Generate the ad-slot style based on advertisement maximum sizes and mark size
+     * Generate the ad-slot style based on advertisement device size.
      *
      * @param \Advertisement $advertisement The advertisement to render.
      *
@@ -210,12 +213,19 @@ class AdvertisementRenderer extends Renderer
      */
     public function getSlotSizeStyle($advertisement)
     {
-        $advertisementHeight = max(array_column($advertisement->normalizeSizes(), 'height'));
+        $advertisementSize = $this->getDeviceAdvertisementSize(
+            $advertisement,
+            $this->container->get('core.globals')->getDevice()
+        );
+
+        if (empty($advertisementSize)) {
+            return '';
+        }
 
         // If orientation is not right or left add mark height to the slot height
         $slotHeight = !in_array($this->getMarkOrientation($advertisement), ['left', 'right'])
-            ? $advertisementHeight + 15
-            : $advertisementHeight;
+            ? $advertisementSize['height'] + 15
+            : $advertisementSize['height'];
 
         return ' style="height: ' . $slotHeight . 'px;"';
     }
