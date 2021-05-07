@@ -58,6 +58,11 @@ class ReviveRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice' ])
+            ->getMock();
+
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'getBaseUrl' ])
             ->getMock();
@@ -88,6 +93,9 @@ class ReviveRendererTest extends TestCase
 
             case 'core.instance':
                 return $this->instance;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'orm.manager':
                 return $this->em;
@@ -237,6 +245,8 @@ class ReviveRendererTest extends TestCase
         $this->router->expects($this->any())->method('generate')
             ->with('api_v1_advertisement_show', [ 'id' => $ad->id ])
             ->willReturn($url);
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/revive.slot.tpl', [
@@ -247,7 +257,7 @@ class ReviveRendererTest extends TestCase
             ->willReturn($output);
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height: 615px;">'
+            . 'style="height: 265px;">'
             . $output . '</div>';
 
         $this->assertEquals(

@@ -54,6 +54,11 @@ class HtmlRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -71,6 +76,9 @@ class HtmlRendererTest extends TestCase
         switch ($name) {
             case 'application.log':
                 return $this->logger;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'orm.manager':
                 return $this->em;
@@ -150,12 +158,14 @@ class HtmlRendererTest extends TestCase
             ->setMethods([ 'getHtml' ])
             ->getMock();
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
         $renderer->expects($this->once())->method('getHtml')
             ->willReturn('<script>foo bar baz</script>');
 
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height: 615px;">'
+            . 'style="height: 265px;">'
             . '<script>foo bar baz</script></div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));

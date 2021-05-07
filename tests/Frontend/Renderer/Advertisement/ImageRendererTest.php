@@ -69,6 +69,11 @@ class ImageRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice' ])
+            ->getMock();
+
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'getBaseUrl' ])
             ->getMock();
@@ -101,6 +106,9 @@ class ImageRendererTest extends TestCase
 
             case 'core.helper.url_generator':
                 return $this->ugh;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'orm.manager':
                 return $this->em;
@@ -205,10 +213,12 @@ class ImageRendererTest extends TestCase
 
         $renderer->expects($this->once())->method('getImageHtml')
             ->willReturn('foo');
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
 
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height: 615px;">foo</div>';
+            . 'style="height: 265px;">foo</div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
     }
