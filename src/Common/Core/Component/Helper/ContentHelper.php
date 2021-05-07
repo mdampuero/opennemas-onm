@@ -282,7 +282,7 @@ class ContentHelper
      */
     public function getProperty($item, string $name, bool $unpublished = false)
     {
-        $item = $this->getContent($item, $unpublished);
+        $item = $this->getContent($item, null, $unpublished);
 
         if (empty($item)) {
             return null;
