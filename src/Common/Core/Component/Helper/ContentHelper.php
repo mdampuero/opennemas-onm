@@ -176,15 +176,16 @@ class ContentHelper
     /**
      * Returns the content of specified type for the provided item.
      *
-     * @param mixed  $item The item to return or the id of the item to return. If
-     *                     not provided, the function will try to search the item in
-     *                     the template.
-     * @param string $type Content type used to find the content when an id
-     *                     provided as first parameter.
+     * @param mixed  $item        The item to return or the id of the item to return. If
+     *                            not provided, the function will try to search the item in
+     *                            the template.
+     * @param string $type        Content type used to find the content when an id
+     *                            provided as first parameter.
+     * @param bool   $unpublished Flag to indicate if the content to get the property from can be unpublished.
      *
      * @return Content The content.
      */
-    public function getContent($item = null, $type = null)
+    public function getContent($item = null, $type = null, bool $unpublished = false)
     {
         $item = $item ?? $this->template->getValue('item');
 
@@ -205,6 +206,10 @@ class ContentHelper
             && !$item instanceof \Content
         ) {
             return null;
+        }
+
+        if ($unpublished) {
+            return $item;
         }
 
         return $this->isReadyForPublish($item) ? $item : null;
@@ -269,14 +274,15 @@ class ContentHelper
     /**
      * Returns a property for the provided item.
      *
-     * @param Content $item The item to get property from.
-     * @param string  $name The property name.
+     * @param Content $item        The item to get property from.
+     * @param string  $name        The property name.
      *
+     * @param bool    $unpublished Flag to indicate if the content to get the property from can be unpublished.
      * @return mixed The property value.
      */
-    public function getProperty($item, string $name)
+    public function getProperty($item, string $name, bool $unpublished = false)
     {
-        $item = $this->getContent($item);
+        $item = $this->getContent($item, $unpublished);
 
         if (empty($item)) {
             return null;
@@ -431,15 +437,15 @@ class ContentHelper
     /**
      * Returns the internal type or human-readable type for the provided item.
      *
-     * @param Content $item     The item to get content type for.
-     * @param bool    $readable True if the instance and item have comments enabled. False
-     *                          otherwise.
-     *
+     * @param Content $item        The item to get content type for.
+     * @param bool    $readable    True if the instance and item have comments enabled. False
+     *                             otherwise.
+     * @param bool    $unpublished Flag to indicate if the content to get the property from can be unpublished.
      * @param string The internal or human-readable type.
      */
-    public function getType($item = null, bool $readable = false) : ?string
+    public function getType($item = null, bool $readable = false, bool $unpublished = false) : ?string
     {
-        $value = $this->getProperty($item, 'content_type_name');
+        $value = $this->getProperty($item, 'content_type_name', $unpublished);
 
         return !empty($value)
             ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
