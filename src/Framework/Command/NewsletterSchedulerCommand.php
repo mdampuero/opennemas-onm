@@ -66,7 +66,6 @@ class NewsletterSchedulerCommand extends Command
 
             try {
                 $this->getContainer()->get('core.loader')
-                    ->resetTemplateDir()
                     ->load($instance->internal_name);
 
                 $this->getContainer()->get('core.security')->setInstance($instance);

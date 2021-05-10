@@ -79,30 +79,8 @@ function get_image_dir($absolute = false) : ?string
  */
 function get_instance_media() : ?string
 {
-    return getService('core.globals')->getInstance()->getMediaShortPath() . '/';
+    return getService('core.globals')->getInstance()->getMediaShortPath();
 }
-
-/**
- * Returns the path to media dir for the active instance.
- *
- * @return string The path to media dir for the active instance.
- */
-function get_media_dir() : ?string
-{
-    return getService('core.globals')->getInstance()->internal_name;
-}
-
-/**
- * Returns the path to media url for the active instance.
- *
- * @return string The path to media url for the active instance.
- */
-function get_media_url() : ?string
-{
-    return "/media/";
-}
-
-
 
 /**
  * Checks if a flag is present in a list of flags.

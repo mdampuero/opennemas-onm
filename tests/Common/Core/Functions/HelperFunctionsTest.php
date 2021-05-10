@@ -233,24 +233,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('media/opennemas');
 
         $this->instance->internal_name = 'opennemas';
-        $this->assertEquals('media/opennemas/', get_instance_media());
-    }
-
-    /**
-     * Tests get_media_dir
-     */
-    public function testGetMediaDir()
-    {
-        $this->instance->internal_name = 'opennemas';
-        $this->assertEquals('opennemas', get_media_dir());
-    }
-
-        /**
-     * Tests get_media_url
-     */
-    public function testGetMediaUrl()
-    {
-        $this->assertEquals('/media/', get_media_url());
+        $this->assertEquals('media/opennemas', get_instance_media());
     }
 
     /**

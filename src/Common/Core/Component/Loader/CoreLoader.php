@@ -124,8 +124,7 @@ class CoreLoader
      */
     public function configureTheme(Theme $theme, array $parents = []) : CoreLoader
     {
-        $template = $this->container->get('core.template');
-
+        $template = $this->container->get('core.template')->setTemplateDir([]);
         $wl       = $this->container->get('core.loader.widget');
 
         $this->container->get('core.globals')->setTheme($theme);
@@ -152,19 +151,6 @@ class CoreLoader
                 }
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * Reset de Template Dir
-
-     * @return CoreLoader The current CoreLoader.
-     */
-    public function resetTemplateDir() : CoreLoader
-    {
-        $template = $this->container->get('core.template');
-        $template->setTemplateDir([]);
 
         return $this;
     }
