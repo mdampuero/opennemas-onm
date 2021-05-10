@@ -43,7 +43,7 @@ class SmartRenderer extends AdvertisementRenderer
             )
         ]);
 
-        return $this->getSlot($ad, $content);
+        return $this->getSlot($ad, $content, false);
     }
 
     /**
