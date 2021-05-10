@@ -56,9 +56,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getBaseUrl', 'getMediaShortPath' ])
             ->getMock();
 
-        $this->theme = $this->getMockBuilder('Theme')->getMock();
-
-        $this->theme->path = '/theme/fred';
+        $this->theme = new Theme([ 'path' => '/themes/fred' ]);
 
         $this->ch->expects($this->any())->method('isReadyForPublish')
             ->willReturn(true);
@@ -67,7 +65,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->globals->expects($this->any())->method('getTheme')
-            ->willReturn(new Theme([ 'path' => 'wibble/bar' ]));
+            ->willReturn($this->theme);
 
         $this->globals->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
@@ -108,9 +106,6 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
 
             case 'core.instance':
                 return $this->instance;
-
-            case 'core.theme':
-                return $this->theme;
 
             default:
                 return null;
@@ -209,19 +204,33 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_image_dir
+     * Tests get_image_dir when the theme is not configured in globals.
      */
-    public function testGetImageDir()
+    public function testGetImageDirWhenNoTheme()
     {
+        $this->globals->expects($this->any())->method('getTheme')
+            ->willReturn($this->theme);
+
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('https://opennemas.com');
 
-        $this->assertEquals('/theme/fred/images', get_image_dir());
-        $this->assertEquals('https://opennemas.com/theme/fred/images', get_image_dir(true));
+        $this->assertEquals('/themes/fred/images', get_image_dir());
+        $this->assertEquals('https://opennemas.com/themes/fred/images', get_image_dir(true));
+    }
 
-        $this->theme = null;
-        $this->assertEquals(null, get_image_dir());
-        $this->assertEquals(null, get_image_dir(true));
+    /**
+     * Tests get_image_dir when the theme is configured in globals.
+     */
+    public function testGetImageWhenTheme()
+    {
+        $this->globals->expects($this->any())->method('getTheme')
+            ->willReturn($this->theme);
+
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://opennemas.com');
+
+        $this->assertEquals('/themes/fred/images', get_image_dir());
+        $this->assertEquals('https://opennemas.com/themes/fred/images', get_image_dir(true));
     }
 
     /**
@@ -311,8 +320,8 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('prod');
 
         $this->assertEquals(
-            '<link rel="stylesheet" href="/wibble/bar/dist/style.css">'
-            . '<script src="/wibble/bar/dist/main.js"></script>',
+            '<link rel="stylesheet" href="/themes/fred/dist/style.css">'
+            . '<script src="/themes/fred/dist/main.js"></script>',
             webpack()
         );
     }

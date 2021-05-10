@@ -59,7 +59,7 @@ function get_url($item = null, array $params = []) : ?string
 function get_image_dir($absolute = false) : ?string
 {
     $instance = getService('core.globals')->getInstance();
-    $theme    = getService('core.theme');
+    $theme    = getService('core.globals')->getTheme();
 
     if (empty($theme)) {
         return null;
@@ -128,7 +128,7 @@ function webpack()
 {
     $env     = getService('kernel')->getEnvironment();
     $request = getService('core.globals')->getRequest();
-    $host    = '/' . getService('core.globals')->getTheme()->path . '/dist';
+    $host    = '/' . trim(getService('core.globals')->getTheme()->path, '/') . '/dist';
 
     if ($env === 'dev') {
         $host = empty($request) ? '' : sprintf('%s:9000', str_replace(
