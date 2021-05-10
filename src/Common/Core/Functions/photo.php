@@ -19,7 +19,7 @@ function get_photo_path($item, string $transform = null, array $params = [], $ab
         return $item;
     }
 
-    $item = get_content($item);
+    $item = get_content($item, 'Photo');
 
     if (empty($item)) {
         return null;
@@ -56,7 +56,7 @@ function get_photo_path($item, string $transform = null, array $params = [], $ab
  */
 function get_photo_size($item = null) : ?string
 {
-    $value = get_property(get_content($item), 'size');
+    $value = get_property(get_content($item, 'Photo'), 'size');
 
     return !empty($value) ? $value : null;
 }
@@ -70,7 +70,7 @@ function get_photo_size($item = null) : ?string
  */
 function get_photo_width($item = null) : ?string
 {
-    $value = get_property(get_content($item), 'width');
+    $value = get_property(get_content($item, 'Photo'), 'width');
 
     return !empty($value) ? $value : null;
 }
@@ -84,7 +84,7 @@ function get_photo_width($item = null) : ?string
  */
 function get_photo_height($item = null) : ?string
 {
-    $value = get_property(get_content($item), 'height');
+    $value = get_property(get_content($item, 'Photo'), 'height');
 
     return !empty($value) ? $value : null;
 }
@@ -98,7 +98,7 @@ function get_photo_height($item = null) : ?string
  */
 function get_photo_mime_type($item = null) : ?string
 {
-    $path = get_photo_path(get_content($item));
+    $path = get_photo_path(get_content($item, 'Photo'));
 
     if (!preg_match('/^http?.*/', $path)) {
         $instance = getService('core.instance');
