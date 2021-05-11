@@ -75,14 +75,12 @@ class PickerController extends Controller
 
         if (!empty($title)) {
             $titleSql = "(description LIKE '%$title%' OR title LIKE '%$title%')";
-            $filter[]  = $titleSql;
+            $filter[] = $titleSql;
         }
 
         if (!empty($category)) {
             $filter[] = "content_category.category_id = $category";
         }
-
-        //$filter[] = "in_litter = 0";
 
         $em = $this->get('entity_repository');
 
