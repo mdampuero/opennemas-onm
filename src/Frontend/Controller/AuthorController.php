@@ -90,14 +90,12 @@ class AuthorController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getInnerAds();
+        $this->getAds();
 
         return $this->render('user/author_frontpage.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheID,
-            'x-tags'         => 'author-user-frontpage,' . $slug . ',' . $page,
-            'x-cacheable'    => true,
+            'cache_id'    => $cacheID,
+            'x-tags'      => 'author-user-frontpage,' . $slug . ',' . $page,
+            'x-cacheable' => true,
         ]);
     }
 
@@ -217,31 +215,27 @@ class AuthorController extends Controller
             ]);
         }
 
-        list($positions, $advertisements) = $this->getInnerAds();
+        $this->getAds();
 
         return $this->render('user/frontpage_authors.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'cache_id'       => $cacheID,
-            'x-tags'         => 'authors-users-frontpage,' . $page,
-            'x-cacheable'    => true,
+            'cache_id'    => $cacheID,
+            'x-tags'      => 'authors-users-frontpage,' . $page,
+            'x-cacheable' => true,
         ]);
     }
 
     /**
-     * Fetches advertisements for article inner.
-     *
-     * @param string category The category identifier.
-     *
-     * @return The list of advertisement from positions ids.
+     * Loads the list of positions and advertisements on renderer service.
      */
-    public static function getInnerAds($category = 0)
+    public function getAds()
     {
-        $positionManager = getService('core.helper.advertisement');
+        $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner');
-        $advertisements  = getService('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
+        $advertisements  = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 }

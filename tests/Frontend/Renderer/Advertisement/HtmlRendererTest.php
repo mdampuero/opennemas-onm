@@ -86,7 +86,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -127,11 +127,23 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
-        $ad = new \Advertisement();
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\HtmlRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -142,14 +154,15 @@ class HtmlRendererTest extends TestCase
             ->willReturn('<script>foo bar baz</script>');
 
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height: 615px;">'
             . '<script>foo bar baz</script></div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -169,7 +182,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::RenderSafeFrame
+     * Tests RenderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -194,7 +207,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::getHtml
+     * Tests getHtml.
      */
     public function testGetHtml()
     {

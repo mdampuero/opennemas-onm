@@ -76,12 +76,10 @@ class NewsletterController extends Controller
             }
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'recaptcha'      => $this->get('core.recaptcha')
+            'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
         ]);
@@ -156,30 +154,29 @@ class NewsletterController extends Controller
             ];
         }
 
-        list($positions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         return $this->render('static_pages/subscription.tpl', [
-            'class'          => $rs['class'],
-            'message'        => $rs['message'],
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
-            'recaptcha'      => $this->get('core.recaptcha')
+            'class'     => $rs['class'],
+            'message'   => $rs['message'],
+            'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
         ]);
     }
 
     /**
-     * Returns the advertisements for the subscription page
+     * Loads the list of positions and advertisements on renderer service.
      */
     public function getAds()
     {
-        // Get letter positions
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7, 9 ]);
         $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
+            ->findByPositionsAndCategory($positions);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 }

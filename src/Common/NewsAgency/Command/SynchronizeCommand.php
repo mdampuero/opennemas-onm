@@ -41,7 +41,7 @@ class SynchronizeCommand extends Command
             )->addOption(
                 'instances',
                 'i',
-                InputOption::VALUE_REQUIRED,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'The list of instances to synchronize (e.g. norf, quux)'
             )->addOption(
                 'servers',
@@ -280,10 +280,6 @@ class SynchronizeCommand extends Command
     {
         $servers   = $input->getOption('servers');
         $instances = $input->getOption('instances');
-
-        if (!empty($instances)) {
-            $instances = preg_split('/\s*,\s*/', $instances);
-        }
 
         if (!empty($servers)) {
             $servers = preg_split('/\s*,\s*/', $servers);

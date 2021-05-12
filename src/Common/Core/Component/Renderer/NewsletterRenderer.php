@@ -28,30 +28,12 @@ class NewsletterRenderer
     /**
      * Initializes the newsletter renderer.
      *
-     * @param Template            $template        The template service.
-     * @param EntityRepository    $entityManager   The entity manager.
-     * @param AuthorService       $authorService   The author service.
-     * @param SettingRepository   $settinManager   The settings repository.
-     * @param AdvertisementHelper $adsHelper       The advertisement helper.
-     * @param adsRepository       $adsRepository   The advertisement repository.
-     * @param Instance            $instance        The current instance.
+     * @param ServiceContainer $container The service container.
      */
-    public function __construct(
-        $tpl,
-        EntityManager $entityManager,
-        AuthorService $authorService,
-        $em,
-        $adsHelper,
-        $adsRepository,
-        $instance
-    ) {
-        $this->tpl      = $tpl;
-        $this->er       = $entityManager;
-        $this->as       = $authorService;
-        $this->ds       = $em->getDataSet('Settings', 'instance');
-        $this->adHelper = $adsHelper;
-        $this->ar       = $adsRepository;
-        $this->instance = $instance;
+    public function __construct($container)
+    {
+        $this->container = $container;
+        $this->tpl       = $container->get('core.template.frontend');
     }
 
     /**
@@ -68,20 +50,22 @@ class NewsletterRenderer
         $menu = new \Menu();
         $menu = $menu->getMenu('frontpage');
 
-        $positions = $this->adHelper->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
-        $ads       = $this->ar->findByPositionsAndCategory($positions, 0);
+        $positions      = $this->container->get('core.helper.advertisement')
+            ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
+        $advertisements = $this->container->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, 0);
 
-        $this->tpl->assign([
-            'advertisements' => $ads,
-            'ads_positions'  => $positions,
-            'ads_format'     => 'newsletter',
-        ]);
+        $this->container->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
+
+        $this->tpl->assign('ads_format', 'newsletter');
 
         // Process public URL for images and links
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
-            $this->instance->getMainDomain()
+            $this->container->get('core.instance')->getMainDomain()
         );
 
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
@@ -103,12 +87,14 @@ class NewsletterRenderer
     public function getContents($criteria)
     {
         $contents = [];
-        if (!is_object($criteria)) {
+        if (empty($criteria)) {
             return $contents;
         }
 
-        $total   = ($criteria->epp > 0) ? $criteria->epp : 5;
+        $total   = ($criteria['epp'] > 0) ? $criteria['epp'] : 5;
         $orderBy = [ 'starttime' => 'desc' ];
+        $date    = new \DateTime(null, $this->container->get('core.locale')
+            ->getTimeZone('frontend'));
 
         $searchCriteria = [
             'content_status'    => [ [ 'value' => 1 ] ],
@@ -127,23 +113,19 @@ class NewsletterRenderer
             ]
         ];
 
-        if ($criteria->filter === 'in_last_day') {
-            $yesterday = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
-            $yesterday->sub(new \DateInterval('P1D'));
+        if ($criteria['filter'] === 'in_last_day') {
+            $date->sub(new \DateInterval('P1D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'starttime'         => [
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                    [ 'value' => $yesterday->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                    [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
-
-            $orderBy = [ 'starttime' => 'desc' ];
         }
 
-        if ($criteria->filter === 'most_viewed') {
-            $threeDaysAgo = new \DateTime(null, getService('core.locale')->getTimeZone('frontend'));
-            $threeDaysAgo->sub(new \DateInterval('P3D'));
+        if ($criteria['filter'] === 'most_viewed') {
+            $date->sub(new \DateInterval('P3D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [
@@ -157,7 +139,7 @@ class NewsletterRenderer
                 ],
                 'starttime' => [
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                    [ 'value' => $threeDaysAgo->format('Y-m-d H:i:s'), 'operator' => '>=' ],
+                    [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
 
@@ -165,31 +147,25 @@ class NewsletterRenderer
         }
 
         // article, attachment, opinion, album, video, poll, static_page, kiosko, letter
-        $searchCriteria['fk_content_type'] = [
-            [ 'value' => [ 1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]
-        ];
+        $searchCriteria['fk_content_type'] = !empty($criteria['content_type'])
+            ? [[ 'value' => [ (int) \ContentManager::getContentTypeIdFromName($criteria['content_type'])]]]
+            : [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];
 
-        if (!empty($criteria->content_type)) {
-            $searchCriteria['fk_content_type'] = [
-                [ 'value' => (int) \ContentManager::getContentTypeIdFromName($criteria->content_type) ]
-            ];
-        }
-
-        if (!empty($criteria->category)
-            && !in_array($criteria->content_type, [ 'opinion', 'letter', 'static_page' ])
+        if (!empty($criteria['category'])
+            && !in_array($criteria['content_type'], [ 'opinion', 'letter', 'static_page' ])
         ) {
             $searchCriteria['category_id'] = [
-                [ 'value' => $criteria->category, 'operator' => 'IN' ]
+                [ 'value' => $criteria['category'], 'operator' => 'IN' ]
             ];
         }
 
-        if ($criteria->content_type === 'opinion' && !empty($criteria->opinion_type)) {
-            $bloggers   = $this->as->getList('is_blog=1')['items'];
+        if ($criteria['content_type'] === 'opinion' && !empty($criteria['opinion_type'])) {
+            $bloggers   = $this->container->get('api.service.author')->getList('is_blog=1')['items'];
             $bloggersId = array_map(function ($item) {
                 return $item->id;
             }, $bloggers);
 
-            $operator = $criteria->opinion_type === 'blog' ? 'IN' : 'NOT IN';
+            $operator = $criteria['opinion_type'] === 'blog' ? 'IN' : 'NOT IN';
 
             if (!empty($bloggersId)) {
                 $searchCriteria['contents.fk_author'] = [
@@ -198,9 +174,16 @@ class NewsletterRenderer
             }
         }
 
-        $contents = $this->er->findBy($searchCriteria, $orderBy, $total, 1);
-
-        return $contents;
+        return array_map(function ($a) {
+            return [
+                'id'                        => $a->id,
+                'content_type'              => $a->content_type,
+                'content_type_l10n_name'    => $a->content_type_l10n_name,
+                'title'                     => $a->title,
+                'content'                   => $a
+            ];
+        }, $this->container->get('entity_repository')
+            ->findBy($searchCriteria, $orderBy, $total, 1));
     }
 
     /**
@@ -213,36 +196,36 @@ class NewsletterRenderer
      */
     protected function hydrateContainers($newsletter)
     {
-        // TODO: Remove this hack to force object conversion ASAP
-        $containers = json_decode(json_encode($newsletter->contents), false);
+        $containers = $newsletter->contents;
 
         foreach ($containers as $index => &$container) {
-            if (!property_exists($container, 'id')) {
-                $container->id = $index + 1;
+            if (!array_key_exists('id', $container)) {
+                $container['id'] = $index + 1;
             }
 
-            foreach ($container->items as $index => &$item) {
+            foreach ($container['items'] as $index => &$item) {
                 // If current item do not fullfill the required format then skip it
-                if ($item->content_type === 'label') {
+                if ($item['content_type'] === 'label') {
                     continue;
                 }
 
-                if ($item->content_type === 'list') {
-                    $contents = $this->getContents($item->criteria);
-                    unset($container->items[$index]);
+                if ($item['content_type'] === 'list') {
+                    $contents = $this->getContents($item['criteria']);
+                    unset($container['items'][$index]);
 
-                    $container->items = array_merge($container->items, $contents);
+                    $container['items'] = array_merge($container['items'], $contents);
                     continue;
                 }
 
-                $content = $this->er->find(classify($item->content_type), $item->id);
+                $content = $this->container->get('entity_repository')
+                    ->find(classify($item['content_type']), $item['id']);
 
                 // if is not a real content, skip this element
                 if (!is_object($content) || is_null($content->id)) {
                     continue;
                 }
 
-                $item = $content;
+                $item['content'] = $content;
             }
         }
 

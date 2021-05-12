@@ -38,7 +38,7 @@ orm:
                 information:         array
                 in_home:             boolean
                 in_litter:           boolean
-                params:              string
+                params:              array
                 pk_content:          integer
                 position:            integer
                 slug:                l10n_string
@@ -49,6 +49,7 @@ orm:
                 categories:          array
                 tags:                array
                 related_contents:    array
+                subscriptions:       array
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter

@@ -1,13 +1,13 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020.
+# Opennemas Developers <developers@opennemas.com>, 2020-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-10 10:33+0000\n"
-"PO-Revision-Date: 2020-12-10 11:36+0100\n"
+"POT-Creation-Date: 2021-04-26 09:37+0000\n"
+"PO-Revision-Date: 2021-04-26 12:11+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1313,6 +1313,12 @@ msgstr "Error al crear una nueva instancia"
 msgid "%s items deleted successfully"
 msgstr "%s elementos eliminados correctamente"
 
+msgid "No file provided"
+msgstr "No se proporcionó ningún archivo"
+
+msgid "A file with the same name has already been uploaded today"
+msgstr "Ya se ha subido un fichero con el mismo nombre en el día de hoy"
+
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Has excedido el límite de versiones. Elimina una para crear una nueva"
 
@@ -1499,6 +1505,78 @@ msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
 msgid "Can't get video information. Check the url"
 msgstr ""
 "No es posible obtener la información del vídeo. Comprueba la dirección."
+
+msgid "Author id"
+msgstr "Id del autor"
+
+msgid "Author name"
+msgstr "Nombre del autor"
+
+msgid "Blank"
+msgstr "Vacío"
+
+msgid "Canonical url"
+msgstr "URL canónica"
+
+msgid "Category id"
+msgstr "Id de categoría"
+
+msgid "Category name"
+msgstr "Nombre de categoría"
+
+msgid "Content id"
+msgstr "Id de contenido"
+
+msgid "Devices"
+msgstr "Dispositivos"
+
+msgid "Page type"
+msgstr "Tipo de página"
+
+msgid "Page format"
+msgstr "Formato de página"
+
+msgid "Instance name"
+msgstr "Nombre de instancia"
+
+msgid "Restricted"
+msgstr "Restringido"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Last editor id"
+msgstr "Id del último editor"
+
+msgid "Last editor name"
+msgstr "Nombre del último editor"
+
+msgid "Main domain"
+msgstr "Dominio principal"
+
+msgid "Media element"
+msgstr "Elemento multimedia"
+
+msgid "Pretitle"
+msgstr "Antetítulo"
+
+msgid "Published date"
+msgstr "Fecha de publicación"
+
+msgid "Publisher id"
+msgstr "Id del editor"
+
+msgid "Publisher name"
+msgstr "Nombre del editor"
+
+msgid "Tag names"
+msgstr "Nombres de etiquetas"
+
+msgid "Tag slugs"
+msgstr "Slugs de etiquetas"
+
+msgid "Updated date"
+msgstr "Fecha de actualización"
 
 msgid "Pay with credit card"
 msgstr "Pagar con tarjeta de crédito"
@@ -1856,9 +1934,6 @@ msgid "Can't connect to server %s. Please check your connection details."
 msgstr ""
 "No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
 
-msgid "Album"
-msgstr "Álbum"
-
 msgid "Article"
 msgstr "Artículo"
 
@@ -1906,6 +1981,9 @@ msgstr "Evento"
 
 msgid "Comment"
 msgstr "Comentario"
+
+msgid "Album"
+msgstr "Álbum"
 
 msgid "Image"
 msgstr "Imagen"
@@ -1987,16 +2065,6 @@ msgstr "Publicar"
 msgid "Search"
 msgstr "Buscar"
 
-msgid "Complete all the required album information before save it"
-msgstr ""
-"Complete toda la información requerida para el álbum antes de guardarlo"
-
-msgid "Check that you have included more than one image in this album"
-msgstr "Comprueba que has incluído más de una imagen en este álbum"
-
-msgid "Assign an image as a cover image"
-msgstr "Asigna una imagen como imagen de portada"
-
 msgid "Save"
 msgstr "Guardar"
 
@@ -2006,7 +2074,7 @@ msgstr "Publicado"
 msgid "Parameters"
 msgstr "Parámetros"
 
-msgid "Cover image"
+msgid "Frontpage image"
 msgstr "Imagen de portada"
 
 msgid "Agency"
@@ -2405,6 +2473,9 @@ msgstr ""
 "a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" target=\"_blank"
 "\" ng-click=\"$event.stopPropagation();\">aqui</a>."
 
+msgid "Use CMP on your AMP pages"
+msgstr "Use CMP en sus páginas AMP"
+
 msgid "Browser update"
 msgstr "Actualización de navegador"
 
@@ -2425,9 +2496,6 @@ msgstr "Elementos en el RSS"
 
 msgid "Language & time"
 msgstr "Idioma y hora"
-
-msgid "Language"
-msgstr "Idioma"
 
 msgid "Control Panel Language"
 msgstr "Idioma del panel de control"
@@ -2676,14 +2744,14 @@ msgstr ""
 "target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web Google "
 "Maps sign up</a>."
 
-msgid "Google Tags"
-msgstr "Google Tags"
+msgid "Google Tag Manager"
+msgstr "Google Tag Manager"
 
-msgid "Google Tags container Id"
-msgstr "Id de contenedor de Google Tags"
+msgid "Google Tag Manager container Id"
+msgstr "Id de contenedor de Google Tag Manager"
 
-msgid "Google Tags container Id for AMP"
-msgstr "Id de contenedor de Google Tags para AMP"
+msgid "Google Tag Manager container Id for AMP"
+msgstr "Id de contenedor de Google Tag Manager para AMP"
 
 msgid ""
 "You can get your Google <strong>Tags</strong> container Id from <a class="
@@ -2695,6 +2763,15 @@ msgstr ""
 "class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
 "\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web de Google "
 "Tags</a>."
+
+msgid "Data Layer"
+msgstr "Data Layer"
+
+msgid "Variable key"
+msgstr "Clave de variable"
+
+msgid "Select a value..."
+msgstr "Selecciona un valor…"
 
 msgid "Act-On"
 msgstr "Act-On"
@@ -2866,6 +2943,19 @@ msgstr "Redirección"
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirigir a portada contenidos no migrados"
 
+msgid "Default skin"
+msgstr "Skin por defecto"
+
+msgid ""
+"Your theme offers multiple skins to slightly change your theme. Select which "
+"one do you want."
+msgstr ""
+"Tu tema ofrece varios skins que lo cambian ligeramente. Selecciona cual "
+"quiere."
+
+msgid "Scripts"
+msgstr "Scripts"
+
 msgid "Scripts in header"
 msgstr "Scripts en la cabecera"
 
@@ -2883,25 +2973,6 @@ msgstr "Scripts al final del body"
 
 msgid "This scripts will be included before the </body> tag"
 msgstr "Estes scripts se incluirán antes de la etiqueta </body>"
-
-msgid "Style"
-msgstr "Estilo"
-
-msgid "Default skin"
-msgstr "Skin por defecto"
-
-msgid ""
-"Your theme offers multiple skins to slightly change your theme. Select which "
-"one do you want."
-msgstr ""
-"Tu tema ofrece varios skins que lo cambian ligeramente. Selecciona cual "
-"quiere."
-
-msgid "Custom CSS"
-msgstr "CSS personalizado"
-
-msgid "This sripts will be included in the global.css file."
-msgstr "Estos scripts se incluirán en el fichero global.css"
 
 msgid "user"
 msgstr "usuario"
@@ -3255,9 +3326,6 @@ msgstr ""
 msgid "Section"
 msgstr "Sección"
 
-msgid "Pretitle"
-msgstr "Antetítulo"
-
 msgid "Select a category"
 msgstr "Selecciona una categoría"
 
@@ -3498,7 +3566,7 @@ msgid "Floating ads (for drop them into columns)"
 msgstr "Publicidades flotantes (para arrastrar en columnas)"
 
 msgid "Advertisement without name"
-msgstr "Publicidad sin nomber"
+msgstr "Publicidad sin nombre"
 
 msgid "Ads"
 msgstr "Publicidades"
@@ -3846,9 +3914,6 @@ msgid ""
 "Defines the orientation for the word that marks the advertisement position"
 msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
 
-msgid "Devices"
-msgstr "Dispositivos"
-
 msgid "selected"
 msgstr "seleccionados"
 
@@ -3953,6 +4018,9 @@ msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
 
 msgid "Delete books"
 msgstr "Eliminar libros"
+
+msgid "Cover image"
+msgstr "Imagen de portada"
 
 msgid "Editorial"
 msgstr "Editorial"
@@ -4676,21 +4744,6 @@ msgstr ""
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
 
-msgid "Unable to find any item that matches your search."
-msgstr "No se han encontrado elementos que coincidan con tu búsqueda."
-
-msgid "There is no opinions yet."
-msgstr "No hay ninguna opinión todavía."
-
-msgid "Unable to find the item"
-msgstr "No se ha encontrado el elemento"
-
-msgid "Click here to return to the list"
-msgstr "Pincha aquí para volver al listado"
-
-msgid "Frontpage image"
-msgstr "Imagen de portada"
-
 msgid "Inner image"
 msgstr "Imagen de interior"
 
@@ -5148,11 +5201,20 @@ msgstr "Mosaico"
 msgid "Reload"
 msgstr "Recargar"
 
+msgid "Unable to find any item that matches your search."
+msgstr "No se han encontrado elementos que coincidan con tu búsqueda."
+
 msgid "Do you want to send the item to trash?"
 msgstr "¿Deseas enviar el elemento a la papelera?"
 
 msgid "Do you want to send the selected items to trash?"
 msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
+
+msgid "Unable to find the item"
+msgstr "No se ha encontrado el elemento"
+
+msgid "Click here to return to the list"
+msgstr "Pincha aquí para volver al listado"
 
 msgid "Columns"
 msgstr "Columnas"
@@ -5290,6 +5352,9 @@ msgstr "%1 contenidos traducidos con éxito al «%2»."
 msgid "No available contents"
 msgstr "No hay contenidos disponibles"
 
+msgid "Caption"
+msgstr "Pie de foto"
+
 msgid "Maximum number of tags per content"
 msgstr "Número máximo de etiquetas por contenido"
 
@@ -5331,9 +5396,6 @@ msgid "This content will only be available in the time range specified above."
 msgstr ""
 "Este contenido sólo estará disponible en el rango de tiempo especificado "
 "arriba."
-
-msgid "Caption"
-msgstr "Pie de foto"
 
 msgid "Insert image"
 msgstr "Insertar imagen"
@@ -5642,6 +5704,19 @@ msgid ""
 msgstr ""
 "Cuando se recibe un comentario y no pasa las comprobaciones de lista negra, "
 "entonces rechazarlo sin intervención."
+
+msgid "Act-on"
+msgstr "Act-On"
+
+msgid "Act-on list where to import users who comment on the web"
+msgstr "Lista de act-on donde importar usuarios que comentan en la web"
+
+msgid ""
+"Only approved comments and non repeated e-mails will create a new contact on "
+"Act-on list."
+msgstr ""
+"Solo los comentarios aprobados y los correos electrónicos no repetidos "
+"crearán un nuevo contacto en la lista de Act-on."
 
 msgid "Please enter your Facebook settings"
 msgstr "Escribe la configuración de Facebook"
@@ -6110,15 +6185,6 @@ msgstr "Formato FLV"
 msgid "http://www.example.com/path/to/file.flv"
 msgstr "http://www.ejemplo.es/ruta/al/archivo.flv"
 
-msgid "Number of videos in frontpage"
-msgstr "Número de vídeos en portada"
-
-msgid "Total number of videos to show per page in the frontpage"
-msgstr "Número total de vídeos para mostrar por página en portada"
-
-msgid "Config video module"
-msgstr "Configuración de módulo «Vídeo»"
-
 msgid "Pick the method to add the video"
 msgstr "El tipo de método para añadir el vídeo"
 
@@ -6239,8 +6305,8 @@ msgstr "Dirección de correo"
 msgid "Go back to the list"
 msgstr "Volver a la lista"
 
-msgid "Add contents to groups by using the \"Add contents\" button"
-msgstr "Añade contenidos a los grupos usando el botón «Añadir contenidos»"
+msgid "Subject"
+msgstr "Asunto"
 
 msgid "Click on \"Add\" or drop contents from other containers"
 msgstr ""
@@ -6299,9 +6365,6 @@ msgstr "Se requiere algún contenido"
 
 msgid "Template"
 msgstr "Plantilla"
-
-msgid "Subject"
-msgstr "Asunto"
 
 msgid "Days"
 msgstr "Días"
@@ -6514,19 +6577,6 @@ msgstr "Fuerte"
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de emails enviados al mes"
 
-msgid "Piwik Statistics"
-msgstr "Estadísticas de Piwik"
-
-msgid "Page ID:"
-msgstr "Identificador del sitio:"
-
-msgid ""
-"You can get your Piwik Site information from <a href=\"https://piwik."
-"openhost.es/admin\">our Piwik server</a>."
-msgstr ""
-"Puede obtener información del sitio de Piwik desde <a href=\"https://piwik."
-"openhost.es/admin\">nuestro servidor de Piwik</a>."
-
 msgid "Contact"
 msgstr "Contacto"
 
@@ -6627,9 +6677,6 @@ msgid "There was an error while creating an instance with the following data:"
 msgstr ""
 "Se ha producido un error al actualizar una instancia con los siguientes "
 "datos:"
-
-msgid "Instance name"
-msgstr "Nombre de instancia"
 
 msgid "Instance internal_name"
 msgstr "Nombre interno de la instancia"
@@ -6871,9 +6918,6 @@ msgstr "Resumen de Opcache"
 
 msgid "Detailed statistics"
 msgstr "Estadísticas detalladas"
-
-msgid "Scripts"
-msgstr "Scripts"
 
 msgid "Path"
 msgstr "Ruta"
@@ -7133,6 +7177,65 @@ msgstr ""
 "'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
 "font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
 "<span style=\"color:#000000\">Equipo</span>"
+
+#~ msgid "Style"
+#~ msgstr "Estilo"
+
+#~ msgid "Custom CSS"
+#~ msgstr "CSS personalizado"
+
+#~ msgid "This sripts will be included in the global.css file."
+#~ msgstr "Estos scripts se incluirán en el fichero global.css"
+
+#~ msgid "There is no opinions yet."
+#~ msgstr "No hay ninguna opinión todavía."
+
+#~ msgid "Piwik Statistics"
+#~ msgstr "Estadísticas de Piwik"
+
+#~ msgid "Page ID:"
+#~ msgstr "Identificador del sitio:"
+
+#~ msgid ""
+#~ "You can get your Piwik Site information from <a href=\"https://piwik."
+#~ "openhost.es/admin\">our Piwik server</a>."
+#~ msgstr ""
+#~ "Puede obtener información del sitio de Piwik desde <a href=\"https://"
+#~ "piwik.openhost.es/admin\">nuestro servidor de Piwik</a>."
+
+#~ msgid "Subscription"
+#~ msgstr "Suscripción"
+
+#~ msgid "Hostname"
+#~ msgstr "Nombre de host"
+
+#~ msgid "Seo tags"
+#~ msgstr "Etiquetas SEO"
+
+#~ msgid "Complete all the required album information before save it"
+#~ msgstr ""
+#~ "Complete toda la información requerida para el álbum antes de guardarlo"
+
+#~ msgid "Check that you have included more than one image in this album"
+#~ msgstr "Comprueba que has incluído más de una imagen en este álbum"
+
+#~ msgid "Assign an image as a cover image"
+#~ msgstr "Asigna una imagen como imagen de portada"
+
+#~ msgid "Google Tags"
+#~ msgstr "Google Tags"
+
+#~ msgid "Number of videos in frontpage"
+#~ msgstr "Número de vídeos en portada"
+
+#~ msgid "Total number of videos to show per page in the frontpage"
+#~ msgstr "Número total de vídeos para mostrar por página en portada"
+
+#~ msgid "Config video module"
+#~ msgstr "Configuración de módulo «Vídeo»"
+
+#~ msgid "Add contents to groups by using the \"Add contents\" button"
+#~ msgstr "Añade contenidos a los grupos usando el botón «Añadir contenidos»"
 
 #~ msgid "Google Analytics Base domain"
 #~ msgstr "Dominio base para Google Analytics"

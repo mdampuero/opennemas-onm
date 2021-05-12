@@ -51,6 +51,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.google.tag_manager:
+        class:     Common\Core\Component\Google\TagManager
+        arguments:   [ '@service_container' ]
+        public:    true
+
     core.image.processor:
         class:     Common\Core\Component\Image\Processor
         public:    true
@@ -77,14 +82,7 @@ services:
 
     core.renderer.newsletter:
         class:     Common\Core\Component\Renderer\NewsletterRenderer
-        arguments:
-            - '@core.template.frontend'
-            - '@entity_repository'
-            - '@api.service.author'
-            - '@orm.manager'
-            - '@core.helper.advertisement'
-            - '@advertisement_repository'
-            - '@core.instance'
+        arguments: [ '@service_container' ]
         public:    true
 
     core.recaptcha:
@@ -145,6 +143,16 @@ services:
         arguments: [ '@orm.manager', '@security.token_storage', [ 'instance' ] ]
         public:    true
 
+    core.service.data_layer:
+        class:     Common\Core\Component\DataLayer\DataLayer
+        factory:   [ '@core.service.data_layer_factory', 'getDataLayer' ]
+        public:    true
+
+    core.service.data_layer_factory:
+        class:     Common\Core\Component\DataLayer\DataLayerFactory
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.theme:
         class:     Common\Model\Entity\Extension
         factory:   [ '@core.loader.theme', 'getTheme' ]
@@ -158,6 +166,11 @@ services:
     core.validator:
         class:      Common\Core\Component\Validator\Validator
         arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
+        public:    true
+
+    core.variables.extractor:
+        class:     Common\Core\Component\Core\VariablesExtractor
+        arguments:   [ '@core.globals', '@service_container', '@core.template.frontend' ]
         public:    true
 
     core.varnish:

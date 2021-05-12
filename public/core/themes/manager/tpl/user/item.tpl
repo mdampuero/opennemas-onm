@@ -69,6 +69,17 @@
                 </span>
               </div>
             </div>
+            <div class="form-group" ng-class="{ 'has-error': userForm.slug.$dirty && userForm.slug.$invalid }">
+              <label class="form-label" for="slug">{t}Slug{/t}</label>
+              <div class="controls input-with-icon right">
+                <input class="form-control" id="slug" name="slug" ng-model="user.slug"  ng-maxlength="20" required type="text"/>
+                <span class="icon right">
+                  <span class="fa fa-check text-success" ng-if="userForm.slug.$dirty && userForm.slug.$valid"></span>
+                  <span class="fa fa-asterisk" ng-if="!userForm.slug.$dirty && userForm.slug.$invalid" uib-tooltip="{t}This field is required{/t}"></span>
+                  <span class="fa fa-times text-error" ng-if="userForm.slug.$dirty && userForm.slug.$invalid" uib-tooltip="{t}This field is invalid{/t}"></span>
+                </span>
+              </div>
+            </div>
             <div class="form-group" ng-class="{ 'has-error': userForm.email.$dirty && userForm.email.$invalid }">
               <label class="form-label" for="email">{t}Email{/t}</label>
               <div class="controls input-with-icon right">

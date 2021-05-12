@@ -12,6 +12,13 @@ class UrlGeneratorHelper
     protected $container;
 
     /**
+     * The content helper.
+     *
+     * @var ContentHelper
+     */
+    protected $contentHelper;
+
+    /**
      * The instance to generate URLs for.
      *
      * @var Instance
@@ -33,15 +40,32 @@ class UrlGeneratorHelper
     protected $forceHttp = false;
 
     /**
+     * The helper to localize the route.
+     *
+     * @var L10nRouteHelper
+     */
+    protected $routeHelper;
+
+    /**
+     * The router component.
+     *
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * Initializes the UrlGeneratorHelper.
      *
      * @param ServiceContainer $container The service container.
      */
     public function __construct($container)
     {
-        $this->container = $container;
-        $this->instance  = $this->container->get('core.instance');
-        $this->locale    = $this->container->get('core.locale');
+        $this->container     = $container;
+        $this->contentHelper = $this->container->get('core.helper.content');
+        $this->instance      = $this->container->get('core.instance');
+        $this->locale        = $this->container->get('core.locale');
+        $this->routeHelper   = $this->container->get('core.helper.l10n_route');
+        $this->router        = $this->container->get('router');
     }
 
     /**
@@ -106,6 +130,56 @@ class UrlGeneratorHelper
         }
 
         return $uri;
+    }
+
+    /**
+     * Generates a route based on the provided item and a list of parameters.
+     *
+     * @param mixed $item   A content or a route name.
+     * @param array $params The list of parameters.
+     *
+     * @return string The generated URL or null if an error is throw.
+     */
+    public function getUrl($item = null, array $params = []) : ?string
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $item = is_string($item) ? $item : $this->contentHelper->getContent($item);
+
+        if (!empty($item->externalUri)) {
+            return $item->externalUri;
+        }
+
+        $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
+        $escape   = array_key_exists('_escape', $params) && $params['_escape'];
+        $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
+
+        // Remove special parameters
+        $params = array_filter($params, function ($a) {
+            return strpos($a, '_') !== 0;
+        }, ARRAY_FILTER_USE_KEY);
+
+        try {
+            $url = is_string($item)
+                ? $this->router->generate(
+                    $item,
+                    $params,
+                    $absolute
+                        ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                        : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
+                ) : $this->generate($item, [
+                    'absolute' => $absolute,
+                    '_format'  => $isAmp ? 'amp' : null,
+                ]);
+
+            $url = $this->routeHelper->localizeUrl($url);
+
+            return $escape ? rawurlencode($url) : $url;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -269,6 +343,10 @@ class UrlGeneratorHelper
     {
         $type = 'opinion';
 
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
         try {
             $author = $this->container->get('api.service.author')
                 ->getItem($content->fk_author);
@@ -285,11 +363,11 @@ class UrlGeneratorHelper
             $type = 'blog';
         }
 
-        $authorName = $this->getAuthorName($content, $author);
+        $authorName = $this->getAuthorName($author);
 
         return $this->generateUriFromConfig($type, [
-            'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($content->created)),
+            'id'       => sprintf('%06d', $content->pk_content),
+            'date'     => date('YmdHis', strtotime($created)),
             'slug'     => urlencode($content->slug),
             'category' => urlencode($authorName),
         ]);
@@ -387,11 +465,11 @@ class UrlGeneratorHelper
     /**
      * Returns the author name to use in the URI for an opinion.
      *
-     * @param Opinion $opinion The opinion.
+     * @param User $author The opinion's author.
      *
      * @return string The author name.
      */
-    protected function getAuthorName($opinion, $author)
+    protected function getAuthorName($author)
     {
         if (!empty($author)) {
             return $this->container->get('data.manager.filter')

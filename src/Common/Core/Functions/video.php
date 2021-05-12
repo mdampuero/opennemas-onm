@@ -9,9 +9,7 @@
  */
 function get_video_embed_html($item)
 {
-    $information = get_property($item, 'information');
-
-    return !empty($information['embedHTML']) ? $information['embedHTML'] : null;
+    return getService('core.helper.video')->getVideoEmbedHtml($item);
 }
 
 /**
@@ -23,9 +21,7 @@ function get_video_embed_html($item)
  */
 function get_video_embed_url($item)
 {
-    $information = get_property($item, 'information');
-
-    return !empty($information['embedUrl']) ? $information['embedUrl'] : null;
+    return getService('core.helper.video')->getVideoEmbedUrl($item);
 }
 
 /**
@@ -37,32 +33,7 @@ function get_video_embed_url($item)
  */
 function get_video_html($item, $width = null, $height = null, $amp = false)
 {
-    $width  = $width ?? '560';
-    $height = $height ?? '320';
-    $output = '';
-
-    if ($item->type === 'script') {
-        $output = sprintf('<div>%s</div>', $item->body);
-    } else {
-        $tpl = !empty($item->information['source'])
-            ? 'video/render/external.tpl'
-            : 'video/render/web-source.tpl';
-
-        $output = getService('core.template.admin')->fetch($tpl, [
-            'info' => $item->information,
-            'height' => $height,
-            'width' => $width
-        ]);
-    }
-
-    if ($amp) {
-        $output = getService('data.manager.filter')
-            ->set($output)
-            ->filter('amp')
-            ->get();
-    }
-
-    return $output;
+    return getService('core.helper.video')->getVideoHtml($item, $width, $height, $amp);
 }
 
 /**
@@ -74,9 +45,7 @@ function get_video_html($item, $width = null, $height = null, $amp = false)
  */
 function get_video_type($item)
 {
-    $value = get_property($item, 'type');
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.video')->getVideoType($item);
 }
 
 /**
@@ -88,9 +57,7 @@ function get_video_type($item)
  */
 function get_video_path($item)
 {
-    $value = get_property($item, 'path');
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.video')->getVideoPath($item);
 }
 
 /**
@@ -102,25 +69,7 @@ function get_video_path($item)
  */
 function get_video_thumbnail($item)
 {
-    $related = get_related($item, 'featured_frontpage');
-
-    if (!empty($related)) {
-        $thumbnail = array_shift($related);
-        return get_content($thumbnail);
-    }
-
-    if (empty($item->information)
-        || !array_key_exists('thumbnail', $item->information)
-    ) {
-        return null;
-    }
-
-    return new Common\Model\Entity\Content([
-        'content_status'    => 1,
-        'content_type_name' => 'photo',
-        'description'       => $item->title,
-        'external_uri'      => $item->information['thumbnail']
-    ]);
+    return getService('core.helper.video')->getVideoThumbnail($item);
 }
 
 /**
@@ -132,9 +81,7 @@ function get_video_thumbnail($item)
  */
 function has_video_embed_html($item)
 {
-    $value = get_video_embed_html($item);
-
-    return !empty($value);
+    return getService('core.helper.video')->hasVideoEmbedHtml($item);
 }
 
 /**
@@ -146,9 +93,7 @@ function has_video_embed_html($item)
  */
 function has_video_embed_url($item)
 {
-    $value = get_video_embed_url($item);
-
-    return !empty($value);
+    return getService('core.helper.video')->hasVideoEmbedUrl($item);
 }
 
 /**
@@ -160,7 +105,5 @@ function has_video_embed_url($item)
  */
 function has_video_path($item)
 {
-    $value = get_video_path($item);
-
-    return !empty($value);
+    return getService('core.helper.video')->hasVideoPath($item);
 }

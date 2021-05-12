@@ -46,6 +46,11 @@ class AdvertisementRendererTest extends TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isInTime' ])
+            ->getMock();
+
         $this->templateAdmin = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
@@ -62,6 +67,8 @@ class AdvertisementRendererTest extends TestCase
 
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('thud.opennemas.com');
+        $this->contentHelper->expects($this->any())->method('isInTime')
+            ->willReturn(true);
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
         $this->em->expects($this->any())->method('getDataSet')
@@ -87,6 +94,9 @@ class AdvertisementRendererTest extends TestCase
             case 'core.instance':
                 return $this->instance;
 
+            case 'core.helper.content':
+                return $this->contentHelper;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -104,7 +114,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::__construct
+     * Tests __construct.
      */
     public function testConstruct()
     {
@@ -115,7 +125,80 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getInlineFormats
+     * Tests getAdvertisement method when no ad.
+     */
+    public function testGetAdvertisementWhenNoAd()
+    {
+        $this->assertEmpty($this->renderer->getAdvertisement('', []));
+    }
+
+    /**
+     * Tests getAdvertisement method when consume.
+     */
+    public function testGetAdvertisementWhenConsume()
+    {
+        $this->assertEmpty($this->renderer->getAdvertisement('', [ 'mode' => 'consume' ]));
+    }
+
+    /**
+     * Tests getAdvertisement.
+     */
+    public function testGetAdvertisement()
+    {
+        $ad1             = new \Advertisement();
+        $ad1->pk_content = 1;
+        $ad1->positions  = [ 1, 2, 3 ];
+
+        $ad2             = new \Advertisement();
+        $ad2->pk_content = 2;
+        $ad2->positions  = [ 1, 2, 3 ];
+
+        $this->renderer->setAdvertisements([$ad1]);
+
+        $reflection = new \ReflectionClass($this->renderer);
+        $requested  = $reflection->getProperty('requested');
+        $requested->setAccessible(true);
+        $requested->setValue($this->renderer, [$ad2]);
+
+        $this->assertEquals(
+            $ad1,
+            $this->renderer->getAdvertisement(2, [ 'mode' => 'consume' ])
+        );
+    }
+
+    /**
+     * Tests get and set methods for advertisement.
+     */
+    public function testGetAndSetAdvertisements()
+    {
+        $this->renderer->setAdvertisements(['foo', 'bar']);
+        $this->assertEquals(['foo', 'bar'], $this->renderer->getAdvertisements());
+    }
+
+    /**
+     * Tests get requested advertisement.
+     */
+    public function testGetRequested()
+    {
+        $reflection = new \ReflectionClass($this->renderer);
+        $requested  = $reflection->getProperty('requested');
+        $requested->setAccessible(true);
+        $requested->setValue($this->renderer, ['foo', 'bar']);
+
+        $this->assertEquals(['foo', 'bar'], $this->renderer->getRequested());
+    }
+
+    /**
+     * Tests get and set methods for advertisement.
+     */
+    public function testGetAndSetPositions()
+    {
+        $this->renderer->setPositions([ 111, 234, 789 ]);
+        $this->assertEquals([ 111, 234, 789 ], $this->renderer->getPositions());
+    }
+
+    /**
+     * Tests getInlineFormats.
      */
     public function testGetInlineFormats()
     {
@@ -126,7 +209,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceCSSClasses
+     * Tests getDeviceCSSClasses.
      */
     public function testGetDeviceCSSClasses()
     {
@@ -156,7 +239,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
+     * Tests getMark.
      */
     public function testGetMark()
     {
@@ -175,7 +258,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getMark
+     * Tests getMark with custom.
      */
     public function testGetMarkWithCustomDefaultMark()
     {
@@ -190,7 +273,40 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getSlot
+     * Tests getMarkOrientation.
+     */
+    public function testGetMarkOrientation()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getMarkOrientation');
+        $method->setAccessible(true);
+
+        $ad         = new \Advertisement();
+        $ad->params = [ 'orientation' => 'waldo' ];
+
+        $this->assertEquals(
+            'waldo',
+            $method->invokeArgs($this->renderer, [ $ad ])
+        );
+    }
+
+    /**
+     * Tests getMarkOrientation when empty.
+     */
+    public function testGetMarkOrientationWhenEmpty()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'getMarkOrientation');
+        $method->setAccessible(true);
+
+        $ad = new \Advertisement();
+
+        $this->assertEquals(
+            'top',
+            $method->invokeArgs($this->renderer, [ $ad ])
+        );
+    }
+
+    /**
+     * Tests getSlot.
      */
     public function testGetSlot()
     {
@@ -199,12 +315,11 @@ class AdvertisementRendererTest extends TestCase
 
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
-        $ad->id         = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'width' => 300, 'floating' => true ];
+        $ad->params     = [ 'height' => 600, 'width' => 300, 'floating' => true ];
 
         $output = '<div class="ad-slot oat oat-visible oat-top "'
-            . ' data-mark="Advertisement">foo</div>';
+            . ' data-mark="Advertisement" style="height: 615px;">foo</div>';
 
         $content = 'foo';
 
@@ -215,18 +330,53 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * Tests getSlotSizeStyle.
+     */
+    public function testGetSlotSizeStyle()
+    {
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
+
+        $output = ' style="height: 615px;"';
+
+        $this->assertEquals(
+            $output,
+            $this->renderer->getSlotSizeStyle($ad, $ad->params)
+        );
+    }
+
+    /**
+     * Tests render with safeframe.
      */
     public function testRenderWithSafeFrameMode()
     {
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
-        $ad->id         = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'placeholder' => 'placeholder1_1' ];
+        $ad->params     = [
+            'height' => 600,
+            'width' => 300,
+            'placeholder' => 'placeholder1_1'
+        ];
 
-        $returnValue = '<div class="ad-slot oat" data-id="123"'
-            . ' data-type="37"></div>';
+        $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
 
         $this->ds->expects($this->any())->method('get')
             ->with('ads_settings')
@@ -239,13 +389,12 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::render
+     * Tests render with inline mode.
      */
     public function testRenderWithInlineMode()
     {
         $ad              = new \Advertisement();
         $ad->pk_content  = 123;
-        $ad->id          = 123;
         $ad->positions   = [ 37 ];
         $ad->params      = [ 'width' => 300, 'floating' => true ];
         $ad->with_script = 3;
@@ -273,15 +422,15 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * Tests renderInlineHeaders without ads.
      */
     public function testRenderInlineHeadersWithNoAds()
     {
-        $this->assertEmpty($this->renderer->renderInlineHeaders([], []));
+        $this->assertEmpty($this->renderer->renderInlineHeaders([]));
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineHeaders
+     * Tests renderInlineHeaders.
      */
     public function testRenderInlineHeaders()
     {
@@ -289,37 +438,43 @@ class AdvertisementRendererTest extends TestCase
 
         $rendererDfp = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderDfpHeaders' ])
+            ->setMethods([ 'renderDfpHeaders', 'getAdvertisements' ])
             ->getMock();
 
+        $rendererDfp->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
         $rendererDfp->expects($this->any())->method('renderDfpHeaders')
             ->willReturn('foo');
 
-        $this->assertEquals('foo', $rendererDfp->renderInlineHeaders([ $ad ], []));
+        $this->assertEquals('foo', $rendererDfp->renderInlineHeaders([]));
 
         $rendererRevive = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderReviveHeaders' ])
+            ->setMethods([ 'renderReviveHeaders', 'getAdvertisements' ])
             ->getMock();
 
+        $rendererRevive->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
         $rendererRevive->expects($this->any())->method('renderReviveHeaders')
             ->willReturn('bar');
 
-        $this->assertEquals('bar', $rendererRevive->renderInlineHeaders([ $ad ], []));
+        $this->assertEquals('bar', $rendererRevive->renderInlineHeaders([]));
 
         $rendererSmart = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderSmartHeaders' ])
+            ->setMethods([ 'renderSmartHeaders', 'getAdvertisements' ])
             ->getMock();
 
+        $rendererSmart->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
         $rendererSmart->expects($this->any())->method('renderSmartHeaders')
             ->willReturn('baz');
 
-        $this->assertEquals('baz', $rendererSmart->renderInlineHeaders([ $ad ], []));
+        $this->assertEquals('baz', $rendererSmart->renderInlineHeaders([]));
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderDfpHeaders
+     * Tests renderDfpHeaders.
      */
     public function testRenderDfpHeaders()
     {
@@ -349,7 +504,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderReviveHeaders
+     * Tests renderReviveHeaders.
      */
     public function testRenderReviveHeaders()
     {
@@ -379,7 +534,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSmartHeaders
+     * Tests renderSmartHeaders.
      */
     public function testRenderSmartHeaders()
     {
@@ -409,7 +564,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial.
      */
     public function testRenderInlineInterstitial()
     {
@@ -457,6 +612,8 @@ class AdvertisementRendererTest extends TestCase
             . '</div>'
         . '</div>';
 
+        $this->renderer->setAdvertisements([$ad]);
+
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'renderInline' ])
@@ -481,12 +638,12 @@ class AdvertisementRendererTest extends TestCase
 
         $this->assertEquals(
             $output,
-            $this->renderer->renderInlineInterstitial([ $ad ], [])
+            $this->renderer->renderInlineInterstitial([])
         );
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial with empty sizes.
      */
     public function testRenderInlineInterstitialWithEmptySizes()
     {
@@ -495,37 +652,38 @@ class AdvertisementRendererTest extends TestCase
         $ad->params['sizes']  = [];
         $ad->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
 
+        $this->renderer->setAdvertisements([$ad]);
+
         $this->assertEmpty(
-            $this->renderer->renderInlineInterstitial([ $ad ], [])
+            $this->renderer->renderInlineInterstitial([])
         );
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderInlineInterstitial
+     * Tests renderInlineInterstitial when no ad.
      */
     public function testRenderInlineInterstitialWithNoInterstitials()
     {
-        $ads = [ ];
-
         $returnValue = '';
         $this->assertEquals(
             $returnValue,
-            $this->renderer->renderInlineInterstitial($ads, [])
+            $this->renderer->renderInlineInterstitial([])
         );
 
         $ad1            = new \Advertisement();
         $ad1->positions = [ 1, 2 ];
-        $ads            = [ $ad1 ];
+
+        $this->renderer->setAdvertisements([$ad1]);
 
         $returnValue = '';
         $this->assertEquals(
             $returnValue,
-            $this->renderer->renderInlineInterstitial($ads, [])
+            $this->renderer->renderInlineInterstitial([])
         );
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getDeviceAdvertisementSize
+     * Tests getDeviceAdvertisementSize.
      */
     public function testGetDeviceAdvertisementSize()
     {
@@ -558,17 +716,35 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::renderSafeFrameSlot
+     * Tests renderSafeFrameSlot.
      */
     public function testRenderSafeFrameSlot()
     {
         $method = new \ReflectionMethod($this->renderer, 'renderSafeFrameSlot');
         $method->setAccessible(true);
 
-        $ad     = new \Advertisement();
-        $ad->id = 123;
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 980,
+                'height' => 250,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 320,
+                'height' => 100,
+                'device' => 'phone'
+            ]
+        ];
 
         $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
+
         $this->assertEquals(
             $returnValue,
             $method->invokeArgs($this->renderer, [ $ad ])
@@ -576,7 +752,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\AdvertisementRenderer::getRendererClass
+     * Tests getRendererClass.
      */
     public function testGetRendererClass()
     {
@@ -616,7 +792,7 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
-     * Tests isFloating when is a floating advertisement.
+     * Tests isFloating when is no floating advertisement.
      */
     public function testIsFloatingWhenFalse()
     {

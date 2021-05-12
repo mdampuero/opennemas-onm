@@ -9,7 +9,7 @@
  */
 function get_album_photos($item) : array
 {
-    return get_related(get_content($item), 'photo');
+    return getService('core.helper.album')->getAlbumPhotos($item);
 }
 
 /**
@@ -21,5 +21,5 @@ function get_album_photos($item) : array
  */
 function has_album_photos($item) : bool
 {
-    return !empty(get_album_photos($item));
+    return getService('core.helper.album')->hasAlbumPhotos($item);
 }

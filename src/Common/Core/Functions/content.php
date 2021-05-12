@@ -1,8 +1,5 @@
 <?php
 
-use Api\Exception\GetItemException;
-use Repository\EntityManager;
-
 /**
  * Returns the body for the provided item.
  *
@@ -12,16 +9,7 @@ use Repository\EntityManager;
  */
 function get_body($item = null) : ?string
 {
-    $map = [
-        'album' => 'description',
-        'poll'  => 'description',
-        'video' => 'description'
-    ];
-
-    $value = array_key_exists(get_type($item), $map) ? get_property($item, $map[get_type($item)]) :
-        get_property($item, 'body');
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.content')->getBody($item);
 }
 
 /**
@@ -35,13 +23,7 @@ function get_body($item = null) : ?string
  */
 function get_caption($item = null) : ?string
 {
-    if (!is_array($item)) {
-        return null;
-    }
-
-    return array_key_exists('caption', $item)
-        ? htmlentities($item['caption'])
-        : null;
+    return getService('core.helper.content')->getCaption($item);
 }
 
 /**
@@ -57,28 +39,7 @@ function get_caption($item = null) : ?string
  */
 function get_content($item = null, $type = null)
 {
-    $item = $item ?? getService('core.template.frontend')->getValue('item');
-
-    // Item as a related content (array with item + caption + position)
-    if (is_array($item) && array_key_exists('item', $item)) {
-        $item = $item['item'];
-    }
-
-    if (!is_object($item) && is_numeric($item) && !empty($type)) {
-        try {
-            $item = getService('entity_repository')->find($type, $item);
-        } catch (GetItemException $e) {
-            return null;
-        }
-    }
-
-    if (!$item instanceof \Common\Model\Entity\Content
-        && !$item instanceof \Content
-    ) {
-        return null;
-    }
-
-    return getService('core.helper.content')->isReadyForPublish($item) ? $item : null;
+    return getService('core.helper.content')->getContent($item, $type);
 }
 
 /**
@@ -90,9 +51,7 @@ function get_content($item = null, $type = null)
  */
 function get_creation_date($item = null) : ?\Datetime
 {
-    $value = get_property($item, 'created');
-
-    return is_object($value) ? $value : new \Datetime($value);
+    return getService('core.helper.content')->getCreationDate($item);
 }
 
 /**
@@ -104,157 +63,7 @@ function get_creation_date($item = null) : ?\Datetime
  */
 function get_description($item = null) : ?string
 {
-    $value = get_property($item, 'description');
-
-    return !empty($value) ? htmlentities($value) : null;
-}
-
-/**
- * Returns the featured media for the provided item based on the featured type.
- *
- * @param mixed  $item The item to get featured media for.
- * @param string $type The featured type.
- * @param bool   $deep Whether to return the final featured media. Fox example,
- *                     if the featured media is a video, with true, the
- *                     function will return the thumbnail of the video but,
- *                     with false, the function will return the video.
- *
- * @return Content The featured media.
- */
-function get_featured_media($item, $type, $deep = true)
-{
-    $item = get_content($item);
-    $map  = [
-        'article' => [
-            'frontpage' => [ 'fk_video', 'img1' ],
-            'inner'     => [ 'fk_video2', 'img2' ]
-        ], 'opinion' => [
-            'frontpage' => [ 'img1' ],
-            'inner'     => [ 'img2' ]
-        ], 'album' => [
-            'frontpage' => [ 'featured_frontpage' ],
-            'inner'     => []
-        ], 'event' => [
-            'frontpage' => [ 'featured_frontpage' ],
-            'inner'     => [ 'featured_inner' ]
-        ], 'video' => [
-            'frontpage' => [ 'featured_frontpage' ],
-            'inner'     => []
-        ], 'book' => [
-            'frontpage' => [ 'cover_id' ],
-            'inner'     => []
-        ], 'special' => [
-            'frontpage' => [ 'img1' ],
-            'inner'     => [ ]
-        ]
-    ];
-
-    if (empty($item)
-        || !array_key_exists(get_type($item), $map)
-        || !array_key_exists($type, $map[get_type($item)])
-    ) {
-        return null;
-    }
-
-    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
-        if (get_type($item) === 'video') {
-            return $type === 'inner' ? $item : get_video_thumbnail($item);
-        }
-
-        if (get_type($item) === 'album' && $type === 'inner') {
-            return $item;
-        }
-
-        $media = get_related($item, $map[get_type($item)][$type][0]);
-
-        return array_shift($media);
-    }
-
-    foreach ($map[get_type($item)][$type] as $key) {
-        if (empty($item->{$key})) {
-            continue;
-        }
-
-        $featured = null;
-
-        if ($item->external) {
-            $related  = getService('core.template.frontend')->getValue('related', []);
-            $featured = array_key_exists($item->{$key}, $related) ? $related[$item->{$key}] : null;
-        } else {
-            $featured = get_content(
-                $item->{$key},
-                preg_match('/img|cover|thumbnail/', $key) ? 'Photo' : 'Video'
-            );
-        }
-
-        if (!empty($featured)) {
-            if ($deep && get_type($featured) === 'video' && $type === 'frontpage') {
-                return get_featured_media($featured, 'frontpage');
-            }
-
-            return $featured;
-        }
-    }
-
-    return null;
-}
-
-/**
- * Returns the featured media caption for the provided item based on the
- * featured type.
- *
- * @param mixed  $item The item to get featured media caption for.
- * @param string $type The featured type.
- *
- * @return Content The featured media caption.
- */
-function get_featured_media_caption($item, $type)
-{
-    $item = get_content($item);
-    $map  = [
-        'article' => [
-            'frontpage' => [ 'footer_video1', 'img1_footer' ],
-            'inner'     => [ 'footer_video2', 'img2_footer' ]
-        ], 'opinion' => [
-            'frontpage' => [ 'img1_footer' ],
-            'inner'     => [ 'img2_footer' ]
-        ], 'album' => [
-            'frontpage' => [],
-            'inner'     => []
-        ], 'event' => [
-            'frontpage' => [ 'featured_frontpage' ],
-            'inner'     => [ 'featured_inner' ]
-        ], 'video' => [
-            'frontpage' => [ 'featured_frontpage' ]
-        ]
-    ];
-
-    if (empty($item)
-        || !array_key_exists(get_type($item), $map)
-        || !array_key_exists($type, $map[get_type($item)])
-    ) {
-        return null;
-    }
-
-    if (in_array(get_type($item), EntityManager::ORM_CONTENT_TYPES)) {
-        $key = array_shift($map[get_type($item)][$type]);
-
-        $related = array_filter($item->related_contents, function ($a) use ($key) {
-            return $a['type'] === $key;
-        });
-
-        return !empty($related)
-            ? htmlentities(array_shift($related)['caption'])
-            : null;
-    }
-
-    foreach ($map[get_type($item)][$type] as $key) {
-        if (!empty($item->{$key})) {
-            return htmlentities($item->{$key});
-        }
-    }
-
-    return null;
+    return getService('core.helper.content')->getDescription($item);
 }
 
 /**
@@ -266,9 +75,7 @@ function get_featured_media_caption($item, $type)
  */
 function get_id($item) : ?int
 {
-    $item = get_content($item);
-
-    return empty($item) ? null : $item->pk_content;
+    return getService('core.helper.content')->getId($item);
 }
 
 /**
@@ -280,9 +87,7 @@ function get_id($item) : ?int
  */
 function get_pretitle($item = null) : ?string
 {
-    $value = get_property($item, 'pretitle');
-
-    return !empty($value) ? htmlentities($value) : null;
+    return getService('core.helper.content')->getPretitle($item);
 }
 
 /**
@@ -295,13 +100,7 @@ function get_pretitle($item = null) : ?string
  */
 function get_property($item, string $name)
 {
-    $item = get_content($item);
-
-    if (empty($item)) {
-        return null;
-    }
-
-    return !empty($item->{$name}) ? $item->{$name} : null;
+    return getService('core.helper.content')->getProperty($item, $name);
 }
 
 /**
@@ -313,9 +112,7 @@ function get_property($item, string $name)
  */
 function get_publication_date($item = null) : ?\Datetime
 {
-    $value = get_property($item, 'starttime') ?? get_property($item, 'created');
-
-    return is_object($value) ? $value : new \Datetime($value);
+    return getService('core.helper.content')->getPublicationDate($item);
 }
 
 /**
@@ -327,9 +124,7 @@ function get_publication_date($item = null) : ?\Datetime
  */
 function get_summary($item = null) : ?string
 {
-    $value = get_property($item, 'summary');
-
-    return !empty($value) ? htmlentities($value) : null;
+    return getService('core.helper.content')->getSummary($item);
 }
 
 /**
@@ -341,66 +136,7 @@ function get_summary($item = null) : ?string
  */
 function get_title($item = null) : ?string
 {
-    $value = get_property($item, 'title');
-
-    return !empty($value) ? htmlentities($value) : null;
-}
-
-/**
- * Returns the list of related contents for the provided item based on the
- * relation type.
- *
- * @param Content $item The item to get related contents for.
- * @param string  $type The relation type.
- *
- * @return array The list of related contents.
- */
-function get_related($item, string $type) : array
-{
-    if (empty($item->related_contents)) {
-        return [];
-    }
-
-    $items = array_filter($item->related_contents, function ($a) use ($type) {
-        return $a['type'] === $type;
-    });
-
-    usort($items, function ($a, $b) {
-        return $a['position'] <=> $b['position'];
-    });
-
-    if ($item->external) {
-        $related = getService('core.template.frontend')->getValue('related');
-
-        return array_filter(array_map(function ($a) use ($related) {
-            return $related[$a['target_id']];
-        }, $items));
-    }
-
-    return array_filter(array_map(function ($a) {
-        $content = get_content($a['target_id'], $a['content_type_name']);
-
-        return empty($content)
-            ? null
-            : [
-                'item' => $content,
-                'caption' => $a['caption'],
-                'position' => $a['position']
-            ];
-    }, $items));
-}
-
-/**
- * Alias to get_related function to use only for 'related_' types.
- *
- * @param Content $item The item to get related contents for.
- * @param string  $type The type of the related contents (frontpage|inner).
- *
- * @return array The list of related contents.
- */
-function get_related_contents($item, string $type) : array
-{
-    return get_related($item, 'related_' . $type);
+    return getService('core.helper.content')->getTitle($item);
 }
 
 /**
@@ -412,17 +148,7 @@ function get_related_contents($item, string $type) : array
  */
 function get_tags($item = null) : array
 {
-    $value = get_property($item, 'tags');
-
-    if (empty($value)) {
-        return [];
-    }
-
-    try {
-        return getService('api.service.tag')->getListByIds($value)['items'];
-    } catch (\Exception $e) {
-        return [];
-    }
+    return getService('core.helper.content')->getTags($item);
 }
 
 /**
@@ -436,11 +162,7 @@ function get_tags($item = null) : array
  */
 function get_type($item = null, bool $readable = false) : ?string
 {
-    $value = get_property($item, 'content_type_name');
-
-    return !empty($value)
-        ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
-        : null;
+    return getService('core.helper.content')->getType($item, $readable);
 }
 
 /**
@@ -452,10 +174,7 @@ function get_type($item = null, bool $readable = false) : ?string
  */
 function has_body($item = null) : bool
 {
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_body($item))
-        && !getService('core.helper.subscription')->isHidden($token, 'body');
+    return getService('core.helper.content')->hasBody($item);
 }
 
 /**
@@ -469,7 +188,7 @@ function has_body($item = null) : bool
  */
 function has_caption($item = null) : bool
 {
-    return !empty(get_caption($item));
+    return getService('core.helper.content')->hasCaption($item);
 }
 
 /**
@@ -481,7 +200,7 @@ function has_caption($item = null) : bool
  */
 function has_comments_enabled($item = null) : bool
 {
-    return !empty(get_property($item, 'with_comment'));
+    return getService('core.helper.content')->hasCommentsEnabled($item);
 }
 
 /**
@@ -493,40 +212,7 @@ function has_comments_enabled($item = null) : bool
  */
 function has_description($item) : bool
 {
-    return !empty(get_description($item));
-}
-
-/**
- * Check if the content has a featured media content.
- *
- * @param Content $item The item to check featured media for.
- * @param string  $type The featured type.
- *
- * @return bool True if the content has a featured media. False otherwise.
- */
-function has_featured_media($item, string $type) : bool
-{
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_featured_media($item, $type))
-        && !getService('core.helper.subscription')->isHidden($token, 'media');
-}
-
-/**
- * Check if the content has a featured media caption.
- *
- * @param Content $item The item to check featured media for.
- * @param string  $type The featured type.
- *
- * @return bool True if the content has a featured media caption. False
- *              otherwise.
- */
-function has_featured_media_caption($item, string $type) : bool
-{
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_featured_media_caption($item, $type))
-        && !getService('core.helper.subscription')->isHidden($token, 'media');
+    return getService('core.helper.content')->hasDescription($item);
 }
 
 /**
@@ -538,26 +224,7 @@ function has_featured_media_caption($item, string $type) : bool
  */
 function has_pretitle($item) : bool
 {
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_pretitle($item))
-        && !getService('core.helper.subscription')->isHidden($token, 'pretitle');
-}
-
-/**
- * Checks if the item has related contents in the specified relation.
- *
- * @param Content $item The item to check.
- * @param string  $type The relation type.
- *
- * @return bool True if the content has related contents. False otherwise.
- */
-function has_related_contents($item, string $type) : bool
-{
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_related_contents($item, $type))
-        && !getService('core.helper.subscription')->isHidden($token, 'related_contents');
+    return getService('core.helper.content')->hasPretitle($item);
 }
 
 /**
@@ -569,10 +236,7 @@ function has_related_contents($item, string $type) : bool
  */
 function has_summary($item) : bool
 {
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_summary($item))
-        && !getService('core.helper.subscription')->isHidden($token, 'summary');
+    return getService('core.helper.content')->hasSummary($item);
 }
 
 /**
@@ -584,7 +248,7 @@ function has_summary($item) : bool
  */
 function has_tags($item = null) : bool
 {
-    return !empty(get_tags($item));
+    return getService('core.helper.content')->hasTags($item);
 }
 
 /**
@@ -596,8 +260,5 @@ function has_tags($item = null) : bool
  */
 function has_title($item) : bool
 {
-    $token = getService('core.template.frontend')->getValue('o_token');
-
-    return !empty(get_title($item))
-        && !getService('core.helper.subscription')->isHidden($token, 'title');
+    return getService('core.helper.content')->hasTitle($item);
 }

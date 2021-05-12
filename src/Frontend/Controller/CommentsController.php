@@ -50,15 +50,11 @@ class CommentsController extends Controller
         $total = $this->get('comment_repository')
             ->countCommentsForContentId($content->id);
 
-        $positions      = [];
-        $advertisements = [];
         if ($sh->hasAdvertisements($sh->getToken($content))) {
-            list($positions, $advertisements) = $this->getAds();
+            $this->getAds();
         }
 
         return $this->render('comments/loader.tpl', [
-            'ads_positions'  => $positions,
-            'advertisements' => $advertisements,
             'total'          => $total,
             'comments'       => $comments,
             'contentId'      => $content->id,
@@ -96,16 +92,12 @@ class CommentsController extends Controller
         $total = $this->get('comment_repository')
             ->countCommentsForContentId($content->id);
 
-        $positions      = [];
-        $advertisements = [];
         if ($sh->hasAdvertisements($sh->getToken($content))) {
-            list($positions, $advertisements) = $this->getAds();
+            $this->getAds();
         }
 
         $contents = $this->get('core.template.frontend')
             ->render('comments/partials/comment_element.tpl', [
-                'ads_positions'  => $positions,
-                'advertisements' => $advertisements,
                 'total'          => $total,
                 'comments'       => $comments,
                 'contentId'      => $content->id,
@@ -356,21 +348,18 @@ class CommentsController extends Controller
     }
 
     /**
-     * Returns all the advertisements for comments.
-     *
-     * @return array A list of Advertisements.
+     * Loads the list of positions and advertisements on renderer service.
      */
     public function getAds()
     {
-        // Get static_pages positions
         $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager
-            ->getPositionsForGroup('comment');
+        $positions       = $positionManager->getPositionsForGroup('comment');
+        $advertisements  = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions);
 
-        $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, 0);
-
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**

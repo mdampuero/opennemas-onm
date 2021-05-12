@@ -334,7 +334,7 @@ class RssController extends FrontendController
                     $replacements  = [
                         '<figure class="op-interactive"><iframe>${1}</iframe></figure>',
                         '<figure class="op-interactive">${2}</figure>${1}',
-                        'src="' . SITE_URL . '/media/'
+                        'src="' . $this->container->get('core.instance')->getBaseUrl() . '/media/'
                     ];
                     $content->body = preg_replace($patterns, $replacements, $content->body);
 
@@ -352,16 +352,14 @@ class RssController extends FrontendController
             $this->view->assign('contents', $contents);
         }
 
-        list($adsPositions, $advertisements) = $this->getAds();
+        $this->getAds();
 
         $response = $this->render('rss/fb_instant_articles.tpl', [
-            'advertisements' => $advertisements,
-            'ads_positions'  => $adsPositions,
-            'ads_format'     => 'fia',
-            'cache_id'       => $cacheID,
-            'x-cacheable'    => true,
-            'x-cache-for'    => $expire,
-            'x-tags'         => 'rss,instant-articles'
+            'ads_format'  => 'fia',
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => 'rss,instant-articles'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -381,10 +379,6 @@ class RssController extends FrontendController
     public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
         $em = $this->get('entity_repository');
-
-        if ($contentType === 'opinion') {
-            $em = $this->get('opinion_repository');
-        }
 
         $order   = [ 'starttime' => 'DESC' ];
         $filters = [
@@ -433,23 +427,19 @@ class RssController extends FrontendController
     }
 
     /**
-     * Fetches advertisements for Instant article.
-     *
-     * @param string category The category identifier.
-     *
-     * @return array The list of advertisements for this page.
+     * Loads the list of positions and advertisements on renderer service.
      */
-    protected function getAds($category = 'home')
+    protected function getAds()
     {
-        $category = (!isset($category) || ($category == 'home')) ? 0 : $category;
-
         $positions = $this->get('core.helper.advertisement')
             ->getPositionsForGroup('fia_inner', [1075, 1076, 1077]);
 
         $advertisements = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions, $category);
+            ->findByPositionsAndCategory($positions);
 
-        return [ $positions, $advertisements ];
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**

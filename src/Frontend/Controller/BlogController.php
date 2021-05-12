@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Common\Core\Controller\Controller;
 
 class BlogController extends FrontendController
 {
@@ -129,14 +128,10 @@ class BlogController extends FrontendController
      */
     protected function getParameters($params, $item = null)
     {
-        $locale = $this->get('core.locale')->getRequestLocale();
         $params = parent::getParameters($params, $item);
 
         if (!empty($item)) {
             $params[$item->content_type_name] = $item;
-
-            $params['tags'] = $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($item->tags, $locale)['items'];
 
             if (array_key_exists('bodyLink', $item->params)) {
                 $params['o_external_link'] = $item->params['bodyLink'];
@@ -154,6 +149,8 @@ class BlogController extends FrontendController
      */
     public function hydrateList(array &$params = []) : void
     {
+        $date = date('Y-m-d H:i:s');
+
         // Invalid page provided as parameter
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')
@@ -161,59 +158,39 @@ class BlogController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        $authors = $this->get('api.service.author')
-            ->getList('is_blog = 1 order by name asc');
-
-        $authors = $this->get('data.manager.filter')
-            ->set($authors['items'])
-            ->filter('mapify', [ 'key' => 'id' ])
-            ->get();
-
-        $order   = [ 'starttime' => 'DESC' ];
-        $date    = date('Y-m-d H:i:s');
-        $filters = [
-            'content_type_name' => [[ 'value' => 'opinion' ]],
-            'blog'              => [[ 'value' => 1 ]],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS' ],
-                [ 'value' => $date, 'operator' => '<' ]
-            ],
-            'endtime'           => [
-                'union'   => 'OR',
-                [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => $date, 'operator' => '>' ]
-            ],
-        ];
-
-        $em    = $this->get('opinion_repository');
-        $blogs = $em->findBy($filters, $order, $epp, $params['page']);
-        $total = $em->countBy($filters);
+        try {
+            $response = $this->get($this->service)->getList(sprintf(
+                'content_type_name="opinion" and content_status=1 and in_litter=0 '
+                . 'and blog=1 and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by starttime desc limit %d offset %d',
+                $date,
+                $date,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            ));
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($blogs)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $epp,
-            'total'       => $total,
+            'epp'         => $params['epp'],
+            'total'       => $response['total'],
             'page'        => $params['page'],
             'route'       => 'frontend_blog_frontpage',
         ]);
 
         $this->view->assign([
-            'opinions'   => $blogs,
-            'authors'    => $authors,
+            'opinions'   => $response['items'],
             'pagination' => $pagination,
-            'page'       => $params['page']
+            'page'       => $params['page'],
+            'total'      => $response['total'],
         ]);
     }
 
@@ -235,45 +212,33 @@ class BlogController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $epp = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_per_page', 10);
-
-        $filters = [
-            'contents`.`fk_author' => [['value' => $author->id ]],
-            'content_status'    => [['value' => 1]],
-            'in_litter'         => [['value' => 0]],
-            'content_type_name' => [['value' => 'opinion']],
-            'starttime' => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS' ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '<' ]
-            ],
-            'endtime' => [
-                'union'   => 'OR',
-                [ 'value'  => null, 'operator'      => 'IS' ],
-                [ 'value' => '0000-00-00 00:00:00', 'operator' => '=' ],
-                [ 'value' => $date, 'operator' => '>' ]
-            ],
-        ];
-
-        $orderBy = ['created' => 'DESC'];
-
-        $total    = $this->get('opinion_repository')->countBy($filters);
-        $contents = $this->get('opinion_repository')
-            ->findBy($filters, $orderBy, $epp, $params['page']);
+        try {
+            $response = $this->get($this->service)->getList(sprintf(
+                'content_type_name="opinion" and content_status=1 and in_litter=0 '
+                . 'and fk_author = %d '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by starttime desc limit %d offset %d',
+                $author->id,
+                $date,
+                $date,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            ));
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($contents)) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
         $pagination = $this->get('paginator')->get([
             'directional' => true,
-            'epp'         => $epp,
+            'epp'         => $params['epp'],
             'page'        => $params['page'],
-            'total'       => $total,
+            'total'       => $response['total'],
             'route'       => [
                 'name'   => 'frontend_blog_author_frontpage',
                 'params' => [ 'author_slug' => $author->slug ]
@@ -282,9 +247,10 @@ class BlogController extends FrontendController
 
         $this->view->assign([
             'pagination' => $pagination,
-            'blogs'      => $contents,
+            'blogs'      => $response['items'],
             'author'     => $author,
             'page'       => $params['page'],
+            'total'      => $response['total'],
         ]);
     }
 
