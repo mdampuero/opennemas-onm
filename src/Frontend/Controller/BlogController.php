@@ -189,7 +189,8 @@ class BlogController extends FrontendController
         $this->view->assign([
             'opinions'   => $response['items'],
             'pagination' => $pagination,
-            'page'       => $params['page']
+            'page'       => $params['page'],
+            'total'      => $response['total'],
         ]);
     }
 
@@ -249,6 +250,7 @@ class BlogController extends FrontendController
             'blogs'      => $response['items'],
             'author'     => $author,
             'page'       => $params['page'],
+            'total'      => $response['total'],
         ]);
     }
 

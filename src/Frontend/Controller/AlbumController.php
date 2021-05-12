@@ -132,6 +132,7 @@ class AlbumController extends FrontendController
 
         $params = array_merge($params, [
             'albums'     => $response['items'],
+            'total'      => $response['total'],
             'pagination' => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
