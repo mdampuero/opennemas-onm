@@ -56,16 +56,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
-     *  The related contents service
-     *
-     * @type {Object}
-     */
-    $scope.related = related;
-
-    /**
-     * @memberOf OpinionCtrl
-     *
-     * @description
      *  The list of routes for the controller.
      *
      * @type {Object}

@@ -77,16 +77,6 @@
          * @memberOf ArticleCtrl
          *
          * @description
-         *  The related contents service
-         *
-         * @type {Object}
-         */
-        $scope.related = related;
-
-        /**
-         * @memberOf ArticleCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}

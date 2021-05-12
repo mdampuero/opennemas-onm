@@ -73,16 +73,6 @@
          * @memberOf AlbumCtrl
          *
          * @description
-         *  The related contents service
-         *
-         * @type {Object}
-         */
-        $scope.related = related;
-
-        /**
-         * @memberOf AlbumCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}

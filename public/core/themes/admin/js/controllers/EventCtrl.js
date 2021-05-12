@@ -72,16 +72,6 @@
          * @memberOf EventCtrl
          *
          * @description
-         *  The related contents service
-         *
-         * @type {Object}
-         */
-        $scope.related = related;
-
-        /**
-         * @memberOf EventCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}

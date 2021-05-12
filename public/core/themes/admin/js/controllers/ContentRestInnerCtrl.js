@@ -83,8 +83,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
                 $scope.item = $scope.data.item;
               }
 
-              $scope.data.extra.related_contents = webStorage.session.get($scope.draftKey).related;
-              $scope.related.init($scope);
+              if ($scope.related) {
+                $scope.data.extra.related_contents = webStorage.session.get($scope.draftKey).related;
+                $scope.related.init($scope);
+              }
 
               modalWindow.close({ response: true, success: true });
             };
