@@ -38,11 +38,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
-     *  The item object.
+     *  The default item object.
      *
      * @type {Object}
      */
-    $scope.item = {
+    $scope.defaultItem = {
       body: '',
       content_type_name: 'video',
       fk_content_type: 9,
@@ -55,7 +55,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       endtime: null,
       thumbnail: null,
       title: '',
-      type: 0,
+      type: 'web-source',
       with_comment: 0,
       categories: [],
       related_contents: [],
@@ -64,6 +64,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       path: '',
       information: {}
     };
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The item object.
+     *
+     * @type {Object}
+     */
+    $scope.item = Object.assign({}, $scope.defaultItem);
 
     /**
      * @memberOf VideoCtrl
@@ -97,26 +107,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      switch ($scope.data.item.type) {
-        case 'script':
-          $scope.setType('script');
-          break;
-
-        case 'external':
-          $scope.setType('external');
-
-          var info = $scope.data.item.information.source;
-
-          $scope.html = info.flv ? 'flv' : 'html5';
-          break;
-
-        default:
-          if ($scope.data.item.path) {
-            $scope.setType('web-source');
-          }
-          break;
-      }
-
       $scope.localize($scope.data.item, 'item', true);
 
       // Check if item is new (created) or existing for use default value or not
@@ -135,27 +125,33 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
-     * @function setType
+     * @function selectType
      * @memberOf VideoCtrl
      *
      * @description
-     *   Updates the scope to the proper video type.
+     *  Resets the video item when the video type changes.
      */
-    $scope.setType = function(type) {
-      if (!type) {
+    $scope.selectType = function(type) {
+      if (!type || $scope.item.type === type) {
         return;
       }
 
-      if (type === 'external' || type === 'script') {
-        $scope.item.type = type;
+      $scope.defaultItem.type = type;
+      $scope.item             = angular.copy($scope.defaultItem, $scope.item);
+      $scope.data.item        = angular.copy($scope.defaultItem, $scope.data.item);
+
+      if (CKEDITOR.instances.body) {
+        CKEDITOR.instances.body.updateElement();
       }
 
-      if (!$scope.item.type) {
-        $scope.item.type = 'html5';
+      if (CKEDITOR.instances.description) {
+        CKEDITOR.instances.description.updateElement();
       }
 
-      $scope.type               = type;
-      $scope.flags.visible.grid = true;
+      $scope.featuredFrontpage = null;
+      $scope.featuredInner     = null;
+
+      $scope.localize($scope.data.item, 'item', true);
     };
 
     /**

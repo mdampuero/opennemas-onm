@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-06 13:49+0000\n"
-"PO-Revision-Date: 2021-05-06 15:50+0200\n"
+"POT-Creation-Date: 2021-05-12 11:51+0000\n"
+"PO-Revision-Date: 2021-05-12 13:53+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -5687,17 +5687,14 @@ msgstr "Miniatura"
 msgid "Write HTML code"
 msgstr "Escribe o código HTML"
 
-msgid "Pick the method to add the video"
-msgstr "Escolla o método para engadir o vídeo"
-
-msgid "Link video from other web video services"
-msgstr "Ligar un vídeo desde outros servizos web de vídeo"
+msgid "Link video from other services"
+msgstr "Ligar un vídeo desde outros servizos"
 
 msgid "Use HTML code"
 msgstr "Usar código HTML"
 
-msgid "Use file video URLs (External HTML5/FLV)"
-msgstr "Usar URLs a ficheiros de vídeo (HTML5/FLV externo)"
+msgid "Use file video URLs"
+msgstr "Usar URLs a ficheiros de vídeo"
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
@@ -7054,6 +7051,9 @@ msgstr "Tes certeza que queres eliminar o grupo de usuarios?"
 
 msgid "Do you want to delete the selected user groups?"
 msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
+
+#~ msgid "Pick the method to add the video"
+#~ msgstr "Escolla o método para engadir o vídeo"
 
 #~ msgid "Unable to create the new article."
 #~ msgstr "Non se puido crear o novo artigo."
