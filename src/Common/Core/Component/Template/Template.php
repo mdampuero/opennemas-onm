@@ -177,6 +177,8 @@ class Template extends \Smarty
             $params[] = $this->getValue('token');
         }
 
+        $params[] = $this->container->get('core.globals')->getDevice();
+
         return implode('|', $params);
     }
 

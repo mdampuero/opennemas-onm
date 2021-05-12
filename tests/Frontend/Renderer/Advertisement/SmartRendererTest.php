@@ -50,6 +50,11 @@ class SmartRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -70,6 +75,9 @@ class SmartRendererTest extends TestCase
 
             case 'entity_repository':
                 return $this->em;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'view':
                 return $this->view;
@@ -275,13 +283,16 @@ class SmartRendererTest extends TestCase
             ->with('smart_ad_server')
             ->willReturn([]);
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
+
         // Avoid template params due to untestable rand() function
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/smart.slot.onecall_async.tpl')
             ->willReturn($output);
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height: 615px;">'
+            . 'style="height: 265px;">'
             . $output . '</div>';
         $this->assertEquals(
             $output,

@@ -9,6 +9,7 @@
  */
 namespace Common\Core\EventListener;
 
+use Common\Core\Component\Core\GlobalVariables;
 use Common\Core\Component\Template\Template;
 use Common\Core\Component\Locale\Locale;
 use Common\Model\Entity\Instance;
@@ -40,12 +41,14 @@ class HttpCacheHeadersListener
     /**
      * Initializes the VarnishListener.
      *
-     * @param Instance $instance The current instance.
-     * @param Locale   $locale   The Locale service.
-     * @param Template $template The Template service.
+     * @param Instance        $instance The current instance.
+     * @param Locale          $locale   The Locale service.
+     * @param Template        $template The Template service.
+     * @param GlobalVariables $globals  The global variables service.
      */
-    public function __construct(?Instance $instance, Locale $locale, Template $template)
+    public function __construct(?Instance $instance, Locale $locale, Template $template, GlobalVariables $globals)
     {
+        $this->globals  = $globals;
         $this->instance = $instance;
         $this->locale   = $locale;
         $this->template = $template;
@@ -80,6 +83,7 @@ class HttpCacheHeadersListener
             $response->headers->set('x-instance', $this->getInstance());
         }
 
+        $response->headers->set('x-device', $this->globals->getDevice());
         $response->headers->set('x-tags', implode(',', $tags));
         $response->headers->set('x-cache-for', '86400s'); // 1 day
 
@@ -148,7 +152,10 @@ class HttpCacheHeadersListener
             return [];
         }
 
-        $defaults = [ 'locale-' . $this->locale->getRequestLocale() ];
+        $defaults = [
+            'locale-' . $this->locale->getRequestLocale(),
+            'device-' . $this->globals->getDevice()
+        ];
 
         if ($this->hasInstance()) {
             array_unshift($defaults, 'instance-' . $this->getInstance());

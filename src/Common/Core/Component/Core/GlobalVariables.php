@@ -26,6 +26,13 @@ class GlobalVariables implements \ArrayAccess
     protected $container;
 
     /**
+     * The device type.
+     *
+     * @var string
+     */
+    protected $device;
+
+    /**
      * The endpoint name.
      *
      * @var string
@@ -130,6 +137,16 @@ class GlobalVariables implements \ArrayAccess
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Returns the device type.
+     *
+     * @return string The device type.
+     */
+    public function getDevice()
+    {
+        return $this->device;
     }
 
     /**
@@ -310,6 +327,16 @@ class GlobalVariables implements \ArrayAccess
     public function setAction($action)
     {
         $this->action = $action;
+    }
+
+    /**
+     * Sets the device type for the current request.
+     *
+     * @return string $device The device type.
+     */
+    public function setDevice($device)
+    {
+        $this->device = $device;
     }
 
     /**
