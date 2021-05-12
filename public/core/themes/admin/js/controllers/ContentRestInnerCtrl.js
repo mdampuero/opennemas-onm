@@ -326,10 +326,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           }
 
           $scope.dtm = $timeout(function() {
-            webStorage.session.set(
-              $scope.draftKey,
-              { item: $scope.data.item, related: $scope.related.exportRelated() }
-            );
+            webStorage.session.set($scope.draftKey, {
+              item: $scope.data.item,
+              related: $scope.related ? $scope.related.exportRelated() : []
+            });
 
             $scope.draftSaved = $window.moment().format('HH:mm');
           }, 2500);
