@@ -1,8 +1,5 @@
 <?php
 
-use Framework\Component\MIME\MimeTypeTool;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 /**
  * Returns the URL for a photo.
  *
@@ -15,36 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 function get_photo_path($item, string $transform = null, array $params = [], $absolute = false)
 {
-    if (is_string($item) || empty($item)) {
-        return $item;
-    }
-
-    $item = get_content($item);
-
-    if (empty($item)) {
-        return null;
-    }
-
-    $url = getService('core.helper.url_generator')->generate($item);
-
-    // Do not transform if empty or external photo
-    if (empty($transform) || preg_match('/^https?.*/', $url)) {
-        if (!preg_match('/^https?.*/', $url) && $absolute) {
-            $url = getService('core.helper.url_generator')
-                ->generate($item, [ 'absolute' => true ]);
-        }
-
-        return $url;
-    }
-
-    $absolute = $absolute
-        ? UrlGeneratorInterface::ABSOLUTE_URL
-        : UrlGeneratorInterface::ABSOLUTE_PATH;
-
-    return getService('router')->generate('asset_image', [
-        'params' => implode(',', array_merge([ $transform ], $params)),
-        'path'   => $url
-    ], $absolute);
+    return getService('core.helper.photo')->getPhotoPath($item, $transform, $params, $absolute);
 }
 
 /**
@@ -56,9 +24,7 @@ function get_photo_path($item, string $transform = null, array $params = [], $ab
  */
 function get_photo_size($item = null) : ?string
 {
-    $value = get_property(get_content($item), 'size');
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.photo')->getPhotoSize($item);
 }
 
 /**
@@ -70,9 +36,7 @@ function get_photo_size($item = null) : ?string
  */
 function get_photo_width($item = null) : ?string
 {
-    $value = get_property(get_content($item), 'width');
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.photo')->getPhotoWidth($item);
 }
 
 /**
@@ -84,9 +48,7 @@ function get_photo_width($item = null) : ?string
  */
 function get_photo_height($item = null) : ?string
 {
-    $value = get_property(get_content($item), 'height');
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.photo')->getPhotoHeight($item);
 }
 
 /**
@@ -98,16 +60,7 @@ function get_photo_height($item = null) : ?string
  */
 function get_photo_mime_type($item = null) : ?string
 {
-    $path = get_photo_path(get_content($item));
-
-    if (!preg_match('/^http?.*/', $path)) {
-        $instance = getService('core.instance');
-        $path     = $instance->getBaseUrl() . $path;
-    }
-
-    $value = MimeTypeTool::getMimeType($path);
-
-    return !empty($value) ? $value : null;
+    return getService('core.helper.photo')->getPhotoMimeType($item);
 }
 
 /**
@@ -119,5 +72,5 @@ function get_photo_mime_type($item = null) : ?string
  */
 function has_photo_size($item = null)
 {
-    return !empty(get_photo_size($item));
+    return getService('core.helper.photo')->hasPhotoSize($item);
 }

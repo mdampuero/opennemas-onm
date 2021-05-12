@@ -1204,6 +1204,8 @@ class Content implements \JsonSerializable, CsvSerializable
      */
     public function getQuickInfo()
     {
+        $contentHelper = getService('core.helper.content');
+
         if (empty($this->id)) {
             return;
         }
@@ -1216,16 +1218,13 @@ class Content implements \JsonSerializable, CsvSerializable
             }
         }
 
-        $status          = $this->getStatus();
-        $schedulingState = getService('core.helper.content')->getSchedulingState($this);
-
         return [
             'title'           => $this->__get('title'),
-            'category'        => get_category_name($this),
+            'category'        => getService('core.helper.category')->getCategoryName($this),
             'starttime'       => $this->starttime,
             'endtime'         => $this->endtime,
-            'scheduled_state' => $this->getL10nSchedulingState($schedulingState),
-            'state'           => $this->getL10nStatus($status),
+            'scheduled_state' => $this->getL10nSchedulingState($contentHelper->getSchedulingState($this)),
+            'state'           => $this->getL10nStatus($this->getStatus()),
             'last_editor'     => $user->name ?? '',
             'views'           => getService('content_views_repository')
                 ->getViews($this->id),
