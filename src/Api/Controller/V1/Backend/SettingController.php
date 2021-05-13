@@ -106,6 +106,7 @@ class SettingController extends Controller
         'webmastertools_bing',
         'webmastertools_google',
         'youtube_page',
+        'sitemap',
     ];
 
     /**
@@ -180,11 +181,16 @@ class SettingController extends Controller
 
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
-            'logo_enabled', 'refresh_interval'
+            'logo_enabled', 'refresh_interval', 'sitemap'
         ];
 
         foreach ($toint as $key) {
-            $settings[$key] = (int) $settings[$key];
+            if ($key == 'sitemap') {
+                $settings[$key]['perpage'] = (int) $settings[$key][ 'perpage' ];
+                $settings[$key]['total']   = (int) $settings[$key][ 'total' ];
+            } else {
+                $settings[$key] = (int) $settings[$key];
+            }
         }
 
         $settings = array_filter($settings, function ($a) {

@@ -1565,6 +1565,43 @@
                 </div>
               </div>
             </uib-tab>
+            </uib-tab>
+            <uib-tab>
+              <uib-tab-heading>
+                <i class="fa fa-sitemap m-r-5"></i>
+                {t}Sitemap{/t}
+              </uib-tab-heading>
+              <div class="tab-wrapper">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h4>
+                      <i class="fa fa-cog"></i>
+                      {t}Parameters{/t}
+                    </h4>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-perpage">
+                            {t}Items per page{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="settings.sitemap.perpage" type="number">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-total">
+                            {t}Total items{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="sitemap-total" name="sitemap-total" ng-model="settings.sitemap.total" type="number">
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </uib-tab>
             {if $app.security->hasPermission('MASTER')}
               <uib-tab>
                 <uib-tab-heading>

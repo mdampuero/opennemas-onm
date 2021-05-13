@@ -279,11 +279,12 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete('rss', 'last')
                 ->delete('rss', 'fia')
                 ->delete('rss', 'frontpage', $content->category_id)
-                ->delete('sitemap', 'image')
                 ->delete('sitemap', 'news')
-                ->delete('sitemap', 'web')
+                ->delete('sitemap', 'article')
                 ->delete('frontpage', 'category', 'home')
                 ->delete('frontpage', 'category', $content->category_id);
+        } elseif ($content->content_type_name == 'image') {
+            $this->template->delete('sitemap', 'image');
         } elseif ($content->content_type_name == 'video') {
             $this->template->delete('sitemap', 'video');
         } elseif ($content->content_type_name == 'opinion') {
@@ -293,7 +294,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ->delete($content->content_type_name, 'list')
                 ->delete($content->content_type_name, 'listauthor', $content->fk_author)
                 ->delete('sitemap', 'news')
-                ->delete('sitemap', 'web');
+                ->delete('sitemap', 'opinion');
         }
     }
 

@@ -288,9 +288,7 @@
             $scope.extra    = response.data.extra;
             $scope.settings = angular.merge($scope.settings,
               response.data.settings);
-
             $scope.pre();
-
             $scope.loading = false;
           }, function() {
             $scope.loading = false;
