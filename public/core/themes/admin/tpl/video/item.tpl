@@ -128,27 +128,6 @@
                 </button>
               </span>
             </div>
-            <div class="input-append"></div>
-              {javascripts}
-                <script defer="defer">
-                  jQuery(document).ready(function($) {
-                    $('#video_url').popover({
-                      placement: 'bottom',
-                      trigger: 'hover',
-                      animation: true,
-                      delay:0,
-                      html : true,
-                      title: '{t}Allowed video sources:{/t}',
-                      content: '{include file="video/partials/_sourceinfo.tpl"}'
-                    });
-                  });
-                </script>
-              {/javascripts}
-              {stylesheets}
-                <style type="text/css">
-                  .popover { width:500px; }
-                </style>
-              {/stylesheets}
           </div>
         </div>
       </span>
