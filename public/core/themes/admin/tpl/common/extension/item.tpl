@@ -37,6 +37,14 @@
           <div class="pull-right">
             <ul class="quick-section">
               {block name="primaryActions"}
+                <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+                  <h5>
+                    <i class="p-r-15">
+                      <i class="fa fa-check"></i>
+                      {t}Draft saved at {/t}[% draftSaved %]
+                    </i>
+                  </h5>
+                </li>
                 <li class="quicklinks">
                   <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" type="button">
                     <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
