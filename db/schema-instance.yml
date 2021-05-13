@@ -168,25 +168,25 @@ articles:
             source_field: [ img1 ]
             target_table: contents
             target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
         -
             name: article_id_img2_id
             source_field: [ img2 ]
             target_table: contents
             target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
         -
             name: article_id_video2_id
             source_field: [ fk_video2 ]
             target_table: contents
             target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
         -
             name: article_id_video_id
             source_field: [ fk_video ]
             target_table: contents
             target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 attachments:
     columns:
         pk_attachment:
@@ -515,13 +515,13 @@ contents:
             options: { unsigned: true, default: 0, notnull: false }
         fk_author:
             type: integer
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         fk_publisher:
             type: integer
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         fk_user_last_editor:
             type: integer
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         position:
             type: integer
             options: { default: 100, notnull: false, unsigned: true }
