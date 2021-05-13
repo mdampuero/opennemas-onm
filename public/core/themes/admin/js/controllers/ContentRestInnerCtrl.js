@@ -302,7 +302,18 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     // Defines a watcher after 5 seconds
     $timeout(function() {
       // Saves a draft 2.5s after the last change
-      $scope.$watch('item', function(nv, ov) {
+      $scope.$watch(function() {
+        var item  = angular.copy($scope.item);
+
+        // Removes the uploaded file if exists from the properties watched to avoid errors.
+        for (var prop in item) {
+          if (item.hasOwnProperty(prop) && item[prop] instanceof File) {
+            item[prop] = null;
+          }
+        }
+
+        return item;
+      }, function(nv, ov) {
         if (!$scope.draftEnabled) {
           return;
         }
@@ -327,9 +338,18 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             $timeout.cancel($scope.dtm);
           }
 
+          var item = angular.copy($scope.data.item);
+
+          // Removes the uploaded file if exists from the properties watched to avoid errors.
+          for (var prop in item) {
+            if (item.hasOwnProperty(prop) && item[prop] instanceof File) {
+              item[prop] = null;
+            }
+          }
+
           $scope.dtm = $timeout(function() {
             webStorage.session.set($scope.draftKey, {
-              item: $scope.data.item,
+              item: item,
               related: $scope.related ? $scope.related.exportRelated() : []
             });
 

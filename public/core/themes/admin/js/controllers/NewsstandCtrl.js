@@ -234,7 +234,7 @@
 
         // Generates thumbnail when file changes
         $scope.$watch('item.path', function(nv) {
-          if (!nv || !angular.isObject(nv)) {
+          if (!nv || !(nv instanceof File)) {
             return;
           }
 
