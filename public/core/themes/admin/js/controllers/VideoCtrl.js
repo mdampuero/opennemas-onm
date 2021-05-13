@@ -146,6 +146,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         return;
       }
 
+      if (type === 'web-source' && ![ 'external', 'script' ].includes($scope.item.type)) {
+        return;
+      }
+
       $scope.defaultItem.type = type;
       $scope.item             = angular.copy($scope.defaultItem);
       $scope.data.item        = angular.copy($scope.defaultItem);
