@@ -89,6 +89,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
+     *  The related service.
+     *
+     * @type {Object}
+     */
+    $scope.related = related;
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
      *  The list of routes for the controller.
      *
      * @type {Object}
@@ -137,16 +147,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
 
       $scope.defaultItem.type = type;
-      $scope.item             = angular.copy($scope.defaultItem, $scope.item);
-      $scope.data.item        = angular.copy($scope.defaultItem, $scope.data.item);
-
-      if (CKEDITOR.instances.body) {
-        CKEDITOR.instances.body.updateElement();
-      }
-
-      if (CKEDITOR.instances.description) {
-        CKEDITOR.instances.description.updateElement();
-      }
+      $scope.item             = angular.copy($scope.defaultItem);
+      $scope.data.item        = angular.copy($scope.defaultItem);
 
       $scope.featuredFrontpage = null;
       $scope.featuredInner     = null;

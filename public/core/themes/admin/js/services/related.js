@@ -188,7 +188,6 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        */
       related.init = function(scope) {
         related.scope = scope;
-        scope.related = related;
         related.bag   = scope.data.extra.related_contents;
 
         var keys = [ 'config', 'data', 'target', 'value' ];
