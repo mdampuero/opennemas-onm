@@ -82,35 +82,37 @@
   <div class="grid simple">
     <div class="grid-body">
       <div ng-if="!item.pk_content" class="video-type-selector form-group">
-        <div class="col-sm-4">
-          <button ng-click="selectType('web-source')" ng-class="{ 'selected' : item.type !== 'script' && item.type !== 'external' }" class="clearfix btn btn-white video-type-selector-button">
-            <div class="video-selector-icon">
-              <i class="fa fa-youtube fa-3x"></i>
-            </div>
-            <div class="video-selector-text">
-              {t}Link video from other services{/t}
-            </div>
-          </button>
-        </div>
-        <div class="col-sm-4">
-          <button ng-click="selectType('script')" ng-class="{ 'selected' : item.type == 'script' }" class="clearfix btn btn-white video-type-selector-button">
-            <div class="video-selector-icon">
-              <i class="fa fa-file-code-o fa-3x"></i>
-            </div>
-            <div class="video-selector-text">
-              {t}Use HTML code{/t}
-            </div>
-          </button>
-        </div>
-        <div class="col-sm-4">
-          <button ng-click="selectType('external')" ng-class="{ 'selected' : item.type == 'external' }" class="clearfix btn btn-white video-type-selector-button">
-            <div class="video-selector-icon">
-              <i class="fa fa-film fa-3x"></i>
-            </div>
-            <div class="video-selector-text">
-              {t}Use file video URLs{/t}
-            </div>
-          </button>
+        <div class="row">
+          <div class="col-sm-4">
+            <button ng-click="selectType('web-source')" ng-class="{ 'selected' : item.type !== 'script' && item.type !== 'external' }" class="clearfix btn btn-white video-type-selector-button">
+              <div class="video-selector-icon">
+                <i class="fa fa-youtube fa-3x"></i>
+              </div>
+              <div class="video-selector-text">
+                {t}Link video from other services{/t}
+              </div>
+            </button>
+          </div>
+          <div class="col-sm-4">
+            <button ng-click="selectType('script')" ng-class="{ 'selected' : item.type == 'script' }" class="clearfix btn btn-white video-type-selector-button">
+              <div class="video-selector-icon">
+                <i class="fa fa-file-code-o fa-3x"></i>
+              </div>
+              <div class="video-selector-text">
+                {t}Use HTML code{/t}
+              </div>
+            </button>
+          </div>
+          <div class="col-sm-4">
+            <button ng-click="selectType('external')" ng-class="{ 'selected' : item.type == 'external' }" class="clearfix btn btn-white video-type-selector-button">
+              <div class="video-selector-icon">
+                <i class="fa fa-film fa-3x"></i>
+              </div>
+              <div class="video-selector-text">
+                {t}Use file video URLs{/t}
+              </div>
+            </button>
+          </div>
         </div>
       </div>
       <span ng-if="item.type !== 'external' && item.type !== 'script'">
