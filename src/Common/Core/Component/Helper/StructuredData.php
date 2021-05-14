@@ -65,9 +65,7 @@ class StructuredData
 
         // Author and media information
         $data['author'] = $this->getAuthorData($data['content']);
-        $media          = $this->getMediaData($data['content']);
-        $data['image']  = $media['image'];
-        $data['video']  = $media['video'];
+        $data           = array_merge($data, $this->getMediaData($data['content']));
 
         // Content keywords
         $data['keywords'] = empty($data['content']->tags) ? ''
@@ -196,6 +194,7 @@ class StructuredData
             ->getMedia($content);
 
         $media = [
+            'album' => $mediaObject->content_type_name === 'album' ? $mediaObject : null,
             'image' => $mediaObject->content_type_name === 'photo' ? $mediaObject : null,
             'video' => $mediaObject->content_type_name === 'video' ? $mediaObject : null,
         ];

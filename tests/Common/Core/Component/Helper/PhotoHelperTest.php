@@ -252,6 +252,15 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests the method hasPhotoPath.
+     */
+    public function testHasPhotoPath()
+    {
+        $this->assertTrue($this->helper->hasPhotoPath('foo/glorp/path'));
+        $this->assertFalse($this->helper->hasPhotoPath(null));
+    }
+
+    /**
      * Tests the method hasPhotoSize.
      */
     public function testHasPhotoSize()

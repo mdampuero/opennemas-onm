@@ -84,7 +84,7 @@
     {if !empty($image)}
       , "image": {
           "@type": "ImageObject",
-          "url": "{get_url item=$image absolute=true}",
+          "url": "{get_photo_path($image, null, [], true)}",
           "height": {$image->height},
           "width": {$image->width}
         }
@@ -105,6 +105,9 @@
           "height": {get_photo_height(get_video_thumbnail($video))|default:360},
           "width": {get_photo_width(get_video_thumbnail($video))|default:480}
         }
+      },
+    {elseif !empty($album)}
+      , "image": {include file='./structured_image_data.tpl' image=get_featured_media($album, 'frontpage')}
       }
     {else}
       }

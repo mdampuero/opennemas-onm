@@ -3,11 +3,7 @@
 namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\ContentMediaHelper;
-use Common\Core\Component\Helper\ImageHelper;
-use Common\Core\Component\Helper\InstanceHelper;
-use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
-use Common\Model\Entity\User;
 
 /**
  * Defines test cases for ContentMediaHelper class.
@@ -19,44 +15,38 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->container = $this->getMockBuilder('ServiceContainer')
+        $this->authorHelper = $this->getMockBuilder('Common\Core\Component\Helper\AuthorHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasAuthorAvatar', 'getAuthorAvatar' ])
+            ->getMock();
+
+        $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\Container')
+            ->disableOriginalConstructor()
             ->setMethods([ 'get' , 'getParameter'])
             ->getMock();
 
-        $this->instance = new Instance([
-            'activated_modules' => [],
-            'domains'           => [ 'frog.fred.com' ],
-            'internal_name'     => 'frog'
-        ]);
-
-        $this->ih = $this->getMockBuilder('ImageHelper')
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getExtension', 'getInformation' ])
+            ->setMethods([ 'getContent' ])
+            ->getMock();
+
+        $this->featuredHelper = $this->getMockBuilder('Common\Core\Component\Helper\FeaturedMediaHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasFeaturedMedia', 'getFeaturedMedia' ])
+            ->getMock();
+
+        $this->instance = $this->getMockBuilder('Common\Model\Entity\Instance')
+            ->setMethods([ 'getMediaShortPath' ])
+            ->getMock();
+
+        $this->imageHelper = $this->getMockBuilder('ImageHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInformation' ])
             ->getMock();
 
         $this->ds = $this->getMockBuilder('DataSet')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
-            ->getMock();
-
-        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
-            ->getMock();
-
-        $this->em = $this->getMockBuilder('EntityManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'find' ])
-            ->getMock();
-
-        $this->ps = $this->getMockBuilder('Api\Service\V1\PhotoService')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
-            ->getMock();
-
-        $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'generate' ])
             ->getMock();
 
         $this->orm = $this->getMockBuilder('OrmEntityManager')
@@ -72,607 +62,243 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->helper = new ContentMediaHelper($this->container, $this->orm);
+        $this->helper = new ContentMediaHelper($this->container);
     }
 
+    /**
+     * Callback funcion to return different services based on string.
+     */
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.helper.author':
+                return $this->authorHelper;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
+
+            case 'core.helper.featured_media':
+                return $this->featuredHelper;
+
+            case 'core.helper.image':
+                return $this->imageHelper;
+
             case 'core.instance':
                 return $this->instance;
 
-            case 'core.helper.image':
-                return $this->ih;
-
-            case 'core.helper.url_generator':
-                return $this->ugh;
-
-            case 'api.service.author':
-                return $this->as;
-
-            case 'entity_repository':
-                return $this->em;
-
-            case 'api.service.photo':
-                return $this->ps;
+            case 'orm.manager':
+                return $this->orm;
         }
 
         return null;
     }
 
     /**
-     * Tests getMedia when content has no media and the instance has no log
-     * enabled.
+     * Tests getMedia method when the content has featured media.
      */
-    public function testGetMediaWhenNoMedia()
+    public function testGetMediaWhenFeatured()
     {
-        $content = new Content([ 'content_type_name' => 'fred' ]);
-
-        $this->ds->expects($this->once())->method('get')
-            ->with('logo_enabled')->willReturn(false);
-
-        $this->assertNull($this->helper->getMedia($content));
-    }
-
-    /**
-     * Tests getMedia when media object has no size.
-     */
-    public function testGetMediaWhenNoSize()
-    {
-        $content = new Content([ 'content_type_name' => 'article' ]);
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm ])
-            ->setMethods([ 'getMediaForArticle' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaForArticle')
-            ->willReturn(json_decode(json_encode([
-                'url' => '/route/to/file.name',
-            ]), false));
-
-
-        $media = $helper->getMedia($content);
-
-        $this->assertEquals(700, $media->width);
-        $this->assertEquals(450, $media->height);
-    }
-
-    /**
-     * Tests getMedia when media object has no size.
-     */
-    public function testGetMediaWhenLogo()
-    {
-        $content = new Content([ 'content_type_name' => 'article' ]);
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm ])
-            ->setMethods([ 'getMediaFromLogo' ])
-            ->getMock();
-
-        $this->ds->expects($this->once())->method('get')
-            ->with('logo_enabled')->willReturn(true);
-
-        $helper->expects($this->once())->method('getMediaFromLogo')
-            ->willReturn(json_decode(json_encode([
-                'url' => '/route/to/file.name',
-            ]), false));
-
-        $media = $helper->getMedia($content);
-
-        $this->assertEquals('/route/to/file.name', $media->url);
-    }
-
-
-    /**
-     * Tests getMedia when media object has size.
-     */
-    public function testGetMediaWhenSize()
-    {
-        $article = new Content([ 'content_type_name' => 'article' ]);
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm ])
-            ->setMethods([ 'getMediaForArticle' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaForArticle')
-            ->willReturn(json_decode(json_encode([
-                'url'    => '/route/to/file.name',
-                'width'  => 600,
-                'height' => 400,
-            ]), false));
-
-
-        $media = $helper->getMedia($article);
-
-        $this->assertEquals(600, $media->width);
-        $this->assertEquals(400, $media->height);
-    }
-
-    /**
-     * Tests getMediaForArticle when the featured media is a photo.
-     */
-    public function testGetMediaForArticleWhenPhoto()
-    {
-        $article = new Content([ 'content_type_name' => 'article' ]);
-        $photo   = new Content([ 'url' => '/route/to/file.name' ]);
-
-        $article->img2 = 69;
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
-            ->setMethods([ 'getMediaFromPhoto' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaFromPhoto')
-            ->with(69)->willReturn($photo);
-
-        $method = new \ReflectionMethod($helper, 'getMediaForArticle');
-        $method->setAccessible(true);
-
-        $media = $method->invokeArgs($helper, [ $article ]);
-
-        $this->assertEquals('/route/to/file.name', $media->url);
-    }
-
-    /**
-     * Tests getMediaForArticle when the featured media is a video.
-     */
-    public function testGetMediaForArticleWhenVideo()
-    {
-        $article = new Content([ 'content_type_name' => 'article' ]);
-        $photo   = new Content([ 'url' => '/route/to/file.name' ]);
-
-        $article->fk_video2 = 791;
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
-            ->setMethods([ 'getMediaFromVideo' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaFromVideo')
-            ->with(791)->willReturn($photo);
-
-        $method = new \ReflectionMethod($helper, 'getMediaForArticle');
-        $method->setAccessible(true);
-
-        $media = $method->invokeArgs($helper, [ $article ]);
-
-        $this->assertEquals('/route/to/file.name', $media->url);
-    }
-
-    /**
-     * Tests getMediaForOpinion when the opinion has a valid media.
-     */
-    public function testGetMediaForOpinionWhenPhoto()
-    {
-        $opinion = new Content([
+        $content = new Content([
+            'pk_content'        => 1,
             'content_type_name' => 'opinion',
             'related_contents'  => [
                 [
-                    'source_id'         => 19,
-                    'target_id'         => 29,
-                    'type'              => 'featured_inner',
+                    'source_id'         => 1,
+                    'target_id'         => 2,
                     'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'caption'           => 'Featured inner caption'
+                    'type'              => 'featured_inner'
                 ]
             ]
         ]);
-        $photo   = new Content([ 'url' => '/route/to/file.name' ]);
 
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
-            ->setMethods([ 'getMediaFromPhoto' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaFromPhoto')
-            ->with(29)->willReturn($photo);
-
-        $method = new \ReflectionMethod($helper, 'getMediaForOpinion');
-        $method->setAccessible(true);
-
-        $this->assertEquals($photo, $method->invokeArgs($helper, [ $opinion ]));
-    }
-
-    /**
-     * Tests getMediaForOpinion when the author has a valid media.
-     */
-    public function testGetMediaForOpinionWhenAuthor()
-    {
-        $opinion = new Content([ 'content_type_name' => 'opinion']);
-        $photo   = new Content([ 'url' => '/route/to/file.name' ]);
-
-        $opinion->fk_author = 398;
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
-            ->setMethods([ 'getMediaFromAuthor' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaFromAuthor')
-            ->with(398)->willReturn($photo);
-
-        $method = new \ReflectionMethod($helper, 'getMediaForOpinion');
-        $method->setAccessible(true);
-
-        $this->assertEquals($photo, $method->invokeArgs($helper, [ $opinion ]));
-    }
-
-    /**
-     * Tests getMediaForOpinion when the opinion nor the opinion's author
-     * has a valid media.
-     */
-    public function testGetMediaForOpinionWhenNoMedia()
-    {
-        $opinion = new Content([ 'content_type_name' => 'opinion']);
-
-        $helper = $this
-            ->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setMethods([ 'getMediaFromAuthor' ])
-            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
-            ->getMock();
-
-        $method = new \ReflectionMethod($helper, 'getMediaForOpinion');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($helper, [ $opinion ]));
-    }
-
-    /**
-     * Tests getMediaForAlbum when the album has and has not a photo
-     * assigned as cover.
-     */
-    public function testGetMediaForAlbum()
-    {
-        $album = new Content([
-            'pk_content'        => 21,
-            'content_type_name' => 'album',
-            'related_contents'  => [
-                [
-                    'source_id' => 21,
-                    'target_id' => 902,
-                    'type'      => 'featured_frontpage',
-                    'caption'   => 'Viverra comprehensam.',
-                    'position'  => 0
-                ],
-                [
-                    'source_id' => 21,
-                    'target_id' => 911,
-                    'type'      => 'photo',
-                    'caption'   => 'Usu modus an nusquam.',
-                    'position'  => 0
-                ],
-            ]
+        $photo = new Content([
+            'pk_content'        => 2,
+            'content_type_name' => 'photo',
+            'width'             => 1920,
+            'height'            => 1080
         ]);
 
-        $photo = new Content();
+        $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
+            ->with($content)
+            ->willReturn(true);
 
-        $method = new \ReflectionMethod($this->helper, 'getMediaForAlbum');
-        $method->setAccessible(true);
-
-        $this->ps->expects($this->once())->method('getItem')
-            ->with(902)->willReturn($photo);
-
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($photo, [ 'absolute' => true ])
-            ->willReturn('/route/to/file.name');
-
-        $mediaObject = $method->invokeArgs($this->helper, [ $album ]);
-
-        $this->assertEquals('/route/to/file.name', $mediaObject->url);
-    }
-
-    /**
-     * Tests getMediaForAlbum when an error is thrown while searching the
-     * album cover.
-     */
-    public function testGetMediaForAlbumWhenError()
-    {
-        $album = new Content([
-            'pk_content'        => 21,
-            'content_type_name' => 'album',
-            'related_contents'  => [
-                [
-                    'source_id' => 21,
-                    'target_id' => 902,
-                    'type'      => 'featured_frontpage',
-                    'caption'   => 'Viverra comprehensam.',
-                    'position'  => 0
-                ],
-                [
-                    'source_id' => 21,
-                    'target_id' => 911,
-                    'type'      => 'photo',
-                    'caption'   => 'Usu modus an nusquam.',
-                    'position'  => 0
-                ],
-            ]
-        ]);
-
-        $this->ps->expects($this->once())->method('getItem')
-            ->will($this->throwException(new \Exception()));
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaForAlbum');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ $album ]));
-    }
-
-    /**
-     * Tests getMediaForVideo
-     */
-    public function testGetMediaForVideo()
-    {
-        $video = new Content();
-
-        $video->pk_content = 343;
-
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getMediaFromVideo' ])
-            ->getMock();
-
-        $helper->expects($this->once())->method('getMediaFromVideo')
-            ->with(343)->willReturn($video);
-
-        $method = new \ReflectionMethod($helper, 'getMediaForVideo');
-        $method->setAccessible(true);
-
-        $this->assertEquals($video, $method->invokeArgs($helper, [ $video ]));
-    }
-
-    /**
-     * Tests getMediaFromAuthor when the author is found and has an avatar
-     */
-    public function testGetMediaFromAuthor()
-    {
-        $helper = $this->getMockBuilder('Common\Core\Component\Helper\ContentMediaHelper')
-            ->setConstructorArgs([ $this->container, $this->orm, $this->em ])
-            ->setMethods([ 'getMediaFromPhoto' ])
-            ->getMock();
-
-        $method = new \ReflectionMethod($helper, 'getMediaFromAuthor');
-        $method->setAccessible(true);
-
-        $this->as->expects($this->any())->method('getItem')
-            ->with(204)->willReturn(new User([ 'avatar_img_id' => 981 ]));
-
-        $helper->expects($this->once())->method('getMediaFromPhoto')
-            ->with(981)->willReturn(new Content([
-                'url' => 'wobble/mumble/fubar.jpg'
-            ]));
-
-        $media = $method->invokeArgs($helper, [ 204 ]);
-
-        $this->assertEquals('wobble/mumble/fubar.jpg', $media->url);
-    }
-
-    /**
-     * Tests getMediaFromPhoto when the author is not found.
-     */
-    public function testGetMediaFromAuthorWhenError()
-    {
-        $this->as->expects($this->once())->method('getItem')
-            ->with(402)->will($this->throwException(new \Exception()));
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromAuthor');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ 402 ]));
-    }
-
-    /**
-     * Tests getMediaFromAuthor when the author is not found.
-     */
-    public function testGetMediaFromAuthorWhenNoAuthor()
-    {
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromAuthor');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
-    }
-
-    /**
-     * Tests getMediaFromAuthor when the author is found and has no avatar.
-     */
-    public function testGetMediaFromAuthorWhenNoAvatar()
-    {
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromAuthor');
-        $method->setAccessible(true);
-
-        $this->as->expects($this->any())->method('getItem')
-            ->with(415)->willReturn(new User());
-
-        $this->assertNull($method->invokeArgs($this->helper, [ 415 ]));
-    }
-
-    /**
-     * Tests getMediaFromLogo.
-     */
-    public function testGetMediaFromLogo()
-    {
-        $this->ds->expects($this->once())->method('get')
-            ->with([ 'sn_default_img', 'mobile_logo', 'site_logo' ])
-            ->willReturn([
-                'sn_default_img' => null,
-                'mobile_logo'    => 'sn_default_img.jpg'
-            ]);
-
-        $this->ih->expects($this->once())->method('getInformation')
-            ->willReturn([ 'width' => 510, 'height' => 639 ]);
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromLogo');
-        $method->setAccessible(true);
-
-        $media = $method->invokeArgs($this->helper, []);
-
-        $this->assertEquals(
-            'http://frog.fred.com/media/frog/sections/sn_default_img.jpg',
-            $media->url
-        );
-    }
-
-    /**
-     * Tests getDefaultMediaObject when an error is thrown.
-     */
-    public function testGetMediaFromLogoWhenError()
-    {
-        $this->ds->expects($this->once())->method('get')
-            ->with([ 'sn_default_img', 'mobile_logo', 'site_logo' ])
-            ->willReturn([
-                'sn_default_img' => null,
-                'mobile_logo'    => 'sn_default_img.jpg'
-            ]);
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromLogo');
-        $method->setAccessible(true);
-
-        $this->ih->expects($this->any())
-            ->method('getInformation')
-            ->will($this->throwException(new \Exception()));
-
-        $this->assertNull($method->invokeArgs($this->helper, []));
-    }
-
-    /**
-     * Tests getMediaFromPhoto when the photo is found.
-     */
-    public function testGetMediaFromPhoto()
-    {
-        $photo = new Content();
-
-        $this->ps->expects($this->once())->method('getItem')
-            ->with(333)->willReturn($photo);
-
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($photo)->willReturn('/route/to/file.name');
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromPhoto');
-        $method->setAccessible(true);
-
-        $media = $method->invokeArgs($this->helper, [ 333 ]);
-        $this->assertEquals('/route/to/file.name', $media->url);
-    }
-
-    /**
-     * Tests getMediaFromPhoto when the photo is not found.
-     */
-    public function testGetMediaFromPhotoWhenError()
-    {
-        $photo = new Content();
-
-        $this->ps->expects($this->once())->method('getItem')
-            ->with(333)->will($this->throwException(new \Exception()));
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromPhoto');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ 333 ]));
-    }
-
-    /**
-     * Tests getMediaFromPhoto when the photo is not found.
-     */
-    public function testGetMediaFromPhotoWhenNoPhoto()
-    {
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromPhoto');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
-    }
-
-    /**
-     * Tests getMediaFromVideo when the video has a thumbnail.
-     */
-    public function testGetMediaFromVideo()
-    {
-        $video = new Content(
-            [
-                'type' => 'external',
-                'related_contents' => [ [ 'target_id' => 854 ] ]
-            ]
-        );
-
-        $photo = new Content();
-
-        $this->ps->expects($this->once())->method('getItem')
-            ->with($video->related_contents[0]['target_id'])
+        $this->featuredHelper->expects($this->once())->method('getFeaturedMedia')
+            ->with($content)
             ->willReturn($photo);
 
-        $this->ugh->expects($this->once())->method('generate')
+        $this->contentHelper->expects($this->once())->method('getContent')
             ->with($photo)
-            ->willReturn('/media/path/glorp');
+            ->willReturn($photo);
 
-        $this->em->expects($this->at(0))->method('find')
-            ->with('Video', 540)->willReturn($video);
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromVideo');
-        $method->setAccessible(true);
-
-        $media = $method->invokeArgs($this->helper, [ 540 ]);
-
-        $this->assertEquals(
-            '/media/path/glorp',
-            $media->url
-        );
+        $this->assertEquals($photo, $this->helper->getMedia($content));
     }
 
     /**
-     * Tests getMediaFromVideo when an error is thrown while searching video.
+     * Tests getMediaWhenDeep.
      */
-    public function testGetMediaFromVideoWhenError()
+    public function testGetMediaWhenDeep()
     {
-        $this->em->expects($this->once())->method('find')
-            ->with('Video', 940)->will($this->throwException(new \Exception()));
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'opinion',
+            'related_contents'  => [
+                [
+                    'source_id'         => 1,
+                    'target_id'         => 2,
+                    'content_type_name' => 'video',
+                    'type'              => 'featured_inner'
+                ]
+            ]
+        ]);
 
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromVideo');
-        $method->setAccessible(true);
+        $video = new Content([
+            'pk_content'        => 2,
+            'content_type_name' => 'video',
+            'related_contents'  => [
+                [
+                    'source_id'         => 2,
+                    'target_id'         => 3,
+                    'content_type_name' => 'photo',
+                    'type'              => 'featured_inner'
+                ]
+            ]
+        ]);
 
-        $this->assertNull($method->invokeArgs($this->helper, [ 940 ]));
+        $photo = new Content([
+            'pk_content'        => 3,
+            'content_type_name' => 'photo',
+            'width'             => 1920,
+            'height'            => 1080,
+            'path'              => 'sample/path.extension'
+        ]);
+
+        $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
+            ->with($content, 'inner')
+            ->willReturn(true);
+
+        $this->featuredHelper->expects($this->at(1))->method('getFeaturedMedia')
+            ->with($content, 'inner')
+            ->willReturn($video);
+
+        $this->featuredHelper->expects($this->at(2))->method('hasFeaturedMedia')
+            ->with($video, 'frontpage')
+            ->willReturn(true);
+
+        $this->featuredHelper->expects($this->at(3))->method('getFeaturedMedia')
+            ->with($video, 'frontpage')
+            ->willReturn($photo);
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->with($photo)
+            ->willReturn($photo);
+
+        $this->assertEquals($photo, $this->helper->getMedia($content, true, 'frontpage'));
+    }
+
+
+    /**
+     * Tests getMedia method when the content has author avatar.
+     */
+    public function testGetMediaWhenAvatar()
+    {
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'opinion',
+            'avatar_img_id'     => 2
+        ]);
+
+        $photo = new Content([
+            'pk_content'        => 2,
+            'content_type_name' => 'photo',
+            'width'             => 1920,
+            'height'            => 1080
+        ]);
+
+        $this->authorHelper->expects($this->at(0))->method('hasAuthorAvatar')
+            ->with($content)
+            ->willReturn(true);
+
+        $this->authorHelper->expects($this->at(1))->method('getAuthorAvatar')
+            ->with($content)
+            ->willReturn(2);
+
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with(2)
+            ->willReturn($photo);
+
+        $this->assertEquals($photo, $this->helper->getMedia($content));
     }
 
     /**
-     * Tests getMediaFromVideo when no video found.
+     * Tests getMedia when logo.
      */
-    public function testGetMediaFromVideoWhenNoVideo()
+    public function testGetMediaWhenLogo()
     {
-        $this->em->expects($this->once())->method('find')
-            ->with('Video', 940)->willReturn(null);
+        $logo = new Content([
+            'path'              => 'sections/image.jpg',
+            'width'             => 1920,
+            'height'            => 1080,
+            'content_type_name' => 'photo',
+            'content_status'    => 1,
+            'in_litter'         => 0
+        ]);
 
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromVideo');
-        $method->setAccessible(true);
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('logo_enabled')
+            ->willReturn(true);
 
-        $this->assertNull($method->invokeArgs($this->helper, [ null ]));
-        $this->assertNull($method->invokeArgs($this->helper, [ 940 ]));
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('sn_default_img')
+            ->willReturn('image.jpg');
+
+        $this->imageHelper->expects($this->at(0))->method('getInformation')
+            ->willReturn([ 'width' => 1920, 'height' => 1080 ]);
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->with($logo)
+            ->willReturn($logo);
+
+        $this->assertEquals($logo, $this->helper->getMedia(null));
     }
 
     /**
-     * Tests getThumbnailUrl when video is not of type external or script.
+     * Tests getMedia when logo and exception.
      */
-    public function testGetThumbnailUrl()
+    public function testGetMediaWhenLogoAndException()
     {
-        $video = new Content(
-            ['information' => [ 'thumbnail' => 'https://img.youtube.com/vi/glorp/1.jpg' ] ]
-        );
+        $logo = new Content([
+            'path'              => 'sections/image.jpg',
+            'width'             => 1920,
+            'height'            => 1080,
+            'content_status'    => 1,
+            'in_litter'         => 0
+        ]);
 
-        $method = new \ReflectionMethod($this->helper, 'getThumbnailUrl');
-        $method->setAccessible(true);
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('logo_enabled')
+            ->willReturn(true);
 
-        $this->assertEquals($video->information['thumbnail'], $method->invokeArgs($this->helper, [ $video ]));
+        $this->assertEquals(null, $this->helper->getMedia($logo));
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('logo_enabled')
+            ->willReturn(true);
+
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('sn_default_img')
+            ->willReturn('image.jpg');
+
+        $this->imageHelper->expects($this->at(0))->method('getInformation')
+            ->will($this->throwException(new \Exception()));
+
+        $this->helper->getMedia($logo);
     }
 
     /**
-     * Tests getThumbnilUrl when video doesn't have any thumbnail.
+     * Tests getMedia when no media.
      */
-    public function testGetThumbnailUrlWhenNoThumbnail()
+    public function testGetMediaWhenNoMedia()
     {
-        $video = new Content();
-
-        $method = new \ReflectionMethod($this->helper, 'getThumbnailUrl');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, [ $video ]));
+        $this->assertNull($this->helper->getMedia(null));
     }
 }
