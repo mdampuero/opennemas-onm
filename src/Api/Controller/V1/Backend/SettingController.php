@@ -180,7 +180,8 @@ class SettingController extends Controller
 
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
-            'logo_enabled', 'refresh_interval'
+            'logo_enabled', 'refresh_interval', 'site_logo', 'mobile_logo',
+            'favico', 'sn_default_img'
         ];
 
         foreach ($toint as $key) {
@@ -203,7 +204,7 @@ class SettingController extends Controller
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
-                    . '/sections/',
+                    . '/',
                 'translation_services' =>
                     $this->get('core.factory.translator')->getTranslatorsData(),
                 'theme_skins' => $this->get('core.theme')->getSkins(),

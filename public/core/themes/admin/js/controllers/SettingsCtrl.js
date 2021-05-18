@@ -160,6 +160,25 @@
           }
         };
 
+        // Updates data to send to server when related contents change
+        $scope.$watch('[ settings.site_logoID, settings.mobile_logoID, settings.favicoID, settings.sn_default_imgID ]', function(nv) {
+          if (nv[0]) {
+            $scope.settings.site_logo =  parseInt(nv[0].pk_content);
+          }
+
+          if (nv[1]) {
+            $scope.settings.mobile_logo =  parseInt(nv[1].pk_content);
+          }
+
+          if (nv[2]) {
+            $scope.settings.favico =  parseInt(nv[2].pk_content);
+          }
+
+          if (nv[3]) {
+            $scope.settings.sn_default_img =  parseInt(nv[3].pk_content);
+          }
+        });
+
         /**
          * @function filterFromLanguages
          * @memberOf SettingsCtrl
@@ -459,40 +478,24 @@
             }
           }
 
-          if ($scope.settings.site_logo) {
-            data.settings.site_logo = $scope.settings.site_logo;
-
-            if (!(data.settings.site_logo instanceof File)) {
-              data.settings.site_logo = $scope.settings.site_logo
-                .replace($scope.extra.prefix, '');
-            }
+          if ($scope.settings.site_logoID) {
+            data.settings.site_logo = parseInt($scope.settings.site_logoID.pk_content);
+            delete data.settings.site_logoID;
           }
 
-          if ($scope.settings.mobile_logo) {
-            data.settings.mobile_logo = $scope.settings.mobile_logo;
-
-            if (!(data.settings.mobile_logo instanceof File)) {
-              data.settings.mobile_logo = data.settings.mobile_logo
-                .replace($scope.extra.prefix, '');
-            }
+          if ($scope.settings.mobile_logoID) {
+            data.settings.mobile_logo = parseInt($scope.settings.mobile_logoID.pk_content);
+            delete data.settings.mobile_logoID;
           }
 
-          if (data.settings.favico) {
-            data.settings.favico = $scope.settings.favico;
-
-            if (!(data.settings.favico instanceof File)) {
-              data.settings.favico = data.settings.favico
-                .replace($scope.extra.prefix, '');
-            }
+          if (data.settings.favicoID) {
+            data.settings.favico = parseInt($scope.settings.favicoID.pk_content);
+            delete data.settings.favicoID;
           }
 
-          if (data.settings.sn_default_img) {
-            data.settings.sn_default_img = $scope.settings.sn_default_img;
-
-            if (!(data.settings.sn_default_img instanceof File)) {
-              data.settings.sn_default_img = data.settings.sn_default_img
-                .replace($scope.extra.prefix, '');
-            }
+          if (data.settings.sn_default_imgID) {
+            data.settings.sn_default_img = parseInt($scope.settings.sn_default_imgID.pk_content);
+            delete data.settings.sn_default_imgID;
           }
 
           return data;
@@ -516,25 +519,25 @@
             sn_default_img:       $scope.settings.sn_default_img
           };
 
-          if ($scope.settings.site_logo) {
+          /*if ($scope.settings.site_logo) {
             $scope.settings.site_logo =
               $scope.extra.prefix + $scope.settings.site_logo;
-          }
+          }*/
 
-          if ($scope.settings.mobile_logo) {
+          /*if ($scope.settings.mobile_logo) {
             $scope.settings.mobile_logo =
               $scope.extra.prefix + $scope.settings.mobile_logo;
-          }
+          }*/
 
-          if ($scope.settings.favico) {
+         /* if ($scope.settings.favico) {
             $scope.settings.favico =
               $scope.extra.prefix + $scope.settings.favico;
-          }
+          }*/
 
-          if ($scope.settings.sn_default_img) {
+        /*  if ($scope.settings.sn_default_img) {
             $scope.settings.sn_default_img =
               $scope.extra.prefix + $scope.settings.sn_default_img;
-          }
+          }*/
 
           if (!$scope.settings.locale.frontend.language.slug) {
             $scope.settings.locale.frontend.language.slug = {};

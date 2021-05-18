@@ -349,6 +349,11 @@
             autoscaleClass = ' autoscale';
           }
 
+          if (options.ngModel && options.reescale && options.reescale === 'true') {
+            autoscale      = 'ng-style="{ \'height\': height, \'width\': width }"';
+            autoscaleClass = ' autoscale';
+          }
+
           var dimensions = '';
 
           if (options.ngModel && options.dimensions && options.dimensions === 'true') {
@@ -432,6 +437,7 @@
           },
           link: function($scope, element, attrs) {
             var children = element.children();
+
             var html     = DynamicImage.render(attrs, $scope.ngModel);
 
             var defaults = DynamicImage.getDefaultSize(element);
@@ -463,6 +469,19 @@
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
               $q.when(DynamicImage.getItem(nv), function(item) {
+                if (attrs.reescale == 'true') {
+                  if (item.width > 1800) {
+                    $scope.height = item.height * 0.18;
+                    $scope.width  = item.width * 0.18;
+                  } else if (item.width > 900) {
+                    $scope.height = item.height * 0.25;
+                    $scope.width  = item.width * 0.25;
+                  } else {
+                    $scope.height = item.height * 0.65;
+                    $scope.width  = item.width * 0.65;
+                  }
+                }
+
                 $scope.src = DynamicImage.generateUrl(item, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
               });
