@@ -371,7 +371,7 @@ class Menu
             return false;
         }
 
-        $isMultilanguageEnable = getService('core.instance')->hasMultilanguage();
+        $isMultilanguageEnable = getService('core.globals')->getInstance()->hasMultilanguage();
         $fm                    = getService('data.manager.filter');
         try {
             $conn = getService('dbal_connection');

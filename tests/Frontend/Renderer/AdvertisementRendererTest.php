@@ -63,7 +63,7 @@ class AdvertisementRendererTest extends TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getDevice' ])
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -80,6 +80,9 @@ class AdvertisementRendererTest extends TestCase
             ->with('Settings', 'instance')->willReturn($this->ds);
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
+        $this->globals->expects($this->any())
+            ->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -96,8 +99,8 @@ class AdvertisementRendererTest extends TestCase
             case 'error.log':
                 return $this->logger;
 
-            case 'core.instance':
-                return $this->instance;
+            case 'core.globals':
+                return $this->globals;
 
             case 'core.globals':
                 return $this->globals;

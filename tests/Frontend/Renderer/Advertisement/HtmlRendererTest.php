@@ -56,7 +56,7 @@ class HtmlRendererTest extends TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getDevice' ])
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')

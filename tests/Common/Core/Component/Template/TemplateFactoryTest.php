@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Template;
 
 use Common\Core\Component\Template\TemplateFactory;
 use Common\Model\Entity\Instance;
+use Opennemas\Orm\Database\Repository\BaseRepository;
 
 /**
  * Defines test cases for TemplateFactory class.
@@ -26,6 +27,7 @@ class TemplateFactoryTest extends \PHPUnit\Framework\TestCase
             'TEMPLATE_USER' => 'frog'
         ] ]);
 
+
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get', 'getParameter', 'hasParameter' ])
             ->getMock();
@@ -34,11 +36,52 @@ class TemplateFactoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance', 'setInstance' ])
+            ->getMock();
+
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getRepository' ])
+            ->getMock();
+
+        $this->repo = $this->getMockBuilder('Repository')
+            ->setMethods([ 'findOneBy' ])
+            ->getMock();
+
+        $this->cache = $this->getMockBuilder('CacheManager')
+            ->setMethods([ 'write', 'setPath' ])
+            ->getMock();
+
         $this->watcher = $this->getMockBuilder('Stopwatch')
             ->setMethods([ 'start', 'stop' ])
             ->getMock();
 
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
+
+        $this->em->expects($this->any())->method('getRepository')
+            ->willReturn($this->repo);
+
         $this->factory = new TemplateFactory($this->container, $this->watcher);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.globals':
+                return $this->globals;
+            case 'request_stack':
+                return $this->rs;
+            case 'core.template.cache':
+                return $this->cache;
+            case 'orm.manager':
+                return $this->em;
+        }
+
+        return null;
     }
 
     /**
@@ -145,9 +188,6 @@ class TemplateFactoryTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->factory, 'getBundleName');
         $method->setAccessible(true);
 
-        $this->container->expects($this->once())->method('get')
-            ->with('request_stack')->willReturn($this->rs);
-
         $this->assertEquals('frontend', $method->invokeArgs($this->factory, []));
     }
 
@@ -210,32 +250,18 @@ class TemplateFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTemplateWhenInFrontend()
     {
-        $em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getRepository' ])
-            ->getMock();
-
-        $repository = $this->getMockBuilder('Opennemas\Orm\File\BaseRepository')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'findOneBy' ])
-            ->getMock();
-
         $method = new \ReflectionMethod($this->factory, 'getTemplate');
         $method->setAccessible(true);
 
-        $this->container->expects($this->at(0))->method('get')
-            ->with('core.instance')->willReturn(null);
         $this->container->expects($this->at(1))->method('hasParameter')
             ->with('core.template.frontend.filters')->willReturn(true);
         $this->container->expects($this->at(2))->method('getParameter')
             ->with('core.template.frontend.filters')->willReturn([]);
-        $this->container->expects($this->at(3))->method('get')
-            ->with('orm.manager')->willReturn($em);
 
-        $em->expects($this->once())->method('getRepository')
-            ->with('theme', 'file')->willReturn($repository);
+        $this->em->expects($this->once())->method('getRepository')
+            ->with('theme', 'file')->willReturn($this->repo);
 
-        $repository->expects($this->once())->method('findOneBy')
+        $this->repo->expects($this->once())->method('findOneBy')
             ->will($this->throwException(new \Exception()));
 
         $method->invokeArgs($this->factory, [ 'frontend' ]);

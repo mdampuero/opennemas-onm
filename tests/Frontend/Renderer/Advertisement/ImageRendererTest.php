@@ -71,7 +71,7 @@ class ImageRendererTest extends TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getDevice' ])
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -89,6 +89,9 @@ class ImageRendererTest extends TestCase
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
 
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
+
         $this->renderer = new ImageRenderer($this->container);
     }
 
@@ -103,6 +106,9 @@ class ImageRendererTest extends TestCase
 
             case 'core.instance':
                 return $this->instance;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'core.helper.url_generator':
                 return $this->ugh;

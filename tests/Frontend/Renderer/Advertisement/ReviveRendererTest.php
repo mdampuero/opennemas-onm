@@ -60,7 +60,7 @@ class ReviveRendererTest extends TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getDevice' ])
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
@@ -78,6 +78,9 @@ class ReviveRendererTest extends TestCase
 
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->renderer = new ReviveRenderer($this->container);
     }
