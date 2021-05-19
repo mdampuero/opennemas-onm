@@ -82,7 +82,13 @@ class ContentMediaHelper
      */
     public function getMedia($content)
     {
-        $media = $this->contentHelper->getContent($this->getMediaObject($content), 'photo');
+        $media = $this->getMediaObject($content);
+
+        if (empty($media)) {
+            return null;
+        }
+
+        $media = $this->contentHelper->getContent($media, 'photo');
 
         if (is_object($media)) {
             $media->width  = $media->width ?? 700;
