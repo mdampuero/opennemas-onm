@@ -43,7 +43,7 @@ class DfpRenderer extends AdvertisementRenderer
                 : null,
         ]);
 
-        return $this->getSlot($ad, $content);
+        return $this->getSlot($ad, $content, false);
     }
 
     /**

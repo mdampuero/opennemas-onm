@@ -10,27 +10,7 @@
  */
 function get_author($item = null) : ?\Common\Model\Entity\User
 {
-    $item = $item ?? getService('core.template.frontend')->getValue('item');
-
-    if (empty($item)) {
-        return null;
-    }
-
-    if (($item instanceof \Content
-        || $item instanceof \Common\Model\Entity\Content)
-        && !empty($item->fk_author)
-    ) {
-        try {
-            return getService('api.service.author')
-                ->getItem($item->fk_author);
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    return $item instanceof \Common\Model\Entity\User
-        ? $item
-        : null;
+    return getService('core.helper.author')->getAuthor($item);
 }
 
 /**
@@ -44,9 +24,7 @@ function get_author($item = null) : ?\Common\Model\Entity\User
  */
 function get_author_avatar($item = null) : ?int
 {
-    $author = get_author($item);
-
-    return !empty($author) ? $author->avatar_img_id : null;
+    return getService('core.helper.author')->getAuthorAvatar($item);
 }
 
 /**
@@ -59,9 +37,7 @@ function get_author_avatar($item = null) : ?int
  */
 function get_author_bio_body($item = null) : ?string
 {
-    $author = get_author($item);
-
-    return !empty($author->bio_description) ? $author->bio_description : null;
+    return getService('core.helper.author')->getAuthorBioBody($item);
 }
 
 /**
@@ -74,9 +50,7 @@ function get_author_bio_body($item = null) : ?string
  */
 function get_author_bio_summary($item = null) : ?string
 {
-    $author = get_author($item);
-
-    return !empty($author->bio) ? $author->bio : null;
+    return getService('core.helper.author')->getAuthorBioSummary($item);
 }
 
 /**
@@ -90,9 +64,7 @@ function get_author_bio_summary($item = null) : ?string
  */
 function get_author_id($item = null) : ?int
 {
-    $author = get_author($item);
-
-    return !empty($author) ? $author->id : null;
+    return getService('core.helper.author')->getAuthorId($item);
 }
 
 /**
@@ -106,29 +78,7 @@ function get_author_id($item = null) : ?int
  */
 function get_author_name($item = null) : ?string
 {
-    $author = get_author($item);
-
-    if (!empty($author)) {
-        return $author->name;
-    }
-
-    $item = $item ?? getService('core.template.frontend')->getValue('item');
-
-    if ($item instanceof \Content
-        || $item instanceof \Common\Model\Entity\Content
-    ) {
-        if (!empty($item->agency)) {
-            return $item->agency;
-        }
-
-        if (!empty($item->author_name)
-            && !$item instanceof \Video
-        ) {
-            return $item->author_name;
-        }
-    }
-
-    return null;
+    return getService('core.helper.author')->getAuthorName($item);
 }
 
 /**
@@ -142,22 +92,7 @@ function get_author_name($item = null) : ?string
  */
 function get_author_rss_url($item = null) : ?string
 {
-    $author = get_author($item);
-
-    if (!empty($author)) {
-        $routeName   = 'frontend_rss_author';
-        $routeParams = [
-            'author_slug' => $author->slug,
-        ];
-
-        if ($author->inrss) {
-            $url = getService('router')->generate($routeName, $routeParams);
-
-            return !empty($url) ? $url : null;
-        }
-    }
-
-    return null;
+    return getService('core.helper.author')->getAuthorRssUrl($item);
 }
 
 /**
@@ -170,9 +105,7 @@ function get_author_rss_url($item = null) : ?string
  */
 function get_author_slug($item = null) : ?string
 {
-    $author = get_author($item);
-
-    return empty($author) ? null : $author->slug;
+    return getService('core.helper.author')->getAuthorSlug($item);
 }
 
 /**
@@ -185,9 +118,7 @@ function get_author_slug($item = null) : ?string
  */
 function get_author_social_facebook_url($item = null) : ?string
 {
-    $author = get_author($item);
-
-    return !empty($author->facebook) ? ("https://www.facebook.com/" . $author->facebook) : null;
+    return getService('core.helper.author')->getAuthorSocialFacebookUrl($item);
 }
 
 /**
@@ -200,9 +131,7 @@ function get_author_social_facebook_url($item = null) : ?string
  */
 function get_author_social_twitter_url($item = null) : ?string
 {
-    $author = get_author($item);
-
-    return !empty($author->twitter) ? ("https://www.twitter.com/" . $author->twitter) : null;
+    return getService('core.helper.author')->getAuthorSocialTwitterUrl($item);
 }
 
 /**
@@ -216,24 +145,7 @@ function get_author_social_twitter_url($item = null) : ?string
  */
 function get_author_url($item = null) : ?string
 {
-    $author = get_author($item);
-
-    if (isset($item->content_type_name) && $item->content_type_name === 'opinion') {
-        return !empty($author)
-            ? getService('core.helper.url_generator')->generate($author)
-            : null;
-    }
-
-    if (has_author_slug($author)) {
-        $routeName   = 'frontend_author_frontpage';
-        $routeParams = [
-            'slug' => get_author_slug($author),
-        ];
-
-        return getService('router')->generate($routeName, $routeParams);
-    }
-
-    return null;
+    return getService('core.helper.author')->getAuthorUrl($item);
 }
 
 /**
@@ -248,7 +160,7 @@ function get_author_url($item = null) : ?string
  */
 function has_author($item = null) : bool
 {
-    return !empty(get_author_name($item));
+    return getService('core.helper.author')->hasAuthor($item);
 }
 
 /**
@@ -263,7 +175,7 @@ function has_author($item = null) : bool
  */
 function has_author_avatar($item = null) : bool
 {
-    return !empty(get_author_avatar($item));
+    return getService('core.helper.author')->hasAuthorAvatar($item);
 }
 
 /**
@@ -278,7 +190,7 @@ function has_author_avatar($item = null) : bool
  */
 function has_author_bio_body($item = null) : bool
 {
-    return !empty(get_author_bio_body($item));
+    return getService('core.helper.author')->hasAuthorBioBody($item);
 }
 
 /**
@@ -293,7 +205,7 @@ function has_author_bio_body($item = null) : bool
  */
 function has_author_bio_summary($item = null) : bool
 {
-    return !empty(get_author_bio_summary($item));
+    return getService('core.helper.author')->hasAuthorBioSummary($item);
 }
 
 /**
@@ -308,9 +220,7 @@ function has_author_bio_summary($item = null) : bool
  */
 function has_author_rss_url($item = null) : bool
 {
-    $url = get_author_rss_url($item);
-
-    return !empty($url);
+    return getService('core.helper.author')->hasAuthorRssUrl($item);
 }
 
 /**
@@ -325,9 +235,7 @@ function has_author_rss_url($item = null) : bool
  */
 function has_author_slug($item = null) : bool
 {
-    $slug = get_author_slug($item);
-
-    return !empty($slug);
+    return getService('core.helper.author')->hasAuthorSlug($item);
 }
 
 /**
@@ -342,7 +250,7 @@ function has_author_slug($item = null) : bool
  */
 function has_author_social_facebook_url($item = null) : bool
 {
-    return !empty(get_author_social_facebook_url($item));
+    return getService('core.helper.author')->hasAuthorSocialFacebookUrl($item);
 }
 
 /**
@@ -357,7 +265,7 @@ function has_author_social_facebook_url($item = null) : bool
  */
 function has_author_social_twitter_url($item = null) : bool
 {
-    return !empty(get_author_social_twitter_url($item));
+    return getService('core.helper.author')->hasAuthorSocialTwitterUrl($item);
 }
 
 /**
@@ -372,7 +280,7 @@ function has_author_social_twitter_url($item = null) : bool
  */
 function has_author_url($item = null) : bool
 {
-    return !empty(get_author_url($item));
+    return getService('core.helper.author')->hasAuthorUrl($item);
 }
 
 /**
@@ -387,7 +295,5 @@ function has_author_url($item = null) : bool
  */
 function is_blog($item = null) : bool
 {
-    $author = get_author($item);
-
-    return !empty($author->is_blog) ? $author->is_blog : false;
+    return getService('core.helper.author')->isBlog($item);
 }

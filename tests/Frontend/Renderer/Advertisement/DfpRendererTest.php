@@ -50,8 +50,9 @@ class DfpRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->globals = $this->getMockBuilder('GlobalVariables')
-            ->setMethods([ 'getInstance' ])
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -63,6 +64,11 @@ class DfpRendererTest extends TestCase
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
 
+        $this->adRenderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getRendererClass' ])
+            ->getMock();
+
         $this->renderer = new DfpRenderer($this->container);
     }
 
@@ -72,21 +78,21 @@ class DfpRendererTest extends TestCase
             case 'orm.manager':
                 return $this->em;
 
+            case 'core.globals':
+                return $this->globals;
+
             case 'entity_repository':
                 return $this->em;
 
             case 'view':
                 return $this->view;
-
-            case 'core.globals':
-                return $this->globals;
         }
 
         return null;
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderAmp
+     * Tests renderAmp.
      */
     public function testRenderAmp()
     {
@@ -145,7 +151,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -205,7 +211,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -213,19 +219,35 @@ class DfpRendererTest extends TestCase
         $ad->id      = 1;
         $ad->created = '2019-03-28 18:40:32';
 
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
+
         $output = '<div id="zone_1">
             <script>
             googletag.cmd.push(function() { googletag.display(\'zone_1\'); });
             </script>
         </div>';
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/dfp.slot.tpl', [
                 'id' => 1,
             ])
             ->willReturn($output);
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height: 265px;">'
             . $output . '</div>';
 
         $this->assertEquals(
@@ -235,7 +257,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     * Tests renderInline with AMP.
      */
     public function testRenderInlineWithAmp()
     {
@@ -257,7 +279,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -279,7 +301,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderSafeFrame
+     * Tests renderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -369,7 +391,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::renderInlineHeader
+     * Tests renderInlineHeader.
      */
     public function testRenderInlineHeader()
     {
@@ -440,7 +462,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getCustomCode
+     * Tests getCustomCode.
      */
     public function testGetCustomCode()
     {
@@ -467,7 +489,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getTargeting
+     * Tests getTargeting.
      */
     public function testGetTargeting()
     {
@@ -504,7 +526,7 @@ class DfpRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\DfpRenderer::getAmpMultiSizes
+     * Tests getAmpMultiSizes.
      */
     public function testGetAmpMultiSizes()
     {

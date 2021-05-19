@@ -69,12 +69,13 @@ class ImageRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl' ])
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
-        $this->globals = $this->getMockBuilder('GlobalVariables')
-            ->setMethods([ 'getInstance' ])
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getBaseUrl' ])
             ->getMock();
 
         $this->instance->expects($this->any())->method('getBaseUrl')
@@ -112,6 +113,9 @@ class ImageRendererTest extends TestCase
             case 'core.helper.url_generator':
                 return $this->ugh;
 
+            case 'core.globals':
+                return $this->globals;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -132,7 +136,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -190,11 +194,23 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
-        $ad = new \Advertisement();
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\ImageRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -203,15 +219,18 @@ class ImageRendererTest extends TestCase
 
         $renderer->expects($this->once())->method('getImageHtml')
             ->willReturn('foo');
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
 
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">foo</div>';
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height: 265px;">foo</div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -231,7 +250,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderSafeFrame
+     * Tests renderSafeFrame.
      */
     public function testRenderSafeFrameWithImage()
     {
@@ -255,7 +274,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::renderSafeFrame
+     * Tests renderSafeFrame with empty image.
      */
     public function testRenderSafeFrameWithEmptyImage()
     {
@@ -265,7 +284,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::RenderSafeFrameImage
+     * Tests RenderSafeFrameImage with flash.
      */
     public function testRenderSafeFrameImageWithFlash()
     {
@@ -344,7 +363,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::RenderSafeFrameImage
+     * Tests RenderSafeFrameImage.
      */
     public function testRenderSafeFrameImage()
     {
@@ -409,7 +428,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImage
+     * Tests getImage.
      */
     public function testGetImage()
     {
@@ -442,7 +461,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml.
      */
     public function testGetImageHtml()
     {
@@ -493,7 +512,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml without image.
      */
     public function testGetImageHtmlWithoutImage()
     {
@@ -515,7 +534,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml with flash.
      */
     public function testGetImageHtmlWithFlash()
     {
@@ -572,7 +591,7 @@ class ImageRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ImageRenderer::getImageHtml
+     * Tests getImageHtml with AMP.
      */
     public function testGetImageHtmlWithAMP()
     {

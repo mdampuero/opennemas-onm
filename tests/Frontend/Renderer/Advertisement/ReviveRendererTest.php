@@ -58,12 +58,13 @@ class ReviveRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl' ])
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice', 'getInstance' ])
             ->getMock();
 
-        $this->globals = $this->getMockBuilder('GlobalVariables')
-            ->setMethods([ 'getInstance' ])
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'getBaseUrl' ])
             ->getMock();
 
         $this->instance->expects($this->any())->method('getBaseUrl')
@@ -116,7 +117,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderAmp
+     * Tests renderAmp.
      */
     public function testRenderAmp()
     {
@@ -161,7 +162,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -216,7 +217,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
@@ -224,6 +225,19 @@ class ReviveRendererTest extends TestCase
         $ad->id        = 123;
         $ad->positions = [ 50 ];
         $ad->params    = [];
+
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $url    = '/ads/get/123';
         $output = '<iframe src="' . $url . '"></iframe>
@@ -234,6 +248,8 @@ class ReviveRendererTest extends TestCase
         $this->router->expects($this->any())->method('generate')
             ->with('api_v1_advertisement_show', [ 'id' => $ad->id ])
             ->willReturn($url);
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/revive.slot.tpl', [
@@ -243,7 +259,8 @@ class ReviveRendererTest extends TestCase
             ])
             ->willReturn($output);
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height: 265px;">'
             . $output . '</div>';
 
         $this->assertEquals(
@@ -253,7 +270,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     * Tests renderInline with AMP.
      */
     public function testRenderInlineWithAmp()
     {
@@ -275,7 +292,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -297,7 +314,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderSafeFrame
+     * Tests renderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -365,7 +382,7 @@ class ReviveRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\ReviveRenderer::renderInlineHeader
+     * Tests renderInlineHeader.
      */
     public function testRenderInlineHeader()
     {

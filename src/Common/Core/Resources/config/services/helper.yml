@@ -13,9 +13,29 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.album:
+        class:      Common\Core\Component\Helper\AlbumHelper
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        public:     true
+
     core.helper.attachment:
         class:     Common\Core\Component\Helper\AttachmentHelper
         arguments: [ '@core.loader.instance', '%core.paths.public%' ]
+        public:    true
+
+    core.helper.author:
+        class:      Common\Core\Component\Helper\AuthorHelper
+        arguments:  [ '@api.service.author', '@router', '@core.template.frontend', '@core.helper.url_generator' ]
+        public:     true
+
+    core.helper.category:
+        class:      Common\Core\Component\Helper\CategoryHelper
+        arguments:  [ '@api.service.category', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]
+        public:     true
+
+    core.helper.checkout:
+        class:     Common\Core\Component\Helper\CheckoutHelper
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.comment:
@@ -25,13 +45,8 @@ services:
 
     core.helper.content:
         class:      Common\Core\Component\Helper\ContentHelper
-        arguments:  [ '@entity_repository', '@api.service.content', '@cache.connection.instance' ]
-        public:     true
-
-    core.helper.checkout:
-        class:     Common\Core\Component\Helper\CheckoutHelper
         arguments: [ '@service_container' ]
-        public:    true
+        public:     true
 
     core.helper.content_media:
         class:     Common\Core\Component\Helper\ContentMediaHelper
@@ -40,6 +55,16 @@ services:
 
     core.helper.csv:
         class:     Common\Core\Component\Helper\CsvHelper
+        public:    true
+
+    core.helper.featured_media:
+        class:     Common\Core\Component\Helper\FeaturedMediaHelper
+        arguments:
+            - '@core.helper.content'
+            - '@core.helper.related'
+            - '@core.helper.subscription'
+            - '@core.template.frontend'
+            - '@core.helper.video'
         public:    true
 
     core.helper.http_fetcher:
@@ -66,14 +91,14 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
-    core.helper.locale:
-        class:     Common\Core\Component\Helper\LocaleHelper
-        arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
-        public:    true
-
     core.helper.l10n_route:
         class:     Common\Core\Component\Helper\L10nRouteHelper
         arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.locale:
+        class:     Common\Core\Component\Helper\LocaleHelper
+        arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
         public:    true
 
     core.helper.newsletter:
@@ -110,6 +135,16 @@ services:
         arguments: [ '@core.security' ]
         public:    true
 
+    core.helper.photo:
+        class:     Common\Core\Component\Helper\PhotoHelper
+        arguments: [ '@core.helper.content', '@core.instance', '@router', '@core.helper.url_generator' ]
+        public:    true
+
+    core.helper.related:
+        class:     Common\Core\Component\Helper\RelatedHelper
+        arguments: [ '@core.helper.content', '@core.helper.subscription', '@core.template.frontend' ]
+        public:    true
+
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@service_container' ]
@@ -133,3 +168,8 @@ services:
         class:     Common\Core\Component\Helper\UserHelper
         arguments: [ '@service_container' ]
         public:    true
+
+    core.helper.video:
+        class:      Common\Core\Component\Helper\VideoHelper
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        public:     true

@@ -21,7 +21,7 @@ class AttachmentService extends ContentOldService
     public function createItem($data, $file = null)
     {
         if (empty($file)) {
-            throw new CreateItemException('No file provided');
+            throw new CreateItemException(_('No file provided'));
         }
 
         try {
@@ -31,7 +31,7 @@ class AttachmentService extends ContentOldService
             $path = $fh->generatePath($file, new \DateTime($data['created'] ?? null));
 
             if ($fh->exists($path)) {
-                throw new FileAlreadyExistsException();
+                throw new FileAlreadyExistsException(_('A file with the same name has already been uploaded today'));
             }
 
             $data['path'] = '/' . $fh->getRelativePath($path);
@@ -59,7 +59,7 @@ class AttachmentService extends ContentOldService
     public function updateItem($id, $data, $file = null)
     {
         if (empty($file) && empty($data['path'])) {
-            throw new UpdateItemException('No file provided');
+            throw new UpdateItemException(_('No file provided'));
         }
 
         try {
@@ -74,7 +74,9 @@ class AttachmentService extends ContentOldService
                 if ($fh->exists($path)
                     && $item->getRelativePath() !== $data['path']
                 ) {
-                    throw new FileAlreadyExistsException();
+                    throw new FileAlreadyExistsException(
+                        _('A file with the same name has already been uploaded today')
+                    );
                 }
 
                 if (!empty($item->getRelativePath())) {

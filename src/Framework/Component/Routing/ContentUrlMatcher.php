@@ -9,6 +9,7 @@
  */
 namespace Framework\Component\Routing;
 
+use Common\Core\Component\Helper\CategoryHelper;
 use Common\Core\Component\Helper\ContentHelper;
 use Repository\EntityManager;
 
@@ -29,15 +30,24 @@ class ContentUrlMatcher
     protected $contentHelper;
 
     /**
+     * The category helper.
+     *
+     * @var CategoryHelper
+     */
+    protected $categoryHelper;
+
+    /**
      * Initializes the ContentUrlMatcher
      *
-     * @param EntityManager $entityManager The entity manager.
-     * @param ContentHelper $contentHelper The content helper.
+     * @param EntityManager  $entityManager  The entity manager.
+     * @param ContentHelper  $contentHelper  The content helper.
+     * @param CategoryHelper $categoryHelper The category helper.
      */
-    public function __construct(EntityManager $em, ContentHelper $contentHelper)
+    public function __construct(EntityManager $em, ContentHelper $contentHelper, CategoryHelper $categoryHelper)
     {
-        $this->em            = $em;
-        $this->contentHelper = $contentHelper;
+        $this->em             = $em;
+        $this->contentHelper  = $contentHelper;
+        $this->categoryHelper = $categoryHelper;
     }
 
     /**
@@ -83,7 +93,7 @@ class ContentUrlMatcher
             && $created === $date
             && $content->content_type_name === $type
             && (is_null($slug) || (string) $slug === (string) $content->slug)
-            && (is_null($category) || $category === get_category_slug($content))
+            && (is_null($category) || $category === $this->categoryHelper->getCategorySlug($content))
             && $this->contentHelper->isReadyForPublish($content)
         ) {
             return $content;

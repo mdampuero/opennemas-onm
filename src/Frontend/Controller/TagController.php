@@ -180,7 +180,7 @@ class TagController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $epp = $this->get('orm.manager')
+        $params['epp'] = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
 
@@ -225,7 +225,7 @@ class TagController extends FrontendController
         ];
 
         $em       = $this->get('entity_repository');
-        $contents = $em->findBy($criteria, 'starttime DESC', $epp, $params['page']);
+        $contents = $em->findBy($criteria, 'starttime DESC', $params['epp'], $params['page']);
         $total    = $em->countBy($criteria);
 
         // No first page and no contents
@@ -235,10 +235,11 @@ class TagController extends FrontendController
 
         $params = array_merge($params, [
             'contents'   => $contents,
+            'total'      => $total,
             'tag'        => $params['item'],
             'pagination' => $this->get('paginator')->get([
                 'directional' => true,
-                'epp'         => $epp,
+                'epp'         => $params['epp'],
                 'maxLinks'    => 0,
                 'page'        => $params['page'],
                 'total'       => $total,

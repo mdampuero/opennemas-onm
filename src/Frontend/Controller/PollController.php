@@ -246,6 +246,7 @@ class PollController extends FrontendController
 
         $params = array_merge($params, [
             'polls'      => $response['items'],
+            'total'      => $response['total'],
             'pagination' => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,

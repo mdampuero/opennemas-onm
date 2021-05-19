@@ -28,6 +28,11 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'isReadyForPublish' ])
             ->getMock();
 
+        $this->categoryHelper = $this->getMockBuilder('Common\Core\Component\Helper\CategoryHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getCategorySlug' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'find' ])
@@ -85,7 +90,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         ]);
         $this->content->category_slug = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
 
-        $this->matcher = new ContentUrlMatcher($this->em, $this->contentHelper);
+        $this->matcher = new ContentUrlMatcher($this->em, $this->contentHelper, $this->categoryHelper);
     }
 
     public function serviceContainerCallback($name)
