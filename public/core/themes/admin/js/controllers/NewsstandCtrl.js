@@ -45,7 +45,7 @@
           categories: [ null ],
           content_status: 0,
           content_type_name: 'kiosko',
-          created: new Date(),
+          created: null,
           date: '',
           endtime: null,
           favorite: 0,

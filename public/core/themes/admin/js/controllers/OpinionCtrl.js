@@ -40,7 +40,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       description: '',
       favorite: 0,
       frontpage: 0,
-      created: new Date(),
+      created: null,
       starttime: null,
       endtime: null,
       title: '',

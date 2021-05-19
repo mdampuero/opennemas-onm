@@ -50,7 +50,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       description: '',
       favorite: 0,
       frontpage: 0,
-      created: new Date(),
+      created: null,
       starttime: null,
       endtime: null,
       thumbnail: null,

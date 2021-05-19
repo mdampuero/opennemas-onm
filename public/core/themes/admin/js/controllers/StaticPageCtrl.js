@@ -48,7 +48,7 @@
           categories: [],
           content_status: 0,
           content_type_name: 'static_page',
-          created: new Date(),
+          created: null,
           description: '',
           endtime: null,
           favorite: 0,

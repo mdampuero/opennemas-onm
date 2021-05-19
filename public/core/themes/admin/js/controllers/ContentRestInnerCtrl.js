@@ -68,13 +68,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             return function(modalWindow) {
               $scope.data.item = webStorage.session.get($scope.draftKey).item;
 
-              [ 'starttime', 'endtime', 'created' ].forEach(function(dateField) {
-                if ($scope.item[dateField]) {
-                  $scope.data.item[dateField] = $window.moment($scope.item[dateField])
-                    .format('YYYY-MM-DD HH:mm:ss');
-                }
-              });
-
               if ($scope.config.linkers.item) {
                 $scope.config.linkers.item.link(
                   $scope.data.item, $scope.item);
