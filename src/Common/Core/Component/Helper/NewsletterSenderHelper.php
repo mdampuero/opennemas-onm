@@ -87,8 +87,17 @@ class NewsletterSenderHelper
         $this->ss                   = $ss;
         $this->actOnFactory         = $actOnFactory;
         $this->ns                   = $newsletterService;
-        $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
-        $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
+    }
+
+    /**
+     * Set a instance internet name
+     *
+     * @param string $name to set
+     *
+     */
+    public function setInternalName($name)
+    {
+        $this->instanceInternalName = $name;
     }
 
     /**
@@ -282,6 +291,9 @@ class NewsletterSenderHelper
      */
     private function sendEmail($newsletter, $mailbox)
     {
+        $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
+        $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
+
         // Build the message
         $message = \Swift_Message::newInstance();
         $message
