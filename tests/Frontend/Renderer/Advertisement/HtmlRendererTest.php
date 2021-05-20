@@ -54,6 +54,11 @@ class HtmlRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice', 'getInstance' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -72,6 +77,9 @@ class HtmlRendererTest extends TestCase
             case 'application.log':
                 return $this->logger;
 
+            case 'core.globals':
+                return $this->globals;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -86,7 +94,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderFia
+     * Tests renderFia.
      */
     public function testRenderFia()
     {
@@ -127,29 +135,44 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     * Tests renderInline.
      */
     public function testRenderInline()
     {
-        $ad = new \Advertisement();
+        $ad                  = new \Advertisement();
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 300,
+                'height' => 600,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 300,
+                'height' => 250,
+                'device' => 'phone'
+            ]
+        ];
 
         $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\HtmlRenderer')
             ->setConstructorArgs([ $this->container ])
             ->setMethods([ 'getHtml' ])
             ->getMock();
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
         $renderer->expects($this->once())->method('getHtml')
             ->willReturn('<script>foo bar baz</script>');
 
 
-        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement">'
+        $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
+            . 'style="height: 265px;">'
             . '<script>foo bar baz</script></div>';
 
         $this->assertEquals($output, $renderer->renderInline($ad, []));
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::renderInline
+     * Tests renderInline with FIA.
      */
     public function testRenderInlineWithFia()
     {
@@ -169,7 +192,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::RenderSafeFrame
+     * Tests RenderSafeFrame.
      */
     public function testRenderSafeFrame()
     {
@@ -194,7 +217,7 @@ class HtmlRendererTest extends TestCase
     }
 
     /**
-     * @covers \Frontend\Renderer\Advertisement\HtmlRenderer::getHtml
+     * Tests getHtml.
      */
     public function testGetHtml()
     {

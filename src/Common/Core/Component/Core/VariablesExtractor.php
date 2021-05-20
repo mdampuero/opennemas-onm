@@ -265,13 +265,16 @@ class VariablesExtractor
      */
     protected function getMediaType()
     {
+        $contentHelper  = $this->container->get('core.helper.content');
+        $featuredHelper = $this->container->get('core.helper.featured_media');
+
         $content = $this->tpl->getValue('o_content') ?? null;
 
         if (empty($content)) {
             return null;
         }
 
-        return get_type(get_featured_media($content, 'inner')) ?? null;
+        return $contentHelper->getType($featuredHelper->getFeaturedMedia($content, 'inner')) ?? null;
     }
 
     /**

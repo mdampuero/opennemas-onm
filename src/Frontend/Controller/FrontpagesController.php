@@ -113,7 +113,7 @@ class FrontpagesController extends Controller
             'category'    => $category,
             'o_category'  => $category,
             'time'        => $systemDate->getTimestamp(),
-            'x-cache-for' => $invalidationDt->format('Y-m-d H: i: s'),
+            'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
             'x-cacheable' => true,
             'x-tags'      => 'frontpage-page,' . $categoryName
         ]);

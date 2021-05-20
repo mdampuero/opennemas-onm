@@ -9,30 +9,7 @@
  */
 function get_category($item = null) : ?\Common\Model\Entity\Category
 {
-    $item = $item ?? getService('core.template.frontend')->getValue('item');
-
-    if (empty($item)) {
-        return null;
-    }
-
-    if (($item instanceof \Content && !empty($item->category_id))
-        || ($item instanceof \Common\Model\Entity\Content && !empty($item->categories))) {
-        try {
-            $category = $item instanceof \Content ?
-            getService('api.service.category')
-                ->getItem($item->category_id) :
-            getService('api.service.category')
-                ->getItem($item->categories[0]);
-
-            return $category;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    return $item instanceof \Common\Model\Entity\Category
-        ? $item
-        : null;
+    return getService('core.helper.category')->getCategory($item);
 }
 
 /**
@@ -46,9 +23,7 @@ function get_category($item = null) : ?\Common\Model\Entity\Category
  */
 function get_category_color($item = null) : ?string
 {
-    $category = get_category($item);
-
-    return !empty($category) ? $category->color : null;
+    return getService('core.helper.category')->getCategoryColor($item);
 }
 
 
@@ -63,9 +38,7 @@ function get_category_color($item = null) : ?string
  */
 function get_category_description($item = null) : ?string
 {
-    $category = get_category($item);
-
-    return !empty($category) ? $category->description : null;
+    return getService('core.helper.category')->getCategoryDescription($item);
 }
 
 /**
@@ -78,9 +51,7 @@ function get_category_description($item = null) : ?string
  */
 function get_category_id($item = null) : ?int
 {
-    $category = get_category($item);
-
-    return !empty($category) ? $category->id : null;
+    return getService('core.helper.category')->getCategoryId($item);
 }
 
 /**
@@ -93,12 +64,7 @@ function get_category_id($item = null) : ?int
  */
 function get_category_logo($item = null) : ?string
 {
-    $category = get_category($item);
-
-    return empty($category) || empty($category->logo_path)
-        ? null
-        : getService('core.instance')->getMediaShortPath()
-            . '/' . $category->logo_path;
+    return getService('core.helper.category')->getCategoryLogo($item);
 }
 
 /**
@@ -111,9 +77,7 @@ function get_category_logo($item = null) : ?string
  */
 function get_category_name($item = null) : ?string
 {
-    $category = get_category($item);
-
-    return !empty($category) ? $category->title : null;
+    return getService('core.helper.category')->getCategoryName($item);
 }
 
 /**
@@ -126,9 +90,7 @@ function get_category_name($item = null) : ?string
  */
 function get_category_slug($item = null) : ?string
 {
-    $category = get_category($item);
-
-    return !empty($category) ? $category->name : null;
+    return getService('core.helper.category')->getCategorySlug($item);
 }
 
 /**
@@ -143,11 +105,7 @@ function get_category_slug($item = null) : ?string
  */
 function get_category_url($item = null) : ?string
 {
-    $category = get_category($item);
-
-    return !empty($category)
-        ? getService('core.helper.url_generator')->generate($category)
-        : null;
+    return getService('core.helper.category')->getCategoryUrl($item);
 }
 
 /**
@@ -161,7 +119,7 @@ function get_category_url($item = null) : ?string
  */
 function has_category_description($item = null) : bool
 {
-    return !empty(get_category_description($item));
+    return getService('core.helper.category')->hasCategoryDescription($item);
 }
 
 /**
@@ -175,5 +133,5 @@ function has_category_description($item = null) : bool
  */
 function has_category_logo($item = null) : bool
 {
-    return !empty(get_category_logo($item));
+    return getService('core.helper.category')->hasCategoryLogo($item);
 }

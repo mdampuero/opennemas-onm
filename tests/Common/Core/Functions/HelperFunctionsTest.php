@@ -26,7 +26,7 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getRequest', 'getTheme' ])
+            ->setMethods([ 'getRequest', 'getTheme', 'getInstance' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -49,16 +49,14 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
 
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'generate' ])
+            ->setMethods([ 'getUrl' ])
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl' ])
+            ->setMethods([ 'getBaseUrl', 'getMediaShortPath' ])
             ->getMock();
 
-        $this->theme = $this->getMockBuilder('Theme')->getMock();
-
-        $this->theme->path = '/theme/fred';
+        $this->theme = new Theme([ 'path' => '/themes/fred' ]);
 
         $this->ch->expects($this->any())->method('isReadyForPublish')
             ->willReturn(true);
@@ -67,7 +65,10 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->globals->expects($this->any())->method('getTheme')
-            ->willReturn(new Theme([ 'path' => 'wibble/bar' ]));
+            ->willReturn($this->theme);
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -106,9 +107,6 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             case 'core.instance':
                 return $this->instance;
 
-            case 'core.theme':
-                return $this->theme;
-
             default:
                 return null;
         }
@@ -119,106 +117,52 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUrlForContent()
     {
-        $item = new Content();
+        $this->ugh->expects($this->once())->method('getUrl')
+            ->with(new Content());
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => false, '_format' => null ])
-            ->willReturn('/grault/fred');
-
-        $this->lrh->expects($this->once())->method('localizeUrl')
-            ->with('/grault/fred')->willReturn('/en/grault/fred');
-
-        $this->assertEquals('/en/grault/fred', get_url($item, [ 'flob' => 'grault' ]));
+        get_url(new Content());
     }
 
     /**
-     * Tests get_url when the provided content has a related content (an array
-     * with item, type, caption and position).
+     * Tests get_image_dir when the theme is not configured in globals.
      */
-    public function testGetUrlForRelatedContent()
+    public function testGetImageDirWhenNoTheme()
     {
-        $item = new Content();
+        $this->globals->expects($this->any())->method('getTheme')
+            ->willReturn($this->theme);
 
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => false, '_format' => null ])
-            ->willReturn('/grault/fred');
-
-        $this->lrh->expects($this->once())->method('localizeUrl')
-            ->with('/grault/fred')->willReturn('/en/grault/fred');
-
-        $this->assertEquals(
-            '/en/grault/fred',
-            get_url([ 'item' => $item ], [ 'flob' => 'grault' ])
-        );
-    }
-
-    /**
-     * Tests get_url for contents from external data source.
-     */
-    public function testGetUrlForExternalContent()
-    {
-        $item = new Content();
-
-        $item->externalUri = '/xyzzy/plugh';
-
-        $this->assertEquals('/xyzzy/plugh', get_url($item));
-    }
-
-    /**
-     * Tests get_url when the provided parameter is a route name.
-     */
-    public function testGetUrlForRoute()
-    {
-        $this->router->expects($this->exactly(2))->method('generate')
-            ->with('wibble', [ 'flob' => 'grault' ])
-            ->willReturn('/grault/fred');
-
-        $this->lrh->expects($this->exactly(2))->method('localizeUrl')
-            ->with('/grault/fred')->willReturn('/en/grault/fred');
-
-        $this->assertEquals('/en/grault/fred', get_url('wibble', [
-            'flob' => 'grault'
-        ]));
-
-        $this->assertEquals('/en/grault/fred', get_url('wibble', [
-            '_absolute' => true,
-            'flob' => 'grault'
-        ]));
-    }
-
-    /**
-     * Tests get_url when the provided parameter is empty.
-     */
-    public function testGetUrlWhenEmpty()
-    {
-        $this->assertEmpty(get_url(null));
-    }
-
-    /**
-     * Tests get_url when an error is thrown.
-     */
-    public function testGetUrlWhenError()
-    {
-        $this->router->expects($this->once())->method('generate')
-            ->will($this->throwException(new \Exception()));
-
-        $this->assertEmpty(get_url('garply'));
-    }
-
-    /**
-     * Tests get_image_dir
-     */
-    public function testGetImageDir()
-    {
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('https://opennemas.com');
 
-        $this->assertEquals('/theme/fred/images', get_image_dir());
-        $this->assertEquals('https://opennemas.com/theme/fred/images', get_image_dir(true));
+        $this->assertEquals('/themes/fred/images', get_image_dir());
+        $this->assertEquals('https://opennemas.com/themes/fred/images', get_image_dir(true));
+    }
 
-        $this->theme = null;
-        $this->assertEquals(null, get_image_dir());
-        $this->assertEquals(null, get_image_dir(true));
+    /**
+     * Tests get_image_dir when the theme is configured in globals.
+     */
+    public function testGetImageWhenTheme()
+    {
+        $this->globals->expects($this->any())->method('getTheme')
+            ->willReturn($this->theme);
+
+        $this->instance->expects($this->any())->method('getBaseUrl')
+            ->willReturn('https://opennemas.com');
+
+        $this->assertEquals('/themes/fred/images', get_image_dir());
+        $this->assertEquals('https://opennemas.com/themes/fred/images', get_image_dir(true));
+    }
+
+    /**
+     * Tests get_instance_media
+     */
+    public function testGetInstanceMedia()
+    {
+        $this->instance->expects($this->any())->method('getMediaShortPath')
+            ->willReturn('media/opennemas');
+
+        $this->instance->internal_name = 'opennemas';
+        $this->assertEquals('media/opennemas', get_instance_media());
     }
 
     /**
@@ -296,8 +240,8 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn('prod');
 
         $this->assertEquals(
-            '<link rel="stylesheet" href="/wibble/bar/dist/style.css">'
-            . '<script src="/wibble/bar/dist/main.js"></script>',
+            '<link rel="stylesheet" href="/themes/fred/dist/style.css">'
+            . '<script src="/themes/fred/dist/main.js"></script>',
             webpack()
         );
     }
