@@ -15,9 +15,9 @@ function smarty_function_render_favico($params, &$smarty)
         ->getDataSet('Settings', 'instance')
         ->get([ 'favico', 'logo_enabled' ]);
 
+
     if (!empty($settings['logo_enabled']) && $settings['favico']) {
-        $favicoUrl = $smarty->getContainer()->get('core.instance')
-            ->getMediaShortPath() . '/sections/' . rawurlencode($settings['favico']);
+        $favicoUrl = rawurlencode(get_logo_path('favico'));
     }
 
     $fileInfo  = pathinfo($favicoUrl);

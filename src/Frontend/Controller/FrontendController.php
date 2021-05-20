@@ -544,6 +544,7 @@ class FrontendController extends Controller
         if (!empty($config['site_logo'])) {
             $logoPath     = $this->get('core.instance')->getMediaShortPath()
                 . '/sections/' . rawurlencode($config['site_logo']);
+
             $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
             $logoFilePath = SITE_PATH . $logoPath;
 

@@ -154,7 +154,7 @@ class ContentMediaHelper
 
         $logos = $this->ds->get([ 'sn_default_img', 'mobile_logo', 'site_logo' ]);
 
-        foreach ($logos as $logo) {
+        foreach ($logos as $key => $logo) {
             if (empty($logo)) {
                 continue;
             }
