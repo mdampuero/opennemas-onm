@@ -146,28 +146,23 @@ class ContentMediaHelper
      */
     protected function getMediaFromLogo()
     {
-        $instance = $this->container->get('core.instance');
-
-        $mediapath = $instance->getMediaShortPath() . '/sections/';
-        $filepath  = $this->container->getParameter('core.paths.public')
-            . $mediapath;
+        $sh       = $this->container->get('core.helper.setting');
+        $ph       = $this->container->get('core.helper.photo');
 
         $logos = $this->ds->get([ 'sn_default_img', 'mobile_logo', 'site_logo' ]);
 
-        foreach ($logos as $key => $logo) {
-            if (empty($logo)) {
+        foreach ($logos as $key => $value) {
+            if (!$sh->hasLogo($key)) {
                 continue;
             }
 
             try {
-                $information = $this->container->get('core.helper.image')
-                    ->getInformation($filepath . $logo);
-
                 $media = new \stdClass();
 
-                $media->url    = $instance->getBaseUrl() . $mediapath . $logo;
-                $media->width  = $information['width'];
-                $media->height = $information['height'];
+                $logo          = $sh->getLogo($key);
+                $media->url    = $ph->getPhotoPath($logo, null, [], true);
+                $media->width  = $ph->getPhotoWidth($logo);
+                $media->height = $ph->getPhotoHeight($logo);
 
                 return $media;
             } catch (\Exception $e) {

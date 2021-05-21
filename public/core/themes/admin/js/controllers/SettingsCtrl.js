@@ -161,7 +161,7 @@
         };
 
         // Updates data to send to server when related contents change
-        $scope.$watch('[ settings.site_logoID, settings.mobile_logoID, settings.favicoID, settings.sn_default_imgID ]', function(nv) {
+        $scope.$watch('[ settings.site_logoID, settings.mobile_logoID, settings.favicoID, settings.sn_default_imgID ]', function(nv, ov) {
           if (nv[0]) {
             $scope.settings.site_logo =  parseInt(nv[0].pk_content);
           }
@@ -518,26 +518,6 @@
             site_logo:            $scope.settings.site_logo,
             sn_default_img:       $scope.settings.sn_default_img
           };
-
-          /*if ($scope.settings.site_logo) {
-            $scope.settings.site_logo =
-              $scope.extra.prefix + $scope.settings.site_logo;
-          }*/
-
-          /*if ($scope.settings.mobile_logo) {
-            $scope.settings.mobile_logo =
-              $scope.extra.prefix + $scope.settings.mobile_logo;
-          }*/
-
-         /* if ($scope.settings.favico) {
-            $scope.settings.favico =
-              $scope.extra.prefix + $scope.settings.favico;
-          }*/
-
-        /*  if ($scope.settings.sn_default_img) {
-            $scope.settings.sn_default_img =
-              $scope.extra.prefix + $scope.settings.sn_default_img;
-          }*/
 
           if (!$scope.settings.locale.frontend.language.slug) {
             $scope.settings.locale.frontend.language.slug = {};

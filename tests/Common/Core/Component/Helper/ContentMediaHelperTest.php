@@ -63,6 +63,16 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
+        $this->ph = $this->getMockBuilder('PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath', 'getPhotoWidth', 'getPhotoHeight' ])
+            ->getMock();
+
+        $this->sh = $this->getMockBuilder('SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getLogo', 'hasLogo' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('getParameter')
             ->with('core.paths.public')->willReturn('/gorp/qux');
 
@@ -86,6 +96,12 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.url_generator':
                 return $this->ugh;
+
+            case 'core.helper.photo':
+                return $this->ph;
+
+            case 'core.helper.setting':
+                return $this->sh;
 
             case 'api.service.author':
                 return $this->as;
@@ -493,24 +509,48 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMediaFromLogo()
     {
+        $media = new \stdClass();
+        $media->url    = 'http://frog.fred.com/media/frog/sections/sn_default_img.jpg';
+        $media->width  = 300;
+        $media->height = 150;
+
         $this->ds->expects($this->once())->method('get')
             ->with([ 'sn_default_img', 'mobile_logo', 'site_logo' ])
             ->willReturn([
                 'sn_default_img' => null,
-                'mobile_logo'    => 'sn_default_img.jpg'
+                'mobile_logo'    => 1
             ]);
 
-        $this->ih->expects($this->once())->method('getInformation')
-            ->willReturn([ 'width' => 510, 'height' => 639 ]);
+        $this->sh->expects($this->at(0))->method('hasLogo')
+            ->willReturn(true);
+
+        $this->sh->expects($this->at(1))->method('getLogo')
+            ->with()
+            ->willReturn(
+                new Content(
+                    [
+                        'path'   => '/media/frog/sections/sn_default_img.jpg',
+                        'width'  => 300,
+                        'height' => 150
+                    ]
+                )
+            );
+
+        $this->ph->expects($this->at(0))->method('getPhotoPath')
+            ->willReturn('http://frog.fred.com/media/frog/sections/sn_default_img.jpg');
+
+        $this->ph->expects($this->at(1))->method('getPhotoWidth')
+            ->willReturn(300);
+
+        $this->ph->expects($this->at(2))->method('getPhotoHeight')
+            ->willReturn(150);
 
         $method = new \ReflectionMethod($this->helper, 'getMediaFromLogo');
         $method->setAccessible(true);
 
-        $media = $method->invokeArgs($this->helper, []);
-
         $this->assertEquals(
-            'http://frog.fred.com/media/frog/sections/sn_default_img.jpg',
-            $media->url
+            $media,
+            $method->invokeArgs($this->helper, [])
         );
     }
 
@@ -523,15 +563,14 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with([ 'sn_default_img', 'mobile_logo', 'site_logo' ])
             ->willReturn([
                 'sn_default_img' => null,
-                'mobile_logo'    => 'sn_default_img.jpg'
+                'mobile_logo'    => 1
             ]);
+
+        $this->sh->expects($this->at(0))->method('hasLogo')
+            ->willReturn(null);
 
         $method = new \ReflectionMethod($this->helper, 'getMediaFromLogo');
         $method->setAccessible(true);
-
-        $this->ih->expects($this->any())
-            ->method('getInformation')
-            ->will($this->throwException(new \Exception()));
 
         $this->assertNull($method->invokeArgs($this->helper, []));
     }

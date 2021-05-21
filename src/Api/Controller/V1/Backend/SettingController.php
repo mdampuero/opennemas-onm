@@ -228,7 +228,6 @@ class SettingController extends Controller
     {
         $defaults = array_fill_keys($this->keys, null);
         $country  = $request->get('instance');
-        $files    = $request->files->get('settings');
         $settings = $request->get('settings');
         $msg      = $this->get('core.messenger');
 
@@ -237,11 +236,7 @@ class SettingController extends Controller
         $instance->merge($country);
         $this->get('orm.manager')->persist($instance);
 
-        // Save files
-        if (!empty($files)) {
-            $settings = array_merge($settings, $this->saveFiles($files));
-        }
-
+        $settings = array_merge($settings, $this->saveFiles($settings));
         $settings = array_merge($defaults, $settings);
 
         // Remove settings for only masters
@@ -322,19 +317,11 @@ class SettingController extends Controller
         $msg      = $this->get('core.messenger');
         $settings = [];
 
-        $dir = $this->getParameter('core.paths.public')
-            . $this->get('core.instance')->getMediaShortPath()
-            . '/sections/';
-
-        // Check if upload directory is already created
-        if (!is_dir($dir)) {
-            \Onm\FilesManager::createDirectory($dir);
-        }
-
         foreach ($files as $key => $file) {
-            list($width, $height) = getimagesize($file);
+            if ($key == 'favico' || $key == 'site_logo' || $key == 'mobile_logo') {
+                $logo   = $this->container->get('core.helper.content')->getContent($file, 'photo');
+                $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
 
-            if ($key != 'sn_default_img') {
                 if ($height > 120) {
                     $msg->add(
                         sprintf(
@@ -344,9 +331,14 @@ class SettingController extends Controller
                         'error',
                         400
                     );
+                    $settings[$key] = get_logo($key)->pk_content ?? null;
                     continue;
                 }
-            } else {
+            } elseif ($key == 'sn_default_img') {
+                $logo   = $this->container->get('core.helper.content')->getContent($file, 'photo');
+                $width  = $this->container->get('core.helper.photo')->getPhotoWidth($logo);
+                $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
+
                 if ($width < 200 || $height < 200) {
                     $msg->add(
                         sprintf(
@@ -356,17 +348,11 @@ class SettingController extends Controller
                         'error',
                         400
                     );
+                    $settings[$key] = get_logo($key)->pk_content ?? null;
                     continue;
                 }
             }
-
-            $name = $file->getClientOriginalName();
-
-            $file->move($dir, $name);
-
-            $settings[$key] = $name;
         }
-
         return $settings;
     }
 
