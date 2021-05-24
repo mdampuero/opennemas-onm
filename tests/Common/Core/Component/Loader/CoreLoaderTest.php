@@ -43,7 +43,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->dataset = $this->getMockBuilder('Opennemas\Orm\Database\DataSet\BaseDataSet')
             ->disableOriginalConstructor()
-            ->setMethods([ 'get' ])
+            ->setMethods([ 'get', 'init' ])
             ->getMock();
 
         $this->dbal = $this->getMockBuilder('Onm\Database\DbalWrapper')
