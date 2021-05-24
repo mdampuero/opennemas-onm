@@ -30,7 +30,7 @@ services:
 
     core.helper.category:
         class:      Common\Core\Component\Helper\CategoryHelper
-        arguments:  [ '@api.service.category', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]
+        arguments:  [ '@service_container', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]
         public:     true
 
     core.helper.checkout:

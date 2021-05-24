@@ -60,9 +60,9 @@ function get_category_id($item = null) : ?int
  * @param Content $item The item to get logo path for. If not provided, the
  *                      function will try to search the item in the template.
  *
- * @return ?string The path to category logo. Null otherwise.
+ * @return ?\Common\Model\Entity\Content The photo logo object. Null otherwise.
  */
-function get_category_logo($item = null) : ?string
+function get_category_logo($item = null) : ?\Common\Model\Entity\Content
 {
     return getService('core.helper.category')->getCategoryLogo($item);
 }

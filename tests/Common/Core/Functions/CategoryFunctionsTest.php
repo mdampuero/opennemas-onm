@@ -24,17 +24,22 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
             'in_litter'      => 0,
             'starttime'      => new \Datetime('2020-01-01 00:00:00'),
             'category_id'    => 20,
-            'logo_path'      => 'images/2018/10/02/2018100215582747239.jpg'
         ]);
 
-        $this->category = new Category(
-            [
-                'id'          => 1,
-                'name'        => 'sports',
-                'color'       => '#dc2127',
-                'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, voluptatum!'
-            ]
-        );
+        $this->category = new Category([
+            'id'          => 1,
+            'name'        => 'sports',
+            'color'       => '#dc2127',
+            'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, voluptatum!',
+            'logo_id'     => 123
+        ]);
+
+        $this->logo = new Content([
+            'content_type_name' => 'photo',
+            'content_status'    => 1,
+            'in_litter'         => 0,
+            'pk_content'        => 123
+        ]);
 
         $this->helper = $this->getMockBuilder('Common\Core\Component\Helper\CategoryHelper')
             ->disableOriginalConstructor()
@@ -122,10 +127,10 @@ class CategoryFunctionsTest extends \PHPUnit\Framework\TestCase
     public function testGetCategoryLogo()
     {
         $this->helper->expects($this->once())->method('getCategoryLogo')
-            ->with($this->content)
-            ->willReturn($this->category->logo_path);
+            ->with($this->category)
+            ->willReturn($this->logo);
 
-        $this->assertEquals($this->category->logo_path, get_category_logo($this->content));
+        $this->assertEquals($this->logo, get_category_logo($this->category));
     }
 
     /**
