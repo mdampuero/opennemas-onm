@@ -71,7 +71,7 @@ class NewsletterSenderHelper
         $settingsRepository,
         $errorLog,
         $appLog,
-        $instance,
+        $globals,
         $mailer,
         $ss,
         $actOnFactory,
@@ -81,23 +81,12 @@ class NewsletterSenderHelper
         $this->ormManager           = $settingsRepository;
         $this->appLog               = $appLog;
         $this->errorLog             = $errorLog;
+        $this->globals              = $globals;
         $this->noReplyAddress       = $noReplyAddress;
-        $this->instanceInternalName = $instance->internal_name;
         $this->mailer               = $mailer;
         $this->ss                   = $ss;
         $this->actOnFactory         = $actOnFactory;
         $this->ns                   = $newsletterService;
-    }
-
-    /**
-     * Set a instance internet name
-     *
-     * @param string $name to set
-     *
-     */
-    public function setInternalName($name)
-    {
-        $this->instanceInternalName = $name;
     }
 
     /**
@@ -294,7 +283,7 @@ class NewsletterSenderHelper
         $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
         $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
-        // Build the message
+        // Buildthe message
         $message = \Swift_Message::newInstance();
         $message
             ->setSubject($newsletter->title)
@@ -306,7 +295,7 @@ class NewsletterSenderHelper
         $headers = $message->getHeaders();
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->instanceInternalName . ' - Newsletter'
+            $this->globals->getInstance()->internal_name . ' - Newsletter'
         );
 
         $this->appLog->notice(
@@ -378,7 +367,7 @@ class NewsletterSenderHelper
         $headers = $email->getHeaders();
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->instanceInternalName . ' - Newsletter subscription'
+            $this->globals->getInstance()->internal_name . ' - Newsletter subscription'
         );
 
         try {

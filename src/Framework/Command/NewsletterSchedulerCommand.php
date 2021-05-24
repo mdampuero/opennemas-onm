@@ -96,7 +96,6 @@ class NewsletterSchedulerCommand extends Command
                 $this->newsletterService  = $this->getContainer()->get('api.service.newsletter');
                 $this->newsletterRenderer = $this->getContainer()->get('core.renderer.newsletter');
 
-                $this->newsletterSender->setInternalName($instance->internal_name);
                 $this->instanceName = $instance->internal_name;
 
                 $time = new \DateTime(null, $this->getContainer()->get('core.locale')->getTimeZone());
