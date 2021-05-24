@@ -97,5 +97,6 @@
       </li>
     </ul>
   </div>
+  <span ng-if="item.params.bodyLink.length > 0" title="{t}Article has external link{/t}"><i class="fa fa-external-link-square"></i> <small>Has external link</small></span>
 {/block}
 
