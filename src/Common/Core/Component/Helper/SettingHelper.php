@@ -75,6 +75,6 @@ class SettingHelper
      */
     protected function logoEnabled() : bool
     {
-        return $this->ds->get('logo_enabled');
+        return $this->ds->get('logo_enabled') ?? false;
     }
 }

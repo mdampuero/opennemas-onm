@@ -89,6 +89,8 @@ class CoreLoader
             $instance->settings['MEDIA_URL'] = '/media/';
         }
 
+        $this->container->get('orm.manager')->getDataSet('Settings', 'instance')->init();
+
         return $this;
     }
 
