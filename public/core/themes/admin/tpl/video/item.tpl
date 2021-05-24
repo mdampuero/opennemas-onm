@@ -116,7 +116,7 @@
         </div>
       </div>
       <span ng-if="item.type !== 'external' && item.type !== 'script'">
-        <div class="form-group no-margin">
+        <div class="form-group">
           <label for="video_url" class="form-label">{t}Video URL{/t}</label>
           <div class="controls">
             <div class="input-group">
