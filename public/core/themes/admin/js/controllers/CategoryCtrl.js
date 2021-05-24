@@ -70,7 +70,7 @@
         };
 
         // Updates the logo_id when an image is selected
-        $scope.$watch('cover', function(nv, ov) {
+        $scope.$watch('item.logo_id', function(nv, ov) {
           if (!ov && !nv || nv && !angular.isObject(nv)) {
             return;
           }
