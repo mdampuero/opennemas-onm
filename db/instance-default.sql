@@ -217,7 +217,7 @@ CREATE TABLE `category` (
   `rss` tinyint(1) unsigned DEFAULT '0',
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `params` text,
-  `logo_path` varchar(200) DEFAULT NULL,
+  `logo_id` bigint(20) unsigned DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
