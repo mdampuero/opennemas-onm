@@ -117,7 +117,10 @@ class PlaygroundController extends Controller
         if (!empty($id)) {
             $widget = $this->get('entity_repository')->find('Widget', $id);
 
-            return $this->get('frontend.renderer')->render($widget, $params);
+            return new Response(
+                $this->get('frontend.renderer.widget')->render($widget, $params),
+                200
+            );
         }
 
         $criteria = [
@@ -140,7 +143,7 @@ class PlaygroundController extends Controller
         }
 
         return new Response(
-            getService('frontend.renderer.widget')->render($widget, $params),
+            $this->get('frontend.renderer.widget')->render($widget, $params),
             200
         );
     }
