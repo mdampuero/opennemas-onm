@@ -64,6 +64,7 @@
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="params.bodyLink" icon="fa-external-link" title="{t}External link{/t}" iRoute="item.params.bodyLink"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>
@@ -74,18 +75,7 @@
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
-    </div>
-  </div>
-  <div class="grid simple" ng-show="data.extra.extra_fields !== undefined && data.extra.extra_fields">
-    <div class="grid-body no-padding">
-      <div class="grid-collapse-title">
-        <i class="fa fa-magic"></i>
-        {t}Additional data{/t}
-      </div>
-
-      <div class="grid-collapse-body expanded">
-        <autoform ng-model="item" fields-by-module="data.extra.extra_fields"/>
-      </div>
+      {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
 {/block}

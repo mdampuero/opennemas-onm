@@ -21,7 +21,6 @@
           },
           template: function() {
             return '<div class="col-md-12" ng-repeat="moduleFields in fieldsByModule">' +
-              '<h5>{{ moduleFields.title }}</h5>' +
               '<div class="form-group" ng-repeat="field in moduleFields.fields">' +
                 '<label class="form-label" for="{{ field.key }}">{{ field.title }}</label>' +
                 '<div class="controls">' +

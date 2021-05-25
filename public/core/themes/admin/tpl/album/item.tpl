@@ -78,7 +78,7 @@
         {t}Parameters{/t}
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured in frontpage{/t}" types="photo"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" title="{t}Agency{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" icon="fa-microphone" title="{t}Agency{/t}"}
     </div>
   </div>
 {/block}

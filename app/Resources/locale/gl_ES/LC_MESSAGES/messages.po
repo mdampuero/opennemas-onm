@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-12 11:51+0000\n"
-"PO-Revision-Date: 2021-05-12 13:53+0200\n"
+"POT-Creation-Date: 2021-05-25 10:13+0000\n"
+"PO-Revision-Date: 2021-05-25 12:16+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -5401,6 +5401,9 @@ msgstr "Tamaño"
 msgid "Inner"
 msgstr "Interior"
 
+msgid "External"
+msgstr "Externo"
+
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
 
@@ -5627,14 +5630,20 @@ msgstr "Imaxe principal"
 msgid "Editorial"
 msgstr "Editorial"
 
-msgid "Video type and file URLs"
-msgstr "Tipo de vídeo e URLs aos ficheiros"
+msgid "Link video from other services"
+msgstr "Ligar un vídeo desde outros servizos"
 
-msgid "HTML5 video"
-msgstr "Video HTML5"
+msgid "Use HTML code"
+msgstr "Usar código HTML"
 
-msgid "Flash video"
-msgstr "Video Flash"
+msgid "Use file video URLs"
+msgstr "Usar URLs a ficheiros de vídeo"
+
+msgid "Video URL"
+msgstr "URL do vídeo"
+
+msgid "Get information"
+msgstr "Obter información"
 
 msgid "MP4 format"
 msgstr "Formato MP4"
@@ -5654,20 +5663,8 @@ msgstr "Formato WebM"
 msgid "http://www.example.com/path/to/file.webm"
 msgstr "http://www.exemplo.com/ruta/ao/ficheiro.webm"
 
-msgid "FLV format"
-msgstr "Formato FLV"
-
-msgid "http://www.example.com/path/to/file.flv"
-msgstr "http://www.exemplo.com/ruta/ao/ficheiro.flv"
-
-msgid "Video URL"
-msgstr "URL do vídeo"
-
-msgid "Get information"
-msgstr "Obter información"
-
-msgid "Allowed video sources:"
-msgstr "Orixes de vídeo permitidas:"
+msgid "Write HTML code"
+msgstr "Escribe o código HTML"
 
 msgid "Loading video information"
 msgstr "Cargando información de vídeo"
@@ -5683,18 +5680,6 @@ msgstr "URL de ficheiro embebido"
 
 msgid "Thumbnail"
 msgstr "Miniatura"
-
-msgid "Write HTML code"
-msgstr "Escribe o código HTML"
-
-msgid "Link video from other services"
-msgstr "Ligar un vídeo desde outros servizos"
-
-msgid "Use HTML code"
-msgstr "Usar código HTML"
-
-msgid "Use file video URLs"
-msgstr "Usar URLs a ficheiros de vídeo"
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
@@ -7051,6 +7036,24 @@ msgstr "Tes certeza que queres eliminar o grupo de usuarios?"
 
 msgid "Do you want to delete the selected user groups?"
 msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
+
+#~ msgid "Video type and file URLs"
+#~ msgstr "Tipo de vídeo e URLs aos ficheiros"
+
+#~ msgid "HTML5 video"
+#~ msgstr "Video HTML5"
+
+#~ msgid "Flash video"
+#~ msgstr "Video Flash"
+
+#~ msgid "FLV format"
+#~ msgstr "Formato FLV"
+
+#~ msgid "http://www.example.com/path/to/file.flv"
+#~ msgstr "http://www.exemplo.com/ruta/ao/ficheiro.flv"
+
+#~ msgid "Allowed video sources:"
+#~ msgstr "Orixes de vídeo permitidas:"
 
 #~ msgid "Pick the method to add the video"
 #~ msgstr "Escolla o método para engadir o vídeo"
