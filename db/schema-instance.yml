@@ -84,92 +84,6 @@ advertisements_positions:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-albums:
-    columns:
-        pk_album:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        subtitle:
-            type: string
-            options: { length: 250, default: null, notnull: false }
-        agency:
-            type: string
-            options: { length: 250, default: null, notnull: false }
-        cover_id:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_album]
-            primary: true
-            unique: true
-            flags: {  }
-        -
-            name: cover_id
-            columns: [cover_id]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: album_id_contents_id
-            source_field: [ pk_album ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-        -
-            name: cover_id
-            source_field: [ cover_id ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
-albums_photos:
-    columns:
-        pk_album:
-            type: bigint
-            options: { length: 20, unsigned: true }
-        pk_photo:
-            type: bigint
-            options: { length: 20, unsigned: true }
-        position:
-            type: integer
-            options: { unsigned: true, default: 1, notnull: false }
-        description:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
-    index:
-        -
-            name: index_album_photo
-            columns: [pk_album, pk_photo]
-            primary: false
-            unique: false
-            flags: {  }
-        -
-            name: pk_album
-            columns: [pk_album]
-            primary: false
-            unique: false
-            flags: {  }
-        -
-            name: pk_photo
-            columns: [pk_photo]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: photos_id_album_id
-            source_field: [ pk_album ]
-            target_table: albums
-            target_field: [ pk_album ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-        -
-            name: photos_id_photo_id
-            source_field: [ pk_photo ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 articles:
     columns:
         pk_article:
@@ -218,6 +132,30 @@ articles:
             primary: true
             unique: true
             flags: {  }
+        -
+            name:    article_id_img1_id
+            columns: [img1]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    article_id_img2_id
+            columns: [img2]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    article_id_video_id
+            columns: [fk_video]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    article_id_video2_id
+            columns: [fk_video2]
+            primary: false
+            unique:  false
+            flags:   {  }
     foreign_keys:
         -
             name: article_id_contents_id
@@ -225,6 +163,30 @@ articles:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: article_id_img1_id
+            source_field: [ img1 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: article_id_img2_id
+            source_field: [ img2 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: article_id_video2_id
+            source_field: [ fk_video2 ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: article_id_video_id
+            source_field: [ fk_video ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 attachments:
     columns:
         pk_attachment:
@@ -552,14 +514,14 @@ contents:
             type: integer
             options: { unsigned: true, default: 0, notnull: false }
         fk_author:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         fk_publisher:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         fk_user_last_editor:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         position:
             type: integer
             options: { default: 100, notnull: false, unsigned: true }
@@ -634,6 +596,18 @@ contents:
             unique: false
             flags: {  }
         -
+            name: fk_publisher
+            columns: [fk_publisher]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_user_last_editor
+            columns: [fk_user_last_editor]
+            primary: false
+            unique: false
+            flags: {  }
+        -
             name: available
             columns: [available]
             primary: false
@@ -665,6 +639,25 @@ contents:
             name: content_type_name
             columns: [content_type_name]
             unique: false
+    foreign_keys:
+        -
+            name: fk_author_users_id
+            source_field: [ fk_author ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: fk_publisher_users_id
+            source_field: [ fk_publisher ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: fk_user_last_editor_users_id
+            source_field: [ fk_user_last_editor ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 
 content_category:
     columns:
@@ -1008,37 +1001,6 @@ newsletters:
             primary: false
             unique:  false
             flags:   {}
-opinions:
-    columns:
-        pk_opinion:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        fk_content_categories:
-            type: integer
-            options: { unsigned: true, default: 7, notnull: false }
-        fk_author:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_opinion]
-            primary: true
-            unique: true
-            flags: {  }
-        -
-            name: fk_author
-            columns: [fk_author]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: opinions_id_contents_id
-            source_field: [ pk_opinion ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 orders:
     columns:
         id:
