@@ -33,11 +33,11 @@ class NewsletterSenderHelper
     protected $errorLog;
 
     /**
-     * The instance service.
+     * The service container.
      *
-     * @var Instance
+     * @var ServiceContainer
      */
-    protected $instance;
+    protected $container;
 
     /**
      * The mailer service.
@@ -71,7 +71,7 @@ class NewsletterSenderHelper
         $settingsRepository,
         $errorLog,
         $appLog,
-        $globals,
+        $container,
         $mailer,
         $ss,
         $actOnFactory,
@@ -81,7 +81,7 @@ class NewsletterSenderHelper
         $this->ormManager           = $settingsRepository;
         $this->appLog               = $appLog;
         $this->errorLog             = $errorLog;
-        $this->globals              = $globals;
+        $this->globals              = $container->get('core.globals');
         $this->noReplyAddress       = $noReplyAddress;
         $this->mailer               = $mailer;
         $this->ss                   = $ss;
@@ -293,9 +293,10 @@ class NewsletterSenderHelper
             ->setTo([ $mailbox['email'] => $mailbox['name']]);
 
         $headers = $message->getHeaders();
+
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->globals->getInstance()->internal_name . ' - Newsletter'
+            $this->globals->getInstance()->nternal_name . ' - Newsletter'
         );
 
         $this->appLog->notice(
@@ -367,7 +368,7 @@ class NewsletterSenderHelper
         $headers = $email->getHeaders();
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->globals->getInstance()->internal_name . ' - Newsletter subscription'
+            $this->globals->getInstance()->nternal_name . ' - Newsletter subscription'
         );
 
         try {

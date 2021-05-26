@@ -147,9 +147,22 @@ class NewsletterRenderer
         }
 
         // article, attachment, opinion, album, video, poll, static_page, kiosko, letter
-        $searchCriteria['fk_content_type'] = !empty($criteria['content_type'])
+        /*$searchCriteria['fk_content_type'] = !empty($criteria['content_type'])
             ? [[ 'value' => [ (int) \ContentManager::getContentTypeIdFromName($criteria['content_type'])]]]
-            : [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];
+            : [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];*/
+        $searchCriteria['content_type_name'] = !empty($criteria['content_type'])
+            ? [[ 'value' => [ '\'' . $criteria['content_type'] . '\'']]]
+            : [[ 'value' => [
+                'album',
+                'article',
+                'attachment',
+                'kiosko',
+                'letter' ,
+                'opinion',
+                'poll',
+                'static_page',
+                'video'
+            ], 'operator' => 'IN' ]];
 
         if (!empty($criteria['category'])
             && !in_array($criteria['content_type'], [ 'opinion', 'letter', 'static_page' ])
