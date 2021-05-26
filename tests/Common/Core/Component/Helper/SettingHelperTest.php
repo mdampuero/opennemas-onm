@@ -69,7 +69,7 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
         $this->ch->expects($this->once())->method('getContent')
             ->with(1, 'photo')->willReturn($photo);
 
-        $this->assertEquals($photo, $this->helper->getLogo('site_logo'));
+        $this->assertEquals($photo, $this->helper->getLogo('default'));
     }
 
     public function testGetLogoWhenNoExists()
@@ -77,7 +77,7 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))->method('get')
             ->with('logo_enabled')->willReturn(true);
 
-        $this->assertEquals(null, $this->helper->getLogo('site_logo'));
+        $this->assertEquals(null, $this->helper->getLogo('default'));
     }
 
     public function testGetLogoWhenDisabledLogo()
@@ -85,6 +85,6 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(0))->method('get')
             ->with('logo_enabled')->willReturn(false);
 
-        $this->assertEquals(null, $this->helper->getLogo('site_logo'));
+        $this->assertEquals(null, $this->helper->getLogo('default'));
     }
 }

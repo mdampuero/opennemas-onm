@@ -38,10 +38,10 @@ class SettingHelper
     public function getLogo($format = 'site_logo') : ?object
     {
         $settings = [
-            'site_logo'      => 'site_logo',
-            'mobile_logo'    => 'mobile_logo',
-            'favico'         => 'favico',
-            'sn_default_img' => 'sn_default_img',
+            'default' => 'site_logo',
+            'simple'  => 'mobile_logo',
+            'favico'  => 'favico',
+            'embed'   => 'sn_default_img',
         ];
 
         if (!array_key_exists($format, $settings) || !$this->logoEnabled()) {
