@@ -27,7 +27,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getContent' ])
+            ->setMethods([ 'getContent', 'getType' ])
             ->getMock();
 
         $this->featuredHelper = $this->getMockBuilder('Common\Core\Component\Helper\FeaturedMediaHelper')
@@ -118,6 +118,10 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
+        $this->contentHelper->expects($this->at(0))->method('getType')
+            ->with($content)
+            ->willReturn('opinion');
+
         $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
             ->with($content)
             ->willReturn(true);
@@ -131,6 +135,75 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($photo);
 
         $this->assertEquals($photo, $this->helper->getMedia($content));
+    }
+
+    /**
+     * Tests getMedia method when performing a deep search.
+     */
+    public function testGetMediaWhenDeep()
+    {
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'opinion',
+            'related_contents'  => [
+                [
+                    'source_id'         => 1,
+                    'target_id'         => 2,
+                    'content_type_name' => 'video',
+                    'type'              => 'featured_inner'
+                ]
+            ]
+        ]);
+
+        $video = new Content(
+            [
+                'pk_content'        => 2,
+                'target_id'         => 3,
+                'content_type_name' => 'photo',
+                'type'              => 'featured_frontpage'
+            ]
+        );
+
+        $photo = new Content([
+            'pk_content'        => 3,
+            'content_type_name' => 'photo',
+            'width'             => 1920,
+            'height'            => 1080
+        ]);
+
+        $this->contentHelper->expects($this->at(0))->method('getType')
+            ->with($content)
+            ->willReturn('opinion');
+
+        $this->contentHelper->expects($this->at(1))->method('getType')
+            ->with($video)
+            ->willReturn('video');
+
+        $this->contentHelper->expects($this->at(2))->method('getType')
+            ->with($photo)
+            ->willReturn('photo');
+
+        $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
+            ->with($content)
+            ->willReturn(true);
+
+        $this->featuredHelper->expects($this->at(1))->method('getFeaturedMedia')
+            ->with($content)
+            ->willReturn($video);
+
+        $this->featuredHelper->expects($this->at(2))->method('hasFeaturedMedia')
+            ->with($video)
+            ->willReturn(true);
+
+        $this->featuredHelper->expects($this->at(3))->method('getFeaturedMedia')
+            ->with($video)
+            ->willReturn($photo);
+
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($photo)
+            ->willReturn($photo);
+
+        $this->assertEquals($photo, $this->helper->getMedia($content, true));
     }
 
     /**

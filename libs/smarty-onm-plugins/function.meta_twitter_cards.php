@@ -52,19 +52,12 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     $output[] = '<meta name="twitter:domain" content="' . $url . '">';
 
     $media = $smarty->getContainer()->get('core.helper.content_media')
-        ->getMedia($content, $params);
+        ->getMedia($content, true);
 
     $photoHelper = $smarty->getContainer()->get('core.helper.photo');
-    $videoHelper = $smarty->getContainer()->get('core.helper.video');
 
-    if (!empty($media)) {
-        $path = $media->content_type_name === 'video'
-            ? $photoHelper->getPhotoPath($videoHelper->getVideoThumbnail($media), null, [], true)
-            : $photoHelper->getPhotoPath($media, null, [], true);
-
-        if (!empty($path)) {
-            $output[] = '<meta name="twitter:image" content="' . $path . '">';
-        }
+    if (!empty($media) && $photoHelper->hasPhotoPath($media)) {
+        $output[] = '<meta name="twitter:image" content="' . $photoHelper->getPhotoPath($media, null, [], true) . '">';
     }
 
     return implode("\n", $output);
