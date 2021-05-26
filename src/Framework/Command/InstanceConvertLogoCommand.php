@@ -54,89 +54,80 @@ class InstanceConvertLogoCommand extends Command
 
         $i = 1;
         foreach ($instances as $instance) {
-            try {
-                $this->getContainer()->get('core.loader')
-                    ->load($instance->internal_name);
+            $this->getContainer()->get('core.loader')
+                ->load($instance->internal_name);
 
-                $this->getContainer()->get('core.security')->setInstance($instance);
+            $this->getContainer()->get('core.security')->setInstance($instance);
 
-                $ds = $this->getContainer()->get('orm.manager')->getDataSet('Settings', 'instance');
-                $ps = $this->getContainer()->get('api.service.photo');
-                $sh = $this->getContainer()->get('core.helper.setting');
+            $ds = $this->getContainer()->get('orm.manager')->getDataSet('Settings', 'instance');
+            $ps = $this->getContainer()->get('api.service.photo');
+            $sh = $this->getContainer()->get('core.helper.setting');
 
-                $logos = $ds->get([ 'sn_default_img', 'mobile_logo', 'site_logo', 'favico' ]);
+            $files = [];
+            $logos = [
+                'default' => 'site_logo',
+                'simple'  => 'mobile_logo',
+                'favico'  => 'favico',
+                'embed'   => 'sn_default_img',
+            ];
 
-                $settings = [];
+            $output->writeln(str_pad(sprintf(
+                '<fg=blue;options=bold>==></><options=bold> (%s/%s)'
+                . ' Processing instance %s</> <fg=blue;options=bold>(%s logos) </>',
+                $i++,
+                count($instances),
+                $instance->internal_name,
+                count($logos)
+            ), 50, '.'));
 
-                $output->writeln(str_pad(sprintf(
-                    '<fg=blue;options=bold>==></><options=bold> (%s/%s)'
-                    . ' Processing instance %s</> <fg=blue;options=bold>(%s logos) </>',
-                    $i++,
-                    count($instances),
-                    $instance->internal_name,
-                    count($logos)
-                ), 50, '.'));
+            foreach ($logos as $key => $setting) {
+                $output->write(str_pad(sprintf(
+                    '<fg=yellow;options=bold>=====></><options=bold> Processing %s</> ',
+                    $key,
+                ), 100, '.'));
 
-                foreach ($logos as $key => $value) {
-                    $output->write(str_pad(sprintf(
-                        '<fg=yellow;options=bold>=====></><options=bold> Processing %s</> ',
-                        $key,
-                    ), 100, '.'));
-
-                    if ($sh->hasLogo($key) || empty($value)) {
-                        $output->writeln(sprintf(
-                            '<fg=yellow;options=bold>SKIP</>',
-                        ));
-                        continue;
-                    }
-
-                    $path = '/media/' . $instance->internal_name . '/sections/';
-                    $file = './public' . $path . $value;
-                    $id   = $this->checkPhotoExists($value);
-
-                    if (file_exists($file) && empty($id)) {
-                        $created  = new \Datetime();
-                        $photo = $ps->createItem([
-                            'created'     => $created->format('Y-m-d H:i:s'),
-                            'description' => $value,
-                            'path_file'   => $created->format('/Y/m/d/'),
-                            'title'       => $value
-                        ], new File($file), true);
-
-                        $logo = $this->getContainer()
-                            ->get('core.helper.content')
-                            ->getContent($photo->pk_content, 'photo');
-
-                        if (!empty($logo)) {
-                            $id = $photo->pk_content;
-                            unlink($file);
-                            $output->writeln(sprintf(
-                                '<fg=green;options=bold>DONE!</>'
-                            ));
-                        } else {
-                            $id = $value;
-                        }
-                    } else {
-                        if (!empty($id)) {
-                            $output->writeln(sprintf(
-                                '<fg=green;options=bold>DONE!</>'
-                            ));
-                        } else {
-                            $output->writeln(sprintf(
-                                '<fg=yellow;options=bold>SKIP</>'
-                            ));
-                        }
-                    }
-
-                    $settings[$key] = $id;
+                if ($sh->hasLogo($key) || empty($ds->get($setting))) {
+                    $output->writeln(sprintf(
+                        '<fg=yellow;options=bold>SKIP</>',
+                    ));
+                    continue;
                 }
-                $ds->set($settings);
-            } catch (\Exception $e) {
-                $output->writeln(sprintf(
-                    ' <fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
-                    $e->getMessage()
-                ));
-                continue;
+
+                $path = 'sections/' . $ds->get($setting);
+                $file = $this->getContainer()->getParameter('core.paths.public')
+                    . $instance->getMediaShortPath()
+                    . '/' . $path;
+
+                if (!file_exists($file)) {
+                    $output->writeln(sprintf(
+                        '<fg=yellow;options=bold>SKIP</>'
+                    ));
+
+                    continue;
+                }
+
+                try {
+                    $photo = $ps->createItem([
+                        'description' => $setting
+                    ], new File($file), true);
+
+                    $ds->set([ $setting => $photo->pk_content ]);
+                    $files[] = $file;
+
+                    $output->writeln(sprintf(
+                        '<fg=green;options=bold>DONE</>'
+                    ));
+                } catch (\Exception $e) {
+                    $output->writeln(sprintf(
+                        '<fg=red;options=bold>FAIL</>'
+                    ));
+                }
+            }
+
+            foreach ($files as $file) {
+                if (file_exists($file)) {
+                    unlink($file);
+                }
             }
         }
 
