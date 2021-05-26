@@ -78,15 +78,15 @@ class NewsletterSenderHelper
         $newsletterService,
         $noReplyAddress
     ) {
-        $this->ormManager           = $settingsRepository;
-        $this->appLog               = $appLog;
-        $this->errorLog             = $errorLog;
-        $this->globals              = $container->get('core.globals');
-        $this->noReplyAddress       = $noReplyAddress;
-        $this->mailer               = $mailer;
-        $this->ss                   = $ss;
-        $this->actOnFactory         = $actOnFactory;
-        $this->ns                   = $newsletterService;
+        $this->ormManager     = $settingsRepository;
+        $this->appLog         = $appLog;
+        $this->errorLog       = $errorLog;
+        $this->globals        = $container->get('core.globals');
+        $this->noReplyAddress = $noReplyAddress;
+        $this->mailer         = $mailer;
+        $this->ss             = $ss;
+        $this->actOnFactory   = $actOnFactory;
+        $this->ns             = $newsletterService;
     }
 
     /**
@@ -280,8 +280,8 @@ class NewsletterSenderHelper
      */
     private function sendEmail($newsletter, $mailbox)
     {
-        $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
-        $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
+        $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
+        $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
         // Buildthe message
         $message = \Swift_Message::newInstance();
@@ -296,7 +296,7 @@ class NewsletterSenderHelper
 
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->globals->getInstance()->nternal_name . ' - Newsletter'
+            $this->globals->getInstance()->internal_name . ' - Newsletter'
         );
 
         $this->appLog->notice(
@@ -368,7 +368,7 @@ class NewsletterSenderHelper
         $headers = $email->getHeaders();
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->globals->getInstance()->nternal_name . ' - Newsletter subscription'
+            $this->globals->getInstance()->internal_name . ' - Newsletter subscription'
         );
 
         try {

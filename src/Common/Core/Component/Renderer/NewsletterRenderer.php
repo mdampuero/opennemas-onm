@@ -146,10 +146,6 @@ class NewsletterRenderer
             $orderBy = [ 'views' => 'desc', 'starttime' => 'desc' ];
         }
 
-        // article, attachment, opinion, album, video, poll, static_page, kiosko, letter
-        /*$searchCriteria['fk_content_type'] = !empty($criteria['content_type'])
-            ? [[ 'value' => [ (int) \ContentManager::getContentTypeIdFromName($criteria['content_type'])]]]
-            : [[ 'value' => [  1, 3, 4, 7, 9, 11, 13, 14, 17 ], 'operator' => 'IN' ]];*/
         $searchCriteria['content_type_name'] = !empty($criteria['content_type'])
             ? [[ 'value' => [ '\'' . $criteria['content_type'] . '\'']]]
             : [[ 'value' => [
