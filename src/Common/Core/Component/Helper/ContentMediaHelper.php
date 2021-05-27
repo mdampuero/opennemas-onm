@@ -80,9 +80,9 @@ class ContentMediaHelper
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getMedia($content)
+    public function getMedia($content, $deep = false)
     {
-        $media = $this->getMediaObject($content);
+        $media = $this->getMediaObject($content, 'inner', $deep);
 
         if (empty($media)) {
             return null;
@@ -102,13 +102,23 @@ class ContentMediaHelper
      * Returns the media object.
      *
      * @param Content $content The content object.
+     * @param String  $type    The type of the featured media "frontpage"|"inner".
+     * @param boolean $deep    Wether perform a deep search or not.
      *
      * @return Content The media object for the specific content.
      */
-    protected function getMediaObject($content)
+    protected function getMediaObject($content, $type, $deep)
     {
-        if ($this->featuredHelper->hasFeaturedMedia($content, 'inner')) {
-            return $this->featuredHelper->getFeaturedMedia($content, 'inner');
+        if (!empty($content) && $this->contentHelper->getType($content) === 'photo') {
+            return $content;
+        }
+
+        if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
+            $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
+
+            return $deep
+                ? $this->getMediaObject($featuredMedia, 'frontpage', $deep)
+                : $featuredMedia;
         }
 
         if ($this->authorHelper->hasAuthorAvatar($content)) {
