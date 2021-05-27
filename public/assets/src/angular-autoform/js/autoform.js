@@ -20,7 +20,7 @@
             ngModel:        '=',
           },
           template: function() {
-            return '<div class="col-md-12" ng-repeat="moduleFields in fieldsByModule">' +
+            return '<div ng-repeat="moduleFields in fieldsByModule">' +
               '<div class="form-group" ng-repeat="field in moduleFields.fields">' +
                 '<label class="form-label" for="{{ field.key }}">{{ field.title }}</label>' +
                 '<div class="controls">' +
