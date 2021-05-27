@@ -87,6 +87,9 @@ class AdvertisementsController extends Controller
 
         $title = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
+        $user = !$this->get('core.security')->hasPermission('MASTER') ?
+            $this->getUser()->id : null;
+
         $data = [
             'title'              => $title,
             'tags'               => $this->getTags($title),
@@ -106,8 +109,8 @@ class AdvertisementsController extends Controller
             'path'               => $request->request->filter('path', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'positions'          => $request->request->get('positions', []),
-            'fk_author'          => $this->getUser()->id,
-            'fk_publisher'       => $this->getUser()->id,
+            'fk_author'          => $user,
+            'fk_publisher'       => $user,
             'params'             => [
                 'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
@@ -116,6 +119,7 @@ class AdvertisementsController extends Controller
                 'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 'user_groups'       => json_decode($request->request->get('user_groups'), true),
                 'orientation'       => $request->request->get('orientation', 'horizontal'),
+                'mark_text'         => $request->request->filter('mark_text', '', FILTER_SANITIZE_STRING),
                 'devices'           => [
                     'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
                     'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
@@ -236,6 +240,9 @@ class AdvertisementsController extends Controller
 
         $title = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
+        $user = !$this->get('core.security')->hasPermission('MASTER') ?
+            $this->getUser()->id : null;
+
         $data = [
             'id'                 => $ad->id,
             'title'              => $title,
@@ -255,8 +262,8 @@ class AdvertisementsController extends Controller
             'path'               => $request->request->filter('path', '', FILTER_SANITIZE_STRING),
             'script'             => $request->request->get('script', ''),
             'positions'          => $request->request->get('positions', []),
-            'fk_author'          => $this->getUser()->id,
-            'fk_publisher'       => $this->getUser()->id,
+            'fk_author'          => $user,
+            'fk_publisher'       => $user,
             'params'             => [
                 'sizes'             => json_decode($request->request->get('sizes', ''), true),
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
