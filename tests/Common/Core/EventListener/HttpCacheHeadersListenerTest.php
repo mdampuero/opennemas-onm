@@ -40,6 +40,11 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRequestLocale' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice' ])
+            ->getMock();
+
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'getValue', 'hasValue' ])
@@ -51,9 +56,12 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
         $this->locale->expects($this->any())->method('getRequestLocale')
             ->willReturn('en_US');
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('foo');
+
         $this->response->headers = $this->headers;
 
-        $this->listener = new HttpCacheHeadersListener($this->instance, $this->locale, $this->template);
+        $this->listener = new HttpCacheHeadersListener($this->instance, $this->locale, $this->template, $this->globals);
     }
 
     /**
@@ -89,7 +97,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
     public function testOnKernelResponseWhenTags()
     {
         $listener = $this->getMockBuilder('Common\Core\EventListener\HttpCacheHeadersListener')
-            ->setConstructorArgs([ $this->instance, $this->locale, $this->template ])
+            ->setConstructorArgs([ $this->instance, $this->locale, $this->template, $this->globals ])
             ->setMethods([ 'getExpire', 'getTags' ])
             ->getMock();
 
@@ -106,10 +114,12 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
         $this->headers->expects($this->at(0))->method('set')
             ->with('x-instance', 'fubar');
         $this->headers->expects($this->at(1))->method('set')
-            ->with('x-tags', 'qux,baz');
+            ->with('x-device', 'foo');
         $this->headers->expects($this->at(2))->method('set')
-            ->with('x-cache-for', '86400s');
+            ->with('x-tags', 'qux,baz');
         $this->headers->expects($this->at(3))->method('set')
+            ->with('x-cache-for', '86400s');
+        $this->headers->expects($this->at(4))->method('set')
             ->with('x-cache-for', 'flob');
 
         $listener->onKernelResponse($this->event);
@@ -202,7 +212,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('fubar', $method->invokeArgs($this->listener, []));
 
-        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template);
+        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template, $this->globals);
         $this->assertEmpty($method->invokeArgs($listener, []));
     }
 
@@ -211,7 +221,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTagsWhenNoInstance()
     {
-        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template);
+        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template, $this->globals);
 
         $method = new \ReflectionMethod($listener, 'getTags');
         $method->setAccessible(true);
@@ -225,7 +235,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->with('x-tags')->willReturn('gorp,wibble');
 
         $this->assertEquals(
-            [ 'locale-en_US' , 'gorp' , 'wibble' ],
+            [ 'locale-en_US' , 'device-foo', 'gorp' , 'wibble' ],
             $method->invokeArgs($listener, [ $this->response ])
         );
     }
@@ -262,7 +272,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->with('x-tags')->willReturn(false);
 
         $this->assertEquals(
-            [ 'instance-fubar', 'locale-en_US' , 'glork' , 'qux' ],
+            [ 'instance-fubar', 'locale-en_US', 'device-foo', 'glork' , 'qux' ],
             $method->invokeArgs($this->listener, [ $this->response ])
         );
     }
@@ -284,7 +294,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->with('x-tags')->willReturn('gorp,wibble');
 
         $this->assertEquals(
-            [ 'instance-fubar', 'locale-en_US' , 'gorp' , 'wibble' ],
+            [ 'instance-fubar', 'locale-en_US', 'device-foo', 'gorp' , 'wibble' ],
             $method->invokeArgs($this->listener, [ $this->response ])
         );
     }
@@ -299,7 +309,7 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($method->invokeArgs($this->listener, []));
 
-        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template);
+        $listener = new HttpCacheHeadersListener(null, $this->locale, $this->template, $this->globals);
         $this->assertFalse($method->invokeArgs($listener, []));
     }
 }

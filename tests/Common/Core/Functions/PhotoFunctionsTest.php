@@ -28,6 +28,7 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
                 'getPhotoWidth',
                 'getPhotoHeight',
                 'getPhotoMimeType',
+                'hasPhotoPath',
                 'hasPhotoSize'
             ])
             ->getMock();
@@ -105,6 +106,17 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->with($this->item);
 
         get_photo_mime_type($this->item);
+    }
+
+    /**
+     * Tests has_photo_path.
+     */
+    public function testHasPhotoPath()
+    {
+        $this->helper->expects($this->once())->method('hasPhotoPath')
+            ->with($this->item);
+
+        has_photo_path($this->item);
     }
 
     /**

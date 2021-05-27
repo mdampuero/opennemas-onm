@@ -303,7 +303,7 @@ class AuthorHelper
      */
     public function hasAuthor($item = null) : bool
     {
-        return !empty($this->getAuthor($item));
+        return !empty($this->getAuthorName($item));
     }
 
     /**

@@ -50,6 +50,11 @@ class DfpRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice', 'getInstance' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -72,6 +77,9 @@ class DfpRendererTest extends TestCase
         switch ($name) {
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'entity_repository':
                 return $this->em;
@@ -230,6 +238,8 @@ class DfpRendererTest extends TestCase
             </script>
         </div>';
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/dfp.slot.tpl', [
                 'id' => 1,
@@ -237,7 +247,7 @@ class DfpRendererTest extends TestCase
             ->willReturn($output);
 
         $output = '<div class="ad-slot oat oat-visible oat-top " data-mark="Advertisement" '
-            . 'style="height: 615px;">'
+            . 'style="height: 265px;">'
             . $output . '</div>';
 
         $this->assertEquals(

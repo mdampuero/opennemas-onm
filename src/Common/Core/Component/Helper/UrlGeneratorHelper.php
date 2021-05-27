@@ -62,7 +62,7 @@ class UrlGeneratorHelper
     {
         $this->container     = $container;
         $this->contentHelper = $this->container->get('core.helper.content');
-        $this->instance      = $this->container->get('core.instance');
+        $this->instance      = $this->container->get('core.globals')->getInstance();
         $this->locale        = $this->container->get('core.locale');
         $this->routeHelper   = $this->container->get('core.helper.l10n_route');
         $this->router        = $this->container->get('router');

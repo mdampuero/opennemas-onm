@@ -124,7 +124,7 @@ class CoreLoader
      */
     public function configureTheme(Theme $theme, array $parents = []) : CoreLoader
     {
-        $template = $this->container->get('core.template');
+        $template = $this->container->get('core.template')->setTemplateDir([]);
         $wl       = $this->container->get('core.loader.widget');
 
         $this->container->get('core.globals')->setTheme($theme);

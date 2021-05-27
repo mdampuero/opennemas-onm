@@ -29,6 +29,10 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
             ->getMock();
@@ -69,6 +73,10 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())
             ->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->globals->expects($this->any())
+            ->method('getInstance')
+            ->willReturn($this->instance);
     }
 
     /**
@@ -81,8 +89,8 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'core.instance':
-                return $this->instance;
+            case 'core.globals':
+                return $this->globals;
 
             case 'orm.manager':
                 return $this->em;

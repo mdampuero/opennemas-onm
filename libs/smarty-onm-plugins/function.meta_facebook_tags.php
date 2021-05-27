@@ -44,16 +44,22 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:url" content="' . $url . '" />';
     $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
-    $image = $smarty->getContainer()->get('core.helper.content_media')
+    $media = $smarty->getContainer()->get('core.helper.content_media')
         ->getMedia($content, $params);
 
-    // Populate the media element if exists
-    if (is_object($image)
-        && !empty($image->url)
-    ) {
-        $output[] = '<meta property="og:image" content="' . $image->url . '" />';
-        $output[] = '<meta property="og:image:width" content="' . $image->width . '"/>';
-        $output[] = '<meta property="og:image:height" content="' . $image->height . '"/>';
+    $photoHelper = $smarty->getContainer()->get('core.helper.photo');
+    $videoHelper = $smarty->getContainer()->get('core.helper.video');
+
+    if (!empty($media)) {
+        $path = $media->content_type_name === 'video'
+            ? $photoHelper->getPhotoPath($videoHelper->getVideoThumbnail($media), null, [], true)
+            : $photoHelper->getPhotoPath($media, null, [], true);
+
+        if (!empty($path)) {
+            $output[] = '<meta property="og:image" content="' . $path . '" />';
+            $output[] = '<meta property="og:image:width" content="' . $media->width . '"/>';
+            $output[] = '<meta property="og:image:height" content="' . $media->height . '"/>';
+        }
     }
 
     return implode("\n", $output);

@@ -756,7 +756,7 @@
           $scope.tm = $timeout(function() {
             $scope.page = 1;
             $scope.list(true);
-          }, 250);
+          }, 1000);
         }, true);
       }
     ]);

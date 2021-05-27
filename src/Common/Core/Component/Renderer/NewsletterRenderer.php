@@ -65,7 +65,7 @@ class NewsletterRenderer
         $publicUrl = preg_replace(
             '@^http[s]?://(.*?)/$@i',
             'http://$1',
-            $this->container->get('core.instance')->getMainDomain()
+            $this->container->get('core.globals')->getInstance()->getMainDomain()
         );
 
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
