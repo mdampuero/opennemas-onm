@@ -147,7 +147,7 @@ class NewsletterRenderer
         }
 
         $searchCriteria['content_type_name'] = !empty($criteria['content_type'])
-            ? [[ 'value' => [ '\'' . $criteria['content_type'] . '\'']]]
+            ? [[ 'value' => $criteria['content_type']]]
             : [[ 'value' => [
                 'album',
                 'article',
