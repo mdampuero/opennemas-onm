@@ -59,8 +59,8 @@ class SettingController extends Controller
         'facebook',
         'facebook_id',
         'facebook_page',
-        'favico',
-        'sn_default_img',
+        'logo_favico',
+        'logo_embed',
         'google_analytics',
         'google_analytics_others',
         'google_custom_search_api_key',
@@ -79,7 +79,7 @@ class SettingController extends Controller
         'locale',
         'logo_enabled',
         'max_session_lifetime',
-        'mobile_logo',
+        'logo_simple',
         'ojd',
         'onm_digest_pass',
         'onm_digest_user',
@@ -96,7 +96,7 @@ class SettingController extends Controller
         'site_description',
         'site_footer',
         'site_keywords',
-        'site_logo',
+        'logo_default',
         'site_name',
         'site_title',
         'theme_skin',
@@ -180,8 +180,8 @@ class SettingController extends Controller
 
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
-            'logo_enabled', 'refresh_interval', 'site_logo', 'mobile_logo',
-            'favico', 'sn_default_img'
+            'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
+            'logo_favico', 'logo_embed'
         ];
 
         foreach ($toint as $key) {
@@ -312,14 +312,14 @@ class SettingController extends Controller
      *
      * @return array The list of filenames.
      */
-    protected function saveFiles($files)
+    protected function saveFiles($logos)
     {
         $msg      = $this->get('core.messenger');
         $settings = [];
 
-        foreach ($files as $key => $file) {
-            if ($key == 'favico' || $key == 'site_logo' || $key == 'mobile_logo') {
-                $logo   = $this->container->get('core.helper.content')->getContent($file, 'photo');
+        foreach ($logos as $key => $id) {
+            if ($key == 'logo_favico' || $key == 'logo_default' || $key == 'logo_simple') {
+                $logo   = $this->container->get('core.helper.content')->getContent($id, 'photo');
                 $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
 
                 if ($height > 120) {
@@ -334,8 +334,8 @@ class SettingController extends Controller
                     $settings[$key] = get_logo($key)->pk_content ?? null;
                     continue;
                 }
-            } elseif ($key == 'sn_default_img') {
-                $logo   = $this->container->get('core.helper.content')->getContent($file, 'photo');
+            } elseif ($key == 'logo_embed') {
+                $logo   = $this->container->get('core.helper.content')->getContent($id, 'photo');
                 $width  = $this->container->get('core.helper.photo')->getPhotoWidth($logo);
                 $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
 

@@ -116,21 +116,9 @@ class ContentMediaHelper
         }
 
         if ($this->ds->get('logo_enabled')) {
-            return $this->getMediaFromLogo();
+            return $this->container->get('core.helper.setting')->getLogo('embed');
         }
 
         return null;
-    }
-
-    /**
-     * Returns default media object for content
-     *
-     * @return object  $mediaObject The media object.
-     */
-    protected function getMediaFromLogo()
-    {
-        $sh = $this->container->get('core.helper.setting');
-
-        return $sh->getLogo('embed');
     }
 }

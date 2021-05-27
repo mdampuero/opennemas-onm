@@ -161,21 +161,21 @@
         };
 
         // Updates data to send to server when related contents change
-        $scope.$watch('[ settings.site_logoID, settings.mobile_logoID, settings.favicoID, settings.sn_default_imgID ]', function(nv, ov) {
+        $scope.$watch('[ settings.logo_defaultID, settings.logo_simpleID, settings.logo_favicoID, settings.logo_embedID ]', function(nv, ov) {
           if (nv[0]) {
-            $scope.settings.site_logo =  parseInt(nv[0].pk_content);
+            $scope.settings.logo_default =  parseInt(nv[0].pk_content);
           }
 
           if (nv[1]) {
-            $scope.settings.mobile_logo =  parseInt(nv[1].pk_content);
+            $scope.settings.logo_simple =  parseInt(nv[1].pk_content);
           }
 
           if (nv[2]) {
-            $scope.settings.favico =  parseInt(nv[2].pk_content);
+            $scope.settings.logo_favico =  parseInt(nv[2].pk_content);
           }
 
           if (nv[3]) {
-            $scope.settings.sn_default_img =  parseInt(nv[3].pk_content);
+            $scope.settings.logo_embed =  parseInt(nv[3].pk_content);
           }
         });
 
@@ -478,24 +478,24 @@
             }
           }
 
-          if ($scope.settings.site_logoID) {
-            data.settings.site_logo = parseInt($scope.settings.site_logoID.pk_content);
-            delete data.settings.site_logoID;
+          if ($scope.settings.logo_defaultID) {
+            data.settings.logo_default = parseInt($scope.settings.logo_defaultID.pk_content);
+            delete data.settings.logo_defaultID;
           }
 
-          if ($scope.settings.mobile_logoID) {
-            data.settings.mobile_logo = parseInt($scope.settings.mobile_logoID.pk_content);
-            delete data.settings.mobile_logoID;
+          if ($scope.settings.logo_simpleID) {
+            data.settings.logo_simple = parseInt($scope.settings.logo_simpleID.pk_content);
+            delete data.settings.logo_simpleID;
           }
 
-          if (data.settings.favicoID) {
-            data.settings.favico = parseInt($scope.settings.favicoID.pk_content);
-            delete data.settings.favicoID;
+          if (data.settings.logo_favicoID) {
+            data.settings.logo_favico = parseInt($scope.settings.logo_favicoID.pk_content);
+            delete data.settings.logo_favicoID;
           }
 
-          if (data.settings.sn_default_imgID) {
-            data.settings.sn_default_img = parseInt($scope.settings.sn_default_imgID.pk_content);
-            delete data.settings.sn_default_imgID;
+          if (data.settings.logo_embedID) {
+            data.settings.logo_embed = parseInt($scope.settings.logo_embedID.pk_content);
+            delete data.settings.logo_embedID;
           }
 
           return data;
@@ -511,12 +511,12 @@
         $scope.pre = function() {
           // Backup some settings
           $scope.backup = {
-            favico:               $scope.settings.favico,
-            mobile_logo:          $scope.settings.mobile_logo,
+            logo_favico:          $scope.settings.logo_favico,
+            logo_simple:          $scope.settings.logo_simple,
             site_color:           $scope.settings.site_color,
             site_color_secondary: $scope.settings.site_color_secondary,
-            site_logo:            $scope.settings.site_logo,
-            sn_default_img:       $scope.settings.sn_default_img
+            logo_default:         $scope.settings.logo_default,
+            logo_embed:           $scope.settings.logo_embed
           };
 
           if (!$scope.settings.locale.frontend.language.slug) {

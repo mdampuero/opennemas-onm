@@ -213,15 +213,15 @@
                         </div>
                         <div class="form-group col-md-12" ng-show="settings.logo_enabled">
 
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.site_logo }"></div>
-                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.site_logo }">
+                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
+                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_default }">
                             <p>{t}Are you sure?{/t}</p>
                             <div class="confirm-actions">
-                              <button class="btn btn-link" ng-click="toggleOverlay('site_logo')" type="button">
+                              <button class="btn btn-link" ng-click="toggleOverlay('logo_default')" type="button">
                                 <i class="fa fa-times fa-lg"></i>
                                 {t}No{/t}
                               </button>
-                              <button class="btn btn-link" ng-click="removeFile('site_logo'); toggleOverlay('site_logo')" type="button">
+                              <button class="btn btn-link" ng-click="removeFile('logo_default'); toggleOverlay('logo_default')" type="button">
                                 <i class="fa fa-check fa-lg"></i>
                                 {t}Yes{/t}
                               </button>
@@ -231,23 +231,23 @@
                           <label class="form-label" for="site-logo">{t}Large logo{/t}</label>
 
                           <div class="thumbnail-placeholder">
-                            <div class="img-thumbnail" ng-if="!settings.site_logo">
-                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.site_logoID">
+                            <div class="img-thumbnail" ng-if="!settings.logo_default">
+                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_defaultID">
                                 <i class="fa fa-picture-o fa-2x"></i>
                                 <h5>{t}Pick an image{/t}</h5>
                               </div>
                             </div>
-                            <div class="dynamic-image-placeholder dynamic-image-no-margin ng-cloak" ng-if="settings.site_logo">
-                              <dynamic-image reescale="true" class="img-thumbnail " instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.site_logo" ng-if="settings.site_logo" only-image="true">
+                            <div class="dynamic-image-placeholder dynamic-image-no-margin ng-cloak" ng-if="settings.logo_default">
+                              <dynamic-image reescale="true" class="img-thumbnail " instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_default" ng-if="settings.logo_default" only-image="true">
                                 <div class="thumbnail-actions ng-cloak">
-                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('site_logo')">
+                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_default')">
                                     <i class="fa fa-trash-o fa-2x"></i>
                                   </div>
-                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.site_logoID">
+                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_defaultID">
                                     <i class="fa fa-camera fa-2x"></i>
                                   </div>
                                 </div>
-                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.site_logoID" media-picker-type="photo" ></div>
+                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_defaultID" media-picker-type="photo" ></div>
                               </dynamic-image>
                             </div>
                           </div>
@@ -256,41 +256,41 @@
 
                         <div class="form-group col-md-12" ng-if="settings.logo_enabled">
 
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.mobile_logo }"></div>
-                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.mobile_logo }">
+                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
+                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_simple }">
                             <p>{t}Are you sure?{/t}</p>
                             <div class="confirm-actions">
-                              <button class="btn btn-link" ng-click="toggleOverlay('mobile_logo')" type="button">
+                              <button class="btn btn-link" ng-click="toggleOverlay('logo_simple')" type="button">
                                 <i class="fa fa-times fa-lg"></i>
                                 {t}No{/t}
                               </button>
-                              <button class="btn btn-link" ng-click="removeFile('mobile_logo'); toggleOverlay('mobile_logo')" type="button">
+                              <button class="btn btn-link" ng-click="removeFile('logo_simple'); toggleOverlay('logo_simple')" type="button">
                                 <i class="fa fa-check fa-lg"></i>
                                 {t}Yes{/t}
                               </button>
                             </div>
                           </div>
 
-                          <label class="form-label" for="mobile_logo">{t}Small logo{/t}</label>
+                          <label class="form-label" for="logo_simple">{t}Small logo{/t}</label>
 
                           <div class="thumbnail-placeholder">
-                            <div class="img-thumbnail" ng-if="!settings.mobile_logo">
-                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.mobile_logoID">
+                            <div class="img-thumbnail" ng-if="!settings.logo_simple">
+                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simpleID">
                                 <i class="fa fa-picture-o fa-2x"></i>
                                 <h5>{t}Pick an image{/t}</h5>
                               </div>
                             </div>
-                            <div class="dynamic-image-placeholder dynamic-image-no-margin  ng-cloak " ng-if="settings.mobile_logo">
-                              <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.mobile_logo" ng-if="settings.mobile_logo" only-image="true">
+                            <div class="dynamic-image-placeholder dynamic-image-no-margin  ng-cloak " ng-if="settings.logo_simple">
+                              <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_simple" ng-if="settings.logo_simple" only-image="true">
                                 <div class="thumbnail-actions ng-cloak">
-                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('mobile_logo')">
+                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_simple')">
                                     <i class="fa fa-trash-o fa-2x"></i>
                                   </div>
-                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.mobile_logoID">
+                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simpleID">
                                     <i class="fa fa-camera fa-2x"></i>
                                   </div>
                                 </div>
-                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.mobile_logoID" media-picker-type="photo" ></div>
+                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simpleID" media-picker-type="photo" ></div>
                               </dynamic-image>
                             </div>
                           </div>
@@ -299,41 +299,41 @@
 
                         <div class="form-group col-md-12" ng-if="settings.logo_enabled">
 
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.favico }"></div>
-                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.favico }">
+                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
+                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_favico }">
                             <p>{t}Are you sure?{/t}</p>
                             <div class="confirm-actions">
-                              <button class="btn btn-link" ng-click="toggleOverlay('favico')" type="button">
+                              <button class="btn btn-link" ng-click="toggleOverlay('logo_favico')" type="button">
                                 <i class="fa fa-times fa-lg"></i>
                                 {t}No{/t}
                               </button>
-                              <button class="btn btn-link" ng-click="removeFile('favico'); toggleOverlay('favico')" type="button">
+                              <button class="btn btn-link" ng-click="removeFile('logo_favico'); toggleOverlay('logo_favico')" type="button">
                                 <i class="fa fa-check fa-lg"></i>
                                 {t}Yes{/t}
                               </button>
                             </div>
                           </div>
 
-                          <label class="form-label" for="favico">{t}Favico{/t}</label>
+                          <label class="form-label" for="logo_favico">{t}Favico{/t}</label>
 
                           <div class="thumbnail-placeholder">
-                            <div class="img-thumbnail" ng-if="!settings.favico">
-                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.favicoID">
+                            <div class="img-thumbnail" ng-if="!settings.logo_favico">
+                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favicoID">
                                 <i class="fa fa-picture-o fa-2x"></i>
                                 <h5>{t}Pick an image{/t}</h5>
                               </div>
                             </div>
-                            <div class="dynamic-image-placeholder dynamic-image-no-margin  ng-cloak " ng-if="settings.favico">
-                              <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.favico" ng-if="settings.favico" only-image="true">
+                            <div class="dynamic-image-placeholder dynamic-image-no-margin  ng-cloak " ng-if="settings.logo_favico">
+                              <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_favico" ng-if="settings.logo_favico" only-image="true">
                                 <div class="thumbnail-actions ng-cloak">
-                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('favico')">
+                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_favico')">
                                     <i class="fa fa-trash-o fa-2x"></i>
                                   </div>
-                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.favicoID">
+                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favicoID">
                                     <i class="fa fa-camera fa-2x"></i>
                                   </div>
                                 </div>
-                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.favicoID" media-picker-type="photo" ></div>
+                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favicoID" media-picker-type="photo" ></div>
                               </dynamic-image>
                             </div>
                           </div>
@@ -342,41 +342,41 @@
 
                         <div class="form-group col-md-12" ng-if="settings.logo_enabled">
 
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.sn_default_img }"></div>
-                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.sn_default_img }">
+                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
+                          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_embed }">
                             <p>{t}Are you sure?{/t}</p>
                             <div class="confirm-actions">
-                              <button class="btn btn-link" ng-click="toggleOverlay('sn_default_img')" type="button">
+                              <button class="btn btn-link" ng-click="toggleOverlay('logo_embed')" type="button">
                                 <i class="fa fa-times fa-lg"></i>
                                 {t}No{/t}
                               </button>
-                              <button class="btn btn-link" ng-click="removeFile('sn_default_img'); toggleOverlay('sn_default_img')" type="button">
+                              <button class="btn btn-link" ng-click="removeFile('logo_embed'); toggleOverlay('logo_embed')" type="button">
                                 <i class="fa fa-check fa-lg"></i>
                                 {t}Yes{/t}
                               </button>
                             </div>
                           </div>
 
-                          <label class="form-label" for="sn_default_img">{t}Social network default image{/t}</label>
+                          <label class="form-label" for="logo_embed">{t}Social network default image{/t}</label>
 
                           <div class="thumbnail-placeholder">
-                            <div class="img-thumbnail" ng-if="!settings.sn_default_img">
-                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.sn_default_imgID">
+                            <div class="img-thumbnail" ng-if="!settings.logo_embed">
+                              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embedID">
                                 <i class="fa fa-picture-o fa-2x"></i>
                                 <h5>{t}Pick an image{/t}</h5>
                               </div>
                             </div>
-                            <div class="dynamic-image-placeholder dynamic-image-no-margin ng-cloak " ng-if="settings.sn_default_img">
-                              <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.sn_default_img" ng-if="settings.sn_default_img" only-image="true">
+                            <div class="dynamic-image-placeholder dynamic-image-no-margin ng-cloak " ng-if="settings.logo_embed">
+                              <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_embed" ng-if="settings.logo_embed" only-image="true">
                                 <div class="thumbnail-actions ng-cloak">
-                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('sn_default_img')">
+                                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_embed')">
                                     <i class="fa fa-trash-o fa-2x"></i>
                                   </div>
-                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.sn_default_imgID">
+                                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embedID">
                                     <i class="fa fa-camera fa-2x"></i>
                                   </div>
                                 </div>
-                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.sn_default_imgID" media-picker-type="photo" ></div>
+                                <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embedID" media-picker-type="photo" ></div>
                               </dynamic-image>
                             </div>
                           </div>

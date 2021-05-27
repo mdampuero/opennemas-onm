@@ -60,7 +60,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->sh = $this->getMockBuilder('SettingHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getLogo', 'hasLogo' ])
+            ->setMethods([ 'getLogo' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('getParameter')
@@ -185,46 +185,44 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getMediaFromLogo.
      */
-    public function testGetMediaFromLogo()
+    public function testGetMediaWhenLogo()
     {
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'article',
+        ]);
+
         $media = new Content(
             [
+                'pk_content'        => 2,
+                'content_type_name' => 'photo',
                 'path'   => '/media/frog/sections/sn_default_img.jpg',
+                'width'             => 1920,
+                'height'            => 1080
             ]
         );
 
+        $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
+            ->with($content)
+            ->willReturn(false);
+
+        $this->authorHelper->expects($this->once())->method('hasAuthorAvatar')
+            ->with($content)
+            ->willReturn(false);
+
+        $this->ds->expects($this->once())->method('get')
+            ->with('logo_enabled')
+            ->willReturn(true);
+
         $this->sh->expects($this->once())->method('getLogo')
             ->with('embed')
-            ->willReturn(
-                new Content(
-                    [
-                        'path'   => '/media/frog/sections/sn_default_img.jpg',
-                    ]
-                )
-            );
+            ->willReturn($media);
 
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromLogo');
-        $method->setAccessible(true);
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($media)
+            ->willReturn($media);
 
-        $this->assertEquals(
-            $media,
-            $method->invokeArgs($this->helper, [])
-        );
-    }
-
-    /**
-     * Tests getDefaultMediaObject when an error is thrown.
-     */
-    public function testGetMediaFromLogoWhenError1()
-    {
-        $this->sh->expects($this->once())->method('getLogo')
-            ->with('embed')
-            ->willReturn(null);
-
-        $method = new \ReflectionMethod($this->helper, 'getMediaFromLogo');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($this->helper, []));
+        $this->assertEquals($media, $this->helper->getMedia($content));
     }
 
     /**
