@@ -146,10 +146,10 @@ class CategoryHelper
     /**
      * Returns the path to category logo for the provided item.
      *
-     * @param Content $item The item to get logo path for. If not provided, the
-     *                      function will try to search the item in the template.
+     * @param Content $item   The item to get logo path for. If not provided, the
+     *                        function will try to search the item in the template.
      *
-     * @return ?string The path to category logo. Null otherwise.
+     * @return Content $photo The photo content for category logo. Null otherwise.
      */
     public function getCategoryLogo($item = null)
     {
