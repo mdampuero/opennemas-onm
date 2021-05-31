@@ -386,6 +386,19 @@ category:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: logo_id
+            columns: [logo_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: logo_id_pk_content
+            source_field: [ logo_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 content_positions:
     columns:
         pk_fk_content:

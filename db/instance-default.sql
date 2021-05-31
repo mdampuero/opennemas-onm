@@ -219,7 +219,9 @@ CREATE TABLE `category` (
   `params` text,
   `logo_id` bigint(20) unsigned DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `logo_id` (`logo_id`),
+  CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
