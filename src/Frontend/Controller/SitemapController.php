@@ -205,7 +205,9 @@ class SitemapController extends Controller
      */
     protected function getContentsCount($perPage)
     {
-        $em       = $this->get('entity_repository');
+        $em = $this->get('entity_repository');
+        $ds = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
 
         $filters = [
             'content_status'    => [[ 'value' => 1 ]],
@@ -226,72 +228,94 @@ class SitemapController extends Controller
 
         $counts = [];
 
-        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER') && $ds->get('sitemap')['album']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'album' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['ALBUM_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['ALBUM_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER') && $ds->get('sitemap')['articles']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'article' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['ARTICLE_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['ARTICLE_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER') && $ds->get('sitemap')['images']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'photo' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['IMAGE_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['IMAGE_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('EVENT_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('EVENT_MANAGER') && $ds->get('sitemap')['events']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'event' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['EVENT_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['EVENT_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER') && $ds->get('sitemap')['kiosko']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'kiosko' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['KIOSKO_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['KIOSKO_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER') && $ds->get('sitemap')['letters']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'letter' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['LETTER_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['LETTER_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER') && $ds->get('sitemap')['opinions']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'opinion' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['OPINION_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['OPINION_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER') && $ds->get('sitemap')['polls']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'poll' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['POLL_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['POLL_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER') && $ds->get('sitemap')['videos']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'video' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $counts['VIDEO_MANAGER'] = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $perPage);
+
+            $counts['VIDEO_MANAGER']['count']   = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('TAG_MANAGER')) {
-            $sql     = ' SELECT DISTINCT SUBSTR(slug,1,1) as letter FROM `tags` ORDER BY SUBSTR(slug,1,1)';
+        if ($this->get('core.security')->hasExtension('TAG_MANAGER') && $ds->get('sitemap')['tags']) {
+            $sql     = ' SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as letter
+                        FROM `tags` ORDER BY SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) ';
             $letters = $this->get('orm.connection.instance')->fetchAll($sql);
 
             foreach ($letters as $letter) {
-                $char = $letter['letter'];
-                $sql = 'SELECT COUNT(id) as counter FROM tags'
-                . ' WHERE slug LIKE "' . $char . '%"';
+                if (ctype_graph($letter['letter'])) {
+                    $char = $letter['letter'];
 
-                $tagsCount = $this->get('orm.connection.instance')->fetchAll($sql)[0]['counter'];
+                    $sql = 'SELECT COUNT(id) as counter FROM tags'
+                    . ' WHERE slug LIKE "' . $char . '%"';
 
-                $counts['TAG_MANAGER'][$char] = ceil($tagsCount / $perPage);
+                    $tagsCount = $this->get('orm.connection.instance')->fetchAll($sql)[0]['counter'];
+
+                    $counts['TAG_MANAGER'][$char] = ceil($tagsCount / $perPage);
+                }
             }
         }
 
@@ -309,13 +333,17 @@ class SitemapController extends Controller
      */
     protected function getResponse($format, $action, $cacheId, $contentsCount = [], $page = null)
     {
+        $ds = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
+
         $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
         $contents = $this->get('core.template.frontend')
             ->render('sitemap/sitemap.tpl', [
                 'action'   => $action,
                 'cache_id' => $cacheId,
                 'counters' => $contentsCount,
-                'page'     => $page
+                'page'     => $page,
+                'sitemap'  => $ds->get('sitemap')
             ]);
 
         if ($format === 'xml.gz') {
@@ -359,41 +387,44 @@ class SitemapController extends Controller
      */
     protected function getTypes()
     {
+        $ds = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance');
+
         $types = [];
 
-        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER') && $ds->get('sitemap')['albums']) {
             $types[] = [ 'value' => 'album' ];
         }
 
-        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER') && $ds->get('sitemap')['articles']) {
             $types[] = [ 'value' => 'article' ];
         }
 
-        if ($this->get('core.security')->hasExtension('EVENT_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('EVENT_MANAGER') && $ds->get('sitemap')['events']) {
             $types[] = [ 'value' => 'event' ];
         }
 
-        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER') && $ds->get('sitemap')['images']) {
             $types[] = [ 'value' => 'photo' ];
         }
 
-        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER') && $ds->get('sitemap')['kiosko']) {
             $types[] = [ 'value' => 'kiosko' ];
         }
 
-        if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER') && $ds->get('sitemap')['letters']) {
             $types[] = [ 'value' => 'letter' ];
         }
 
-        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER') && $ds->get('sitemap')['opinions']) {
             $types[] = [ 'value' => 'opinion' ];
         }
 
-        if ($this->get('core.security')->hasExtension('POLL_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER') && $ds->get('sitemap')['polls']) {
             $types[] = [ 'value' => 'poll' ];
         }
 
-        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER')) {
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER') && $ds->get('sitemap')['videos']) {
             $types[] = [ 'value' => 'video' ];
         }
 

@@ -185,9 +185,10 @@ class SettingController extends Controller
         ];
 
         foreach ($toint as $key) {
-            if ($key == 'sitemap') {
-                $settings[$key]['perpage'] = (int) $settings[$key][ 'perpage' ];
-                $settings[$key]['total']   = (int) $settings[$key][ 'total' ];
+            if ($key == 'sitemap' && !empty($settings[$key])) {
+                foreach ($settings[$key] as $element => $value) {
+                    $settings[$key][$element]   = (int) $value;
+                }
             } else {
                 $settings[$key] = (int) $settings[$key];
             }
