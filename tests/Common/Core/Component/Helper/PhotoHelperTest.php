@@ -30,14 +30,19 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
-        $this->frontend = $this->getMockBuilder('Common\Core\Component\Template\Template')
+        $this->theme = $this->getMockBuilder('Common\Model\Entity\Theme')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getValue' ])
+            ->setMethods([ 'getCuts' ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
             ->disableOriginalConstructor()
             ->setMethods([ 'generate' ])
+            ->getMock();
+
+        $this->frontend = $this->getMockBuilder('Common\Core\Component\Template\Template')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getValue' ])
             ->getMock();
 
         $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
@@ -67,7 +72,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             'starttime'      => new \Datetime('2020-01-01 00:00:00')
         ]);
 
-        $this->helper = new PhotoHelper($this->contentHelper, $this->instance, $this->router, $this->ugh);
+        $this->helper = new PhotoHelper($this->contentHelper, $this->instance, $this->router, $this->theme, $this->ugh);
     }
 
     /**
@@ -207,6 +212,72 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getPhotoSizes.
+     */
+    public function testGetPhotoSizes()
+    {
+        $result = '(max-width: 480px) 480px, (max-width: 768px) 768px, 992px';
+
+        $this->theme->expects($this->at(0))->method('getCuts')
+            ->willReturn(null);
+
+        $this->assertEmpty($this->helper->getPhotoSizes(null));
+
+        $this->theme->expects($this->at(0))->method('getCuts')
+            ->willReturn(
+                [
+                    'mobile' => [ 'width' => 480 ],
+                    'tablet' => [ 'width' => 768 ],
+                    'laptop' => [ 'width' => 992 ]
+                ]
+            );
+
+        $this->assertEquals($result, $this->helper->getPhotoSizes('laptop'));
+    }
+
+    /**
+     * Tests getPhotoSrcSet.
+     */
+    public function testGetPhotoSrcSet()
+    {
+        $result = '/asset/thumbnail,480,270/path/test/photo.jpg 480w,' .
+            ' /asset/thumbnail,768,432/path/test/photo.jpg 768w,' .
+            ' /asset/thumbnail,992,558/path/test/photo.jpg';
+
+        $photo = new Content(
+            [
+                'content_type_name' => 'photo',
+                'path'              => '/path/test/photo.jpg'
+            ]
+        );
+
+        $this->theme->expects($this->at(0))->method('getCuts')
+            ->willReturn(null);
+
+        $this->assertEmpty($this->helper->getPhotoSrcSet(null));
+
+        $this->theme->expects($this->at(0))->method('getCuts')
+            ->willReturn(
+                [
+                    'mobile' => [ 'width' => 480, 'height' => 270 ],
+                    'tablet' => [ 'width' => 768, 'height' => 432 ],
+                    'laptop' => [ 'width' => 992, 'height' => 558 ]
+                ]
+            );
+
+        $this->router->expects($this->at(0))->method('generate')
+            ->willReturn('/asset/thumbnail,480,270/path/test/photo.jpg');
+
+        $this->router->expects($this->at(1))->method('generate')
+            ->willReturn('/asset/thumbnail,768,432/path/test/photo.jpg');
+
+        $this->router->expects($this->at(2))->method('generate')
+            ->willReturn('/asset/thumbnail,992,558/path/test/photo.jpg');
+
+        $this->assertEquals($result, $this->helper->getPhotoSrcSet($photo, 'thumbnail', 'laptop'));
+    }
+
+    /**
      * Tests getWidth.
      */
     public function testGetPhotoWidth()
@@ -269,8 +340,31 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->helper->hasPhotoSize($photo));
 
         $contentHelper = new ContentHelper($this->container);
-        $photoHelper   = new PhotoHelper($contentHelper, $this->instance, $this->router, $this->ugh);
+        $photoHelper   = new PhotoHelper($contentHelper, $this->instance, $this->router, $this->theme, $this->ugh);
 
         $this->assertFalse($photoHelper->hasPhotoSize($externalThumbnail));
+    }
+
+    /**
+     * Tests the method hasPhotoSizes.
+     */
+    public function testHasPhotoSizes()
+    {
+        $this->assertFalse($this->helper->hasPhotoSizes());
+    }
+
+    /**
+     * Tests the method hasPhotoSrcSet.
+     */
+    public function testHasPhotoSrcSet()
+    {
+        $photo = new Content(
+            [
+                'content_type_name' => 'photo',
+                'path'              => '/path/test/photo.jpg'
+            ]
+        );
+
+        $this->assertFalse($this->helper->hasPhotoSrcSet($photo, null, null));
     }
 }

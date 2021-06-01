@@ -34,6 +34,13 @@ class PhotoHelper
     protected $router;
 
     /**
+     * The theme of the instance.
+     *
+     * @var Theme
+     */
+    protected $theme;
+
+    /**
      * The url generator helper.
      *
      * @var UrlGeneratorHelper
@@ -46,13 +53,15 @@ class PhotoHelper
      * @param ContentHelper      $contentHelper The content helper.
      * @param Instance           $instance      The current instance.
      * @param Router             $router        The router component.
+     * @param Theme              $theme         The theme of the instance.
      * @param UrlGeneratorHelper $ugh           The url generator helper.
      */
-    public function __construct($contentHelper, $instance, $router, $ugh)
+    public function __construct($contentHelper, $instance, $router, $theme, $ugh)
     {
         $this->contentHelper = $contentHelper;
         $this->instance      = $instance;
         $this->router        = $router;
+        $this->theme         = $theme;
         $this->ugh           = $ugh;
     }
 
@@ -114,6 +123,70 @@ class PhotoHelper
         );
 
         return !empty($value) ? $value : null;
+    }
+
+    /**
+     * Returns the srcset of the provided photo path.
+     *
+     * @param integer $width The width of the transformation or null.
+     *
+     * @return string The srcset to show.
+     */
+    public function getPhotoSizes($device = 'desktop')
+    {
+        $sizes = '';
+        $cuts  = $this->theme->getCuts($device);
+
+        if (empty($cuts)) {
+            return '';
+        }
+
+        $widths = array_map(function ($item) {
+            return $item['width'];
+        }, $cuts);
+
+        $last = array_pop($widths);
+
+        foreach ($widths as $width) {
+            $sizes .= sprintf('(max-width: %dpx) %dpx, ', $width, $width);
+        }
+
+        return $sizes . sprintf('%dpx', $last);
+    }
+
+    /**
+     * Returns the srcset of the provided photo path.
+     *
+     * @param string  $photo     The photo path.
+     * @param string  $transform The name of the transformation to apply.
+     * @param string  $device    The device type.
+     *
+     * @return string The srcset to show.
+     */
+    public function getPhotoSrcSet($photo, $transform = 'thumbnail', $device = 'desktop')
+    {
+        $srcSet = '';
+        $cuts   = $this->theme->getCuts($device);
+
+        if (empty($cuts)) {
+            return '';
+        }
+
+        $last = array_pop($cuts);
+
+        foreach ($cuts as $key => $value) {
+            $srcSet .= $this->getPhotoPath(
+                $photo,
+                $transform,
+                [ $value['width'], $value['height'], 'center', 'center' ]
+            ) . ' ' . $value['width'] . 'w, ';
+        }
+
+        return $srcSet . $this->getPhotoPath(
+            $photo,
+            $transform,
+            [$last['width'], $last['height'], 'center', 'center']
+        );
     }
 
     /**
@@ -180,5 +253,31 @@ class PhotoHelper
     public function hasPhotoSize($item = null)
     {
         return !empty($this->getPhotoSize($item));
+    }
+
+    /**
+     * Returns if the provided data has sizes for the specific device type.
+     *
+     * @param string $device The device to get the sizes for.
+     *
+     * @return bool Wether the photo has sizes or not.
+     */
+    public function hasPhotoSizes($device = 'desktop')
+    {
+        return !empty($this->getPhotoSizes($device));
+    }
+
+    /**
+     * Returns if the provided photo has srcset for the specific device type.
+     *
+     * @param string  $photo     The photo to get the srcset from.
+     * @param string  $transform The name of the transformation to apply.
+     * @param string  $device    The device to get the srcset for.
+     *
+     * @return bool Wether the photo has srcset or not.
+     */
+    public function hasPhotoSrcSet($photo, $transform, $device = 'desktop')
+    {
+        return !empty($this->getPhotoSrcSet($photo, $transform, $device));
     }
 }
