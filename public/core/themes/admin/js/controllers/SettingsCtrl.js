@@ -615,7 +615,7 @@
 
         // Update sitemap values from default
         $scope.$watch('settings.sitemap', function(nv, ov) {
-          if (nv !== 'undefined' && ov == 'undefined') {
+          if (typeof nv !== 'undefined' && typeof ov === 'undefined') {
               $scope.settings.sitemap = angular.merge($scope.default.sitemap[0], $scope.settings.sitemap);
           }
         }, true);
