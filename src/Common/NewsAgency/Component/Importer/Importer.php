@@ -349,6 +349,7 @@ class Importer
         // Force content_type_name for photos
         if ($resource->type === 'photo') {
             $data['content_type_name'] = 'photo';
+            $data['fk_content_type']   = 8;
         }
 
         $data = array_merge($this->defaults, $data, [
