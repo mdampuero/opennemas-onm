@@ -1,0 +1,4 @@
+manager_sitemap_list:
+    path: /sitemap
+    options:
+        expose: true

@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -36,6 +37,7 @@ class SitemapController extends Controller
         'poll'   => '1h',
         'kiosko'   => '1h',
         'event'   => '1h',
+        'categories'   => '1h',
     ];
 
     /**
@@ -71,13 +73,24 @@ class SitemapController extends Controller
      *
      * @return Response the response object
      */
-    public function indexAction($format, $action = 'index', $page = null, $letter = '')
+    public function indexAction($format, $action = 'index', $page = null, $letter = '', $year = null, $month = null)
     {
         $cacheId       = $this->view->getCacheId('sitemap', $action);
         $contentsCount = [];
-        $perPage       = $this->get('orm.manager')
+
+        $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('sitemap')['perpage'] ?? 50;
+            ->get('sitemap');
+
+        if (empty($settings)) {
+            $settings = getService('orm.manager')
+                ->getDataSet('Settings', 'manager')
+                ->get('sitemap');
+
+            foreach ($settings as $key => $value) {
+                $settings[$key] = (int) $value;
+            }
+        }
 
         $this->view->setConfig('sitemap');
 
@@ -89,39 +102,54 @@ class SitemapController extends Controller
             && (empty($this->view->getCaching())
                 || !$this->view->isCached('sitemap/sitemap.tpl', $cacheId))
         ) {
-            $this->getAction($action, $perPage, $page, $letter);
+            $this->getAction($action, $settings, $page, $letter, $year, $month);
         } else {
-            $contentsCount = $this->getContentsCount($perPage);
-            $page          = 1;
+            if (!empty($year) && !empty($month)) {
+                $contentsCount = $this->getContentsCount($settings, $year, $month, $settings);
+            } else {
+                $contentsCount = $this->getYears();
+            }
+
+            $page = 1;
         }
 
-        return $this->getResponse($format, $action, $cacheId, $contentsCount, $page);
+        return $this->getResponse($settings, $format, $action, $cacheId, $contentsCount, $page, $year, $month);
     }
 
     /**
      * Generates and assigns the information for the actions sitemap to template.
      */
-    protected function getAction($action, $perPage, $page, $letter)
+    protected function getAction($action, $settings, $page, $letter, $year, $month)
     {
         switch ($action) {
             case 'latest':
-                $this->setSitemap([], [], null, null);
+                $criteria = [
+                    'content_type_name' => array_merge([
+                        'union' => 'OR',
+                    ], $this->getTypes($settings)),
+                    'content_status'    => [[ 'value' => 1 ]],
+                    'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
+                ];
+
+                $this->setSitemap($year, $month, $settings, $criteria);
                 break;
             case 'tag':
-                $this->generateTagSitemap($letter, $perPage, $page);
+                $this->generateTagSitemap($letter, $settings, $page);
                 break;
             case 'image':
-                $this->setSitemap([], [[ 'value' => 'photo' ]], $perPage, $page);
+                $this->setSitemap($year, $month, $settings, [], [[ 'value' => 'photo' ]], $settings['perpage'], $page);
+                break;
+            case 'categories':
                 break;
             default:
-                $this->setSitemap([], [[ 'value' => $action ]], $perPage, $page);
+                $this->setSitemap($year, $month, $settings, [], [[ 'value' => $action ]], $settings['perpage'], $page);
         }
     }
 
     /**
      * Generates and assigns the information for the tag sitemap to template.
      */
-    protected function generateTagSitemap($letter, $perPage, $page)
+    protected function generateTagSitemap($letter, $settings, $page)
     {
         $sql = 'SELECT DISTINCT(slug) FROM tags'
             . ' WHERE slug LIKE "'
@@ -129,9 +157,9 @@ class SitemapController extends Controller
             . '%"'
             . ' ORDER BY slug ASC'
             . ' LIMIT '
-            . $perPage
+            . $settings['perpage']
             . ' OFFSET '
-            . $perPage * ($page - 1);
+            . $settings['perpage'] * ($page - 1);
 
         $tags = $this->get('orm.connection.instance')->fetchAll($sql);
         $tags = array_map(function ($a) {
@@ -149,35 +177,26 @@ class SitemapController extends Controller
      *
      * @return Array The list of contents
      */
-    public function getContents($criteria = [], $types = [], $limit = 100, $page = 1)
+    public function getContents($year, $month, $settings, $criteria = [], $types = [], $limit = 100, $page = 1)
     {
         if (empty($types)) {
-            $types = $this->getTypes();
+            $types = $this->getTypes($settings);
         }
 
-        // Set search filters
-        $filters = [
-            'content_type_name' => array_merge([
-                'union' => 'OR',
-            ], $types),
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
-
         if (!empty($criteria)) {
-            $filters = array_merge($filters, $criteria);
+            $filters = $criteria;
+        } else {
+            // Set search filters
+            $filters = [
+                'content_type_name' => array_merge([
+                    'union' => 'OR',
+                ], $types),
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'changed'         => [
+                    [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
+                ]
+            ];
         }
 
         $em       = $this->get('entity_repository');
@@ -199,108 +218,97 @@ class SitemapController extends Controller
     /**
      * Returns the count of contents for index listing
      *
-     * @param integer $perPage    Items per page
+     * @param integer $settings['perpage']    Items per page
      *
      * @return Array The count of contents
      */
-    protected function getContentsCount($perPage)
+    protected function getContentsCount($settings, $year, $month)
     {
         $em = $this->get('entity_repository');
-        $ds = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance');
 
         $filters = [
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            'changed'         => [
+                [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
             ]
         ];
 
         $counts = [];
 
-        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER') && $ds->get('sitemap')['album']) {
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER') && $settings['album']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'album' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['ALBUM_MANAGER']['count']   = $pages;
+            $counts['ALBUM_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER') && $ds->get('sitemap')['articles']) {
+        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER') && $settings['articles']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'article' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['ARTICLE_MANAGER']['count']   = $pages;
+            $counts['ARTICLE_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER') && $ds->get('sitemap')['images']) {
+        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER') && $settings['images']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'photo' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['IMAGE_MANAGER']['count']   = $pages;
+            $counts['IMAGE_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('EVENT_MANAGER') && $ds->get('sitemap')['events']) {
+        if ($this->get('core.security')->hasExtension('EVENT_MANAGER') && $settings['events']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'event' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['EVENT_MANAGER']['count']   = $pages;
+            $counts['EVENT_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER') && $ds->get('sitemap')['kiosko']) {
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER') && $settings['kiosko']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'kiosko' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['KIOSKO_MANAGER']['count']   = $pages;
+            $counts['KIOSKO_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('LETTER_MANAGER') && $ds->get('sitemap')['letters']) {
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER') && $settings['letters']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'letter' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['LETTER_MANAGER']['count']   = $pages;
+            $counts['LETTER_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('OPINION_MANAGER') && $ds->get('sitemap')['opinions']) {
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER') && $settings['opinions']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'opinion' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['OPINION_MANAGER']['count']   = $pages;
+            $counts['OPINION_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('POLL_MANAGER') && $ds->get('sitemap')['polls']) {
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER') && $settings['polls']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'poll' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['POLL_MANAGER']['count']   = $pages;
+            $counts['POLL_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER') && $ds->get('sitemap')['videos']) {
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER') && $settings['videos']) {
             $contentFilter = [  'content_type_name'    => [[ 'value' => 'video' ]] ];
             $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($em->countBy($filters) / $perPage);
+            $pages         = ceil($em->countBy($filters) / $settings['perpage']);
 
-            $counts['VIDEO_MANAGER']['count']   = $pages;
+            $counts['VIDEO_MANAGER']['count'] = $pages;
         }
 
-        if ($this->get('core.security')->hasExtension('TAG_MANAGER') && $ds->get('sitemap')['tags']) {
+        if ($this->get('core.security')->hasExtension('TAG_MANAGER') && $settings['tags']) {
             $sql     = ' SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as letter
                         FROM `tags` ORDER BY SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) ';
             $letters = $this->get('orm.connection.instance')->fetchAll($sql);
@@ -314,7 +322,7 @@ class SitemapController extends Controller
 
                     $tagsCount = $this->get('orm.connection.instance')->fetchAll($sql)[0]['counter'];
 
-                    $counts['TAG_MANAGER'][$char] = ceil($tagsCount / $perPage);
+                    $counts['TAG_MANAGER'][$char] = ceil($tagsCount / $settings['perpage']);
                 }
             }
         }
@@ -331,11 +339,16 @@ class SitemapController extends Controller
      *
      * @return Response The response object.
      */
-    protected function getResponse($format, $action, $cacheId, $contentsCount = [], $page = null)
-    {
-        $ds = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance');
-
+    protected function getResponse(
+        $settings,
+        $format,
+        $action,
+        $cacheId,
+        $contentsCount = [],
+        $page = null,
+        $year = null,
+        $month = null
+    ) {
         $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
         $contents = $this->get('core.template.frontend')
             ->render('sitemap/sitemap.tpl', [
@@ -343,7 +356,9 @@ class SitemapController extends Controller
                 'cache_id' => $cacheId,
                 'counters' => $contentsCount,
                 'page'     => $page,
-                'sitemap'  => $ds->get('sitemap')
+                'sitemap'  => $settings,
+                'year'     => $year,
+                'month'    => $month
             ]);
 
         if ($format === 'xml.gz') {
@@ -385,50 +400,82 @@ class SitemapController extends Controller
      *
      * @return Array The list of types
      */
-    protected function getTypes()
+    protected function getTypes($settings)
     {
-        $ds = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance');
-
         $types = [];
 
-        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER') && $ds->get('sitemap')['albums']) {
+        if ($this->get('core.security')->hasExtension('ALBUM_MANAGER') && $settings['album']) {
             $types[] = [ 'value' => 'album' ];
         }
 
-        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER') && $ds->get('sitemap')['articles']) {
+        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER') && $settings['articles']) {
             $types[] = [ 'value' => 'article' ];
         }
 
-        if ($this->get('core.security')->hasExtension('EVENT_MANAGER') && $ds->get('sitemap')['events']) {
+        if ($this->get('core.security')->hasExtension('EVENT_MANAGER') && $settings['events']) {
             $types[] = [ 'value' => 'event' ];
         }
 
-        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER') && $ds->get('sitemap')['images']) {
+        if ($this->get('core.security')->hasExtension('IMAGE_MANAGER') && $settings['images']) {
             $types[] = [ 'value' => 'photo' ];
         }
 
-        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER') && $ds->get('sitemap')['kiosko']) {
+        if ($this->get('core.security')->hasExtension('KIOSKO_MANAGER') && $settings['kiosko']) {
             $types[] = [ 'value' => 'kiosko' ];
         }
 
-        if ($this->get('core.security')->hasExtension('LETTER_MANAGER') && $ds->get('sitemap')['letters']) {
+        if ($this->get('core.security')->hasExtension('LETTER_MANAGER') && $settings['letters']) {
             $types[] = [ 'value' => 'letter' ];
         }
 
-        if ($this->get('core.security')->hasExtension('OPINION_MANAGER') && $ds->get('sitemap')['opinions']) {
+        if ($this->get('core.security')->hasExtension('OPINION_MANAGER') && $settings['opinions']) {
             $types[] = [ 'value' => 'opinion' ];
         }
 
-        if ($this->get('core.security')->hasExtension('POLL_MANAGER') && $ds->get('sitemap')['polls']) {
+        if ($this->get('core.security')->hasExtension('POLL_MANAGER') && $settings['polls']) {
             $types[] = [ 'value' => 'poll' ];
         }
 
-        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER') && $ds->get('sitemap')['videos']) {
+        if ($this->get('core.security')->hasExtension('VIDEO_MANAGER') && $settings['videos']) {
             $types[] = [ 'value' => 'video' ];
         }
 
         return $types;
+    }
+
+        /**
+     * Returns the list of year/month
+     *
+     *
+     * @return Array The count of contents
+     */
+    protected function getYears()
+    {
+        $years = [];
+
+        $sql = 'SELECT DISTINCT DATE_FORMAT(`changed`, "%Y-%m") as `dates`
+            FROM `contents` ORDER BY `dates` ASC';
+
+        $result = $this->get('orm.connection.instance')->fetchAll($sql);
+
+        foreach ($result as $value) {
+            $aux = explode('-', $value['dates']);
+
+            if (count($aux) == 2) {
+                $currentMonth = date('m');
+                $currentYear  = date('Y');
+
+                if ($aux[0] == $currentYear && $aux[1] == $currentMonth) {
+                    $lastMod = date('Y-m-d H:i:s');
+                } else {
+                    $lastMod = date('Y-m-t 23:59:59', strtotime($aux[0] . '-' . $aux[1]));
+                }
+
+                $years[$aux[0]][$aux[1]] = $lastMod;
+            }
+        }
+
+        return $years;
     }
 
     /**
@@ -461,7 +508,7 @@ class SitemapController extends Controller
     /**
      *  Method for set sitemap of similar content
      */
-    protected function setSitemap($criteria = [], $types = [], $limit = 100, $page = 1)
+    protected function setSitemap($year, $month, $settings, $criteria = [], $types = [], $limit = 100, $page = 1)
     {
         if (is_null($page) || is_null($limit)) {
             $limit = $this->get('orm.manager')
@@ -471,7 +518,7 @@ class SitemapController extends Controller
         }
 
         $tags     = [];
-        $contents = $this->getContents($criteria, $types, $limit, $page);
+        $contents = $this->getContents($year, $month, $settings, $criteria, $types, $limit, $page);
 
         foreach ($contents as &$content) {
             if (!empty($content->tags)) {

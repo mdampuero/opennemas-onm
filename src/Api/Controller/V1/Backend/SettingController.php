@@ -121,7 +121,8 @@ class SettingController extends Controller
         'body_start_script_amp',
         'header_script',
         'header_script_amp',
-        'robots_txt_rules'
+        'robots_txt_rules',
+        'sitemap'
     ];
 
     /**

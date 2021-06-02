@@ -123,8 +123,8 @@ class SidebarController extends Controller
                     ]
                 ],
                 [
-                    'name'     => _('System'),
-                    'icon'     => 'fa-gears',
+                    'name'     => _('Users'),
+                    'icon'     => 'fa-user',
                     'security' => [
                         'permission' => [ 'USER_LIST', 'GROUP_LIST' ],
                     ],
@@ -147,6 +147,18 @@ class SidebarController extends Controller
                                 'permission' => [ 'GROUP_LIST' ],
                             ],
                         ]
+                    ]
+                ],
+                [
+                    'name'     => _('System'),
+                    'icon'     => 'fa-gears',
+                    'items' => [
+                        [
+                            'name'     => _('Sitemaps'),
+                            'icon'     => 'fa-sitemap',
+                            'route'    => 'manager_sitemap_list',
+                            'click'    => true,
+                        ],
                     ]
                 ]
             ],
