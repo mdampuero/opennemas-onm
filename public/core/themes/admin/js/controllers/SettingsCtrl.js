@@ -47,6 +47,31 @@
          * @memberOf SettingsCtrl
          *
          * @description
+         *  The default sitemap values
+         *
+         * @type {Object}
+         */
+        $scope.default = {
+          sitemap: [{
+            perpage: 500,
+            total: 100,
+            album: 0,
+            articles: 0,
+            events: 0,
+            images: 0,
+            kiosko: 0,
+            letters: 0,
+            opinions: 0,
+            polls: 0,
+            tags: 0,
+            videos: 0
+              }]
+        };
+
+        /**
+         * @memberOf SettingsCtrl
+         *
+         * @description
          *  The settings object with default values.
          *
          * @type {Object}
@@ -587,6 +612,13 @@
         $scope.removeTranslator = function(index) {
           $scope.settings.translators.splice(index, 1);
         };
+
+        // Update sitemap values from default
+        $scope.$watch('settings.sitemap', function(nv, ov) {
+          if (nv !== 'undefined' && ov == 'undefined') {
+              $scope.settings.sitemap = angular.merge($scope.default.sitemap[0], $scope.settings.sitemap);
+          }
+        }, true);
       }
     ]);
 })();

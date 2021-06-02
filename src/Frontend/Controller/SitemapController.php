@@ -25,44 +25,44 @@ class SitemapController extends Controller
      * @const array
      */
     const EXPIRE = [
-        'image' => '1h',
-        'index' => '1d',
-        'latest'  => '1h',
-        'tag'   => '1d',
-        'video' => '1h',
-        'article'   => '1h',
-        'opinion'   => '1h',
-        'album'   => '1h',
-        'letter'   => '1h',
-        'poll'   => '1h',
-        'kiosko'   => '1h',
-        'event'   => '1h',
+        'image'        => '1h',
+        'index'        => '1d',
+        'latest'       => '1h',
+        'tag'          => '1d',
+        'video'        => '1h',
+        'article'      => '1h',
+        'opinion'      => '1h',
+        'album'        => '1h',
+        'letter'       => '1h',
+        'poll'         => '1h',
+        'kiosko'       => '1h',
+        'event'        => '1h',
         'categories'   => '1h',
     ];
 
     /**
      * The list of needed extensions per action.
      *
-     * @var array
+     * @const array
      */
     const EXTENSIONS = [
         'album'   => [ 'ALBUM_MANAGER' ],
-        'article'   => [ 'ARTICLE_MANAGER' ],
+        'article' => [ 'ARTICLE_MANAGER' ],
         'event'   => [ 'EVENT_MANAGER' ],
-        'image' => [ 'IMAGE_MANAGER' ],
-        'kiosko'   => [ 'KIOSKO_MANAGER' ],
+        'image'   => [ 'IMAGE_MANAGER' ],
+        'kiosko'  => [ 'KIOSKO_MANAGER' ],
         'latest'  => [
                     'ALBUM_MANAGER', 'ARTICLE_MANAGER',
                     'EVENT_MANAGER', 'IMAGE_MANAGER',
                     'KIOSKO_MANAGER', 'LATEST_MANAGER' ,
                     'LETTER_MANAGER','OPINION_MANAGER',
                     'POLL_MANAGER', 'VIDEO_MANAGER',
-                ],
-        'letter'   => [ 'LETTER_MANAGER' ],
-        'opinion'   => [ 'OPINION_MANAGER' ],
-        'poll'   => [ 'POLL_MANAGER' ],
-        'tag'   => [ 'TAG_MANAGER' ],
-        'video' => [ 'VIDEO_MANAGER' ],
+                   ],
+        'letter'  => [ 'LETTER_MANAGER' ],
+        'opinion' => [ 'OPINION_MANAGER' ],
+        'poll'    => [ 'POLL_MANAGER' ],
+        'tag'     => [ 'TAG_MANAGER' ],
+        'video'   => [ 'VIDEO_MANAGER' ],
     ];
 
     /**
@@ -86,10 +86,6 @@ class SitemapController extends Controller
             $settings = getService('orm.manager')
                 ->getDataSet('Settings', 'manager')
                 ->get('sitemap');
-
-            foreach ($settings as $key => $value) {
-                $settings[$key] = (int) $value;
-            }
         }
 
         $this->view->setConfig('sitemap');
