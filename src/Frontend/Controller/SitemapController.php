@@ -68,8 +68,12 @@ class SitemapController extends Controller
     /**
      * Renders the index sitemap
      *
-     * @param string $action The sitemap action.
-     * @param string $format The sitemap format.
+     * @param string  $format The sitemap format.
+     * @param string  $action The sitemap action.
+     * @param integer $page The actual page.
+     * @param string  $letter The actual tag letter
+     * @param integer $year The sitemap year.
+     * @param integer $format The sitemap month.
      *
      * @return Response the response object
      */
@@ -98,7 +102,7 @@ class SitemapController extends Controller
             && (empty($this->view->getCaching())
                 || !$this->view->isCached('sitemap/sitemap.tpl', $cacheId))
         ) {
-            $this->getAction($action, $settings, $page, $letter, $year, $month);
+            $this->setAction($action, $settings, $page, $letter, $year, $month);
         } else {
             if (!empty($year) && !empty($month)) {
                 $contentsCount = $this->getContentsCount($settings, $year, $month, $settings);
@@ -113,37 +117,13 @@ class SitemapController extends Controller
     }
 
     /**
-     * Generates and assigns the information for the actions sitemap to template.
-     */
-    protected function getAction($action, $settings, $page, $letter, $year, $month)
-    {
-        switch ($action) {
-            case 'latest':
-                $criteria = [
-                    'content_type_name' => array_merge([
-                        'union' => 'OR',
-                    ], $this->getTypes($settings)),
-                    'content_status'    => [[ 'value' => 1 ]],
-                    'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
-                ];
-
-                $this->setSitemap($year, $month, $settings, $criteria);
-                break;
-            case 'tag':
-                $this->generateTagSitemap($letter, $settings, $page);
-                break;
-            case 'image':
-                $this->setSitemap($year, $month, $settings, [], [[ 'value' => 'photo' ]], $settings['perpage'], $page);
-                break;
-            case 'categories':
-                break;
-            default:
-                $this->setSitemap($year, $month, $settings, [], [[ 'value' => $action ]], $settings['perpage'], $page);
-        }
-    }
-
-    /**
      * Generates and assigns the information for the tag sitemap to template.
+     *
+     * @param string $letter The actual tag letter
+     * @param string $settins The sitemap settings.
+     * @param int    $page The actual page.
+     *
+     * @return Response the response object
      */
     protected function generateTagSitemap($letter, $settings, $page)
     {
@@ -168,12 +148,15 @@ class SitemapController extends Controller
     /**
      * Returns the list of contents basing on a criteria.
      *
+     * @param integer $year The sitemap year to search by.
+     * @param integer $month The sitemap month to search by.
      * @param array   $criteria The criteria to search by.
-     * @param integer $limit    The maximum number of contents to return.
+     * @param array   $types The types to search by.
+     * @param integer $page The page to search by.
      *
      * @return Array The list of contents
      */
-    public function getContents($year, $month, $settings, $criteria = [], $types = [], $limit = 100, $page = 1)
+    public function getContents($year, $month, $settings, $criteria = [], $types = [], $page = 1)
     {
         if (empty($types)) {
             $types = $this->getTypes($settings);
@@ -196,7 +179,7 @@ class SitemapController extends Controller
         }
 
         $em       = $this->get('entity_repository');
-        $contents = $em->findBy($filters, ['created' => 'desc'], $limit, $page);
+        $contents = $em->findBy($filters, ['created' => 'desc'], $settings['total'], $page);
 
         // Filter by scheduled
         $cm       = new \ContentManager();
@@ -214,7 +197,9 @@ class SitemapController extends Controller
     /**
      * Returns the count of contents for index listing
      *
-     * @param integer $settings['perpage']    Items per page
+     * @param integer $settings The sitemap settings
+     * @param integer $year The sitemap year
+     * @param integer $month The sitemap month
      *
      * @return Array The count of contents
      */
@@ -329,9 +314,14 @@ class SitemapController extends Controller
     /**
      * Generates a response basing on the format and the action.
      *
-     * @param string $format  Whether compress the sitemap or not
-     * @param string $action  The type of sitemap
+     * @param string $settings The sitemap settings.
+     * @param string $format  Whether compress the sitemap or not.
+     * @param string $action The type of sitemap.
      * @param string $cacheId The template cache id.
+     * @param array  $contentsCount The array with de contents count.
+     * @param integer $page The sitemap page.
+     * @param integer $year The sitemap year.
+     * @param integer $month The sitemap month.
      *
      * @return Response The response object.
      */
@@ -393,6 +383,8 @@ class SitemapController extends Controller
 
     /**
      *  Method for recover get types
+     *
+     * @param array $settings The sitemap settins
      *
      * @return Array The list of types
      */
@@ -502,19 +494,60 @@ class SitemapController extends Controller
     }
 
     /**
-     *  Method for set sitemap of similar content
+     * Generates and assigns the information for the actions sitemap to template.
+     *
+     * @param string  $action The sitemap action.
+     * @param array   $settings The sitemap settings.
+     * @param integer $page The actual page.
+     * @param string  $letter The actual tag letter
+     * @param integer $year The sitemap year.
+     * @param integer $format The sitemap month.
+     *
      */
-    protected function setSitemap($year, $month, $settings, $criteria = [], $types = [], $limit = 100, $page = 1)
-    {
-        if (is_null($page) || is_null($limit)) {
-            $limit = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('sitemap')['total'] ?? 100;
-            $pag   = 1;
-        }
 
+    protected function setAction($action, $settings, $page, $letter, $year, $month)
+    {
+        switch ($action) {
+            case 'latest':
+                $criteria = [
+                    'content_type_name' => array_merge([
+                        'union' => 'OR',
+                    ], $this->getTypes($settings)),
+                    'content_status'    => [[ 'value' => 1 ]],
+                    'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]]
+                ];
+
+                $this->setSitemap($year, $month, $settings, $criteria);
+                break;
+            case 'tag':
+                $this->generateTagSitemap($letter, $settings, $page);
+                break;
+            case 'image':
+                $this->setSitemap($year, $month, $settings, [], [[ 'value' => 'photo' ]], $page);
+                break;
+            case 'categories':
+                break;
+            default:
+                $this->setSitemap($year, $month, $settings, [], [[ 'value' => $action ]], $page);
+        }
+    }
+
+    /**
+     *  Method for set sitemap of similar content
+     *
+     * @param integer $year The sitemap year.
+     * @param integer $month The sitemap month.
+     * @param array $settings The sitemap settins.
+     * @param array $criteria The criteria to search by.
+     * @param array $types The types to seearch by.
+     * @param integer $page The sitemap page.
+     *
+     * @return boolean True if the action is avaiable. False otherwise.
+     */
+    protected function setSitemap($year, $month, $settings, $criteria = [], $types = [], $page = 1)
+    {
         $tags     = [];
-        $contents = $this->getContents($year, $month, $settings, $criteria, $types, $limit, $page);
+        $contents = $this->getContents($year, $month, $settings, $criteria, $types, $page);
 
         foreach ($contents as &$content) {
             if (!empty($content->tags)) {
