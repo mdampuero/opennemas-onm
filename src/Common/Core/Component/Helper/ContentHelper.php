@@ -187,6 +187,7 @@ class ContentHelper
     public function getContent($item = null, $type = null)
     {
         $item = $item ?? $this->template->getValue('item');
+
         // Item as a related content (array with item + caption + position)
         if (is_array($item) && array_key_exists('item', $item)) {
             $item = $item['item'];
