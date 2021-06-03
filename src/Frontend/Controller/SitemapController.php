@@ -127,9 +127,13 @@ class SitemapController extends Controller
      */
     protected function generateTagSitemap($letter, $settings, $page)
     {
+        if (empty($page)) {
+            $page = 1;
+        }
+
         $sql = 'SELECT DISTINCT(slug) FROM tags'
             . ' WHERE slug LIKE "'
-            . $letter
+            . $lettercle
             . '%"'
             . ' ORDER BY slug ASC'
             . ' LIMIT '
@@ -156,7 +160,7 @@ class SitemapController extends Controller
      *
      * @return Array The list of contents
      */
-    public function getContents($year, $month, $settings, $criteria = [], $types = [], $page = 1)
+    public function getContents($limit, $year, $month, $settings, $criteria = [], $types = [], $page = 1)
     {
         if (empty($types)) {
             $types = $this->getTypes($settings);
@@ -179,7 +183,8 @@ class SitemapController extends Controller
         }
 
         $em       = $this->get('entity_repository');
-        $contents = $em->findBy($filters, ['created' => 'desc'], $settings['total'], $page);
+
+        $contents = $em->findBy($filters, ['created' => 'desc'], $limit, $page);
 
         // Filter by scheduled
         $cm       = new \ContentManager();
@@ -523,12 +528,12 @@ class SitemapController extends Controller
                 $this->generateTagSitemap($letter, $settings, $page);
                 break;
             case 'image':
-                $this->setSitemap($year, $month, $settings, [], [[ 'value' => 'photo' ]], $page);
+                $this->setSitemap($year, $month, $settings, $page, [], [[ 'value' => 'photo' ]]);
                 break;
             case 'categories':
                 break;
             default:
-                $this->setSitemap($year, $month, $settings, [], [[ 'value' => $action ]], $page);
+                $this->setSitemap($year, $month, $settings, $page, [], [[ 'value' => $action ]]);
         }
     }
 
@@ -544,10 +549,18 @@ class SitemapController extends Controller
      *
      * @return boolean True if the action is avaiable. False otherwise.
      */
-    protected function setSitemap($year, $month, $settings, $criteria = [], $types = [], $page = 1)
+    protected function setSitemap($year, $month, $settings, $page, $criteria = [], $types = [])
     {
         $tags     = [];
-        $contents = $this->getContents($year, $month, $settings, $criteria, $types, $page);
+
+        if (empty($page)) {
+            $page  = 1;
+            $limit = $settings['total'];
+        } else {
+            $limit = $settings['perpage'];
+        }
+
+        $contents = $this->getContents($limit, $year, $month, $settings, $criteria, $types, $page);
 
         foreach ($contents as &$content) {
             if (!empty($content->tags)) {
