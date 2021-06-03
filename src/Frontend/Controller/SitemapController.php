@@ -133,7 +133,7 @@ class SitemapController extends Controller
 
         $sql = 'SELECT DISTINCT(slug) FROM tags'
             . ' WHERE slug LIKE "'
-            . $lettercle
+            . $letter
             . '%"'
             . ' ORDER BY slug ASC'
             . ' LIMIT '
