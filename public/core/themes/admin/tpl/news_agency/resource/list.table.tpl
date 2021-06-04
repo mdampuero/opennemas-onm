@@ -80,17 +80,17 @@
       </div>
     </div>
     <div class="m-b-10 m-t-5" ng-show="!expanded[$index] && item.related.length > 0">
-      <div ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related">
+      <div ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related track by $index">
         <small>
           &angrt;
           <i class="fa m-r-5 fa-file-text-o" ng-show="data.extra.related[id].type === 'text'"></i>
           [% data.extra.related[id].title %]
         </small>
       </div>
-      <img class="img-thumbnail m-r-10 m-t-10" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related" ng-src="[% routing.generate(routes.getContent, { id: id }) %]" style="height: 40px;">
+      <img class="img-thumbnail m-r-10 m-t-10" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related track by $index" ng-src="[% routing.generate(routes.getContent, { id: id }) %]" style="height: 40px;">
     </div>
     <div class="related row m-b-10 m-l-30" ng-show="expanded[$index] && item.related.length > 0">
-      <div class="m-t-10" ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related">
+      <div class="m-t-10" ng-if="data.extra.related[id].type === 'text'" ng-repeat="id in item.related track by $index">
         <div class="checkbox check-default" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }">
           <input id="checkbox-related-[% item.id %]-related-[% $index %]" checklist-model="selected.related" checklist-value="id" ng-disabled="!isSelected(item.id)" type="checkbox">
           <label for="checkbox-related-[% item.id %]-related-[% $index %]">
@@ -99,7 +99,7 @@
           </label>
         </div>
       </div>
-      <div class="col-xs-4 m-t-10" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related">
+      <div class="col-xs-4 m-t-10" ng-if="data.extra.related[id].type === 'photo'" ng-repeat="id in item.related track by $index">
         <div class="checkbox check-default" ng-class="{ 'selected': selected.related && selected.related.indexOf(id) !== -1 }">
           <input id="checkbox-related-[% item.id %]-related-[% $index %]" checklist-model="selected.related" checklist-value="id" ng-disabled="!isSelected(item.id)" type="checkbox">
           <label for="checkbox-related-[% item.id %]-related-[% $index %]" ng-class="{ 'p-t-7 p-l-7': data.extra.related[id].type !== 'text' }">
