@@ -175,11 +175,11 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn('opinion');
 
-        $this->contentHelper->expects($this->at(1))->method('getType')
+        $this->contentHelper->expects($this->at(2))->method('getType')
             ->with($video)
             ->willReturn('video');
 
-        $this->contentHelper->expects($this->at(2))->method('getType')
+        $this->contentHelper->expects($this->at(4))->method('getType')
             ->with($photo)
             ->willReturn('photo');
 
@@ -224,6 +224,11 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
+
+        $this->contentHelper->expects($this->at(2))->method('getType')
+            ->with($content)
+            ->willReturn('opinion');
+
         $this->authorHelper->expects($this->at(0))->method('hasAuthorAvatar')
             ->with($content)
             ->willReturn(true);
@@ -232,11 +237,71 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn(2);
 
-        $this->contentHelper->expects($this->once())->method('getContent')
+        $this->contentHelper->expects($this->at(3))->method('getContent')
             ->with(2)
             ->willReturn($photo);
 
         $this->assertEquals($photo, $this->helper->getMedia($content));
+    }
+
+    /**
+     * Tests getMedia when kiosko.
+     */
+    public function testGetMediaWhenKiosko()
+    {
+        $kiosko = new Content([
+            'pk_content'        => 4,
+            'content_type_name' => 'kiosko',
+            'thumbnail'         => '2018/11/06/kiosko.jpg'
+        ]);
+
+        $kioskoImg = new Content([
+            'path'              => 'kiosko/2018/11/06/kiosko.jpg',
+            'width'             => 1920,
+            'height'            => 1080,
+            'content_type_name' => 'photo',
+            'content_status'    => 1,
+            'in_litter'         => 0
+        ]);
+
+        $this->contentHelper->expects($this->at(1))->method('getType')
+            ->with($kiosko)
+            ->willReturn('kiosko');
+
+        $this->imageHelper->expects($this->any())->method('getInformation')
+            ->willReturn([ 'width' => 1920, 'height' => 1080 ]);
+
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($kioskoImg)
+            ->willReturn($kioskoImg);
+
+        $this->assertEquals($kioskoImg, $this->helper->getMedia($kiosko));
+
+        $this->imageHelper->expects($this->at(0))->method('getInformation')
+            ->will($this->throwException(new \Exception()));
+
+        $this->contentHelper->expects($this->at(1))->method('getType')
+            ->with($kiosko)
+            ->willReturn('kiosko');
+
+        $this->helper->getMedia($kiosko);
+    }
+
+    /**
+     * Tests getMedia when kiosko withou thumnail.
+     */
+    public function testGetMediaWhenKioskoWithoutThumbnail()
+    {
+        $kiosko = new Content([
+            'pk_content'        => 4,
+            'content_type_name' => 'kiosko',
+        ]);
+
+        $this->contentHelper->expects($this->at(1))->method('getType')
+            ->with($kiosko)
+            ->willReturn('kiosko');
+
+        $this->assertNull($this->helper->getMedia($kiosko));
     }
 
     /**
@@ -264,7 +329,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         $this->imageHelper->expects($this->at(0))->method('getInformation')
             ->willReturn([ 'width' => 1920, 'height' => 1080 ]);
 
-        $this->contentHelper->expects($this->at(0))->method('getContent')
+        $this->contentHelper->expects($this->once())->method('getContent')
             ->with($logo)
             ->willReturn($logo);
 
