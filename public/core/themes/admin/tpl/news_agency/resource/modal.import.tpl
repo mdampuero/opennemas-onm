@@ -12,7 +12,7 @@
           [% item.title %]
         </strong>
         <ul class="no-style">
-          <li class="nowrap" ng-repeat="id in item.related" ng-if="template.related[id]">
+          <li class="nowrap" ng-repeat="id in item.related track by $index" ng-if="template.related[id]">
             <small>
               &angrt;
               <i class="fa m-r-5" ng-class="{ 'fa-file-text-o': template.related[id].type === 'text', 'fa-picture-o': template.related[id].type === 'photo', 'fa-film': template.related[id].type === 'video' }"></i>
