@@ -282,7 +282,17 @@ class SitemapController extends Controller
 
             $number = ceil(count($this->get('orm.connection.instance')->fetchAll($sql)) / $settings['perpage']);
 
-            return $this->getResponse($format, $cacheId, 'tagIndex', [ 'tag' => $number ]);
+            return $this->getResponse(
+                $format,
+                $cacheId,
+                'tagIndex',
+                [ 'tag' => $number ],
+                null,
+                null,
+                null,
+                null,
+                $letter
+            );
         }
 
         return $this->getResponse($format, $cacheId, 'tagIndex');
@@ -350,7 +360,8 @@ class SitemapController extends Controller
         $page = null,
         $year = null,
         $month = null,
-        $googleNews = null
+        $googleNews = null,
+        $letter = null
     ) {
         $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
         $contents = $this->get('core.template.frontend')
@@ -358,6 +369,7 @@ class SitemapController extends Controller
                 'action'     => $action,
                 'cache_id'   => $cacheId,
                 'counters'   => $contentsCount,
+                'letter'     => $letter,
                 'page'       => $page,
                 'year'       => $year,
                 'month'      => $month,
