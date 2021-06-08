@@ -234,12 +234,6 @@ class SitemapController extends Controller
         return $this->getResponse($settings, $format, 'contents', $contents, null, $year, $month, $googleNews);
     }
 
-    protected function getSettings()
-    {
-        return $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap')
-            ?? getService('orm.manager')->getDataSet('Settings', 'manager')->get('sitemap');
-    }
-
     /**
      * Generates the subindex for the tags basing on the letter.
      *
@@ -285,6 +279,12 @@ class SitemapController extends Controller
         }
 
         return $this->getResponse($settings, $format, 'tag', $tags);
+    }
+
+    protected function getSettings()
+    {
+        return $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap')
+            ?? getService('orm.manager')->getDataSet('Settings', 'manager')->get('sitemap');
     }
 
     /**
