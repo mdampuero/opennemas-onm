@@ -1,54 +1,50 @@
-frontend_action_page_sitemap:
-    path: /{year}/{month}/sitemap.{action}.{page}.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml', page: 1 }
-    requirements:
-        format: 'xml|xml.gz'
-        action: '|image|video|article|opinion|album|letter|poll|kiosko|event'
-        page: '[1-9][0-9]*'
-        year: '[0-9]{4}'
-        month: '[0-9]{2}'
-
-frontend_action_sitemap:
-    path: /{year}/{month}/sitemap.{action}.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml' }
-    requirements:
-        format: 'xml|xml.gz'
-        action: '|image|video|article|opinion|album|letter|poll|kiosko|event'
-        year: '[0-9]{4}'
-        month: '[0-9]{2}'
-
-frontend_categories_sitemap:
-    path: /sitemap.categories.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml', action: 'categories' }
-    requirements:
-        format: 'xml|xml.gz'
-
 frontend_index_sitemap:
     path: /sitemap.{format}
     defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
 
-frontend_latest_sitemap:
-    path: /sitemap.latest.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml', action: 'latest' }
+frontend_categories_sitemap:
+    path: /sitemap.categories.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:categories, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
 
-frontend_monthly_sitemap:
+frontend_news_sitemap:
+    path: /sitemap.news.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:news, format: 'xml'}
+    requirements:
+        format: 'xml|xml.gz'
+
+frontend_action_page_sitemap:
+    path: /{year}/{month}/sitemap.{action}.{page}.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', page: 1 }
+    requirements:
+        format: 'xml|xml.gz'
+        action: 'image|video|article|opinion|album|letter|poll|kiosko|event'
+        page: '[1-9][0-9]*'
+        year: '[0-9]{4}'
+        month: '[0-9]{2}'
+
+frontend_subindex_sitemap:
     path: /{year}/{month}/sitemap.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml' }
+    defaults: { _controller: FrontendBundle:Sitemap:subindex, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
         year: '[0-9]{4}'
         month: '[0-9]{2}'
 
 frontend_tag_page_sitemap:
-    path: /{year}/{month}/sitemap.tag.{letter}.{page}.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml', action: 'tag', page: 1, letter: 'a' }
+    path: /sitemap.tag.{letter}.{page}.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:tag, format: 'xml', page: 1 }
     requirements:
         format: 'xml|xml.gz'
         letter: '[a-zA-Z0-9]'
-        page: '[1-9][0-9]*'
-        year: '[0-9]{4}'
-        month: '[0-9]{2}'
+        page:   '[1-9][0-9]*'
+
+frontend_tag_sitemap:
+    path: /sitemap.tag.{letter}.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:tagIndex, format: 'xml', letter: 'a' }
+    requirements:
+        format: 'xml|xml.gz'
+        letter: '[a-zA-Z0-9]'
