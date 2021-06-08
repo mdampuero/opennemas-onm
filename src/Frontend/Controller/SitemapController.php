@@ -75,35 +75,40 @@ class SitemapController extends Controller
      */
     public function indexAction($format)
     {
-        $contents = [];
-        $settings = $this->getSettings();
+        $cacheId = $this->view->getCacheId('sitemap', 'index');
 
-        if ($this->get('core.security')->hasExtension('TAG_MANAGER')) {
-            $letters = $this->get('orm.connection.instance')
-                ->fetchAll(
-                    'SELECT DISTINCT SUBSTRING(`slug`, 1, 1) as "letter"' .
-                    'FROM `tags` WHERE `slug` IS NOT NULL'
-                );
-        }
+        if (!$this->isCached('index')) {
+            $contents = [];
 
-        $result = $this->get('orm.connection.instance')->fetchAll(
-            'SELECT DISTINCT DATE_FORMAT(`changed`, "%Y-%m") as `dates`
-            FROM `contents` ORDER BY `dates` ASC'
-        );
-
-        foreach ($result as $value) {
-            if (empty($value['dates'])) {
-                continue;
+            if ($this->get('core.security')->hasExtension('TAG_MANAGER')) {
+                $letters = $this->get('orm.connection.instance')
+                    ->fetchAll(
+                        'SELECT DISTINCT SUBSTRING(`slug`, 1, 1) as "letter"' .
+                        'FROM `tags` WHERE `slug` IS NOT NULL'
+                    );
             }
 
-            $aux = explode('-', $value['dates']);
+            $result = $this->get('orm.connection.instance')->fetchAll(
+                'SELECT DISTINCT DATE_FORMAT(`changed`, "%Y-%m") as `dates`
+                FROM `contents` ORDER BY `dates` ASC'
+            );
 
-            $contents[$aux[0]][$aux[1]] = $value === date("Y-m")
-                ? date('Y-m-d H:i:s')
-                : date('Y-m-t 23:59:59', strtotime($aux[0] . '-' . $aux[1]));
+            foreach ($result as $value) {
+                if (empty($value['dates'])) {
+                    continue;
+                }
+
+                $aux = explode('-', $value['dates']);
+
+                $contents[$aux[0]][$aux[1]] = $value === date("Y-m")
+                    ? date('Y-m-d H:i:s')
+                    : date('Y-m-t 23:59:59', strtotime($aux[0] . '-' . $aux[1]));
+            }
+
+            return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
         }
 
-        return $this->getResponse($settings, $format, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
+        return $this->getResponse($format, $cacheId, 'index');
     }
 
     /**
@@ -115,17 +120,21 @@ class SitemapController extends Controller
      */
     public function categoriesAction($format)
     {
-        $settings = $this->getSettings();
+        $cacheId = $this->view->getCacheId('sitemap', 'categories');
+        $categories = [];
 
-        try {
-            $categories = $this->get('api.service.category')->getList(
-                sprintf('enabled = 1 limit %d', $settings['total'])
-            )['items'];
-        } catch (GetListException $e) {
-            $categories = [];
+        if (!$this->isCached('categories')) {
+            $settings = $this->getSettings();
+
+            try {
+                $categories = $this->get('api.service.category')->getList(
+                    sprintf('enabled = 1 limit %d', $settings['total'])
+                )['items'];
+            } catch (GetListException $e) {
+            }
         }
 
-        return $this->getResponse($settings, $format, 'categories', $categories);
+        return $this->getResponse($format, $cacheId, 'categories', $categories);
     }
 
     /**
@@ -137,29 +146,35 @@ class SitemapController extends Controller
      */
     public function newsAction($format)
     {
-        $settings = $this->getSettings();
-        $filters  = [
-            'content_type_name' => [
-                [ 'value' => [ 'article', 'opinion' ], 'operator' => 'IN' ]
-            ],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ]
-        ];
+        $cacheId = $this->view->getCacheId('sitemap', 'news');
 
-        $contents = $this->get('entity_repository')
-            ->findBy($filters, ['created' => 'desc'], $settings['total']);
+        if (!$this->isCached('news')) {
+            $settings = $this->getSettings();
+            $filters  = [
+                'content_type_name' => [
+                    [ 'value' => [ 'article', 'opinion' ], 'operator' => 'IN' ]
+                ],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ]
+            ];
 
-        return $this->getResponse($settings, $format, 'news', $contents);
+            $contents = $this->get('entity_repository')
+                ->findBy($filters, ['created' => 'desc'], $settings['total']);
+
+            return $this->getResponse($format, $cacheId, 'news', $contents);
+        }
+
+        return $this->getResponse($format, $cacheId, 'news');
     }
 
     /**
@@ -171,26 +186,33 @@ class SitemapController extends Controller
      */
     public function subindexAction($year, $month, $format)
     {
-        $settings = $this->getSettings();
-        $contents = [];
+        $cacheId = $this->view->getCacheId('sitemap', 'subindex', $year, $month);
 
-        $filters = [
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'changed'         => [
-                [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
-            ]
-        ];
+        if (!$this->isCached('subindex')) {
+            $settings = $this->getSettings();
+            $contents = [];
 
-        foreach ($this->getTypes($settings, [ 'tag' ]) as $type) {
-            $contentFilter = [ 'content_type_name' => [[ 'value' => $type ]] ];
-            $filters       = array_merge($filters, $contentFilter);
-            $pages         = ceil($this->get('entity_repository')->countBy($filters) / $settings['perpage']);
+            $filters = [
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'changed'         => [
+                    [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
+                ]
+            ];
 
-            $contents[$type] = $pages;
+            foreach ($this->getTypes($settings, [ 'tag' ]) as $type) {
+                $contentFilter = [ 'content_type_name' => [[ 'value' => $type ]] ];
+                $filters       = array_merge($filters, $contentFilter);
+                $pages         = ceil($this->get('entity_repository')->countBy($filters) / $settings['perpage']);
+
+                $contents[$type] = $pages;
+            }
+
+
+            return $this->getResponse($format, $cacheId, 'subindex', $contents, null, $year, $month);
         }
 
-        return $this->getResponse($settings, $format, 'subindex', $contents, null, $year, $month);
+        return $this->getResponse($format, $cacheId, 'subindex');
     }
 
     /**
@@ -206,32 +228,39 @@ class SitemapController extends Controller
      */
     public function contentsAction($year, $month, $action, $page, $format)
     {
-        $googleNews = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('google_news_name');
+        $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $action, $page);
 
-        $em       = $this->get('entity_repository');
-        $settings = $this->getSettings();
+        if (!$this->isCached('contents')) {
+            $googleNews = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('google_news_name');
 
-        $filters = [
-            'content_type_name' => [[ 'value' => $action ]],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ]
-        ];
+            $em       = $this->get('entity_repository');
+            $settings = $this->getSettings();
 
-        $contents = $em->findBy($filters, ['created' => 'desc'], $settings['perpage'], $page);
+            $filters = [
+                'content_type_name' => [[ 'value' => $action ]],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ]
+            ];
 
-        return $this->getResponse($settings, $format, 'contents', $contents, null, $year, $month, $googleNews);
+            $contents = $em->findBy($filters, ['created' => 'desc'], $settings['perpage'], $page);
+
+
+            return $this->getResponse($format, $cacheId, 'contents', $contents, null, $year, $month, $googleNews);
+        }
+
+        return $this->getResponse($format, $cacheId, 'contents');
     }
 
     /**
@@ -243,14 +272,20 @@ class SitemapController extends Controller
      */
     public function tagIndexAction($letter, $format)
     {
-        $settings = $this->getSettings();
+        $cacheId  = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
 
-        $sql = 'SELECT DISTINCT(slug) FROM tags WHERE slug LIKE "'
-            . $letter . '%" ORDER BY slug ASC';
+        if (!$this->isCached('tagIndex')) {
+            $settings = $this->getSettings();
 
-        $number = ceil(count($this->get('orm.connection.instance')->fetchAll($sql)) / $settings['perpage']);
+            $sql = 'SELECT DISTINCT(slug) FROM tags WHERE slug LIKE "'
+                . $letter . '%" ORDER BY slug ASC';
 
-        return $this->getResponse($settings, $format, 'tagIndex', [ 'tag' => $number ]);
+            $number = ceil(count($this->get('orm.connection.instance')->fetchAll($sql)) / $settings['perpage']);
+
+            return $this->getResponse($format, $cacheId, 'tagIndex', [ 'tag' => $number ]);
+        }
+
+        return $this->getResponse($format, $cacheId, 'tagIndex');
     }
 
     /**
@@ -262,23 +297,29 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $page, $format)
     {
-        $settings = $this->getSettings();
+        $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter, $page);
+        $tags    = [];
 
-        try {
-            $tags = $this->get('api.service.tag')->getListBySql(
-                sprintf(
-                    'SELECT * FROM tags WHERE slug LIKE "%s%%" ' .
-                    'LIMIT %s OFFSET %s',
-                    $letter,
-                    $settings['perpage'],
-                    $settings['perpage'] * ($page - 1)
-                )
-            )['items'];
-        } catch (GetListException $e) {
-            return $this->getResponse($settings, $format, 'tag', []);
+        if (!$this->isCached('tag')) {
+            $settings = $this->getSettings();
+
+            try {
+                $tags = $this->get('api.service.tag')->getListBySql(
+                    sprintf(
+                        'SELECT * FROM tags WHERE slug LIKE "%s%%" ' .
+                        'LIMIT %s OFFSET %s',
+                        $letter,
+                        $settings['perpage'],
+                        $settings['perpage'] * ($page - 1)
+                    )
+                )['items'];
+            } catch (GetListException $e) {
+            }
+
+            return $this->getResponse($format, $cacheId, 'tag', $tags);
         }
 
-        return $this->getResponse($settings, $format, 'tag', $tags);
+        return $this->getResponse($format, $cacheId, 'tag');
     }
 
     protected function getSettings()
@@ -302,8 +343,8 @@ class SitemapController extends Controller
      * @return Response The response object.
      */
     protected function getResponse(
-        $settings,
         $format,
+        $cacheId,
         $action,
         $contentsCount = [],
         $page = null,
@@ -315,9 +356,9 @@ class SitemapController extends Controller
         $contents = $this->get('core.template.frontend')
             ->render(self::TEMPLATES[$action], [
                 'action'     => $action,
+                'cache_id'   => $cacheId,
                 'counters'   => $contentsCount,
                 'page'       => $page,
-                'sitemap'    => $settings,
                 'year'       => $year,
                 'month'      => $month,
                 'googleNews' => $googleNews
@@ -344,7 +385,7 @@ class SitemapController extends Controller
     }
 
     /**
-     *  Method for recover get types
+     * Method for recover get types
      *
      * @param array $settings The sitemap settins
      * @param array $ommit    An array of types to ommit.
@@ -359,5 +400,21 @@ class SitemapController extends Controller
                 && !empty($settings[$key])
                 && $this->get('core.security')->hasExtension($value);
         }, ARRAY_FILTER_USE_BOTH));
+    }
+
+    /**
+     * Returns true if there is a valid cache.
+     *
+     * @param string $action The action to check.
+     *
+     * @return string The cache id in the cas
+     */
+    protected function isCached($action)
+    {
+        $cacheId = $this->view->getCacheId('sitemap', $action);
+
+        $this->view->setConfig('sitemap');
+
+        return !empty($this->view->getCaching() && $this->view->isCached(self::TEMPLATES[$action], $cacheId));
     }
 }
