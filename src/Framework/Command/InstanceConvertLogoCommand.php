@@ -106,6 +106,7 @@ class InstanceConvertLogoCommand extends Command
 
                 try {
                     $photo = $ps->createItem([
+                        'created'     => '2021-01-01 00:00:00',
                         'description' => 'logo_' . $key
                     ], new File($file), true);
 
