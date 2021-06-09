@@ -115,7 +115,7 @@ class ContentMediaHelper
             return $this->authorHelper->getAuthorAvatar($content);
         }
 
-        if ($this->ds->get('logo_enabled')) {
+        if ($this->container->get('core.helper.setting')->hasLogo('embed')) {
             return $this->container->get('core.helper.setting')->getLogo('embed');
         }
 

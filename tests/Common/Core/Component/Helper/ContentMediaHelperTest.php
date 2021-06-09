@@ -60,7 +60,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->sh = $this->getMockBuilder('SettingHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getLogo' ])
+            ->setMethods([ 'getLogo', 'hasLogo' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('getParameter')
@@ -210,9 +210,9 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn(false);
 
-        $this->ds->expects($this->once())->method('get')
-            ->with('logo_enabled')
-            ->willReturn(true);
+        $this->sh->expects($this->once())->method('hasLogo')
+            ->with('embed')
+            ->willReturn($media);
 
         $this->sh->expects($this->once())->method('getLogo')
             ->with('embed')
