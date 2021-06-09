@@ -78,7 +78,7 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
             ->with('logo_enabled')->willReturn(true);
 
         $this->ds->expects($this->at(1))->method('get')
-            ->with('logo_default')->willReturn(1);
+            ->with('logo_default')->willReturn(0);
 
         $this->assertEquals(null, $this->helper->getLogo('default'));
     }
@@ -89,5 +89,21 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
             ->with('logo_enabled')->willReturn(false);
 
         $this->assertEquals(null, $this->helper->getLogo('default'));
+    }
+
+    public function testHasLogo()
+    {
+        $photo = new Content(['id' => 1]);
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('logo_enabled')->willReturn(true);
+
+        $this->ds->expects($this->at(1))->method('get')
+            ->with('logo_default')->willReturn(1);
+
+        $this->ch->expects($this->once())->method('getContent')
+            ->with(1, 'photo')->willReturn($photo);
+
+        $this->assertTrue($this->helper->hasLogo('default'));
     }
 }
