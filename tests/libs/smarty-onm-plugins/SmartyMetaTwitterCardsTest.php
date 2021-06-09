@@ -50,6 +50,16 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->photoHelper = $this->getMockBuilder('Common\Core\Component\Helper\PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath', 'hasPhotoPath' ])
+            ->getMock();
+
+        $this->videoHelper = $this->getMockBuilder('Common\Core\Component\Helper\VideoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getVideoThumbnail' ])
+            ->getMock();
+
         $this->requestStack = $this->getMockBuilder('RequestStack')
             ->setMethods([ 'getCurrentRequest' ])
             ->getMock();
@@ -104,6 +114,12 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'core.helper.content_media':
                 return $this->helper;
+
+            case 'core.helper.photo':
+                return $this->photoHelper;
+
+            case 'core.helper.video':
+                return $this->videoHelper;
 
             case 'core.instance':
                 return $this->instance;
@@ -294,6 +310,14 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
+
+        $this->photoHelper->expects($this->once())->method('hasPhotoPath')
+            ->with($photo)
+            ->willReturn(true);
+
+        $this->photoHelper->expects($this->once())->method('getPhotoPath')
+            ->with($photo, null, [], true)
+            ->willReturn('http://route/to/file.name');
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"

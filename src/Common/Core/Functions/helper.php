@@ -9,44 +9,7 @@
  */
 function get_url($item = null, array $params = []) : ?string
 {
-    if (empty($item)) {
-        return null;
-    }
-
-    $item = is_string($item) ? $item : get_content($item);
-
-    if (!empty($item->externalUri)) {
-        return $item->externalUri;
-    }
-
-    $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
-    $escape   = array_key_exists('_escape', $params) && $params['_escape'];
-    $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
-
-    // Remove special parameters
-    $params = array_filter($params, function ($a) {
-        return strpos($a, '_') !== 0;
-    }, ARRAY_FILTER_USE_KEY);
-
-    try {
-        $url = is_string($item)
-            ? getService('router')->generate(
-                $item,
-                $params,
-                $absolute
-                    ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                    : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
-            ) : getService('core.helper.url_generator')->generate($item, [
-                'absolute' => $absolute,
-                '_format'  => $isAmp ? 'amp' : null,
-            ]);
-
-        $url = getService('core.helper.l10n_route')->localizeUrl($url);
-
-        return $escape ? rawurlencode($url) : $url;
-    } catch (\Exception $e) {
-        return null;
-    }
+    return getService('core.helper.url_generator')->getUrl($item, $params);
 }
 
 /**
@@ -58,8 +21,8 @@ function get_url($item = null, array $params = []) : ?string
  */
 function get_image_dir($absolute = false) : ?string
 {
-    $instance = getService('core.instance');
-    $theme    = getService('core.theme');
+    $instance = getService('core.globals')->getInstance();
+    $theme    = getService('core.globals')->getTheme();
 
     if (empty($theme)) {
         return null;
@@ -70,6 +33,16 @@ function get_image_dir($absolute = false) : ?string
     }
 
     return '/' . trim($theme->path, '/') . '/images';
+}
+
+/**
+ * Returns the path to image folder for the active instance.
+ *
+ * @return string The path to image folder for the active instance.
+ */
+function get_instance_media() : ?string
+{
+    return getService('core.globals')->getInstance()->getMediaShortPath();
 }
 
 /**
@@ -118,7 +91,7 @@ function webpack()
 {
     $env     = getService('kernel')->getEnvironment();
     $request = getService('core.globals')->getRequest();
-    $host    = '/' . getService('core.globals')->getTheme()->path . '/dist';
+    $host    = '/' . trim(getService('core.globals')->getTheme()->path, '/') . '/dist';
 
     if ($env === 'dev') {
         $host = empty($request) ? '' : sprintf('%s:9000', str_replace(

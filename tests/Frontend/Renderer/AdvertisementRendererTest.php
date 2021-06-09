@@ -61,6 +61,11 @@ class AdvertisementRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getDevice', 'getInstance' ])
+            ->getMock();
+
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'getBaseUrl' ])
             ->getMock();
@@ -75,6 +80,9 @@ class AdvertisementRendererTest extends TestCase
             ->with('Settings', 'instance')->willReturn($this->ds);
         $this->view->expects($this->any())->method('get')
             ->with('backend')->willReturn($this->templateAdmin);
+        $this->globals->expects($this->any())
+            ->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
@@ -91,8 +99,11 @@ class AdvertisementRendererTest extends TestCase
             case 'error.log':
                 return $this->logger;
 
-            case 'core.instance':
-                return $this->instance;
+            case 'core.globals':
+                return $this->globals;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'core.helper.content':
                 return $this->contentHelper;
@@ -148,6 +159,9 @@ class AdvertisementRendererTest extends TestCase
         $ad1             = new \Advertisement();
         $ad1->pk_content = 1;
         $ad1->positions  = [ 1, 2, 3 ];
+        $ad1->params     = [
+            'devices' => [ 'desktop' => 1, 'tablet' => 0, 'phone' => 1 ]
+        ];
 
         $ad2             = new \Advertisement();
         $ad2->pk_content = 2;
@@ -159,6 +173,9 @@ class AdvertisementRendererTest extends TestCase
         $requested  = $reflection->getProperty('requested');
         $requested->setAccessible(true);
         $requested->setValue($this->renderer, [$ad2]);
+
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
 
         $this->assertEquals(
             $ad1,
@@ -316,7 +333,15 @@ class AdvertisementRendererTest extends TestCase
         $ad             = new \Advertisement();
         $ad->pk_content = 123;
         $ad->positions  = [ 37 ];
-        $ad->params     = [ 'height' => 600, 'width' => 300, 'floating' => true ];
+        $ad->params     = [
+            'height' => 600,
+            'width' => 300,
+            'floating' => true,
+            'devices' => [ 'desktop' => 1, 'tablet' => 1, 'phone' => 1 ]
+        ];
+
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
 
         $output = '<div class="ad-slot oat oat-visible oat-top "'
             . ' data-mark="Advertisement" style="height: 615px;">foo</div>';
@@ -354,7 +379,10 @@ class AdvertisementRendererTest extends TestCase
             ]
         ];
 
-        $output = ' style="height: 615px;"';
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
+
+        $output = ' style="height: 115px;"';
 
         $this->assertEquals(
             $output,

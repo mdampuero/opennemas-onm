@@ -53,7 +53,10 @@ class NewsletterSchedulerCommand extends Command
         ));
 
         $i = 1;
+
         foreach ($instances as $instance) {
+            $this->getContainer()->get('cache.connection.instance')->init();
+
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
                 $i++,
@@ -63,20 +66,18 @@ class NewsletterSchedulerCommand extends Command
 
             try {
                 $this->getContainer()->get('core.loader')
-                    ->load($instance->internal_name)
-                    ->init();
+                    ->load($instance->internal_name);
+
                 $this->getContainer()->get('core.security')->setInstance($instance);
 
-                $instance = $this->getContainer()->get('core.instance');
-
-
-                $this->getContainer()->get('core.helper.url_generator')->forceHttp(true);
+                $this->getContainer()->get('core.helper.url_generator')
+                    ->forceHttp(true)
+                    ->setInstance($instance);
 
                 // Set base url from instance information to fix url generation
                 $context = $this->getContainer()->get('router')->getContext();
 
                 $context->setHost($instance->getMainDomain());
-
 
                 $context->setScheme(
                     in_array(
@@ -133,7 +134,7 @@ class NewsletterSchedulerCommand extends Command
                 ), 50, '.'));
 
                 try {
-                    $output->write(str_pad(' - Newsletter send and registered ', 50, '.'));
+                    $output->write(str_pad(' - Newsletter sent and registered ', 50, '.'));
 
                     if ($this->canWeSendTemplate($template, $time)) {
                         $this->sendScheduledTemplate($template, $output, $time);

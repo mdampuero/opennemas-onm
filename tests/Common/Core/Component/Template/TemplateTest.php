@@ -34,6 +34,10 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getDevice' ])
+            ->getMock();
+
         $this->request = $this->getMockBuilder('Request')
             ->setMethods([ 'getSchemeAndHttpHost' ])
             ->getMock();
@@ -53,6 +57,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.globals':
+                return $this->globals;
+
             case 'core.locale':
                 return $this->locale;
 
@@ -206,25 +213,28 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('', $template->getCacheId());
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
+
         $this->assertEquals(
-            'frontend|categoryname|1234234234234|en',
+            'frontend|categoryname|1234234234234|en|desktop',
             $template->getCacheId('frontend', 'category-name', '1234234234234')
         );
 
         $this->assertEquals(
-            'frontend|categoryname|en',
+            'frontend|categoryname|en|desktop',
             $template->getCacheId('frontend', 'category-name')
         );
 
         $template->assign('token', 12345);
 
         $this->assertEquals(
-            'frontend|categoryname|en|12345',
+            'frontend|categoryname|en|12345|desktop',
             $template->getCacheId('frontend', 'category-name')
         );
 
         $this->assertEquals(
-            'fubar|baz|thud|en|12345',
+            'fubar|baz|thud|en|12345|desktop',
             $template->getCacheId('fubar', [ 'baz', [ 'thud' ] ])
         );
     }
@@ -554,7 +564,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template->expects($this->once())->method('assign')
             ->with([
-                'app'       => null,
+                'app'       => $this->globals,
                 '_template' => $template
             ]);
 

@@ -107,7 +107,7 @@ class Frontpages
                 $content->external    = 1;
                 $content->externalUri = getService('router')
                     ->generate('frontend_external_article_show', [
-                        'category_slug' => get_category_slug($content),
+                        'category_slug' => getService('core.helper.category')->getCategorySlug($content),
                         'slug'          => $content->slug,
                         'article_id'    => date('YmdHis', strtotime($content->created)) .
                         sprintf('%06d', $content->pk_content),

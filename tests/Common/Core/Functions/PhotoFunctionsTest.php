@@ -20,209 +20,81 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+        $this->helper = $this->getMockBuilder('\Common\Core\Component\Helper\PhotoHelper')
             ->disableOriginalConstructor()
-            ->setMethods(['isReadyForPublish'])
+            ->setMethods([
+                'getPhotoPath',
+                'getPhotoSize',
+                'getPhotoWidth',
+                'getPhotoHeight',
+                'getPhotoMimeType',
+                'hasPhotoPath',
+                'hasPhotoSize'
+            ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
-        $this->frontend = $this->getMockBuilder('Common\Core\Component\Template\Template')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getValue' ])
-            ->getMock();
-
-        $this->router = $this->getMockBuilder('Router')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'generate' ])
-            ->getMock();
-
-        $this->ugh = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'generate' ])
-            ->getMock();
-
-        $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl' ])
-            ->getMock();
+        $this->item = new Content([
+            'content_status' => 1,
+            'in_litter'      => 0,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
 
         $this->container->expects($this->any())->method('get')
-            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
-
-        $this->contentHelper->expects($this->any())->method('isReadyForPublish')
-            ->willReturn(true);
+            ->with('core.helper.photo')
+            ->willReturn($this->helper);
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
         $GLOBALS['kernel'] = $this->kernel;
-
-        $this->content = new Content([
-            'content_type'   => 'photo',
-            'content_status' => 1,
-            'in_litter'      => 0,
-            'starttime'      => new \Datetime('2020-01-01 00:00:00')
-        ]);
     }
 
     /**
-     * Returns a mocked service based on the service name.
-     *
-     * @param string $name The service name.
-     *
-     * @return mixed The mocked service.
+     * Tests get_photo_path.
      */
-    public function serviceContainerCallback($name)
+    public function testGetPhotoPath()
     {
-        switch ($name) {
-            case 'core.helper.url_generator':
-                return $this->ugh;
+        $this->helper->expects($this->once())->method('getPhotoPath')
+            ->with($this->item);
 
-            case 'core.helper.content':
-                return $this->contentHelper;
-
-            case 'router':
-                return $this->router;
-
-            case 'core.instance':
-                return $this->instance;
-
-            case 'core.template.frontend':
-                return $this->frontend;
-            default:
-                return null;
-        }
+        get_photo_path($this->item);
     }
 
     /**
-     * Tests get_photo_path when empty photo provided.
-     */
-    public function testGetPhotoPathWhenEmpty()
-    {
-        $this->assertNull(get_photo_path(null));
-    }
-
-    /**
-     * Tests get_photo_path when no transform provided.
-     */
-    public function testGetPhotoPathWhenNoTransform()
-    {
-        $photo = new Content([
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2000-01-01 00:00:00')
-        ]);
-
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
-
-        $this->assertEquals('/plugh', get_photo_path('/plugh'));
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo));
-    }
-
-    /**
-     * Tests get_photo_path when a transform is provided.
-     */
-    public function testGetPhotoPathWhenTransform()
-    {
-        $photo = new Content([
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2000-01-01 00:00:00')
-        ]);
-
-        $this->ugh->expects($this->once())->method('generate')
-            ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
-
-        $this->router->expects($this->once())->method('generate')
-            ->with('asset_image', [
-                'params' => 'grault',
-                'path'   => '/glorp/xyzzy/foobar.jpg'
-            ])->willReturn('/glorp/xyzzy/foobar.jpg');
-
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault'));
-    }
-
-    /**
-     * Tests get_photo_path when generating absolute URL.
-     */
-    public function testGetPhotoPathWhenAbsolute()
-    {
-        $photo = new Content([
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2000-01-01 00:00:00')
-        ]);
-
-        $this->ugh->expects($this->at(0))->method('generate')
-            ->with($photo)
-            ->willReturn('/glorp/xyzzy/foobar.jpg');
-
-        $this->ugh->expects($this->at(1))->method('generate')
-            ->with($photo, [ 'absolute' => true ])
-            ->willReturn('http://foo.bar/glorp/xyzzy/foobar.jpg');
-
-        $this->assertEquals(
-            'http://foo.bar/glorp/xyzzy/foobar.jpg',
-            get_photo_path($photo, null, [], true)
-        );
-    }
-
-    /**
-     * Tests get_photo_path when generating absolute URL for an image with transform.
-     */
-    public function testGetPhotoPathWhenAbsoluteAndTransform()
-    {
-        $photo = new Content([
-            'content_status' => 1,
-            'starttime'      => new \Datetime('2000-01-01 00:00:00')
-        ]);
-
-        $this->ugh->expects($this->at(0))->method('generate')
-            ->with($photo)
-            ->willReturn('/glorp/xyzzy/foobar.jpg');
-
-        $this->router->expects($this->once())->method('generate')
-            ->with('asset_image', [
-                'params' => 'grault',
-                'path'   => '/glorp/xyzzy/foobar.jpg'
-            ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn(
-                '/glorp/xyzzy/foobar.jpg'
-            );
-
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', get_photo_path($photo, 'grault', [], true));
-    }
-
-    /**
-     * Tests get_size.
+     * Tests get_photo_size.
      */
     public function testGetPhotoSize()
     {
-        $this->assertNull(get_photo_size($this->content));
+        $this->helper->expects($this->once())->method('getPhotoSize')
+            ->with($this->item);
 
-        $this->content->size = '222';
-        $this->assertEquals('222', get_photo_size($this->content));
+        get_photo_size($this->item);
     }
 
     /**
-     * Tests get_width.
+     * Tests get_photo_width.
      */
     public function testGetPhotoWidth()
     {
-        $this->assertNull(get_photo_width($this->content));
+        $this->helper->expects($this->once())->method('getPhotoWidth')
+            ->with($this->item);
 
-        $this->content->width = '222';
-        $this->assertEquals('222', get_photo_width($this->content));
+        get_photo_width($this->item);
     }
 
     /**
-     * Tests get_height.
+     * Tests get_photo_height.
      */
     public function testGetPhotoHeight()
     {
-        $this->assertNull(get_photo_height($this->content));
+        $this->helper->expects($this->once())->method('getPhotoHeight')
+            ->with($this->item);
 
-        $this->content->height = '222';
-        $this->assertEquals('222', get_photo_height($this->content));
+        get_photo_height($this->item);
     }
 
     /**
@@ -230,40 +102,31 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoMimeType()
     {
-        $this->instance->expects($this->any())->method('getBaseUrl')
-            ->willReturn('https://glorp.com/pp.jpg');
+        $this->helper->expects($this->once())->method('getPhotoMimeType')
+            ->with($this->item);
 
-        $this->content->path = '/glorp/xyzzy/foobar.jpg';
-        $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
+        get_photo_mime_type($this->item);
     }
 
     /**
-     * Tests get_photo_mime_type when external photo.
+     * Tests has_photo_path.
      */
-    public function testGetPhotoMimeTypeWhenExternal()
+    public function testHasPhotoPath()
     {
-        $this->content->path = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
-        $this->instance->expects($this->any())->method('getBaseUrl')
-            ->willReturn('http://glorp.com/ppp.jpg');
-        $this->assertEquals('image/jpeg', get_photo_mime_type($this->content));
+        $this->helper->expects($this->once())->method('hasPhotoPath')
+            ->with($this->item);
+
+        has_photo_path($this->item);
     }
 
     /**
-     * Tests the method has_photo_size.
+     * Tests has_photo_size.
      */
     public function testHasPhotoSize()
     {
-        $photo = new Content(
-            [
-                'content_status' => 1,
-                'starttime' => new \Datetime(),
-                'size' => 128
-            ]
-        );
+        $this->helper->expects($this->once())->method('hasPhotoSize')
+            ->with($this->item);
 
-        $externalThumbnail = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
-
-        $this->assertTrue(has_photo_size($photo));
-        $this->assertFalse(has_photo_size($externalThumbnail));
+        has_photo_size($this->item);
     }
 }
