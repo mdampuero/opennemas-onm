@@ -1,4 +1,4 @@
-manager_sitemap_list:
+manager_sitemap_show:
     path: /sitemap
     options:
         expose: true

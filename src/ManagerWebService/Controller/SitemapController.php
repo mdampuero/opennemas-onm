@@ -20,10 +20,17 @@ class SitemapController extends Controller
      * @apiSuccess {Array}   results The list of sitemap settings
      *
      */
-    public function listAction()
+    public function showAction()
     {
         $st = getService('orm.manager')
             ->getDataSet('Settings', 'manager')->get('sitemap');
+
+        if (empty($st)) {
+            $response = new Response();
+            $response->setContent(json_encode([]));
+
+            return $response;
+        }
 
         foreach ($st as $key => $value) {
             $st[$key] = (int) $value;

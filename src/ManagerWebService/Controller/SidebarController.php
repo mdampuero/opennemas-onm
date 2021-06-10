@@ -156,7 +156,7 @@ class SidebarController extends Controller
                         [
                             'name'     => _('Sitemaps'),
                             'icon'     => 'fa-sitemap',
-                            'route'    => 'manager_sitemap_list',
+                            'route'    => 'manager_sitemap_show',
                             'click'    => true,
                         ],
                     ]

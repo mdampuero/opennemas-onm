@@ -6,10 +6,9 @@
       '$routeProvider', 'routingProvider',
       function($routeProvider, routingProvider) {
         $routeProvider
-          .when(routingProvider.ngGenerateShort('manager_sitemap_list'), {
-            templateUrl: '/managerws/template/sitemap:list.' + appVersion + '.tpl',
-            controller: 'SitemapListCtrl',
-            reloadOnSearch: false
+          .when(routingProvider.ngGenerateShort('manager_sitemap_show'), {
+            templateUrl: '/managerws/template/sitemap:item.' + appVersion + '.tpl',
+            controller: 'SitemapCtrl'
           });
       }
     ]);

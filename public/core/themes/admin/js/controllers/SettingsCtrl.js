@@ -51,21 +51,19 @@
          *
          * @type {Object}
          */
-        $scope.default = {
-          sitemap: [{
+        $scope.sitemap = {
             perpage: 500,
             total: 100,
             album: 0,
-            articles: 0,
-            events: 0,
-            images: 0,
+            article: 0,
+            event: 0,
+            photo: 0,
             kiosko: 0,
-            letters: 0,
-            opinions: 0,
-            polls: 0,
-            tags: 0,
-            videos: 0
-              }]
+            letter: 0,
+            opinion: 0,
+            poll: 0,
+            tag: 0,
+            video: 0
         };
 
         /**
@@ -615,9 +613,11 @@
 
         // Update sitemap values from default
         $scope.$watch('settings.sitemap', function(nv, ov) {
-          if (typeof nv !== 'undefined' && typeof ov === 'undefined') {
-              $scope.settings.sitemap = angular.merge($scope.default.sitemap[0], $scope.settings.sitemap);
+          if (!nv || ov) {
+            return;
           }
+
+          $scope.settings.sitemap = angular.merge($scope.sitemap, $scope.settings.sitemap);
         }, true);
       }
     ]);

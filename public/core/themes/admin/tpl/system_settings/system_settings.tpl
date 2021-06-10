@@ -1565,7 +1565,6 @@
                 </div>
               </div>
             </uib-tab>
-            </uib-tab>
             {if $app.security->hasPermission('MASTER')}
               <uib-tab>
                 <uib-tab-heading>
@@ -1600,11 +1599,11 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <label class="form-label" for="sitemap-total">
-                              {t}Total items{/t}
-                              <span class="help ">
+                              {t}Total sitemap news elements{/t}
+                            </label>
+                                                          <span class="help ">
                                 (min. 100, máx. 1000)
                               </span>
-                            </label>
                             <div class="controls">
                               <input class="form-control" id="sitemap-total" name="sitemap-total" ng-model="settings.sitemap.total" type="number" min="100" max="1000">
                             </div>
@@ -1614,7 +1613,7 @@
                       <div class="col-md-6">
                       <h4>
                         <i class="fa fa-eye"></i>
-                        Sitemap {t}Activated{/t}
+                        {t}Sitemaps enabled{/t}
                       </h4>
                       <div class="form-group">
                         <span class="help">
@@ -1626,63 +1625,63 @@
                             <div class="checkbox form-group">
                               <input class="form-control" id="sitemap-album" name="sitemap-album" ng-false-value="0" ng-model="settings.sitemap.album" ng-true-value="1"  type="checkbox"/>
                               <label class="form-label" for="sitemap-album">
-                                Sitemap {t}Albums{/t}
+                                {t}Albums{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-articles" name="sitemap-articles" ng-false-value="0" ng-model="settings.sitemap.articles" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-articles">
-                                Sitemap {t}Articles{/t}
+                              <input class="form-control" id="sitemap-article" name="sitemap-article" ng-false-value="0" ng-model="settings.sitemap.article" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-article">
+                                {t}Articles{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-events" name="sitemap-events" ng-false-value="0" ng-model="settings.sitemap.events" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-events">
-                                Sitemap {t}Events{/t}
+                              <input class="form-control" id="sitemap-event" name="sitemap-event" ng-false-value="0" ng-model="settings.sitemap.event" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-event">
+                                {t}Events{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-images" name="sitemap-images" ng-false-value="0" ng-model="settings.sitemap.images" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-images">
-                                Sitemap {t}Images{/t}
+                              <input class="form-control" id="sitemap-photo" name="sitemap-photo" ng-false-value="0" ng-model="settings.sitemap.photo" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-photo">
+                                {t}Images{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
                               <input class="form-control" id="sitemap-kiosko" name="sitemap-kiosko" ng-false-value="0" ng-model="settings.sitemap.kiosko" ng-true-value="1"  type="checkbox"/>
                               <label class="form-label" for="sitemap-kiosko">
-                                Sitemap {t}Newsstand{/t}
+                                {t}Newsstand{/t}
                               </label>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-letters" name="sitemap-letters" ng-false-value="0" ng-model="settings.sitemap.letters" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-letters">
-                                Sitemap {t}Letter to the editor{/t}
+                              <input class="form-control" id="sitemap-letter" name="sitemap-letter" ng-false-value="0" ng-model="settings.sitemap.letter" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-letter">
+                                {t}Letter to the editor{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-opinions" name="sitemap-opinions" ng-false-value="0" ng-model="settings.sitemap.opinions" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-opinions">
-                                Sitemap {t}Opinions{/t}
+                              <input class="form-control" id="sitemap-opinion" name="sitemap-opinion" ng-false-value="0" ng-model="settings.sitemap.opinion" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-opinion">
+                                {t}Opinions{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-polls" name="sitemap-polls" ng-false-value="0" ng-model="settings.sitemap.polls" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-polls">
-                                Sitemap {t}Polls{/t}
+                              <input class="form-control" id="sitemap-poll" name="sitemap-poll" ng-false-value="0" ng-model="settings.sitemap.poll" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-poll">
+                                {t}Polls{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-tags" name="sitemap-tags" ng-false-value="0" ng-model="settings.sitemap.tags" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-tags">
-                                Sitemap {t}Tags{/t}
+                              <input class="form-control" id="sitemap-tag" name="sitemap-tag" ng-false-value="0" ng-model="settings.sitemap.tag" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-tag">
+                                {t}Tags{/t}
                               </label>
                             </div>
                             <div class="checkbox form-group">
-                              <input class="form-control" id="sitemap-videos" name="sitemap-videos" ng-false-value="0" ng-model="settings.sitemap.videos" ng-true-value="1"  type="checkbox"/>
-                              <label class="form-label" for="sitemap-videos">
-                                Sitemap {t}Videos{/t}
+                              <input class="form-control" id="sitemap-video" name="sitemap-video" ng-false-value="0" ng-model="settings.sitemap.video" ng-true-value="1"  type="checkbox"/>
+                              <label class="form-label" for="sitemap-video">
+                                {t}Videos{/t}
                               </label>
                             </div>
                           </div>

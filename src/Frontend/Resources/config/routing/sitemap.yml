@@ -10,6 +10,12 @@ frontend_categories_sitemap:
     requirements:
         format: 'xml|xml.gz'
 
+frontend_authors_sitemap:
+    path: /sitemap.authors.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:authors, format: 'xml' }
+    requirements:
+        format: 'xml|xml.gz'
+
 frontend_news_sitemap:
     path: /sitemap.news.{format}
     defaults: { _controller: FrontendBundle:Sitemap:news, format: 'xml'}
@@ -21,7 +27,7 @@ frontend_action_page_sitemap:
     defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', page: 1 }
     requirements:
         format: 'xml|xml.gz'
-        action: 'image|video|article|opinion|album|letter|poll|kiosko|event'
+        action: 'photo|video|article|opinion|album|letter|poll|kiosko|event'
         page: '[1-9][0-9]*'
         year: '[0-9]{4}'
         month: '[0-9]{2}'
