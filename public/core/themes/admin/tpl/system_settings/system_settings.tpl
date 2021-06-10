@@ -1690,7 +1690,6 @@
                   </div>
                 </div>
               </uib-tab>
-
               <uib-tab>
                 <uib-tab-heading>
                   <i class="fa fa-rebel m-r-5"></i>

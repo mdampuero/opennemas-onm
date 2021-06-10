@@ -309,9 +309,10 @@
           http.get('api_v1_backend_settings_list').then(function(response) {
             $scope.instance = response.data.instance;
             $scope.extra    = response.data.extra;
-            $scope.settings = angular.merge($scope.settings,
-              response.data.settings);
+            $scope.settings = angular.merge($scope.settings, response.data.settings);
+
             $scope.pre();
+
             $scope.loading = false;
           }, function() {
             $scope.loading = false;

@@ -10,9 +10,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetListException;
-use Article;
 use Common\Core\Controller\Controller;
-use phpDocumentor\Reflection\Types\Object_;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,14 +24,14 @@ class SitemapController extends Controller
      * @const array
      */
     const EXPIRE = [
-        'categories'   => '1h',
-        'authors'      => '1d',
-        'contents'     => '1h',
-        'index'        => '1d',
-        'news'         => '1h',
-        'subindex'     => '1d',
-        'tag'          => '1d',
-        'tagIndex'     => '1d',
+        'categories' => '1h',
+        'authors'    => '1d',
+        'contents'   => '1h',
+        'index'      => '1d',
+        'news'       => '1h',
+        'subindex'   => '1d',
+        'tag'        => '1d',
+        'tagIndex'   => '1d',
     ];
 
     /**
@@ -235,7 +233,6 @@ class SitemapController extends Controller
 
                 $contents[$type] = $pages;
             }
-
 
             return $this->getResponse($format, $cacheId, 'subindex', $contents, null, $year, $month);
         }

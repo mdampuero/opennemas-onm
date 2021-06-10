@@ -2,7 +2,6 @@
   'use strict';
 
   angular.module('ManagerApp.controllers')
-
     /**
      * @ngdoc controller
      * @name SitemapCtrl
