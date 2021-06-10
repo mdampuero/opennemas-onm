@@ -516,6 +516,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $result['params']['bodyLink'] = 'https://lorem.ipsum';
         $result['content_type_name']  = 'photo';
         $result['path']               = '/flob/importers/block/name.php';
+        $result['fk_content_type']    = 8;
 
         $this->assertEquals($result, $method->invokeArgs($this->importer, [ $resource, $data ]));
     }

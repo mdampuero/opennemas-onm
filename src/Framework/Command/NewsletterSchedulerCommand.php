@@ -134,7 +134,7 @@ class NewsletterSchedulerCommand extends Command
                 ), 50, '.'));
 
                 try {
-                    $output->write(str_pad(' - Newsletter send and registered ', 50, '.'));
+                    $output->write(str_pad(' - Newsletter sent and registered ', 50, '.'));
 
                     if ($this->canWeSendTemplate($template, $time)) {
                         $this->sendScheduledTemplate($template, $output, $time);

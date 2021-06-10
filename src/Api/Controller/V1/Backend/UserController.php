@@ -84,6 +84,7 @@ class UserController extends ApiController
         return [
             'client'      => $this->getClient(),
             'countries'   => $this->get('core.geo')->getCountries(),
+            'provinces'   => $this->get('core.geo')->getRegions('ES'),
             'languages'   => $languages,
             'photos'      => $this->getPhotos($items),
             'taxes'       => $this->get('vat')->getTaxes(),

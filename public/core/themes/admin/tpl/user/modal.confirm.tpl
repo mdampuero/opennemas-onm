@@ -6,7 +6,7 @@
     <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
     <p class="text-center">{t}Activate users has a cost of 12€ user/month.{/t} {t escape=off}If you have questions please have a look to our help article and/or contact us at <a href="mailto:sales@openhost.es">sales@openhost.es</a>{/t}</p>
     <div ng-if="template.step != 2">
-      <div ng-init="countries = template.extra.countries; taxes = template.extra.taxes">
+      <div ng-init="countries = template.extra.countries;provinces = template.extra.provinces;taxes = template.extra.taxes">
         <p class="text-center">{t}Please, fill billing information below, we will send you an invoice for all activated users at the end of the month.{/t}</p>
         {include file="client/form.tpl" modal="true"}
       </div>

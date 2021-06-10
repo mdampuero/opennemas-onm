@@ -52,7 +52,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
 
         $this->photoHelper = $this->getMockBuilder('Common\Core\Component\Helper\PhotoHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getPhotoPath' ])
+            ->setMethods([ 'getPhotoPath', 'hasPhotoPath' ])
             ->getMock();
 
         $this->videoHelper = $this->getMockBuilder('Common\Core\Component\Helper\VideoHelper')
@@ -311,63 +311,9 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
 
-        $this->photoHelper->expects($this->once())->method('getPhotoPath')
-            ->with($photo, null, [], true)
-            ->willReturn('http://route/to/file.name');
-
-        $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
-            . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
-            . "<meta name=\"twitter:description\" content=\"This is the summary\">\n"
-            . "<meta name=\"twitter:site\" content=\"@twtuser\">\n"
-            . "<meta name=\"twitter:domain\" content=\"http://route/to/content.html\">\n"
-            . "<meta name=\"twitter:image\" content=\"http://route/to/file.name\">";
-
-        $this->assertEquals(
-            $output,
-            smarty_function_meta_twitter_cards(null, $this->smarty)
-        );
-    }
-
-    /**
-     * Test smarty_function_meta_twitter_cards when content and video
-     */
-    public function testMetaTwitterWhenContentAndVideo()
-    {
-        $content          = new \Content();
-        $content->title   = 'This is the title';
-        $content->summary = 'This is the summary';
-        $content->body    = 'This is the body';
-
-        $this->ds->expects($this->at(0))
-            ->method('get')
-            ->with('twitter_page')
-            ->willReturn('https://twitter.com/twtuser');
-
-        $this->smarty->expects($this->at(1))->method('getValue')
-            ->with('content')
-            ->willReturn($content);
-
-        $this->ds->expects($this->at(1))->method('get')->with('site_title')
-            ->willReturn('Site title');
-        $this->ds->expects($this->at(2))->method('get')->with('site_description')
-            ->willReturn('Site description');
-
-        // Video object
-        $video                    = new \Content();
-        $video->width             = 600;
-        $video->height            = 400;
-        $video->content_type_name = 'video';
-
-        // Photo object
-        $photo      = new \Content();
-        $photo->url = 'http://route/to/file.name';
-
-        $this->helper->expects($this->once())->method('getMedia')
-            ->willReturn($video);
-
-        $this->videoHelper->expects($this->once())->method('getVideoThumbnail')
-            ->with($video)
-            ->willReturn($photo);
+        $this->photoHelper->expects($this->once())->method('hasPhotoPath')
+            ->with($photo)
+            ->willReturn(true);
 
         $this->photoHelper->expects($this->once())->method('getPhotoPath')
             ->with($photo, null, [], true)
