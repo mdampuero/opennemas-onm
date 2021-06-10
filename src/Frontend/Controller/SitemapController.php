@@ -267,6 +267,16 @@ class SitemapController extends Controller
                 'content_type_name' => [[ 'value' => $action ]],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
                 'changed'         => [
                     [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
                 ]
