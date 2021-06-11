@@ -242,7 +242,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
     {
         $result = '/asset/thumbnail,480,270/path/test/photo.jpg 480w,' .
             ' /asset/thumbnail,768,432/path/test/photo.jpg 768w,' .
-            ' /asset/thumbnail,992,558/path/test/photo.jpg';
+            ' /asset/thumbnail,992,558/path/test/photo.jpg 992w';
 
         $photo = new Content(
             [

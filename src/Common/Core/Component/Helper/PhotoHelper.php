@@ -186,7 +186,7 @@ class PhotoHelper
             $photo,
             $transform,
             [$last['width'], $last['height'], 'center', 'center']
-        );
+        ) . ' ' . $last['width'] . 'w';
     }
 
     /**
