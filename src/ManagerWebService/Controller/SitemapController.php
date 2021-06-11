@@ -58,15 +58,21 @@ class SitemapController extends Controller
 
         if ($settings['sitemap']['perpage'] < 500 || $settings['sitemap']['perpage'] > 1000) {
             $msg->add(_('Items per page must be between 500 and 1000'), 'error');
-        } elseif ($settings['sitemap']['total'] < 100 || $settings['sitemap']['total'] > 1000) {
-            $msg->add(_('Items total must be between 500 and 1000'), 'error');
-        } else {
-            getService('orm.manager')
-                ->getDataSet('Settings', 'manager')
-                ->set($settings);
 
-            $msg->add(_('Sitemap saved successfully'), 'success');
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
+
+        if ($settings['sitemap']['total'] < 100 || $settings['sitemap']['total'] > 1000) {
+            $msg->add(_('Items total must be between 500 and 1000'), 'error');
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        $this->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->set($settings);
+
+        $msg->add(_('Sitemap saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }

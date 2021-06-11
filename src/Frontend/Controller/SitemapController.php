@@ -62,7 +62,7 @@ class SitemapController extends Controller
         'categories' => 'sitemap/categories.tpl',
         'authors'    => 'sitemap/authors.tpl',
         'contents'   => 'sitemap/content.tpl',
-        'news'       => 'sitemap/content.tpl',
+        'news'       => 'sitemap/news.tpl',
         'subindex'   => 'sitemap/subindex.tpl',
         'tag'        => 'sitemap/tag.tpl',
         'tagIndex'   => 'sitemap/subindex.tpl'
@@ -124,7 +124,7 @@ class SitemapController extends Controller
      */
     public function categoriesAction($format)
     {
-        $cacheId = $this->view->getCacheId('sitemap', 'categories');
+        $cacheId    = $this->view->getCacheId('sitemap', 'categories');
         $categories = [];
 
         if (!$this->isCached('categories', $cacheId)) {
@@ -299,7 +299,7 @@ class SitemapController extends Controller
      */
     public function tagIndexAction($letter, $format)
     {
-        $cacheId  = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
+        $cacheId = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
 
         if (!$this->isCached('tagIndex', $cacheId)) {
             $settings = $this->getSettings();
@@ -446,7 +446,7 @@ class SitemapController extends Controller
      *
      * @param string $action The action to check.
      *
-     * @return string The cache id in the cas
+     * @return string True if the content is cached false otherwise.
      */
     protected function isCached($action, $cacheId)
     {

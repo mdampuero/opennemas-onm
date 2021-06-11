@@ -15,8 +15,8 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-success text-uppercase" ng-click="save();">
-              <i class="fa fa-save m-r-5"></i>
+            <a class="btn btn-loading btn-success text-uppercase" ng-click="save();">
+              <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i>
               {t}Save{/t}
             </a>
           </li>
