@@ -87,26 +87,23 @@ class SitemapController extends Controller
             if ($this->get('core.security')->hasExtension('TAG_MANAGER') && $settings['tag']) {
                 $letters = $this->get('orm.connection.instance')
                     ->fetchAll(
-                        'SELECT DISTINCT SUBSTRING(`slug`, 1, 1) as "letter"' .
+                        'SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as "letter"' .
                         'FROM `tags` WHERE `slug` IS NOT NULL'
                     );
             }
 
             $result = $this->get('orm.connection.instance')->fetchAll(
-                'SELECT DISTINCT DATE_FORMAT(`changed`, "%Y-%m") as `dates`
-                FROM `contents` ORDER BY `dates` ASC'
+                'SELECT CONVERT(year(changed), NCHAR) as yy, LPAD(month(changed),2,"0")'
+                . 'as mm FROM `contents` group by yy,mm order by yy, mm'
             );
-
             foreach ($result as $value) {
-                if (empty($value['dates'])) {
+                if (empty($value['yy']) || empty($value['mm'])) {
                     continue;
                 }
 
-                $aux = explode('-', $value['dates']);
-
-                $contents[$aux[0]][$aux[1]] = $value['dates'] === date("Y-m")
-                    ? date('Y-m-d H:i:s')
-                    : date('Y-m-t 23:59:59', strtotime($aux[0] . '-' . $aux[1]));
+                $contents[$value['yy']][$value['mm']] = ($value['yy'] === date("Y") && $value['mm'] === date("m"))
+                ? date('Y-m-d H:i:s')
+                : date('Y-m-t 23:59:59', strtotime($value['yy'] . '-' . $value['mm']));
             }
 
             return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
@@ -299,6 +296,8 @@ class SitemapController extends Controller
      */
     public function tagIndexAction($letter, $format)
     {
+        $letter = substr(html_entity_decode($letter), 0, 1);
+
         $cacheId = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
 
         if (!$this->isCached('tagIndex', $cacheId)) {
@@ -334,6 +333,8 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $page, $format)
     {
+        $letter = substr(html_entity_decode($letter), 0, 1);
+
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter, $page);
         $tags    = [];
 
