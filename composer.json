@@ -38,7 +38,8 @@
             "src/Common/Core/Functions/photo.php",
             "src/Common/Core/Functions/setting.php",
             "src/Common/Core/Functions/related.php",
-            "src/Common/Core/Functions/video.php"
+            "src/Common/Core/Functions/video.php",
+            "src/Common/Core/Functions/setting.php"
         ]
     },
     "autoload-dev": {

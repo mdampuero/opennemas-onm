@@ -37,13 +37,17 @@ class SettingHelper
      */
     public function getLogo($format = 'default') : ?object
     {
-        if (!$this->logoEnabled()) {
+        if (!$this->isLogoEnabled()) {
             return null;
         }
 
         $format = 'logo_' . $format;
 
         $logo = $this->ds->get($format);
+
+        if (empty($logo)) {
+            return null;
+        }
 
         return $this->container
             ->get('core.helper.content')
@@ -68,8 +72,8 @@ class SettingHelper
      * @return bool True if the logo for the provided format is enabled. False
      *              otherwise.
      */
-    protected function logoEnabled() : bool
+    protected function isLogoEnabled() : bool
     {
-        return $this->ds->get('logo_enabled') ?? false;
+        return boolval($this->ds->get('logo_enabled'));
     }
 }

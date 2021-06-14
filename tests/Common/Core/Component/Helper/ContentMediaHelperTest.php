@@ -53,6 +53,16 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
+        $this->ph = $this->getMockBuilder('PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath', 'getPhotoWidth', 'getPhotoHeight' ])
+            ->getMock();
+
+        $this->sh = $this->getMockBuilder('SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getLogo', 'hasLogo' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('getParameter')
             ->with('core.paths.public')->willReturn('/gorp/qux');
 
@@ -79,6 +89,12 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.featured_media':
                 return $this->featuredHelper;
+
+            case 'core.helper.photo':
+                return $this->ph;
+
+            case 'core.helper.setting':
+                return $this->sh;
 
             case 'core.helper.image':
                 return $this->imageHelper;
@@ -305,54 +321,42 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getMedia when logo.
+     * Tests getMediaFromLogo.
      */
     public function testGetMediaWhenLogo()
     {
-        $logo = new Content([
-            'path'              => 'sections/image.jpg',
-            'width'             => 1920,
-            'height'            => 1080,
-            'content_type_name' => 'photo',
-            'content_status'    => 1,
-            'in_litter'         => 0
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'article',
         ]);
 
-        $this->ds->expects($this->at(0))->method('get')
-            ->with('logo_enabled')
-            ->willReturn(true);
+        $media = new Content(
+            [
+                'pk_content'        => 2,
+                'content_type_name' => 'photo',
+                'path'   => '/media/frog/sections/sn_default_img.jpg',
+                'width'             => 1920,
+                'height'            => 1080
+            ]
+        );
 
-        $this->ds->expects($this->at(1))->method('get')
-            ->with('sn_default_img')
-            ->willReturn('image.jpg');
+        $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
+            ->with($content)
+            ->willReturn(false);
 
-        $this->imageHelper->expects($this->at(0))->method('getInformation')
-            ->willReturn([ 'width' => 1920, 'height' => 1080 ]);
+        $this->sh->expects($this->once())->method('hasLogo')
+            ->with('embed')
+            ->willReturn($media);
+
+        $this->sh->expects($this->once())->method('getLogo')
+            ->with('embed')
+            ->willReturn($media);
 
         $this->contentHelper->expects($this->once())->method('getContent')
-            ->with($logo)
-            ->willReturn($logo);
+            ->with($media)
+            ->willReturn($media);
 
-        $this->assertEquals($logo, $this->helper->getMedia(null));
-
-        $this->ds->expects($this->at(0))->method('get')
-            ->with('logo_enabled')
-            ->willReturn(true);
-
-        $this->assertEquals(null, $this->helper->getMedia($logo));
-
-        $this->ds->expects($this->at(0))->method('get')
-            ->with('logo_enabled')
-            ->willReturn(true);
-
-        $this->ds->expects($this->at(1))->method('get')
-            ->with('sn_default_img')
-            ->willReturn('image.jpg');
-
-        $this->imageHelper->expects($this->at(0))->method('getInformation')
-            ->will($this->throwException(new \Exception()));
-
-        $this->helper->getMedia($logo);
+        $this->assertEquals($media, $this->helper->getMedia($content));
     }
 
     /**

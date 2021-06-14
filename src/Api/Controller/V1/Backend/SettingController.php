@@ -59,8 +59,8 @@ class SettingController extends Controller
         'facebook',
         'facebook_id',
         'facebook_page',
-        'favico',
-        'sn_default_img',
+        'logo_favico',
+        'logo_embed',
         'google_analytics',
         'google_analytics_others',
         'google_custom_search_api_key',
@@ -79,7 +79,7 @@ class SettingController extends Controller
         'locale',
         'logo_enabled',
         'max_session_lifetime',
-        'mobile_logo',
+        'logo_simple',
         'ojd',
         'onm_digest_pass',
         'onm_digest_user',
@@ -96,7 +96,7 @@ class SettingController extends Controller
         'site_description',
         'site_footer',
         'site_keywords',
-        'site_logo',
+        'logo_default',
         'site_name',
         'site_title',
         'theme_skin',
@@ -180,7 +180,8 @@ class SettingController extends Controller
 
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
-            'logo_enabled', 'refresh_interval'
+            'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
+            'logo_favico', 'logo_embed'
         ];
 
         foreach ($toint as $key) {
@@ -203,7 +204,7 @@ class SettingController extends Controller
                 ],
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
-                    . '/sections/',
+                    . '/',
                 'translation_services' =>
                     $this->get('core.factory.translator')->getTranslatorsData(),
                 'theme_skins' => $this->get('core.theme')->getSkins(),
@@ -227,7 +228,6 @@ class SettingController extends Controller
     {
         $defaults = array_fill_keys($this->keys, null);
         $country  = $request->get('instance');
-        $files    = $request->files->get('settings');
         $settings = $request->get('settings');
         $msg      = $this->get('core.messenger');
 
@@ -236,11 +236,7 @@ class SettingController extends Controller
         $instance->merge($country);
         $this->get('orm.manager')->persist($instance);
 
-        // Save files
-        if (!empty($files)) {
-            $settings = array_merge($settings, $this->saveFiles($files));
-        }
-
+        $settings = array_merge($settings, $this->saveFiles($settings));
         $settings = array_merge($defaults, $settings);
 
         // Remove settings for only masters
@@ -316,24 +312,16 @@ class SettingController extends Controller
      *
      * @return array The list of filenames.
      */
-    protected function saveFiles($files)
+    protected function saveFiles($logos)
     {
         $msg      = $this->get('core.messenger');
         $settings = [];
 
-        $dir = $this->getParameter('core.paths.public')
-            . $this->get('core.instance')->getMediaShortPath()
-            . '/sections/';
+        foreach ($logos as $key => $id) {
+            if ($key == 'logo_favico' || $key == 'logo_default' || $key == 'logo_simple') {
+                $logo   = $this->container->get('core.helper.content')->getContent($id, 'photo');
+                $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
 
-        // Check if upload directory is already created
-        if (!is_dir($dir)) {
-            \Onm\FilesManager::createDirectory($dir);
-        }
-
-        foreach ($files as $key => $file) {
-            list($width, $height) = getimagesize($file);
-
-            if ($key != 'sn_default_img') {
                 if ($height > 120) {
                     $msg->add(
                         sprintf(
@@ -343,9 +331,14 @@ class SettingController extends Controller
                         'error',
                         400
                     );
+                    $settings[$key] = get_logo($key)->pk_content ?? null;
                     continue;
                 }
-            } else {
+            } elseif ($key == 'logo_embed') {
+                $logo   = $this->container->get('core.helper.content')->getContent($id, 'photo');
+                $width  = $this->container->get('core.helper.photo')->getPhotoWidth($logo);
+                $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
+
                 if ($width < 200 || $height < 200) {
                     $msg->add(
                         sprintf(
@@ -355,17 +348,11 @@ class SettingController extends Controller
                         'error',
                         400
                     );
+                    $settings[$key] = get_logo($key)->pk_content ?? null;
                     continue;
                 }
             }
-
-            $name = $file->getClientOriginalName();
-
-            $file->move($dir, $name);
-
-            $settings[$key] = $name;
         }
-
         return $settings;
     }
 
