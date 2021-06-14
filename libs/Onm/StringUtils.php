@@ -471,7 +471,6 @@ class StringUtils
         'para',
         'pero',
         'por',
-        'que',
         'salvo',
         'se',
         'segun',

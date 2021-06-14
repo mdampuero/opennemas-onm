@@ -411,14 +411,14 @@ contents:
             type: integer
             options: { unsigned: true, default: 0, notnull: false }
         fk_author:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         fk_publisher:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         fk_user_last_editor:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null, notnull: false }
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
         position:
             type: integer
             options: { default: 100, notnull: false, unsigned: true }
@@ -493,6 +493,18 @@ contents:
             unique: false
             flags: {  }
         -
+            name: fk_publisher
+            columns: [fk_publisher]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_user_last_editor
+            columns: [fk_user_last_editor]
+            primary: false
+            unique: false
+            flags: {  }
+        -
             name: available
             columns: [available]
             primary: false
@@ -524,6 +536,25 @@ contents:
             name: content_type_name
             columns: [content_type_name]
             unique: false
+    foreign_keys:
+        -
+            name: fk_author_users_id
+            source_field: [ fk_author ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: fk_publisher_users_id
+            source_field: [ fk_publisher ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: fk_user_last_editor_users_id
+            source_field: [ fk_user_last_editor ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
 
 content_category:
     columns:

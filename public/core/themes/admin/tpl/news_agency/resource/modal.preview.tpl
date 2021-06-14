@@ -67,7 +67,7 @@
             </li>
           </ul>
           <div class="content-related-photo">
-            <img class="img-thumbnail" ng-repeat="id in template.item.related" ng-if="template.related[id].type === 'photo'" ng-src="[% routing.generate(template.routes.getContent, { id: id }) %]" />
+            <img class="img-thumbnail" ng-repeat="id in template.item.related track by $index" ng-if="template.related[id].type === 'photo'" ng-src="[% routing.generate(template.routes.getContent, { id: id }) %]" />
           </div>
         </div>
       </div>

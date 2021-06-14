@@ -32,5 +32,5 @@ function smarty_function_renderMetaKeywords($params, &$smarty)
         return implode(',', $tags);
     }
 
-    return '<meta name="keywords" content="' . implode(',', $tags) . '" />';
+    return '<meta name="keywords" content="' . html_attribute(implode(',', $tags)) . '" />';
 }

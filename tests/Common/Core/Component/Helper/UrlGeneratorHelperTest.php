@@ -34,6 +34,10 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'filter', 'get', 'set' ])
             ->getMock();
 
+        $this->globals = $this->getMockBuilder('GlobalVariables')
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage' ])
             ->getMock();
@@ -61,6 +65,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->fm);
         $this->fm->expects($this->any())->method('filter')
             ->willReturn($this->fm);
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -90,6 +97,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'user_repository':
                 return $this->um;
+
+            case 'core.globals':
+                return $this->globals;
 
             case 'core.instance':
                 return $this->instance;

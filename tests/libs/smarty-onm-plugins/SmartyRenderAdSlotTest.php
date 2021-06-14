@@ -43,7 +43,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
-            ->setMethods([ 'render', 'getInlineFormats', 'getAdvertisement', 'getPositions' ])
+            ->setMethods([ 'render', 'getInlineFormats', 'getAdvertisement', 'getPositions', 'getSlotSizeStyle' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')

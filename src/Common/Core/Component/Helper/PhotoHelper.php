@@ -72,7 +72,7 @@ class PhotoHelper
             return $item;
         }
 
-        $item = $this->contentHelper->getContent($item);
+        $item = $this->contentHelper->getContent($item, 'Photo');
 
         if (empty($item)) {
             return null;
@@ -108,7 +108,10 @@ class PhotoHelper
      */
     public function getPhotoSize($item = null) : ?string
     {
-        $value = $this->contentHelper->getProperty($this->contentHelper->getContent($item), 'size');
+        $value = $this->contentHelper->getProperty(
+            $this->contentHelper->getContent($item, 'Photo'),
+            'size'
+        );
 
         return !empty($value) ? $value : null;
     }
@@ -122,7 +125,10 @@ class PhotoHelper
      */
     public function getPhotoWidth($item = null) : ?string
     {
-        $value = $this->contentHelper->getProperty($this->contentHelper->getContent($item), 'width');
+        $value = $this->contentHelper->getProperty(
+            $this->contentHelper->getContent($item, 'Photo'),
+            'width'
+        );
 
         return !empty($value) ? $value : null;
     }
@@ -136,7 +142,10 @@ class PhotoHelper
      */
     public function getPhotoHeight($item = null) : ?string
     {
-        $value = $this->contentHelper->getProperty($this->contentHelper->getContent($item), 'height');
+        $value = $this->contentHelper->getProperty(
+            $this->contentHelper->getContent($item, 'Photo'),
+            'height'
+        );
 
         return !empty($value) ? $value : null;
     }
@@ -150,7 +159,7 @@ class PhotoHelper
      */
     public function getPhotoMimeType($item = null) : ?string
     {
-        $path = $this->getPhotoPath($this->contentHelper->getContent($item));
+        $path = $this->getPhotoPath($this->contentHelper->getContent($item, 'Photo'));
 
         if (!preg_match('/^http?.*/', $path)) {
             $path = $this->instance->getBaseUrl() . $path;

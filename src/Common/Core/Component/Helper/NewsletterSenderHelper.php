@@ -33,11 +33,11 @@ class NewsletterSenderHelper
     protected $errorLog;
 
     /**
-     * The instance service.
+     * The service container.
      *
-     * @var Instance
+     * @var ServiceContainer
      */
-    protected $instance;
+    protected $container;
 
     /**
      * The mailer service.
@@ -71,24 +71,22 @@ class NewsletterSenderHelper
         $settingsRepository,
         $errorLog,
         $appLog,
-        $instance,
+        $container,
         $mailer,
         $ss,
         $actOnFactory,
         $newsletterService,
         $noReplyAddress
     ) {
-        $this->ormManager           = $settingsRepository;
-        $this->appLog               = $appLog;
-        $this->errorLog             = $errorLog;
-        $this->noReplyAddress       = $noReplyAddress;
-        $this->instanceInternalName = $instance->internal_name;
-        $this->mailer               = $mailer;
-        $this->ss                   = $ss;
-        $this->actOnFactory         = $actOnFactory;
-        $this->ns                   = $newsletterService;
-        $this->newsletterConfigs    = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
-        $this->siteName             = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
+        $this->ormManager     = $settingsRepository;
+        $this->appLog         = $appLog;
+        $this->errorLog       = $errorLog;
+        $this->globals        = $container->get('core.globals');
+        $this->noReplyAddress = $noReplyAddress;
+        $this->mailer         = $mailer;
+        $this->ss             = $ss;
+        $this->actOnFactory   = $actOnFactory;
+        $this->ns             = $newsletterService;
     }
 
     /**
@@ -282,7 +280,10 @@ class NewsletterSenderHelper
      */
     private function sendEmail($newsletter, $mailbox)
     {
-        // Build the message
+        $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
+        $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
+
+        // Buildthe message
         $message = \Swift_Message::newInstance();
         $message
             ->setSubject($newsletter->title)
@@ -292,9 +293,10 @@ class NewsletterSenderHelper
             ->setTo([ $mailbox['email'] => $mailbox['name']]);
 
         $headers = $message->getHeaders();
+
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->instanceInternalName . ' - Newsletter'
+            $this->globals->getInstance()->internal_name . ' - Newsletter'
         );
 
         $this->appLog->notice(
@@ -366,7 +368,7 @@ class NewsletterSenderHelper
         $headers = $email->getHeaders();
         $headers->addParameterizedHeader(
             'ACUMBAMAIL-SMTPAPI',
-            $this->instanceInternalName . ' - Newsletter subscription'
+            $this->globals->getInstance()->internal_name . ' - Newsletter subscription'
         );
 
         try {

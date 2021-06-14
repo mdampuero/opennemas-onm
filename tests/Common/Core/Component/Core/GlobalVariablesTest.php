@@ -143,6 +143,14 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getRequest.
+     */
+    public function testGetRequest()
+    {
+        $this->assertEquals($this->request, $this->globals->getRequest());
+    }
+
+    /**
      * Tests getSection when category assigned to template.
      */
     public function testGetSectionWithCategory()
@@ -222,6 +230,15 @@ class GlobalVariablesTest extends \PHPUnit\Framework\TestCase
     {
         $this->globals->setAction('glork');
         $this->assertEquals('glork', $this->globals->getAction());
+    }
+
+    /**
+     * Tests get and set methods for device.
+     */
+    public function testSetAndGetDevice()
+    {
+        $this->globals->setDevice('fubar');
+        $this->assertEquals('fubar', $this->globals->getDevice());
     }
 
     /**

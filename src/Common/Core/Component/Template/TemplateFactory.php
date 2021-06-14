@@ -143,7 +143,7 @@ class TemplateFactory
     {
         $filters  = 'core.template.' . $name . '.filters';
         $uuid     = 'es.openhost.theme.' . $name;
-        $instance = $this->container->get('core.instance');
+        $instance = $this->container->get('core.globals')->getInstance();
 
         $filters = $this->container->hasParameter($filters)
             ? $this->container->getParameter($filters)

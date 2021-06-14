@@ -112,7 +112,7 @@ services:
             - '@orm.manager'
             - '@error.log'
             - '@application.log'
-            - '@core.instance'
+            - '@service_container'
             - '@mailer'
             - '@api.service.subscription'
             - '@external.act_on.factory'

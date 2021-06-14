@@ -299,8 +299,8 @@ class CategoryController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-
         $params['articles']   = $contents;
+        $params['total']      = $total;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'boundary'    => false,

@@ -185,7 +185,7 @@ class OpinionController extends FrontendController
         $params = array_merge($params, [
             'opinions'   => $response['items'],
             'pagination' => $pagination,
-            'page'       => $params['page']
+            'total'      => $response['total']
         ]);
 
         $this->view->assign($params);
@@ -246,6 +246,7 @@ class OpinionController extends FrontendController
         $this->view->assign([
             'pagination' => $pagination,
             'opinions'   => $response['items'],
+            'total'      => $response['total'],
             'author'     => $author,
             'page'       => $params['page'],
         ]);

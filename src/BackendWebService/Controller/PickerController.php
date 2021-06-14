@@ -74,28 +74,13 @@ class PickerController extends Controller
         }
 
         if (!empty($title)) {
-            $titleSql = "(description LIKE '%$title%' OR title LIKE '%$title%'";
-
-            $tagSearcheableWord = $this
-                ->get('data.manager.filter')
-                ->set($title)
-                ->filter('slug')
-                ->get();
-
-            if (!empty($tagSearcheableWord)) {
-                $titleSql .= ' OR EXISTS(SELECT 1 FROM tags' .
-                    ' INNER JOIN contents_tags ON contents_tags.tag_id = tags.id' .
-                    " WHERE contents_tags.content_id = contents.pk_content AND tags.slug LIKE '%$tagSearcheableWord%')";
-            }
-            $titleSql .= ')';
-            $filter[]  = $titleSql;
+            $titleSql = "(description LIKE '%$title%' OR title LIKE '%$title%')";
+            $filter[] = $titleSql;
         }
 
         if (!empty($category)) {
             $filter[] = "content_category.category_id = $category";
         }
-
-        $filter[] = "in_litter != 1";
 
         $em = $this->get('entity_repository');
 

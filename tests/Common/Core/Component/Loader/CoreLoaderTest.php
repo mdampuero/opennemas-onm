@@ -43,7 +43,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->dataset = $this->getMockBuilder('Opennemas\Orm\Database\DataSet\BaseDataSet')
             ->disableOriginalConstructor()
-            ->setMethods([ 'get' ])
+            ->setMethods([ 'get', 'init' ])
             ->getMock();
 
         $this->dbal = $this->getMockBuilder('Onm\Database\DbalWrapper')
@@ -58,7 +58,7 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
-            ->setMethods([ 'setInstance', 'setTheme' ])
+            ->setMethods([ 'setInstance', 'setTheme', 'getInstance' ])
             ->getMock();
 
         $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
@@ -176,6 +176,9 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
             'internal_name' => 'plugh',
             'settings'      => [ 'BD_DATABASE' => 'baz' ]
         ]);
+
+        $this->globals->expects($this->any())->method('getInstance')
+            ->willReturn($instance);
 
         $this->conn->expects($this->once())->method('selectDatabase')
             ->with('baz');

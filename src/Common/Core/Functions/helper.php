@@ -21,8 +21,8 @@ function get_url($item = null, array $params = []) : ?string
  */
 function get_image_dir($absolute = false) : ?string
 {
-    $instance = getService('core.instance');
-    $theme    = getService('core.theme');
+    $instance = getService('core.globals')->getInstance();
+    $theme    = getService('core.globals')->getTheme();
 
     if (empty($theme)) {
         return null;
@@ -33,6 +33,16 @@ function get_image_dir($absolute = false) : ?string
     }
 
     return '/' . trim($theme->path, '/') . '/images';
+}
+
+/**
+ * Returns the path to image folder for the active instance.
+ *
+ * @return string The path to image folder for the active instance.
+ */
+function get_instance_media() : ?string
+{
+    return getService('core.globals')->getInstance()->getMediaShortPath();
 }
 
 /**
@@ -81,7 +91,7 @@ function webpack()
 {
     $env     = getService('kernel')->getEnvironment();
     $request = getService('core.globals')->getRequest();
-    $host    = '/' . getService('core.globals')->getTheme()->path . '/dist';
+    $host    = '/' . trim(getService('core.globals')->getTheme()->path, '/') . '/dist';
 
     if ($env === 'dev') {
         $host = empty($request) ? '' : sprintf('%s:9000', str_replace(

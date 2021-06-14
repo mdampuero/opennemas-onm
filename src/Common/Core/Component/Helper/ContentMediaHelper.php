@@ -83,7 +83,13 @@ class ContentMediaHelper
      */
     public function getMedia($content)
     {
-        $media = $this->contentHelper->getContent($this->getMediaObject($content, 'inner'), 'photo');
+        $media = $this->getMediaObject($content, 'inner');
+
+        if (empty($media)) {
+            return null;
+        }
+
+        $media = $this->contentHelper->getContent($media, 'photo');
 
         if (is_object($media)) {
             $media->width  = $media->width ?? 700;
@@ -107,13 +113,19 @@ class ContentMediaHelper
             return $content;
         }
 
+        if ($this->contentHelper->getType($content) === 'kiosko') {
+            return $this->getMediaFromKiosko($content);
+        }
+
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
 
             return $this->getMediaObject($featuredMedia, 'frontpage');
         }
 
-        if ($this->authorHelper->hasAuthorAvatar($content)) {
+        if ($this->contentHelper->getType($content) === 'opinion'
+            && $this->authorHelper->hasAuthorAvatar($content)
+        ) {
             return $this->authorHelper->getAuthorAvatar($content);
         }
 
@@ -142,6 +154,38 @@ class ContentMediaHelper
 
                 return new Content([
                     'path'              => 'sections/' . $logo,
+                    'width'             => $information['width'],
+                    'height'            => $information['height'],
+                    'content_type_name' => 'photo',
+                    'content_status'    => 1,
+                    'in_litter'         => 0
+                ]);
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns default media object for content
+     *
+     * @param Content $content The content object.
+     *
+     * @return object  $mediaObject The media object.
+     */
+    protected function getMediaFromKiosko($content)
+    {
+        if (!empty($content->thumbnail)) {
+            $filepath = $this->container->getParameter('core.paths.public')
+                . $this->instance->getNewsstandShortPath() . '/' . $content->thumbnail;
+
+            try {
+                $information = $this->imageHelper->getInformation($filepath);
+
+                return new Content([
+                    'path'              => 'kiosko/' . $content->thumbnail,
                     'width'             => $information['width'],
                     'height'            => $information['height'],
                     'content_type_name' => 'photo',
