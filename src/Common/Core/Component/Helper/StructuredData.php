@@ -65,7 +65,6 @@ class StructuredData
 
         // Author and media information
         $data['author'] = $this->getAuthorData($data['content']);
-        $data           = array_merge($data, $this->getMediaData($data['content']));
 
         // Content keywords
         $data['keywords'] = empty($data['content']->tags) ? ''
@@ -179,27 +178,6 @@ class StructuredData
         }
 
         return $logo;
-    }
-
-    /**
-     * Method to retrieve the media information.
-     *
-     * @param \Content $content The content object.
-     *
-     * @return array Array with media information.
-     */
-    protected function getMediaData($content)
-    {
-        $mediaObject = $this->container->get('core.helper.content_media')
-            ->getMedia($content);
-
-        $media = [
-            'album' => $mediaObject->content_type_name === 'album' ? $mediaObject : null,
-            'image' => $mediaObject->content_type_name === 'photo' ? $mediaObject : null,
-            'video' => $mediaObject->content_type_name === 'video' ? $mediaObject : null,
-        ];
-
-        return $media;
     }
 
     /**

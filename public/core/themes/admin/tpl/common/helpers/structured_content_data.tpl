@@ -81,33 +81,30 @@
       },
       "url": "{$siteUrl}"
     }
-    {if !empty($image)}
+    {if get_type(get_featured_media($content, 'inner')) === 'photo'}
       , "image": {
           "@type": "ImageObject",
-          "url": "{get_photo_path($image, null, [], true)}",
-          "height": {$image->height},
-          "width": {$image->width}
+          "url": "{get_photo_path(get_featured_media($content, 'inner'), null, [], true)}",
+          "height": {get_photo_height(get_featured_media($content, 'inner'))},
+          "width": {get_photo_width(get_featured_media($content, 'inner'))}
         }
       },
-      {include file='./structured_image_data.tpl'}
-    {elseif !empty($video)}
+      {include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
+    {elseif get_type(get_featured_media($content, 'inner')) === 'video'}
       , "video": {
           "@type": "VideoObject",
-          "name": "{$video->title|escape:'html'}",
-          "description": "{$video->description|default:$video->title|escape:'html'}",
-          "uploadDate": "{format_date date=$video->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
-          "thumbnailUrl": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
-          "contentUrl": "{get_url item=$video absolute=true}"
+          "name": "{get_title(get_featured_media($content, 'inner'))|escape:'html'}",
+          "description": "{get_description(get_featured_media($content, 'inner'))|default:get_title(get_featured_media($content, 'inner'))|escape:'html'}",
+          "uploadDate": "{format_date date=get_publication_date(get_featured_media($content, 'inner')) format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+          "thumbnailUrl": "{get_photo_path(get_video_thumbnail(get_featured_media($content, 'inner')), '', [], true)}",
+          "contentUrl": "{get_url item=get_featured_media($content, 'inner') absolute=true}"
         }
       , "image": {
           "@type": "ImageObject",
-          "url": "{get_photo_path(get_video_thumbnail($video), '', [], true)}",
-          "height": {get_photo_height(get_video_thumbnail($video))|default:360},
-          "width": {get_photo_width(get_video_thumbnail($video))|default:480}
+          "url": "{get_photo_path(get_video_thumbnail(get_featured_media($content, 'inner')), '', [], true)}",
+          "height": {get_photo_height(get_video_thumbnail(get_featured_media($content, 'inner')))|default:360},
+          "width": {get_photo_width(get_video_thumbnail(get_featured_media($content, 'inner')))|default:480}
         }
-      },
-    {elseif !empty($album)}
-      , "image": {include file='./structured_image_data.tpl' image=get_featured_media($album, 'frontpage')}
       }
     {else}
       }

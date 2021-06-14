@@ -81,9 +81,9 @@ class ContentMediaHelper
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getMedia($content, $deep = false)
+    public function getMedia($content)
     {
-        $media = $this->contentHelper->getContent($this->getMediaObject($content, 'inner', $deep), 'photo');
+        $media = $this->contentHelper->getContent($this->getMediaObject($content, 'inner'), 'photo');
 
         if (is_object($media)) {
             $media->width  = $media->width ?? 700;
@@ -101,7 +101,7 @@ class ContentMediaHelper
      *
      * @return Content The media object for the specific content.
      */
-    protected function getMediaObject($content, $type, $deep)
+    protected function getMediaObject($content, $type)
     {
         if (!empty($content) && $content->content_type_name === 'photo') {
             return $content;
@@ -110,9 +110,7 @@ class ContentMediaHelper
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
 
-            return $deep
-                ? $this->getMediaObject($featuredMedia, 'frontpage', $deep)
-                : $featuredMedia;
+            return $this->getMediaObject($featuredMedia, 'frontpage');
         }
 
         if ($this->authorHelper->hasAuthorAvatar($content)) {
