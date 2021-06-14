@@ -29,13 +29,14 @@
         "files": [
             "libs/functions.php",
             "src/Common/Core/Functions/album.php",
+            "src/Common/Core/Functions/author.php",
             "src/Common/Core/Functions/category.php",
             "src/Common/Core/Functions/content.php",
             "src/Common/Core/Functions/featured.php",
             "src/Common/Core/Functions/helper.php",
             "src/Common/Core/Functions/pagination.php",
-            "src/Common/Core/Functions/author.php",
             "src/Common/Core/Functions/photo.php",
+            "src/Common/Core/Functions/setting.php",
             "src/Common/Core/Functions/related.php",
             "src/Common/Core/Functions/video.php"
         ]
