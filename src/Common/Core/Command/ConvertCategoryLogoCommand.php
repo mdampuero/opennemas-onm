@@ -113,6 +113,7 @@ class ConvertCategoryLogoCommand extends Command
 
                     if (file_exists($filePath) && empty($photoId)) {
                         $photo = $ps->createItem([
+                            'created'     => '2021-01-02 00:00:00',
                             'description' => $filename
                         ], new File($filePath), true);
 
