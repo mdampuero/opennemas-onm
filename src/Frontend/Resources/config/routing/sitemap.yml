@@ -40,17 +40,17 @@ frontend_subindex_sitemap:
         year: '[0-9]{4}'
         month: '[0-9]{2}'
 
-frontend_tag_page_sitemap:
-    path: /sitemap.tag.{letter}.{page}.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:tag, format: 'xml', page: 1 }
-    requirements:
-        format: 'xml|xml.gz'
-        letter: '.*'
-        page:   '[1-9][0-9]*'
-
 frontend_tag_sitemap:
     path: /sitemap.tag.{letter}.{format}
     defaults: { _controller: FrontendBundle:Sitemap:tagIndex, format: 'xml', letter: 'a' }
     requirements:
         format: 'xml|xml.gz'
-        letter: '.*'
+        letter: '.|%[a-zA-Z0-9]{2}'
+
+frontend_tag_page_sitemap:
+    path: /sitemap.tag.{letter}.{page}.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:tag, format: 'xml', page: 1 }
+    requirements:
+        format: 'xml|xml.gz'
+        letter: '.|%[a-zA-Z0-9]{2}'
+        page:   '[1-9][0-9]*'

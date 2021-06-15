@@ -92,10 +92,15 @@ class SitemapController extends Controller
                     );
             }
 
+            $letters = array_filter($letters, function ($a) {
+                return ctype_graph($a['letter']);
+            });
+
             $result = $this->get('orm.connection.instance')->fetchAll(
                 'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
                 . 'FROM `contents` WHERE year(changed) is not null group by dates order by dates'
             );
+
             foreach ($result as $value) {
                 if (empty($value['dates'])) {
                     continue;
@@ -298,7 +303,7 @@ class SitemapController extends Controller
      */
     public function tagIndexAction($letter, $format)
     {
-        $letter = substr(html_entity_decode($letter, ENT_XML1, 'UTF-8'), 0, 1);
+        $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
         $cacheId = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
 
@@ -306,7 +311,11 @@ class SitemapController extends Controller
             $settings = $this->getSettings();
 
             $sql = 'SELECT DISTINCT(slug) FROM tags WHERE slug LIKE "'
-                . $letter . '%" ORDER BY slug ASC';
+                . preg_replace(
+                    ['/"/', '/_/'],
+                    ['\"', '\\_'],
+                    $letter
+                ) . '%" ORDER BY slug ASC';
 
             $number = ceil(count($this->get('orm.connection.instance')->fetchAll($sql)) / $settings['perpage']);
 
@@ -335,7 +344,7 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $page, $format)
     {
-        $letter = substr(html_entity_decode($letter, ENT_XML1, 'UTF-8'), 0, 1);
+        $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter, $page);
         $tags    = [];
@@ -348,7 +357,11 @@ class SitemapController extends Controller
                     sprintf(
                         'SELECT * FROM tags WHERE slug LIKE "%s%%" ' .
                         'LIMIT %s OFFSET %s',
-                        $letter,
+                        preg_replace(
+                            ['/"/', '/_/'],
+                            ['\"', '\\_'],
+                            $letter
+                        ),
                         $settings['perpage'],
                         $settings['perpage'] * ($page - 1)
                     )
