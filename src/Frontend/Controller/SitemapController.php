@@ -24,14 +24,12 @@ class SitemapController extends Controller
      * @const array
      */
     const EXPIRE = [
-        'categories' => '1h',
+        'categories' => '1d',
         'authors'    => '1d',
         'contents'   => '1h',
         'index'      => '1d',
         'news'       => '1h',
-        'subindex'   => '1d',
-        'tag'        => '1d',
-        'tagIndex'   => '1d',
+        'tag'        => '1h',
     ];
 
     /**
@@ -63,9 +61,7 @@ class SitemapController extends Controller
         'authors'    => 'sitemap/authors.tpl',
         'contents'   => 'sitemap/content.tpl',
         'news'       => 'sitemap/news.tpl',
-        'subindex'   => 'sitemap/subindex.tpl',
-        'tag'        => 'sitemap/tag.tpl',
-        'tagIndex'   => 'sitemap/subindex.tpl'
+        'tag'        => 'sitemap/tag.tpl'
     ];
 
     /**
@@ -208,43 +204,6 @@ class SitemapController extends Controller
     }
 
     /**
-     * Returns the subindex sitemap.
-     *
-     * @param string $format The format to get the response.
-     *
-     * @return Response The subindex sitemap response.
-     */
-    public function subindexAction($year, $month, $format)
-    {
-        $cacheId = $this->view->getCacheId('sitemap', 'subindex', $year, $month);
-
-        if (!$this->isCached('subindex', $cacheId)) {
-            $settings = $this->getSettings();
-            $contents = [];
-
-            $filters = [
-                'content_status'    => [[ 'value' => 1 ]],
-                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-                'changed'         => [
-                    [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
-                ]
-            ];
-
-            foreach ($this->getTypes($settings, [ 'tag' ]) as $type) {
-                $contentFilter = [ 'content_type_name' => [[ 'value' => $type ]] ];
-                $filters       = array_merge($filters, $contentFilter);
-                $pages         = ceil($this->get('entity_repository')->countBy($filters) / $settings['perpage']);
-
-                $contents[$type] = $pages;
-            }
-
-            return $this->getResponse($format, $cacheId, 'subindex', $contents, null, $year, $month);
-        }
-
-        return $this->getResponse($format, $cacheId, 'subindex');
-    }
-
-    /**
      * Returns the content sitemap.
      *
      * @param integer $year   The year of the content.
@@ -255,9 +214,9 @@ class SitemapController extends Controller
      *
      * @return Response The sitemap for the contents.
      */
-    public function contentsAction($year, $month, $action, $page, $format)
+    public function contentsAction($year, $month, $format)
     {
-        $cacheId = $this->view->getCacheId('sitemap', $action, $year, $month, $page);
+        $cacheId = $this->view->getCacheId('sitemap', $year, $month);
 
         if (!$this->isCached('contents', $cacheId)) {
             $googleNews = $this->get('orm.manager')
@@ -268,7 +227,12 @@ class SitemapController extends Controller
             $settings = $this->getSettings();
 
             $filters = [
-                'content_type_name' => [[ 'value' => $action ]],
+                'content_type_name' => [
+                    [
+                        'value'    => $this->getTypes($settings, [ 'tag' ]),
+                        'operator' => 'IN'
+                    ]
+                ],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
                 'endtime'           => [
@@ -286,53 +250,12 @@ class SitemapController extends Controller
                 ]
             ];
 
-            $contents = $em->findBy($filters, ['created' => 'desc'], $settings['perpage'], $page);
+            $contents = $em->findBy($filters, ['created' => 'desc'], 50000);
 
             return $this->getResponse($format, $cacheId, 'contents', $contents, null, $year, $month, $googleNews);
         }
 
         return $this->getResponse($format, $cacheId, 'contents');
-    }
-
-    /**
-     * Generates the subindex for the tags basing on the letter.
-     *
-     * @param string $letter The first letter of the tags to search.
-     *
-     * @return Response the response object
-     */
-    public function tagIndexAction($letter, $format)
-    {
-        $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
-
-        $cacheId = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
-
-        if (!$this->isCached('tagIndex', $cacheId)) {
-            $settings = $this->getSettings();
-
-            $sql = 'SELECT DISTINCT(slug) FROM tags WHERE slug LIKE "'
-                . preg_replace(
-                    ['/"/', '/_/'],
-                    ['\"', '\\_'],
-                    $letter
-                ) . '%" ORDER BY slug ASC';
-
-            $number = ceil(count($this->get('orm.connection.instance')->fetchAll($sql)) / $settings['perpage']);
-
-            return $this->getResponse(
-                $format,
-                $cacheId,
-                'tagIndex',
-                [ 'tag' => $number ],
-                null,
-                null,
-                null,
-                null,
-                $letter
-            );
-        }
-
-        return $this->getResponse($format, $cacheId, 'tagIndex');
     }
 
     /**
@@ -342,28 +265,25 @@ class SitemapController extends Controller
      *
      * @return Response the sitemap with the tags of the current page.
      */
-    public function tagAction($letter, $page, $format)
+    public function tagAction($letter, $format)
     {
         $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
-        $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter, $page);
+        $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter);
         $tags    = [];
 
         if (!$this->isCached('tag', $cacheId)) {
-            $settings = $this->getSettings();
-
             try {
                 $tags = $this->get('api.service.tag')->getListBySql(
                     sprintf(
                         'SELECT * FROM tags WHERE slug LIKE "%s%%" ' .
-                        'LIMIT %s OFFSET %s',
+                        'LIMIT %s',
                         preg_replace(
                             ['/"/', '/_/'],
                             ['\"', '\\_'],
                             $letter
                         ),
-                        $settings['perpage'],
-                        $settings['perpage'] * ($page - 1)
+                        50000
                     )
                 )['items'];
             } catch (GetListException $e) {
