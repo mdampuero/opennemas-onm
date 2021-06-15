@@ -93,17 +93,19 @@ class SitemapController extends Controller
             }
 
             $result = $this->get('orm.connection.instance')->fetchAll(
-                'SELECT CONVERT(year(changed), NCHAR) as yy, LPAD(month(changed),2,"0")'
-                . 'as mm FROM `contents` group by yy,mm order by yy, mm'
+                'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
+                . 'FROM `contents` WHERE year(changed) is not null group by dates order by dates'
             );
             foreach ($result as $value) {
-                if (empty($value['yy']) || empty($value['mm'])) {
+                if (empty($value['dates'])) {
                     continue;
                 }
 
-                $contents[$value['yy']][$value['mm']] = ($value['yy'] === date("Y") && $value['mm'] === date("m"))
-                ? date('Y-m-d H:i:s')
-                : date('Y-m-t 23:59:59', strtotime($value['yy'] . '-' . $value['mm']));
+                $aux = explode('-', $value['dates']);
+
+                $contents[$aux[0]][$aux[1]] = $value['dates'] === date("Y-m")
+                    ? date('Y-m-d H:i:s')
+                    : date('Y-m-t 23:59:59', strtotime($aux[0] . '-' . $aux[1]));
             }
 
             return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
@@ -296,7 +298,7 @@ class SitemapController extends Controller
      */
     public function tagIndexAction($letter, $format)
     {
-        $letter = substr(html_entity_decode($letter), 0, 1);
+        $letter = substr(html_entity_decode($letter, ENT_XML1, 'UTF-8'), 0, 1);
 
         $cacheId = $this->view->getCacheId('sitemap', 'tagIndex', $letter);
 
@@ -333,7 +335,7 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $page, $format)
     {
-        $letter = substr(html_entity_decode($letter), 0, 1);
+        $letter = substr(html_entity_decode($letter, ENT_XML1, 'UTF-8'), 0, 1);
 
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter, $page);
         $tags    = [];
