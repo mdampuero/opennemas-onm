@@ -250,7 +250,7 @@ class SitemapController extends Controller
                 ]
             ];
 
-            $contents = $em->findBy($filters, ['created' => 'desc'], 50000);
+            $contents = $em->findBy($filters, ['created' => 'desc'], $settings['perpage']);
 
             return $this->getResponse($format, $cacheId, 'contents', $contents, null, $year, $month, $googleNews);
         }
@@ -283,7 +283,7 @@ class SitemapController extends Controller
                             ['\"', '\\_'],
                             $letter
                         ),
-                        50000
+                        $this->getSettings()['total']
                     )
                 )['items'];
             } catch (GetListException $e) {

@@ -1588,11 +1588,11 @@
                             <label class="form-label" for="sitemap-perpage">
                               {t}Items per page{/t}
                               <span class="help ">
-                                (min. 500, máx. 1000)
+                                (máx. 50000)
                               </span>
                             </label>
                             <div class="controls">
-                              <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="settings.sitemap.perpage" type="number" min="500" max="1000">
+                              <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="settings.sitemap.perpage" type="number" min="1" max="50000">
                             </div>
                           </div>
                         </div>
@@ -1601,9 +1601,9 @@
                             <label class="form-label" for="sitemap-total">
                               {t}Total sitemap news elements{/t}
                             </label>
-                                                          <span class="help ">
+                            <span class="help ">
                                 (min. 100, máx. 1000)
-                              </span>
+                            </span>
                             <div class="controls">
                               <input class="form-control" id="sitemap-total" name="sitemap-total" ng-model="settings.sitemap.total" type="number" min="100" max="1000">
                             </div>

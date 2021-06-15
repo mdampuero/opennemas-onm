@@ -56,8 +56,8 @@ class SitemapController extends Controller
 
         $msg = $this->get('core.messenger');
 
-        if ($settings['sitemap']['perpage'] < 500 || $settings['sitemap']['perpage'] > 1000) {
-            $msg->add(_('Items per page must be between 500 and 1000'), 'error');
+        if ($settings['sitemap']['perpage'] < 1 || $settings['sitemap']['perpage'] > 50000) {
+            $msg->add(_('Items per page must be between 1 and 50000'), 'error');
 
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }

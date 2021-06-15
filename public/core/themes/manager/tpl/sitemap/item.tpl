@@ -44,11 +44,11 @@
                 <label class="form-label" for="sitemap-perpage">
                   {t}Items per page{/t}
                   <span class="help">
-                    (min. 500, máx. 1000)
+                    (máx. 50000)
                   </span>
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="item.perpage" type="number" min="500" max="1000">
+                  <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="item.perpage" type="number" min="1" max="50000">
                 </div>
               </div>
             </div>
