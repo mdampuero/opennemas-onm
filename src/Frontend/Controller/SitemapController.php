@@ -46,7 +46,7 @@ class SitemapController extends Controller
         'letter'  => [ 'LETTER_MANAGER' ],
         'opinion' => [ 'OPINION_MANAGER' ],
         'poll'    => [ 'POLL_MANAGER' ],
-        'tag'     => [ 'TAG_MANAGER' ],
+        'tag'     => [],
         'video'   => [ 'VIDEO_MANAGER' ],
     ];
 
@@ -80,7 +80,7 @@ class SitemapController extends Controller
         if (!$this->isCached('index', $cacheId)) {
             $contents = [];
 
-            if ($this->get('core.security')->hasExtension('TAG_MANAGER') && $settings['tag']) {
+            if ($settings['tag']) {
                 $letters = $this->get('orm.connection.instance')
                     ->fetchAll(
                         'SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as "letter"' .
@@ -373,7 +373,7 @@ class SitemapController extends Controller
             return !in_array($key, $ommit)
                 && array_key_exists($key, $settings)
                 && !empty($settings[$key])
-                && $this->get('core.security')->hasExtension($value);
+                && ($this->get('core.security')->hasExtension($value) || empty($value));
         }, ARRAY_FILTER_USE_BOTH));
     }
 
