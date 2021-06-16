@@ -86,27 +86,48 @@ class SitemapController extends Controller
                         'SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as "letter"' .
                         'FROM `tags` WHERE `slug` IS NOT NULL'
                     );
+
+                $letters = array_filter($letters, function ($a) {
+                    return ctype_graph($a['letter']);
+                });
             }
 
-            $letters = array_filter($letters, function ($a) {
-                return ctype_graph($a['letter']);
-            });
+            $types = array_merge([ 'news' ], array_filter([ 'photo', 'video' ], function ($type) use ($settings) {
+                return in_array($type, $this->getTypes($settings));
+            }));
 
-            $result = $this->get('orm.connection.instance')->fetchAll(
-                'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
-                . 'FROM `contents` WHERE year(changed) is not null group by dates order by dates'
-            );
+            foreach ($types as $type) {
+                $dates  = [];
+                $result = $type === 'news'
+                    ? $this->getDates($this->getTypes($settings, [ 'tag', 'photo', 'video' ], true))
+                    : $this->getDates('"' . $type . '"');
 
-            foreach ($result as $value) {
-                if (empty($value['dates'])) {
-                    continue;
+                if (!empty($result)) {
+                    $dates[$type] = $result;
                 }
 
-                $aux = explode('-', $value['dates']);
+                if (empty($dates)) {
+                    return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
+                }
 
-                $contents[$aux[0]][$aux[1]] = $value['dates'] === date("Y-m")
-                    ? date('Y-m-d H:i:s')
-                    : date('Y-m-t 23:59:59', strtotime($aux[0] . '-' . $aux[1]));
+                foreach ($dates[$type] as $date) {
+                    if (empty($date)) {
+                        continue;
+                    }
+
+                    list($year, $month) = explode('-', $date);
+
+                    $last = $date === date("Y-m")
+                        ? date('Y-m-d H:i:s')
+                        : date('Y-m-t 23:59:59', strtotime($date));
+
+                    $contents[] = [
+                        'type' => $type,
+                        'date' => $last,
+                        'year' => $year,
+                        'month' => $month
+                    ];
+                }
             }
 
             return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
@@ -214,9 +235,9 @@ class SitemapController extends Controller
      *
      * @return Response The sitemap for the contents.
      */
-    public function contentsAction($year, $month, $format)
+    public function contentsAction($year, $month, $action, $format)
     {
-        $cacheId = $this->view->getCacheId('sitemap', $year, $month);
+        $cacheId = $this->view->getCacheId('sitemap', $year, $month, $action);
 
         if (!$this->isCached('contents', $cacheId)) {
             $googleNews = $this->get('orm.manager')
@@ -225,11 +246,14 @@ class SitemapController extends Controller
 
             $em       = $this->get('entity_repository');
             $settings = $this->getSettings();
+            $types    = $action === 'news'
+                ? $this->getTypes($settings, [ 'tag', 'video', 'photo' ])
+                : [ $action ];
 
             $filters = [
                 'content_type_name' => [
                     [
-                        'value'    => $this->getTypes($settings, [ 'tag' ]),
+                        'value'    => $types,
                         'operator' => 'IN'
                     ]
                 ],
@@ -283,7 +307,7 @@ class SitemapController extends Controller
                             ['\"', '\\_'],
                             $letter
                         ),
-                        $this->getSettings()['total']
+                        $this->getSettings()['perpage']
                     )
                 )['items'];
             } catch (GetListException $e) {
@@ -295,6 +319,39 @@ class SitemapController extends Controller
         return $this->getResponse($format, $cacheId, 'tag');
     }
 
+    /**
+     * Returns the dates range for the specified content_type_names.
+     *
+     * @param string $types A comma separated string with content_type_names.
+     *
+     * @return array $dates The array of dates.
+     */
+    protected function getDates($types)
+    {
+        if (empty($types)) {
+            return null;
+        }
+
+        $result = $this->get('orm.connection.instance')->fetchAll(
+            sprintf(
+                'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
+                . 'FROM `contents` WHERE year(changed) is not null '
+                . 'AND `content_type_name` IN (%s) '
+                . 'group by dates order by dates',
+                $types
+            )
+        );
+
+        return array_map(function ($a) {
+            return $a['dates'];
+        }, $result);
+    }
+
+    /**
+     * Returns the instance settings for the sitemap if exists or the manager settings otherwise.
+     *
+     * @return array The sitemap settings.
+     */
     protected function getSettings()
     {
         return $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap')
@@ -367,14 +424,22 @@ class SitemapController extends Controller
      *
      * @return Array The list of types
      */
-    protected function getTypes($settings, $ommit = [])
+    protected function getTypes($settings, $ommit = [], $asString = false)
     {
-        return array_keys(array_filter(self::EXTENSIONS, function ($value, $key) use ($settings, $ommit) {
+        $types = array_keys(array_filter(self::EXTENSIONS, function ($value, $key) use ($settings, $ommit) {
             return !in_array($key, $ommit)
                 && array_key_exists($key, $settings)
                 && !empty($settings[$key])
                 && ($this->get('core.security')->hasExtension($value) || empty($value));
         }, ARRAY_FILTER_USE_BOTH));
+
+        if (!$asString) {
+            return $types;
+        }
+
+        return implode(',', array_map(function ($a) {
+            return '"' . $a . '"';
+        }, $types));
     }
 
     /**
