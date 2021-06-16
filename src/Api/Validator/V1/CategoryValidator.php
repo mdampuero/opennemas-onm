@@ -29,15 +29,29 @@ class CategoryValidator extends Validator
                 $category = $this->container->get('api.service.category')
                     ->getItemBySlug($name);
 
+                // Check logo size
+                if (!empty($category->logo_id)) {
+                    $logo = $this->container->get('api.service.photo')
+                        ->getItem($category->logo_id);
+
+                    if ($logo->height > 120) {
+                        throw new InvalidArgumentException(
+                            sprintf(
+                                _('The maximum height for the %s is 120px. Please adjust your image size.'),
+                                'logo ' . _('of') . ' ' . $category->title
+                            ),
+                            400
+                        );
+                    }
+                }
+
                 // Update action
                 if ($category->id == $item->id) {
                     continue;
                 }
             } catch (\Exception $e) {
-                continue;
+                throw new InvalidArgumentException($e->getMessage(), $e->getCode());
             }
-
-            throw new InvalidArgumentException(_('Invalid category'), 400);
         }
     }
 }

@@ -16,7 +16,7 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->container = $this->getMockBuilder('Container')
+        $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
             ->getMock();
 
@@ -27,6 +27,11 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\CategoryService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getItem' ])
+            ->getMock();
+
+        $this->photoService = $this->getMockBuilder('Api\Service\V1\PhotoService')
             ->disableOriginalConstructor()
             ->setMethods([ 'getItem' ])
             ->getMock();
@@ -52,7 +57,7 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->helper = new CategoryHelper($this->service, $this->instance, $this->template, $this->ugh);
+        $this->helper = new CategoryHelper($this->container, $this->instance, $this->template, $this->ugh);
     }
 
     /**
@@ -67,6 +72,9 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.category':
                 return $this->service;
+
+            case 'api.service.photo':
+                return $this->photoService;
 
             case 'core.instance':
                 return $this->instance;
@@ -206,13 +214,33 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
     */
     public function testGetCategoryLogo()
     {
-        $category = new Category([ 'logo_path' => 'images/bar/qux.jpg' ]);
+        $category = new Category([ 'id' => 436, 'logo_id' => 123 ]);
+
+        $photo             = new \Content();
+        $photo->pk_content = 123;
+
+        $this->photoService->expects($this->any())->method('getItem')
+            ->willReturn($photo);
 
         $this->assertNull($this->helper->getCategoryLogo(131));
         $this->assertEquals(
-            '/media/foo/images/bar/qux.jpg',
+            $photo,
             $this->helper->getCategoryLogo($category)
         );
+    }
+
+    /**
+    * Tests getCategoryLogo when exception.
+    */
+    public function testGetCategoryLogoWhenException()
+    {
+        $category = new Category([ 'id' => 436, 'logo_id' => 123 ]);
+
+        $this->photoService->expects($this->any())->method('getItem')
+            ->with(123)
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertNull($this->helper->getCategoryLogo($category));
     }
 
     /**
@@ -267,7 +295,13 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
     */
     public function testHasCategoryLogo()
     {
-        $category = new Category([ 'logo_path' => 'images/bar/qux.jpg' ]);
+        $category = new Category([ 'id' => 436, 'logo_id' => 123 ]);
+
+        $photo             = new \Content();
+        $photo->pk_content = 123;
+
+        $this->photoService->expects($this->any())->method('getItem')
+            ->willReturn($photo);
 
         $this->assertFalse($this->helper->hasCategoryLogo(131));
         $this->assertTrue($this->helper->hasCategoryLogo($category));

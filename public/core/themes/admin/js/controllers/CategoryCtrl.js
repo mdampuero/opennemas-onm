@@ -44,11 +44,6 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
-
-          if ($scope.data.item && $scope.data.item.logo_path) {
-            $scope.cover =
-              $scope.data.item.logo_path.replace($window.instanceMedia, '');
-          }
         };
 
         /**
@@ -74,13 +69,13 @@
             $scope.item.id !== null;
         };
 
-        // Updates the logo_path when an image is selected
-        $scope.$watch('cover', function(nv, ov) {
+        // Updates the logo_id when an image is selected
+        $scope.$watch('item.logo_id', function(nv, ov) {
           if (!ov && !nv || nv && !angular.isObject(nv)) {
             return;
           }
 
-          $scope.item.logo_path = nv ? nv.path : null;
+          $scope.item.logo_id = nv ? nv.pk_content : null;
         }, true);
 
         // Generates slug when flag changes

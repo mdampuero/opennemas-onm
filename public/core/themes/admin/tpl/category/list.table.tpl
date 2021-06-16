@@ -71,7 +71,7 @@
     [% item.name %]
   </td>
   <td class="text-center v-align-middle">
-    <dynamic-image class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="item.logo_path" only-image="true"></dynamic-image>
+    <dynamic-image class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="item.logo_id" only-image="true"></dynamic-image>
   </td>
   <td class="text-center v-align-middle">
     <span class="badge badge-white" ng-if="item.color" ng-style="{ 'background-color': item.color}">&nbsp;&nbsp;</span>
