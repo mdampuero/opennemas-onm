@@ -92,42 +92,31 @@ class SitemapController extends Controller
                 });
             }
 
-            $types = array_merge([ 'news' ], array_filter([ 'photo', 'video' ], function ($type) use ($settings) {
-                return in_array($type, $this->getTypes($settings));
-            }));
+            $dates = [];
+            $dates = $this->getDates($this->getTypes($settings, [ 'tag' ], true));
+            $types = $this->getTypes($settings, [ 'tag' ]);
 
-            foreach ($types as $type) {
-                $dates  = [];
-                $result = $type === 'news'
-                    ? $this->getDates($this->getTypes($settings, [ 'tag', 'photo', 'video' ], true))
-                    : $this->getDates('"' . $type . '"');
+            if (empty($dates)) {
+                return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
+            }
 
-                if (!empty($result)) {
-                    $dates[$type] = $result;
+            foreach ($dates as $date) {
+                if (empty($date)) {
+                    continue;
                 }
 
-                if (empty($dates)) {
-                    return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
-                }
+                list($year, $month) = explode('-', $date);
 
-                foreach ($dates[$type] as $date) {
-                    if (empty($date)) {
-                        continue;
-                    }
+                $last = $date === date("Y-m")
+                    ? date('Y-m-d H:i:s')
+                    : date('Y-m-t 23:59:59', strtotime($date));
 
-                    list($year, $month) = explode('-', $date);
-
-                    $last = $date === date("Y-m")
-                        ? date('Y-m-d H:i:s')
-                        : date('Y-m-t 23:59:59', strtotime($date));
-
-                    $contents[] = [
-                        'type' => $type,
-                        'date' => $last,
-                        'year' => $year,
-                        'month' => $month
-                    ];
-                }
+                $contents[] = [
+                    'date'  => $last,
+                    'year'  => $year,
+                    'month' => $month,
+                    'pages' => ceil($this->getContents($date, $types) / $settings['perpage'])
+                ];
             }
 
             return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
@@ -229,52 +218,25 @@ class SitemapController extends Controller
      *
      * @param integer $year   The year of the content.
      * @param integer $month  The month of the content.
-     * @param string  $action The action to perform.
      * @param integer $page   The page of the contents.
      * @param string  $format The format to get the response.
      *
      * @return Response The sitemap for the contents.
      */
-    public function contentsAction($year, $month, $action, $format)
+    public function contentsAction($year, $month, $page, $format)
     {
-        $cacheId = $this->view->getCacheId('sitemap', $year, $month, $action);
+        $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
 
         if (!$this->isCached('contents', $cacheId)) {
             $googleNews = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('google_news_name');
 
-            $em       = $this->get('entity_repository');
+            $date     = $year . '-' . $month;
             $settings = $this->getSettings();
-            $types    = $action === 'news'
-                ? $this->getTypes($settings, [ 'tag', 'video', 'photo' ])
-                : [ $action ];
+            $types    = $this->getTypes($settings, [ 'tag' ]);
 
-            $filters = [
-                'content_type_name' => [
-                    [
-                        'value'    => $types,
-                        'operator' => 'IN'
-                    ]
-                ],
-                'content_status'    => [[ 'value' => 1 ]],
-                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-                'endtime'           => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-                ],
-                'starttime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'changed'         => [
-                    [ 'value' => $year . '-' . $month . '%', 'operator' => 'LIKE' ],
-                ]
-            ];
-
-            $contents = $em->findBy($filters, ['created' => 'desc'], $settings['perpage']);
+            $contents = $this->getContents($date, $types, $settings['perpage']);
 
             return $this->getResponse($format, $cacheId, 'contents', $contents, null, $year, $month, $googleNews);
         }
@@ -317,6 +279,58 @@ class SitemapController extends Controller
         }
 
         return $this->getResponse($format, $cacheId, 'tag');
+    }
+
+    /**
+     * Returns the contents for an specific month.
+     *
+     * @param string  $date    The date of the contents.
+     * @param integer $perpage The numnber of items per page.
+     * @param array   $types   The types of the contents to filter.
+     *
+     * @return mixed $items The elements or the number of elements depending on the number.
+     */
+    protected function getContents($date, $types, $perpage = null)
+    {
+        $em = $this->get('entity_repository');
+
+        $filters = [
+            'content_type_name' => [
+                [
+                    'value'    => $types,
+                    'operator' => 'IN'
+                ]
+            ],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+            ],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'changed ' => [
+                [
+                    'value' => sprintf(
+                        '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
+                        date('Y-m-01 00:00:00', strtotime($date)),
+                        date('Y-m-01 00:00:00', strtotime($date))
+                    ),
+                    'field' => true,
+                    'operator' => 'BETWEEN'
+                ]
+            ],
+        ];
+
+        if (empty($perpage)) {
+            return $em->countBy($filters);
+        }
+
+        return $em->findBy($filters, ['changed' => 'asc'], $perpage);
     }
 
     /**

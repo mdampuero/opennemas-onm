@@ -272,7 +272,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ->delete('category', 'list', $content->category_id)
             ->delete($content->content_type_name, 'frontpage')
             ->delete($content->content_type_name, 'list')
-            ->delete('sitemap', $content->content_type_name);
+            ->delete('sitemap', 'contents');
 
         if ($content->content_type_name == 'article') {
             $this->template

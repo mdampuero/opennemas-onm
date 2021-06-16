@@ -23,13 +23,13 @@ frontend_news_sitemap:
         format: 'xml|xml.gz'
 
 frontend_contents_sitemap:
-    path: sitemap.{action}.{year}.{month}.{format}
+    path: sitemap.contents.{year}.{month}.{page}.{format}
     defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', page: 1 }
     requirements:
-        action: 'photo|video|news'
         format: 'xml|xml.gz'
-        year: '[0-9]{4}'
-        month: '[0-9]{2}'
+        year:   '[0-9]{4}'
+        month:  '[0-9]{2}'
+        page:   '[1-9][0-9]*'
 
 frontend_tag_sitemap:
     path: /sitemap.tag.{letter}.{format}
