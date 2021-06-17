@@ -41,7 +41,6 @@ class SitemapController extends Controller
         'album'   => [ 'ALBUM_MANAGER' ],
         'article' => [ 'ARTICLE_MANAGER' ],
         'event'   => [ 'EVENT_MANAGER' ],
-        'photo'   => [ 'IMAGE_MANAGER' ],
         'kiosko'  => [ 'KIOSKO_MANAGER' ],
         'letter'  => [ 'LETTER_MANAGER' ],
         'opinion' => [ 'OPINION_MANAGER' ],
