@@ -116,6 +116,16 @@ class Instance extends Entity
     }
 
     /**
+     * Returns the path for instance sitemap files.
+     *
+     * @return string The relative path for sitemap files.
+     */
+    public function getSitemapShortPath()
+    {
+        return "sitemap/{$this->internal_name}";
+    }
+
+    /**
      * Checks if the current instance has multilanguage enabled.
      *
      * @return boolean True if the instance has multilanguage enabled. False

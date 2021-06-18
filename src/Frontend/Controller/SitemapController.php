@@ -226,21 +226,43 @@ class SitemapController extends Controller
     {
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
 
-        if (!$this->isCached('contents', $cacheId)) {
-            $googleNews = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('google_news_name');
+        $path = sprintf(
+            '%s/sitemap.%d.%d.%d.xml.gz',
+            $this->get('core.instance')->getSitemapShortPath(),
+            $year,
+            $month,
+            $page
+        );
 
-            $date     = $year . '-' . $month;
-            $settings = $this->getSettings();
-            $types    = $this->getTypes($settings, [ 'tag' ]);
-
-            $contents = $this->getContents($date, $types, $settings['perpage']);
-
-            return $this->getResponse($format, $cacheId, 'contents', $contents, null, $year, $month, $googleNews);
+        if (file_exists($path)) {
+            return $this->getResponse($format, $cacheId, 'contents', [], $path);
         }
 
-        return $this->getResponse($format, $cacheId, 'contents');
+        $googleNews = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_news_name');
+
+        $date     = $year . '-' . $month;
+        $settings = $this->getSettings();
+        $types    = $this->getTypes($settings, [ 'tag' ]);
+
+        $contents = $this->getContents($date, $types, $settings['perpage']);
+
+        if ($date === date('Y-m')) {
+            $path = null;
+        }
+
+        return $this->getResponse(
+            $format,
+            $cacheId,
+            'contents',
+            $contents,
+            $path,
+            $page,
+            $year,
+            $month,
+            $googleNews
+        );
     }
 
     /**
@@ -390,41 +412,52 @@ class SitemapController extends Controller
         $cacheId,
         $action,
         $contentsCount = [],
+        $path = null,
         $page = null,
         $year = null,
         $month = null,
-        $googleNews = null,
-        $letter = null
+        $googleNews = null
     ) {
-        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
+        $headers = [
+            'Content-Type' => 'application/xml; charset=utf-8',
+            'x-cache-for' => self::EXPIRE[$action],
+            'x-cacheable' => true,
+            'x-tags'      => sprintf('sitemap,%s', $action)
+        ];
+
         $contents = $this->get('core.template.frontend')
             ->render(self::TEMPLATES[$action], [
                 'action'     => $action,
                 'cache_id'   => $cacheId,
                 'counters'   => $contentsCount,
-                'letter'     => $letter,
                 'page'       => $page,
                 'year'       => $year,
                 'month'      => $month,
                 'googleNews' => $googleNews
             ]);
 
-        if ($format === 'xml.gz') {
-            $contents = gzencode($contents, 9);
-            $headers  = [
-                'Content-Type'        => 'application/x-gzip',
-                'Content-Length'      => strlen($contents),
-                'Content-Disposition' => 'attachment; filename="sitemap.'
-                    . $action . '.xml.gz"'
-            ];
+        if (!empty($path)) {
+            $length = null;
+
+            if (!file_exists($path)) {
+                $length = file_put_contents($path, gzencode($contents, 9));
+            }
+
+            $file = !empty($length) ? gzencode($contents, 9) : file_get_contents($path);
         }
 
-        $headers = array_merge($headers, [
-            'x-cache-for' => self::EXPIRE[$action],
-            'x-cacheable' => true,
-            'x-tags'      => sprintf('sitemap,%s', $action),
-            'x-cacheable' => true,
-        ]);
+        if ($format === 'xml.gz') {
+            $filename = implode(".", array_filter([ $action, $year, $month, $page ]));
+            $file     = $file ?? gzencode($contents, 9);
+
+            $headers = array_merge($headers, [
+                'Content-Type'        => 'application/x-gzip',
+                'Content-length'      => strlen($file),
+                'Content-Disposition' => sprintf('attachment; filename="sitemap.%s.xml.gz"', $filename)
+            ]);
+
+            return new Response($file, 200, $headers);
+        }
 
         return new Response($contents, 200, $headers);
     }
