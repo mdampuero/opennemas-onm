@@ -168,7 +168,7 @@ class PhotoHelper
         $srcSet = '';
         $cuts   = $this->theme->getCuts($device);
 
-        if (empty($cuts)) {
+        if (empty($cuts) || empty($photo)) {
             return '';
         }
 
