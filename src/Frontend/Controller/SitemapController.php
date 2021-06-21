@@ -38,15 +38,15 @@ class SitemapController extends Controller
      * @const array
      */
     const EXTENSIONS = [
-        'album'   => [ 'ALBUM_MANAGER' ],
-        'article' => [ 'ARTICLE_MANAGER' ],
-        'event'   => [ 'EVENT_MANAGER' ],
-        'kiosko'  => [ 'KIOSKO_MANAGER' ],
-        'letter'  => [ 'LETTER_MANAGER' ],
-        'opinion' => [ 'OPINION_MANAGER' ],
-        'poll'    => [ 'POLL_MANAGER' ],
-        'tag'     => [],
-        'video'   => [ 'VIDEO_MANAGER' ],
+        'album'   => 'ALBUM_MANAGER',
+        'article' => 'ARTICLE_MANAGER',
+        'event'   => 'EVENT_MANAGER',
+        'kiosko'  => 'KIOSKO_MANAGER',
+        'letter'  => 'LETTER_MANAGER',
+        'opinion' => 'OPINION_MANAGER',
+        'poll'    => 'POLL_MANAGER',
+        'tag'     => '',
+        'video'   => 'VIDEO_MANAGER',
     ];
 
     /**
@@ -73,7 +73,7 @@ class SitemapController extends Controller
     public function indexAction($format)
     {
         $cacheId  = $this->view->getCacheId('sitemap', 'index');
-        $settings = $this->getSettings();
+        $settings = $this->get('core.helper.sitemap')->getSettings();
         $letters  = [];
 
         if (!$this->isCached('index', $cacheId)) {
@@ -91,8 +91,9 @@ class SitemapController extends Controller
                 });
             }
 
-            $dates = [];
-            $dates = $this->getDates($this->getTypes($settings, [ 'tag' ], true));
+            $dates = $this->get('core.helper.sitemap')
+                ->getDates($this->getTypes($settings, [ 'tag' ], true));
+
             $types = $this->getTypes($settings, [ 'tag' ]);
 
             if (empty($dates)) {
@@ -106,12 +107,7 @@ class SitemapController extends Controller
 
                 list($year, $month) = explode('-', $date);
 
-                $last = $date === date("Y-m")
-                    ? date('Y-m-d H:i:s')
-                    : date('Y-m-t 23:59:59', strtotime($date));
-
                 $contents[] = [
-                    'date'  => $last,
                     'year'  => $year,
                     'month' => $month,
                     'pages' => ceil($this->getContents($date, $types) / $settings['perpage'])
@@ -184,7 +180,7 @@ class SitemapController extends Controller
         $cacheId = $this->view->getCacheId('sitemap', 'news');
 
         if (!$this->isCached('news', $cacheId)) {
-            $settings = $this->getSettings();
+            $settings = $this->get('core.helper.sitemap')->getSettings();
             $filters  = [
                 'content_type_name' => [
                     [ 'value' => [ 'article', 'opinion' ], 'operator' => 'IN' ]
@@ -227,10 +223,10 @@ class SitemapController extends Controller
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
 
         $path = sprintf(
-            '%s/sitemap.%d.%d.%d.xml.gz',
+            '%s/sitemap.%d.%s.%d.xml.gz',
             $this->get('core.instance')->getSitemapShortPath(),
             $year,
-            $month,
+            str_pad($month, 2, "0", STR_PAD_LEFT),
             $page
         );
 
@@ -243,7 +239,7 @@ class SitemapController extends Controller
             ->get('google_news_name');
 
         $date     = $year . '-' . $month;
-        $settings = $this->getSettings();
+        $settings = $this->get('core.helper.sitemap')->getSettings();
         $types    = $this->getTypes($settings, [ 'tag' ]);
 
         $contents = $this->getContents($date, $types, $settings['perpage']);
@@ -290,7 +286,7 @@ class SitemapController extends Controller
                             ['\"', '\\_'],
                             $letter
                         ),
-                        $this->getSettings()['perpage']
+                        $this->get('core.helper.sitemap')->getSettings()['perpage']
                     )
                 )['items'];
             } catch (GetListException $e) {
@@ -352,45 +348,6 @@ class SitemapController extends Controller
         }
 
         return $em->findBy($filters, ['changed' => 'asc'], $perpage);
-    }
-
-    /**
-     * Returns the dates range for the specified content_type_names.
-     *
-     * @param string $types A comma separated string with content_type_names.
-     *
-     * @return array $dates The array of dates.
-     */
-    protected function getDates($types)
-    {
-        if (empty($types)) {
-            return null;
-        }
-
-        $result = $this->get('orm.connection.instance')->fetchAll(
-            sprintf(
-                'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
-                . 'FROM `contents` WHERE year(changed) is not null '
-                . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
-                $types
-            )
-        );
-
-        return array_map(function ($a) {
-            return $a['dates'];
-        }, $result);
-    }
-
-    /**
-     * Returns the instance settings for the sitemap if exists or the manager settings otherwise.
-     *
-     * @return array The sitemap settings.
-     */
-    protected function getSettings()
-    {
-        return $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap')
-            ?? $this->get('orm.manager')->getDataSet('Settings', 'manager')->get('sitemap');
     }
 
     /**

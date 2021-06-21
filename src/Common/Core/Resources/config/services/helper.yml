@@ -145,6 +145,11 @@ services:
         arguments: [ '@core.helper.content', '@core.helper.subscription', '@core.template.frontend' ]
         public:    true
 
+    core.helper.sitemap:
+        class:     Common\Core\Component\Helper\SitemapHelper
+        arguments: [ '@core.instance', '@orm.manager', '@orm.connection.instance', '%core.paths.public%' ]
+        public:    true
+
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@service_container' ]
