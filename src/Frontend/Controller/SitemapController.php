@@ -231,7 +231,7 @@ class SitemapController extends Controller
         );
 
         if (file_exists($path)) {
-            return $this->getResponse($format, $cacheId, 'contents', [], $path);
+            return $this->getResponse($format, $cacheId, 'contents', [], $path, $page, $year, $month);
         }
 
         $googleNews = $this->get('orm.manager')
