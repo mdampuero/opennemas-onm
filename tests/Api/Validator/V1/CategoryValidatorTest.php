@@ -55,18 +55,17 @@ class CategoryValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests validate when the provided information is valid.
+     * Tests validate when creating with valid information.
      */
-    public function testValidateWhenValidCategory()
+    public function testValidateWhenCreateValidCategory()
     {
         $item = new Category([
-            'name' => 'flob',
-            'id'   => 1
+            'name' => 'flob'
         ]);
 
         $this->categoryService->expects($this->any())->method('getItemBySlug')
             ->with('flob')
-            ->willReturn($item);
+            ->will($this->throwException(new \Exception()));
 
         $this->addToAssertionCount(1);
 
@@ -76,22 +75,44 @@ class CategoryValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests validate when the provided information is not valid.
-     *
-     * @expectedException \Api\Exception\InvalidArgumentException
+     * Tests validate when updating with valid information.
      */
-    public function testValidateWhenNotValidCategory()
+    public function testValidateWhenUpdateValidCategory()
     {
         $item = new Category([
             'name' => 'flob',
             'id'   => 1
         ]);
 
-        $this->categoryService->expects($this->any())->method('getItemBySlug')
-            ->with('flob')
-            ->willReturn($this->throwException(new \Exception()));
+        $this->addToAssertionCount(1);
 
         $this->validator->validate($item);
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Tests validate when the provided slug is not valid.
+     *
+     * @expectedException \Api\Exception\InvalidArgumentException
+     */
+    public function testValidateWhenNotValidCategorySlug()
+    {
+        $item1 = new Category([
+            'name' => 'flob',
+            'id'   => 1
+        ]);
+
+        $item2 = new Category([
+            'name' => 'flob',
+            'id'   => 2
+        ]);
+
+        $this->categoryService->expects($this->any())->method('getItemBySlug')
+            ->with('flob')
+            ->willReturn($item2);
+
+        $this->validator->validate($item1);
     }
 
     /**
