@@ -52,6 +52,19 @@
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label" for="sitemap-perpage">
+                {t}Elements per page{/t}
+                <span class="help ">
+                  (min. 100, máx. 1000)
+                </span>
+              </label>
+              <div class="controls">
+                <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="item.perpage" type="number" min="100" max="1000">
+              </div>
+            </div>
+          </div>
           </div>
           <div class="col-md-6">
           <h4>

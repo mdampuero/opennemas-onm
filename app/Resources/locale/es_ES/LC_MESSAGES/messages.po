@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 12:08+0000\n"
-"PO-Revision-Date: 2021-06-15 14:09+0200\n"
+"POT-Creation-Date: 2021-06-22 14:57+0000\n"
+"PO-Revision-Date: 2021-06-22 16:58+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -3850,11 +3850,23 @@ msgstr "Indica los elementos que se mostrarán en cada sitemap."
 msgid "Total sitemap news elements"
 msgstr "Noticias totales para el sitemap"
 
+msgid "Elements per page"
+msgstr "Elementos por página"
+
 msgid "Sitemaps enabled"
 msgstr "Sitemaps activados"
 
 msgid "Activate the elements that you want to appear in the sitemap."
 msgstr "Activa los elementos que quieres que aparezcan en el sitemap."
+
+msgid "Sitemaps disk cache"
+msgstr "Caché de disco del sitemap"
+
+msgid "This section allows to remove the sitemaps saved on disk."
+msgstr "Esta sección permite eliminar los sitemaps guardados en disco."
+
+msgid "Search for a sitemap by year, month and page"
+msgstr "Busca un sitemap por año, mes y página"
 
 msgid "Only masters"
 msgstr "Solo masters"
@@ -7204,6 +7216,10 @@ msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
 msgid "Do you want to delete the selected user groups?"
 msgstr ""
 "¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+
+#, fuzzy
+#~ msgid "Elements perpage"
+#~ msgstr "Elementos por página"
 
 #~ msgid "Style"
 #~ msgstr "Estilo"
