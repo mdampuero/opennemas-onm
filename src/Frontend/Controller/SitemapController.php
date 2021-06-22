@@ -33,23 +33,6 @@ class SitemapController extends Controller
     ];
 
     /**
-     * The list of needed extensions per action.
-     *
-     * @const array
-     */
-    const EXTENSIONS = [
-        'album'   => 'ALBUM_MANAGER',
-        'article' => 'ARTICLE_MANAGER',
-        'event'   => 'EVENT_MANAGER',
-        'kiosko'  => 'KIOSKO_MANAGER',
-        'letter'  => 'LETTER_MANAGER',
-        'opinion' => 'OPINION_MANAGER',
-        'poll'    => 'POLL_MANAGER',
-        'tag'     => '',
-        'video'   => 'VIDEO_MANAGER',
-    ];
-
-    /**
      * The list of templates per action.
      *
      * @const array
@@ -92,9 +75,9 @@ class SitemapController extends Controller
             }
 
             $dates = $this->get('core.helper.sitemap')
-                ->getDates($this->getTypes($settings, [ 'tag' ], true));
+                ->getDates($this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ], true));
 
-            $types = $this->getTypes($settings, [ 'tag' ]);
+            $types = $this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ]);
 
             if (empty($dates)) {
                 return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
@@ -110,7 +93,9 @@ class SitemapController extends Controller
                 $contents[] = [
                     'year'  => $year,
                     'month' => $month,
-                    'pages' => ceil($this->getContents($date, $types) / $settings['perpage'])
+                    'pages' => ceil(
+                        $this->get('core.helper.sitemap')->getContents($date, $types) / $settings['perpage']
+                    )
                 ];
             }
 
@@ -240,9 +225,9 @@ class SitemapController extends Controller
 
         $date     = $year . '-' . $month;
         $settings = $this->get('core.helper.sitemap')->getSettings();
-        $types    = $this->getTypes($settings, [ 'tag' ]);
+        $types    = $this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ]);
 
-        $contents = $this->getContents($date, $types, $settings['perpage']);
+        $contents = $this->get('core.helper.sitemap')->getContents($date, $types, $settings['perpage']);
 
         if ($date === date('Y-m')) {
             $path = null;
@@ -296,58 +281,6 @@ class SitemapController extends Controller
         }
 
         return $this->getResponse($format, $cacheId, 'tag');
-    }
-
-    /**
-     * Returns the contents for an specific month.
-     *
-     * @param string  $date    The date of the contents.
-     * @param integer $perpage The numnber of items per page.
-     * @param array   $types   The types of the contents to filter.
-     *
-     * @return mixed $items The elements or the number of elements depending on the number.
-     */
-    protected function getContents($date, $types, $perpage = null)
-    {
-        $em = $this->get('entity_repository');
-
-        $filters = [
-            'content_type_name' => [
-                [
-                    'value'    => $types,
-                    'operator' => 'IN'
-                ]
-            ],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'changed ' => [
-                [
-                    'value' => sprintf(
-                        '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
-                        date('Y-m-01 00:00:00', strtotime($date)),
-                        date('Y-m-01 00:00:00', strtotime($date))
-                    ),
-                    'field' => true,
-                    'operator' => 'BETWEEN'
-                ]
-            ],
-        ];
-
-        if (empty($perpage)) {
-            return $em->countBy($filters);
-        }
-
-        return $em->findBy($filters, ['changed' => 'asc'], $perpage);
     }
 
     /**
@@ -417,32 +350,6 @@ class SitemapController extends Controller
         }
 
         return new Response($contents, 200, $headers);
-    }
-
-    /**
-     * Method for recover get types
-     *
-     * @param array $settings The sitemap settings
-     * @param array $ommit    An array of types to ommit.
-     *
-     * @return Array The list of types
-     */
-    protected function getTypes($settings, $ommit = [], $asString = false)
-    {
-        $types = array_keys(array_filter(self::EXTENSIONS, function ($value, $key) use ($settings, $ommit) {
-            return !in_array($key, $ommit)
-                && array_key_exists($key, $settings)
-                && !empty($settings[$key])
-                && ($this->get('core.security')->hasExtension($value) || empty($value));
-        }, ARRAY_FILTER_USE_BOTH));
-
-        if (!$asString) {
-            return $types;
-        }
-
-        return implode(',', array_map(function ($a) {
-            return '"' . $a . '"';
-        }, $types));
     }
 
     /**

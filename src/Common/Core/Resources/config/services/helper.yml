@@ -147,7 +147,7 @@ services:
 
     core.helper.sitemap:
         class:     Common\Core\Component\Helper\SitemapHelper
-        arguments: [ '@core.instance', '@orm.manager', '@orm.connection.instance', '%core.paths.public%' ]
+        arguments: [ '@service_container', '@core.instance', '@orm.manager', '@orm.connection.instance', '%core.paths.public%' ]
         public:    true
 
     core.helper.structured_data:

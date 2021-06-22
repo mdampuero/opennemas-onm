@@ -209,6 +209,7 @@ class SettingController extends Controller
                     'backend'  => $locale->getAvailableLocales('backend'),
                     'frontend' => $locale->getAvailableLocales('frontend')
                 ],
+                'sitemaps' => $this->get('core.helper.sitemap')->getSitemapsInfo(),
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
                     . '/sections/',
