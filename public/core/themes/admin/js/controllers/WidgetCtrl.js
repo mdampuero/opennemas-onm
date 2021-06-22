@@ -127,6 +127,10 @@
             // eslint-disable-next-line no-new-wrappers
             var value = new Number($scope.item.params[key]);
 
+            if ($scope.item.params[key] === '') {
+              value = '';
+            }
+
             value = value.toString() === 'NaN' ? $scope.item.params[key] : value.valueOf();
 
             params.push({ name: key, value: value });
