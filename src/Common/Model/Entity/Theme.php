@@ -32,6 +32,28 @@ class Theme extends Extension
     }
 
     /**
+     * Returns the list of cuts for the theme.
+     *
+     * @param string $device The device type.
+     *
+     * @return array The cuts for the theme that matches the restrictions.
+     *
+     */
+    public function getCuts($device = 'desktop')
+    {
+        if (!array_key_exists('parameters', $this->data)
+            || !array_key_exists('cuts', $this->data['parameters'])) {
+            return [];
+        }
+
+        $targetWidth = $this->data['parameters']['cuts'][$device]['width'];
+
+        return array_filter($this->data['parameters']['cuts'], function ($item) use ($targetWidth) {
+            return $item['width'] <= $targetWidth;
+        });
+    }
+
+    /**
      * Returns the skin information basing on the skin id.
      *
      * @param string $id The skin id.

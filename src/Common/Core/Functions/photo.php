@@ -28,6 +28,32 @@ function get_photo_size($item = null) : ?string
 }
 
 /**
+ * Returns the srcset of the provided photo path.
+ *
+ * @param string $device The device to get sizes from.
+ *
+ * @return string The srcset to show.
+ */
+function get_photo_sizes($device = 'desktop')
+{
+    return getService('core.helper.photo')->getPhotoSizes($device);
+}
+
+/**
+ * Returns the srcset of the provided photo path.
+ *
+ * @param string  $photo     The photo to get srcset from.
+ * @param string  $transform The transformation to apply.
+ * @param string  $device    The type of device to get srcset for.
+ *
+ * @return string The srcset to show.
+ */
+function get_photo_srcset($photo, $transform, $device = 'desktop')
+{
+    return getService('core.helper.photo')->getPhotoSrcSet($photo, $transform, $device);
+}
+
+/**
  * Returns the width for the provided photo.
  *
  * @param Content $item The photo to get property from.
@@ -85,4 +111,19 @@ function has_photo_path($item = null)
 function has_photo_size($item = null)
 {
     return getService('core.helper.photo')->hasPhotoSize($item);
+}
+
+/**
+ * Returns if the provided data has srcset.
+ *
+ * @param string  $path      The photo path.
+ * @param string  $transform The name of the transformation to apply.
+ * @param integer $height    The height of the transformation or null.
+ * @param integer $width     The width of the transformation or null.
+ *
+ * @return bool Wether the photo has srcset or not.
+ */
+function has_photo_srcset($path, $transform = null, $height = null, $width = null)
+{
+    return getService('core.helper.photo')->hasPhotoSrcSet($path, $transform, $height, $width);
 }
