@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-22 14:57+0000\n"
-"PO-Revision-Date: 2021-06-22 16:58+0200\n"
+"POT-Creation-Date: 2021-06-23 14:39+0000\n"
+"PO-Revision-Date: 2021-06-23 16:42+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -6918,6 +6918,12 @@ msgstr "Partner que puede ver esta información del cliente"
 
 msgid "View on"
 msgstr "Ver en"
+
+msgid "Do you want to modify this settings?"
+msgstr "¿Quieres modificar esta configuración?"
+
+msgid "This action can affect the performance of the platform"
+msgstr "Esta acción puede afectar al rendimiento de la plataforma"
 
 msgid "UUID"
 msgstr "UUID"

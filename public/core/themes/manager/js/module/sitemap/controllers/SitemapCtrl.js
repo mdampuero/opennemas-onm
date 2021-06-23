@@ -15,16 +15,38 @@
      *   Handles all actions in users listing.
      */
     .controller('SitemapCtrl', [
-      '$scope', 'http', 'messenger',
-      function($scope, http, messenger) {
+      '$scope', '$uibModal', 'http', 'messenger',
+      function($scope, $uibModal, http, messenger) {
         $scope.save = function() {
-          $scope.saving = 1;
+          var modal = $uibModal.open(
+            {
+              templateUrl: '/managerws/template/sitemap:modal.' + appVersion + '.tpl',
+              backdrop: 'static',
+              controller: 'modalCtrl',
+              resolve: {
+                template: function() {
+                  return {};
+                },
+                success: function() {
+                  return function(modalWindow) {
+                    $scope.saving = 1;
 
-          http.post('manager_ws_sitemap_save', $scope.item).then(function(response) {
+                    http.post('manager_ws_sitemap_save', $scope.item).then(function(response) {
+                      modalWindow.close({ data: response.data, success: true });
+                    }, function(response) {
+                      modalWindow.close({ data: response.data, success: false });
+                    });
+                  };
+                }
+              }
+            });
+
+          modal.result.then(function(response) {
             $scope.saving = 0;
             messenger.post(response.data);
-          }, function() {
+          }, function(response) {
             $scope.saving = 0;
+            messenger.post(response.data);
           });
         };
 
