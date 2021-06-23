@@ -6,6 +6,7 @@ use Common\Model\Entity\Instance;
 use Opennemas\Orm\Core\Connection;
 use Opennemas\Orm\Core\EntityManager;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -93,6 +94,7 @@ class SitemapHelper
         $this->entityManager = $entityManager;
         $this->connection    = $connection;
         $this->finder        = new Finder();
+        $this->fs            = new Filesystem();
         $this->publicDir     = $publicDir;
         $this->settings      = $this->getSettings();
     }
@@ -311,6 +313,25 @@ class SitemapHelper
         }
 
         return $removed;
+    }
+
+    /**
+     * Save the sitemap and returns the length.
+     *
+     * @param string $path     The path of the sitemap.
+     * @param array  $contents The array of contents to persist.
+     *
+     * @return integer The length of the sitemap.
+     */
+    public function saveSitemap($path, $contents)
+    {
+        $dirPath = $this->publicDir . '/' . dirname($path);
+
+        if (!$this->fs->exists($dirPath)) {
+            $this->fs->mkdir($dirPath);
+        }
+
+        return file_put_contents($path, gzencode($contents, 9));
     }
 
     /**

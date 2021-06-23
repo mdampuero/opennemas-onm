@@ -340,7 +340,7 @@ class SitemapController extends Controller
             $length = null;
 
             if (!file_exists($path)) {
-                $length = file_put_contents($path, gzencode($contents, 9));
+                $length = $this->get('core.helper.sitemap')->saveSitemap($path, $contents);
             }
 
             $file = !empty($length) ? gzencode($contents, 9) : file_get_contents($path);
