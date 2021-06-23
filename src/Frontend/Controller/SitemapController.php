@@ -181,6 +181,16 @@ class SitemapController extends Controller
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ], 'changed ' => [
+                    [
+                        'value' => sprintf(
+                            '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
+                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s'))),
+                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s')))
+                        ),
+                        'field' => true,
+                        'operator' => 'BETWEEN'
+                    ]
                 ]
             ];
 
