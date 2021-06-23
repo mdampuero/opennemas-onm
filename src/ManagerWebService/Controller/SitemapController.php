@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class SitemapController extends Controller
 {
 
-        /**
+    /**
      * @api {get} /sitemap
-
-     * @apiSuccess {Array}   results The list of sitemap settings
+     *
+     * @apiSuccess {Array} results The list of sitemap settings
      *
      */
     public function showAction()
