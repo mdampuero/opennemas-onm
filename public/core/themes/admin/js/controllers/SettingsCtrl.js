@@ -497,6 +497,10 @@
 
           http.put('api_v1_backend_settings_save', data)
             .then(function(response) {
+              // Remove the sitemaps from the array if the sitemap configuration has been changed
+              if ($scope.flags.sitemap) {
+                $scope.extra.sitemaps.items = [];
+              }
               $scope.saving = false;
               messenger.post(response.data);
             }, function(response) {
@@ -688,6 +692,10 @@
 
         // Update sitemap values from default
         $scope.$watch('settings.sitemap', function(nv, ov) {
+          if (nv && nv !== ov && !$scope.flags.sitemap) {
+            $scope.flags.sitemap = true;
+          }
+
           if (!nv || ov) {
             return;
           }
