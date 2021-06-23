@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('ManagerApp.controllers')
+
     /**
      * @ngdoc controller
      * @name SitemapCtrl
@@ -32,9 +33,9 @@
         };
 
         return http.get(route).then(function(response) {
-            $scope.item = response.data;
+          $scope.item = response.data;
         }, function() {
-            $scope.item = {};
+          $scope.item = {};
         });
       }
     ]);
