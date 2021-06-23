@@ -276,11 +276,20 @@ class SettingController extends Controller
         // TODO: Remove this hack when frontend settings name are updated
         $settings = $this->updateOldSettingsName($settings);
 
+        // TODO: Remove this when the sitemap is separated from settings.
         if (array_key_exists('sitemap', $settings)) {
+            $remove = false;
             $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
 
-            // TODO: Remove this when the sitemap is separated from settings.
-            if ($settings['sitemap'] !== $config) {
+            foreach ($settings['sitemap'] as $key => $value) {
+                if ($key === 'total' || $value === $config[$key]) {
+                    continue;
+                }
+
+                $remove = true;
+            }
+
+            if ($remove) {
                 $this->get('core.helper.sitemap')->deleteSitemaps();
             }
         }
