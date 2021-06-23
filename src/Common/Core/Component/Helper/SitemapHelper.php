@@ -284,7 +284,7 @@ class SitemapHelper
      *
      * @return array An array of the removed sitemaps.
      */
-    public function deleteSitemaps($parameters)
+    public function deleteSitemaps($parameters = [])
     {
         $removed  = [];
         $path     = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
