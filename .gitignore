@@ -25,6 +25,7 @@ public/build
 public/bundles
 public/media/
 public/themes
+public/sitemap
 
 # Not ignore
 !public/themes/admin
