@@ -67,6 +67,13 @@ class SitemapHelper
     protected $finder;
 
     /**
+     * The filesystem component.
+     *
+     * @var FileSystem
+     */
+    protected $fs;
+
+    /**
      * The path to the public directory.
      *
      * @var string
@@ -98,8 +105,8 @@ class SitemapHelper
         $this->connection    = $connection;
         $this->container     = $container;
         $this->entityManager = $entityManager;
-        $this->finder        = $this->getFinder();
-        $this->fs            = $this->getFileSystem();
+        $this->finder        = new Finder();
+        $this->fs            = new Filesystem();
         $this->instance      = $instance;
         $this->publicDir     = $publicDir;
         $this->settings      = $this->getSettings();
@@ -386,25 +393,5 @@ class SitemapHelper
         return array_map(function ($a) {
             return $a['dates'];
         }, $result);
-    }
-
-    /**
-     * Returns a new Finder.
-     *
-     * @return Finder The finder.
-     */
-    protected function getFinder() : Finder
-    {
-        return new Finder();
-    }
-
-    /**
-     * Returns a new FileSystem.
-     *
-     * @return FileSystem The fileSystem.
-     */
-    protected function getFileSystem() : FileSystem
-    {
-        return new FileSystem();
     }
 }
