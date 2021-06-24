@@ -122,7 +122,7 @@ class Instance extends Entity
      */
     public function getSitemapShortPath()
     {
-        return "sitemap/{$this->internal_name}";
+        return "{$this->internal_name}/sitemap";
     }
 
     /**

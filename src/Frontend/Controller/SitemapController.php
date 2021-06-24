@@ -218,7 +218,8 @@ class SitemapController extends Controller
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
 
         $path = sprintf(
-            '%s/sitemap.%d.%s.%d.xml.gz',
+            '%s/%s/sitemap.%d.%s.%d.xml.gz',
+            $this->getParameter('core.paths.cache'),
             $this->get('core.instance')->getSitemapShortPath(),
             $year,
             str_pad($month, 2, "0", STR_PAD_LEFT),

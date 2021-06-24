@@ -338,7 +338,7 @@ class SitemapHelper
      */
     public function saveSitemap($path, $contents)
     {
-        $dirPath = $this->publicDir . '/' . dirname($path);
+        $dirPath = dirname($path);
 
         if (!$this->fs->exists($dirPath)) {
             $this->fs->mkdir($dirPath);
