@@ -73,6 +73,12 @@ class SitemapHelper
      */
     protected $publicDir;
 
+    /**
+     * The configuration of the sitemap.
+     *
+     * @var array
+     */
+    protected $settings;
 
     /**
      * Initializes the sitemap helper
@@ -89,12 +95,12 @@ class SitemapHelper
         Connection $connection,
         string $publicDir
     ) {
-        $this->container     = $container;
-        $this->instance      = $instance;
-        $this->entityManager = $entityManager;
         $this->connection    = $connection;
-        $this->finder        = new Finder();
-        $this->fs            = new Filesystem();
+        $this->container     = $container;
+        $this->entityManager = $entityManager;
+        $this->finder        = $this->getFinder();
+        $this->fs            = $this->getFileSystem();
+        $this->instance      = $instance;
         $this->publicDir     = $publicDir;
         $this->settings      = $this->getSettings();
     }
@@ -169,11 +175,11 @@ class SitemapHelper
             '/' . $this->instance->getSitemapShortPath() .
             '/' . $filename;
 
-        if (file_exists($path)) {
+        try {
             return date("Y-m-d H:i:s", filemtime($path));
+        } catch (\Exception $e) {
+            return date("Y-m-d H:i:s");
         }
-
-        return date("Y-m-d H:i:s");
     }
 
     /**
@@ -380,5 +386,25 @@ class SitemapHelper
         return array_map(function ($a) {
             return $a['dates'];
         }, $result);
+    }
+
+    /**
+     * Returns a new Finder.
+     *
+     * @return Finder The finder.
+     */
+    protected function getFinder() : Finder
+    {
+        return new Finder();
+    }
+
+    /**
+     * Returns a new FileSystem.
+     *
+     * @return FileSystem The fileSystem.
+     */
+    protected function getFileSystem() : FileSystem
+    {
+        return new FileSystem();
     }
 }
