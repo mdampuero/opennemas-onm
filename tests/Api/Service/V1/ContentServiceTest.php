@@ -193,9 +193,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('content.patchItem', [
+                'action' => 'Api\Service\V1\OrmService::patchItem',
                 'id'     => 1,
-                'item'   => $item,
-                'action' => 'Api\Service\V1\OrmService::patchItem'
+                'item'   => $item
             ]);
 
         $this->service->patchItem(1, $data);
@@ -263,9 +263,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('content.updateItem', [
+                'action' => 'Api\Service\V1\OrmService::updateItem',
                 'id'     => 1,
-                'item'   => $item,
-                'action' => 'Api\Service\V1\OrmService::updateItem'
+                'item'   => $item
             ]);
 
         $this->service->updateItem(1, $data);
