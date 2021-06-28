@@ -295,7 +295,7 @@ class Poll extends Content
                 'total_votes' => $this->total_votes
             ], [ 'pk_poll' => $this->id ]);
 
-            dispatchEventWithParams('content.update', [ 'item' => $this ]);
+            dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
 
             return true;
         } catch (\Exception $e) {

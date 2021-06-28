@@ -114,7 +114,11 @@ class RedisServiceTest extends \PHPUnit\Framework\TestCase
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('redis.getItem', [ 'id' => 'glorp', 'item' => 'garply' ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('redis.deleteItem', [ 'id' => 'glorp', 'item' => 'garply' ]);
+            ->with('redis.deleteItem', [
+                'action' => 'Api\Service\V1\RedisService::deleteItem',
+                'id'     => 'glorp',
+                'item'   => 'garply'
+            ]);
 
         $this->service->deleteItem('glorp');
     }

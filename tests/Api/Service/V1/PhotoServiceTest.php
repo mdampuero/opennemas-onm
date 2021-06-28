@@ -283,8 +283,9 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('content.deleteList', [
-                'ids'   => [ 1, 2 ],
-                'items' => [ $itemA, $itemB ]
+                'action' => 'Api\Service\V1\PhotoService::deleteList',
+                'ids'    => [ 1, 2 ],
+                'item'   => [ $itemA, $itemB ]
             ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
