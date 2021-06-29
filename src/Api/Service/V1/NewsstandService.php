@@ -25,7 +25,9 @@ class NewsstandService extends ContentService
         }
 
         try {
-            $data = $this->assignUser(
+            $data['changed'] = new \DateTime();
+            $data['created'] = new \DateTime();
+            $data            = $this->assignUser(
                 $data,
                 [ 'fk_user_last_editor', 'fk_publisher' ]
             );
