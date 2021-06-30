@@ -199,10 +199,14 @@ class SitemapHelper
         $path  = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
         $files = [];
 
-        $this->finder->files()->in($path);
+        try {
+            $this->finder->files()->in($path);
+        } catch (\Exception $e) {
+            return $files;
+        }
 
         if (!$this->finder->hasResults()) {
-            return [];
+            return $files;
         }
 
         foreach ($this->finder as $file) {
@@ -252,12 +256,7 @@ class SitemapHelper
         $em = $this->container->get('entity_repository');
 
         $filters = [
-            'content_type_name' => [
-                [
-                    'value'    => $types,
-                    'operator' => 'IN'
-                ]
-            ],
+            'content_type_name' => [[ 'value' => $types, 'operator' => 'IN' ]],
             'content_status'    => [[ 'value' => 1 ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
             'endtime'           => [
@@ -332,7 +331,7 @@ class SitemapHelper
      * Save the sitemap and returns the length.
      *
      * @param string $path     The path of the sitemap.
-     * @param array  $contents The array of contents to persist.
+     * @param string $contents The array of contents to persist.
      *
      * @return integer The length of the sitemap.
      */
