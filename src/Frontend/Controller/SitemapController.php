@@ -181,7 +181,8 @@ class SitemapController extends Controller
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ], 'changed ' => [
+                ],
+                'changed' => [
                     [
                         'value' => sprintf(
                             '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
@@ -337,6 +338,7 @@ class SitemapController extends Controller
                 'googleNews' => $googleNews
             ]);
 
+        $file = null;
         if (!empty($path)) {
             $length = null;
 
