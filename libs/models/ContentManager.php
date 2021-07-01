@@ -451,7 +451,6 @@ class ContentManager
             ],
             'endtime'           => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00'],
                 [ 'value'  => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => $now, 'operator' => '>' ]
             ],
@@ -689,7 +688,6 @@ class ContentManager
             'starttime'       => [[ 'value' => $date, 'operator' => '>=' ]],
             'endtime'         => [
                 'union' => 'OR',
-                [ 'value' => '0000-00-00 00:00:00' ],
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => $now, 'operator' => '>' ],
             ],

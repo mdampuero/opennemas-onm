@@ -140,8 +140,6 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->contentHelper->expects($this->at(4))->method('isInTime')
             ->willReturn(true);
-        $this->contentHelper->expects($this->at(5))->method('isInTime')
-            ->willReturn(false);
 
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
 
@@ -168,11 +166,5 @@ class ContentManagerTest extends \PHPUnit\Framework\TestCase
         $content->endtime   = null;
 
         $this->assertEquals(1, count($cm->getinTime([ $content ])));
-
-        // Check with content with zeroed values
-        $content->starttime = '0000-00-00 00:00:00';
-        $content->endtime   = '0000-00-00 00:00:00';
-
-        $this->assertEquals(0, count($cm->getinTime([ $content ])));
     }
 }
