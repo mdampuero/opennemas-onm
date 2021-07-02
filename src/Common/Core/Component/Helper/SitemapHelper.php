@@ -8,6 +8,7 @@ use Opennemas\Orm\Core\EntityManager;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Helper class to retrieve sitemaps data.
@@ -182,7 +183,7 @@ class SitemapHelper
             '/' . $this->instance->getSitemapShortPath() .
             '/' . $filename;
 
-        $date = filemtime($path);
+        $date = @filemtime($path);
 
         return !empty($date) ? date("Y-m-d H:i:s", $date) : $date;
     }
@@ -249,7 +250,7 @@ class SitemapHelper
      *
      * @return mixed $items The elements or the number of elements depending on the number.
      */
-    public function getContents($date, $types, $perpage = null)
+    public function getContents($date, $types, $perpage = null, $page = 1)
     {
         $em = $this->container->get('entity_repository');
 
@@ -284,7 +285,13 @@ class SitemapHelper
             return $em->countBy($filters);
         }
 
-        return $em->findBy($filters, ['changed' => 'asc'], $perpage);
+        $contents = $em->findBy($filters, ['changed' => 'asc'], $perpage, $page, $perpage * ($page - 1));
+
+        if (empty($contents)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $contents;
     }
 
     /**

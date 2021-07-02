@@ -239,7 +239,8 @@ class SitemapController extends Controller
         $settings = $this->get('core.helper.sitemap')->getSettings();
         $types    = $this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ]);
 
-        $contents = $this->get('core.helper.sitemap')->getContents($date, $types, $settings['perpage']);
+        $contents = $this->get('core.helper.sitemap')
+            ->getContents($date, $types, $settings['perpage'], $page);
 
         if ($date === date('Y-m')) {
             $path = null;
