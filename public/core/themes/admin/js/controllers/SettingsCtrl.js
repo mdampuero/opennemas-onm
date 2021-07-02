@@ -207,6 +207,25 @@
           }
         };
 
+        // Updates data to send to server when related contents change
+        $scope.$watch('[ settings.logo_defaultID, settings.logo_simpleID, settings.logo_favicoID, settings.logo_embedID ]', function(nv, ov) {
+          if (nv[0]) {
+            $scope.settings.logo_default =  parseInt(nv[0].pk_content);
+          }
+
+          if (nv[1]) {
+            $scope.settings.logo_simple =  parseInt(nv[1].pk_content);
+          }
+
+          if (nv[2]) {
+            $scope.settings.logo_favico =  parseInt(nv[2].pk_content);
+          }
+
+          if (nv[3]) {
+            $scope.settings.logo_embed =  parseInt(nv[3].pk_content);
+          }
+        });
+
         /**
          * @function filterFromLanguages
          * @memberOf SettingsCtrl
@@ -559,40 +578,24 @@
             }
           }
 
-          if ($scope.settings.site_logo) {
-            data.settings.site_logo = $scope.settings.site_logo;
-
-            if (!(data.settings.site_logo instanceof File)) {
-              data.settings.site_logo = $scope.settings.site_logo
-                .replace($scope.extra.prefix, '');
-            }
+          if ($scope.settings.logo_defaultID) {
+            data.settings.logo_default = parseInt($scope.settings.logo_defaultID.pk_content);
+            delete data.settings.logo_defaultID;
           }
 
-          if ($scope.settings.mobile_logo) {
-            data.settings.mobile_logo = $scope.settings.mobile_logo;
-
-            if (!(data.settings.mobile_logo instanceof File)) {
-              data.settings.mobile_logo = data.settings.mobile_logo
-                .replace($scope.extra.prefix, '');
-            }
+          if ($scope.settings.logo_simpleID) {
+            data.settings.logo_simple = parseInt($scope.settings.logo_simpleID.pk_content);
+            delete data.settings.logo_simpleID;
           }
 
-          if (data.settings.favico) {
-            data.settings.favico = $scope.settings.favico;
-
-            if (!(data.settings.favico instanceof File)) {
-              data.settings.favico = data.settings.favico
-                .replace($scope.extra.prefix, '');
-            }
+          if (data.settings.logo_favicoID) {
+            data.settings.logo_favico = parseInt($scope.settings.logo_favicoID.pk_content);
+            delete data.settings.logo_favicoID;
           }
 
-          if (data.settings.sn_default_img) {
-            data.settings.sn_default_img = $scope.settings.sn_default_img;
-
-            if (!(data.settings.sn_default_img instanceof File)) {
-              data.settings.sn_default_img = data.settings.sn_default_img
-                .replace($scope.extra.prefix, '');
-            }
+          if (data.settings.logo_embedID) {
+            data.settings.logo_embed = parseInt($scope.settings.logo_embedID.pk_content);
+            delete data.settings.logo_embedID;
           }
 
           return data;
@@ -608,33 +611,13 @@
         $scope.pre = function() {
           // Backup some settings
           $scope.backup = {
-            favico:               $scope.settings.favico,
-            mobile_logo:          $scope.settings.mobile_logo,
+            logo_favico:          $scope.settings.logo_favico,
+            logo_simple:          $scope.settings.logo_simple,
             site_color:           $scope.settings.site_color,
             site_color_secondary: $scope.settings.site_color_secondary,
-            site_logo:            $scope.settings.site_logo,
-            sn_default_img:       $scope.settings.sn_default_img
+            logo_default:         $scope.settings.logo_default,
+            logo_embed:           $scope.settings.logo_embed
           };
-
-          if ($scope.settings.site_logo) {
-            $scope.settings.site_logo =
-              $scope.extra.prefix + $scope.settings.site_logo;
-          }
-
-          if ($scope.settings.mobile_logo) {
-            $scope.settings.mobile_logo =
-              $scope.extra.prefix + $scope.settings.mobile_logo;
-          }
-
-          if ($scope.settings.favico) {
-            $scope.settings.favico =
-              $scope.extra.prefix + $scope.settings.favico;
-          }
-
-          if ($scope.settings.sn_default_img) {
-            $scope.settings.sn_default_img =
-              $scope.extra.prefix + $scope.settings.sn_default_img;
-          }
 
           if (!$scope.settings.locale.frontend.language.slug) {
             $scope.settings.locale.frontend.language.slug = {};

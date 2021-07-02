@@ -48,8 +48,27 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
+        $this->ph = $this->getMockBuilder('PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath' ])
+            ->getMock();
+
+        $this->sh = $this->getMockBuilder('SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getLogo', 'hasLogo' ])
+            ->getMock();
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
 
         $this->container->expects($this->any())
             ->method('get')
@@ -75,6 +94,12 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.helper.photo':
+                return $this->ph;
+
+            case 'core.helper.setting':
+                return $this->sh;
         }
 
         return null;
@@ -85,17 +110,13 @@ class SmartyRenderFavicoTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderFavico()
     {
-        $this->ds->expects($this->any())
-            ->method('get')
-            ->with([ 'favico', 'logo_enabled' ])
-            ->willReturn([
-                'logo_enabled' => 1 ,
-                'favico'       => 'foobar.png'
-            ]);
+        $link = '/foo/bar/sections/foobar.png';
 
-        $this->instance->expects($this->any())
-            ->method('getMediaShortPath')
-            ->willReturn('/foo/bar');
+        $this->sh->expects($this->once())->method('hasLogo')
+            ->willReturn(true);
+
+        $this->ph->expects($this->once())->method('getPhotoPath')
+            ->willReturn($link);
 
         $output = "<link rel='icon' type='image/png' href='/foo/bar/sections/foobar.png'>\n"
             . "\t<link rel='apple-touch-icon' href='/foo/bar/sections/foobar.png'>\n"

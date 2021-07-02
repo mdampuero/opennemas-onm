@@ -373,9 +373,9 @@ category:
         params:
             type: text
             options: {length: 65532, default: null, notnull: false}
-        logo_path:
-            type: string
-            options: { length: 200, default: null, notnull: false }
+        logo_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
         color:
             type: string
             options: { length: 10, default: null, notnull: false }
@@ -386,6 +386,19 @@ category:
             primary: true
             unique: true
             flags: {  }
+        -
+            name: logo_id
+            columns: [logo_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: logo_id_pk_content
+            source_field: [ logo_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 content_positions:
     columns:
         pk_fk_content:

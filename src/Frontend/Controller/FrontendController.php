@@ -538,12 +538,13 @@ class FrontendController extends Controller
     {
         $config = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color', 'site_logo' ]);
+            ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color' ]);
 
         // Get instance logo size
-        if (!empty($config['site_logo'])) {
-            $logoPath     = $this->get('core.instance')->getMediaShortPath()
-                . '/sections/' . rawurlencode($config['site_logo']);
+        if (has_logo('default')) {
+            $path     = get_photo_path(get_logo('default'));
+            $logoPath = dirname($path) . '/' . rawurlencode(basename($path));
+
             $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
             $logoFilePath = SITE_PATH . $logoPath;
 

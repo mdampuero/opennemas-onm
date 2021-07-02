@@ -30,7 +30,7 @@ services:
 
     core.helper.category:
         class:      Common\Core\Component\Helper\CategoryHelper
-        arguments:  [ '@api.service.category', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]
+        arguments:  [ '@service_container', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]
         public:     true
 
     core.helper.checkout:
@@ -50,7 +50,7 @@ services:
 
     core.helper.content_media:
         class:     Common\Core\Component\Helper\ContentMediaHelper
-        arguments: [ '@service_container' ]
+        arguments: [ '@service_container', '@orm.manager', '@entity_repository' ]
         public:    true
 
     core.helper.csv:
@@ -137,12 +137,17 @@ services:
 
     core.helper.photo:
         class:     Common\Core\Component\Helper\PhotoHelper
-        arguments: [ '@core.helper.content', '@core.instance', '@router', '@core.helper.url_generator' ]
+        arguments: [ '@core.helper.content', '@core.instance', '@router', '@core.theme', '@core.helper.url_generator' ]
         public:    true
 
     core.helper.related:
         class:     Common\Core\Component\Helper\RelatedHelper
         arguments: [ '@core.helper.content', '@core.helper.subscription', '@core.template.frontend' ]
+        public:    true
+
+    core.helper.setting:
+        class:     Common\Core\Component\Helper\SettingHelper
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.sitemap:

@@ -12,6 +12,13 @@ use Common\Model\Entity\Instance;
 class CategoryHelper
 {
     /**
+     * The services container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * The category service.
      *
      * @var CategoryService
@@ -42,17 +49,18 @@ class CategoryHelper
     /**
      * Initializes the CategoryHelper.
      *
-     * @param CategoryService    $service  The category service.
-     * @param Instance           $instance The current instance.
-     * @param Template           $tpl The frontend template.
-     * @param UrlGeneratorHelper $ugh      The url generator helper.
+     * @param ServiceContainer   $container The service container.
+     * @param Instance           $instance  The current instance.
+     * @param Template           $tpl       The frontend template.
+     * @param UrlGeneratorHelper $ugh       The url generator helper.
      */
-    public function __construct(CategoryService $service, Instance $instance, Template $tpl, UrlGeneratorHelper $ugh)
+    public function __construct($container, Instance $instance, Template $tpl, UrlGeneratorHelper $ugh)
     {
-        $this->service  = $service;
-        $this->instance = $instance;
-        $this->tpl      = $tpl;
-        $this->ugh      = $ugh;
+        $this->container = $container;
+        $this->service   = $this->container->get('api.service.category');
+        $this->instance  = $instance;
+        $this->tpl       = $tpl;
+        $this->ugh       = $ugh;
     }
 
     /**
@@ -138,19 +146,27 @@ class CategoryHelper
     /**
      * Returns the path to category logo for the provided item.
      *
-     * @param Content $item The item to get logo path for. If not provided, the
-     *                      function will try to search the item in the template.
+     * @param Content $item   The item to get logo path for. If not provided, the
+     *                        function will try to search the item in the template.
      *
-     * @return ?string The path to category logo. Null otherwise.
+     * @return Content $photo The photo content for category logo. Null otherwise.
      */
     public function getCategoryLogo($item = null)
     {
         $category = $this->getCategory($item);
 
-        return empty($category) || empty($category->logo_path)
-            ? null
-            : $this->instance->getMediaShortPath()
-                . '/' . $category->logo_path;
+        if (empty($category->logo_id)) {
+            return null;
+        }
+
+        try {
+            $photo = $this->container->get('api.service.photo')
+                ->getItem($category->logo_id);
+
+            return $photo;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
