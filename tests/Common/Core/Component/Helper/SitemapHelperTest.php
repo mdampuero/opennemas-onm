@@ -249,14 +249,6 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests the method getSitemapDate.
-     */
-    public function testGetSitemapDate()
-    {
-        $this->assertEquals(date('Y-m-d H:i:s'), $this->helper->getSitemapDate('glorp'));
-    }
-
-    /**
      * Tests the method getSitemaps when there are no results.
      */
     public function testGetSitemaps()

@@ -182,11 +182,9 @@ class SitemapHelper
             '/' . $this->instance->getSitemapShortPath() .
             '/' . $filename;
 
-        try {
-            return date("Y-m-d H:i:s", filemtime($path));
-        } catch (\Exception $e) {
-            return date("Y-m-d H:i:s");
-        }
+        $date = filemtime($path);
+
+        return !empty($date) ? date("Y-m-d H:i:s", $date) : $date;
     }
 
     /**
