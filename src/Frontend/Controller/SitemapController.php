@@ -276,14 +276,12 @@ class SitemapController extends Controller
             try {
                 $tags = $this->get('api.service.tag')->getListBySql(
                     sprintf(
-                        'SELECT * FROM tags WHERE slug LIKE "%s%%" ' .
-                        'LIMIT %s',
+                        'SELECT * FROM tags WHERE slug LIKE "%s%%" ',
                         preg_replace(
                             ['/"/', '/_/'],
                             ['\"', '\\_'],
                             $letter
-                        ),
-                        $this->get('core.helper.sitemap')->getSettings()['perpage']
+                        )
                     )
                 )['items'];
             } catch (GetListException $e) {
