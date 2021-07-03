@@ -285,7 +285,7 @@ class SitemapHelper
             return $em->countBy($filters);
         }
 
-        $contents = $em->findBy($filters, ['changed' => 'asc'], $perpage, $page, $perpage * ($page - 1));
+        $contents = $em->findBy($filters, ['changed' => 'asc'], $perpage, $page);
 
         if (empty($contents)) {
             throw new NotFoundHttpException();
