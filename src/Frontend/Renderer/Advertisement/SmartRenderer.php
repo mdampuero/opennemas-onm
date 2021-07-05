@@ -103,11 +103,12 @@ class SmartRenderer extends AdvertisementRenderer
 
         $content = $this->tpl
             ->fetch('advertisement/helpers/inline/' . $template, [
-                'config'    => $config,
-                'id'        => $ad->params['smart_format_id'],
-                'page_id'   => $config['page_id'][$params['advertisementGroup']],
-                'rand'      => rand(),
-                'targeting' => $this->getTargeting(
+                'config'     => $config,
+                'id'         => $ad->params['smart_format_id'],
+                'page_id'    => $config['page_id'][$params['advertisementGroup']],
+                'rand'       => rand(),
+                'customCode' => $this->getCustomCode(),
+                'targeting'  => $this->getTargeting(
                     $params['category'],
                     $params['extension'],
                     $params['content']->id
