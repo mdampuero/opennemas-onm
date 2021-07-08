@@ -37,7 +37,7 @@ class HttpEfe extends Http
     {
         if (array_key_exists('username', $this->params)) {
             $auth = $this->params['username'] . ':' . $this->params['password'];
-            $url  = str_replace('http://', 'http://' . $auth . '@', $url);
+            $url  = preg_replace('/(https?):\/\//', '$1://' . $auth . '@', $url);
         }
 
         $ch   = curl_init();
