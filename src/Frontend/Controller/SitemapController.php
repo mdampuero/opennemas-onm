@@ -271,6 +271,43 @@ class SitemapController extends Controller
     }
 
     /**
+     * Redirects to the new contents action.
+     */
+    public function oldContentsAction()
+    {
+        $helper             = $this->get('core.helper.sitemap');
+        $settings           = $helper->getSettings();
+        $dates              = $helper->getDates();
+        $last               = array_pop($dates);
+        list($year, $month) = explode('-', $last);
+        $page               = ceil(
+            $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
+        );
+
+        return $this->redirect(
+            $this->generateUrl(
+                'frontend_contents_sitemap',
+                ['format' => 'xml.gz', 'page' => $page, 'month' => $month, 'year' => $year]
+            ),
+            301
+        );
+    }
+
+    /**
+     * Redirects to the news action.
+     */
+    public function oldNewsAction($format)
+    {
+        return $this->redirect(
+            $this->generateUrl(
+                'frontend_news_sitemap',
+                [ 'format' => $format ]
+            ),
+            301
+        );
+    }
+
+    /**
      * Generates the tags sitemap.
      *
      * @param integer $page The current page.
@@ -279,19 +316,6 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $format)
     {
-        //TODO: Remove this as soon as possible.
-        if ($letter === null) {
-            $tags   = $this->get('core.helper.sitemap')->getTags();
-            $letter = array_shift($tags)['letter'];
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'frontend_tag_sitemap',
-                    [ 'format' => $format, 'letter' => $letter ]
-                )
-            );
-        }
-
         $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter);
@@ -316,6 +340,23 @@ class SitemapController extends Controller
         }
 
         return $this->getResponse($format, $cacheId, 'tag');
+    }
+
+    /**
+     * Redirects to the new tag action.
+     */
+    public function oldTagAction($format)
+    {
+        $tags   = $this->get('core.helper.sitemap')->getTags();
+        $letter = array_shift($tags)['letter'];
+
+        return $this->redirect(
+            $this->generateUrl(
+                'frontend_tag_sitemap',
+                [ 'letter' => $letter, 'format' => $format ]
+            ),
+            301
+        );
     }
 
     /**

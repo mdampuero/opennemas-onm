@@ -33,19 +33,25 @@ frontend_contents_sitemap:
 
 frontend_contents_sitemap_old:
     path: sitemapweb.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', year: null, month: null, page: null }
+    defaults: { _controller: FrontendBundle:Sitemap:oldContents, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
 
 frontend_contents_sitemap_image_old:
     path: sitemapimage.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', year: null, month: null, page: null }
+    defaults: { _controller: FrontendBundle:Sitemap:oldContents, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
 
 frontend_contents_sitemap_video_old:
     path: sitemapvideo.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', year: null, month: null, page: null }
+    defaults: { _controller: FrontendBundle:Sitemap:oldContents, format: 'xml' }
+    requirements:
+        format: 'xml|xml.gz'
+
+frontend_old_news_sitemap:
+    path: /sitemapnews.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:oldNews, format: 'xml'}
     requirements:
         format: 'xml|xml.gz'
 
@@ -59,6 +65,6 @@ frontend_tag_sitemap:
 
 frontend_tag_sitemap_old:
     path: sitemaptag.{format}
-    defaults: { _controller: FrontendBundle:Sitemap:tag, format: 'xml', letter: null }
+    defaults: { _controller: FrontendBundle:Sitemap:oldTag, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
