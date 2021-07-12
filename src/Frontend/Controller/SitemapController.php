@@ -56,28 +56,21 @@ class SitemapController extends Controller
     public function indexAction($format)
     {
         $cacheId  = $this->view->getCacheId('sitemap', 'index');
-        $settings = $this->get('core.helper.sitemap')->getSettings();
+        $helper   = $this->get('core.helper.sitemap');
+        $settings = $helper->getSettings();
         $letters  = [];
 
         if (!$this->isCached('index', $cacheId)) {
             $contents = [];
 
             if ($settings['tag']) {
-                $letters = $this->get('orm.connection.instance')
-                    ->fetchAll(
-                        'SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as "letter"' .
-                        'FROM `tags` WHERE `slug` IS NOT NULL'
-                    );
-
-                $letters = array_filter($letters, function ($a) {
-                    return ctype_graph($a['letter']);
-                });
+                $letters = $helper->getTags();
             }
 
-            $dates = $this->get('core.helper.sitemap')
-                ->getDates($this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ], true));
+            $dates = $helper
+                ->getDates($helper->getTypes($settings, [ 'tag' ], true));
 
-            $types = $this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ]);
+            $types = $helper->getTypes($settings, [ 'tag' ]);
 
             if (empty($dates)) {
                 return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
@@ -94,7 +87,7 @@ class SitemapController extends Controller
                     'year'  => $year,
                     'month' => $month,
                     'pages' => ceil(
-                        $this->get('core.helper.sitemap')->getContents($date, $types) / $settings['perpage']
+                        $helper->getContents($date, $types) / $settings['perpage']
                     )
                 ];
             }
@@ -216,6 +209,26 @@ class SitemapController extends Controller
      */
     public function contentsAction($year, $month, $page, $format)
     {
+        // TODO: Remove this as soon as possible
+        $helper   = $this->get('core.helper.sitemap');
+        $settings = $helper->getSettings();
+
+        if (empty(array_filter([$year, $month, $page]))) {
+            $dates              = $helper->getDates();
+            $last               = array_pop($dates);
+            list($year, $month) = explode('-', $last);
+            $page               = ceil(
+                $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
+            );
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'frontend_contents_sitemap',
+                    ['format' => 'xml.gz', 'page' => $page, 'month' => $month, 'year' => $year]
+                )
+            );
+        }
+
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
 
         $path = sprintf(
@@ -236,10 +249,8 @@ class SitemapController extends Controller
             ->get('google_news_name');
 
         $date     = $year . '-' . $month;
-        $settings = $this->get('core.helper.sitemap')->getSettings();
-        $types    = $this->get('core.helper.sitemap')->getTypes($settings, [ 'tag' ]);
-
-        $contents = $this->get('core.helper.sitemap')
+        $types    = $helper->getTypes($settings, [ 'tag' ]);
+        $contents = $helper
             ->getContents($date, $types, $settings['perpage'], $page);
 
         if ($date === date('Y-m')) {
@@ -268,6 +279,19 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $format)
     {
+        //TODO: Remove this as soon as possible.
+        if ($letter === null) {
+            $tags   = $this->get('core.helper.sitemap')->getTags();
+            $letter = array_shift($tags)['letter'];
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'frontend_tag_sitemap',
+                    [ 'format' => $format, 'letter' => $letter ]
+                )
+            );
+        }
+
         $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter);

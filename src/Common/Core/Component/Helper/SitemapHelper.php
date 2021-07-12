@@ -295,6 +295,23 @@ class SitemapHelper
     }
 
     /**
+     * Returns the list of letters with tags in the instance.
+     *
+     * @return array The array of tags.
+     */
+    public function getTags()
+    {
+        $letters = $this->connection->fetchAll(
+            'SELECT DISTINCT SUBSTR(CAST(CONVERT(slug USING utf8) as binary),1,1) as "letter"' .
+            'FROM `tags` WHERE `slug` IS NOT NULL'
+        );
+
+        return array_filter($letters, function ($a) {
+            return ctype_graph($a['letter']);
+        });
+    }
+
+    /**
      * Remove the indicated sitemaps.
      *
      * @param integer $year  The year of the sitemaps.
