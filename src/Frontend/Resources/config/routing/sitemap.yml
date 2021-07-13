@@ -22,6 +22,12 @@ frontend_news_sitemap:
     requirements:
         format: 'xml|xml.gz'
 
+frontend_contents_latest:
+    path: sitemap.contents.latest.{format}
+    defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml.gz', year: null, month: null, page: null}
+    requirements:
+        format: 'xml.gz'
+
 frontend_contents_sitemap:
     path: sitemap.contents.{year}.{month}.{page}.{format}
     defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml', page: 1 }

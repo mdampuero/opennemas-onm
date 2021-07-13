@@ -220,13 +220,6 @@ class SitemapController extends Controller
             $page               = ceil(
                 $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
             );
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'frontend_contents_sitemap',
-                    ['format' => 'xml.gz', 'page' => $page, 'month' => $month, 'year' => $year]
-                )
-            );
         }
 
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
