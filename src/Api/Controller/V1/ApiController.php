@@ -82,7 +82,7 @@ class ApiController extends Controller
 
         $ids = $request->request->get('ids', []);
 
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_DELETE'), [ $ids ]);
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_DELETE'), $ids);
 
         $msg     = $this->get('core.messenger');
         $deleted = $this->get($this->service)->deleteList($ids);
@@ -184,7 +184,7 @@ class ApiController extends Controller
         $params = $request->request->all();
         $ids    = $params['ids'];
 
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $ids ]);
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), $ids);
 
         $msg = $this->get('core.messenger');
 
