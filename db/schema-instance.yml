@@ -699,6 +699,12 @@ content_category:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: content_type_name_changed
+            columns: [ content_type_name, changed ]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: content_category_content_content_id

@@ -160,8 +160,9 @@ class CacheManager
 
         // Template converts "|" to "^"
         $cacheId = str_replace('|', '^', $cacheId);
+        $cacheId = preg_replace('/\^(desktop|phone|tablet)/', '', $cacheId);
 
-        // Make a regular expression to filter
+        // Make a regular expression to filters
         $cacheId = '/^' . preg_quote($cacheId) . '\^.*?' . '/';
 
         $files = $this->getFiles($cacheId);

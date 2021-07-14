@@ -9,9 +9,9 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetListException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Displays contents as sitemaps.
@@ -24,281 +24,415 @@ class SitemapController extends Controller
      * @const array
      */
     const EXPIRE = [
-        'image' => '1h',
-        'index' => '1d',
-        'news'  => '1h',
-        'tag'   => '1d',
-        'video' => '1h',
-        'web'   => '1h',
+        'categories' => '1d',
+        'authors'    => '1d',
+        'contents'   => '1h',
+        'index'      => '1d',
+        'news'       => '1h',
+        'tag'        => '1h',
     ];
 
     /**
-     * The list of needed extensions per action.
+     * The list of templates per action.
      *
-     * @var array
+     * @const array
      */
-    const EXTENSIONS = [
-        'image' => [ 'IMAGE_MANAGER' ],
-        'news'  => [ 'ARTICLE_MANAGER' ],
-        'tag'   => [ 'es.openhost.module.tagsSitemap' ],
-        'video' => [ 'VIDEO_MANAGER' ],
-        'web'   => [ 'ARTICLE_MANAGER', 'OPINION_MANAGER' ],
+    const TEMPLATES = [
+        'index'      => 'sitemap/index.tpl',
+        'categories' => 'sitemap/categories.tpl',
+        'authors'    => 'sitemap/authors.tpl',
+        'contents'   => 'sitemap/content.tpl',
+        'news'       => 'sitemap/news.tpl',
+        'tag'        => 'sitemap/tag.tpl'
     ];
 
     /**
      * Renders the index sitemap
      *
-     * @param string $action The sitemap action.
-     * @param string $format The sitemap format.
+     * @param string  $format The sitemap format.
      *
      * @return Response the response object
      */
-    public function indexAction($action, $format)
+    public function indexAction($format)
     {
-        $action  = empty($action) ? 'index' : $action;
-        $cacheId = $this->view->getCacheId('sitemap', $action);
-        $method  = 'generate' . $action . 'Sitemap';
+        $cacheId  = $this->view->getCacheId('sitemap', 'index');
+        $helper   = $this->get('core.helper.sitemap');
+        $settings = $helper->getSettings();
+        $letters  = [];
 
-        $this->view->setConfig('sitemap');
+        if (!$this->isCached('index', $cacheId)) {
+            $contents = [];
 
-        if (!$this->isActionAvailable($action)) {
-            throw new ResourceNotFoundException();
+            if ($settings['tag']) {
+                $letters = $helper->getTags();
+            }
+
+            $dates = $helper
+                ->getDates($helper->getTypes($settings, [ 'tag' ], true));
+
+            $types = $helper->getTypes($settings, [ 'tag' ]);
+
+            if (empty($dates)) {
+                return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
+            }
+
+            foreach ($dates as $date) {
+                if (empty($date)) {
+                    continue;
+                }
+
+                list($year, $month) = explode('-', $date);
+
+                $contents[] = [
+                    'year'  => $year,
+                    'month' => $month,
+                    'pages' => ceil(
+                        $helper->getContents($date, $types) / $settings['perpage']
+                    )
+                ];
+            }
+
+            return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
         }
 
-        if (method_exists($this, $method)
-            && (empty($this->view->getCaching())
-                || !$this->view->isCached('sitemap/sitemap.tpl', $cacheId))
-        ) {
-            $this->{$method}();
-        }
-
-        return $this->getResponse($format, $action, $cacheId);
+        return $this->getResponse($format, $cacheId, 'index');
     }
 
     /**
-     * Generates and assigns the information for the image sitemap to template.
+     * Returns the categories sitemap.
+     *
+     * @param string $format The format to get the response.
+     *
+     * @return Response The categories sitemap response.
      */
-    protected function generateImageSitemap()
+    public function categoriesAction($format)
     {
-        $contents = $this->getContents([
-            'join' => [
-                [
-                    'table'      => 'articles',
-                    'pk_content' => [ [ 'value' => 'pk_article', 'field' => true ] ]
+        $cacheId    = $this->view->getCacheId('sitemap', 'categories');
+        $categories = [];
+
+        if (!$this->isCached('categories', $cacheId)) {
+            try {
+                $categories = $this->get('api.service.category')->getList(
+                    'enabled = 1'
+                )['items'];
+            } catch (GetListException $e) {
+            }
+        }
+
+        return $this->getResponse($format, $cacheId, 'categories', $categories);
+    }
+
+    /**
+     * Returns the author sitemap.
+     *
+     * @param string $format The format to get the response.
+     *
+     * @return Response The authors sitemap response.
+     */
+    public function authorsAction($format)
+    {
+        $cacheId = $this->view->getCacheId('sitemap', 'authors');
+        $authors = [];
+
+        if (!$this->isCached('authors', $cacheId)) {
+            try {
+                $authors = $this->get('api.service.author')->getList(
+                    'activated = 1'
+                )['items'];
+            } catch (GetListException $e) {
+            }
+        }
+
+        return $this->getResponse($format, $cacheId, 'authors', $authors);
+    }
+
+    /**
+     * Returns the news sitemap.
+     *
+     * @param string $format The format to get the response.
+     *
+     * @return Response The newss sitemap.
+     */
+    public function newsAction($format)
+    {
+        $cacheId = $this->view->getCacheId('sitemap', 'news');
+
+        if (!$this->isCached('news', $cacheId)) {
+            $settings = $this->get('core.helper.sitemap')->getSettings();
+            $filters  = [
+                'content_type_name' => [
+                    [ 'value' => [ 'article', 'opinion' ], 'operator' => 'IN' ]
+                ],
+                'content_status'    => [[ 'value' => 1 ]],
+                'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                ],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'changed' => [
+                    [
+                        'value' => sprintf(
+                            '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
+                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s'))),
+                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s')))
+                        ),
+                        'field' => true,
+                        'operator' => 'BETWEEN'
+                    ]
                 ]
-            ],
-            'content_type_name' => [['value' => 'article']],
-            'img2'              => [['value' => 'NULL', 'operator' => '<>']],
-        ]);
+            ];
 
-        $em = getService('entity_repository');
+            $contents = $this->get('entity_repository')
+                ->findBy($filters, ['changed' => 'desc'], $settings['total']);
 
-        $this->view->assign(['contents' => $contents]);
-    }
-
-    /**
-     * Generates and assigns the information for the news sitemap to template.
-     */
-    protected function generateNewsSitemap()
-    {
-        $tags     = [];
-        $contents = $this->getContents();
-
-        foreach ($contents as &$content) {
-            $tags = array_merge($content->tags, $tags);
+            return $this->getResponse($format, $cacheId, 'news', $contents);
         }
 
-        $this->view->assign([
-            'contents'   => $contents,
-            'googleNews' => $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('google_news_name'),
-            'tags'       => $this->getTags($tags)
-        ]);
+        return $this->getResponse($format, $cacheId, 'news');
     }
 
     /**
-     * Generates and assigns the information for the tag sitemap to template.
-     */
-    protected function generateTagSitemap()
-    {
-        $sql = 'SELECT DISTINCT(slug) FROM tags'
-            . ' WHERE slug REGEXP "^[a-zA-Z0-9]{1}.{1,29}$"'
-            . ' ORDER BY slug ASC';
-
-        $tags = $this->get('orm.connection.instance')->fetchAll($sql);
-        $tags = array_map(function ($a) {
-            return $a['slug'];
-        }, $tags);
-
-        $this->view->assign([ 'tags' => $tags ]);
-    }
-
-    /**
-     * Generates and assigns the information for the video sitemap to template.
-     */
-    protected function generateVideoSitemap()
-    {
-        $tags     = [];
-        $contents = $this->getContents([
-            'content_type_name' => [ ['value' => 'video'] ]
-        ]);
-
-        foreach ($contents as $content) {
-            $tags = array_merge($content->tags, $tags);
-        }
-
-        $this->view->assign([
-            'contents' => $contents,
-            'tags'     => $this->getTags($tags)
-        ]);
-    }
-
-    /**
-     * Generates and assigns the information for the web sitemap to template.
-     */
-    protected function generateWebSitemap()
-    {
-        $contents = $this->getContents();
-
-        $this->view->assign([ 'contents' => $contents ]);
-    }
-
-    /**
-     * Returns the list of contents basing on a criteria.
+     * Returns the content sitemap.
      *
-     * @param array   $criteria The criteria to search by.
-     * @param integer $limit    The maximum number of contents to return.
+     * @param integer $year   The year of the content.
+     * @param integer $month  The month of the content.
+     * @param integer $page   The page of the contents.
+     * @param string  $format The format to get the response.
      *
-     * @return Array The list of contents
+     * @return Response The sitemap for the contents.
      */
-    public function getContents($criteria = [], $limit = 100)
+    public function contentsAction($year, $month, $page, $format)
     {
-        $types = [];
+        // TODO: Remove this as soon as possible
+        $helper   = $this->get('core.helper.sitemap');
+        $settings = $helper->getSettings();
 
-        if ($this->get('core.security')->hasExtension('ARTICLE_MANAGER')) {
-            $types[] = [ 'value' => 'article' ];
+        if (empty(array_filter([$year, $month, $page]))) {
+            $dates              = $helper->getDates();
+            $last               = array_pop($dates);
+            list($year, $month) = explode('-', $last);
+            $page               = ceil(
+                $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
+            );
         }
 
-        if ($this->get('core.security')->hasExtension('OPINION_MANAGER')) {
-            $types[] = [ 'value' => 'opinion' ];
+        $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
+
+        $path = sprintf(
+            '%s/%s/sitemap.%d.%s.%d.xml.gz',
+            $this->getParameter('core.paths.cache'),
+            $this->get('core.instance')->getSitemapShortPath(),
+            $year,
+            str_pad($month, 2, "0", STR_PAD_LEFT),
+            $page
+        );
+
+        if (file_exists($path)) {
+            return $this->getResponse($format, $cacheId, 'contents', [], $path, $page, $year, $month);
         }
 
-        // Set search filters
-        $filters = [
-            'content_type_name' => array_merge([
-                'union' => 'OR',
-            ], $types),
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
+        $googleNews = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('google_news_name');
 
-        if (!empty($criteria)) {
-            $filters = array_merge($filters, $criteria);
+        $date     = $year . '-' . $month;
+        $types    = $helper->getTypes($settings, [ 'tag' ]);
+        $contents = $helper
+            ->getContents($date, $types, $settings['perpage'], $page);
+
+        if ($date === date('Y-m')) {
+            $path = null;
         }
 
-        $em       = $this->get('entity_repository');
-        $contents = $em->findBy($filters, ['created' => 'desc'], $limit, 1);
+        return $this->getResponse(
+            $format,
+            $cacheId,
+            'contents',
+            $contents,
+            $path,
+            $page,
+            $year,
+            $month,
+            $googleNews
+        );
+    }
 
-        // Filter by scheduled
-        $cm       = new \ContentManager();
-        $contents = $cm->getInTime($contents);
-        $contents = $cm->filterBlocked($contents);
+    /**
+     * Redirects to the new contents action.
+     */
+    public function oldContentsAction()
+    {
+        $helper             = $this->get('core.helper.sitemap');
+        $settings           = $helper->getSettings();
+        $dates              = $helper->getDates();
+        $last               = array_pop($dates);
+        list($year, $month) = explode('-', $last);
+        $page               = ceil(
+            $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
+        );
 
-        $contents = array_filter($contents, function ($a) {
-            return !array_key_exists('bodyLink', $a->params)
-                || empty($a->params['bodyLink']);
-        });
+        return $this->redirect(
+            $this->generateUrl(
+                'frontend_contents_sitemap',
+                ['format' => 'xml.gz', 'page' => $page, 'month' => $month, 'year' => $year]
+            ),
+            301
+        );
+    }
 
-        return $contents;
+    /**
+     * Redirects to the news action.
+     */
+    public function oldNewsAction($format)
+    {
+        return $this->redirect(
+            $this->generateUrl(
+                'frontend_news_sitemap',
+                [ 'format' => $format ]
+            ),
+            301
+        );
+    }
+
+    /**
+     * Generates the tags sitemap.
+     *
+     * @param integer $page The current page.
+     *
+     * @return Response the sitemap with the tags of the current page.
+     */
+    public function tagAction($letter, $format)
+    {
+        $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
+
+        $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter);
+        $tags    = [];
+
+        if (!$this->isCached('tag', $cacheId)) {
+            try {
+                $tags = $this->get('api.service.tag')->getListBySql(
+                    sprintf(
+                        'SELECT * FROM tags WHERE slug LIKE "%s%%" ',
+                        preg_replace(
+                            ['/"/', '/_/'],
+                            ['\"', '\\_'],
+                            $letter
+                        )
+                    )
+                )['items'];
+            } catch (GetListException $e) {
+            }
+
+            return $this->getResponse($format, $cacheId, 'tag', $tags);
+        }
+
+        return $this->getResponse($format, $cacheId, 'tag');
+    }
+
+    /**
+     * Redirects to the new tag action.
+     */
+    public function oldTagAction($format)
+    {
+        $tags   = $this->get('core.helper.sitemap')->getTags();
+        $letter = array_shift($tags)['letter'];
+
+        return $this->redirect(
+            $this->generateUrl(
+                'frontend_tag_sitemap',
+                [ 'letter' => $letter, 'format' => $format ]
+            ),
+            301
+        );
     }
 
     /**
      * Generates a response basing on the format and the action.
      *
-     * @param string $format  Whether compress the sitemap or not
-     * @param string $action  The type of sitemap
+     * @param string $settings The sitemap settings.
+     * @param string $format  Whether compress the sitemap or not.
+     * @param string $action The type of sitemap.
      * @param string $cacheId The template cache id.
+     * @param array  $contentsCount The array with de contents count.
+     * @param integer $page The sitemap page.
+     * @param integer $year The sitemap year.
+     * @param integer $month The sitemap month.
      *
      * @return Response The response object.
      */
-    protected function getResponse($format, $action, $cacheId)
-    {
-        $headers  = [ 'Content-Type' => 'application/xml; charset=utf-8' ];
-        $contents = $this->get('core.template.frontend')
-            ->render('sitemap/sitemap.tpl', [
-                'action'   => $action,
-                'cache_id' => $cacheId
-            ]);
-
-        if ($format === 'xml.gz') {
-            $contents = gzencode($contents, 9);
-            $headers  = [
-                'Content-Type'        => 'application/x-gzip',
-                'Content-Length'      => strlen($contents),
-                'Content-Disposition' => 'attachment; filename="sitemap'
-                    . $action . '.xml.gz"'
-            ];
-        }
-
-        $headers = array_merge($headers, [
+    protected function getResponse(
+        $format,
+        $cacheId,
+        $action,
+        $contentsCount = [],
+        $path = null,
+        $page = null,
+        $year = null,
+        $month = null,
+        $googleNews = null
+    ) {
+        $headers = [
+            'Content-Type' => 'application/xml; charset=utf-8',
             'x-cache-for' => self::EXPIRE[$action],
             'x-cacheable' => true,
-            'x-tags'      => sprintf('sitemap,%s', $action),
-            'x-cacheable' => true,
-        ]);
+            'x-tags'      => sprintf('sitemap,%s', $action)
+        ];
+
+        $contents = $this->get('core.template.frontend')
+            ->render(self::TEMPLATES[$action], [
+                'action'     => $action,
+                'cache_id'   => $cacheId,
+                'counters'   => $contentsCount,
+                'page'       => $page,
+                'year'       => $year,
+                'month'      => $month,
+                'googleNews' => $googleNews
+            ]);
+
+        $file = null;
+        if (!empty($path)) {
+            $length = null;
+
+            if (!file_exists($path)) {
+                $length = $this->get('core.helper.sitemap')->saveSitemap($path, $contents);
+            }
+
+            $file = !empty($length) ? gzencode($contents, 9) : file_get_contents($path);
+        }
+
+        if ($format === 'xml.gz') {
+            $filename = implode(".", array_filter([ $action, $year, $month, $page ]));
+            $file     = $file ?? gzencode($contents, 9);
+
+            $headers = array_merge($headers, [
+                'Content-Type'        => 'application/x-gzip',
+                'Content-length'      => strlen($file),
+                'Content-Disposition' => sprintf('attachment; filename="sitemap.%s.xml.gz"', $filename)
+            ]);
+
+            return new Response($file, 200, $headers);
+        }
 
         return new Response($contents, 200, $headers);
     }
 
     /**
-     *  Method for recover all tags for the content list
+     * Returns true if there is a valid cache.
      *
-     * @param array $tagIds List of ids for tags
+     * @param string $action The action to check.
      *
-     * @return array List of tags for the contents
+     * @return string True if the content is cached false otherwise.
      */
-    protected function getTags($tagIds)
+    protected function isCached($action, $cacheId)
     {
-        $tagIds = array_unique($tagIds);
-        return $this->get('api.service.tag')
-            ->getListByIdsKeyMapped($tagIds)['items'];
-    }
+        $this->view->setConfig('sitemap');
 
-    /**
-     * Checks if the action is available basing on the current activated
-     * extensions.
-     *
-     * @param string $action The action name.
-     *
-     * @return boolean True if the action is avaiable. False otherwise.
-     */
-    protected function isActionAvailable($action)
-    {
-        if ($action === 'index'
-            || !array_key_exists($action, self::EXTENSIONS)
-        ) {
-            return true;
-        }
-
-        $available = false;
-
-        foreach (self::EXTENSIONS[$action] as $extension) {
-            if ($this->get('core.security')->hasExtension($extension)) {
-                $available = true;
-            }
-        }
-
-        return $available;
+        return !empty($this->view->getCaching() && $this->view->isCached(self::TEMPLATES[$action], $cacheId));
     }
 }

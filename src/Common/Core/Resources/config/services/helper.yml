@@ -150,6 +150,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.sitemap:
+        class:     Common\Core\Component\Helper\SitemapHelper
+        arguments: [ '@service_container', '@core.instance', '@orm.manager', '@orm.connection.instance', '%core.paths.cache%' ]
+        public:    true
+
     core.helper.structured_data:
         class:     Common\Core\Component\Helper\StructuredData
         arguments: [ '@service_container' ]

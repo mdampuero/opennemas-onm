@@ -106,6 +106,7 @@ class SettingController extends Controller
         'webmastertools_bing',
         'webmastertools_google',
         'youtube_page',
+        'sitemap',
     ];
 
     /**
@@ -120,7 +121,8 @@ class SettingController extends Controller
         'body_start_script_amp',
         'header_script',
         'header_script_amp',
-        'robots_txt_rules'
+        'robots_txt_rules',
+        'sitemap'
     ];
 
     /**
@@ -181,11 +183,17 @@ class SettingController extends Controller
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
             'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
-            'logo_favico', 'logo_embed'
+            'logo_favico', 'logo_embed', 'sitemap'
         ];
 
         foreach ($toint as $key) {
-            $settings[$key] = (int) $settings[$key];
+            if (!empty($settings[$key]) && is_array($settings[$key])) {
+                foreach ($settings[$key] as $element => $value) {
+                    $settings[$key][$element] = (int) $value;
+                }
+            } else {
+                $settings[$key] = (int) $settings[$key];
+            }
         }
 
         $settings = array_filter($settings, function ($a) {
@@ -202,6 +210,7 @@ class SettingController extends Controller
                     'backend'  => $locale->getAvailableLocales('backend'),
                     'frontend' => $locale->getAvailableLocales('frontend')
                 ],
+                'sitemaps' => $this->get('core.helper.sitemap')->getSitemapsInfo(),
                 'timezones' => \DateTimeZone::listIdentifiers(),
                 'prefix'    => $this->get('core.instance')->getMediaShortPath()
                     . '/',
@@ -262,6 +271,24 @@ class SettingController extends Controller
 
         // TODO: Remove this hack when frontend settings name are updated
         $settings = $this->updateOldSettingsName($settings);
+
+        // TODO: Remove this when the sitemap is separated from settings.
+        if (array_key_exists('sitemap', $settings)) {
+            $remove = false;
+            $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
+
+            foreach ($settings['sitemap'] as $key => $value) {
+                if ($key === 'total' || $value === $config[$key]) {
+                    continue;
+                }
+
+                $remove = true;
+            }
+
+            if ($remove) {
+                $this->get('core.helper.sitemap')->deleteSitemaps();
+            }
+        }
 
         // Save settings
         $this->get('orm.manager')
@@ -353,6 +380,7 @@ class SettingController extends Controller
                 }
             }
         }
+
         return $settings;
     }
 
