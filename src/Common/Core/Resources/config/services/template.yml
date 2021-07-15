@@ -16,6 +16,7 @@ parameters:
             - generate_fb_pages_tag
             - js_includes
             - statistics
+            - lazyscripts
     core.template.admin.filters:
         output:
             - css_includes
