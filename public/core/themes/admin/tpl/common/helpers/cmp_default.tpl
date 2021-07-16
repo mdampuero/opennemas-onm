@@ -1,5 +1,5 @@
-<script src="https://cmp-cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-cmp-builder-version="2.0.0" data-domain-script="bottom-panel-dark-stack-global-ot"></script>
-<script>
+<@script src="https://cmp-cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-cmp-builder-version="2.0.0" data-domain-script="bottom-panel-dark-stack-global-ot"></script>
+<@script>
     function OptanonWrapper() {
       var div = document.getElementById('overlay-cookies');
 
