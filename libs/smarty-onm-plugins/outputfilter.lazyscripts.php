@@ -27,9 +27,16 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
         && !preg_match('/\/rss/', $uri)
     ) {
         if (in_array('es.openhost.module.lazyscripts', $instance->activated_modules)) {
+            // Mark as no lazy the strings that already has data-onm-type.
+            $output = preg_replace(
+                '/<script([^<>]*?)(data-onm-type=\"[A-Za-z+\/\.]+")([^<>]*)>/',
+                '<@script $1 $2 $3>',
+                $output
+            );
+
             // Change the valid type with the markup.
             $output = preg_replace(
-                '/<script([^<>]*?) (type=\"[A-Za-z+\/\.]+")([^<>]*)>/',
+                '/<script([^<>]*?)(type=\"[A-Za-z+\/\.]+")([^<>]*)>/',
                 '<@script $1 data-onm-$2 type="onmlazyloadscript">',
                 $output
             );
