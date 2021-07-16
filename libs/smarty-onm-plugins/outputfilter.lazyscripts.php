@@ -9,8 +9,9 @@
  */
 function smarty_outputfilter_lazyscripts($output, $smarty)
 {
-    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
-    $uri     = $request->getUri();
+    $request  = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $instance = $smarty->getContainer()->get('core.instance');
+    $uri      = $request->getUri();
 
     if (is_null($request)) {
         return $output;
@@ -25,8 +26,7 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
     ) {
-        // TODO: Replace this with the module check.
-        if (true) {
+        if (in_array('es.openhost.module.lazyscripts', $instance->activated_modules)) {
             // Change the valid type with the markup.
             $output = preg_replace(
                 '/<script([^<>]*?) (type=\"[A-Za-z+\/\.]+")([^<>]*)>/',
