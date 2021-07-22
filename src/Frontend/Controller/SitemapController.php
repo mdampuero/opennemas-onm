@@ -237,10 +237,6 @@ class SitemapController extends Controller
             return $this->getResponse($format, $cacheId, 'contents', [], $path, $page, $year, $month);
         }
 
-        $googleNews = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('google_news_name');
-
         $date     = $year . '-' . $month;
         $types    = $helper->getTypes($settings, [ 'tag' ]);
         $contents = $helper
@@ -258,8 +254,7 @@ class SitemapController extends Controller
             $path,
             $page,
             $year,
-            $month,
-            $googleNews
+            $month
         );
     }
 
@@ -374,8 +369,7 @@ class SitemapController extends Controller
         $path = null,
         $page = null,
         $year = null,
-        $month = null,
-        $googleNews = null
+        $month = null
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
@@ -392,7 +386,9 @@ class SitemapController extends Controller
                 'page'       => $page,
                 'year'       => $year,
                 'month'      => $month,
-                'googleNews' => $googleNews
+                'googleNews' => $this->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('google_news_name')
             ]);
 
         $file = null;
