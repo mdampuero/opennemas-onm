@@ -37,7 +37,7 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
             // Change the valid type with the markup.
             $output = preg_replace(
                 '/<script([^<>]*?)(type=\"[A-Za-z+\/\.]+")([^<>]*)>/',
-                '<@script $1 data-onm-$2 type="onmlazyloadscript">',
+                '<@script $1 data-onm-$2 type="onmlazyloadscript" $3>',
                 $output
             );
 
