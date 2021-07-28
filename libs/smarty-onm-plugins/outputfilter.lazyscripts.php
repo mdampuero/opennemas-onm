@@ -25,6 +25,7 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
         && !preg_match('/\/rss/', $uri)
+        && !preg_match('@\.amp\.html@', $uri)
     ) {
         if (in_array('es.openhost.module.lazyscripts', $instance->activated_modules)) {
             // Mark as no lazy the strings that already has data-onm-type.
