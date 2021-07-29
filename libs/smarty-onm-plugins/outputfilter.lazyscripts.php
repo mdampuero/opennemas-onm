@@ -11,11 +11,12 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
 {
     $request  = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
     $instance = $smarty->getContainer()->get('core.instance');
-    $uri      = $request->getUri();
 
     if (is_null($request)) {
         return $output;
     }
+
+    $uri = $request->getUri();
 
     if (!preg_match('/newsletter/', $smarty->source->resource)
         && !preg_match('/\/manager/', $uri)
