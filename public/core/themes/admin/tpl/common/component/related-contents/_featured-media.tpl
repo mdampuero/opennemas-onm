@@ -7,10 +7,8 @@
       {include file="common/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
     </span>
   {/if}
-  <span ng-if="data.extra.related_contents[{$iName}.target_id]" class="pull-right">
-    <a class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-href="[% getFeaturedMediaUrl(data.extra.related_contents[{$iName}.target_id]) %]" ng-click="$event.stopPropagation()" target="_blank" uib-tooltip="{t}Edit{/t}">
-      {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[{$iName}.target_id]" iFlagName=true iFlagIcon=true}
-    </a>
+  <span class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-if="data.extra.related_contents[{$iName}.target_id]" class="pull-right">
+    {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[{$iName}.target_id]" iFlagName=true iFlagIcon=true}
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$iName} }">
