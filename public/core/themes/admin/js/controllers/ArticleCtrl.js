@@ -160,7 +160,7 @@
           CKEDITOR.instances.body.updateElement();
           CKEDITOR.instances.description.updateElement();
 
-          var status = { starttime: null, endtime: null, content_status: 1 };
+          var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
           var item   = Object.assign({}, $scope.data.item, status);
 
           var data = {
