@@ -279,7 +279,11 @@ class SmartRendererTest extends TestCase
         $this->ds->expects($this->at(0))->method('get')
             ->with('smart_ad_server')
             ->willReturn($config);
+
         $this->ds->expects($this->at(1))->method('get')
+            ->with('smart_custom_code');
+
+        $this->ds->expects($this->at(2))->method('get')
             ->with('smart_ad_server')
             ->willReturn([]);
 

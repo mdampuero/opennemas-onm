@@ -2,6 +2,8 @@
 <script type="application/javascript">
   var targetingCode = '{$targeting}';
 
+  {$customCode}
+
   sas.cmd.push(function() {
     sas.call("std", {
       siteId: {$config['site_id']},

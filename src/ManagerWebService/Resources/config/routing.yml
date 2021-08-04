@@ -43,6 +43,10 @@ manager_ws_sidebar:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/sidebar.yml'
     prefix:   /
 
+manager_ws_sitemap:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/sitemap.yml'
+    prefix:   /
+
 manager_ws_template:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/template.yml'
     prefix:   /

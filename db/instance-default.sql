@@ -493,6 +493,7 @@ CREATE TABLE `contents` (
   KEY `fk_author` (`fk_author`),
   KEY `fk_publisher` (`fk_publisher`),
   KEY `fk_user_last_editor` (`fk_user_last_editor`),
+  KEY `content_type_name_changed` (`content_type_name`,`changed`),
   CONSTRAINT `fk_author_users_id` FOREIGN KEY (`fk_author`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher_users_id` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_user_last_editor_users_id` FOREIGN KEY (`fk_user_last_editor`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -1266,4 +1267,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-15  7:52:27
+-- Dump completed on 2021-06-24  6:38:14
