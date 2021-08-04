@@ -396,25 +396,6 @@
               instance.on('instanceReady', function(ev) {
                 // Disable html attribute sorting
                 ev.editor.dataProcessor.writer.sortAttributes = 0;
-
-                // Data from HTML value
-                var data = element[0].innerText;
-
-                // If model, data from model
-                if (scope && scope.ngModel) {
-                  data = scope.ngModel;
-                }
-
-                scope.$apply(function() {
-                  stop = true;
-
-                  instance.setData(data);
-
-                  if (form) {
-                    form.$setPristine(true);
-                  }
-                });
-
                 scope.$broadcast('ckeditor.ready.' + instance.name);
               });
 
