@@ -58,9 +58,9 @@ class UserSubscriber implements EventSubscriberInterface
      */
     public function onUserUpdate(Event $event)
     {
-        $users = $event->hasArgument('item')
-            ? [ $event->getArgument('item') ]
-            : $event->getArgument('items');
+        $users = is_array($event->getArgument('item'))
+            ? $event->getArgument('item')
+            : [ $event->getArgument('item') ];
 
         // TODO: Remove when using new ORM for users
         foreach ($users as $user) {

@@ -145,9 +145,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $category = new Category([ 'id' => 3750 ]);
 
-        $this->event->expects($this->at(0))->method('hasArgument')
-            ->with('item')->willReturn(true);
-        $this->event->expects($this->at(1))->method('getArgument')
+        $this->event->expects($this->any())->method('getArgument')
             ->with('item')->willReturn($category);
 
         $this->helper->expects($this->at(0))->method('deleteItem')
@@ -169,10 +167,8 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             new Category([ 'id' => 1086 ])
         ];
 
-        $this->event->expects($this->at(0))->method('hasArgument')
-            ->with('item')->willReturn(false);
-        $this->event->expects($this->at(1))->method('getArgument')
-            ->with('items')->willReturn($categories);
+        $this->event->expects($this->any())->method('getArgument')
+            ->with('item')->willReturn($categories);
 
         $this->helper->expects($this->at(0))->method('deleteItem')
             ->with($categories[0]);
