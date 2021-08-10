@@ -47,6 +47,53 @@
          * @memberOf SettingsCtrl
          *
          * @description
+         *  The default sitemap values
+         *
+         * @type {Object}
+         */
+        $scope.sitemap = {
+          perpage: 500,
+          total: 100,
+          album: 0,
+          article: 0,
+          event: 0,
+          photo: 0,
+          kiosko: 0,
+          letter: 0,
+          opinion: 0,
+          poll: 0,
+          tag: 0,
+          video: 0
+        };
+
+        /**
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *  The default criteria values for the sitemap.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = {
+          year:  '',
+          month: '',
+          page: null
+        };
+
+        /**
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *  The default value for the sitemaps flag.
+         *
+         * @type {boolean}
+         */
+        $scope.flags.show = false;
+
+        /**
+         * @memberOf SettingsCtrl
+         *
+         * @description
          *  The settings object with default values.
          *
          * @type {Object}
@@ -160,6 +207,25 @@
           }
         };
 
+        // Updates data to send to server when related contents change
+        $scope.$watch('[ settings.logo_defaultID, settings.logo_simpleID, settings.logo_favicoID, settings.logo_embedID ]', function(nv, ov) {
+          if (nv[0]) {
+            $scope.settings.logo_default =  parseInt(nv[0].pk_content);
+          }
+
+          if (nv[1]) {
+            $scope.settings.logo_simple =  parseInt(nv[1].pk_content);
+          }
+
+          if (nv[2]) {
+            $scope.settings.logo_favico =  parseInt(nv[2].pk_content);
+          }
+
+          if (nv[3]) {
+            $scope.settings.logo_embed =  parseInt(nv[3].pk_content);
+          }
+        });
+
         /**
          * @function filterFromLanguages
          * @memberOf SettingsCtrl
@@ -180,6 +246,34 @@
             .filter(function(e) {
               return e.code !== from;
             });
+        };
+
+        /**
+         * @function filterSitemaps
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *  Filter the sitemap files.
+         *
+         * @param {Array}
+         */
+        $scope.filterSitemaps = function(criteria) {
+          return function(item) {
+            var obj   = {};
+            var array = item.split('.').slice(1, 4);
+
+            obj.year  = array[0];
+            obj.month = array[1];
+            obj.page  = array[2];
+
+            for (var prop in criteria) {
+              if (criteria[prop] !== null && criteria[prop] !== '' && criteria[prop].toString() !== obj[prop]) {
+                return false;
+              }
+            }
+
+            return true;
+          };
         };
 
         /**
@@ -286,8 +380,7 @@
           http.get('api_v1_backend_settings_list').then(function(response) {
             $scope.instance = response.data.instance;
             $scope.extra    = response.data.extra;
-            $scope.settings = angular.merge($scope.settings,
-              response.data.settings);
+            $scope.settings = angular.merge($scope.settings, response.data.settings);
 
             $scope.pre();
 
@@ -388,6 +481,28 @@
         };
 
         /**
+         * @function removeSitemaps
+         * @memberOf SettingCtrl
+         *
+         * @description
+         *  Remove sitemaps.
+         */
+        $scope.removeSitemaps = function() {
+          http.delete('api_v1_backend_sitemap_delete', $scope.criteria)
+            .then(function(response) {
+              // Remove the sitemaps in the extras
+              if (response.data.deleted.length > 0) {
+                $scope.extra.sitemaps.items = $scope.extra.sitemaps.items.filter(function(sitemap) {
+                  return response.data.deleted.indexOf(sitemap) < 0;
+                });
+              }
+              messenger.post(response.data.message);
+            }, function(response) {
+              messenger.post(response.data.message);
+            });
+        };
+
+        /**
          * @function save
          * @memberOf SettingsCtrl
          *
@@ -401,6 +516,10 @@
 
           http.put('api_v1_backend_settings_save', data)
             .then(function(response) {
+              // Remove the sitemaps from the array if the sitemap configuration has been changed
+              if ($scope.flags.sitemap) {
+                $scope.extra.sitemaps.items = [];
+              }
               $scope.saving = false;
               messenger.post(response.data);
             }, function(response) {
@@ -459,40 +578,24 @@
             }
           }
 
-          if ($scope.settings.site_logo) {
-            data.settings.site_logo = $scope.settings.site_logo;
-
-            if (!(data.settings.site_logo instanceof File)) {
-              data.settings.site_logo = $scope.settings.site_logo
-                .replace($scope.extra.prefix, '');
-            }
+          if ($scope.settings.logo_defaultID) {
+            data.settings.logo_default = parseInt($scope.settings.logo_defaultID.pk_content);
+            delete data.settings.logo_defaultID;
           }
 
-          if ($scope.settings.mobile_logo) {
-            data.settings.mobile_logo = $scope.settings.mobile_logo;
-
-            if (!(data.settings.mobile_logo instanceof File)) {
-              data.settings.mobile_logo = data.settings.mobile_logo
-                .replace($scope.extra.prefix, '');
-            }
+          if ($scope.settings.logo_simpleID) {
+            data.settings.logo_simple = parseInt($scope.settings.logo_simpleID.pk_content);
+            delete data.settings.logo_simpleID;
           }
 
-          if (data.settings.favico) {
-            data.settings.favico = $scope.settings.favico;
-
-            if (!(data.settings.favico instanceof File)) {
-              data.settings.favico = data.settings.favico
-                .replace($scope.extra.prefix, '');
-            }
+          if (data.settings.logo_favicoID) {
+            data.settings.logo_favico = parseInt($scope.settings.logo_favicoID.pk_content);
+            delete data.settings.logo_favicoID;
           }
 
-          if (data.settings.sn_default_img) {
-            data.settings.sn_default_img = $scope.settings.sn_default_img;
-
-            if (!(data.settings.sn_default_img instanceof File)) {
-              data.settings.sn_default_img = data.settings.sn_default_img
-                .replace($scope.extra.prefix, '');
-            }
+          if (data.settings.logo_embedID) {
+            data.settings.logo_embed = parseInt($scope.settings.logo_embedID.pk_content);
+            delete data.settings.logo_embedID;
           }
 
           return data;
@@ -508,33 +611,13 @@
         $scope.pre = function() {
           // Backup some settings
           $scope.backup = {
-            favico:               $scope.settings.favico,
-            mobile_logo:          $scope.settings.mobile_logo,
+            logo_favico:          $scope.settings.logo_favico,
+            logo_simple:          $scope.settings.logo_simple,
             site_color:           $scope.settings.site_color,
             site_color_secondary: $scope.settings.site_color_secondary,
-            site_logo:            $scope.settings.site_logo,
-            sn_default_img:       $scope.settings.sn_default_img
+            logo_default:         $scope.settings.logo_default,
+            logo_embed:           $scope.settings.logo_embed
           };
-
-          if ($scope.settings.site_logo) {
-            $scope.settings.site_logo =
-              $scope.extra.prefix + $scope.settings.site_logo;
-          }
-
-          if ($scope.settings.mobile_logo) {
-            $scope.settings.mobile_logo =
-              $scope.extra.prefix + $scope.settings.mobile_logo;
-          }
-
-          if ($scope.settings.favico) {
-            $scope.settings.favico =
-              $scope.extra.prefix + $scope.settings.favico;
-          }
-
-          if ($scope.settings.sn_default_img) {
-            $scope.settings.sn_default_img =
-              $scope.extra.prefix + $scope.settings.sn_default_img;
-          }
 
           if (!$scope.settings.locale.frontend.language.slug) {
             $scope.settings.locale.frontend.language.slug = {};
@@ -589,6 +672,19 @@
         $scope.removeTranslator = function(index) {
           $scope.settings.translators.splice(index, 1);
         };
+
+        // Update sitemap values from default
+        $scope.$watch('settings.sitemap', function(nv, ov) {
+          if (nv && nv !== ov && !$scope.flags.sitemap) {
+            $scope.flags.sitemap = true;
+          }
+
+          if (!nv || ov) {
+            return;
+          }
+
+          $scope.settings.sitemap = angular.merge($scope.sitemap, $scope.settings.sitemap);
+        }, true);
       }
     ]);
 })();

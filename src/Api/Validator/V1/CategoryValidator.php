@@ -19,25 +19,34 @@ class CategoryValidator extends Validator
      */
     public function validate($item)
     {
-        $names = $item->name;
-        if (!is_array($names)) {
-            $names = [ $names ];
-        }
+        // Check logo size
+        if (!empty($item->logo_id)) {
+            $logo = $this->container->get('api.service.photo')
+                ->getItem($item->logo_id);
 
-        foreach ($names as $name) {
-            try {
-                $category = $this->container->get('api.service.category')
-                    ->getItemBySlug($name);
-
-                // Update action
-                if ($category->id == $item->id) {
-                    continue;
-                }
-            } catch (\Exception $e) {
-                continue;
+            if ($logo->height > 120) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        _('The maximum height for the %s is 120px. Please adjust your image size.'),
+                        'logo ' . _('of') . ' ' . $item->title
+                    ),
+                    400
+                );
             }
-
-            throw new InvalidArgumentException(_('Invalid category'), 400);
         }
+
+        try {
+            $category = $this->container->get('api.service.category')
+                ->getItemBySlug($item->name);
+
+            // Update action
+            if ($category->id === $item->id) {
+                return;
+            }
+        } catch (\Exception $e) {
+            return;
+        }
+
+        throw new InvalidArgumentException(_('Invalid category'), 400);
     }
 }

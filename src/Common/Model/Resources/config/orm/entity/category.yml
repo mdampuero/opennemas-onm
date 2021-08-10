@@ -13,7 +13,7 @@ orm:
                 rss:                 boolean
                 parent_id:           integer
                 params:              array
-                logo_path:           string
+                logo_id:             integer
                 color:               string
             converters:
                 default:
@@ -58,9 +58,9 @@ orm:
                         params:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
-                        logo_path:
-                            type: string
-                            options: { default: null, notnull: false, length: 200 }
+                        logo_id:
+                            type: bigint
+                            options: { default: null, unsigned: true }
                         color:
                             type: string
                             options: { default: null, notnull: false, length: 10 }

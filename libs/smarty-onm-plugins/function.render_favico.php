@@ -10,14 +10,12 @@ function smarty_function_render_favico($params, &$smarty)
 {
     // Check if favico is defined on site
     $favicoUrl = '/assets/images/favicon.png';
-    $settings  = $smarty->getContainer()
-        ->get('orm.manager')
-        ->getDataSet('Settings', 'instance')
-        ->get([ 'favico', 'logo_enabled' ]);
 
-    if (!empty($settings['logo_enabled']) && $settings['favico']) {
-        $favicoUrl = $smarty->getContainer()->get('core.globals')->getInstance()
-            ->getMediaShortPath() . '/sections/' . rawurlencode($settings['favico']);
+    if (has_logo('favico')) {
+        $path      = get_photo_path(get_logo('favico'));
+        $favicoUrl = dirname($path)
+            . '/'
+            . rawurlencode(basename($path));
     }
 
     $fileInfo  = pathinfo($favicoUrl);

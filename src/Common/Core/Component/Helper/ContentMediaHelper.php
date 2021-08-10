@@ -129,40 +129,8 @@ class ContentMediaHelper
             return $this->authorHelper->getAuthorAvatar($content);
         }
 
-        if ($this->ds->get('logo_enabled')) {
-            return $this->getMediaFromLogo();
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns default media object for content
-     *
-     * @return object  $mediaObject The media object.
-     */
-    protected function getMediaFromLogo()
-    {
-        $filepath = $this->container->getParameter('core.paths.public')
-            . $this->instance->getMediaShortPath() . '/sections/';
-
-        $logo = $this->ds->get('sn_default_img');
-
-        if (!empty($logo)) {
-            try {
-                $information = $this->imageHelper->getInformation($filepath . $logo);
-
-                return new Content([
-                    'path'              => 'sections/' . $logo,
-                    'width'             => $information['width'],
-                    'height'            => $information['height'],
-                    'content_type_name' => 'photo',
-                    'content_status'    => 1,
-                    'in_litter'         => 0
-                ]);
-            } catch (\Exception $e) {
-                return null;
-            }
+        if ($this->container->get('core.helper.setting')->hasLogo('embed')) {
+            return $this->container->get('core.helper.setting')->getLogo('embed');
         }
 
         return null;

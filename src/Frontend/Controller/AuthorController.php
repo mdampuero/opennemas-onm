@@ -55,13 +55,11 @@ class AuthorController extends Controller
                 'in_litter'       => [[ 'value' => 0 ]],
                 'starttime'       => [
                     'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
                     [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'         => [
                     'union' => 'OR',
-                    [ 'value' => '0000-00-00 00:00:00' ],
                     [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
                     [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]

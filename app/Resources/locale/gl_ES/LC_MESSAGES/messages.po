@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 10:13+0000\n"
-"PO-Revision-Date: 2021-05-25 12:16+0200\n"
+"POT-Creation-Date: 2021-08-10 07:01+0000\n"
+"PO-Revision-Date: 2021-08-10 09:19+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1237,8 +1237,20 @@ msgstr "Ordes"
 msgid "OpCache Status"
 msgstr "Estado de Opcache"
 
+msgid "Sitemaps"
+msgstr "Sitemaps"
+
 msgid "Show/hide sidebar"
 msgstr "Mostrar/ocultar barra lateral"
+
+msgid "Items per page must be between 1 and 50000"
+msgstr "Os elementos por páxina deben estar entre 1 e 50000"
+
+msgid "Items total must be between 500 and 1000"
+msgstr "O total de elementos debe estar entre 500 e 1000"
+
+msgid "Sitemap saved successfully"
+msgstr "A configuración do sitemap gardouse correctamente"
 
 #, php-format
 msgid "%s users deleted successfully"
@@ -1311,6 +1323,13 @@ msgstr "O elemento xa está importado"
 msgid "The synchronization is already in progress. Try again later."
 msgstr ""
 "O proceso de sincronización está en curso. Inténtao de novo máis tarde."
+
+#, php-format
+msgid "The maximum height for the %s is 120px. Please adjust your image size."
+msgstr "O alto máximo para o %s é 120px. Por favor axusta o tamaño da imaxe."
+
+msgid "of"
+msgstr "de"
 
 msgid "Invalid category"
 msgstr "Categoría non válida"
@@ -1436,10 +1455,6 @@ msgstr "Opinión"
 
 msgid "Blog"
 msgstr "Blog"
-
-#, php-format
-msgid "The maximum height for the %s is 120px. Please adjust your image size."
-msgstr "O alto máximo para o %s é 120px. Por favor axusta o tamaño da imaxe."
 
 #, php-format
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
@@ -2662,9 +2677,6 @@ msgstr "reiniciar"
 msgid "apply"
 msgstr "aplicar"
 
-msgid "of"
-msgstr "de"
-
 msgid "Clear"
 msgstr "Limpar"
 
@@ -3793,6 +3805,33 @@ msgstr ""
 "Se tes unha <strong>páxina en Twitter</strong>, engade o teu nome de perfil "
 "no formulario. Por defecto usarase o de OpenNeMas."
 
+msgid "Sitemap"
+msgstr "Sitemap"
+
+msgid "Indicates the elements that will be displayed in each sitemap."
+msgstr "Indica os elementos que se amosarán en cada sitemap."
+
+msgid "Total sitemap news elements"
+msgstr "Novas totais para o sitemap"
+
+msgid "Elements per page"
+msgstr "Elementos por páxina"
+
+msgid "Sitemaps enabled"
+msgstr "Sitemaps habilitados"
+
+msgid "Activate the elements that you want to appear in the sitemap."
+msgstr "Active os elementos que desexa que aparezan no sitemap."
+
+msgid "Sitemaps disk cache"
+msgstr "Caché de disco dos sitemaps"
+
+msgid "This section allows to remove the sitemaps saved on disk."
+msgstr "Esta sección permite borrar os sitemaps gardados en disco."
+
+msgid "Search for a sitemap by year, month and page"
+msgstr "Busca un sitemap por año, mes y página"
+
 msgid "Only masters"
 msgstr "Só masters"
 
@@ -4759,6 +4798,9 @@ msgstr "Recargar portada"
 msgid "Config opinion module"
 msgstr "Configuración do módulo de opinión"
 
+msgid "External"
+msgstr "Externo"
+
 msgid "Mosaic"
 msgstr "Mosaico"
 
@@ -4961,7 +5003,6 @@ msgstr "No hai contidos dispoñibeis"
 msgid "Select an element"
 msgstr "Selecciona un elemento"
 
-#, fuzzy
 msgid "Attachment"
 msgstr "Anexos"
 
@@ -5400,9 +5441,6 @@ msgstr "Tamaño"
 
 msgid "Inner"
 msgstr "Interior"
-
-msgid "External"
-msgstr "Externo"
 
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
@@ -6745,6 +6783,12 @@ msgstr "Partner que pode ver esta información do cliente"
 
 msgid "View on"
 msgstr "Ver en"
+
+msgid "Do you want to modify this settings?"
+msgstr "¿Queres modificar esta configuración?"
+
+msgid "This action can affect the performance of the platform"
+msgstr "Esta acción pode afectar o rendemento da plataforma"
 
 msgid "UUID"
 msgstr "UUID"

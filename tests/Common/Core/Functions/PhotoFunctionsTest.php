@@ -25,6 +25,8 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([
                 'getPhotoPath',
                 'getPhotoSize',
+                'getPhotoSizes',
+                'getPhotoSrcSet',
                 'getPhotoWidth',
                 'getPhotoHeight',
                 'getPhotoMimeType',
@@ -73,6 +75,28 @@ class PhotoFunctionsTest extends \PHPUnit\Framework\TestCase
             ->with($this->item);
 
         get_photo_size($this->item);
+    }
+
+    /**
+     * Tests get_photo_sizes.
+     */
+    public function testGetPhotoSizes()
+    {
+        $this->helper->expects($this->once())->method('getPhotoSizes')
+            ->with('desktop');
+
+        get_photo_sizes('desktop');
+    }
+
+    /**
+     * Tests get_photo_srcset.
+     */
+    public function testGetPhotoSrcSet()
+    {
+        $this->helper->expects($this->once())->method('getPhotoSrcSet')
+            ->with($this->item, 'thumbnail', 'desktop');
+
+        get_photo_srcset($this->item, 'thumbnail', 'desktop');
     }
 
     /**
