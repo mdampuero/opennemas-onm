@@ -31,7 +31,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
         // Check for AMP pages
         if (preg_match('@\.amp\.html@', $uri)) {

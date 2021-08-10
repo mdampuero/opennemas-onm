@@ -24,7 +24,7 @@ function smarty_outputfilter_data_layer($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
         && !preg_match('@\.amp\.html@', $uri)
     ) {
         $dataLayerMap = $smarty->getContainer()

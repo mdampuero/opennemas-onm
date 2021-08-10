@@ -25,7 +25,7 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
         && !preg_match('@\.amp\.html@', $uri)
     ) {
         if (in_array('es.openhost.module.lazyscripts', $instance->activated_modules)) {
@@ -50,10 +50,8 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
                 $output
             );
         }
-
-        // Remove the @ on the scripts marked in template as not lazy.
-        return preg_replace('/<@script/', '<script', $output);
     }
 
-    return $output;
+    // Remove the @ on the scripts marked in template as not lazy.
+    return preg_replace('/<@script/', '<script', $output);
 }
