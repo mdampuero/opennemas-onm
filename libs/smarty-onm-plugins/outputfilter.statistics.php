@@ -28,7 +28,7 @@ function smarty_outputfilter_statistics($output, $smarty)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads/', $uri)
         && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
         $output = $smarty->getContainer()->get('frontend.renderer')->render(
             $content,
