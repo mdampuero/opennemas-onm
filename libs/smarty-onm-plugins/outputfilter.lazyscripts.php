@@ -50,10 +50,8 @@ function smarty_outputfilter_lazyscripts($output, $smarty)
                 $output
             );
         }
-
-        // Remove the @ on the scripts marked in template as not lazy.
-        return preg_replace('/<@script/', '<script', $output);
     }
 
-    return $output;
+    // Remove the @ on the scripts marked in template as not lazy.
+    return preg_replace('/<@script/', '<script', $output);
 }
