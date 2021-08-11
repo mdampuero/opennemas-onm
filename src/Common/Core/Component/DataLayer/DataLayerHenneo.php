@@ -87,18 +87,6 @@ class DataLayerHenneo extends DataLayer
     }
 
     /**
-     * Returns the customization for the updateDate.
-     *
-     * @param null|string $date The date to customize.
-     *
-     * @return null|string The customized date.
-     */
-    protected function customizeUpdateDate(?string $date)
-    {
-        return $this->customizePublicationDate($date);
-    }
-
-    /**
      * Returns the customization for the format.
      *
      * @param string $format The format to customize.
