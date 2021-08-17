@@ -42,7 +42,7 @@ class UserCacheHelper extends CacheHelper
     public function deleteItem(User $item) : CacheHelper
     {
         $this->queue->push(new ServiceTask('cache', 'delete', [
-            'user-' . $item->id
+            sprintf('user-%s', $item->id)
         ]));
 
         $isAuthor = array_search(3, array_column($item->user_groups, 'user_group_id'));
