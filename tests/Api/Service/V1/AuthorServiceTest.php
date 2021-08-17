@@ -26,6 +26,11 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->dispatcher = $this->getMockBuilder('Common\Core\Component\EventDispatcher\EventDispatcher')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'dispatch' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
                 'getMetadata', 'getRepository', 'persist',
@@ -75,6 +80,9 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.oql.fixer':
                 return $this->fixer;
+
+            case 'core.dispatcher':
+                return $this->dispatcher;
         }
 
         return null;

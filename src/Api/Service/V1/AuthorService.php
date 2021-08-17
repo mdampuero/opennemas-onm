@@ -60,6 +60,11 @@ class AuthorService extends UserService
             });
 
             $this->em->persist($item, $item->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
+                'id'   => $id,
+                'item' => $item
+            ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
