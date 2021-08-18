@@ -261,66 +261,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getMedia when kiosko.
-     */
-    public function testGetMediaWhenKiosko()
-    {
-        $kiosko = new Content([
-            'pk_content'        => 4,
-            'content_type_name' => 'kiosko',
-            'thumbnail'         => '2018/11/06/kiosko.jpg'
-        ]);
-
-        $kioskoImg = new Content([
-            'path'              => 'kiosko/2018/11/06/kiosko.jpg',
-            'width'             => 1920,
-            'height'            => 1080,
-            'content_type_name' => 'photo',
-            'content_status'    => 1,
-            'in_litter'         => 0
-        ]);
-
-        $this->contentHelper->expects($this->at(1))->method('getType')
-            ->with($kiosko)
-            ->willReturn('kiosko');
-
-        $this->imageHelper->expects($this->any())->method('getInformation')
-            ->willReturn([ 'width' => 1920, 'height' => 1080 ]);
-
-        $this->contentHelper->expects($this->once())->method('getContent')
-            ->with($kioskoImg)
-            ->willReturn($kioskoImg);
-
-        $this->assertEquals($kioskoImg, $this->helper->getMedia($kiosko));
-
-        $this->imageHelper->expects($this->at(0))->method('getInformation')
-            ->will($this->throwException(new \Exception()));
-
-        $this->contentHelper->expects($this->at(1))->method('getType')
-            ->with($kiosko)
-            ->willReturn('kiosko');
-
-        $this->helper->getMedia($kiosko);
-    }
-
-    /**
-     * Tests getMedia when kiosko withou thumnail.
-     */
-    public function testGetMediaWhenKioskoWithoutThumbnail()
-    {
-        $kiosko = new Content([
-            'pk_content'        => 4,
-            'content_type_name' => 'kiosko',
-        ]);
-
-        $this->contentHelper->expects($this->at(1))->method('getType')
-            ->with($kiosko)
-            ->willReturn('kiosko');
-
-        $this->assertNull($this->helper->getMedia($kiosko));
-    }
-
-    /**
      * Tests getMediaFromLogo.
      */
     public function testGetMediaWhenLogo()
