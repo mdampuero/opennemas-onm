@@ -109,8 +109,6 @@ class AuthorHelper
 
                 $author = $this->service->getItem($item->fk_author);
 
-                $cacheId = 'author-' . $item->fk_author;
-
                 $this->cache->set($cacheId, $author, 900);
 
                 return $author;

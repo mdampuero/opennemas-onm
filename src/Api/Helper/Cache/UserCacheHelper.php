@@ -25,9 +25,9 @@ class UserCacheHelper extends CacheHelper
      */
     public function __construct(?Instance $instance, Queue $queue, $container)
     {
+        parent::__construct($instance, $queue);
+
         $this->cache    = $container->get('cache.connection.instance');
-        $this->instance = $instance;
-        $this->queue    = $queue;
     }
 
     /**
@@ -45,10 +45,8 @@ class UserCacheHelper extends CacheHelper
             sprintf('user-%s', $item->id)
         ]));
 
-        $isAuthor = array_search(3, array_column($item->user_groups, 'user_group_id'));
-
-        if (false !== $isAuthor) {
-            $this->cache->remove('author-' . $item->id);
+        if (array_search(3, array_column($item->user_groups, 'user_group_id')) !== false) {
+            $this->cache->remove(sprintf('author-%s', $item->id));
         }
 
         return $this;

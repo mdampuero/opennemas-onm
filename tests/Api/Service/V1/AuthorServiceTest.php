@@ -89,65 +89,6 @@ class AuthorServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests deleteItem when no error.
-     */
-    public function testDeleteItem()
-    {
-        $item = new Entity([
-            'user_groups' => [ [ 'status' => 1, 'user_group_id' => 3 ] ]
-        ]);
-
-        $this->repository->expects($this->once())->method('findOneBy')
-            ->willReturn($item);
-        $this->em->expects($this->once())->method('persist')
-            ->with($item);
-
-        $this->service->deleteItem(23);
-    }
-
-    /**
-     * Tests deleteItem when the item to delete is the current user.
-     *
-     * @expectedException \Api\Exception\DeleteItemException
-     */
-    public function testDeleteItemWhenEqualsToCurrentUser()
-    {
-        $this->service->deleteItem(1);
-    }
-
-    /**
-     * Tests deleteItem when no item found.
-     *
-     * @expectedException \Api\Exception\DeleteItemException
-     */
-    public function testDeleteItemWhenNoEntity()
-    {
-        $this->repository->expects($this->any())->method('findOneBy')
-            ->will($this->throwException(new \Exception()));
-
-        $this->service->deleteItem(23);
-    }
-
-    /**
-     * Tests deleteItem when an error happens while removing object.
-     *
-     * @expectedException \Api\Exception\DeleteItemException
-     */
-    public function testDeleteItemWhenErrorWhileRemoving()
-    {
-        $item = new Entity([
-            'user_groups' => [ [ 'status' => 1, 'user_group_id' => 3 ] ]
-        ]);
-
-        $this->repository->expects($this->once())->method('findOneBy')
-            ->willReturn($item);
-        $this->em->expects($this->once())->method('persist')
-            ->with($item)->will($this->throwException(new \Exception()));
-
-        $this->service->deleteItem(23);
-    }
-
-    /**
      * Tests getItem when no error.
      */
     public function testGetItem()
