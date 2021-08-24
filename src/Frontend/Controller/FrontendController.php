@@ -315,14 +315,10 @@ class FrontendController extends Controller
     protected function getExpectedUri($action, $params = [])
     {
         if (array_key_exists('item', $params)) {
-            $outParams = [];
-
-            if (array_key_exists('_format', $params) && !empty($params['_format'])) {
-                $outParams['_format'] = $params['_format'];
-            }
-
             $expected = $this->get('core.helper.url_generator')
-                ->generate($params['item'], $outParams);
+                ->generate($params['item'], array_filter($params, function ($key) {
+                    return $key === '_format';
+                }, ARRAY_FILTER_USE_KEY));
 
             return $this->get('core.helper.l10n_route')->localizeUrl($expected);
         }
