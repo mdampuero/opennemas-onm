@@ -191,11 +191,11 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn('opinion');
 
-        $this->contentHelper->expects($this->at(2))->method('getType')
+        $this->contentHelper->expects($this->at(1))->method('getType')
             ->with($video)
             ->willReturn('video');
 
-        $this->contentHelper->expects($this->at(4))->method('getType')
+        $this->contentHelper->expects($this->at(2))->method('getType')
             ->with($photo)
             ->willReturn('photo');
 
@@ -240,8 +240,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
-
-        $this->contentHelper->expects($this->at(2))->method('getType')
+        $this->contentHelper->expects($this->at(1))->method('getType')
             ->with($content)
             ->willReturn('opinion');
 
@@ -253,7 +252,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn(2);
 
-        $this->contentHelper->expects($this->at(3))->method('getContent')
+        $this->contentHelper->expects($this->at(2))->method('getContent')
             ->with(2)
             ->willReturn($photo);
 
