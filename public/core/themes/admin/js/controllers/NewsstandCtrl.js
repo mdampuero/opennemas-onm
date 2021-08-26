@@ -46,19 +46,6 @@
          * @memberOf NewsstandCtrl
          *
          * @description
-         *  The map of related contents and types.
-         *
-         * @type {Object}
-         */
-        $scope.relatedMap = {
-          relatedFrontpage: 'related_frontpage',
-          relatedInner:     'related_inner',
-        };
-
-        /**
-         * @memberOf NewsstandCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}

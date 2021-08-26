@@ -548,6 +548,29 @@
         };
 
         /**
+         * @function getFeaturedMedia
+         * @memberOf BaseCtrl
+         *
+         * @description
+         *   Returns the featured media of type for an item.
+         *
+         * @param {Object} The item to get featured media for.
+         * @param {String} The featured media type.
+         */
+        $scope.getFeaturedMedia = function(item, type) {
+          var featured = item.related_contents.filter(function(e) {
+            return e.type === type;
+          });
+
+          if (featured.length === 0 ||
+              !$scope.data.extra.related_contents[featured[0].target_id]) {
+            return { path: null };
+          }
+
+          return $scope.data.extra.related_contents[featured[0].target_id];
+        };
+
+        /**
          * Insert the selected items in media picker in the target element.
          *
          * @param  Object event The event object.
