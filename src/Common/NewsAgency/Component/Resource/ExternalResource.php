@@ -57,6 +57,13 @@ class ExternalResource
     public $id = '';
 
     /**
+     * If the resource has parent.
+     *
+     * @var boolean
+     */
+    public $isChild = false;
+
+    /**
      * The file name for media resources.
      *
      * @var string
