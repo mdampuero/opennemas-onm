@@ -35,15 +35,14 @@ class NewsstandService extends ContentService
 
             $item = new $this->class($data);
 
-            $nh            = $this->container->get('core.helper.newsstand');
-            $filePath      = $nh->generatePath($file, $item->created);
+            $nh       = $this->container->get('core.helper.newsstand');
+            $filePath = $nh->generatePath($file, $item->created);
 
             if ($nh->exists($filePath)) {
                 throw new FileAlreadyExistsException();
             }
 
-            $item->path      = $nh->getRelativePath($filePath);
-            $item->thumbnail = str_replace('pdf', 'jpg', $item->path);
+            $item->path = $nh->getRelativePath($filePath);
 
             $photo = $this->container->get('api.service.photo')->createItem([], $thumbnail);
 
@@ -96,12 +95,9 @@ class NewsstandService extends ContentService
                 $data['path'] = $nh->getRelativePath($filePath);
 
                 $nh->remove($item->path);
-//                $nh->remove($item->thumbnail);
                 $nh->move($file, $filePath);
-//                $nh->move($thumbnail, $thumbnailPath);
 
-                $item->path      = $nh->getRelativePath($filePath);
-                $item->thumbnail = str_replace('pdf', 'jpg', $item->path);
+                $item->path = $nh->getRelativePath($filePath);
 
                 $photo = $this->container->get('api.service.photo')->createItem([], $thumbnail);
 
