@@ -558,6 +558,10 @@
          * @param {String} The featured media type.
          */
         $scope.getFeaturedMedia = function(item, type) {
+          if (!item.related_contents) {
+            return { path: null };
+          }
+
           var featured = item.related_contents.filter(function(e) {
             return e.type === type;
           });
