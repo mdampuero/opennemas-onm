@@ -85,8 +85,8 @@ class NewsstandService extends ContentService
             $item->setData($data);
 
             if (!empty($file)) {
-                $nh            = $this->container->get('core.helper.newsstand');
-                $filePath      = $nh->generatePath($file, $item->created);
+                $nh       = $this->container->get('core.helper.newsstand');
+                $filePath = $nh->generatePath($file, $item->created);
 
                 if ($nh->exists($filePath)) {
                     throw new FileAlreadyExistsException();
