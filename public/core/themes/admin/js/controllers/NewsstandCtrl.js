@@ -66,9 +66,10 @@
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
 
-          if ($scope.item.thumbnail) {
-            $scope.preview = $scope.data.extra.paths.newsstand + '/' +
-              $scope.item.thumbnail;
+          var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
+
+          if (featured.path) {
+            $scope.featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
           }
         };
 
