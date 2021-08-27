@@ -3,6 +3,7 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Template\Template;
+use Common\Model\Entity\Content;
 use Repository\EntityManager;
 
 /**
