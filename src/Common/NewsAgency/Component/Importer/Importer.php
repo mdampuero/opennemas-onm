@@ -506,7 +506,7 @@ class Importer
 
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
-                $data['related_contents'] = $this->getRelated(
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
                 );
@@ -611,31 +611,5 @@ class Importer
         return array_map(function ($tag) {
             return $tag->id;
         }, $tags);
-    }
-
-    /**
-     * Returns a list of related contents.
-     *
-     * @param Content $content       The content to push like related.
-     * @param array   $relationships The array of the relationships.
-     * @param array   $actual        The array of actual related contents.
-     *
-     * @return array An array of related contents without source id.
-     */
-    protected function getRelated(Content $content, array $relationships, array $actual = []) : array
-    {
-        $new = [];
-
-        foreach ($relationships as $relationship) {
-            array_push($new, [
-                'target_id' => $content->pk_content,
-                'type' => $relationship,
-                'content_type_name' => $content->content_type_name,
-                'caption' => $content->description,
-                'position' => 0
-            ]);
-        }
-
-        return array_merge($actual, $new);
     }
 }
