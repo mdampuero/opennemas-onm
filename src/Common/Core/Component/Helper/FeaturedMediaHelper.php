@@ -225,7 +225,7 @@ class FeaturedMediaHelper
      *
      * @return array An array of related contents without source id.
      */
-    protected function getRelated(Content $content, array $relationships, array $actual = []) : array
+    public function getRelated(Content $content, array $relationships, array $actual = []) : array
     {
         $new = [];
 
