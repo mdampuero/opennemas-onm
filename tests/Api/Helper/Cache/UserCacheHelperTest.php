@@ -17,6 +17,10 @@ class UserCacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->container = $this->getMockBuilder('ServiceContainer' . uniqid())
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->instance = new Instance();
 
         $this->queue = $this->getMockBuilder('Opennemas\Task\Component\Queue\Queue')
@@ -24,7 +28,7 @@ class UserCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'push' ])
             ->getMock();
 
-        $this->helper = new UserCacheHelper($this->instance, $this->queue);
+        $this->helper = new UserCacheHelper($this->instance, $this->queue, $this->container);
     }
 
     /**
@@ -32,7 +36,7 @@ class UserCacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteItem()
     {
-        $user = new User([ 'id' => 552 ]);
+        $user = new User([ 'id' => 552, 'user_groups' => [1, 3] ]);
 
         $this->queue->expects($this->once())->method('push')
             ->with(new ServiceTask('cache', 'delete', [ 'user-552' ]));
