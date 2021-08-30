@@ -75,7 +75,8 @@ class SmartyService implements Service
                 : $this->cache->delete($id);
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'id' => $id
+                'action' => __METHOD__,
+                'id'     => $id
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());

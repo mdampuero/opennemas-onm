@@ -44,7 +44,7 @@ class PhotoService extends ContentService
                 throw new FileAlreadyExistsException();
             }
 
-            $filename = basename($path);
+            $filename         = basename($path);
             $originalFilename = pathinfo(
                 $file instanceof UploadedFile ?
                     $file->getClientOriginalName() : $file->getFilename(),
@@ -72,8 +72,9 @@ class PhotoService extends ContentService
             $id = $this->em->getMetadata($item)->getId($item);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => array_pop($id),
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => array_pop($id),
+                'item'   => $item
             ]);
 
             $ih->move($file, $path, $copy);
@@ -134,8 +135,9 @@ class PhotoService extends ContentService
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'ids'   => $deleted,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $deleted,
+            'item'   => $items
         ]);
 
         return count($deleted);

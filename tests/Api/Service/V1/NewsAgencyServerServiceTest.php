@@ -100,7 +100,11 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->with('news_agency_config', [ $data ]);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('news_agency.server.createItem', [ 'id' => 1, 'item' => $data ]);
+            ->with('news_agency.server.createItem', [
+                'action' => 'Api\Service\V1\NewsAgencyServerService::createItem',
+                'id'     => 1,
+                'item'   => $data
+            ]);
 
         $this->service->createItem($data);
     }
@@ -135,7 +139,11 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('news_agency.server.getItem', [ 'id' => 1, 'item' => $data ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('news_agency.server.deleteItem', [ 'id' => 1, 'item' => $data ]);
+            ->with('news_agency.server.deleteItem', [
+                'action' => 'Api\Service\V1\NewsAgencyServerService::deleteItem',
+                'id'     => 1,
+                'item'   => $data
+            ]);
 
         $this->service->deleteItem(1);
     }
@@ -169,8 +177,9 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('news_agency.server.deleteList', [
-                'ids'   => [ 1, 2 ],
-                'items' => $data
+                'action' => 'Api\Service\V1\NewsAgencyServerService::deleteList',
+                'ids'    => [ 1, 2 ],
+                'item'   => $data
             ]);
 
         $this->service->deleteList([ 1, 2 ]);
@@ -400,8 +409,9 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('news_agency.server.patchItem', [
-                'id'   => 1,
-                'item' => array_merge([ 'foo' => 'quux' ], $data)
+                'action' => 'Api\Service\V1\NewsAgencyServerService::patchItem',
+                'id'     => 1,
+                'item'   => array_merge([ 'foo' => 'quux' ], $data)
             ]);
 
         $this->service->patchItem(1, $data);
@@ -453,8 +463,9 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('news_agency.server.patchList', [
-                'ids'  => [ 1 ],
-                'items' => [ array_merge([ 'foo' => 'quux' ], $data) ]
+                'action' => 'Api\Service\V1\NewsAgencyServerService::patchList',
+                'ids'    => [ 1 ],
+                'item'   => [ array_merge([ 'foo' => 'quux' ], $data) ]
             ]);
 
         $this->service->patchList([ 1 ], $data);
@@ -572,7 +583,11 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             ->with('news_agency_config', [ $data ]);
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('news_agency.server.updateItem', [ 'id' => 1, 'item' => $data ]);
+            ->with('news_agency.server.updateItem', [
+                'action' => 'Api\Service\V1\NewsAgencyServerService::updateItem',
+                'id'     => 1,
+                'item'   => $data
+            ]);
 
         $this->service->updateItem(1, $data);
     }
