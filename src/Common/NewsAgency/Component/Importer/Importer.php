@@ -506,7 +506,7 @@ class Importer
 
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
-                $data['related_contents'] = $this->getRelated(
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
                 );
