@@ -15,8 +15,8 @@
      * @requires routing
      */
     .controller('PollCtrl', [
-      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing', 'translator',
-      function($controller, $scope, $window, linker, localizer, routing, translator) {
+      '$controller', '$scope', '$window', 'linker', 'localizer', 'related', 'routing', 'translator',
+      function($controller, $scope, $window, linker, localizer, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -58,10 +58,22 @@
           type: 0,
           with_comment: 0,
           categories: [],
+          related_contents: [],
           tags: [],
           agency: '',
           items: [],
+          closetime: '',
         };
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The related service.
+         *
+         * @type {Object}
+         */
+        $scope.related = related;
 
         /**
          * @memberOf PollCtrl
@@ -89,7 +101,7 @@
          *   Adds an empty answer to the answer list.
          */
         $scope.addAnswer = function() {
-          var item = { pk_item: '', votes: 0, item: '' };
+          var item = { pk_item: $scope.data.item.items.length, votes: 0, item: '' };
 
           $scope.data.item.items.push(item);
 
@@ -103,6 +115,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'items' ]);
+          $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -121,6 +134,8 @@
           }
 
           $scope.checkDraft();
+          related.init($scope);
+          related.watch();
           translator.init($scope);
         };
 
@@ -161,8 +176,8 @@
          * @return {Boolean} True if the poll is closed. False otherwise.
          */
         $scope.isClosed = function(item) {
-          return item && item.params && item.params.closetime &&
-            new Date(item.params.closetime) < new Date();
+          return item && item.closetime &&
+            new Date(item.closetime) < new Date();
         };
 
         /**

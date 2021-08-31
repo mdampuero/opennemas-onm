@@ -130,7 +130,7 @@ class PollController extends FrontendController
         }
 
         // Prevent vote when poll is closed
-        if ($poll->isClosed()) {
+        if ($this->get('core.helper.poll')->isClosed($poll)) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('You can\'t vote this poll, it is closed.'));
 
@@ -142,7 +142,7 @@ class PollController extends FrontendController
             );
         }
 
-        $cookieName = 'poll-' . $poll->pk_poll;
+        $cookieName = 'poll-' . $poll->pk_content;
         $cookie     = $request->cookies->get($cookieName);
 
         // Prevent vote when already voted
@@ -159,7 +159,14 @@ class PollController extends FrontendController
         }
 
         try {
-            $poll->vote($answer);
+            $items = array_map(function ($item) use ($answer) {
+                if ($item['pk_item'] == $answer) {
+                    $item['votes']++;
+                }
+                return $item;
+            }, $poll->items);
+
+            $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
             $this->get('session')->getFlashBag()
                 ->add('success', _('Thanks for participating.'));
@@ -227,10 +234,10 @@ class PollController extends FrontendController
             ? sprintf(' and category_id=%d', $category->id)
             : '';
 
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="poll" and content_status=1 and in_litter=0 %s '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
@@ -244,8 +251,24 @@ class PollController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $total_votes = $this->get('core.helper.poll')->getTotalVotes($response['items']);
+
+        $polls = [];
+        $polls = array_map(function ($poll) use ($total_votes) {
+            $items = array_map(function ($item) use ($poll, $total_votes) {
+                $percent = round($item['votes'] /
+                    ($total_votes[$poll->pk_content] > 0 ? $total_votes[$poll->pk_content] : 1), 4) * 100;
+
+                $item['percent'] = sprintf('%.2f', $percent);
+
+                return $item;
+            }, $poll->items);
+            $poll->items = $items;
+            return $poll;
+        }, $response['items']);
+
         $params = array_merge($params, [
-            'polls'      => $response['items'],
+            'polls'      => $polls, //Poner items procesados
             'total'      => $response['total'],
             'pagination' => $this->get('paginator')->get([
                 'boundary'    => false,
@@ -265,5 +288,35 @@ class PollController extends FrontendController
 
             ])
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItem(Request $request)
+    {
+        try {
+            $item = $this->get($this->service)
+                ->getItem($this->getIdFromRequest($request));
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (empty($item) || !$this->get('core.helper.content')->isReadyForPublish($item)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $total_votes = $this->get('core.helper.poll')->getTotalVotes($item);
+
+        $item->items = array_map(function ($a) use ($item, $total_votes) {
+            $percent = round($item['votes'] /
+                ($total_votes[$item->pk_content] > 0 ? $total_votes[$item->pk_content] : 1), 4) * 100;
+
+            $a['percent'] = sprintf('%.2f', $percent);
+
+            return $a;
+        }, $item->items);
+
+        return $item;
     }
 }

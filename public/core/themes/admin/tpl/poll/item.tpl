@@ -62,7 +62,7 @@
         </div>
       </div>
       {include file="ui/component/content-editor/accordion/author.tpl"}
-      {include file="ui/component/content-editor/accordion/category.tpl" field="category_id"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
@@ -93,7 +93,7 @@
         <div class="form-group no-margin">
           <div class="controls">
             <div class="input-group">
-              <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current="true" datetime-picker-min="item.created" id="closetime" name="closetime" ng-model="item.params.closetime" type="datetime">
+              <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current="true" datetime-picker-min="item.created" id="closetime" name="closetime" ng-model="item.closetime" type="datetime">
               <span class="input-group-addon add-on">
                 <span class="fa fa-calendar"></span>
               </span>
@@ -101,6 +101,7 @@
           </div>
         </div>
       </div>
+      {include file="common/component/related-contents/_featured-media.tpl" field="related_contents[0]" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
     </div>
   </div>
 {/block}
@@ -128,7 +129,7 @@
               <div class="input-group">
                 <input class="form-control" ng-model="answer.item" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.items[$index].item[data.extra.locale.default] : '' %]" uib-tooltip="{t}Original{/t}: [% data.item.items[$index].item[data.extra.locale.default] %]" tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected" required type="text"/>
                 <div class="input-group-addon">
-                  <small ng-if="answer.votes > 0">{t}Votes{/t}:  [% answer.votes %] / [% item.total_votes %]</small>
+                  <small ng-if="answer.votes > 0">{t}Votes{/t}:  [% answer.votes %] / [% data.extra.total_votes[item.pk_content] %]</small>
                   <small ng-if="answer.votes <= 0">{t}No votes{/t}</small>
                 </div>
                 <div class="input-group-btn">

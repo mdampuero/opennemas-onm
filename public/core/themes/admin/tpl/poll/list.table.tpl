@@ -102,7 +102,7 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('votes')">
     <span class="badge badge-default">
       <strong>
-        [% item.total_votes %]
+        [% data.extra.total_votes[item.pk_content] %]
       </strong>
     </span>
   </td>

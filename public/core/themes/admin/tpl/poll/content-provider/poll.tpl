@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+<div data-content-id="{$content->id}" data-class="{get_type($content)}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style="true"}
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
@@ -7,7 +7,7 @@
         <div class="checkbox check-default">
           <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
           <label for="checkbox-{$content->id}"></label>
-        </div>
+      </div>
         <div class="title">
             <span class="type">{t}Poll{/t}</span>
             {$content->title}
