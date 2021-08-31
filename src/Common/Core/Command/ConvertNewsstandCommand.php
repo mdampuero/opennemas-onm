@@ -2,6 +2,7 @@
 
 namespace Common\Core\Command;
 
+use Api\Exception\GetListException;
 use Common\Core\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,7 +57,9 @@ class ConvertNewsstandCommand extends Command
 
                 $oql = 'content_type_name="kiosko" order by starttime desc';
 
-                $newsstands = $ns->getList($oql);
+                $newsstands = array_filter($ns->getList($oql)['items'], function ($item) {
+                    return substr($item->thumbnail, -4) === '.jpg';
+                });
 
                 $output->writeln(str_pad(sprintf(
                     '<fg=blue;options=bold>==></><options=bold> (%s/%s)'
@@ -64,10 +67,10 @@ class ConvertNewsstandCommand extends Command
                     $index++,
                     count($instances),
                     $instance->internal_name,
-                    count($newsstands['items'])
+                    count($newsstands)
                 ), 50, '.'));
 
-                foreach ($newsstands['items'] as $key => $newsstand) {
+                foreach ($newsstands as $key => $newsstand) {
                     $output->write(str_pad(sprintf(
                         '<fg=yellow;options=bold>=====></><options=bold> Processing %s</> ',
                         $key
@@ -95,28 +98,14 @@ class ConvertNewsstandCommand extends Command
                     }
 
                     if (!empty($photoId)) {
-                        $photo = $ps->getItem($photoId);
-                        if ($newsstand->thumbnail != $photo->path) {
-                            $newsstand->thumbnail = $photo->path;
-
-                            $ns->patchItem($newsstand->id, [ 'related_contents' => $this->getContainer()->get('core.helper.featured_media')
-                                ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]) ]);
-
-                            $output->writeln(sprintf(
-                                '<fg=green;options=bold>IMAGE ALREADY EXISTS - UPDATE</>'
-                            ));
-                        } else {
-                            $output->writeln(sprintf(
-                                '<fg=yellow;options=bold>SKIP</>'
-                            ));
-                        }
-
+                        $output->writeln(sprintf(
+                            '<fg=yellow;options=bold>IMAGE ALREADY EXISTS - SKIP</>'
+                        ));
                         continue;
                     }
 
                     if (file_exists($filePath) && empty($photoId)) {
                         $photo = $ps->createItem([
-//                            'created'     => '2021-09-02 00:00:00',
                             'created'     => $newsstand->created->format('Y-m-d H:i:s'),
                             'description' => $filename
                         ], new File($filePath), true);
