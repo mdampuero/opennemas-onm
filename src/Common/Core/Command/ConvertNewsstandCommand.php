@@ -67,10 +67,10 @@ class ConvertNewsstandCommand extends Command
                     $index++,
                     count($instances),
                     $instance->internal_name,
-                    count($newsstands['items'])
+                    count($newsstands)
                 ), 50, '.'));
 
-                foreach ($newsstands['items'] as $key => $newsstand) {
+                foreach ($newsstands as $key => $newsstand) {
                     $output->write(str_pad(sprintf(
                         '<fg=yellow;options=bold>=====></><options=bold> Processing %s</> ',
                         $key
