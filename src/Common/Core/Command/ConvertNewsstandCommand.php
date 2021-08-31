@@ -2,6 +2,7 @@
 
 namespace Common\Core\Command;
 
+use Api\Exception\GetListException;
 use Common\Core\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,7 +57,9 @@ class ConvertNewsstandCommand extends Command
 
                 $oql = 'content_type_name="kiosko" order by starttime desc';
 
-                $newsstands = $ns->getList($oql);
+                $newsstands = array_filter($ns->getList($oql)['items'], function ($item) {
+                    return substr($item->thumbnail, -4) === '.jpg';
+                });
 
                 $output->writeln(str_pad(sprintf(
                     '<fg=blue;options=bold>==></><options=bold> (%s/%s)'
@@ -116,7 +119,6 @@ class ConvertNewsstandCommand extends Command
 
                     if (file_exists($filePath) && empty($photoId)) {
                         $photo = $ps->createItem([
-//                            'created'     => '2021-09-02 00:00:00',
                             'created'     => $newsstand->created->format('Y-m-d H:i:s'),
                             'description' => $filename
                         ], new File($filePath), true);
