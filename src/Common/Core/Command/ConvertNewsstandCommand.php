@@ -98,22 +98,9 @@ class ConvertNewsstandCommand extends Command
                     }
 
                     if (!empty($photoId)) {
-                        $photo = $ps->getItem($photoId);
-                        if ($newsstand->thumbnail != $photo->path) {
-                            $newsstand->thumbnail = $photo->path;
-
-                            $ns->patchItem($newsstand->id, [ 'related_contents' => $this->getContainer()->get('core.helper.featured_media')
-                                ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]) ]);
-
-                            $output->writeln(sprintf(
-                                '<fg=green;options=bold>IMAGE ALREADY EXISTS - UPDATE</>'
-                            ));
-                        } else {
-                            $output->writeln(sprintf(
-                                '<fg=yellow;options=bold>SKIP</>'
-                            ));
-                        }
-
+                        $output->writeln(sprintf(
+                            '<fg=yellow;options=bold>IMAGE ALREADY EXISTS - SKIP</>'
+                        ));
                         continue;
                     }
 
