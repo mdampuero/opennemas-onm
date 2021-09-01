@@ -105,6 +105,8 @@ class FeaturedMediaHelper
             ], 'special' => [
                 'frontpage' => [ 'img1' ],
                 'inner'     => [ ]
+            ], 'poll' => [
+                'inner'     => [ 'featured_inner' ]
             ]
         ];
 
@@ -198,6 +200,8 @@ class FeaturedMediaHelper
                 'inner'     => [ 'featured_inner' ]
             ], 'video' => [
                 'frontpage' => [ 'featured_frontpage' ]
+            ], 'poll' => [
+                'inner'     => [ 'featured_inner' ]
             ]
         ];
 

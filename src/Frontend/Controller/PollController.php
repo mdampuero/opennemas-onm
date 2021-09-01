@@ -117,7 +117,7 @@ class PollController extends FrontendController
         }
 
         // Prevent vote when no answer
-        if (empty($answer)) {
+        if (!$request->request->has('answer')) {
             $this->get('session')->getFlashBag()
                 ->add('error', _('Error: no vote value!'));
 
@@ -309,7 +309,7 @@ class PollController extends FrontendController
         $total_votes = $this->get('core.helper.poll')->getTotalVotes($item);
 
         $item->items = array_map(function ($a) use ($item, $total_votes) {
-            $percent = round($item['votes'] /
+            $percent = round($a['votes'] /
                 ($total_votes[$item->pk_content] > 0 ? $total_votes[$item->pk_content] : 1), 4) * 100;
 
             $a['percent'] = sprintf('%.2f', $percent);

@@ -78,7 +78,7 @@ class EntityManager extends BaseManager
 
         if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
             try {
-                $entity = getService('api.service.content')->getItem($id);
+                $entity = getService('api.service.' . \underscore($contentType))->getItem($id);
             } catch (GetItemException $e) {
                 return null;
             }
