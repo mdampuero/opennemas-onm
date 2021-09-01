@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4438a2c1488b0297912db9e157485506",
+    "content-hash": "1692439fde35f24dad0cc5dd2db87451",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2931,11 +2931,11 @@
         },
         {
             "name": "opennemas/orm",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/orm.git",
-                "reference": "736c516cd8a80f0f8a88e37a9736e7c36bcf4336"
+                "reference": "1d96e74d0ba9eb9b64e70fb892d90f87430fc645"
             },
             "require": {
                 "composer/package-versions-deprecated": "1.11.99.1",
@@ -2995,7 +2995,7 @@
                 "opennemas",
                 "orm"
             ],
-            "time": "2021-05-12T13:19:40+00:00"
+            "time": "2021-09-01T06:54:30+00:00"
         },
         {
             "name": "opennemas/task",
