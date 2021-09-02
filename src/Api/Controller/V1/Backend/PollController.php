@@ -91,7 +91,7 @@ class PollController extends ContentController
         if (!is_array($request->request->all()['items']) || count($request->request->all()['items']) < 2) {
             $msg = $this->get('core.messenger');
 
-            $msg->add('A minimum of 2 answers are required', 'error', 400);
+            $msg->add(_('A minimum of 2 answers are required'), 'error', 400);
 
             $response = new JsonResponse($msg->getMessages(), $msg->getCode());
 
