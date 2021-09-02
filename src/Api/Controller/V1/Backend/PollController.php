@@ -70,17 +70,9 @@ class PollController extends ContentController
      */
     public function saveItemAction(Request $request)
     {
-        if (!is_array($request->request->all()['items']) || count($request->request->all()['items']) < 2) {
-            $msg = $this->get('core.messenger');
+        $response = $this->checkItems($request->request->all()['items']);
 
-            $msg->add('A minimum of 2 answers are required', 'error', 400);
-
-            $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-
-            return $response;
-        }
-
-        return parent::saveItemAction($request);
+        return is_null($response) ? parent::saveItemAction($request) : $response;
     }
 
     /**
@@ -88,7 +80,13 @@ class PollController extends ContentController
      */
     public function updateItemAction(Request $request, $id)
     {
-        if (!is_array($request->request->all()['items']) || count($request->request->all()['items']) < 2) {
+        $response = $this->checkItems($request->request->all()['items']);
+
+        return is_null($response) ? parent::updateItemAction($request, $id) : $response;
+    }
+
+    private function checkItems($items) {
+        if (!is_array($items) || count($items) < 2) {
             $msg = $this->get('core.messenger');
 
             $msg->add(_('A minimum of 2 answers are required'), 'error', 400);
@@ -98,6 +96,6 @@ class PollController extends ContentController
             return $response;
         }
 
-        return parent::updateItemAction($request, $id);
+        return null;
     }
 }

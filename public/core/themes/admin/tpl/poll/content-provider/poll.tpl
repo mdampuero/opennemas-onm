@@ -7,7 +7,7 @@
         <div class="checkbox check-default">
           <input class="action-button" name="selected-{$content->id}" id="checkbox-{$content->id}" checklist-model="selected.contents" checklist-value="{$content->id}" type="checkbox">
           <label for="checkbox-{$content->id}"></label>
-      </div>
+        </div>
         <div class="title">
             <span class="type">{t}Poll{/t}</span>
             {$content->title}

@@ -135,14 +135,14 @@ services:
         arguments: [ '@core.security' ]
         public:    true
 
-    core.helper.poll:
-        class:     Common\Core\Component\Helper\PollHelper
-        arguments: [ ]
-        public:    true
-
     core.helper.photo:
         class:     Common\Core\Component\Helper\PhotoHelper
         arguments: [ '@core.helper.content', '@core.instance', '@router', '@core.theme', '@core.helper.url_generator' ]
+        public:    true
+
+    core.helper.poll:
+        class:     Common\Core\Component\Helper\PollHelper
+        arguments: [ ]
         public:    true
 
     core.helper.related:

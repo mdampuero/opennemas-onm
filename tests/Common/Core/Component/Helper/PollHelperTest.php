@@ -11,8 +11,8 @@ use Common\Model\Entity\Content;
 class PollHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Configures the testing environment.
-     */
+    * Configures the testing environment.
+    */
     public function setUp()
     {
         $this->items = [

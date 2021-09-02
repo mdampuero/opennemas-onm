@@ -86,7 +86,7 @@ class PollController extends BackendController
             ]);
 
             return $this->render('poll/content-provider.tpl', [
-                'polls'   => $response['items'],
+                'polls'      => $response['items'],
                 'pagination' => $pagination,
             ]);
         } catch (GetListException $e) {

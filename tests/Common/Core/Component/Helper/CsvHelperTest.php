@@ -154,8 +154,8 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
         $data[0]->starttime      = $date;
         $data[0]->content_status = 1;
         $data[0]->items          = [
-            [ 'pk_item' => 10, 'item' => 'flob', 'votes' => 35  ],
-            [ 'pk_item' => 20, 'item' => 'corge', 'votes' => 20 ]
+            [ 'pk_item' => 1, 'item' => 'flob', 'votes' => 35  ],
+            [ 'pk_item' => 2, 'item' => 'corge', 'votes' => 20 ]
         ];
 
         $data[1]->pk_content     = 2;
@@ -166,9 +166,9 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
         $data[1]->starttime      = $date;
         $data[1]->content_status = 1;
         $data[1]->items          = [
-            [ 'pk_item' => 11, 'item' => 'foobar', 'votes' => 5 ],
-            [ 'pk_item' => 21, 'item' => 'foo', 'votes' => 100 ],
-            [ 'pk_item' => 31, 'item' => 'bar', 'votes' => 40 ]
+            [ 'pk_item' => 1, 'item' => 'foobar', 'votes' => 5 ],
+            [ 'pk_item' => 2, 'item' => 'foo', 'votes' => 100 ],
+            [ 'pk_item' => 3, 'item' => 'bar', 'votes' => 40 ]
         ];
 
         // body, description, title, pretitle, item0, item1
@@ -181,15 +181,16 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->at(11))->method('get')
             ->willReturn(null);
         $this->fm->expects($this->at(14))->method('get')
-            ->willReturn('flob');
+            ->willReturn('');
         $this->fm->expects($this->at(17))->method('get')
-            ->willReturn('corge');
+            ->willReturn('gorp');
 
 
         $method = new \ReflectionMethod($this->helper, 'parse');
         $method->setAccessible(true);
 
         list($headers, $values) = $method->invokeArgs($this->helper, [ $data ]);
+
 
         $this->assertEquals([
             'pk_content', 'pretitle', 'title', 'description', 'created',
@@ -210,8 +211,8 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'pk_content'     => 2,
-                'title'          => 'corge',
-                'description'    => 'flob',
+                'title'          => 'gorp',
+                'description'    => '',
                 'created'        => '2010-01-01 00:00:00',
                 'changed'        => '2010-01-01 00:00:00',
                 'starttime'      => '2010-01-01 00:00:00',
