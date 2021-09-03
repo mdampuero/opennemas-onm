@@ -166,6 +166,12 @@ class PollController extends FrontendController
                 return $item;
             }, $poll->items);
 
+            //Unset percent attribute from items
+            $poll->items = array_map(function ($a) {
+                unset($a['percent']);
+                return $a;
+            }, $poll->items);
+
             $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
             $this->get('session')->getFlashBag()
