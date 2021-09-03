@@ -84,7 +84,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return e.id === item.category_id;
+            return e.id === item.categories[0];
           });
 
           if (categories.length === 0) {
