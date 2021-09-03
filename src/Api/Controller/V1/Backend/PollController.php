@@ -85,7 +85,8 @@ class PollController extends ContentController
         return is_null($response) ? parent::updateItemAction($request, $id) : $response;
     }
 
-    private function checkItems($items) {
+    private function checkItems($items)
+    {
         if (!is_array($items) || count($items) < 2) {
             $msg = $this->get('core.messenger');
 
