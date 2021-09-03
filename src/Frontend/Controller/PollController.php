@@ -167,10 +167,10 @@ class PollController extends FrontendController
             }, $poll->items);
 
             //Unset percent attribute from items
-            $poll->items = array_map(function ($a) {
+            $items = array_map(function ($a) {
                 unset($a['percent']);
                 return $a;
-            }, $poll->items);
+            }, $items);
 
             $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
