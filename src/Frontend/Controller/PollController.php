@@ -163,14 +163,11 @@ class PollController extends FrontendController
                 if ($item['pk_item'] == $answer) {
                     $item['votes']++;
                 }
+                //Unset percent attribute from items
+                unset($a['percent']);
+
                 return $item;
             }, $poll->items);
-
-            //Unset percent attribute from items
-            $items = array_map(function ($a) {
-                unset($a['percent']);
-                return $a;
-            }, $items);
 
             $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
