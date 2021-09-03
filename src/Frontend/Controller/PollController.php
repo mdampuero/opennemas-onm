@@ -164,7 +164,7 @@ class PollController extends FrontendController
                     $item['votes']++;
                 }
                 //Unset percent attribute from items
-                unset($a['percent']);
+                unset($item['percent']);
 
                 return $item;
             }, $poll->items);
