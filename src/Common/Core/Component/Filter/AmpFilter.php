@@ -28,7 +28,7 @@ class AmpFilter extends Filter
 
             // Transformed tags
             '@<video([^>]+>)(?s)(.*?)<\/video>@',
-            '@<iframe.*src="[http:|https:]*(.*?)".*>(?s).*?<\/iframe>@',
+            '@<iframe.*src="[http:|https:]*(.*?)".*?>(?s).*?<\/iframe>@',
             '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
             '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)?\/.*?>(?s).*?<\/blockquote>@',
             '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
