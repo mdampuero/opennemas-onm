@@ -298,6 +298,11 @@
             <a href="{url name=backend_albums_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Albums{/t}</a>
           </li>
           {/is_module_activated}
+          {is_module_activated name="ALBUM_MANAGER"}
+          <li>
+            <a href="{url name=backend_events_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Events{/t}</a>
+          </li>
+          {/is_module_activated}
           {is_module_activated name="LETTER_MANAGER"}
           <li>
             <a href="{url name=admin_letters_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Letter{/t}</a>
