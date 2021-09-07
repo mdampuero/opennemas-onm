@@ -38,8 +38,8 @@ class NewsMLComponentListTest extends TestCase
         $parser->method('parse')->will(
             $this->onConsecutiveCalls(new ExternalResource(), [
                 new ExternalResource([ 'id' => 'photo1', 'type' => 'photo' ]),
-                new ExternalResource([ 'id' => 'text2', 'type' => 'text', 'isChild' => true ]),
-                new ExternalResource([ 'id' => 'photo2', 'type' => 'photo', 'isChild' => true ])
+                new ExternalResource([ 'id' => 'text2', 'type' => 'text', 'isChild' => true, 'uid' => '123' ]),
+                new ExternalResource([ 'id' => 'photo2', 'type' => 'photo', 'isChild' => true, 'uid' => '123' ])
             ])
         );
 

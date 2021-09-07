@@ -62,6 +62,16 @@ class NitfOpennemasTest extends TestCase
     }
 
     /**
+     * Tests getParentId with valid and invalid XML.
+     */
+    public function testGetParentId()
+    {
+        $this->assertEmpty($this->parser->getParentId($this->invalid));
+
+        $this->assertEquals('26082021', $this->parser->getParentId($this->valid));
+    }
+
+    /**
      * Tests getTags with valid and invalid XML.
      */
     public function testGetTags()
@@ -71,6 +81,16 @@ class NitfOpennemasTest extends TestCase
             'foo,bar,baz,foobar',
             $this->parser->getTags($this->valid)
         );
+    }
+
+    /**
+     * Tests getUid with valid and invalid XML.
+     */
+    public function testGetUid()
+    {
+        $this->assertEmpty($this->parser->getUid($this->invalid));
+
+        $this->assertEquals('20210907', $this->parser->getUid($this->valid));
     }
 
     /**
