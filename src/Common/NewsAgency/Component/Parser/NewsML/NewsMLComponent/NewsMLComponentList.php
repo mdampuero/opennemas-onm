@@ -67,12 +67,12 @@ class NewsMLComponentList extends NewsML
                 $related[] = $content->id;
             }
 
-            if ($content->type === 'photo' && $content->isChild) {
-                $childRelated[] = $content->id;
-            }
-
             if ($content->type === 'text' && $content->isChild) {
                 $related[] = $content->id;
+            }
+
+            if ($content->type === 'photo' && $content->isChild && !empty($content->uid)) {
+                $childRelated[$content->uid] = $content->id;
             }
         }
 
@@ -80,12 +80,16 @@ class NewsMLComponentList extends NewsML
         foreach ($contents as $content) {
             $content->merge($this->bag);
 
-            if ($content->type === 'text') {
+            if ($content->type === 'text' && !$content->isChild) {
                 $content->related = $related;
             }
 
-            if ($content->type === 'text' && $content->isChild) {
-                $content->related = $childRelated;
+            if ($content->type === 'text'
+                && $content->isChild
+                && !empty($content->uid)
+                && array_key_exists($content->uid, $childRelated)
+            ) {
+                $content->related = [$childRelated[$content->uid]];
             }
         }
 
