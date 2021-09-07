@@ -132,6 +132,13 @@ class ExternalResource
     public $type = 'text';
 
     /**
+     * The resource uid.
+     *
+     * @var string
+     */
+    public $uid = '';
+
+    /**
      * The resource URN.
      *
      * @var string

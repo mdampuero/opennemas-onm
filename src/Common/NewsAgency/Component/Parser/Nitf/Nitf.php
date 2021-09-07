@@ -180,32 +180,6 @@ class Nitf extends Parser
     }
 
     /**
-     * Returns the id of the parent content.
-     *
-     * @param SimpleXMLObject The parsed data.
-     *
-     * @return string The parent content id.
-     */
-    public function getParentId($data)
-    {
-        $id = $data->xpath('//doc-parent');
-
-        if (empty($id)) {
-            return '';
-        }
-
-        $value = (string) $id[0];
-
-        if (!empty($id[0]->attributes())
-            && !empty($id[0]->attributes()->{'id-string'})
-        ) {
-            $value = (string) $id[0]->attributes()->{'id-string'}[0];
-        }
-
-        return $value;
-    }
-
-    /**
      * Returns the priority from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -336,7 +310,6 @@ class Nitf extends Parser
         $content->type         = 'text';
         $content->urn          = $this->getUrn($data);
         $content->href         = $this->getHref($data);
-        $content->isChild      = !empty($this->getParentId($data));
 
         return $content;
     }
