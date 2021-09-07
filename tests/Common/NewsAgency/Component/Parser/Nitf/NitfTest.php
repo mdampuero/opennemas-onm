@@ -122,16 +122,6 @@ class NitfTest extends TestCase
     /**
      * Tests getPriority with valid and invalid XML.
      */
-    public function testGetParentId()
-    {
-        $this->assertEmpty($this->parser->getId($this->invalid));
-
-        $this->assertEquals('26082021', $this->parser->getParentId($this->valid));
-    }
-
-    /**
-     * Tests getPriority with valid and invalid XML.
-     */
     public function testGetPriority()
     {
         $this->assertEquals(5, $this->parser->getPriority($this->invalid));
