@@ -85,7 +85,7 @@ class Content extends Entity
      */
     public function getCacheEntity()
     {
-        $this->stored = [];
+        $this->reset();
     }
 
     /**
