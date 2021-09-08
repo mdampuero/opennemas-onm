@@ -11,7 +11,7 @@ orm:
                 author_ip:               string
                 date:                    datetime
                 body:                    string
-                status:                  integer
+                status:                  string
                 agent:                   string
                 type:                    string
                 parent_id:               integer
@@ -19,14 +19,14 @@ orm:
                 content_type_referenced: string
             converters:
                 default:
-                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    class:     Common\Model\Database\Data\Converter\ContentConverter
                     arguments: [ '@orm.metadata.comment' ]
             repositories:
-                database:
+                instance:
                     class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.comment', '@cache.connection.instance' ]
             persisters:
-                database:
+                instance:
                     class:     Opennemas\Orm\Database\Persister\BasePersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.comment', '@cache.connection.instance' ]
             mapping:

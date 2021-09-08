@@ -74,7 +74,7 @@ class NotificationService
             CURRENT_LANGUAGE_SHORT => sprintf(
                 _('You have %s pending comments. Click <a href="%s">here</a> to moderate.'),
                 $comments,
-                $this->container->get('router')->generate('backend_comments')
+                $this->container->get('router')->generate('backend_comments_list')
             )
         ];
 
@@ -82,7 +82,7 @@ class NotificationService
             CURRENT_LANGUAGE_SHORT => sprintf(
                 _('You have %s pending comments. Click <a href="%s">here</a> to moderate.'),
                 $comments,
-                $this->container->get('router')->generate('backend_comments')
+                $this->container->get('router')->generate('backend_comments_list')
             )
         ];
 
