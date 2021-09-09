@@ -49,13 +49,13 @@ class CommentController extends BackendController
 
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-
         $comment_system = $ds->get('comment_system', []);
 
         if ($comment_system == 'facebook') {
             $template = '/facebook/list.tpl';
 
             $config = $ds->get('facebook', []);
+
             $params['fb_app_id'] = empty($config['api_key']) ? null : trim($config['api_key']);
         }
 

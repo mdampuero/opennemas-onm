@@ -556,41 +556,6 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getComment when the comment does not exists, when it exists but the
-     * linked content does not exists and when the comment and the content
-     * exist.
-     */
-    public function testGetComment()
-    {
-        $method = new \ReflectionMethod($this->redirector, 'getComment');
-        $method->setAccessible(true);
-
-        $this->conn->expects($this->at(0))->method('fetchAssoc')
-            ->with('SELECT * FROM comments WHERE id=?', [ 4562 ])
-            ->willReturn([]);
-
-        $this->conn->expects($this->at(1))->method('fetchAssoc')
-            ->with('SELECT * FROM comments WHERE id=?', [ 2345 ])
-            ->willReturn([ 'content_id' => null ]);
-
-        $this->conn->expects($this->at(2))->method('fetchAssoc')
-            ->with('SELECT * FROM comments WHERE id=?', [ 2345 ])
-            ->willReturn([ 'content_id' => 1467 ]);
-
-        $this->conn->expects($this->at(3))->method('fetchAssoc')
-            ->willReturn([ 'pk_content' => 1467 ]);
-
-        $this->conn->expects($this->at(4))->method('fetchAll')
-            ->willReturn([]);
-
-        $this->assertEmpty($method->invokeArgs($this->redirector, [ 4562 ]));
-        $this->assertEmpty($method->invokeArgs($this->redirector, [ 2345 ]));
-
-        $content = $method->invokeArgs($this->redirector, [ 2345 ]);
-        $this->assertEquals(1467, $content->pk_content);
-    }
-
-    /**
      * Tests getContent for multiple content types.
      */
     public function testGetContent()

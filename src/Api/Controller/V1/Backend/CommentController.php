@@ -76,8 +76,8 @@ class CommentController extends ApiController
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-        $defaultConfigs  = $this->get('core.helper.comment')->getDefaultConfigs();
-        $config          = $ds->get('comments_config', []);
+        $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
+        $config         = $ds->get('comments_config', []);
 
         foreach ($config as $configName => $value) {
             if ($configName == 'number_elements') {
