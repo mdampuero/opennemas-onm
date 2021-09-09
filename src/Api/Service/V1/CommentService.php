@@ -11,4 +11,5 @@ namespace Api\Service\V1;
 
 class CommentService extends OrmService
 {
+
 }
