@@ -43,7 +43,6 @@ class WebServiceController extends Controller
         $r->addAPIClass('WebService\Handlers\Articles');
         $r->addAPIClass('WebService\Handlers\Authors');
         $r->addAPIClass('WebService\Handlers\Categories');
-        $r->addAPIClass('WebService\Handlers\Comments');
         $r->addAPIClass('WebService\Handlers\Contents');
         $r->addAPIClass('WebService\Handlers\Frontpages');
         $r->addAPIClass('WebService\Handlers\Images');

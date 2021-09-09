@@ -21,7 +21,7 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=backend_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
+              <a class="btn btn-link" href="{url name=backend_comments_config}" title="{t}Disqus module configuration{/t}">
                 <i class="fa fa-gear fa-lg"></i>
               </a>
             </li>

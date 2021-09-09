@@ -6,10 +6,6 @@ backend_ws_client:
     resource: '@BackendWebServiceBundle/Resources/config/routing/client.yml'
     prefix:   /
 
-backend_ws_comments:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/comments.yml'
-    prefix:   /
-
 backend_ws_domain:
     resource: '@BackendWebServiceBundle/Resources/config/routing/domain.yml'
     prefix:   /

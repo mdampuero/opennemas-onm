@@ -12,7 +12,8 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
+use Api\Exception\GetListException;
+use DateTime;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,8 +25,22 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Frontend_Controllers
  */
-class CommentsController extends Controller
+class CommentController extends FrontendController
 {
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_REJECTED = 'rejected';
+    const STATUS_PENDING  = 'pending';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'COMMENT_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.comment';
+
     /**
      * Returns the list of comments for a given content id
      *
@@ -40,28 +55,27 @@ class CommentsController extends Controller
         $offset    = $request->query->getDigits('offset', 1);
 
         $content = $this->getContent($contentId);
+
         if (empty($content)) {
             return new Response('', 404);
         }
 
         $comments = $this->getComments($content, $epp, $offset);
 
-        $sh    = $this->get('core.helper.subscription');
-        $total = $this->get('comment_repository')
-            ->countCommentsForContentId($content->id);
+        $sh = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
             $this->getAds();
         }
 
         return $this->render('comments/loader.tpl', [
-            'total'          => $total,
-            'comments'       => $comments,
+            'total'          => $comments['total'],
+            'comments'       => $comments['items'],
             'contentId'      => $content->id,
             'elems_per_page' => $epp,
             'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
-            'count'          => $total,
+            'count'          => $comments['total'],
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
@@ -82,15 +96,14 @@ class CommentsController extends Controller
         $offset    = $request->query->getDigits('offset', 1);
 
         $content = $this->getContent($contentId);
+
         if (empty($content)) {
             return new Response('', 404);
         }
 
         $comments = $this->getComments($content, $epp, $offset);
 
-        $sh    = $this->get('core.helper.subscription');
-        $total = $this->get('comment_repository')
-            ->countCommentsForContentId($content->id);
+        $sh = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
             $this->getAds();
@@ -98,8 +111,8 @@ class CommentsController extends Controller
 
         $contents = $this->get('core.template.frontend')
             ->render('comments/partials/comment_element.tpl', [
-                'total'          => $total,
-                'comments'       => $comments,
+                'total'          => $comments['total'],
+                'comments'       => $comments['items'],
                 'contentId'      => $content->id,
                 'elems_per_page' => $epp,
                 'offset'         => $offset,
@@ -107,7 +120,7 @@ class CommentsController extends Controller
 
         return new Response(json_encode([
             'contents' => $contents,
-            'more'     => $total > ($epp * $offset),
+            'more'     => $comments['total'] > ($epp * $offset),
         ]), 200);
     }
 
@@ -125,10 +138,12 @@ class CommentsController extends Controller
         $commentId = $request->request->getDigits('comment_id', 0);
         $cookie    = $request->cookies->get('comment-vote-' . $commentId);
         $ip        = getUserRealIP();
+        $comment   = $this->get($this->service)->getItem($commentId);
 
         // User already voted this comment
         if (!is_null($cookie)) {
-            return new Response(_('Already voted.'), 400);
+            //TODO: quitar este comentario
+           //return new Response(_('Already voted.'), 400);
         }
 
         // Reject the request is not sent by POST
@@ -141,23 +156,20 @@ class CommentsController extends Controller
             return new Response(_('Not valid vote value'), 400);
         }
 
-        // 1 Vote up - 2 Vote down
-        $voteValue = ($voteValue == 'up') ? 1 : 2;
+        try {
+            // Positive Vote up - Negative Vote down
+            $voteValue = ($voteValue == 'up') ? 'positive' : 'negative';
 
-        // Create the vote
-        $voteObject = new \Vote($commentId);
-        if (is_null($voteObject)) {
-            return new Response(_("Error: no vote value!"), 400);
-        }
+            $value = empty($comment->{$voteValue}) ? 1 : $comment->{$voteValue} + 1;
 
-        $update = $voteObject->update($voteValue, $ip);
+            $this->get($this->service)->updateItem($commentId, [$voteValue => $value]);
 
-        if ($update) {
             $response = new Response('ok', 200);
             $response->headers->setCookie(
                 new Cookie('comment-vote-' . $commentId, true, new \DateTime('+3 days'))
             );
-        } else {
+
+        } catch (\Exception $e) {
             $response = new Response(_("You have voted this comment previously."), 400);
         }
 
@@ -177,6 +189,7 @@ class CommentsController extends Controller
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
         $authorEmail = $request->request->filter('author-email', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
+        $content     = $this->getContent($contentId);
         $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
@@ -197,11 +210,13 @@ class CommentsController extends Controller
         $httpCode = 200;
 
         try {
+            $now = new DateTime();
+
             $data = [
                 'content_id'   => $contentId,
                 'body'         => $body,
                 'author'       => $authorName,
-                'author_ip'    => $ip
+                'author_ip'    => $ip,
             ];
 
             if (!empty($authorEmail)) {
@@ -213,6 +228,11 @@ class CommentsController extends Controller
             $data['body'] = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
 
             $errors = $this->get('core.validator')->validate($data, 'comment');
+
+            $data['date'] = $now->format('Y-m-d H:i:s');
+            $data['content_type_referenced'] = $content->content_type_name;
+
+            $errorType = '';
 
             if ($cm->moderateManually()) {
                 if (!empty($errors)) {
@@ -228,14 +248,13 @@ class CommentsController extends Controller
                     'type'    => 'warning',
                 ];
 
-                $data['status'] = \Comment::STATUS_PENDING;
-                $comment        = new \Comment();
-                $comment->create($data);
+                $data['status'] = self::STATUS_PENDING;
+
             } else {
                 if (empty($errors)) {
                     $data['status'] = $cm->autoAccept()
-                        ? \Comment::STATUS_ACCEPTED
-                        : \Comment::STATUS_PENDING;
+                        ? self::STATUS_ACCEPTED
+                        : self::STATUS_PENDING;
 
                     $handling = $cm->autoAccept()
                         ? _('Your comment was accepted.')
@@ -246,13 +265,10 @@ class CommentsController extends Controller
                         'message' => $handling,
                         'type'    => 'success',
                     ];
-
-                    $comment = new \Comment();
-                    $comment->create($data);
                 } else {
                     $data['status'] = $cm->autoReject()
-                        ? \Comment::STATUS_REJECTED
-                        : \Comment::STATUS_PENDING;
+                        ? self::STATUS_REJECTED
+                        : self::STATUS_PENDING;
 
                     $errorType = $errors['type'];
                     $httpCode  = 400;
@@ -269,13 +285,13 @@ class CommentsController extends Controller
                         ),
                         'type'    => 'error',
                     ];
-
-                    if ($errorType != 'fatal') {
-                        $comment = new \Comment();
-                        $comment->create($data);
-                    }
                 }
             }
+
+            if ($errorType != 'fatal') {
+                $this->get($this->service)->createItem($data);
+            }
+
         } catch (\Exception $e) {
             $httpCode = 400;
             $message  = [
@@ -290,59 +306,6 @@ class CommentsController extends Controller
                 'id' => $contentId,
             ]));
         }
-
-        return $response;
-    }
-
-    /**
-     * Returns a json containing the list of comments count for each content requested
-     *
-     * @param Request $request the request object
-     *
-     * @return JsonResponse
-     */
-    public function getCommentsCountAction(Request $request)
-    {
-        // Fetch the list of content ids, clean and filter them
-        $ids = $ids = $request->query->get('ids', []);
-        $ids = array_unique(array_filter(
-            array_map(
-                function ($id) {
-                    return (int) $id;
-                },
-                explode(',', $ids)
-            ),
-            function ($id) {
-                return ((int) $id) > 0;
-            }
-        ));
-
-        // Fetch data from database
-        $commentsCount = [];
-        if (!empty($ids)) {
-            try {
-                $ids  = implode(',', $ids);
-                $conn = $this->get('orm.manager')->getConnection('instance');
-                $data = $conn->fetchAll(
-                    'SELECT content_id, COUNT(*) as comments_count FROM comments '
-                    . 'WHERE content_id IN (' . $ids . ') AND status = ? GROUP BY content_id',
-                    [ \Comment::STATUS_ACCEPTED ]
-                );
-                foreach ($data as $value) {
-                    $commentsCount[$value['content_id']] = $value['comments_count'];
-                }
-            } catch (\Exception $e) {
-                return new JsonResponse($commentsCount, 500);
-            }
-        }
-
-        // Prepare response
-        $response = new JsonResponse();
-        $response->setData($commentsCount);
-        // Add edge cache support
-        $response->headers->set('x-tags', 'comments,' . $ids);
-        $response->headers->set('x-cache-for', '+300 sec');
-        $response->headers->set('x-cacheable', true);
 
         return $response;
     }
@@ -387,7 +350,7 @@ class CommentsController extends Controller
     /**
      * Returns comments for the content given a page.
      *
-     * @param object  $content The content object.
+     * @param object  $contents The content object.
      * @param integer $epp     The number of elements to return.
      * @param integer $offset  The initial offset.
      *
@@ -395,20 +358,26 @@ class CommentsController extends Controller
      */
     protected function getComments($content, $epp, $offset)
     {
-        $configs = $this->get('core.helper.comment')->getConfigs();
-        $cm      = $this->get('comment_repository');
-        $total   = $cm->countCommentsForContentId($content->id);
+        $configs  = $this->get('core.helper.comment')->getConfigs();
 
-        $epp = empty($epp) || $epp > $total
-            ? (int) $configs['number_elements'] : $epp;
+        $epp = empty($epp) ? (int) $configs['number_elements'] : $epp;
 
-        $comments = $cm->getCommentsforContentId($content->id, $epp, $offset);
+        $oql = sprintf(
+            'content_id = %d'
+            . ' and status = "accepted"'
+            . ' order by date desc limit %d offset %d',
+            $content->pk_content,
+            $epp,
+            ($offset -1) * $epp
+        );
 
-        foreach ($comments as &$comment) {
-            $vote           = new \Vote($comment->id);
-            $comment->votes = $vote;
+        try {
+            $comments = $this->get($this->service)->getList($oql);
+
+            return $comments;
         }
-
-        return $comments;
+        catch(GetListException $ex) {
+           return ['total' => 0, 'items' => []];
+        }
     }
 }

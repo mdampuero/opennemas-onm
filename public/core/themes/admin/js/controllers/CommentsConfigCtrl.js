@@ -108,12 +108,12 @@
          *   Validates facebook or disqus
          */
         $scope.validate = function() {
-          if ($scope.extra.handler === 'facebook' && !$scope.config.fb_app_id) {
+          if ($scope.extra.handler === 'facebook' && !$scope.extra.facebook.api_key.trim()) {
             return false;
           }
 
           if ($scope.extra.handler === 'disqus' &&
-            (!$scope.config.secretKey || !$scope.config.shortname)) {
+            (!$scope.extra.disqus_secret_key.trim() || !$scope.extra.disqus_shortname.trim())) {
             return false;
           }
 

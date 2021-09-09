@@ -257,13 +257,13 @@
               </h4>
             </div>
             <div class="grid-body">
-              <div class="alert alert-danger m-l-20" role="alert" ng-if="!config.fb_app_id.trim()"> {t}Please enter your Facebook settings{/t} </div>
-              <div class="form-group m-l-20" ng-class="{ 'has-error' : !config.fb_app_id.trim() }">
+              <div class="alert alert-danger m-l-20" role="alert" ng-if="!extra.facebook.api_key.trim()"> {t}Please enter your Facebook settings{/t} </div>
+              <div class="form-group m-l-20" ng-class="{ 'has-error' : !extra.facebook.api_key.trim() }">
                 <label class="form-label" for="facebook_api_key">
                   {t}Facebook App Id{/t}
                 </label>
                 <div class="controls">
-                  <input class="form-control" id="facebook_api_key" name="facebook-api-key" type="text" ng-model="config.fb_app_id"/>
+                  <input class="form-control" id="facebook_api_key" name="facebook-api-key" type="text" ng-model="extra.facebook.api_key"/>
                   <div class="help">
                     {t escape=off}To be able to moderate comments of your site in Facebook you must create and set here your <strong>Facebook App Id</strong>.{/t}
                     <br>
@@ -283,15 +283,15 @@
               </h4>
             </div>
             <div class="grid-body">
-              <div class="alert alert-danger m-l-20" role="alert" ng-if="!config.shortname || !config.secretKey"> {t}Please enter your Disqus settings{/t} </div>
+              <div class="alert alert-danger m-l-20" role="alert" ng-if="!extra.disqus_shortname || !extra.disqus_secret_key"> {t}Please enter your Disqus settings{/t} </div>
               <div class="row">
                 <div class="col-sm-6 col-xs-12">
-                  <div class="form-group m-l-20" ng-class="{ 'has-error' : !config.shortname }">
+                  <div class="form-group m-l-20" ng-class="{ 'has-error' : !extra.disqus_shortname }">
                     <label class="form-label" for="shortname">
-                      Disqus Id (shortname)
+                      Disqus Id (extra.disqus_shortname)
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="shortname" name="shortname" required type="text" ng-model="config.shortname"/>
+                      <input class="form-control" id="shortname" name="shortname" required type="text" ng-model="extra.disqus_shortname"/>
                       <div class="help">
                         {t}A shortname is the unique identifier assigned to a Disqus site. All the comments posted to a site are referenced with the shortname{/t}.
                       </div>
@@ -299,12 +299,12 @@
                   </div>
                 </div>
                 <div class="col-sm-6 col-xs-12">
-                  <div class="form-group m-l-20" ng-class="{ 'has-error' : !config.secretKey }">
+                  <div class="form-group m-l-20" ng-class="{ 'has-error' : !extra.disqus_secret_key }">
                     <label class="form-label" for="secret_key">
                       Disqus API Secret Key
                     </label>
                     <div class="controls">
-                      <input class="form-control" id="secret_key" name="secret-key" required type="text" ng-model="config.secretKey"/>
+                      <input class="form-control" id="secret_key" name="secret-key" required type="text" ng-model="extra.disqus_secret_key"/>
                       <div class="help">
                         {t escape=off}You can get your Disqus secret key in <a href="http://disqus.com/api/applications/" target="_blank">here</a>{/t}.
                       </div>

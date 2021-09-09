@@ -36,6 +36,40 @@ class CommentController extends BackendController
     protected $resource = 'comment';
 
     /**
+     * {@inheritdoc}
+     */
+    public function listAction(Request $request)
+    {
+        $params   = [];
+        $template = '/list.tpl';
+
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
+
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+
+
+        $comment_system = $ds->get('comment_system', []);
+
+        if ($comment_system == 'facebook') {
+            $template = '/facebook/list.tpl';
+
+            $config = $ds->get('facebook', []);
+            $params['fb_app_id'] = empty($config['api_key']) ? null : trim($config['api_key']);
+        }
+
+        if ($comment_system == 'disqus') {
+            $template = '/disqus/list.tpl';
+
+            $params['disqus_secret_key'] = $ds->get('disqus_secret_key', []);
+            $params['disqus_shortname']  = $ds->get('disqus_shortname', []);
+        }
+
+        return $this->render($this->resource . $template, $params);
+    }
+
+    /**
      * Config for article system
      *
      * @return Response the response object

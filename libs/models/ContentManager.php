@@ -991,7 +991,7 @@ class ContentManager
         try {
             $rs = getService('dbal_connection')->fetchAll(
                 $sql,
-                [ \Comment::STATUS_ACCEPTED, $count ]
+                [ 'accepted' , $count ]
             );
 
             foreach ($rs as $contentData) {

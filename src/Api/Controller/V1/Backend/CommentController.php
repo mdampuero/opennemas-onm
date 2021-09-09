@@ -54,6 +54,7 @@ class CommentController extends ApiController
         );
 
         $extra['contents'] = [];
+
         foreach ($items as $content) {
             $extra['contents'][$content['pk_content']] = $content;
         }
@@ -77,7 +78,6 @@ class CommentController extends ApiController
 
         $defaultConfigs  = $this->get('core.helper.comment')->getDefaultConfigs();
         $config          = $ds->get('comments_config', []);
-        $commentsHandler = $ds->get('comment_system');
 
         foreach ($config as $configName => $value) {
             if ($configName == 'number_elements') {
@@ -93,9 +93,12 @@ class CommentController extends ApiController
         return new JsonResponse([
             'config' => $config,
             'extra'   => [
-                'handler' => $commentsHandler,
+                'handler' => $ds->get('comment_system'),
                 'blacklist_comment' => $this->get('core.validator')
-                    ->getConfig(Validator::BLACKLIST_RULESET_COMMENTS)
+                    ->getConfig(Validator::BLACKLIST_RULESET_COMMENTS),
+                'disqus_shortname' => $ds->get('disqus_shortname', []),
+                'disqus_secret_key' => $ds->get('disqus_secret_key', []),
+                'facebook' => $ds->get('facebook', [])
                 ]
         ]);
     }
@@ -130,8 +133,11 @@ class CommentController extends ApiController
         }
 
         try {
+            $ds->set('disqus_shortname', $extra['disqus_shortname']);
+            $ds->set('disqus_secret_key', $extra['disqus_secret_key']);
             $ds->set('comments_config', $config);
             $ds->set('comment_system', $extra['handler']);
+            $ds->set('facebook', $extra['facebook']);
 
             $this->get('core.validator')
                 ->setConfig(Validator::BLACKLIST_RULESET_COMMENTS, $extra['blacklist_comment']);

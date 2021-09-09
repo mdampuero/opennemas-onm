@@ -17,6 +17,8 @@ orm:
                 parent_id:               integer
                 user_id:                 integer
                 content_type_referenced: string
+                positive:                integer
+                negative:                integer
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter
