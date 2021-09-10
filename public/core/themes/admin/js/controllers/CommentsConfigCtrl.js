@@ -108,12 +108,17 @@
          *   Validates facebook or disqus
          */
         $scope.validate = function() {
-          if ($scope.extra.handler === 'facebook' && !$scope.extra.facebook.api_key.trim()) {
+          if ($scope.extra.handler === 'facebook' &&
+          (!$scope.extra.facebook.api_key ||
+            !$scope.extra.facebook.api_key.trim())) {
             return false;
           }
 
           if ($scope.extra.handler === 'disqus' &&
-            (!$scope.extra.disqus_secret_key.trim() || !$scope.extra.disqus_shortname.trim())) {
+            (!$scope.extra.disqus_secret_key ||
+              !$scope.extra.disqus_shortname ||
+              !$scope.extra.disqus_secret_key.trim() ||
+              !$scope.extra.disqus_shortname.trim())) {
             return false;
           }
 

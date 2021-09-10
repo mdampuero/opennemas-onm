@@ -96,8 +96,8 @@ class CommentController extends ApiController
                 'handler' => $ds->get('comment_system'),
                 'blacklist_comment' => $this->get('core.validator')
                     ->getConfig(Validator::BLACKLIST_RULESET_COMMENTS),
-                'disqus_shortname' => $ds->get('disqus_shortname', []),
-                'disqus_secret_key' => $ds->get('disqus_secret_key', []),
+                'disqus_shortname' => $ds->get('disqus_shortname', null),
+                'disqus_secret_key' => $ds->get('disqus_secret_key', null),
                 'facebook' => $ds->get('facebook', [])
                 ]
         ]);

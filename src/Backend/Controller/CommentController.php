@@ -62,8 +62,8 @@ class CommentController extends BackendController
         if ($comment_system == 'disqus') {
             $template = '/disqus/list.tpl';
 
-            $params['disqus_secret_key'] = $ds->get('disqus_secret_key', []);
-            $params['disqus_shortname']  = $ds->get('disqus_shortname', []);
+            $params['disqus_secret_key'] = $ds->get('disqus_secret_key', null);
+            $params['disqus_shortname']  = $ds->get('disqus_shortname', null);
         }
 
         return $this->render($this->resource . $template, $params);
