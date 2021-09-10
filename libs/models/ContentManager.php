@@ -979,6 +979,7 @@ class ContentManager
      */
     public function getLatestComments($count = 6)
     {
+        $em       = getService('entity_repository');
         $contents = [];
 
         $sql = 'SELECT DISTINCT(comments.content_id), comments.date as comment_date,'
@@ -995,8 +996,7 @@ class ContentManager
             );
 
             foreach ($rs as $contentData) {
-                $content = new \Article();
-                $content->load($contentData);
+                $content                 = $em->find('article', $contentData['pk_content']);
                 $content->comment        = $contentData['comment_body'];
                 $content->pk_comment     = $contentData['comment_id'];
                 $content->comment_author = $contentData['comment_author'];
