@@ -142,8 +142,7 @@ class CommentController extends FrontendController
 
         // User already voted this comment
         if (!is_null($cookie)) {
-            //TODO: quitar este comentario
-           //return new Response(_('Already voted.'), 400);
+            return new Response(_('Already voted.'), 400);
         }
 
         // Reject the request is not sent by POST
@@ -168,7 +167,6 @@ class CommentController extends FrontendController
             $response->headers->setCookie(
                 new Cookie('comment-vote-' . $commentId, true, new \DateTime('+3 days'))
             );
-
         } catch (\Exception $e) {
             $response = new Response(_("You have voted this comment previously."), 400);
         }
@@ -229,7 +227,7 @@ class CommentController extends FrontendController
 
             $errors = $this->get('core.validator')->validate($data, 'comment');
 
-            $data['date'] = $now->format('Y-m-d H:i:s');
+            $data['date']                    = $now->format('Y-m-d H:i:s');
             $data['content_type_referenced'] = $content->content_type_name;
 
             $errorType = '';
@@ -249,7 +247,6 @@ class CommentController extends FrontendController
                 ];
 
                 $data['status'] = self::STATUS_PENDING;
-
             } else {
                 if (empty($errors)) {
                     $data['status'] = $cm->autoAccept()
@@ -287,11 +284,9 @@ class CommentController extends FrontendController
                     ];
                 }
             }
-
             if ($errorType != 'fatal') {
                 $this->get($this->service)->createItem($data);
             }
-
         } catch (\Exception $e) {
             $httpCode = 400;
             $message  = [
@@ -299,8 +294,8 @@ class CommentController extends FrontendController
                 'type'    => 'error',
             ];
         }
-
         $response = new JsonResponse($message, $httpCode);
+
         if (!$request->isXmlHttpRequest()) {
             $response = new RedirectResponse($this->generateUrl('frontend_comments_get', [
                 'id' => $contentId,
@@ -358,7 +353,7 @@ class CommentController extends FrontendController
      */
     protected function getComments($content, $epp, $offset)
     {
-        $configs  = $this->get('core.helper.comment')->getConfigs();
+        $configs = $this->get('core.helper.comment')->getConfigs();
 
         $epp = empty($epp) ? (int) $configs['number_elements'] : $epp;
 
@@ -368,16 +363,15 @@ class CommentController extends FrontendController
             . ' order by date desc limit %d offset %d',
             $content->pk_content,
             $epp,
-            ($offset -1) * $epp
+            ($offset - 1) * $epp
         );
 
         try {
             $comments = $this->get($this->service)->getList($oql);
 
             return $comments;
-        }
-        catch(GetListException $ex) {
-           return ['total' => 0, 'items' => []];
+        } catch (GetListException $ex) {
+            return ['total' => 0, 'items' => []];
         }
     }
 }
