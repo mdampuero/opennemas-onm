@@ -260,7 +260,7 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`),
   KEY `comment_content_id` (`content_id`),
   KEY `comment_parent_id` (`parent_id`),
-  CONSTRAINT `comments_id_contents_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE SET NULL
+  CONSTRAINT `comments_id_contents_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -297,6 +297,7 @@ CREATE TABLE `commentsmeta` (
 
 LOCK TABLES `commentsmeta` WRITE;
 /*!40000 ALTER TABLE `commentsmeta` DISABLE KEYS */;
+INSERT INTO `commentsmeta` VALUES (1,'negative','0'),(1,'positive','0'),(2,'negative','0'),(2,'positive','0'),(3,'negative','0'),(3,'positive','0'),(4,'negative','0'),(4,'positive','0'),(5,'negative','0'),(5,'positive','0'),(6,'negative','0'),(6,'positive','0'),(7,'negative','0'),(7,'positive','0'),(8,'negative','0'),(8,'positive','0'),(9,'negative','0'),(9,'positive','0');
 /*!40000 ALTER TABLE `commentsmeta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -721,33 +722,6 @@ LOCK TABLES `newsletters` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `opinions`
---
-
-DROP TABLE IF EXISTS `opinions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `opinions` (
-  `pk_opinion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fk_content_categories` int(10) unsigned DEFAULT '7',
-  `fk_author` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pk_opinion`),
-  KEY `fk_author` (`fk_author`),
-  CONSTRAINT `opinions_id_contents_id` FOREIGN KEY (`pk_opinion`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=744 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `opinions`
---
-
-LOCK TABLES `opinions` WRITE;
-/*!40000 ALTER TABLE `opinions` DISABLE KEYS */;
-INSERT INTO `opinions` VALUES (595,7,9),(596,7,9),(598,7,10),(599,7,10),(601,7,11),(637,7,8),(638,7,8),(639,7,8),(640,7,8),(654,7,12),(658,7,12),(659,7,12),(660,7,12),(662,7,13),(663,7,13),(664,7,13),(732,7,9),(734,7,9),(736,7,9),(738,7,9),(740,7,14),(741,7,14),(742,7,14),(743,7,14);
-/*!40000 ALTER TABLE `opinions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `orders`
 --
 
@@ -830,6 +804,34 @@ LOCK TABLES `pclave` WRITE;
 /*!40000 ALTER TABLE `pclave` DISABLE KEYS */;
 INSERT INTO `pclave` VALUES (1,'Opennemas','https://www.opennemas.com/','url');
 /*!40000 ALTER TABLE `pclave` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `polls`
+--
+
+DROP TABLE IF EXISTS `polls`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `polls` (
+  `pk_poll` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `total_votes` int(10) unsigned NOT NULL DEFAULT '0',
+  `used_ips` longtext,
+  `pretitle` varchar(512) DEFAULT NULL,
+  `visualization` smallint(1) unsigned DEFAULT '0',
+  PRIMARY KEY (`pk_poll`),
+  CONSTRAINT `polls_id_contents_id` FOREIGN KEY (`pk_poll`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `polls`
+--
+
+LOCK TABLES `polls` WRITE;
+/*!40000 ALTER TABLE `polls` DISABLE KEYS */;
+INSERT INTO `polls` VALUES (163,4,'a:2:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:4;}i:1;a:2:{s:2:\"ip\";s:14:\"178.139.12.224\";s:5:\"count\";i:1;}}','Interesante reflexiÃ³n',0),(164,17,'a:4:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:16;}i:1;a:2:{s:2:\"ip\";s:11:\"95.16.86.69\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:14:\"83.165.253.141\";s:5:\"count\";i:1;}i:3;a:2:{s:2:\"ip\";s:9:\"127.0.0.1\";s:5:\"count\";i:1;}}','Cine o libros',1),(165,12,'a:5:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:7;}i:1;a:2:{s:2:\"ip\";s:11:\"95.16.86.69\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:14:\"213.60.224.181\";s:5:\"count\";i:1;}i:3;a:2:{s:2:\"ip\";s:11:\"2.136.50.33\";s:5:\"count\";i:2;}i:4;a:2:{s:2:\"ip\";s:13:\"46.222.76.171\";s:5:\"count\";i:1;}}','Presidente de los EE.UU.',0),(166,23,'a:3:{i:0;a:2:{s:2:\"ip\";s:9:\"127.0.1.1\";s:5:\"count\";i:21;}i:1;a:2:{s:2:\"ip\";s:14:\"91.116.137.243\";s:5:\"count\";i:1;}i:2;a:2:{s:2:\"ip\";s:11:\"95.16.86.29\";s:5:\"count\";i:1;}}','La mejor liga del mundo',1);
+/*!40000 ALTER TABLE `polls` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1176,33 +1178,6 @@ INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','',
 UNLOCK TABLES;
 
 --
--- Table structure for table `votes`
---
-
-DROP TABLE IF EXISTS `votes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `votes` (
-  `pk_vote` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `value_pos` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `value_neg` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `ips_count_vote` text,
-  `karma` int(10) unsigned DEFAULT '100',
-  PRIMARY KEY (`pk_vote`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `votes`
---
-
-LOCK TABLES `votes` WRITE;
-/*!40000 ALTER TABLE `votes` DISABLE KEYS */;
-INSERT INTO `votes` VALUES (1,0,0,'a:0:{}',100),(2,0,0,'a:0:{}',100),(3,0,0,'a:0:{}',100),(4,0,0,'a:0:{}',100),(5,0,0,'a:0:{}',100),(6,0,0,'a:0:{}',100),(7,0,0,'a:0:{}',100),(8,0,0,'a:0:{}',100),(9,0,0,'a:0:{}',100);
-/*!40000 ALTER TABLE `votes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `widgets`
 --
 
@@ -1237,4 +1212,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-03  6:32:30
+-- Dump completed on 2021-09-10 12:34:12
