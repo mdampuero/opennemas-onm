@@ -77,7 +77,7 @@
 {/block}
 
 {block name="list"}
-  {include file="comment/partials/_list.table.tpl"}
+  {include file="comment/list.table.tpl"}
 {/block}
 
 {block name="modals"}
