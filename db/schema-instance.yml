@@ -1456,30 +1456,6 @@ user_user_group:
             target_table: user_groups
             target_field: [ pk_user_group ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-votes:
-    columns:
-        pk_vote:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        value_pos:
-            type: smallint
-            options: { length: 5, unsigned: true, default: 0 }
-        value_neg:
-            type: smallint
-            options: { length: 5, unsigned: true, default: 0 }
-        ips_count_vote:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
-        karma:
-            type: integer
-            options: { unsigned: true, default: 100, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_vote]
-            primary: true
-            unique: true
-            flags: {  }
 widgets:
     columns:
         pk_widget:
