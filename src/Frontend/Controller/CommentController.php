@@ -204,9 +204,6 @@ class CommentController extends FrontendController
             ], 400);
         }
 
-
-        $httpCode = 200;
-
         try {
             $now = new DateTime();
 
@@ -231,59 +228,44 @@ class CommentController extends FrontendController
             $data['content_type_referenced'] = $content->content_type_name;
 
             $errorType = '';
+            $httpCode = 200;
 
-            if ($cm->moderateManually()) {
-                if (!empty($errors)) {
-                    throw new \Exception(sprintf(
-                        '<strong>%s</strong><br> %s',
-                        _('Your comment was rejected due to:'),
-                        implode('<br>', $errors['errors'])
-                    ));
-                }
-
-                $message = [
-                    'message' => _('Your comment was accepted and now we have to moderate it.'),
-                    'type'    => 'warning',
-                ];
-
-                $data['status'] = self::STATUS_PENDING;
-            } else {
-                if (empty($errors)) {
-                    $data['status'] = $cm->autoAccept()
-                        ? self::STATUS_ACCEPTED
-                        : self::STATUS_PENDING;
-
-                    $handling = $cm->autoAccept()
-                        ? _('Your comment was accepted.')
-                        : _('Your comment is valid and now is waiting for moderation.');
-
-                    $httpCode = 200;
+            if (empty($errors)) {
+                if ($cm->moderateManually() || !$cm->autoAccept()) {
+                    $data['status'] = self::STATUS_PENDING;
                     $message  = [
-                        'message' => $handling,
+                        'message' => _('Your comment was accepted and now we have to moderate it.'),
                         'type'    => 'success',
                     ];
                 } else {
-                    $data['status'] = $cm->autoReject()
-                        ? self::STATUS_REJECTED
-                        : self::STATUS_PENDING;
-
-                    $errorType = $errors['type'];
-                    $httpCode  = 400;
-
-                    $handling = ($cm->autoReject() || $cm->isEmailRequired())
-                        ? _('Your comment was rejected due to:')
-                        : _('Your comment is waiting for moderation due to:');
-
-                    $message = [
-                        'message' => sprintf(
-                            '<strong>%s</strong><br> %s',
-                            $handling,
-                            implode('<br>', $errors['errors'])
-                        ),
-                        'type'    => 'error',
+                    $data['status'] = self::STATUS_ACCEPTED;
+                    $message  = [
+                        'message' => _('Your comment was accepted.'),
+                        'type'    => 'success',
                     ];
                 }
+            } else {
+                $data['status'] = $cm->autoReject()
+                ? self::STATUS_REJECTED
+                : self::STATUS_PENDING;
+
+                $errorType = $errors['type'];
+                $httpCode  = 400;
+
+                $handling = ($cm->autoReject() || $cm->isEmailRequired())
+                    ? _('Your comment was rejected due to:')
+                    : _('Your comment is waiting for moderation due to:');
+
+                $message = [
+                    'message' => sprintf(
+                        '<strong>%s</strong><br> %s',
+                        $handling,
+                        implode('<br>', $errors['errors'])
+                    ),
+                    'type'    => 'error',
+                ];
             }
+
             if ($errorType != 'fatal') {
                 $this->get($this->service)->createItem($data);
             }
