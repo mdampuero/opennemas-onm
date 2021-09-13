@@ -433,20 +433,18 @@ class Importer
         $this->setPropagation(true);
 
         foreach ($contents as $content) {
-            if ($content->content_type_name === 'video') {
-                $data['related_contents'] = $this->getRelated(
-                    $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
-                );
-                break;
-            }
-
             if ($content->content_type_name === 'photo') {
                 $data['related_contents'] = $this->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
                 );
-                break;
+            }
+
+            if ($content->content_type_name === 'video') {
+                $data['related_contents'] = $this->getRelated(
+                    $content,
+                    [ 'featured_frontpage', 'featured_inner' ]
+                );
             }
         }
 
