@@ -13,7 +13,3 @@ frontend_comments_vote:
 frontend_comments_save:
     path: /comments/save
     defaults: { _controller: FrontendBundle:Comment:save }
-
-frontend_comments_count:
-    path: /comments/count/{ids}
-    defaults: { _controller: FrontendBundle:Comment:getCommentsCount }
