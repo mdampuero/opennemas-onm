@@ -979,6 +979,7 @@ class ContentManager
      */
     public function getLatestComments($count = 6)
     {
+        $em       = getService('entity_repository');
         $contents = [];
 
         $sql = 'SELECT DISTINCT(comments.content_id), comments.date as comment_date,'

@@ -66,7 +66,7 @@
         };
 
         /**
-         * @memberOf ArticleCtrl
+         * @memberOf PollCtrl
          *
          * @description
          *  The related service.

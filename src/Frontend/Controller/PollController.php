@@ -104,42 +104,18 @@ class PollController extends FrontendController
             ->isValid($response, $request->getClientIp());
 
         if (!$isValid) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _("The reCAPTCHA wasn't entered correctly."
-                    . " Go back and try it again."));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            return $this->getResponse('error', "The reCAPTCHA wasn't entered correctly."
+                . " Go back and try it again.", $poll);
         }
 
         // Prevent vote when no answer
         if (!$request->request->has('answer')) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('Error: no vote value!'));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            return $this->getResponse('error', 'Error: no vote value!', $poll);
         }
 
         // Prevent vote when poll is closed
         if ($this->get('core.helper.poll')->isClosed($poll)) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('You can\'t vote this poll, it is closed.'));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            return $this->getResponse('error', 'You can\'t vote this poll, it is closed.', $poll);
         }
 
         $cookieName = 'poll-' . $poll->pk_content;
@@ -147,15 +123,7 @@ class PollController extends FrontendController
 
         // Prevent vote when already voted
         if (!empty($cookie)) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('You have voted this poll previously.'));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            return $this->getResponse('error', 'You have voted this poll previously.', $poll);
         }
 
         try {
@@ -171,21 +139,10 @@ class PollController extends FrontendController
 
             $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
-            $this->get('session')->getFlashBag()
-                ->add('success', _('Thanks for participating.'));
-
-            $cookie   = new Cookie($cookieName, 'voted');
-            $response = new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
-
-            $response->headers->setCookie($cookie);
+            return $this->getResponse('success', 'Thanks for participating.', $poll);
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('Error while updating content'));
+            return $this->getResponse('error', 'Error while updating content', $poll);
         }
-
-        return $response;
     }
 
     /**
@@ -254,24 +211,8 @@ class PollController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $total_votes = $this->get('core.helper.poll')->getTotalVotes($response['items']);
-
-        $polls = [];
-        $polls = array_map(function ($poll) use ($total_votes) {
-            $items = array_map(function ($item) use ($poll, $total_votes) {
-                $percent = round($item['votes'] /
-                    ($total_votes[$poll->pk_content] > 0 ? $total_votes[$poll->pk_content] : 1), 4) * 100;
-
-                $item['percent'] = sprintf('%.2f', $percent);
-
-                return $item;
-            }, $poll->items);
-            $poll->items = $items;
-            return $poll;
-        }, $response['items']);
-
         $params = array_merge($params, [
-            'polls'      => $polls,
+            'polls'      => $response['items'],
             'total'      => $response['total'],
             'pagination' => $this->get('paginator')->get([
                 'boundary'    => false,
@@ -293,33 +234,20 @@ class PollController extends FrontendController
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getItem(Request $request)
+    private function getResponse($type, $msg, $poll)
     {
-        try {
-            $item = $this->get($this->service)
-                ->getItem($this->getIdFromRequest($request));
-        } catch (\Exception $e) {
-            throw new ResourceNotFoundException();
+        $this->get('session')->getFlashBag()
+            ->add($type, _($msg));
+
+        $response = new RedirectResponse(
+            $this->get('core.helper.url_generator')->generate($poll)
+        );
+
+        if ($type == 'success') {
+            $cookie = new Cookie('poll-' . $poll->pk_content, 'voted');
+            $response->headers->setCookie($cookie);
         }
 
-        if (empty($item) || !$this->get('core.helper.content')->isReadyForPublish($item)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $total_votes = $this->get('core.helper.poll')->getTotalVotes($item);
-
-        $item->items = array_map(function ($a) use ($item, $total_votes) {
-            $percent = round($a['votes'] /
-                ($total_votes[$item->pk_content] > 0 ? $total_votes[$item->pk_content] : 1), 4) * 100;
-
-            $a['percent'] = sprintf('%.2f', $percent);
-
-            return $a;
-        }, $item->items);
-
-        return $item;
+        return $response;
     }
 }

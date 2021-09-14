@@ -132,8 +132,18 @@ class PollServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('find')
             ->with(1)->willReturn($this->item);
 
+        $this->fm->expects($this->at(0))->method('set')
+            ->with($this->item->items)
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->at(1))->method('filter')
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn($this->item->items);
+
         $this->ph->expects($this->once())->method('getTotalVotes')
-            ->with($this->item)->willReturn([ '1' => 15 ]);
+            ->willReturn([ '1' => 15 ]);
 
         $response = $this->service->getItem(1);
 

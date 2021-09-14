@@ -81,6 +81,22 @@ class Content extends Entity
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheEntity()
+    {
+        $this->reset();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEntityFromCache()
+    {
+        $this->refresh();
+    }
+
+    /**
      * Returns a list of objects associated to an specific position
      *
      * @param string $name The position name

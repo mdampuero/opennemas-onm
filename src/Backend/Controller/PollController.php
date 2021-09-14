@@ -54,10 +54,13 @@ class PollController extends BackendController
         $this->checkSecurity($this->extension);
 
         $page         = $request->query->getDigits('page', 1);
-        $suggested    = $request->query->getBoolean('suggested', false);
         $category     = $request->query->getDigits('category', 0);
         $itemsPerPage = 8;
         $oql          = 'content_type_name = "poll" and in_litter != 1 and content_status = 1 ';
+
+        if (!empty($category)) {
+            $oql .= sprintf('and category_id = %d ', $category);
+        }
 
         try {
             $oql .= 'order by created desc limit ' . $itemsPerPage;
@@ -69,7 +72,7 @@ class PollController extends BackendController
             $context = $this->get('core.locale')->getContext();
             $this->get('core.locale')->setContext('frontend');
 
-            $response = $this->get('api.service.content')->getList($oql);
+            $response = $this->get('api.service.poll')->getList($oql);
 
             $this->get('core.locale')->setContext($context);
 

@@ -19,34 +19,70 @@ class PollService extends ContentService
      */
     public function getItem($id)
     {
-        try {
-            if (empty($id)) {
-                throw new \InvalidArgumentException();
+        return $this->getPercents([0 => parent::getItem($id)])[0];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getList($oql = '')
+    {
+        $list = parent::getList($oql);
+
+        $list['items'] = $this->getPercents($list['items']);
+
+        return $list;
+    }
+
+    /**
+     * Generate percents for poll items
+     *
+     * @param array $list The list of polls.
+     *
+     * @return array $list The list of polls with items percents.
+     */
+    private function getPercents($list)
+    {
+        $total_votes = $this->container->get('core.helper.poll')->getTotalVotes($list);
+
+        $list = array_map(function ($poll) use ($total_votes) {
+            $items = array_map(function ($item) use ($poll, $total_votes) {
+                $percent = round($item['votes'] /
+                    ($total_votes[$poll->pk_content] > 0 ? $total_votes[$poll->pk_content] : 1), 4) * 100;
+
+                $item['percent'] = sprintf('%.2f', $percent);
+
+                return $item;
+            }, $poll->items);
+
+            $poll->items = $items;
+
+            return $poll;
+        }, $list);
+
+        return $list;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function localizeItem($item)
+    {
+        $keys = [
+            'items' => [ 'item' ],
+        ];
+
+        $item = parent::localizeItem($item);
+
+        foreach ($keys as $key => $value) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
+                    ->filter('localize', [ 'keys' => $value ])
+                    ->get();
             }
-
-            $item = $this->em->getRepository($this->entity, $this->origin)->find($id);
-
-            $this->localizeItem($item);
-
-            $this->dispatcher->dispatch($this->getEventName('getItem'), [
-                'id'   => $id,
-                'item' => $item
-            ]);
-
-            $total_votes = $this->container->get('core.helper.poll')->getTotalVotes($item);
-
-            $item->items = array_map(function ($a) use ($item, $total_votes) {
-                $percent = round($a['votes'] /
-                    ($total_votes[$item->pk_content] > 0 ? $total_votes[$item->pk_content] : 1), 4) * 100;
-
-                $a['percent'] = sprintf('%.2f', $percent);
-
-                return $a;
-            }, $item->items);
-
-            return $item;
-        } catch (\Exception $e) {
-            throw new GetItemException($e->getMessage(), $e->getCode());
         }
+
+        return $item;
     }
 }
