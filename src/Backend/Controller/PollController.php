@@ -72,7 +72,7 @@ class PollController extends BackendController
             $context = $this->get('core.locale')->getContext();
             $this->get('core.locale')->setContext('frontend');
 
-            $response = $this->get('api.service.content')->getList($oql);
+            $response = $this->get('api.service.poll')->getList($oql);
 
             $this->get('core.locale')->setContext($context);
 
