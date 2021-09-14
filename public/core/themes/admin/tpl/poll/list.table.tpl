@@ -7,10 +7,19 @@
       {t}Media{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-inner" checklist-model="app.columns.selected" checklist-value="'featured_inner'" type="checkbox">
+    <label for="checkbox-featured-inner">
+      {t}Featured in inner{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="commonColumnsHeader" prepend}
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('media')" width="80">
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
+    {t}Inner{/t}
   </th>
 {/block}
 
@@ -22,6 +31,13 @@
     <small class="text-italic" ng-if="!item.items || item.items.length === 0">
       -
     </small>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')">
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_inner" ng-model="item" only-image="true" transform="zoomcrop,220,220">
+      <div class="badge badge-default text-bold text-uppercase">
+        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_inner')" iFlagName=true iFlagIcon=true}
+      </div>
+    </dynamic-image>
   </td>
 {/block}
 
@@ -107,17 +123,17 @@
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('close')">
-    <strong ng-if="!item.params.closetime">
+    <strong ng-if="!item.closetime">
       ∞
     </strong>
-    <div ng-if="item.params.closetime">
+    <div ng-if="item.closetime">
       <i class="fa fa-calendar"></i>
-      [% item.params.closetime | moment : 'YYYY-MM-DD' %]
+      [% item.closetime | moment : 'YYYY-MM-DD' %]
     </div>
-    <small ng-if="item.params.closetime">
+    <small ng-if="item.closetime">
       <i class="fa fa-clock-o"></i>
       <strong>
-        [% item.params.closetime | moment : 'HH:mm:ss' %]
+        [% item.closetime | moment : 'HH:mm:ss' %]
       </strong>
     </small>
   </td>

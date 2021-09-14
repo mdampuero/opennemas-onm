@@ -40,7 +40,6 @@ class PollService extends ContentService
                     ($total_votes[$item->pk_content] > 0 ? $total_votes[$item->pk_content] : 1), 4) * 100;
 
                 $a['percent'] = sprintf('%.2f', $percent);
-
                 return $a;
             }, $item->items);
 
@@ -48,5 +47,28 @@ class PollService extends ContentService
         } catch (\Exception $e) {
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function localizeItem($item)
+    {
+        $keys = [
+            'items' => [ 'item' ],
+        ];
+
+        $item = parent::localizeItem($item);
+
+        foreach ($keys as $key => $value) {
+            if (!empty($item->{$key})) {
+                $item->{$key} = $this->container->get('data.manager.filter')
+                    ->set($item->{$key})
+                    ->filter('localize', [ 'keys' => $value ])
+                    ->get();
+            }
+        }
+
+        return $item;
     }
 }

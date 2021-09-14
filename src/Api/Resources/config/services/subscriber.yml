@@ -17,12 +17,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    core.subscriber.poll:
-        class:     Api\EventSubscriber\PollSubscriber
-        arguments: [ '@api.helper.cache.content' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
     core.subscriber.setting:
         class: Api\EventSubscriber\SettingSubscriber
         arguments: [ '@api.helper.cache' ]

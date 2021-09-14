@@ -101,7 +101,7 @@
           </div>
         </div>
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" field="related_contents[0]" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
     </div>
   </div>
 {/block}
