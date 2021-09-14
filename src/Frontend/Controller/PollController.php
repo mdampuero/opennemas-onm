@@ -211,26 +211,8 @@ class PollController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $total_votes = $this->get('core.helper.poll')->getTotalVotes($response['items']);
-
-        $polls = [];
-        $polls = array_map(function ($poll) use ($total_votes) {
-            $items = array_map(function ($item) use ($poll, $total_votes) {
-                $percent = round($item['votes'] /
-                    ($total_votes[$poll->pk_content] > 0 ? $total_votes[$poll->pk_content] : 1), 4) * 100;
-
-                $item['percent'] = sprintf('%.2f', $percent);
-
-                return $item;
-            }, $poll->items);
-
-            $poll->items = $items;
-
-            return $poll;
-        }, $response['items']);
-
         $params = array_merge($params, [
-            'polls'      => $polls,
+            'polls'      => $response['items'],
             'total'      => $response['total'],
             'pagination' => $this->get('paginator')->get([
                 'boundary'    => false,
@@ -250,36 +232,6 @@ class PollController extends FrontendController
 
             ])
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getItem(Request $request)
-    {
-        try {
-            $item = $this->get($this->service)
-                ->getItem($this->getIdFromRequest($request));
-        } catch (\Exception $e) {
-            throw new ResourceNotFoundException();
-        }
-
-        if (empty($item) || !$this->get('core.helper.content')->isReadyForPublish($item)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $total_votes = $this->get('core.helper.poll')->getTotalVotes($item);
-
-        $item->items = array_map(function ($a) use ($item, $total_votes) {
-            $percent = round($a['votes'] /
-                ($total_votes[$item->pk_content] > 0 ? $total_votes[$item->pk_content] : 1), 4) * 100;
-
-            $a['percent'] = sprintf('%.2f', $percent);
-
-            return $a;
-        }, $item->items);
-
-        return $item;
     }
 
     private function getResponse($type, $msg, $poll)

@@ -143,7 +143,7 @@ class PollServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->item->items);
 
         $this->ph->expects($this->once())->method('getTotalVotes')
-            ->with($this->item)->willReturn([ '1' => 15 ]);
+            ->willReturn([ '1' => 15 ]);
 
         $response = $this->service->getItem(1);
 
