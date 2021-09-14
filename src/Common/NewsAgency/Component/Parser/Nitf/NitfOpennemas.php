@@ -86,6 +86,8 @@ class NitfOpennemas extends Nitf
 
         $resource->author       = $this->getAuthor($data);
         $resource->author_photo = $this->getAuthorPhoto($data);
+        $resource->isChild      = !empty($this->getParentId($data));
+        $resource->uid          = $this->getUid($data);
 
         return $resource;
     }
@@ -124,6 +126,58 @@ class NitfOpennemas extends Nitf
         }
 
         return null;
+    }
+
+    /**
+     * Returns the id of the parent content.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The parent content id.
+     */
+    public function getParentId($data)
+    {
+        $id = $data->xpath('//doc-parent');
+
+        if (empty($id)) {
+            return '';
+        }
+
+        $value = (string) $id[0];
+
+        if (!empty($id[0]->attributes())
+            && !empty($id[0]->attributes()->{'id-string'})
+        ) {
+            $value = (string) $id[0]->attributes()->{'id-string'}[0];
+        }
+
+        return $value;
+    }
+
+    /**
+     * Returns the uid from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The uid.
+     */
+    public function getUid($data)
+    {
+        $uid = $data->xpath('//doc-uid');
+
+        if (empty($uid)) {
+            return '';
+        }
+
+        $value = (string) $uid[0];
+
+        if (!empty($uid[0]->attributes())
+            && !empty($uid[0]->attributes()->{'id-string'})
+        ) {
+            $value = (string) $uid[0]->attributes()->{'id-string'}[0];
+        }
+
+        return $value;
     }
 
     /**
