@@ -13,7 +13,7 @@
             {if is_blog($content)}
               <strong>{t}Blog{/t}</strong>
             {else}
-              <span class="type">{get_type($content, true)}</span>
+              <span class="type">{get_type($content, true, true)}</span>
             {/if}
             {get_author_name($content)} - {$content->title}
         </div>

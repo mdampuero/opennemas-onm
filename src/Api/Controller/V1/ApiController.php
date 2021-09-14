@@ -58,6 +58,7 @@ class ApiController extends Controller
     public function deleteItemAction($id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_DELETE'), [ $id ]);
 
         $msg = $this->get('core.messenger');
 
@@ -79,7 +80,10 @@ class ApiController extends Controller
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
 
-        $ids     = $request->request->get('ids', []);
+        $ids = $request->request->get('ids', []);
+
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_DELETE'), $ids);
+
         $msg     = $this->get('core.messenger');
         $deleted = $this->get($this->service)->deleteList($ids);
 
@@ -110,6 +114,7 @@ class ApiController extends Controller
     public function getItemAction($id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('show'));
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $id ]);
 
         $ss   = $this->get($this->service);
         $item = $ss->getItem($id);
@@ -154,6 +159,7 @@ class ApiController extends Controller
     public function patchItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $id ]);
 
         $msg = $this->get('core.messenger');
 
@@ -177,7 +183,10 @@ class ApiController extends Controller
 
         $params = $request->request->all();
         $ids    = $params['ids'];
-        $msg    = $this->get('core.messenger');
+
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), $ids);
+
+        $msg = $this->get('core.messenger');
 
         unset($params['ids']);
 
@@ -240,6 +249,7 @@ class ApiController extends Controller
     public function updateItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $id ]);
 
         $msg = $this->get('core.messenger');
 
@@ -367,5 +377,20 @@ class ApiController extends Controller
         return $this->get('api.service.tag')->responsify(
             $this->get('api.service.tag')->getListByIds($ids)['items']
         );
+    }
+
+    /**
+     * Checks if the user has permission to delete or modify a list of contents.
+     *
+     * @param mixed $permission  The permission to check (CONTENT_OTHER_UPDATE, CONTENT_OTHER_DELETE).
+     * @param array  $ids        The ids of the contents to modify or delete.
+     *
+     * @throws AccessDeniedException If the action can not be executed.
+     */
+    protected function checkSecurityForContents($permission, array $ids)
+    {
+        foreach ($ids as $id) {
+            $this->checkSecurity($this->extension, $permission, $this->get($this->service)->getItem($id));
+        }
     }
 }

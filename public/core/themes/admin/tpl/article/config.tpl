@@ -19,7 +19,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=admin_articles}" title="{t}Go back to list{/t}">
+                <a class="btn btn-link" href="{url name=backend_articles_list}" title="{t}Go back to list{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>

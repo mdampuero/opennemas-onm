@@ -15,10 +15,25 @@
      * @requires routing
      */
     .controller('StaticPageCtrl', [
-      '$controller', '$scope', 'routing',
-      function($controller, $scope, routing) {
+      '$controller', '$scope', 'routing', 'translator',
+      function($controller, $scope, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'static-page-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
 
         /**
          * @memberOf StaticPageCtrl
@@ -33,7 +48,7 @@
           categories: [],
           content_status: 0,
           content_type_name: 'static_page',
-          created: new Date(),
+          created: null,
           description: '',
           endtime: null,
           favorite: 0,
@@ -70,6 +85,13 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'static-page-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

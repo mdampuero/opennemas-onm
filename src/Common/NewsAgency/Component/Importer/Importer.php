@@ -163,16 +163,8 @@ class Importer
                 ->createItem($data, $file, true);
         }
 
-        if ($data['content_type_name'] == 'opinion') {
-            return $this->container->get('api.service.opinion')
-                ->createItem($data);
-        }
-
-        $target  = \classify($data['content_type_name']);
-        $content = new $target();
-        $content->create($data);
-
-        return $content;
+        return $this->container->get('api.service.content')
+            ->createItem($data);
     }
 
     /**
@@ -402,16 +394,25 @@ class Importer
      */
     protected function getDataForArticle(ExternalResource $resource, array $data) : array
     {
+        $date = new \DateTime();
+
         $data = array_merge($data, [
-            'category_id'  => $this->getCategory($resource, $data),
-            'agency'    => !empty($resource->signature)
+            'content_status'  => 1,
+            'created'         => $date->format('Y-m-d H:i:s'),
+            'fk_content_type' => 1,
+            'categories'      => [ $this->getCategory($resource, $data) ],
+            'agency'          => !empty($resource->signature)
                 ? $resource->signature
                 : (array_key_exists('agency_string', $this->config)
                     ? $this->config['agency_string']
                     : null),
-            'pretitle'  => $resource->pretitle,
-            'summary'   => $resource->summary,
-            'title_int' => $resource->title,
+            'pretitle'        => $resource->pretitle,
+            'description'     => $resource->summary,
+            'title_int'       => $resource->title,
+            'slug'            => $this->container->get('data.manager.filter')
+                ->set($resource->title)
+                ->filter('slug')
+                ->get()
         ]);
 
         if (empty($resource->related)) {
@@ -434,31 +435,17 @@ class Importer
         $data['related_contents'] = [];
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
-                if (!array_key_exists('img1', $data)) {
-                    $data['img1']        = $content->pk_content;
-                    $data['img1_footer'] = strip_tags($content->body);
-                }
-
-                if (!array_key_exists('img2', $data)
-                    || $data['img1'] == $data['img2']
-                ) {
-                    $data['img2']        = $content->pk_content;
-                    $data['img2_footer'] = strip_tags($content->body);
-                }
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
+                    $content,
+                    [ 'featured_frontpage', 'featured_inner' ]
+                );
             }
 
             if ($content->content_type_name === 'video') {
-                if (!array_key_exists('fk_video', $data)) {
-                    $data['fk_video']     = $content->pk_content;
-                    $data['footer_video'] = strip_tags($content->body);
-                }
-
-                if (!array_key_exists('fk_video2', $data)
-                    || $data['fk_video'] == $data['fk_video2']
-                ) {
-                    $data['fk_video2']     = $content->pk_content;
-                    $data['footer_video2'] = strip_tags($content->body);
-                }
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
+                    $content,
+                    [ 'featured_frontpage', 'featured_inner' ]
+                );
             }
 
             if ($content->content_type_name === 'article') {

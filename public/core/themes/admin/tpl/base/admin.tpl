@@ -133,7 +133,7 @@
                       {is_module_activated name="ARTICLE_MANAGER"}
                         {acl isAllowed="ARTICLE_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_article_create}">
+                            <a href="{url name=backend_article_create}">
                               <i class="fa fa-file-text"></i>
                               <span class="title">{t}Article{/t}</span>
                             </a>

@@ -2,12 +2,27 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('OpinionCtrl', [
-  '$controller', '$scope', '$uibModal', 'http', 'related', 'routing', 'cleaner',
-  function($controller, $scope, $uibModal, http, related, routing, cleaner) {
+  '$controller', '$scope', '$uibModal', 'http', 'related', 'routing', 'cleaner', 'translator',
+  function($controller, $scope, $uibModal, http, related, routing, cleaner, translator) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+    /**
+     * @inheritdoc
+     */
+    $scope.draftEnabled = true;
+
+    /**
+     * @inheritdoc
+     */
+    $scope.draftKey = 'opinion-draft';
+
+    /**
+     * @inheritdoc
+     */
+    $scope.dtm = null;
 
     /**
      * @memberOf OpinionCtrl
@@ -25,7 +40,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       description: '',
       favorite: 0,
       frontpage: 0,
-      created: new Date(),
+      created: null,
       starttime: null,
       endtime: null,
       title: '',
@@ -41,7 +56,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @memberOf OpinionCtrl
      *
      * @description
-     *  The related contents service
+     *  The related service.
      *
      * @type {Object}
      */
@@ -77,8 +92,14 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
+      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+        $scope.draftKey = 'opinion-' + $scope.data.item.pk_content + '-draft';
+      }
+
+      $scope.checkDraft();
       related.init($scope);
       related.watch();
+      translator.init($scope);
     };
 
     /**

@@ -17,6 +17,7 @@ class ContentService extends OrmService
     public function createItem($data)
     {
         $data['changed'] = new \DateTime();
+        $data['created'] = new \DateTime();
 
         $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
@@ -104,7 +105,7 @@ class ContentService extends OrmService
      * @param array $data       The content data.
      * @param array $userFields The user data fields to update.
      *
-     * @return Content The content.
+     * @return array The data with the current user on user fields.
      */
     protected function assignUser($data, $userFields = [])
     {

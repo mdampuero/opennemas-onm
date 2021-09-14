@@ -2,7 +2,6 @@
 
 namespace Api\Service\V1;
 
-use Api\Exception\GetListException;
 use Api\Service\V1\ContentService;
 
 class OpinionService extends ContentService

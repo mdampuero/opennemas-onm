@@ -265,19 +265,25 @@
               {assign var="version_id_pro" value=$version_id}
           {/if}
           {is_module_activated name="ARTICLE_MANAGER"}
-          {if $category_id eq 0}
-          <li>
-            <a href="{url name=admin_articles_content_provider_suggested category=$category_id frontpage_version_id=$version_id_pro}">{t}Suggested{/t}</a>
-          </li>
-          {else}
-          <li>
-            <a href="{url name=admin_articles_content_provider_category category=$category_id frontpage_version_id=$version_id_pro}">{t}Others in category{/t}</a>
-          </li>
-          {/if}
+            {if $category_id eq 0}
+              <li>
+                <a href="{url name=backend_articles_content_provider category=$category_id suggested=true}">
+                  {t}Suggested{/t}
+                </a>
+              </li>
+            {else}
+              <li>
+                <a href="{url name=backend_articles_content_provider category=$category_id}">
+                  {t}Others in category{/t}
+                </a>
+              </li>
+            {/if}
           {/is_module_activated}
-          <li>
-            <a href="{url name=admin_articles_content_provider_category}">{t}Latest articles{/t}</a>
-          </li>
+            <li>
+              <a href="{url name=backend_articles_content_provider}">
+                {t}Latest articles{/t}
+              </a>
+            </li>
           {is_module_activated name="WIDGET_MANAGER"}
           <li>
             <a href="{url name=backend_widgets_content_provider frontpage_version_id=$version_id_pro}">{t}Widgets{/t}</a>

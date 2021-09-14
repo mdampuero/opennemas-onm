@@ -74,8 +74,6 @@ class ExportContentCommand extends Command
         return $this->getContainer()->get('view')->get('backend')
             ->fetch('news_agency/newsml_templates/base.tpl', [
                 'content'    => $content,
-                'photo'      => $content->img1,
-                'photoInner' => $content->img2,
                 'tags'       => $this->getContainer()->get('api.service.tag')
                     ->getListByIdsKeyMapped($content->tags)['items']
             ]);
@@ -221,24 +219,6 @@ class ExportContentCommand extends Command
     }
 
     /**
-     * Processes an article.
-     *
-     * @param \Article $article Article to process.
-     */
-    protected function processArticle($article)
-    {
-        // Process frontpage image
-        if (!empty($article->img1)) {
-            $this->processFrontImage($article);
-        }
-
-        // Process inner image
-        if (!empty($article->img2)) {
-            $this->processInnerImage($article);
-        }
-    }
-
-    /**
      * Export all articles from an instance in xml files
      *
      * @param array $contents Contents to process.
@@ -254,12 +234,6 @@ class ExportContentCommand extends Command
                 ));
             }
 
-            $method = 'process' . ucfirst($content->content_type_name);
-
-            if (method_exists($this, $method)) {
-                $this->{$method}($content);
-            }
-
             $this->loadAuthor($content);
             $this->dumpFile($content, $this->convertToNewsML($content), $target);
 
@@ -268,68 +242,6 @@ class ExportContentCommand extends Command
             if ($this->output->isVeryVerbose()) {
                 $this->writeStatus('success', 'DONE', true);
             }
-        }
-    }
-
-    /**
-     * Process content frontend image
-     *
-     * @param $content The content to process frontend image
-     */
-    protected function processFrontImage($content)
-    {
-        $image = $this->getContainer()->get('api.service.photo')->getItem($content->img1);
-
-        if (is_null($image)) {
-            $content->img1 = 0;
-            return;
-        }
-
-        $content->img1_path = $image->path;
-        $content->img1      = $image;
-
-        if (!mb_check_encoding($content->img1->description)) {
-            $content->img1->description = utf8_encode($content->img1->description);
-        }
-    }
-
-    /**
-     * Process content inner image
-     *
-     * @param $content The content to process inner image
-     */
-    protected function processInnerImage($content)
-    {
-        $image = $this->getContainer()->get('api.service.photo')->getItem($content->img2);
-
-        if (is_null($image)) {
-            $content->img2 = 0;
-            return;
-        }
-
-        $content->img2_path = $image->path;
-        $content->img2      = $image;
-
-        if (!mb_check_encoding($content->img2->description)) {
-            $content->img2->description = utf8_encode($content->img2->description);
-        }
-    }
-
-    /**
-     * Processes an opinion.
-     *
-     * @param \Opinion $opinion Opinion to process.
-     */
-    protected function processOpinion($opinion)
-    {
-        // Process frontpage image
-        if (!empty($opinion->img1)) {
-            $this->processFrontImage($opinion);
-        }
-
-        // Process inner image
-        if (!empty($opinion->img2)) {
-            $this->processInnerImage($opinion);
         }
     }
 }

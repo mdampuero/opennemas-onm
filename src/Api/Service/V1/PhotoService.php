@@ -44,7 +44,7 @@ class PhotoService extends ContentService
                 throw new FileAlreadyExistsException();
             }
 
-            $filename = basename($path);
+            $filename         = basename($path);
             $originalFilename = pathinfo(
                 $file instanceof UploadedFile ?
                     $file->getClientOriginalName() : $file->getFilename(),
@@ -60,6 +60,8 @@ class PhotoService extends ContentService
                 'title'          => $filename,
                 'slug'           => $filename,
             ], $data, $ih->getInformation($file->getPathname()));
+
+            $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
             $data = $this->em->getConverter($this->entity)
                 ->objectify(array_merge($this->defaults, $data));

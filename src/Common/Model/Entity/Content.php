@@ -81,6 +81,22 @@ class Content extends Entity
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCacheEntity()
+    {
+        $this->reset();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEntityFromCache()
+    {
+        $this->refresh();
+    }
+
+    /**
      * Returns a list of objects associated to an specific position
      *
      * @param string $name The position name
@@ -110,5 +126,24 @@ class Content extends Entity
         return count(array_filter($this->related_contents, function ($element) use ($name) {
             return $element['type'] == $name;
         })) > 0;
+    }
+
+    /**
+     * Returns true if the user is the owner of the content.
+     *
+     * @param int $id The id of the user.
+     *
+     * @return boolean True if the user is the owner of the content, false otherwise.
+     */
+    public function isOwner($userId)
+    {
+        if (empty($this->fk_publisher)
+            || $this->fk_publisher == $userId
+            || $this->fk_author == $userId
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -14,9 +14,24 @@
      * @requires routing
      */
     .controller('NewsstandCtrl', [
-      '$controller', '$scope', '$timeout', '$window', 'routing',
-      function($controller, $scope, $timeout, $window, routing) {
+      '$controller', '$scope', '$timeout', '$window', 'routing', 'translator',
+      function($controller, $scope, $timeout, $window, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'kiosko-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
 
         /**
          * @memberOf NewsstandCtrl
@@ -30,7 +45,7 @@
           categories: [ null ],
           content_status: 0,
           content_type_name: 'kiosko',
-          created: new Date(),
+          created: null,
           date: '',
           endtime: null,
           favorite: 0,
@@ -70,6 +85,13 @@
             $scope.preview = $scope.data.extra.paths.newsstand + '/' +
               $scope.item.thumbnail;
           }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'kiosko-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**
@@ -212,7 +234,7 @@
 
         // Generates thumbnail when file changes
         $scope.$watch('item.path', function(nv) {
-          if (!nv || !angular.isObject(nv)) {
+          if (!nv || !(nv instanceof File)) {
             return;
           }
 
