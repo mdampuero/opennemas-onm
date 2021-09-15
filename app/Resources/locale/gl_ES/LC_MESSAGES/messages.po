@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 10:02+0000\n"
-"PO-Revision-Date: 2021-09-02 12:05+0200\n"
+"POT-Creation-Date: 2021-09-15 10:27+0000\n"
+"PO-Revision-Date: 2021-09-15 12:29+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -85,57 +85,6 @@ msgstr "Libro actualizado correctamente."
 #, php-format
 msgid "Book '%s' deleted successfully."
 msgstr "Libro «%s» foi eliminado correctamente."
-
-msgid "Comment data sent not valid."
-msgstr "Os datos enviados do comentario non son válidos."
-
-#, php-format
-msgid "Now you are using the %s comment system."
-msgstr "Agora está a usar o sistema de comentarios de %s."
-
-msgid "Accepted"
-msgstr "Aceptado"
-
-msgid "Rejected"
-msgstr "Rexeitado"
-
-msgid "Pending"
-msgstr "Pendente"
-
-#, php-format
-msgid "Comment with id \"%d\" doesn't exists."
-msgstr "Non existe o comentario co identificador «%d»"
-
-msgid "Comment updated successfully."
-msgstr "Comentario actualizado correctamente."
-
-msgid "Settings saved."
-msgstr "Opcións gardadas."
-
-msgid "There was an error while saving the settings"
-msgstr "Produciuse un erro ao gardar as preferencias."
-
-msgid ""
-"Please provide your Disqus configuration to start to use your Disqus "
-"Comments module"
-msgstr ""
-"Complete a configuración de Disqus para comezar a usar módulo «Comentarios "
-"de Disqus»"
-
-msgid "Disqus configurations saved properly."
-msgstr "Configuracións de Disqus gardadas correctamente."
-
-msgid "There was an error while saving the Disqus module configuration"
-msgstr "Produciuse un erro ao gardar a configuración do módulo «Disqus»"
-
-msgid "Facebook configuration saved successfully"
-msgstr "Configuración de Facebook gardada correctamente."
-
-msgid ""
-"There was an error while saving the Facebook comments module configuration"
-msgstr ""
-"Produciuse un erro ao gardar a configuración do módulo «Comentarios de "
-"Facebook»"
 
 #, php-format
 msgid "Unable to arquive content with id %s: %s"
@@ -534,6 +483,12 @@ msgstr "Xestor de caché"
 msgid "Settings"
 msgstr "Preferencias"
 
+msgid "You don't have enough privileges for modify this content."
+msgstr "Non tes permisos dabondo para modificar este contido."
+
+msgid "Item deleted successfully"
+msgstr "Elemento eliminado correctamente"
+
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "Non se puido eliminar o elemento co identificador «%d»"
@@ -543,29 +498,12 @@ msgid "Unable to find the item with id \"%d\""
 msgstr "Non se puido atopar o elemento co identificador «%d»"
 
 #, php-format
-msgid "%d item(s) deleted successfully"
-msgstr "%d elemento(s) eliminados correctamente"
-
-msgid "Item deleted successfully"
-msgstr "Elemento eliminado correctamente"
-
-#, php-format
-msgid "Unable to update item with id \"%d\""
-msgstr "Non se puido actualizar o elemento co identificador «%d»"
-
-#, php-format
-msgid "%d item(s) updated successfully"
-msgstr "%d elemento(s) actualizado(s) correctamente"
-
-msgid "Item updated successfully"
-msgstr "Elemento actualizado correctamente"
-
-msgid "You don't have enough privileges for modify this content."
-msgstr "Non tes permisos dabondo para modificar este contido."
-
-#, php-format
 msgid "You don't have enough privileges to delete the content with id %s."
 msgstr "Non tes permisos dabondo para eliminar o contido con id %s."
+
+#, php-format
+msgid "%d item(s) deleted successfully"
+msgstr "%d elemento(s) eliminados correctamente"
 
 msgid "Item restored successfully"
 msgstr "Elemento restaurado correctamente"
@@ -894,17 +832,11 @@ msgstr "Método de solicitude non válido"
 msgid "Not valid vote value"
 msgstr "Valor de votación non válido"
 
-msgid "Error: no vote value!"
-msgstr "Erro: non hai valor de votación!"
-
 msgid "You have voted this comment previously."
 msgstr "Xa votaches neste comentario anteriormente."
 
 msgid "Please fill the captcha code."
 msgstr "Por favor, complete o código captcha"
-
-msgid "Your comment was rejected due to:"
-msgstr "O teu comentario foi rexeitado debido a:"
 
 msgid "Your comment was accepted and now we have to moderate it."
 msgstr "O teu comentario foi aceptado e agora deberá moderarse."
@@ -912,8 +844,8 @@ msgstr "O teu comentario foi aceptado e agora deberá moderarse."
 msgid "Your comment was accepted."
 msgstr "O teu comentario foi aceptado."
 
-msgid "Your comment is valid and now is waiting for moderation."
-msgstr "O teu comentario é válido e agora deberá moderarse."
+msgid "Your comment was rejected due to:"
+msgstr "O teu comentario foi rexeitado debido a:"
 
 msgid "Your comment is waiting for moderation due to:"
 msgstr "O teu comentario terá que moderarse debido a:"
@@ -962,15 +894,6 @@ msgstr "Subscribícheste ao boletín de novas."
 
 msgid "You have been unsubscribed from the newsletter."
 msgstr "Desubscribícheste do boletín de novas."
-
-msgid "You can't vote this poll, it is closed."
-msgstr "A enquisa está pechada, non podes votar."
-
-msgid "You have voted this poll previously."
-msgstr "Xa votaches nesta enquisa anteriormente."
-
-msgid "Thanks for participating."
-msgstr "Grazas por participar."
 
 msgid "Homepage News"
 msgstr "Novas de portada"
@@ -1037,6 +960,9 @@ msgstr "Esta conta xa está verificada"
 
 msgid "The verification email was sent."
 msgstr "O correo de verificación foi enviado."
+
+msgid "Item updated successfully"
+msgstr "Elemento actualizado correctamente"
 
 msgid "Unable to update the user."
 msgstr "Non se puido actualizar o usuario."
@@ -1358,6 +1284,21 @@ msgstr "Widget %s non dispoñíbel"
 
 msgid "Running cleanup in background"
 msgstr "Executando limpeza en segundo plano"
+
+msgid "Accepted"
+msgstr "Aceptado"
+
+msgid "Rejected"
+msgstr "Rexeitado"
+
+msgid "Pending"
+msgstr "Pendente"
+
+msgid "Settings saved."
+msgstr "Opcións gardadas."
+
+msgid "There was an error while saving the settings"
+msgstr "Produciuse un erro ao gardar as preferencias."
 
 msgid "Item imported successfully"
 msgstr "Elemento importado correctamente"
@@ -1927,15 +1868,6 @@ msgstr "Ficheiro"
 msgid "Book"
 msgstr "Libro"
 
-msgid "Not valid comment id."
-msgstr "Non é un id de comentario válido."
-
-msgid "Status not valid."
-msgstr "Estado non válido."
-
-msgid "Unable to delete the comment."
-msgstr "Non foi posible eliminar o comentario."
-
 msgid "trashed"
 msgstr "en lixo"
 
@@ -2004,12 +1936,6 @@ msgstr "URL"
 
 msgid "Internal search"
 msgstr "Busca interna"
-
-msgid "A Favor"
-msgstr "A Favor"
-
-msgid "En Contra"
-msgstr "Contra"
 
 msgid "Select a category..."
 msgstr "Selecciona unha categoría…"
@@ -5439,43 +5365,6 @@ msgstr "Disqus non está configurado"
 msgid "Config comments module"
 msgstr "Configurar módulo «Comentarios»"
 
-msgid "Unable to find any comment that matches your search."
-msgstr "Non se puideron atopar comentarios que coincidan coa súa busca."
-
-msgid "Maybe changing any filter could help."
-msgstr "Pode que cambiar un filtro axude."
-
-msgid "Author:"
-msgstr "Autor:"
-
-msgid "Submitted on:"
-msgstr "Enviado o:"
-
-msgid "In response to"
-msgstr "En resposta a"
-
-msgid "Update"
-msgstr "Actualizar"
-
-msgid "Updating"
-msgstr "Actualizando"
-
-msgid "Nickname"
-msgstr "Alcume"
-
-msgid "Submitted on"
-msgstr "Enviado o"
-
-msgid "Sender IP"
-msgstr "IP do emisor"
-
-msgid "Commented on"
-msgstr "Comentado en"
-
-msgid ""
-"Are you sure that do you want send to the trash this comment from \"%1\"?"
-msgstr "Tes certeza que queres enviar ao lixo este comentario  «%1»?"
-
 msgid "Change comment manager to <span class=\"text-primary\">%1</span>"
 msgstr ""
 "Cambiar o xestor de comentarios a <span class=\"text-primary\">%1</span>"
@@ -5507,44 +5396,6 @@ msgstr ""
 "Facebook. Vai <a href=\"https://developers.facebook.com/\" target=\"_blank"
 "\">aquí</a> para obter un identificador de aplicación e, a continuación, "
 "preme Configuración para configuralo"
-
-msgid "Please enter your Disqus settings"
-msgstr "Por faor escribe as configuracións de Disqus"
-
-msgid ""
-"A shortname is the unique identifier assigned to a Disqus site. All the "
-"comments posted to a site are referenced with the shortname"
-msgstr ""
-"Un shortname é o identificador único asignado a un sitio Disqus. Todos os "
-"comentarios publicados neste sitio son referenciados co shortname"
-
-msgid ""
-"You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
-"applications/\" target=\"_blank\">here</a>"
-msgstr ""
-"Pode obter as súas chaves de Disqus desde <a href=\"http://disqus.com/api/"
-"applications/\" target=\"_blank\">aquí</a>"
-
-msgid "Please enter your Facebook settings"
-msgstr "Por faor escribe as configuracións de Facebook"
-
-msgid "Facebook App Id"
-msgstr "Identificador de aplicativo de Facebook"
-
-msgid ""
-"To be able to moderate comments of your site in Facebook you must create and "
-"set here your <strong>Facebook App Id</strong>."
-msgstr ""
-"Para poder moderar os comentarios do teu sitio en Facebook debes crear e "
-"configurar aquí o teu <strong>Id de aplicación de Facebook</strong>."
-
-msgid ""
-"You can get your Facebook App Keys from <a href=\"https://developers."
-"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
-msgstr ""
-"Podes obter as túas chaves de aplicativo de Facebook desde <a href=\"https://"
-"developers.facebook.com/apps\" target=\"_blank\">o sitio web Facebook "
-"Developers</a>."
 
 msgid "Default settings"
 msgstr "Configuracións por omisión"
@@ -5587,11 +5438,11 @@ msgstr ""
 "Opennemas admite varios xestores de comentarios. Podes cambiar ao xestor que "
 "desexes cando queiras."
 
-msgid "Built-in system"
-msgstr "Sistema integrado"
-
 msgid "Use the built-in comment system"
 msgstr "Usar o sistema de comentarios propio"
+
+msgid "Built-in system"
+msgstr "Sistema integrado"
 
 msgid ""
 "Use our simple but effective comment system that requires zero configuration "
@@ -5691,6 +5542,68 @@ msgid ""
 msgstr ""
 "Só os comentarios aprobados e os correos electrónicos non repetidos crearán "
 "un novo contacto na lista de Act-on."
+
+msgid "Please enter your Facebook settings"
+msgstr "Por faor escribe as configuracións de Facebook"
+
+msgid "Facebook App Id"
+msgstr "Identificador de aplicativo de Facebook"
+
+msgid ""
+"To be able to moderate comments of your site in Facebook you must create and "
+"set here your <strong>Facebook App Id</strong>."
+msgstr ""
+"Para poder moderar os comentarios do teu sitio en Facebook debes crear e "
+"configurar aquí o teu <strong>Id de aplicación de Facebook</strong>."
+
+msgid ""
+"You can get your Facebook App Keys from <a href=\"https://developers."
+"facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
+msgstr ""
+"Podes obter as túas chaves de aplicativo de Facebook desde <a href=\"https://"
+"developers.facebook.com/apps\" target=\"_blank\">o sitio web Facebook "
+"Developers</a>."
+
+msgid "Please enter your Disqus settings"
+msgstr "Por faor escribe as configuracións de Disqus"
+
+msgid ""
+"A shortname is the unique identifier assigned to a Disqus site. All the "
+"comments posted to a site are referenced with the shortname"
+msgstr ""
+"Un shortname é o identificador único asignado a un sitio Disqus. Todos os "
+"comentarios publicados neste sitio son referenciados co shortname"
+
+msgid ""
+"You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">here</a>"
+msgstr ""
+"Pode obter as súas chaves de Disqus desde <a href=\"http://disqus.com/api/"
+"applications/\" target=\"_blank\">aquí</a>"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Author:"
+msgstr "Autor:"
+
+msgid "Submitted on:"
+msgstr "Enviado o:"
+
+msgid "In response to"
+msgstr "En resposta a"
+
+msgid "Nickname"
+msgstr "Alcume"
+
+msgid "Submitted on"
+msgstr "Enviado o"
+
+msgid "Sender IP"
+msgstr "IP do emisor"
+
+msgid "Commented on"
+msgstr "Comentado en"
 
 msgid "Unable to find any letter that matches your search."
 msgstr "Non se puideron atopar cartas que coincidan coa súa busca."
@@ -7083,6 +6996,92 @@ msgstr "Forte"
 
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de correo-e enviados por mes"
+
+#~ msgid "Comment data sent not valid."
+#~ msgstr "Os datos enviados do comentario non son válidos."
+
+#~ msgid "Now you are using the %s comment system."
+#~ msgstr "Agora está a usar o sistema de comentarios de %s."
+
+#~ msgid "Comment with id \"%d\" doesn't exists."
+#~ msgstr "Non existe o comentario co identificador «%d»"
+
+#~ msgid "Comment updated successfully."
+#~ msgstr "Comentario actualizado correctamente."
+
+#~ msgid ""
+#~ "Please provide your Disqus configuration to start to use your Disqus "
+#~ "Comments module"
+#~ msgstr ""
+#~ "Complete a configuración de Disqus para comezar a usar módulo "
+#~ "«Comentarios de Disqus»"
+
+#~ msgid "Disqus configurations saved properly."
+#~ msgstr "Configuracións de Disqus gardadas correctamente."
+
+#~ msgid "There was an error while saving the Disqus module configuration"
+#~ msgstr "Produciuse un erro ao gardar a configuración do módulo «Disqus»"
+
+#~ msgid "Facebook configuration saved successfully"
+#~ msgstr "Configuración de Facebook gardada correctamente."
+
+#~ msgid ""
+#~ "There was an error while saving the Facebook comments module configuration"
+#~ msgstr ""
+#~ "Produciuse un erro ao gardar a configuración do módulo «Comentarios de "
+#~ "Facebook»"
+
+#~ msgid "Unable to update item with id \"%d\""
+#~ msgstr "Non se puido actualizar o elemento co identificador «%d»"
+
+#~ msgid "%d item(s) updated successfully"
+#~ msgstr "%d elemento(s) actualizado(s) correctamente"
+
+#~ msgid "Error: no vote value!"
+#~ msgstr "Erro: non hai valor de votación!"
+
+#~ msgid "Your comment is valid and now is waiting for moderation."
+#~ msgstr "O teu comentario é válido e agora deberá moderarse."
+
+#~ msgid "You can't vote this poll, it is closed."
+#~ msgstr "A enquisa está pechada, non podes votar."
+
+#~ msgid "You have voted this poll previously."
+#~ msgstr "Xa votaches nesta enquisa anteriormente."
+
+#~ msgid "Thanks for participating."
+#~ msgstr "Grazas por participar."
+
+#~ msgid "Not valid comment id."
+#~ msgstr "Non é un id de comentario válido."
+
+#~ msgid "Status not valid."
+#~ msgstr "Estado non válido."
+
+#~ msgid "Unable to delete the comment."
+#~ msgstr "Non foi posible eliminar o comentario."
+
+#~ msgid "A Favor"
+#~ msgstr "A Favor"
+
+#~ msgid "En Contra"
+#~ msgstr "Contra"
+
+#~ msgid "Unable to find any comment that matches your search."
+#~ msgstr "Non se puideron atopar comentarios que coincidan coa súa busca."
+
+#~ msgid "Maybe changing any filter could help."
+#~ msgstr "Pode que cambiar un filtro axude."
+
+#~ msgid "Update"
+#~ msgstr "Actualizar"
+
+#~ msgid "Updating"
+#~ msgstr "Actualizando"
+
+#~ msgid ""
+#~ "Are you sure that do you want send to the trash this comment from \"%1\"?"
+#~ msgstr "Tes certeza que queres enviar ao lixo este comentario  «%1»?"
 
 #~ msgid "Video type and file URLs"
 #~ msgstr "Tipo de vídeo e URLs aos ficheiros"
