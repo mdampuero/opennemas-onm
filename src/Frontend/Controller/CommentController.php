@@ -136,7 +136,6 @@ class CommentController extends FrontendController
         $voteValue = $request->request->filter('vote', null, FILTER_SANITIZE_STRING);
         $commentId = $request->request->getDigits('comment_id', 0);
         $cookie    = $request->cookies->get('comment-vote-' . $commentId);
-        $ip        = getUserRealIP();
         $comment   = $this->get($this->service)->getItem($commentId);
 
         // User already voted this comment
@@ -156,11 +155,11 @@ class CommentController extends FrontendController
 
         try {
             // Positive Vote up - Negative Vote down
-            $voteValue = ($voteValue == 'up') ? 'positive' : 'negative';
+            $vote = ($voteValue == 'up') ? 'positive' : 'negative';
 
-            $value = empty($comment->{$voteValue}) ? 1 : $comment->{$voteValue} + 1;
+            $value = empty($comment->{$vote}) ? 1 : $comment->{$vote} + 1;
 
-            $this->get($this->service)->updateItem($commentId, [$voteValue => $value]);
+            $this->get($this->service)->updateItem($commentId, [$vote => $value]);
 
             $response = new Response('ok', 200);
             $response->headers->setCookie(
