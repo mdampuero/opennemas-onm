@@ -28,7 +28,6 @@
   </li>
 {/block}
 
-
 {block name="extraTitle"}
   <li class="hidden-xs m-l-5 m-r-5 quicklinks">
     <h4>
@@ -139,7 +138,7 @@
             </div>
             <div class="grid-body">
               <div class ="form-inline">
-                <div class="form-group p-l-20" ng-class="{ 'has-error' : (config.number_elements < 3 || config.number_elements > 100 || !config.number_elements) }">
+                <div class="form-group p-l-20" ng-class="{ 'has-error' : (config.number_elements < 3 || config.number_elements > 100 || !config.number_elementsy) }">
                   <label class="form-label" for="number_elements">
                     <h5>
                       {t}Number of comments to show{/t}:
