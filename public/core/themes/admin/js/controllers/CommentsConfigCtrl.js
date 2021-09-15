@@ -122,6 +122,13 @@
             return false;
           }
 
+          if ($scope.extra.handler === 'onm' &&
+            ($scope.config.number_elements < 3 ||
+              $scope.config.number_elements > 100 ||
+              !$scope.config.number_elements)) {
+            return false;
+          }
+
           return true;
         };
       }
