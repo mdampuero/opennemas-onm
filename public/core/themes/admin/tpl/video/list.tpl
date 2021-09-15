@@ -86,6 +86,11 @@
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
+  <li class="hidden-xs ng-cloak m-r-10 m-b-10 quicklinks">
+    <div class="hidden-xs hidden-sm ng-cloak quicklinks">
+      <onm-tags-input class="block" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" unique="true" placeholder="{t}Input one tag{/t}"/>
+    </div>
+  </li>
 {/block}
 
 {block name="list"}

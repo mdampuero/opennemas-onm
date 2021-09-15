@@ -36,18 +36,19 @@
             placeholder:   '@',
             required:      '=',
             selectionOnly: '=',
+            unique:        '=',
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
-              '<button class="btn btn-info btn-mini pull-right" ng-hide="hideGenerate" ng-click="generate(generateFrom())" type="button">' +
+              '<button ng-if="!unique" class="btn btn-info btn-mini pull-right" ng-hide="hideGenerate" ng-click="generate(generateFrom())" type="button">' +
                 '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': generating }"></i>' +
                 $window.strings.tags.generate +
               '</button>' +
-              '<button class="btn btn-danger btn-mini m-r-5 pull-right" ng-click="clear()" type="button">' +
+              '<button ng-if="!unique" class="btn btn-danger btn-mini m-r-5 pull-right" ng-click="clear()" type="button">' +
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
-              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
+              '<span ng-if="!unique" class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
                 '[% tagsInLocale ? tagsInLocale.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +

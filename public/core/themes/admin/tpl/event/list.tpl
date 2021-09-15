@@ -49,6 +49,11 @@
         <i class="fa fa-trash-o fa-lg"></i>
       </button>
     </li>
+    <li class="hidden-xs ng-cloak m-r-10 m-b-10 quicklinks">
+      <div class="hidden-xs hidden-sm ng-cloak quicklinks">
+        <onm-tags-input class="block" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" unique="true" placeholder="{t}Input one tag{/t}"/>
+      </div>
+    </li>
   {/acl}
 {/block}
 
