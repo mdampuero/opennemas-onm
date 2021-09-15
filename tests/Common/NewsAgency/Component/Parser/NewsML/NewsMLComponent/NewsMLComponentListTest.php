@@ -37,7 +37,9 @@ class NewsMLComponentListTest extends TestCase
             ->willReturn([]);
         $parser->method('parse')->will(
             $this->onConsecutiveCalls(new ExternalResource(), [
-                new ExternalResource([ 'id' => 'photo1', 'type' => 'photo' ])
+                new ExternalResource([ 'id' => 'photo1', 'type' => 'photo' ]),
+                new ExternalResource([ 'id' => 'text2', 'type' => 'text', 'isChild' => true, 'uid' => '123' ]),
+                new ExternalResource([ 'id' => 'photo2', 'type' => 'photo', 'isChild' => true, 'uid' => '123' ])
             ])
         );
 
@@ -63,7 +65,18 @@ class NewsMLComponentListTest extends TestCase
 
         $resources = $this->parser->parse($this->valid);
 
-        $this->assertEquals(2, count($resources));
+        $this->assertEquals(4, count($resources));
+        $this->assertEquals($resources[1]->id, $resources[0]->related[0]);
+    }
+
+    /**
+     * Tests parse with valid XML and with child.
+     */
+    public function testParseWithChild()
+    {
+        $resources = $this->parser->parse($this->valid);
+
+        $this->assertEquals(4, count($resources));
         $this->assertEquals($resources[1]->id, $resources[0]->related[0]);
     }
 }

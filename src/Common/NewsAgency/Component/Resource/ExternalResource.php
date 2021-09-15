@@ -57,6 +57,13 @@ class ExternalResource
     public $id = '';
 
     /**
+     * If the resource has parent.
+     *
+     * @var boolean
+     */
+    public $isChild = false;
+
+    /**
      * The file name for media resources.
      *
      * @var string
@@ -123,6 +130,13 @@ class ExternalResource
      * @var string
      */
     public $type = 'text';
+
+    /**
+     * The resource uid.
+     *
+     * @var string
+     */
+    public $uid = '';
 
     /**
      * The resource URN.

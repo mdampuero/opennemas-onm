@@ -59,20 +59,37 @@ class NewsMLComponentList extends NewsML
             }
         }
 
-        // Get photo resources
-        $related = [];
+        // Get related resources
+        $related      = [];
+        $childRelated = [];
         foreach ($contents as $content) {
-            if ($content->type === 'photo') {
+            if ($content->type === 'photo' && !$content->isChild) {
                 $related[] = $content->id;
+            }
+
+            if ($content->type === 'text' && $content->isChild) {
+                $related[] = $content->id;
+            }
+
+            if ($content->type === 'photo' && $content->isChild && !empty($content->uid)) {
+                $childRelated[$content->uid] = $content->id;
             }
         }
 
-        // Add related photos to texts resources
+        // Add related to texts resources
         foreach ($contents as $content) {
             $content->merge($this->bag);
 
-            if ($content->type === 'text') {
+            if ($content->type === 'text' && !$content->isChild) {
                 $content->related = $related;
+            }
+
+            if ($content->type === 'text'
+                && $content->isChild
+                && !empty($content->uid)
+                && array_key_exists($content->uid, $childRelated)
+            ) {
+                $content->related = [$childRelated[$content->uid]];
             }
         }
 
