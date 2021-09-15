@@ -114,8 +114,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.localize($scope.data.item, 'item', true, [ 'items' ]);
-          $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
+          $scope.localize($scope.data.item, 'item', true, [ 'items', 'related_contents' ]);
 
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
