@@ -234,6 +234,15 @@ class PollController extends FrontendController
         ]);
     }
 
+    /**
+     * Returns the resposne with the passed parameters
+     *
+     * @param string $type The response type.
+     * @param string $msg The response message.
+     * @param object $poll The poll to generate url.
+     *
+     * @return Response The response object.
+     */
     private function getResponse($type, $msg, $poll)
     {
         $this->get('session')->getFlashBag()
