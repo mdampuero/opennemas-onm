@@ -29,17 +29,18 @@ function get_caption($item = null) : ?string
 /**
  * Returns the content of specified type for the provided item.
  *
- * @param mixed  $item The item to return or the id of the item to return. If
- *                     not provided, the function will try to search the item in
- *                     the template.
- * @param string $type Content type used to find the content when an id
- *                     provided as first parameter.
+ * @param mixed  $item        The item to return or the id of the item to return. If
+ *                            not provided, the function will try to search the item in
+ *                            the template.
+ * @param string $type        Content type used to find the content when an id
+ *                            provided as first parameter.
+ * @param bool   $unpublished Flag to indicate if the content to get the property from can be unpublished.
  *
  * @return Content The content.
  */
-function get_content($item = null, $type = null)
+function get_content($item = null, $type = null, bool $unpublished = false)
 {
-    return getService('core.helper.content')->getContent($item, $type);
+    return getService('core.helper.content')->getContent($item, $type, $unpublished);
 }
 
 /**
@@ -93,14 +94,15 @@ function get_pretitle($item = null) : ?string
 /**
  * Returns a property for the provided item.
  *
- * @param Content $item The item to get property from.
- * @param string  $name The property name.
+ * @param Content $item        The item to get property from.
+ * @param string  $name        The property name.
+ * @param bool    $unpublished Flag to indicate if the content to get the property from can be unpublished.
  *
  * @return mixed The property value.
  */
-function get_property($item, string $name)
+function get_property($item, string $name, bool $unpublished = false)
 {
-    return getService('core.helper.content')->getProperty($item, $name);
+    return getService('core.helper.content')->getProperty($item, $name, $unpublished);
 }
 
 /**
@@ -154,15 +156,16 @@ function get_tags($item = null) : array
 /**
  * Returns the internal type or human-readable type for the provided item.
  *
- * @param Content $item     The item to get content type for.
- * @param bool    $readable True if the instance and item have comments enabled. False
- *                          otherwise.
+ * @param Content $item        The item to get content type for.
+ * @param bool    $readable    True if the instance and item have comments enabled. False
+ *                             otherwise.
+ * @param bool    $unpublished Flag to indicate if the content to get the property from can be unpublished.
  *
  * @param string The internal or human-readable type.
  */
-function get_type($item = null, bool $readable = false) : ?string
+function get_type($item = null, bool $readable = false, bool $unpublished = false) : ?string
 {
-    return getService('core.helper.content')->getType($item, $readable);
+    return getService('core.helper.content')->getType($item, $readable, $unpublished);
 }
 
 /**

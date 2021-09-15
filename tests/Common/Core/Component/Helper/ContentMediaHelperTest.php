@@ -134,10 +134,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
-        $this->contentHelper->expects($this->at(0))->method('getType')
-            ->with($content)
-            ->willReturn('opinion');
-
         $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
             ->with($content)
             ->willReturn(true);
@@ -175,7 +171,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             [
                 'pk_content'        => 2,
                 'target_id'         => 3,
-                'content_type_name' => 'photo',
+                'content_type_name' => 'video',
                 'type'              => 'featured_frontpage'
             ]
         );
@@ -187,39 +183,27 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
-        $this->contentHelper->expects($this->at(0))->method('getType')
-            ->with($content)
-            ->willReturn('opinion');
-
-        $this->contentHelper->expects($this->at(1))->method('getType')
-            ->with($video)
-            ->willReturn('video');
-
-        $this->contentHelper->expects($this->at(2))->method('getType')
-            ->with($photo)
-            ->willReturn('photo');
-
         $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
-            ->with($content)
+            ->with($content, 'inner')
             ->willReturn(true);
 
         $this->featuredHelper->expects($this->at(1))->method('getFeaturedMedia')
-            ->with($content)
+            ->with($content, 'inner')
             ->willReturn($video);
 
         $this->featuredHelper->expects($this->at(2))->method('hasFeaturedMedia')
-            ->with($video)
+            ->with($video, 'frontpage')
             ->willReturn(true);
 
         $this->featuredHelper->expects($this->at(3))->method('getFeaturedMedia')
-            ->with($video)
+            ->with($video, 'frontpage')
             ->willReturn($photo);
 
         $this->contentHelper->expects($this->once())->method('getContent')
-            ->with($photo)
+            ->with($photo, 'photo')
             ->willReturn($photo);
 
-        $this->assertEquals($photo, $this->helper->getMedia($content, true));
+        $this->helper->getMedia($content);
     }
 
     /**
@@ -240,7 +224,11 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
-        $this->contentHelper->expects($this->at(1))->method('getType')
+        $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
+            ->with($content, 'inner')
+            ->willReturn(false);
+
+        $this->contentHelper->expects($this->at(0))->method('getType')
             ->with($content)
             ->willReturn('opinion');
 
@@ -252,7 +240,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn(2);
 
-        $this->contentHelper->expects($this->at(2))->method('getContent')
+        $this->contentHelper->expects($this->at(1))->method('getContent')
             ->with(2)
             ->willReturn($photo);
 

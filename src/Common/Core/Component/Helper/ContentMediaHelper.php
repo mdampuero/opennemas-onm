@@ -77,12 +77,13 @@ class ContentMediaHelper
      * Get image url for a given content
      *
      * @param object $content The content object.
+     * @param bool   $deep    A flag to search only for photos.
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getMedia($content, $deep = false)
+    public function getMedia($content)
     {
-        $media = $this->getMediaObject($content, 'inner', $deep);
+        $media = $this->getMediaObject($content, 'inner');
 
         if (empty($media)) {
             return null;
@@ -103,22 +104,19 @@ class ContentMediaHelper
      *
      * @param Content $content The content object.
      * @param String  $type    The type of the featured media "frontpage"|"inner".
-     * @param boolean $deep    Wether perform a deep search or not.
      *
      * @return Content The media object for the specific content.
      */
-    protected function getMediaObject($content, $type, $deep)
+    protected function getMediaObject($content, $type)
     {
-        if (!empty($content) && $this->contentHelper->getType($content) === 'photo') {
+        if (!empty($content) && $content->content_type_name === 'photo') {
             return $content;
         }
 
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
 
-            return $deep
-                ? $this->getMediaObject($featuredMedia, 'frontpage', $deep)
-                : $featuredMedia;
+            return $this->getMediaObject($featuredMedia, 'frontpage');
         }
 
         if ($this->contentHelper->getType($content) === 'opinion'

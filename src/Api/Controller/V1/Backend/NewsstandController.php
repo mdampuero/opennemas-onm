@@ -27,6 +27,19 @@ class NewsstandController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'KIOSKO_CREATE',
+        'delete' => 'KIOSKO_DELETE',
+        'patch'  => 'KIOSKO_UPDATE',
+        'update' => 'KIOSKO_UPDATE',
+        'list'   => 'KIOSKO_ADMIN',
+        'save'   => 'KIOSKO_CREATE',
+        'show'   => 'KIOSKO_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.newsstand';
 
     /**

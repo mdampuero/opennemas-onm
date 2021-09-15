@@ -422,27 +422,6 @@
         };
 
         /**
-         * @function isTranslated
-         * @memberOf BaseCtrl
-         *
-         * @description
-         *   Checks if the article is translated to the locale.
-         *
-         * @param {String} locale The locale to check.
-         *
-         * @return {Boolean} True if the article is translated. False otherwise.
-         */
-        $scope.isTranslated = function(item, keys, locale) {
-          for (var i = 0; i < keys.length; i++) {
-            if (item[keys[i]] && item[keys[i]][locale]) {
-              return true;
-            }
-          }
-
-          return false;
-        };
-
-        /**
          * @function launchPhotoEditor
          * @memberOf InnerCtrl
          *

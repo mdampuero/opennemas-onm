@@ -50,7 +50,7 @@
     }
     {if has_featured_media($content, 'frontpage')}
       , "primaryImageOfPage":
-        {include file='./structured_image_data.tpl' image=get_content(get_featured_media($content, 'frontpage'))}
+        {include file='./structured_image_data.tpl' image=get_featured_media($content, 'frontpage')}
     {/if}
     {if has_album_photos($content)}
       , "associatedMedia": [

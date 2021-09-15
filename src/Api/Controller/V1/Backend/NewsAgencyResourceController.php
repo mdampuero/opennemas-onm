@@ -80,7 +80,7 @@ class NewsAgencyResourceController extends ApiController
 
         if (empty($params['content_status'])) {
             $route = $params['content_type_name'] === 'article'
-                ? 'admin_article_show'
+                ? 'backend_article_show'
                 : 'backend_opinion_show';
 
             $response->headers->set('location', $this->generateUrl($route, [

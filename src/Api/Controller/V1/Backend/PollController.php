@@ -21,6 +21,19 @@ class PollController extends ContentOldController
     protected $extension = 'POLL_MANAGER';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'POLL_CREATE',
+        'delete' => 'POLL_DELETE',
+        'patch'  => 'POLL_UPDATE',
+        'update' => 'POLL_UPDATE',
+        'list'   => 'POLL_ADMIN',
+        'save'   => 'POLL_CREATE',
+        'show'   => 'POLL_UPDATE',
+    ];
+
+    /**
      * The route name to generate URL from when creating a new item.
      *
      * @var string

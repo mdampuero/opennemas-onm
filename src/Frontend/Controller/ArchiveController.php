@@ -29,13 +29,14 @@ class ArchiveController extends Controller
         $today = new \DateTime();
         $today->modify('-1 day');
 
-        $year         = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
-        $month        = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
-        $day          = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
-        $categorySlug = $request->query->filter('category_slug', null, FILTER_SANITIZE_STRING);
-        $page         = $request->query->getDigits('page', 1);
-        $date         = "{$year}-{$month}-{$day}";
-        $itemsPerPage = 20;
+        $year           = $request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $month          = $request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $day            = $request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
+        $categorySlug   = $request->query->filter('category_slug', null, FILTER_SANITIZE_STRING);
+        $page           = $request->query->getDigits('page', 1);
+        $date           = "{$year}-{$month}-{$day}";
+        $itemsPerPage   = 20;
+        $categoryHelper = $this->container->get('core.helper.category');
 
         if (!empty($categorySlug)) {
             try {
@@ -90,19 +91,21 @@ class ArchiveController extends Controller
             $library  = [];
 
             foreach ($contents as $content) {
-                // Create category group
-                if (!isset($library[$content->category_id])
-                    && !empty($content->category_id)
-                ) {
-                    $library[$content->category_id] = $this
-                        ->get('api.service.category')
-                        ->getItem($content->category_id);
+                $category = $categoryHelper->getCategoryId($content);
 
-                    $library[$content->category_id]->contents = [];
+                // Create category group
+                if (!isset($library[$category])
+                    && !empty($category)
+                ) {
+                    $library[$category] = $this
+                        ->get('api.service.category')
+                        ->getItem($category);
+
+                    $library[$category]->contents = [];
                 }
 
                 // Add contents to category group
-                $library[$content->category_id]->contents[] = $content;
+                $library[$category]->contents[] = $content;
             }
 
             // Pagination for block more videos

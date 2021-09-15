@@ -24,6 +24,14 @@
 {/block}
 
 {block name="primaryActions"}
+  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+    <h5>
+      <i class="p-r-15">
+        <i class="fa fa-check"></i>
+        {t}Draft saved at {/t}[% draftSaved %]
+      </i>
+    </h5>
+  </li>
   <li class="quicklinks">
     <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
       <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
@@ -136,8 +144,8 @@
           </div>
         </div>
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Frontpage image{/t}"}
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Inner image{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
     </div>
   </div>
 {/block}
@@ -150,4 +158,13 @@
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
     </div>
   </div>
+{/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-translate">
+    {include file="common/modals/_translate.tpl"}
+  </script>
 {/block}

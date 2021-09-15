@@ -125,3 +125,12 @@
     </div>
   </div>
 {/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-translate">
+    {include file="common/modals/_translate.tpl"}
+  </script>
+{/block}

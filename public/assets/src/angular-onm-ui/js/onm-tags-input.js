@@ -424,7 +424,7 @@
 
         // Updates ngModel when tags added/removed
         $scope.$watch('tags', function(nv) {
-          $scope.ngModel = !nv ? null : nv.map(function(e) {
+          $scope.ngModel = !nv || Array.isArray(nv) && !nv.length ? null : nv.map(function(e) {
             return e.id;
           });
         }, true);

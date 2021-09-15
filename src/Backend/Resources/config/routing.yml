@@ -182,53 +182,6 @@ admin_keyword_autolink:
     path:     /keywords/autolink
     defaults: { _controller: BackendBundle:Keywords:autolink }
 
-# Article controller routes
-admin_articles:
-    path:     /articles
-    defaults: { _controller: BackendBundle:Articles:list }
-
-admin_article_create:
-    path:     /articles/create
-    defaults: { _controller: BackendBundle:Articles:create }
-
-admin_article_show:
-    path:     /articles/{id}/show
-    defaults: { _controller: BackendBundle:Articles:show }
-    options:
-        expose: true
-
-admin_article_update:
-    path:     /articles/{id}/update
-    defaults: { _controller: BackendBundle:Articles:update }
-
-admin_article_preview:
-    path:     /articles/preview
-    defaults: { _controller: BackendBundle:Articles:preview }
-    options:
-        expose: true
-
-admin_article_get_preview:
-    path:     /articles/get-preview
-    defaults: { _controller: BackendBundle:Articles:getPreview }
-    options:
-        expose: true
-
-admin_articles_content_provider_suggested:
-    path:     /articles/content-provider-suggested
-    defaults: { _controller: BackendBundle:Articles:contentProviderSuggested }
-
-admin_articles_content_provider_category:
-    path:     /articles/content-provider-category
-    defaults: { _controller: BackendBundle:Articles:contentProviderCategory }
-
-admin_articles_content_provider_in_frontpage:
-    path:     /articles/content-provider-in-frontpage
-    defaults: { _controller: BackendBundle:Articles:contentProviderInFrontpage }
-
-admin_articles_config:
-    path:     /articles/config
-    defaults: { _controller: BackendBundle:Articles:config }
-
 # Trash controller routes
 admin_trash:
     path:     /trash
@@ -266,6 +219,10 @@ backend_account:
 backend_album:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/album.yml'
+
+backend_article:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/article.yml'
 
 backend_attachment:
     prefix: /

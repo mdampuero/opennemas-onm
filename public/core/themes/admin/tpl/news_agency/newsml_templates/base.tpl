@@ -101,7 +101,7 @@
                       </story.date>
                     </dateline>
                     <abstract>
-                      <p><![CDATA[{$content->summary}]]></p>
+                      <p><![CDATA[{get_summary($content)}]]></p>
                     </abstract>
                   </body.head>
                   <body.content>

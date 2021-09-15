@@ -4,11 +4,13 @@
  */
 function smarty_function_humandate($params, &$smarty)
 {
-    $created = $params['created'];
-    $updated = $params['updated'];
+    $created = $params['created'] instanceof \DateTime ? $params['created']->getTimestamp() : $params['created'];
+    $updated = $params['updated'] instanceof \DateTime ? $params['updated']->getTimestamp() : $params['updated'];
 
     $article   = isset($params['article']) ? $params['article'] : null;
-    $starttime = strtotime($article->starttime);
+    $starttime = $article->starttime instanceof \DateTime
+        ? $article->starttime->getTimestamp()
+        : strtotime($article->starttime);
 
 
     if (array_key_exists('date', $params) && $params['date'] instanceof \DateTime) {

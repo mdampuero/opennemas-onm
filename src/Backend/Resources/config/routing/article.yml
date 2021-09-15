@@ -1,0 +1,25 @@
+
+# Article controller routes
+backend_articles_config:
+    path:     /articles/config
+    defaults: { _controller: BackendBundle:Article:config }
+
+backend_articles_content_provider:
+    path:     /articles/content-provider
+    defaults: { _controller: BackendBundle:Article:contentProvider }
+
+backend_article_create:
+    path:     /articles/create
+    defaults: { _controller: BackendBundle:Article:create }
+
+backend_articles_list:
+    path:     /articles
+    defaults: { _controller: BackendBundle:Article:list }
+    options:
+        expose: true
+
+backend_article_show:
+    path:     /articles/{id}
+    defaults: { _controller: BackendBundle:Article:show }
+    options:
+        expose: true

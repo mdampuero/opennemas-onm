@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-23 14:39+0000\n"
-"PO-Revision-Date: 2021-06-23 16:42+0200\n"
+"POT-Creation-Date: 2021-08-10 07:01+0000\n"
+"PO-Revision-Date: 2021-08-10 09:11+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -538,25 +538,6 @@ msgstr "Gestor de caché"
 msgid "Settings"
 msgstr "Opciones"
 
-msgid "Unable to create the new article."
-msgstr "No se pudo crear el nuevo artículo."
-
-msgid "Article successfully created."
-msgstr "Artículo creado correctamente."
-
-msgid "Unable to update the article."
-msgstr "No se pudo actualizar el artículo."
-
-msgid ""
-"You can't modify this article because you don't have enought privileges."
-msgstr "No tienes suficientes permisos para modificar este artículo."
-
-msgid "Article data sent not valid."
-msgstr "Los datos del artículo enviados no son válidos."
-
-msgid "Article successfully updated."
-msgstr "Artículo actualizado correctamente."
-
 #, php-format
 msgid "Unable to delete the item with id \"%d\""
 msgstr "No se pudo eliminar el elemento con el identificador «%d»"
@@ -854,6 +835,9 @@ msgstr "Pregúntale al administrador"
 
 msgid "Something is wrong!"
 msgstr "¡Algo está mal!"
+
+msgid "You don't have permission to perform this action"
+msgstr "No tienes permiso para realizar esta acción."
 
 msgid "Something unexpected happened!"
 msgstr "¡Ha pasado algo inesperado!"
@@ -1347,6 +1331,14 @@ msgid "The synchronization is already in progress. Try again later."
 msgstr ""
 "El proceso de sincronización está en curso. Inténtalo de nuevo más tarde."
 
+#, php-format
+msgid "The maximum height for the %s is 120px. Please adjust your image size."
+msgstr ""
+"El alto máximo para el %s es 120px. Por favor ajusta el tamaño de la imagen."
+
+msgid "of"
+msgstr "de"
+
 msgid "Invalid category"
 msgstr "Categoría no válida"
 
@@ -1371,10 +1363,6 @@ msgstr "Anterior"
 #, php-format
 msgid "Widget %s not available"
 msgstr "Widget %s no disponible"
-
-#, php-format
-msgid "Unable to find the article with the id \"%d\""
-msgstr "No se pudo encontrar un artículo con el identificador «%d»"
 
 msgid "Running cleanup in background"
 msgstr "Ejecutando limpieza en segundo plano"
@@ -1475,11 +1463,6 @@ msgstr "Opinión"
 
 msgid "Blog"
 msgstr "Blog"
-
-#, php-format
-msgid "The maximum height for the %s is 120px. Please adjust your image size."
-msgstr ""
-"El alto máximo para el %s es 120px. Por favor ajusta el tamaño de la imagen."
 
 #, php-format
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
@@ -1946,9 +1929,6 @@ msgid "Can't connect to server %s. Please check your connection details."
 msgstr ""
 "No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
 
-msgid "Article"
-msgstr "Artículo"
-
 msgid "File"
 msgstr "Archivos"
 
@@ -1987,6 +1967,9 @@ msgstr "en tiempo"
 
 msgid "postponed"
 msgstr "aplazado"
+
+msgid "Article"
+msgstr "Artículo"
 
 msgid "Event"
 msgstr "Evento"
@@ -2476,8 +2459,11 @@ msgstr "Archivar"
 msgid "Send to trash"
 msgstr "Enviar a la papelera"
 
-msgid "Frontpage image"
-msgstr "Imagen de portada"
+msgid "Draft saved at "
+msgstr "Borrador guardado a las "
+
+msgid "Featured in frontpage"
+msgstr "Destacado de portada"
 
 msgid "Agency"
 msgstr "Agencia"
@@ -2707,9 +2693,6 @@ msgstr "reiniciar"
 
 msgid "apply"
 msgstr "aplicar"
-
-msgid "of"
-msgstr "de"
 
 msgid "Clear"
 msgstr "Limpiar"
@@ -3962,8 +3945,8 @@ msgstr "Sitio web externo"
 msgid "Website URL"
 msgstr "URL del sitio web"
 
-msgid "Inner image"
-msgstr "Imagen de interior"
+msgid "Featured in inner"
+msgstr "Destacado de interior"
 
 msgid "Body"
 msgstr "Cuerpo"
@@ -4840,11 +4823,19 @@ msgstr "Recargar portada"
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
 
+msgid "External"
+msgstr "Externo"
+
 msgid "Mosaic"
 msgstr "Mosaico"
 
 msgid "Reload"
 msgstr "Recargar"
+
+msgid "Unable to find any item or you don't have permission to see the list."
+msgstr ""
+"No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
+"permisos para ver la lista."
 
 msgid "Do you want to send the item to trash?"
 msgstr "¿Deseas enviar el elemento a la papelera?"
@@ -4864,8 +4855,8 @@ msgstr "Sin categoría"
 msgid "No tags"
 msgstr "Sin etiquetas"
 
-msgid "Unable to find the item"
-msgstr "No se ha encontrado el elemento"
+msgid "The item doesn't exists or you don't have permission to see it."
+msgstr "El contenido no existe o no tienes permiso para verlo."
 
 msgid "Click here to return to the list"
 msgstr "Pincha aquí para volver al listado"
@@ -4969,6 +4960,9 @@ msgstr "Si, eliminarlos todos"
 msgid "No available translators for \"%1&rarr;%2\""
 msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
 
+msgid "Do you want to translate to \"%1\"?"
+msgstr "¿Quieres traducir automáticamente a \"%1\"?"
+
 msgid "Translating content into \"%1\""
 msgstr "Traduciendo contenido al «%1»"
 
@@ -4977,6 +4971,16 @@ msgstr "Contenido traducido con éxito al «%1»."
 
 msgid "Ok"
 msgstr "Aceptar"
+
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
+"Hay una nueva versión de este contenido que fue guardado como borrador."
+
+msgid "Discard it"
+msgstr "Descartar"
+
+msgid "Resume editing"
+msgstr "Continuar edición"
 
 msgid "Permanently remove item"
 msgstr "Eliminar de forma permanente el elemento"
@@ -5024,6 +5028,12 @@ msgstr ""
 
 msgid "No available contents"
 msgstr "No hay contenidos disponibles"
+
+msgid "Select an element"
+msgstr "Selecciona un elemento"
+
+msgid "Attachment"
+msgstr "Adjuntos"
 
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"
@@ -5428,125 +5438,8 @@ msgstr ""
 "articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
 "\">Términos del servicio</a>"
 
-msgid "There is a new version of this content that was saved as a draft."
-msgstr ""
-"Hay una nueva versión de este contenido que fue guardado como borrador."
-
-msgid "Discard it"
-msgstr "Descartar"
-
-msgid "Resume editing"
-msgstr "Continuar edición"
-
 msgid "Config article module"
 msgstr "Configuración del módulo «Artículos»"
-
-msgid "Translate selected"
-msgstr "Traducir seleccionados"
-
-msgid "Translate into %1"
-msgstr "Traducir a %1"
-
-msgid "No available articles."
-msgstr "No hay artículos disponibles."
-
-msgid "Article has external link"
-msgstr "Artículo con enlace externo"
-
-msgid "Suggest this element to home"
-msgstr "Sugerir este elemento en portada"
-
-msgid "Suggest to home"
-msgstr "Sugerir en portada"
-
-msgid "Unsuggest this element to home"
-msgstr "No sugerir este elemento en portada"
-
-msgid "Unsuggest to home"
-msgstr "No sugerir en portada"
-
-msgid "Creating article"
-msgstr "Creando artículo"
-
-msgid "Editing article"
-msgstr "Editando artículo"
-
-msgid "Draft saved at "
-msgstr "Borrador guardado a las "
-
-msgid "Inner title"
-msgstr "Título interior"
-
-msgid "Signature"
-msgstr "Firma"
-
-msgid "Suggested for frontpage"
-msgstr "Sugerir en portada principal"
-
-msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
-msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
-
-msgid ""
-"The content will be fully available only for subscribers in the selected "
-"subscriptions"
-msgstr ""
-"El contenido estará disponible por completo solo para los suscriptores de "
-"las suscripciones seleccionadas"
-
-msgid "Related contents"
-msgstr "Contenidos relacionados"
-
-msgid "Related in frontpage"
-msgstr "Relacionados en portada Sección."
-
-msgid "Related in inner"
-msgstr "Relacionado en noticia interior"
-
-msgid "Related in home"
-msgstr "Relacionado en portada principal"
-
-msgid "Album for frontpage"
-msgstr "Álbum: portadas"
-
-msgid "Only one album"
-msgstr "Solo un álbum"
-
-msgid "Album for inner"
-msgstr "Álbum: interior"
-
-# Albums edit
-msgid "Gallery for Home"
-msgstr "Galería para portada principal"
-
-msgid "Images assigned"
-msgstr "Imágenes asignadas"
-
-msgid "Image to show in frontpages"
-msgstr "Imagen a mostrar en portadas"
-
-msgid "Image to show in inner"
-msgstr "Imagen a mostrar en interior"
-
-msgid "Home image"
-msgstr "Imagen para portada principal"
-
-msgid "Video for frontpage"
-msgstr "Vídeo para portada"
-
-msgid "Pick a video"
-msgstr "Escoja un vídeo"
-
-msgid "File name"
-msgstr "Nombre del archivo"
-
-msgid "Creation date"
-msgstr "Fecha de creación"
-
-msgid "Footer text for inner video:"
-msgstr "Pie para el vídeo interior:"
-
-msgid "Video for inner article page"
-msgstr "Vídeo para artículo interior"
 
 msgid "Customize"
 msgstr "Personalizar"
@@ -5577,6 +5470,34 @@ msgstr "Subtítulo"
 
 msgid "Size"
 msgstr "Tamaño"
+
+msgid "Inner"
+msgstr "Interior"
+
+msgid "Suggested for frontpage"
+msgstr "Sugerir en portada principal"
+
+msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
+msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
+
+msgid ""
+"The content will be fully available only for subscribers in the selected "
+"subscriptions"
+msgstr ""
+"El contenido estará disponible por completo solo para los suscriptores de "
+"las suscripciones seleccionadas"
+
+msgid "Related in frontpage"
+msgstr "Relacionados en portada"
+
+msgid "Related in inner"
+msgstr "Relacionados en interior"
+
+msgid "Inner title"
+msgstr "Título interior"
+
+msgid "Signature"
+msgstr "Firma"
 
 msgid "Where are you from?"
 msgstr "De donde eres?"
@@ -5780,14 +5701,20 @@ msgstr "Imagen de portada"
 msgid "Editorial"
 msgstr "Editorial"
 
-msgid "Video type and file URLs"
-msgstr "Tipo de vídeo y URLs a los archivos"
+msgid "Link video from other services"
+msgstr "Enlazar vídeo desde otros servicios"
 
-msgid "HTML5 video"
-msgstr "Vídeo HTML5"
+msgid "Use HTML code"
+msgstr "Usar código HTML"
 
-msgid "Flash video"
-msgstr "Vídeo Flash"
+msgid "Use file video URLs"
+msgstr "Usar URLs a ficheros de vídeo"
+
+msgid "Video URL"
+msgstr "URL del vídeo"
+
+msgid "Get information"
+msgstr "Obtener información"
 
 msgid "MP4 format"
 msgstr "Formato MP4"
@@ -5807,20 +5734,8 @@ msgstr "Formato WebM"
 msgid "http://www.example.com/path/to/file.webm"
 msgstr "http://www.ejemplo.es/ruta/al/archivo.webm"
 
-msgid "FLV format"
-msgstr "Formato FLV"
-
-msgid "http://www.example.com/path/to/file.flv"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.flv"
-
-msgid "Video URL"
-msgstr "URL del vídeo"
-
-msgid "Get information"
-msgstr "Obtener información"
-
-msgid "Allowed video sources:"
-msgstr "Orígenes de vídeo permitidos:"
+msgid "Write HTML code"
+msgstr "Escriba el código HTML"
 
 msgid "Loading video information"
 msgstr "Cargando información de vídeo"
@@ -5836,21 +5751,6 @@ msgstr "URL de embebido"
 
 msgid "Thumbnail"
 msgstr "Miniatura"
-
-msgid "Write HTML code"
-msgstr "Escriba el código HTML"
-
-msgid "Pick the method to add the video"
-msgstr "El tipo de método para añadir el vídeo"
-
-msgid "Link video from other web video services"
-msgstr "Enlazar vídeo desde otros servicios web de vídeo"
-
-msgid "Use HTML code"
-msgstr "Usar código HTML"
-
-msgid "Use file video URLs (External HTML5/FLV)"
-msgstr "Usar URLs a ficheros de vídeo (HTML5/FLV externo)"
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
@@ -6070,7 +5970,7 @@ msgid "Floating ads (for drop them into columns)"
 msgstr "Publicidades flotantes (para arrastrar en columnas)"
 
 msgid "Advertisement without name"
-msgstr "Publicidad sin nombre"
+msgstr "Publicidad sin nomber"
 
 msgid "Ad block detected"
 msgstr "Bloqueador de publicidad detectado"
@@ -6307,6 +6207,9 @@ msgstr "Si, importar y editar"
 
 msgid "Priority"
 msgstr "Prioridad"
+
+msgid "Related contents"
+msgstr "Contenidos relacionados"
 
 msgid "View"
 msgstr "Vistas"
@@ -6806,6 +6709,9 @@ msgstr "No puedes pasar!"
 msgid "You are not allowed to access this resource."
 msgstr "No tiene permiso para acceder a este recurso."
 
+msgid "Unable to find the item"
+msgstr "No se ha encontrado el elemento"
+
 msgid "Delete instance"
 msgstr "Eliminar instancia"
 
@@ -7223,9 +7129,52 @@ msgid "Do you want to delete the selected user groups?"
 msgstr ""
 "¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
 
+#~ msgid "Video type and file URLs"
+#~ msgstr "Tipo de vídeo y URLs a los archivos"
+
+#~ msgid "HTML5 video"
+#~ msgstr "Vídeo HTML5"
+
+#~ msgid "Flash video"
+#~ msgstr "Vídeo Flash"
+
+#~ msgid "FLV format"
+#~ msgstr "Formato FLV"
+
+#~ msgid "http://www.example.com/path/to/file.flv"
+#~ msgstr "http://www.ejemplo.es/ruta/al/archivo.flv"
+
+#~ msgid "Allowed video sources:"
+#~ msgstr "Orígenes de vídeo permitidos:"
+
+#~ msgid "Pick the method to add the video"
+#~ msgstr "El tipo de método para añadir el vídeo"
+
+#~ msgid "Unable to create the new article."
+#~ msgstr "No se pudo crear el nuevo artículo."
+
+#~ msgid "Article successfully created."
+#~ msgstr "Artículo creado correctamente."
+
+#~ msgid "Unable to update the article."
+#~ msgstr "No se pudo actualizar el artículo."
+
+#~ msgid ""
+#~ "You can't modify this article because you don't have enought privileges."
+#~ msgstr "No tienes suficientes permisos para modificar este artículo."
+
+#~ msgid "Article data sent not valid."
+#~ msgstr "Los datos del artículo enviados no son válidos."
+
+#~ msgid "Article successfully updated."
+#~ msgstr "Artículo actualizado correctamente."
+
 #, fuzzy
-#~ msgid "Elements perpage"
-#~ msgstr "Elementos por página"
+#~ msgid "No available selectedTranslators for \"%1&rarr;%2\""
+#~ msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
+
+#~ msgid "Unable to find the article with the id \"%d\""
+#~ msgstr "No se pudo encontrar un artículo con el identificador «%d»"
 
 #~ msgid "Style"
 #~ msgstr "Estilo"
@@ -7236,8 +7185,90 @@ msgstr ""
 #~ msgid "This sripts will be included in the global.css file."
 #~ msgstr "Estos scripts se incluirán en el fichero global.css"
 
+#~ msgid "Translate selected"
+#~ msgstr "Traducir seleccionados"
+
+#~ msgid "Translate into %1"
+#~ msgstr "Traducir a %1"
+
+#~ msgid "No available articles."
+#~ msgstr "No hay artículos disponibles."
+
+#~ msgid "Article has external link"
+#~ msgstr "Artículo con enlace externo"
+
+#~ msgid "Suggest this element to home"
+#~ msgstr "Sugerir este elemento en portada"
+
+#~ msgid "Suggest to home"
+#~ msgstr "Sugerir en portada"
+
+#~ msgid "Unsuggest this element to home"
+#~ msgstr "No sugerir este elemento en portada"
+
+#~ msgid "Unsuggest to home"
+#~ msgstr "No sugerir en portada"
+
+#~ msgid "Creating article"
+#~ msgstr "Creando artículo"
+
+#~ msgid "Editing article"
+#~ msgstr "Editando artículo"
+
+#~ msgid "Images assigned"
+#~ msgstr "Imágenes asignadas"
+
+#~ msgid "Image to show in frontpages"
+#~ msgstr "Imagen a mostrar en portadas"
+
+#~ msgid "Image to show in inner"
+#~ msgstr "Imagen a mostrar en interior"
+
+#~ msgid "Home image"
+#~ msgstr "Imagen para portada principal"
+
+#~ msgid "Video for frontpage"
+#~ msgstr "Vídeo para portada"
+
+#~ msgid "Pick a video"
+#~ msgstr "Escoja un vídeo"
+
+#~ msgid "File name"
+#~ msgstr "Nombre del archivo"
+
+#~ msgid "Creation date"
+#~ msgstr "Fecha de creación"
+
+#~ msgid "Footer text for inner video:"
+#~ msgstr "Pie para el vídeo interior:"
+
+#~ msgid "Video for inner article page"
+#~ msgstr "Vídeo para artículo interior"
+
+#~ msgid "Related in home"
+#~ msgstr "Relacionado en portada principal"
+
+#~ msgid "Album for frontpage"
+#~ msgstr "Álbum: portadas"
+
+#~ msgid "Only one album"
+#~ msgstr "Solo un álbum"
+
+#~ msgid "Album for inner"
+#~ msgstr "Álbum: interior"
+
+# Albums edit
+#~ msgid "Gallery for Home"
+#~ msgstr "Galería para portada principal"
+
+#~ msgid "Frontpage image"
+#~ msgstr "Imagen de portada"
+
 #~ msgid "There is no opinions yet."
 #~ msgstr "No hay ninguna opinión todavía."
+
+#~ msgid "Inner image"
+#~ msgstr "Imagen de interior"
 
 #~ msgid "Piwik Statistics"
 #~ msgstr "Estadísticas de Piwik"

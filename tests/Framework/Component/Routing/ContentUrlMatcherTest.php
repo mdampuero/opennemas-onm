@@ -9,6 +9,7 @@
  */
 namespace Framework\Tests\Component\Routing;
 
+use Common\Model\Entity\Content;
 use Framework\Component\Routing\ContentUrlMatcher;
 
 class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
@@ -77,8 +78,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
 
         $GLOBALS['kernel'] = $this->kernel;
 
-        $this->content = new \Article();
-        $this->content->load([
+        $this->content = new Content([
             'pk_content'        => 184,
             'created'           => '2015-01-14 23:50:16',
             'starttime'         => '2015-01-14 23:55:36',
@@ -88,6 +88,7 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
             'content_status'    => '1',
             'in_litter'         => 0,
         ]);
+
         $this->content->category_slug = 'ciencia'; // Loaded separatedly to avoid ContentCategory call
 
         $this->matcher = new ContentUrlMatcher($this->em, $this->contentHelper, $this->categoryHelper);
@@ -124,9 +125,6 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->once())->method('find')
             ->willReturn($this->content);
 
-        $this->fm->expects($this->at(2))->method('get')
-            ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
-
         $this->contentHelper->expects($this->once())->method('isReadyForPublish')
             ->willReturn(true);
 
@@ -143,9 +141,6 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
     {
         $this->em->expects($this->once())->method('find')
             ->willReturn($this->content);
-
-        $this->fm->expects($this->at(2))->method('get')
-            ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
 
         $this->contentHelper->expects($this->once())->method('isReadyForPublish')
             ->willReturn(true);
@@ -188,9 +183,6 @@ class ContentUrlMatcherTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertTrue(is_object($return));
-
-        $this->fm->expects($this->at(2))->method('get')
-            ->willReturn('subida-mar-ultimas-decadas-ha-sido-mas-rapida-previsto');
 
         // Not valid category
         $return = $this->matcher->matchContentUrl(

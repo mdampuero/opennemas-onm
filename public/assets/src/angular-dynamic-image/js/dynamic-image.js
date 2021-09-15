@@ -173,7 +173,7 @@
         };
 
         /**
-         * @function getFeaturedFrontpage
+         * @function getFeaturedMedia
          * @memberof DynamicImage
          *
          * @description
@@ -183,13 +183,17 @@
          *
          * @return {int} The related content id.
          */
-        this.getFeaturedFrontpage = function(item) {
+        this.getFeaturedMedia = function(item, type) {
           if (!Array.isArray(item.related_contents)) {
             return null;
           }
 
+          if (!type) {
+            type = 'featured_frontpage';
+          }
+
           var related = item.related_contents.filter(function(related) {
-            return related.type === 'featured_frontpage';
+            return related.type === type;
           }).shift();
 
           if (!related) {
@@ -211,7 +215,7 @@
          * @return {number|Object|Promise|string}
          *  The item or a promise wich will return the item.
          */
-        this.getItem = function(item) {
+        this.getItem = function(item, type) {
           if (!item) {
             return null;
           }
@@ -237,7 +241,7 @@
             });
           }
 
-          var related = this.getFeaturedFrontpage(item);
+          var related = this.getFeaturedMedia(item, type);
 
           if (!related) {
             return null;
@@ -466,7 +470,7 @@
 
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
-              $q.when(DynamicImage.getItem(nv), function(item) {
+              $q.when(DynamicImage.getItem(nv, attrs.type), function(item) {
                 if (attrs.reescale === 'true') {
                   $scope.height = item.height;
                   $scope.width  = item.width;

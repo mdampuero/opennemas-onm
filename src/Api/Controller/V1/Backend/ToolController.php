@@ -113,9 +113,9 @@ class ToolController extends Controller
         );
 
         $data = array_map(function ($a) use ($translator) {
-            $value = $translator->translate(htmlentities($a));
-
-            return mb_convert_encoding(html_entity_decode($value), 'UTF-8');
+            return !empty($a)
+                ? mb_convert_encoding(html_entity_decode($translator->translate(htmlentities($a))), 'UTF-8')
+                : null;
         }, $data);
 
         return new JsonResponse($data);

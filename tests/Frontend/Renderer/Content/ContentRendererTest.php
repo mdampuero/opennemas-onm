@@ -100,7 +100,7 @@ class ContentRendererTest extends TestCase
      */
     public function testGetTemplateWhenArticle()
     {
-        $article        = new \Article();
+        $article        = new Content([ 'content_type_name' => 'article' ]);
         $params['item'] = $article;
         $params['tpl']  = 'frontpage/contents/_custom_article.tpl';
 
