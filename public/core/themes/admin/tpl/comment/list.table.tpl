@@ -1,20 +1,20 @@
 {extends file="common/extension/list.table.tpl"}
 
 {block name="commonColumns"}
-  <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('avatar')">
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-avatar" checklist-model="app.columns.selected" checklist-value="'avatar'" type="checkbox">
     <label for="checkbox-avatar">
       {t}Avatar{/t}
     </label>
   </div>
-  <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('author')">
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-author" checklist-model="app.columns.selected" checklist-value="'author'" type="checkbox">
     <label for="checkbox-author">
       {t}Author{/t}
     </label>
   </div>
   {acl isAllowed="COMMENT_AVAILABLE"}
-    <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('content_status')">
+    <div class="checkbox column-filters-checkbox">
       <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'content_status'" type="checkbox">
       <label for="checkbox-published">
         {t}Published{/t}
