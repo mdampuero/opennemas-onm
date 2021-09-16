@@ -41,7 +41,7 @@ function smarty_function_render_ad_slot($params, &$smarty)
     // Get targeting parameters for advertising renderers
     $app    = $smarty->getValue('app');
     $params = array_merge($params, [
-        'category'           => $smarty->getValue('actual_category'),
+        'category'           => $app['section'],
         'extension'          => $app['extension'],
         'advertisementGroup' => $app['advertisementGroup'],
         'content'            => $smarty->getValue('content'),
