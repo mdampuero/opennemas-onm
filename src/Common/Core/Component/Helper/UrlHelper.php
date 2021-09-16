@@ -30,7 +30,6 @@ class UrlHelper
             'api',
             'asset',
             'build\/assets',
-            'content\/share-by-email',
             'manager',
             'ws',
         ];
