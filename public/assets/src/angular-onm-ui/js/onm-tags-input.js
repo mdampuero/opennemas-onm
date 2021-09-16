@@ -120,7 +120,7 @@
          */
         $scope.add = function(tag, filter) {
           if (filter) {
-            var input = document.querySelector('tags-input input');
+            var input       = document.querySelector('tags-input input');
             var placeholder = input.getAttribute('placeholder');
 
             input.setAttribute('disabled', true);
