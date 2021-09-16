@@ -70,8 +70,15 @@
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
-  <li class="hidden-xs ng-cloak m-r-10 quicklinks">
-    <onm-tags-input class="block" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" unique="true" placeholder="{t}Input one tag{/t}"/>
+  <li class="hidden-xs quicklinks">
+    <div class="input-group input-group-animated">
+      <span class="input-group-addon">
+        <i class="fa fa-tags fa-lg"></i>
+      </span>
+    </div>
+  </li>
+  <li>
+    <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" filter="true" placeholder="{t}Search by tag{/t}"/>
   </li>
 {/block}
 

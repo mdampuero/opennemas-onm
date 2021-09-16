@@ -10,6 +10,23 @@
       padding-right: 0;
   }
 
+  tags-input .tags input {
+    transition: all .25s linear;
+  }
+
+  tags-input .tags {
+    width: fit-content;
+    border: transparent;
+  }
+
+  tags-input .tags.focused input:focus {
+    min-width: 250px;
+  }
+
+  tags-input .host {
+    height: 36px;
+  }
+
   .input-group {
     max-width: unset;
 
