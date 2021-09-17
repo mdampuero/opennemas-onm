@@ -18,7 +18,6 @@ function smarty_outputfilter_statistics($output, $smarty)
     }
 
     $uri     = $request->getUri();
-
     $referer = $request->headers->get('referer');
 
     if (!preg_match('/newsletter/', $smarty->source->resource)
