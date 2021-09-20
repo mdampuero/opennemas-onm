@@ -215,6 +215,18 @@ class Locale
     }
 
     /**
+     * Returns the locale for the current request without region.
+     *
+     * @param string $context The context to get request locale for.
+     *
+     * @return string The current request locale without region.
+     */
+    public function getRequestLocaleShort($context = null)
+    {
+        return explode('_', $this->getRequestLocale($context))[0];
+    }
+
+    /**
      * Returns the locale slug for the current request..
      *
      * @param string $context The context to get request locale for.
