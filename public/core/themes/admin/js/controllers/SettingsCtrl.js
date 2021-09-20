@@ -512,8 +512,7 @@
         $scope.save = function() {
           var data = $scope.post();
 
-          if (!data.settings.locale.frontend.language.selected ||
-              !data.settings.locale.frontend.language.available) {
+          if (!data.settings.locale.frontend.language.selected) {
             messenger.post(window.strings.forms.not_locale, 'error');
             return null;
           }
