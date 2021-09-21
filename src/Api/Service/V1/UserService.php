@@ -91,6 +91,12 @@ class UserService extends OrmService
             }
 
             $this->em->remove($item, $item->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
+                'action' => __METHOD__,
+                'id'   => $id,
+                'item' => $item
+            ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
         }

@@ -1,12 +1,5 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Framework\EventListener;
 
 use Api\Exception\GetItemException;
@@ -57,31 +50,50 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 5]
             ],
             'content.create' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.update' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.delete' => [
+                ['logAction', 5],
                 ['removeObjectCacheForContent', 10],
             ],
             'content.createItem' => [
+                ['logAction', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.updateItem' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.deleteItem' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
-            'content.patchItem'     => [
+            'content.patchItem' => [
+                ['logAction', 5],
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.patchList' => [
+                ['logAction', 5],
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.deleteList' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
@@ -139,6 +151,30 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Logs the action.
+     *
+     * @param Event $event The event object.
+     */
+    public function logAction(Event $event)
+    {
+        if (empty($event->hasArgument('action'))) {
+            return;
+        }
+
+        $action = $event->getArgument('action');
+        $item   = $event->getArgument('item');
+        $items  = is_array($item) ? $item : [ $item ];
+
+        if (!empty($items)) {
+            foreach ($items as $content) {
+                logContentEvent($action, $content);
+            }
+
+            return;
+        }
+    }
+
+    /**
      * Removes the list of countries for manager from cache.
      *
      * @param Event $event The event object.
@@ -178,15 +214,17 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheForContent(Event $event)
     {
-        $content = $event->getArgument('item');
+        $item  = $event->getArgument('item');
+        $items = is_array($item) ? $item : [ $item ];
 
-        if (!empty($content->content_type_name)) {
-            $contentType = $content->content_type_name;
-        } else {
-            $contentType = \underscore(get_class($content));
+        foreach ($items as $object) {
+            if (!empty($object->content_type_name)) {
+                $this->cache->delete($object->content_type_name . "-" . $object->id);
+                return;
+            }
+
+            $this->cache->delete(\underscore(get_class($object)) . '-' . $object->id);
         }
-
-        $this->cache->delete($contentType . "-" . $content->id);
     }
 
     /**
@@ -261,35 +299,38 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $content = $event->getArgument('item');
+        $item  = $event->getArgument('item');
+        $items = is_array($item) ? $item : [ $item ];
 
-        // Clean cache for the content
-        $this->template
-            ->delete('content', $content->pk_content)
-            ->delete('archive', date('Ymd'))
-            ->delete('rss', $content->content_type_name)
-            ->delete('frontpage', $content->content_type_name)
-            ->delete('category', 'list', $content->category_id)
-            ->delete($content->content_type_name, 'frontpage')
-            ->delete($content->content_type_name, 'list')
-            ->delete('sitemap', 'contents');
-
-        if ($content->content_type_name == 'article') {
+        foreach ($items as $content) {
+            // Clean cache for the content
             $this->template
-                ->delete('rss', 'frontpage', 'home')
-                ->delete('rss', 'last')
-                ->delete('rss', 'fia')
-                ->delete('rss', 'frontpage', $content->category_id)
-                ->delete('sitemap', 'news')
-                ->delete('frontpage', 'category', 'home')
-                ->delete('frontpage', 'category', $content->category_id);
-        } elseif ($content->content_type_name == 'opinion') {
-            $this->template
-                ->delete('blog', 'list')
-                ->delete('blog', 'listauthor')
+                ->delete('content', $content->pk_content)
+                ->delete('archive', date('Ymd'))
+                ->delete('rss', $content->content_type_name)
+                ->delete('frontpage', $content->content_type_name)
+                ->delete('category', 'list', $content->category_id)
+                ->delete($content->content_type_name, 'frontpage')
                 ->delete($content->content_type_name, 'list')
-                ->delete($content->content_type_name, 'listauthor', $content->fk_author)
-                ->delete('sitemap', 'news');
+                ->delete('sitemap', 'contents');
+
+            if ($content->content_type_name == 'article') {
+                $this->template
+                    ->delete('rss', 'frontpage', 'home')
+                    ->delete('rss', 'last')
+                    ->delete('rss', 'fia')
+                    ->delete('rss', 'frontpage', $content->category_id)
+                    ->delete('sitemap', 'news')
+                    ->delete('frontpage', 'category', 'home')
+                    ->delete('frontpage', 'category', $content->category_id);
+            } elseif ($content->content_type_name == 'opinion') {
+                $this->template
+                    ->delete('blog', 'list')
+                    ->delete('blog', 'listauthor')
+                    ->delete($content->content_type_name, 'list')
+                    ->delete($content->content_type_name, 'listauthor', $content->fk_author)
+                    ->delete('sitemap', 'news');
+            }
         }
     }
 

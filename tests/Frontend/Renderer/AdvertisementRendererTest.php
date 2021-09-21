@@ -391,6 +391,21 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * Tests getSlotSizeStyle when no size.
+     */
+    public function testGetSlotSizeStyleWhenNoSize()
+    {
+        $ad                  = new \Advertisement();
+        $ad->pk_content      = 123;
+        $ad->params['sizes'] = [];
+
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('phone');
+
+        $this->assertEmpty($this->renderer->getSlotSizeStyle($ad, $ad->params));
+    }
+
+    /**
      * Tests render with safeframe.
      */
     public function testRenderWithSafeFrameMode()

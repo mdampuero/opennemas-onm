@@ -403,9 +403,9 @@ class Importer
             'categories'      => [ $this->getCategory($resource, $data) ],
             'agency'          => !empty($resource->signature)
                 ? $resource->signature
-                : array_key_exists('agency_string', $this->config)
+                : (array_key_exists('agency_string', $this->config)
                     ? $this->config['agency_string']
-                    : null,
+                    : null),
             'pretitle'        => $resource->pretitle,
             'description'     => $resource->summary,
             'title_int'       => $resource->title,
@@ -432,6 +432,7 @@ class Importer
 
         $this->setPropagation(true);
 
+        $data['related_contents'] = [];
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
                 $data['related_contents'] = $this->getRelated(
@@ -444,6 +445,14 @@ class Importer
                 $data['related_contents'] = $this->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
+                );
+            }
+
+            if ($content->content_type_name === 'article') {
+                $data['related_contents'] = $this->getRelated(
+                    $content,
+                    [ 'related_frontpage', 'related_inner' ],
+                    $data['related_contents']
                 );
             }
         }
@@ -609,7 +618,7 @@ class Importer
      *
      * @return array An array of related contents without source id.
      */
-    protected function getRelated(Content $content, array $relationships, array $actual = []) : array
+    protected function getRelated($content, array $relationships, array $actual = []) : array
     {
         $new = [];
 
