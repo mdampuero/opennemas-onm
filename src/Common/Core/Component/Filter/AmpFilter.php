@@ -28,11 +28,11 @@ class AmpFilter extends Filter
 
             // Transformed tags
             '@<video([^>]+>)(?s)(.*?)<\/video>@',
+            '@<audio([^>]+>)(?s)((.*)(src=".*")(.*?))<\/audio>@',
             '@<iframe.*src="[http:|https:]*(.*?)".*?>(?s).*?<\/iframe>@',
             '@<div.*?class="fb-(post|video)".*?data-href="([^"]+)".*?>(?s).*?<\/div>@',
             '@<blockquote.*?class="instagram-media"(?s).*?href=".*?(\.com|\.am)\/p\/(.*?)?\/.*?>(?s).*?<\/blockquote>@',
             '@<blockquote.*?class="twitter-(video|tweet)"(?s).*?\/status\/(\d+)(?s).+?<\/blockquote>@',
-            '@<blockquote class="tiktok-embed" cite="(.*?)"((.*)(\n)?)*?</blockquote>@',
             '@<div[^>]*class=\"brid\"[^>]*>.*?/partners/([0-9]+).*</div>[^>]*?'
                 . '<script.*"id":"([0-9]+)".*"video":"([0-9]+)".*</script>@',
 
@@ -57,6 +57,8 @@ class AmpFilter extends Filter
             // Transformed tags
             '<amp-video layout="responsive" width="518" height="291" controls>${2}'
                 . '<div fallback><p>This browser does not support the video element.</p></div></amp-video>',
+            '<amp-audio width="auto" height="50" controlslist="nodownload" controlslist="nodownload">${2}'
+                . '<div fallback><p>Your browser doesn’t support HTML5 audio.</p></div></amp-audio>',
             '<amp-iframe width=518 height=291'
                 . ' sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"'
                 . ' layout="responsive" frameborder="0" src="https:${1}">'
@@ -65,7 +67,6 @@ class AmpFilter extends Filter
                 . 'data-embed-as="${1}" data-href="${2}"></amp-facebook>',
             '<amp-instagram data-shortcode="${2}" width="400" height="400" layout="responsive"></amp-instagram>',
             '<amp-twitter width=486 height=657 layout="responsive" data-tweetid="${2}"></amp-twitter>',
-            '<amp-tiktok width=486 height=657 layout="responsive" data-src="${1}"></amp-tiktok>',
             '<amp-brid-player autoplay data-partner="${1}" data-player="${2}" data-video="${3}"'
                 . ' layout="responsive" width="518" height="291"></amp-brid-player>',
 
