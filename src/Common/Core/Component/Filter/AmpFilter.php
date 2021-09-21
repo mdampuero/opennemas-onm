@@ -57,8 +57,8 @@ class AmpFilter extends Filter
             // Transformed tags
             '<amp-video layout="responsive" width="518" height="291" controls>${2}'
                 . '<div fallback><p>This browser does not support the video element.</p></div></amp-video>',
-            '<amp-audio width="auto" height="50" controlslist="nodownload" controlslist="nodownload">${2}'
-                . '<div fallback><p>Your browser doesn’t support HTML5 audio.</p></div></amp-audio>',
+            '<amp-audio width="auto" height="50">${2}'
+                . '<div fallback><p>This browser does not support the audio element.</p></div></amp-audio>',
             '<amp-iframe width=518 height=291'
                 . ' sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"'
                 . ' layout="responsive" frameborder="0" src="https:${1}">'
