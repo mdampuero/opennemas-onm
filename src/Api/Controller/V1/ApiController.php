@@ -113,9 +113,6 @@ class ApiController extends Controller
      */
     public function getItemAction($id)
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('show'));
-        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [ $id ]);
-
         $ss   = $this->get($this->service);
         $item = $ss->getItem($id);
 
