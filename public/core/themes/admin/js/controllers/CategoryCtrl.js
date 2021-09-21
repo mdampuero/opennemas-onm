@@ -14,8 +14,8 @@
      *   Handles actions for category edit form.
      */
     .controller('CategoryCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$window', 'http', 'linker',
-      function($controller, $location, $scope, $timeout, $window, http, linker) {
+      '$controller', '$location', '$scope', '$timeout', '$window', 'http', 'linker', 'translator',
+      function($controller, $location, $scope, $timeout, $window, http, linker, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 

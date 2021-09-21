@@ -154,75 +154,6 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests getMedia method when performing a deep search.
-     */
-    public function testGetMediaWhenDeep()
-    {
-        $content = new Content([
-            'pk_content'        => 1,
-            'content_type_name' => 'opinion',
-            'related_contents'  => [
-                [
-                    'source_id'         => 1,
-                    'target_id'         => 2,
-                    'content_type_name' => 'video',
-                    'type'              => 'featured_inner'
-                ]
-            ]
-        ]);
-
-        $video = new Content(
-            [
-                'pk_content'        => 2,
-                'target_id'         => 3,
-                'content_type_name' => 'photo',
-                'type'              => 'featured_frontpage'
-            ]
-        );
-
-        $photo = new Content([
-            'pk_content'        => 3,
-            'content_type_name' => 'photo',
-            'width'             => 1920,
-            'height'            => 1080
-        ]);
-
-        $this->contentHelper->expects($this->at(0))->method('getType')
-            ->with($content)
-            ->willReturn('opinion');
-
-        $this->contentHelper->expects($this->at(2))->method('getType')
-            ->with($video)
-            ->willReturn('video');
-
-        $this->contentHelper->expects($this->at(4))->method('getType')
-            ->with($photo)
-            ->willReturn('photo');
-
-        $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
-            ->with($content)
-            ->willReturn(true);
-
-        $this->featuredHelper->expects($this->at(1))->method('getFeaturedMedia')
-            ->with($content)
-            ->willReturn($video);
-
-        $this->featuredHelper->expects($this->at(2))->method('hasFeaturedMedia')
-            ->with($video)
-            ->willReturn(true);
-
-        $this->featuredHelper->expects($this->at(3))->method('getFeaturedMedia')
-            ->with($video)
-            ->willReturn($photo);
-
-        $this->contentHelper->expects($this->once())->method('getContent')
-            ->with($photo)
-            ->willReturn($photo);
-
-        $this->assertEquals($photo, $this->helper->getMedia($content, true));
-    }
-
-    /**
      * Tests getMedia method when the content has author avatar.
      */
     public function testGetMediaWhenAvatar()
@@ -241,7 +172,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
 
-        $this->contentHelper->expects($this->at(2))->method('getType')
+        $this->contentHelper->expects($this->at(1))->method('getType')
             ->with($content)
             ->willReturn('opinion');
 
@@ -253,7 +184,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn(2);
 
-        $this->contentHelper->expects($this->at(3))->method('getContent')
+        $this->contentHelper->expects($this->at(2))->method('getContent')
             ->with(2)
             ->willReturn($photo);
 
@@ -280,7 +211,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'in_litter'         => 0
         ]);
 
-        $this->contentHelper->expects($this->at(1))->method('getType')
+        $this->contentHelper->expects($this->at(0))->method('getType')
             ->with($kiosko)
             ->willReturn('kiosko');
 
@@ -293,10 +224,10 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($kioskoImg, $this->helper->getMedia($kiosko));
 
-        $this->imageHelper->expects($this->at(0))->method('getInformation')
+        $this->imageHelper->expects($this->any())->method('getInformation')
             ->will($this->throwException(new \Exception()));
 
-        $this->contentHelper->expects($this->at(1))->method('getType')
+        $this->contentHelper->expects($this->at(0))->method('getType')
             ->with($kiosko)
             ->willReturn('kiosko');
 

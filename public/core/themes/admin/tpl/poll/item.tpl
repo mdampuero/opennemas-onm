@@ -24,6 +24,14 @@
 {/block}
 
 {block name="primaryActions"}
+  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+    <h5>
+      <i class="p-r-15">
+        <i class="fa fa-check"></i>
+        {t}Draft saved at {/t}[% draftSaved %]
+      </i>
+    </h5>
+  </li>
   <li class="quicklinks">
     <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="button">
       <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
@@ -145,4 +153,13 @@
       </div>
     </div>
   </div>
+{/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-translate">
+    {include file="common/modals/_translate.tpl"}
+  </script>
 {/block}

@@ -28,6 +28,19 @@ class WidgetController extends ContentOldController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'WIDGET_CREATE',
+        'delete' => 'WIDGET_DELETE',
+        'patch'  => 'WIDGET_UPDATE',
+        'update' => 'WIDGET_UPDATE',
+        'list'   => 'WIDGET_ADMIN',
+        'save'   => 'WIDGET_CREATE',
+        'show'   => 'WIDGET_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.widget';
 
     /**

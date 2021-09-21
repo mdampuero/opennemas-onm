@@ -28,6 +28,19 @@ class StaticPageController extends ContentController
     protected $getItemRoute = 'api_v1_backend_static_page_get_item';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'STATIC_PAGE_CREATE',
+        'delete' => 'STATIC_PAGE_DELETE',
+        'patch'  => 'STATIC_PAGE_UPDATE',
+        'update' => 'STATIC_PAGE_UPDATE',
+        'list'   => 'STATIC_PAGE_ADMIN',
+        'save'   => 'STATIC_PAGE_CREATE',
+        'show'   => 'STATIC_PAGE_UPDATE',
+    ];
+
+    /**
      * The API service name.
      *
      * @var string

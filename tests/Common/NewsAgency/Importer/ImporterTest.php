@@ -29,7 +29,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'findBy', 'countBy' ])
             ->getMock();
 
-        $this->os = $this->getMockBuilder('Api\Service\V1\OpinionService')
+        $this->service = $this->getMockBuilder('Api\Service\V1\OpinionService')
             ->disableOriginalConstructor()
             ->setMethods([ 'createItem' ])
             ->getMock();
@@ -64,8 +64,8 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'api.service.opinion':
-                return $this->os;
+            case 'api.service.content':
+                return $this->service;
 
             case 'api.service.photo':
                 return $this->ps;
@@ -228,7 +228,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             ->with($resource, [])
             ->willReturn([ 'content_type_name' => 'opinion' ]);
 
-        $this->os->expects($this->once())->method('createItem')
+        $this->service->expects($this->once())->method('createItem')
             ->with([ 'content_type_name' => 'opinion' ])
             ->willReturn($content);
 

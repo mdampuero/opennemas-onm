@@ -10,8 +10,6 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class ContentController extends ApiController
 {
@@ -58,14 +56,42 @@ class ContentController extends ApiController
     }
 
     /**
-     * Returns the list of photos linked to the article.
+     * Returns the list of related contents of the item.
      *
      * @param Content $content The content.
      *
-     * @return array The list of photos linked to the content.
+     * @return array The related contents of the item.
      */
-    protected function getRelatedContents($items)
+    protected function getRelatedContents($content)
     {
-        return [];
+        $extra = [];
+
+        if (empty($content)) {
+            return $extra;
+        }
+
+        if (is_object($content)) {
+            $content = [ $content ];
+        }
+
+        foreach ($content as $element) {
+            if (!is_array($element->related_contents)) {
+                continue;
+            }
+
+            foreach ($element->related_contents as $relation) {
+                try {
+                    $er      = $this->container->get('entity_repository');
+                    $content = $er->find($relation['content_type_name'], $relation['target_id']);
+
+                    $extra[$relation['target_id']] = in_array($relation['content_type_name'], $er::ORM_CONTENT_TYPES) ?
+                            $this->container->get('api.service.content')->responsify($content) :
+                            $content;
+                } catch (GetItemException $e) {
+                }
+            }
+        }
+
+        return $extra;
     }
 }

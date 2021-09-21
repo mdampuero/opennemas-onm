@@ -2,7 +2,6 @@
 
 namespace Tests\Api\Service\V1;
 
-use Api\Exception\GetListException;
 use Api\Service\V1\OpinionService;
 use Common\Model\Entity\User;
 

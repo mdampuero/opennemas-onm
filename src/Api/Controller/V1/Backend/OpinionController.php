@@ -31,6 +31,19 @@ class OpinionController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'OPINION_CREATE',
+        'delete' => 'OPINION_DELETE',
+        'patch'  => 'OPINION_UPDATE',
+        'update' => 'OPINION_UPDATE',
+        'list'   => 'OPINION_ADMIN',
+        'save'   => 'OPINION_CREATE',
+        'show'   => 'OPINION_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.opinion';
 
     /**
@@ -186,41 +199,5 @@ class OpinionController extends ContentController
     public function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('opinion');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRelatedContents($content)
-    {
-        $service = $this->get('api.service.photo');
-        $extra   = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $element) {
-            if (!is_array($element->related_contents)) {
-                continue;
-            }
-
-            foreach ($element->related_contents as $relation) {
-                if (!preg_match('/featured_.*/', $relation['type'])) {
-                    continue;
-                }
-                try {
-                    $photo                         = $service->getItem($relation['target_id']);
-                    $extra[$relation['target_id']] = $service->responsify($photo);
-                } catch (GetItemException $e) {
-                }
-            }
-        }
-
-        return $extra;
     }
 }
