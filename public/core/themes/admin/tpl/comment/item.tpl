@@ -22,18 +22,18 @@
 {block name="rightColumn"}
   <div class="grid simple">
     {acl isAllowed="COMMENT_AVAILABLE"}
-    <div class="form-group">
-      <div class="grid-collapse-title">
-        <i class="fa fa-eye m-r-5"></i>
-        {t}Status{/t}
-      </div>
-      <div class="grid-body">
-        <div class="controls" ng-repeat="status in extra.statuses" ng-if="status.value" >
-          <input type="radio" name="status" value="[% status.value %]" id="content_status_[% status.value %]" ng-checked="item.status == status.value" ng-model="item.status">
-          <label for="content_status_[% status.value %]" class="form-label">[% status.title %]</label>
+      <div class="form-group">
+        <div class="grid-collapse-title">
+          <i class="fa fa-eye m-r-5"></i>
+          {t}Status{/t}
+        </div>
+        <div class="grid-body">
+          <div class="controls" ng-repeat="status in extra.statuses" ng-if="status.value" >
+            <input type="radio" name="status" value="[% status.value %]" id="content_status_[% status.value %]" ng-checked="item.status == status.value" ng-model="item.status">
+            <label for="content_status_[% status.value %]" class="form-label">[% status.title %]</label>
+          </div>
         </div>
       </div>
-    </div>
     {/acl}
   </div>
 {/block}

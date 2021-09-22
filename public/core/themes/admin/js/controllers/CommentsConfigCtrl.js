@@ -68,7 +68,7 @@
 
           http.get($scope.routes.getConfig).then(function(response) {
             $scope.config = response.data.config;
-            $scope.extra = response.data.extra;
+            $scope.extra  = response.data.extra;
             $scope.disableFlags('http');
           }, function() {
             $scope.disableFlags('http');
@@ -88,6 +88,8 @@
             return;
           }
 
+          $scope.cleanKeys();
+
           $scope.flags.http.saving = true;
 
           http.put($scope.routes.saveConfig, { config: $scope.config, extra: $scope.extra })
@@ -105,31 +107,51 @@
          * @memberOf CommentsConfigCtrl
          *
          * @description
-         *   Validates facebook or disqus
+         *   Validate for $scope.config elements
          */
         $scope.validate = function() {
-          if ($scope.extra.handler === 'facebook' &&
-          (!$scope.extra.facebook.api_key ||
-            !$scope.extra.facebook.api_key.trim())) {
-            return false;
-          }
+          var validKeys = {
+            onm: [
+              'comment_system', 'disable_comments', 'with_comments',
+              'number_elements' ],
+            facebook: [ 'comment_system', 'disable_comments', 'with_comments',
+              'facebook_apikey' ],
+            disqus: [ 'comment_system', 'disable_comments', 'with_comments',
+              'disqus_secretkey', 'disqus_shortname' ]
+          };
 
-          if ($scope.extra.handler === 'disqus' &&
-            (!$scope.extra.disqus_secret_key ||
-              !$scope.extra.disqus_shortname ||
-              !$scope.extra.disqus_secret_key.trim() ||
-              !$scope.extra.disqus_shortname.trim())) {
-            return false;
-          }
-
-          if ($scope.extra.handler === 'onm' &&
-            ($scope.config.number_elements < 3 ||
-              $scope.config.number_elements > 100 ||
-              !$scope.config.number_elements)) {
-            return false;
+          for (var element of validKeys[$scope.config.comment_system]) {
+            if ($scope.config[element] === null || $scope.config[element].length < 1) {
+              return false;
+            }
           }
 
           return true;
+        };
+
+        /**
+         * @function cleanKeys
+         * @memberOf CommentsConfigCtrl
+         *
+         * @description
+         *   Clean $scope.config keys for saving data
+         */
+        $scope.cleanKeys = function() {
+          var validKeys = {
+            onm: [
+              'comment_system', 'disable_comments', 'with_comments',
+              'number_elements', 'required_email', 'moderation_manual',
+              'moderation_autoaccept', 'moderation_autoreject'
+            ],
+            facebook: [ 'comment_system', 'disable_comments', 'with_comments', 'facebook_apikey' ],
+            disqus: [ 'comment_system', 'disable_comments', 'with_comments', 'disqus_secretkey', 'disqus_shortname' ]
+          };
+
+          Object.keys($scope.config).forEach((key) => {
+            if (!validKeys[$scope.config.comment_system].includes(key)) {
+              delete $scope.config[key];
+            }
+          });
         };
       }
     ]);

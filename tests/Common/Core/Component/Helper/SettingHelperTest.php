@@ -106,4 +106,24 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->helper->hasLogo('default'));
     }
+
+    public function testToInt()
+    {
+        $array    = [ 'element' => '1' ];
+        $expected = [ 'element' => 1 ];
+        $toInt    = [ 'element' ];
+
+        $this->assertEquals($expected, $this->helper->toInt($array, $toInt));
+    }
+
+    public function testToBoolean()
+    {
+        $array    = [ 'element' => '1' ];
+        $array2   = [ 'element' => 'true' ];
+        $expected = [ 'element' => true ];
+        $toBool   = [ 'element' ];
+
+        $this->assertEquals($expected, $this->helper->toBoolean($array, $toBool));
+        $this->assertEquals($expected, $this->helper->toBoolean($array2, $toBool));
+    }
 }

@@ -17,7 +17,7 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf PollCtrl
+         * @memberOf CommentCtrl
          *
          * @description
          *  The item object.

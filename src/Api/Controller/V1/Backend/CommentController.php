@@ -21,6 +21,16 @@ class CommentController extends ApiController
     const STATUS_PENDING  = 'pending';
 
     /**
+     * The flist of keys to convert to boolean
+     *
+     * @var array
+     */
+    private $tobool = [
+        'disable_comments', 'with_comments', 'moderation_manual',
+        'moderation_autoreject', 'moderation_autoaccept', 'required_email'
+    ];
+
+    /**
      * {@inheritdoc}
      */
     protected $service = 'api.service.comment';
@@ -61,7 +71,7 @@ class CommentController extends ApiController
 
         $extra['dateTimezone'] = $this->container->get('core.locale')->getTimeZone();
 
-        $this->get('core.locale')->setContext('frontend');
+        //$this->get('core.locale')->setContext('frontend');
 
         return $extra;
     }
@@ -75,34 +85,26 @@ class CommentController extends ApiController
     public function getConfigAction()
     {
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $sh = $this->get('core.helper.setting');
 
         $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
-        $config         = $ds->get('comments_config', []);
+        $config         = $ds->get('comment_settings', []);
 
-        foreach ($config as $configName => $value) {
-            if ($configName == 'number_elements') {
-                $config[$configName] = (int) $config[$configName];
-            }
-            if ($value == '1') {
-                $config[$configName] = true;
-            }
-        }
+        $config = $sh->toInt($config, ['number_elements']);
+        $config = $sh->toBoolean($config, $this->tobool);
 
         $config = array_merge($defaultConfigs, $config);
 
         return new JsonResponse([
             'config' => $config,
             'extra'   => [
-                'handler' => $ds->get('comment_system'),
                 'blacklist_comment' => $this->get('core.validator')
                     ->getConfig(Validator::BLACKLIST_RULESET_COMMENTS),
-                'disqus_shortname' => $ds->get('disqus_shortname', null),
-                'disqus_secret_key' => $ds->get('disqus_secret_key', null),
-                'facebook' => $ds->get('facebook', [])
                 ]
         ]);
     }
-        /**
+
+    /**
      * Returns comments configuration
      *
      * @param Request $request The request object.
@@ -113,31 +115,16 @@ class CommentController extends ApiController
     {
         $msg = $this->get('core.messenger');
         $ds  = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $sh  = $this->get('core.helper.setting');
 
         $config = $request->request->get('config', []);
         $extra  = $request->request->get('extra', []);
 
-        $tobool = [
-            'disable_comments', 'with_comments', 'moderation_manual',
-            'moderation_autoreject', 'moderation_autoaccept', 'required_email'
-        ];
-
-        foreach ($tobool as $key) {
-            if (!empty($config[$key])) {
-                if ($config[$key] == 'true') {
-                    $config[$key] = true;
-                } else {
-                    $config[$key] = false;
-                }
-            }
-        }
+        $config = $sh->toInt($config, ['number_elements']);
+        $config = $sh->toBoolean($config, $this->tobool);
 
         try {
-            $ds->set('disqus_shortname', $extra['disqus_shortname']);
-            $ds->set('disqus_secret_key', $extra['disqus_secret_key']);
-            $ds->set('comments_config', $config);
-            $ds->set('comment_system', $extra['handler']);
-            $ds->set('facebook', $extra['facebook']);
+            $ds->set('comment_settings', $config);
 
             $this->get('core.validator')
                 ->setConfig(Validator::BLACKLIST_RULESET_COMMENTS, $extra['blacklist_comment']);
