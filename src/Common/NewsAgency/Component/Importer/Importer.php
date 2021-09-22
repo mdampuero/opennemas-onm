@@ -397,7 +397,6 @@ class Importer
         $date = new \DateTime();
 
         $data = array_merge($data, [
-            'content_status'  => 1,
             'created'         => $date->format('Y-m-d H:i:s'),
             'fk_content_type' => 1,
             'categories'      => [ $this->getCategory($resource, $data) ],
@@ -474,7 +473,6 @@ class Importer
     {
         $date = new \DateTime();
         $data = array_merge($data, [
-            'content_status' => 1,
             'created' => $date->format('Y-m-d H:i:s'),
             'fk_content_type' => 4,
             'slug' => $this->container->get('data.manager.filter')
