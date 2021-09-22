@@ -69,9 +69,9 @@ class CommentController extends ApiController
             $extra['contents'][$content['pk_content']] = $content;
         }
 
+        $extra['keys']         = $this->get('api.service.content')->getL10nKeys();
+        $extra['locale']       = $this->get('core.helper.locale')->getConfiguration();
         $extra['dateTimezone'] = $this->container->get('core.locale')->getTimeZone();
-
-        //$this->get('core.locale')->setContext('frontend');
 
         return $extra;
     }

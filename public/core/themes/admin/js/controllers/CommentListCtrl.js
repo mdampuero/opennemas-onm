@@ -10,6 +10,7 @@
      * @requires $controller
      * @requires $scope
      * @requires oqlEncoder
+     * @requires localizer
      *
      * @description
      *   Controller for comments listing.
@@ -82,8 +83,19 @@
             $scope.data.items = [];
           }
 
+          $scope.localize($scope.data.extra.contents, 'contents');
+
           $scope.items = $scope.data.items;
+
           $scope.extra = $scope.data.extra;
+        };
+
+        $scope.localizeText = function(text) {
+          if (typeof text === 'object') {
+            return text[$scope.config.locale.selected];
+          }
+
+          return text;
         };
       }
     ]);

@@ -49,21 +49,19 @@ class CommentController extends BackendController
 
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-        $comment_system = $ds->get('comment_system', []);
+        $config = $ds->get('comment_settings', []);
 
-        if ($comment_system == 'facebook') {
+        if ($config['comment_system'] == 'facebook') {
             $template = '/facebook/list.tpl';
 
-            $config = $ds->get('facebook', []);
-
-            $params['fb_app_id'] = empty($config['api_key']) ? null : trim($config['api_key']);
+            $params['fb_app_id'] = $config['facebook_apikey'];
         }
 
-        if ($comment_system == 'disqus') {
+        if ($config['comment_system'] == 'disqus') {
             $template = '/disqus/list.tpl';
 
-            $params['disqus_secret_key'] = $ds->get('disqus_secret_key', null);
-            $params['disqus_shortname']  = $ds->get('disqus_shortname', null);
+            $params['disqus_secret_key'] = $config['disqus_shortname'];
+            $params['disqus_shortname']  = $config['disqus_secretkey'];
         }
 
         return $this->render($this->resource . $template, $params);
