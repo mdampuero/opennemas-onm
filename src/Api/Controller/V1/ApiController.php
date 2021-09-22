@@ -58,7 +58,7 @@ class ApiController extends Controller
     public function deleteItemAction($id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('delete'));
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_DELETE'), [ $id ]);
+        $this->checkSecurityForContents('CONTENT_OTHER_DELETE', [ $id ]);
 
         $msg = $this->get('core.messenger');
 
@@ -82,7 +82,7 @@ class ApiController extends Controller
 
         $ids = $request->request->get('ids', []);
 
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_DELETE'), $ids);
+        $this->checkSecurityForContents('CONTENT_OTHER_DELETE', $ids);
 
         $msg     = $this->get('core.messenger');
         $deleted = $this->get($this->service)->deleteList($ids);
@@ -113,9 +113,6 @@ class ApiController extends Controller
      */
     public function getItemAction($id)
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('show'));
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $id ]);
-
         $ss   = $this->get($this->service);
         $item = $ss->getItem($id);
 
@@ -159,7 +156,7 @@ class ApiController extends Controller
     public function patchItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $id ]);
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [ $id ]);
 
         $msg = $this->get('core.messenger');
 
@@ -184,7 +181,7 @@ class ApiController extends Controller
         $params = $request->request->all();
         $ids    = $params['ids'];
 
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), $ids);
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', $ids);
 
         $msg = $this->get('core.messenger');
 
@@ -249,7 +246,7 @@ class ApiController extends Controller
     public function updateItemAction(Request $request, $id)
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
-        $this->checkSecurityForContents($this->getActionPermission('CONTENT_OTHER_UPDATE'), [ $id ]);
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [ $id ]);
 
         $msg = $this->get('core.messenger');
 
