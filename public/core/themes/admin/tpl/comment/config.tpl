@@ -137,7 +137,7 @@
           </div>
           <div class="grid-body">
             <div class ="form-inline">
-              <div class="form-group p-l-20" ng-class="{ 'has-error' : (config.number_elements < 3 || config.number_elements > 100 || !config.number_elements) }">
+              <div class="form-group p-l-20" ng-class="{ 'has-error' : !config.number_elements }">
                 <label class="form-label" for="number_elements">
                   <h5>
                     {t}Number of comments to show{/t}:
@@ -261,7 +261,7 @@
                 {t}Facebook App Id{/t}
               </label>
               <div class="controls">
-                <input class="form-control" id="facebook_api_key" name="facebook-api-key" type="text" ng-model="config.facebook_apikey" requi/>
+                <input class="form-control" id="facebook_api_key" name="facebook-api-key" type="text" ng-model="config.facebook_apikey"/>
                 <div class="help">
                   {t escape=off}To be able to moderate comments of your site in Facebook you must create and set here your <strong>Facebook App Id</strong>.{/t}
                   <br>
