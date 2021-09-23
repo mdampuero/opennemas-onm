@@ -253,9 +253,10 @@ class CommentsController extends ContentController
 
         $contents = $this->get('entity_repository')->findMulti($ids);
 
+        $cs = $this->container->get('api.service.content');
         $extra['contents'] = [];
         foreach ($contents as $content) {
-            $extra['contents'][$content->pk_content] = $content;
+            $extra['contents'][$content->pk_content] = $cs->responsify($content);
         }
 
         $extra['dateTimezone'] = $this->container->get('core.locale')->getTimeZone();
