@@ -56,6 +56,23 @@ class ContentService extends OrmService
     /**
      * {@inheritdoc}
      */
+    protected function getOqlForList($oql)
+    {
+        $cleanOql = preg_replace('/and tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', '', $oql);
+        preg_match('/tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', $oql, $matches);
+
+        if (empty($matches)) {
+            return $cleanOql;
+        }
+
+        return $this->container->get('orm.oql.fixer')->fix($cleanOql)
+            ->addCondition(sprintf('tag_id in [%s]', $matches[1]))
+            ->getOql();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function patchItem($id, $data)
     {
         $data['changed'] = new \DateTime();
