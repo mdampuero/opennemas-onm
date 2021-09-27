@@ -84,8 +84,8 @@
   <div class="grid simple">
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
+      {include file="ui/component/content-editor/textarea.tpl" incomplete="incomplete" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
+      {include file="ui/component/content-editor/textarea.tpl" incomplete="incomplete" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
     </div>
   </div>
 {/block}

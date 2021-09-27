@@ -132,7 +132,7 @@
         </div>
       </span>
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+      {include file="ui/component/content-editor/textarea.tpl" incomplete="incomplete" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
       <span ng-if="item.type === 'external'">
         <div class="form-group">
           <div class="controls">
