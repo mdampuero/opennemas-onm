@@ -46,6 +46,11 @@
         $scope.dtm = null;
 
         /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
+
+        /**
          * @memberOf ArticleCtrl
          *
          * @description

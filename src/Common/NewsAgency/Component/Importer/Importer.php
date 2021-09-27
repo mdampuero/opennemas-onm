@@ -338,12 +338,6 @@ class Importer
             $data['content_type_name'] = $this->config['target'];
         }
 
-        // Force content_type_name for photos
-        if ($resource->type === 'photo') {
-            $data['content_type_name'] = 'photo';
-            $data['fk_content_type']   = 8;
-        }
-
         $data = array_merge($this->defaults, $data, [
             'description'         => $resource->summary,
             'frontpage'           => 0,
@@ -357,6 +351,13 @@ class Importer
             'body'                => $resource->body,
             'href'                => $resource->href,
         ]);
+
+        // Force some properties for photos
+        if ($resource->type === 'photo') {
+            $data['content_type_name'] = 'photo';
+            $data['fk_content_type']   = 8;
+            $data['description']       = $resource->body;
+        }
 
         // Check if the source has an external link configured
         if (array_key_exists('external', $this->config)

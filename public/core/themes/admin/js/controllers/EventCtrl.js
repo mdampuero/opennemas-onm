@@ -35,6 +35,11 @@
         $scope.dtm = null;
 
         /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
+
+        /**
          * @memberOf EventCtrl
          *
          * @description

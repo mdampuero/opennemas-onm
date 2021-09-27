@@ -32,6 +32,11 @@
         /**
          * @inheritdoc
          */
+        $scope.incomplete = true;
+
+        /**
+         * @inheritdoc
+         */
         $scope.routes = {
           createItem:   'api_v1_backend_tag_create_item',
           getItem:      'api_v1_backend_tag_get_item',

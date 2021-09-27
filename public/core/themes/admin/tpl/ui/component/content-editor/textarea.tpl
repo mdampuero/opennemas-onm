@@ -13,6 +13,6 @@
     {/acl}
   {/if}
   <div class="controls">
-    <textarea name="{$field}" id="{$field}" ng-model="item.{$field}" onm-editor onm-editor-preset="{if !isset($preset)}simple{else}{$preset}{/if}" class="form-control" rows="{if !isset($rows)}15{else}{$rows}{/if}"></textarea>
+    <textarea name="{$field}" id="{$field}" incomplete="incomplete" ng-model="item.{$field}" onm-editor onm-editor-preset="{if !isset($preset)}simple{else}{$preset}{/if}" class="form-control" rows="{if !isset($rows)}15{else}{$rows}{/if}"></textarea>
   </div>
 </div>
