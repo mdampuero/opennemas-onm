@@ -92,7 +92,7 @@
       </div>
       <div class="form-group">
         {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-        {include file="ui/component/content-editor/textarea.tpl" incomplete="incomplete" title="{t}Description{/t}" field="description" rows=20}
+        {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=20}
       </div>
     </div>
   </div>
