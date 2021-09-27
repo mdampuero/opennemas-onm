@@ -55,11 +55,26 @@ class ConvertNewsstandCommand extends Command
                 $ps = $this->getContainer()->get('api.service.photo');
                 $ns = $this->getContainer()->get('api.service.newsstand');
 
-                $oql = 'content_type_name="kiosko" order by starttime desc';
+                $oql = 'select * from contents where content_type_name="kiosko" order by starttime desc limit 500';
 
-                $newsstands = array_filter($ns->getList($oql)['items'], function ($item) {
+                $newsstands = array_filter($ns->getListBySql($oql)['items'], function ($item) {
                     return substr($item->thumbnail, -4) === '.jpg';
                 });
+
+                for ($i = 1; $i < 50; $i++) {
+                    $oql = sprintf(
+                        'select * from contents where content_type_name="kiosko"' .
+                        ' order by starttime desc limit 500 offset %d',
+                        $i * 500
+                    );
+
+                    $newsstands = array_merge(
+                        $newsstands,
+                        array_filter($ns->getListBySql($oql)['items'], function ($item) {
+                            return substr($item->thumbnail, -4) === '.jpg';
+                        })
+                    );
+                }
 
                 $output->writeln(str_pad(sprintf(
                     '<fg=blue;options=bold>==></><options=bold> (%s/%s)'
@@ -110,8 +125,11 @@ class ConvertNewsstandCommand extends Command
                             'description' => $filename
                         ], new File($filePath), true);
 
-                        $ns->patchItem($newsstand->id, [ 'related_contents' => $this->getContainer()->get('core.helper.featured_media')
-                            ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]) ]);
+                        $ns->patchItem(
+                            $newsstand->id,
+                            [ 'related_contents' => $this->getContainer()->get('core.helper.featured_media')
+                                ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]) ]
+                        );
 
                         $output->writeln(sprintf(
                             '<fg=green;options=bold>DONE</>'
