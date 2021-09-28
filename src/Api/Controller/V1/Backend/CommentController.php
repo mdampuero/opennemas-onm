@@ -21,7 +21,7 @@ class CommentController extends ApiController
     const STATUS_PENDING  = 'pending';
 
     /**
-     * The flist of keys to convert to boolean
+     * The list of keys to convert to boolean
      *
      * @var array
      */
