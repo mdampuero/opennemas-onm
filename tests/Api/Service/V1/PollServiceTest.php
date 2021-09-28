@@ -27,7 +27,7 @@ class PollServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->dispatcher = $this->getMockBuilder('EventDispatcher')
-            ->setMethods([ 'dispatch' ])
+            ->setMethods([ 'dispatch', 'getEventName' ])
             ->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
@@ -49,7 +49,7 @@ class PollServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'find' ])->getMock();
+            ->setMethods([ 'find', 'findBy', 'countBy' ])->getMock();
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -148,5 +148,56 @@ class PollServiceTest extends \PHPUnit\Framework\TestCase
         $response = $this->service->getItem(1);
 
         $this->assertEquals($itemsPercent, $response->items);
+    }
+
+    /**
+     * Tests getList.
+     *
+     */
+    public function testGetList()
+    {
+        $itemsPercent = [
+            [
+                'pk_item' => 1,
+                'votes'   => 5,
+                'item'    => 'Item1',
+                'percent' => '33.33'
+            ],
+            [
+                'pk_item' => 2,
+                'votes'   => 2,
+                'item'    => 'Item2',
+                'percent' => '13.33'
+            ],
+            [
+                'pk_item' => 3,
+                'votes'   => 8,
+                'item'    => 'Item3',
+                'percent' => '53.33'
+            ],
+        ];
+
+        $this->repository->expects($this->once())->method('findBy')
+            ->with('')->willReturn([0 => $this->item]);
+
+        $this->repository->expects($this->once())->method('countBy')
+            ->with('')->willReturn(1);
+
+        $this->fm->expects($this->at(0))->method('set')
+            ->with($this->item->items)
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->at(1))->method('filter')
+            ->willReturn($this->fm);
+
+        $this->fm->expects($this->at(2))->method('get')
+            ->willReturn($this->item->items);
+
+        $this->ph->expects($this->once())->method('getTotalVotes')
+            ->willReturn([ '1' => 15 ]);
+
+        $response = $this->service->getList('');
+
+        $this->assertEquals($itemsPercent, $response['items'][0]->items);
     }
 }
