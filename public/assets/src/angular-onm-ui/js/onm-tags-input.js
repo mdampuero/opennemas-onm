@@ -36,24 +36,26 @@
             placeholder:   '@',
             required:      '=',
             selectionOnly: '=',
+            filter:        '=',
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
-              '<button class="btn btn-info btn-mini pull-right" ng-hide="hideGenerate" ng-click="generate(generateFrom())" type="button">' +
+              '<button ng-if="!filter" class="btn btn-info btn-mini pull-right" ng-hide="hideGenerate" ng-click="generate(generateFrom())" type="button">' +
                 '<i class="fa fa-refresh m-r-5" ng-class="{ \'fa-spin\': generating }"></i>' +
                 $window.strings.tags.generate +
               '</button>' +
-              '<button class="btn btn-danger btn-mini m-r-5 pull-right" ng-click="clear()" type="button">' +
+              '<button ng-if="!filter" class="btn btn-danger btn-mini m-r-5 pull-right" ng-click="clear()" type="button">' +
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
-              '<span class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
+              '<span ng-if="!filter" class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
                 '[% tagsInLocale ? tagsInLocale.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +
-            '<div>' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-adding="add($tag)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
-                '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
+            '<div class="tags-input-wrapper">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-removing="remove($tag, filter)" on-tag-adding="add($tag, filter)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+                '<auto-complete ng-if="!filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
+                '<auto-complete ng-if="filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
               '<input name="tags" type="hidden" ng-value="getJsonValue()">' +
@@ -114,9 +116,21 @@
          *   Checks if the added tag is already in the database and adds the id
          *   and the slug to the added tag.
          *
-         * @param {Object} tag The added tag object.
+         * @param {Object} tag     The added tag object.
+         * @param {boolean} filter A flag to indicate if the directive is used to filter.
          */
-        $scope.add = function(tag) {
+        $scope.add = function(tag, filter) {
+          if (filter) {
+            var input       = document.querySelector('tags-input input');
+            var placeholder = input.getAttribute('placeholder');
+
+            input.setAttribute('disabled', true);
+            input.setAttribute('placeholder', '');
+            input.setAttribute('data-placeholder', placeholder);
+
+            return;
+          }
+
           if ($scope.tags && $scope.tags.length >= $scope.maxTags) {
             return false;
           }
@@ -130,6 +144,27 @@
           }
 
           return true;
+        };
+
+        /**
+         * @function remove
+         * @memberOf OnmTagsInputCtrl
+         *
+         * @description
+         * Removes a tag.
+         *
+         * @param {Object} tag     The added tag object.
+         * @param {boolean} filter A flag to indicate if the directive is used to filter.
+         */
+        $scope.remove = function(tag, filter) {
+          if (!filter) {
+            return;
+          }
+
+          var input = document.querySelector('tags-input input');
+
+          input.removeAttribute('disabled');
+          input.setAttribute('placeholder', input.getAttribute('data-placeholder'));
         };
 
         /**
@@ -424,7 +459,7 @@
 
         // Updates ngModel when tags added/removed
         $scope.$watch('tags', function(nv) {
-          $scope.ngModel = !nv ? null : nv.map(function(e) {
+          $scope.ngModel = !nv || Array.isArray(nv) && !nv.length ? null : nv.map(function(e) {
             return e.id;
           });
         }, true);

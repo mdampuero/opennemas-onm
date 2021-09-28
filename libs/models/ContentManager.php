@@ -485,165 +485,6 @@ class ContentManager
         return $contents;
     }
 
-    /**
-     * This function returns an array of objects $contentType of the most
-     * commented in the last few days indicated.
-     *
-     * @param string  $contentType type of content
-     * @param boolean $notEmpty    If there are no results regarding the days
-     *                             indicated, the query is performed on the
-     *                             entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value
-     *                             is 0, then does not filter by categories. For
-     *                             default is 0.
-     * @param integer $days Interval of days on which the consultation
-     *                             takes place. For default is 2.
-     * @param integer $maxElements Number of objects that the function returns.
-     *                             For default is 8.
-     * @param boolean $all Get all the content regardless of content
-     *                             status and endtime.
-     * @return array
-     */
-    public function getMostComentedContent(
-        $contentType,
-        $notEmpty = false,
-        $category = 0,
-        $days = 2,
-        $maxElements = 9,
-        $all = false,
-        $page = 1
-    ) {
-        $offset = ($page - 1) * $maxElements;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll(
-                "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
-                FROM contents, comments, articles
-                WHERE contents.pk_content = comments.content_id
-                AND contents.pk_content = articles.pk_article
-                AND contents.content_status=1
-                AND starttime >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
-                GROUP BY contents.pk_content
-                ORDER BY num_comments DESC, contents.starttime DESC
-                LIMIT ? OFFSET ?",
-                [ $days, $maxElements, $offset ]
-            );
-
-            $contents = [];
-            foreach ($rs as $row) {
-                $content = new $contentType();
-                $content->load($row);
-
-                $contents[$content->pk_content] = [
-                    'pk_content' => $content->pk_content,
-                    'num'        => $content->num_comments,
-                    'title'      => $content->title,
-                    'permalink'  => $content->slug,
-                ];
-            }
-
-            return $contents;
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return false;
-        }
-    }
-
-    /**
-     * This function returns an array of objects $contentType of the most voted
-     * in the last few days indicated.
-     * Objects only have covered the fields pk_content, title, and total_value
-     * total_votes
-     *
-     * @param string  $contentType type of content
-     * @param boolean $not_empty   If there are no results regarding the days
-     *                             indicated, the query is performed on the
-     *                             entire bd. For default is false
-     * @param integer $category pk_content_category ok the contents. If value
-     *                             is 0, then does not filter by categories.
-     *                             For default is 0.
-     * @param integer $author pk_author of the contnet. If value is 0,
-     *                             then does not filter by categories.
-     *                             For default is 0.
-     * @param integer $days Interval of days on which the consultation
-     *                             takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns.
-     *                             For default is 8.
-     * @param boolean $all Get all the content regardless of content
-     *                             status.
-     * @return array the contents
-     */
-    public function getMostVotedContent(
-        $contentType,
-        $notEmpty = false,
-        $category = 0,
-        $author = 0,
-        $days = 2,
-        $num = 8,
-        $all = false
-    ) {
-        // TODO: Review algorithm
-        $table = tableize($contentType);
-
-        $tables   = '`contents`, `' . $table . '`, `ratings` ';
-        $whereSQL = '`contents`.in_litter=0 ';
-        if (!$all) {
-            $whereSQL .= ' AND `contents`.`content_status`=1 ';
-        }
-
-        $daysFilterSQL     = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $tablesRelationSQL = ' AND `contents`.pk_content=`' . $table . '`.pk_' . strtolower($contentType) .
-            ' AND `ratings`.pk_rating=`contents`.pk_content ';
-        $orderBySQL        = ' ORDER BY `contents`.`content_status` DESC, `ratings`.total_votes DESC ';
-        $limitSQL          = 'LIMIT ' . $num;
-
-        if (isset($author) && !is_null($author) && intval($author) > 0) {
-            if ($contentType == 'Opinion') {
-                $whereSQL .= 'AND `opinions`.fk_author=' . $author . ' ';
-            } else {
-                $whereSQL .= 'AND `contents`.fk_author=' . $author . ' ';
-            }
-        }
-
-        if (intval($category) > 0) {
-            $tables .= ', `content_category` ';
-
-            $tablesRelationSQL .= ' AND  `content_category`.contend_id = `contents`.pk_content '
-                . 'AND `content_category`.category_id=' . $category . ' ';
-        }
-
-        $sql = 'SELECT * FROM ' . $tables
-            . ' WHERE ' . $whereSQL . $daysFilterSQL . $tablesRelationSQL
-            . $orderBySQL . $limitSQL;
-
-        try {
-            $rs = getService('dbal_connection')->fetchAll($sql);
-
-            if (is_null($rs) || count($rs) < 4) {
-                $rs = getService('dbal_connection')->fetchAll(
-                    'SELECT * FROM ' . $tables
-                    . ' WHERE ' . $whereSQL . $tablesRelationSQL
-                    . $orderBySQL . $limitSQL
-                );
-            }
-
-            if (empty($rs) || !is_array($rs)) {
-                return [];
-            }
-
-            return $this->loadObject($rs, $contentType);
-        } catch (\Exception $e) {
-            getService('error.log')->error(
-                $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-            );
-
-            return false;
-        }
-    }
-
      /**
      * This function returns an array of objects all types of the most viewed
      * in the last few days indicated.
@@ -1138,6 +979,7 @@ class ContentManager
      */
     public function getLatestComments($count = 6)
     {
+        $em       = getService('entity_repository');
         $contents = [];
 
         $sql = 'SELECT DISTINCT(comments.content_id), comments.date as comment_date,'
@@ -1154,8 +996,7 @@ class ContentManager
             );
 
             foreach ($rs as $contentData) {
-                $content = new \Article();
-                $content->load($contentData);
+                $content                 = $em->find('article', $contentData['pk_content']);
                 $content->comment        = $contentData['comment_body'];
                 $content->pk_comment     = $contentData['comment_id'];
                 $content->comment_author = $contentData['comment_author'];

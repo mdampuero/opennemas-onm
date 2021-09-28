@@ -2,8 +2,13 @@
   <i class="fa fa-image m-r-10"></i>
   {$iTitle}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$iName} }"></i>
-  <span class="pull-right">
-    {include file="common/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
+  {if $iRequired}
+    <span class="pull-right">
+      {include file="common/component/icon/status.tpl" iForm="form.$iName" iNgModel=$iName iValidation=true}
+    </span>
+  {/if}
+  <span class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-if="data.extra.related_contents[{$iName}.target_id]" class="pull-right">
+    {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[{$iName}.target_id]" iFlagName=true iFlagIcon=true}
   </span>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$iName} }">
@@ -24,9 +29,9 @@
     </div>
     <div class="thumbnail-placeholder">
       <div class="img-thumbnail" ng-show="!{$iName}">
-        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}">
+        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}" photo-editor-enabled="true">
           <i class="fa fa-picture-o fa-2x"></i>
-          <h5>{t}Pick an image{/t}</h5>
+          <h5>{t}Select an element{/t}</h5>
         </div>
       </div>
       <div class="dynamic-image-placeholder" ng-show="{$iName}">
@@ -35,7 +40,7 @@
             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('{$iName}')">
               <i class="fa fa-trash-o fa-2x"></i>
             </div>
-            <div class="thumbnail-action" media-picker media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="photo">
+            <div class="thumbnail-action" media-picker media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}" photo-editor-enabled="true">
               <i class="fa fa-camera fa-2x"></i>
             </div>
           </div>

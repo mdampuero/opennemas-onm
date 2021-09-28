@@ -1,5 +1,5 @@
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.author = !expanded.author">
-  <i class="fa fa-users m-r-10"></i>{t}Author{/t}
+  <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.author }"></i>
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.author">
     <span ng-show="!item.fk_author"><strong>{t}No author{/t}</strong></span>

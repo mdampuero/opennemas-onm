@@ -15,10 +15,25 @@
      * @requires routing
      */
     .controller('PollCtrl', [
-      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing',
-      function($controller, $scope, $window, linker, localizer, routing) {
+      '$controller', '$scope', '$window', 'linker', 'localizer', 'routing', 'translator',
+      function($controller, $scope, $window, linker, localizer, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'poll-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
 
         /**
          * @memberOf PollCtrl
@@ -36,7 +51,7 @@
           description: '',
           favorite: 0,
           frontpage: 0,
-          created: new Date(),
+          created: null,
           starttime: null,
           endtime: null,
           title: '',
@@ -100,6 +115,13 @@
             $scope.item.items.push($scope.localizeOption(
               $scope.data.item.items[i], $scope.item.items.length));
           }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'poll-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

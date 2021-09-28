@@ -50,6 +50,8 @@ orm:
                 tags:                array
                 related_contents:    array
                 subscriptions:       array
+                title_int:           l10n_string
+                pretitle:            l10n_string
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter

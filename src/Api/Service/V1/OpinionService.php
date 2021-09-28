@@ -2,7 +2,6 @@
 
 namespace Api\Service\V1;
 
-use Api\Exception\GetListException;
 use Api\Service\V1\ContentService;
 
 class OpinionService extends ContentService
@@ -12,6 +11,8 @@ class OpinionService extends ContentService
      */
     protected function getOqlForList($oql)
     {
+        $oql = parent::getOqlForList($oql);
+
         preg_match('/blog\\s*=\\s*\"?([01])\"?\\s*/', $oql, $matches);
 
         if (!empty($matches)) {

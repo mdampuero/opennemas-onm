@@ -117,6 +117,11 @@
         <a href="[% getFrontendUrl(item) %]" target="_blank">
           <i class="fa fa-external-link m-r-5"></i>
           {t}Link{/t}
+          <span class="m-l-5" ng-if="item.params.bodyLink.length > 0">
+            <small>
+              ({t}External{/t})
+            </small>
+          </span>
         </a>
       </li>
     </ul>

@@ -38,12 +38,13 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             simple: false
           },
           related_frontpage: {
+            mirror: 'related_inner',
             name:   'relatedFrontpage',
-            simple: true
+            simple: false
           },
           related_inner: {
             name:   'relatedInner',
-            simple: true
+            simple: false
           },
         },
         mirrored: {}
@@ -145,6 +146,33 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         }
 
         return angular.isDefined(index) ? items[index] : items;
+      };
+
+      /**
+       * @function exportRelated
+       * @memberOf related
+       *
+       * @description
+       *  Returns an object with the related contents.
+       *
+       * @return {Object} An object with the related contents.
+       */
+      related.exportRelated = function() {
+        if (!Array.isArray(related.bag)) {
+          return related.bag;
+        }
+
+        var relatedObject = {};
+
+        var filteredBag = related.bag.filter(function(item) {
+          return item !== null;
+        });
+
+        filteredBag.forEach(function(item) {
+          relatedObject[item.pk_content] = item;
+        });
+
+        return relatedObject;
       };
 
       /**
@@ -314,6 +342,15 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             related.scope.data[related.map[type].name] = item;
             related.scope[related.map[type].name]      = related.localize(item, type);
 
+            related.mirrored[name] = true;
+            return;
+          }
+
+          if (nv === ov) {
+            return;
+          }
+
+          if (!ov && related.scope[related.map[type].name]) {
             related.mirrored[name] = true;
             return;
           }

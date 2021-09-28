@@ -32,6 +32,11 @@
         $scope.widgetForm = false;
 
         /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
+
+        /**
          * @memberOf AlbumCtrl
          *
          * @description
@@ -48,7 +53,7 @@
           description: '',
           favorite: 0,
           frontpage: 0,
-          created: new Date(),
+          created: null,
           starttime: null,
           endtime: null,
           renderlet: 'html',

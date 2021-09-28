@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+<div data-content-id="{$content->id}" data-class="{$content->content_type_name}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
@@ -10,11 +10,8 @@
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            {if $content->in_frontpage && ($params['home'] != true)}
-              <i class="fa fa-home"></i>
-            {/if}
-            {if !($content->in_frontpage) && ($params['home'] != true)}<i class="fa fa-star content-icon-suggested"></i>{/if}
-            <span class="type">{$content->content_type_l10n_name}</span>
+            <i class="fa fa-star content-icon-suggested"></i>
+            <span class="type">{get_type($content, true, true)}</span>
             {$content->title}
         </div>
     </div>
@@ -28,7 +25,7 @@
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_article_show id=$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=backend_article_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
             </li>
@@ -48,16 +45,6 @@
                 <a title="{t}Remove from all frontpages{/t}" href="#" class="arquive">
                     <i class="fa fa-inbox"></i> {t}Arquive{/t}
                 </a>
-            </li>
-            <li>
-                {if !$content->in_frontpage && ($params['home'] != true)}
-                <a title="{t}Suggest this element to home{/t}" href="#" class="suggest-to-home">
-                    <i class="fa fa-star"></i> {t}Suggest to home{/t}
-                </a>
-                <a title="{t}Unsuggest this element to home{/t}" href="#" class="remove suggest-to-home">
-                    <i class="fa fa-star-empty"></i> {t}Unsuggest to home{/t}
-                </a>
-                {/if}
             </li>
             <li class="divider"></li>
             <li>

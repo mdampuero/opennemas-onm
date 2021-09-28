@@ -135,7 +135,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['wordCount']       = 4;
         $output['logo']            = 'logo';
         $output['author']          = 'author';
-        $output['image']           = null;
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
@@ -146,16 +145,11 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $object->expects($this->at(0))->method('getLogoData')->willReturn('logo');
         $object->expects($this->at(1))->method('getDescription')->willReturn('This is the description');
         $object->expects($this->at(2))->method('getAuthorData')->willReturn('author');
-        $object->expects($this->at(3))->method('getMediaData')
-            ->willReturn([
-                'image' => null,
-                'video' => $data['video']
-            ]);
 
-        $object->expects($this->at(4))->method('getTags')
+        $object->expects($this->at(3))->method('getTags')
             ->with($data['content']->tags)
             ->willReturn('keywords,object,json,linking');
-        $object->expects($this->at(5))->method('getTags')
+        $object->expects($this->at(4))->method('getTags')
             ->with($data['video']->tags)
             ->willReturn('keywords,object,json,linking,data');
 
@@ -389,38 +383,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('/media/opennemas');
 
         $method->invokeArgs($this->object, []);
-    }
-
-    /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getMediaData
-     */
-    public function testGetMediaDataWithPhoto()
-    {
-        $method = new \ReflectionMethod($this->object, 'getMediaData');
-        $method->setAccessible(true);
-
-        $content = new \Content();
-        $this->helper->expects($this->once())
-            ->method('getMedia')
-            ->willReturn(new \Content());
-
-        $method->invokeArgs($this->object, [ $content ]);
-    }
-
-    /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getMediaData
-     */
-    public function testGetMediaDataWithVideo()
-    {
-        $method = new \ReflectionMethod($this->object, 'getMediaData');
-        $method->setAccessible(true);
-
-        $content = new \Content();
-        $this->helper->expects($this->once())
-            ->method('getMedia')
-            ->willReturn(new Content());
-
-        $method->invokeArgs($this->object, [ $content ]);
     }
 
     /**

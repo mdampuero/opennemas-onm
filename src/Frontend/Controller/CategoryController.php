@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -210,34 +211,27 @@ class CategoryController extends FrontendController
      */
     protected function getItems($params)
     {
-        $em = $this->get('entity_repository');
+        $service = $this->get('api.service.content');
+        $now     = date('Y-m-d H:i:s');
 
-        $now      = date('Y-m-d H:i:s');
-        $order    = [ 'starttime' => 'DESC', 'pk_content' => 'DESC' ];
-        $criteria = [
-            'category_id' => [
-                [ 'value' => $params['category']->id ]
-            ],
-            'fk_content_type' => [
-                [ 'value' => [1, 7, 9], 'operator' => 'IN' ]
-            ],
-            'content_status' => [ [ 'value' => 1 ] ],
-            'in_litter'      => [ [ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'      => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => $now, 'operator' => '<=' ],
-            ],
-            'endtime' => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => $now, 'operator' => '>' ],
-            ]
-        ];
+        $response = $service->getList(
+            sprintf(
+                'content_status = 1 and in_litter = 0 and category_id = %d ' .
+                'and fk_content_type in [1,7,9] ' .
+                'and (starttime is null or starttime < "%s") ' .
+                'and (endtime is null or endtime > "%s") ' .
+                'order by starttime desc limit %d offset %d',
+                $params['category']->id,
+                $now,
+                $now,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            )
+        );
 
         return [
-            $em->findBy($criteria, $order, $params['epp'], $params['page']),
-            $em->countBy($criteria)
+            $response['items'],
+            $response['total']
         ];
     }
 
@@ -286,7 +280,11 @@ class CategoryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        list($contents, $total) = $this->getItems($params);
+        try {
+            list($contents, $total) = $this->getItems($params);
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {

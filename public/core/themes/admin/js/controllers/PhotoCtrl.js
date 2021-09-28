@@ -10,6 +10,26 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
     /**
+     * @inheritdoc
+     */
+    $scope.draftEnabled = true;
+
+    /**
+     * @inheritdoc
+     */
+    $scope.draftKey = 'photo-draft';
+
+    /**
+     * @inheritdoc
+     */
+    $scope.dtm = null;
+
+    /**
+     * @inheritdoc
+     */
+    $scope.incomplete = true;
+
+    /**
      * @memberOf PhotoCtrl
      *
      * @description
@@ -31,6 +51,12 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item');
+
+      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+        $scope.draftKey = 'photo-' + $scope.data.item.pk_content + '-draft';
+      }
+
+      $scope.checkDraft();
     };
 
     /**

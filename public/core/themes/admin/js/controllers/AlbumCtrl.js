@@ -16,10 +16,30 @@
      * @requires routing
      */
     .controller('AlbumCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'related', 'routing',
-      function($controller, $scope, $timeout, $uibModal, $window, related, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'related', 'routing', 'translator',
+      function($controller, $scope, $timeout, $uibModal, $window, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'album-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
 
         /**
          * @memberOf AlbumCtrl
@@ -37,7 +57,7 @@
           description: '',
           favorite: 0,
           frontpage: 0,
-          created: new Date(),
+          created: null,
           starttime: null,
           endtime: null,
           thumbnail: null,
@@ -58,7 +78,7 @@
          * @memberOf AlbumCtrl
          *
          * @description
-         *  The related contents service
+         *  The related service.
          *
          * @type {Object}
          */
@@ -124,8 +144,14 @@
               $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'album-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.checkDraft();
           related.init($scope);
           related.watch();
+          translator.init($scope);
         };
 
         /**

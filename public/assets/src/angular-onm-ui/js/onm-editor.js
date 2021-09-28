@@ -318,7 +318,8 @@
           // E = Element, A = Attribute, C = Class, M = Comment
           restrict: 'A',
           scope: {
-            ngModel: '=',
+            ngModel:    '=',
+            incomplete: '='
           },
           require: [ 'ngModel', '^?form' ],
           link: function(scope, element, attrs, ctrls) {
@@ -332,95 +333,82 @@
              * Initializes the current CKEditor instance.
              */
             var onLoad = function() {
-              var options  = Editor.configure(attrs.onmEditorPreset);
-              var instance = Editor.init(element[0], options);
-
-              // Updates CKEditor when model changes
-              scope.$watch('ngModel', function(nv) {
-                // Prevent infinite loop when comparing '' and undefined
-                var value = angular.isUndefined(nv) ? '' : nv;
-
-                if (stop) {
-                  stop = !stop;
+              scope.$watch('incomplete', function(nv) {
+                if (nv === true) {
                   return;
                 }
 
-                // Prevent double changes when comparing null and ''
-                if (instance.getData() === '' && !ngModel.$viewValue) {
-                  return;
-                }
+                var options  = Editor.configure(attrs.onmEditorPreset);
+                var instance = Editor.init(element[0], options);
 
-                if (instance.getData() !== value) {
-                  instance.setData(value, { internal: false });
-                }
-              }, true);
+                // Updates CKEditor when model changes
+                scope.$watch('ngModel', function(nv) {
+                  // Prevent infinite loop when comparing '' and undefined
+                  var value = angular.isUndefined(nv) ? '' : nv;
 
-              /**
-               * Updates model when CKEditor changes and model is not equals.
-               *
-               * @param {Object} e The event object.
-               */
-              var setModelData = function(e) {
-                if (stop) {
-                  stop = !stop;
-                  return;
-                }
-
-                // Use 'key' event only when in source mode
-                if (e.name === 'key' && instance.mode !== 'source') {
-                  return;
-                }
-
-                var data = instance.getData();
-
-                // Prevent double changes when comparing null and ''
-                if (data === '' && !ngModel.$viewValue) {
-                  return;
-                }
-
-                if (data !== ngModel.$viewValue) {
-                  $timeout(function() {
-                    stop = true;
-                    scope.ngModel = data;
-                  }, 0);
-                }
-              };
-
-              instance.on('change', setModelData);
-              instance.on('dialogHide', setModelData);
-
-              // For source view
-              instance.on('key', setModelData);
-
-              // Initializes the CKEditor with data
-              instance.on('instanceReady', function(ev) {
-                // Disable html attribute sorting
-                ev.editor.dataProcessor.writer.sortAttributes = 0;
-
-                // Data from HTML value
-                var data = element[0].innerText;
-
-                // If model, data from model
-                if (scope && scope.ngModel) {
-                  data = scope.ngModel;
-                }
-
-                scope.$apply(function() {
-                  stop = true;
-
-                  instance.setData(data);
-
-                  if (form) {
-                    form.$setPristine(true);
+                  if (stop) {
+                    stop = !stop;
+                    return;
                   }
+
+                  // Prevent double changes when comparing null and ''
+                  if (instance.getData() === '' && !ngModel.$viewValue) {
+                    return;
+                  }
+
+                  if (instance.getData() !== value) {
+                    instance.setData(value, { internal: false });
+                  }
+                }, true);
+
+                /**
+                 * Updates model when CKEditor changes and model is not equals.
+                 *
+                 * @param {Object} e The event object.
+                 */
+                var setModelData = function(e) {
+                  if (stop) {
+                    stop = !stop;
+                    return;
+                  }
+
+                  // Use 'key' event only when in source mode
+                  if (e.name === 'key' && instance.mode !== 'source') {
+                    return;
+                  }
+
+                  var data = instance.getData();
+
+                  // Prevent double changes when comparing null and ''
+                  if (data === '' && !ngModel.$viewValue) {
+                    return;
+                  }
+
+                  if (data !== ngModel.$viewValue) {
+                    $timeout(function() {
+                      stop = true;
+                      scope.ngModel = data;
+                    }, 0);
+                  }
+                };
+
+                instance.on('change', setModelData);
+                instance.on('dialogHide', setModelData);
+
+                // For source view
+                instance.on('key', setModelData);
+
+                // Initializes the CKEditor with data
+                instance.on('instanceReady', function(ev) {
+                  // Disable html attribute sorting
+                  ev.editor.dataProcessor.writer.sortAttributes = 0;
+                  scope.$broadcast('ckeditor.ready.' + instance.name);
                 });
 
-                scope.$broadcast('ckeditor.ready.' + instance.name);
-              });
-
-              // Destroy CKEditor when element is destroyed
-              element.bind('$destroy', function() {
-                Editor.destroy(instance.name);
+                // Destroy CKEditor when element is destroyed
+                element.bind('$destroy', function() {
+                  Editor.destroy(instance.name);
+                });
               });
             };
 

@@ -98,7 +98,7 @@ $menuXml = [
                 'id'          => 'article_manager',
                 'title'       => _('Articles'),
                 'icon'        => 'fa fa-file-text',
-                'link'        => url('admin_articles'),
+                'link'        => url('backend_articles_list'),
                 'module_name' => 'ARTICLE_MANAGER',
                 'privilege'   => 'ARTICLE_PENDINGS',
             ],

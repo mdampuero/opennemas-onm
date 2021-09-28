@@ -9,6 +9,7 @@
  */
 namespace Tests\Frontend\Renderer;
 
+use Common\Model\Entity\Content;
 use Frontend\Renderer\Renderer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -110,10 +111,9 @@ class RendererTest extends TestCase
     public function testRenderWhenNoSpecificContent()
     {
         $params  = [];
-        $content = new \Article();
+        $content = new Content();
 
         $this->container->expects($this->at(0))->method('get')
-            ->with('frontend.renderer.article')
             ->will($this->throwException(new ServiceNotFoundException(1)));
 
         $this->assertEquals('ContentRenderer Code', $this->renderer->render($content, $params));

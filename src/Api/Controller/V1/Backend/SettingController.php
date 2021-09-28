@@ -273,7 +273,7 @@ class SettingController extends Controller
         $settings = $this->updateOldSettingsName($settings);
 
         // TODO: Remove this when the sitemap is separated from settings.
-        if (array_key_exists('sitemap', $settings)) {
+        if (array_key_exists('sitemap', $settings) && !empty($settings['sitemap'])) {
             $remove = false;
             $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
 

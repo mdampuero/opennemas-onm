@@ -17,6 +17,7 @@ class ContentService extends OrmService
     public function createItem($data)
     {
         $data['changed'] = new \DateTime();
+        $data['created'] = new \DateTime();
 
         $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
@@ -50,6 +51,23 @@ class ContentService extends OrmService
         $oql = sprintf('slug regexp "(.+\"|^)%s(\".+|$)" and fk_content_type=%d', $slug, $contentType);
 
         return $this->getItemBy($oql);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getOqlForList($oql)
+    {
+        $cleanOql = preg_replace('/and tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', '', $oql);
+        preg_match('/tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', $oql, $matches);
+
+        if (empty($matches)) {
+            return $cleanOql;
+        }
+
+        return $this->container->get('orm.oql.fixer')->fix($cleanOql)
+            ->addCondition(sprintf('tag_id in [%s]', $matches[1]))
+            ->getOql();
     }
 
     /**
@@ -104,7 +122,7 @@ class ContentService extends OrmService
      * @param array $data       The content data.
      * @param array $userFields The user data fields to update.
      *
-     * @return Content The content.
+     * @return array The data with the current user on user fields.
      */
     protected function assignUser($data, $userFields = [])
     {

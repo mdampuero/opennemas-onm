@@ -17,8 +17,10 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $title   = $ds->get('site_title');
     $summary = $ds->get('site_description');
 
+    $contentHelper = $smarty->getContainer()->get('core.helper.content');
+
     if (!empty($content)) {
-        $summary = trim(\Onm\StringUtils::htmlAttribute($content->summary));
+        $summary = trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
         if (empty($summary)) {
             $summary = mb_substr(
                 trim(\Onm\StringUtils::htmlAttribute($content->body)),
@@ -30,11 +32,6 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         $title = htmlspecialchars(
             html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
         );
-
-        // Change summary for videos
-        if ($content->content_type_name == 'video') {
-            $summary = trim(\Onm\StringUtils::htmlAttribute($content->description));
-        }
     }
 
     // Generate tags
@@ -45,7 +42,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
     $media = $smarty->getContainer()->get('core.helper.content_media')
-        ->getMedia($content, true);
+        ->getMedia($content);
 
     $photoHelper = $smarty->getContainer()->get('core.helper.photo');
 

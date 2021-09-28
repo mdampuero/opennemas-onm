@@ -20,6 +20,19 @@ class AlbumController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $permissions = [
+        'create' => 'ALBUM_CREATE',
+        'delete' => 'ALBUM_DELETE',
+        'patch'  => 'ALBUM_UPDATE',
+        'update' => 'ALBUM_UPDATE',
+        'list'   => 'ALBUM_ADMIN',
+        'save'   => 'ALBUM_CREATE',
+        'show'   => 'ALBUM_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.album';
 
     /**
@@ -39,43 +52,5 @@ class AlbumController extends ContentController
     protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('album');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRelatedContents($content)
-    {
-        $service = $this->get('api.service.photo');
-        $extra   = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $element) {
-            if (!is_array($element->related_contents)) {
-                continue;
-            }
-
-            foreach ($element->related_contents as $relation) {
-                if (!preg_match('/photo|featured_frontpage/', $relation['type'])) {
-                    continue;
-                }
-
-                try {
-                    $photo = $service->getItem($relation['target_id']);
-
-                    $extra[$relation['target_id']] = $service->responsify($photo);
-                } catch (GetItemException $e) {
-                }
-            }
-        }
-
-        return $extra;
     }
 }

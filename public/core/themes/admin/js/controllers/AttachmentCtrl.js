@@ -16,10 +16,30 @@
      * @requires routing
      */
     .controller('AttachmentCtrl', [
-      '$controller', '$scope',
-      function($controller, $scope) {
+      '$controller', '$scope', 'translator',
+      function($controller, $scope, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'attachment-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
 
         /**
          * @memberOf AttachmentCtrl
@@ -37,7 +57,7 @@
           description: '',
           favorite: 0,
           frontpage: 0,
-          created: new Date(),
+          created: null,
           starttime: null,
           endtime: null,
           title: '',
@@ -91,6 +111,13 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'attachment-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.checkDraft();
+          translator.init($scope);
         };
 
         /**

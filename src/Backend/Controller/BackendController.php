@@ -9,7 +9,6 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Security;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,8 +23,6 @@ class BackendController extends Controller
      */
     public function createAction(Request $request)
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('create'));
-
         $params = [];
 
         if ($this->get('core.helper.locale')->hasMultilanguage()) {
@@ -44,8 +41,6 @@ class BackendController extends Controller
      */
     public function listAction(Request $request)
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
-
         $params = [];
 
         if ($this->get('core.helper.locale')->hasMultilanguage()) {
@@ -65,8 +60,6 @@ class BackendController extends Controller
      */
     public function showAction(Request $request, $id)
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
-
         $params = [ 'id' => $id ];
 
         if ($this->get('core.helper.locale')->hasMultilanguage()) {

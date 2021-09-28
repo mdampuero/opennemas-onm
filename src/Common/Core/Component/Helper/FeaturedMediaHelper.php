@@ -82,11 +82,13 @@ class FeaturedMediaHelper
      */
     public function getFeaturedMedia($item, $type, $deep = true)
     {
-        $item = $this->contentHelper->getContent($item);
-        $map  = [
+        $item        = $this->contentHelper->getContent($item);
+        $contentType = $this->contentHelper->getType($item);
+
+        $map = [
             'article' => [
-                'frontpage' => [ 'fk_video', 'img1' ],
-                'inner'     => [ 'fk_video2', 'img2' ]
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
             ], 'opinion' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
@@ -109,27 +111,40 @@ class FeaturedMediaHelper
         ];
 
         if (empty($item)
-            || !array_key_exists($this->contentHelper->getType($item), $map)
-            || !array_key_exists($type, $map[$this->contentHelper->getType($item)])
+            || !array_key_exists($contentType, $map)
+            || !array_key_exists($type, $map[$contentType])
         ) {
             return null;
         }
 
-        if (in_array($this->contentHelper->getType($item), EntityManager::ORM_CONTENT_TYPES)) {
-            if ($this->contentHelper->getType($item) === 'video') {
+        if (in_array($contentType, EntityManager::ORM_CONTENT_TYPES)) {
+            if ($contentType === 'video') {
                 return $type === 'inner' ? $item : $this->videoHelper->getVideoThumbnail($item);
             }
 
-            if ($this->contentHelper->getType($item) === 'album' && $type === 'inner') {
+            if ($contentType === 'album' && $type === 'inner') {
                 return $item;
             }
 
-            $media = $this->relatedHelper->getRelated($item, $map[$this->contentHelper->getType($item)][$type][0]);
+            $related = $this->relatedHelper->getRelated($item, $map[$contentType][$type][0]);
 
-            return array_shift($media);
+            if (empty($related)) {
+                return null;
+            }
+
+            $media = $this->contentHelper->getContent(array_shift($related));
+
+            if ($deep &&
+                    in_array($this->contentHelper->getType($media), [ 'video', 'album' ]) &&
+                    $type === 'frontpage'
+            ) {
+                return $this->getFeaturedMedia($media, 'frontpage');
+            }
+
+            return $media;
         }
 
-        foreach ($map[$this->contentHelper->getType($item)][$type] as $key) {
+        foreach ($map[$contentType][$type] as $key) {
             if (empty($item->{$key})) {
                 continue;
             }
@@ -169,11 +184,13 @@ class FeaturedMediaHelper
      */
     public function getFeaturedMediaCaption($item, $type)
     {
-        $item = $this->contentHelper->getContent($item);
-        $map  = [
+        $item        = $this->contentHelper->getContent($item);
+        $contentType = $this->contentHelper->getType($item);
+
+        $map = [
             'article' => [
-                'frontpage' => [ 'footer_video1', 'img1_footer' ],
-                'inner'     => [ 'footer_video2', 'img2_footer' ]
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
             ], 'opinion' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
@@ -189,14 +206,14 @@ class FeaturedMediaHelper
         ];
 
         if (empty($item)
-            || !array_key_exists($this->contentHelper->getType($item), $map)
-            || !array_key_exists($type, $map[$this->contentHelper->getType($item)])
+            || !array_key_exists($contentType, $map)
+            || !array_key_exists($type, $map[$contentType])
         ) {
             return null;
         }
 
-        if (in_array($this->contentHelper->getType($item), EntityManager::ORM_CONTENT_TYPES)) {
-            $key = array_shift($map[$this->contentHelper->getType($item)][$type]);
+        if (in_array($contentType, EntityManager::ORM_CONTENT_TYPES)) {
+            $key = array_shift($map[$contentType][$type]);
 
             $related = array_filter($item->related_contents, function ($a) use ($key) {
                 return $a['type'] === $key;
@@ -207,7 +224,7 @@ class FeaturedMediaHelper
                 : null;
         }
 
-        foreach ($map[$this->contentHelper->getType($item)][$type] as $key) {
+        foreach ($map[$contentType][$type] as $key) {
             if (!empty($item->{$key})) {
                 return htmlentities($item->{$key});
             }

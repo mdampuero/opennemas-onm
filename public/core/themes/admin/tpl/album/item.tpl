@@ -27,6 +27,14 @@
 {/block}
 
 {block name="primaryActions"}
+  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+    <h5>
+      <i class="p-r-15">
+        <i class="fa fa-check"></i>
+        {t}Draft saved at {/t}[% draftSaved %]
+      </i>
+    </h5>
+  </li>
   <li class="quicklinks">
     <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="button">
       <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
@@ -69,8 +77,8 @@
         <i class="fa fa-cog m-r-10"></i>
         {t}Parameters{/t}
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Frontpage image{/t}"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" title="{t}Agency{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured in frontpage{/t}" types="photo"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" icon="fa-microphone" title="{t}Agency{/t}"}
     </div>
   </div>
 {/block}
@@ -143,7 +151,7 @@
         </div>
       </div>
       <div class="text-center">
-        <button class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="target.photos" type="button">
+        <button class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="target.photos" media-picker-types="photo" type="button">
           <i class="fa fa-plus m-r-5"></i>
           {t}Add{/t}
         </button>
@@ -159,5 +167,11 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-translate">
+    {include file="common/modals/_translate.tpl"}
   </script>
 {/block}

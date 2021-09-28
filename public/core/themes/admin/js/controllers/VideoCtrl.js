@@ -2,12 +2,32 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing',
-  function($controller, $scope, $timeout, $window, http, messenger, related, routing) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing', 'translator',
+  function($controller, $scope, $timeout, $window, http, messenger, related, routing, translator) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+    /**
+     * @inheritdoc
+     */
+    $scope.draftEnabled = true;
+
+    /**
+     * @inheritdoc
+     */
+    $scope.draftKey = 'video-draft';
+
+    /**
+     * @inheritdoc
+     */
+    $scope.dtm = null;
+
+    /**
+     * @inheritdoc
+     */
+    $scope.incomplete = true;
 
     /**
      * @memberOf VideoCtrl
@@ -23,11 +43,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
-     *  The item object.
+     *  The default item object.
      *
      * @type {Object}
      */
-    $scope.item = {
+    $scope.defaultItem = {
       body: '',
       content_type_name: 'video',
       fk_content_type: 9,
@@ -35,12 +55,12 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       description: '',
       favorite: 0,
       frontpage: 0,
-      created: new Date(),
+      created: null,
       starttime: null,
       endtime: null,
       thumbnail: null,
       title: '',
-      type: 0,
+      type: 'web-source',
       with_comment: 0,
       categories: [],
       related_contents: [],
@@ -54,11 +74,31 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @memberOf VideoCtrl
      *
      * @description
+     *  The item object.
+     *
+     * @type {Object}
+     */
+    $scope.item = Object.assign({}, $scope.defaultItem);
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
      *   Object with trusted URLs for preview.
      *
      * @type {Object}
      */
     $scope.preview = {};
+
+    /**
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  The related service.
+     *
+     * @type {Object}
+     */
+    $scope.related = related;
 
     /**
      * @memberOf VideoCtrl
@@ -82,26 +122,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      switch ($scope.data.item.type) {
-        case 'script':
-          $scope.setType('script');
-          break;
-
-        case 'external':
-          $scope.setType('external');
-
-          var info = $scope.data.item.information.source;
-
-          $scope.html = info.flv ? 'flv' : 'html5';
-          break;
-
-        default:
-          if ($scope.data.item.path) {
-            $scope.setType('web-source');
-          }
-          break;
-      }
-
       $scope.localize($scope.data.item, 'item', true);
 
       // Check if item is new (created) or existing for use default value or not
@@ -109,32 +129,40 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
+      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+        $scope.draftKey = 'video-' + $scope.data.item.pk_content + '-draft';
+      }
+
+      $scope.checkDraft();
       related.init($scope);
       related.watch();
+      translator.init($scope);
     };
 
     /**
-     * @function setType
+     * @function selectType
      * @memberOf VideoCtrl
      *
      * @description
-     *   Updates the scope to the proper video type.
+     *  Resets the video item when the video type changes.
      */
-    $scope.setType = function(type) {
-      if (!type) {
+    $scope.selectType = function(type) {
+      if (!type || $scope.item.type === type) {
         return;
       }
 
-      if (type === 'external' || type === 'script') {
-        $scope.item.type = type;
+      if (type === 'web-source' && ![ 'external', 'script' ].includes($scope.item.type)) {
+        return;
       }
 
-      if (!$scope.item.type) {
-        $scope.item.type = 'html5';
-      }
+      $scope.defaultItem.type = type;
+      $scope.item             = angular.copy($scope.defaultItem);
+      $scope.data.item        = angular.copy($scope.defaultItem);
 
-      $scope.type               = type;
-      $scope.flags.visible.grid = true;
+      $scope.featuredFrontpage = null;
+      $scope.featuredInner     = null;
+
+      $scope.localize($scope.data.item, 'item', true);
     };
 
     /**

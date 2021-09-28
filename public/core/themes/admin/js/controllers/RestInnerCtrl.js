@@ -21,8 +21,10 @@
      *   Provides generic actions to edit, save and update items.
      */
     .controller('RestInnerCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window',
+      'cleaner', 'http', 'messenger', 'routing', 'webStorage',
+      function($controller, $scope, $timeout, $uibModal, $window,
+          cleaner, http, messenger, routing, webStorage) {
         $.extend(this, $controller('BaseCtrl', { $scope: $scope }));
 
         /**
@@ -127,6 +129,7 @@
             $scope.configure($scope.data.extra);
             $scope.buildScope();
             $scope.disableFlags('http');
+            $scope.incomplete = false;
           }, function() {
             $scope.item = null;
             $scope.disableFlags('http');
@@ -218,6 +221,11 @@
               $timeout(function() {
                 $scope.getItem($scope.getItemId());
               }, 500);
+            }
+
+            if ($scope.draftKey !== null) {
+              $scope.draftSaved = null;
+              webStorage.session.remove($scope.draftKey);
             }
 
             messenger.post(response.data);

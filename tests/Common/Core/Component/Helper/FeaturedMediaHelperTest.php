@@ -143,8 +143,8 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
         $content->content_status    = 1;
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
-        $content->content_type_name = 'article';
-        $content->img1              = 893;
+        $content->content_type_name = 'book';
+        $content->cover_id          = 893;
         $content->external          = 1;
 
         $this->assertEquals($photo, $this->helper->getFeaturedMedia($content, 'frontpage'));
@@ -178,11 +178,7 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
                 'position' => 9
             ] ]);
 
-        $this->assertEquals([
-            'item'     => $photo,
-            'caption'  => 'Justo auctor vero probo pertinax',
-            'position' => 9
-        ], $this->helper->getFeaturedMedia($this->content, 'frontpage'));
+        $this->assertEquals($photo, $this->helper->getFeaturedMedia($this->content, 'frontpage'));
     }
 
     /**
@@ -206,8 +202,8 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
         $content->content_status    = 1;
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
-        $content->content_type_name = 'article';
-        $content->img1              = 893;
+        $content->content_type_name = 'book';
+        $content->cover_id          = 893;
 
         $this->assertEquals($photo, $this->helper->getFeaturedMedia($content, 'frontpage'));
     }
@@ -239,8 +235,12 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->em->expects($this->at(0))->method('find')
-            ->with('Video', 779)->willReturn($video);
+        $this->relatedHelper->expects($this->once())->method('getRelated')
+            ->willReturn([ [
+                'item'     => $video,
+                'caption'  => 'Lorem ipsum dolor sit amet.',
+                'position' => 0
+            ] ]);
 
         $this->videoHelper->expects($this->once())->method('getVideoThumbnail')
             ->willReturn($photo);
@@ -250,7 +250,15 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->fk_video          = 779;
+        $content->related_contents  = [
+            [
+                'type'              => 'featured_frontpage',
+                'target_id'         => 779,
+                'content_type_name' => 'video',
+                'caption'           => 'Lorem ipsum dolor sit amet.',
+                'position'          => 0
+            ]
+        ];
 
         $this->assertEquals($photo, $this->helper->getFeaturedMedia($content, 'frontpage'));
     }
@@ -276,8 +284,12 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
             'external_uri'      => 'http://waldo/thud.jpg'
         ]);
 
-        $this->em->expects($this->once())->method('find')
-            ->with('Video', 779)->willReturn($video);
+        $this->relatedHelper->expects($this->once())->method('getRelated')
+            ->willReturn([ [
+                'item'     => $video,
+                'caption'  => 'Lorem ipsum dolor sit amet.',
+                'position' => 0
+            ] ]);
 
         $this->videoHelper->expects($this->once())->method('getVideoThumbnail')
             ->willReturn($photo);
@@ -287,7 +299,15 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->fk_video          = 779;
+        $content->related_contents  = [
+            [
+                'type'              => 'featured_frontpage',
+                'target_id'         => 779,
+                'content_type_name' => 'video',
+                'caption'           => 'Lorem ipsum dolor sit amet.',
+                'position'          => 0
+            ]
+        ];
 
         $this->assertEquals($photo, $this->helper->getFeaturedMedia($content, 'frontpage'));
     }
@@ -302,10 +322,14 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
 
 
         $this->content->content_type_name = 'article';
+        $this->content->related_contents  = [];
 
         $this->assertNull($this->helper->getFeaturedMediaCaption($this->content, 'frontpage'));
 
-        $this->content->img1_footer = 'Rhoncus pretium';
+        $this->content->related_contents = [ [
+            'type'    => 'featured_frontpage',
+            'caption' => 'Rhoncus pretium'
+        ] ];
 
         $this->assertEquals('Rhoncus pretium', $this->helper->getFeaturedMediaCaption($this->content, 'frontpage'));
 
@@ -339,24 +363,34 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
         $photo->starttime         = '2020-01-01 00:00:00';
         $photo->content_type_name = 'photo';
 
-        $this->em->expects($this->once())->method('find')
-            ->with('Photo', 893)->willReturn($photo);
-
-        $this->assertNull($this->helper->getFeaturedMedia($this->content, 'baz'));
-        $this->assertNull($this->helper->getFeaturedMedia($this->content, 'inner'));
-
         $content                    = new \Content();
         $content->content_status    = 1;
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->img1              = 893;
-
-        $this->em->expects($this->once())->method('find')
-            ->with('Photo', 893)->willReturn($photo);
+        $content->related_contents  = [
+            [
+                'type'              => 'featured_frontpage',
+                'target_id'         => 893,
+                'content_type_name' => 'photo',
+                'caption'           => 'Lorem ipsum dolor sit amet.',
+                'position'          => 0
+            ]
+        ];
 
         $this->assertFalse($this->helper->hasFeaturedMedia($content, 'baz'));
         $this->assertFalse($this->helper->hasFeaturedMedia($content, 'inner'));
+
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
+            ->with($content, 'featured_frontpage')
+            ->willReturn(
+                [
+                    'item'     => $photo,
+                    'caption'  => 'Lorem ipsum dolor sit amet.',
+                    'position' => 0
+                ]
+            );
+
         $this->assertTrue($this->helper->hasFeaturedMedia($content, 'frontpage'));
     }
 
@@ -366,13 +400,13 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
     public function testHasFeaturedMediaCaption()
     {
         $this->content->content_type_name = 'article';
-        $this->content->img1_footer       = 'Rhoncus pretium';
-
-        $this->subscriptionHelper->expects($this->at(0))->method('isHidden')
-            ->willReturn(true);
+        $this->content->related_contents  = [ [
+            'type'    => 'featured_inner',
+            'caption' => 'Rhoncus pretium'
+        ] ];
 
         $this->assertFalse($this->helper->hasFeaturedMediaCaption($this->content, 'baz'));
         $this->assertFalse($this->helper->hasFeaturedMediaCaption($this->content, 'frontpage'));
-        $this->assertTrue($this->helper->hasFeaturedMediaCaption($this->content, 'frontpage'));
+        $this->assertTrue($this->helper->hasFeaturedMediaCaption($this->content, 'inner'));
     }
 }

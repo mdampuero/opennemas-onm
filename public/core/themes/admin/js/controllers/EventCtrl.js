@@ -15,9 +15,29 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', 'related', 'routing',
-      function($controller, $scope, related, routing) {
+      '$controller', '$scope', 'related', 'routing', 'translator',
+      function($controller, $scope, related, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'event-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
 
         /**
          * @memberOf EventCtrl
@@ -35,7 +55,7 @@
           description: '',
           favorite: 0,
           frontpage: 0,
-          created: new Date(),
+          created: null,
           starttime: null,
           endtime: null,
           thumbnail: null,
@@ -57,7 +77,7 @@
          * @memberOf EventCtrl
          *
          * @description
-         *  The related contents service
+         *  The related service.
          *
          * @type {Object}
          */
@@ -93,8 +113,14 @@
               $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'event-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.checkDraft();
           related.init($scope);
           related.watch();
+          translator.init($scope);
         };
 
         /**
