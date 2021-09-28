@@ -42,7 +42,7 @@
          * @type {Object}
          */
         $scope.config = {};
-        $scope.extra = {};
+        $scope.extra  = {};
         $scope.saving = false;
 
         /**
