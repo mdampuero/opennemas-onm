@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 13:35+0000\n"
-"PO-Revision-Date: 2021-09-23 15:37+0200\n"
+"POT-Creation-Date: 2021-09-28 09:11+0000\n"
+"PO-Revision-Date: 2021-09-28 11:21+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -837,7 +837,7 @@ msgid "Something is wrong!"
 msgstr "¡Algo está mal!"
 
 msgid "You don't have permission to perform this action"
-msgstr "No tienes permiso para realizar esta acción."
+msgstr "No tienes permiso para realizar esta acción"
 
 msgid "Something unexpected happened!"
 msgstr "¡Ha pasado algo inesperado!"
@@ -2739,7 +2739,7 @@ msgid "Floating ads (for drop them into columns)"
 msgstr "Publicidades flotantes (para arrastrar en columnas)"
 
 msgid "Advertisement without name"
-msgstr "Publicidad sin nomber"
+msgstr "Publicidad sin nombre"
 
 msgid "Edit '%1'"
 msgstr "Editar '%1'"
@@ -3354,7 +3354,7 @@ msgid "Draft saved at "
 msgstr "Borrador guardado a las "
 
 msgid "The item doesn't exists or you don't have permission to see it."
-msgstr "El contenido no existe o no tienes permiso para verlo."
+msgstr "El elemento no existe o no tienes permiso para verlo."
 
 msgid "Click here to return to the list"
 msgstr "Pincha aquí para volver al listado"
@@ -3400,8 +3400,7 @@ msgstr "Recargar"
 
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr ""
-"No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
-"permisos para ver la lista."
+"No se puede encontrar ningún elemento o no tiene permiso para ver la lista."
 
 msgid "No available contents"
 msgstr "No hay contenidos disponibles"
@@ -3465,7 +3464,7 @@ msgid "Yes, remove them all"
 msgstr "Si, eliminarlos todos"
 
 msgid "Do you want to translate to \"%1\"?"
-msgstr "¿Quieres traducir automáticamente a \"%1\"?"
+msgstr "¿Quieres traducir a \"%1\"?"
 
 msgid "Translating content into \"%1\""
 msgstr "Traduciendo contenido al «%1»"
@@ -3924,16 +3923,16 @@ msgstr ""
 "las suscripciones seleccionadas"
 
 msgid "Featured in frontpage"
-msgstr "Destacado de portada"
+msgstr "Destacado en portadas"
 
 msgid "Featured in inner"
-msgstr "Destacado de interior"
+msgstr "Destacado en interior"
 
 msgid "Related in frontpage"
-msgstr "Relacionados en portada"
+msgstr "Relacionados en portada Sección."
 
 msgid "Related in inner"
-msgstr "Relacionados en interior"
+msgstr "Relacionado en noticia interior"
 
 msgid "Inner title"
 msgstr "Título interior"
@@ -3945,7 +3944,7 @@ msgid "Newsletter Signature"
 msgstr "Firma del boletín"
 
 msgid "Alternative signature for newsletter"
-msgstr "Firma alternativa para boletín"
+msgstr "Firma alternativa para boletín."
 
 msgid "Customize"
 msgstr "Personalizar"
@@ -4045,6 +4044,9 @@ msgstr "Nueva etiqueta"
 
 msgid "The form has some missing or invalid fields, please review it."
 msgstr "Revise el formulario ya que tiene campos sin completar o inválidos."
+
+msgid "You must have at least 1 languages ​​set for the frontend"
+msgstr "Debe tener almenos 1 idiomas configurado para la interfaz"
 
 msgid "Instance information"
 msgstr "Información de la instancia"
@@ -4663,7 +4665,7 @@ msgid "Use HTML code"
 msgstr "Usar código HTML"
 
 msgid "Use file video URLs"
-msgstr "Usar URLs a ficheros de vídeo"
+msgstr "Usar URLs a ficheros de vídeo (HTML5/FLV externo)"
 
 msgid "Video URL"
 msgstr "URL del vídeo"
@@ -7138,27 +7140,6 @@ msgstr "¿Quieres modificar esta configuración?"
 msgid "This action can affect the performance of the platform"
 msgstr "Esta acción puede afectar al rendimiento de la plataforma"
 
-#~ msgid "Video type and file URLs"
-#~ msgstr "Tipo de vídeo y URLs a los archivos"
-
-#~ msgid "HTML5 video"
-#~ msgstr "Vídeo HTML5"
-
-#~ msgid "Flash video"
-#~ msgstr "Vídeo Flash"
-
-#~ msgid "FLV format"
-#~ msgstr "Formato FLV"
-
-#~ msgid "http://www.example.com/path/to/file.flv"
-#~ msgstr "http://www.ejemplo.es/ruta/al/archivo.flv"
-
-#~ msgid "Allowed video sources:"
-#~ msgstr "Orígenes de vídeo permitidos:"
-
-#~ msgid "Pick the method to add the video"
-#~ msgstr "El tipo de método para añadir el vídeo"
-
 #~ msgid "Unable to create the new article."
 #~ msgstr "No se pudo crear el nuevo artículo."
 
@@ -7178,21 +7159,8 @@ msgstr "Esta acción puede afectar al rendimiento de la plataforma"
 #~ msgid "Article successfully updated."
 #~ msgstr "Artículo actualizado correctamente."
 
-#, fuzzy
-#~ msgid "No available selectedTranslators for \"%1&rarr;%2\""
-#~ msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
-
 #~ msgid "Unable to find the article with the id \"%d\""
 #~ msgstr "No se pudo encontrar un artículo con el identificador «%d»"
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizado"
-
-#~ msgid "This sripts will be included in the global.css file."
-#~ msgstr "Estos scripts se incluirán en el fichero global.css"
 
 #~ msgid "Translate selected"
 #~ msgstr "Traducir seleccionados"
@@ -7270,14 +7238,48 @@ msgstr "Esta acción puede afectar al rendimiento de la plataforma"
 #~ msgid "Gallery for Home"
 #~ msgstr "Galería para portada principal"
 
+#~ msgid "Allowed video sources:"
+#~ msgstr "Orígenes de vídeo permitidos:"
+
+#~ msgid "Video type and file URLs"
+#~ msgstr "Tipo de vídeo y URLs a los archivos"
+
+#~ msgid "HTML5 video"
+#~ msgstr "Vídeo HTML5"
+
+#~ msgid "Flash video"
+#~ msgstr "Vídeo Flash"
+
+#~ msgid "FLV format"
+#~ msgstr "Formato FLV"
+
+#~ msgid "http://www.example.com/path/to/file.flv"
+#~ msgstr "http://www.ejemplo.es/ruta/al/archivo.flv"
+
 #~ msgid "Frontpage image"
 #~ msgstr "Imagen de portada"
 
-#~ msgid "There is no opinions yet."
-#~ msgstr "No hay ninguna opinión todavía."
+#~ msgid "Pick the method to add the video"
+#~ msgstr "El tipo de método para añadir el vídeo"
 
 #~ msgid "Inner image"
 #~ msgstr "Imagen de interior"
+
+#, fuzzy
+#~ msgid "Elements perpage"
+#~ msgstr "Elementos por página"
+
+#~ msgid "Style"
+#~ msgstr "Estilo"
+
+#~ msgid "Custom CSS"
+#~ msgstr "CSS personalizado"
+
+#~ msgid "This sripts will be included in the global.css file."
+#~ msgstr "Estos scripts se incluirán en el fichero global.css"
+
+#~ msgid "There is no opinions yet."
+#~ msgstr "No hay ninguna opinión todavía."
 
 #~ msgid "Piwik Statistics"
 #~ msgstr "Estadísticas de Piwik"
