@@ -1,5 +1,6 @@
 parameters:
     core.helper.comment.default_params:
+        comment_system: 'onm'
         disable_comments: false
         with_comments: true
         number_elements: 10

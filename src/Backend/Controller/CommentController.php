@@ -49,7 +49,10 @@ class CommentController extends BackendController
 
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
 
-        $config = $ds->get('comment_settings', []);
+        $config         = $ds->get('comment_settings', []);
+        $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
+
+        $config = array_merge($defaultConfigs, $config);
 
         if ($config['comment_system'] == 'facebook') {
             $template = '/facebook/list.tpl';
