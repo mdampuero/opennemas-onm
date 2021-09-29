@@ -176,6 +176,15 @@ class LocaleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getRequestLocaleShort and setRequestLocale methods.
+     */
+    public function testGetRequestLocaleshort()
+    {
+        $this->locale->setRequestLocale('es_ES');
+        $this->assertEquals('es', $this->locale->getRequestLocaleShort());
+    }
+
+    /**
      * Tests getRequestSlug.
      */
     public function testGetRequestSlug()

@@ -21,6 +21,15 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItem' ])
             ->getMock();
 
+        $this->cache = $this->getMockBuilder('Cache' . uniqid())
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get', 'set' ])
+            ->getMock();
+
+        $this->container = $this->getMockBuilder('ServiceContainer' . uniqid())
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'getValue' ])
@@ -36,10 +45,21 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->helper = new AuthorHelper($this->as, $this->router, $this->template, $this->ugh);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->helper = new AuthorHelper($this->container, $this->as, $this->router, $this->template, $this->ugh);
     }
 
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'cache.connection.instance':
+                return $this->cache;
+        }
 
+        return null;
+    }
     /**
      * Tests getAuthor when a author is already provided as parameter.
      */

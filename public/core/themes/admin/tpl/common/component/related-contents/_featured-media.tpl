@@ -29,7 +29,7 @@
     </div>
     <div class="thumbnail-placeholder">
       <div class="img-thumbnail" ng-show="!{$iName}">
-        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}">
+        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}" photo-editor-enabled="true">
           <i class="fa fa-picture-o fa-2x"></i>
           <h5>{t}Select an element{/t}</h5>
         </div>
@@ -40,7 +40,7 @@
             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('{$iName}')">
               <i class="fa fa-trash-o fa-2x"></i>
             </div>
-            <div class="thumbnail-action" media-picker media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}">
+            <div class="thumbnail-action" media-picker media-picker-ignore="[% related.getIds('{$iName}') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="target.{$iName}" media-picker-types="{$types}" photo-editor-enabled="true">
               <i class="fa fa-camera fa-2x"></i>
             </div>
           </div>

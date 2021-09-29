@@ -112,7 +112,7 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
             ->with('glorp');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('smarty.deleteItem', [ 'id' => 'glorp' ]);
+            ->with('smarty.deleteItem', [ 'action' => 'Api\Service\V1\SmartyService::deleteItem', 'id' => 'glorp' ]);
 
         $this->service->deleteItem('glorp');
     }
@@ -125,7 +125,7 @@ class SmartyServiceTest extends \PHPUnit\Framework\TestCase
         $this->cache->expects($this->once())->method('deleteCompiles');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
-            ->with('smarty.deleteItem', [ 'id' => 'compile' ]);
+            ->with('smarty.deleteItem', [ 'action' => 'Api\Service\V1\SmartyService::deleteItem', 'id' => 'compile' ]);
 
         $this->service->deleteItem('compile');
     }

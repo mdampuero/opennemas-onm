@@ -93,7 +93,9 @@ class AdvertisementRenderer extends Renderer
             function ($advertisement) use ($position, $device) {
                 return is_array($advertisement->positions)
                     && in_array($position, $advertisement->positions)
-                    && $advertisement->params['devices'][$device] === 1;
+                    && ($advertisement->params['devices'][$device] === 1
+                        || empty($device)
+                    );
             }
         );
 

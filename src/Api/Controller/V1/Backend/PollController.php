@@ -76,34 +76,9 @@ class PollController extends ContentController
 
         $response = $us->getList($oql);
 
-        $items = $response['items'];
-        if ($format == '.csv') {
-            $rows = [
-                "pk_content",
-                "pretitle",
-                "title",
-                "description",
-                "created",
-                "changed",
-                "starttime",
-                "content_status",
-                "body"
-            ];
-
-            $items = array_map(function ($a) use ($rows) {
-                $item = [];
-
-                foreach ($rows as $key) {
-                    $item[$key] = $a->{$key};
-                }
-
-                $total_votes = $this->get('core.helper.poll')->getTotalVotes($a);
-
-                $item['total_votes'] = $total_votes[$item['pk_content']];
-
-                return $item;
-            }, $response['items']);
-        }
+        $items = $format == '.csv'
+            ? $this->getCsvSerialize($response['items'])
+            : $response['items'];
 
         return [
             'items'      => $us->responsify($items),
@@ -151,5 +126,46 @@ class PollController extends ContentController
         }
 
         return null;
+    }
+
+    /**
+     * Returns a array serialized for csv export
+     *
+     * @param array $items The list of items.
+     *
+     * @return array $items serializd
+     */
+    private function getCsvSerialize($items)
+    {
+        $rows = [
+            'pk_content', 'pretitle', 'title', 'description', 'created',
+            'changed', 'starttime', 'content_status', 'body'
+        ];
+
+        $output = array_map(function ($a) use ($rows) {
+            $item = [];
+
+            foreach ($rows as $key) {
+                $item[$key] = $a->{$key};
+            }
+
+            $total_votes = $this->get('core.helper.poll')->getTotalVotes($a);
+
+            $item['total_votes'] = $total_votes[$item['pk_content']];
+
+            $i = 0;
+
+            foreach ($a->items as $element) {
+                foreach ($element as $key => $value) {
+                    $item[$key . $i] = $value;
+                }
+
+                $i++;
+            }
+
+            return $item;
+        }, $items);
+
+        return $output;
     }
 }

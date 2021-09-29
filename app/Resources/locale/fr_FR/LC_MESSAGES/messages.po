@@ -4425,6 +4425,24 @@ msgstr "Ajouter le contenu"
 msgid "Related in inner"
 msgstr "Contenu associée dans la page intérieure"
 
+msgid "Related in home"
+msgstr "Contenu associée dans l'accueil"
+
+msgid "Gallery for frontpage"
+msgstr "Galerie pour le couverture"
+
+msgid "Only one album"
+msgstr "Une seule galerie"
+
+msgid "Add gallery"
+msgstr "Ajouter la galerie"
+
+msgid "Gallery for inner"
+msgstr "Galerie pour l'intérieur"
+
+msgid "Gallery for Home"
+msgstr "Gallerie pour l'accueil"
+
 msgid "Suggest this element to home"
 msgstr "Proposer cet élément pour la accueil"
 

@@ -25,6 +25,11 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
     $scope.dtm = null;
 
     /**
+     * @inheritdoc
+     */
+    $scope.incomplete = true;
+
+    /**
      * @memberOf PhotoCtrl
      *
      * @description

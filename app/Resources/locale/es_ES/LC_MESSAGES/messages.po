@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 10:27+0000\n"
-"PO-Revision-Date: 2021-09-15 12:28+0200\n"
+"POT-Creation-Date: 2021-09-29 10:12+0000\n"
+"PO-Revision-Date: 2021-09-29 12:13+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -4568,6 +4568,9 @@ msgstr "Publicar"
 msgid "Unpublish"
 msgstr "Despublicar"
 
+msgid "Search by tag"
+msgstr "Buscar por etiqueta"
+
 msgid "Customize in frontpage"
 msgstr "Personalizar en portada"
 
@@ -4643,6 +4646,12 @@ msgstr "Título interior"
 
 msgid "Signature"
 msgstr "Firma"
+
+msgid "Newsletter Signature"
+msgstr "Firma del boletín"
+
+msgid "Alternative signature for newsletter"
+msgstr "Firma alternativa para boletín"
 
 msgid "Sidebars"
 msgstr "Barras laterales"
@@ -5818,6 +5827,9 @@ msgstr "Nueva etiqueta"
 
 msgid "The form has some missing or invalid fields, please review it."
 msgstr "Revise el formulario ya que tiene campos sin completar o inválidos."
+
+msgid "You must have at least 1 languages ​​set for the frontend"
+msgstr "Debes tener al menos 1 idioma configurado para la interfaz"
 
 msgid "Instance information"
 msgstr "Información de la instancia"

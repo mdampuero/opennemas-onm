@@ -57,8 +57,9 @@ class NewsstandService extends ContentService
             $id = $this->em->getMetadata($item)->getId($item);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
 
             return $item;
@@ -105,8 +106,9 @@ class NewsstandService extends ContentService
             $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());

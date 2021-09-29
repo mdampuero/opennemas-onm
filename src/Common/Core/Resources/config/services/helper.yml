@@ -26,7 +26,7 @@ services:
 
     core.helper.author:
         class:      Common\Core\Component\Helper\AuthorHelper
-        arguments:  [ '@api.service.author', '@router', '@core.template.frontend', '@core.helper.url_generator' ]
+        arguments:  [ '@service_container', '@api.service.author', '@router', '@core.template.frontend', '@core.helper.url_generator' ]
         public:     true
 
     core.helper.category:

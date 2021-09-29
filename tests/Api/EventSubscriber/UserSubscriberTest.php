@@ -67,9 +67,7 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $user = new User([ 'id' => 3750 ]);
 
-        $this->event->expects($this->at(0))->method('hasArgument')
-            ->with('item')->willReturn(true);
-        $this->event->expects($this->at(1))->method('getArgument')
+        $this->event->expects($this->any())->method('getArgument')
             ->with('item')->willReturn($user);
 
         $this->helper->expects($this->once())->method('deleteItem')
@@ -89,10 +87,8 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
             new User([ 'id' => 1086 ])
         ];
 
-        $this->event->expects($this->at(0))->method('hasArgument')
-            ->with('item')->willReturn(false);
-        $this->event->expects($this->at(1))->method('getArgument')
-            ->with('items')->willReturn($users);
+        $this->event->expects($this->any())->method('getArgument')
+            ->with('item')->willReturn($users);
 
         $this->helper->expects($this->at(0))->method('deleteItem')
             ->with($users[0]);

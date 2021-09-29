@@ -46,28 +46,6 @@ class AuthorService extends UserService
     /**
      * {@inheritdoc}
      */
-    public function deleteItem($id)
-    {
-        if ($id == $this->container->get('core.user')->id) {
-            throw new DeleteItemException('You cannot delete this item', 403);
-        }
-
-        try {
-            $item = $this->getItem($id);
-
-            $item->user_groups = array_filter($item->user_groups, function ($a) {
-                return $a['user_group_id'] != 3;
-            });
-
-            $this->em->persist($item, $item->getOrigin());
-        } catch (\Exception $e) {
-            throw new DeleteItemException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getOqlForList($oql)
     {
          // Force OQL to include type

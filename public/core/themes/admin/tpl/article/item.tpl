@@ -111,6 +111,11 @@
         <div class="col-sm-6">
           {include file="ui/component/input/text.tpl" iCounter=true iField="agency" iTitle="{t}Signature{/t}"}
         </div>
+        {is_module_activated name="NEWSLETTER_MANAGER"}
+          <div class="col-sm-6">
+            {include file="ui/component/input/text.tpl" iCounter=true iField="newsletter_agency" iTitle="{t}Newsletter Signature{/t}" iHelp="{t}Alternative signature for newsletter{/t}"}
+          </div>
+        {/is_module_activated}
       </div>
       {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}"}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
