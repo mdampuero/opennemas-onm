@@ -129,6 +129,7 @@
             $scope.configure($scope.data.extra);
             $scope.buildScope();
             $scope.disableFlags('http');
+            $scope.incomplete = false;
           }, function() {
             $scope.item = null;
             $scope.disableFlags('http');

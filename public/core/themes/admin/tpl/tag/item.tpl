@@ -48,11 +48,8 @@
         </div>
       </div>
       <div class="form-group no-margin">
-        <label class="form-label" for="description">
-          {t}Description{/t}
-        </label>
         <div class="controls">
-          <textarea onm-editor onm-editor-preset="simple" ng-model="item.description" name="description" cols="30" rows="10"></textarea>
+          {include cols=30 file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=10 imagepicker=true}
         </div>
       </div>
     </div>

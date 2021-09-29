@@ -60,8 +60,9 @@ class RedisService implements Service
             $this->cache->remove($id);
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());

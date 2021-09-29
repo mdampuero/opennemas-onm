@@ -31,7 +31,6 @@ class CoreListener
         'asset',
         'auth',
         'build\/assets',
-        'content\/share-by-email',
         'manager',
         'oauth',
         'ws',

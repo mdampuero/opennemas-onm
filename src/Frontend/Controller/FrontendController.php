@@ -156,6 +156,14 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
+        $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
+
+        if ($request->getPathInfo() !== $expected
+            && empty($this->get('request_stack')->getParentRequest())
+        ) {
+            return new RedirectResponse($expected, 301);
+        }
+
         $params = $this->getParameters($request, $item);
 
         if ($this->hasExternalLink($params)) {
@@ -308,7 +316,9 @@ class FrontendController extends Controller
     {
         if (array_key_exists('item', $params)) {
             $expected = $this->get('core.helper.url_generator')
-                ->generate($params['item']);
+                ->generate($params['item'], array_filter($params, function ($key) {
+                    return $key === '_format';
+                }, ARRAY_FILTER_USE_KEY));
 
             return $this->get('core.helper.l10n_route')->localizeUrl($expected);
         }

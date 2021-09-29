@@ -409,7 +409,10 @@ class EntityManager extends BaseManager
             } else {
                 $contents[$cacheKey]->tags = [];
             }
-            $contentsForCache[$cacheKey] = $contents[$cacheKey];
+
+            if (!in_array(\underscore($contents[$cacheKey]->content_type_name), self::ORM_CONTENT_TYPES)) {
+                $contentsForCache[$cacheKey] = $contents[$cacheKey];
+            }
         }
 
         return $contentsForCache;

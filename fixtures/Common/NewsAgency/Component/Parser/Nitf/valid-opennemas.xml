@@ -4,6 +4,8 @@
     <docdata management-status="usable">
       <doc.rights agent="Opennemas"/>
       <doc-id id-string="21155709" />
+      <doc-parent id-string="26082021" />
+      <doc-uid id-string="20210907" />
       <key-list>
         <keyword key="foo,bar,baz,foobar"/>
       </key-list>

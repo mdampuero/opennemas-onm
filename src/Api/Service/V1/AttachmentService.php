@@ -43,8 +43,9 @@ class AttachmentService extends ContentOldService
             }
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
 
             return $item;
@@ -91,8 +92,9 @@ class AttachmentService extends ContentOldService
             }
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());

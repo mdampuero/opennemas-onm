@@ -77,8 +77,9 @@ class NewsAgencyServerService implements Service
             $this->dataset->set('news_agency_config', $this->config);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => count($this->config),
-                'item' => $data
+                'action' => __METHOD__,
+                'id'     => count($this->config),
+                'item'   => $data
             ]);
 
             return array_merge([ 'id' => count($this->config) ], $data);
@@ -101,8 +102,9 @@ class NewsAgencyServerService implements Service
             $this->dataset->set('news_agency_config', $this->config);
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
@@ -136,8 +138,9 @@ class NewsAgencyServerService implements Service
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'ids'   => $deleted,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $deleted,
+            'item'   => $items
         ]);
 
         return count($deleted);
@@ -281,8 +284,9 @@ class NewsAgencyServerService implements Service
             $this->dataset->set('news_agency_config', $this->config);
 
             $this->dispatcher->dispatch($this->getEventName('patchItem'), [
-                'id'   => $id,
-                'item' => $this->config[$id - 1]
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $this->config[$id - 1]
             ]);
         } catch (\Exception $e) {
             throw new PatchItemException($e->getMessage(), $e->getCode());
@@ -320,8 +324,9 @@ class NewsAgencyServerService implements Service
         }
 
         $this->dispatcher->dispatch($this->getEventName('patchList'), [
-            'ids'   => $updated,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $updated,
+            'item'   => $items
         ]);
 
         return count($updated);
@@ -374,8 +379,9 @@ class NewsAgencyServerService implements Service
             $this->dataset->set('news_agency_config', $this->config);
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'id'   => $id,
-                'item' => $data
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $data
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage(), $e->getCode());

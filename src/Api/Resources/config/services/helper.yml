@@ -21,7 +21,7 @@ services:
 
     api.helper.cache.user:
         class:     Api\Helper\Cache\UserCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue' ]
+        arguments: [ '@core.instance', '@task.service.queue', '@service_container' ]
 
     api.helper.cache.user_group:
         class:     Api\Helper\Cache\UserGroupCacheHelper

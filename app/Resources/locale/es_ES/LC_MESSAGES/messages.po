@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 10:02+0000\n"
-"PO-Revision-Date: 2021-09-02 12:04+0200\n"
+"POT-Creation-Date: 2021-09-29 07:53+0000\n"
+"PO-Revision-Date: 2021-09-29 10:10+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -968,15 +968,6 @@ msgstr "Te has suscrito al boletín de noticias."
 
 msgid "You have been unsubscribed from the newsletter."
 msgstr "Hemos eliminado tu suscripción del boletín de noticias."
-
-msgid "You can't vote this poll, it is closed."
-msgstr "La encuesta está cerrada, no puedes votar."
-
-msgid "You have voted this poll previously."
-msgstr "Ya has votado esta encuesta anteriormente."
-
-msgid "Thanks for participating."
-msgstr "Gracias por participar."
 
 msgid "Homepage News"
 msgstr "Noticias de la portada principal"
@@ -4643,6 +4634,9 @@ msgstr "Publicar"
 msgid "Unpublish"
 msgstr "Despublicar"
 
+msgid "Search by tag"
+msgstr "Buscar por etiqueta"
+
 msgid "Customize in frontpage"
 msgstr "Personalizar en portada"
 
@@ -4718,6 +4712,12 @@ msgstr "Título interior"
 
 msgid "Signature"
 msgstr "Firma"
+
+msgid "Newsletter Signature"
+msgstr "Firma de boletín"
+
+msgid "Alternative signature for newsletter"
+msgstr "Firma alternative para boletín"
 
 msgid "Sidebars"
 msgstr "Barras laterales"
@@ -5907,6 +5907,9 @@ msgstr "Nueva etiqueta"
 
 msgid "The form has some missing or invalid fields, please review it."
 msgstr "Revise el formulario ya que tiene campos sin completar o inválidos."
+
+msgid "You must have at least 1 languages ​​set for the frontend"
+msgstr "Debes tener al menos 1 idioma configurado para la interfaz"
 
 msgid "Instance information"
 msgstr "Información de la instancia"
@@ -7131,6 +7134,15 @@ msgstr "Fuerte"
 
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de emails enviados al mes"
+
+#~ msgid "You can't vote this poll, it is closed."
+#~ msgstr "La encuesta está cerrada, no puedes votar."
+
+#~ msgid "You have voted this poll previously."
+#~ msgstr "Ya has votado esta encuesta anteriormente."
+
+#~ msgid "Thanks for participating."
+#~ msgstr "Gracias por participar."
 
 #~ msgid "Video type and file URLs"
 #~ msgstr "Tipo de vídeo y URLs a los archivos"

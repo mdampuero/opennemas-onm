@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 10:02+0000\n"
-"PO-Revision-Date: 2021-09-02 12:05+0200\n"
+"POT-Creation-Date: 2021-09-29 07:53+0000\n"
+"PO-Revision-Date: 2021-09-29 10:13+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -962,15 +962,6 @@ msgstr "Subscribícheste ao boletín de novas."
 
 msgid "You have been unsubscribed from the newsletter."
 msgstr "Desubscribícheste do boletín de novas."
-
-msgid "You can't vote this poll, it is closed."
-msgstr "A enquisa está pechada, non podes votar."
-
-msgid "You have voted this poll previously."
-msgstr "Xa votaches nesta enquisa anteriormente."
-
-msgid "Thanks for participating."
-msgstr "Grazas por participar."
 
 msgid "Homepage News"
 msgstr "Novas de portada"
@@ -4622,6 +4613,9 @@ msgstr "Publicar"
 msgid "Unpublish"
 msgstr "Despublicar"
 
+msgid "Search by tag"
+msgstr "Buscar por etiqueta"
+
 msgid "Customize in frontpage"
 msgstr "Personalizar en portada"
 
@@ -4697,6 +4691,12 @@ msgstr "Titulo interior:"
 
 msgid "Signature"
 msgstr "Sinatura"
+
+msgid "Newsletter Signature"
+msgstr "Sinatura do boletín"
+
+msgid "Alternative signature for newsletter"
+msgstr "Sinatura alternativa para o boletín"
 
 msgid "Sidebars"
 msgstr "Barras laterais"
@@ -5873,6 +5873,9 @@ msgstr "Nova etiqueta"
 
 msgid "The form has some missing or invalid fields, please review it."
 msgstr "Revise o formulario xa que ten campos sen completar ou inválidos."
+
+msgid "You must have at least 1 languages ​​set for the frontend"
+msgstr "Debe ter polo menos 1 idioma definido para a interface"
 
 msgid "Instance information"
 msgstr "Información da instancia"
@@ -7083,6 +7086,15 @@ msgstr "Forte"
 
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de correo-e enviados por mes"
+
+#~ msgid "You can't vote this poll, it is closed."
+#~ msgstr "A enquisa está pechada, non podes votar."
+
+#~ msgid "You have voted this poll previously."
+#~ msgstr "Xa votaches nesta enquisa anteriormente."
+
+#~ msgid "Thanks for participating."
+#~ msgstr "Grazas por participar."
 
 #~ msgid "Video type and file URLs"
 #~ msgstr "Tipo de vídeo e URLs aos ficheiros"
