@@ -75,6 +75,7 @@ class CommentController extends FrontendController
             'elems_per_page' => $epp,
             'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
+            'more'           => $comments['total'] > ($epp * $offset),
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
