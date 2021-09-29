@@ -220,22 +220,12 @@ class ContentManager
      */
     public static function dropSuggestedFlagFromContentIdsArray($contentIds, $conn = false)
     {
-        $conn = getService('orm.manager')->getConnection('instance');
-
-        if (is_array($contentIds) && (count($contentIds) > 0)) {
-            $contentIdsSQL = implode(', ', $contentIds);
-            $values        = [ date("Y-m-d H:i:s") ];
-
-            $sql = 'UPDATE contents '
-                 . 'SET `frontpage`=0, `changed`=? '
-                 . 'WHERE `pk_content` IN (' . $contentIdsSQL . ')';
-            if ($conn->executeUpdate($sql, $values) === false) {
+        if (is_array($contentIds) && !empty($contentIds)) {
+            try {
+                getService('api.service.content')->patchList($contentIds, [ 'frontpage' => 0 ]);
+            } catch (\Exception $e) {
                 return false;
             }
-
-            getService('application.log')->info(
-                'Drop suggested flag action executed at ' . $contentIdsSQL . ' ids'
-            );
 
             return true;
         }
