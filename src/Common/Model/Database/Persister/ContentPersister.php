@@ -91,6 +91,10 @@ class ContentPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
+        if (empty($entity->starttime) && !empty($entity->content_status)) {
+            $entity->starttime = new \DateTime();
+        }
+
         $changes    = $entity->getChanges();
         $categories = $entity->categories;
         $tags       = $entity->tags;
