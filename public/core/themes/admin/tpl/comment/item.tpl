@@ -68,7 +68,7 @@
         <label class="form-label" for="title"><i class="fa fa-archive"></i>  {t}Commented on{/t}</label>
         <div class="controls m-l-20">
           <strong>{include file="common/component/icon/content_type_icon.tpl" iField="extra.contents[item.content_id]" iFlagName=true}</strong>:
-          <a href="/content/[% item.content_id %]">[% extra.contents[item.content_id].title %]</a>
+          <a href="/content/[% item.content_id %]">[% localizeText(extra.contents[item.content_id].title)%]</a>
         </div>
       </div>
       <div class="form-group">
