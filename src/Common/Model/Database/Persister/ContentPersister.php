@@ -38,7 +38,7 @@ class ContentPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
-        if (empty($entity->starttime)) {
+        if (empty($entity->starttime) && !empty($entity->content_status)) {
             $entity->starttime = new \DateTime();
         }
 
