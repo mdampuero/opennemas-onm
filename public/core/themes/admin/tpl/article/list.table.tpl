@@ -28,14 +28,14 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')">
     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_frontpage" ng-model="item" only-image="true" transform="zoomcrop,220,220">
       <div class="badge badge-default text-bold text-uppercase">
-        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_frontpage')" iFlagName=true iFlagIcon=true}
+        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_frontpage').path" iFlagName=true iFlagIcon=true}
       </div>
     </dynamic-image>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')">
     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_inner" ng-model="item" only-image="true" transform="zoomcrop,220,220">
       <div class="badge badge-default text-bold text-uppercase">
-        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_inner')" iFlagName=true iFlagIcon=true}
+        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_inner').path" iFlagName=true iFlagIcon=true}
       </div>
     </dynamic-image>
   </td>
