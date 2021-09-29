@@ -94,7 +94,7 @@
 
         /**
          * @function localizeText
-         * @memberOf CommentListCtrl
+         * @memberOf CommentCtrl
          *
          * @param {any} String or Object to localize.
          *
