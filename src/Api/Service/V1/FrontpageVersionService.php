@@ -115,8 +115,16 @@ class FrontpageVersionService extends OrmService
         $filteredContents = [];
 
         foreach ($contents as $content) {
-            if ($content->content_status === 1) {
-                $filteredContents[$content->id] = $content;
+            try {
+                if ($content->content_status === 1) {
+                    $filteredContents[$content->id] = $content;
+                }
+            } catch (\Exception $e) {
+                getService('error.log')->error(
+                    $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
+                );
+
+                continue;
             }
         }
 

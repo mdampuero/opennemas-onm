@@ -205,12 +205,20 @@ class LayoutManager
 
         if (array_key_exists($name, $this->positions)) {
             foreach ($this->positions[$name] as $position) {
-                if (array_key_exists($position->pk_fk_content, $this->contents)) {
-                    $output .= $this->renderContent(
-                        $this->contents[$position->pk_fk_content]
+                try {
+                    if (array_key_exists($position->pk_fk_content, $this->contents)) {
+                        $output .= $this->renderContent(
+                            $this->contents[$position->pk_fk_content]
+                        );
+                    }
+                } catch (\Exception $e) {
+                    getService('error.log')->error(
+                        $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
                     );
+
+                    continue;
                 }
-            }
+                    }
         }
 
         return $output;
