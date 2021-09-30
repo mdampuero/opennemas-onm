@@ -218,7 +218,7 @@ class LayoutManager
 
                     continue;
                 }
-                    }
+            }
         }
 
         return $output;
