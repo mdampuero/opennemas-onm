@@ -55,13 +55,9 @@ class ConvertNewsstandCommand extends Command
                 $ps = $this->getContainer()->get('api.service.photo');
                 $ns = $this->getContainer()->get('api.service.newsstand');
 
-                $oql = 'select * from contents where content_type_name="kiosko" order by starttime desc limit 500';
+                $newsstands = [];
 
-                $newsstands = array_filter($ns->getListBySql($oql)['items'], function ($item) {
-                    return substr($item->thumbnail, -4) === '.jpg';
-                });
-
-                for ($i = 1; $i < 50; $i++) {
+                for ($i = 0; $i < 50; $i++) {
                     $oql = sprintf(
                         'select * from contents where content_type_name="kiosko"' .
                         ' order by starttime desc limit 500 offset %d',
