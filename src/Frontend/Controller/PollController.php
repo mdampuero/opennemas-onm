@@ -104,18 +104,21 @@ class PollController extends FrontendController
             ->isValid($response, $request->getClientIp());
 
         if (!$isValid) {
-            return $this->getResponse('error', "The reCAPTCHA wasn't entered correctly."
-                . " Go back and try it again.", $poll);
+            return $this->getResponse(
+                'error',
+                _("The reCAPTCHA wasn't entered correctly. Go back and try it again."),
+                $poll
+            );
         }
 
         // Prevent vote when no answer
         if (!$request->request->has('answer')) {
-            return $this->getResponse('error', 'Error: no vote value!', $poll);
+            return $this->getResponse('error', _('Error: no vote value!'), $poll);
         }
 
         // Prevent vote when poll is closed
         if ($this->get('core.helper.poll')->isClosed($poll)) {
-            return $this->getResponse('error', 'You can\'t vote this poll, it is closed.', $poll);
+            return $this->getResponse('error', _('You can\'t vote this poll, it is closed.'), $poll);
         }
 
         $cookieName = 'poll-' . $poll->pk_content;
@@ -123,7 +126,7 @@ class PollController extends FrontendController
 
         // Prevent vote when already voted
         if (!empty($cookie)) {
-            return $this->getResponse('error', 'You have voted this poll previously.', $poll);
+            return $this->getResponse('error', _('You have voted this poll previously.'), $poll);
         }
 
         try {
@@ -139,9 +142,9 @@ class PollController extends FrontendController
 
             $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
-            return $this->getResponse('success', 'Thanks for participating.', $poll);
+            return $this->getResponse('success', _('Thanks for participating.'), $poll);
         } catch (\Exception $e) {
-            return $this->getResponse('error', 'Error while updating content', $poll);
+            return $this->getResponse('error', _('Error while updating content'), $poll);
         }
     }
 
@@ -246,7 +249,7 @@ class PollController extends FrontendController
     private function getResponse($type, $msg, $poll)
     {
         $this->get('session')->getFlashBag()
-            ->add($type, _($msg));
+            ->add($type, $msg);
 
         $response = new RedirectResponse(
             $this->get('core.helper.url_generator')->generate($poll)
