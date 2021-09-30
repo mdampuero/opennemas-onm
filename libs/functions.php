@@ -83,7 +83,8 @@ function url($urlName, $params = [], $absolute = false)
         $absolute = Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
     }
 
-    return $GLOBALS['kernel']->getContainer()->get('router')->generate($urlName, $params, $absolute);
+    global $kernel;
+    return $kernel->getContainer()->get('router')->generate($urlName, $params, $absolute);
 }
 
 /**
@@ -159,7 +160,8 @@ function getUserRealIP()
 
 function getService($serviceName)
 {
-    return $GLOBALS['kernel']->getContainer()->get($serviceName);
+    global $kernel;
+    return $kernel->getContainer()->get($serviceName);
 }
 
 /**
