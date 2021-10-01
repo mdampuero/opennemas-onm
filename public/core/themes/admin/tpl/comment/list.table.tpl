@@ -8,9 +8,9 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-author" checklist-model="app.columns.selected" checklist-value="'author'" type="checkbox">
-    <label for="checkbox-author">
-      {t}Author{/t}
+    <input id="checkbox-comment" checklist-model="app.columns.selected" checklist-value="'comment'" type="checkbox">
+    <label for="checkbox-comment">
+      {t}Comment{/t}
     </label>
   </div>
   {acl isAllowed="COMMENT_AVAILABLE"}
@@ -27,8 +27,8 @@
   <th class="hidden-xs text-center" ng-if="isColumnEnabled('avatar')" width="40">
     <i class="fa fa-picture-o"></i>
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('author')" width="400">
-    {t}Author{/t}
+  <th class="v-align-middle" ng-if="isColumnEnabled('comment')" width="400">
+    {t}Comment{/t}
   </th>
   {acl isAllowed="COMMENT_AVAILABLE"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
@@ -43,7 +43,7 @@
   <td class="hidden-xs text-center" ng-if="isColumnEnabled('avatar')">
     <gravatar class="gravatar img-thumbnail img-thumbnail-circle" ng-model="item.author_email" size="40" ></gravatar>
   </td>
-  <td class="v-align-middle" ng-if="isColumnEnabled('author')">
+  <td class="v-align-middle" ng-if="isColumnEnabled('comment')">
     <small class="gravatar">
       <div class="submitted-on">
         <strong>{t}Author:{/t}</strong> [% item.author %] <span ng-if="item.author_email">([% item.author_email %])</span>
