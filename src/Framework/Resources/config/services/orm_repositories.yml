@@ -1,9 +1,4 @@
 services:
-    comment_repository:
-        class: Repository\CommentManager
-        arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]
-        public: true
-
     content_views_repository:
         class: Repository\ContentViewsManager
         arguments: [ '@orm.connection.instance', '@cache', '@error.log', '%cache_prefix%' ]

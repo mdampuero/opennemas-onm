@@ -38,6 +38,7 @@ orm:
                 information:         array
                 in_home:             boolean
                 in_litter:           boolean
+                items:               array
                 params:              array
                 pk_content:          integer
                 position:            integer

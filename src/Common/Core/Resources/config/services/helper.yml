@@ -1,5 +1,6 @@
 parameters:
     core.helper.comment.default_params:
+        comment_system: 'onm'
         disable_comments: false
         with_comments: true
         number_elements: 10
@@ -138,6 +139,11 @@ services:
     core.helper.photo:
         class:     Common\Core\Component\Helper\PhotoHelper
         arguments: [ '@core.helper.content', '@core.instance', '@router', '@core.theme', '@core.helper.url_generator' ]
+        public:    true
+
+    core.helper.poll:
+        class:     Common\Core\Component\Helper\PollHelper
+        arguments: [ ]
         public:    true
 
     core.helper.related:

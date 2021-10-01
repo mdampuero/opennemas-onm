@@ -104,78 +104,45 @@ class PollController extends FrontendController
             ->isValid($response, $request->getClientIp());
 
         if (!$isValid) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _("The reCAPTCHA wasn't entered correctly."
-                    . " Go back and try it again."));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            return $this->getResponse('error', "The reCAPTCHA wasn't entered correctly."
+                . " Go back and try it again.", $poll);
         }
 
         // Prevent vote when no answer
-        if (empty($answer)) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('Error: no vote value!'));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+        if (!$request->request->has('answer')) {
+            return $this->getResponse('error', 'Error: no vote value!', $poll);
         }
 
         // Prevent vote when poll is closed
-        if ($poll->isClosed()) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('You can\'t vote this poll, it is closed.'));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+        if ($this->get('core.helper.poll')->isClosed($poll)) {
+            return $this->getResponse('error', 'You can\'t vote this poll, it is closed.', $poll);
         }
 
-        $cookieName = 'poll-' . $poll->pk_poll;
+        $cookieName = 'poll-' . $poll->pk_content;
         $cookie     = $request->cookies->get($cookieName);
 
         // Prevent vote when already voted
         if (!empty($cookie)) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('You have voted this poll previously.'));
-
-            $this->get('core.dispatcher')
-                ->dispatch('poll.vote', [ 'item' => $poll ]);
-
-            return new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            return $this->getResponse('error', 'You have voted this poll previously.', $poll);
         }
 
         try {
-            $poll->vote($answer);
+            $items = array_map(function ($item) use ($answer) {
+                if ($item['pk_item'] == $answer) {
+                    $item['votes']++;
+                }
+                //Unset percent attribute from items
+                unset($item['percent']);
 
-            $this->get('session')->getFlashBag()
-                ->add('success', _('Thanks for participating.'));
+                return $item;
+            }, $poll->items);
 
-            $cookie   = new Cookie($cookieName, 'voted');
-            $response = new RedirectResponse(
-                $this->get('core.helper.url_generator')->generate($poll)
-            );
+            $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
 
-            $response->headers->setCookie($cookie);
+            return $this->getResponse('success', 'Thanks for participating.', $poll);
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()
-                ->add('error', _('Error while updating content'));
+            return $this->getResponse('error', 'Error while updating content', $poll);
         }
-
-        return $response;
     }
 
     /**
@@ -227,10 +194,10 @@ class PollController extends FrontendController
             ? sprintf(' and category_id=%d', $category->id)
             : '';
 
-        $response = $this->get('api.service.content_old')->getList(sprintf(
+        $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="poll" and content_status=1 and in_litter=0 %s '
-            . 'and (starttime IS NULL or starttime < "%s") '
-            . 'and (endtime IS NULL or endtime > "%s") '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
             . 'order by starttime desc limit %d offset %d',
             $categoryOQL,
             $date,
@@ -265,5 +232,31 @@ class PollController extends FrontendController
 
             ])
         ]);
+    }
+
+    /**
+     * Returns the resposne with the passed parameters
+     *
+     * @param string $type The response type.
+     * @param string $msg The response message.
+     * @param object $poll The poll to generate url.
+     *
+     * @return Response The response object.
+     */
+    private function getResponse($type, $msg, $poll)
+    {
+        $this->get('session')->getFlashBag()
+            ->add($type, _($msg));
+
+        $response = new RedirectResponse(
+            $this->get('core.helper.url_generator')->generate($poll)
+        );
+
+        if ($type == 'success') {
+            $cookie = new Cookie('poll-' . $poll->pk_content, 'voted');
+            $response->headers->setCookie($cookie);
+        }
+
+        return $response;
     }
 }

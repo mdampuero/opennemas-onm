@@ -143,28 +143,28 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testParseWhenSerializable()
     {
-        $data = [ new \Poll(), new \Poll() ];
+        $data = [ new \Content(), new \Content() ];
         $date = new \Datetime('2010-01-01 00:00:00');
 
         $data[0]->pk_content     = 1;
+        $data[0]->content_type_name     = 'poll';
         $data[0]->title          = 'waldo';
         $data[0]->created        = $date;
         $data[0]->changed        = $date;
         $data[0]->starttime      = $date;
         $data[0]->content_status = 1;
-        $data[0]->total_votes    = 145;
         $data[0]->items          = [
             [ 'pk_item' => 1, 'item' => 'flob', 'votes' => 35  ],
             [ 'pk_item' => 2, 'item' => 'corge', 'votes' => 20 ]
         ];
 
         $data[1]->pk_content     = 2;
+        $data[1]->content_type_name     = 'poll';
         $data[1]->title          = 'gorp';
         $data[1]->created        = $date;
         $data[1]->changed        = $date;
         $data[1]->starttime      = $date;
         $data[1]->content_status = 1;
-        $data[1]->total_votes    = 55;
         $data[1]->items          = [
             [ 'pk_item' => 1, 'item' => 'foobar', 'votes' => 5 ],
             [ 'pk_item' => 2, 'item' => 'foo', 'votes' => 100 ],
@@ -181,35 +181,20 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
         $this->fm->expects($this->at(11))->method('get')
             ->willReturn(null);
         $this->fm->expects($this->at(14))->method('get')
-            ->willReturn('flob');
+            ->willReturn('');
         $this->fm->expects($this->at(17))->method('get')
-            ->willReturn('corge');
-
-        // body, description, title, pretitle, item0, item1
-        $this->fm->expects($this->at(20))->method('get')
-            ->willReturn('');
-        $this->fm->expects($this->at(23))->method('get')
-            ->willReturn('');
-        $this->fm->expects($this->at(26))->method('get')
             ->willReturn('gorp');
-        $this->fm->expects($this->at(29))->method('get')
-            ->willReturn(null);
-        $this->fm->expects($this->at(32))->method('get')
-            ->willReturn('foobar');
-        $this->fm->expects($this->at(35))->method('get')
-            ->willReturn('foo');
-        $this->fm->expects($this->at(38))->method('get')
-            ->willReturn('bar');
+
 
         $method = new \ReflectionMethod($this->helper, 'parse');
         $method->setAccessible(true);
 
         list($headers, $values) = $method->invokeArgs($this->helper, [ $data ]);
 
+
         $this->assertEquals([
             'pk_content', 'pretitle', 'title', 'description', 'created',
-            'changed', 'starttime', 'content_status', 'body', 'total_votes',
-            'item0', 'votes0', 'item1', 'votes1', 'item2', 'votes2'
+            'changed', 'starttime', 'content_status', 'body'
         ], $headers);
 
         $this->assertEquals([
@@ -222,12 +207,7 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
                 'starttime'      => '2010-01-01 00:00:00',
                 'content_status' => 1,
                 'body'           => '',
-                'pretitle'       => null,
-                'total_votes'    => 145,
-                'item0'          => 'flob',
-                'votes0'         => 35,
-                'item1'          => 'corge',
-                'votes1'         => 20
+                'pretitle'       => null
             ],
             [
                 'pk_content'     => 2,
@@ -237,15 +217,8 @@ class CsvHelperTest extends \PHPUnit\Framework\TestCase
                 'changed'        => '2010-01-01 00:00:00',
                 'starttime'      => '2010-01-01 00:00:00',
                 'content_status' => 1,
-                'body'           => '',
-                'pretitle'       => null,
-                'total_votes'    => 55,
-                'item0'          => 'foobar',
-                'votes0'         => 5,
-                'item1'          => 'foo',
-                'votes1'         => 100,
-                'item2'          => 'bar',
-                'votes2'         => 40
+                'body'           => null,
+                'pretitle'       => null
             ]
         ], $values);
     }

@@ -977,16 +977,14 @@ class ContentManager
             . ' comments.id as comment_id, contents.* FROM comments, contents '
             . 'WHERE contents.pk_content = comments.content_id '
             . 'AND contents.fk_content_type = 1 AND contents.in_litter <> 1 '
-            . 'AND comments.status = ? ORDER BY comments.date DESC LIMIT ?';
+            . 'AND comments.status = "accepted" ORDER BY comments.date DESC LIMIT ' . $count;
 
         try {
-            $rs = getService('dbal_connection')->fetchAll(
-                $sql,
-                [ \Comment::STATUS_ACCEPTED, $count ]
-            );
+            $rs = getService('dbal_connection')->fetchAll($sql);
 
             foreach ($rs as $contentData) {
-                $content                 = $em->find('article', $contentData['pk_content']);
+                $content = new \Content();
+                $content->load($contentData);
                 $content->comment        = $contentData['comment_body'];
                 $content->pk_comment     = $contentData['comment_id'];
                 $content->comment_author = $contentData['comment_author'];
