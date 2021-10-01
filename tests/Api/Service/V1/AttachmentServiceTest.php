@@ -26,8 +26,6 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
-
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -45,6 +43,11 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getConverter', 'getMetadata', 'getRepository', 'persist', 'remove'])
             ->getMock();
 
+        $this->file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
         $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods(['filter', 'get', 'set'])
@@ -60,27 +63,24 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove', 'exists' ])
             ->getMock();
 
-        $this->container->expects($this->any())->method('get')
-            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
-
-        $this->il->expects($this->any())->method('getInstance')
-            ->willReturn($this->instance);
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
+            ->getMock();
 
         $this->security = $this->getMockBuilder('Sercurity')
             ->setMethods([ 'hasPermission' ])
             ->getMock();
 
-        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
-            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
-            ->getMock();
+        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
 
-        $this->file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
         $this->em->expects($this->any())->method('getMetadata')
             ->willReturn($this->metadata);
+
+        $this->il->expects($this->any())->method('getInstance')
+            ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
