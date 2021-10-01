@@ -14,8 +14,6 @@ use Api\Exception\UpdateItemException;
 use Api\Exception\DeleteItemException;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Content;
-use Exception;
-use Mockery as m;
 
 /**
  * @runTestsInSeparateProcesses
