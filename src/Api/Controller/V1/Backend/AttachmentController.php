@@ -12,7 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class AttachmentController extends ContentOldController
+class AttachmentController extends ContentController
 {
     /**
      * {@inheritdoc}
