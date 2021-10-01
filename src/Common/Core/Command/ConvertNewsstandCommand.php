@@ -64,9 +64,15 @@ class ConvertNewsstandCommand extends Command
                         $i * 500
                     );
 
+                    $partialNewsstands = $ns->getListBySql($oql)['items'];
+
+                    if (empty($partialNewsstands)) {
+                        break;
+                    }
+
                     $newsstands = array_merge(
                         $newsstands,
-                        array_filter($ns->getListBySql($oql)['items'], function ($item) {
+                        array_filter($partialNewsstands, function ($item) {
                             return substr($item->thumbnail, -4) === '.jpg';
                         })
                     );
