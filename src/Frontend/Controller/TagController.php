@@ -194,6 +194,7 @@ class TagController extends FrontendController
             return $a->id;
         }, $params['items']);
 
+        // TODO: Use ORM getList when polls (11) are migrated
         $criteria = [
             'join' => [
                 [
@@ -208,19 +209,19 @@ class TagController extends FrontendController
                 ]
             ],
             'fk_content_type' => [
-                [ 'value' => [ 1, 4, 7, 9, 11 ], 'operator' => 'in' ],
+                [ 'value' => [ 1, 4, 5, 7, 9, 11 ], 'operator' => 'in' ],
             ],
             'content_status'    => [ [ 'value' => 1 ] ],
             'in_litter'         => [ [ 'value' => 0 ] ],
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
 
