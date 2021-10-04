@@ -1021,6 +1021,35 @@
                         </div>
                       </div>
                     </div>
+                    {is_module_activated name="es.openhost.module.dataLayerHenneo"}
+                    <div class="panel-group" id="panel-group-prometeo" data-toggle="collapse">
+                      <div class="panel panel-default">
+                        <div class="panel-heading collapsed">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-parent="#panel-group-prometeo" data-toggle="collapse" href="#prometeo">
+                              <i class="fa fa-signal"></i>{t}Prometeo{/t}
+                            </a>
+                          </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="prometeo">
+                          <div class="panel-body">
+                            <div class="form-group">
+                              <label class="form-label" for="prometeo-id">
+                                {t}Prometeo Media ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="prometeo-id" name="prometeo-id" ng-model="settings.prometeo.id" type="text">
+                              </div>
+                            </div>
+                            <small class="help">
+                              <i class="fa fa-info-circle m-r-5 text-info"></i>
+                              {t}We are not responsible of the stats or of any third party services{/t}
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/is_module_activated}
                     <h4>
                       <i class="fa fa-cog"></i>
                       {t}Internal settings{/t}
