@@ -33,7 +33,7 @@ class DataLayerHenneo extends DataLayer
      *
      * @return string The customized extension.
      */
-    protected function customizeExtension(string $extension)
+    public function customizeExtension(string $extension)
     {
         $contentTypes = [
             'album',
