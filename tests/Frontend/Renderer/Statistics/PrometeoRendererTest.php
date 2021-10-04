@@ -5,6 +5,7 @@ namespace Tests\Frontend\Renderer;
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Statistics\PrometeoRenderer;
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for PrometeoRenderer class.
@@ -47,6 +48,7 @@ class PrometeoRendererTest extends TestCase
             ->willReturn($this->container);
 
         $this->renderer = new PrometeoRenderer($this->container);
+        $this->instance = new Instance();
     }
 
     public function serviceContainerCallback($name)
@@ -60,6 +62,8 @@ class PrometeoRendererTest extends TestCase
                 return $this->dl;
             case 'core.variables.extractor':
                 return $this->extractor;
+            case 'core.instance':
+                return $this->instance;
         }
 
         return null;
@@ -104,6 +108,8 @@ class PrometeoRendererTest extends TestCase
         $method = new \ReflectionMethod($renderer, 'validate');
         $method->setAccessible(true);
 
+        $this->instance->activated_modules = [ 'es.openhost.module.dataLayerHenneo' ];
+
         $this->assertTrue($method->invokeArgs($renderer, []));
     }
 
@@ -114,6 +120,8 @@ class PrometeoRendererTest extends TestCase
     {
         $method = new \ReflectionMethod($this->renderer, 'validate');
         $method->setAccessible(true);
+
+        $this->instance->activated_modules = [];
 
         $this->assertFalse($method->invokeArgs($this->renderer, []));
     }

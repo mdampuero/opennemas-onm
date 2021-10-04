@@ -41,7 +41,10 @@ class PrometeoRenderer extends StatisticsRenderer
      */
     protected function validate()
     {
-        if (!is_array($this->config)
+        $modules = $this->container->get('core.instance')->activated_modules;
+
+        if (!in_array('es.openhost.module.dataLayerHenneo', $modules)
+            || !is_array($this->config)
             || !array_key_exists('id', $this->config)
             || empty(trim($this->config['id']))
         ) {
