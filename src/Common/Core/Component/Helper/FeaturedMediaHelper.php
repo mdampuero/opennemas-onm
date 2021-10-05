@@ -99,6 +99,9 @@ class FeaturedMediaHelper
             ], 'event' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
+            ], 'kiosko' => [
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
             ], 'video' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => []
@@ -199,6 +202,9 @@ class FeaturedMediaHelper
                 'frontpage' => [],
                 'inner'     => []
             ], 'event' => [
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
+            ], 'kiosko' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
             ], 'video' => [
