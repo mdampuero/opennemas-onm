@@ -29,8 +29,8 @@
         </div>
         <div class="grid-body">
           <div class="controls" ng-repeat="status in extra.statuses" ng-if="status.value" >
-            <input type="radio" name="status" value="[% status.value %]" id="content_status_[% status.value %]" ng-checked="item.status == status.value" ng-model="item.status">
-            <label for="content_status_[% status.value %]" class="form-label">[% status.title %]</label>
+            <input type="radio" name="status" value="[% status.value %]" id="status_[% status.value %]" ng-checked="item.status == status.value" ng-model="item.status">
+            <label for="status_[% status.value %]" class="form-label">[% status.title %]</label>
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
       <div class="form-group">
         <label class="form-label" for="body"><i class="fa fa-comment m-r-5"></i> {t}Body{/t}</label>
         <div class="controls">
-          <textarea onm-editor onm-editor-preset="simple" name="body" id="body" ng-model="item.body" class="form-control"></textarea>
+          {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="simple" rows=15}
         </div>
       </div>
     </div>
