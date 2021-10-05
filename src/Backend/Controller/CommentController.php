@@ -75,10 +75,11 @@ class CommentController extends BackendController
      *
      * @return Response the response object
      *
-     * @Security("hasExtension('MASTER')")
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_SETTINGS')")
      */
     public function configAction()
     {
-        return $this->render('comment/config.tpl', [ 'id' => 'opciones' ]);
+        return $this->render('comment/config.tpl');
     }
 }

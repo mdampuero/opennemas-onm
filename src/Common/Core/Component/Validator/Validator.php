@@ -167,7 +167,7 @@ class Validator
         }
 
         // Only with automatic moderation
-        if (!$this->ds->get('comments_config')['moderation_manual']) {
+        if (!$this->commentHelper->moderateManually()) {
             $blacklist['author'][] = new Constraints\BlackListWords([
                 'words'   => $config,
                 'message' => _('Your name has invalid words')

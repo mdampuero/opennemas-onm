@@ -120,7 +120,9 @@
               'disqus_secretkey', 'disqus_shortname' ]
           };
 
-          for (var element of validKeys[$scope.config.comment_system]) {
+          for (var key in validKeys[$scope.config.comment_system]) {
+            var element = validKeys[$scope.config.comment_system][key];
+
             if ($scope.config[element] === null || $scope.config[element].length < 1) {
               return false;
             }
@@ -139,7 +141,7 @@
         $scope.cleanKeys = function() {
           var validKeys = {
             onm: [
-              'comment_system', 'disable_comments', 'with_comments',
+              'acton_list', 'comment_system', 'disable_comments', 'with_comments',
               'number_elements', 'required_email', 'moderation_manual',
               'moderation_autoaccept', 'moderation_autoreject'
             ],

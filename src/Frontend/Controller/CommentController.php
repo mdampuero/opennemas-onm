@@ -190,6 +190,7 @@ class CommentController extends FrontendController
         $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
+        $xmlRequest  = $request->isXmlHttpRequest();
 
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
@@ -226,64 +227,59 @@ class CommentController extends FrontendController
             $data['date']                    = $now->format('Y-m-d H:i:s');
             $data['content_type_referenced'] = $content->content_type_name;
 
-            $errorType = '';
-            $httpCode = 200;
+            if (!empty($errors) && $errors['type'] == 'fatal') {
+                return new JsonResponse([
+                    'message' => sprintf(
+                        '<strong>%s</strong><br> %s',
+                        _('Your comment was rejected due to:'),
+                        implode('<br>', $errors['errors'])
+                    ),
+                    'type'    => 'error',
+                ], 400);
+            }
 
-            if (empty($errors)) {
-                if ($cm->moderateManually() || !$cm->autoAccept()) {
-                    $data['status'] = self::STATUS_PENDING;
-                    $message  = [
-                        'message' => _('Your comment was accepted and now we have to moderate it.'),
-                        'type'    => 'success',
-                    ];
-                } else {
-                    $data['status'] = self::STATUS_ACCEPTED;
-                    $message  = [
-                        'message' => _('Your comment was accepted.'),
-                        'type'    => 'success',
-                    ];
-                }
-            } else {
+            if (!empty($errors)) {
                 $data['status'] = $cm->autoReject()
-                ? self::STATUS_REJECTED
-                : self::STATUS_PENDING;
+                    ? self::STATUS_REJECTED
+                    : self::STATUS_PENDING;
 
-                $errorType = $errors['type'];
-                $httpCode  = 400;
-
-                $handling = ($cm->autoReject() || $cm->isEmailRequired())
+                $handling = $cm->autoReject()
                     ? _('Your comment was rejected due to:')
                     : _('Your comment is waiting for moderation due to:');
 
-                $message = [
+                return $this->saveData($data, $xmlRequest) ?: new JsonResponse([
                     'message' => sprintf(
                         '<strong>%s</strong><br> %s',
                         $handling,
                         implode('<br>', $errors['errors'])
                     ),
                     'type'    => 'error',
-                ];
+                ], 400);
             }
 
-            if ($errorType != 'fatal') {
-                $this->get($this->service)->createItem($data);
+            if ($cm->moderateManually() || !$cm->autoAccept()) {
+                $data['status'] = self::STATUS_PENDING;
+
+                return $this->saveData($data, $xmlRequest) ?: new JsonResponse([
+                    'type' => 'success',
+                    'message' => _('Your comment was accepted and now we have to moderate it.'),
+                ], 200);
+            }
+
+            if (!$cm->moderateManually() && $cm->autoAccept()) {
+                $data['status'] = self::STATUS_ACCEPTED;
+
+                return $this->saveData($data, $xmlRequest) ?: new JsonResponse([
+                    'type' => 'success',
+                    'message' => _('Your comment was accepted.'),
+                ], 200);
             }
         } catch (\Exception $e) {
-            $httpCode = 400;
-            $message  = [
+            return new JsonResponse([
                 'message' => $e->getMessage(),
                 'type'    => 'error',
-            ];
+            ], 400);
         }
-        $response = new JsonResponse($message, $httpCode);
-
-        if (!$request->isXmlHttpRequest()) {
-            $response = new RedirectResponse($this->generateUrl('frontend_comments_get', [
-                'id' => $contentId,
-            ]));
-        }
-
-        return $response;
     }
 
     /**
@@ -354,5 +350,26 @@ class CommentController extends FrontendController
         } catch (GetListException $ex) {
             return ['total' => 0, 'items' => []];
         }
+    }
+
+    /**
+     * Save comment and returns RedirectResponse if the request is a XMLHttpRequest
+     *
+     * @param array $data Data to save.
+     * @param boolean $isXmlHttpRequest True if the request is a XMLHttpRequest
+     *
+     * @return any RedirectResponse if the request is a XMLHttpRequest null otherwise
+     */
+    protected function saveData($data, $isXmlHttpRequest)
+    {
+        $this->get($this->service)->createItem($data);
+
+        if (!$isXmlHttpRequest) {
+            return new RedirectResponse($this->generateUrl('frontend_comments_get', [
+                'id' => $data['contentId'],
+            ]));
+        }
+
+        return null;
     }
 }
