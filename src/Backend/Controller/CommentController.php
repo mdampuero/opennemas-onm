@@ -75,7 +75,8 @@ class CommentController extends BackendController
      *
      * @return Response the response object
      *
-     * @Security("hasPermission('ADMIN')")
+     * @Security("hasExtension('COMMENT_MANAGER')
+     *     and hasPermission('COMMENT_SETTINGS')")
      */
     public function configAction()
     {
