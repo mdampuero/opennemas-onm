@@ -61,7 +61,7 @@
 
           oqlEncoder.configure({
             placeholder: {
-              body: '[key] ~ "%[value]%"'
+              body: 'body ~ "%[value]%"',
             }
           });
 

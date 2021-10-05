@@ -39,7 +39,10 @@
           columns: {
             collapsed: true,
             hidden: [],
-            selected: [ 'author', 'avatar', 'category', 'created', 'content_status', 'tags', 'title' ]
+            selected: [
+              'author', 'avatar', 'category', 'comment',
+              'content_status', 'created', 'status', 'tags', 'title'
+            ]
           },
         };
 

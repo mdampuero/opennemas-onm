@@ -52,7 +52,7 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $this->dataSet->expects($this->any())->method('get')
-            ->with('comments_config', [])
+            ->with('comment_settings', [])
             ->willReturn([]);
 
         $this->assertAttributeEquals($this->dataSet, 'ds', $this->helper);

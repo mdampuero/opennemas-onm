@@ -127,7 +127,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->with('item')->willReturn(true);
 
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn(null);
 
         $this->assertEmpty($this->subscriber->addContact($this->event));
@@ -146,7 +146,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'acton_list' => 1 ]);
 
         $this->event->expects($this->at(1))->method('getArgument')
@@ -169,7 +169,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'acton_list' => 1 ]);
 
         $this->event->expects($this->at(1))->method('getArgument')
@@ -196,7 +196,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'acton_list' => 1 ]);
 
         $this->event->expects($this->at(1))->method('getArgument')
@@ -225,7 +225,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'acton_list' => 1 ]);
 
         $this->event->expects($this->at(1))->method('getArgument')
@@ -263,7 +263,7 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'acton_list' => 1 ]);
 
         $this->event->expects($this->at(1))->method('getArgument')

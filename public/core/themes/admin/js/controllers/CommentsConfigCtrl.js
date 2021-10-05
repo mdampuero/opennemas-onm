@@ -120,7 +120,9 @@
               'disqus_secretkey', 'disqus_shortname' ]
           };
 
-          for (var element of validKeys[$scope.config.comment_system]) {
+          for (var key in validKeys[$scope.config.comment_system]) {
+            var element = validKeys[$scope.config.comment_system][key];
+
             if ($scope.config[element] === null || $scope.config[element].length < 1) {
               return false;
             }

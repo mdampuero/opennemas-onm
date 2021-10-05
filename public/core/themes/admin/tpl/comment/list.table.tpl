@@ -15,7 +15,7 @@
   </div>
   {acl isAllowed="COMMENT_AVAILABLE"}
     <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'content_status'" type="checkbox">
+      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'status'" type="checkbox">
       <label for="checkbox-published">
         {t}Published{/t}
       </label>
@@ -31,7 +31,7 @@
     {t}Comment{/t}
   </th>
   {acl isAllowed="COMMENT_AVAILABLE"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('status')" width="150">
       <span class="m-l-5">
         {t}Published{/t}
       </span>
@@ -69,7 +69,7 @@
     </div>
   </td>
   {acl isAllowed="COMMENT_AVAILABLE"}
-    <td class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')">
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('status')">
       <span ng-show="item.status != 'pending'">
         <button class="btn btn-white" ng-class="{ statusLoading: item.statusLoading == 1, published: item.status == 'accepted', unpublished: (item.status == 'rejected' || item.status == 'pending') }" ng-click="patch(item, 'status', item.status != 'accepted' ? 'accepted' : 'rejected')" type="button" uib-tooltip-html="item.status !== 'accepted' ? '{t}Rejected{/t}' : '{t}Accepted{/t}'">
           <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.statusLoading, 'fa-check text-success' : !item.statusLoading && item.status == 'accepted', 'fa-times text-error': !item.statusLoading && (item.status == 'pending' || item.status == 'rejected') }"></i>

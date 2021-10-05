@@ -80,7 +80,7 @@ class ActOnContactSubscriber implements EventSubscriberInterface
 
         $commentsConfig = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('comments_config');
+            ->get('comment_settings');
 
         $listId  = $commentsConfig['acton_list'] ?? null;
         $comment = $event->getArgument('item');
