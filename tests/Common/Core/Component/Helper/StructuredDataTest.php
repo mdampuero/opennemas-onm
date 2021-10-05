@@ -10,6 +10,7 @@
 namespace Test\Common\Core\Component\Helper;
 
 use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for StructuredData class.
@@ -45,9 +46,9 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
-        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+        $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AuthorHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getAuthor' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
@@ -83,8 +84,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             case 'orm.manager':
                 return $this->em;
 
-            case 'api.service.author':
-                return $this->as;
+            case 'core.helper.author':
+                return $this->ah;
 
             case 'api.service.tag':
                 return $this->ts;
@@ -303,14 +304,15 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAuthorData()
     {
+        $author = new User([ 'name' => 'John Dow' ]);
         $method = new \ReflectionMethod($this->object, 'getAuthorData');
         $method->setAccessible(true);
 
         $content = new \Content();
 
-        $this->as->expects($this->once())
-            ->method('getItem')
-            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+        $this->ah->expects($this->once())
+            ->method('getAuthor')
+            ->willReturn($author);
 
         $method->invokeArgs($this->object, [ $content ]);
     }
@@ -325,8 +327,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Content();
 
-        $this->as->expects($this->once())
-            ->method('getItem')
+        $this->ah->expects($this->once())
+            ->method('getAuthor')
             ->willReturn(null);
 
         $this->ds->expects($this->once())->method('get')
