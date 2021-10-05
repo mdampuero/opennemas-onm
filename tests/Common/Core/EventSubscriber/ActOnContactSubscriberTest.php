@@ -123,8 +123,14 @@ class ActOnContactSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddContactWhenNoList()
     {
+        $comment         = new \stdClass();
+        $comment->status = 'accepted';
+
         $this->event->expects($this->at(0))->method('hasArgument')
             ->with('item')->willReturn(true);
+
+        $this->event->expects($this->at(1))->method('getArgument')
+            ->with('item')->willReturn($comment);
 
         $this->ds->expects($this->any())->method('get')
             ->with('comment_settings')
