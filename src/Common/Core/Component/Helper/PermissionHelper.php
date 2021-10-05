@@ -1639,6 +1639,13 @@ class PermissionHelper
                 'module'      => 'es.openhost.module.events',
                 'enabled'     => 1
             ],
+            251 => [
+                'id'          => 251,
+                'name'        => 'COMMENT_SETTINGS',
+                'description' => _('Manage module setting'),
+                'module'      => 'COMMENT_MANAGER',
+                'enabled'     => 1
+            ],
         ];
     }
 }

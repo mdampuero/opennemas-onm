@@ -17,11 +17,13 @@
 {/block}
 
 {block name="primaryActions"}
-  <li class="quicklinks">
-    <a class="btn btn-link" href="{url name=backend_comments_config}" title="{t}Config comments module{/t}">
-      <i class="fa fa-gear fa-lg"></i>
-    </a>
-  </li>
+  {acl isAllowed="COMMENT_SETTINGS"}
+    <li class="quicklinks">
+      <a class="btn btn-link" href="{url name=backend_comments_config}" title="{t}Config comments module{/t}">
+        <i class="fa fa-gear fa-lg"></i>
+      </a>
+    </li>
+  {/acl}
   <li class="hidden-xs quicklinks">
     <a class="btn btn-white" href="[% getExportUrl() %]">
       <span class="fa fa-download"></span>

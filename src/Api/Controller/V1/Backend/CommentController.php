@@ -21,6 +21,25 @@ class CommentController extends ApiController
     const STATUS_PENDING  = 'pending';
 
     /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'COMMENT_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'update' => 'COMMENT_UPDATE',
+        'list'   => 'COMMENT_ADMIN',
+        'show'   => 'COMMENT_UPDATE',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.comment';
+
+    /**
      * The list of keys to convert to boolean
      *
      * @var array
@@ -29,11 +48,6 @@ class CommentController extends ApiController
         'disable_comments', 'with_comments', 'moderation_manual',
         'moderation_autoreject', 'moderation_autoaccept', 'required_email'
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $service = 'api.service.comment';
 
     /**
      * {@inheritdoc}
@@ -84,6 +98,8 @@ class CommentController extends ApiController
      */
     public function getConfigAction()
     {
+        $this->checkSecurity($this->extension, 'COMMENT_SETTINGS');
+
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh = $this->get('core.helper.setting');
 
@@ -113,6 +129,8 @@ class CommentController extends ApiController
      */
     public function saveConfigAction(Request $request)
     {
+        $this->checkSecurity($this->extension, 'COMMENT_SETTINGS');
+
         $msg = $this->get('core.messenger');
         $ds  = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh  = $this->get('core.helper.setting');
