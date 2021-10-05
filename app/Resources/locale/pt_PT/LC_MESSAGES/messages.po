@@ -4150,6 +4150,24 @@ msgstr "Adicionar conteúdo"
 msgid "Related in inner"
 msgstr "Relacionados no interior"
 
+msgid "Related in home"
+msgstr "Relacionados na capa principal"
+
+msgid "Gallery for frontpage"
+msgstr "Galeria para capa"
+
+msgid "Only one album"
+msgstr "Apenas um álbum"
+
+msgid "Add gallery"
+msgstr "Adicionar galeria"
+
+msgid "Gallery for inner"
+msgstr "Galeria para interior"
+
+msgid "Gallery for Home"
+msgstr "Galeria para capa principal"
+
 msgid "Suggest this element to home"
 msgstr "Sugerir este elemento para capa"
 

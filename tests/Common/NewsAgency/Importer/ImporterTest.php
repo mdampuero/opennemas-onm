@@ -517,6 +517,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $result['content_type_name']  = 'photo';
         $result['path']               = '/flob/importers/block/name.php';
         $result['fk_content_type']    = 8;
+        $result['description']        = $resource->body;
 
         $this->assertEquals($result, $method->invokeArgs($this->importer, [ $resource, $data ]));
     }

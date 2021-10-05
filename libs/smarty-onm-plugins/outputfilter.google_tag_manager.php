@@ -20,10 +20,9 @@ function smarty_outputfilter_google_tag_manager($output, $smarty)
     if (!preg_match('/newsletter/', $smarty->source->resource)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
-        && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
-        && !preg_match('/\/ads/', $uri)
-        && !preg_match('/\/comments/', $uri)
+        && !preg_match('/\/ads\//', $uri)
+        && !preg_match('/\/comments\//', $uri)
         && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
         $gtm = $smarty->getContainer()->get('core.google.tag_manager');

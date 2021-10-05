@@ -110,6 +110,7 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('varnish.deleteItem', [
+                'action' => 'Api\Service\V1\VarnishService::deleteItem',
                 'id' => 'obj.http.x-tags ~ instance-frog.*,glorp.*'
             ]);
 

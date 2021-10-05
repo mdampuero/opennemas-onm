@@ -161,7 +161,7 @@
                           - <span class="hidden-xs">[% content.author_ip %]</span>
                         </div>
                         <div class="submitted-on"><strong>{t}Submitted on:{/t}</strong> [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.dateTimezone.timezone %]</div>
-                        <div class="on-response-to"><strong>{t}In response to{/t}:</strong> <a ng-href="/[% extra.contents[content.content_id].uri %]" target="_blank">[% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 100">...</span></a></div>
+                        <div class="on-response-to"><strong>{t}In response to{/t}:</strong> <a ng-href="/content/[% content.content_id %]" target="_blank">[% extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="extra.contents[content.content_id].title.length > 100">...</span></a></div>
                       </small>
                     </div>
                     <div class="comment-body-block row">

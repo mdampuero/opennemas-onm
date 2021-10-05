@@ -164,7 +164,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('entity.getItem', [ 'id' => 23, 'item' => $item ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.deleteItem', [ 'id' => 23, 'item' => $item ]);
+            ->with('entity.deleteItem', [
+                'action' => 'Api\Service\V1\OrmService::deleteItem',
+                'id'     => 23,
+                'item'   => $item
+            ]);
 
         $this->service->deleteItem(23);
     }
@@ -230,8 +234,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('entity.deleteList', [
-                'ids'   => [ 1, 2 ],
-                'items' => [ $itemA, $itemB ]
+                'action' => 'Api\Service\V1\OrmService::deleteList',
+                'ids'    => [ 1, 2 ],
+                'item'  => [ $itemA, $itemB ]
             ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
@@ -585,7 +590,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('entity.getItem', [ 'id' => 1, 'item' => $item ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
-            ->with('entity.patchItem', [ 'id' => 1, 'item' => $item ]);
+            ->with('entity.patchItem', [
+                'action' => 'Api\Service\V1\OrmService::patchItem',
+                'id'     => 1,
+                'item'   => $item
+                ]);
 
         $this->service->patchItem(1, $data);
 
@@ -663,8 +672,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('entity.patchList', [
-                'ids'   => [ 1, 2 ],
-                'items' => [ $itemA, $itemB ]
+                'action' => 'Api\Service\V1\OrmService::patchList',
+                'ids'    => [ 1, 2 ],
+                'item'   => [ $itemA, $itemB ]
             ]);
 
         $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
@@ -784,8 +794,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('entity.updateItem', [
-                'id'   => 1,
-                'item' => $item
+                'action' => 'Api\Service\V1\OrmService::updateItem',
+                'id'     => 1,
+                'item'   => $item
             ]);
 
         $this->service->updateItem(1, $data);

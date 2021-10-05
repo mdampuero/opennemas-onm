@@ -79,8 +79,11 @@ class ContentPositionService extends OrmService
 
         // Foreach element setup the sql values statement part
         foreach ($elements as $element) {
-            $contentIds[] = $element['id'];
-            $positions[]  = [
+            if ($element['content_type'] === 'article') {
+                $contentIds[] = $element['id'];
+            }
+
+            $positions[] = [
                 $conn->quote($element['id'], \PDO::PARAM_INT),
                 $conn->quote($categoryID, \PDO::PARAM_INT),
                 $conn->quote($element['position'], \PDO::PARAM_INT),

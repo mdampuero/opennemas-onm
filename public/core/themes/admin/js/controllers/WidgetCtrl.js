@@ -32,6 +32,11 @@
         $scope.widgetForm = false;
 
         /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
+
+        /**
          * @memberOf AlbumCtrl
          *
          * @description
