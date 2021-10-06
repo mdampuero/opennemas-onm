@@ -38,6 +38,16 @@ class PrometeoRendererTest extends TestCase
             ->setMethods([ 'getContainer', 'getSection' ])
             ->getMock();
 
+        $this->featuredHelper = $this->getMockBuilder('Common\Core\Component\Helper\FeaturedMediaHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasFeaturedMedia', 'getFeaturedMedia' ])
+            ->getMock();
+
+        $this->ph = $this->getMockBuilder('PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -64,6 +74,10 @@ class PrometeoRendererTest extends TestCase
                 return $this->extractor;
             case 'core.instance':
                 return $this->instance;
+            case 'core.helper.featured_media':
+                return $this->featuredHelper;
+            case 'core.helper.photo':
+                return $this->ph;
         }
 
         return null;
@@ -82,9 +96,12 @@ class PrometeoRendererTest extends TestCase
         $this->dl->expects($this->any())->method('customizeExtension')
             ->willReturn('foo');
         $this->extractor->expects($this->at(0))->method('get')
+            ->with('mediaType')
+            ->willReturn('photo');
+        $this->extractor->expects($this->at(1))->method('get')
             ->with('extension')
             ->willReturn('bar');
-        $this->extractor->expects($this->at(1))->method('get')
+        $this->extractor->expects($this->at(2))->method('get')
             ->with('tagSlugs')
             ->willReturn('baz');
 

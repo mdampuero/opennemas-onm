@@ -20,7 +20,7 @@
             "media_id": {$id},
             "title": "{get_title($content)}",
             "keywords": "{$seoTags}",
-            "image": "{get_photo_path(get_featured_media($content, 'inner'), null, [], true)}",
+            "image": "{$imagePath}",
             "tags": "{$seoTags}",
             "subs_mode": "",
             "subs_period": "",
@@ -41,6 +41,5 @@
         "image": true
       }
     }
-
   </script>
 </amp-analytics>

@@ -9,7 +9,7 @@
     content_type: "{$type}",
     section: "{get_category_slug($content)}",
     tags: "{$seoTags}",
-    thumbnail_image: "{get_photo_path(get_featured_media($content, 'inner'), null, [], true)}",
+    thumbnail_image: "{$imagePath}",
     cuser: "__onm_user"
   }
 </script>

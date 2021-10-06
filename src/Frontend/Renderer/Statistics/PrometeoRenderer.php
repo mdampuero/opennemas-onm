@@ -25,14 +25,22 @@ class PrometeoRenderer extends StatisticsRenderer
     protected function getParameters($content = null)
     {
         $dataLayer = $this->container->get('core.service.data_layer');
-        $extension = $this->container->get('core.variables.extractor')->get('extension');
-        $seoTags   = $this->container->get('core.variables.extractor')->get('tagSlugs');
+        $extractor = $this->container->get('core.variables.extractor');
+
+        // If media type is not a photo, get frontpage image
+        $type = $extractor->get('mediaType') === 'photo' ? 'inner' : 'frontpage';
 
         return [
-            'content' => $content,
-            'id'      => $this->config['id'],
-            'type'    => $dataLayer->customizeExtension($extension),
-            'seoTags' => $seoTags
+            'content'   => $content,
+            'id'        => $this->config['id'],
+            'type'      => $dataLayer->customizeExtension($extractor->get('extension')),
+            'seoTags'   => $extractor->get('tagSlugs'),
+            'imagePath' => $this->container->get('core.helper.photo')->getPhotoPath(
+                $this->container->get('core.helper.featured_media')->getFeaturedMedia($content, $type),
+                null,
+                [],
+                true
+            )
         ];
     }
 
