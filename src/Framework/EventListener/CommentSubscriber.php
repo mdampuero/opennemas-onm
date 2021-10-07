@@ -54,7 +54,7 @@ class CommentSubscriber implements EventSubscriberInterface
     {
         $system = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('comment_system');
+            ->get('comment_settings')['comment_system'];
 
         if (empty($system) || $system !== 'onm') {
             return;
