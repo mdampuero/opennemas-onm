@@ -326,13 +326,6 @@ class PermissionHelper
                 'module'      => 'COMMENT_MANAGER',
                 'enabled'     => 1
             ],
-            35 => [
-                'id'          => 35,
-                'name'        => 'COMMENT_POLL',
-                'description' => _('Manage poll comments'),
-                'module'      => 'COMMENT_MANAGER',
-                'enabled'     => 1
-            ],
             37 => [
                 'id'          => 37,
                 'name'        => 'COMMENT_AVAILABLE',
@@ -358,13 +351,6 @@ class PermissionHelper
                 'id'          => 40,
                 'name'        => 'COMMENT_CREATE',
                 'description' => _('Create'),
-                'module'      => 'COMMENT_MANAGER',
-                'enabled'     => 1
-            ],
-            41 => [
-                'id'          => 41,
-                'name'        => 'COMMENT_TRASH',
-                'description' => _('Send to trash and restore'),
                 'module'      => 'COMMENT_MANAGER',
                 'enabled'     => 1
             ],
