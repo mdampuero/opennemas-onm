@@ -25,9 +25,9 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+        $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AuthorHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getAuthor' ])
             ->getMock();
 
         $this->rs = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
@@ -98,8 +98,8 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'api.service.author':
-                return $this->as;
+            case 'core.helper.author':
+                return $this->ah;
 
             case 'api.service.tag':
                 return $this->ts;
@@ -168,7 +168,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $author = new User([ 'id' => 1 ]);
-        $this->as->expects($this->any())->method('getItem')
+        $this->ah->expects($this->any())->method('getAuthor')
             ->with($content->fk_author)
             ->willReturn($author);
 
@@ -190,7 +190,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')
             ->willReturn($content);
 
-        $this->as->expects($this->once())->method('getItem')
+        $this->ah->expects($this->once())->method('getAuthor')
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
@@ -227,7 +227,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $author = new User([ 'id' => 1, 'name' => 'John Doe' ]);
-        $this->as->expects($this->any())->method('getItem')
+        $this->ah->expects($this->any())->method('getAuthor')
             ->with($content->fk_author)
             ->willReturn($author);
 
@@ -249,7 +249,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')
             ->willReturn($content);
 
-        $this->as->expects($this->once())->method('getItem')
+        $this->ah->expects($this->once())->method('getAuthor')
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
@@ -488,7 +488,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $author = new User([ 'id' => 1 ]);
-        $this->as->expects($this->any())->method('getItem')
+        $this->ah->expects($this->any())->method('getAuthor')
             ->with($content->fk_user_last_editor)
             ->willReturn($author);
 
@@ -510,7 +510,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')
             ->willReturn($content);
 
-        $this->as->expects($this->once())->method('getItem')
+        $this->ah->expects($this->once())->method('getAuthor')
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
@@ -547,7 +547,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $author = new User([ 'id' => 1, 'name' => 'John Doe' ]);
-        $this->as->expects($this->any())->method('getItem')
+        $this->ah->expects($this->any())->method('getAuthor')
             ->with($content->fk_user_last_editor)
             ->willReturn($author);
 
@@ -569,7 +569,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')
             ->willReturn($content);
 
-        $this->as->expects($this->once())->method('getItem')
+        $this->ah->expects($this->once())->method('getAuthor')
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
@@ -775,7 +775,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $author = new User([ 'id' => 1 ]);
-        $this->as->expects($this->any())->method('getItem')
+        $this->ah->expects($this->any())->method('getAuthor')
             ->with($content->fk_publisher)
             ->willReturn($author);
 
@@ -797,7 +797,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')
             ->willReturn($content);
 
-        $this->as->expects($this->once())->method('getItem')
+        $this->ah->expects($this->once())->method('getAuthor')
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));
@@ -834,7 +834,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($content);
 
         $author = new User([ 'id' => 1, 'name' => 'John Doe' ]);
-        $this->as->expects($this->any())->method('getItem')
+        $this->ah->expects($this->any())->method('getAuthor')
             ->with($content->fk_publisher)
             ->willReturn($author);
 
@@ -856,7 +856,7 @@ class VariablesExtractorTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')
             ->willReturn($content);
 
-        $this->as->expects($this->once())->method('getItem')
+        $this->ah->expects($this->once())->method('getAuthor')
             ->will($this->throwException(new GetItemException()));
 
         $this->assertEmpty($method->invokeArgs($this->extractor, []));

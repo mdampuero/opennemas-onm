@@ -113,7 +113,7 @@ class StructuredData
         // Get author if exists or agency. Otherwise get site name.
         $author = '';
         try {
-            $user   = $this->container->get('api.service.author')->getItem($content->fk_author);
+            $user   = $this->container->get('core.helper.author')->getAuthor($content->fk_author);
             $author = $user->name;
         } catch (\Exception $e) {
             $author = $content->agency;
