@@ -68,9 +68,8 @@ class TagSubscriber implements EventSubscriberInterface
      */
     public function onTagUpdate(Event $event)
     {
-        $tags = $event->hasArgument('item')
-            ? [ $event->getArgument('item') ]
-            : $event->getArgument('items');
+        $tags = $event->getArgument('item');
+        $tags = is_array($tags) ? $tags : [ $tags ];
 
         foreach ($tags as $tag) {
             $this->helper->deleteItem($tag);
