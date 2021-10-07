@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-29 10:12+0000\n"
+"POT-Creation-Date: 2021-10-07 07:49+0000\n"
 "PO-Revision-Date: 2021-09-29 12:13+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
@@ -843,17 +843,17 @@ msgstr "Ya has votado en este comentario anteriormente."
 msgid "Please fill the captcha code."
 msgstr "Por favor complete el código captcha"
 
-msgid "Your comment was accepted and now we have to moderate it."
-msgstr "Tu comentario fue aceptado y ahora deberá ser moderado."
-
-msgid "Your comment was accepted."
-msgstr "Tu comentario fue aceptado."
-
 msgid "Your comment was rejected due to:"
 msgstr "Tu comentario se ha rechazado debido a:"
 
 msgid "Your comment is waiting for moderation due to:"
 msgstr "Tu comentario está siendo moderado debido a:"
+
+msgid "Your comment was accepted and now we have to moderate it."
+msgstr "Tu comentario fue aceptado y ahora deberá ser moderado."
+
+msgid "Your comment was accepted."
+msgstr "Tu comentario fue aceptado."
 
 msgid "Email is required but it will not be published"
 msgstr "El email es obligatorio aunque no se publicará"
@@ -1872,9 +1872,6 @@ msgid "Can't connect to server %s. Please check your connection details."
 msgstr ""
 "No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
 
-msgid "File"
-msgstr "Archivos"
-
 msgid "Book"
 msgstr "Libro"
 
@@ -1904,6 +1901,9 @@ msgstr "aplazado"
 
 msgid "Article"
 msgstr "Artículo"
+
+msgid "File"
+msgstr "Archivos"
 
 msgid "Event"
 msgstr "Evento"
