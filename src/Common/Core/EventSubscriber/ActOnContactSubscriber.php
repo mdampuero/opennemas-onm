@@ -57,10 +57,10 @@ class ActOnContactSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'comment.create'    => [ [ 'addContact', 5 ] ],
-            'comment.update'    => [ [ 'addContact', 5 ] ],
-            'comment.patchItem' => [ [ 'addContact', 5 ] ],
-            'comment.patchList' => [ [ 'addContact', 5 ] ]
+            'comment.createItem' => [ [ 'addContact', 5 ] ],
+            'comment.updateItem' => [ [ 'addContact', 5 ] ],
+            'comment.patchItem'  => [ [ 'addContact', 5 ] ],
+            'comment.patchList'  => [ [ 'addContact', 5 ] ]
         ];
     }
 
