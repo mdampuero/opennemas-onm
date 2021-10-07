@@ -29,9 +29,11 @@ class CommentController extends ApiController
      * {@inheritdoc}
      */
     protected $permissions = [
-        'update' => 'COMMENT_UPDATE',
+        'delete' => 'COMMENT_DELETE',
         'list'   => 'COMMENT_ADMIN',
+        'patch'  => 'COMMENT_UPDATE',
         'show'   => 'COMMENT_UPDATE',
+        'update' => 'COMMENT_UPDATE',
     ];
 
     /**
