@@ -72,9 +72,9 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label" for="body"><i class="fa fa-comment m-r-5"></i> {t}Body{/t}</label>
         <div class="controls">
-          {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="simple" rows=15}
+          <label class="form-label" for="body"><i class="fa fa-comment m-r-5"></i> {t}Body{/t}</label>
+          {include file="ui/component/content-editor/textarea.tpl" field="body" preset="simple" rows=15}
         </div>
       </div>
     </div>
