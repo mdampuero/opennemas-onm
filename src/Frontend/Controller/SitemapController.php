@@ -191,7 +191,17 @@ class SitemapController extends Controller
             $contents = $this->get('entity_repository')
                 ->findBy($filters, ['changed' => 'desc'], $settings['total']);
 
-            return $this->getResponse($format, $cacheId, 'news', $contents);
+            return $this->getResponse(
+                $format,
+                $cacheId,
+                'news',
+                $contents,
+                null,
+                null,
+                null,
+                null,
+                'no-store'
+            );
         }
 
         return $this->getResponse(
@@ -203,7 +213,7 @@ class SitemapController extends Controller
             null,
             null,
             null,
-            'no-cache'
+            'no-store'
         );
     }
 
