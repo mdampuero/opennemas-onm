@@ -194,7 +194,17 @@ class SitemapController extends Controller
             return $this->getResponse($format, $cacheId, 'news', $contents);
         }
 
-        return $this->getResponse($format, $cacheId, 'news');
+        return $this->getResponse(
+            $format,
+            $cacheId,
+            'news',
+            [],
+            null,
+            null,
+            null,
+            null,
+            'no-cache'
+        );
     }
 
     /**
@@ -369,7 +379,8 @@ class SitemapController extends Controller
         $path = null,
         $page = null,
         $year = null,
-        $month = null
+        $month = null,
+        $cacheControl = ''
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
@@ -411,6 +422,10 @@ class SitemapController extends Controller
                 'Content-length'      => strlen($file),
                 'Content-Disposition' => sprintf('attachment; filename="sitemap.%s.xml.gz"', $filename)
             ]);
+
+            if (!empty($cacheControl)) {
+                $headers['Cache-Control'] = $cacheControl;
+            }
 
             return new Response($file, 200, $headers);
         }
