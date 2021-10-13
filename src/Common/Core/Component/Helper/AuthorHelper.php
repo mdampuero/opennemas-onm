@@ -94,12 +94,14 @@ class AuthorHelper
             return null;
         }
 
-        if (($item instanceof \Content
+        if ((($item instanceof \Content
             || $item instanceof \Common\Model\Entity\Content)
-            && !empty($item->fk_author)
+            && !empty($item->fk_author))
+            || (!is_object($item) && is_numeric($item))
         ) {
             try {
-                $cacheId = 'author-' . $item->fk_author;
+                $id      = is_numeric($item) ? $item : $item->fk_author;
+                $cacheId = 'author-' . $id;
 
                 $author = $this->cache->get($cacheId);
 
@@ -107,7 +109,7 @@ class AuthorHelper
                     return $author;
                 }
 
-                $author = $this->service->getItem($item->fk_author);
+                $author = $this->service->getItem($id);
 
                 $this->cache->set($cacheId, $author, 900);
 

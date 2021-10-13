@@ -3,6 +3,7 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Template\Template;
+use Common\Model\Entity\Content;
 use Repository\EntityManager;
 
 /**
@@ -96,6 +97,9 @@ class FeaturedMediaHelper
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => []
             ], 'event' => [
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
+            ], 'kiosko' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
             ], 'video' => [
@@ -202,6 +206,9 @@ class FeaturedMediaHelper
             ], 'event' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
+            ], 'kiosko' => [
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
             ], 'video' => [
                 'frontpage' => [ 'featured_frontpage' ]
             ], 'poll' => [
@@ -235,6 +242,32 @@ class FeaturedMediaHelper
         }
 
         return null;
+    }
+
+    /**
+     * Returns a list of related contents.
+     *
+     * @param Content $content       The content to push like related.
+     * @param array   $relationships The array of the relationships.
+     * @param array   $actual        The array of actual related contents.
+     *
+     * @return array An array of related contents without source id.
+     */
+    public function getRelated(Content $content, array $relationships, array $actual = []) : array
+    {
+        $new = [];
+
+        foreach ($relationships as $relationship) {
+            array_push($new, [
+                'target_id' => $content->pk_content,
+                'type' => $relationship,
+                'content_type_name' => $content->content_type_name,
+                'caption' => $content->description,
+                'position' => 0
+            ]);
+        }
+
+        return array_merge($actual, $new);
     }
 
     /**
