@@ -123,7 +123,7 @@
           for (var key in validKeys[$scope.config.comment_system]) {
             var element = validKeys[$scope.config.comment_system][key];
 
-            if ($scope.config[element] === null || $scope.config[element].length < 1) {
+            if (!$scope.config[element] || $scope.config[element].length < 1) {
               return false;
             }
           }
