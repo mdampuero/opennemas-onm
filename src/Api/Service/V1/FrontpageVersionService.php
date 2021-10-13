@@ -16,6 +16,13 @@ use Api\Exception\GetItemException;
 class FrontpageVersionService extends OrmService
 {
     /**
+     * The locale.
+     *
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
      * The number of versions to keep
      *
      * @var int
@@ -115,16 +122,12 @@ class FrontpageVersionService extends OrmService
         $filteredContents = [];
 
         foreach ($contents as $content) {
-            try {
-                if ($content->content_status === 1) {
-                    $filteredContents[$content->id] = $content;
-                }
-            } catch (\Exception $e) {
-                getService('error.log')->error(
-                    $e->getMessage() . ' Stack Trace: ' . $e->getTraceAsString()
-                );
-
+            if ($content === null) {
                 continue;
+            }
+
+            if ($content->content_status === 1) {
+                $filteredContents[$content->id] = $content;
             }
         }
 
@@ -146,7 +149,7 @@ class FrontpageVersionService extends OrmService
             $this->getFrontpageWithCategory($categoryId);
 
         $version = null;
-        if (!is_array($versions) && frontpageVersionId != null) {
+        if (!is_array($versions) && $frontpageVersionId != null) {
             $version = $versions;
         } elseif (empty($frontpageVersionId)) {
             $version = $this->getCurrentVersion($versions);
@@ -543,18 +546,18 @@ class FrontpageVersionService extends OrmService
 
         foreach ($contents as $content) {
             if (!empty($content->starttime) &&
-                $content->starttime > $systemDateTz &&
-                $content->starttime < $invalidationTime
+                $content->starttime > new \DateTime($systemDateTz) &&
+                $content->starttime < new \DateTime($invalidationTime)
             ) {
-                $invalidationTime = $content->starttime;
+                $invalidationTime = $content->starttime->format('Y-m-d H:i:s');
                 continue;
             }
 
             if (!empty($content->endtime) &&
-                $content->endtime > $systemDateTz &&
-                $content->endtime < $invalidationTime
+                $content->endtime > new \DateTime($systemDateTz) &&
+                $content->endtime < new \DateTime($invalidationTime)
             ) {
-                $invalidationTime = $content->endtime;
+                $invalidationTime = $content->endtime->format('Y-m-d H:i:s');
                 continue;
             }
         }
