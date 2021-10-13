@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-28 09:11+0000\n"
-"PO-Revision-Date: 2021-09-28 11:21+0200\n"
+"POT-Creation-Date: 2021-10-06 14:49+0000\n"
+"PO-Revision-Date: 2021-10-06 16:50+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -5328,6 +5328,12 @@ msgstr ""
 
 msgid "Chartbeat Domain"
 msgstr "Dominio de Chartbeat"
+
+msgid "Prometeo"
+msgstr "Prometeo"
+
+msgid "Prometeo Media ID"
+msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
