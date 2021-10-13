@@ -7,6 +7,14 @@
       {t}Favorite{/t}
     </label>
   </div>
+  {acl isAllowed="ATTACHMENT_AVAILABLE"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'content_status'" type="checkbox">
+      <label for="checkbox-published">
+        {t}Published{/t}
+      </label>
+    </div>
+  {/acl}
 {/block}
 
 {block name="customColumnsHeader"}
