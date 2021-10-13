@@ -149,11 +149,11 @@
             disqus: [ 'comment_system', 'disable_comments', 'with_comments', 'disqus_secretkey', 'disqus_shortname' ]
           };
 
-          Object.keys($scope.config).forEach((key) => {
+          for (var key in $scope.config) {
             if (!validKeys[$scope.config.comment_system].includes(key)) {
               delete $scope.config[key];
             }
-          });
+          }
         };
       }
     ]);
