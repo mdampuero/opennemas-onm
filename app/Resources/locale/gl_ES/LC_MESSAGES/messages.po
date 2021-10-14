@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-29 10:12+0000\n"
+"POT-Creation-Date: 2021-10-14 10:47+0000\n"
 "PO-Revision-Date: 2021-09-29 12:14+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
@@ -838,17 +838,17 @@ msgstr "Xa votaches neste comentario anteriormente."
 msgid "Please fill the captcha code."
 msgstr "Por favor, complete o código captcha"
 
-msgid "Your comment was accepted and now we have to moderate it."
-msgstr "O teu comentario foi aceptado e agora deberá moderarse."
-
-msgid "Your comment was accepted."
-msgstr "O teu comentario foi aceptado."
-
 msgid "Your comment was rejected due to:"
 msgstr "O teu comentario foi rexeitado debido a:"
 
 msgid "Your comment is waiting for moderation due to:"
 msgstr "O teu comentario terá que moderarse debido a:"
+
+msgid "Your comment was accepted and now we have to moderate it."
+msgstr "O teu comentario foi aceptado e agora deberá moderarse."
+
+msgid "Your comment was accepted."
+msgstr "O teu comentario foi aceptado."
 
 msgid "Email is required but it will not be published"
 msgstr "O campo de correo-e é obrigatorio porén non será publicado"
@@ -894,6 +894,18 @@ msgstr "Subscribícheste ao boletín de novas."
 
 msgid "You have been unsubscribed from the newsletter."
 msgstr "Desubscribícheste do boletín de novas."
+
+msgid "Error: no vote value!"
+msgstr "Erro: non hai valor de votación!"
+
+msgid "You can't vote this poll, it is closed."
+msgstr "A enquisa está pechada, non podes votar."
+
+msgid "You have voted this poll previously."
+msgstr "Xa votaches nesta enquisa anteriormente."
+
+msgid "Thanks for participating."
+msgstr "Grazas por participar."
 
 msgid "Homepage News"
 msgstr "Novas de portada"
@@ -1590,9 +1602,6 @@ msgstr "Xestionar estado de favorito"
 
 msgid "Administrate opinion widget"
 msgstr "Administrar widget de opinión"
-
-msgid "Manage poll comments"
-msgstr "Xestionar comentarios de enquisas"
 
 msgid "Approve/reject"
 msgstr "Aprobar/rexeitar"
@@ -7009,6 +7018,9 @@ msgstr "Forte"
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de correo-e enviados por mes"
 
+#~ msgid "Manage poll comments"
+#~ msgstr "Xestionar comentarios de enquisas"
+
 #~ msgid "Comment data sent not valid."
 #~ msgstr "Os datos enviados do comentario non son válidos."
 
@@ -7049,20 +7061,8 @@ msgstr "Número máximo de correo-e enviados por mes"
 #~ msgid "%d item(s) updated successfully"
 #~ msgstr "%d elemento(s) actualizado(s) correctamente"
 
-#~ msgid "Error: no vote value!"
-#~ msgstr "Erro: non hai valor de votación!"
-
 #~ msgid "Your comment is valid and now is waiting for moderation."
 #~ msgstr "O teu comentario é válido e agora deberá moderarse."
-
-#~ msgid "You can't vote this poll, it is closed."
-#~ msgstr "A enquisa está pechada, non podes votar."
-
-#~ msgid "You have voted this poll previously."
-#~ msgstr "Xa votaches nesta enquisa anteriormente."
-
-#~ msgid "Thanks for participating."
-#~ msgstr "Grazas por participar."
 
 #~ msgid "Not valid comment id."
 #~ msgstr "Non é un id de comentario válido."
