@@ -46,7 +46,7 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->cs = $this->getMockBuilder('Api\Service\V1\CategoryService')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getItem', 'getList' ])
             ->getMock();
 
         $this->fs = $this->getMockBuilder('Api\Service\V1\FrontpageService')
@@ -87,14 +87,14 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->filterManager = $this->getMockBuilder('FilterManager' . uniqid())
             ->disableOriginalConstructor()
-            ->setMethods([ 'set' ])
+            ->setMethods([ 'set', 'filter', 'get' ])
             ->getMock();
 
         $this->frontpageVersionsRepository = $this->getMockBuilder('FrontpageVersionRepository' . uniqid())
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCatFrontpageRel', 'getCurrentVersionForCategory',
-                'getNextVersionForCategory', 'countBy'
+                'getNextVersionForCategory', 'countBy', 'findBy'
             ])
             ->getMock();
 
@@ -563,26 +563,66 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($manager->getContentIds(1, 2, null));
     }
 
-    //FALLA---------------------------------------------------------------------------------------------
+    /**
+     * Tests getFrontpageWithCategoryWhenEmptyCategory.
+     */
+    public function testGetFrontpageWithCategoryWhenEmptyCategory()
+    {
+        $category = new Category([ 'id' => 1 ]);
+
+        $this->cs->expects($this->once())
+            ->method('getList')
+            ->willReturn([ 'items' => [ $category ] ]);
+
+        $this->frontpageVersionsRepository->expects($this->once())
+            ->method('getCatFrontpageRel')
+            ->willReturn([ 1 => $category ]);
+
+        $this->contentPositionService->expects($this->any())->method('getCategoriesWithManualFrontpage')
+            ->willReturn([]);
+
+        $this->frontpageVersionsRepository->expects($this->once())->method('findBy')
+            ->with("category_id = 0 order by publish_date desc")
+            ->willReturn([]);
+
+        $this->service->getFrontpageWithCategory(null);
+    }
+
     /**
      * Tests getFrontpageWithCategory.
      */
-/*     public function testgetFrontpageWithCategory()
+    public function testGetFrontpageWithCategoryWhenNotEmptyCategory()
     {
+        $category = new Category([ 'id' => 1, 'title' => 'category' ]);
+
+        $this->cs->expects($this->once())
+            ->method('getList')
+            ->willReturn([ 'items' => [ $category ] ]);
+
+        $this->frontpageVersionsRepository->expects($this->once())
+            ->method('getCatFrontpageRel')
+            ->willReturn([ 0 => $category ]);
+
         $this->contentPositionService->expects($this->any())->method('getCategoriesWithManualFrontpage')
-            ->willReturn(true);
+            ->willReturn([]);
 
-        $manager = $this->getMockBuilder('Api\Service\V1\FrontpageVersionService')
-            ->setConstructorArgs([ $this->container, 'Opennemas\Orm\Core\Entity' ])
-            ->setMethods([ 'getCatFrontpagesRel' ])
-            ->getMock();
+        $this->filterManager->expects($this->at(0))->method('set')
+            ->with('category')
+            ->willReturn($this->filterManager);
 
-        $manager->expects($this->at(0))->method('getCatFrontpagesRel')
-            ->willReturn(1);
+        $this->filterManager->expects($this->at(1))->method('filter')
+            ->with('localize')
+            ->willReturn($this->filterManager);
 
-        $this->assertEquals([], $this->service->getFrontpageWithCategory( 1 ));
+        $this->filterManager->expects($this->at(2))->method('get')
+            ->willReturn('category');
+
+        $this->frontpageVersionsRepository->expects($this->once())->method('findBy')
+            ->with("category_id = 1 order by publish_date desc")
+            ->willReturn([]);
+
+        $this->service->getFrontpageWithCategory(1);
     }
- */
 
     /**
      * Tests saveFrontPageVersion.
