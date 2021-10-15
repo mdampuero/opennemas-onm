@@ -429,7 +429,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForLetter()
     {
-        $content = new \Letter();
+        $content = new \Content();
 
         $content->id                = 252;
         $content->author            = 'My author';
@@ -451,7 +451,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForLetterWhenCreatedAsObject()
     {
-        $content = new \Letter();
+        $content = new \Content();
         $date    = new \DateTime();
 
         $content->id                = 252;

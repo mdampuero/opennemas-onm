@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+<div data-content-id="{$content->id}" data-class="{get_type($content)}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
@@ -24,7 +24,7 @@
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=admin_letter_show id=$content->id}">
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=backend_letter_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
             </li>

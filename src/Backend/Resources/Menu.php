@@ -159,7 +159,7 @@ $menuXml = [
                 'id'          => 'letter_manager',
                 'title'       => _('Letter to the editor'),
                 'icon'        => 'fa fa-envelope',
-                'link'        => url('admin_letters'),
+                'link'        => url('backend_letters_list'),
                 'module_name' => 'LETTER_MANAGER',
                 'privilege'   => 'LETTER_ADMIN',
             ],

@@ -1,0 +1,61 @@
+api_v1_backend_letter_get_list:
+    path:    /letters
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:getList, format: '.json'  }
+    methods: [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_letter_create_item:
+    path:    /letters/new
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:createItem }
+    options:
+        expose: true
+
+api_v1_backend_letter_get_item:
+    path:    /letters/{id}
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:getItem }
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_letter_save_item:
+    path:    /letters
+    methods: [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:saveItem }
+    options:
+        expose: true
+
+api_v1_backend_letter_update_item:
+    path:    /letters/{id}
+    methods: [ PUT ]
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:updateItem }
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_letter_get_list:
+    path:    /letters
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:getList, format: '.json'  }
+    methods: [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_letter_patch_item:
+    path:     /letters/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_letter_patch_list:
+    path:     /letters
+    defaults: { _controller: ApiBundle:V1/Backend/Letter:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
