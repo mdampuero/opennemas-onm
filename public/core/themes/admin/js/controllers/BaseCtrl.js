@@ -369,7 +369,11 @@
           }
 
           for (var i = 0; i < items.length; i++) {
-            Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
+            if (items[i].content_type_name === 'photo') {
+              Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
+            } else {
+              Editor.get(target).insertHtml(Renderer.renderContent(items[i]));
+            }
           }
 
           Editor.get(target).fire('change');

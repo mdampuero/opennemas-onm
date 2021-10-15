@@ -52,6 +52,10 @@
           return html;
         };
 
+        this.renderContent = function(item) {
+          return '<a href="">' + item.title + '</a><br>';
+        };
+
         return this;
       }
     ]);
