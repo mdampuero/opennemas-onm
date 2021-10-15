@@ -399,6 +399,10 @@ class SitemapController extends Controller
             'x-tags'      => sprintf('sitemap,%s', $action)
         ];
 
+        if (!empty($cacheControl)) {
+            $headers['Cache-Control'] = $cacheControl;
+        }
+
         $contents = $this->get('core.template.frontend')
             ->render(self::TEMPLATES[$action], [
                 'action'     => $action,
@@ -432,10 +436,6 @@ class SitemapController extends Controller
                 'Content-length'      => strlen($file),
                 'Content-Disposition' => sprintf('attachment; filename="sitemap.%s.xml.gz"', $filename)
             ]);
-
-            if (!empty($cacheControl)) {
-                $headers['Cache-Control'] = $cacheControl;
-            }
 
             return new Response($file, 200, $headers);
         }
