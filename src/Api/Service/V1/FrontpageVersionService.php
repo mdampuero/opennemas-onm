@@ -122,12 +122,10 @@ class FrontpageVersionService extends OrmService
         $filteredContents = [];
 
         foreach ($contents as $content) {
-            if ($content === null) {
-                continue;
-            }
-
-            if ($content->content_status === 1) {
-                $filteredContents[$content->id] = $content;
+            if ($content !== null) {
+                if ($content->content_status === 1) {
+                    $filteredContents[$content->id] = $content;
+                }
             }
         }
 

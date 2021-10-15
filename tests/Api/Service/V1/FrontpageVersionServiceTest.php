@@ -437,7 +437,6 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($manager->getPublicFrontpageData(1));
     }
 
-    //Falta cobertura---------------------------------------------------------------------------------------------
     /**
      * Tests getContentsInCurrentVersionforCategory.
      */
@@ -470,7 +469,6 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($manager->getContentsInCurrentVersionforCategory(1));
     }
 
-    //Falta cobertura---------------------------------------------------------------------------------------------
     /**
      * Tests getFrontpageData.
      */
@@ -540,7 +538,6 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->service->getContentPositions(1, 1));
     }
 
-    //Falta cobertura---------------------------------------------------------------------------------------------
     /**
      * Tests getContentIds.
      */
@@ -556,11 +553,12 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $contentPositions = [ $contents ];
 
         $manager->expects($this->any())->method('getCurrentVersionFromDB')
-            ->with(1)->willReturn(1);
+            ->with(1)->willReturn(2);
         $manager->expects($this->any())->method('getContentPositions')
             ->with(1, 2)->willReturn($contentPositions);
 
         $this->assertIsArray($manager->getContentIds(1, 2, null));
+        $this->assertIsArray($manager->getContentIds(1, null, null));
     }
 
     /**
@@ -585,11 +583,18 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->with("category_id = 0 order by publish_date desc")
             ->willReturn([]);
 
-        $this->service->getFrontpageWithCategory(null);
+        list($frontpages, $versions) = $this->service->getFrontpageWithCategory(null);
+
+        $category = new Category([ 'id' => 1, 'name' => null ]);
+        $this->assertEquals([
+            [ 'id' => 1, 'name' => null, 'frontpage_id' => $category, 'manual' => true ],
+            [ 'id' => 0, 'name' => 'Frontpage', 'manual' => false ]
+        ], $frontpages);
+        $this->assertEquals([], $versions);
     }
 
     /**
-     * Tests getFrontpageWithCategory.
+     * Tests getFrontpageWithCategory when not empty category.
      */
     public function testGetFrontpageWithCategoryWhenNotEmptyCategory()
     {
@@ -621,7 +626,13 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->with("category_id = 1 order by publish_date desc")
             ->willReturn([]);
 
-        $this->service->getFrontpageWithCategory(1);
+        list($frontpages, $versions) = $this->service->getFrontpageWithCategory(1);
+
+        $this->assertEquals([
+            [ 'id' => 0, 'name' => 'Frontpage', 'manual' => true ],
+            [ 'id' => 1, 'name' => 'category', 'manual' => false ]
+        ], $frontpages);
+        $this->assertEquals([], $versions);
     }
 
     /**
