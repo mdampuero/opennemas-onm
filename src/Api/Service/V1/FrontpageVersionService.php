@@ -345,13 +345,13 @@ class FrontpageVersionService extends OrmService
             if (empty($frontpageVersion['frontpage_id'])) {
                 $frontpage = ['name' => _('Frontpage')];
                 if ($frontpageVersion['category_id'] != '0') {
-                    $context = $this->container->get('core.locale')->getContext();
-                    $this->container->get('core.locale')->setContext('frontend');
+                    $context = $this->locale->getContext();
+                    $this->locale->setContext('frontend');
 
                     $category = $this->container->get('api.service.category')
                         ->getItem($frontpageVersion['category_id']);
 
-                    $this->container->get('core.locale')->setContext($context);
+                    $this->locale->setContext($context);
 
                     $frontpage['name'] = $category->name;
                 }
@@ -579,8 +579,8 @@ class FrontpageVersionService extends OrmService
         $contentPositions = $this->getContentPositions($categoryId, $versionId);
         $contents         = [];
 
-        $context = $this->container->get('core.locale')->getContext();
-        $this->container->get('core.locale')->setContext('frontend');
+        $context = $this->locale->getContext();
+        $this->locale->setContext('frontend');
 
         foreach ($contentPositions as $placeholder) {
             foreach ($placeholder as $content) {
@@ -589,7 +589,7 @@ class FrontpageVersionService extends OrmService
             }
         }
 
-        $this->container->get('core.locale')->setContext($context);
+        $this->locale->setContext($context);
 
         return [$contentPositions, $contents];
     }
