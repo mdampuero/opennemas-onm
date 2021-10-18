@@ -11,7 +11,8 @@
    *   The `onm.renderer` module provides a service to render HTML elements from
    *   objects.
    */
-  angular.module('onm.renderer', [])
+  angular.module('onm.renderer', [ 'onm.routing' ])
+
     /**
      * @ngdoc service
      * @name  Renderer
@@ -20,7 +21,9 @@
      *   Service to render HTML elements from objects.
      */
     .service('Renderer', [
-      function() {
+      'routing', 'http',
+      function(routing, http) {
+
         /**
          * @function renderImage
          * @memberOf Renderer
@@ -52,8 +55,73 @@
           return html;
         };
 
-        this.renderContent = function(item) {
-          return '<a href="">' + item.title + '</a><br>';
+        this.renderContent = function(item, extra) {
+          if (item.content_type_name === 'attachment') {
+            return '<a href="' + instanceMedia + item.path.substr(1) + '">' + item.title + '</a><br>';
+          }
+
+          var category = !item.categories ? {} : extra.categories.filter(function(category) {
+            return category.id === item.categories[0];
+          })[0];
+
+          var author = !item.fk_author ? {} : extra.authors.filter(function(author) {
+            return author.id === item.fk_author;
+          })[0];
+
+          var route  = 'frontend_' + item.content_type_name + '_show';
+          var params = {
+            id:      item.pk_content,
+            created: window.moment(item.created).format('YYYYMMDDHHmmss')
+          };
+
+          if (item.content_type_name === 'opinion') {
+            params.author_name   = author.slug;
+            params.opinion_title = item.slug;
+          } else {
+            params.slug = item.slug;
+          }
+
+          if (item.categories && item.categories.length > 0) {
+            params.category_slug = category.name;
+          }
+
+          var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
+            return related.type === 'featured_inner';
+          });
+
+          related = related.length > 0 ? related[0] : null;
+
+          if (!related) {
+            return '<div class="content onm-new">' +
+              '<div class="title-content">' +
+              '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
+              '</div>' +
+              '</div>';
+          }
+
+          var photoRoute = {
+            name: 'api_v1_backend_photo_get_item',
+            params: { id: related.target_id }
+          };
+
+          return http.get(photoRoute).then(function(response) {
+            var photo = response.data.item;
+
+            return '<div class="content onm-new">' +
+              '<figure>' +
+              '<img src="' + instanceMedia + photo.path + '" height="200" width="200">' +
+              '</figure>' +
+              '<div class="title-content">' +
+              '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
+              '</div>' +
+              '</div>';
+          }, function() {
+            return '<div class="content onm-new">' +
+              '<div class="title-content">' +
+              '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
+              '</div>' +
+              '</div>';
+          });
         };
 
         return this;

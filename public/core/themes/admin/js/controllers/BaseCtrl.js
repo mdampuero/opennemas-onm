@@ -19,9 +19,9 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor',
+      '$q', '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor',
       'http', 'linker', 'localizer', 'messenger', 'Renderer', '$sce',
-      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer, $sce) {
+      function($q, $rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer, $sce) {
         /**
          * @memberOf BaseCtrl
          *
@@ -363,7 +363,7 @@
          * @param string target The target id.
          * @param array  items  The items to insert.
          */
-        $scope.insertInCKEditor = function(target, items) {
+        $scope.insertInCKEditor = function(target, items, extra) {
           if (!(items instanceof Array)) {
             items = [ items ];
           }
@@ -372,7 +372,9 @@
             if (items[i].content_type_name === 'photo') {
               Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
             } else {
-              Editor.get(target).insertHtml(Renderer.renderContent(items[i]));
+              $q.when(Renderer.renderContent(items[i], extra), function(html) {
+                Editor.get(target).insertHtml(html);
+              });
             }
           }
 
@@ -584,7 +586,7 @@
           if (/editor.*/.test(args.target)) {
             var target = args.target.replace('editor.', '');
 
-            $scope.insertInCKEditor(target, args.items);
+            $scope.insertInCKEditor(target, args.items, $scope.data.extra);
             return;
           }
 
