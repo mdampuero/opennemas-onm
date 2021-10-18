@@ -122,10 +122,8 @@ class FrontpageVersionService extends OrmService
         $filteredContents = [];
 
         foreach ($contents as $content) {
-            if ($content !== null) {
-                if ($content->content_status === 1) {
-                    $filteredContents[$content->id] = $content;
-                }
+            if (!empty($content) && $content->content_status === 1) {
+                $filteredContents[$content->id] = $content;
             }
         }
 
@@ -368,6 +366,7 @@ class FrontpageVersionService extends OrmService
                     400
                 );
             }
+
             $frontpageVersion['created'] = new \DateTime();
 
             $fvc = $this->createItem($frontpageVersion);
@@ -527,40 +526,37 @@ class FrontpageVersionService extends OrmService
 
         $frontpageVersionId = $this->getNextVersionForCategory($categoryId);
 
-        $systemDateTz = (new \DateTime(null, $this->locale->getTimeZone()))->format('Y-m-d H:i:s');
+        $systemDateTz = new \DateTime(null, $this->locale->getTimeZone());
+
         if (empty($frontpageVersionId)) {
             $invalidationTime = new \DateTime(null, $this->locale->getTimeZone());
             // Add 1 year to the current timestamp
             $timestamp = $invalidationTime->getTimestamp() + 31536000;
             $invalidationTime->setTimestamp($timestamp);
-            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
         } else {
             $frontpageVersion = $this->getItem($frontpageVersionId);
             if (!empty($frontpageVersion->publish_date)) {
-                $invalidationTime = $frontpageVersion->publish_date
-                    ->format('Y-m-d H:i:s');
+                $invalidationTime = $frontpageVersion->publish_date;
             }
         }
 
         foreach ($contents as $content) {
             if (!empty($content->starttime) &&
-                $content->starttime > new \DateTime($systemDateTz) &&
-                $content->starttime < new \DateTime($invalidationTime)
+                $content->starttime > $systemDateTz &&
+                $content->starttime < $invalidationTime
             ) {
-                $invalidationTime = $content->starttime->format('Y-m-d H:i:s');
+                $invalidationTime = $content->starttime;
                 continue;
             }
 
             if (!empty($content->endtime) &&
-                $content->endtime > new \DateTime($systemDateTz) &&
-                $content->endtime < new \DateTime($invalidationTime)
+                $content->endtime > $systemDateTz &&
+                $content->endtime < $invalidationTime
             ) {
-                $invalidationTime = $content->endtime->format('Y-m-d H:i:s');
+                $invalidationTime = $content->endtime;
                 continue;
             }
         }
-
-        $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->locale->getTimeZone());
 
         return $invalidationTime;
     }
