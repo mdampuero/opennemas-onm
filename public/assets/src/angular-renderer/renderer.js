@@ -92,7 +92,7 @@
           related = related.length > 0 ? related[0] : null;
 
           if (!related) {
-            return '<div class="content onm-new">' +
+            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 20px 20px 0 20px;">' +
               '<div class="title-content">' +
               '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
               '</div>' +
@@ -107,16 +107,17 @@
           return http.get(photoRoute).then(function(response) {
             var photo = response.data.item;
 
-            return '<div class="content onm-new">' +
-              '<figure>' +
-              '<img src="' + instanceMedia + photo.path + '" height="200" width="200">' +
+            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 20px 20px 0 20px;">' +
+              '<figure style="width: 25%; flex-basis: 25%;">' +
+              '<img src="/asset/zoomcrop,480,270,center,center/' + instanceMedia + photo.path +
+              '" height="96" width="96">' +
               '</figure>' +
-              '<div class="title-content">' +
+              '<div style="width: 70%; flex-basis: 70%;" class="title-content">' +
               '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
               '</div>' +
               '</div>';
           }, function() {
-            return '<div class="content onm-new">' +
+            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 20px 20px 0 20px;">' +
               '<div class="title-content">' +
               '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
               '</div>' +
