@@ -100,7 +100,8 @@
           getItem:     'api_v1_backend_letter_get_item',
           list:        'api_v1_backend_letter_get_list',
           saveItem:    'api_v1_backend_letter_save_item',
-          updateItem:  'api_v1_backend_letter_update_item'
+          updateItem:  'api_v1_backend_letter_update_item',
+          public:      'frontend_letter_show',
         };
 
         /**

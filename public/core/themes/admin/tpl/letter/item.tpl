@@ -58,6 +58,9 @@
   </div>
   <div class="grid simple">
     <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
+      </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo"}
     </div>
@@ -67,20 +70,17 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standar" rows=15}
       <h4>{t}Author information{/t}</h4>
       <div class="row">
-        <div class="form-inline-block">
-          <div class="form-group col-md-6">
-            {include file="ui/component/input/text.tpl" iCounter=false iField="author" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Nickname{/t}" iValidation=true}
-          </div>
-          <div class="form-group col-md-6">
-            {include file="ui/component/input/text.tpl" iCounter=false iField="email" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Email{/t}" iValidation=true}
-          </div>
+        <div class="form-group col-md-6">
+          {include file="ui/component/input/text.tpl" iCounter=false iField="author" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Nickname{/t}" iValidation=true}
+        </div>
+        <div class="form-group col-md-6">
+          {include file="ui/component/input/text.tpl" iCounter=false iField="email" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Email{/t}" iValidation=true}
         </div>
       </div>
-      {include file="ui/component/input/text.tpl" iField="created" iNgActions="ng-blur=\"generate()\" readonly" iTitle="{t}Created at{/t}"}
+      {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standar" rows=15}
     </div>
   </div>
 {/block}

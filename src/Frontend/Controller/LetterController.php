@@ -9,211 +9,208 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Swift_RfcComplianceException;
+use DateTime;
+use VARIANT;
 
 /**
- * Handles the actions for letters
- *
- * @package Frontend_Controllers
+ * Displays a letter or a list of letters.
  */
-class LetterController extends Controller
+class LetterController extends FrontendController
 {
     /**
-     * Displays a list of letters.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
+     * {@inheritdoc}
      */
-    public function frontpageAction(Request $request)
+    protected $extension = 'LETTER_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $caches = [
+        'list'       => 'letter',
+        'listauthor' => 'letter',
+        'show'       => 'letter',
+        'showamp'    => 'letter',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'list'    => 'letters_frontpage',
+        'show'    => 'letters_inner',
+        'form'    => 'letters_inner',
+        'showamp' => 'amp_inner',
+    ];
+
+    /**
+     * The list of routes per action.
+     *
+     * @var array
+     */
+    protected $routes = [
+        'list' => 'frontend_letter_frontpage'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.letter';
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'list'     => 'letter/letter_frontpage.tpl',
+        'show'     => 'letter/letter.tpl',
+        'form' => 'letter/letter_form.tpl',
+        'showamp'  => 'amp/content.tpl',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    /*public function listAction(Request $request)
     {
-        if (!$this->get('core.security')->hasExtension('LETTER_MANAGER')) {
+        $this->getAds();
+
+        return parent::listAction($request);
+    }*/
+
+    /**
+     * {@inheritdoc}
+     */
+    /*public function showAction(Request $request)
+    {
+        $this->getAds();
+
+        return parent::showAction($request);
+    }*/
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateList(array &$params = []) : void
+    {
+        // Invalid page provided as parameter
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
-        $page = $request->query->getDigits('page', 1);
+        $epp = (int) $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_per_page', 10);
 
-        // Setup templating cache layer
-        $this->view->setConfig('letter-frontpage');
-        $cacheID = $this->view->getCacheId('frontpage', 'letter', $page);
+        $response = $this->get($this->service)->getList(sprintf(
+            'content_type_name="letter" and content_status=1 and in_litter=0 '
+            . 'order by created desc limit %d offset %d',
+            $epp,
+            $epp * ($params['page'] - 1)
+        ));
 
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached('letter/letter_frontpage.tpl', $cacheID)
-        ) {
-            $itemsPerPage = 12;
+        // No first page and no contents
+        if ($params['page'] > 1 && empty($response['items'])) {
+            throw new ResourceNotFoundException();
+        }
 
-            $order   = [ 'created' => 'DESC' ];
-            $filters = [
-                'content_type_name' => [[ 'value' => 'letter' ]],
-                'content_status'    => [[ 'value' => 1 ]],
-                'in_litter'         => [[ 'value' => 0 ]],
-                'starttime'       => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'endtime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-                ]
-            ];
-
-            $em           = $this->get('entity_repository');
-            $letters      = $em->findBy($filters, $order, $itemsPerPage, $page);
-            $countLetters = $em->countBy($filters);
-
-            // Pagination for block more videos
-            $pagination = $this->get('paginator')->get([
+        $params = array_merge($params, [
+            'otherLetters'    => $response['items'],
+            'total'           => $response['total'],
+            'pagination'      => $this->get('paginator')->get([
                 'boundary'    => false,
                 'directional' => true,
                 'maxLinks'    => 0,
-                'epp'         => $itemsPerPage,
-                'page'        => $page,
-                'total'       => $countLetters,
+                'epp'         => $epp,
+                'page'        => $params['page'],
+                'total'       => $response['total'],
                 'route'       => [
-                    'name'   => 'frontend_letter_frontpage',
+                    'name'    => 'frontend_letter_frontpage',
+                    'params'  => [],
                 ]
-            ]);
 
-            $this->view->assign([
-                'otherLetters' => $letters,
-                'pagination'   => $pagination,
-            ]);
-        }
-
-        $this->getAds();
-
-        return $this->render('letter/letter_frontpage.tpl', [
-            'cache_id'    => $cacheID,
-            'recaptcha'   => $this->get('core.recaptcha')
-                ->configureFromSettings()
-                ->getHtml(),
-            'x-tags'      => 'letter-frontpage',
-            'x-cacheable' => true,
-        ]);
-    }
-
-    /**
-     * Shows a letter.
-     *
-     * @param string $slug   The letter slug.
-     * @param string $id     The letter id.
-     *
-     * @return Response The response object.
-     */
-    public function showAction($slug, $id)
-    {
-        $letter = $this->get('content_url_matcher')
-            ->matchContentUrl('letter', $id, $slug);
-
-        if (empty($letter)) {
-            throw new ResourceNotFoundException();
-        }
-
-        // Setup view
-        $this->view->setConfig('letter-inner');
-        $cacheID = $this->view->getCacheId('content', $letter->id);
-
-        if ($this->view->getCaching() === 0
-            || !$this->view->isCached('letter/letter.tpl', $cacheID)
-        ) {
-            $order   = [ 'created' => 'DESC' ];
-            $filters = [
-                'content_type_name' => [[ 'value' => 'letter' ]],
-                'content_status'    => [[ 'value' => 1 ]],
-                'in_litter'         => [[ 'value' => 0 ]],
-                'starttime'       => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'endtime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
-                ],
-            ];
-
-            $otherLetters = $this->get('entity_repository')->findBy($filters, $order, 5, 1);
-
-            $this->view->assign(['otherLetters' => $otherLetters]);
-        }
-
-        $this->getAds();
-
-        return $this->render('letter/letter.tpl', [
-            'cache_id'    => $cacheID,
-            'content'     => $letter,
-            'contentId'   => $letter->id,
-            'letter'      => $letter,
-            'o_content'   => $letter,
-            'x-tags'      => 'letter,' . $letter->id,
-            'x-cacheable' => true,
-            'tags'        => $this->get('api.service.tag')
-                ->getListByIdsKeyMapped($letter->tags)['items']
+            ])
         ]);
     }
 
     /**
      * Displays a form to send letters to the newspaper.
+     * The list of routes per action.
      *
      * @return Response The response object.
+     * @var array
      */
-    public function showFormAction()
+    public function formAction(Request $request)
     {
-        $this->getAds();
+        //$this->getAds();
+        parent::getAdvertisements();
 
-        return $this->render('letter/letter_form.tpl', [
+        $action = $this->get('core.globals')->getAction();
+        $params = $this->getParameters($request);
+        $params = array_merge($params, [
             'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml()
         ]);
+
+        return $this->render($this->getTemplate($action), $params);
     }
 
     /**
-     * Saves a letter into database.
+     * Saves a content given its information and the content to relate to
      *
-     * @param Request $request The request object.
+     * @param Request $request the request object
      *
-     * @return Response The response object.
+     * @return Response the response object
      */
     public function saveAction(Request $request)
     {
         $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
-        $isValid  = $this->get('core.recaptcha')
+
+        // Check current recaptcha
+        $isValid = $this->get('core.recaptcha')
             ->configureFromSettings()
             ->isValid($response, $request->getClientIp());
 
         // What happens when the CAPTCHA was entered incorrectly
         if (!$isValid) {
-            $msg      = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
-            $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
-
-            return $response;
+            return  new RedirectResponse(
+                $this->generateUrl('frontend_letter_form')
+                . '?msg="'
+                . _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
+                . '"'
+            );
         }
 
-        $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
         $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
-        $msg           = _('Unable to save the letter.');
 
         if (!empty($security_code)) {
-            return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
+            return new RedirectResponse(
+                $this->generateUrl('frontend_letter_frontpage')
+                . '?msg="'
+                . _('Unable to save the letter.')
+                . '"'
+            );
         }
 
-        $params  = [];
+        //$params  = [];
         $data    = [];
+
         $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
         $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
         $email   = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
-        $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
-        $items   = $request->request->get('items');
+        //$url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
+        $text    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
+        //$items   = $request->request->get('items');
+        $now     = new DateTime();
 
-        $moreData = _("Name") . ": {$name} \n " . _("Email") . ": {$email} \n ";
+        /*$moreData = _("Name") . ": {$name} \n " . _("Email") . ": {$email} \n ";
         if (!empty($items)) {
             foreach ($items as $key => $value) {
                 if (!empty($key) && !empty($value)) {
@@ -221,102 +218,100 @@ class LetterController extends Controller
                     $moreData    .= " {$key}: {$value}\n ";
                 }
             }
-        }
+        }*/
 
         $data = [
-            'author'         => $url,
-            'body'           => iconv(mb_detect_encoding($lettertext), "UTF-8", $lettertext),
+            'author'         => $name,
+            'body'           => iconv(mb_detect_encoding($text), "UTF-8", $text),
             'content_status' => 0, // pending status
             'email'          => $email,
-            'image'          => $this->saveImage($request),
+            //'image'          => $this->saveImage($request),
             'title'          => $subject,
-            'url'            => $url,
+            //'url'            => $url,
         ];
 
         // Prevent XSS attack
-        $data         = array_map('strip_tags', $data);
-        $data['body'] = nl2br($moreData . $data['body']);
+        $data = array_map('strip_tags', $data);
 
-        $data['params'] = [
-            'ip' => getUserRealIP(),
-        ];
+        $data['body']              = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
+        $data['created']           = $now->format('Y-m-d H:i:s');
+        $data['starttime']         = $now->format('Y-m-d H:i:s');
+        $data['content_type_name'] = 'letter';
+        $data['fk_content_type']   = 17;
+        $data['content_status']    = 2;
+        $data['params']            = [' ip' => getUserRealIP() ];
+        $data['slug']              = getService('data.manager.filter')
+            ->set(empty($data['slug']) ? $data['title'] : $data['slug'])
+            ->filter('slug')
+            ->get();
 
-        $letter = new \Letter();
-
-        if ($letter->create($data)) {
-            $msg = _("Your letter has been saved and is awaiting publication.");
-
+        try {
             $settings = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get(['contact_email', 'site_name']);
 
             $recipient = $settings['contact_email'];
+
             if (!empty($recipient)) {
-                $mailSender = $this->getParameter('mailer_no_reply_address');
+               $mailSender = $this->getParameter('mailer_no_reply_address');
 
-                //  Build the message
-                $text = \Swift_Message::newInstance();
-                $text
-                    ->setSubject('[' . _('Letter to the editor') . '] ' . $subject)
-                    ->setBody($data['body'], 'text/html')
-                    ->setTo([ $recipient => $recipient ])
-                    ->setFrom([ $mailSender => $settings['site_name'] ])
-                    ->setSender([ $mailSender => $settings['site_name'] ]);
+               //  Build the message
+               $swiftMsg = \Swift_Message::newInstance();
+               $swiftMsg
+                   ->setSubject('[' . _('Letter to the editor') . '] ' . $subject)
+                   ->setBody($data['body'], 'text/html')
+                   ->setTo([ $recipient => $recipient ])
+                   ->setFrom([ $mailSender => $settings['site_name'] ])
+                   ->setSender([ $mailSender => $settings['site_name'] ]);
 
-                $headers = $text->getHeaders();
-                $headers->addParameterizedHeader(
-                    'ACUMBAMAIL-SMTPAPI',
-                    $this->get('core.instance')->internal_name . ' - Letter'
-                );
+               $headers = $swiftMsg->getHeaders();
 
-                try {
-                    $this->get('mailer')->send($text);
+               $headers->addParameterizedHeader(
+                   'ACUMBAMAIL-SMTPAPI',
+                   $this->get('core.instance')->internal_name . ' - Letter'
+               );
 
-                    $this->get('application.log')->notice(
-                        "Email sent. Frontend letter (From:" . $email . ", to: " . $recipient . ")"
-                    );
-                } catch (\Exception $e) {
-                    $this->get('application.log')->notice(
-                        "Email NOT sent. Frontend letter (From:" . $email . ", to: " . $recipient . "):"
-                        . $e->getMessage()
-                    );
-                }
+               $this->get('mailer')->send($text);
+
+               $this->get('application.log')->notice(
+                   "Email sent. Frontend letter (From:" . $email . ", to: " . $recipient . ")"
+               );
             }
-        } else {
-            $msg = _("Your letter has not been saved, make sure you fill in all the fields correctly.");
-        }
 
-        return new RedirectResponse($this->generateUrl('frontend_letter_frontpage') . '?msg="' . $msg . '"');
-    }
+            $this->get($this->service)->createItem($data);
+        } catch (Swift_RfcComplianceException $e) {
+            $this->get('application.log')->notice(
+                "Email NOT sent. Frontend letter (From:" . $email . ", to: " . $recipient . "):"
+                . $e->getMessage()
+            );
 
-    /**
-     * Uploads and creates an image.
-     *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
-     */
-    public function saveImage(Request $request)
-    {
-        $file = $request->files->get('image');
-        $ps   = $this->get('api.service.photo');
-
-        if (empty($file)) {
-            return null;
-        }
-
-        try {
-            return $ps->createItem([], $file)->pk_content;
+            return new RedirectResponse(
+                $this->generateUrl('frontend_letter_frontpage')
+                . '?msg="'
+                . $e->getMessage()
+                . '"'
+            );
         } catch (\Exception $e) {
-            $this->get('error.log')->error('Unable to save letter image: ' . $e->getMessage());
-            return null;
+            return new RedirectResponse(
+                $this->generateUrl('frontend_letter_frontpage')
+                . '?msg="'
+                . $e->getMessage()
+                . '"'
+            );
         }
+
+        return new RedirectResponse(
+            $this->generateUrl('frontend_letter_frontpage')
+            . '?msg="'
+            . _("Your letter has been saved and is awaiting publication.")
+            . '"'
+        );
     }
 
     /**
-     * Loads the list of positions and advertisements on renderer service.
-     */
-    public function getAds()
+-     * Loads the list of positions and advertisements on renderer service.
+-     */
+   /*public function getAds()
     {
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
@@ -326,5 +321,5 @@ class LetterController extends Controller
         $this->get('frontend.renderer.advertisement')
             ->setPositions($positions)
             ->setAdvertisements($advertisements);
-    }
+    }*/
 }

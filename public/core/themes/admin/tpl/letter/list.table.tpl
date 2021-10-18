@@ -87,8 +87,8 @@
   {acl isAllowed="LETTER_AVAILABLE"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')">
       <span ng-show="item.content_status != 2">
-        <button class="btn btn-white" ng-class="{ statusLoading: item.content_statusLoading == 1, published: item.content_status == 1, unpublished: (item.content_status == 2 || item.content_status == 0) }" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 2)" type="button" uib-tooltip-html="item.content_status !== 1 ? '{t}Rejected{/t}' : '{t}Accepted{/t}'">
-          <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading, 'fa-check text-success' : !item.content_statusLoading && item.content_status == 1, 'fa-times text-error': !item.content_statusLoading && (item.content_status == 0 || item.content_status == 2) }"></i>
+        <button class="btn btn-white" ng-class="{ statusLoading: item.content_statusLoading == 1, published: item.content_status == 1, unpublished: (item.content_status == 2 || item.content_status == 0) }" ng-click="patch(item, 'content_status', item.content_status != 1 ? 1 : 0)" type="button" uib-tooltip-html="item.content_status !== 1 ? '{t}Rejected{/t}' : '{t}Accepted{/t}'">
+          <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading, 'fa-check text-success' : !item.content_statusLoading && item.content_status == 1, 'fa-times text-error': !item.content_statusLoading && item.content_status == 0 }"></i>
         </button>
       </span>
       <span ng-show="item.content_status == 2">
@@ -97,7 +97,7 @@
             <i class="fa fa-clock-o text-warning"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-right no-padding">
-            <li><a href="#" ng-click="patch(item, 'content_status', 2)"><i class="fa fa-times text-error"></i> {t}Reject{/t}</a> </li>
+            <li><a href="#" ng-click="patch(item, 'content_status', 0)"><i class="fa fa-times text-error"></i> {t}Reject{/t}</a> </li>
             <li><a href="#" ng-click="patch(item, 'content_status', 1)"><i class="fa fa-check text-success"></i> {t}Accept{/t}</a></li>
           </ul>
         </div>
