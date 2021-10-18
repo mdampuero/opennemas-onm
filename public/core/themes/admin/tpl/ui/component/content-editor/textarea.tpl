@@ -14,7 +14,7 @@
   {/if}
   {if $contentPicker}
     <div class="pull-right m-r-5">
-      <div class="btn btn-mini" {if $required}required{/if} content-picker content-picker-target="editor.{$field}" content-picker-selection="true" content-picker-type="album,article,attachment,opinion,poll,video" content-picker-max-size="1">
+      <div class="btn btn-mini" {if $required}required{/if} content-picker content-picker-target="editor.{$field}" content-picker-selection="true" content-picker-type="album,article,attachment,opinion,poll,video" content-picker-max-size="10">
         <i class="fa fa-plus"></i>
         {t}Insert related{/t}
       </div>

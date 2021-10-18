@@ -25,6 +25,33 @@
       function(routing, http) {
 
         /**
+         * @memberOf Renderer
+         *
+         * @description
+         *  The html template for the related content.
+         *
+         * @type {String}
+         */
+        this.template = '<p>' +
+          '<div class="content onm-new">' +
+          '[figure]' +
+          '<div class="title-content">' +
+          '<a href="[url]">[title]</a>' +
+          '</div>' +
+          '</div>' +
+          '</p>';
+
+        /**
+         * @memberOf Renderer
+         *
+         * @description
+         *  The html template for the figure of the content.
+         *
+         * @type {String}
+         */
+        this.figure = '<figure><img src="[path]" height="96" width="96"></figure>';
+
+        /**
          * @function renderImage
          * @memberOf Renderer
          *
@@ -39,7 +66,7 @@
         this.renderImage = function(image, align) {
           var alt   = '';
           var align = '';
-          var html  = '<img[align] src="' + instanceMedia + image.path + '"[alt]>';
+          var html  = '<img[align] style="max-width: 100%;" src="' + instanceMedia + image.path + '"[alt]>';
 
           if (image.description) {
             alt = ' alt="' + image.description + '"';
@@ -55,9 +82,26 @@
           return html;
         };
 
+        /**
+         * @function renderContent
+         * @memberOf Renderer
+         *
+         * @description
+         *   Returns the HTML code to insert in a text for a related content.
+         *
+         * @param {Object} item  The related content.
+         * @param {Array}  extra The array of extra data.
+         *
+         * @return {String} The HTML code.
+         */
         this.renderContent = function(item, extra) {
+          var html = this.template.replace('[title]', item.title);
+
           if (item.content_type_name === 'attachment') {
-            return '<a href="' + instanceMedia + item.path.substr(1) + '">' + item.title + '</a><br>';
+            html = html.replace('[url]', instanceMedia + item.path.substr(1));
+            html = html.replace('[figure]', '');
+
+            return html;
           }
 
           var category = !item.categories ? {} : extra.categories.filter(function(category) {
@@ -85,6 +129,9 @@
             params.category_slug = category.name;
           }
 
+          // Generates the url for the content.
+          html = html.replace('[url]', routing.generate(route, params));
+
           var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
             return related.type === 'featured_frontpage';
           });
@@ -92,11 +139,9 @@
           related = related.length > 0 ? related[0] : null;
 
           if (!related) {
-            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 15px;">' +
-              '<div class="title-content">' +
-              '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
-              '</div>' +
-              '</div>';
+            html = html.replace('[figure]', '');
+
+            return html;
           }
 
           var photoRoute = {
@@ -107,22 +152,15 @@
           return http.get(photoRoute).then(function(response) {
             var photo = response.data.item;
 
-            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 15px;">' +
-              '<figure style="width: 25%; flex-basis: 25%;">' +
-              '<img src="/asset/zoomcrop,480,270,center,center/' + instanceMedia + photo.path +
-              '" height="96" width="96">' +
-              '</figure>' +
-              '<div style="width: 70%; flex-basis: 70%;" class="title-content">' +
-              '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
-              '</div>' +
-              '</div>';
-          }, function() {
-            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 15px;">' +
-              '<div class="title-content">' +
-              '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
-              '</div>' +
-              '</div>';
-          });
+            return html.replace(
+              '[figure]',
+              this.figure.replace('[path]', '/asset/zoomcrop,480,270,center,center/' + instanceMedia + photo.path)
+            );
+          }.bind(this), function() {
+            html = html.replace('[figure]', '');
+
+            return html;
+          }.bind(this));
         };
 
         return this;
