@@ -23,10 +23,10 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('LetterCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
-      'http', 'related', 'routing', 'translator',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner,
-          http, related, routing, translator) {
+      '$controller', '$scope', '$timeout', '$uibModal', '$window',
+      'related', 'routing', 'translator',
+      function($controller, $scope, $timeout, $uibModal, $window,
+          related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -98,10 +98,11 @@
         $scope.routes = {
           createItem:  'api_v1_backend_letter_create_item',
           getItem:     'api_v1_backend_letter_get_item',
-          list:        'api_v1_backend_letter_get_list',
+          list:        'backend_letters_list',
           saveItem:    'api_v1_backend_letter_save_item',
           updateItem:  'api_v1_backend_letter_update_item',
           public:      'frontend_letter_show',
+          redirect:    'backend_letter_show',
         };
 
         /**
@@ -138,15 +139,12 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory) {
-            return '';
-          }
-
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
+              author: item.author
             })
           );
         };

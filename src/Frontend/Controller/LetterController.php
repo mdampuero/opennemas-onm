@@ -173,14 +173,12 @@ class LetterController extends FrontendController
     {
         $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
 
-        // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
             ->configureFromSettings()
             ->isValid($response, $request->getClientIp());
 
-        // What happens when the CAPTCHA was entered incorrectly
         if (!$isValid) {
-            return  new RedirectResponse(
+            return new RedirectResponse(
                 $this->generateUrl('frontend_letter_form')
                 . '?msg="'
                 . _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
@@ -199,98 +197,36 @@ class LetterController extends FrontendController
             );
         }
 
-        //$params  = [];
-        $data    = [];
+
 
         $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
         $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
         $email   = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
-        //$url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
         $text    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
-        //$items   = $request->request->get('items');
         $now     = new DateTime();
 
-        /*$moreData = _("Name") . ": {$name} \n " . _("Email") . ": {$email} \n ";
-        if (!empty($items)) {
-            foreach ($items as $key => $value) {
-                if (!empty($key) && !empty($value)) {
-                    $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
-                    $moreData    .= " {$key}: {$value}\n ";
-                }
-            }
-        }*/
-
+        $data = [];
         $data = [
-            'author'         => $name,
-            'body'           => iconv(mb_detect_encoding($text), "UTF-8", $text),
-            'content_status' => 0, // pending status
-            'email'          => $email,
-            //'image'          => $this->saveImage($request),
-            'title'          => $subject,
-            //'url'            => $url,
+            'title'             => $subject,
+            'body'              => iconv(mb_detect_encoding($text), "UTF-8", $text),
+            'content_status'    => 2, // pending status
+            'content_type_name' => 'letter',
+            'fk_content_type'   => 17,
+            'author'            => $name,
+            'email'             => $email,
+            'created'           => $now->format('Y-m-d H:i:s'),
+            'starttime'         => $now->format('Y-m-d H:i:s'),
+            'params'            => [ 'ip' => getUserRealIP() ],
+            'slug'              => getService('data.manager.filter')
+                ->set($subject)
+                ->filter('slug')
+                ->get()
         ];
 
-        // Prevent XSS attack
         $data = array_map('strip_tags', $data);
 
-        $data['body']              = '<p>' . preg_replace('@\\n@', '</p><p>', $data['body']) . '</p>';
-        $data['created']           = $now->format('Y-m-d H:i:s');
-        $data['starttime']         = $now->format('Y-m-d H:i:s');
-        $data['content_type_name'] = 'letter';
-        $data['fk_content_type']   = 17;
-        $data['content_status']    = 2;
-        $data['params']            = [' ip' => getUserRealIP() ];
-        $data['slug']              = getService('data.manager.filter')
-            ->set(empty($data['slug']) ? $data['title'] : $data['slug'])
-            ->filter('slug')
-            ->get();
-
         try {
-            $settings = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get(['contact_email', 'site_name']);
-
-            $recipient = $settings['contact_email'];
-
-            if (!empty($recipient)) {
-               $mailSender = $this->getParameter('mailer_no_reply_address');
-
-               //  Build the message
-               $swiftMsg = \Swift_Message::newInstance();
-               $swiftMsg
-                   ->setSubject('[' . _('Letter to the editor') . '] ' . $subject)
-                   ->setBody($data['body'], 'text/html')
-                   ->setTo([ $recipient => $recipient ])
-                   ->setFrom([ $mailSender => $settings['site_name'] ])
-                   ->setSender([ $mailSender => $settings['site_name'] ]);
-
-               $headers = $swiftMsg->getHeaders();
-
-               $headers->addParameterizedHeader(
-                   'ACUMBAMAIL-SMTPAPI',
-                   $this->get('core.instance')->internal_name . ' - Letter'
-               );
-
-               $this->get('mailer')->send($text);
-
-               $this->get('application.log')->notice(
-                   "Email sent. Frontend letter (From:" . $email . ", to: " . $recipient . ")"
-               );
-            }
-
             $this->get($this->service)->createItem($data);
-        } catch (Swift_RfcComplianceException $e) {
-            $this->get('application.log')->notice(
-                "Email NOT sent. Frontend letter (From:" . $email . ", to: " . $recipient . "):"
-                . $e->getMessage()
-            );
-
-            return new RedirectResponse(
-                $this->generateUrl('frontend_letter_frontpage')
-                . '?msg="'
-                . $e->getMessage()
-                . '"'
-            );
         } catch (\Exception $e) {
             return new RedirectResponse(
                 $this->generateUrl('frontend_letter_frontpage')
@@ -299,6 +235,8 @@ class LetterController extends FrontendController
                 . '"'
             );
         }
+
+        $this->sendEmail($data['body'], $subject, $email);
 
         return new RedirectResponse(
             $this->generateUrl('frontend_letter_frontpage')
@@ -309,9 +247,54 @@ class LetterController extends FrontendController
     }
 
     /**
+     * Send verification email
+     */
+    protected function sendEmail($body, $subject, $email)
+    {
+        try {
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get(['contact_email', 'site_name']);
+
+            $recipient = $settings['contact_email'];
+
+            if (!empty($recipient)) {
+                $mailSender = $this->getParameter('mailer_no_reply_address');
+
+                //  Build the message
+                $text = \Swift_Message::newInstance();
+                $text
+                    ->setSubject('[' . _('Letter to the editor') . '] ' . $subject)
+                    ->setBody($body, 'text/html')
+                    ->setTo([ $recipient => $recipient ])
+                    ->setFrom([ $mailSender => $settings['site_name'] ])
+                    ->setSender([ $mailSender => $settings['site_name'] ]);
+
+                $headers = $text->getHeaders();
+
+                $headers->addParameterizedHeader(
+                    'ACUMBAMAIL-SMTPAPI',
+                    $this->get('core.instance')->internal_name . ' - Letter'
+                );
+
+                $this->get('mailer')->send($text);
+
+                $this->get('application.log')->notice(
+                    "Email sent. Frontend letter (From:" . $email . ", to: " . $recipient . ")"
+                );
+            }
+        } catch (\Exception $e) {
+            $this->get('application.log')->notice(
+                "Email NOT sent. Frontend letter (From:" . $email . ", to: " . $recipient . "):"
+                . $e->getMessage()
+            );
+        }
+    }
+
+    /**
 -     * Loads the list of positions and advertisements on renderer service.
 -     */
-   /*public function getAds()
+    /*public function getAds()
     {
         $positionManager = $this->get('core.helper.advertisement');
         $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);

@@ -16,8 +16,8 @@
      *   Controller for comments listing.
      */
     .controller('LetterListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder', 'routing', '$window',
+      function($controller, $scope, oqlEncoder, routing, $window) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -43,6 +43,7 @@
           patchItem:  'api_v1_backend_letter_patch_item',
           deleteList: 'api_v1_backend_letter_delete_list',
           deleteItem: 'api_v1_backend_letter_delete_item',
+          public:     'frontend_letter_show',
         };
 
         /**
@@ -83,6 +84,29 @@
           $scope.items = $scope.data.items;
 
           $scope.extra = $scope.data.extra;
+        };
+
+        /**
+         *
+         * @function getFrontendUrl
+         * @memberOf LetterCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content,
+              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              slug: item.slug,
+              author: item.author
+            })
+          );
         };
       }
     ]);
