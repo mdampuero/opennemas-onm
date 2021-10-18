@@ -86,13 +86,13 @@
           }
 
           var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
-            return related.type === 'featured_inner';
+            return related.type === 'featured_frontpage';
           });
 
           related = related.length > 0 ? related[0] : null;
 
           if (!related) {
-            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 20px 20px 0 20px;">' +
+            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 15px;">' +
               '<div class="title-content">' +
               '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
               '</div>' +
@@ -107,7 +107,7 @@
           return http.get(photoRoute).then(function(response) {
             var photo = response.data.item;
 
-            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 20px 20px 0 20px;">' +
+            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 15px;">' +
               '<figure style="width: 25%; flex-basis: 25%;">' +
               '<img src="/asset/zoomcrop,480,270,center,center/' + instanceMedia + photo.path +
               '" height="96" width="96">' +
@@ -117,7 +117,7 @@
               '</div>' +
               '</div>';
           }, function() {
-            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 20px 20px 0 20px;">' +
+            return '<div class="content onm-new" style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 1px solid black; padding: 15px;">' +
               '<div class="title-content">' +
               '<a href="' + routing.generate(route, params) + '">' + item.title + '</a>' +
               '</div>' +
