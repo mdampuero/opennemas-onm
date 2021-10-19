@@ -46,6 +46,8 @@
     EditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
     EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
 
+    EditorProvider.addCustomCss('ckeditor.css');
+
     // Enable CKEditor for all environments (browsers)
     EditorProvider.setCompatible(true);
   }]);
