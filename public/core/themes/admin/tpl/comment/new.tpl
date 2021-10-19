@@ -99,7 +99,7 @@
               <div class="form-group">
                 <label class="form-label" for="body"><i class="fa fa-comment m-r-5"></i> {t}Body{/t}</label>
                 <div class="controls">
-                  <textarea onm-editor onm-editor-preset="simple" name="body" id="body" ng-model="body" class="form-control">{$comment->body|clearslash}</textarea>
+                  <textarea class="form-control" name="body">{$comment->body|clearslash}</textarea>
                 </div>
               </div>
             </div>

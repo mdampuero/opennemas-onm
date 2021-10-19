@@ -29,7 +29,8 @@
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },
-          page: 1
+          page: 1,
+          tag: null
         };
 
         /**

@@ -352,6 +352,64 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getRelated.
+     */
+    public function testGetRelated()
+    {
+        $actual = [
+            [
+                'caption'           => 'Facilis, aperiam!',
+                'content_type_name' => 'photo',
+                'position'          => 0,
+                'source_id'         => 10,
+                'target_id'         => 20,
+                'type'              => 'photo'
+            ]
+        ];
+
+        $content = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'photo',
+            'description'       => 'Lorem ipsum dolor sit amet.'
+         ]);
+
+         $relationships = [ 'featured_frontpage', 'featured_inner' ];
+
+        $result = [
+                [
+                    'caption'           => 'Facilis, aperiam!',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'source_id'         => 10,
+                    'target_id'         => 20,
+                    'type'              => 'photo'
+                ],
+                [
+                    'caption'           => 'Lorem ipsum dolor sit amet.',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'target_id'         => 1,
+                    'type'              => 'featured_frontpage'
+                ],
+                [
+                    'caption'           => 'Lorem ipsum dolor sit amet.',
+                    'content_type_name' => 'photo',
+                    'position'          => 0,
+                    'target_id'         => 1,
+                    'type'              => 'featured_inner'
+                ]
+            ];
+
+        $method = new \ReflectionMethod(
+            get_class($this->helper),
+            'getRelated'
+        );
+        $method->setAccessible(true);
+
+        $this->assertEquals($result, $method->invokeArgs($this->helper, [ $content, $relationships, $actual ]));
+    }
+
+    /**
      * Tests hasFeaturedMedia.
      */
     public function testHasFeaturedMedia()

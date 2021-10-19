@@ -11,7 +11,8 @@ function smarty_outputfilter_data_layer($output, $smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
 
-    if (is_null($request)) {
+    if (is_null($request)
+        || stripos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 
