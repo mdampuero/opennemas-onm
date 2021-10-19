@@ -39,6 +39,11 @@ services:
         arguments: [ '@service_container', 'Common\Model\Entity\ContentPosition' ]
         public:    true
 
+    api.service.event:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
     api.service.frontpage:
         class:     Api\Service\V1\FrontpageService
         arguments: [ '@service_container', 'Common\Model\Entity\Frontpage' ]
@@ -47,6 +52,11 @@ services:
     api.service.frontpage_version:
         class:     Api\Service\V1\FrontpageVersionService
         arguments: [ '@service_container', 'Common\Model\Entity\FrontpageVersion' ]
+        public:    true
+
+    api.service.kiosko:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
     api.service.newsletter:
@@ -80,8 +90,8 @@ services:
         public:    true
 
     api.service.poll:
-        class:     Api\Service\V1\ContentOldService
-        arguments: [ '@service_container', '\Poll' ]
+        class:     Api\Service\V1\PollService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
     api.service.redis:

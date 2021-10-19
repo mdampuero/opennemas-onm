@@ -27,7 +27,7 @@ class UserCacheHelper extends CacheHelper
     {
         parent::__construct($instance, $queue);
 
-        $this->cache    = $container->get('cache.connection.instance');
+        $this->cache = $container->get('cache.connection.instance');
     }
 
     /**

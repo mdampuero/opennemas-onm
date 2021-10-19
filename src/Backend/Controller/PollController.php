@@ -53,48 +53,46 @@ class PollController extends BackendController
     {
         $this->checkSecurity($this->extension);
 
-        $categoryId         = $request->query->getDigits('category', 0);
-        $page               = $request->query->getDigits('page', 1);
-        $epp                = 8;
-        $frontpageVersionId =
-            $request->query->getDigits('frontpage_version_id', null);
-        $frontpageVersionId = $frontpageVersionId === '' ?
-            null :
-            $frontpageVersionId;
+        $page         = $request->query->getDigits('page', 1);
+        $category     = $request->query->getDigits('category', 0);
+        $itemsPerPage = 8;
+        $oql          = 'content_type_name = "poll" and in_litter != 1 and content_status = 1 ';
 
-        $em  = $this->get('entity_repository');
-        $ids = $this->get('api.service.frontpage_version')
-            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Poll');
+        if (!empty($category)) {
+            $oql .= sprintf('and category_id = %d ', $category);
+        }
 
-        $order   = [ 'created' => 'desc' ];
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'poll' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
-            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
-        ];
+        try {
+            $oql .= 'order by created desc limit ' . $itemsPerPage;
 
-        $polls = $em->findBy($filters, $order, $epp, $page);
-        $total = $em->countBy($filters);
+            if ($page > 1) {
+                $oql .= ' offset ' . ($page - 1) * $itemsPerPage;
+            }
 
-        $this->get('core.locale')->setContext('frontend');
+            $context = $this->get('core.locale')->getContext();
+            $this->get('core.locale')->setContext('frontend');
 
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $epp,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => [
-                'name'   => 'backend_polls_content_provider',
-                'params' => [ 'category' => $categoryId ]
-            ],
-        ]);
+            $response = $this->get('api.service.poll')->getList($oql);
 
-        return $this->render('poll/content-provider.tpl', [
-            'polls'      => $polls,
-            'pagination' => $pagination,
-        ]);
+            $this->get('core.locale')->setContext($context);
+
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => true,
+                'directional' => true,
+                'epp'         => 8,
+                'maxLinks'    => 5,
+                'page'        => $page,
+                'total'       => $response['total'],
+                'route'       => [
+                    'name'   => 'backend_polls_content_provider'
+                ],
+            ]);
+
+            return $this->render('poll/content-provider.tpl', [
+                'polls'      => $response['items'],
+                'pagination' => $pagination,
+            ]);
+        } catch (GetListException $e) {
+        }
     }
 }
