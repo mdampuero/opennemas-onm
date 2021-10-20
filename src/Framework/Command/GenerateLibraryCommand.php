@@ -68,7 +68,7 @@ EOF
             return;
         }
 
-        $urlBase = "http://www.cronicasdelaemigracion.com/seccion/";
+        $urlBase = "https://www.cronicasdelaemigracion.com/seccion/";
 
         // multi handle
         $mh = curl_multi_init();
@@ -83,6 +83,8 @@ EOF
                 curl_setopt($curly[$category_slug], CURLOPT_URL, $url);
                 curl_setopt($curly[$category_slug], CURLOPT_HEADER, 0);
                 curl_setopt($curly[$category_slug], CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curly[$category_slug], CURLOPT_SSL_VERIFYHOST, 0);
+                curl_setopt($curly[$category_slug], CURLOPT_SSL_VERIFYPEER, 0);
 
                 curl_multi_add_handle($mh, $curly[$category_slug]);
             }
