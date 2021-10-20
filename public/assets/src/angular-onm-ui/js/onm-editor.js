@@ -208,6 +208,15 @@
             .addExternal(names, path, filename);
         };
 
+        /**
+         * @function addCustomCss
+         * @memberOf Editor
+         * 
+         * @description
+         *  Adds a custom css to the editor.
+         * 
+         * @param {String} path The path of the file with the custom css. 
+         */
         this.addCustomCss = function(path) {
           var editor = $windowProvider.$get().CKEDITOR;
 

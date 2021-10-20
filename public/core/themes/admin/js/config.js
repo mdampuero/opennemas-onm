@@ -46,6 +46,7 @@
     EditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
     EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
 
+    // Add custom css
     EditorProvider.addCustomCss('/assets/css/ckeditor.css');
 
     // Enable CKEditor for all environments (browsers)
