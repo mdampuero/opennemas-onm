@@ -208,10 +208,10 @@
             .addExternal(names, path, filename);
         };
 
-        this.addCustomCss = function(filename) {
+        this.addCustomCss = function(path) {
           var editor = $windowProvider.$get().CKEDITOR;
 
-          editor.config.contentsCss = [ editor.config.contentsCss ].concat(editor.getUrl(filename));
+          editor.config.contentsCss = [ editor.config.contentsCss ].concat(path);
         }
 
         /**

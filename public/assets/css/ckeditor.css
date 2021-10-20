@@ -1,0 +1,12 @@
+.content.onm-new {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    align-items: center;
+}
+
+figure {
+    border: unset;
+    border-radius: unset;
+    background: unset;
+}
