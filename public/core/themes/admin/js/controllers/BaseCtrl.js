@@ -368,13 +368,15 @@
             items = [ items ];
           }
 
+          if (items[0].content_type_name !== 'photo') {
+            $q.when(Renderer.renderRelatedContents(items, extra, target), function(html) {
+              Editor.get(target).insertHtml(html);
+            });
+          }
+
           for (var i = 0; i < items.length; i++) {
             if (items[i].content_type_name === 'photo') {
               Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
-            } else {
-              $q.when(Renderer.renderContent(items[i], extra, target), function(html) {
-                Editor.get(target).insertHtml(html);
-              });
             }
           }
 

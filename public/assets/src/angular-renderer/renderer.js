@@ -21,8 +21,17 @@
      *   Service to render HTML elements from objects.
      */
     .service('Renderer', [
-      'routing', 'http',
-      function(routing, http) {
+      '$q', 'routing', 'http',
+      function($q, routing, http) {
+        /**
+         * @memberOf Renderer
+         * 
+         * @description
+         *  The template for the group of related contents.
+         * 
+         * @type {String}
+         */
+        this.base = '<ul class="related-contents">[contents]</ul>';
 
         /**
          * @memberOf Renderer
@@ -32,14 +41,12 @@
          *
          * @type {String}
          */
-        this.template = '<p>' +
-          '<div class="content onm-new">' +
+        this.template = '<li class="content onm-new">' +
           '[figure]' +
           '<div class="title-content">' +
           '<a href="[url]">[title]</a>' +
           '</div>' +
-          '</div>' +
-          '</p>';
+          '</li>';
 
         /**
          * @memberOf Renderer
@@ -83,6 +90,36 @@
         };
 
         /**
+         * @function renderRelatedContents
+         * @memberOf Renderer
+         * 
+         * @description
+         *  Returns the html code to insert in the ckeditor for a group of related contents.
+         * 
+         * @param {Array}    items  The array of related contents selected.
+         * @param {Array}    extra  The array of extra data.
+         * @param {String}   target The target of the picker.
+         *  
+         * @returns {String} The html code for a group of related contents. 
+         */
+        this.renderRelatedContents = function(items, extra, target) {
+          var html     = '';
+          var promises = items.map(function(item) {
+            return this.renderContent(item, extra, target);
+          }.bind(this)); 
+
+          return $q.all(promises).then(function(result) {
+            result.forEach(function(code) {
+              html += code;
+            });
+
+            console.log(this.base.replace('[contents]', html));
+
+            return this.base.replace('[contents]', html);
+          }.bind(this));
+        };
+
+        /**
          * @function renderContent
          * @memberOf Renderer
          *
@@ -93,9 +130,10 @@
          * @param {Array}  extra  The array of extra data.
          * @param {String} target The target of the picker.
          *
-         * @return {String} The HTML code.
+         * @return {String} The html code for a related content.
          */
         this.renderContent = function(item, extra, target) {
+          console.log(item);
           var html = this.template.replace('[title]', item.title);
 
           if (item.content_type_name === 'attachment') {
@@ -130,13 +168,15 @@
             params.category_slug = category.name;
           }
 
-          if (target === 'description') {
-            return '<a href="' + routing.generate(route, params) + '">' +
-              item.title + '</a>';
-          }
-
           // Generates the url for the content.
           html = html.replace('[url]', routing.generate(route, params));
+
+          if (target !== 'body') {
+            html = html.replace('[title]', item.title);
+            html = html.replace('[figure]', '');
+
+            return html;
+          }
 
           var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
             return related.type === 'featured_frontpage';
