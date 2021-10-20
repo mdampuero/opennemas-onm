@@ -372,7 +372,7 @@
             if (items[i].content_type_name === 'photo') {
               Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
             } else {
-              $q.when(Renderer.renderContent(items[i], extra), function(html) {
+              $q.when(Renderer.renderContent(items[i], extra, target), function(html) {
                 Editor.get(target).insertHtml(html);
               });
             }

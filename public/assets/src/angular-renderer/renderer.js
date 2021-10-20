@@ -89,12 +89,13 @@
          * @description
          *   Returns the HTML code to insert in a text for a related content.
          *
-         * @param {Object} item  The related content.
-         * @param {Array}  extra The array of extra data.
+         * @param {Object} item   The related content.
+         * @param {Array}  extra  The array of extra data.
+         * @param {String} target The target of the picker.
          *
          * @return {String} The HTML code.
          */
-        this.renderContent = function(item, extra) {
+        this.renderContent = function(item, extra, target) {
           var html = this.template.replace('[title]', item.title);
 
           if (item.content_type_name === 'attachment') {
@@ -127,6 +128,11 @@
 
           if (item.categories && item.categories.length > 0) {
             params.category_slug = category.name;
+          }
+
+          if (target === 'description') {
+            return '<a href="' + routing.generate(route, params) + '">' +
+              item.title + '</a>';
           }
 
           // Generates the url for the content.
