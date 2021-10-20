@@ -34,12 +34,13 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             $headerScript    .= '_amp';
             $bodyStartScript .= '_amp';
             $bodyEndScript   .= '_amp';
+            $customCssAmp     = 'custom_css_amp';
         }
 
         $settings = $smarty->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ $headerScript, $bodyStartScript, $bodyEndScript ]);
+            ->get([ $headerScript, $bodyStartScript, $bodyEndScript, $customCssAmp ]);
 
         if (array_key_exists($headerScript, $settings)
             && !empty($settings[$headerScript])
@@ -67,6 +68,16 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             $output = preg_replace(
                 '@(</body.*>)@',
                 "\n" . base64_decode($settings[$bodyEndScript]) . "\n" . '${1}',
+                $output
+            );
+        }
+
+        if (array_key_exists($customCssAmp, $settings)
+            && !empty($settings[$customCssAmp])
+        ) {
+            $output = preg_replace(
+                '@(<style amp-custom>(?s).*?)(</style>)@',
+                '${1}' . "\n" . base64_decode($settings[$customCssAmp]) . "\n" . '${2}',
                 $output
             );
         }
