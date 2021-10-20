@@ -1,7 +1,11 @@
+.related-contents {
+    width: 70%;
+    padding: 0;
+}
+
 .content.onm-new {
     display: flex;
     flex-direction: row;
-    border: 1px solid black;
     align-items: center;
 }
 
