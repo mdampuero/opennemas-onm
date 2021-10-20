@@ -113,8 +113,6 @@
               html += code;
             });
 
-            console.log(this.base.replace('[contents]', html));
-
             return this.base.replace('[contents]', html);
           }.bind(this));
         };
@@ -133,7 +131,6 @@
          * @return {String} The html code for a related content.
          */
         this.renderContent = function(item, extra, target) {
-          console.log(item);
           var html = this.template.replace('[title]', item.title);
 
           if (item.content_type_name === 'attachment') {
