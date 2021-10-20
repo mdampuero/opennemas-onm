@@ -56,7 +56,7 @@
          *
          * @type {String}
          */
-        this.figure = '<figure><img src="[path]" height="96" width="96"></figure>';
+        this.figure = '<figure><img src="[path]" width="120" height="68"></figure>';
 
         /**
          * @function renderImage
