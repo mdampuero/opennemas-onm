@@ -29,6 +29,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         $headerScript    = 'header_script';
         $bodyStartScript = 'body_start_script';
         $bodyEndScript   = 'body_end_script';
+        $customCssAmp    = '';
 
         if (preg_match('@\.amp\.html@', $uri)) {
             $headerScript    .= '_amp';
@@ -72,7 +73,8 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             );
         }
 
-        if (array_key_exists($customCssAmp, $settings)
+        if (!empty($customCssAmp)
+            && array_key_exists($customCssAmp, $settings)
             && !empty($settings[$customCssAmp])
         ) {
             $output = preg_replace(
