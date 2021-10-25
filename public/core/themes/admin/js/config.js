@@ -44,6 +44,7 @@
 
     // Add custom plugins
     EditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
+    EditorProvider.addExternal('autotoc', '/assets/src/ckeditor-autotoc/');
     EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
 
     // Add custom css
