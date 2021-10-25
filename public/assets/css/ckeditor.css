@@ -1,12 +1,11 @@
-.related-contents {
-    width: 70%;
-    padding: 0;
-}
-
-.content.onm-new {
+.related-content.related-content-inner ul li {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.related-content.related-content-inner ul {
+    padding: 0;
 }
 
 figure {
