@@ -25,13 +25,17 @@
       function($q, routing, http) {
         /**
          * @memberOf Renderer
-         * 
+         *
          * @description
          *  The template for the group of related contents.
-         * 
+         *
          * @type {String}
          */
-        this.base = '<ul class="related-contents">[contents]</ul>';
+        this.base = '<div class="related-content related-content-inner clearfix">' +
+          '<ul class="colorize-text">' +
+          '[contents]' +
+          '</ul>' +
+          '</div>';
 
         /**
          * @memberOf Renderer
@@ -41,11 +45,9 @@
          *
          * @type {String}
          */
-        this.template = '<li class="content onm-new">' +
+        this.template = '<li>' +
           '[figure]' +
-          '<div class="title-content">' +
-          '<a href="[url]">[title]</a>' +
-          '</div>' +
+          '<div class="article-data"><a href="[url]">[title]</a></div>' +
           '</li>';
 
         /**
@@ -56,7 +58,7 @@
          *
          * @type {String}
          */
-        this.figure = '<figure><img src="[path]" width="120" height="68"></figure>';
+        this.figure = '<figure class="image capture"><img src="[path]" width="120" height="68"></figure>';
 
         /**
          * @function renderImage
@@ -93,21 +95,21 @@
         /**
          * @function renderRelatedContents
          * @memberOf Renderer
-         * 
+         *
          * @description
          *  Returns the html code to insert in the ckeditor for a group of related contents.
-         * 
+         *
          * @param {Array}    items  The array of related contents selected.
          * @param {Array}    extra  The array of extra data.
          * @param {String}   target The target of the picker.
-         *  
-         * @returns {String} The html code for a group of related contents. 
+         *
+         * @returns {String} The html code for a group of related contents.
          */
         this.renderRelatedContents = function(items, extra, target) {
           var html     = '';
           var promises = items.map(function(item) {
             return this.renderContent(item, extra, target);
-          }.bind(this)); 
+          }.bind(this));
 
           return $q.all(promises).then(function(result) {
             result.forEach(function(code) {
