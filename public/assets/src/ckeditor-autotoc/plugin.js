@@ -6,21 +6,19 @@ CKEDITOR.plugins.add('autotoc', {
       exec: function(editor) {
         var template = '<ol[style]>[contents]</ol>';
         var body     = editor.getData();
+
         body         = body + '[end]';
         var contents = '';
 
-        var generate = function(text, level) {
-          var regex  = !level ?
-            new RegExp('<(h([1-5]).*?)>.*?(<h|\\[end\\])', 's') :
-            new RegExp('<(h(' + level + ').*?)>.*?(<h|\\[end\\])' , 's');
-
+        var generate = function(text) {
+          var regex  = new RegExp('<(h([1-5]).*?)>.*?(<h|\\[end\\])', 's');
           var header = text.match(regex);
 
           if (!header || header.length === 0) {
             return '';
           }
 
-          var id         = text.match(/id=\"(.+?)\"/)[1];
+          var id         = text.match(/id="(.+?)"/)[1];
           var titleRegex = new RegExp('<h' + header[2] + '.*?>(.+?)<');
           var title      = header[0].match(titleRegex);
 
@@ -40,7 +38,7 @@ CKEDITOR.plugins.add('autotoc', {
 
         var result =  '[toc]' + editor.getData();
 
-        editor.setData(result.replace('[toc]', contents));
+        editor.setData(result.replace('[toc]', template));
       }
     });
 
@@ -52,4 +50,3 @@ CKEDITOR.plugins.add('autotoc', {
     });
   }
 });
-  
