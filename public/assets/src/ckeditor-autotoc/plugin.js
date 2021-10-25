@@ -4,7 +4,7 @@ CKEDITOR.plugins.add('autotoc', {
   init: function(editor) {
     editor.addCommand('autotoc', {
       exec: function(editor) {
-        var template = '<ol[style]>[contents]</ol>';
+        var template = '<ul[style]>[contents]</ul>';
         var body     = editor.getData();
 
         body         = body + '[end]';
