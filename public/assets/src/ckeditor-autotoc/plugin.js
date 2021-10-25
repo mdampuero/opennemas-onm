@@ -18,14 +18,17 @@ CKEDITOR.plugins.add('autotoc', {
             return '';
           }
 
-          var id         = text.match(/id="(.+?)"/)[1];
+          var id = text.match(/id="(.+?)"/);
+
+          id = id ? id[1] : '';
+
           var titleRegex = new RegExp('<h' + header[2] + '.*?>(.+?)<');
           var title      = header[0].match(titleRegex);
 
           title = title && title.length > 0 ? title[1] : '';
 
           contents += '<li><a href="#' + id + '">' + title + '</a></li>';
-          
+
           body = body.replace(header[0].substr(0, header[0].length - 2), '');
 
           generate(body);
