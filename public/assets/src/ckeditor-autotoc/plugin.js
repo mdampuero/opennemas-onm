@@ -22,7 +22,7 @@ CKEDITOR.plugins.add('autotoc', {
 
           id = id ? id[1] : '';
 
-          var titleRegex = new RegExp('<h' + header[2] + '.*?>(.+?)<');
+          var titleRegex = new RegExp('<h' + header[2] + '.*?>(.+?)</h' + header[2]);
           var title      = header[0].match(titleRegex);
 
           title = title && title.length > 0 ? title[1] : '';
