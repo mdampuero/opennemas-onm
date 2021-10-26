@@ -4,14 +4,22 @@ CKEDITOR.plugins.add('autotoc', {
   init: function(editor) {
     editor.addCommand('autotoc', {
       exec: function(editor) {
-        var template = '<ul[style]>[contents]</ul>';
+        var template = '<ol[style]>[contents]</ol>';
         var body     = editor.getData();
-
-        body         = body + '[end]';
         var contents = '';
 
-        var generate = function(text) {
-          var regex  = new RegExp('<(h([1-5]).*?)>.*?(<h|\\[end\\])', 's');
+        body = body + '[end]';
+
+        var generate = function(text, level) {
+          // Select the correct header
+          var pattern = '<(h([1-5]).*?)>.*?(<h\\2|\\[end\\])';
+
+          if (level && !isNaN(parseInt(level))) {
+            pattern = pattern.replace('[1-5]', parseInt(level) + 1);
+            text    = text + '[end]';
+          }
+
+          var regex  = new RegExp(pattern, 's');
           var header = text.match(regex);
 
           if (!header || header.length === 0) {
@@ -27,11 +35,26 @@ CKEDITOR.plugins.add('autotoc', {
 
           title = title && title.length > 0 ? title[1] : '';
 
-          contents += '<li><a href="#' + id + '">' + title + '</a></li>';
+          // Generate the code for the selected header
+          contents += '<li><a href="#' + id + '">' + title + '</a><ul>';
 
-          body = body.replace(header[0].substr(0, header[0].length - 2), '');
+          generate(header[0], header[2]);
 
-          generate(body);
+          // Remove the processed header
+          contents += '</ul></li>';
+
+          pattern = '<(h([1-5]).*?)>.*?(<h|\\[end\\])';
+
+          if (level && !isNaN(parseInt(level))) {
+            pattern = pattern.replace('[1-5]', parseInt(level) + 1);
+          }
+
+          regex = new RegExp(pattern, 's');
+
+          header = text.match(regex);
+          body   = body.substr(header[0].length - 2);
+
+          generate(body, level);
         };
 
         generate(body);
