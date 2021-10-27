@@ -191,10 +191,30 @@ class SitemapController extends Controller
             $contents = $this->get('entity_repository')
                 ->findBy($filters, ['changed' => 'desc'], $settings['total']);
 
-            return $this->getResponse($format, $cacheId, 'news', $contents);
+            return $this->getResponse(
+                $format,
+                $cacheId,
+                'news',
+                $contents,
+                null,
+                null,
+                null,
+                null,
+                'no-store'
+            );
         }
 
-        return $this->getResponse($format, $cacheId, 'news');
+        return $this->getResponse(
+            $format,
+            $cacheId,
+            'news',
+            [],
+            null,
+            null,
+            null,
+            null,
+            'no-store'
+        );
     }
 
     /**
@@ -369,7 +389,8 @@ class SitemapController extends Controller
         $path = null,
         $page = null,
         $year = null,
-        $month = null
+        $month = null,
+        $cacheControl = ''
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
@@ -377,6 +398,10 @@ class SitemapController extends Controller
             'x-cacheable' => true,
             'x-tags'      => sprintf('sitemap,%s', $action)
         ];
+
+        if (!empty($cacheControl)) {
+            $headers['Cache-Control'] = $cacheControl;
+        }
 
         $contents = $this->get('core.template.frontend')
             ->render(self::TEMPLATES[$action], [
