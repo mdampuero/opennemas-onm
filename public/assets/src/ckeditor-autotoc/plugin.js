@@ -8,53 +8,27 @@ CKEDITOR.plugins.add('autotoc', {
         var body     = editor.getData();
         var contents = '';
 
-        body = body + '[end]';
-
-        var generate = function(text, level) {
-          // Select the correct header
-          var pattern = '<(h([1-5]).*?)>.*?(<h\\2|\\[end\\])';
-
-          if (level && !isNaN(parseInt(level))) {
-            pattern = pattern.replace('[1-5]', parseInt(level) + 1);
-            text    = text + '[end]';
-          }
-
-          var regex  = new RegExp(pattern, 's');
-          var header = text.match(regex);
-
-          if (!header || header.length === 0) {
+        var generate = function(text) {
+          var text    = text + '[end]';
+          var element = text.match(/<(h([1-5]).*?)>.*?(<h\2|\[end\])/s);
+          
+          if (!element) {
             return '';
           }
 
-          var id = text.match(/id="(.+?)"/);
+          var header  = element[0].match(/<(h(?<level>[1-5])(.*id="(?<id>.*?)")?)>(?<title>.*?)(<\/h\2>)/s);
+          var id      = header.groups.id ? header.groups.id : '';
+          var title   = header.groups.title ? header.groups.title : '';
 
-          id = id ? id[1] : '';
-
-          var titleRegex = new RegExp('<h' + header[2] + '.*?>(.+?)</h' + header[2]);
-          var title      = header[0].match(titleRegex);
-
-          title = title && title.length > 0 ? title[1] : '';
-
-          // Generate the code for the selected header
           contents += '<li><a href="#' + id + '">' + title + '</a><ul>';
 
-          generate(header[0], header[2]);
+          generate(element[0].substr(3));
 
-          // Remove the processed header
-          contents += '</ul></li>';
+          contents += '</ul>';
 
-          pattern = '<(h([1-5]).*?)>.*?(<h|\\[end\\])';
+          text = text.replace(element[0].substr(0, element[0].length - 3), '');
 
-          if (level && !isNaN(parseInt(level))) {
-            pattern = pattern.replace('[1-5]', parseInt(level) + 1);
-          }
-
-          regex = new RegExp(pattern, 's');
-
-          header = text.match(regex);
-          body   = body.substr(header[0].length - 2);
-
-          generate(body, level);
+          generate(text);
         };
 
         generate(body);
