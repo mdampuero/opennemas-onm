@@ -10,15 +10,15 @@ CKEDITOR.plugins.add('autotoc', {
 
         var generate = function(text) {
           var text    = text + '[end]';
-          var element = text.match(/<(h([1-5]).*?)>.*?(<h\2|\[end\])/s);
-          
+          var element = text.match(/<(h([1-5]).*?)>.*?(<h\2|\[end\])/);
+
           if (!element) {
             return '';
           }
 
-          var header = element[0].match(/<(h(?<level>[1-5])(.*id="(?<id>.*?)")?)>(?<title>.*?)(<\/h\2>)/s);
-          var id     = header.groups.id ? header.groups.id : '';
-          var title  = header.groups.title ? header.groups.title : '';
+          var header = element[0].match(/<(h([1-5])(.*id="(.*?)")?)>(.*?)(<\/h\2>)/);
+          var id     = header[4] ? header[4] : '';
+          var title  = header[5] ? header[5] : '';
 
           contents += '<li><a href="#' + id + '">' + title + '</a><ul>';
 
@@ -31,7 +31,7 @@ CKEDITOR.plugins.add('autotoc', {
           generate(text);
         };
 
-        generate(body);
+        generate(body.replace(/(\r\n|\n|\r)/gm, ''));
 
         template = template.replace('[style]', '');
         template = template.replace('[contents]', contents);
