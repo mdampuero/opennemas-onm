@@ -16,9 +16,9 @@ CKEDITOR.plugins.add('autotoc', {
             return '';
           }
 
-          var header  = element[0].match(/<(h(?<level>[1-5])(.*id="(?<id>.*?)")?)>(?<title>.*?)(<\/h\2>)/s);
-          var id      = header.groups.id ? header.groups.id : '';
-          var title   = header.groups.title ? header.groups.title : '';
+          var header = element[0].match(/<(h(?<level>[1-5])(.*id="(?<id>.*?)")?)>(?<title>.*?)(<\/h\2>)/s);
+          var id     = header.groups.id ? header.groups.id : '';
+          var title  = header.groups.title ? header.groups.title : '';
 
           contents += '<li><a href="#' + id + '">' + title + '</a><ul>';
 
