@@ -149,6 +149,9 @@ class CommentController extends ApiController
             $this->get('core.validator')
                 ->setConfig(Validator::BLACKLIST_RULESET_COMMENTS, $extra['blacklist_comment']);
 
+            $this->get('core.dispatcher')
+                ->dispatch('comments.config');
+
             $msg->add(_('Settings saved.'), 'success', 200);
         } catch (\Exception $e) {
             $msg->add(_('There was an error while saving the settings'), 'error', 400);

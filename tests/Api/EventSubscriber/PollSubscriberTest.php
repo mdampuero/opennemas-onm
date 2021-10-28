@@ -73,6 +73,38 @@ class PollSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests logAction when there is no action.
+     */
+    public function testLogActionWhenNoAction()
+    {
+        $this->event->expects($this->once())->method('hasArgument')
+            ->with('action')
+            ->willReturn(false);
+
+        $this->assertEmpty($this->subscriber->logAction($this->event));
+    }
+
+    /**
+     * Tests logAction when empty items.
+     */
+    public function testLogActionWhenEmptyItems()
+    {
+        $this->event->expects($this->at(0))->method('hasArgument')
+            ->with('action')
+            ->willReturn(true);
+
+        $this->event->expects($this->at(1))->method('getArgument')
+            ->with('action')
+            ->willReturn('updateItem');
+
+        $this->event->expects($this->at(2))->method('getArgument')
+            ->with('item')
+            ->willReturn([]);
+
+        $this->subscriber->logAction($this->event);
+    }
+
+    /**
      * Tests removeSmartyCacheForContent when no argument
      */
     public function testRemoveSmartyCacheForContentWhenNoArgument()
@@ -130,45 +162,6 @@ class PollSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests removeObjectCacheForContent when no content type name
-     */
-    public function testRemoveObjectCacheForContentWhenNoContentType()
-    {
-        $item = new Content(
-            [
-                'pk_content' => 1,
-            ]
-        );
-
-        $this->event->expects($this->once())->method('getArgument')
-            ->with('item')->willReturn($item);
-
-        $this->helper->expects($this->once())->method('deleteItem');
-
-        $this->subscriber->removeObjectCacheForContent($this->event);
-    }
-
-    /**
-     * Tests removeObjectCacheForContent when content type name
-     */
-    public function testRemoveObjectCacheForContentWhenContentType()
-    {
-        $item = new Content(
-            [
-                'pk_content' => 1,
-                'content_type_name' => 'poll',
-            ]
-        );
-
-        $this->event->expects($this->once())->method('getArgument')
-            ->with('item')->willReturn($item);
-
-        $this->helper->expects($this->once())->method('deleteItem');
-
-        $this->subscriber->removeObjectCacheForContent($this->event);
-    }
-
-    /**
      * Tests removeVarnishCacheCurrentInstance when no varnish param
      */
     public function testRemoveVarnishCacheCurrentInstanceWhenNoVarnish()
@@ -184,11 +177,13 @@ class PollSubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveVarnishCacheCurrentInstanceWhenVarnish()
     {
+        $poll = new Content([ 'pk_content' => 1 ]);
+
         $this->container->expects($this->once())->method('hasParameter')
             ->with('varnish')->willReturn(true);
 
         $this->event->expects($this->once())->method('getArgument')
-            ->with('id')->willReturn(1);
+            ->with('item')->willReturn($poll);
 
         $this->subscriber->removeVarnishCacheCurrentInstance($this->event);
     }

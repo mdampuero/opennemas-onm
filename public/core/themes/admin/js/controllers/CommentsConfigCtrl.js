@@ -123,7 +123,7 @@
           for (var key in validKeys[$scope.config.comment_system]) {
             var element = validKeys[$scope.config.comment_system][key];
 
-            if ($scope.config[element] === null || $scope.config[element].length < 1) {
+            if (typeof $scope.config[element] === 'undefined') {
               return false;
             }
           }
@@ -149,11 +149,11 @@
             disqus: [ 'comment_system', 'disable_comments', 'with_comments', 'disqus_secretkey', 'disqus_shortname' ]
           };
 
-          Object.keys($scope.config).forEach((key) => {
+          for (var key in $scope.config) {
             if (!validKeys[$scope.config.comment_system].includes(key)) {
               delete $scope.config[key];
             }
-          });
+          }
         };
       }
     ]);

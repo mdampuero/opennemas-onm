@@ -30,23 +30,34 @@ class PollSubscriber implements EventSubscriberInterface
     {
         return [
             'poll.createItem' => [
+                ['logAction', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'poll.updateItem' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             'poll.deleteItem' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
-            'poll.patchItem'     => [
+            'poll.patchItem' => [
+                ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
-            ]
+            ],
+            'poll.patchList' => [
+                ['logAction', 5],
+                ['removeSmartyCacheForContent', 5],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'poll.deleteList' => [
+                ['logAction', 5],
+                ['removeSmartyCacheForContent', 5],
+                ['removeVarnishCacheCurrentInstance', 5],
+            ],
         ];
     }
 
@@ -61,38 +72,45 @@ class PollSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $content = $event->getArgument('item');
+        $item  = $event->getArgument('item');
+        $items = is_array($item) ? $item : [ $item ];
 
-        // Clean cache for the content
-        $this->template
-            ->delete('content', $content->pk_content)
-            ->delete('archive', date('Ymd'))
-            ->delete('rss', $content->content_type_name)
-            ->delete('frontpage', $content->content_type_name)
-            ->delete('category', 'list', $content->category_id)
-            ->delete($content->content_type_name, 'frontpage')
-            ->delete($content->content_type_name, 'list')
-            ->delete('sitemap', 'contents');
+        foreach ($items as $content) {
+            // Clean cache for the content
+            $this->template
+                ->delete('content', $content->pk_content)
+                ->delete('archive', date('Ymd'))
+                ->delete('rss', $content->content_type_name)
+                ->delete('frontpage', $content->content_type_name)
+                ->delete('category', 'list', $content->category_id)
+                ->delete($content->content_type_name, 'frontpage')
+                ->delete($content->content_type_name, 'list')
+                ->delete('sitemap', 'contents');
+        }
     }
 
     /**
-     * Deletes a content from cache after it is updated.
+     * Logs the action.
      *
-     * @param Event $event The event to handle.
-     *
-     * @return null
+     * @param Event $event The event object.
      */
-    public function removeObjectCacheForContent(Event $event)
+    public function logAction(Event $event)
     {
-        $content = $event->getArgument('item');
-
-        if (!empty($content->content_type_name)) {
-            $contentType = $content->content_type_name;
-        } else {
-            $contentType = \underscore(get_class($content));
+        if (empty($event->hasArgument('action'))) {
+            return;
         }
 
-        $this->cache->deleteItem($content);
+        $action = $event->getArgument('action');
+        $item   = $event->getArgument('item');
+        $items  = is_array($item) ? $item : [ $item ];
+
+        if (!empty($items)) {
+            foreach ($items as $content) {
+                logContentEvent($action, $content);
+            }
+
+            return;
+        }
     }
 
     /**
@@ -106,7 +124,8 @@ class PollSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $id = $event->getArgument('id');
+        $item  = $event->getArgument('item');
+        $items = is_array($item) ? $item : [ $item ];
 
         $instanceName = $this->container->get('core.instance')->internal_name;
 
@@ -116,12 +135,20 @@ class PollSubscriber implements EventSubscriberInterface
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*poll-%s.*', $instanceName, $id)
-            ])
-        )->push(
-            new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName)
             ])
         );
+
+        foreach ($items as $item) {
+            $this->container->get('task.service.queue')->push(
+                new ServiceTask(
+                    'core.varnish',
+                    'ban',
+                    [
+                        sprintf('obj.http.x-tags ~ instance-%s.*poll-%s.*', $instanceName, $item->pk_content)
+                    ]
+                )
+            );
+        }
     }
 }
