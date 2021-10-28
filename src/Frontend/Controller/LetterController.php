@@ -40,9 +40,9 @@ class LetterController extends FrontendController
      * {@inheritdoc}
      */
     protected $groups = [
-        'list'    => 'letters_frontpage',
-        'show'    => 'letters_inner',
-        'form'    => 'letters_inner',
+        'list'    => 'article_inner',
+        'show'    => 'article_inner',
+        'form'    => 'article_inner',
         'showamp' => 'amp_inner',
     ];
 
@@ -68,29 +68,9 @@ class LetterController extends FrontendController
     protected $templates = [
         'list'     => 'letter/letter_frontpage.tpl',
         'show'     => 'letter/letter.tpl',
-        'form' => 'letter/letter_form.tpl',
+        'form'     => 'letter/letter_form.tpl',
         'showamp'  => 'amp/content.tpl',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function listAction(Request $request)
-    {
-        $this->getAds();
-
-        return parent::listAction($request);
-    }*/
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function showAction(Request $request)
-    {
-        $this->getAds();
-
-        return parent::showAction($request);
-    }*/
 
     /**
      * {@inheritdoc}
@@ -148,7 +128,6 @@ class LetterController extends FrontendController
      */
     public function formAction(Request $request)
     {
-        //$this->getAds();
         parent::getAdvertisements();
 
         $action = $this->get('core.globals')->getAction();
@@ -197,8 +176,6 @@ class LetterController extends FrontendController
             );
         }
 
-
-
         $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
         $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
         $email   = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
@@ -216,14 +193,12 @@ class LetterController extends FrontendController
             'email'             => $email,
             'created'           => $now->format('Y-m-d H:i:s'),
             'starttime'         => $now->format('Y-m-d H:i:s'),
-            'params'            => [ 'ip' => getUserRealIP() ],
+            'ip'                => getUserRealIP() ,
             'slug'              => getService('data.manager.filter')
                 ->set($subject)
                 ->filter('slug')
                 ->get()
         ];
-
-        $data = array_map('strip_tags', $data);
 
         try {
             $this->get($this->service)->createItem($data);
@@ -290,19 +265,4 @@ class LetterController extends FrontendController
             );
         }
     }
-
-    /**
--     * Loads the list of positions and advertisements on renderer service.
--     */
-    /*public function getAds()
-    {
-        $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner', [ 7 ]);
-        $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions);
-
-        $this->get('frontend.renderer.advertisement')
-            ->setPositions($positions)
-            ->setAdvertisements($advertisements);
-    }*/
 }

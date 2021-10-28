@@ -22,3 +22,5 @@ backend_letters_content_provider:
 backend_letters_list:
     path:     /letters
     defaults: { _controller: BackendBundle:Letter:list }
+    options:
+        expose: true

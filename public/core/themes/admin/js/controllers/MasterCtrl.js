@@ -41,7 +41,8 @@
             hidden: [],
             selected: [
               'author', 'avatar', 'category', 'comment',
-              'content_status', 'created', 'status', 'tags', 'title'
+              'content_status', 'created', 'status', 'tags', 'title',
+              'user',
             ]
           },
         };

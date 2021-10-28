@@ -18,7 +18,7 @@
 {/block}
 
 {block name="title"}
-  <a class="no-padding" href="{url name=backend_articles_list}">
+  <a class="no-padding" href="{url name=backend_letters_list}">
     {t}Letters to the Editor{/t}
   </a>
 {/block}
