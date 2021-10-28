@@ -45,6 +45,11 @@ class HooksSubscriber implements EventSubscriberInterface
             'advertisement.delete' => [
                 [ 'removeVarnishCacheForAdvertisement', 5 ],
             ],
+            // Comments Config hooks
+            'comments.config' => [
+                ['removeSmartyCacheAll', 5],
+                ['removeVarnishCacheCurrentInstance', 5]
+            ],
             // Content hooks
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 5]

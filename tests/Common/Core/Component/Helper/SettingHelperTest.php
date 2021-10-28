@@ -109,8 +109,8 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
 
     public function testToInt()
     {
-        $array    = [ 'element' => '1' ];
-        $array2    = [
+        $array  = [ 'element' => '1' ];
+        $array2 = [
             'element' => '1',
             'element' => [ 'value' => '1']
         ];
@@ -120,7 +120,7 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
             'element' => 1,
             'element' => [ 'value' => 1]
         ];
-        $toInt    = [ 'element' ];
+        $toInt     = [ 'element' ];
 
         $this->assertEquals($expected, $this->helper->toInt($array, $toInt));
         $this->assertEquals($expected2, $this->helper->toInt($array2, $toInt));
@@ -128,8 +128,8 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
 
     public function testToBoolean()
     {
-        $array    = [ 'element' => '1' ];
-        $array2   = [
+        $array  = [ 'element' => '1' ];
+        $array2 = [
             'element' => 'true',
             'element' => [ 'value' => 'true']
         ];
@@ -139,7 +139,7 @@ class SettingHelperTest extends \PHPUnit\Framework\TestCase
             'element' => true,
             'element' => [ 'value' => true]
         ];
-        $toBool   = [ 'element' ];
+        $toBool    = [ 'element' ];
 
         $this->assertEquals($expected, $this->helper->toBoolean($array, $toBool));
         $this->assertEquals($expected2, $this->helper->toBoolean($array2, $toBool));
