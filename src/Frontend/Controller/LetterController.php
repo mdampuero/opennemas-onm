@@ -158,7 +158,7 @@ class LetterController extends FrontendController
 
         if (!$isValid) {
             return new RedirectResponse(
-                $this->generateUrl('frontend_letter_form')
+                $this->generateUrl('frontend_letter_frontpage')
                 . '?msg="'
                 . _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
                 . '"'
@@ -180,6 +180,27 @@ class LetterController extends FrontendController
         $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
         $email   = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
         $text    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
+
+        $data = [
+            'email'      => $email,
+            'lettertext' => $text,
+            'name'       => $name,
+            'subject'    => $subject,
+        ];
+
+        $errors = $this->get('core.validator')->validate($data, 'letter');
+
+        if (!empty($errors)) {
+            return new RedirectResponse(
+                $this->generateUrl('frontend_letter_frontpage')
+                . '?msg="'
+                . _('Your letter was rejected due to:')
+                . '<br>'
+                . implode('<br>', $errors['errors'])
+                . '"'
+            );
+        }
+
         $now     = new DateTime();
 
         $data = [];
