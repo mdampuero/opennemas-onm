@@ -57,7 +57,7 @@ class CommentController extends ApiController
     protected function getExtraData($comments = [])
     {
         $extra = [ 'statuses' => [
-            [ 'title' => _('All'), 'value' => null ],
+            [ 'title' => _('Any'), 'value' => null ],
             [ 'title' => _('Accepted'), 'value' => self::STATUS_ACCEPTED ],
             [ 'title' => _('Rejected'), 'value' => self::STATUS_REJECTED ],
             [ 'title' => _('Pending'), 'value' => self::STATUS_PENDING ],
