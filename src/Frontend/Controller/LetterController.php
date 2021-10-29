@@ -12,9 +12,7 @@ namespace Frontend\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Swift_RfcComplianceException;
 use DateTime;
-use VARIANT;
 
 /**
  * Displays a letter or a list of letters.
@@ -194,7 +192,7 @@ class LetterController extends FrontendController
             return new RedirectResponse(
                 $this->generateUrl('frontend_letter_frontpage')
                 . '?msg="'
-                . _('Your letter was rejected due to:')
+                . _('Unable to save the letter.')
                 . '<br>'
                 . implode('<br>', $errors['errors'])
                 . '"'

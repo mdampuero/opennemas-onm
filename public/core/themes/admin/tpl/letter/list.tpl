@@ -69,7 +69,7 @@
     </div>
   </li>
   <li class="hidden-xs ng-cloak m-r-10 quicklinks">
-    <ui-select class="{$class}" ng-init="status = [ { name: '{t}Any{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 }, { name: '{t}Pending{/t}', value: 2 } ]" ng-model="{$ngModel}" theme="select2">
+    <ui-select ng-init="status = [ { name: '{t}Any{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 }, { name: '{t}Pending{/t}', value: 2 } ]" ng-model="criteria.content_status" theme="select2">
       <ui-select-match>
         <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
