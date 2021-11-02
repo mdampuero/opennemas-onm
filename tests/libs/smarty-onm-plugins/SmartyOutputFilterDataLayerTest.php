@@ -73,7 +73,7 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
 
         $this->instance = new Instance([ 'activated_modules' => [ 'es.openhost.module.dataLayerHenneo' ] ]);
 
-        $this->output = '<html><head></head><body></body></html>';
+        $this->output = '<!DOCTYPE html><html><head></head><body></body></html>';
     }
 
     /**
@@ -164,7 +164,7 @@ class SmartyOutputFilterDataLayerTest extends \PHPUnit\Framework\TestCase
         $this->dl->expects($this->once())->method('getDataLayerCode')
             ->willReturn('<script>Data Layer Code</script>');
 
-        $output = '<html><head><script>Data Layer Code</script></head><body></body></html>';
+        $output = '<!DOCTYPE html><html><head><script>Data Layer Code</script></head><body></body></html>';
         $this->assertEquals(
             $output,
             smarty_outputfilter_data_layer($this->output, $this->smarty)

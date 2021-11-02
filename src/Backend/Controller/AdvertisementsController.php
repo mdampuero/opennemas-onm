@@ -313,7 +313,7 @@ class AdvertisementsController extends Controller
         $epp        = 8;
 
         $oql = sprintf(
-            'content_type_name="advertisement" and in_litter="0" '
+            'content_type_name="advertisement" and content_status="1" and in_litter="0"'
             . 'and position="37" order by created desc limit %s offset %s',
             $epp,
             ($page - 1) * $epp

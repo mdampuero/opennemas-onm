@@ -84,7 +84,11 @@
               </div>
               <div class="p-b-30 p-l-30 p-r-30 p-t-35">
                 <div class="text-center">
-                  <img class="img-thumbnail" ng-src="[% preview %]" ng-show="preview" style="max-height: 180px;">
+                  <img class="img-thumbnail" ng-if="preview" ng-src="[% preview %]" ng-show="preview" style="max-height: 180px;">
+                  <div class="dynamic-image-placeholder" ng-if="!preview && featured">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="featured" transform="zoomcrop,200,200">
+                    </dynamic-image>
+                  </div>
                   <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
                   <p class="m-t-15 text-center nowrap">
                     <strong ng-if="item.path" title="[% getFileName() %]">

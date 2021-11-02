@@ -27,6 +27,13 @@ class LayoutManager
     ];
 
     /**
+     * The contents.
+     *
+     * @var array
+     */
+    protected $contents = [];
+
+    /**
      * The current layout document.
      *
      * @var array
@@ -41,11 +48,25 @@ class LayoutManager
     protected $layouts = [];
 
     /**
+     * The params.
+     *
+     * @var array
+     */
+    protected $params = [];
+
+    /**
      * The path to load layouts from.
      *
      * @var ?string
      */
     protected $path = null;
+
+    /**
+     * The positions.
+     *
+     * @var array
+     */
+    protected $positions = [];
 
     /**
      * The TemplateFactory service.
@@ -188,7 +209,7 @@ class LayoutManager
 
         return $tpl->fetch($template, [
             'content' => $content,
-            'params'   => $this->params
+            'params'  => $this->params
         ]);
     }
 
@@ -206,9 +227,11 @@ class LayoutManager
         if (array_key_exists($name, $this->positions)) {
             foreach ($this->positions[$name] as $position) {
                 if (array_key_exists($position->pk_fk_content, $this->contents)) {
-                    $output .= $this->renderContent(
-                        $this->contents[$position->pk_fk_content]
-                    );
+                    if ($this->contents[$position->pk_fk_content] != null) {
+                        $output .= $this->renderContent(
+                            $this->contents[$position->pk_fk_content]
+                        );
+                    }
                 }
             }
         }

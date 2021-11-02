@@ -16,7 +16,10 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <img class="no-margin img-thumbnail" ng-src="[% data.extra.paths.newsstand + '/' + item.thumbnail %]">
+    <div class="dynamic-image-placeholder">
+      <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="getFeaturedMedia(item, 'featured_frontpage').path" transform="zoomcrop,200,200">
+      </dynamic-image>
+    </div>
   </td>
 {/block}
 

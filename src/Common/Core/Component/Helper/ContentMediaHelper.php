@@ -113,10 +113,6 @@ class ContentMediaHelper
             return $content;
         }
 
-        if ($this->contentHelper->getType($content) === 'kiosko') {
-            return $this->getMediaFromKiosko($content);
-        }
-
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
 
@@ -131,38 +127,6 @@ class ContentMediaHelper
 
         if ($this->container->get('core.helper.setting')->hasLogo('embed')) {
             return $this->container->get('core.helper.setting')->getLogo('embed');
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns default media object for content
-     *
-     * @param Content $content The content object.
-     *
-     * @return object  $mediaObject The media object.
-     */
-    protected function getMediaFromKiosko($content)
-    {
-        if (!empty($content->thumbnail)) {
-            $filepath = $this->container->getParameter('core.paths.public')
-                . $this->instance->getNewsstandShortPath() . '/' . $content->thumbnail;
-
-            try {
-                $information = $this->imageHelper->getInformation($filepath);
-
-                return new Content([
-                    'path'              => 'kiosko/' . $content->thumbnail,
-                    'width'             => $information['width'],
-                    'height'            => $information['height'],
-                    'content_type_name' => 'photo',
-                    'content_status'    => 1,
-                    'in_litter'         => 0
-                ]);
-            } catch (\Exception $e) {
-                return null;
-            }
         }
 
         return null;

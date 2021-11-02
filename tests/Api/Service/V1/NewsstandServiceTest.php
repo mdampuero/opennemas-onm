@@ -70,6 +70,21 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
         $this->il->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
 
+        $this->ps = $this->getMockBuilder('Api\Service\V1\PhotoService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'createItem', 'getItem' ])
+            ->getMock();
+
+        $this->ph = $this->getMockBuilder('PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath' ])
+            ->getMock();
+
+        $this->fh = $this->getMockBuilder('Common\Core\Component\Helper\FeaturedMediaHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getRelated' ])
+            ->getMock();
+
         $this->service = $this->getMockBuilder('Api\Service\V1\NewsstandService')
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->setMethods([ 'getItem', 'assignUser' ])
@@ -94,6 +109,12 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.newsstand':
                 return $this->nh;
+
+            case 'api.service.photo':
+                return $this->ps;
+
+            case 'core.helper.featured_media':
+                return $this->fh;
 
             case 'core.security':
                 return $this->security;
@@ -121,6 +142,12 @@ class NewsstandServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
+
+        $photo             = new Content();
+        $photo->pk_content = 123;
+
+        $this->ps->expects($this->any())->method('createItem')
+            ->willReturn($photo);
 
         $this->nh->expects($this->once())->method('move')
             ->will($this->throwException(new \Exception()));

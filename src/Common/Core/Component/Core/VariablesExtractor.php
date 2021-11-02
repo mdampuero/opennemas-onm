@@ -55,8 +55,8 @@ class VariablesExtractor
 
         try {
             if (!empty($content->fk_author)) {
-                $author = $this->container->get('api.service.author')
-                    ->getItem($content->fk_author);
+                $author = $this->container->get('core.helper.author')
+                    ->getAuthor($content->fk_author);
             }
         } catch (GetItemException $e) {
             return null;
@@ -80,8 +80,8 @@ class VariablesExtractor
 
         try {
             if (!empty($content->fk_author)) {
-                $author = $this->container->get('api.service.author')
-                    ->getItem($content->fk_author);
+                $author = $this->container->get('core.helper.author')
+                    ->getAuthor($content->fk_author);
             }
         } catch (GetItemException $e) {
             return null;
@@ -213,8 +213,8 @@ class VariablesExtractor
 
         try {
             if (!empty($content->fk_user_last_editor)) {
-                $author = $this->container->get('api.service.author')
-                    ->getItem($content->fk_user_last_editor);
+                $author = $this->container->get('core.helper.author')
+                    ->getAuthor($content->fk_user_last_editor);
             }
         } catch (GetItemException $e) {
             return null;
@@ -238,8 +238,8 @@ class VariablesExtractor
 
         try {
             if (!empty($content->fk_user_last_editor)) {
-                $author = $this->container->get('api.service.author')
-                    ->getItem($content->fk_user_last_editor);
+                $author = $this->container->get('core.helper.author')
+                    ->getAuthor($content->fk_user_last_editor);
             }
         } catch (GetItemException $e) {
             return null;
@@ -333,8 +333,8 @@ class VariablesExtractor
 
         try {
             if (!empty($content->fk_publisher)) {
-                $author = $this->container->get('api.service.author')
-                    ->getItem($content->fk_publisher);
+                $author = $this->container->get('core.helper.author')
+                    ->getAuthor($content->fk_publisher);
             }
         } catch (GetItemException $e) {
             return null;
@@ -358,8 +358,8 @@ class VariablesExtractor
 
         try {
             if (!empty($content->fk_publisher)) {
-                $author = $this->container->get('api.service.author')
-                    ->getItem($content->fk_publisher);
+                $author = $this->container->get('core.helper.author')
+                    ->getAuthor($content->fk_publisher);
             }
         } catch (GetItemException $e) {
             return null;

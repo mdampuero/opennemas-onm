@@ -10,6 +10,7 @@
 namespace Test\Common\Core\Component\Helper;
 
 use Common\Model\Entity\Content;
+use Common\Model\Entity\User;
 
 /**
  * Defines test cases for StructuredData class.
@@ -45,9 +46,19 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
-        $this->as = $this->getMockBuilder('Api\Service\V1\AuthorService')
+        $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AuthorHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getItem' ])
+            ->setMethods([ 'getAuthor' ])
+            ->getMock();
+
+        $this->sh = $this->getMockBuilder('Common\Core\Component\Helper\SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasLogo', 'getLogo' ])
+            ->getMock();
+
+        $this->ph = $this->getMockBuilder('Common\Core\Component\Helper\PhotoHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPhotoPath' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
@@ -83,21 +94,27 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             case 'orm.manager':
                 return $this->em;
 
-            case 'api.service.author':
-                return $this->as;
+            case 'core.helper.author':
+                return $this->ah;
 
             case 'api.service.tag':
                 return $this->ts;
 
             case 'core.helper.content_media':
                 return $this->helper;
+
+            case 'core.helper.setting':
+                return $this->sh;
+
+            case 'core.helper.photo':
+                return $this->ph;
         }
 
         return null;
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::__construct
+     * Tests __construct
      */
     public function testConstruct()
     {
@@ -107,8 +124,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
-     * with tags in both: content and video
+     * Tests extractParamsFromData
      */
     public function testExtractParamsFromData()
     {
@@ -168,8 +184,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::extractParamsFromData
-     * without content
+     * Tests extractParamsFromData without content
      */
     public function testExtractParamsFromDataWithoutContent()
     {
@@ -201,8 +216,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
-     * for content of type album
+     * Tests generateJsonLDCode
      */
     public function testGenerateJsonLDCodeWithAlbum()
     {
@@ -233,8 +247,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
-     * for content of type article with video
+     * Tests generateJsonLDCode
      */
     public function testGenerateJsonLDCodeArticleWithVideo()
     {
@@ -266,8 +279,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::generateJsonLDCode
-     * for content of type video
+     * Tests generateJsonLDCode
      */
     public function testGenerateJsonLDCodeWithVideo()
     {
@@ -299,24 +311,25 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getAuthorData
+     * Tests getAuthorData
      */
     public function testGetAuthorData()
     {
+        $author = new User([ 'name' => 'John Dow' ]);
         $method = new \ReflectionMethod($this->object, 'getAuthorData');
         $method->setAccessible(true);
 
         $content = new \Content();
 
-        $this->as->expects($this->once())
-            ->method('getItem')
-            ->willReturn(json_decode(json_encode([ 'name' => 'John Doe' ])));
+        $this->ah->expects($this->once())
+            ->method('getAuthor')
+            ->willReturn($author);
 
         $method->invokeArgs($this->object, [ $content ]);
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getAuthorData
+     * Tests getAuthorData without author
      */
     public function testGetAuthorDataWithoutAuthor()
     {
@@ -325,8 +338,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $content = new \Content();
 
-        $this->as->expects($this->once())
-            ->method('getItem')
+        $this->ah->expects($this->once())
+            ->method('getAuthor')
             ->willReturn(null);
 
         $this->ds->expects($this->once())->method('get')
@@ -338,7 +351,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getDescription
+     * Tests getDescription
      */
     public function testGetDescription()
     {
@@ -366,27 +379,73 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getLogoData
+     * Tests getLogoData
      */
     public function testGetLogoData()
     {
         $method = new \ReflectionMethod($this->object, 'getLogoData');
         $method->setAccessible(true);
 
-        $this->ds->expects($this->at(0))
-            ->method('get')
-            ->with('site_logo')
-            ->willReturn('logo.png');
-
         $this->instance->expects($this->once())
-            ->method('getMediaShortPath')
+            ->method('getBaseUrl')
             ->willReturn('/media/opennemas');
 
-        $method->invokeArgs($this->object, []);
+        $this->sh->expects($this->at(0))
+            ->method('hasLogo')
+            ->with('default')
+            ->willReturn(true);
+
+        $media = new Content(
+            [
+                'pk_content'        => 2,
+                'content_type_name' => 'photo',
+                'path'   => '/path_to_file/logo.jpg',
+                'width'             => 1920,
+                'height'            => 1080
+            ]
+        );
+
+        $this->sh->expects($this->at(1))
+            ->method('getLogo')
+            ->with('default')
+            ->willReturn($media);
+
+        $this->ph->expects($this->any())
+            ->method('getPhotoPath')
+            ->with($media, null, [], true)
+            ->willReturn('https://opennemas.com/media/opennemas/path_to_file/logo.jpg');
+
+        $this->assertEquals(
+            'https://opennemas.com/media/opennemas/path_to_file/logo.jpg',
+            $method->invokeArgs($this->object, [])
+        );
     }
 
     /**
-     * @covers \Common\Core\Component\Helper\StructuredData::getTags
+     * Tests getLogoData without logo
+     */
+    public function testGetLogoDataWithoutLogo()
+    {
+        $method = new \ReflectionMethod($this->object, 'getLogoData');
+        $method->setAccessible(true);
+
+        $this->instance->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('/media/opennemas');
+
+        $this->sh->expects($this->at(0))
+            ->method('hasLogo')
+            ->with('default')
+            ->willReturn(false);
+
+        $this->assertEquals(
+            '/media/opennemas/assets/images/logos/opennemas-powered-horizontal.png',
+            $method->invokeArgs($this->object, [])
+        );
+    }
+
+    /**
+     * Tests getTags
      */
     public function testGetTags()
     {
