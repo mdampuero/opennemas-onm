@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use DateTime;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Displays a letter or a list of letters.
@@ -155,23 +156,19 @@ class LetterController extends FrontendController
             ->isValid($response, $request->getClientIp());
 
         if (!$isValid) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_letter_frontpage')
-                . '?msg="'
-                . _("The reCAPTCHA wasn't entered correctly. Go back and try it again.")
-                . '"'
-            );
+            return new JsonResponse([
+                'type'    => 'danger',
+                'message' => _('Please fill the captcha code.'),
+            ], 400);
         }
 
         $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
         if (!empty($security_code)) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_letter_frontpage')
-                . '?msg="'
-                . _('Unable to save the letter.')
-                . '"'
-            );
+            return new JsonResponse([
+                'type'    => 'danger',
+                'message' => _('Unable to save the letter.'),
+            ], 400);
         }
 
         $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
@@ -189,19 +186,18 @@ class LetterController extends FrontendController
         $errors = $this->get('core.validator')->validate($data, 'letter');
 
         if (!empty($errors)) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_letter_frontpage')
-                . '?msg="'
-                . _('Unable to save the letter.')
-                . '<br>'
-                . implode('<br>', $errors['errors'])
-                . '"'
-            );
+            return new JsonResponse([
+                'type'    => 'danger',
+                'message' =>
+                    _('Unable to save the letter.')
+                    . '<br>'
+                    . implode('<br>', $errors['errors'])
+                ,
+            ], 400);
         }
 
-        $now     = new DateTime();
+        $now = new DateTime();
 
-        $data = [];
         $data = [
             'title'             => $subject,
             'body'              => iconv(mb_detect_encoding($text), "UTF-8", $text),
@@ -222,22 +218,18 @@ class LetterController extends FrontendController
         try {
             $this->get($this->service)->createItem($data);
         } catch (\Exception $e) {
-            return new RedirectResponse(
-                $this->generateUrl('frontend_letter_frontpage')
-                . '?msg="'
-                . $e->getMessage()
-                . '"'
-            );
+            return new JsonResponse([
+                'type'    => 'danger',
+                'message' => $e->getMessage(),
+            ], 400);
         }
 
         $this->sendEmail($data['body'], $subject, $email);
 
-        return new RedirectResponse(
-            $this->generateUrl('frontend_letter_frontpage')
-            . '?msg="'
-            . _("Your letter has been saved and is awaiting publication.")
-            . '"'
-        );
+        return new JsonResponse([
+            'type'    => 'success',
+            'message' => _("Your letter has been saved and is awaiting publication.")
+        ], 200);
     }
 
     /**

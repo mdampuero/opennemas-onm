@@ -23,3 +23,6 @@ frontend_letter_show:
 frontend_letter_save:
     path: /cartas-al-director/save
     defaults: { _controller: FrontendBundle:Letter:save }
+    methods: [ POST ]
+    options:
+        expose: true
