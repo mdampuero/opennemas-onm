@@ -12,7 +12,8 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
+use Api\Exception\GetListException;
+use DateTime;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,8 +25,22 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Frontend_Controllers
  */
-class CommentsController extends Controller
+class CommentController extends FrontendController
 {
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_REJECTED = 'rejected';
+    const STATUS_PENDING  = 'pending';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'COMMENT_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.comment';
+
     /**
      * Returns the list of comments for a given content id
      *
@@ -40,28 +55,27 @@ class CommentsController extends Controller
         $offset    = $request->query->getDigits('offset', 1);
 
         $content = $this->getContent($contentId);
+
         if (empty($content)) {
             return new Response('', 404);
         }
 
         $comments = $this->getComments($content, $epp, $offset);
 
-        $sh    = $this->get('core.helper.subscription');
-        $total = $this->get('comment_repository')
-            ->countCommentsForContentId($content->id);
+        $sh = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
             $this->getAds();
         }
 
         return $this->render('comments/loader.tpl', [
-            'total'          => $total,
-            'comments'       => $comments,
+            'total'          => $comments['total'],
+            'comments'       => $comments['items'],
             'contentId'      => $content->id,
             'elems_per_page' => $epp,
             'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
-            'count'          => $total,
+            'more'           => $comments['total'] > ($epp * $offset),
             'recaptcha'      => $this->get('core.recaptcha')
                 ->configureFromSettings()
                 ->getHtml(),
@@ -82,15 +96,14 @@ class CommentsController extends Controller
         $offset    = $request->query->getDigits('offset', 1);
 
         $content = $this->getContent($contentId);
+
         if (empty($content)) {
             return new Response('', 404);
         }
 
         $comments = $this->getComments($content, $epp, $offset);
 
-        $sh    = $this->get('core.helper.subscription');
-        $total = $this->get('comment_repository')
-            ->countCommentsForContentId($content->id);
+        $sh = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
             $this->getAds();
@@ -98,8 +111,8 @@ class CommentsController extends Controller
 
         $contents = $this->get('core.template.frontend')
             ->render('comments/partials/comment_element.tpl', [
-                'total'          => $total,
-                'comments'       => $comments,
+                'total'          => $comments['total'],
+                'comments'       => $comments['items'],
                 'contentId'      => $content->id,
                 'elems_per_page' => $epp,
                 'offset'         => $offset,
@@ -107,7 +120,7 @@ class CommentsController extends Controller
 
         return new Response(json_encode([
             'contents' => $contents,
-            'more'     => $total > ($epp * $offset),
+            'more'     => $comments['total'] > ($epp * $offset),
         ]), 200);
     }
 
@@ -124,7 +137,7 @@ class CommentsController extends Controller
         $voteValue = $request->request->filter('vote', null, FILTER_SANITIZE_STRING);
         $commentId = $request->request->getDigits('comment_id', 0);
         $cookie    = $request->cookies->get('comment-vote-' . $commentId);
-        $ip        = getUserRealIP();
+        $comment   = $this->get($this->service)->getItem($commentId);
 
         // User already voted this comment
         if (!is_null($cookie)) {
@@ -141,23 +154,19 @@ class CommentsController extends Controller
             return new Response(_('Not valid vote value'), 400);
         }
 
-        // 1 Vote up - 2 Vote down
-        $voteValue = ($voteValue == 'up') ? 1 : 2;
+        try {
+            // Positive Vote up - Negative Vote down
+            $vote = ($voteValue == 'up') ? 'positive' : 'negative';
 
-        // Create the vote
-        $voteObject = new \Vote($commentId);
-        if (is_null($voteObject)) {
-            return new Response(_("Error: no vote value!"), 400);
-        }
+            $value = empty($comment->{$vote}) ? 1 : $comment->{$vote} + 1;
 
-        $update = $voteObject->update($voteValue, $ip);
+            $this->get($this->service)->updateItem($commentId, [$vote => $value]);
 
-        if ($update) {
             $response = new Response('ok', 200);
             $response->headers->setCookie(
                 new Cookie('comment-vote-' . $commentId, true, new \DateTime('+3 days'))
             );
-        } else {
+        } catch (\Exception $e) {
             $response = new Response(_("You have voted this comment previously."), 400);
         }
 
@@ -177,9 +186,11 @@ class CommentsController extends Controller
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
         $authorEmail = $request->request->filter('author-email', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
+        $content     = $this->getContent($contentId);
         $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
+        $xmlRequest  = $request->isXmlHttpRequest();
 
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
@@ -193,15 +204,14 @@ class CommentsController extends Controller
             ], 400);
         }
 
-
-        $httpCode = 200;
-
         try {
+            $now = new DateTime();
+
             $data = [
                 'content_id'   => $contentId,
                 'body'         => $body,
                 'author'       => $authorName,
-                'author_ip'    => $ip
+                'author_ip'    => $ip,
             ];
 
             if (!empty($authorEmail)) {
@@ -214,137 +224,62 @@ class CommentsController extends Controller
 
             $errors = $this->get('core.validator')->validate($data, 'comment');
 
-            if ($cm->moderateManually()) {
-                if (!empty($errors)) {
-                    throw new \Exception(sprintf(
+            $data['date']                    = $now->format('Y-m-d H:i:s');
+            $data['content_type_referenced'] = $content->content_type_name;
+
+            if (!empty($errors) && $errors['type'] == 'fatal') {
+                return new JsonResponse([
+                    'message' => sprintf(
                         '<strong>%s</strong><br> %s',
                         _('Your comment was rejected due to:'),
                         implode('<br>', $errors['errors'])
-                    ));
-                }
+                    ),
+                    'type'    => 'error',
+                ], 400);
+            }
 
-                $message = [
+            if (!empty($errors)) {
+                $data['status'] = $cm->autoReject()
+                    ? self::STATUS_REJECTED
+                    : self::STATUS_PENDING;
+
+                $handling = $cm->autoReject()
+                    ? _('Your comment was rejected due to:')
+                    : _('Your comment is waiting for moderation due to:');
+
+                return $this->saveData($data, $xmlRequest) ?: new JsonResponse([
+                    'message' => sprintf(
+                        '<strong>%s</strong><br> %s',
+                        $handling,
+                        implode('<br>', $errors['errors'])
+                    ),
+                    'type'    => 'error',
+                ], 400);
+            }
+
+            if ($cm->moderateManually() || !$cm->autoAccept()) {
+                $data['status'] = self::STATUS_PENDING;
+
+                return $this->saveData($data, $xmlRequest) ?: new JsonResponse([
+                    'type' => 'success',
                     'message' => _('Your comment was accepted and now we have to moderate it.'),
-                    'type'    => 'warning',
-                ];
+                ], 200);
+            }
 
-                $data['status'] = \Comment::STATUS_PENDING;
-                $comment        = new \Comment();
-                $comment->create($data);
-            } else {
-                if (empty($errors)) {
-                    $data['status'] = $cm->autoAccept()
-                        ? \Comment::STATUS_ACCEPTED
-                        : \Comment::STATUS_PENDING;
+            if (!$cm->moderateManually() && $cm->autoAccept()) {
+                $data['status'] = self::STATUS_ACCEPTED;
 
-                    $handling = $cm->autoAccept()
-                        ? _('Your comment was accepted.')
-                        : _('Your comment is valid and now is waiting for moderation.');
-
-                    $httpCode = 200;
-                    $message  = [
-                        'message' => $handling,
-                        'type'    => 'success',
-                    ];
-
-                    $comment = new \Comment();
-                    $comment->create($data);
-                } else {
-                    $data['status'] = $cm->autoReject()
-                        ? \Comment::STATUS_REJECTED
-                        : \Comment::STATUS_PENDING;
-
-                    $errorType = $errors['type'];
-                    $httpCode  = 400;
-
-                    $handling = ($cm->autoReject() || $cm->isEmailRequired())
-                        ? _('Your comment was rejected due to:')
-                        : _('Your comment is waiting for moderation due to:');
-
-                    $message = [
-                        'message' => sprintf(
-                            '<strong>%s</strong><br> %s',
-                            $handling,
-                            implode('<br>', $errors['errors'])
-                        ),
-                        'type'    => 'error',
-                    ];
-
-                    if ($errorType != 'fatal') {
-                        $comment = new \Comment();
-                        $comment->create($data);
-                    }
-                }
+                return $this->saveData($data, $xmlRequest) ?: new JsonResponse([
+                    'type' => 'success',
+                    'message' => _('Your comment was accepted.'),
+                ], 200);
             }
         } catch (\Exception $e) {
-            $httpCode = 400;
-            $message  = [
+            return new JsonResponse([
                 'message' => $e->getMessage(),
                 'type'    => 'error',
-            ];
+            ], 400);
         }
-
-        $response = new JsonResponse($message, $httpCode);
-        if (!$request->isXmlHttpRequest()) {
-            $response = new RedirectResponse($this->generateUrl('frontend_comments_get', [
-                'id' => $contentId,
-            ]));
-        }
-
-        return $response;
-    }
-
-    /**
-     * Returns a json containing the list of comments count for each content requested
-     *
-     * @param Request $request the request object
-     *
-     * @return JsonResponse
-     */
-    public function getCommentsCountAction(Request $request)
-    {
-        // Fetch the list of content ids, clean and filter them
-        $ids = $ids = $request->query->get('ids', []);
-        $ids = array_unique(array_filter(
-            array_map(
-                function ($id) {
-                    return (int) $id;
-                },
-                explode(',', $ids)
-            ),
-            function ($id) {
-                return ((int) $id) > 0;
-            }
-        ));
-
-        // Fetch data from database
-        $commentsCount = [];
-        if (!empty($ids)) {
-            try {
-                $ids  = implode(',', $ids);
-                $conn = $this->get('orm.manager')->getConnection('instance');
-                $data = $conn->fetchAll(
-                    'SELECT content_id, COUNT(*) as comments_count FROM comments '
-                    . 'WHERE content_id IN (' . $ids . ') AND status = ? GROUP BY content_id',
-                    [ \Comment::STATUS_ACCEPTED ]
-                );
-                foreach ($data as $value) {
-                    $commentsCount[$value['content_id']] = $value['comments_count'];
-                }
-            } catch (\Exception $e) {
-                return new JsonResponse($commentsCount, 500);
-            }
-        }
-
-        // Prepare response
-        $response = new JsonResponse();
-        $response->setData($commentsCount);
-        // Add edge cache support
-        $response->headers->set('x-tags', 'comments,' . $ids);
-        $response->headers->set('x-cache-for', '+300 sec');
-        $response->headers->set('x-cacheable', true);
-
-        return $response;
     }
 
     /**
@@ -387,7 +322,7 @@ class CommentsController extends Controller
     /**
      * Returns comments for the content given a page.
      *
-     * @param object  $content The content object.
+     * @param object  $contents The content object.
      * @param integer $epp     The number of elements to return.
      * @param integer $offset  The initial offset.
      *
@@ -396,19 +331,45 @@ class CommentsController extends Controller
     protected function getComments($content, $epp, $offset)
     {
         $configs = $this->get('core.helper.comment')->getConfigs();
-        $cm      = $this->get('comment_repository');
-        $total   = $cm->countCommentsForContentId($content->id);
 
-        $epp = empty($epp) || $epp > $total
-            ? (int) $configs['number_elements'] : $epp;
+        $epp = empty($epp) ? (int) $configs['number_elements'] : $epp;
 
-        $comments = $cm->getCommentsforContentId($content->id, $epp, $offset);
+        $oql = sprintf(
+            'content_id = %d'
+            . ' and status = "accepted"'
+            . ' order by date desc limit %d offset %d',
+            $content->pk_content,
+            $epp,
+            ($offset - 1) * $epp
+        );
 
-        foreach ($comments as &$comment) {
-            $vote           = new \Vote($comment->id);
-            $comment->votes = $vote;
+        try {
+            $comments = $this->get($this->service)->getList($oql);
+
+            return $comments;
+        } catch (GetListException $ex) {
+            return ['total' => 0, 'items' => []];
+        }
+    }
+
+    /**
+     * Save comment and returns RedirectResponse if the request is a XMLHttpRequest
+     *
+     * @param array $data Data to save.
+     * @param boolean $isXmlHttpRequest True if the request is a XMLHttpRequest
+     *
+     * @return any RedirectResponse if the request is a XMLHttpRequest null otherwise
+     */
+    protected function saveData($data, $isXmlHttpRequest)
+    {
+        $this->get($this->service)->createItem($data);
+
+        if (!$isXmlHttpRequest) {
+            return new RedirectResponse($this->generateUrl('frontend_comments_get', [
+                'id' => $data['contentId'],
+            ]));
         }
 
-        return $comments;
+        return null;
     }
 }

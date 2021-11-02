@@ -28,7 +28,7 @@ class CommentHelper
     public function __construct($em, $defaultConfigs)
     {
         $this->ds             = $em->getDataSet('Settings', 'instance');
-        $this->configs        = $this->ds->get('comments_config', []);
+        $this->configs        = $this->ds->get('comment_settings', []);
         $this->defaultConfigs = $defaultConfigs;
     }
 

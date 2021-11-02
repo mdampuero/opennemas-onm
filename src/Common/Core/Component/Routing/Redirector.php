@@ -165,24 +165,6 @@ class Redirector
     }
 
     /**
-     * Returns an comment by id.
-     *
-     * @param integer $id The comment id.
-     *
-     * @return Comment The comment.
-     */
-    protected function getComment($id)
-    {
-        $comment = new \Comment($id);
-
-        if (empty($comment->content_id)) {
-            return null;
-        }
-
-        return new \Content($comment->content_id);
-    }
-
-    /**
      * Returns a content basing on an id and a content type.
      *
      * @param integer $id          The content id.

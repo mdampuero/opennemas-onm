@@ -57,8 +57,10 @@ class ActOnContactSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'comment.create' => [ [ 'addContact', 5 ] ],
-            'comment.update' => [ [ 'addContact', 5 ] ]
+            'comment.createItem' => [ [ 'addContact', 5 ] ],
+            'comment.updateItem' => [ [ 'addContact', 5 ] ],
+            'comment.patchItem'  => [ [ 'addContact', 5 ] ],
+            'comment.patchList'  => [ [ 'addContact', 5 ] ]
         ];
     }
 
@@ -78,47 +80,54 @@ class ActOnContactSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $items = $event->getArgument('item');
+
+        if (is_object($items)) {
+            $items = [ $items ];
+        }
+
         $commentsConfig = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('comments_config');
+            ->get('comment_settings');
 
-        $listId  = $commentsConfig['acton_list'] ?? null;
-        $comment = $event->getArgument('item');
+        $listId = $commentsConfig['acton_list'] ?? null;
 
-        if (empty($listId) || $comment->status !== 'accepted') {
-            return;
-        }
-
-        try {
-            $endpoint = $this->actOnFactory->getEndpoint('contact');
-
-            if ($endpoint->existContact($listId, $comment->author_email)) {
+        foreach ($items as $comment) {
+            if (empty($listId) || $comment->status !== 'accepted') {
                 return;
             }
-        } catch (\Exception $e) {
-            $this->logger->error(
-                'Error checking for Act-on contact: ' . $e->getMessage()
-            );
 
-            return;
-        }
+            try {
+                $endpoint = $this->actOnFactory->getEndpoint('contact');
 
-        $sendingParams = [
-            'Correo electrónico' => $comment->author_email,
-            'Nombre Yomi'        => $comment->author,
-            'Boletin ECD'        => 'Y',
-            'Tema'               => 'Realizado Comentario ECD'
-        ];
+                if ($endpoint->existContact($listId, $comment->author_email)) {
+                    return;
+                }
+            } catch (\Exception $e) {
+                $this->logger->error(
+                    'Error checking for Act-on contact: ' . $e->getMessage()
+                );
 
-        try {
-            $endpoint->addContact(
-                $listId,
-                [ 'contact' => json_encode($sendingParams) ]
-            );
-        } catch (\Exception $e) {
-            $this->logger->error(
-                'Error creating Act-on contact: ' . $e->getMessage()
-            );
+                return;
+            }
+
+            $sendingParams = [
+                'Correo electrónico' => $comment->author_email,
+                'Nombre Yomi'        => $comment->author,
+                'Boletin ECD'        => 'Y',
+                'Tema'               => 'Realizado Comentario ECD'
+            ];
+
+            try {
+                $endpoint->addContact(
+                    $listId,
+                    [ 'contact' => json_encode($sendingParams) ]
+                );
+            } catch (\Exception $e) {
+                $this->logger->error(
+                    'Error creating Act-on contact: ' . $e->getMessage()
+                );
+            }
         }
     }
 }
