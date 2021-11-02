@@ -100,6 +100,9 @@ class LetterController extends FrontendController
         }
 
         $params = array_merge($params, [
+            'recaptcha' => $this->get('core.recaptcha')
+                ->configureFromSettings()
+                ->getHtml(),
             'otherLetters'    => $response['items'],
             'total'           => $response['total'],
             'pagination'      => $this->get('paginator')->get([
