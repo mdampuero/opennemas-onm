@@ -68,7 +68,7 @@
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>
-  <div class="grid simple" ng-show="item.type == 'script' || item.type == 'external'">
+  <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}

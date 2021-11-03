@@ -47,7 +47,7 @@ class VideoController extends BackendController
 
         $page = $request->query->getDigits('page', 1);
         $epp  = 8;
-        $oql  = 'content_type_name = "video" and in_litter = 0'
+        $oql  = 'content_type_name = "video" and content_status = 1 and in_litter = 0'
             . ' order by created desc limit ' . $epp;
 
         if ($page > 1) {

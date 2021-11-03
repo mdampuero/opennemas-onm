@@ -697,7 +697,9 @@ class StringUtils
         }
 
         if (is_string($input)) {
-            $input = mb_convert_encoding($input, 'UTF-8', mb_detect_encoding($input));
+            $input = !empty(mb_detect_encoding($input)) ?
+                mb_convert_encoding($input, 'UTF-8', mb_detect_encoding($input)) :
+                '';
         }
 
         return $input;
