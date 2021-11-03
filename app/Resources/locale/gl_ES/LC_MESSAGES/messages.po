@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-14 10:49+0000\n"
-"PO-Revision-Date: 2021-09-29 12:14+0200\n"
+"POT-Creation-Date: 2021-11-03 08:11+0000\n"
+"PO-Revision-Date: 2021-11-03 09:13+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -160,25 +160,6 @@ msgstr "Palabra chave creada correctamente"
 
 msgid "Keyword updated successfully"
 msgstr "Palabra chave actualizada correctamente"
-
-msgid "Letter successfully created."
-msgstr "Carta creada correctamente"
-
-msgid "Unable to create the new letter."
-msgstr "Non se puido crear a nova carta"
-
-#, php-format
-msgid "Unable to find the letter with the id \"%d\""
-msgstr "Non se puido atopar a carta con identificador «%d»"
-
-msgid "Letter data sent not valid."
-msgstr "Os datos enviados da carta non son válidos."
-
-msgid "Letter successfully updated."
-msgstr "Carta gardada correctamente."
-
-msgid "Unable to update the letter."
-msgstr "Non se puido actualizar a carta."
 
 #, php-format
 msgid "Unable to find the menu with the id \"%d\""
@@ -870,21 +851,8 @@ msgstr "Non puidemos completar a túa petición."
 msgid "Unable to save the letter."
 msgstr "Non se puido gardar a carta."
 
-msgid "Name"
-msgstr "Nome"
-
-msgid "Email"
-msgstr "Correo electrónico"
-
 msgid "Your letter has been saved and is awaiting publication."
 msgstr "A tua carta foi salvada e está esperando publicación."
-
-msgid ""
-"Your letter has not been saved, make sure you fill in all the fields "
-"correctly."
-msgstr ""
-"A tua carta non foi salvada, asegúrate de completar todos os campos "
-"correctamente."
 
 msgid "Check the form and try again"
 msgstr "Revisa o formulario e inténtao de novo"
@@ -1102,6 +1070,9 @@ msgstr "Notificación gardada correctamente"
 #, php-format
 msgid "%s notifications saved successfully"
 msgstr "%s notificacións gardadas correctamente"
+
+msgid "Email"
+msgstr "Correo electrónico"
 
 msgid "Help"
 msgstr "Axuda"
@@ -1416,6 +1387,9 @@ msgstr "Requírese un mínimo de 2 respostas"
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
 msgstr ""
 "O tamaño mínimo para o %s é 200x200. Por favor axusta o tamaño da imaxe."
+
+msgid "Name"
+msgstr "Nome"
 
 msgid "Activated"
 msgstr "Activado"
@@ -1775,6 +1749,12 @@ msgstr "O teu nome conten palabras non válidas"
 
 msgid "Your comment has words under discussion."
 msgstr "O teu comentario contén palabras baixo discusión."
+
+msgid "Your letter is too short"
+msgstr "A túa carta é demasiado curta"
+
+msgid "Please provide a valid subject"
+msgstr "Proporciona un asunto válido"
 
 msgid "Please provide a valid tag"
 msgstr "Fornece unha etiqueta válida"
@@ -5623,35 +5603,17 @@ msgstr "IP do emisor"
 msgid "Commented on"
 msgstr "Comentado en"
 
-msgid "Unable to find any letter that matches your search."
-msgstr "Non se puideron atopar cartas que coincidan coa súa busca."
-
-msgid "Publish/Unpublish"
-msgstr "Publicar/despublicar"
-
-msgid "Editing letter"
-msgstr "Editar carta"
-
-msgid "Creating letter"
-msgstr "Creando carta"
-
-msgid "Author information"
-msgstr "Información do autor"
-
-msgid "Created at"
-msgstr "Creado en"
-
-msgid "Related url"
-msgstr "Url relacionado"
-
-msgid "Image assigned"
-msgstr "Imaxe asignada"
+msgid "New letter"
+msgstr "Carta nova"
 
 msgid "Delete letter"
 msgstr "Eliminar carta"
 
 msgid "Delete letters"
 msgstr "Eliminar cartas"
+
+msgid "Author information"
+msgstr "Información do autor"
 
 msgid "Unable to find any special that matches your search."
 msgstr "Non se puideron atopar especiais que coincidan coa súa busca."
@@ -6958,6 +6920,9 @@ msgstr "Nova instancia"
 msgid "Edit instance"
 msgstr "Editar instancia"
 
+msgid "Created at"
+msgstr "Creado en"
+
 msgid "Created from"
 msgstr "Creado o"
 
@@ -7017,6 +6982,49 @@ msgstr "Forte"
 
 msgid "Maximun number of emails sent by month"
 msgstr "Número máximo de correo-e enviados por mes"
+
+#~ msgid "Letter successfully created."
+#~ msgstr "Carta creada correctamente"
+
+#~ msgid "Unable to create the new letter."
+#~ msgstr "Non se puido crear a nova carta"
+
+#~ msgid "Unable to find the letter with the id \"%d\""
+#~ msgstr "Non se puido atopar a carta con identificador «%d»"
+
+#~ msgid "Letter data sent not valid."
+#~ msgstr "Os datos enviados da carta non son válidos."
+
+#~ msgid "Letter successfully updated."
+#~ msgstr "Carta gardada correctamente."
+
+#~ msgid "Unable to update the letter."
+#~ msgstr "Non se puido actualizar a carta."
+
+#~ msgid ""
+#~ "Your letter has not been saved, make sure you fill in all the fields "
+#~ "correctly."
+#~ msgstr ""
+#~ "A tua carta non foi salvada, asegúrate de completar todos os campos "
+#~ "correctamente."
+
+#~ msgid "Unable to find any letter that matches your search."
+#~ msgstr "Non se puideron atopar cartas que coincidan coa súa busca."
+
+#~ msgid "Publish/Unpublish"
+#~ msgstr "Publicar/despublicar"
+
+#~ msgid "Editing letter"
+#~ msgstr "Editar carta"
+
+#~ msgid "Creating letter"
+#~ msgstr "Creando carta"
+
+#~ msgid "Related url"
+#~ msgstr "Url relacionado"
+
+#~ msgid "Image assigned"
+#~ msgstr "Imaxe asignada"
 
 #~ msgid "Manage poll comments"
 #~ msgstr "Xestionar comentarios de enquisas"
