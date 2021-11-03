@@ -179,14 +179,14 @@ class LetterController extends FrontendController
         $email   = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
         $text    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
 
-        $data = [
+        $validate = [
             'email'      => $email,
             'lettertext' => $text,
             'name'       => $name,
             'subject'    => $subject,
         ];
 
-        $errors = $this->get('core.validator')->validate($data, 'letter');
+        $errors = $this->get('core.validator')->validate($validate, 'letter');
 
         if (!empty($errors)) {
             return new JsonResponse([
