@@ -98,14 +98,14 @@
           }
 
           var parameters = Object.assign($scope.buildObject(params), $scope.buildObject($scope.item.params));
-          var result      = [];
+          var result     = [];
 
           var properties = params.map(function(param) {
             return param.name;
           });
 
           properties.forEach(function(property) {
-            var object   = {};
+            var object = {};
 
             object.name  = property;
             object.value = parameters[property];
