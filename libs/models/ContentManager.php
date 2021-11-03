@@ -218,7 +218,7 @@ class ContentManager
      *
      * @return boolean true if all went well
      */
-    public static function dropSuggestedFlagFromContentIdsArray($contentIds, $conn = false)
+    public static function dropSuggestedFlagFromContentIdsArray($contentIds)
     {
         if (is_array($contentIds) && !empty($contentIds)) {
             try {
