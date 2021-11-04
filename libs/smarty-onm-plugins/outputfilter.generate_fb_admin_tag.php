@@ -6,6 +6,10 @@ function smarty_outputfilter_generate_fb_admin_tag($output, $smarty)
         ->getDataSet('Settings')
         ->get([ 'comment_settings' ])['comment_settings'];
 
+    if (empty($settings)) {
+        return $output;
+    }
+
     $system = array_key_exists('comment_system', $settings)
         ? $settings['comment_system']
         : null;
