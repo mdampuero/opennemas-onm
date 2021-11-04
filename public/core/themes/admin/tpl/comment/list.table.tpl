@@ -8,14 +8,14 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-comment" checklist-model="app.columns.selected" checklist-value="'comment'" type="checkbox">
+    <input id="checkbox-comment" checklist-model="app.columns.selected" checklist-value="'comment'" type="checkbox" disabled>
     <label for="checkbox-comment">
       {t}Comment{/t}
     </label>
   </div>
   {acl isAllowed="COMMENT_AVAILABLE"}
     <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'status'" type="checkbox">
+      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'status'" type="checkbox" disabled>
       <label for="checkbox-published">
         {t}Published{/t}
       </label>
