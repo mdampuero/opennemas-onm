@@ -11,7 +11,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use DateTime;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

@@ -122,7 +122,6 @@ api_v1_backend_widget:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/widget.yml'
     prefix:   /backend
 
-
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
     prefix:   /

@@ -76,7 +76,7 @@ class LetterController extends BackendController
             $pagination = $this->get('paginator')->get([
                 'boundary'    => true,
                 'directional' => true,
-                'epp'         => 8,
+                'epp'         => $itemsPerPage,
                 'maxLinks'    => 5,
                 'page'        => $page,
                 'total'       => $response['total'],
