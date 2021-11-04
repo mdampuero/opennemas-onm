@@ -13,3 +13,20 @@ figure {
     border-radius: unset;
     background: unset;
 }
+
+figure.image img {
+  max-width: 100%;
+}
+
+div.image-inbody-center {
+  display: flex;
+  justify-content: center;
+}
+
+div.image-inbody-left figure {
+  float: left;
+}
+
+div.image-inbody-right figure {
+  float: right;
+}

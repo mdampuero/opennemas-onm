@@ -75,7 +75,7 @@
         this.renderImage = function(image, align) {
           var alt   = '';
           var align = '';
-          var html  = '<figure class="image"><img[align] style="max-width: 100%;" src="' + instanceMedia + image.path + '"[alt]><figcaption>[caption]</figcaption></figure>';
+          var html  = '<figure class="image"><img[align] src="' + instanceMedia + image.path + '"[alt]><figcaption>[caption]</figcaption></figure>';
 
           if (image.description) {
             alt = ' alt="' + image.description + '"';

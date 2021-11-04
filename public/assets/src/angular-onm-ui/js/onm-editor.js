@@ -211,17 +211,34 @@
         /**
          * @function addCustomCss
          * @memberOf Editor
-         * 
+         *
          * @description
          *  Adds a custom css to the editor.
-         * 
-         * @param {String} path The path of the file with the custom css. 
+         *
+         * @param {String} path The path of the file with the custom css.
          */
         this.addCustomCss = function(path) {
           var editor = $windowProvider.$get().CKEDITOR;
 
           editor.config.contentsCss = [ editor.config.contentsCss ].concat(path);
-        }
+        };
+
+        /**
+         * @function addCustomImageClass
+         * @memberOf Editor
+         *
+         * @description
+         *  Adds a custom class to the images of ckeditor.
+         */
+        this.addCustomImageClass = function() {
+          var editor = $windowProvider.$get().CKEDITOR;
+
+          editor.config.image2_alignClasses = [
+            'image-inbody-left',
+            'image-inbody-center',
+            'image-inbody-right'
+          ];
+        };
 
         /**
          * @function destroy

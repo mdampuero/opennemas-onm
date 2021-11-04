@@ -50,6 +50,9 @@
     // Add custom css
     EditorProvider.addCustomCss('/assets/css/ckeditor.css');
 
+    // Add custom class for image2 plugin
+    EditorProvider.addCustomImageClass();
+
     // Enable CKEditor for all environments (browsers)
     EditorProvider.setCompatible(true);
   }]);
