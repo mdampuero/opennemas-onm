@@ -79,10 +79,6 @@ class ContentPositionService extends OrmService
 
         // Foreach element setup the sql values statement part
         foreach ($elements as $element) {
-            if ($element['content_type'] === 'article') {
-                $contentIds[] = $element['id'];
-            }
-
             $positions[] = [
                 $conn->quote($element['id'], \PDO::PARAM_INT),
                 $conn->quote($categoryID, \PDO::PARAM_INT),
@@ -114,7 +110,20 @@ class ContentPositionService extends OrmService
 
             // Unset suggested flag if saving content positions in frontpage
             if ($categoryID == 0) {
-                \ContentManager::dropSuggestedFlagFromContentIdsArray($contentIds, $conn);
+                $contentPositions = array_filter($elements, function ($element) {
+                    return $element['content_type'] === 'article';
+                });
+
+                $contents = $this->container->get('api.service.article')
+                    ->getListByIds(array_column($contentPositions, 'id'))['items'];
+
+                $contentIds = array_map(function ($content) {
+                    return $content->pk_content;
+                }, array_filter($contents, function ($content) {
+                    return $content->frontpage === 1;
+                }));
+
+                \ContentManager::dropSuggestedFlagFromContentIdsArray($contentIds);
             }
 
             $conn->commit();
