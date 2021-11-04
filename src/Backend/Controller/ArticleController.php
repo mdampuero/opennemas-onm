@@ -71,7 +71,7 @@ class ArticleController extends BackendController
         $suggested    = $request->query->getBoolean('suggested', false);
         $category     = $request->query->getDigits('category', 0);
         $itemsPerPage = 8;
-        $oql          = 'content_type_name = "article" and in_litter = 0 ';
+        $oql          = 'content_type_name = "article" and content_status = 1 and in_litter = 0 ';
 
         if ($suggested) {
             $oql .= 'and frontpage = 1 ';

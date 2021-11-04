@@ -60,7 +60,7 @@ class OpinionController extends BackendController
     {
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
-        $oql          = 'content_type_name = "opinion" and in_litter = 0';
+        $oql          = 'content_type_name = "opinion" and content_status = 1 and in_litter = 0';
 
         try {
             $oql .= ' order by created desc limit ' . $itemsPerPage;

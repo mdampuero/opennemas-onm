@@ -550,26 +550,6 @@ class FrontendController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color' ]);
 
-        // Get instance logo size
-        if (has_logo('default')) {
-            $path     = get_photo_path(get_logo('default'));
-            $logoPath = dirname($path) . '/' . rawurlencode(basename($path));
-
-            $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
-            $logoFilePath = SITE_PATH . $logoPath;
-
-            $logoSize = file_exists($logoFilePath)
-                ? @getimagesize($logoFilePath)
-                : null;
-
-            if (is_array($logoSize)) {
-                $this->view->assign([
-                    'logoSize' => $logoSize,
-                    'logoUrl'  => $logoUrl
-                ]);
-            }
-        }
-
         // Get menu
         $mm      = $this->container->get('menu_repository');
         $ampMenu = $mm->findOneBy([ 'name' => [[ 'value' => 'amp' ]] ], null, 1, 1);

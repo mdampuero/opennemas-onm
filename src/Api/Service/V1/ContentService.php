@@ -126,7 +126,7 @@ class ContentService extends OrmService
      */
     protected function assignUser($data, $userFields = [])
     {
-        if ($this->container->get('core.security')->hasPermission('MASTER')) {
+        if (!$this->isEditable($data)) {
             return $data;
         }
 
@@ -156,5 +156,25 @@ class ContentService extends OrmService
         }
 
         return $item;
+    }
+
+    /**
+     * Checks if the last editor needs to be changed.
+     *
+     * @param array $data The array of data to update.
+     *
+     * @return boolean True if the last editor needs to be changed, false otherwise.
+     */
+    protected function isEditable($data = [])
+    {
+        if ($data === [ 'frontpage' => 0 ]) {
+            return false;
+        }
+
+        if ($this->container->get('core.security')->hasPermission('MASTER')) {
+            return false;
+        }
+
+        return true;
     }
 }

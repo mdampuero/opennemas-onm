@@ -157,24 +157,20 @@ class StructuredData
      */
     protected function getLogoData()
     {
-        // Default logo information
-        $logo = [
-            'url'    => $this->instance->getBaseUrl()
-                 . '/assets/images/logos/opennemas-powered-horizontal.png',
-            'width'  => '350',
-            'height' => '60'
-        ];
+        $sh = $this->container->get('core.helper.setting');
 
-        $siteLogo = $this->ds->get('site_logo');
-        if (!empty($siteLogo)) {
-            $logo = [
-                'url'    => $this->instance->getBaseUrl()
-                    . '/asset/thumbnail%252C260%252C60%252Ccenter%252Ccenter'
-                    . $this->container->get('core.instance')->getMediaShortPath()
-                    . '/sections/' . $siteLogo,
-                'width'  => '260',
-                'height' => '60'
-            ];
+        // Default logo information
+        $logo = $this->instance->getBaseUrl()
+            . '/assets/images/logos/opennemas-powered-horizontal.png';
+
+        // Get instance logo size
+        if ($sh->hasLogo('default')) {
+            $logo = $this->container->get('core.helper.photo')->getPhotoPath(
+                $sh->getLogo('default'),
+                null,
+                [],
+                true
+            );
         }
 
         return $logo;

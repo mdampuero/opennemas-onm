@@ -8,14 +8,14 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-comment" checklist-model="app.columns.selected" checklist-value="'comment'" type="checkbox">
+    <input id="checkbox-comment" checklist-model="app.columns.selected" checklist-value="'comment'" type="checkbox" disabled>
     <label for="checkbox-comment">
       {t}Comment{/t}
     </label>
   </div>
   {acl isAllowed="COMMENT_AVAILABLE"}
     <div class="checkbox column-filters-checkbox">
-      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'status'" type="checkbox">
+      <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'status'" type="checkbox" disabled>
       <label for="checkbox-published">
         {t}Published{/t}
       </label>
@@ -49,7 +49,7 @@
         <strong>{t}Author:{/t}</strong> [% item.author %] <span ng-if="item.author_email">([% item.author_email %])</span>
         - <span class="hidden-xs">[% item.author_ip %]</span>
       </div>
-      <div class="submitted-on"><strong>{t}Submitted on:{/t}</strong> [% item.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.dateTimezone.timezone %]</div>
+      <div class="submitted-on"><strong>{t}Submitted on:{/t}</strong> [% item.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : extra.dateTimezone.timezone %]</div>
       <div class="on-response-to"><strong>{t}In response to{/t}:</strong> <a ng-href="/content/[% item.content_id %]" target="_blank">
       [% localizeText(extra.contents[item.content_id].title) %]
       <span ng-if="extra.contents[item.content_id].title.length > 100">...</span></a></div>

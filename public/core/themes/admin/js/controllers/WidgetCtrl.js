@@ -97,18 +97,44 @@
             return;
           }
 
-          var oldParams = $scope.item.params;
+          var parameters = Object.assign($scope.buildObject(params), $scope.buildObject($scope.item.params));
+          var result     = [];
 
-          $scope.item.params = [];
+          var properties = params.map(function(param) {
+            return param.name;
+          });
 
-          for (var i = 0; i < params.length; i++) {
-            if (i < oldParams.length && params[i].name === oldParams[i].name) {
-              $scope.item.params.push(oldParams[i]);
-              continue;
-            }
+          properties.forEach(function(property) {
+            var object = {};
 
-            $scope.item.params.push(params[i]);
-          }
+            object.name  = property;
+            object.value = parameters[property];
+
+            result.push(object);
+          });
+
+          $scope.item.params = result;
+        };
+
+        /**
+         * @function buildObject
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *  Generates an object basing on the array of parameters.
+         *
+         * @param {Array} params The array of parameters.
+         *
+         * @return {Object} The object with the parameters as properties.
+         */
+        $scope.buildObject = function(params) {
+          var object = {};
+
+          params.forEach(function(param) {
+            object[param.name] = param.value;
+          });
+
+          return object;
         };
 
         /**
