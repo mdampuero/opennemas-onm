@@ -3,30 +3,28 @@
     flex-direction: row;
     align-items: center;
 }
-
 .related-content.related-content-inner ul {
     padding: 0;
 }
-
 figure {
     border: unset;
     border-radius: unset;
     background: unset;
 }
-
+img,
 figure.image img {
   max-width: 100%;
 }
-
+p.image-inbody-center,
 div.image-inbody-center {
   display: flex;
   justify-content: center;
 }
-
+span.image-inbody-left,
 div.image-inbody-left figure {
   float: left;
 }
-
+span.image-inbody-right,
 div.image-inbody-right figure {
   float: right;
 }
