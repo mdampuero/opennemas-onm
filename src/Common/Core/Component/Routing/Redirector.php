@@ -472,7 +472,7 @@ class Redirector
             throw new ContentNotMigratedException();
         }
 
-        $router = $this->get('router');
+        $router = $this->container->get('router');
         $route  = preg_replace('/_+/', '_', 'frontend_' . $type . '_frontpage');
         $url    = $router->generate('frontend_frontpage');
 
