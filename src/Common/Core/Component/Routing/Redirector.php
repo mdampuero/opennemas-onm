@@ -127,7 +127,6 @@ class Redirector
             $this->cache->set($cacheId, $url);
         }
 
-
         return $url;
     }
 
