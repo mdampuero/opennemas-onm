@@ -92,7 +92,11 @@ class PollController extends BackendController
                 'page'        => $page,
                 'total'       => $response['total'],
                 'route'       => [
-                    'name'   => 'backend_polls_content_provider'
+                    'name'   => 'backend_polls_content_provider',
+                    'params' => [
+                        'category'             => $category,
+                        'frontpage_version_id' => $version
+                    ]
                 ],
             ]);
 

@@ -83,6 +83,10 @@ class AlbumController extends BackendController
                 'total'       => $total,
                 'route'       => [
                     'name' => 'backend_albums_content_provider',
+                    'params' => [
+                        'category'             => $category,
+                        'frontpage_version_id' => $version
+                    ]
                 ],
             ]);
 

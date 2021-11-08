@@ -93,7 +93,11 @@ class OpinionController extends BackendController
                 'page'        => $page,
                 'total'       => $response['total'],
                 'route'       => [
-                    'name'   => 'backend_opinions_content_provider'
+                    'name'   => 'backend_opinions_content_provider',
+                    'params' => [
+                        'category'             => $category,
+                        'frontpage_version_id' => $version
+                    ]
                 ],
             ]);
 
