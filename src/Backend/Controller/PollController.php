@@ -66,10 +66,6 @@ class PollController extends BackendController
             $oql .= sprintf('and pk_content !in[%s] ', implode(',', $contentsInFrontpage));
         }
 
-        if (!empty($category)) {
-            $oql .= sprintf('and category_id = %d ', $category);
-        }
-
         try {
             $oql .= 'order by created desc limit ' . $itemsPerPage;
 
