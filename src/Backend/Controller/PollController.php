@@ -53,10 +53,18 @@ class PollController extends BackendController
     {
         $this->checkSecurity($this->extension);
 
-        $page         = $request->query->getDigits('page', 1);
         $category     = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
+        $version      = $request->query->getDigits('frontpage_version_id', 1);
         $itemsPerPage = 8;
         $oql          = 'content_type_name = "poll" and in_litter != 1 and content_status = 1 ';
+
+        $contentsInFrontpage = $this->get('api.service.frontpage_version')
+            ->getContentIds($category, $version, 'poll');
+
+        if (!empty($contentsInFrontpage)) {
+            $oql .= sprintf('and pk_content !in[%s] ', implode(',', $contentsInFrontpage));
+        }
 
         if (!empty($category)) {
             $oql .= sprintf('and category_id = %d ', $category);

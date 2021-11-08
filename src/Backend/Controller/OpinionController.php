@@ -58,9 +58,18 @@ class OpinionController extends BackendController
      */
     public function contentProviderAction(Request $request)
     {
+        $category     = $request->query->getDigits('category', 0);
+        $version      = $request->query->getDigits('frontpage_version_id', 1);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 8;
-        $oql          = 'content_type_name = "opinion" and content_status = 1 and in_litter = 0';
+        $oql          = 'content_type_name = "opinion" and content_status = 1 and in_litter = 0 ';
+
+        $contentsInFrontpage = $this->get('api.service.frontpage_version')
+            ->getContentIds($category, $version, 'opinion');
+
+        if (!empty($contentsInFrontpage)) {
+            $oql .= sprintf('and pk_content !in[%s] ', implode(',', $contentsInFrontpage));
+        }
 
         try {
             $oql .= ' order by created desc limit ' . $itemsPerPage;

@@ -45,14 +45,20 @@ class VideoController extends BackendController
     {
         $this->checkSecurity($this->extension);
 
-        $page = $request->query->getDigits('page', 1);
-        $epp  = 8;
-        $oql  = 'content_type_name = "video" and content_status = 1 and in_litter = 0'
-            . ' order by created desc limit ' . $epp;
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
+        $version  = $request->query->getDigits('frontpage_version_id', 1);
+        $epp      = 8;
+        $oql      = 'content_type_name = "video" and content_status = 1 and in_litter = 0 ';
 
-        if ($page > 1) {
-            $oql .= ' offset ' . ($page - 1) * $epp;
+        $contentsInFrontpage = $this->get('api.service.frontpage_version')
+            ->getContentIds($category, $version, 'video');
+
+        if (!empty($contentsInFrontpage)) {
+            $oql .= sprintf('and pk_content !in[%s] ', implode(',', $contentsInFrontpage));
         }
+
+        $oql .= ' order by created desc limit ' . $epp;
 
         try {
             $context = $this->get('core.locale')->getContext();
