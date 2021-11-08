@@ -127,6 +127,7 @@ class Redirector
             $this->cache->set($cacheId, $url);
         }
 
+
         return $url;
     }
 
@@ -387,7 +388,7 @@ class Redirector
         return new RedirectResponse(empty($target) ? '/' : $target, 301);
     }
 
-        /**
+    /**
      * Handles the redirections for all the contents.
      *
      * @param Array Params
@@ -408,6 +409,7 @@ class Redirector
         }
 
         $source      = !empty($id) ? $id : $slug;
+
         $translation = $this->getUrl($source, $type);
 
         if (empty($translation)) {
@@ -447,7 +449,7 @@ class Redirector
         return new RedirectResponse($url . $fragment, 301);
     }
 
-        /**
+    /**
      * Returns a response when a content was not found basing on a setting from
      * the instance.
      *
