@@ -2,7 +2,6 @@
 
 namespace Common\Core\Component\Routing;
 
-use Api\Exception\GetItemException;
 use Api\Service\Service;
 use Opennemas\Cache\Core\Cache;
 use Common\Model\Entity\Category;
@@ -15,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Common\Core\Component\Exception\ContentNotMigratedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class Redirector
 {
@@ -172,9 +173,8 @@ class Redirector
      *
      * @return Content The content.
      *
-     * TODO: Change to protected when RedirectorController removed
      */
-    public function getContent($id, $contentType)
+    protected function getContent($id, $contentType)
     {
         $contentType = \classify($contentType);
         $method      = 'get' . $contentType;
@@ -372,7 +372,116 @@ class Redirector
                 ->generate($target);
         }
 
+        if (strpos($target, '/redirect/content') !== false) {
+            $data   = explode('&', explode('?', $target)[1]);
+            $params = [];
+
+            foreach ($data as $item) {
+                $element             = explode('=', $item);
+                $params[$element[0]] = $element[1];
+            }
+
+            return $this->getRedirectContent($params);
+        }
+
         return new RedirectResponse(empty($target) ? '/' : $target, 301);
+    }
+
+        /**
+     * Handles the redirections for all the contents.
+     *
+     * @param Array Params
+     *
+     * @return Response The response object
+     */
+    protected function getRedirectContent($params)
+    {
+        $id       = !empty($params['content_id']) ? $params['content_id'] : null;
+        $slug     = !empty($params['slug']) ? $params['slug'] : null;
+        $type     = !empty($params['content_type']) ? $params['content_type'] : null;
+        $format   = !empty($params['format']) ? $params['format'] : null;
+        $fragment = '';
+        $content  = null;
+
+        if (empty($id) && empty($slug)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $source      = !empty($id) ? $id : $slug;
+        $translation = $this->getUrl($source, $type);
+
+        if (empty($translation)) {
+            throw new ContentNotMigratedException();
+        }
+
+        // Redirect content migrated to another domain
+        if ($translation->type === 2) {
+            return new RedirectResponse(
+                (preg_match('/http(s)?:\/\//', $translation->target) ? '' : '/')
+                . $translation->target
+            );
+        }
+
+        $content = $this->getContent($translation->target, $translation->content_type);
+
+        if (empty($content)) {
+            return $this->getRedirectNotMigratedContent($type);
+        }
+
+        if ($type === 'comment') {
+            $fragment = '#comentarios';
+        }
+
+        $url = $this->container->get('core.helper.url_generator')->generate($content);
+
+        if ($format === 'amp' && in_array(
+            $content->content_type_name,
+            [ 'album', 'article', 'opinion', 'poll', 'video' ]
+        )) {
+            $url = str_replace('.html', '.amp.html', $url);
+        }
+
+        // TODO: Remove when URI target="_blank"' not included for external
+        $url = str_replace('" target="_blank', '', $url);
+
+        return new RedirectResponse($url . $fragment, 301);
+    }
+
+        /**
+     * Returns a response when a content was not found basing on a setting from
+     * the instance.
+     *
+     * @param string $type The content type.
+     *
+     * @return RedirectResponse The redirection response object to frontpages
+     *                         when the instance has redirection to frontpages
+     *                         enabled.
+     *
+     * @throws ContentNotMigratedException When instance has redirection to
+     *                                     frontpages disabled.
+     */
+    protected function getRedirectNotMigratedContent($type)
+    {
+        $ignored     = [ 'article', 'category' ];
+        $redirection = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('redirection');
+
+        if (empty($redirection)) {
+            throw new ContentNotMigratedException();
+        }
+
+        $router = $this->get('router');
+        $route  = preg_replace('/_+/', '_', 'frontend_' . $type . '_frontpage');
+        $url    = $router->generate('frontend_frontpage');
+
+        if (!in_array($type, $ignored)
+            && $router->getRouteCollection()->get($route)
+        ) {
+            $url = $router->generate($route);
+        }
+
+        return new RedirectResponse($url, 301);
     }
 
     /**
