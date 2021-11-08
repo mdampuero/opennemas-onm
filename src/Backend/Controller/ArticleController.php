@@ -113,7 +113,11 @@ class ArticleController extends BackendController
                 'total'       => $response['total'],
                 'route'       => [
                     'name'   => 'backend_articles_content_provider',
-                    'params' => [ 'category' => $category ]
+                    'params' => [
+                        'category'             => $category,
+                        'last'                 => $last,
+                        'frontpage_version_id' => $version
+                    ]
                 ],
             ]);
 
