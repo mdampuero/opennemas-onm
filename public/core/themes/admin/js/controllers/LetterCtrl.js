@@ -67,10 +67,10 @@
           starttime: null,
           endtime: null,
           title: '',
+          slug: '',
           with_comment: 0,
           related_contents: [],
           tags: [],
-          url: '',
           author: '',
           email: '',
         };
