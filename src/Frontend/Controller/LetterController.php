@@ -83,7 +83,7 @@ class LetterController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
-        $now  = new \DateTime();
+        $now = new \DateTime();
 
         $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="letter" and content_status=1 and in_litter=0 '
