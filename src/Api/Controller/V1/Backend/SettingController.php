@@ -29,6 +29,7 @@ class SettingController extends Controller
         'body_end_script_amp',
         'body_start_script',
         'body_start_script_amp',
+        'custom_css_amp',
         'header_script',
         'header_script_amp',
     ];
@@ -53,6 +54,7 @@ class SettingController extends Controller
         'contact_email',
         'cookies',
         'cookies_hint_url',
+        'custom_css_amp',
         'data_layer',
         'dynamic_css',
         'elements_in_rss',
@@ -120,6 +122,7 @@ class SettingController extends Controller
         'body_end_script_amp',
         'body_start_script',
         'body_start_script_amp',
+        'custom_css_amp',
         'header_script',
         'header_script_amp',
         'robots_txt_rules',

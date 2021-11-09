@@ -54,8 +54,6 @@ DELETE FROM `letters` WHERE `pk_letter` NOT IN (SELECT `pk_content` FROM `conten
 DELETE FROM `menu_items` WHERE `menu_items`.`pk_menu` NOT IN (SELECT `pk_menu` FROM `menues`);
 DELETE FROM `opinions` WHERE `pk_opinion` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `polls` WHERE `pk_poll` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `poll_items` WHERE `fk_pk_poll` NOT IN (SELECT `pk_poll` FROM `polls`);
 DELETE FROM `related_contents` WHERE `pk_content1` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `related_contents` WHERE `pk_content2` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `static_pages` WHERE `pk_static_page` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -111,7 +109,6 @@ ALTER TABLE newsletter_archive CHANGE pk_newsletter pk_newsletter INT UNSIGNED A
 ALTER TABLE newsletter_archive CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE newsletter_archive CHANGE updated updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE orders CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
-CREATE INDEX fk_pk_poll ON poll_items (fk_pk_poll);
 CREATE INDEX pk_content2 ON related_contents (pk_content2);
 ALTER TABLE special_contents CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL;
 ALTER TABLE newsletter_archive CHANGE fk_special fk_special BIGINT UNSIGNED NOT NULL
@@ -126,4 +123,3 @@ CREATE INDEX pk_fk_user_group ON user_groups_privileges (pk_fk_user_group);
 ALTER TABLE usermeta CHANGE user_id user_id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE users CHANGE id id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE user_notification ADD read_time DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
-ALTER TABLE votes CHANGE pk_vote pk_vote BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;

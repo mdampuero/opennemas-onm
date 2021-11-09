@@ -46,7 +46,7 @@ class EventController extends BackendController
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @Security("hasExtension('EVENT_MANAGER')")
+     * @Security("hasExtension('es.openhost.module.events')")
      */
     public function contentProviderAction(Request $request)
     {

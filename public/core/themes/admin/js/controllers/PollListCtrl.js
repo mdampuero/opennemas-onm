@@ -29,7 +29,8 @@
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },
-          page: 1
+          page: 1,
+          tag: null
         };
 
         /**
@@ -84,7 +85,7 @@
           }
 
           var categories = $scope.categories.filter(function(e) {
-            return e.id === item.category_id;
+            return e.id === item.categories[0];
           });
 
           if (categories.length === 0) {

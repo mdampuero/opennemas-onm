@@ -140,6 +140,7 @@ class Controller extends SymfonyController
 
         if (!empty($content)
             && !$this->get('core.security')->hasPermission($permission)
+            && ($content instanceof \Common\Model\Entity\Content || $content instanceof \Content)
             && !$content->isOwner($this->getUser()->id)
         ) {
             throw new AccessDeniedException();

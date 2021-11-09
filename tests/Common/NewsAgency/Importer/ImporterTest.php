@@ -183,7 +183,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     public function testConfigure()
     {
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'with_comments' => 0 ]);
 
         $this->assertEquals(

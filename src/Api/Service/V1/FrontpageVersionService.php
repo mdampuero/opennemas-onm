@@ -16,6 +16,13 @@ use Api\Exception\GetItemException;
 class FrontpageVersionService extends OrmService
 {
     /**
+     * The locale.
+     *
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
      * The number of versions to keep
      *
      * @var int
@@ -115,7 +122,7 @@ class FrontpageVersionService extends OrmService
         $filteredContents = [];
 
         foreach ($contents as $content) {
-            if ($content->content_status === 1) {
+            if (!empty($content) && $content->content_status === 1) {
                 $filteredContents[$content->id] = $content;
             }
         }
@@ -138,7 +145,7 @@ class FrontpageVersionService extends OrmService
             $this->getFrontpageWithCategory($categoryId);
 
         $version = null;
-        if (!is_array($versions) && frontpageVersionId != null) {
+        if (!is_array($versions) && $frontpageVersionId != null) {
             $version = $versions;
         } elseif (empty($frontpageVersionId)) {
             $version = $this->getCurrentVersion($versions);
@@ -336,13 +343,13 @@ class FrontpageVersionService extends OrmService
             if (empty($frontpageVersion['frontpage_id'])) {
                 $frontpage = ['name' => _('Frontpage')];
                 if ($frontpageVersion['category_id'] != '0') {
-                    $context = $this->container->get('core.locale')->getContext();
-                    $this->container->get('core.locale')->setContext('frontend');
+                    $context = $this->locale->getContext();
+                    $this->locale->setContext('frontend');
 
                     $category = $this->container->get('api.service.category')
                         ->getItem($frontpageVersion['category_id']);
 
-                    $this->container->get('core.locale')->setContext($context);
+                    $this->locale->setContext($context);
 
                     $frontpage['name'] = $category->name;
                 }
@@ -359,6 +366,7 @@ class FrontpageVersionService extends OrmService
                     400
                 );
             }
+
             $frontpageVersion['created'] = new \DateTime();
 
             $fvc = $this->createItem($frontpageVersion);
@@ -487,7 +495,7 @@ class FrontpageVersionService extends OrmService
      **/
     private function filterPublishedContents($contents)
     {
-        $contentHelper = $this->container->get('core.helper.content');
+        $contentHelper    = $this->container->get('core.helper.content');
         $filteredContents = [];
 
         foreach ($contents as $key => $content) {
@@ -518,18 +526,17 @@ class FrontpageVersionService extends OrmService
 
         $frontpageVersionId = $this->getNextVersionForCategory($categoryId);
 
-        $systemDateTz = (new \DateTime(null, $this->locale->getTimeZone()))->format('Y-m-d H:i:s');
+        $systemDateTz = new \DateTime(null, $this->locale->getTimeZone());
+
         if (empty($frontpageVersionId)) {
             $invalidationTime = new \DateTime(null, $this->locale->getTimeZone());
             // Add 1 year to the current timestamp
             $timestamp = $invalidationTime->getTimestamp() + 31536000;
             $invalidationTime->setTimestamp($timestamp);
-            $invalidationTime = $invalidationTime->format('Y-m-d H:i:s');
         } else {
             $frontpageVersion = $this->getItem($frontpageVersionId);
             if (!empty($frontpageVersion->publish_date)) {
-                $invalidationTime = $frontpageVersion->publish_date
-                    ->format('Y-m-d H:i:s');
+                $invalidationTime = $frontpageVersion->publish_date;
             }
         }
 
@@ -551,8 +558,6 @@ class FrontpageVersionService extends OrmService
             }
         }
 
-        $invalidationTime = \DateTime::createFromFormat('Y-m-d H:i:s', $invalidationTime, $this->locale->getTimeZone());
-
         return $invalidationTime;
     }
 
@@ -570,8 +575,8 @@ class FrontpageVersionService extends OrmService
         $contentPositions = $this->getContentPositions($categoryId, $versionId);
         $contents         = [];
 
-        $context = $this->container->get('core.locale')->getContext();
-        $this->container->get('core.locale')->setContext('frontend');
+        $context = $this->locale->getContext();
+        $this->locale->setContext('frontend');
 
         foreach ($contentPositions as $placeholder) {
             foreach ($placeholder as $content) {
@@ -580,7 +585,7 @@ class FrontpageVersionService extends OrmService
             }
         }
 
-        $this->container->get('core.locale')->setContext($context);
+        $this->locale->setContext($context);
 
         return [$contentPositions, $contents];
     }

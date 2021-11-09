@@ -977,74 +977,6 @@ pclave:
             primary: true
             unique: true
             flags: {  }
-poll_items:
-    columns:
-        pk_item:
-            type: integer
-            options: { unsigned: true, autoincrement: true }
-        fk_pk_poll:
-            type: bigint
-            options: { length: 20, unsigned: true, default: null }
-        item:
-            type: string
-            options: { length: 255, default: null }
-        metadata:
-            type: string
-            options: { length: 250, default: null, notnull: false }
-        votes:
-            type: integer
-            options: { unsigned: true, default: 0, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_item]
-            primary: true
-            unique: true
-            flags: {  }
-        -
-            name: fk_pk_poll
-            columns: [fk_pk_poll]
-            primary: false
-            unique: false
-            flags: {  }
-    foreign_keys:
-        -
-            name: poll_items_id_contents_id
-            source_field: [ fk_pk_poll ]
-            target_table: polls
-            target_field: [ pk_poll ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-polls:
-    columns:
-        pk_poll:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        total_votes:
-            type: integer
-            options: { unsigned: true, default: 0 }
-        used_ips:
-            type: text
-            options: { length: 4294967295, default: null, notnull: false }
-        pretitle:
-            type: string
-            options: { length: 512, default: null, notnull: false }
-        visualization:
-            type: smallint
-            options: { length: 1, unsigned: true, default: 0, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_poll]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: polls_id_contents_id
-            source_field: [ pk_poll ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 ratings:
     columns:
         pk_rating:
@@ -1524,30 +1456,6 @@ user_user_group:
             target_table: user_groups
             target_field: [ pk_user_group ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-votes:
-    columns:
-        pk_vote:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        value_pos:
-            type: smallint
-            options: { length: 5, unsigned: true, default: 0 }
-        value_neg:
-            type: smallint
-            options: { length: 5, unsigned: true, default: 0 }
-        ips_count_vote:
-            type: text
-            options: { length: 65532, default: null, notnull: false }
-        karma:
-            type: integer
-            options: { unsigned: true, default: 100, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_vote]
-            primary: true
-            unique: true
-            flags: {  }
 widgets:
     columns:
         pk_widget:

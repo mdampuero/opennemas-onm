@@ -21,7 +21,7 @@ class Content extends Entity
      *
      * @var array
      */
-    protected static $l10nKeys = [ 'body', 'description', 'slug', 'title' ];
+    protected static $l10nKeys = [ 'body', 'description', 'slug', 'title', 'related_contents' ];
 
     /**
      * Gets the value of the property from the raw data array.
