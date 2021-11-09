@@ -10,7 +10,6 @@
      * @requires $controller
      * @requires $scope
      * @requires $timeout
-     * @requires $uibModal
      * @requires $window
      * @requires cleaner
      * @requires http
@@ -23,10 +22,9 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('LetterCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window',
-      'related', 'routing', 'translator',
-      function($controller, $scope, $timeout, $uibModal, $window,
-          related, routing, translator) {
+      '$controller', '$scope', '$timeout', '$window', 'routing',
+      function($controller, $scope, $timeout, $window,
+          routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -81,16 +79,6 @@
          * @memberOf LetterCtrl
          *
          * @description
-         *  The related service.
-         *
-         * @type {Object}
-         */
-        $scope.related = related;
-
-        /**
-         * @memberOf LetterCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}
@@ -121,9 +109,6 @@
           }
 
           $scope.checkDraft();
-          related.init($scope);
-          related.watch();
-          translator.init($scope);
         };
 
         /**

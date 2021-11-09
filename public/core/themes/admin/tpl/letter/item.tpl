@@ -59,25 +59,21 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      <h4>{t}Author information{/t}</h4>
+      {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
       <div class="row">
         <div class="form-group col-md-6">
-          {include file="ui/component/input/text.tpl" iCounter=false iField="author" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Nickname{/t}" iValidation=true}
+          {include file="ui/component/input/text.tpl" iCounter=false iField="author" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Author{/t}" iValidation=true}
         </div>
         <div class="form-group col-md-6">
           {include file="ui/component/input/text.tpl" iCounter=false iField="email" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Email{/t}" iValidation=true}
         </div>
       </div>
-      {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standar" rows=15}
     </div>
   </div>
 {/block}
 
 {block name="modals"}
-  <script type="text/ng-template" id="modal-translate">
-    {include file="common/modals/_translate.tpl"}
-  </script>
   <script type="text/ng-template" id="modal-draft">
     {include file="common/modals/_draft.tpl"}
   </script>

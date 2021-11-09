@@ -68,6 +68,16 @@
       </span>
     </div>
   </li>
+  <li class="hidden-xs quicklinks">
+    <div class="input-group input-group-animated">
+      <span class="input-group-addon tag-input-icon">
+        <i class="fa fa-tags fa-lg"></i>
+      </span>
+    </div>
+  </li>
+  <li>
+    <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" filter="true" placeholder="{t}Search by tag{/t}"/>
+  </li>
   <li class="hidden-xs ng-cloak m-r-10 quicklinks">
     <ui-select ng-init="status = [ { name: '{t}Any{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 }, { name: '{t}Pending{/t}', value: 2 } ]" ng-model="criteria.content_status" theme="select2">
       <ui-select-match>
@@ -94,9 +104,6 @@
   </script>
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
-  </script>
-  <script type="text/ng-template" id="modal-translate-selected">
-    {include file="common/modals/_translate_selected.tpl"}
   </script>
 {/block}
 

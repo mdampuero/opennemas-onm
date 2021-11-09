@@ -31,7 +31,6 @@ class LetterController extends FrontendController
         'list'       => 'letter',
         'listauthor' => 'letter',
         'show'       => 'letter',
-        'showamp'    => 'letter',
     ];
 
     /**
@@ -41,7 +40,6 @@ class LetterController extends FrontendController
         'list'    => 'article_inner',
         'show'    => 'article_inner',
         'form'    => 'article_inner',
-        'showamp' => 'amp_inner',
     ];
 
     /**
@@ -67,7 +65,6 @@ class LetterController extends FrontendController
         'list'     => 'letter/letter_frontpage.tpl',
         'show'     => 'letter/letter.tpl',
         'form'     => 'letter/letter_form.tpl',
-        'showamp'  => 'amp/content.tpl',
     ];
 
     /**
@@ -86,11 +83,17 @@ class LetterController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_per_page', 10);
 
+        $now  = new \DateTime();
+
         $response = $this->get($this->service)->getList(sprintf(
             'content_type_name="letter" and content_status=1 and in_litter=0 '
+            . ' and (starttime <= "%s" or starttime is null)'
+            . ' and (endtime > "%s" or endtime is null)'
             . 'order by created desc limit %d offset %d',
+            $now->format('Y-m-d H:i:s'),
+            $now->format('Y-m-d H:i:s'),
             $epp,
-            $epp * ($params['page'] - 1)
+            $epp * ($params['page'] - 1),
         ));
 
         // No first page and no contents
@@ -115,7 +118,6 @@ class LetterController extends FrontendController
                     'name'    => 'frontend_letter_frontpage',
                     'params'  => [],
                 ]
-
             ])
         ]);
     }
@@ -198,8 +200,7 @@ class LetterController extends FrontendController
             ], 400);
         }
 
-        $now = new DateTime();
-
+        $now  = new DateTime();
         $data = [
             'title'             => $subject,
             'body'              => iconv(mb_detect_encoding($text), "UTF-8", $text),
@@ -220,13 +221,20 @@ class LetterController extends FrontendController
         try {
             $this->get($this->service)->createItem($data);
         } catch (\Exception $e) {
+            $this->get('application.log')->notice(
+                "Letter NOT saved: "
+                . $e->getMessage()
+            );
+
             return new JsonResponse([
                 'type'    => 'danger',
-                'message' => $e->getMessage(),
+                'message' => _('Unable to save the letter.'),
             ], 400);
         }
 
-        $this->sendEmail($data['body'], $subject, $email);
+        $moreData = _("Name") . ": {$name} \n " . _("Email") . ": {$email} \n ";
+
+        $this->sendEmail(nl2br($moreData . $data['body']), $subject, $email);
 
         return new JsonResponse([
             'type'    => 'success',

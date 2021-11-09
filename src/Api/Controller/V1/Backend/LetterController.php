@@ -49,42 +49,4 @@ class LetterController extends ContentController
 
         return array_merge($extraData, $extra);
     }
-
-    /**
-     * Returns the list of tags for an item or a list of items.
-     *
-     * @param mixed $items The item or the list of items to get tags for.
-     *
-     * @return array The list of tags.
-     */
-    protected function getTags($items = null)
-    {
-        if (empty($items)) {
-            return [];
-        }
-
-        if (!is_array($items)) {
-            $items = [ $items ];
-        }
-
-        $ids = [];
-
-        foreach ($items as $item) {
-            if (!empty($item->tags)) {
-                $ids = array_unique(array_merge($ids, $item->tags));
-            }
-        }
-
-        $ids = array_values(array_filter($ids, function ($a) {
-            return !empty($a);
-        }));
-
-        if (empty($ids)) {
-            return [];
-        }
-
-        return $this->get('api.service.tag')->responsify(
-            $this->get('api.service.tag')->getListByIds($ids)['items']
-        );
-    }
 }

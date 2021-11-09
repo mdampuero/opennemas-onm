@@ -1,8 +1,8 @@
 {extends file="common/extension/list.table.tpl"}
 
-{block name="commonColumns" append}
+{block name="customColumns"}
   <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('user')">
-    <input id="checkbox-theme" checklist-model="app.columns.selected" checklist-value="'user'" type="checkbox">
+    <input id="checkbox-theme" checklist-model="app.columns.selected" checklist-value="'user'" type="checkbox" disabled>
     <label for="checkbox-theme">
       {t}Author{/t}
     </label>
@@ -17,7 +17,7 @@
   {/acl}
 {/block}
 
-{block name="commonColumnsHeader" append}
+{block name="customColumnsHeader"}
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('user')" width="150">
     {t}Author{/t}
   </th>
@@ -30,7 +30,7 @@
   {/acl}
 {/block}
 
-{block name="commonColumnsBody" append}
+{block name="customColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('user')">
     <div class="small-text">
       <p> <strong>[% item.author %]</strong> </p>
@@ -46,8 +46,8 @@
         </button>
       </span>
       <span ng-show="item.content_status == 2">
-        <div class="btn-group open-on-hover">
-          <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
+        <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
+          <button type="button"  class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
             <i class="fa fa-clock-o text-warning"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-right no-padding">

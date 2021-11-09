@@ -56,6 +56,8 @@
         $scope.init = function() {
           $scope.backup.criteria    = $scope.criteria;
           $scope.app.columns.hidden = [ 'category', 'author'];
+          $scope.app.columns.selected =  _.uniq($scope.app.columns.selected
+            .concat([ 'user' ]));
 
           oqlEncoder.configure({
             placeholder: {
@@ -82,7 +84,6 @@
           }
 
           $scope.items = $scope.data.items;
-
           $scope.extra = $scope.data.extra;
         };
 
