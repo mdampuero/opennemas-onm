@@ -113,7 +113,7 @@ class ContentService extends OrmService
     {
         $item = \Onm\StringUtils::convertToUtf8($item);
 
-        return parent::responsify($item);
+        return !empty($item) ? parent::responsify($item) : null;
     }
 
     /**
@@ -176,5 +176,31 @@ class ContentService extends OrmService
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate($item)
+    {
+        //Validate if related contents exists
+        if (!empty($item->related_contents)) {
+            //Need aux variable for unset data
+            $related = $item->related_contents;
+
+            foreach ($related as $key => $content) {
+                try {
+                    //If not exists throws Exception
+                    $this->getItem($content['target_id']);
+                } catch (\Exception $e) {
+                    //On error, delete key of related contents
+                    unset($related[$key]);
+                }
+            }
+
+            $item->related_contents = $related;
+        }
+
+        return parent::validate($item);
     }
 }
