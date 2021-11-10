@@ -346,7 +346,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests validate when related contents exists.
+     * Tests validate
      */
     public function testValidate()
     {

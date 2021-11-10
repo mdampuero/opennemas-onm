@@ -201,6 +201,6 @@ class ContentService extends OrmService
             $item->related_contents = $related;
         }
 
-        return parent::validate($item);
+        parent::validate($item);
     }
 }
