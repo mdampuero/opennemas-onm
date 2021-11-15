@@ -1562,13 +1562,6 @@ class PermissionHelper
                 'module'      => 'FRONTEND',
                 'enabled'     => 1
             ],
-            251 => [
-                'id'          => 251,
-                'name'        => 'NON_MEMBER_HIDE_ADVERTISEMENTS',
-                'description' => _('Hide advertisements'),
-                'module'      => 'FRONTEND',
-                'enabled'     => 1
-            ],
             243 => [
                 'id'          => 243,
                 'name'        => 'TAG_ADMIN',
@@ -1627,6 +1620,13 @@ class PermissionHelper
             ],
             251 => [
                 'id'          => 251,
+                'name'        => 'NON_MEMBER_HIDE_ADVERTISEMENTS',
+                'description' => _('Hide advertisements'),
+                'module'      => 'FRONTEND',
+                'enabled'     => 1
+            ],
+            252 => [
+                'id'          => 252,
                 'name'        => 'COMMENT_SETTINGS',
                 'description' => _('Manage module setting'),
                 'module'      => 'COMMENT_MANAGER',
