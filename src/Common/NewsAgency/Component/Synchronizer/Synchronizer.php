@@ -14,11 +14,9 @@ use Common\NewsAgency\Component\Factory\ServerFactory;
 use Common\NewsAgency\Component\Repository\LocalRepository;
 use Common\Model\Entity\Instance;
 use Opennemas\Data\Serialize\Serializer\PhpSerializer;
-use PHP_CodeSniffer\Reports\Code;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Mime\Message;
 
 /**
  * Synchronizes contents from an external server and makes them ready-to-import.
