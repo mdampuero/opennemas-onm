@@ -60,6 +60,10 @@ class VideoController extends BackendController
 
         $oql .= ' order by created desc limit ' . $epp;
 
+        if ($page > 1) {
+            $oql .= ' offset ' . ($page - 1) * $epp;
+        }
+
         try {
             $context = $this->get('core.locale')->getContext();
             $this->get('core.locale')->setContext('frontend');
