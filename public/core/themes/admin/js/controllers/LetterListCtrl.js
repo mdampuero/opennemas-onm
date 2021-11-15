@@ -32,6 +32,7 @@
           in_litter: 0,
           orderBy: { created:  'desc' },
           page: 1,
+          tags: null,
         };
 
         /**

@@ -2,12 +2,6 @@
 
 namespace Api\Controller\V1\Backend;
 
-use Api\Exception\GetItemException;
-use Common\Model\Entity\Content;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 class LetterController extends ContentController
 {
     /**
