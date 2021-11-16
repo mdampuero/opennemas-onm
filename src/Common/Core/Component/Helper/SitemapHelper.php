@@ -23,7 +23,7 @@ class SitemapHelper
     const EXTENSIONS = [
         'album'   => 'ALBUM_MANAGER',
         'article' => 'ARTICLE_MANAGER',
-        'event'   => 'EVENT_MANAGER',
+        'event'   => 'es.openhost.module.events',
         'kiosko'  => 'KIOSKO_MANAGER',
         'letter'  => 'LETTER_MANAGER',
         'opinion' => 'OPINION_MANAGER',
