@@ -46,7 +46,7 @@
         </button>
       </span>
       <span ng-show="item.content_status == 2">
-        <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
+        <div class="btn-group open-on-hover" ng-class="{ 'dropup': $index >= items.length - 1 }">
           <button type="button"  class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" uib-tooltip="{t}Pending{/t}">
             <i class="fa fa-clock-o text-warning"></i>
           </button>
