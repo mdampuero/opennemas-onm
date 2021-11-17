@@ -37,7 +37,7 @@
         $scope.incomplete = true;
 
         /**
-         * @memberOf AlbumCtrl
+         * @memberOf WidgetCtrl
          *
          * @description
          *  The item object.
@@ -64,7 +64,21 @@
         };
 
         /**
-         * @memberOf AlbumCtrl
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *  The data extra object contains related elements and
+         *  param index to insert a list of contents id
+         *
+         * @type {Object}
+         */
+        $scope.data = {
+          related: [],
+          paramIndex: null,
+        };
+
+        /**
+         * @memberOf WidgetCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -114,6 +128,70 @@
           });
 
           $scope.item.params = result;
+        };
+
+        /**
+         * @function addParamIndex
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Adds index to identify contents id in params
+         *
+         * @param integr index The index of params with contents id
+         */
+        $scope.addParamIndex = function(index) {
+          $scope.data.paramIndex = index;
+
+          $scope.$watch('data.related.length', function(nv) {
+            if (nv) {
+              $scope.item.params[$scope.data.paramIndex].value = '';
+              var ids = '';
+
+              $scope.data.related.forEach(function(item) {
+                ids += item.pk_content + ',';
+              });
+
+              ids = ids.substring(0, ids.length - 1);
+              $scope.item.params[$scope.data.paramIndex].value = ids;
+            }
+          });
+        };
+
+        /**
+         * @function removeItem
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Delete related item from index
+         *
+         * @param integr index The index of related to delete
+         */
+        $scope.removeItem = function(index) {
+          $scope.data.related.splice(index, 1);
+        };
+
+        /**
+         * @function loadRelated
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Load related contents from params ids values
+         *
+         */
+        $scope.loadRelated = function() {
+          var oql = 'pk_content in [' +
+            $scope.item.params[$scope.data.paramIndex].value +
+            ']';
+
+          var route = {
+            name: 'api_v1_backend_content_get_list',
+            params: { oql: oql }
+          };
+
+          http.get(route)
+            .then(function(response) {
+              $scope.data.related = response.data.items;
+            });
         };
 
         /**
