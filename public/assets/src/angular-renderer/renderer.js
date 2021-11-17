@@ -217,7 +217,11 @@
                     instanceMedia + response.data.item.path
                   )
                 );
-              }.bind(this));
+              }.bind(this), function() {
+                html = html.replace('[figure]', '');
+
+                return html;
+              });
             }
 
             return html.replace(
