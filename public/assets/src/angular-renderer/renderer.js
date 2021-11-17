@@ -185,7 +185,9 @@
           related = related.length > 0 ? related[0] : null;
 
           if (!related) {
-            html = html.replace('[figure]', '');
+            html = item.information && item.information.thumbnail ?
+              html.replace('[figure]', this.figure.replace('[path]', item.information.thumbnail)) :
+              html.replace('[figure]', '');
 
             return html;
           }
@@ -205,6 +207,13 @@
                 html = html.replace('[figure]', '');
 
                 return html;
+              }
+
+              if (typeof frontpage !== 'number') {
+                return html.replace(
+                  '[figure]',
+                  this.figure.replace('[path]', frontpage)
+                );
               }
 
               route.params.id = frontpage;
@@ -247,16 +256,16 @@
          * @return {Object} The featured frontpage.
          */
         this.getFeaturedFrontpage = function(item) {
-          if (!Array.isArray(item.related_contents)) {
-            return null;
-          }
+          var relatedContents = Array.isArray(item.related_contents) ?
+            item.related_contents :
+            [];
 
-          var related = item.related_contents.filter(function(related) {
+          var related = relatedContents.filter(function(related) {
             return related.type === 'featured_frontpage';
           }).shift();
 
           if (!related) {
-            return null;
+            return item.information && item.information.thumbnail ? item.information.thumbnail : null;
           }
 
           return related.target_id;
