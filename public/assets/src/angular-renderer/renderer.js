@@ -190,23 +190,72 @@
             return html;
           }
 
-          var photoRoute = {
-            name: 'api_v1_backend_photo_get_item',
+          var route = {
+            name: 'api_v1_backend_content_get_item',
             params: { id: related.target_id }
           };
 
-          return http.get(photoRoute).then(function(response) {
-            var photo = response.data.item;
+          return http.get(route).then(function(response) {
+            var related = response.data.item;
+
+            if (related.content_type_name !== 'photo') {
+              var frontpage = this.getFeaturedFrontpage(related);
+
+              if (!frontpage) {
+                html = html.replace('[figure]', '');
+
+                return html;
+              }
+
+              route.params.id = frontpage;
+
+              return http.get(route).then(function(response) {
+                return html.replace(
+                  '[figure]',
+                  this.figure.replace(
+                    '[path]', '/asset/zoomcrop,480,270,center,center/' +
+                    instanceMedia + response.data.item.path
+                  )
+                );
+              }.bind(this));
+            }
 
             return html.replace(
               '[figure]',
-              this.figure.replace('[path]', '/asset/zoomcrop,480,270,center,center/' + instanceMedia + photo.path)
+              this.figure.replace('[path]', '/asset/zoomcrop,480,270,center,center/' + instanceMedia + related.path)
             );
           }.bind(this), function() {
             html = html.replace('[figure]', '');
 
             return html;
-          }.bind(this));
+          });
+        };
+
+        /**
+         * @function getFeaturedFrontpage
+         * @memberOf Renderer
+         *
+         * @description
+         *   Returns the featured frontpage for a given item.
+         *
+         * @param {Object} item The item to get the featured frontpage.
+         *
+         * @return {Object} The featured frontpage.
+         */
+        this.getFeaturedFrontpage = function(item) {
+          if (!Array.isArray(item.related_contents)) {
+            return null;
+          }
+
+          var related = item.related_contents.filter(function(related) {
+            return related.type === 'featured_frontpage';
+          }).shift();
+
+          if (!related) {
+            return null;
+          }
+
+          return related.target_id;
         };
 
         return this;
