@@ -12,9 +12,11 @@ namespace Api\Service\V1;
 use Api\Exception\CreateItemException;
 use Api\Exception\FileAlreadyExistsException;
 use Api\Exception\UpdateItemException;
+use Api\Exception\DeleteItemException;
 
-class AttachmentService extends ContentOldService
+class AttachmentService extends ContentService
 {
+
     /**
      * {@inheritdoc}
      */
@@ -25,8 +27,6 @@ class AttachmentService extends ContentOldService
         }
 
         try {
-            $item = new $this->class;
-
             $fh   = $this->container->get('core.helper.attachment');
             $path = $fh->generatePath($file, new \DateTime($data['created'] ?? null));
 
@@ -38,17 +38,7 @@ class AttachmentService extends ContentOldService
 
             $fh->move($file, $path);
 
-            if (!$id = $item->create($data)) {
-                throw new \Exception();
-            }
-
-            $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'action' => __METHOD__,
-                'id'     => $id,
-                'item'   => $item
-            ]);
-
-            return $item;
+            return parent::createItem($data);
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
@@ -73,31 +63,43 @@ class AttachmentService extends ContentOldService
                 $data['path'] = '/' . $fh->getRelativePath($path);
 
                 if ($fh->exists($path)
-                    && $item->getRelativePath() !== $data['path']
+                    && $item->path !== $data['path']
                 ) {
                     throw new FileAlreadyExistsException(
                         _('A file with the same name has already been uploaded today')
                     );
                 }
 
-                if (!empty($item->getRelativePath())) {
-                    $fh->remove($item->getRelativePath());
+                if (!empty($item->path)) {
+                    $fh->remove($item->path);
                 }
 
                 $fh->move($file, $path);
+                unset($data['_method']);
             }
 
-            if (!$item->update($data)) {
-                throw new \Exception();
-            }
-
-            $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'action' => __METHOD__,
-                'id'     => $id,
-                'item'   => $item
-            ]);
+            return parent::updateItem($id, $data);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteItem($id)
+    {
+        try {
+            $item = $this->getItem($id);
+            $fh   = $this->container->get('core.helper.attachment');
+
+            if (!empty($item->path)) {
+                $fh->remove($item->path);
+            }
+
+            return parent::deleteItem($id);
+        } catch (\Exception $e) {
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
     }
 }

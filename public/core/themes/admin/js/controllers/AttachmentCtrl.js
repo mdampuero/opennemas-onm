@@ -148,6 +148,16 @@
           return true;
         };
 
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          if (data.path === null) {
+            data.path = $scope.item.path;
+          }
+          return data;
+        };
+
         // Update path in original item when localized item changes
         $scope.$watch('item.path', function(nv) {
           if ($scope.data && $scope.data.item) {

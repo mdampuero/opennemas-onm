@@ -84,34 +84,6 @@ advertisements_positions:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-attachments:
-    columns:
-        pk_attachment:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        title:
-            type: string
-            options: { length: 200, default: null }
-        path:
-            type: string
-            options: { length: 200, default: null }
-        category:
-            type: integer
-            options: { default: 1 }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_attachment]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: attachment_id_contents_id
-            source_field: [ pk_attachment ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 books:
     columns:
         pk_book:
