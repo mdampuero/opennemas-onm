@@ -561,6 +561,7 @@
             content_type_name: $scope.criteria.contentType ?
               [ $scope.criteria.contentType ] : $scope.picker.types.enabled,
             epp:        $scope.epp,
+            enabled:    $scope.picker.types.enabled,
             intime:     $scope.picker.intime,
             page:       $scope.page,
             sort_by:    'created',
