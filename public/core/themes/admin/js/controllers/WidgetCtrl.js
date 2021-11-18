@@ -180,7 +180,7 @@
          *
          */
         $scope.loadRelated = function() {
-          if ($scope.item.params[$scope.data.paramIndex].value != '') {
+          if ($scope.item.params[$scope.data.paramIndex].value !== '') {
             var oql = 'pk_content in [' +
               $scope.item.params[$scope.data.paramIndex].value +
               ']';
@@ -193,6 +193,10 @@
             http.get(route)
               .then(function(response) {
                 $scope.data.related = response.data.items;
+              })
+              .catch(function(err) {
+                $scope.data.related = [];
+                return err;
               });
           }
         };
