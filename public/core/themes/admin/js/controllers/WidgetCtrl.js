@@ -142,8 +142,8 @@
         $scope.addParamIndex = function(index) {
           $scope.data.paramIndex = index;
 
-          $scope.$watch('data.related.length', function(nv) {
-            if (nv) {
+          $scope.$watch('data.related', function(nv) {
+            if ($scope.data.related) {
               $scope.item.params[$scope.data.paramIndex].value = '';
               var ids = '';
 
@@ -168,6 +168,7 @@
          */
         $scope.removeItem = function(index) {
           $scope.data.related.splice(index, 1);
+          $scope.addParamIndex($scope.data.paramIndex);
         };
 
         /**
@@ -179,19 +180,21 @@
          *
          */
         $scope.loadRelated = function() {
-          var oql = 'pk_content in [' +
-            $scope.item.params[$scope.data.paramIndex].value +
-            ']';
+          if ($scope.item.params[$scope.data.paramIndex].value != '') {
+            var oql = 'pk_content in [' +
+              $scope.item.params[$scope.data.paramIndex].value +
+              ']';
 
-          var route = {
-            name: 'api_v1_backend_content_get_list',
-            params: { oql: oql }
-          };
+            var route = {
+              name: 'api_v1_backend_content_get_list',
+              params: { oql: oql }
+            };
 
-          http.get(route)
-            .then(function(response) {
-              $scope.data.related = response.data.items;
-            });
+            http.get(route)
+              .then(function(response) {
+                $scope.data.related = response.data.items;
+              });
+          }
         };
 
         /**
