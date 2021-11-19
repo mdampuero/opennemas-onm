@@ -100,7 +100,7 @@ $menuXml = [
                 'icon'        => 'fa fa-file-text',
                 'link'        => url('backend_articles_list'),
                 'module_name' => 'ARTICLE_MANAGER',
-                'privilege'   => 'ARTICLE_PENDINGS',
+                'privilege'   => 'ARTICLE_ADMIN',
             ],
             [
                 'id'          => 'opinion_manager',

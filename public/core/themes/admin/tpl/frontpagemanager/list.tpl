@@ -267,20 +267,20 @@
           {is_module_activated name="ARTICLE_MANAGER"}
             {if $category_id eq 0}
               <li>
-                <a href="{url name=backend_articles_content_provider category=$category_id suggested=true}">
+                <a href="{url name=backend_articles_content_provider category=$category_id frontpage_version_id=$version_id_pro suggested=true}">
                   {t}Suggested{/t}
                 </a>
               </li>
             {else}
               <li>
-                <a href="{url name=backend_articles_content_provider category=$category_id}">
+                <a href="{url name=backend_articles_content_provider category=$category_id frontpage_version_id=$version_id_pro}">
                   {t}Others in category{/t}
                 </a>
               </li>
             {/if}
           {/is_module_activated}
             <li>
-              <a href="{url name=backend_articles_content_provider}">
+              <a href="{url name=backend_articles_content_provider category=$category_id frontpage_version_id=$version_id_pro last=true}">
                 {t}Latest articles{/t}
               </a>
             </li>
