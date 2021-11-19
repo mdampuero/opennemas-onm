@@ -45,8 +45,6 @@ class InstanceHelper
      */
     protected $mediaPath;
 
-
-
     /**
      * Initializes the InstanceHelper.
      *
@@ -59,6 +57,28 @@ class InstanceHelper
         $this->conn      = $conn;
         $this->fs        = new Filesystem();
         $this->mediaPath = $mediaPath;
+    }
+
+    /**
+     * Returns the number of accepted comments.
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return array The number of accepted comments.
+     */
+    public function countComments(Instance $instance) : int
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql = 'select count(*) as total from comments';
+
+            $comments = $this->conn->fetchAssoc($sql);
+
+            return $comments['total'];
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     /**

@@ -116,6 +116,18 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-events" checklist-model="columns.selected" checklist-value="'events'" type="checkbox">
+    <label for="checkbox-events">
+      {t}Events{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-kioskos" checklist-model="columns.selected" checklist-value="'kioskos'" type="checkbox">
+    <label for="checkbox-kioskos">
+      {t}Kioskos{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
     <label for="checkbox-users">
       {t}Users{/t}
@@ -125,6 +137,12 @@
     <input id="checkbox-emails" checklist-model="columns.selected" checklist-value="'emails'" type="checkbox">
     <label for="checkbox-emails">
       {t}Emails{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-comments" checklist-model="columns.selected" checklist-value="'comments'" type="checkbox">
+    <label for="checkbox-comments">
+      {t}Comments{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -233,6 +251,14 @@
     <i class="fa fa-envelope" uib-tooltip="{t}Letter{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('letters') == 'asc', 'fa fa-caret-down': isOrderedBy('letters') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('events')" ng-show="isColumnEnabled('events')" width="80">
+    <i class="fa fa-calendar" uib-tooltip="{t}Events{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('events') == 'asc', 'fa fa-caret-down': isOrderedBy('events') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('kioskos')" ng-show="isColumnEnabled('kioskos')" width="80">
+    <i class="fa fa-newspaper-o" uib-tooltip="{t}Kioskos{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('kioskos') == 'asc', 'fa fa-caret-down': isOrderedBy('kioskos') == 'desc'}"></i>
+  </th>
   <th class="text-center pointer" ng-click="sort('users')" ng-show="isColumnEnabled('users')" width="80">
     <i class="fa fa-users" uib-tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
@@ -240,6 +266,10 @@
   <th class="text-center pointer" ng-click="sort('emails')" ng-show="isColumnEnabled('emails')" width="80">
     <i class="fa fa-mail-forward" uib-tooltip="{t}Emails{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('emails') == 'asc', 'fa fa-caret-down': isOrderedBy('emails') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('comments')" ng-show="isColumnEnabled('comments')" width="80">
+    <i class="fa fa-comments" uib-tooltip="{t}Comments{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('comments') == 'asc', 'fa fa-caret-down': isOrderedBy('comments') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="120">
     <i class="fa fa-database" uib-tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
@@ -394,6 +424,16 @@
       [% item.letters %]
     </span>
   </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('events')" title="{t}Events{/t}">
+    <span class="badge text-bold">
+      [% item.events %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('kioskos')" title="{t}Kioskos{/t}">
+    <span class="badge text-bold">
+      [% item.kioskos %]
+    </span>
+  </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('users')" title="{t}Users{/t}">
     <span class="badge text-bold">
       [% item.users %]
@@ -402,6 +442,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('emails')" title="{t}Emails{/t}">
     <span class="badge text-bold">
       [% item.emails %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('comments')" title="{t}Comments{/t}">
+    <span class="badge text-bold">
+      [% item.comments %]
     </span>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('media_size')" title="{t}Media size{/t}">

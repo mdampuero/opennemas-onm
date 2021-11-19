@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.33, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
--- Host: mysql    Database: 1
+-- Host: mysql    Database: 852
 -- ------------------------------------------------------
--- Server version	5.7.33-log
+-- Server version	5.7.26-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -233,7 +233,8 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`),
   KEY `comment_content_id` (`content_id`),
   KEY `comment_parent_id` (`parent_id`),
-  CONSTRAINT `comments_id_contents_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `comment_status` (`status`),
+  CONSTRAINT `comments_id_contents_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1157,4 +1158,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-14 10:50:46
+-- Dump completed on 2021-11-19 13:48:29

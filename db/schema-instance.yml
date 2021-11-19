@@ -175,6 +175,12 @@ comments:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: comment_status
+            columns: [status]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: comments_id_contents_id
@@ -565,12 +571,6 @@ content_category:
         -
             name: content_category_category_id
             columns: [category_id]
-            primary: false
-            unique: false
-            flags: {  }
-        -
-            name: content_type_name_changed
-            columns: [ content_type_name, changed ]
             primary: false
             unique: false
             flags: {  }

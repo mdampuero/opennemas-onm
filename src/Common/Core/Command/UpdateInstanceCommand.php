@@ -193,6 +193,10 @@ class UpdateInstanceCommand extends Command
         $instance->last_login = $helper->getLastActivity($instance);
         $this->writeStatus('success', 'DONE', true);
 
+        $this->writePad('- Counting accepted comments');
+        $instance->comments = $helper->countComments($instance);
+        $this->writeStatus('success', 'DONE', true);
+
         $this->writePad('- Counting active users');
         $instance->users = $helper->countUsers($instance);
         $this->writeStatus('success', 'DONE', true);
