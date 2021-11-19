@@ -233,8 +233,7 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`),
   KEY `comment_content_id` (`content_id`),
   KEY `comment_parent_id` (`parent_id`),
-  KEY `comment_status` (`status`),
-  CONSTRAINT `comments_id_contents_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE SET NULL
+  KEY `comment_status` (`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1158,4 +1157,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-19 13:48:29
+-- Dump completed on 2021-11-19 14:14:11

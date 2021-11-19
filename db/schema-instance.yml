@@ -187,7 +187,7 @@ comments:
             source_field: [ content_id ]
             target_table: contents
             target_field: [ pk_content ]
-            restrictions: { onUpdate: 'SET NULL', onDelete: 'SET NULL' }
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 commentsmeta:
     columns:
         fk_content:
