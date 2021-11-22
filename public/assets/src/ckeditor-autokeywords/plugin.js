@@ -5,7 +5,7 @@ CKEDITOR.plugins.add('autokeywords', {
     editor.addCommand('replaceKeywords', {
       exec: function(editor) {
         $.ajax({
-          url: '/admin/keywords/autolink',
+          url: '/api/v1/backend/keywords/autolink',
           type: 'POST',
           data: {
             text: editor.getData()

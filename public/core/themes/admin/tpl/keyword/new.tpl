@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{if $keyword->id}{url name=admin_keyword_update id=$keyword->id}{else}{url name=admin_keyword_create}{/if}" method="POST">
+<form id="formulario" name="formulario" action="{if $keyword->id}{url name=api_v1_backend_keyword_update_item id=$keyword->id}{else}{url name=api_v1_backend_keyword_create_item}{/if}" method="POST">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -20,11 +20,11 @@
         <div class="all-actions pull-right">
           <ul class="nav quick-section">
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=admin_keywords}" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
+              <a class="btn btn-link" href="{url name=backend_keywords_list}" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
                 <span class="fa fa-reply"></span>
               </a>
             </li>
-            {acl isAllowed="PCLAVE_CREATE"}
+            {acl isAllowed="KEYWORD_CREATE"}
             <li class="quicklinks"><span class="h-seperate"></span></li>
             <li class="quicklinks">
               <button class="btn btn-primary" type="submit" data-text="{t}Saving{/t}..." id="save-button">
@@ -43,9 +43,9 @@
       <div class="grid-body">
         <div class="col-md-7">
           <div class="form-group">
-            <label class="form-label" for="pclave">{t}Name{/t}</label>
+            <label class="form-label" for="keyword">{t}Name{/t}</label>
             <div class="controls">
-              <input type="text" id="pclave" name="pclave" value="{$keyword->pclave|default:""}"
+              <input type="text" id="keyword" name="keyword" value="{$keyword->keyword|default:""}"
               class="form-control" size="30" maxlength="60" required>
             </div>
           </div>

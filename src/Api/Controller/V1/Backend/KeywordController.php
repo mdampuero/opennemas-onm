@@ -1,47 +1,42 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <onm-devs@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-namespace Backend\Controller;
+
+namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
+use Api\Controller\V1\ApiController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
-use Imagine\Filter\Basic\Resize;
 
-/**
- * Handles the actions for the keywords.
- */
-class KeywordsController extends BackendController
+class KeywordController extends ApiController
 {
     /**
-     * The extension name required by this controller.
-     *
-     * @var string
+     * {@inheritdoc}
      */
     protected $extension = 'KEYWORD_MANAGER';
 
     /**
-     * The list of permissions for every action.
-     *
-     * @var type
+     * {@inheritdoc}
      */
     protected $permissions = [
         'create' => 'KEYWORD_CREATE',
+        'delete' => 'KEYWORD_DELETE',
+        'patch'  => 'KEYWORD_UPDATE',
         'update' => 'KEYWORD_UPDATE',
         'list'   => 'KEYWORD_ADMIN',
+        'save'   => 'KEYWORD_CREATE',
         'show'   => 'KEYWORD_UPDATE',
     ];
+
     /**
      * {@inheritdoc}
      */
-    protected $resource = 'keyword';
+    protected $service = 'api.service.keyword';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $getItemRoute = 'api_v1_backend_keyword_get_item';
 
     /**
      * Given a text, this action replaces all the registered keywords with the
@@ -58,9 +53,10 @@ class KeywordsController extends BackendController
         $text = $request->request->get('text', null);
 
         if (!empty($text)) {
-            $service  = $this->get('api.service.keyword');
+            $service  = $this->get($this->service);
             $keywords = $service->getList()['items'];
-            return new Response($service->replaceTerms($text, $keywords));
+            $response = $service->replaceTerms($text, $keywords);
+            return new Response($response);
         }
 
         return new Response($text);

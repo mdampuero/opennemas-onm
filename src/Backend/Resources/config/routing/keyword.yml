@@ -1,0 +1,18 @@
+backend_keyword_create:
+    path:     /keywords/create
+    defaults: { _controller: BackendBundle:Keywords:create }
+
+backend_keywords_list:
+    path:     /keywords
+    defaults: { _controller: BackendBundle:Keywords:list }
+    options:
+        expose: true
+
+backend_keyword_show:
+    path:     /keywords/{id}
+    defaults: { _controller: BackendBundle:Keywords:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+

@@ -1,7 +1,8 @@
-(function () {
- 'use strict';
+(function() {
+  'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  KeywordListCtrl
@@ -18,52 +19,65 @@
     .controller('KeywordListCtrl', [
       '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
       function($controller, $location, $scope, http, messenger, oqlEncoder) {
-
         // Initialize the super class and extend it.
-        $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
-      /**
-       * Updates the array of contents.
-       *
-       * @param string route Route name.
-       */
-      $scope.list = function(route) {
-        $scope.loading = 1;
-        $scope.selected = { all: false, contents: [] };
-
-        oqlEncoder.configure({
-          placeholder: {
-            pclave: 'pclave ~ "%[value]%"',
-          }
-        });
-
-        var oql   = oqlEncoder.getOql($scope.criteria);
-        var route = {
-          name: $scope.route,
-          params:  { oql: oql }
+        /**
+         * @inheritdoc
+         */
+        $scope.routes = {
+          getList:     'api_v1_backend_keyword_get_list',
+          deleteItem:  'api_v1_backend_keyword_delete',
+          deleteList:  'api_v1_backend_keyword_batch_delete',
         };
 
-        $location.search('oql', oql);
+        /**
+         * @inheritdoc
+         */
+        $scope.criteria = {
+          epp: 10,
+          orderBy: { keyword:  'asc' },
+          page: 1
+        };
 
-        http.get(route).then(function(response) {
-          $scope.total = parseInt(response.data.total);
-          $scope.contents         = response.data.results;
-          $scope.map              = response.data.map;
+        /**
+         * @inheritdoc
+         */
+        $scope.getItemId = function(item) {
+          return item.id;
+        };
 
-          if (response.data.hasOwnProperty('extra')) {
-            $scope.extra = response.data.extra;
+        /**
+         * @function init
+         * @memberOf CommentListCtrl
+         *
+         * @description
+         *   Configures the controller.
+         */
+        $scope.init = function() {
+          $scope.backup.criteria = $scope.criteria;
+          oqlEncoder.configure({
+            placeholder: {
+              keyword: 'keyword ~ "%[value]%"',
+            }
+          });
+          $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+
+          if (!data.items) {
+            $scope.data.items = [];
           }
 
-          // Disable spinner
-          $scope.loading = 0;
-        }, function () {
-          $scope.loading = 0;
+          $scope.items = $scope.data.items;
 
-          messenger.post({
-            message: 'Error while fetching data from backend',
-            type:    'error'
-          });
-        });
-      };
-    }]);
+          $scope.extra = $scope.data.extra;
+        };
+      }
+    ]);
 })();
