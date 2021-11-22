@@ -57,7 +57,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
-            ->setMethods([ 'countBy', 'find', 'findBy' ])
+            ->setMethods([ 'countBy', 'find', 'findBy', 'findBySql' ])
             ->getMock();
 
         $this->ih = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
@@ -228,6 +228,8 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Entity([ 'path' => 'images/2010/01/01/plugh.mumble' ]);
 
+        $this->repository->expects($this->once())->method('findBySql')
+            ->willReturn([]);
         $this->service->expects($this->exactly(2))->method('getItem')
             ->with(23)
             ->willReturn($item);
@@ -258,24 +260,22 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     public function testDeleteList()
     {
         $itemA = new Entity([
-            'name' => 'wubble',
-            'path' => 'images/2010/01/01/plugh.wubble'
+            'pk_content' => 1,
+            'name'       => 'wubble',
+            'path'       => 'images/2010/01/01/plugh.wubble'
         ]);
         $itemB = new Entity([
-            'name' => 'xyzzy',
-            'path' => 'images/2010/01/01/plugh.xyzzy'
+            'pk_content' => 2,
+            'name'       => 'xyzzy',
+            'path'       => 'images/2010/01/01/plugh.xyzzy'
         ]);
 
-        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+        $this->repository->expects($this->once())->method('findBySql')
             ->willReturn([]);
-        $this->metadata->expects($this->at(2))->method('getId')
-            ->with($itemA)->willReturn([ 'id' => 1 ]);
-        $this->metadata->expects($this->at(3))->method('getId')
-            ->with($itemB)->willReturn([ 'id' => 2 ]);
-
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
+
         $this->em->expects($this->exactly(2))->method('remove');
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
@@ -286,9 +286,10 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('content.deleteList', [
-                'action' => 'Api\Service\V1\PhotoService::deleteList',
-                'ids'    => [ 1, 2 ],
-                'item'   => [ $itemA, $itemB ]
+                'action'  => 'Api\Service\V1\PhotoService::deleteList',
+                'ids'     => [ 1, 2 ],
+                'item'    => [ $itemA, $itemB ],
+                'related' => []
             ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
@@ -320,17 +321,13 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             'path' => 'images/2010/01/01/plugh.xyzzy'
         ]);
 
-        $this->metadata->expects($this->at(0))->method('getL10nKeys')
+        $this->repository->expects($this->once())->method('findBySql')
             ->willReturn([]);
-        $this->metadata->expects($this->at(2))->method('getId')
-            ->with($itemA)->willReturn([ 'id' => 1 ]);
-
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
 
-        $this->em->expects($this->at(3))->method('remove')->willReturn('foobar');
-        $this->em->expects($this->at(5))->method('remove')
+        $this->em->expects($this->once())->method('remove')
             ->will($this->throwException(new \Exception()));
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')

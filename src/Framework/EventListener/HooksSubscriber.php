@@ -84,6 +84,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
+                ['removeCacheForRelatedContents', 5],
             ],
             'content.patchItem' => [
                 ['logAction', 5],
@@ -102,6 +103,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
                 ['removeVarnishCacheCurrentInstance', 5],
+                ['removeCacheForRelatedContents', 5],
             ],
             // Frontpage hooks
             'frontpage.save_position' => [
@@ -548,5 +550,24 @@ class HooksSubscriber implements EventSubscriberInterface
                 sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName)
             ])
         );
+    }
+
+    /**
+     * Rempves caché for related contents of element deleted
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeCacheForRelatedContents(Event $event)
+    {
+        if (!$event->hasArgument('related')) {
+            return false;
+        }
+
+        $item    = $event->getArgument('related');
+        $related = is_array($item) ? $item : [ $item ];
+
+        foreach ($related as $content) {
+            $this->cache->delete('content-' . $content->pk_content);
+        }
     }
 }
