@@ -113,7 +113,6 @@ class ContentService extends OrmService
     {
         $item = \Onm\StringUtils::convertToUtf8($item);
 
-        //return !empty($item) ? parent::responsify($item) : null;
         return parent::responsify($item);
     }
 
