@@ -56,7 +56,8 @@
           created: null,
           starttime: null,
           endtime: null,
-          renderlet: 'html',
+          type: null,
+          class: null,
           title: '',
           params: [],
           categories: [],
@@ -259,14 +260,18 @@
          */
         $scope.resetContent = function() {
           $('.widget-form').empty();
-          $scope.item.content = null;
+          $scope.item.class = null;
           $scope.widgetForm   = null;
         };
 
         // Gets the form for widget when widget type changes
-        $scope.$watch('item.content', function(nv) {
+        $scope.$watch('item.class', function(nv) {
           if (!nv) {
             return;
+          }
+
+          if ($scope.item.type) {
+            $scope.item.body = $scope.item.class;
           }
 
           $scope.getForm(nv);

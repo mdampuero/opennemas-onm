@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WidgetController extends ContentOldController
+class WidgetController extends ContentController
 {
     /**
      * {@inheritdoc}
