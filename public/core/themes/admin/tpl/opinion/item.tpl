@@ -50,7 +50,9 @@
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="grid-collapse-title">
-        {include file="ui/component/content-editor/accordion/published.tpl"}
+        {acl isAllowed="OPINION_AVAILABLE"}
+          {include file="ui/component/content-editor/accordion/published.tpl"}
+        {/acl}
         <div class="m-t-5">
           {include file="ui/component/content-editor/accordion/checkbox.tpl" field="in_home" title="{t}Home{/t}"}
         </div>

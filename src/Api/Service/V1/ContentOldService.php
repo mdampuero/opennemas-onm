@@ -106,8 +106,9 @@ class ContentOldService implements Service
             }
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
 
             return $item;
@@ -127,8 +128,9 @@ class ContentOldService implements Service
             $item->remove($id);
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
@@ -164,8 +166,9 @@ class ContentOldService implements Service
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'ids'   => $deleted,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $deleted,
+            'item'   => $items
         ]);
 
         return count($deleted);
@@ -339,8 +342,9 @@ class ContentOldService implements Service
             $this->validate($item);
 
             $this->dispatcher->dispatch($this->getEventName('patchItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new PatchItemException($e->getMessage(), $e->getCode());
@@ -376,8 +380,9 @@ class ContentOldService implements Service
         }
 
         $this->dispatcher->dispatch($this->getEventName('patchList'), [
-            'ids'   => $updated,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $updated,
+            'item'   => $items
         ]);
 
         return count($updated);
@@ -411,8 +416,9 @@ class ContentOldService implements Service
             }
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());

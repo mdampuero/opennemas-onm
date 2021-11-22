@@ -132,6 +132,7 @@ class Controller extends SymfonyController
         }
 
         if (!empty($permission)
+            && !in_array($permission, [ 'CONTENT_OTHER_UPDATE', 'CONTENT_OTHER_DELETE' ])
             && !$this->get('core.security')->hasPermission($permission)
         ) {
             throw new AccessDeniedException();
@@ -139,6 +140,7 @@ class Controller extends SymfonyController
 
         if (!empty($content)
             && !$this->get('core.security')->hasPermission($permission)
+            && ($content instanceof \Common\Model\Entity\Content || $content instanceof \Content)
             && !$content->isOwner($this->getUser()->id)
         ) {
             throw new AccessDeniedException();

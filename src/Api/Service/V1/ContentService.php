@@ -56,6 +56,23 @@ class ContentService extends OrmService
     /**
      * {@inheritdoc}
      */
+    protected function getOqlForList($oql)
+    {
+        $cleanOql = preg_replace('/and tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', '', $oql);
+        preg_match('/tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', $oql, $matches);
+
+        if (empty($matches)) {
+            return $cleanOql;
+        }
+
+        return $this->container->get('orm.oql.fixer')->fix($cleanOql)
+            ->addCondition(sprintf('tag_id in [%s]', $matches[1]))
+            ->getOql();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function patchItem($id, $data)
     {
         $data['changed'] = new \DateTime();
@@ -109,7 +126,7 @@ class ContentService extends OrmService
      */
     protected function assignUser($data, $userFields = [])
     {
-        if ($this->container->get('core.security')->hasPermission('MASTER')) {
+        if (!$this->isEditable($data)) {
             return $data;
         }
 
@@ -139,5 +156,25 @@ class ContentService extends OrmService
         }
 
         return $item;
+    }
+
+    /**
+     * Checks if the last editor needs to be changed.
+     *
+     * @param array $data The array of data to update.
+     *
+     * @return boolean True if the last editor needs to be changed, false otherwise.
+     */
+    protected function isEditable($data = [])
+    {
+        if ($data === [ 'frontpage' => 0 ]) {
+            return false;
+        }
+
+        if ($this->container->get('core.security')->hasPermission('MASTER')) {
+            return false;
+        }
+
+        return true;
     }
 }

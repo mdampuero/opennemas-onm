@@ -67,17 +67,26 @@ class ArticleController extends BackendController
      */
     public function contentProviderAction(Request $request)
     {
+        $category     = $request->query->getDigits('category', 0);
+        $last         = $request->query->getBoolean('last', false);
         $page         = $request->query->getDigits('page', 1);
         $suggested    = $request->query->getBoolean('suggested', false);
-        $category     = $request->query->getDigits('category', 0);
+        $version      = $request->query->getDigits('frontpage_version_id', 1);
         $itemsPerPage = 8;
-        $oql          = 'content_type_name = "article" and in_litter = 0 ';
+        $oql          = 'content_type_name = "article" and content_status = 1 and in_litter = 0 ';
+
+        $contentsInFrontpage = $this->get('api.service.frontpage_version')
+            ->getContentIds($category, $version, 'article');
+
+        if (!empty($contentsInFrontpage)) {
+            $oql .= sprintf('and pk_content !in[%s] ', implode(',', $contentsInFrontpage));
+        }
 
         if ($suggested) {
             $oql .= 'and frontpage = 1 ';
         }
 
-        if (!empty($category)) {
+        if (!empty($category) && !$last) {
             $oql .= sprintf('and category_id = %d ', $category);
         }
 
@@ -103,7 +112,12 @@ class ArticleController extends BackendController
                 'page'        => $page,
                 'total'       => $response['total'],
                 'route'       => [
-                    'name'   => 'backend_articles_content_provider'
+                    'name'   => 'backend_articles_content_provider',
+                    'params' => [
+                        'category'             => $category,
+                        'last'                 => $last,
+                        'frontpage_version_id' => $version
+                    ]
                 ],
             ]);
 

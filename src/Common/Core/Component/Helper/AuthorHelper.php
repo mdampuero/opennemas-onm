@@ -12,6 +12,13 @@ use Symfony\Component\Routing\Router;
 class AuthorHelper
 {
     /**
+     * The services container.
+     *
+     * @var Container
+     */
+
+    protected $container;
+    /**
      * The author service.
      *
      * @var AuthorService
@@ -40,19 +47,34 @@ class AuthorHelper
     protected $ugh;
 
     /**
+     * The cache service.
+     *
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
      * Initializes the author service.
      *
-     * @param AuthorService      $service  The author service.
-     * @param Template           $template The frontend template.
-     * @param Router             $router   The router.
-     * @param UrlGeneratorHelper $ugh      The url generator helper.
+     * @param Container          $container The service container.
+     * @param AuthorService      $service   The author service.
+     * @param Template           $template  The frontend template.
+     * @param Router             $router    The router.
+     * @param UrlGeneratorHelper $ugh       The url generator helper.
      */
-    public function __construct(AuthorService $service, Router $router, Template $template, UrlGeneratorHelper $ugh)
-    {
-        $this->service  = $service;
-        $this->template = $template;
-        $this->router   = $router;
-        $this->ugh      = $ugh;
+    public function __construct(
+        $container,
+        AuthorService $service,
+        Router $router,
+        Template $template,
+        UrlGeneratorHelper $ugh
+    ) {
+        $this->container = $container;
+        $this->service   = $service;
+        $this->template  = $template;
+        $this->router    = $router;
+        $this->ugh       = $ugh;
+        $this->cache     = $this->container->get('cache.connection.instance');
     }
 
     /**
@@ -72,12 +94,26 @@ class AuthorHelper
             return null;
         }
 
-        if (($item instanceof \Content
+        if ((($item instanceof \Content
             || $item instanceof \Common\Model\Entity\Content)
-            && !empty($item->fk_author)
+            && !empty($item->fk_author))
+            || (!is_object($item) && is_numeric($item))
         ) {
             try {
-                return $this->service->getItem($item->fk_author);
+                $id      = is_numeric($item) ? $item : $item->fk_author;
+                $cacheId = 'author-' . $id;
+
+                $author = $this->cache->get($cacheId);
+
+                if (!empty($author)) {
+                    return $author;
+                }
+
+                $author = $this->service->getItem($id);
+
+                $this->cache->set($cacheId, $author, 900);
+
+                return $author;
             } catch (\Exception $e) {
                 return null;
             }

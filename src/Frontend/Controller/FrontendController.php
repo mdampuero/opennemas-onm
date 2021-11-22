@@ -156,6 +156,14 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
+        $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
+
+        if ($request->getPathInfo() !== $expected
+            && empty($this->get('request_stack')->getParentRequest())
+        ) {
+            return new RedirectResponse($expected, 301);
+        }
+
         $params = $this->getParameters($request, $item);
 
         if ($this->hasExternalLink($params)) {
@@ -308,7 +316,9 @@ class FrontendController extends Controller
     {
         if (array_key_exists('item', $params)) {
             $expected = $this->get('core.helper.url_generator')
-                ->generate($params['item']);
+                ->generate($params['item'], array_filter($params, function ($key) {
+                    return $key === '_format';
+                }, ARRAY_FILTER_USE_KEY));
 
             return $this->get('core.helper.l10n_route')->localizeUrl($expected);
         }
@@ -539,26 +549,6 @@ class FrontendController extends Controller
         $config = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color' ]);
-
-        // Get instance logo size
-        if (has_logo('default')) {
-            $path     = get_photo_path(get_logo('default'));
-            $logoPath = dirname($path) . '/' . rawurlencode(basename($path));
-
-            $logoUrl      = $this->get('core.instance')->getBaseUrl() . $logoPath;
-            $logoFilePath = SITE_PATH . $logoPath;
-
-            $logoSize = file_exists($logoFilePath)
-                ? @getimagesize($logoFilePath)
-                : null;
-
-            if (is_array($logoSize)) {
-                $this->view->assign([
-                    'logoSize' => $logoSize,
-                    'logoUrl'  => $logoUrl
-                ]);
-            }
-        }
 
         // Get menu
         $mm      = $this->container->get('menu_repository');

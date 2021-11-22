@@ -33,7 +33,7 @@ class DataLayerHenneo extends DataLayer
      *
      * @return string The customized extension.
      */
-    protected function customizeExtension(string $extension)
+    public function customizeExtension(string $extension)
     {
         $contentTypes = [
             'album',
@@ -84,18 +84,6 @@ class DataLayerHenneo extends DataLayer
         $date = new \DateTime($date);
 
         return !empty($date) ? $date->format('Ymd') : null;
-    }
-
-    /**
-     * Returns the customization for the updateDate.
-     *
-     * @param null|string $date The date to customize.
-     *
-     * @return null|string The customized date.
-     */
-    protected function customizeUpdateDate(?string $date)
-    {
-        return $this->customizePublicationDate($date);
     }
 
     /**

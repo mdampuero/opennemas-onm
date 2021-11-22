@@ -293,7 +293,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUriForAttachment()
     {
-        $content = new \Attachment();
+        $content = new \Content();
 
         $content->content_type_name = 'attachment';
         $content->id                = 252;

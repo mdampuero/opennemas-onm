@@ -100,7 +100,7 @@ $menuXml = [
                 'icon'        => 'fa fa-file-text',
                 'link'        => url('backend_articles_list'),
                 'module_name' => 'ARTICLE_MANAGER',
-                'privilege'   => 'ARTICLE_PENDINGS',
+                'privilege'   => 'ARTICLE_ADMIN',
             ],
             [
                 'id'          => 'opinion_manager',
@@ -114,7 +114,7 @@ $menuXml = [
                 'id'          => 'comment_manager',
                 'title'       => _('Comments'),
                 'icon'        => 'fa fa-comment',
-                'link'        => url('backend_comments'),
+                'link'        => url('backend_comments_list'),
                 'module_name' => 'COMMENT_MANAGER',
                 'privilege'   => 'COMMENT_ADMIN',
             ],

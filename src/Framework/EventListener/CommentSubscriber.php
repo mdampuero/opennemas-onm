@@ -54,22 +54,24 @@ class CommentSubscriber implements EventSubscriberInterface
     {
         $system = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('comment_system');
+            ->get('comment_settings')['comment_system'];
 
         if (empty($system) || $system !== 'onm') {
             return;
         }
 
         $response = $event->getResponse();
-        $comments = $this->container->get('comment_repository')
-            ->countPendingComments();
 
-        if ((int) $comments === 0) {
+        $total = $this->container->get('orm.manager')
+            ->getRepository('Comment', 'instance')
+            ->countBy('status = "pending"');
+
+        if ((int) $total === 0) {
             return;
         }
 
         $response[] = $this->container->get('core.service.notification')
-            ->getFromComments($comments);
+            ->getFromComments($total);
 
         $event->setResponse($response);
     }

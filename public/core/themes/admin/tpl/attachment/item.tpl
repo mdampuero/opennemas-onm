@@ -23,6 +23,23 @@
   </a>
 {/block}
 
+{block name="primaryActions"}
+  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+    <h5>
+      <i class="p-r-15">
+        <i class="fa fa-check"></i>
+        {t}Draft saved at {/t}[% draftSaved %]
+      </i>
+    </h5>
+  </li>
+  <li class="quicklinks">
+    <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+      <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+      {t}Save{/t}
+    </button>
+  </li>
+{/block}
+
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -36,7 +53,7 @@
           {/acl}
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/category.tpl" field="category_id"}
+      {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>

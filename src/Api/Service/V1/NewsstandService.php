@@ -37,19 +37,21 @@ class NewsstandService extends ContentService
 
             $item = new $this->class($data);
 
-            $nh            = $this->container->get('core.helper.newsstand');
-            $filePath      = $nh->generatePath($file, $item->created);
-            $thumbnailPath = str_replace('pdf', 'jpg', $filePath);
+            $nh       = $this->container->get('core.helper.newsstand');
+            $filePath = $nh->generatePath($file, $item->created);
 
-            if ($nh->exists($filePath) || $nh->exists($thumbnailPath)) {
+            if ($nh->exists($filePath)) {
                 throw new FileAlreadyExistsException();
             }
 
-            $item->path      = $nh->getRelativePath($filePath);
-            $item->thumbnail = str_replace('pdf', 'jpg', $item->path);
+            $item->path = $nh->getRelativePath($filePath);
+
+            $photo = $this->container->get('api.service.photo')->createItem([], $thumbnail);
+
+            $item->related_contents = $this->container->get('core.helper.featured_media')
+                ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]);
 
             $nh->move($file, $filePath);
-            $nh->move($thumbnail, $thumbnailPath);
 
             $this->validate($item);
             $this->em->persist($item, $this->getOrigin());
@@ -57,8 +59,9 @@ class NewsstandService extends ContentService
             $id = $this->em->getMetadata($item)->getId($item);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
 
             return $item;
@@ -85,28 +88,33 @@ class NewsstandService extends ContentService
             $item->setData($data);
 
             if (!empty($file)) {
-                $nh            = $this->container->get('core.helper.newsstand');
-                $filePath      = $nh->generatePath($file, $item->created);
-                $thumbnailPath = str_replace('pdf', 'jpg', $filePath);
+                $nh       = $this->container->get('core.helper.newsstand');
+                $filePath = $nh->generatePath($file, $item->created);
 
-                if ($nh->exists($filePath) || $nh->exists($thumbnailPath)) {
+                if ($nh->exists($filePath)) {
                     throw new FileAlreadyExistsException();
                 }
 
                 $data['path'] = $nh->getRelativePath($filePath);
 
                 $nh->remove($item->path);
-                $nh->remove($item->thumbnail);
                 $nh->move($file, $filePath);
-                $nh->move($thumbnail, $thumbnailPath);
+
+                $item->path = $nh->getRelativePath($filePath);
+
+                $photo = $this->container->get('api.service.photo')->createItem([], $thumbnail);
+
+                $item->related_contents = $this->container->get('core.helper.featured_media')
+                    ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]);
             }
 
             $this->validate($item);
             $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());

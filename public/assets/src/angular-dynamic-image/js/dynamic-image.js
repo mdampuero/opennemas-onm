@@ -226,12 +226,6 @@
             return item;
           }
 
-          if (item.content_type_name === 'video' &&
-                item.hasOwnProperty('information') &&
-                item.information.thumbnail) {
-            return item.information.thumbnail;
-          }
-
           if (Number.isFinite(item)) {
             this.route.params = { id: item };
             return $http.get(this.route).then(function(response) {
@@ -242,6 +236,13 @@
           }
 
           var related = this.getFeaturedMedia(item, type);
+
+          if (!related &&
+                item.content_type_name === 'video' &&
+                item.hasOwnProperty('information') &&
+                item.information.thumbnail) {
+            return item.information.thumbnail;
+          }
 
           if (!related) {
             return null;

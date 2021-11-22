@@ -21,7 +21,10 @@ class Content extends Entity
      *
      * @var array
      */
-    protected static $l10nKeys = [ 'body', 'description', 'slug', 'title' ];
+    protected static $l10nKeys = [
+        'body', 'description', 'pretitle', 'slug',
+        'title', 'title_int', 'related_contents'
+    ];
 
     /**
      * Gets the value of the property from the raw data array.
@@ -78,6 +81,22 @@ class Content extends Entity
         $media = $this->getRelated($name);
 
         return array_pop($media);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheEntity()
+    {
+        $this->reset();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEntityFromCache()
+    {
+        $this->refresh();
     }
 
     /**

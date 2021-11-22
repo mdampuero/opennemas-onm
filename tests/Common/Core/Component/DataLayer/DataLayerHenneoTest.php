@@ -85,7 +85,7 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
         $result = [
             'extension'  => 'blogpost',
             'date'       => '20210213',
-            'updateDate' => '20210213',
+            'updateDate' => '2021-02-13 00:00:00',
             'format'     => 'web'
         ];
 

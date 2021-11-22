@@ -11,7 +11,8 @@ function smarty_outputfilter_data_layer($output, $smarty)
 {
     $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
 
-    if (is_null($request)) {
+    if (is_null($request)
+        || stripos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 
@@ -20,11 +21,10 @@ function smarty_outputfilter_data_layer($output, $smarty)
     if (!preg_match('/newsletter/', $smarty->source->resource)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
-        && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
-        && !preg_match('/\/ads/', $uri)
-        && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/ads\//', $uri)
+        && !preg_match('/\/comments\//', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
         && !preg_match('@\.amp\.html@', $uri)
     ) {
         $dataLayerMap = $smarty->getContainer()

@@ -24,16 +24,15 @@ function smarty_outputfilter_statistics($output, $smarty)
         && !preg_match('/\/admin\/frontpages/', $referer)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
-        && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
-        && !preg_match('/\/ads/', $uri)
-        && !preg_match('/\/comments/', $uri)
-        && !preg_match('/\/rss/', $uri)
+        && !preg_match('/\/ads\//', $uri)
+        && !preg_match('/\/comments\//', $uri)
+        && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
         $output = $smarty->getContainer()->get('frontend.renderer')->render(
             $content,
             [
-                'types'  => [ 'Default', 'Chartbeat', 'Comscore', 'Ojd', 'GAnalytics' ],
+                'types'  => [ 'Default', 'Chartbeat', 'Comscore', 'Ojd', 'GAnalytics', 'Prometeo' ],
                 'output' => $output
             ]
         );

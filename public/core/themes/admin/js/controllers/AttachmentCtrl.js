@@ -37,6 +37,11 @@
         $scope.dtm = null;
 
         /**
+         * @inheritdoc
+         */
+        $scope.incomplete = true;
+
+        /**
          * @memberOf AttachmentCtrl
          *
          * @description
@@ -141,6 +146,16 @@
           }
 
           return true;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          if (data.path === null) {
+            data.path = $scope.item.path;
+          }
+          return data;
         };
 
         // Update path in original item when localized item changes

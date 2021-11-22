@@ -175,6 +175,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->at(3))->method('getValue')
             ->with('app')
             ->willReturn([
+                'section'            => 'baz',
                 'extension'          => 'foobar',
                 'advertisementGroup' => 'gulp'
             ]);

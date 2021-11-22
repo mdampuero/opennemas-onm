@@ -129,6 +129,7 @@
             $scope.configure($scope.data.extra);
             $scope.buildScope();
             $scope.disableFlags('http');
+            $scope.incomplete = false;
           }, function() {
             $scope.item = null;
             $scope.disableFlags('http');
@@ -209,6 +210,8 @@
             $scope.disableFlags('http');
 
             if ($scope.routes.redirect && response.status === 201) {
+              $scope.flags.http.saving = true;
+
               var id = response.headers().location
                 .substring(response.headers().location.lastIndexOf('/') + 1);
 

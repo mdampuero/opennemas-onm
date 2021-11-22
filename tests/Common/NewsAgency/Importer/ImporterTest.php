@@ -183,7 +183,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     public function testConfigure()
     {
         $this->ds->expects($this->any())->method('get')
-            ->with('comments_config')
+            ->with('comment_settings')
             ->willReturn([ 'with_comments' => 0 ]);
 
         $this->assertEquals(
@@ -517,6 +517,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $result['content_type_name']  = 'photo';
         $result['path']               = '/flob/importers/block/name.php';
         $result['fk_content_type']    = 8;
+        $result['description']        = $resource->body;
 
         $this->assertEquals($result, $method->invokeArgs($this->importer, [ $resource, $data ]));
     }
@@ -543,64 +544,6 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->assertEquals($result, $method->invokeArgs($this->importer, [ [ $urn ] ]));
-    }
-
-    /**
-     * Tests getRelated.
-     */
-    public function testGetRelated()
-    {
-        $actual = [
-            [
-                'caption'           => 'Facilis, aperiam!',
-                'content_type_name' => 'photo',
-                'position'          => 0,
-                'source_id'         => 10,
-                'target_id'         => 20,
-                'type'              => 'photo'
-            ]
-        ];
-
-        $content = new Content([
-            'pk_content'        => 1,
-            'content_type_name' => 'photo',
-            'description'       => 'Lorem ipsum dolor sit amet.'
-         ]);
-
-         $relationships = [ 'featured_frontpage', 'featured_inner' ];
-
-        $result = [
-                [
-                    'caption'           => 'Facilis, aperiam!',
-                    'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'source_id'         => 10,
-                    'target_id'         => 20,
-                    'type'              => 'photo'
-                ],
-                [
-                    'caption'           => 'Lorem ipsum dolor sit amet.',
-                    'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'target_id'         => 1,
-                    'type'              => 'featured_frontpage'
-                ],
-                [
-                    'caption'           => 'Lorem ipsum dolor sit amet.',
-                    'content_type_name' => 'photo',
-                    'position'          => 0,
-                    'target_id'         => 1,
-                    'type'              => 'featured_inner'
-                ]
-            ];
-
-        $method = new \ReflectionMethod(
-            get_class($this->importer),
-            'getRelated'
-        );
-        $method->setAccessible(true);
-
-        $this->assertEquals($result, $method->invokeArgs($this->importer, [ $content, $relationships, $actual ]));
     }
 
     /**

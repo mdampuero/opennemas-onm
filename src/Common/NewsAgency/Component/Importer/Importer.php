@@ -121,7 +121,7 @@ class Importer
         $config = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->init()
-            ->get('comments_config');
+            ->get('comment_settings');
 
         if (!empty($config) && array_key_exists('with_comments', $config)) {
             $this->defaults['with_comment'] = (int) $config['with_comments'];
@@ -338,12 +338,6 @@ class Importer
             $data['content_type_name'] = $this->config['target'];
         }
 
-        // Force content_type_name for photos
-        if ($resource->type === 'photo') {
-            $data['content_type_name'] = 'photo';
-            $data['fk_content_type']   = 8;
-        }
-
         $data = array_merge($this->defaults, $data, [
             'description'         => $resource->summary,
             'frontpage'           => 0,
@@ -357,6 +351,13 @@ class Importer
             'body'                => $resource->body,
             'href'                => $resource->href,
         ]);
+
+        // Force some properties for photos
+        if ($resource->type === 'photo') {
+            $data['content_type_name'] = 'photo';
+            $data['fk_content_type']   = 8;
+            $data['description']       = $resource->body;
+        }
 
         // Check if the source has an external link configured
         if (array_key_exists('external', $this->config)
@@ -397,15 +398,14 @@ class Importer
         $date = new \DateTime();
 
         $data = array_merge($data, [
-            'content_status'  => 1,
             'created'         => $date->format('Y-m-d H:i:s'),
             'fk_content_type' => 1,
             'categories'      => [ $this->getCategory($resource, $data) ],
             'agency'          => !empty($resource->signature)
                 ? $resource->signature
-                : array_key_exists('agency_string', $this->config)
+                : (array_key_exists('agency_string', $this->config)
                     ? $this->config['agency_string']
-                    : null,
+                    : null),
             'pretitle'        => $resource->pretitle,
             'description'     => $resource->summary,
             'title_int'       => $resource->title,
@@ -432,21 +432,28 @@ class Importer
 
         $this->setPropagation(true);
 
+        $data['related_contents'] = [];
         foreach ($contents as $content) {
-            if ($content->content_type_name === 'video') {
-                $data['related_contents'] = $this->getRelated(
+            if ($content->content_type_name === 'photo') {
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
                 );
-                break;
             }
 
-            if ($content->content_type_name === 'photo') {
-                $data['related_contents'] = $this->getRelated(
+            if ($content->content_type_name === 'video') {
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
                 );
-                break;
+            }
+
+            if ($content->content_type_name === 'article') {
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
+                    $content,
+                    [ 'related_frontpage', 'related_inner' ],
+                    $data['related_contents']
+                );
             }
         }
 
@@ -467,7 +474,6 @@ class Importer
     {
         $date = new \DateTime();
         $data = array_merge($data, [
-            'content_status' => 1,
             'created' => $date->format('Y-m-d H:i:s'),
             'fk_content_type' => 4,
             'slug' => $this->container->get('data.manager.filter')
@@ -495,7 +501,7 @@ class Importer
 
         foreach ($contents as $content) {
             if ($content->content_type_name === 'photo') {
-                $data['related_contents'] = $this->getRelated(
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
                     [ 'featured_frontpage', 'featured_inner' ]
                 );
@@ -600,31 +606,5 @@ class Importer
         return array_map(function ($tag) {
             return $tag->id;
         }, $tags);
-    }
-
-    /**
-     * Returns a list of related contents.
-     *
-     * @param Content $content       The content to push like related.
-     * @param array   $relationships The array of the relationships.
-     * @param array   $actual        The array of actual related contents.
-     *
-     * @return array An array of related contents without source id.
-     */
-    protected function getRelated(Content $content, array $relationships, array $actual = []) : array
-    {
-        $new = [];
-
-        foreach ($relationships as $relationship) {
-            array_push($new, [
-                'target_id'         => $content->pk_content,
-                'type'              => $relationship,
-                'content_type_name' => $content->content_type_name,
-                'caption'           => $content->description,
-                'position'          => 0
-            ]);
-        }
-
-        return array_merge($actual, $new);
     }
 }

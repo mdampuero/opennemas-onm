@@ -25,6 +25,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $scope.dtm = null;
 
     /**
+     * @inheritdoc
+     */
+    $scope.incomplete = true;
+
+    /**
      * @memberOf OpinionCtrl
      *
      * @description

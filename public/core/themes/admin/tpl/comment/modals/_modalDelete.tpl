@@ -1,17 +1,32 @@
-<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close();">&times;</button>
-  <h4 class="modal-title">
-    <i class="fa fa-trash-o"></i>
-    {t}Send to trash{/t}
-  </h4>
-</div>
 <div class="modal-body">
-  <p>
-    {t escape=off 1="[% template.content.author %]"}Are you sure that do you want send to the trash this comment from "%1"?{/t}
-  </p>
+  <button class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();" type="button">
+    <i class="fa fa-times"></i>
+  </button>
+  <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
+  <h4 class="p-b-30 text-center" ng-if="!template.selected || template.selected == 1">{t}Do you want to delete the item?{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="template.selected > 1">{t}Do you want to delete the selected items?{/t}</h4>
+  <div class="no-margin text-center">
+    <div><i class="fa fa-3x fa-warning text-warning"></i></div>
+    <p class="bold m-t-10 text-uppercase">
+      {t}This action can not be undone{/t}
+    </p>
+  </div>
 </div>
-<div class="modal-footer">
-  <span class="loading" ng-if="deleting == 1"></span>
-  <button class="btn btn-primary" ng-click="confirm()" ng-disabled="loading">{t}Yes, delete{/t}</button>
-  <button class="btn secondary" ng-click="close()" ng-disabled="loading">{t}No{/t}</button>
+<div class="modal-footer row">
+  <div class="col-xs-6">
+    <button class="btn btn-block btn-danger text-uppercase" data-dismiss="modal" ng-click="dismiss()" ng-disabled="loading" type="button">
+      <h4 class="bold text-uppercase text-white">
+        <i class="fa fa-times m-r-5"></i>
+        {t}No{/t}
+      </h4>
+    </button>
+  </div>
+  <div class="col-xs-6">
+    <button type="button" class="btn btn-block btn-success btn-loading" ng-click="confirm()" ng-disabled="loading">
+      <h4 class="bold text-uppercase text-white">
+        <i class="fa fa-check m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': loading }"></i>
+        {t}Yes{/t}
+      </h4>
+    </button>
+  </div>
 </div>

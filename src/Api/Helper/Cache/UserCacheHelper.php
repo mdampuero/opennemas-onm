@@ -3,10 +3,33 @@
 namespace Api\Helper\Cache;
 
 use Common\Model\Entity\User;
+use Common\Model\Entity\Instance;
+use Opennemas\Task\Component\Queue\Queue;
 use Opennemas\Task\Component\Task\ServiceTask;
 
 class UserCacheHelper extends CacheHelper
 {
+    /**
+     * The cache service.
+     *
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
+     * Initializes the CacheHelper.
+     *
+     * @param Instance  $instance  The current instance.
+     * @param queue     $queue     The task queue service.
+     * @param Container $container The service container.
+     */
+    public function __construct(?Instance $instance, Queue $queue, $container)
+    {
+        parent::__construct($instance, $queue);
+
+        $this->cache = $container->get('cache.connection.instance');
+    }
+
     /**
      * TODO: Remove when using new ORM for users
      *
@@ -21,6 +44,10 @@ class UserCacheHelper extends CacheHelper
         $this->queue->push(new ServiceTask('cache', 'delete', [
             sprintf('user-%s', $item->id)
         ]));
+
+        if (array_search(3, array_column($item->user_groups, 'user_group_id')) !== false) {
+            $this->cache->remove(sprintf('author-%s', $item->id));
+        }
 
         return $this;
     }

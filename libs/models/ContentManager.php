@@ -218,24 +218,14 @@ class ContentManager
      *
      * @return boolean true if all went well
      */
-    public static function dropSuggestedFlagFromContentIdsArray($contentIds, $conn = false)
+    public static function dropSuggestedFlagFromContentIdsArray($contentIds)
     {
-        $conn = getService('orm.manager')->getConnection('instance');
-
-        if (is_array($contentIds) && (count($contentIds) > 0)) {
-            $contentIdsSQL = implode(', ', $contentIds);
-            $values        = [ date("Y-m-d H:i:s") ];
-
-            $sql = 'UPDATE contents '
-                 . 'SET `frontpage`=0, `changed`=? '
-                 . 'WHERE `pk_content` IN (' . $contentIdsSQL . ')';
-            if ($conn->executeUpdate($sql, $values) === false) {
+        if (is_array($contentIds) && !empty($contentIds)) {
+            try {
+                getService('api.service.content')->patchList($contentIds, [ 'frontpage' => 0 ]);
+            } catch (\Exception $e) {
                 return false;
             }
-
-            getService('application.log')->info(
-                'Drop suggested flag action executed at ' . $contentIdsSQL . ' ids'
-            );
 
             return true;
         }
@@ -979,6 +969,7 @@ class ContentManager
      */
     public function getLatestComments($count = 6)
     {
+        $em       = getService('entity_repository');
         $contents = [];
 
         $sql = 'SELECT DISTINCT(comments.content_id), comments.date as comment_date,'
@@ -986,16 +977,13 @@ class ContentManager
             . ' comments.id as comment_id, contents.* FROM comments, contents '
             . 'WHERE contents.pk_content = comments.content_id '
             . 'AND contents.fk_content_type = 1 AND contents.in_litter <> 1 '
-            . 'AND comments.status = ? ORDER BY comments.date DESC LIMIT ?';
+            . 'AND comments.status = "accepted" ORDER BY comments.date DESC LIMIT ' . $count;
 
         try {
-            $rs = getService('dbal_connection')->fetchAll(
-                $sql,
-                [ \Comment::STATUS_ACCEPTED, $count ]
-            );
+            $rs = getService('dbal_connection')->fetchAll($sql);
 
             foreach ($rs as $contentData) {
-                $content = new \Article();
+                $content = new \Content();
                 $content->load($contentData);
                 $content->comment        = $contentData['comment_body'];
                 $content->pk_comment     = $contentData['comment_id'];

@@ -116,8 +116,9 @@ class OrmService implements Service
             $id = $this->em->getMetadata($item)->getId($item);
 
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
-                'id'   => array_pop($id),
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => array_pop($id),
+                'item'   => $item
             ]);
 
             return $item;
@@ -137,6 +138,7 @@ class OrmService implements Service
             $this->em->remove($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
+                'action' => __METHOD__,
                 'id'   => $id,
                 'item' => $item
             ]);
@@ -176,8 +178,9 @@ class OrmService implements Service
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'ids'   => $deleted,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $deleted,
+            'item'   => $items
         ]);
 
         return count($deleted);
@@ -356,8 +359,9 @@ class OrmService implements Service
             $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('patchItem'), [
-                'id'   => $id,
-                'item' => $item
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
             ]);
         } catch (\Exception $e) {
             throw new PatchItemException($e->getMessage(), $e->getCode());
@@ -400,8 +404,9 @@ class OrmService implements Service
         }
 
         $this->dispatcher->dispatch($this->getEventName('patchList'), [
-            'ids'   => $updated,
-            'items' => $items
+            'action' => __METHOD__,
+            'ids'    => $updated,
+            'item'   => $items
         ]);
 
         return count($updated);
@@ -459,6 +464,7 @@ class OrmService implements Service
             $this->em->persist($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
+                'action' => __METHOD__,
                 'id'   => $id,
                 'item' => $item
             ]);

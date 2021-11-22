@@ -28,7 +28,7 @@ use Onm\Cache\CacheInterface;
 class EntityManager extends BaseManager
 {
     const ORM_CONTENT_TYPES = [
-        'album', 'article', 'event', 'kiosko', 'opinion', 'photo', 'video'
+        'album', 'article', 'attachment', 'event', 'kiosko', 'opinion', 'photo', 'poll', 'video'
     ];
 
     /**
@@ -78,7 +78,7 @@ class EntityManager extends BaseManager
 
         if (in_array(\underscore($contentType), self::ORM_CONTENT_TYPES)) {
             try {
-                $entity = getService('api.service.content')->getItem($id);
+                $entity = getService('api.service.' . \underscore($contentType))->getItem($id);
             } catch (GetItemException $e) {
                 return null;
             }
@@ -409,7 +409,10 @@ class EntityManager extends BaseManager
             } else {
                 $contents[$cacheKey]->tags = [];
             }
-            $contentsForCache[$cacheKey] = $contents[$cacheKey];
+
+            if (!in_array(\underscore($contents[$cacheKey]->content_type_name), self::ORM_CONTENT_TYPES)) {
+                $contentsForCache[$cacheKey] = $contents[$cacheKey];
+            }
         }
 
         return $contentsForCache;

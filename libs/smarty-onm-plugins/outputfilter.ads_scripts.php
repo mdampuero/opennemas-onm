@@ -21,26 +21,27 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         && !preg_match('/\/admin\/frontpages/', $uri)
         && !preg_match('/\/manager/', $uri)
         && !preg_match('/\/managerws/', $uri)
-        && !preg_match('/\/share-by-email/', $uri)
         && !preg_match('/\/sharrre/', $uri)
-        && !preg_match('/\/ads/', $uri)
-        && !preg_match('/\/comments/', $uri)
+        && !preg_match('/\/ads\//', $uri)
+        && !preg_match('/\/comments\//', $uri)
         && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
         $headerScript    = 'header_script';
         $bodyStartScript = 'body_start_script';
         $bodyEndScript   = 'body_end_script';
+        $customCssAmp    = '';
 
         if (preg_match('@\.amp\.html@', $uri)) {
             $headerScript    .= '_amp';
             $bodyStartScript .= '_amp';
             $bodyEndScript   .= '_amp';
+            $customCssAmp     = 'custom_css_amp';
         }
 
         $settings = $smarty->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ $headerScript, $bodyStartScript, $bodyEndScript ]);
+            ->get([ $headerScript, $bodyStartScript, $bodyEndScript, $customCssAmp ]);
 
         if (array_key_exists($headerScript, $settings)
             && !empty($settings[$headerScript])
@@ -68,6 +69,17 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             $output = preg_replace(
                 '@(</body.*>)@',
                 "\n" . base64_decode($settings[$bodyEndScript]) . "\n" . '${1}',
+                $output
+            );
+        }
+
+        if (!empty($customCssAmp)
+            && array_key_exists($customCssAmp, $settings)
+            && !empty($settings[$customCssAmp])
+        ) {
+            $output = preg_replace(
+                '@(<style amp-custom>(?s).*?)(</style>)@',
+                '${1}' . "\n" . base64_decode($settings[$customCssAmp]) . "\n" . '${2}',
                 $output
             );
         }

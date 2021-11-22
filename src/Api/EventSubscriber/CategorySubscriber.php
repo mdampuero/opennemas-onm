@@ -105,9 +105,9 @@ class CategorySubscriber implements EventSubscriberInterface
      */
     public function onCategoryUpdate(Event $event)
     {
-        $categories = $event->hasArgument('item')
-            ? [ $event->getArgument('item') ]
-            : $event->getArgument('items');
+        $categories = is_array($event->getArgument('item'))
+            ? $event->getArgument('item')
+            : [ $event->getArgument('item') ];
 
         foreach ($categories as $category) {
             $this->helper->deleteItem($category);

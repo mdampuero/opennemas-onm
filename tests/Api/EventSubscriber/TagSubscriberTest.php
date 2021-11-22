@@ -54,9 +54,7 @@ class TagSubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $tag = new Tag([ 'id' => 3750 ]);
 
-        $this->event->expects($this->at(0))->method('hasArgument')
-            ->with('item')->willReturn(true);
-        $this->event->expects($this->at(1))->method('getArgument')
+        $this->event->expects($this->once())->method('getArgument')
             ->with('item')->willReturn($tag);
 
         $this->helper->expects($this->once())->method('deleteItem')->with($tag);
@@ -75,10 +73,8 @@ class TagSubscriberTest extends \PHPUnit\Framework\TestCase
             new Tag([ 'id' => 1086 ])
         ];
 
-        $this->event->expects($this->at(0))->method('hasArgument')
-            ->with('item')->willReturn(false);
-        $this->event->expects($this->at(1))->method('getArgument')
-            ->with('items')->willReturn($tags);
+        $this->event->expects($this->once())->method('getArgument')
+            ->with('item')->willReturn($tags);
 
         $this->helper->expects($this->at(0))->method('deleteItem')->with($tags[0]);
         $this->helper->expects($this->at(1))->method('deleteItem')->with($tags[1]);

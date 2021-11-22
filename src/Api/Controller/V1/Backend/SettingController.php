@@ -29,6 +29,7 @@ class SettingController extends Controller
         'body_end_script_amp',
         'body_start_script',
         'body_start_script_amp',
+        'custom_css_amp',
         'header_script',
         'header_script_amp',
     ];
@@ -53,6 +54,7 @@ class SettingController extends Controller
         'contact_email',
         'cookies',
         'cookies_hint_url',
+        'custom_css_amp',
         'data_layer',
         'dynamic_css',
         'elements_in_rss',
@@ -85,6 +87,7 @@ class SettingController extends Controller
         'onm_digest_user',
         'paypal_mail',
         'pinterest_page',
+        'prometeo',
         'recaptcha',
         'redirection',
         'refresh_interval',
@@ -119,6 +122,7 @@ class SettingController extends Controller
         'body_end_script_amp',
         'body_start_script',
         'body_start_script_amp',
+        'custom_css_amp',
         'header_script',
         'header_script_amp',
         'robots_txt_rules',
@@ -273,7 +277,7 @@ class SettingController extends Controller
         $settings = $this->updateOldSettingsName($settings);
 
         // TODO: Remove this when the sitemap is separated from settings.
-        if (array_key_exists('sitemap', $settings)) {
+        if (array_key_exists('sitemap', $settings) && !empty($settings['sitemap'])) {
             $remove = false;
             $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
 

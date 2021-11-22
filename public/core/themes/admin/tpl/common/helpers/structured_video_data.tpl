@@ -1,4 +1,4 @@
-<script type="application/ld+json">
+<@script type="application/ld+json">
   [{
     "@context": "http://schema.org/",
     "@type": "BreadcrumbList",
@@ -47,9 +47,7 @@
       "name": "{$siteName|escape:'html'}",
       "logo": {
         "@type": "ImageObject",
-        "url": "{$logo['url']}",
-        "width": {$logo['width']},
-        "height": {$logo['height']}
+        "url": "{$logo}"
       },
       "url": "{$siteUrl}"
     }
