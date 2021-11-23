@@ -19,10 +19,6 @@ class WidgetRenderer extends Renderer
     public function render($widget, $params)
     {
         switch ($widget->type) {
-            case 'html':
-                $output = $widget->body;
-                break;
-
             case 'smarty':
                 $output = $this->renderletSmarty($widget);
                 break;
@@ -31,7 +27,7 @@ class WidgetRenderer extends Renderer
                 $output = $this->renderletIntelligentWidget($widget, $params);
                 break;
             default:
-                $output = $widget->body;
+                $output = $widget->body ? $widget->body : '';
                 break;
         }
 
