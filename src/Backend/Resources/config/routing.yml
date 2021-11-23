@@ -256,6 +256,10 @@ backend_event:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/event.yml'
 
+backend_obituary:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/obituary.yml'
+
 backend_frontpage:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/frontpage.yml'
