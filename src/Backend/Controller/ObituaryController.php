@@ -3,6 +3,7 @@
 namespace Backend\Controller;
 
 use Api\Exception\GetListException;
+use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
