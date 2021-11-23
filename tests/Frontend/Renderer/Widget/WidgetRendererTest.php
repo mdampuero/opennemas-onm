@@ -57,7 +57,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenHtml()
     {
-        $widget       = new \Widget();
+        $widget       = new \Content();
         $widget->type = null;
         $widget->body = 'Html Renderlet Code';
         $expected     = '<div class="widget">' . $widget->body . '</div>';
@@ -70,7 +70,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenSmarty()
     {
-        $widget       = new \Widget();
+        $widget       = new \Content();
         $widget->type = 'smarty';
         $expected     = '<div class="widget">Smarty Renderlet Code</div>';
 
@@ -82,7 +82,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenIntelligentWidget()
     {
-        $widget       = new \Widget();
+        $widget       = new \Content();
         $widget->type = 'intelligentwidget';
         $expected     = '<div class="widget">Intelligent Renderlet Code</div>';
 
@@ -94,7 +94,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenNoValid()
     {
-        $widget       = new \Widget();
+        $widget       = new \Content();
         $widget->type = 'other';
         $expected     = '<div class="widget"></div>';
 
@@ -106,7 +106,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderletSmarty()
     {
-        $widget       = new \Widget();
+        $widget       = new \Content();
         $widget->body = "smarty/renderlet/widget.tpl";
 
         $renderer = new WidgetRenderer($this->container);
@@ -167,7 +167,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenEmpty()
     {
-        $widget          = new \Widget();
+        $widget          = new \Content();
         $widget->content = null;
 
         $renderer = new WidgetRenderer($this->container);
@@ -182,7 +182,7 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenNoClass()
     {
-        $widget       = new \Widget();
+        $widget       = new \Content();
         $widget->body = 'AllHeadlines';
 
         $renderer = new WidgetRenderer($this->container);
