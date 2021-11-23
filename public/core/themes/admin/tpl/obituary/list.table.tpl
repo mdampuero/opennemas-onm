@@ -57,7 +57,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-maps" checklist-model="app.columns.selected" checklist-value="'maps'" type="checkbox">
     <label for="checkbox-maps">
-      {t}Maps{/t}
+      {t}Google Maps{/t}
     </label>
   </div>
   {acl isAllowed="OBITUARY_AVAILABLE"}
