@@ -19,10 +19,6 @@ class WidgetRenderer extends Renderer
     public function render($widget, $params)
     {
         switch ($widget->type) {
-            case 'smarty':
-                $output = $this->renderletSmarty($widget);
-                break;
-
             case 'intelligentwidget':
                 $output = $this->renderletIntelligentWidget($widget, $params);
                 break;
@@ -33,29 +29,6 @@ class WidgetRenderer extends Renderer
 
         return "<div class=\"widget\">" . $output . "</div>";
     }
-
-    /**
-     * Renders a HTML wiget
-     *
-     * @return string the generated HTML
-     *
-     * @see resource.string.php Smarty plugin
-     * @see resource.widget.php Smarty plugin
-     */
-    protected function renderletSmarty($widget)
-    {
-        $resource = 'string:' . $widget->body;
-        $wgtTpl   = $this->container->get('core.template');
-
-        // no caching
-        $wgtTpl->caching       = 0;
-        $wgtTpl->force_compile = true;
-
-        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget->body ]);
-
-        return $output;
-    }
-
 
     /**
      * Renders an intelligent wiget

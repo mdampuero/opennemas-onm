@@ -16,7 +16,7 @@ class WidgetRendererTest extends TestCase
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\Widget\WidgetRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderletSmarty', 'renderletIntelligentWidget', 'getWidget' ])
+            ->setMethods([ 'renderletIntelligentWidget', 'getWidget' ])
             ->getMock();
 
         $this->loader = $this->getMockBuilder('Common\Core\Component\Loader\WidgetLoader')
@@ -28,9 +28,6 @@ class WidgetRendererTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
             ->getMock();
-
-        $this->renderer->expects($this->any())->method('renderletSmarty')
-            ->willReturn('Smarty Renderlet Code');
 
         $this->renderer->expects($this->any())->method('renderletIntelligentWidget')
             ->willReturn('Intelligent Renderlet Code');
@@ -66,18 +63,6 @@ class WidgetRendererTest extends TestCase
     }
 
     /**
-     * Tests render when widget smarty.
-     */
-    public function testRenderWhenSmarty()
-    {
-        $widget       = new \Content();
-        $widget->type = 'smarty';
-        $expected     = '<div class="widget">Smarty Renderlet Code</div>';
-
-        $this->assertEquals($expected, $this->renderer->render($widget, []));
-    }
-
-    /**
      * Tests render when intelligent widget.
      */
     public function testRenderWhenIntelligentWidget()
@@ -99,25 +84,6 @@ class WidgetRendererTest extends TestCase
         $expected     = '<div class="widget"></div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
-    }
-
-    /**
-     * Tests renderletSmarty.
-     */
-    public function testRenderletSmarty()
-    {
-        $widget       = new \Content();
-        $widget->body = "smarty/renderlet/widget.tpl";
-
-        $renderer = new WidgetRenderer($this->container);
-        $method   = new \ReflectionMethod($renderer, 'renderletSmarty');
-        $method->setAccessible(true);
-
-        $this->template->expects($this->once())->method('fetch')
-            ->with('string:' . $widget->body, [ 'widget' => $widget->body ])
-            ->willReturn('Output');
-
-        $this->assertEquals('Output', $method->invokeArgs($renderer, [ $widget ]));
     }
 
     /**
