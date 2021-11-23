@@ -57,10 +57,10 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenHtml()
     {
-        $widget            = new \Widget();
-        $widget->renderlet = 'html';
-        $widget->content   = 'Html Renderlet Code';
-        $expected          = '<div class="widget">' . $widget->content . '</div>';
+        $widget       = new \Widget();
+        $widget->type = null;
+        $widget->body = 'Html Renderlet Code';
+        $expected     = '<div class="widget">' . $widget->body . '</div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
@@ -70,9 +70,9 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenSmarty()
     {
-        $widget            = new \Widget();
-        $widget->renderlet = 'smarty';
-        $expected          = '<div class="widget">Smarty Renderlet Code</div>';
+        $widget       = new \Widget();
+        $widget->type = 'smarty';
+        $expected     = '<div class="widget">Smarty Renderlet Code</div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
@@ -82,9 +82,9 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenIntelligentWidget()
     {
-        $widget            = new \Widget();
-        $widget->renderlet = 'intelligentwidget';
-        $expected          = '<div class="widget">Intelligent Renderlet Code</div>';
+        $widget       = new \Widget();
+        $widget->type = 'intelligentwidget';
+        $expected     = '<div class="widget">Intelligent Renderlet Code</div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
@@ -94,9 +94,9 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenNoValid()
     {
-        $widget            = new \Widget();
-        $widget->renderlet = '';
-        $expected          = '<div class="widget"></div>';
+        $widget       = new \Widget();
+        $widget->type = 'other';
+        $expected     = '<div class="widget"></div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
@@ -106,15 +106,15 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderletSmarty()
     {
-        $widget          = new \Widget();
-        $widget->content = "smarty/renderlet/widget.tpl";
+        $widget       = new \Widget();
+        $widget->body = "smarty/renderlet/widget.tpl";
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'renderletSmarty');
         $method->setAccessible(true);
 
         $this->template->expects($this->once())->method('fetch')
-            ->with('string:' . $widget->content, [ 'widget' => $widget->content ])
+            ->with('string:' . $widget->body, [ 'widget' => $widget->body ])
             ->willReturn('Output');
 
         $this->assertEquals('Output', $method->invokeArgs($renderer, [ $widget ]));
@@ -182,15 +182,15 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenNoClass()
     {
-        $widget          = new \Widget();
-        $widget->content = 'AllHeadlines';
+        $widget       = new \Widget();
+        $widget->body = 'AllHeadlines';
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getWidget');
         $method->setAccessible(true);
 
         $this->loader->expects($this->at(0))->method('loadWidget')
-            ->with($widget->content);
+            ->with($widget->body);
 
         $this->assertEquals(null, $method->invokeArgs($renderer, [ $widget ]));
     }

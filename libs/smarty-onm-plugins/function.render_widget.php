@@ -5,22 +5,34 @@ function smarty_function_render_widget($params, &$smarty)
     $widgetName = isset($params['name']) ? $params['name'] : null;
     $widgetID   = isset($params['id']) ? $params['id'] : null;
 
-    $er = getService('widget_repository');
+    $us = getService('api.service.content');
 
     if (!is_null($widgetName)) {
         // Initialize widget from name
-        $criteria = [
-            'content'           => [ [ 'value' => $widgetName ] ],
-            'content_type_name' => [ [ 'value' => 'widget' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 0 ] ],
-        ];
-
-        $widget = $er->findOneBy($criteria, null, 1, 1);
+        $sql = sprintf(
+            'SELECT contents.* FROM contents INNER JOIN contentmeta'
+            . ' ON pk_content = fk_content '
+            . ' WHERE meta_name = "class"'
+            . ' and meta_value = "%s"'
+            . ' and content_type_name = "widget"'
+            . ' and content_status = 1'
+            . ' and in_litter = 0'
+            . ' limit 1',
+            $widgetName
+        );
     } else {
-        // Initialize widget from id
-        $widget = $er->find('Widget', $widgetID);
+        $sql = sprintf(
+            'SELECT contents.* FROM contents INNER JOIN contentmeta'
+            . ' ON pk_content = fk_content '
+            . ' WHERE content_type_name = "widget"'
+            . ' and content_status = 1 and'
+            . ' and in_litter = 0'
+            . ' and pk_content = %s',
+            $widgetID
+        );
     }
+
+    $widget = $us->getListBySql($sql)['items'];
 
     $output = '';
     if ($widget->content_status) {

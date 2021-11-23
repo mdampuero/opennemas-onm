@@ -18,9 +18,9 @@ class WidgetRenderer extends Renderer
      */
     public function render($widget, $params)
     {
-        switch ($widget->renderlet) {
+        switch ($widget->type) {
             case 'html':
-                $output = $widget->content;
+                $output = $widget->body;
                 break;
 
             case 'smarty':
@@ -31,7 +31,7 @@ class WidgetRenderer extends Renderer
                 $output = $this->renderletIntelligentWidget($widget, $params);
                 break;
             default:
-                $output = '';
+                $output = $widget->body;
                 break;
         }
 
@@ -48,14 +48,14 @@ class WidgetRenderer extends Renderer
      */
     protected function renderletSmarty($widget)
     {
-        $resource = 'string:' . $widget->content;
+        $resource = 'string:' . $widget->body;
         $wgtTpl   = $this->container->get('core.template');
 
         // no caching
         $wgtTpl->caching       = 0;
         $wgtTpl->force_compile = true;
 
-        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget->content ]);
+        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget->body ]);
 
         return $output;
     }
@@ -73,7 +73,7 @@ class WidgetRenderer extends Renderer
         $widget = $this->getWidget($content, $params);
 
         if (is_null($widget)) {
-            return sprintf(_('Widget %s not available'), $content->content);
+            return sprintf(_('Widget %s not available'), $content->body);
         }
 
         return $widget->render($params);
@@ -89,7 +89,7 @@ class WidgetRenderer extends Renderer
      */
     public function getWidget($content, $params = null)
     {
-        $widget = $content->content;
+        $widget = $content->body;
 
         if (empty($widget)) {
             return null;

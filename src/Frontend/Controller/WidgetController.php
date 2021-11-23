@@ -19,6 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 class WidgetController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.widget';
+
+    /**
      * Get a widget and execute an action.
      *
      * @param Request $request The request object.
