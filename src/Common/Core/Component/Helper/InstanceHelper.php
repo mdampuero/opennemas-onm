@@ -60,11 +60,11 @@ class InstanceHelper
     }
 
     /**
-     * Returns the number of accepted comments.
+     * Returns the number of comments.
      *
      * @param Instance $instance The instance.
      *
-     * @return array The number of accepted comments.
+     * @return array The number of comments.
      */
     public function countComments(Instance $instance) : int
     {
