@@ -553,7 +553,7 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Rempves caché for related contents of element deleted
+     * Removes cache for related contents of element deleted
      *
      * @param Event $event The event to handle.
      */
@@ -562,6 +562,7 @@ class HooksSubscriber implements EventSubscriberInterface
         if (!$event->hasArgument('related')) {
             return false;
         }
+
         $cache   = $this->container->get('cache.connection.instance');
         $item    = $event->getArgument('related');
         $related = is_array($item) ? $item : [ $item ];
