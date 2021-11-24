@@ -257,18 +257,20 @@
          * @return {Object} The list of tags.
          */
         $scope.list = function(query) {
-          http.get({
-            name: 'api_v1_backend_tools_slug',
-            params: { slug: query }
-          }).then(function(response) {
-            query = response.data.slug;
-          });
           var criteria = {
             name: query,
             epp: $scope.maxResults,
             orderBy: { 'length(name)': 'asc', name: 'asc' },
             page: 1
           };
+
+          http.get({
+            name: 'api_v1_backend_tools_slug',
+            params: { slug: query }
+          }).then(function(response) {
+            query = response.data.slug;
+            criteria.name = query;
+          });
 
           if (!$scope.ignoreLocale && $scope.locale &&
               $scope.locale.multilanguage) {

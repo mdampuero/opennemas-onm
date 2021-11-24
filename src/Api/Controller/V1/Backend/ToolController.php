@@ -55,8 +55,6 @@ class ToolController extends Controller
         if (empty($str)) {
             return [ 'items' => [], 'total' => 0 ];
         }
-        var_dump($str);
-        die();
         $filterManager = $this->get('data.manager.filter');
         $tagService    = $this->get('api.service.tag');
 
