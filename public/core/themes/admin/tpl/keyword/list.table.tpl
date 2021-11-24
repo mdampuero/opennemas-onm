@@ -2,45 +2,43 @@
 
 {block name="commonColumns"}
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-keyword" checklist-model="app.columns.selected" checklist-value="'keyword'" type="checkbox" >
+    <input id="checkbox-keyword" checklist-model="app.columns.selected" checklist-value="'keyword'" type="checkbox" disabled >
     <label for="checkbox-keyword">
-      {t}Keyword{/t}
+      {t}Name{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-value" checklist-model="app.columns.selected" checklist-value="'value'" type="checkbox" >
-    <label for="checkbox-value">
-      {t}Value{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-type" checklist-model="app.columns.selected" checklist-value="'type'" type="checkbox" >
+    <input id="checkbox-type" checklist-model="app.columns.selected" checklist-value="'type'" type="checkbox" disabled >
     <label for="checkbox-type">
       {t}Type{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-value" checklist-model="app.columns.selected" checklist-value="'value'" type="checkbox" disabled >
+    <label for="checkbox-value">
+      {t}Value{/t}
+    </label>
+  </div>
+
 {/block}
 
 {block name="commonColumnsHeader"}
   <th class="v-align-middle" ng-if="isColumnEnabled('keyword')" width="200">
-    {t}Keyword{/t}
+    {t}Name{/t}
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('value')" width="200">
-    <span class="m-l-5">
-      {t}Value{/t}
-    </span>
-  </th>
-  <th class="hidden-xs text-center" ng-if="isColumnEnabled('type')" width="150">
+  <th class="hidden-xs text-center" ng-if="isColumnEnabled('type')" width="200">
     <span class="m-l-5">
       {t}Type{/t}
+    </span>
+  </th>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('value')" width="200">
+    <span class="m-l-5">
+      {t}Value{/t}
     </span>
   </th>
 {/block}
 
 {block name="commonColumnsBody"}
-  <td class="hidden-xs text-center" ng-if="isColumnEnabled('check')">
-    
-  </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('keyword')">
     <div class="table-text ng-binding">
     [% item.keyword %]
@@ -60,15 +58,17 @@
     </div>
   </td>
 
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('value')">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">
     <div class="table-text ng-binding">
-    [% item.value %]
+    <span ng-if="item.type == 'url'"><span class="fa fa-external-link"></span> {t}External link to {/t}</span>
+    <span ng-if="item.type == 'intsearch'" ><span class="fa fa-link"></span> {t}Internal search to keyword{/t}</span>
+    <span ng-if="item.type == 'email'"><span class="fa fa-envelope"></span> {t}Link to send email to{/t}</span>
     </div>
   </td>
 
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('value')">
     <div class="table-text ng-binding">
-    [% item.type %]
+    [% item.value %]
     </div>
   </td>
 {/block}

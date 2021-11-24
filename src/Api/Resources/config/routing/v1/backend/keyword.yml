@@ -59,6 +59,3 @@ api_v1_backend_keyword_update_item:
         expose: true
     requirements:
         id: \d+
-
-
-

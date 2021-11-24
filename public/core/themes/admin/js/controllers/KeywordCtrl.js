@@ -87,25 +87,6 @@
         $scope.getData = function() {
           return $scope.item;
         };
-
-        /**
-         * @function localizeText
-         * @memberOf CommentCtrl
-         *
-         * @param {any} String or Object to localize.
-         *
-         * @return {String} Localized text.
-         *
-         * @description
-         *   Localize and return text
-         */
-        $scope.localizeText = function(text) {
-          if (typeof text === 'object') {
-            return text[$scope.config.locale.selected];
-          }
-
-          return text;
-        };
       }
     ]);
 })();

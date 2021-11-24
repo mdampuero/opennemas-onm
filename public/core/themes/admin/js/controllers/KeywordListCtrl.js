@@ -17,8 +17,8 @@
      *   Controller for opinion list.
      */
     .controller('KeywordListCtrl', [
-      '$controller', '$location', '$scope', 'http', 'messenger', 'oqlEncoder',
-      function($controller, $location, $scope, http, messenger, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
@@ -49,13 +49,14 @@
 
         /**
          * @function init
-         * @memberOf CommentListCtrl
+         * @memberOf KeywordListCtrl
          *
          * @description
          *   Configures the controller.
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
+          $scope.app.columns.selected = [ 'keyword', 'type', 'value' ];
           oqlEncoder.configure({
             placeholder: {
               keyword: 'keyword ~ "%[value]%"',
@@ -68,15 +69,11 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
-          $scope.configure(data.extra);
-
           if (!data.items) {
             $scope.data.items = [];
           }
 
           $scope.items = $scope.data.items;
-
-          $scope.extra = $scope.data.extra;
         };
       }
     ]);

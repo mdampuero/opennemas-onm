@@ -15,4 +15,3 @@ backend_keyword_show:
         id: \d+
     options:
         expose: true
-

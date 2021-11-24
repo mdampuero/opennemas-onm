@@ -12,8 +12,6 @@ namespace Backend\Controller;
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
-use Imagine\Filter\Basic\Resize;
 
 /**
  * Handles the actions for the keywords.
