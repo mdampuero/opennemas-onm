@@ -177,4 +177,22 @@ class ContentService extends OrmService
 
         return true;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate($item)
+    {
+        if (!empty($item->related_contents)) {
+            $item->related_contents = array_filter($item->related_contents, function ($related) {
+                try {
+                    return !empty($this->getItem($related['target_id'])) ? true : false;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            });
+        }
+
+        parent::validate($item);
+    }
 }
