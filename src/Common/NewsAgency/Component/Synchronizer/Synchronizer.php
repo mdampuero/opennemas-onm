@@ -218,14 +218,23 @@ class Synchronizer
             $servers = [ $servers ];
         }
 
-        foreach ($servers as $server) {
-            if ($server['activated'] == '1') {
-                $this->updateServer($server);
+        try {
+            foreach ($servers as $server) {
+                if ($server['activated'] == '1') {
+                    $this->updateServer($server);
+                }
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        } finally {
+            try {
+                $this->updateSyncFile();
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage(), $e->getCode());
+            } finally {
+                $this->unlockSync();
             }
         }
-
-        $this->updateSyncFile();
-        $this->unlockSync();
 
         return $this;
     }

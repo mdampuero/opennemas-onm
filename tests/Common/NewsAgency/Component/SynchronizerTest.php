@@ -11,6 +11,7 @@ namespace Tests\Common\NewsAgency\Component\Synchronizer;
 
 use Common\NewsAgency\Component\Synchronizer\Synchronizer;
 use Common\Model\Entity\Instance;
+use Exception;
 
 /**
  * Defines test cases for Synchronizer class.
@@ -315,6 +316,35 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer->expects($this->once())->method('updateServer')
             ->with($server);
         $synchronizer->expects($this->once())->method('updateSyncFile');
+        $synchronizer->expects($this->once())->method('unlockSync');
+
+        $this->assertEquals($synchronizer, $synchronizer->synchronize($server));
+    }
+
+    /**
+     * Tests synchronize when the provided parameter is a server. Throws Exception
+     * @expectedException \Exception
+     */
+    public function testExceptionSynchronizeForServer()
+    {
+        $server = [ 'id' => 19660, 'activated' => 1 ];
+
+        $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'isSyncEnvironmentReady', 'lockSync', 'unlockSync',
+                'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
+            ])->getMock();
+
+        $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
+            ->willReturn(false);
+        $synchronizer->expects($this->once())->method('setupSyncEnvironment');
+        $synchronizer->expects($this->once())->method('lockSync');
+        $synchronizer->expects($this->once())->method('updateServer')
+            ->with($server)
+            ->willThrowException(new Exception());
+        $synchronizer->expects($this->once())->method('updateSyncFile')
+            ->willThrowException(new Exception());
         $synchronizer->expects($this->once())->method('unlockSync');
 
         $this->assertEquals($synchronizer, $synchronizer->synchronize($server));
