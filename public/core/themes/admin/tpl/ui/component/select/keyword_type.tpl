@@ -1,4 +1,4 @@
-<div class="form-group{$iClass}" style="width:50%" >
+<div class="form-group {$iClass}" style="{$sStyle}" >
   {if $iTitle}
     <label for="{$iField}" class="form-label">
       {$iTitle}

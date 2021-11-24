@@ -53,7 +53,7 @@
       <div class="grid simple" >
         <div class="grid-body">
           {include file="ui/component/input/text.tpl" iCounter=true iField="keyword" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
-          {include file="ui/component/select/keyword_type.tpl" iField="type" iRequired=true iTitle="{t}Type{/t}" sClass="form-control" ngModel="criteria.type"}
+          {include file="ui/component/select/keyword_type.tpl" iField="type" iRequired=true iTitle="{t}Type{/t}" sClass="form-control" sStyle="width:50%" ngModel="criteria.type"}
           {include file="ui/component/input/text.tpl" iCounter=true iField="value" iRequired=true iTitle="{t}Value{/t}" iValidation=true}
         </div>
       </div>
