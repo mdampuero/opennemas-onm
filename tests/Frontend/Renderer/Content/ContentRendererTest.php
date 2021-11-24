@@ -179,7 +179,7 @@ class ContentRendererTest extends TestCase
      */
     public function testGetTemplateWhenLetter()
     {
-        $letter         = new \Letter();
+        $letter         = new Content([ 'content_type_name' => 'letter' ]);
         $params['item'] = $letter;
         $tpl            = 'frontpage/contents/_content.tpl';
 
