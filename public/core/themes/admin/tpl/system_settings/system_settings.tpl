@@ -1880,10 +1880,10 @@
                               {t}Elements per frontpage{/t}
                             </label>
                             <span class="help ">
-                                (min. 10, máx. 1000)
+                                (min. 10)
                             </span>
                             <div class="controls">
-                              <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10" max="1000">
+                              <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10">
                             </div>
                           </div>
                         </div>
