@@ -70,22 +70,11 @@
          * @inheritdoc
          */
         $scope.parseData = function(data) {
-          $scope.configure(data.extra);
-
-          $scope.extra = $scope.data.extra;
-
           if (!data.item) {
             return data;
           }
 
           return $scope;
-        };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.getData = function() {
-          return $scope.item;
         };
       }
     ]);

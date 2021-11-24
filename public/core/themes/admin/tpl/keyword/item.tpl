@@ -49,7 +49,7 @@
         </a>
       </div>
     </div>
-    <div class="row ng-cloak" ng-show="!flags.http.loading && flags.visible.grid && item">
+    <div class="ng-cloak" ng-show="!flags.http.loading && flags.visible.grid && item">
       <div class="grid simple" >
         <div class="grid-body">
           {include file="ui/component/input/text.tpl" iCounter=true iField="keyword" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
@@ -58,7 +58,6 @@
         </div>
       </div>
     </div>
-
   </div>
 {/block}
 
