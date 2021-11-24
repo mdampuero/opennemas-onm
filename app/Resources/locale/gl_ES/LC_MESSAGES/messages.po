@@ -1,21 +1,20 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Opennemas Developers <developers@opennemas.com>, 2020-2021.
-# adan <adan@openhost.es>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-22 16:30+0000\n"
-"PO-Revision-Date: 2021-11-04 16:48+0100\n"
-"Last-Translator: adan <adan@openhost.es>\n"
-"Language-Team: Spanish - Spain <adan@openhost.es>\n"
-"Language: es_ES\n"
+"POT-Creation-Date: 2021-11-24 14:18+0000\n"
+"PO-Revision-Date: 2021-11-24 15:24+0100\n"
+"Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
+"Language-Team: Galician\n"
+"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 3.36.0\n"
 
 msgid "All"
@@ -3010,7 +3009,7 @@ msgid "Letters"
 msgstr "Cartas"
 
 msgid "New letter"
-msgstr "Carta nova"
+msgstr "Nova carta"
 
 msgid "Search by tag"
 msgstr "Buscar por eqtiqueta"
@@ -5506,7 +5505,7 @@ msgid "Prometeo"
 msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
-msgstr "ID de medios de Prometeo"
+msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -5819,6 +5818,9 @@ msgstr "Scripts al final del body"
 
 msgid "This scripts will be included before the </body> tag"
 msgstr "Estos scripts incluiranse antes da etiqueta </body>"
+
+msgid "Elements per frontpage"
+msgstr "Elementos por portada"
 
 msgid "CSS"
 msgstr "CSS"
@@ -6987,15 +6989,6 @@ msgstr "Desexas eliminar o cliente?"
 msgid "Do you want to delete the selected clients?"
 msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
 
-#~ msgid "Author information"
-#~ msgstr "Información do autor"
-
-#~ msgid "Delete letter"
-#~ msgstr "Eliminar carta"
-
-#~ msgid "Delete letters"
-#~ msgstr "Eliminar cartas"
-
 #~ msgid "Letter successfully created."
 #~ msgstr "Carta creada correctamente"
 
@@ -7027,11 +7020,20 @@ msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
 #~ msgid "Publish/Unpublish"
 #~ msgstr "Publicar/despublicar"
 
+#~ msgid "Delete letter"
+#~ msgstr "Eliminar carta"
+
+#~ msgid "Delete letters"
+#~ msgstr "Eliminar cartas"
+
 #~ msgid "Editing letter"
 #~ msgstr "Editar carta"
 
 #~ msgid "Creating letter"
 #~ msgstr "Creando carta"
+
+#~ msgid "Author information"
+#~ msgstr "Información do autor"
 
 #~ msgid "Related url"
 #~ msgstr "Url relacionado"

@@ -59,6 +59,11 @@ class FrontpagesController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get('frontpage_layout_' . $categoryId, 'default');
 
+        // Get Max items in frontpage
+        $maxItemsFrontpage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('frontpage_max_items', 100);
+
         $lm->selectLayout($layoutName);
 
         $views = $this->get('content_views_repository')->getViews(array_keys($contents));
@@ -86,6 +91,7 @@ class FrontpagesController extends Controller
             'frontpages'           => $frontpages,
             'versions'             => $versions,
             'version_id'           => $versionId,
+            'frontpage_max_items'  => $maxItemsFrontpage,
             'time'                 => [
                 'timezone'         => $this->get('core.locale')->getTimeZone()
                     ->getName(),

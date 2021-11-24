@@ -1875,6 +1875,19 @@
                           </div>
                         </div>
                         <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="form-label" for="frontpage_max_items">
+                              {t}Elements per frontpage{/t}
+                            </label>
+                            <span class="help ">
+                                (min. 10)
+                            </span>
+                            <div class="controls">
+                              <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
                           <h4>
                             <i class="fa fa-code"></i>
                             {t}Scripts{/t} AMP
