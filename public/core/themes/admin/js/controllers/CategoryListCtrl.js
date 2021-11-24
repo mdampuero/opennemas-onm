@@ -192,7 +192,7 @@
           $scope.criteria.epp     = null;
 
           oqlEncoder.configure({ placeholder: {
-            name: '[key] ~ "[value]"',
+            name: '[key] ~ "%[value]%"',
           } });
 
           $scope.list();
@@ -305,7 +305,13 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
+          var items = $scope.data.items;
+
           $scope.data.items = $scope.sortItems($scope.data.items, null, 0);
+
+          if (items.length !== $scope.data.items.length) {
+            $scope.data.items = items;
+          }
 
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
