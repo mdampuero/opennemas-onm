@@ -562,12 +562,12 @@ class HooksSubscriber implements EventSubscriberInterface
         if (!$event->hasArgument('related')) {
             return false;
         }
-
+        $cache   = $this->container->get('cache.connection.instance');
         $item    = $event->getArgument('related');
         $related = is_array($item) ? $item : [ $item ];
 
         foreach ($related as $content) {
-            $this->cache->delete('content-' . $content->pk_content);
+            $cache->remove('content-' . $content->pk_content);
         }
     }
 }
