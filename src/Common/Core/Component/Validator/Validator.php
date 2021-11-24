@@ -17,6 +17,7 @@ class Validator
     // List of ruleset names
     const BLACKLIST_RULESET_COMMENTS = 'comment';
     const BLACKLIST_RULESET_TAGS     = 'tag';
+    const BLACKLIST_RULESET_LETTERS  = 'letter';
 
     /**
      * The settings dataset
@@ -184,6 +185,46 @@ class Validator
         return new BaseConstraints\Collection($constraints);
     }
 
+    /**
+     * Get the constrains for letters.
+     *
+     * @return BaseConstraints\Collection BaseConstraints collection for comments.
+     */
+    protected function getLetterConstraint($data)
+    {
+        $constraints = [
+            'email'  => [
+                new BaseConstraints\NotBlank([
+                    'message' => _('Please provide a valid email address')
+                ]),
+            ],
+            'lettertext' => [
+                new BaseConstraints\Length([
+                    'min'        => 25,
+                    'minMessage' => _('Your letter is too short')
+                ]),
+            ],
+            'name' => [
+                new BaseConstraints\NotBlank([
+                    'message' => _('Please provide a valid author name')
+                ]),
+            ],
+            'subject' => [
+                new BaseConstraints\NotBlank([
+                    'message' => _('Please provide a valid subject')
+                ]),
+            ]
+        ];
+
+        // Check constraints for author email
+        if (!empty($data['email'])) {
+            $constraints['email'][] = new BaseConstraints\Email([
+                'message' => _('Please provide a valid email address')
+            ]);
+        }
+
+        return new BaseConstraints\Collection($constraints);
+    }
 
     /**
      * Get the constrains for tags.

@@ -311,7 +311,7 @@
           {/is_module_activated}
           {is_module_activated name="LETTER_MANAGER"}
           <li>
-            <a href="{url name=admin_letters_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Letter{/t}</a>
+            <a href="{url name=backend_letters_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Letter{/t}</a>
           </li>
           {/is_module_activated}
           {is_module_activated name="POLL_MANAGER"}

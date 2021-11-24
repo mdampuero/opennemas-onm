@@ -1,5 +1,0 @@
-backend_ws_letters_list:
-    path:     /letter
-    defaults: { _controller: BackendWebServiceBundle:Letter:list }
-    options:
-        expose: true
