@@ -61,7 +61,7 @@
         $scope.item = {
           body: '',
           content_type_name: 'obituary',
-          fk_content_type: 1,
+          fk_content_type: 15,
           content_status: 0,
           description: '',
           frontpage: 0,
