@@ -14,7 +14,7 @@
 {/block}
 
 {block name="icon"}
-  <i class="fa fa-address-card-o m-r-10"></i>
+  <i class="fa fa-shield fa-flip-vertical m-r-10"></i>
 {/block}
 
 {block name="title"}
