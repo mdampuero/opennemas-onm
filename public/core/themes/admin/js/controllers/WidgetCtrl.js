@@ -67,20 +67,6 @@
          * @memberOf WidgetCtrl
          *
          * @description
-         *  The data extra object contains related elements and
-         *  param index to insert a list of contents id
-         *
-         * @type {Object}
-         */
-        $scope.data = {
-          related: [],
-          paramIndex: null,
-        };
-
-        /**
-         * @memberOf WidgetCtrl
-         *
-         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}
@@ -131,55 +117,21 @@
         };
 
         /**
-         * @function addParamIndex
+         * @function init
          * @memberOf WidgetCtrl
          *
          * @description
-         *   Adds index to identify contents id in params
+         *   Make all the necessary actions to initialize the controller.
          *
-         * @param integr index The index of params with contents id
+         * @param {integer} index The index of params with contents id
          */
-        $scope.addParamIndex = function(index) {
-          $scope.data.paramIndex = index;
+        $scope.init = function(index) {
+          $scope.data = {
+            related: [],
+            paramIndex: index,
+          };
 
-          $scope.$watch('data.related', function(nv) {
-            if ($scope.data.related) {
-              $scope.item.params[$scope.data.paramIndex].value = '';
-              var ids = '';
-
-              $scope.data.related.forEach(function(item) {
-                ids += item.pk_content + ',';
-              });
-
-              ids = ids.substring(0, ids.length - 1);
-              $scope.item.params[$scope.data.paramIndex].value = ids;
-            }
-          });
-        };
-
-        /**
-         * @function removeItem
-         * @memberOf WidgetCtrl
-         *
-         * @description
-         *   Delete related item from index
-         *
-         * @param integr index The index of related to delete
-         */
-        $scope.removeItem = function(index) {
-          $scope.data.related.splice(index, 1);
-          $scope.addParamIndex($scope.data.paramIndex);
-        };
-
-        /**
-         * @function loadRelated
-         * @memberOf WidgetCtrl
-         *
-         * @description
-         *   Load related contents from params ids values
-         *
-         */
-        $scope.loadRelated = function() {
+          // Initialize the array of related contents
           if ($scope.item.params[$scope.data.paramIndex].value !== '') {
             var oql = 'pk_content in [' +
               $scope.item.params[$scope.data.paramIndex].value +
@@ -199,6 +151,40 @@
                 return err;
               });
           }
+
+          // Watch for changes in the related contents
+          $scope.$watch(function() {
+            if (!$scope.data.related.length) {
+              return '';
+            }
+
+            return $scope.data.related.reduce(function(previous, current) {
+              if (!previous) {
+                return previous + current.pk_content;
+              }
+
+              return previous + ',' + current.pk_content;
+            }, '');
+          }, function(nv, ov) {
+            if (ov === nv) {
+              return;
+            }
+
+            $scope.item.params[$scope.data.paramIndex].value = nv;
+          });
+        };
+
+        /**
+         * @function removeItem
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Delete related item from index
+         *
+         * @param integer index The index of related to delete
+         */
+        $scope.removeItem = function(index) {
+          $scope.data.related.splice(index, 1);
         };
 
         /**
