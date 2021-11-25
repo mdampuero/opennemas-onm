@@ -128,13 +128,13 @@
         $scope.init = function(index) {
           $scope.data = {
             related: [],
-            paramIndex: index,
+            index: index,
           };
 
           // Initialize the array of related contents
-          if ($scope.item.params[$scope.data.paramIndex].value !== '') {
+          if ($scope.item.params[$scope.data.index].value !== '') {
             var oql = 'pk_content in [' +
-              $scope.item.params[$scope.data.paramIndex].value +
+              $scope.item.params[$scope.data.index].value +
               ']';
 
             var route = {
@@ -170,7 +170,7 @@
               return;
             }
 
-            $scope.item.params[$scope.data.paramIndex].value = nv;
+            $scope.item.params[$scope.data.index].value = nv;
           });
         };
 
