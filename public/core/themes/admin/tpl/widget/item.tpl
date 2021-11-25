@@ -49,20 +49,20 @@
                 {t}Type{/t}
               </label>
               <div class="radio m-b-5 m-t-5">
-                <input id="renderlet-html" ng-change="resetContent()" ng-model="item.type" ng-value="" type="radio" ng-checked="!item.type">
+                <input id="renderlet-html" ng-change="resetContent()" ng-model="item.widget_type" ng-value="" type="radio" ng-checked="!item.widget_type">
                 <label for="renderlet-html">
                   HTML
                 </label>
               </div>
               <div class="radio m-t-5">
-                <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.type" ng-value="'intelligentwidget'" type="radio">
+                <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.widget_type" ng-value="'intelligentwidget'" type="radio">
                 <label for="renderlet-intelligent">
                   {t}IntelligentWidget{/t}
                 </label>
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6" ng-if="item.type">
+          <div class="col-lg-6 col-md-6" ng-if="item.widget_type">
             <div class="form-group no-margin">
               <label class="form-label">
                 {t}Content{/t}
@@ -72,7 +72,7 @@
                   <ui-select-match placeholder="{t}Select a type{/t}">
                     [% $select.selected.name %]
                   </ui-select-match>
-                  <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
+                  <ui-select-choices position="up" repeat="item.id as item in data.extra.class | filter: { name: $select.search }">
                     <div ng-bind-html="item.name | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
@@ -82,10 +82,10 @@
           </div>
         </div>
       </div>
-      <div class="ng-cloak" ng-show="!item.type">
+      <div class="ng-cloak" ng-show="!item.widget_type">
         {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="body" imagepicker=true rows=5}
       </div>
-      <div class="ng-cloak" ng-show="item.type && item.class">
+      <div class="ng-cloak" ng-show="item.widget_type && item.class">
         <div class="p-b-50 p-t-50 spinner-wrapper" ng-if="flags.http.formLoading">
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>

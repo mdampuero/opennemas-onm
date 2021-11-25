@@ -55,7 +55,7 @@ class WidgetRendererTest extends TestCase
     public function testRenderWhenHtml()
     {
         $widget       = new \Content();
-        $widget->type = null;
+        $widget->widget_type = null;
         $widget->body = 'Html Renderlet Code';
         $expected     = '<div class="widget">' . $widget->body . '</div>';
 
@@ -68,7 +68,7 @@ class WidgetRendererTest extends TestCase
     public function testRenderWhenIntelligentWidget()
     {
         $widget       = new \Content();
-        $widget->type = 'intelligentwidget';
+        $widget->widget_type = 'intelligentwidget';
         $expected     = '<div class="widget">Intelligent Renderlet Code</div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
@@ -80,7 +80,7 @@ class WidgetRendererTest extends TestCase
     public function testRenderWhenNoValid()
     {
         $widget       = new \Content();
-        $widget->type = 'other';
+        $widget->widget_type = 'other';
         $expected     = '<div class="widget"></div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));

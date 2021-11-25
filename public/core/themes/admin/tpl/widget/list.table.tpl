@@ -34,8 +34,8 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <i class="fa fa-lg fa-code" ng-if="!item.type" uib-tooltip="HTML"></i>
-    <i class="fa fa-lg fa-cog" ng-if="item.type" uib-tooltip="{t}IntelligentWidget{/t}"></i>
+    <i class="fa fa-lg fa-code" ng-if="!item.widget_type" uib-tooltip="HTML"></i>
+    <i class="fa fa-lg fa-cog" ng-if="item.widget_type" uib-tooltip="{t}IntelligentWidget{/t}"></i>
   </td>
 {/block}
 
@@ -71,15 +71,15 @@
 
 {block name="customColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('content')">
-    <span class="label label-default" ng-if="item.type && item.body">
+    <span class="label label-default" ng-if="item.widget_type && item.body">
       <strong>
         [% item.body %]
       </strong>
     </span>
-    <small class="text-italic" ng-if="item.type && !item.body">
+    <small class="text-italic" ng-if="item.widget_type && !item.body">
       &lt;{t}Not selected{/t}&gt;
     </small>
-    <span ng-if="!item.type">
+    <span ng-if="!item.widget_type">
       -
     </span>
   </td>

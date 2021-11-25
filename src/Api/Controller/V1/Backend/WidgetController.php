@@ -76,7 +76,7 @@ class WidgetController extends ContentController
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
-            'types'      => $this->getTypes()
+            'class'      => $this->getTypes()
         ]);
     }
 

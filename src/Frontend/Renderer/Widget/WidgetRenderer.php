@@ -18,7 +18,7 @@ class WidgetRenderer extends Renderer
      */
     public function render($widget, $params)
     {
-        switch ($widget->type) {
+        switch ($widget->widget_type) {
             case 'intelligentwidget':
                 $output = $this->renderletIntelligentWidget($widget, $params);
                 break;

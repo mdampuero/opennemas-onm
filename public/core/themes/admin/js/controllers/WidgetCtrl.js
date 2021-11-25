@@ -56,7 +56,7 @@
           created: null,
           starttime: null,
           endtime: null,
-          type: null,
+          widget_type: null,
           class: null,
           title: '',
           params: [],
@@ -264,17 +264,16 @@
           $scope.widgetForm   = null;
         };
 
-        // Gets the form for widget when widget type changes
+        // Gets the form for widget when widget class changes
         $scope.$watch('item.class', function(nv) {
           if (!nv) {
             return;
           }
 
-          if ($scope.item.type) {
+          if ($scope.item.widget_type) {
             $scope.item.body = $scope.item.class;
+            $scope.getForm(nv);
           }
-
-          $scope.getForm(nv);
         }, true);
       }
     ]);
