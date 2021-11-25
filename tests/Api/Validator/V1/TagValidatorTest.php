@@ -10,6 +10,8 @@
 namespace Tests\Api\Validator\V1;
 
 use Api\Validator\V1\TagValidator;
+use Api\Exception\InvalidArgumentException;
+use Common\Model\Entity\Tag;
 use Opennemas\Orm\Core\Entity;
 
 /**
@@ -73,7 +75,7 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWhenValidExistingTag()
     {
-        $item = new Entity([ 'name' => 'flob', 'locale' => 'es_ES' ]);
+        $item = new Entity([ 'name' => 'flob', 'locale' => 'es_ES', 'id' => 175 ]);
         $item->refresh();
 
         $this->coreValidator->expects($this->any())->method('validate')
@@ -87,28 +89,25 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests validate when the provided information is valid.
+     * Tests validate when the provided information is invalid.
+     *
+     * @expectedException \Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenValidNewTag()
+    public function testValidateWhenInvalidNewTag()
     {
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
         $this->tagService->expects($this->at(0))->method('getItemBy')
-            ->with('name = "flob" and locale is null')
-            ->will($this->throwException(new \Exception()));
-
-        $this->tagService->expects($this->at(1))->method('getItemBy')
-            ->with('name = "plugh" and locale = "es_ES"')
-            ->willReturn(new Entity([ 'name' => 'Plugh' ]));
+            ->with('(name = "flob" or slug = "flob") and locale is null')
+            ->willReturn(new Tag([
+                'name' => 'test',
+                'slug' => 'flob',
+            ]));
 
         $this->validator->validate(new Entity([
             'name' => 'flob',
-        ]));
-
-        $this->validator->validate(new Entity([
-            'name'   => 'plugh',
-            'locale' => 'es_ES'
+            'slug' => 'flob'
         ]));
     }
 
@@ -119,29 +118,40 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWhenLocaleInvalid()
     {
-        $this->coreValidator->expects($this->once())->method('validate')
+        $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
+        $this->tagService->expects($this->at(0))->method('getItemBy')
+            ->with('(name = "flob" or slug = "flob") and locale = "es_ES"')
+            ->willReturn(new Tag([
+                'name' => 'test',
+                'slug' => 'flob',
+            ]));
+
         $this->validator->validate(new Entity([
-            'name'   => 'baz',
-            'locale' => 'en_US'
+            'name' => 'flob',
+            'slug' => 'flob',
+            'locale' => 'es_ES',
+
         ]));
     }
 
     /**
-     * Tests validate when the provided information is not valid.
-     *
-     * @expectedException \Api\Exception\InvalidArgumentException
+     * Tests validate when the provided information is valid.
      */
-    public function testValidateWhenNameInvalid()
+    public function testValidateWhenNameAndSlugValid()
     {
-        $item = new Entity([ 'name' => 'flob', 'locale' => 'es_ES' ]);
-        $item->refresh();
+        $this->coreValidator->expects($this->any())->method('validate')
+            ->willReturn([]);
 
-        $this->coreValidator->expects($this->once())->method('validate')
-            ->willReturn([ 'error1' => 'plugh fred' ]);
+        $this->tagService->expects($this->at(0))->method('getItemBy')
+            ->with('(name = "flob" or slug = "flob") and locale is null')
+            ->willReturn([]);
 
-        $this->validator->validate($item);
+        $this->validator->validate(new Entity([
+            'name' => 'flob',
+            'slug' => 'flob'
+        ]));
     }
 
     /**
@@ -152,16 +162,19 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateWhenTagAlreadyExists()
     {
-        $this->coreValidator->expects($this->once())->method('validate')
+        $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
-        $this->tagService->expects($this->once())->method('getItemBy')
-            ->with('name = "baz" and locale = "es_ES"')
-            ->willReturn(new Entity([ 'name' => 'baz' ]));
+        $this->tagService->expects($this->at(0))->method('getItemBy')
+            ->with('(name = "flob" or slug = "flob") and locale is null')
+            ->willReturn(new Tag([
+                'name' => 'flob',
+                'slug' => 'flob',
+            ]));
 
         $this->validator->validate(new Entity([
-            'name'   => 'baz',
-            'locale' => 'es_ES'
+            'name' => 'flob',
+            'slug' => 'flob'
         ]));
     }
 }

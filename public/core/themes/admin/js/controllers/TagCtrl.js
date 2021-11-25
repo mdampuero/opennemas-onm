@@ -26,7 +26,8 @@
          */
         $scope.item = {
           description: '',
-          locale: null
+          locale: null,
+          id: null
         };
 
         /**
@@ -68,7 +69,7 @@
 
           var route = {
             name:   $scope.routes.validateItem,
-            params: { name: $scope.item.name, locale: $scope.item.locale }
+            params: { name: $scope.item.name, id: $scope.item.id, locale: $scope.item.locale }
           };
 
           $scope.tm = $timeout(function() {

@@ -258,63 +258,62 @@
          */
         $scope.list = function(query) {
           var criteria = {
-            name: query,
+            slug: query,
             epp: $scope.maxResults,
             orderBy: { 'length(name)': 'asc', name: 'asc' },
             page: 1
           };
 
-          http.get({
+          return http.get({
             name: 'api_v1_backend_tools_slug',
             params: { slug: query }
           }).then(function(response) {
-            query = response.data.slug;
-            criteria.name = query;
-          });
+            criteria.slug = response.data.slug;
 
-          if (!$scope.ignoreLocale && $scope.locale &&
+            if (!$scope.ignoreLocale && $scope.locale &&
               $scope.locale.multilanguage) {
-            criteria.locale = $scope.locale.selected;
-          }
-
-          oqlEncoder.configure({
-            placeholder: {
-              name: '[key] ~ "%[value]%"',
-              locale: '([key] is null or [key] = "[value]")'
+              criteria.locale = $scope.locale.selected;
             }
-          });
 
-          var oql = oqlEncoder.getOql(criteria);
-
-          return http.get({
-            name: 'api_v1_backend_tag_get_list',
-            params: { oql: oql }
-          }).then(function(response) {
-            $scope.data = response.data;
-
-            var items = response.data.items;
-
-            if (!$scope.selectionOnly) {
-              var found = items.filter(function(e) {
-                return e.name === query;
-              });
-
-              if (found.length === 0) {
-                var item = { id: query, name: query };
-
-                if ($scope.locale && $scope.locale.multilanguage) {
-                  item.locale = $scope.locale.selected;
-                }
-
-                items.push(item);
-
-                items = items.sort(function(a, b) {
-                  return a.name.length < b.name.length ? -1 : 0;
-                });
+            oqlEncoder.configure({
+              placeholder: {
+                slug: '[key] ~ "%[value]%"',
+                locale: '([key] is null or [key] = "[value]")'
               }
-            }
+            });
 
-            return items;
+            var oql = oqlEncoder.getOql(criteria);
+
+            return http.get({
+              name: 'api_v1_backend_tag_get_list',
+              params: { oql: oql }
+            }).then(function(response) {
+              $scope.data = response.data;
+
+              var items = response.data.items;
+
+              if (!$scope.selectionOnly) {
+                var found = items.filter(function(e) {
+                  return e.name === query || e.slug === query;
+                });
+
+                if (found.length === 0) {
+                  var item = { id: query, name: query };
+
+                  if ($scope.locale && $scope.locale.multilanguage) {
+                    item.locale = $scope.locale.selected;
+                  }
+
+                  items.push(item);
+
+                  items = items.sort(function(a, b) {
+                    return a.name.length < b.name.length ? -1 : 0;
+                  });
+                }
+              }
+
+              return items;
+            });
           });
         };
 
