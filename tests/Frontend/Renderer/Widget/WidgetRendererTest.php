@@ -133,8 +133,8 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenEmpty()
     {
-        $widget          = new \Content();
-        $widget->content = null;
+        $widget       = new \Content();
+        $widget->body = 'ContentListing';
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getWidget');

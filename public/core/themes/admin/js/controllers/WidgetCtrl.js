@@ -190,7 +190,7 @@
          * @param {String} uuid The widget uuid.
          */
         $scope.getForm = function(uuid) {
-          if ($scope.item.renderlet === 'html') {
+          if (!$scope.item.widget_type) {
             return;
           }
 
