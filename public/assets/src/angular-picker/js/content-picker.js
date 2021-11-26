@@ -280,6 +280,9 @@
             elm.bind('click', function() {
               $scope.reset();
 
+              $scope.picker.selection.maxSize = attrs.contentPickerMaxSize ?
+                parseInt(attrs.contentPickerMaxSize) : 1;
+
               // Initialize the media picker available modes
               if (attrs.contentPickerMode) {
                 var modes = attrs.contentPickerMode.split(',');

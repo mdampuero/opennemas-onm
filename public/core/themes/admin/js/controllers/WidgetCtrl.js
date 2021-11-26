@@ -67,6 +67,20 @@
          * @memberOf WidgetCtrl
          *
          * @description
+         *  The data extra object contains related elements and
+         *  param index to insert a list of contents id
+         *
+         * @type {Object}
+         */
+        $scope.data = {
+          related: [],
+          index: null,
+        };
+
+        /**
+         * @memberOf WidgetCtrl
+         *
+         * @description
          *  The list of routes for the controller.
          *
          * @type {Object}
@@ -126,10 +140,7 @@
          * @param {integer} index The index of params with contents id
          */
         $scope.init = function(index) {
-          $scope.data = {
-            related: [],
-            index: index,
-          };
+          $scope.data.index = index;
 
           // Initialize the array of related contents
           if ($scope.item.params[$scope.data.index].value !== '') {
@@ -154,7 +165,7 @@
 
           // Watch for changes in the related contents
           $scope.$watch(function() {
-            if (!$scope.data.related.length) {
+            if (!$scope.data.related) {
               return '';
             }
 
