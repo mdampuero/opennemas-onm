@@ -271,7 +271,6 @@
           }
 
           if ($scope.item.widget_type) {
-            $scope.item.body = $scope.item.class;
             $scope.getForm(nv);
           }
         }, true);
