@@ -271,6 +271,7 @@
           }
 
           if ($scope.item.widget_type) {
+            $scope.item.body = null;
             $scope.getForm(nv);
           }
         }, true);
