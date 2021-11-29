@@ -10,7 +10,7 @@ function smarty_function_render_widget($params, &$smarty)
     if (!is_null($widgetName)) {
         // Initialize widget from name
         $criteria = [
-            'body'              => [ [ 'value' => $widgetName ] ],
+            'class'             => [ [ 'value' => $widgetName ] ],
             'content_type_name' => [ [ 'value' => 'widget' ] ],
             'content_status'    => [ [ 'value' => 1 ] ],
             'in_litter'         => [ [ 'value' => 0 ] ],

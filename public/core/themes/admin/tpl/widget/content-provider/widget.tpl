@@ -1,4 +1,3 @@
-
 <div data-content-id="{$content->id}" data-class="{$content->content_type_name}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
