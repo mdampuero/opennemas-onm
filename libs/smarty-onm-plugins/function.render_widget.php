@@ -17,7 +17,7 @@ function smarty_function_render_widget($params, &$smarty)
             $widgetName
         );
 
-        $widget = $sw->getList($oql);
+        $widget = $sw->getList($oql)['items'][0];
     } else {
         // Initialize widget from id
         $widget = $sw->getItem($widgetID);
