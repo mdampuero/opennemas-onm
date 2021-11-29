@@ -187,19 +187,33 @@ class UpdateInstanceCommand extends Command
 
         $this->writePad('- Checking creation date');
         $instance->created = $helper->getCreated($instance);
-        $this->writeStatus('success', 'DONE', true);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info',
+            $instance->created->format(' (Y-m-d H:i:s)'
+        ), true);
 
         $this->writePad('- Checking last activity');
         $instance->last_login = $helper->getLastActivity($instance);
-        $this->writeStatus('success', 'DONE', true);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info',
+            $instance->last_login->format(' (Y-m-d H:i:s)'
+        ), true);
 
         $this->writePad('- Counting comments');
         $instance->comments = $helper->countComments($instance);
-        $this->writeStatus('success', 'DONE', true);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', sprintf(
+            ' (%s)',
+            $instance->comments
+        ), true);
 
         $this->writePad('- Counting active users');
         $instance->users = $helper->countUsers($instance);
-        $this->writeStatus('success', 'DONE', true);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', sprintf(
+            ' (%s)',
+            $instance->users
+        ), true);
 
         $this->writePad('- Counting contents');
         $contents = $helper->countContents($instance);
@@ -210,6 +224,10 @@ class UpdateInstanceCommand extends Command
 
         $instance->contents = array_sum($contents);
 
-        $this->writeStatus('success', 'DONE', true);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', sprintf(
+            ' (%s)',
+            $instance->contents
+        ), true);
     }
 }
