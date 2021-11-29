@@ -67,9 +67,9 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenIntelligentWidget()
     {
-        $widget       = new \Content();
+        $widget              = new \Content();
         $widget->widget_type = 'intelligentwidget';
-        $expected     = '<div class="widget">Intelligent Renderlet Code</div>';
+        $expected            = '<div class="widget">Intelligent Renderlet Code</div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
@@ -79,9 +79,9 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenNoValid()
     {
-        $widget       = new \Content();
+        $widget              = new \Content();
         $widget->widget_type = 'other';
-        $expected     = '<div class="widget"></div>';
+        $expected            = '<div class="widget"></div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
@@ -133,8 +133,8 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenEmpty()
     {
-        $widget       = new \Content();
-        $widget->body = 'ContentListing';
+        $widget        = new \Content();
+        $widget->class = 'ContentListing';
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getWidget');
@@ -148,15 +148,15 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenNoClass()
     {
-        $widget       = new \Content();
-        $widget->body = 'AllHeadlines';
+        $widget        = new \Content();
+        $widget->class = 'AllHeadlines';
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getWidget');
         $method->setAccessible(true);
 
         $this->loader->expects($this->at(0))->method('loadWidget')
-            ->with($widget->body);
+            ->with($widget->class);
 
         $this->assertEquals(null, $method->invokeArgs($renderer, [ $widget ]));
     }

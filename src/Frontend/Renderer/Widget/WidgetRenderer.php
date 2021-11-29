@@ -42,7 +42,7 @@ class WidgetRenderer extends Renderer
         $widget = $this->getWidget($content, $params);
 
         if (is_null($widget)) {
-            return sprintf(_('Widget %s not available'), $content->body);
+            return sprintf(_('Widget %s not available'), $content->class);
         }
 
         return $widget->render($params);
@@ -58,7 +58,7 @@ class WidgetRenderer extends Renderer
      */
     public function getWidget($content, $params = null)
     {
-        $widget = $content->body;
+        $widget = $content->class;
 
         if (empty($widget)) {
             return null;

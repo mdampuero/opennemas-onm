@@ -5,21 +5,22 @@ function smarty_function_render_widget($params, &$smarty)
     $widgetName = isset($params['name']) ? $params['name'] : null;
     $widgetID   = isset($params['id']) ? $params['id'] : null;
 
-    $er = getService('entity_repository');
+    $sw = getService('api.service.widget');
 
     if (!is_null($widgetName)) {
         // Initialize widget from name
-        $criteria = [
-            'class'             => [ [ 'value' => $widgetName ] ],
-            'content_type_name' => [ [ 'value' => 'widget' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 0 ] ],
-        ];
+        $oql = sprintf(
+            'content_type_name="widget" and content_status = 1'
+            . ' and in_litter = 0 '
+            . ' and class = "%s"'
+            . ' limit 1',
+            $widgetName
+        );
 
-        $widget = $er->findOneBy($criteria, null, 1, 1);
+        $widget = $sw->getList($oql);
     } else {
         // Initialize widget from id
-        $widget = $er->find('Widget', $widgetID);
+        $widget = $sw->getItem($widgetID);
     }
 
     $output = '';
