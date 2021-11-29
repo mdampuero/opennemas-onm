@@ -71,12 +71,12 @@
 
 {block name="customColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('content')">
-    <span class="label label-default" ng-if="item.widget_type && item.body">
+    <span class="label label-default" ng-if="item.widget_type && item.class">
       <strong>
-        [% item.body %]
+        [% item.class %]
       </strong>
     </span>
-    <small class="text-italic" ng-if="item.widget_type && !item.body">
+    <small class="text-italic" ng-if="item.widget_type && !item.class">
       &lt;{t}Not selected{/t}&gt;
     </small>
     <span ng-if="!item.widget_type">
