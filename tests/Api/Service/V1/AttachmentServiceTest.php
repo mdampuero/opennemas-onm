@@ -84,7 +84,7 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem', 'assignUser' ])
+            ->setMethods([ 'getItem', 'assignUser', 'getListBySql' ])
             ->getMock();
     }
 
@@ -372,6 +372,8 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             'path' => '/2010/01/01/plugh.mumble'
         ]);
 
+        $this->service->expects($this->any())->method('getListBySql')
+            ->willReturn([]);
         $this->service->expects($this->any())->method('getItem')
             ->willReturn($content);
 

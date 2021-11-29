@@ -344,4 +344,38 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($result, $method->invokeArgs($this->service, [ $item ]));
     }
+
+    /**
+     * Tests validate
+     */
+    public function testValidate()
+    {
+        $method = new \ReflectionMethod($this->service, 'validate');
+        $method->setAccessible(true);
+
+        $related = [
+            0 => [
+                'target_id'         => 1,
+                'content_type_name' => 'photo'
+            ],
+            1 => [
+                'target_id'         => 2,
+                'content_type_name' => 'photo'
+            ],
+        ];
+
+        $item = new Content([
+            'pk_content'        => 10,
+            'content_type_name' => 'article',
+            'related_contents'  => $related
+        ]);
+
+        $this->service->expects($this->at(0))->method('getItem')
+            ->with(1)->willReturn($item);
+
+        $this->service->expects($this->at(1))->method('getItem')
+            ->with(2)->will($this->throwException(new \Exception()));
+
+        $method->invokeArgs($this->service, [ $item ]);
+    }
 }
