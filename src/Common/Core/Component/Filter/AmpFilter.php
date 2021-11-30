@@ -36,7 +36,7 @@ class AmpFilter extends Filter
             '@<blockquote class="tiktok-embed" cite="(.*?)"((.*)(\n)?)*?</blockquote>@',
             '@<div[^>]*class=\"brid\"[^>]*>.*?/partners/([0-9]+).*</div>[^>]*?'
                 . '<script.*"id":"([0-9]+)".*"video":"([0-9]+)".*</script>@',
-            '@<div[^>]+class\s*=\s*"(?s)(.*?)"[^>]*>(?s)(.*?)</div>@',
+            '@<div[^>]*[\s]+class[\s]*=[\s]*"(?s)(.*?)"[^>]*>(?s)(.*?)</div>@',
 
             // Invalid tags
             '@<object[^>]*>(?s).*?<\/object>@',
