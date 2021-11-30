@@ -79,6 +79,9 @@ frontend_password:
 frontend_poll:
     resource: '@FrontendBundle/Resources/config/routing/poll.yml'
 
+frontend_redirect:
+    resource: '@FrontendBundle/Resources/config/routing/redirect.yml'
+
 frontend_rss:
     resource: '@FrontendBundle/Resources/config/routing/rss.yml'
 

@@ -74,8 +74,8 @@ class Redirector
     public function getResponse(Request $request, Url $url)
     {
         $response = $url->redirection
-            ? $this->getRedirectResponse($request, $url)
-            : $this->getForwardResponse($request, $url);
+        ? $this->getRedirectResponse($request, $url)
+        : $this->getForwardResponse($request, $url);
 
         $xTags = $response->headers->get('x-tags') . ",url-" . $url->id;
 
@@ -83,6 +83,18 @@ class Redirector
         $response->headers->set('x-cacheable', true);
 
         return $response;
+    }
+
+    /**
+     * Returns a response basing on /redirect/content route
+     *
+     * @param Request $request The current request.
+
+     * @return mixed The redirect response
+     */
+    public function getResponseContent(Request $request)
+    {
+        return $this->getRedirectContentParams($request->getRequestUri());
     }
 
     /**
@@ -373,18 +385,30 @@ class Redirector
         }
 
         if (strpos($target, '/redirect/content') !== false) {
-            $data   = explode('&', explode('?', $target)[1]);
-            $params = [];
-
-            foreach ($data as $item) {
-                $element             = explode('=', $item);
-                $params[$element[0]] = $element[1];
-            }
-
-            return $this->getRedirectContent($params);
+            return $this->getRedirectContentParams($target);
         }
 
         return new RedirectResponse(empty($target) ? '/' : $target, 301);
+    }
+
+    /**
+     * Handles the params for redirections for Redirect Content
+     *
+     * @param string Target
+     *
+     * @return Response The response object
+     */
+    protected function getRedirectContentParams($target)
+    {
+        $data   = explode('&', explode('?', $target)[1]);
+        $params = [];
+
+        foreach ($data as $item) {
+            $element             = explode('=', $item);
+            $params[$element[0]] = $element[1];
+        }
+
+        return $this->getRedirectContent($params);
     }
 
     /**
@@ -408,7 +432,6 @@ class Redirector
         }
 
         $source      = !empty($id) ? $id : $slug;
-
         $translation = $this->getUrl($source, $type);
 
         if (empty($translation)) {
