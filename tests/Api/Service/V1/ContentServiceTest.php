@@ -379,7 +379,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
         $method->invokeArgs($this->service, [ $item ]);
     }
 
-        /**
+    /**
      * Tests deleteItem when no error.
      */
     public function testDeleteItem()

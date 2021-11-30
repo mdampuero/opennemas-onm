@@ -51,7 +51,7 @@ class ContentService extends OrmService
         }
     }
 
-        /**
+    /**
      * {@inheritdoc}
      */
     public function deleteList($ids)
