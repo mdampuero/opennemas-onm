@@ -188,12 +188,16 @@ class UpdateInstanceCommand extends Command
         $this->writePad('- Checking creation date');
         $instance->created = $helper->getCreated($instance);
         $this->writeStatus('success', 'DONE');
-        $this->writeStatus('info', $instance->created->format('(Y-m-d H:i:s)'), true);
+        if ($instance->created instanceof \DateTime) {
+            $this->writeStatus('info', $instance->created->format('(Y-m-d H:i:s)'), true);
+        }
 
         $this->writePad('- Checking last activity');
         $instance->last_login = $helper->getLastActivity($instance);
         $this->writeStatus('success', 'DONE');
-        $this->writeStatus('info', $instance->last_login->format('(Y-m-d H:i:s)'), true);
+        if ($instance->last_login instanceof \DateTime) {
+            $this->writeStatus('info', $instance->last_login->format('(Y-m-d H:i:s)'), true);
+        }
 
         $this->writePad('- Counting comments');
         $instance->comments = $helper->countComments($instance);
