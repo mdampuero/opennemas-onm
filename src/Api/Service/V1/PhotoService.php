@@ -119,27 +119,30 @@ class PhotoService extends ContentService
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
-        $deleted = [];
         $items   = [];
+        $deleted = array_map(function ($a) {
+            return $a->pk_content;
+        }, $response['items']);
+
+        $related = $this->getRelatedContents(implode(',', $deleted));
+
         foreach ($response['items'] as $item) {
             try {
                 $this->container->get('core.helper.image')->remove($item->path);
 
                 $this->em->remove($item, $item->getOrigin());
 
-                $id = $this->em->getMetadata($item)->getId($item);
-
-                $deleted[] = array_pop($id);
-                $items[]   = $item;
+                $items[] = $item;
             } catch (\Exception $e) {
                 throw new DeleteListException($e->getMessage(), $e->getCode());
             }
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'action' => __METHOD__,
-            'ids'    => $deleted,
-            'item'   => $items
+            'action'  => __METHOD__,
+            'ids'     => $deleted,
+            'item'    => $items,
+            'related' => $related
         ]);
 
         return count($deleted);

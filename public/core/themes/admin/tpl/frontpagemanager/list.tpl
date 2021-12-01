@@ -32,7 +32,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="frontpageForm" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json})" class="frontpagemanager-wrapper">
+<form action="#" method="get" name="frontpageForm" ng-controller="FrontpageCtrl" ng-init="init({json_encode($frontpages)|clear_json}, {json_encode($versions)|clear_json}, {json_encode($category_id)|clear_json}, {json_encode($version_id)|clear_json}, {json_encode($time)|clear_json}, {json_encode($frontpage_last_saved)|clear_json}, {json_encode($available_layouts)|clear_json}, {json_encode($layout_theme)|clear_json}, {json_encode($frontpage_max_items)|clear_json})" class="frontpagemanager-wrapper">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -267,20 +267,20 @@
           {is_module_activated name="ARTICLE_MANAGER"}
             {if $category_id eq 0}
               <li>
-                <a href="{url name=backend_articles_content_provider category=$category_id suggested=true}">
+                <a href="{url name=backend_articles_content_provider category=$category_id frontpage_version_id=$version_id_pro suggested=true}">
                   {t}Suggested{/t}
                 </a>
               </li>
             {else}
               <li>
-                <a href="{url name=backend_articles_content_provider category=$category_id}">
+                <a href="{url name=backend_articles_content_provider category=$category_id frontpage_version_id=$version_id_pro}">
                   {t}Others in category{/t}
                 </a>
               </li>
             {/if}
           {/is_module_activated}
             <li>
-              <a href="{url name=backend_articles_content_provider}">
+              <a href="{url name=backend_articles_content_provider category=$category_id frontpage_version_id=$version_id_pro last=true}">
                 {t}Latest articles{/t}
               </a>
             </li>
