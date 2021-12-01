@@ -10,8 +10,6 @@
 namespace Tests\Api\Validator\V1;
 
 use Api\Validator\V1\TagValidator;
-use Api\Exception\InvalidArgumentException;
-use Common\Model\Entity\Tag;
 use Opennemas\Orm\Core\Entity;
 
 /**
@@ -111,9 +109,7 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests validate when the provided locale is not valid.
-     *
-     * @expectedException \Api\Exception\InvalidArgumentException
+     * Tests validate when the provided locale is not null.
      */
     public function testValidateWhenLocaleNotNull()
     {
@@ -123,14 +119,30 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->tagService->expects($this->at(0))->method('getList')
             ->with('(name = "flob" or slug = "flob") and locale = "es_ES"')
             ->willReturn([
-                'total' => 1
+                'total' => 0
             ]);
 
         $this->validator->validate(new Entity([
             'name' => 'flob',
             'slug' => 'flob',
             'locale' => 'es_ES',
+        ]));
+    }
 
+    /**
+     * Tests validate when the provided locale is invalid.
+     *
+     * @expectedException \Api\Exception\InvalidArgumentException
+     */
+    public function testValidateWhenLocaleInvalid()
+    {
+        $this->coreValidator->expects($this->any())->method('validate')
+            ->willReturn([]);
+
+        $this->validator->validate(new Entity([
+            'name' => 'flob',
+            'slug' => 'flob',
+            'locale' => 'pt_PT',
         ]));
     }
 
