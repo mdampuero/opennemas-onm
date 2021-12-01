@@ -29,10 +29,6 @@ class TagValidator extends Validator
             throw new InvalidArgumentException(_('Invalid tag'), 400);
         }
 
-        if ($item->exists()) {
-            return;
-        }
-
         $locales = $this->container->get('core.locale')
             ->getAvailableLocales('frontend');
 
@@ -43,33 +39,24 @@ class TagValidator extends Validator
             throw new InvalidArgumentException(_('Invalid tag'), 400);
         }
 
-        $oql = ( $item->id && is_numeric($item->id) ) ?
-            sprintf(
-                '(( name = "%s" and id != "%d" ) or ( slug = "%s" and id != "%d" ))',
-                $item->name,
-                $item->id,
-                $item->slug,
-                $item->id,
-            ) : sprintf(
-                '(name = "%s" or slug = "%s")',
-                $item->name,
-                $item->slug
-            );
-        $oql .= (!empty($item->locale)) ?
-            sprintf(' and locale = "%s"', $item->locale) :
-            ' and locale is null';
+        $oql = sprintf('(name = "%s" or slug = "%s")', $item->name, $item->slug);
 
-        try {
-            $tag = $this->container->get('api.service.tag')->getItemBy($oql);
-
-            // Tags with different names are considered different
-            if ($tag->name !== $item->name && $tag->slug !== $item->slug) {
-                return;
-            }
-        } catch (\Exception $e) {
-            return;
+        if ($item->id && is_numeric($item->id)) {
+            $oql .= sprintf(' and id != %d', $item->id);
         }
 
-        throw new InvalidArgumentException(_('Invalid tag'), 400);
+        $oql .= (!empty($item->locale))
+            ? sprintf(' and locale = "%s"', $item->locale)
+            : ' and locale is null';
+
+        try {
+            $tags = $this->container->get('api.service.tag')->getList($oql);
+
+            if ($tags['total'] > 0) {
+                throw new \Exception();
+            }
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException(_('Invalid tag'), 400);
+        }
     }
 }

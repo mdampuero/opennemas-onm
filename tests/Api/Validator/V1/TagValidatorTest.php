@@ -25,7 +25,7 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->tagService = $this->getMockBuilder('TagService')
-            ->setMethods([ 'getItemBy' ])
+            ->setMethods([ 'getList' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('ServiceContainer' . uniqid())
@@ -98,12 +98,11 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
-        $this->tagService->expects($this->at(0))->method('getItemBy')
+        $this->tagService->expects($this->at(0))->method('getList')
             ->with('(name = "flob" or slug = "flob") and locale is null')
-            ->willReturn(new Tag([
-                'name' => 'test',
-                'slug' => 'flob',
-            ]));
+            ->willReturn([
+                'total' => 2
+            ]);
 
         $this->validator->validate(new Entity([
             'name' => 'flob',
@@ -116,17 +115,16 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenLocaleInvalid()
+    public function testValidateWhenLocaleNotNull()
     {
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
-        $this->tagService->expects($this->at(0))->method('getItemBy')
+        $this->tagService->expects($this->at(0))->method('getList')
             ->with('(name = "flob" or slug = "flob") and locale = "es_ES"')
-            ->willReturn(new Tag([
-                'name' => 'test',
-                'slug' => 'flob',
-            ]));
+            ->willReturn([
+                'total' => 1
+            ]);
 
         $this->validator->validate(new Entity([
             'name' => 'flob',
@@ -144,9 +142,11 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
-        $this->tagService->expects($this->at(0))->method('getItemBy')
+        $this->tagService->expects($this->at(0))->method('getList')
             ->with('(name = "flob" or slug = "flob") and locale is null')
-            ->willReturn([]);
+            ->willReturn([
+                'total' => 0
+            ]);
 
         $this->validator->validate(new Entity([
             'name' => 'flob',
@@ -165,12 +165,11 @@ class TagValidatorTest extends \PHPUnit\Framework\TestCase
         $this->coreValidator->expects($this->any())->method('validate')
             ->willReturn([]);
 
-        $this->tagService->expects($this->at(0))->method('getItemBy')
+        $this->tagService->expects($this->at(0))->method('getList')
             ->with('(name = "flob" or slug = "flob") and locale is null')
-            ->willReturn(new Tag([
-                'name' => 'flob',
-                'slug' => 'flob',
-            ]));
+            ->willReturn([
+                'total' => 2
+            ]);
 
         $this->validator->validate(new Entity([
             'name' => 'flob',
