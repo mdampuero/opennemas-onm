@@ -49,11 +49,20 @@ class ContentController extends ApiController
             return null;
         }
 
+        $locale = array_keys(
+            $this->get('core.helper.locale')->getConfiguration()['available']
+        );
+
         if (!is_array($tags)) {
             $tags = [ $tags ];
         }
 
         $elements = [];
+
+        foreach ($locale as $value) {
+            $elements[$value] = [];
+        }
+
         $nulls    = [];
 
         array_map(function ($item) use (&$elements, &$nulls) {
