@@ -457,7 +457,7 @@
               if ($scope.locale && $scope.locale.multilanguage) {
                 $scope.tagsInLocale = $scope.tags.filter(function(e) {
                   return !$scope.locale || !e.locale ||
-                  e.locale === $scope.locale.selected;
+                    e.locale === $scope.locale.selected;
                 });
               }
             }
@@ -486,7 +486,7 @@
             ovIds = ov.filter(function(e) {
               // Only delete tags for any or current locale
               return !$scope.locale || !e.locale ||
-              e.locale === $scope.locale.selected;
+                e.locale === $scope.locale.selected;
             }).map(function(e) {
               return e.id;
             });
@@ -516,7 +516,7 @@
 
             $scope.tags = $scope.tags.concat(nv.filter(function(e) {
               return toAdd.indexOf(e.id) !== -1 &&
-              $scope.ngModel.indexOf(e.id) === -1;
+                $scope.ngModel.indexOf(e.id) === -1;
             }));
 
             $scope.$parent.data.extra.tags[$scope.locale.selected] = $scope.tagsInLocale;
@@ -524,4 +524,4 @@
         }, true);
       }
     ]);
-  })();
+})();
