@@ -177,12 +177,12 @@
                 {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0">
+                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0 || ((item.tags_localized | filter : { locale: null }).length === 0 && (item.tags_localized | filter : { locale: config.locale.selected }).length === 0)">
                   &lt;{t}No tags{/t}&gt;
                 </small>
-                <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!(data.extra.tags[config.locale.selected] | filter : { id: id })[0].locale || (data.extra.tags[config.locale.selected] | filter : { id: id })[0].locale === config.locale.selected">
-                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: (data.extra.tags[config.locale.selected] | filter : { id: id })[0].id }) %]" ng-if="(data.extra.tags[config.locale.selected] | filter : { id: id })[0].name">
-                    [% (data.extra.tags[config.locale.selected] | filter : { id: id })[0].name %]
+                <div class="inline m-r-5 m-t-5" ng-repeat="item in item.tags_localized">
+                  <a class="label label-defaul label-info text-bold" href="" ng-if="item.locale === config.locale.selected || item.locale === null">
+                    [% item.name %]
                   </a>
                 </div>
               </td>
