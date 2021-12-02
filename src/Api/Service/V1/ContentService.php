@@ -249,6 +249,7 @@ class ContentService extends OrmService
                 $result[] = $item->getStored();
                 return $result;
             });
+
             $item->tagsLocalized = $tags;
         }
 
