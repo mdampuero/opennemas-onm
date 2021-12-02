@@ -7,7 +7,7 @@
   </span>
   <span class="badge badge-default m-r-5 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.tags && item.tags && item.tags.length != 0" ng-class="{ 'badge-danger' : item.tags.length === 0 }">
     <strong>
-      [% item.tags.length %] {t}Tags{/t}
+      [% data.extra.tags[config.locale.selected].length  %] {t}Tags{/t}
     </strong>
   </span>
 </div>

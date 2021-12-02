@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Doctrine\DBAL\Types\ArrayType;
 
 class ContentController extends ApiController
 {
@@ -35,6 +36,39 @@ class ContentController extends ApiController
             ],
             'related_contents' => $this->getRelatedContents($items),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTags($items = null)
+    {
+        $tags = parent::getTags($items);
+
+        if (empty($tags)) {
+            return null;
+        }
+
+        if (!is_array($tags)) {
+            $tags = [ $tags ];
+        }
+
+        $elements = [];
+        $nulls    = [];
+
+        array_map(function ($item) use (&$elements, &$nulls) {
+            if (!empty($item['locale'])) {
+                $elements[$item['locale']][] = $item;
+            } else {
+                $nulls[] = $item;
+            }
+        }, $tags);
+
+        foreach ($elements as $key => $value) {
+            $elements[$key] = array_merge($value, $nulls);
+        }
+
+        return $elements;
     }
 
     /**
