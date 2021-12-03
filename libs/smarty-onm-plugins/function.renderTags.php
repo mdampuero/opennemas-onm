@@ -15,13 +15,20 @@ function smarty_function_renderTags($params, &$smarty)
         return '';
     }
 
-    $content   = $params['content'];
-    $ids       = !empty($content->tags) ? $content->tags : [];
-    $separator = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
-    $output    = '';
+    $exclude_types = array('letter');
+    $content       = $params['content'];
+    $ids           = !empty($content->tags) ? $content->tags : [];
+    $separator     = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
+    $output        = '';
 
     try {
-        $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
+        //Comprobar si el tipo de contenido es propenso a tener multiidioma o no (Ej: Letter)
+        $locale = $smarty->getContainer()->get('core.instance')->hasMultilanguage()
+            && !in_array($content->content_type_name, $exclude_types)
+            ? $smarty->getContainer()->get('core.locale')->getRequestLocale()
+            : null;
+
+        $tags = $smarty->getContainer()->get('api.service.tag')->getListByIdsKeyMapped($ids, $locale)['items'];
 
         if (array_key_exists('limit', $params)) {
             $tags = array_slice($tags, 0, $params['limit']);
