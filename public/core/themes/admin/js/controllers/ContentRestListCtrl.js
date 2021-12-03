@@ -38,8 +38,28 @@
          *
          * @return {Boolean} True if the item has featured media, false otherwise.
          */
-        $scope.getLocalizedTags = function(origin, array) {
+        $scope.getLocalizedTags = function(origin, array, locale, multilanguage) {
           var items = [];
+
+          if (multilanguage) {
+            origin = origin[locale];
+          } else {
+            var aux = [];
+
+            Object.values(origin).forEach(function(item) {
+              aux = aux.concat(item);
+            });
+
+            aux.forEach(function(item, index) {
+              aux.forEach(function(item2, index2) {
+                if (item.id === item2.id && index != index2) {
+                  aux.splice(index2, 1);
+                }
+              });
+            });
+
+            origin = aux;
+          }
 
           items = origin.filter(function(o) {
             return array.includes(o.id);
