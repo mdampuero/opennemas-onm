@@ -451,6 +451,7 @@ CREATE TABLE `users` (
   `avatar_img_id` bigint(20) unsigned DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
+  `slug` varchar(100) DEFAULT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
