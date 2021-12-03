@@ -284,7 +284,6 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('find')
             ->with([ 30044, 2795, 26934 ])->willReturn($tags);
 
-
         $this->assertEquals(
             [ 'items' => [ 0 => $tags[0], 1 => $tags[1] ], 'total' => 2 ],
             $this->service->getListByIdsKeyMapped([ 30044, 2795, 26934 ], 'es')
