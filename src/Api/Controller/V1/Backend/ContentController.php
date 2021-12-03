@@ -63,7 +63,7 @@ class ContentController extends ApiController
             $elements[$value] = [];
         }
 
-        $nulls    = [];
+        $nulls = [];
 
         array_map(function ($item) use (&$elements, &$nulls) {
             if (!empty($item['locale'])) {
