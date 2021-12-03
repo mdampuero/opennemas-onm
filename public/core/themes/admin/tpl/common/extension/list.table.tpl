@@ -177,10 +177,10 @@
                 {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0 || ((item.tags_localized | filter : { locale: null }).length === 0 && (item.tags_localized | filter : { locale: config.locale.selected }).length === 0)">
+                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0 || (getLocalizedTags(data.extra.tags[config.locale.selected],item.tags).length === 0)">
                   &lt;{t}No tags{/t}&gt;
                 </small>
-                <div class="inline m-r-5 m-t-5" ng-repeat="item in item.tags_localized">
+                <div class="inline m-r-5 m-t-5" ng-repeat="item in getLocalizedTags(data.extra.tags[config.locale.selected],item.tags)">
                   <a class="label label-defaul label-info text-bold" href="" ng-if="item.locale === config.locale.selected || item.locale === null">
                     [% item.name %]
                   </a>

@@ -48,7 +48,7 @@
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
-              '<span ng-if="!filter" class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
+              '<span ng-if="!filter" class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length >= maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
                 '[% tagsInLocale ? tagsInLocale.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +

@@ -239,20 +239,6 @@ class ContentService extends OrmService
             }
         }
 
-        if (!empty($item->tags)) {
-            $ts   = $this->container->get('api.service.tag');
-            $tags = [];
-            $oql  = 'id in [' . implode(',', $item->tags) . ']';
-            $tags = $ts->getList($oql)['items'];
-
-            $tags = array_reduce($tags, function ($result, $item) {
-                $result[] = $item->getStored();
-                return $result;
-            });
-
-            $item->tagsLocalized = $tags;
-        }
-
         return $item;
     }
 
