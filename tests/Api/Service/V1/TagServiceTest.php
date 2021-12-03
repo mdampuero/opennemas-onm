@@ -263,11 +263,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('find')
             ->with([ 134 ])->willReturn([ $tag ]);
 
-        $this->converter->expects($this->once())->method('responsify')
-            ->with([ 134 => $tag ])->willReturn([ 134 => $tag ]);
 
         $this->assertEquals(
-            [ 'items' => [ 134 => $tag ], 'total' => 1 ],
+            [ 'items' => [ 0 => $tag ], 'total' => 1 ],
             $this->service->getListByIdsKeyMapped([ 134 ])
         );
     }
@@ -286,12 +284,9 @@ class TagServiceTest extends \PHPUnit\Framework\TestCase
         $this->repository->expects($this->once())->method('find')
             ->with([ 30044, 2795, 26934 ])->willReturn($tags);
 
-        $this->converter->expects($this->once())->method('responsify')
-            ->with([ 30044 => $tags[0], 2795 => $tags[1] ])
-            ->willReturn([ 30044 => $tags[0], 2795 => $tags[1] ]);
 
         $this->assertEquals(
-            [ 'items' => [ 30044 => $tags[0], 2795 => $tags[1] ], 'total' => 2 ],
+            [ 'items' => [ 0 => $tags[0], 1 => $tags[1] ], 'total' => 2 ],
             $this->service->getListByIdsKeyMapped([ 30044, 2795, 26934 ], 'es')
         );
     }
