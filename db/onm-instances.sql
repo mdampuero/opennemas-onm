@@ -465,7 +465,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'master','21f0e80a0401deaebce9df20a22cf98c','',NULL,NULL,'support@opennemas.com','Master',0,NULL,1);
+INSERT INTO `users` VALUES (1,'master','21f0e80a0401deaebce9df20a22cf98c','',NULL,NULL,'support@opennemas.com','Master','master',0,NULL,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
