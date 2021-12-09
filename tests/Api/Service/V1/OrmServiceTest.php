@@ -158,8 +158,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->repository->expects($this->once())->method('find')
             ->willReturn($item);
-        $this->repository->expects($this->once())->method('findBySql')
-            ->willReturn([]);
+
         $this->em->expects($this->once())->method('remove')
             ->with($item);
 
@@ -169,8 +168,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.deleteItem', [
                 'action'  => 'Api\Service\V1\OrmService::deleteItem',
                 'id'      => 23,
-                'item'    => $item,
-                'related' => []
+                'item'    => $item
             ]);
 
         $this->service->deleteItem(23);
@@ -183,8 +181,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteItemWhenNoEntity()
     {
-        $this->repository->expects($this->once())->method('findBySql')
-            ->willReturn([]);
         $this->repository->expects($this->any())->method('find')
             ->will($this->throwException(new \Exception()));
 
@@ -200,8 +196,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Entity();
 
-        $this->repository->expects($this->once())->method('findBySql')
-            ->willReturn([]);
         $this->repository->expects($this->once())->method('find')
             ->willReturn($item);
         $this->em->expects($this->once())->method('remove')
@@ -221,8 +215,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'pk_content' => 1, 'name' => 'wubble']);
         $itemB = new Entity([ 'pk_content' => 2, 'name' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('findBySql')
-            ->willReturn([]);
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
@@ -239,8 +231,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.deleteList', [
                 'action'  => 'Api\Service\V1\OrmService::deleteList',
                 'ids'     => [ 1, 2 ],
-                'item'    => [ $itemA, $itemB ],
-                'related' => []
+                'item'    => [ $itemA, $itemB ]
             ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
@@ -266,8 +257,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->repository->expects($this->once())->method('findBySql')
-            ->willReturn([]);
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);

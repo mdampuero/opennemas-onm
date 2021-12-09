@@ -132,8 +132,6 @@ class OrmService implements Service
      */
     public function deleteItem($id)
     {
-        $related = $this->getRelatedContents($id);
-
         try {
             $item = $this->getItem($id);
 
@@ -142,8 +140,7 @@ class OrmService implements Service
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
                 'action'  => __METHOD__,
                 'id'      => $id,
-                'item'    => $item,
-                'related' => $related
+                'item'    => $item
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
@@ -170,8 +167,6 @@ class OrmService implements Service
                 return $a->pk_content;
         }, $response['items']);
 
-        $related = $this->getRelatedContents(implode(',', $deleted));
-
         foreach ($response['items'] as $item) {
             try {
                 $this->em->remove($item, $item->getOrigin());
@@ -185,8 +180,7 @@ class OrmService implements Service
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
             'action'  => __METHOD__,
             'ids'     => $deleted,
-            'item'    => $items,
-            'related' => $related
+            'item'    => $items
         ]);
 
         return count($deleted);
@@ -520,22 +514,6 @@ class OrmService implements Service
     protected function getEventName($action)
     {
         return \underscore(basename($this->entity)) . '.' . $action;
-    }
-
-    /**
-     * Returns the diferent related contents for ids passeds
-     *
-     * @param string $ids The list of ids for search related contents comma separated
-     *
-     * @return array The list of related contents.
-     */
-    protected function getRelatedContents($ids)
-    {
-        $sql = 'SELECT contents.* FROM contents'
-            . ' INNER JOIN content_content ON contents.pk_content = content_content.source_id'
-            . ' WHERE content_content.target_id in (' . $ids . ')';
-
-        return $this->getListBySql($sql)['items'];
     }
 
     /**

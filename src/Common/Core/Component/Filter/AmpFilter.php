@@ -36,6 +36,7 @@ class AmpFilter extends Filter
             '@<blockquote class="tiktok-embed" cite="(.*?)"((.*)(\n)?)*?</blockquote>@',
             '@<div[^>]*class=\"brid\"[^>]*>.*?/partners/([0-9]+).*</div>[^>]*?'
                 . '<script.*"id":"([0-9]+)".*"video":"([0-9]+)".*</script>@',
+            '@<div[^>]*[\s]+class[\s]*=[\s]*"(?s)(.*?)"[^>]*>(?s)(.*?)</div>@',
 
             // Invalid tags
             '@<object[^>]*>(?s).*?<\/object>@',
@@ -44,7 +45,7 @@ class AmpFilter extends Filter
 
             // Clean attributes
             '@<(table|tbody|blockquote|th|tr|td|ul|li|ol|dl|p|strong|br|span'
-                . '|div|b|pre|hr|col|h1|h2|h3|h4|h5|h6)[^>]*?(\/?)>@',
+                . '|b|pre|hr|col|h1|h2|h3|h4|h5|h6|div(?!.*[\s]+class[\s]*=.*))[^>]*?(\/?)>@',
             '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
         ];
 
@@ -71,6 +72,7 @@ class AmpFilter extends Filter
             '<amp-tiktok width=486 height=657 layout="responsive" data-src="${1}"></amp-tiktok>',
             '<amp-brid-player autoplay data-partner="${1}" data-player="${2}" data-video="${3}"'
                 . ' layout="responsive" width="518" height="291"></amp-brid-player>',
+            '<div class="${1}">${2}</div>',
 
             // Invalid tags
             '',

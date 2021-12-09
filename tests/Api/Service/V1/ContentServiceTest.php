@@ -37,7 +37,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
-                'getConverter', 'getMetadata', 'getRepository', 'persist'
+                'getConverter', 'getMetadata', 'getRepository', 'persist', 'remove'
             ])->getMock();
 
         $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
@@ -55,7 +55,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->repository = $this->getMockBuilder('Repository' . uniqid())
             ->setMethods([
-                'countContents', 'moveContents', 'removeContents'
+                'countContents', 'moveContents', 'removeContents', 'findBySql', 'find'
             ])->getMock();
 
         $this->security = $this->getMockBuilder('Sercurity')
@@ -81,7 +81,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->repository);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\ContentService')
-            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser' ])
+            ->setMethods([ 'getItem', 'getItemBy', 'getListByIds', 'assignUser', 'getRelatedContents' ])
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
             ->getMock();
     }
@@ -377,5 +377,135 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->with(2)->will($this->throwException(new \Exception()));
 
         $method->invokeArgs($this->service, [ $item ]);
+    }
+
+    /**
+     * Tests deleteItem when no error.
+     */
+    public function testDeleteItem()
+    {
+        $item = new Content();
+
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->with(1)->willReturn([]);
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)->willReturn($item);
+
+        $this->em->expects($this->once())->method('remove')
+            ->with($item);
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('content.deleteItem', [
+                'action'  => 'Api\Service\V1\ContentService::deleteItem',
+                'id'      => 1,
+                'item'   => $item,
+                'related' => []
+            ]);
+
+        $this->service->deleteItem(1);
+    }
+
+    /**
+     * Tests deleteItem when no item found.
+     *
+     * @expectedException \Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenNoEntity()
+    {
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->with(1)->willReturn([]);
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)->will($this->throwException(new \Exception()));
+
+        $this->service->deleteItem(1);
+    }
+
+    /**
+     * Tests deleteItem when an error happens while removing object.
+     *
+     * @expectedException \Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenErrorWhileRemoving()
+    {
+        $item = new Content();
+
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->with(1)->willReturn([]);
+        $this->service->expects($this->once())->method('getItem')
+            ->with(1)->willReturn($item);
+
+        $this->em->expects($this->once())->method('remove')
+            ->with($item)->will($this->throwException(new \Exception()));
+
+        $this->service->deleteItem(1);
+    }
+    /**
+     * Tests deleteList when no error.
+     */
+    public function testDeleteList()
+    {
+        $itemA = new Content([ 'pk_content' => 1, 'name' => 'wubble']);
+        $itemB = new Content([ 'pk_content' => 2, 'name' => 'xyzzy' ]);
+
+        $this->service->expects($this->once())->method('getListByIds')
+            ->willReturn(['items' => [ $itemA, $itemB ]]);
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->willReturn([]);
+
+        $this->em->expects($this->exactly(2))->method('remove');
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('content.deleteList', [
+                'action'  => 'Api\Service\V1\ContentService::deleteList',
+                'ids'     => [ 1, 2 ],
+                'item'    => [ $itemA, $itemB ],
+                'related' => []
+            ]);
+
+        $this->service->deleteList([ 1, 2 ]);
+    }
+
+    /**
+     * Tests deleteList when invalid list of ids provided.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenInvalidIds()
+    {
+        $this->service->deleteList('xyzzy');
+    }
+
+    /**
+     * Tests deleteList when one error happens while removing.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenOneErrorWhileRemoving()
+    {
+        $itemA = new Content([ 'name' => 'wubble']);
+        $itemB = new Content([ 'name' => 'xyzzy' ]);
+
+        $this->service->expects($this->once())->method('getListByIds')
+            ->willReturn(['items' => [ $itemA, $itemB ]]);
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->willReturn([]);
+
+        $this->em->expects($this->once())->method('remove')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when an error happens while searching.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenErrorWhileSearching()
+    {
+        $this->service->expects($this->once())->method('getListByIds')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->deleteList([ 1, 2 ]);
     }
 }
