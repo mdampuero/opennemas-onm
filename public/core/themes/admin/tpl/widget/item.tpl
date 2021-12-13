@@ -68,7 +68,7 @@
                 {t}Content{/t}
               </label>
               <div class="controls controls-validation">
-                <ui-select class="block" name="content" theme="select2" ng-model="item.classes" required>
+                <ui-select class="block" name="content" theme="select2" ng-model="item.class" required>
                   <ui-select-match placeholder="{t}Select a type{/t}">
                     [% $select.selected.name %]
                   </ui-select-match>
