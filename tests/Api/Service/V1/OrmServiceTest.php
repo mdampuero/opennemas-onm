@@ -158,6 +158,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->repository->expects($this->once())->method('find')
             ->willReturn($item);
+
         $this->em->expects($this->once())->method('remove')
             ->with($item);
 
@@ -165,9 +166,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.getItem', [ 'id' => 23, 'item' => $item ]);
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('entity.deleteItem', [
-                'action' => 'Api\Service\V1\OrmService::deleteItem',
-                'id'     => 23,
-                'item'   => $item
+                'action'  => 'Api\Service\V1\OrmService::deleteItem',
+                'id'      => 23,
+                'item'    => $item
             ]);
 
         $this->service->deleteItem(23);
@@ -211,19 +212,13 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteList()
     {
-        $itemA = new Entity([ 'name' => 'wubble']);
-        $itemB = new Entity([ 'name' => 'xyzzy' ]);
-
-        $this->metadata->expects($this->at(0))->method('getL10nKeys')
-            ->willReturn([]);
-        $this->metadata->expects($this->at(2))->method('getId')
-            ->with($itemA)->willReturn([ 'id' => 1 ]);
-        $this->metadata->expects($this->at(3))->method('getId')
-            ->with($itemB)->willReturn([ 'id' => 2 ]);
+        $itemA = new Entity([ 'pk_content' => 1, 'name' => 'wubble']);
+        $itemB = new Entity([ 'pk_content' => 2, 'name' => 'xyzzy' ]);
 
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
+
         $this->em->expects($this->exactly(2))->method('remove');
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
@@ -234,9 +229,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('entity.deleteList', [
-                'action' => 'Api\Service\V1\OrmService::deleteList',
-                'ids'    => [ 1, 2 ],
-                'item'  => [ $itemA, $itemB ]
+                'action'  => 'Api\Service\V1\OrmService::deleteList',
+                'ids'     => [ 1, 2 ],
+                'item'    => [ $itemA, $itemB ]
             ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
@@ -262,17 +257,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
         $itemA = new Entity([ 'name' => 'wubble']);
         $itemB = new Entity([ 'name' => 'xyzzy' ]);
 
-        $this->metadata->expects($this->at(0))->method('getL10nKeys')
-            ->willReturn([]);
-        $this->metadata->expects($this->at(2))->method('getId')
-            ->with($itemA)->willReturn([ 'id' => 1 ]);
-
         $this->repository->expects($this->once())->method('find')
             ->with([ 1, 2 ])
             ->willReturn([ $itemA, $itemB ]);
 
-        $this->em->expects($this->at(3))->method('remove')->willReturn('foobar');
-        $this->em->expects($this->at(5))->method('remove')
+        $this->em->expects($this->once())->method('remove')
             ->will($this->throwException(new \Exception()));
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
@@ -281,7 +270,7 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
                 'items' => [ $itemA, $itemB ]
             ]);
 
-        $this->assertEquals(1, $this->service->deleteList([ 1, 2 ]));
+        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
     }
 
     /**

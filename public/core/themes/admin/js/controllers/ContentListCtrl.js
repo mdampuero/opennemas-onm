@@ -448,11 +448,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           success: function() {
             return function() {
               var url = routing.generate(
-                'backend_ws_keyword_delete',
+                'api_v1_backend_keyword_delete',
                 { id: content.id }
               );
 
-              return $http.post(url);
+              return $http.delete(url);
             };
           }
         }
@@ -579,9 +579,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           },
           success: function() {
             return function() {
-              var url = routing.generate('backend_ws_keywords_batch_delete');
+              var url = routing.generate('api_v1_backend_keyword_batch_delete');
 
-              return $http.post(url, { ids: $scope.selected.contents });
+              return $http.delete(url, { ids: $scope.selected.contents });
             };
           }
         }

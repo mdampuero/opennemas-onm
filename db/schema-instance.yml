@@ -716,31 +716,6 @@ frontpage_versions:
             target_table: frontpages
             target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-letters:
-    columns:
-        pk_letter:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        author:
-            type: string
-            options: { length: 255, default: null, notnull: false }
-        email:
-            type: string
-            options: { length: 255, default: null, notnull: false }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_letter]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: letters_id_contents_id
-            source_field: [ pk_letter ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 menu_items:
     columns:
         pk_item:
@@ -928,18 +903,18 @@ orders:
             primary: true
             unique: true
             flags: {  }
-pclave:
+keywords:
     columns:
         id:
             type: integer
             options: { unsigned: true, autoincrement: true }
-        pclave:
+        keyword:
             type: string
             options: { length: 60, default: null }
         value:
             type: string
             options: { length: 240, default: null, notnull: false }
-        tipo:
+        type:
             type: string
             options: { length: 20, default: 'intsearch' }
     index:
