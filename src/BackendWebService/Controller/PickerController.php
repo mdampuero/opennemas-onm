@@ -32,6 +32,7 @@ class PickerController extends Controller
         $from         = $request->query->filter('from', '', FILTER_SANITIZE_STRING);
         $to           = $request->query->filter('to', '', FILTER_SANITIZE_STRING);
         $contentTypes = $request->query->filter('content_type_name', [], FILTER_SANITIZE_STRING);
+        $enabled      = $request->query->filter('enabled', [], FILTER_SANITIZE_STRING);
         $category     = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
         $intime       = $request->query->getBoolean('intime', false);
 
@@ -41,7 +42,7 @@ class PickerController extends Controller
 
         if (!empty($contentTypes)) {
             if ($contentTypes[0] == 'contents-in-frontpage') {
-                return $this->listFrontpageContents();
+                return $this->listFrontpageContents($enabled);
             }
 
             $types = [];
@@ -264,7 +265,7 @@ class PickerController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    private function listFrontpageContents()
+    private function listFrontpageContents($enabled = [])
     {
         $contentHelper = $this->container->get('core.helper.content');
 
@@ -273,9 +274,10 @@ class PickerController extends Controller
             ->get('api.service.frontpage_version')
             ->getContentsInCurrentVersionforCategory(0);
 
-        $results = array_filter($results, function ($value) use ($contentHelper) {
+        $results = array_filter($results, function ($value) use ($contentHelper, $enabled) {
             return $value->content_type_name != 'widget'
-                && $contentHelper->isReadyForPublish($value);
+                && $contentHelper->isReadyForPublish($value)
+                && in_array($value->content_type_name, $enabled);
         });
 
         $results = $this->responsify($results);

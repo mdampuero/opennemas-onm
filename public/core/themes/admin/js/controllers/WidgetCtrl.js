@@ -37,7 +37,7 @@
         $scope.incomplete = true;
 
         /**
-         * @memberOf AlbumCtrl
+         * @memberOf WidgetCtrl
          *
          * @description
          *  The item object.
@@ -65,7 +65,21 @@
         };
 
         /**
-         * @memberOf AlbumCtrl
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *  The data extra object contains related elements and
+         *  param index to insert a list of contents id
+         *
+         * @type {Object}
+         */
+        $scope.data = {
+          related: [],
+          index: null,
+        };
+
+        /**
+         * @memberOf WidgetCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -115,6 +129,74 @@
           });
 
           $scope.item.params = result;
+        };
+
+        /**
+         * @function init
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Make all the necessary actions to initialize the controller.
+         *
+         * @param {integer} index The index of params with contents id
+         */
+        $scope.init = function(index) {
+          $scope.data.index = index;
+
+          // Initialize the array of related contents
+          if ($scope.item.params[$scope.data.index].value !== '') {
+            var oql = 'pk_content in [' +
+              $scope.item.params[$scope.data.index].value +
+              ']';
+
+            var route = {
+              name: 'api_v1_backend_content_get_list',
+              params: { oql: oql }
+            };
+
+            http.get(route)
+              .then(function(response) {
+                $scope.data.related = response.data.items;
+              })
+              .catch(function(err) {
+                $scope.data.related = [];
+                return err;
+              });
+          }
+
+          // Watch for changes in the related contents
+          $scope.$watch(function() {
+            if (!$scope.data.related) {
+              return '';
+            }
+
+            return $scope.data.related.reduce(function(previous, current) {
+              if (!previous) {
+                return previous + current.pk_content;
+              }
+
+              return previous + ',' + current.pk_content;
+            }, '');
+          }, function(nv, ov) {
+            if (ov === nv) {
+              return;
+            }
+
+            $scope.item.params[$scope.data.index].value = nv;
+          });
+        };
+
+        /**
+         * @function removeItem
+         * @memberOf WidgetCtrl
+         *
+         * @description
+         *   Delete related item from index
+         *
+         * @param integer index The index of related to delete
+         */
+        $scope.removeItem = function(index) {
+          $scope.data.related.splice(index, 1);
         };
 
         /**

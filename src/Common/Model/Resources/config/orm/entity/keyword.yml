@@ -1,0 +1,46 @@
+orm:
+    metadata:
+        -
+            name:  Keyword
+            class: Common\Model\Entity\Keyword
+            properties:
+              id:             integer
+              keyword:        string
+              value:          string
+              type:           string
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.keyword' ]
+            repositories:
+                instance:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.keyword', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.keyword', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: keywords
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true autoincrement: true }
+                        keyword:
+                            type: string
+                            options: { default: null, notnull: false, lenght: 60 }
+                        value:
+                            type: string
+                            options: { default: null, notnull: false, lenght: 240 }
+                        type:
+                            type: string
+                            options: { default: null, notnull: false, lenght: 20 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }
+

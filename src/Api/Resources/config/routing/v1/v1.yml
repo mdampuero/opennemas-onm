@@ -34,6 +34,10 @@ api_v1_backend_content:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/content.yml'
     prefix:   /backend
 
+api_v1_backend_keyword:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/keyword.yml'
+    prefix:   /backend
+
 api_v1_backend_letter:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/letter.yml'
     prefix:   /backend

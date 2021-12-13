@@ -1,4 +1,5 @@
 angular.module('BackendApp.controllers')
+
   /**
    * @ngdoc controller
    * @name  OpinionListCtrl
@@ -55,7 +56,7 @@ angular.module('BackendApp.controllers')
 
           // Disable spinner
           $scope.loading = 0;
-        }, function () {
+        }, function() {
           $scope.loading = 0;
           var params = {
             id: new Date().getTime(),
@@ -70,7 +71,7 @@ angular.module('BackendApp.controllers')
       /**
        * Permanently removes a list of contents by using a confirmation dialog
        */
-      $scope.removeSelectedMenus = function () {
+      $scope.removeSelectedMenus = function() {
         // Enable spinner
         $scope.deleting = 1;
 
@@ -87,7 +88,7 @@ angular.module('BackendApp.controllers')
             success: function() {
               return function() {
                 return http.post('backend_ws_menus_batch_delete',
-                  {ids: $scope.selected.contents});
+                  { ids: $scope.selected.contents });
               };
             }
           }
@@ -140,4 +141,5 @@ angular.module('BackendApp.controllers')
           }
         });
       };
-  }]);
+    }
+  ]);

@@ -728,29 +728,29 @@ LOCK TABLES `pc_users` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `pclave`
+-- Table structure for table `keywords`
 --
 
-DROP TABLE IF EXISTS `pclave`;
+DROP TABLE IF EXISTS `keywords`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pclave` (
+CREATE TABLE `keywords` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `pclave` varchar(60) NOT NULL,
+  `keyword` varchar(60) NOT NULL,
   `value` varchar(240) DEFAULT NULL,
-  `tipo` varchar(20) NOT NULL DEFAULT 'intsearch',
+  `type` varchar(20) NOT NULL DEFAULT 'intsearch',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pclave`
+-- Dumping data for table `keywords`
 --
 
-LOCK TABLES `pclave` WRITE;
-/*!40000 ALTER TABLE `pclave` DISABLE KEYS */;
-INSERT INTO `pclave` VALUES (1,'Opennemas','https://www.opennemas.com/','url');
-/*!40000 ALTER TABLE `pclave` ENABLE KEYS */;
+LOCK TABLES `keywords` WRITE;
+/*!40000 ALTER TABLE `keywords` DISABLE KEYS */;
+INSERT INTO `keywords` VALUES (1,'Opennemas','https://www.opennemas.com/','url');
+/*!40000 ALTER TABLE `keywords` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
