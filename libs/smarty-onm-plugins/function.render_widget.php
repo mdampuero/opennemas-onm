@@ -1,4 +1,8 @@
 <?php
+
+use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
+
 function smarty_function_render_widget($params, &$smarty)
 {
     // Initializing parameters
@@ -17,10 +21,18 @@ function smarty_function_render_widget($params, &$smarty)
             $widgetName
         );
 
-        $widget = $sw->getList($oql)['items'][0];
+        try {
+            $widget = $sw->getList($oql)['items'][0];
+        } catch (GetListException $e) {
+            return '';
+        }
     } else {
         // Initialize widget from id
-        $widget = $sw->getItem($widgetID);
+        try {
+            $widget = $sw->getItem($widgetID);
+        } catch (GetItemException $e) {
+            return '';
+        }
     }
 
     $output = '';

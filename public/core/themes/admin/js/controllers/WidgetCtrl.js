@@ -343,7 +343,8 @@
         $scope.resetContent = function() {
           $('.widget-form').empty();
           $scope.item.class = null;
-          $scope.widgetForm   = null;
+          $scope.widgetForm = null;
+          $scope.item.body  = null;
         };
 
         // Gets the form for widget when widget class changes
@@ -352,10 +353,7 @@
             return;
           }
 
-          if ($scope.item.widget_type) {
-            $scope.item.body = null;
-            $scope.getForm(nv);
-          }
+          $scope.getForm(nv);
         }, true);
       }
     ]);

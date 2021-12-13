@@ -79,7 +79,7 @@
       <ui-select-match>
         <strong>{t}Content{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
-      <ui-select-choices repeat="item.id as item in addEmptyValue(data.extra.class, 'id', 'name') | filter: { name: $select.search }">
+      <ui-select-choices repeat="item.id as item in addEmptyValue(data.extra.classes, 'id', 'name') | filter: { name: $select.search }">
         <div ng-bind-html="item.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>

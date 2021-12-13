@@ -89,7 +89,7 @@ class WidgetController extends BackendController
             ]);
 
             return $this->render('widget/content-provider.tpl', [
-                'widgets'   => $response['items'],
+                'widgets'    => $response['items'],
                 'pagination' => $pagination,
             ]);
         } catch (GetListException $e) {

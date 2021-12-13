@@ -68,11 +68,11 @@
                 {t}Content{/t}
               </label>
               <div class="controls controls-validation">
-                <ui-select class="block" name="content" theme="select2" ng-model="item.class" required>
+                <ui-select class="block" name="content" theme="select2" ng-model="item.classes" required>
                   <ui-select-match placeholder="{t}Select a type{/t}">
                     [% $select.selected.name %]
                   </ui-select-match>
-                  <ui-select-choices position="up" repeat="item.id as item in data.extra.class | filter: { name: $select.search }">
+                  <ui-select-choices position="up" repeat="item.id as item in data.extra.classes | filter: { name: $select.search }">
                     <div ng-bind-html="item.name | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>

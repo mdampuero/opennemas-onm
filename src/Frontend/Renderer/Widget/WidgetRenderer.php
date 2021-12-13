@@ -18,16 +18,12 @@ class WidgetRenderer extends Renderer
      */
     public function render($widget, $params)
     {
-        switch ($widget->widget_type) {
-            case 'intelligentwidget':
-                $output = $this->renderletIntelligentWidget($widget, $params);
-                break;
-            default:
-                $output = $widget->body ? $widget->body : '';
-                break;
-        }
-
-        return "<div class=\"widget\">" . $output . "</div>";
+        return sprintf(
+            "<div class=\"widget\">%s</div>",
+            $widget->widget_type === 'intelligentwidget'
+            ? $this->renderletIntelligentWidget($widget, $params)
+            : $widget->body ?? ''
+        );
     }
 
     /**
