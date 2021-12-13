@@ -297,9 +297,9 @@ $menuXml = [
                 'id'          => 'keyword_manager',
                 'title'       => _('Keywords'),
                 'icon'        => 'fa fa-tags',
-                'link'        => url('admin_keywords'),
+                'link'        => url('backend_keywords_list'),
                 'module_name' => 'KEYWORD_MANAGER',
-                'privilege'   => 'PCLAVE_ADMIN',
+                'privilege'   => 'KEYWORD_ADMIN',
             ],
             [
                 'id'          => 'sync_manager',

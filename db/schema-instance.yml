@@ -897,18 +897,18 @@ orders:
             primary: true
             unique: true
             flags: {  }
-pclave:
+keywords:
     columns:
         id:
             type: integer
             options: { unsigned: true, autoincrement: true }
-        pclave:
+        keyword:
             type: string
             options: { length: 60, default: null }
         value:
             type: string
             options: { length: 240, default: null, notnull: false }
-        tipo:
+        type:
             type: string
             options: { length: 20, default: 'intsearch' }
     index:
