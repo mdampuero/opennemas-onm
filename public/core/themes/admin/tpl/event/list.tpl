@@ -17,7 +17,7 @@
 {/block}
 
 {block name="primaryActions"}
-  {acl isAllowed="ALBUM_CREATE"}
+  {acl isAllowed="EVENT_CREATE"}
     <li class="quicklinks">
       <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_event_create}">
         <span class="fa fa-plus m-r-5"></span>

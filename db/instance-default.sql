@@ -233,6 +233,7 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`),
   KEY `comment_content_id` (`content_id`),
   KEY `comment_parent_id` (`parent_id`),
+  KEY `comment_status` (`status`),
   CONSTRAINT `comments_id_contents_id` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -467,7 +468,6 @@ CREATE TABLE `contents` (
   KEY `fk_author` (`fk_author`),
   KEY `fk_publisher` (`fk_publisher`),
   KEY `fk_user_last_editor` (`fk_user_last_editor`),
-  KEY `content_type_name_changed` (`content_type_name`,`changed`),
   CONSTRAINT `fk_author_users_id` FOREIGN KEY (`fk_author`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher_users_id` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_user_last_editor_users_id` FOREIGN KEY (`fk_user_last_editor`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -1131,4 +1131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-04 12:51:39
+-- Dump completed on 2021-11-19 14:33:27
