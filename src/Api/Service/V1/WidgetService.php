@@ -25,15 +25,17 @@ class WidgetService extends ContentService
                 return $a->id;
             }, $intelligent);
 
-            if (empty($ids)) {
-                return $cleanOql;
-            }
-
-            return $this->container->get('orm.oql.fixer')->fix($cleanOql)
+            return empty($ids)
+                ? $cleanOql
+                : $this->container->get('orm.oql.fixer')->fix($cleanOql)
                 ->addCondition(sprintf('pk_content !in [%s]', implode(',', $ids)))
                 ->getOql();
         }
 
-        return $oql;
+        preg_match('/and class=\"([a-zA-z]+)\"/', $oql, $matches);
+
+        return empty($matches)
+            ? $oql
+            : preg_replace('/and widget_type=\"intelligentwidget\"/', '', $oql);
     }
 }
