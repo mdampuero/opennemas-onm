@@ -69,7 +69,7 @@ angular.module('onm.routing', []).provider('routing', function() {
    *
    * @return Object The current object.
    */
-  this.$get = function () {
+  this.$get = function() {
     return this;
   };
 });

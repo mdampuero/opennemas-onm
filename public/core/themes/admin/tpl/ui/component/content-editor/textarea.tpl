@@ -5,7 +5,7 @@
   {if $imagepicker}
     {acl isAllowed='PHOTO_ADMIN'}
       <div class="pull-right">
-        <div class="btn btn-mini" {if $required}required{/if} media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="5" media-picker-target="editor.{$field}" photo-editor-enabled="true">
+        <div class="btn btn-mini" {if $required}required{/if} media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="editor.{$field}" photo-editor-enabled="true">
           <i class="fa fa-plus"></i>
           {t}Insert image{/t}
         </div>
