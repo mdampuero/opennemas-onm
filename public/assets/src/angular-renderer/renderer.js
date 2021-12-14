@@ -129,11 +129,10 @@
          *
          * @param {Object} item   The related content.
          * @param {Array}  extra  The array of extra data.
-         * @param {String} target The target of the picker.
          *
          * @return {String} The html code for a related content.
          */
-        this.renderContent = function(item, extra, target) {
+        this.renderContent = function(item, extra) {
           var html = this.template.replace('[title]', item.title);
 
           if (item.content_type_name === 'attachment') {
@@ -170,13 +169,6 @@
 
           // Generates the url for the content.
           html = html.replace('[url]', routing.generate(route, params));
-
-          if (target !== 'body') {
-            html = html.replace('[title]', item.title);
-            html = html.replace('[figure]', '');
-
-            return html;
-          }
 
           var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
             return related.type === 'featured_frontpage';

@@ -369,7 +369,7 @@
           }
 
           if (items[0].content_type_name !== 'photo') {
-            $q.when(Renderer.renderRelatedContents(items, extra, target), function(html) {
+            $q.when(Renderer.renderRelatedContents(items, extra), function(html) {
               Editor.get(target).insertHtml(html);
             });
           }
