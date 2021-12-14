@@ -345,7 +345,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     /**
      * @function localizeText
-     * @memberOf CommentCtrl
+     * @memberOf ContentRestInnerCtrl
      *
      * @param {any} String or Object to localize.
      *

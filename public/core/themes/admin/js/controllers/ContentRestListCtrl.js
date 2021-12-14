@@ -52,7 +52,7 @@
 
         /**
          * @function sendToTrash
-         * @memberOf UserCtrl
+         * @memberOf ContentRestListCtrl
          *
          * @description
          *   Shows a modal to confirm user update.
@@ -135,7 +135,7 @@
 
         /**
          * @function localizeText
-         * @memberOf CommentCtrl
+         * @memberOf ContentRestListCtrl
          *
          * @param {any} String or Object to localize.
          *
