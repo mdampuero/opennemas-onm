@@ -45,7 +45,35 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests countContents when no error thrown.
+     * Tests countComments when error thrown.
+     */
+    public function testCountCommentsWhenError()
+    {
+        $this->conn->expects($this->once())->method('selectDatabase')
+            ->with(3441);
+
+        $this->conn->expects($this->once())->method('fetchAssoc')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEmpty($this->helper->countComments($this->instance));
+    }
+
+    /**
+     * Tests countComments when no error thrown.
+     */
+    public function testCountCommentsWhenNoError()
+    {
+        $this->conn->expects($this->once())->method('selectDatabase')
+            ->with(3441);
+
+        $this->conn->expects($this->once())->method('fetchAssoc')
+            ->willReturn([ 'total' => 3562 ]);
+
+        $this->assertEquals(3562, $this->helper->countComments($this->instance));
+    }
+
+    /**
+     * Tests countContents when error thrown.
      */
     public function testCountContentsWhenError()
     {
@@ -58,7 +86,7 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests countContents when error thrown.
+     * Tests countContents when no error thrown.
      */
     public function testCountContentsWhenNoError()
     {

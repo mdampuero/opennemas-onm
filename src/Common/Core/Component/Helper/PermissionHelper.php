@@ -650,28 +650,28 @@ class PermissionHelper
             ],
             90 => [
                 'id'          => 90,
-                'name'        => 'PCLAVE_ADMIN',
+                'name'        => 'KEYWORD_ADMIN',
                 'description' => _('List'),
                 'module'      => 'KEYWORD_MANAGER',
                 'enabled'     => 1
             ],
             91 => [
                 'id'          => 91,
-                'name'        => 'PCLAVE_UPDATE',
+                'name'        => 'KEYWORD_UPDATE',
                 'description' => _('Edit'),
                 'module'      => 'KEYWORD_MANAGER',
                 'enabled'     => 1
             ],
             92 => [
                 'id'          => 92,
-                'name'        => 'PCLAVE_DELETE',
+                'name'        => 'KEYWORD_DELETE',
                 'description' => _('Delete'),
                 'module'      => 'KEYWORD_MANAGER',
                 'enabled'     => 1
             ],
             93 => [
                 'id'          => 93,
-                'name'        => 'PCLAVE_CREATE',
+                'name'        => 'KEYWORD_CREATE',
                 'description' => _('Create'),
                 'module'      => 'KEYWORD_MANAGER',
                 'enabled'     => 1
@@ -1562,13 +1562,6 @@ class PermissionHelper
                 'module'      => 'FRONTEND',
                 'enabled'     => 1
             ],
-            251 => [
-                'id'          => 251,
-                'name'        => 'NON_MEMBER_HIDE_ADVERTISEMENTS',
-                'description' => _('Hide advertisements'),
-                'module'      => 'FRONTEND',
-                'enabled'     => 1
-            ],
             243 => [
                 'id'          => 243,
                 'name'        => 'TAG_ADMIN',
@@ -1627,6 +1620,13 @@ class PermissionHelper
             ],
             251 => [
                 'id'          => 251,
+                'name'        => 'NON_MEMBER_HIDE_ADVERTISEMENTS',
+                'description' => _('Hide advertisements'),
+                'module'      => 'FRONTEND',
+                'enabled'     => 1
+            ],
+            252 => [
+                'id'          => 252,
                 'name'        => 'COMMENT_SETTINGS',
                 'description' => _('Manage module setting'),
                 'module'      => 'COMMENT_MANAGER',

@@ -15,13 +15,6 @@ use Opennemas\Orm\Database\Repository\BaseRepository;
 class ContentPositionRepository extends BaseRepository
 {
     /**
-     * Number of max elements allowd in a frontpage, excluding advertisements
-     *
-     * @var int
-     **/
-    const MAX_NUMBER_OF_CONTENTS = 100;
-
-    /**
      * Returns a list of content positions for a given category and frontpage id
      *
      * @param int $categoryId the category id to get contents from

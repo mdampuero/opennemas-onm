@@ -451,6 +451,7 @@ CREATE TABLE `users` (
   `avatar_img_id` bigint(20) unsigned DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
+  `slug` varchar(100) DEFAULT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
   `token` varchar(50) DEFAULT NULL,
   `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
@@ -464,7 +465,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'master','21f0e80a0401deaebce9df20a22cf98c','',NULL,NULL,'support@opennemas.com','Master',0,NULL,1);
+INSERT INTO `users` VALUES (1,'master','21f0e80a0401deaebce9df20a22cf98c','',NULL,NULL,'support@opennemas.com','Master','master',0,NULL,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -108,29 +108,6 @@ admin_special_update:
     path:     /specials/{id}/update
     defaults: { _controller: BackendBundle:Specials:update }
 
-# Letter manager routes
-admin_letters:
-    path:     /letters
-    defaults: { _controller: BackendBundle:Letters:list }
-
-admin_letter_create:
-    path:     /letters/create
-    defaults: { _controller: BackendBundle:Letters:create }
-
-admin_letter_show:
-    path:     /letters/{id}/show
-    defaults: { _controller: BackendBundle:Letters:show }
-    options:
-        expose: true
-
-admin_letter_update:
-    path:     /letter/{id}/update
-    defaults: { _controller: BackendBundle:Letters:update }
-
-admin_letters_content_provider:
-    path:     /letters/content-provider
-    defaults: { _controller: BackendBundle:Letters:contentProvider }
-
 # Books controller routes
 admin_books:
     path:     /books
@@ -158,29 +135,6 @@ admin_search:
 admin_search_content_provider:
     path:     /search/content-provider
     defaults: { _controller: BackendBundle:Search:contentProvider }
-
-# Keywork controller routes
-admin_keywords:
-    path:     /keywords
-    defaults: { _controller: BackendBundle:Keywords:list }
-
-admin_keyword_create:
-    path:     /keywords/create
-    defaults: { _controller: BackendBundle:Keywords:create }
-
-admin_keyword_show:
-    path:     /keywords/{id}/show
-    defaults: { _controller: BackendBundle:Keywords:show }
-    options:
-        expose: true
-
-admin_keyword_update:
-    path:     /keywords/{id}/update
-    defaults: { _controller: BackendBundle:Keywords:update }
-
-admin_keyword_autolink:
-    path:     /keywords/autolink
-    defaults: { _controller: BackendBundle:Keywords:autolink }
 
 # Trash controller routes
 admin_trash:
@@ -259,6 +213,14 @@ backend_event:
 backend_frontpage:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/frontpage.yml'
+
+backend_keyword:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/keyword.yml'
+
+backend_letter:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/letter.yml'
 
 backend_newsletter:
     prefix:   /

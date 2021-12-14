@@ -82,6 +82,12 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
+        // Div with class and other attributes
+        $str      = '<div style="width:100%;" class="thisClassShouldBeKept">Some div content</div>';
+        $expected = '<div class="thisClassShouldBeKept">Some div content</div>';
+        
+        $this->assertEquals($expected, $this->filter->filter($str));
+
         // String with video
         $str      = '<p>The string</p><video src="/mumble/"></video><p>to</p><p>parse</p>';
         $expected = '<p>The string</p><amp-video layout="responsive" width="518" '

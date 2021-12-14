@@ -9,11 +9,11 @@
  */
 namespace Tests\Api\Service\V1;
 
-use Api\Service\V1\AttachmentService;
-use Common\Core\Component\Helper\AttachmentHelper;
+use Api\Exception\CreateItemException;
+use Api\Exception\UpdateItemException;
+use Api\Exception\DeleteItemException;
 use Common\Model\Entity\Instance;
-
-use Mockery as m;
+use Common\Model\Entity\Content;
 
 /**
  * @runTestsInSeparateProcesses
@@ -26,10 +26,12 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
-
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->converter = $this->getMockBuilder('Converter' . uniqid())
+            ->setMethods([ 'objectify', 'responsify' ])
             ->getMock();
 
         $this->dispatcher = $this->getMockBuilder('Common\Core\Component\EventDispatcher\EventDispatcher')
@@ -37,8 +39,18 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
-        $this->em = $this->getMockBuilder('EntityRepository')
-            ->setMethods([ 'find' ])
+        $this->em = $this->getMockBuilder('EntityManager' . uniqid())
+            ->setMethods([ 'getConverter', 'getMetadata', 'getRepository', 'persist', 'remove'])
+            ->getMock();
+
+        $this->file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName' ])
+            ->getMock();
+
+        $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['filter', 'get', 'set'])
             ->getMock();
 
         $this->il = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
@@ -51,15 +63,28 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generatePath', 'getRelativePath', 'move', 'remove', 'exists' ])
             ->getMock();
 
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
+            ->getMock();
+
+        $this->security = $this->getMockBuilder('Sercurity')
+            ->setMethods([ 'hasPermission' ])
+            ->getMock();
+
+        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
+
+        $this->em->expects($this->any())->method('getMetadata')
+            ->willReturn($this->metadata);
 
         $this->il->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
-            ->setConstructorArgs([ $this->container, '\Attachment' ])
-            ->setMethods([ 'getItem' ])
+            ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
+            ->setMethods([ 'getItem', 'assignUser', 'getListBySql' ])
             ->getMock();
     }
 
@@ -76,11 +101,17 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.dispatcher':
                 return $this->dispatcher;
 
-            case 'entity_repository':
+            case 'orm.manager':
                 return $this->em;
 
             case 'core.helper.attachment':
                 return $this->ah;
+
+            case 'data.manager.filter':
+                return $this->fm;
+
+            case 'core.security':
+                return $this->security;
 
             default:
                 return null;
@@ -98,24 +129,19 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests createItem when an error while moving the file is thrown.
+     * Tests createItem when file already exists.
      *
      * @expectedException Api\Exception\CreateItemException
      */
-    public function testCreateItemWhenErrorWithFile()
+    public function testCreateItemWhenFileAlreadyExists()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
+        $this->ah->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
 
-        $externalAttachment = m::mock('overload:\Attachment');
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(true);
 
-        $this->ah->expects($this->once())->method('move');
-
-        $externalAttachment->shouldReceive('create')->once()->andReturn(null);
-
-        $this->service->createItem([ 'title' => 'waldo' ], $file);
+        $this->service->createItem([ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -123,20 +149,24 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException Api\Exception\CreateItemException
      */
-    public function testCreateItemWhenFileAlreadyExists()
+    public function testCreateItemWhenErrorWithFile()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
-
         $this->ah->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
 
         $this->ah->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->security->expects($this->any())->method('hasPermission')
             ->willReturn(true);
 
-        $this->service->createItem([ 'title' => 'waldo' ], $file);
+        $this->em->expects($this->any())->method('getConverter')
+            ->willReturn($this->converter);
+
+        $this->ah->expects($this->once())->method('move')
+            ->willReturn(new CreateItemException());
+
+        $this->service->createItem([ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -144,18 +174,32 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateItemWhenSuccessfulUpload()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'flob', 'changed' => 'foo', 'bar' => 1 ]);
 
-        $externalAttachment = m::mock('overload:\Attachment');
+        $this->ah->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
 
-        $this->ah->expects($this->once())->method('move');
+        $this->ah->expects($this->once())->method('getRelativePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
 
-        $externalAttachment->shouldReceive('create')->once()->andReturn($externalAttachment);
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(false);
 
-        $this->service->createItem([ 'title' => 'waldo' ], $file);
+        $this->security->expects($this->any())->method('hasPermission')
+            ->willReturn(true);
+
+        $this->em->expects($this->any())->method('getConverter')
+            ->willReturn($this->converter);
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
+
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
+
+        $this->service->createItem([ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -165,23 +209,30 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItemWhenErrorWithFile()
     {
-        $item = new \Attachment();
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'attachment'
+        ]);
 
-        $item->created = '2010-01-01 00:00:00';
-        $item->path    = '/2010/01/01/plugh.mumble';
-
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
-
-        $this->service->expects($this->once())->method('getItem')
-            ->willReturn($item);
+        $this->service->expects($this->any())->method('getItem')
+            ->willReturn($content);
 
         $this->ah->expects($this->once())->method('generatePath')
-            ->will($this->throwException(new \Exception()));
+            ->willReturn('/2010/01/01/plugh.mumble');
 
-        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+        $this->ah->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->security->expects($this->any())->method('hasPermission')
+            ->willReturn(true);
+
+        $this->em->expects($this->any())->method('getConverter')
+            ->willReturn($this->converter);
+
+        $this->ah->expects($this->once())->method('move')
+            ->willReturn(new UpdateItemException());
+
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -191,30 +242,21 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItemWhenFileAlreadyExists()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'attachment'
+        ]);
 
-        $attachment = $this->getMockBuilder('\Attachment')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getRelativePath' ])
-            ->getMock();
+        $this->service->expects($this->any())->method('getItem')
+            ->willReturn($content);
 
-        $this->ah->expects($this->once())->method('getRelativePath')
-            ->willReturn('AttachmentHelper');
+        $this->ah->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
 
         $this->ah->expects($this->once())->method('exists')
             ->willReturn(true);
 
-        $this->service->expects($this->once())->method('getItem')
-            ->with(1)
-            ->willReturn($attachment);
-
-        $attachment->expects($this->once())->method('getRelativePath')
-            ->willReturn('Attachment');
-
-        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -224,35 +266,30 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItemWhenNotEmptyRelativePath()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'attachment'
+        ]);
 
-        $attachment = $this->getMockBuilder('\Attachment')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getRelativePath', 'update' ])
-            ->getMock();
+        $this->service->expects($this->any())->method('getItem')
+            ->willReturn($content);
 
-        $this->service->expects($this->once())->method('getItem')
-            ->with(1)
-            ->willReturn($attachment);
+        $this->ah->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
 
         $this->ah->expects($this->once())->method('exists')
             ->willReturn(false);
 
-        $attachment->expects($this->any())->method('getRelativePath')
-            ->willReturn('Attachment');
+        $this->security->expects($this->any())->method('hasPermission')
+            ->willReturn(true);
 
-        $this->ah->expects($this->once())
-            ->method('remove');
+        $this->em->expects($this->any())->method('getConverter')
+            ->willReturn($this->converter);
 
-        $this->ah->expects($this->once())
-            ->method('move');
+        $this->ah->expects($this->any())->method('remove')
+            ->willReturn(new UpdateItemException());
 
-        $attachment->expects($this->once())->method('update');
-
-        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -260,36 +297,35 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItemWhenSuccessfulUpdate()
     {
-        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
-            ->getMock();
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'attachment',
+            'path' => '/2010/01/01/plugh.mumble'
+        ]);
 
-        $attachment = $this->getMockBuilder('\Attachment')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getRelativePath', 'update' ])
-            ->getMock();
+        $this->service->expects($this->any())->method('getItem')
+            ->willReturn($content);
 
-        $this->service->expects($this->once())->method('getItem')
-            ->with(1)
-            ->willReturn($attachment);
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($this->arrayHasKey('changed'))
+            ->will($this->returnArgument(0));
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
+
+        $this->ah->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
 
         $this->ah->expects($this->once())->method('exists')
             ->willReturn(false);
 
-        $attachment->expects($this->any())->method('getRelativePath')
-            ->willReturn('Attachment');
+        $this->security->expects($this->any())->method('hasPermission')
+            ->willReturn(true);
 
-        $this->ah->expects($this->once())
-            ->method('remove');
+        $this->em->expects($this->any())->method('getConverter')
+            ->willReturn($this->converter);
 
-        $this->ah->expects($this->once())
-            ->method('move');
-
-        $attachment->expects($this->once())->method('update')
-            ->willReturn('something');
-
-        $this->service->updateItem(1, [ 'title' => 'waldo' ], $file);
+        $this->service->updateItem(1, [ 'title' => 'waldo' ], $this->file);
     }
 
     /**
@@ -300,5 +336,51 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
     public function testUpdateItemWhenNoFileNorPath()
     {
         $this->service->updateItem(1, [ 'title' => 'waldo' ]);
+    }
+
+
+    /**
+     * Tests deleteItem when no error.
+     */
+    public function testDeleteItem()
+    {
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'attachment',
+            'path' => '/2010/01/01/plugh.mumble'
+        ]);
+
+        $this->service->expects($this->any())->method('getItem')
+            ->willReturn($content);
+
+        $this->em->expects($this->once())->method('remove')
+            ->with($content);
+
+        $this->service->deleteItem(1);
+    }
+
+    /**
+     * Tests deleteItem when error.
+     *
+     * @expectedException Api\Exception\DeleteItemException
+     */
+    public function testDeleteItemWhenError()
+    {
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'attachment',
+            'path' => '/2010/01/01/plugh.mumble'
+        ]);
+
+        $this->service->expects($this->any())->method('getListBySql')
+            ->willReturn([]);
+        $this->service->expects($this->any())->method('getItem')
+            ->willReturn($content);
+
+        $this->em->expects($this->any())->method('remove')
+            ->with($content->path)
+            ->willReturn(new DeleteItemException());
+
+        $this->service->deleteItem(1);
     }
 }

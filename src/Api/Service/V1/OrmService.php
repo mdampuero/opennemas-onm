@@ -138,9 +138,9 @@ class OrmService implements Service
             $this->em->remove($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'action' => __METHOD__,
-                'id'   => $id,
-                'item' => $item
+                'action'  => __METHOD__,
+                'id'      => $id,
+                'item'    => $item
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
@@ -162,25 +162,25 @@ class OrmService implements Service
             throw new DeleteListException($e->getMessage(), $e->getCode());
         }
 
-        $deleted = [];
         $items   = [];
+        $deleted = array_map(function ($a) {
+                return $a->pk_content;
+        }, $response['items']);
+
         foreach ($response['items'] as $item) {
             try {
                 $this->em->remove($item, $item->getOrigin());
 
-                $id = $this->em->getMetadata($item)->getId($item);
-
-                $deleted[] = array_pop($id);
-                $items[]   = $item;
+                $items[] = $item;
             } catch (\Exception $e) {
                 throw new DeleteListException($e->getMessage(), $e->getCode());
             }
         }
 
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'action' => __METHOD__,
-            'ids'    => $deleted,
-            'item'   => $items
+            'action'  => __METHOD__,
+            'ids'     => $deleted,
+            'item'    => $items
         ]);
 
         return count($deleted);

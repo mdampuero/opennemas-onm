@@ -63,6 +63,7 @@ class SettingController extends Controller
         'facebook_page',
         'logo_favico',
         'logo_embed',
+        'frontpage_max_items',
         'google_analytics',
         'google_analytics_others',
         'google_custom_search_api_key',
@@ -125,6 +126,7 @@ class SettingController extends Controller
         'custom_css_amp',
         'header_script',
         'header_script_amp',
+        'frontpage_max_items',
         'robots_txt_rules',
         'sitemap'
     ];
@@ -187,7 +189,7 @@ class SettingController extends Controller
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
             'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
-            'logo_favico', 'logo_embed', 'sitemap'
+            'logo_favico', 'logo_embed', 'sitemap', 'frontpage_max_items'
         ];
 
         foreach ($toint as $key) {
