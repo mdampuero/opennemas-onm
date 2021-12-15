@@ -17,11 +17,6 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * @inheritdoc
-         */
-        $scope.incomplete = true;
-
-        /**
          * @memberOf CommentCtrl
          *
          * @description
