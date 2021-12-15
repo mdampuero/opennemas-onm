@@ -42,6 +42,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     $scope.dtm = null;
 
     /**
+     * @inheritdoc
+     */
+    $scope.incomplete = true;
+
+    /**
      * @function checkDraft
      * @memberOf ContentRestInnerCtrl
      *

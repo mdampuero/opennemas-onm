@@ -32,11 +32,6 @@
         $scope.widgetForm = false;
 
         /**
-         * @inheritdoc
-         */
-        $scope.incomplete = true;
-
-        /**
          * @memberOf WidgetCtrl
          *
          * @description
