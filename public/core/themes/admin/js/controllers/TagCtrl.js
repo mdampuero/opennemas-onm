@@ -30,6 +30,13 @@
         };
 
         /**
+         * @memberOf TagCtrl
+         * @description
+         *  Flag to hide the list of fields
+         */
+        $scope.noFields = true;
+
+        /**
          * @inheritdoc
          */
         $scope.incomplete = true;

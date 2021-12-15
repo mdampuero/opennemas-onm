@@ -23,6 +23,9 @@
   </a>
 {/block}
 
+{block name="commonFields"}
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

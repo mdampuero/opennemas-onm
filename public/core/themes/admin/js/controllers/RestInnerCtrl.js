@@ -83,9 +83,7 @@
               hidden: []
             };
           } else {
-            $scope.app.fields[$scope.contentKey].selected.forEach(function(item) {
-              $scope.expanded[item] = true;
-            });
+            $scope.setExpandedFields($scope.app.fields[$scope.contentKey].selected, true);
           }
         };
 
@@ -330,6 +328,31 @@
 
           return 0;
         };
+
+        /**
+         * @function setExpandedFields
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Set 'value' expanded from 'fields'
+         *
+         * @param {Array} data The data fields.
+         * @param {Boolean} data The value (true/false).
+         *
+         */
+        $scope.setExpandedFields = function(fields, value) {
+          fields.forEach(function(item) {
+            $scope.expanded[item] = value;
+          });
+        };
+
+        // Define watcher to fields
+        $scope.$watch('app.fields', function(nv, ov) {
+          $scope.setExpandedFields(ov[$scope.contentKey].selected, false);
+          $scope.setExpandedFields(nv[$scope.contentKey].selected, true);
+
+          return true;
+        }, true);
       }
     ]);
 })();
