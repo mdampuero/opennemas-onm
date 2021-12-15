@@ -16,7 +16,7 @@
               {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[related.target_id]" iFlagIcon=true}
             </span>
             <span class="related-item-title">
-              [% data.extra.related_contents[related.target_id].title %]
+              [% localizeText(data.extra.related_contents[related.target_id].title ) %]
             </span>
             <span class="related-item-status" ng-if="related.content_status == 0">
               ({t}No published{/t})
