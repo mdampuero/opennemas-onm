@@ -20,6 +20,11 @@
       function($controller, $scope, http) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
+        /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'newsagency';
+
         $scope.item = {
           authors_map: [],
           categories_map: [],
@@ -81,6 +86,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+
           if ($scope.item.activated) {
             $scope.item.activated = parseInt($scope.item.activated);
           }

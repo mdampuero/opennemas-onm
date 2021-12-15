@@ -106,6 +106,15 @@
   </div>
 {/block}
 
+{block name="customFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('closed')">
+    <input id="checkbox-closed" checklist-model="app.fields[contentKey].selected" checklist-value="'closed'" type="checkbox">
+    <label for="checkbox-closed">
+      {t}Vote end date{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

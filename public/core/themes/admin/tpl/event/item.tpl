@@ -150,6 +150,27 @@
   </div>
 {/block}
 
+{block name="customFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('when')">
+    <input id="checkbox-when" checklist-model="app.fields[contentKey].selected" checklist-value="'when'" type="checkbox">
+    <label for="checkbox-when">
+      {t}Event date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('where')">
+    <input id="checkbox-where" checklist-model="app.fields[contentKey].selected" checklist-value="'where'" type="checkbox">
+    <label for="checkbox-where">
+      {t}Event location{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('external_website')">
+    <input id="checkbox-external_website" checklist-model="app.fields[contentKey].selected" checklist-value="'external_website'" type="checkbox">
+    <label for="checkbox-external_website">
+      {t}External website{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

@@ -65,6 +65,15 @@
   </div>
 {/block}
 
+{block name="customFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('date')">
+    <input id="checkbox-date" checklist-model="app.fields[contentKey].selected" checklist-value="'date'" type="checkbox">
+    <label for="checkbox-date">
+      {t}Date{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

@@ -83,6 +83,15 @@
   </div>
 {/block}
 
+{block name="customFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('agency')">
+    <input id="checkbox-agency" checklist-model="app.fields[contentKey].selected" checklist-value="'agency'" type="checkbox">
+    <label for="checkbox-agency">
+      {t}Agency{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

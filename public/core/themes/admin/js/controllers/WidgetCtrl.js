@@ -22,6 +22,11 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'widget';
+
+        /**
          * @memberOf WidgetCtrl
          *
          * @description
@@ -234,6 +239,15 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.widget.hidden =
+            [
+              'author', 'category', 'slug',
+              'bodyLink', 'tags', 'lists',
+              'featuredFrontpage', 'featuredInner',
+              'relatedFrontpage', 'relatedInner'
+            ];
+
           var params = [];
 
           for (var key in $scope.item.params) {

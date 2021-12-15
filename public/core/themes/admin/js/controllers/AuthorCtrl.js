@@ -21,6 +21,11 @@
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'author';
+
+        /**
          * @memberOf AuthorCtrl
          *
          * @description
@@ -61,6 +66,15 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.author.hidden =
+            [
+              'author', 'category', 'tags',
+              'bodyLink', 'schedule', 'lists',
+              'featuredFrontpage', 'featuredInner',
+              'relatedFrontpage', 'relatedInner'
+            ];
+
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }

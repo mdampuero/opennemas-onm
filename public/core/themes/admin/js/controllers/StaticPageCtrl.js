@@ -33,6 +33,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'staticpage';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -84,6 +89,15 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.staticpage.hidden =
+            [
+              'author', 'category', 'tags',
+              'bodyLink', 'schedule', 'lists',
+              'featuredFrontpage', 'featuredInner',
+              'relatedFrontpage', 'relatedInner'
+            ];
+
           $scope.localize($scope.data.item, 'item', true);
 
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {

@@ -22,6 +22,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'category';
+
+        /**
+         * @inheritdoc
+         */
         $scope.item = {
           description: '',
           parent_id: null
@@ -43,6 +48,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
           $scope.localize($scope.data.item, 'item', true);
         };
 

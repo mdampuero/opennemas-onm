@@ -34,6 +34,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'album';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -136,6 +141,13 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.album.hidden =
+            [
+              'bodyLink', 'lists', 'featuredInner',
+              'relatedFrontpage', 'relatedInner'
+            ];
+
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
           // Use default value for new items

@@ -33,6 +33,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'poll';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -114,6 +119,10 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.poll.hidden =
+            [ 'bodyLink', 'featuredFrontpage', 'relatedInner', 'relatedFrontpage', 'lists' ];
+
           $scope.localize($scope.data.item, 'item', true, [ 'items', 'related_contents' ]);
 
           // Check if item is new (created) or existing for use default value or not

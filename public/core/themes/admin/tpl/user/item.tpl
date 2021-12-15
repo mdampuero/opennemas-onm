@@ -133,6 +133,21 @@
   {/if}
 {/block}
 
+{block name="customFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('user_groups')">
+    <input id="checkbox-user_groups" checklist-model="app.fields[contentKey].selected" checklist-value="'user_groups'" type="checkbox">
+    <label for="checkbox-user_groups">
+      {t}User Groups{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('language')">
+    <input id="checkbox-language" checklist-model="app.fields[contentKey].selected" checklist-value="'language'" type="checkbox">
+    <label for="checkbox-language">
+      {t}Language{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

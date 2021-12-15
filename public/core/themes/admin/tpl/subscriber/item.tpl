@@ -137,6 +137,15 @@
   {/acl}
 {/block}
 
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('subscriptions')">
+    <input id="checkbox-subscriptions" checklist-model="app.fields[contentKey].selected" checklist-value="'subscriptions'" type="checkbox">
+    <label for="checkbox-subscriptions">
+      {t}Lists{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

@@ -41,6 +41,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'letter';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -97,6 +102,13 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.letter.hidden =
+            [ 'author', 'category', 'bodyLink', 'lists',
+              'featuredFrontpage', 'featuredInner',
+              'relatedFrontpage', 'relatedInner'
+            ];
+
           $scope.localize($scope.data.item, 'item', true, [ ]);
 
           // Check if item is new (created) or existing for use default value or not

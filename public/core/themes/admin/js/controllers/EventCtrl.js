@@ -32,6 +32,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'event';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -105,6 +110,10 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.event.hidden =
+            [ 'bodyLink', 'relatedInner', 'relatedFrontpage', 'lists' ];
+
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
           // Use default value for new items

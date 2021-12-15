@@ -25,6 +25,11 @@
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'subscriber';
+
+        /**
          * @memberOf SubscriberCtrl
          *
          * @description
@@ -78,6 +83,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }

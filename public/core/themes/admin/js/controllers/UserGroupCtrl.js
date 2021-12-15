@@ -25,6 +25,11 @@
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'usergroup';
+
+        /**
          * @memberOf UserGroupCtrl
          *
          * @description
@@ -123,6 +128,14 @@
             ]
           }
         ];
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.checkFields();
+          return true;
+        };
 
         /**
          * @memberOf UserGroupCtrl

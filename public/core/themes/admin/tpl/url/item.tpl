@@ -66,6 +66,15 @@
   </div>
 {/block}
 
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('redirection')">
+    <input id="checkbox-redirection" checklist-model="app.fields[contentKey].selected" checklist-value="'redirection'" type="checkbox">
+    <label for="checkbox-redirection">
+      {t}Redirection{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-title">

@@ -22,6 +22,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     /**
      * @inheritdoc
      */
+    $scope.contentKey = 'video';
+
+    /**
+     * @inheritdoc
+     */
     $scope.dtm = null;
 
     /**
@@ -122,6 +127,12 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
+      $scope.checkFields();
+      $scope.app.fields.video.hidden =
+        [
+          'lists', 'bodyLink', 'featuredInner',
+          'relatedFrontpage', 'relatedInner'
+        ];
       $scope.localize($scope.data.item, 'item', true);
 
       // Check if item is new (created) or existing for use default value or not

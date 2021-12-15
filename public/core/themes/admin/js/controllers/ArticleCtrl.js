@@ -43,6 +43,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'article';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -112,6 +117,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
           // Check if item is new (created) or existing for use default value or not

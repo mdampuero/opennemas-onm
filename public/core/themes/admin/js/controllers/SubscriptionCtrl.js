@@ -20,6 +20,11 @@
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'subscription';
+
+        /**
          * @memberOf SubscriptionCtrl
          *
          * @description
@@ -47,6 +52,14 @@
           redirect:   'backend_subscription_show',
           saveItem:   'api_v1_backend_subscription_save_item',
           updateItem: 'api_v1_backend_subscription_update_item'
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.checkFields();
+          return true;
         };
 
         /**

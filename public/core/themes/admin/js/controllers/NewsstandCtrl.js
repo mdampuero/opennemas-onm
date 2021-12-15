@@ -31,6 +31,11 @@
         /**
          * @inheritdoc
          */
+        $scope.contentKey = 'kiosko';
+
+        /**
+         * @inheritdoc
+         */
         $scope.dtm = null;
 
         /**
@@ -79,6 +84,14 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.checkFields();
+          $scope.app.fields.kiosko.hidden =
+            [
+              'author', 'tags', 'bodyLink', 'lists',
+              'featuredFrontpage', 'featuredInner',
+              'relatedFrontpage', 'relatedInner'
+            ];
+
           $scope.localize($scope.data.item, 'item', true);
 
           var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');

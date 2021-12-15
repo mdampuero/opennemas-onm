@@ -60,6 +60,15 @@
   </div>
 {/block}
 
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('visibility')">
+    <input id="checkbox-visibility" checklist-model="app.fields[contentKey].selected" checklist-value="'visibility'" type="checkbox">
+    <label for="checkbox-visibility">
+      {t}Visibility{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

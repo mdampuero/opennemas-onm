@@ -25,6 +25,11 @@
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'url';
+
+        /**
          * @memberOf UserGroupCtrl
          *
          * @description
@@ -54,6 +59,14 @@
           redirect:   'backend_url_show',
           saveItem:   'api_v1_backend_url_save_item',
           updateItem: 'api_v1_backend_url_update_item'
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.checkFields();
+          return true;
         };
 
         // Updates item target when selected content from content picker changes

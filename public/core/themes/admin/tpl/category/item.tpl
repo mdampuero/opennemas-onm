@@ -155,6 +155,33 @@
   </div>
 {/block}
 
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('category')">
+    <input id="checkbox-category" checklist-model="app.fields[contentKey].selected" checklist-value="'category'" type="checkbox">
+    <label for="checkbox-category">
+      {t}Subsection of{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('color')">
+    <input id="checkbox-color" checklist-model="app.fields[contentKey].selected" checklist-value="'color'" type="checkbox">
+    <label for="checkbox-color">
+      {t}Color{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('logo')">
+    <input id="checkbox-logo" checklist-model="app.fields[contentKey].selected" checklist-value="'logo'" type="checkbox">
+    <label for="checkbox-logo">
+      {t}Logo{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('type')">
+    <input id="checkbox-type" checklist-model="app.fields[contentKey].selected" checklist-value="'type'" type="checkbox">
+    <label for="checkbox-type">
+      {t}Type{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

@@ -22,6 +22,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     /**
      * @inheritdoc
      */
+    $scope.contentKey = 'opinion';
+
+    /**
+     * @inheritdoc
+     */
     $scope.dtm = null;
 
     /**
@@ -90,6 +95,10 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
+      $scope.checkFields();
+      $scope.app.fields.opinion.hidden =
+        [ 'category', 'relatedInner', 'relatedFrontpage', 'lists' ];
+
       $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
       // Check if item is new (created) or existing for use default value or not

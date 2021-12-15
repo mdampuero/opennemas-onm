@@ -31,6 +31,26 @@
          * @memberOf RestInnerCtrl
          *
          * @description
+         *  The content key.
+         *
+         * @type {String}
+         */
+        $scope.contentKey = null;
+
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *  The list of expanded fields
+         *
+         * @type {Array}
+         */
+        $scope.expanded = [];
+
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
          *  The item object.
          *
          * @type {Object}
@@ -46,6 +66,47 @@
          * @type {Boolean}
          */
         $scope.refreshOnUpdate = false;
+
+        /**
+         * @function checkFields
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Checks if the fields exist and creates or expands them
+         */
+        $scope.checkFields = function() {
+          $scope.app.fields.collapsed = true;
+
+          if (!$scope.app.fields.hasOwnProperty($scope.contentKey)) {
+            $scope.app.fields[$scope.contentKey] = {
+              selected: [],
+              hidden: []
+            };
+          } else {
+            $scope.app.fields[$scope.contentKey].selected.forEach(function(item) {
+              $scope.expanded[item] = true;
+            });
+          }
+        };
+
+        /**
+         * @function isFieldHidden
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Checks if a columns is hidden for the current list.
+         *
+         * @param {String} name The columns name.
+         */
+        $scope.isFieldHidden = function(name) {
+          var columns = null;
+
+          if ($scope.app.hasOwnProperty('fields') && $scope.app.fields.hasOwnProperty($scope.contentKey)) {
+            columns = $scope.app.fields[$scope.contentKey];
+          }
+
+          return columns !== null ? columns.hidden.indexOf(name) !== -1 : false;
+        };
 
         /**
          * @function buildScope
