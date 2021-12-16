@@ -206,6 +206,12 @@
                 <input class="form-control" datetime-picker="domainPicker" ng-model="instance.domain_expire" type="text">
               </div>
             </div>
+            <div class="form-group" ng-if="security.hasPermission('MASTER')">
+              <label class="form-label">{t}Subdirectory path{/t}</label>
+              <div class="controls">
+                <input class="form-control" ng-model="instance.subdirectory" type="text">
+              </div>
+            </div>
           </div>
         </div>
       </div>
