@@ -29,7 +29,7 @@ class PhotoService extends ContentService
     /**
      *{@inheritdoc}
      */
-    public function createItem($data = [], $file = null, bool $copy = false)
+    public function createItem($data = [], $file = null, bool $copy = false, bool $optimize = false)
     {
         if (empty($file)) {
             throw new CreateItemException('No file provided');
@@ -72,20 +72,51 @@ class PhotoService extends ContentService
             $this->em->persist($item, $this->getOrigin());
 
             $id = $this->em->getMetadata($item)->getId($item);
-
+            $id = array_pop($id);
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
                 'action' => __METHOD__,
-                'id'     => array_pop($id),
+                'id'     => $id,
                 'item'   => $item
             ]);
 
             $ih->move($file, $path, $copy);
+            if ($optimize) {
+                $this->optimizeImage($path);
+                $this->updateImage($id, $path);
+            }
 
             return $item;
         } catch (\Exception $e) {
             $ih->remove($path);
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
+    }
+
+    protected function optimizeImage($path)
+    {
+        $optimize = [
+            'flatten'          => false,
+            'quality'          => 80,
+            'resolution-units' => 'ppi',
+            'resolution-x'     => 99,
+            'resolution-y'     => 99
+        ];
+        $processor = $this->container->get('core.image.processor');
+        $processor->open($path);
+        $processor->optimize($optimize);
+        $processor->save($path);
+    }
+
+    protected function updateImage($id, $path)
+    {
+        $ih   = $this->container->get('core.helper.image');
+        $data = $ih->getInformation($path);
+        $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
+        
+        $data = $this->em->getConverter($this->entity)
+            ->objectify(array_merge($this->defaults, $data));
+            
+        $this->updateItem($id, $data);
     }
 
     /**
