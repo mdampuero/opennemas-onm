@@ -54,10 +54,10 @@ class WidgetRendererTest extends TestCase
      */
     public function testRenderWhenHtml()
     {
-        $widget       = new \Content();
+        $widget              = new \Content();
         $widget->widget_type = null;
-        $widget->body = 'Html Renderlet Code';
-        $expected     = '<div class="widget">' . $widget->body . '</div>';
+        $widget->body        = 'Html Renderlet Code';
+        $expected            = '<div class="widget">' . $widget->body . '</div>';
 
         $this->assertEquals($expected, $this->renderer->render($widget, []));
     }
