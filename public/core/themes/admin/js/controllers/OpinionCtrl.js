@@ -97,7 +97,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $scope.buildScope = function() {
       $scope.checkFields();
       $scope.app.fields.opinion.hidden =
-        [ 'category', 'relatedInner', 'relatedFrontpage', 'lists' ];
+        [ 'category', 'lists', 'relatedInner', 'relatedFrontpage' ];
 
       $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 

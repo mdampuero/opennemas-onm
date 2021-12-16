@@ -104,7 +104,8 @@
         $scope.buildScope = function() {
           $scope.checkFields();
           $scope.app.fields.letter.hidden =
-            [ 'author', 'category', 'bodyLink', 'lists',
+            [
+              'author', 'category', 'bodyLink', 'lists',
               'featuredFrontpage', 'featuredInner',
               'relatedFrontpage', 'relatedInner'
             ];

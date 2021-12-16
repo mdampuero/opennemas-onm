@@ -92,18 +92,18 @@
          * @memberOf RestInnerCtrl
          *
          * @description
-         *   Checks if a columns is hidden for the current list.
+         *   Checks if a field is hidden for the current list.
          *
-         * @param {String} name The columns name.
+         * @param {String} name The field name.
          */
         $scope.isFieldHidden = function(name) {
-          var columns = null;
+          var fields = null;
 
           if ($scope.app.hasOwnProperty('fields') && $scope.app.fields.hasOwnProperty($scope.contentKey)) {
-            columns = $scope.app.fields[$scope.contentKey];
+            fields = $scope.app.fields[$scope.contentKey];
           }
 
-          return columns !== null ? columns.hidden.indexOf(name) !== -1 : false;
+          return fields !== null ? fields.hidden.indexOf(name) !== -1 : false;
         };
 
         /**
