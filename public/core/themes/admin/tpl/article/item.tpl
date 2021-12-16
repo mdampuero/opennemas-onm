@@ -108,7 +108,7 @@
   <div class="grid simple">
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/input/blocked_text.tpl" iTitle="{t}Inner title{/t}" iProp="title_int" iFlag="title_int" iForm="form.title_int" iName="title_int" iNgModel="item.title_int" iRequired=true iValidation=true}
+      {include file="ui/component/input/text.tpl" iProp="title_int" iField="title_int" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Inner title{/t}" iValidation=true iCounter=true}
       <div class="row">
         <div class="col-sm-6">
           {include file="ui/component/input/text.tpl" iCounter=true iField="agency" iTitle="{t}Signature{/t}"}
