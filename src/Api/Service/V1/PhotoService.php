@@ -96,10 +96,10 @@ class PhotoService extends ContentService
     {
         $optimize = [
             'flatten'          => false,
-            'quality'          => 80,
+            'quality'          => 90,
             'resolution-units' => 'ppi',
-            'resolution-x'     => 99,
-            'resolution-y'     => 99
+            'resolution-x'     => 72,
+            'resolution-y'     => 72
         ];
         $processor = $this->container->get('core.image.processor');
         $processor->open($path);
@@ -112,10 +112,10 @@ class PhotoService extends ContentService
         $ih   = $this->container->get('core.helper.image');
         $data = $ih->getInformation($path);
         $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
-        
+
         $data = $this->em->getConverter($this->entity)
             ->objectify(array_merge($this->defaults, $data));
-            
+
         $this->updateItem($id, $data);
     }
 
