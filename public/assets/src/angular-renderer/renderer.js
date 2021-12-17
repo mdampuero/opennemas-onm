@@ -75,7 +75,7 @@
         this.renderImage = function(image, align) {
           var alt   = '';
           var align = '';
-          var html  = '<figure class="image"><img[align] src="' + instanceMedia + image.path + '"[alt]><figcaption>[caption]</figcaption></figure>';
+          var html  = '<figure class="image"><img[align] width="[width]" height="[height]" src="' + instanceMedia + image.path + '"[alt]><figcaption>[caption]</figcaption></figure>';
 
           if (image.description) {
             alt = ' alt="' + image.description + '"';
@@ -88,6 +88,8 @@
           html = html.replace('[align]', align);
           html = html.replace('[alt]', alt);
           html = html.replace('[caption]', image.description);
+          html = html.replace('[width]', image.width);
+          html = html.replace('[height]', image.height);
 
           return html;
         };
