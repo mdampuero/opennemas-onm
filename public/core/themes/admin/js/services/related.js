@@ -328,6 +328,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        */
       related.watchMirror = function(name, type, simple) {
         related.scope.$watch(name, function(nv, ov) {
+          // ON edit page and simple content (image field), dont mirror when field was already set
           if (related.map[type].simple && related.scope.item.pk_content && ov && nv) {
             return;
           }
@@ -350,6 +351,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             return;
           }
 
+          // Dont mirror when field was already set
           if (nv === ov) {
             return;
           }
@@ -363,6 +365,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             return [ e.target_id, e.caption ];
           });
 
+          // On list of contents and edit page, don't miror when field was not empty (avoid delete mirroring)
           if (!related.map[type].simple && related.scope.item.pk_content && oldIds.length > 0) {
             return;
           }
