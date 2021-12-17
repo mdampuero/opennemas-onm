@@ -67,13 +67,17 @@ class InstanceLoader
             return $this;
         }
 
-        $domain   = preg_replace('/\.+$/', '', $domain);
-        $instance = $this->cache->exists($domain)
-            ? $this->cache->get($domain)
-            : null;
+        $domain         = preg_replace('/\.+$/', '', $domain);
+        $match          = preg_match('@(\/[a-zA-Z]+)\/?@', $uri, $subdirectory);
+        $completeDomain = $match ? $subdirectory[1] : null;
 
-        if ($this->isValid($instance, $domain)) {
-            $this->instance = $instance;
+        if ($this->cache->exists($domain) || !empty($completeDomain) && $this->cache->exists($completeDomain)) {
+            $this->instance = $this->cache->get($domain) ?? $this->cache->get($completeDomain);
+
+            if (!$this->isValid($this->instance, $domain)) {
+                throw new \Exception();
+            }
+
             return $this;
         }
 
@@ -84,13 +88,35 @@ class InstanceLoader
             $domain
         );
 
-        $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
+        $instances = $this->em->getRepository('Instance')->findBy($oql);
+
+        if (empty($instances)) {
+            throw new \Exception();
+        }
+
+        if (count($instances) === 1) {
+            $this->instance = array_shift($instances);
+
+            if (!$this->isValid($this->instance, $domain)) {
+                throw new \Exception();
+            }
+
+            $this->cache->set($domain, $this->instance);
+
+            return $this;
+        }
+
+        $this->instance = array_filter($instances, function ($a) use ($subdirectory) {
+            return $a->subdirectory === $subdirectory[1];
+        });
+
+        $this->instance = array_pop($instances);
 
         if (!$this->isValid($this->instance, $domain)) {
             throw new \Exception();
         }
 
-        $this->cache->set($domain, $this->instance);
+        $this->cache->set($completeDomain, $this->instance);
 
         return $this;
     }

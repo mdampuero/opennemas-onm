@@ -32,7 +32,7 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->repository = $this->getMockBuilder('Openneams\Orm\Database\Repository\BaseRepository')
             ->disableOriginalConstructor()
-            ->setMethods([ 'findOneBy' ])
+            ->setMethods([ 'findBy', 'findOneBy' ])
             ->getMock();
 
         $this->cm->expects($this->any())->method('getConnection')
@@ -98,17 +98,19 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
      * Tests loadInstanceByDomain when the provided domain and URI refers to a
      * valid instance that was previously not saved to cache.
      */
-    public function testLoadInstanceByDomainWhenInstanceInDatabase()
+    public function testLoadInstanceByDomainWhenInstanceInDatabaseAndOnlyOneInstance()
     {
+        $instance = new Instance([
+            'internal_name' => 'garply',
+            'domains'       => [ 'fubar.foo' ]
+        ]);
+
         $this->cache->expects($this->once())->method('exists')
             ->with('fubar.foo')->willReturn(false);
 
-        $this->repository->expects($this->once())->method('findOneBy')
+        $this->repository->expects($this->once())->method('findBy')
             ->with('domains regexp "^fubar.foo($|,)|,\s*fubar.foo\s*,|(^|,)\s*fubar.foo$"')
-            ->willReturn(new Instance([
-                'internal_name' => 'garply',
-                'domains'       => [ 'fubar.foo' ]
-            ]));
+            ->willReturn([ $instance ]);
 
         $instance = $this->loader
             ->loadInstanceByDomain('fubar.foo', '/')
@@ -123,15 +125,17 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadInstanceByDomainWhenWrongInstanceInDatabase()
     {
+        $instance = [ new Instance([
+            'internal_name' => 'garply',
+            'domains'       => [ 'thud.foo' ]
+        ]) ];
+
         $this->cache->expects($this->once())->method('exists')
             ->with('fubar.foo')->willReturn(false);
 
-        $this->repository->expects($this->once())->method('findOneBy')
+        $this->repository->expects($this->once())->method('findBy')
             ->with('domains regexp "^fubar.foo($|,)|,\s*fubar.foo\s*,|(^|,)\s*fubar.foo$"')
-            ->willReturn(new Instance([
-                'internal_name' => 'garply',
-                'domains'       => [ 'thud.foo' ]
-            ]));
+            ->willReturn([ $instance ]);
 
         $this->expectException(\Exception::class);
 
