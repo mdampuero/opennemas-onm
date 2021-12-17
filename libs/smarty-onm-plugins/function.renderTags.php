@@ -15,14 +15,13 @@ function smarty_function_renderTags($params, &$smarty)
         return '';
     }
 
-    $exclude_types = array('letter');
+    $exclude_types = [ 'letter' ];
     $content       = $params['content'];
     $ids           = !empty($content->tags) ? $content->tags : [];
     $separator     = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
     $output        = '';
 
     try {
-        //Comprobar si el tipo de contenido es propenso a tener multiidioma o no (Ej: Letter)
         $locale = $smarty->getContainer()->get('core.instance')->hasMultilanguage()
             && !in_array($content->content_type_name, $exclude_types)
             ? $smarty->getContainer()->get('core.locale')->getRequestLocale()

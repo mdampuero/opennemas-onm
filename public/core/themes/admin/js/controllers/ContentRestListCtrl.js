@@ -31,7 +31,7 @@
          * @memberof ContentRestListCtrl
          *
          * @description
-         *  Returns loc localized tags for each item in list
+         *  Returns localized tags for each item in list
          *
          * @param {array} origin The list of all localized tags
          * @param {array} array The list of item id tags
@@ -39,33 +39,15 @@
          * @return {Boolean} True if the item has featured media, false otherwise.
          */
         $scope.getLocalizedTags = function(origin, array, locale, multilanguage) {
-          var items = [];
-
           if (multilanguage) {
-            origin = origin[locale];
-          } else {
-            var aux = [];
-
-            Object.values(origin).forEach(function(item) {
-              aux = aux.concat(item);
+            return origin[locale].filter(function(o) {
+              return array.includes(o.id);
             });
-
-            aux.forEach(function(item, index) {
-              aux.forEach(function(item2, index2) {
-                if (item.id === item2.id && index != index2) {
-                  aux.splice(index2, 1);
-                }
-              });
-            });
-
-            origin = aux;
           }
 
-          items = origin.filter(function(o) {
+          return origin.filter(function(o) {
             return array.includes(o.id);
           });
-
-          return items;
         };
 
         /**

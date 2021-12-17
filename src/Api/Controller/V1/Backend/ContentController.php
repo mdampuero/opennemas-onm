@@ -43,39 +43,29 @@ class ContentController extends ApiController
      */
     protected function getTags($items = null)
     {
-        $tags = parent::getTags($items);
+        $config = $this->get('core.helper.locale')->getConfiguration();
+        $tags   = parent::getTags($items);
 
-        $locale = array_keys(
+        if (!$config['multilanguage']) {
+            return $tags;
+        }
+
+        $locales = array_keys(
             $this->get('core.helper.locale')->getConfiguration()['available']
         );
 
-        if (!is_array($tags)) {
-            $tags = [ $tags ];
-        }
+        $tagsByLocale = [];
 
-        $elements = [];
-
-        foreach ($locale as $value) {
-            $elements[$value] = [];
-        }
-
-        if (!empty($tags)) {
-            $nulls = [];
-
-            array_map(function ($item) use (&$elements, &$nulls) {
-                if (!empty($item['locale'])) {
-                    $elements[$item['locale']][] = $item;
-                } else {
-                    $nulls[] = $item;
+        foreach ($locales as $locale) {
+            $tagsByLocale[$locale] = [];
+            foreach ($tags as $tag) {
+                if (empty($tag['locale']) || $tag['locale'] === $locale) {
+                    array_push($tagsByLocale[$locale], $tag);
                 }
-            }, $tags);
-
-            foreach ($elements as $key => $value) {
-                $elements[$key] = array_merge($value, $nulls);
             }
         }
 
-        return $elements;
+        return $tagsByLocale;
     }
 
     /**
