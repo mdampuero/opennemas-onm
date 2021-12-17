@@ -36,7 +36,7 @@
          * @param {array} origin The list of all localized tags
          * @param {array} array The list of item id tags
          *
-         * @return {Boolean} True if the item has featured media, false otherwise.
+         * @return {array} return tags localized
          */
         $scope.getLocalizedTags = function(origin, array, locale, multilanguage) {
           if (multilanguage) {
