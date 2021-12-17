@@ -328,7 +328,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        */
       related.watchMirror = function(name, type, simple) {
         related.scope.$watch(name, function(nv, ov) {
-          // ON edit page and simple content (image field), dont mirror when field was already set
+          // On edit page and simple content (image field), don't mirror when field was already set
           if (related.map[type].simple && related.scope.item.pk_content && ov && nv) {
             return;
           }
@@ -351,7 +351,7 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             return;
           }
 
-          // Dont mirror when field was already set
+          // Don't mirror when field was already set
           if (nv === ov) {
             return;
           }
