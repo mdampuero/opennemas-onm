@@ -1,6 +1,6 @@
 {block name="fields"}
   <div class="column-filters-toggle ng-cloak" ng-click="app.fields.collapsed = !app.fields.collapsed" ng-if="!flags.http.loading && !noFields">
-    <span class="column-filters-ellipsis"><i class="fa fa-lg " ng-class="{ 'fa-caret-down': app.fields.collapsed, 'fa-caret-up': !app.fields.collapsed }"></i></span>
+    <span class="column-filters-ellipsis"><i class="fa fa-lg " ng-class="{ 'fa-angle-down': app.fields.collapsed, 'fa-angle-up': !app.fields.collapsed }"></i></span>
   </div>
   <div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.fields.collapsed }" ng-if="!flags.http.loading">
     <h5>{t}Expand{/t}</h5>
