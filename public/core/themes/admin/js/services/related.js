@@ -363,6 +363,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             return [ e.target_id, e.caption ];
           });
 
+          if (!related.map[type].simple && related.scope.item.pk_content && oldIds.length > 0) {
+            return;
+          }
+
           var mirrorIds = !angular.isArray(related.scope[related.map[type].name]) ?
             [] : related.scope[related.map[type].name].map(function(e) {
               return [ e.target_id, e.caption ];
