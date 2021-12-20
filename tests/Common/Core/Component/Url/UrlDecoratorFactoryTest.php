@@ -17,6 +17,11 @@ class UrlDecoratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\Container')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->urlHelper = $this->getMockBuilder('Common\Core\Component\Helper\UrlHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'parse', 'unparse' ])
@@ -27,7 +32,7 @@ class UrlDecoratorFactoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'hasMultilanguage', 'isSubdirectory' ])
             ->getMock();
 
-        $this->urlDecoratorFactory = new UrlDecoratorFactory($this->urlHelper, $this->instance);
+        $this->urlDecoratorFactory = new UrlDecoratorFactory($this->container, $this->urlHelper, $this->instance);
     }
 
     /**
@@ -35,7 +40,7 @@ class UrlDecoratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUrlDecoratorWithNormalInstance()
     {
-        $urlDecorator = new UrlDecorator($this->urlHelper);
+        $urlDecorator = new UrlDecorator($this->container, $this->urlHelper);
 
         $this->instance->expects($this->once())->method('hasMultilanguage')
             ->willReturn(false);
@@ -51,8 +56,8 @@ class UrlDecoratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUrlDecoratorWithMultilanguageInstance()
     {
-        $urlLocalizerDecorator = new UrlLocalizerDecorator($this->urlHelper);
-        $urlDecorator          = new UrlDecorator($this->urlHelper, $urlLocalizerDecorator);
+        $urlLocalizerDecorator = new UrlLocalizerDecorator($this->container, $this->urlHelper);
+        $urlDecorator          = new UrlDecorator($this->container, $this->urlHelper, $urlLocalizerDecorator);
 
         $this->instance->expects($this->once())->method('hasMultilanguage')
             ->willReturn(true);
@@ -68,8 +73,8 @@ class UrlDecoratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUrlDecoratorWithSubdirectoryInstance()
     {
-        $urlSubdirectoryDecorator = new UrlSubdirectoryDecorator($this->urlHelper);
-        $urlDecorator             = new UrlDecorator($this->urlHelper, $urlSubdirectoryDecorator);
+        $urlSubdirectoryDecorator = new UrlSubdirectoryDecorator($this->container, $this->urlHelper);
+        $urlDecorator             = new UrlDecorator($this->container, $this->urlHelper, $urlSubdirectoryDecorator);
 
         $this->instance->expects($this->once())->method('hasMultilanguage')
             ->willReturn(false);
