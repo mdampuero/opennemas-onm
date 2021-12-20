@@ -10,7 +10,7 @@ use Common\Core\Component\Url\UrlSubdirectoryDecorator;
 /**
  * Defines test cases for UrlDecoratorFactory class.
  */
-class SmartyUrlTest extends \PHPUnit\Framework\TestCase
+class UrlDecoratorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Configures the testing environment.
