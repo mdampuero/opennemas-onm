@@ -74,7 +74,7 @@ class InstanceLoader
             if ($this->cache->exists($domain . $subdirectory[1])) {
                 $this->instance = $this->cache->get($domain . $subdirectory[1]);
 
-                if (!$this->isValid($this->instance, $domain . $subdirectory[1])) {
+                if (!$this->isValid($this->instance, $domain)) {
                     throw new \Exception();
                 }
 
