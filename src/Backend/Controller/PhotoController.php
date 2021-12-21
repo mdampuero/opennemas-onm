@@ -9,6 +9,8 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Security;
+
 class PhotoController extends BackendController
 {
     /**
@@ -36,6 +38,7 @@ class PhotoController extends BackendController
      *
      * @return Response the response object
      *
+     * @Security("hasExtension('MASTER')")
      */
     public function configAction()
     {
