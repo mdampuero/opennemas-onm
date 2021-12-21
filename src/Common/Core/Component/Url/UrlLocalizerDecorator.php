@@ -16,6 +16,10 @@ class UrlLocalizerDecorator extends UrlDecorator
      */
     public function prefixUrl(string $url, string $routeName = '')
     {
+        if (!empty($this->urlDecorator)) {
+            $url = $this->urlDecorator->prefixUrl($url, $routeName);
+        }
+
         $localeService = $this->container->get('core.locale');
         $defaultLocale = $localeService->getLocale('frontend');
         $requestLocale = $localeService->getRequestLocale();
@@ -38,10 +42,6 @@ class UrlLocalizerDecorator extends UrlDecorator
                 . (array_key_exists('path', $parts) ? $parts['path'] : '');
 
             $url = $this->urlHelper->unparse($parts);
-        }
-
-        if (!empty($this->urlDecorator)) {
-            $url = $this->urlDecorator->prefixUrl($url, $routeName);
         }
 
         return $url;
