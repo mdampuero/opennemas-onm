@@ -15,3 +15,9 @@ backend_photos_list:
     defaults: { _controller: BackendBundle:Photo:list }
     options:
         expose: true
+
+backend_photos_config:
+    path:     /photos/config
+    defaults: { _controller: BackendBundle:Photo:config }
+    options:
+        expose: true

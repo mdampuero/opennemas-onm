@@ -29,7 +29,7 @@ class PhotoService extends ContentService
     /**
      *{@inheritdoc}
      */
-    public function createItem($data = [], $file = null, bool $copy = false, bool $optimize = false)
+    public function createItem($data = [], $file = null, bool $copy = false)
     {
         if (empty($file)) {
             throw new CreateItemException('No file provided');
@@ -80,7 +80,15 @@ class PhotoService extends ContentService
             ]);
 
             $ih->move($file, $path, $copy);
-            if ($optimize) {
+
+            $ds = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance');
+
+            $config = $ds->get('photo_settings', []);
+            $sh     = $this->container->get('core.helper.setting');
+            $config = $sh->toBoolean($config, ['optimize_images']);
+
+            if ($config['optimize_images']) {
                 $this->optimizeImage($path);
                 $this->updateImage($id, $path);
             }
@@ -94,17 +102,18 @@ class PhotoService extends ContentService
 
     protected function optimizeImage($path)
     {
-        $optimize = [
-            'flatten'          => false,
-            'quality'          => 90,
-            'resolution-units' => 'ppi',
-            'resolution-x'     => 72,
-            'resolution-y'     => 72
-        ];
         $processor = $this->container->get('core.image.processor');
-        $processor->open($path);
-        $processor->optimize($optimize);
-        $processor->save($path);
+        $processor->open($path)
+            ->apply('thumbnail', [1920, 1920, 'center', 'center'])
+            ->optimize([
+                'flatten'          => false,
+                'quality'          => 65,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->save($path)
+            ->close();
     }
 
     protected function updateImage($id, $path)

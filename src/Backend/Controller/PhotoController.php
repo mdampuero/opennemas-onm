@@ -30,4 +30,15 @@ class PhotoController extends BackendController
      * {@inheritdoc}
      */
     protected $resource = 'photo';
+
+    /**
+     * Config for photo system
+     *
+     * @return Response the response object
+     *
+     */
+    public function configAction()
+    {
+        return $this->render('photo/config.tpl');
+    }
 }

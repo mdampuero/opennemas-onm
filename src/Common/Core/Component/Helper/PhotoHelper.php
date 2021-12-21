@@ -56,13 +56,14 @@ class PhotoHelper
      * @param Theme              $theme         The theme of the instance.
      * @param UrlGeneratorHelper $ugh           The url generator helper.
      */
-    public function __construct($contentHelper, $instance, $router, $theme, $ugh)
+    public function __construct($contentHelper, $instance, $router, $theme, $ugh, $defaultConfigs = [])
     {
-        $this->contentHelper = $contentHelper;
-        $this->instance      = $instance;
-        $this->router        = $router;
-        $this->theme         = $theme;
-        $this->ugh           = $ugh;
+        $this->contentHelper  = $contentHelper;
+        $this->instance       = $instance;
+        $this->router         = $router;
+        $this->theme          = $theme;
+        $this->ugh            = $ugh;
+        $this->defaultConfigs = $defaultConfigs;
     }
 
     /**
@@ -291,5 +292,29 @@ class PhotoHelper
     public function hasPhotoSrcSet($photo, $transform, $device = 'desktop')
     {
         return !empty($this->getPhotoSrcSet($photo, $transform, $device));
+    }
+
+    /**
+     * Returns the complete configs merged with the default
+     *
+     * @return array the list of configs
+     */
+    public function getConfigs()
+    {
+        if (!is_array($this->configs)) {
+            $this->configs = [];
+        }
+
+        return array_merge($this->getDefaultConfigs(), $this->configs);
+    }
+
+    /**
+     * Returns a list of configurations for the photos module
+     *
+     * @return array the list of default configurations
+     */
+    public function getDefaultConfigs()
+    {
+        return $this->defaultConfigs;
     }
 }
