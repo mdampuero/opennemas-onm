@@ -49,10 +49,10 @@ class UrlDecorator
      *
      * @return String The url prefixed.
      */
-    public function prefixUrl(string $url)
+    public function prefixUrl(string $url, string $route = '')
     {
         if (!empty($this->urlDecorator)) {
-            $url = $this->urlDecorator->prefixUrl($url);
+            $url = $this->urlDecorator->prefixUrl($url, $route);
         }
 
         return $url;
