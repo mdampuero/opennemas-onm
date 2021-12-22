@@ -21,11 +21,26 @@ class UserSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'user.deleteItem' => [ [ 'onUserDelete', 5 ], ],
-            'user.deleteList' => [ [ 'onUserDelete', 5 ], ],
-            'user.patchItem'  => [ [ 'onUserUpdate', 5 ], ],
-            'user.patchList'  => [ [ 'onUserUpdate', 5 ], ],
-            'user.updateItem' => [ [ 'onUserUpdate', 5 ], ]
+            'user.deleteItem' => [
+                ['logAction', 5],
+                [ 'onUserDelete', 5 ],
+            ],
+            'user.deleteList' => [
+                ['logAction', 5],
+                [ 'onUserDelete', 5 ],
+            ],
+            'user.patchItem'  => [
+                ['logAction', 5],
+                [ 'onUserUpdate', 5 ],
+            ],
+            'user.patchList'  => [
+                ['logAction', 5],
+                [ 'onUserUpdate', 5 ],
+            ],
+            'user.updateItem' => [
+                ['logAction', 5],
+                [ 'onUserUpdate', 5 ],
+            ]
         ];
     }
 
@@ -37,6 +52,31 @@ class UserSubscriber implements EventSubscriberInterface
     public function __construct(UserCacheHelper $helper)
     {
         $this->helper = $helper;
+    }
+
+    /**
+     * Logs the action.
+     *
+     * @param Event $event The event object.
+     */
+    public function logAction(Event $event)
+    {
+        if (empty($event->hasArgument('action'))) {
+            return;
+        }
+
+        $action = $event->getArgument('action');
+        $users  = is_array($event->getArgument('item'))
+            ? $event->getArgument('item')
+            : [ $event->getArgument('item') ];
+
+        if (!empty($users)) {
+            foreach ($users as $content) {
+                logContentEvent($action, $content);
+            }
+
+            return;
+        }
     }
 
     /**
