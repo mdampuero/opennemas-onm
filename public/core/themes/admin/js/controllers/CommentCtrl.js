@@ -23,6 +23,13 @@
 
         /**
          * @memberOf CommentCtrl
+         * @description
+         *  Flag to hide the list of fields
+         */
+        $scope.noFields = true;
+
+        /**
+         * @memberOf CommentCtrl
          *
          * @description
          *  The item object.
