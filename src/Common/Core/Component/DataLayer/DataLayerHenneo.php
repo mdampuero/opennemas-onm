@@ -97,4 +97,16 @@ class DataLayerHenneo extends DataLayer
     {
         return $format === 'html' ? 'web' : $format;
     }
+
+    /**
+     * Get the content and check if it's under subscription.
+     *
+     * @param Boolean True if the content is restricted, false otherwise.
+     *
+     * @return string The customized string for restricted content.
+     */
+    protected function customizeIsRestricted(?bool $isRestricted)
+    {
+        return $isRestricted ? 'registro' : 'abierto';
+    }
 }
