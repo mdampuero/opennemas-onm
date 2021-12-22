@@ -38,6 +38,38 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests logAction when there is no action.
+     */
+    public function testLogActionWhenNoAction222()
+    {
+        $this->event->expects($this->once())->method('hasArgument')
+            ->with('action')
+            ->willReturn(false);
+
+        $this->assertEmpty($this->subscriber->logAction($this->event));
+    }
+
+    /**
+     * Tests logAction when empty items.
+     */
+    public function testLogActionWhenEmptyItems222()
+    {
+        $this->event->expects($this->at(0))->method('hasArgument')
+            ->with('action')
+            ->willReturn(true);
+
+        $this->event->expects($this->at(1))->method('getArgument')
+            ->with('action')
+            ->willReturn('updateItem');
+
+        $this->event->expects($this->at(2))->method('getArgument')
+            ->with('item')
+            ->willReturn([]);
+
+        $this->subscriber->logAction($this->event);
+    }
+
+    /**
      * Tests getSubscribedEvents.
      */
     public function testGetSubscribedEvents()
