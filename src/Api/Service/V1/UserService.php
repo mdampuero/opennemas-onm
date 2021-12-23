@@ -147,7 +147,6 @@ class UserService extends OrmService
             }
         }
 
-
         return $deleted;
     }
 
