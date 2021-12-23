@@ -11,28 +11,18 @@ function smarty_function_render_widget($params, &$smarty)
 
     $sw = getService('api.service.widget');
 
-    if (!is_null($widgetName)) {
-        // Initialize widget from name
-        $oql = sprintf(
-            'content_type_name="widget" and content_status = 1'
-            . ' and in_litter = 0 '
-            . ' and class = "%s"'
-            . ' limit 1',
-            $widgetName
-        );
+    $oql = 'content_type_name="widget"'
+        . ' and content_status = 1'
+        . ' and in_litter = 0 ';
 
-        try {
-            $widget = $sw->getList($oql)['items'][0];
-        } catch (GetListException $e) {
-            return '';
-        }
-    } else {
-        // Initialize widget from id
-        try {
-            $widget = $sw->getItem($widgetID);
-        } catch (GetItemException $e) {
-            return '';
-        }
+    $oql .= !is_null($widgetName)
+        ? sprintf(' and class = "%s"', $widgetName)
+        : sprintf(' and pk_content = "%s"', $widgetID);
+
+    try {
+        $widget = $sw->getItemBy($oql);
+    } catch (GetItemException $e) {
+        return '';
     }
 
     $output = '';
