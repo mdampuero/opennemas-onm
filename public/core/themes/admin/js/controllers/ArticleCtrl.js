@@ -203,6 +203,11 @@
 
         // Update title_int when title changes
         $scope.$watch('item.title', function(nv, ov) {
+          //mirror only when titile_int locker is 'closed'
+          if (!$scope.flags.block.title_int) {
+            return;
+          }
+
           if (!nv && !ov) {
             return;
           }
