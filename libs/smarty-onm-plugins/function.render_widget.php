@@ -13,11 +13,13 @@ function smarty_function_render_widget($params, &$smarty)
 
     $oql = 'content_type_name="widget"'
         . ' and content_status = 1'
-        . ' and in_litter = 0 ';
+        . ' and in_litter = 0';
 
     $oql .= !is_null($widgetName)
         ? sprintf(' and class = "%s"', $widgetName)
         : sprintf(' and pk_content = "%s"', $widgetID);
+
+    $oql .= ' limit 1';
 
     try {
         $widget = $sw->getItemBy($oql);
