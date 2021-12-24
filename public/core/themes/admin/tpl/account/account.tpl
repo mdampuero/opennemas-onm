@@ -97,22 +97,22 @@
               </div>
             </div>
           </div>
+
           <div class="col-md-6">
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Page views this month{/t}
+                  {t}Emails sent from{/t} {$lastInvoice}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <span class="item-count">
-                      {t}coming soon... work in progress...{/t}
-                    </span>
+                    <span class="item-count">{$total}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
         <div class="row">
           <div class="col-md-12">
