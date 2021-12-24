@@ -459,10 +459,10 @@ class OrmService implements Service
 
             $item = $this->getItem($id);
             $item->setData($data);
-            
+
             $this->validate($item);
             $this->em->persist($item, $item->getOrigin());
-            
+
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
                 'action' => __METHOD__,
                 'id'   => $id,

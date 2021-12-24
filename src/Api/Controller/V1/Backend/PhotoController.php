@@ -100,7 +100,6 @@ class PhotoController extends ContentController
         ]);
     }
 
-
     /**
      * Returns photos configuration
      *
@@ -112,12 +111,9 @@ class PhotoController extends ContentController
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh = $this->get('core.helper.setting');
 
-        $defaultConfigs = $this->get('core.helper.photo')->getDefaultConfigs();
         $config         = $ds->get('photo_settings', []);
 
         $config = $sh->toBoolean($config, ['optimize_images']);
-
-        $config = array_merge($defaultConfigs, $config);
 
         return new JsonResponse([
             'config' => $config
@@ -138,10 +134,8 @@ class PhotoController extends ContentController
         $sh  = $this->get('core.helper.setting');
 
         $config = $request->request->get('config', []);
-        $extra  = $request->request->get('extra', []);
 
         $config = $sh->toInt($config, ['number_elements']);
-        // $config = $sh->toBoolean($config, $this->tobool);
 
         try {
             $ds->set('photo_settings', $config);
