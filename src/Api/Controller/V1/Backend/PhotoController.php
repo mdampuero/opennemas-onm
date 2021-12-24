@@ -111,8 +111,7 @@ class PhotoController extends ContentController
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh = $this->get('core.helper.setting');
 
-        $config         = $ds->get('photo_settings', []);
-
+        $config = $ds->get('photo_settings', []);
         $config = $sh->toBoolean($config, ['optimize_images']);
 
         return new JsonResponse([
