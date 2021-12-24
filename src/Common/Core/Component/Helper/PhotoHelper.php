@@ -58,11 +58,11 @@ class PhotoHelper
      */
     public function __construct($contentHelper, $instance, $router, $theme, $ugh)
     {
-        $this->contentHelper  = $contentHelper;
-        $this->instance       = $instance;
-        $this->router         = $router;
-        $this->theme          = $theme;
-        $this->ugh            = $ugh;
+        $this->contentHelper = $contentHelper;
+        $this->instance      = $instance;
+        $this->router        = $router;
+        $this->theme         = $theme;
+        $this->ugh           = $ugh;
     }
 
     /**
