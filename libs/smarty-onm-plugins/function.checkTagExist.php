@@ -31,9 +31,11 @@ function smarty_function_checkTagExist($params, &$smarty)
     }
 
     foreach ($content->tags as $tagId) {
-        if (array_key_exists($tagId, $tags) && $tags[$tagId]['name'] == $tag) {
-            $smarty->assign($assign, true);
-            return '';
+        foreach ($tags as $value) {
+            if ($tagId == $value->id && $value->name == $tag) {
+                $smarty->assign($assign, true);
+                return '';
+            }
         }
     }
 }
