@@ -193,6 +193,70 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests loadInstanceByDomainWhenSubdirectoryAndNotValidInstance.
+     *
+     * @expectedException \Exception
+     */
+    public function testLoadInstanceByDomainWhenSubdirectoryAndNotValidInstance()
+    {
+        $this->loader->loadInstanceByDomain('https://glorp.baz', '/subdirectory');
+    }
+
+    /**
+     * Tests loadInstanceByDomainWhenSubdirectoryAndValidInstance.
+     */
+    public function testLoadInstanceByDomainWhenSubdirectoryAndValidInstance()
+    {
+        $instance = new Instance(
+            [
+                'subdirectory' => 'subdirectory',
+                'domains'      => [ 'glorp.baz' ]
+            ]
+        );
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->willReturn($instance);
+
+        $this->loader->loadInstanceByDomain('glorp.baz', '/subdirectory');
+    }
+
+    /**
+     * Tests loadInstanceByDomainWhenSubdirectoryAndNotValidCachedInstance.
+     *
+     * @expectedException \Exception
+     */
+    public function testLoadInstanceByDomainWhenSubdirectoryAndNotValidCachedInstance()
+    {
+        $this->cache->expects($this->once())->method('exists')
+            ->with('https://glorp.baz/subdirectory')
+            ->willReturn(true);
+
+        $this->loader->loadInstanceByDomain('https://glorp.baz', '/subdirectory');
+    }
+
+    /**
+     * Tests loadInstanceByDomainWhenSubdirectoryAndValidCachedInstance.
+     */
+    public function testLoadInstanceByDomainWhenSubdirectoryAndValidCachedInstance()
+    {
+        $instance = new Instance(
+            [
+                'subdirectory' => 'subdirectory',
+                'domains'      => [ 'glorp.baz' ]
+            ]
+        );
+        $this->cache->expects($this->once())->method('exists')
+            ->with('glorp.baz/subdirectory')
+            ->willReturn(true);
+
+        $this->cache->expects($this->once())->method('get')
+            ->with('glorp.baz/subdirectory')
+            ->willReturn($instance);
+
+        $this->assertEquals($this->loader, $this->loader->loadInstanceByDomain('glorp.baz', '/subdirectory'));
+    }
+
+    /**
      * Tests setInstance.
      */
     public function testSetInstance()

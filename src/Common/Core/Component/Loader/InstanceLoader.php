@@ -89,15 +89,18 @@ class InstanceLoader
                 $subdirectory[1]
             );
 
-            $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
+            try {
+                $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
 
-            if (!$this->isValid($this->instance, $domain)) {
-                throw new \Exception();
+                if (!$this->isValid($this->instance, $domain)) {
+                    throw new \Exception();
+                }
+
+                $this->cache->set($domain . $subdirectory[1], $this->instance);
+
+                return $this;
+            } catch (\Exception $e) {
             }
-
-            $this->cache->set($domain . $subdirectory[1], $this->instance);
-
-            return $this;
         }
 
         $oql = sprintf(
