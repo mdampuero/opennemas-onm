@@ -145,6 +145,11 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
       var emails = $scope.moreEmails.split('\n');
       var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+      // Delete duplicate emails
+      emails = emails.filter(function(item, pos) {
+        return emails.indexOf(item) === pos;
+      });
+
       // Get only emails to easy checking
       var currentEmails = [];
 
@@ -152,8 +157,8 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
         currentEmails.push($scope.recipients.items[i].email);
       }
 
-      // Save new valid emails
-      for (var i = 0; i < emails.length; i++) {
+      // Save new valid emails (up to a maximum of 100)
+      for (var i = 0; i < emails.length && $scope.recipients.items.length < 100; i++) {
         if (pattern.test(emails[i]) &&
             currentEmails.indexOf(emails[i]) === -1
         ) {
