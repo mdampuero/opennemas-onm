@@ -29,12 +29,18 @@ class Instance extends Entity
     /**
      * Returns the base url for the instance
      *
-     * @return string
+     * @param  string $allowSubdirectory Indicates if the url can have a subdirectory or not.
+     *
+     * @return string The base url of the instance.
      **/
-    public function getBaseUrl()
+    public function getBaseUrl(bool $allowSubdirectory = false)
     {
         $protocol = (in_array('es.openhost.module.frontendSsl', $this->activated_modules))
             ? 'https://' : 'http://';
+
+        if ($allowSubdirectory && !empty($this->subdirectory)) {
+            return $protocol . $this->getMainDomain() . $this->subdirectory;
+        }
 
         return $protocol . $this->getMainDomain();
     }
@@ -137,5 +143,15 @@ class Instance extends Entity
             'es.openhost.module.multilanguage',
             $this->activated_modules
         );
+    }
+
+    /**
+     * Checks if the current instance is a subdirectory of another one.
+     *
+     * @return boolean True if the instance is a subdirectory of another. False otherwise.
+     */
+    public function isSubdirectory()
+    {
+        return !empty($this->subdirectory);
     }
 }
