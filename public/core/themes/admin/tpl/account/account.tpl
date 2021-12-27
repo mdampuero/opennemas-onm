@@ -81,23 +81,21 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row row-eq-height">
           <div class="col-md-6">
             <div class="tiles blue m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Users{/t}
+                  {t}Users Active{/t}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <span class="item-title">{t}Activated{/t}</span>
                     <span class="item-count">{$instance->users}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="col-md-6">
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
@@ -112,9 +110,8 @@
               </div>
             </div>
           </div>
-
         </div>
-        <div class="row">
+        <div class="row row-eq-height">
           <div class="col-md-12">
             <div class="tiles white">
               <div class="tiles-body clearfix">
