@@ -24,6 +24,11 @@ class GAnalyticsRendererTest extends TestCase
 
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->ds = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
 
         $this->em = $this->getMockBuilder('Opennemas\Orm\Core\EntityManager')
@@ -70,6 +75,9 @@ class GAnalyticsRendererTest extends TestCase
         $this->global->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->ds->expects($this->any())->method('get')
             ->willReturn([ ['api_key' => 'UA-453942342-1'] ]);
 
@@ -79,6 +87,9 @@ class GAnalyticsRendererTest extends TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.decorator.url':
+                return $this->decorator;
+
             case 'core.service.data_layer':
                 return $this->dl;
 

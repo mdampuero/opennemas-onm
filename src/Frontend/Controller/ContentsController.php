@@ -119,6 +119,7 @@ class ContentsController extends Controller
         }
 
         $url = $this->get('core.helper.url_generator')->generate($content);
+        $url = $this->get('core.decorator.url')->prefixUrl($url);
 
         return new \Symfony\Component\HttpFoundation\RedirectResponse($url);
     }

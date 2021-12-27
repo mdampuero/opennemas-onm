@@ -25,16 +25,17 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->cache = $this->getMockBuilder('Cache')
             ->setMethods([ 'fetch' ])
             ->getMock();
 
         $this->conn = $this->getMockBuilder('DatabaseConnection')
             ->setMethods([ 'fetchAll' ])
-            ->getMock();
-
-        $this->helper = $this->getMockBuilder('L10nRouteHelper')
-            ->setMethods([ 'localizeUrl' ])
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
@@ -73,6 +74,9 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -91,6 +95,8 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'cache':
                 return $this->cache;
+            case 'core.decorator.url':
+                return $this->decorator;
             case 'request':
                 return $this->request;
             case 'core.helper.url_generator':
@@ -175,9 +181,6 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
      */
     public function testMetaAmpHtmlWhenContent()
     {
-        $this->helper->expects($this->once())->method('localizeUrl')
-            ->willReturn('/wibble/wubble');
-
         $this->request->expects($this->any())->method('getRequestUri')
             ->willReturn('wibble.html');
 
@@ -301,7 +304,7 @@ class SmartyOutputFilterMetaAmpHtmlTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->once())->method('getValue')
             ->willReturn($content);
 
-        $this->helper->expects($this->once())->method('localizeUrl')
+        $this->decorator->expects($this->once())->method('prefixUrl')
             ->will($this->throwException(new \Exception()));
 
         $this->assertEquals(

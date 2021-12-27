@@ -24,6 +24,11 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'qux' ]);
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->str = '<p>Taciti sociosqu ad litora torquent per
             conubia nostra, per inceptos himenaeos. Nulla lectus sem, tristique
             sed, semper in, <a href="waldo">hendrerit</a> non, sem. Vivamus
@@ -54,6 +59,9 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate', 'setInstance' ])
             ->getMock();
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -71,6 +79,9 @@ class ReplaceUrlFilterTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.decorator.url':
+                return $this->decorator;
+
             case 'core.helper.url_generator':
                 return $this->ug;
 

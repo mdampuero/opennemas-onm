@@ -85,7 +85,7 @@ class UrlGeneratorHelper
     /**
      * Returns a generated uri for a content type given some params.
      *
-     * @param string $content The content to generate the url.
+     * @param Content $content The content to generate the url.
      * @param array  $params  The list of params required to generate the URI.
      *
      * @return string The generated URI.
@@ -174,7 +174,7 @@ class UrlGeneratorHelper
                     '_format'  => $isAmp ? 'amp' : null,
                 ]);
 
-            $url = $this->routeHelper->localizeUrl($url);
+            $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
             return $escape ? rawurlencode($url) : $url;
         } catch (\Exception $e) {

@@ -272,7 +272,7 @@ class FrontendController extends Controller
             $url = $this->get('core.helper.url_generator')
                 ->generate($params['o_content'], [ 'absolute' => true ]);
 
-            return $this->get('core.helper.l10n_route')->localizeUrl($url);
+            return $this->get('core.decorator.url')->prefixUrl($url);
         }
 
         $params = $this->getKnownParameters($action, $params);
@@ -284,7 +284,7 @@ class FrontendController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return $this->get('core.helper.l10n_route')->localizeUrl($url);
+        return $this->get('core.decorator.url')->prefixUrl($url);
     }
 
     /**
@@ -320,7 +320,7 @@ class FrontendController extends Controller
                     return $key === '_format';
                 }, ARRAY_FILTER_USE_KEY));
 
-            return $this->get('core.helper.l10n_route')->localizeUrl($expected);
+            return $this->get('core.decorator.url')->prefixUrl($expected);
         }
 
         $route = $this->getRoute($action, $params);
@@ -332,7 +332,7 @@ class FrontendController extends Controller
 
         $expected = $this->get('router')->generate($route, $params);
 
-        return $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        return $this->get('core.decorator.url')->prefixUrl($expected);
     }
 
     /**

@@ -15,6 +15,11 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContext' ])
+            ->getMock();
+
         $this->urlHelper = $this->getMockBuilder('Common\Core\Component\Helper\UrlHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'parse', 'unparse' ])
@@ -25,11 +30,34 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'prefixUrl' ])
             ->getMock();
 
+        $this->locale->expects($this->any())->method('getContext')
+            ->willReturn('frontend');
+
         $this->container->expects($this->any())->method('get')
-            ->with('core.instance')
-            ->willReturn(new Instance([ 'subdirectory' => '/sub' ]));
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->decorator = new UrlSubdirectoryDecorator($this->container, $this->urlHelper);
+    }
+
+    /**
+     * Returns a mock service basing on name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.locale':
+                return $this->locale;
+
+            case 'core.instance':
+                return new Instance([ 'subdirectory' => '/sub' ]);
+
+            default:
+                return null;
+        }
     }
 
     /**

@@ -42,6 +42,12 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
                 'set'
             ])->getMock();
 
+
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->oldCache = $this->getMockBuilder('Cache')
             ->disableOriginalConstructor()
             ->setMethods([ 'fetch' ])
@@ -112,6 +118,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $GLOBALS['kernel'] = $this->kernel;
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
@@ -144,6 +153,9 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
             case 'cache':
                 return $this->oldCache;
+
+            case 'core.decorator.url':
+                return $this->decorator;
 
             case 'core.helper.url_generator':
                 return $this->ugh;

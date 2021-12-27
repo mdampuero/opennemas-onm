@@ -22,8 +22,7 @@ function smarty_function_get_url($params, &$smarty)
             '_format'  => $isAmp ? 'amp' : null,
         ]);
 
-    $url = $container->get('core.helper.l10n_route')
-        ->localizeUrl($url, '');
+    $url = $container->get('core.decorator.url')->prefixUrl($url);
 
     return $escape ? rawurlencode($url) : $url;
 }

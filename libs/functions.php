@@ -84,7 +84,13 @@ function url($urlName, $params = [], $absolute = false)
     }
 
     global $kernel;
-    return $kernel->getContainer()->get('router')->generate($urlName, $params, $absolute);
+
+    $container = $kernel->getContainer();
+
+    $route = $container->get('router')->generate($urlName, $params, $absolute);
+    $route = $container->get('core.decorator.url')->prefixUrl($route);
+
+    return $route;
 }
 
 /**

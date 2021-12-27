@@ -36,8 +36,7 @@ function smarty_function_renderTags($params, &$smarty)
             'slug' => $tag->slug
         ]);
 
-        $url = $smarty->getContainer()->get('core.helper.l10n_route')
-            ->localizeUrl($url, '');
+        $url = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
 
         $output .= sprintf(
             '<a href="%s" class="tag-item">%s</a>%s',

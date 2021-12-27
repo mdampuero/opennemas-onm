@@ -299,6 +299,8 @@ class Redirector
 
             $target = $this->container->get('core.helper.url_generator')
                 ->generate($target);
+
+            $target = $this->container->get('core.decorator.url')->prefixUrl($target);
         }
 
         $info  = parse_url($target);
@@ -382,6 +384,8 @@ class Redirector
         if (is_object($target)) {
             $target = $this->container->get('core.helper.url_generator')
                 ->generate($target);
+
+            $target = $this->container->get('core.decorator.url')->prefixUrl($target);
         }
 
         if (strpos($target, '/redirect/content') !== false) {
@@ -458,6 +462,8 @@ class Redirector
 
         $url = $this->container->get('core.helper.url_generator')->generate($content);
 
+        $url = $this->container->get('core.decorator.url')->prefixUrl($url);
+
         if ($format === 'amp' && in_array(
             $content->content_type_name,
             [ 'album', 'article', 'opinion', 'poll', 'video' ]
@@ -504,6 +510,8 @@ class Redirector
         ) {
             $url = $router->generate($route);
         }
+
+        $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
         return new RedirectResponse($url, 301);
     }

@@ -30,6 +30,11 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
             ->setMethods([ 'getValue' ])
@@ -45,6 +50,9 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -56,6 +64,9 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'cache.connection.instance':
                 return $this->cache;
+
+            case 'core.decorator.url':
+                return $this->decorator;
         }
 
         return null;

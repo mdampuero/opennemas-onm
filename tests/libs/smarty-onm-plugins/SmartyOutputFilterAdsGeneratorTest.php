@@ -34,6 +34,11 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDataSet' ])
             ->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -80,6 +85,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -116,6 +124,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.decorator.url':
+                return $this->decorator;
+
             case 'core.helper.content':
                 return $this->contentHelper;
 

@@ -56,6 +56,13 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
     $adsPositions = $adsRenderer->getPositions();
 
+    $url = $smarty->getContainer()->get('router')
+        ->generate('api_v1_advertisements_list');
+
+    $url = is_string($url)
+        ? $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url)
+        : $url;
+
     $content = $smarty->getContainer()->get('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
             'debug'              => $app['environment'] === 'dev' ? 'true' : 'false',
@@ -65,8 +72,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'contentId'          => $content->id ?? null,
             'lifetime'           => $settings['lifetime_cookie'],
             'positions'          => $isSafeFrame ? implode(',', $adsPositions) : '',
-            'url'                => $smarty->getContainer()->get('router')
-                ->generate('api_v1_advertisements_list')
+            'url'                => $url
         ]);
 
     $output = str_replace('</head>', $content . '</head>', $output);

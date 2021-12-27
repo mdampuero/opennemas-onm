@@ -243,6 +243,7 @@ class AuthorHelper
 
             if ($author->inrss) {
                 $url = $this->router->generate($routeName, $routeParams);
+                $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
                 return !empty($url) ? $url : null;
             }
@@ -310,8 +311,10 @@ class AuthorHelper
         $author = $this->getAuthor($item);
 
         if (isset($item->content_type_name) && $item->content_type_name === 'opinion') {
+            $url = $this->ugh->generate($author);
+
             return !empty($author)
-                ? $this->ugh->generate($author)
+                ? $this->container->get('core.decorator.url')->prefixUrl($url)
                 : null;
         }
 
@@ -321,7 +324,9 @@ class AuthorHelper
                 'slug' => $this->getAuthorSlug($author),
             ];
 
-            return $this->router->generate($routeName, $routeParams);
+            $url = $this->router->generate($routeName, $routeParams);
+
+            return $this->container->get('core.decorator.url')->prefixUrl($url);
         }
 
         return null;

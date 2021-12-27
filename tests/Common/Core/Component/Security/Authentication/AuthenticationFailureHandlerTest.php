@@ -26,6 +26,11 @@ class AuthenticationFailureHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'addError', 'failure', 'getInternalErrorMessage' ])
             ->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->exception = new AuthenticationException();
 
         $this->headers = $this->getMockBuilder('Headers')
@@ -44,13 +49,16 @@ class AuthenticationFailureHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->auth->expects($this->once())->method('addError')
             ->with($this->exception);
         $this->auth->expects($this->once())->method('failure');
 
         $this->request->headers = $this->headers;
 
-        $this->handler = new AuthenticationFailureHandler($this->auth, $this->logger, $this->router);
+        $this->handler = new AuthenticationFailureHandler($this->auth, $this->logger, $this->router, $this->decorator);
     }
 
     /**
