@@ -81,7 +81,7 @@
             </div>
           </div>
         </div>
-        <div class="row row-eq-height">
+        <div class="row">
           <div class="col-md-6">
             <div class="tiles blue m-b-15">
               <div class="tiles-body">
@@ -111,7 +111,7 @@
             </div>
           </div>
         </div>
-        <div class="row row-eq-height">
+        <div class="row">
           <div class="col-md-12">
             <div class="tiles white">
               <div class="tiles-body clearfix">
