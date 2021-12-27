@@ -32,6 +32,16 @@ services:
                 template: '@Core/collector/brand.html.twig'
                 priority: 2000
 
+    core.factory.url_decorator:
+        class:     Common\Core\Component\Url\UrlDecoratorFactory
+        arguments: [ '@service_container', '@core.helper.url', '@core.instance' ]
+        public:    true
+
+    core.decorator.url:
+        class:     Common\Core\Component\Url\UrlDecorator
+        factory:   [ '@core.factory.url_decorator', 'getUrlDecorator' ]
+        public:    true
+
     core.dispatcher:
         class:     Common\Core\Component\EventDispatcher\EventDispatcher
         arguments: [ '@event_dispatcher' ]
@@ -111,12 +121,12 @@ services:
 
     core.security.authentication.success:
         class:     Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler
-        arguments: [ '@core.security.authentication', '@application.log', '@router', '@security.token_storage' ]
+        arguments: [ '@core.security.authentication', '@application.log', '@router', '@security.token_storage', '@core.decorator.url' ]
         public:    true
 
     core.security.authentication.failure:
         class:     Common\Core\Component\Security\Authentication\AuthenticationFailureHandler
-        arguments: [ '@core.security.authentication', '@application.log', '@router' ]
+        arguments: [ '@core.security.authentication', '@application.log', '@router', '@core.decorator.url' ]
         public:    true
 
     core.security.authentication.oauth.success:
