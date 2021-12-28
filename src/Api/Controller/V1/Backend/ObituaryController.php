@@ -7,7 +7,7 @@ class ObituaryController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $extension = 'es.openhost.module.obituaries';
+    protected $extension = 'OBITUARY_MANAGER';
 
     /**
      * {@inheritdoc}

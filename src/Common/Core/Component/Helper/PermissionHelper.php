@@ -1636,28 +1636,28 @@ class PermissionHelper
                 'id'          => 253,
                 'name'        => 'OBITUARY_ADMIN',
                 'description' => _('List'),
-                'module'      => 'es.openhost.module.obituaries',
+                'module'      => 'OBITUARY_MANAGER',
                 'enabled'     => 1
             ],
             254 => [
                 'id'          => 254,
                 'name'        => 'OBITUARY_UPDATE',
                 'description' => _('Edit'),
-                'module'      => 'es.openhost.module.obituaries',
+                'module'      => 'OBITUARY_MANAGER',
                 'enabled'     => 1
             ],
             255 => [
                 'id'          => 255,
                 'name'        => 'OBITUARY_DELETE',
                 'description' => _('Delete'),
-                'module'      => 'es.openhost.module.obituaries',
+                'module'      => 'OBITUARY_MANAGER',
                 'enabled'     => 1
             ],
             256 => [
                 'id'          => 256,
                 'name'        => 'OBITUARY_CREATE',
                 'description' => _('Create'),
-                'module'      => 'es.openhost.module.obituaries',
+                'module'      => 'OBITUARY_MANAGER',
                 'enabled'     => 1
             ],
         ];
