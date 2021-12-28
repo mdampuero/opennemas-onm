@@ -29,16 +29,14 @@ function smarty_function_renderTags($params, &$smarty)
 
         $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
 
-        if (array_key_exists('limit', $params)) {
-            $count = 0;
+        $tags = array_filter($tags, function ($tag) use ($locale) {
+            if (empty($locale) || empty($tag->locale) || $tag->locale == $locale) {
+                    return $tag;
+            }
+        });
 
-            $tags = array_filter($tags, function ($tag) use (&$count, $params, $locale) {
-                if ($count < $params['limit'] &&
-                (empty($locale) || empty($tag->locale) || $tag->locale == $locale)) {
-                        $count++;
-                        return $tag;
-                }
-            });
+        if (array_key_exists('limit', $params)) {
+            $tags = array_slice($tags, 0, $params['limit']);
         }
     } catch (GetListException $e) {
         return '';
@@ -46,21 +44,19 @@ function smarty_function_renderTags($params, &$smarty)
 
     // Generate tags links
     foreach ($tags as $tag) {
-        if (empty($locale) || empty($tag->locale) || $tag->locale == $locale) {
-            $url = $smarty->getContainer()->get('router')->generate('frontend_tag_frontpage', [
-                'slug' => $tag->slug
-            ]);
+        $url = $smarty->getContainer()->get('router')->generate('frontend_tag_frontpage', [
+            'slug' => $tag->slug
+        ]);
 
-            $url = $smarty->getContainer()->get('core.helper.l10n_route')
-                ->localizeUrl($url, '');
+        $url = $smarty->getContainer()->get('core.helper.l10n_route')
+            ->localizeUrl($url, '');
 
-            $output .= sprintf(
-                '<a href="%s" class="tag-item">%s</a>%s',
-                $url,
-                $tag->name,
-                $separator
-            );
-        }
+        $output .= sprintf(
+            '<a href="%s" class="tag-item">%s</a>%s',
+            $url,
+            $tag->name,
+            $separator
+        );
     }
 
     return $output;
