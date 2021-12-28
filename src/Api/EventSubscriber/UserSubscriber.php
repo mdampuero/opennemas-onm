@@ -21,6 +21,9 @@ class UserSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            'user.createItem' => [
+                ['logAction', 5],
+            ],
             'user.deleteItem' => [
                 ['logAction', 5],
                 [ 'onUserDelete', 5 ],
