@@ -76,12 +76,29 @@
           tags: [],
           external_link: '',
           agency: '',
+          title_int: '',
+        };
+
+        $scope.init = function(target, source) {
+          $scope.flags.block[target] = ($scope.item[source] === $scope.item[target]) ? true : false;
         };
 
         /**
-         * Set inner title field blocked by default
+         * @function changeFlag
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Change the flag on click
+         *
+         * @param {String} key  The key label.
+         *
          */
-        $scope.flags.block.title_int = true;
+        $scope.changeFlag = function(key, source) {
+          if (!$scope.flags.block[key]) {
+            $scope.item[key] = $scope.item[source];
+          }
+          $scope.flags.block[key] = !$scope.flags.block[key];
+        };
 
         /**
          * @memberOf ArticleCtrl
