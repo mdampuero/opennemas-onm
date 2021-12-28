@@ -105,21 +105,18 @@ class TagService extends OrmService
 
         $tags = $this->getListByIds($ids);
 
-        if (empty($locale)) {
-            return $tags;
-        }
-
         $returnArr = [];
 
         foreach ($tags['items'] as $tag) {
-            if (empty($tag->locale)
+            if (empty($locale)
+                || empty($tag->locale)
                 || $tag->locale === $locale
             ) {
-                $returnArr[] = $tag;
+                $returnArr[$tag->id] = \Onm\StringUtils::convertToUtf8($tag);
             }
         }
 
-        $tags['items'] = $returnArr;
+        $tags['items'] = $this->responsify($returnArr);
         $tags['total'] = count($tags['items']);
 
         return $tags;

@@ -24,6 +24,11 @@ function smarty_function_checkTagExist($params, &$smarty)
     $tag     = $params['tag'];
     $assign  = $params['assign'];
 
+    if (empty($tags)) {
+        $tags = $smarty->getContainer()
+            ->get('api.service.tag')->getListByIdsKeyMapped($content->tags)['items'];
+    }
+
     if (empty($content->tags) || !is_array($content->tags)
         || empty($tags) || !is_array($tags) || empty($tag) || empty($assign)
     ) {
@@ -31,11 +36,9 @@ function smarty_function_checkTagExist($params, &$smarty)
     }
 
     foreach ($content->tags as $tagId) {
-        foreach ($tags as $value) {
-            if ($tagId == $value->id && $value->name == $tag) {
-                $smarty->assign($assign, true);
-                return '';
-            }
+        if (array_key_exists($tagId, $tags) && $tags[$tagId]['name'] == $tag) {
+            $smarty->assign($assign, true);
+            return '';
         }
     }
 }
