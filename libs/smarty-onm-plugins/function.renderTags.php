@@ -22,22 +22,33 @@ function smarty_function_renderTags($params, &$smarty)
     $output        = '';
 
     try {
-        $locale = $smarty->getContainer()->get('core.instance')->hasMultilanguage()
+        $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
+
+        $locale = $multilanguage
             && !in_array($content->content_type_name, $exclude_types)
             ? $smarty->getContainer()->get('core.locale')->getRequestLocale()
             : null;
 
-        $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
+        $oql = sprintf(
+            'id in [%s]',
+            implode(',', $ids)
+        );
 
-        $tags = array_filter($tags, function ($tag) use ($locale) {
-            if (empty($locale) || empty($tag->locale) || $tag->locale == $locale) {
-                    return $tag;
-            }
-        });
-
-        if (array_key_exists('limit', $params)) {
-            $tags = array_slice($tags, 0, $params['limit']);
+        if ($multilanguage) {
+            $oql .= sprintf(
+                ' and (locale is null or locale = \'%s\')',
+                $locale
+            );
         }
+
+        if (array_key_exists('limit', $params) && !empty($params['limit'])) {
+            $oql .= sprintf(
+                ' limit %s',
+                $params['limit']
+            );
+        }
+
+        $tags = $smarty->getContainer()->get('api.service.tag')->getList($oql)['items'];
     } catch (GetListException $e) {
         return '';
     }
