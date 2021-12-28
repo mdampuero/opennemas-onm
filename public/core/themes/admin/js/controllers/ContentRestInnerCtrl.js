@@ -105,8 +105,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     $scope.getData = function() {
       var data = angular.extend({}, $scope.data.item);
 
-      // Support external link
-
       if ($scope.item.params && $scope.item.params.length > 0) {
         data.params = angular.extend(data.params, $scope.item.params);
       }
