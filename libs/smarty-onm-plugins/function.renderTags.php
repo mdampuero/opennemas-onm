@@ -17,9 +17,14 @@ function smarty_function_renderTags($params, &$smarty)
 
     $exclude_types = [ 'letter' ];
     $content       = $params['content'];
-    $ids           = !empty($content->tags) ? $content->tags : [];
-    $separator     = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
-    $output        = '';
+
+    if (empty($content->tags)) {
+        return '';
+    }
+
+    $ids       = $content->tags;
+    $separator = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
+    $output    = '';
 
     try {
         $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
