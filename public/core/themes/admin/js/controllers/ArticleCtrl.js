@@ -79,11 +79,6 @@
         };
 
         /**
-         * Set inner title field blocked by default
-         */
-        $scope.flags.block.title_int = true;
-
-        /**
          * @memberOf ArticleCtrl
          *
          * @description
@@ -111,6 +106,10 @@
           saveItem:    'api_v1_backend_article_save_item',
           savePreview: 'api_v1_backend_article_save_preview',
           updateItem:  'api_v1_backend_article_update_item'
+        };
+
+        $scope.distinct = function(source, target) {
+          return $scope.item[source] !== $scope.item[target];
         };
 
         /**
@@ -200,6 +199,14 @@
             $scope.flags.http.generating_preview = false;
           });
         };
+
+        $scope.$watch('flags.block.title_int', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.item.title;
+        });
 
         // Update title_int when title changes
         $scope.$watch('item.title', function(nv, ov) {
