@@ -30,7 +30,15 @@ function smarty_function_renderTags($params, &$smarty)
         $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
 
         if (array_key_exists('limit', $params)) {
-            $tags = array_slice($tags, 0, $params['limit']);
+            $count = 0;
+
+            $tags = array_filter($tags, function ($tag) use (&$count, $params, $locale) {
+                if ($count < $params['limit'] &&
+                (empty($locale) || empty($tag->locale) || $tag->locale == $locale)) {
+                        $count++;
+                        return $tag;
+                }
+            });
         }
     } catch (GetListException $e) {
         return '';
