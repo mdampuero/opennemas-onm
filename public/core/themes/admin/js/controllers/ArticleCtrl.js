@@ -79,6 +79,9 @@
           title_int: '',
         };
 
+        /**
+         * Set inner title field blocked by default
+         */
         $scope.flags.block.title_int = true;
 
         /**
