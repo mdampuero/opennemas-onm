@@ -79,6 +79,8 @@
           title_int: '',
         };
 
+        $scope.flags.block.title_int = true;
+
         /**
          * @memberOf ArticleCtrl
          *
@@ -109,8 +111,15 @@
           updateItem:  'api_v1_backend_article_update_item'
         };
 
-        $scope.distinct = function(source, target) {
-          return $scope.item[source] !== $scope.item[target];
+        $scope.distinct = function(target, source) {
+          var distinct = $scope.item[source] !== $scope.item[target];
+
+          // Avoid incongruity firs time when flag.block.title_int === true but visual flag is 'false' due to distinct()
+
+          if (distinct && $scope.flags.block[target] === true) {
+            $scope.flags.block[target] = !$scope.flags.block[target];
+          }
+          return distinct;
         };
 
         /**

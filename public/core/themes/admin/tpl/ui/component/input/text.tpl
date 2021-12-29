@@ -1,9 +1,3 @@
-{$faOpen = 'fa-lock'}
-{$faClose = 'fa-unlock-alt'}
-{if $iFaOpen && $iFaClose}
-{$faOpen = $iFaOpen}
-{$faClose = $iFaClose}
-{/if}
 <div class="form-group {$iClass}">
   {if $iTitle}
     <label for="{$iField}" class="form-label">
@@ -15,7 +9,7 @@
     <div class="input-group">
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="flags.block.{$iField} = !flags.block.{$iField}" type="button">
-          <i class="fa" ng-class="{ 'fa-chain': flags.block.{$iField}, 'fa-chain-broken': !flags.block || !flags.block.{$iField} || distinct('{$iField}', '{$iSource}')}"></i>
+          <i class="fa" ng-class="{ 'fa-chain': flags.block.{$iField} || !distinct('{$iField}', '{$iSource}'), 'fa-chain-broken': flags.block.{$iField} === false || distinct('{$iField}', '{$iSource}')}"></i>
         </button>
       </span>
     {/if}
