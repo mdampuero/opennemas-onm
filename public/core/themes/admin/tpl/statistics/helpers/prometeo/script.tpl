@@ -10,6 +10,7 @@
     section: "{get_category_slug($content)}",
     tags: "{$seoTags}",
     thumbnail_image: "{$imagePath}",
+    accesstype: "{$accessType}",
     cuser: "__onm_user"
   }
 </script>
