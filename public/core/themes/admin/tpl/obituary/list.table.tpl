@@ -71,17 +71,17 @@
 {/block}
 
 {block name="customColumnsHeader"}
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('mortuary')" width="200">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('mortuary')" width="150">
     <span class="m-l-5">
       {t}Mortuary{/t}
     </span>
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('website')" width="300">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('website')" width="150">
     <span class="m-l-5">
       {t}Website{/t}
     </span>
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('maps')" width="400">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('maps')" width="150">
     <span class="m-l-5">
       {t}Google Maps{/t}
     </span>
@@ -101,17 +101,17 @@
       [% item.mortuary %]
     </div>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('maps')">
-    <div class="table-text">
-      <a href="[% item.maps %]" target="_blank">
-        [% item.maps %]
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('website')">
+    <div class="table-text" ng-if="item.website">
+      <a href="[% item.website %]" target="_blank">
+        {t}External link{/t}
       </a>
     </div>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('website')">
-    <div class="table-text">
-      <a href="[% item.website %]" target="_blank">
-        [% item.website %]
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('maps')">
+    <div class="table-text" ng-if="item.maps">
+      <a href="[% item.maps %]" target="_blank">
+        {t}External link{/t}
       </a>
     </div>
   </td>
