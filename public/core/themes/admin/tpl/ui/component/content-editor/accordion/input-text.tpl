@@ -9,7 +9,7 @@
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$field} }">
   <div class="form-group no-margin">
     <div class="controls">
-      <input class="form-control" id="{$field}" name="{$field}" ng-model="{$iRoute}" type="text" />
+      <input class="form-control" id="{$field}" name="{$field}" ng-model="item.params.{$field}" type="text" />
     </div>
   </div>
 </div>

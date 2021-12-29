@@ -78,7 +78,14 @@
         {t}Parameters{/t}
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured in frontpage{/t}" types="photo"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" icon="fa-microphone" title="{t}Agency{/t}" iRoute="item.agency"}
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.agency = !expanded.agency">
+        <i class="fa fa-microphone m-r-10"></i>{t}Agency{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>
+        </a>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.agency }">
+        {include file="ui/component/input/text.tpl" iField="agency"}
+      </div>
     </div>
   </div>
 {/block}
