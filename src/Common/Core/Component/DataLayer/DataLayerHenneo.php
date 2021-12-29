@@ -73,6 +73,18 @@ class DataLayerHenneo extends DataLayer
     }
 
     /**
+     * Get the content and check if it's under subscription.
+     *
+     * @param Boolean True if the content is restricted, false otherwise.
+     *
+     * @return string The customized string for restricted content.
+     */
+    public function customizeIsRestricted(?bool $isRestricted)
+    {
+        return $isRestricted ? 'registro' : 'abierto';
+    }
+
+    /**
      * Returns the customization for the publicationDate.
      *
      * @param null|string $date The date to customize.
@@ -96,17 +108,5 @@ class DataLayerHenneo extends DataLayer
     protected function customizeFormat(string $format)
     {
         return $format === 'html' ? 'web' : $format;
-    }
-
-    /**
-     * Get the content and check if it's under subscription.
-     *
-     * @param Boolean True if the content is restricted, false otherwise.
-     *
-     * @return string The customized string for restricted content.
-     */
-    protected function customizeIsRestricted(?bool $isRestricted)
-    {
-        return $isRestricted ? 'registro' : 'abierto';
     }
 }
