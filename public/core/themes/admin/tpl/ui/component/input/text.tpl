@@ -11,17 +11,17 @@
     </label>
   {/if}
   <div class="controls {if $iCounter || $iValidation}controls{if $iCounter}-counter{/if}{if $iValidation}-validation{/if}{/if}">
-    {if $iBlock}
+    {if $iSource}
     <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" ng-click="{if $iClick}changeFlag('{$iBlock}','{$iClick}'){else}flags.block.{$iBlock} = !flags.block.{$iBlock}{/if}" type="button">
-          <i class="fa" ng-class="{ '{$faOpen}': flags.block.{$iBlock}, '{$faClose}': !flags.block || !flags.block.{$iBlock} }"></i>
+        <button class="btn btn-default" ng-click="flags.block.{$iField} = !flags.block.{$iField}" type="button">
+          <i class="fa" ng-class="{ 'fa-chain': flags.block.{$iField}, 'fa-chain-broken': !flags.block || !flags.block.{$iField} || distinct('{$iField}', '{$iSource}')}"></i>
         </button>
       </span>
     {/if}
-    <input class="form-control" id="{$iField}" {if $iCompareTo}ng-init="init('{$iField}','{$iCompareTo}')"{/if} name="{$iField}" {if $iBlock}ng-disabled="flags.block.{$iBlock}"{/if} {$iNgActions} ng-model="item.{$iField}" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.{$iField}[data.extra.locale.default] : '{$iPlaceholder}' %]" {if $iRequired}required{/if} tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected" type="text" uib-tooltip="{t}Original{/t}: [% data.item.title[data.extra.locale.default] %]" iCounter={$iCounter} iValidation={$iValidation}>
+    <input class="form-control" id="{$iField}" name="{$iField}" {if $iSource}ng-disabled="flags.block.{$iField}"{/if} {$iNgActions} ng-model="item.{$iField}" placeholder="[% data.extra.locale.multilanguage && data.extra.locale.default !== config.locale.selected ? data.item.{$iField}[data.extra.locale.default] : '{$iPlaceholder}' %]" {if $iRequired}required{/if} tooltip-enable="config.locale.multilanguage && config.locale.default !== config.locale.selected" type="text" uib-tooltip="{t}Original{/t}: [% data.item.title[data.extra.locale.default] %]" iCounter={$iCounter} iValidation={$iValidation}>
     {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.$iField" iNgModel="item.$iField"}
-    {if $iBlock}
+    {if $iSource}
     </div>
     {/if}
     {if $iHelp}

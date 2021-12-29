@@ -79,27 +79,6 @@
           title_int: '',
         };
 
-        $scope.init = function(target, source) {
-          $scope.flags.block[target] = ($scope.item[source] === $scope.item[target]) ? true : false;
-        };
-
-        /**
-         * @function changeFlag
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Change the flag on click
-         *
-         * @param {String} key  The key label.
-         *
-         */
-        $scope.changeFlag = function(key, source) {
-          if (!$scope.flags.block[key]) {
-            $scope.item[key] = $scope.item[source];
-          }
-          $scope.flags.block[key] = !$scope.flags.block[key];
-        };
-
         /**
          * @memberOf ArticleCtrl
          *
@@ -128,6 +107,10 @@
           saveItem:    'api_v1_backend_article_save_item',
           savePreview: 'api_v1_backend_article_save_preview',
           updateItem:  'api_v1_backend_article_update_item'
+        };
+
+        $scope.distinct = function(source, target) {
+          return $scope.item[source] !== $scope.item[target];
         };
 
         /**
@@ -218,9 +201,17 @@
           });
         };
 
+        $scope.$watch('flags.block.title_int', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.item.title;
+        });
+
         // Update title_int when title changes
         $scope.$watch('item.title', function(nv, ov) {
-          //mirror only when title_int locker is 'closed'
+          // Mirror only when title_int locker is 'closed'
           if (!$scope.flags.block.title_int) {
             return;
           }
