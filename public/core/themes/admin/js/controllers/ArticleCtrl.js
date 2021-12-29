@@ -76,7 +76,6 @@
           tags: [],
           external_link: '',
           agency: '',
-          title_int: '',
         };
 
         /**
