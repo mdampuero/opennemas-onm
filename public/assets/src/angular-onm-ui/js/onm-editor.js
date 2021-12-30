@@ -371,25 +371,19 @@
                     stop = !stop;
                     return;
                   }
+                  // Timeout in order to prevent overlap
+                  $timeout(function() {
+                    var data = instance.getData();
 
-                  // Use 'key' event only when in source mode
-                  if (e.name === 'key' && instance.mode !== 'source') {
-                    return;
-                  }
-
-                  var data = instance.getData();
-
-                  // Prevent double changes when comparing null and ''
-                  if (data === '' && !ngModel.$viewValue) {
-                    return;
-                  }
-
-                  if (data !== ngModel.$viewValue) {
-                    $timeout(function() {
+                    // Prevent double changes when comparing null and ''
+                    if (data === '' && !ngModel.$viewValue) {
+                      return;
+                    }
+                    if (data !== ngModel.$viewValue) {
                       stop = true;
                       scope.ngModel = data;
-                    }, 0);
-                  }
+                    }
+                  }, 0);
                 };
 
                 instance.on('change', setModelData);
