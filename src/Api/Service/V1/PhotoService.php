@@ -88,7 +88,7 @@ class PhotoService extends ContentService
             $sh     = $this->container->get('core.helper.setting');
             $config = $sh->toBoolean($config, ['optimize_images']);
 
-            if ($config['optimize_images']) {
+            if (array_key_exists('optimize_images', $config) && $config['optimize_images']) {
                 $this->optimizeImage($path);
                 $this->updateImage($id, $path);
             }
