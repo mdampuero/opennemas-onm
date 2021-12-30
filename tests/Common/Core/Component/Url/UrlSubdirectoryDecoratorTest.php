@@ -30,9 +30,6 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'prefixUrl' ])
             ->getMock();
 
-        $this->locale->expects($this->any())->method('getContext')
-            ->willReturn('frontend');
-
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
@@ -72,6 +69,9 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->with([ 'path' => '/sub/foo/baz/glorp.php' ])
             ->willReturn('/sub/foo/baz/glorp.php');
 
+        $this->locale->expects($this->once())->method('getContext')
+            ->willReturn('frontend');
+
         $this->assertEquals('/sub/foo/baz/glorp.php', $this->decorator->prefixUrl('/foo/baz/glorp.php'));
     }
 
@@ -95,6 +95,24 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->with([ 'path' => '/sub/en/foo/baz/glorp.php' ])
             ->willReturn('/sub/en/foo/baz/glorp.php');
 
+        $this->locale->expects($this->once())->method('getContext')
+            ->willReturn('frontend');
+
         $this->assertEquals('/sub/en/foo/baz/glorp.php', $decorator->prefixUrl($url));
+    }
+
+    /**
+     * Tests the method prefixUrl when the url is not decorable.
+     */
+    public function testPrefixUrlWhenNoDecorable()
+    {
+        $this->urlHelper->expects($this->once())->method('parse')
+            ->with('/admin/foo/baz')
+            ->willReturn([ 'path' => '/admin/foo/baz' ]);
+
+        $this->locale->expects($this->once())->method('getContext')
+            ->willReturn('backend');
+
+        $this->assertEquals('/admin/foo/baz', $this->decorator->prefixUrl('/admin/foo/baz'));
     }
 }
