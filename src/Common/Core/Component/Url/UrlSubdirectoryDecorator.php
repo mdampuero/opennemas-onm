@@ -17,10 +17,10 @@ class UrlSubdirectoryDecorator extends UrlDecorator
     /**
      * {@inheritdoc}
      */
-    public function prefixUrl(string $url, string $routeName = '')
+    public function prefixUrl(string $url)
     {
         if (!empty($this->urlDecorator)) {
-            $url = $this->urlDecorator->prefixUrl($url, $routeName);
+            $url = $this->urlDecorator->prefixUrl($url);
         }
 
         $parts = $this->urlHelper->parse($url);

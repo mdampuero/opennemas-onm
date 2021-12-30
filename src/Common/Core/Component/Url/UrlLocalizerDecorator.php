@@ -14,10 +14,23 @@ class UrlLocalizerDecorator extends UrlDecorator
     /**
      * {@inheritdoc}
      */
-    public function prefixUrl(string $url, string $routeName = '')
+    public function prefixUrl(string $url)
     {
         if (!empty($this->urlDecorator)) {
-            $url = $this->urlDecorator->prefixUrl($url, $routeName);
+            $url = $this->urlDecorator->prefixUrl($url);
+        }
+
+        $routeName = '';
+        $parts     = $this->urlHelper->parse($url);
+
+        if (array_key_exists('path', $parts) && !empty($parts['path'])) {
+            try {
+                $path       = preg_replace('@/$@', '', $parts['path']);
+                $parameters = $this->container->get('router')->match($path);
+                $routeName  = $parameters['_route'];
+            } catch (\Exception $e) {
+                return $url;
+            }
         }
 
         $localeService = $this->container->get('core.locale');
@@ -33,11 +46,8 @@ class UrlLocalizerDecorator extends UrlDecorator
         }
 
         // Localize if unknown route or route can be localized
-        if (empty($routeName)
-            || in_array($routeName, $this->container->get('core.helper.l10n_route')->getLocalizableRoutes())
+        if (in_array($routeName, $this->container->get('core.helper.l10n_route')->getLocalizableRoutes())
         ) {
-            $parts = $this->urlHelper->parse($url);
-
             $parts['path'] = '/' . $slugs[$requestLocale]
                 . (array_key_exists('path', $parts) ? $parts['path'] : '');
 

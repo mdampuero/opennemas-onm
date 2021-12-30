@@ -6,7 +6,7 @@ use Common\Core\Component\Helper\UrlHelper;
 use Common\Core\Component\Url\UrlLocalizerDecorator;
 
 /**
- * Defines test cases for L10nRouteHelper class.
+ * Defines test cases for UrlLocalizerDecorator class.
  */
 class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,19 +15,6 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->uroute = $this->getMockBuilder('Route')
-            ->setMethods([ 'getOption' ])
-            ->getMock();
-
-        $this->lroute = $this->getMockBuilder('Route')
-            ->setMethods([ 'getOption' ])
-            ->getMock();
-
-        $this->uroute->expects($this->any())->method('getOption')
-            ->with('l10n')->willReturn(false);
-        $this->lroute->expects($this->any())->method('getOption')
-            ->with('l10n')->willReturn(true);
-
         $this->routeHelper = $this->getMockBuilder('Locale')
             ->disableOriginalConstructor()
             ->setMethods([ 'getLocalizableRoutes' ])
@@ -37,26 +24,14 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getLocale', 'getRequestLocale', 'getSlugs' ])
             ->getMock();
 
-        $this->routeCollection = $this->getMockBuilder('RouteCollection')
-            ->setMethods([ 'all' ])
-            ->getMock();
-
         $this->router = $this->getMockBuilder('Router')
-            ->setMethods([ 'getRouteCollection' ])
+            ->disableOriginalConstructor()
+            ->setMethods([ 'match' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\Container')
             ->setMethods([ 'get' ])
             ->getMock();
-
-        $this->routeCollection->expects($this->any())->method('all')
-            ->willReturn([
-                'frog_plugh'  => $this->uroute,
-                'corge_xyzzy' => $this->lroute
-            ]);
-
-        $this->router->expects($this->any())->method('getRouteCollection')
-            ->willReturn($this->routeCollection);
 
         $this->urlHelper = $this->getMockBuilder('Common\Core\Component\Helper\UrlHelper')
             ->disableOriginalConstructor()
@@ -66,7 +41,7 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
-        $this->helper = new UrlLocalizerDecorator($this->container, $this->urlHelper);
+        $this->localizer = new UrlLocalizerDecorator($this->container, $this->urlHelper);
     }
 
     /**
@@ -94,151 +69,95 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests prefixUrl when the current route supports locale and the current
-     * requests does not match the default locale.
+     * Tests prefixUrl when there is an inner decorator.
      */
-    public function testPrefixUrlWithLocalizableRoute()
+    public function testPrefixUrlWhenInner()
     {
-        $property = new \ReflectionProperty($this->helper, 'routes');
+        $decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
 
-        $property->setAccessible(true);
-        $property->setValue($this->helper, [ 'foo_fubar_wibble' ]);
+        $localizer = new UrlLocalizerDecorator($this->container, $this->urlHelper, $decorator);
 
-        $this->locale->expects($this->any())->method('getLocale')
-            ->willReturn('es_ES');
-        $this->locale->expects($this->any())
-            ->method('getRequestLocale')->willReturn('en_US');
-        $this->locale->expects($this->any())->method('getSlugs')
-            ->willReturn([ 'es_ES' => 'es', 'en_US' => 'en' ]);
+        $decorator->expects($this->once())->method('prefixUrl')
+            ->with('/foo/baz')
+            ->willReturn('/foo/baz');
 
-        $this->urlHelper->expects($this->at(0))->method('parse')
-            ->willReturn([ 'path' => '/glork/fred' ]);
+        $this->urlHelper->expects($this->once())->method('parse')
+            ->with('/foo/baz')
+            ->willReturn([ 'path' => '/foo/baz' ]);
 
-        $this->urlHelper->expects($this->at(1))->method('unparse')
-            ->with([ 'path' => '/en/glork/fred' ])
-            ->willReturn('/en/glork/fred');
+        $this->router->expects($this->once())->method('match')
+            ->will($this->throwException(new \Exception));
 
-        $this->routeHelper->expects($this->any())->method('getLocalizableRoutes')
-            ->willReturn([ 'foo_fubar_wibble' ]);
-
-        $this->assertEquals(
-            '/en/glork/fred',
-            $this->helper->prefixUrl('/glork/fred', 'foo_fubar_wibble')
-        );
-
-        $this->urlHelper->expects($this->at(0))->method('parse')
-            ->willReturn([ 'domain' => 'http://quux.waldo', 'path' => '' ]);
-
-        $this->urlHelper->expects($this->at(1))->method('unparse')
-            ->with([ 'domain' => 'http://quux.waldo', 'path' => '/en' ])
-            ->willReturn('http://quux.waldo/en');
-
-        $this->assertEquals(
-            'http://quux.waldo/en',
-            $this->helper->prefixUrl(
-                'http://quux.waldo',
-                'foo_fubar_wibble',
-                true
-            )
-        );
-
-        $this->urlHelper->expects($this->at(0))->method('parse')
-            ->willReturn([ 'domain' => 'http://quux.waldo', 'path' => '/glork/fred' ]);
-
-        $this->urlHelper->expects($this->at(1))->method('unparse')
-            ->with([ 'domain' => 'http://quux.waldo', 'path' => '/en/glork/fred' ])
-            ->willReturn('http://quux.waldo/en/glork/fred');
-
-        $this->assertEquals(
-            'http://quux.waldo/en/glork/fred',
-            $this->helper->prefixUrl(
-                'http://quux.waldo/glork/fred',
-                'foo_fubar_wibble'
-            )
-        );
-
-        $this->urlHelper->expects($this->at(0))->method('parse')
-            ->willReturn([
-                'domain' => 'http://quux.waldo',
-                'path'   => '/glork/fred?garply=quux&xyzzy=flob',
-                'port'   => ':8080'
-            ]);
-
-        $this->urlHelper->expects($this->at(1))->method('unparse')
-            ->with([
-                'domain' => 'http://quux.waldo',
-                'path' => '/en/glork/fred?garply=quux&xyzzy=flob',
-                'port'   => ':8080'
-            ])
-            ->willReturn('http://quux.waldo:8080/en/glork/fred?garply=quux&xyzzy=flob');
-
-        $this->assertEquals(
-            'http://quux.waldo:8080/en/glork/fred?garply=quux&xyzzy=flob',
-            $this->helper->prefixUrl(
-                'http://quux.waldo:8080/glork/fred?garply=quux&xyzzy=flob',
-                'foo_fubar_wibble'
-            )
-        );
+        $this->assertEquals('/foo/baz', $localizer->prefixUrl('/foo/baz'));
     }
 
     /**
-     * Tests localiezeUrl when the locale for the current request matches the
-     * default locale.
+     * Tests prefixUrl when the router throws an exception.
      */
-    public function testPrefixUrlWithDefaultLocale()
+    public function testPrefixUrlWhenNoMatching()
     {
-        $this->locale->expects($this->any())
-            ->method('getRequestLocale')->willReturn('en');
-        $this->locale->expects($this->any())
-            ->method('getLocale')->willReturn('en');
+        $this->urlHelper->expects($this->once())->method('parse')
+            ->with('/foo/baz')
+            ->willReturn([ 'path' => '/foo/baz' ]);
 
-        $this->assertEquals(
-            '/foo/bar',
-            $this->helper->prefixUrl('/foo/bar', '')
-        );
+        $this->router->expects($this->once())->method('match')
+            ->with('/foo/baz')
+            ->will($this->throwException(new \Exception()));
 
-        $this->assertEquals(
-            'http://example.com/foo/bar',
-            $this->helper->prefixUrl('http://example.com/foo/bar', '')
-        );
+        $this->assertEquals('/foo/baz', $this->localizer->prefixUrl('/foo/baz'));
     }
 
     /**
-     * Tests prefixUrl with an unknown locale.
+     * Tests prefixUrl when the locale is the default or not exists.
      */
-    public function testPrefixUrlWithUnknownLocale()
+    public function testPrefixUrlWhenDefaultLocale()
     {
-        $this->locale->expects($this->any())
-            ->method('getLocale')->willReturn('en_US');
-        $this->locale->expects($this->any())
-            ->method('getRequestLocale')->willReturn('mumble');
-        $this->locale->expects($this->any())
-            ->method('getSlugs')->willReturn([ 'en', 'es' ]);
+        $this->urlHelper->expects($this->once())->method('parse')
+            ->with('/foo/baz')
+            ->willReturn([ 'path' => '/foo/baz' ]);
 
-        $this->assertEquals(
-            '/foo/bar',
-            $this->helper->prefixUrl('/foo/bar', '')
-        );
+        $this->locale->expects($this->at(0))->method('getLocale')
+            ->with('frontend')
+            ->willReturn('esp');
 
-        $this->assertEquals(
-            'http://example.com/foo/bar',
-            $this->helper->prefixUrl('http://example.com/foo/bar', '')
-        );
+        $this->locale->expects($this->at(1))->method('getRequestLocale')
+            ->willReturn('esp');
+
+        $this->assertEquals('/foo/baz', $this->localizer->prefixUrl('/foo/baz'));
     }
 
     /**
-     * Tests prefixUrl when the current route does not support locale.
+     * Tests prefixUrl when the url is successfully translated.
      */
-    public function testPrefixUrlWithUnlocalizableRoute()
+    public function testPrefixUrlWhenSuccess()
     {
-        $property = new \ReflectionProperty($this->helper, 'routes');
+        $this->urlHelper->expects($this->once())->method('parse')
+            ->with('/foo/baz')
+            ->willReturn([ 'path' => '/foo/baz' ]);
 
-        $property->setAccessible(true);
-        $property->setValue($this->helper, [ 'foo_fubar_wibble' ]);
+        $this->router->expects($this->once())->method('match')
+            ->willReturn([ '_route' => 'foo_baz' ]);
 
-        $this->assertEquals(
-            '/glork/fred',
-            $this->helper->prefixUrl('/glork/fred', 'glork_fred')
-        );
+        $this->locale->expects($this->at(0))->method('getLocale')
+            ->with('frontend')
+            ->willReturn('esp');
+
+        $this->locale->expects($this->at(1))->method('getRequestLocale')
+            ->willReturn('eng');
+
+        $this->locale->expects($this->at(2))->method('getSlugs')
+            ->willReturn([ 'esp' => 'esp', 'eng' => 'eng' ]);
+
+        $this->routeHelper->expects($this->once())->method('getLocalizableRoutes')
+            ->willReturn([ 'foo_baz' ]);
+
+        $this->urlHelper->expects($this->once())->method('unparse')
+            ->with([ 'path' => '/eng/foo/baz' ])
+            ->willReturn('/eng/foo/baz');
+
+        $this->assertEquals('/eng/foo/baz', $this->localizer->prefixUrl('/foo/baz'));
     }
 }
