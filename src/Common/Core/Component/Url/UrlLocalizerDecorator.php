@@ -34,7 +34,7 @@ class UrlLocalizerDecorator extends UrlDecorator
 
         // Localize if unknown route or route can be localized
         if (empty($routeName)
-            || in_array($routeName, $this->getLocalizableRoutes())
+            || in_array($routeName, $this->container->get('core.helper.l10n_route')->getLocalizableRoutes())
         ) {
             $parts = $this->urlHelper->parse($url);
 
@@ -45,28 +45,5 @@ class UrlLocalizerDecorator extends UrlDecorator
         }
 
         return $url;
-    }
-
-    /**
-     * Returns the list of localizable routes.
-     *
-     * @return array The list of localizable routes.
-     */
-    public function getLocalizableRoutes()
-    {
-        // Get the list of routes that could be localized
-        if (empty($this->routes)) {
-            $routes = array_filter(
-                $this->container->get('router')->getRouteCollection()->all(),
-                function ($route) {
-                    return true === $route->getOption('l10n')
-                        || 'true' === $route->getOption('l10n');
-                }
-            );
-
-            $this->routes = array_keys($routes);
-        }
-
-        return $this->routes;
     }
 }

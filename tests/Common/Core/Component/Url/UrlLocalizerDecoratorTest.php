@@ -28,6 +28,11 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->lroute->expects($this->any())->method('getOption')
             ->with('l10n')->willReturn(true);
 
+        $this->routeHelper = $this->getMockBuilder('Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getLocalizableRoutes' ])
+            ->getMock();
+
         $this->locale = $this->getMockBuilder('Locale')
             ->setMethods([ 'getLocale', 'getRequestLocale', 'getSlugs' ])
             ->getMock();
@@ -80,20 +85,12 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
+            case 'core.helper.l10n_route':
+                return $this->routeHelper;
+
             case 'router':
                 return $this->router;
         }
-    }
-
-    /**
-     * Tests getLocalizableRoutes.
-     */
-    public function testGetLocalizableRoutes()
-    {
-        $this->assertEquals(
-            [ 'corge_xyzzy' ],
-            $this->helper->getLocalizableRoutes()
-        );
     }
 
     /**
@@ -120,6 +117,9 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->urlHelper->expects($this->at(1))->method('unparse')
             ->with([ 'path' => '/en/glork/fred' ])
             ->willReturn('/en/glork/fred');
+
+        $this->routeHelper->expects($this->any())->method('getLocalizableRoutes')
+            ->willReturn([ 'foo_fubar_wibble' ]);
 
         $this->assertEquals(
             '/en/glork/fred',
