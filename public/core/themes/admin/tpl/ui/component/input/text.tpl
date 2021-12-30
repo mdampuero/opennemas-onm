@@ -8,8 +8,8 @@
     {if $iSource}
     <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-default" ng-click="flags.block.{$iField} = !flags.block.{$iField}" type="button">
-          <i class="fa" ng-class="{ 'fa-chain': flags.block.{$iField} || !distinct('{$iField}', '{$iSource}'), 'fa-chain-broken': flags.block.{$iField} === false || distinct('{$iField}', '{$iSource}')}"></i>
+        <button class="btn btn-default" ng-click="flags.block.{$iField} = !flags.block.{$iField}">
+          <i class="fa" ng-class="{ 'fa-chain': flags.block.{$iField}, 'fa-chain-broken': !flags.block.{$iField} }"></i>
         </button>
       </span>
     {/if}

@@ -79,11 +79,6 @@
         };
 
         /**
-         * Set inner title field blocked by default
-         */
-        $scope.flags.block.title_int = true;
-
-        /**
          * @memberOf ArticleCtrl
          *
          * @description
@@ -113,17 +108,6 @@
           updateItem:  'api_v1_backend_article_update_item'
         };
 
-        $scope.distinct = function(target, source) {
-          var distinct = $scope.item[source] !== $scope.item[target];
-
-          // Avoid incongruity firs time when flag.block.title_int === true but visual flag is 'false' due to distinct()
-
-          if (distinct && $scope.flags.block[target] === true) {
-            $scope.flags.block[target] = !$scope.flags.block[target];
-          }
-          return distinct;
-        };
-
         /**
          * @inheritdoc
          */
@@ -138,6 +122,8 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'article-' + $scope.data.item.pk_content + '-draft';
           }
+
+          $scope.flags.block.title_int = $scope.item.title_int === $scope.item.title;
 
           $scope.checkDraft();
           related.init($scope);
@@ -212,6 +198,7 @@
           });
         };
 
+        // Update title int when block flag changes
         $scope.$watch('flags.block.title_int', function(nv) {
           if (!nv) {
             return;
@@ -245,6 +232,16 @@
             }
           }
         }, true);
+
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if ($scope.flags.block.title_int !== ($scope.item.title === $scope.item.title_int)) {
+            $scope.flags.block.title_int = !$scope.flags.block.title_int;
+          }
+        });
 
         /**
          * @inheritdoc
