@@ -185,9 +185,11 @@ class RouterListener implements EventSubscriberInterface
             return;
         }
 
+        $instance = $this->container->get('core.instance');
+
         // If the instance is a subdirectory
-        if (!empty($subdirectory = $this->container->get('core.loader.instance')->getInstance()->subdirectory)) {
-            $newRequest = $this->removeSubdirectoryFromRequest($subdirectory);
+        if ($instance->isSubdirectory()) {
+            $newRequest = $this->removeSubdirectoryFromRequest($instance->subdirectory);
         }
 
         // If the instance has defined language
