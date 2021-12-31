@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-21 10:10+0000\n"
-"PO-Revision-Date: 2021-12-21 11:18+0100\n"
+"POT-Creation-Date: 2021-12-31 08:46+0000\n"
+"PO-Revision-Date: 2021-12-31 09:47+0100\n"
 "Last-Translator: adan <adan@openhost.es>\n"
 "Language-Team: Spanish - Spain <adan@openhost.es>\n"
 "Language: es_ES\n"
@@ -450,8 +450,8 @@ msgstr "Preguntas frecuentes"
 msgid "Contact support"
 msgstr "Contactar con soporte"
 
-msgid "System"
-msgstr "Sistema"
+msgid "Settings"
+msgstr "Ajustes"
 
 msgid "URLs"
 msgstr "URLs"
@@ -459,8 +459,17 @@ msgstr "URLs"
 msgid "Cache manager"
 msgstr "Gestor de caché"
 
-msgid "Settings"
-msgstr "Opciones"
+#, fuzzy
+msgid "Homepage manager"
+msgstr "Gestor de portadas"
+
+#, fuzzy
+msgid "Advertising"
+msgstr "Publicidad"
+
+#, fuzzy
+msgid "Suscriptions"
+msgstr "Suscripciones"
 
 msgid "You don't have enough privileges for modify this content."
 msgstr "No tienes permisos suficientes para modificar este contenido."
@@ -1149,6 +1158,9 @@ msgstr "Ordenes"
 
 msgid "OpCache Status"
 msgstr "Estado de Opcache"
+
+msgid "System"
+msgstr "Sistema"
 
 msgid "Sitemaps"
 msgstr "Sitemaps"

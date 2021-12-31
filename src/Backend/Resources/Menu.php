@@ -398,31 +398,94 @@ $menuXml = [
 
     [
         'id'          => 'settings_manager',
-        'title'       => _('System'),
+        'title'       => _('Settings'),
         'icon'        => 'fa fa-cogs',
         'link'        => '#',
         'module_name' => 'SETTINGS_MANAGER',
         'privilege'   => 'ONM_SETTINGS',
         'submenu' => [
             [
-                'id'          => 'urls',
-                'title'       => _('URLs'),
-                'link'        => url('backend_urls_list'),
-                'icon'        => 'fa fa-globe',
-                'privilege'   => 'MASTER'
-            ],
-            [
-                'id'          => 'cache',
-                'title'       => _('Cache manager'),
-                'icon'        => 'fa fa-database',
-                'link'        => url('backend_cache_list'),
-                'privilege'   => 'MASTER'
-            ],
-            [
-                'id'          => 'settings',
-                'title'       => _('Settings'),
+                'id'          => 'general_settings_manager',
+                'title'       => _('General'),
                 'icon'        => 'fa fa-cogs',
-                'link'        => url('admin_system_settings'),
+                'link'        => '#',
+                'module_name' => 'SETTINGS_MANAGER',
+                'privilege'   => 'ONM_SETTINGS',
+                'submenu' => [
+                    [
+                        'id'          => 'urls',
+                        'title'       => _('URLs'),
+                        'link'        => url('backend_urls_list'),
+                        'icon'        => 'fa fa-globe',
+                        'privilege'   => 'MASTER'
+                    ],
+                    [
+                        'id'          => 'cache',
+                        'title'       => _('Cache manager'),
+                        'icon'        => 'fa fa-database',
+                        'link'        => url('backend_cache_list'),
+                        'privilege'   => 'MASTER'
+                    ],
+                    [
+                        'id'          => 'settings',
+                        'title'       => _('Settings'),
+                        'icon'        => 'fa fa-cogs',
+                        'link'        => url('admin_system_settings'),
+                    ]
+                ]
+            ],
+            [
+                'id'          => 'content_settings_manager',
+                'title'       => _('Content'),
+                'icon'        => 'fa fa-cogs',
+                'link'        => '#',
+                'module_name' => 'SETTINGS_MANAGER',
+                'privilege'   => 'ONM_SETTINGS',
+                'submenu' => [
+                    [
+                        'id'          => 'advertising_settings',
+                        'title'       => _('Advertising'),
+                        'icon'        => 'fa fa-bullhorn',
+                        'link'        => url('backend_settings_advertisement'),
+                    ],
+                    [
+                        'id'          => 'tags_settings',
+                        'title'       => _('Tags'),
+                        'icon'        => 'fa fa-tags',
+                        'link'        => url('backend_settings_tag'),
+                    ],
+                    [
+                        'id'          => 'articles_settings',
+                        'title'       => _('Articles'),
+                        'icon'        => 'fa fa-file-text',
+                        'link'        => url('backend_settings_article'),
+                    ],
+                    [
+                        'id'          => 'opinions_settings',
+                        'title'       => _('Opinions'),
+                        'icon'        => 'fa fa-quote-right',
+                        'link'        => url('backend_settings_opinion'),
+                    ],
+                    [
+                        'id'          => 'comments_settings',
+                        'title'       => _('Comments'),
+                        'icon'        => 'fa fa-comment',
+                        'link'        => url('backend_settings_comment'),
+                    ],
+                    [
+                        'id'          => 'photos_settings',
+                        'title'       => _('Photos'),
+                        'icon'        => 'fa fa-picture-o',
+                        'link'        => url('backend_settings_photo'),
+                        'privilege'   => 'MASTER'
+                    ],
+                    [
+                        'id'          => 'suscriptions_settings',
+                        'title'       => _('Suscriptions'),
+                        'icon'        => 'fa fa-address-card',
+                        'link'        => url('backend_settings_subscriber'),
+                    ]
+                ],
             ]
         ]
     ]

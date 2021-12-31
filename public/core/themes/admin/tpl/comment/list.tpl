@@ -19,7 +19,7 @@
 {block name="primaryActions"}
   {acl isAllowed="COMMENT_SETTINGS"}
     <li class="quicklinks">
-      <a class="btn btn-link" href="{url name=backend_comments_config}" title="{t}Config comments module{/t}">
+      <a class="btn btn-link" href="{url name=backend_settings_comment}" title="{t}Config comments module{/t}">
         <i class="fa fa-gear fa-lg"></i>
       </a>
     </li>

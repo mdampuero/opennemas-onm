@@ -309,3 +309,7 @@ backend_user_group:
 backend_widget:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/widget.yml'
+
+backend_settings:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/setting.yml'

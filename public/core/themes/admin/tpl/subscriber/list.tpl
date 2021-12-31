@@ -19,7 +19,7 @@
 {block name="primaryActions"}
   {acl isAllowed="SUBSCRIBER_SETTINGS"}
     <li class="quicklinks">
-      <a class="btn btn-link" href="[% routing.generate('backend_subscribers_settings') %]" title="{t}Config users module{/t}">
+      <a class="btn btn-link" href="[% routing.generate('backend_settings_subscriber') %]" title="{t}Config users module{/t}">
         <i class="fa fa-cog fa-lg"></i>
       </a>
     </li>

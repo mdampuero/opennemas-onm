@@ -1,0 +1,32 @@
+backend_settings_photo:
+    path:     /settings/photo
+    defaults: { _controller: BackendBundle:Photo:config }
+    options:
+        expose: true
+backend_settings_advertisement:
+    path:     /settings/advertisement
+    defaults: { _controller: BackendBundle:Advertisements:config }
+
+backend_settings_tag:
+    path:     /settings/tag
+    defaults: { _controller: BackendBundle:Tag:config }
+    options:
+        expose: true
+
+backend_settings_article:
+    path:     /settings/article
+    defaults: { _controller: BackendBundle:Article:config }
+
+backend_settings_opinion:
+    path:     /settings/opinion
+    defaults: { _controller: BackendBundle:Opinion:config }
+
+backend_settings_comment:
+    path:     /settings/comment
+    defaults: { _controller: BackendBundle:Comment:config }
+
+backend_settings_subscriber:
+    path:     /settings/subscriber
+    defaults: { _controller: BackendBundle:Subscriber:settings }
+    options:
+        expose: true

@@ -21,7 +21,7 @@
     <ul class="nav quick-section">
       {acl isAllowed="OPINION_SETTINGS"}
         <li class="quicklinks">
-          <a class="btn btn-link" href="{url name=backend_opinions_config}" title="{t}Config opinion module{/t}">
+          <a class="btn btn-link" href="{url name=backend_settings_opinion}" title="{t}Config opinion module{/t}">
             <i class="fa fa-cog fa-lg"></i>
           </a>
         </li>

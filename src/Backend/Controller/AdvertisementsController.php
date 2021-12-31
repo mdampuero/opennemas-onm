@@ -441,7 +441,7 @@ class AdvertisementsController extends Controller
         // Delete caches for frontpages
         $this->get('core.dispatcher')->dispatch('setting.update');
 
-        return $this->redirect($this->generateUrl('admin_ads_config'));
+        return $this->redirect($this->generateUrl('backend_settings_advertisement'));
     }
 
     /**
