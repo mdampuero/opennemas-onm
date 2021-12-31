@@ -77,7 +77,7 @@ services:
 
     core.instance.checker:
         class:     Common\Core\Component\Instance\Checker
-        arguments: [ '@orm.manager' ]
+        arguments: [ '@orm.manager', '@core.locale' ]
         public:    true
 
     core.instance.validator:
