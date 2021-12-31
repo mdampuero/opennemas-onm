@@ -14,7 +14,7 @@ class ObituaryController extends BackendController
     /**
      * The extension name required by this controller.
      */
-    protected $extension = 'OBITUARY_MANAGER';
+    protected $extension = 'es.openhost.module.obituary';
 
     /**
      * The list of permissions for every action.
@@ -39,7 +39,7 @@ class ObituaryController extends BackendController
      * @param  Request $request The request object.
      * @return Response         The response object.
      *
-     * @Security("hasExtension('OBITUARY_MANAGER')")
+     * @Security("hasExtension('es.openhost.module.obituary')")
      */
     public function contentProviderAction(Request $request)
     {
