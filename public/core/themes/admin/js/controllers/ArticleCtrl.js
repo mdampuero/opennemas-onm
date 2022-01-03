@@ -69,6 +69,7 @@
           starttime: null,
           endtime: null,
           title: '',
+          title_int: '',
           type: 0,
           with_comment: 0,
           categories: [],
