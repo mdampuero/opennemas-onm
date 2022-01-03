@@ -13,6 +13,7 @@ figure {
 }
 img,
 figure.image img {
+  height: auto;
   max-width: 100%;
 }
 p.image-inbody-center,
