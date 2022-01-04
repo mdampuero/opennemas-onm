@@ -1,3 +1,4 @@
+/* IMPORTANT: When this file changes the query string of the path of this file must be changed on ckeditor config.js */
 .related-content.related-content-inner ul li {
     display: flex;
     flex-direction: row;
