@@ -1,0 +1,91 @@
+# Stop unbuntu apache server
+sudo /etc/init.d/apache2 stop
+
+
+# Start eEFInd
+radeon.modeset=0
+
+
+# Fix Gandalf on manager
+redis-cli -h redis -n 0 flushdb //1 id do usuario
+redis-cli -h redis del dev_manager_user-id
+
+
+# Passbolt
+729
+
+
+# Después de actualizar core
+./fucker shell
+    bin/composer.phar install # CTRL + C; ENTER para no sobreescribir parameters.yml incorrectamente
+    make routes
+    exit
+./fucker redis flushall
+
+
+# Checkout y pull de todos los temas al mismo branch de core
+make themes
+
+# Checkout y pull de todos los temas al branch indicado
+make branch=type/ONM-XXX theme
+
+
+# Delete caches
+sudo rm -rf ~/onm-docker-dev/volumes/onm/tmp/cache/dev/;sudo rm -rf ~/onm-docker-dev/volumes/onm/tmp/cache/prod/;sudo rm -rf ~/onm-docker-dev/volumes/onm/tmp/compiles/smarty/;sudo rm -rf ~/onm-docker-dev/volumes/onm/public/build/assets/
+
+cd '/home/miguel/onm-docker-dev/volumes/onm/tmp/cache/dev'; sudo rm -rf *;
+cd '/home/miguel/onm-docker-dev/volumes/onm/tmp/cache/prod'; sudo rm -rf *;
+cd '/home/miguel/onm-docker-dev/volumes/onm/tmp/compiles/smarty'; sudo rm -rf *;
+cd '/home/miguel/onm-docker-dev/volumes/onm/public/build/assets'; sudo rm -rf *
+
+
+# Image folder permisions Fix
+# From ./fucker shell on theme directory:
+chown www-data:www-data -R images/
+
+
+# Update routes from fucker shell
+app/console fos:js-routing:dump --target=public/assets/js/routes.js
+
+
+# Batch merge themes
+for theme in auris bastet bragi dryads eurus forseti freya horus kalliope kibele kronos lrinternacional mercury mihos moura nemo nemty nyx odin pekka rhea selket slido tecnofisis televisionlr verbeia xaman; do
+echo "\n\nTheme: $theme"
+    cd $theme
+    git checkout master
+    git pull
+    git checkout feature/ONM-7058
+    git pull
+    git merge --no-ff master
+    git push
+    git checkout pre
+    git pull
+    git merge --no-ff feature/ONM-7058
+    git push
+    cd ..
+    sleep 10
+done
+
+
+# Batch merge themes
+for theme in anemoi amon auris bastet bragi dryads eurus forseti freya galatea hathor hermes horus kalliope khepri kibele kronos lrinternacional mercury mihos moura nemo nemty notus nyx odin pekka rhea selket simplo skanda slido tecnofisis televisionlr verbeia xaman zisa; do
+echo "\n\nTheme: $theme"
+    cd $theme
+    git checkout improvement/ONM-3654
+    git pull
+    git checkout testing
+    git pull
+    git merge --no-ff improvement/ONM-3654
+    git push
+    git checkout pre
+    git pull
+    git merge --no-ff improvement/ONM-3654
+    git push
+    cd ..
+    sleep 60
+done
+
+
+# Regex:
+# Busca imágenes mal cerradas
+<img[^>]*/>
