@@ -26,7 +26,7 @@ class TagValidator extends Validator
             ], CoreValidator::BLACKLIST_RULESET_TAGS);
 
         if (!empty($errors)) {
-            throw new InvalidArgumentException(_('Invalid tag'), 400);
+            throw new InvalidArgumentException(array_pop($errors['errors']), 400);
         }
 
         $locales = $this->container->get('core.locale')
@@ -36,7 +36,7 @@ class TagValidator extends Validator
         if (!empty($item->locale)
             && !in_array($item->locale, array_keys($locales))
         ) {
-            throw new InvalidArgumentException(_('Invalid tag'), 400);
+            throw new InvalidArgumentException(_('The selected locale is invalid'), 400);
         }
 
         $oql = sprintf('(name = "%s" or slug = "%s")', $item->name, $item->slug);
@@ -56,7 +56,7 @@ class TagValidator extends Validator
                 throw new \Exception();
             }
         } catch (\Exception $e) {
-            throw new InvalidArgumentException(_('Invalid tag'), 400);
+            throw new InvalidArgumentException(_('There is another tag with the same name or slug'), 409);
         }
     }
 }
