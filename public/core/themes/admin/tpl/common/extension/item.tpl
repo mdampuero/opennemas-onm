@@ -76,7 +76,6 @@
         </div>
         <div class="row ng-cloak" ng-show="!flags.http.loading && flags.visible.grid && item">
           <div class="col-md-4 col-md-push-8">
-            {include file="common/extension/fields.tpl"}
             {block name="rightColumn"}{/block}
           </div>
           <div class="col-md-8 col-md-pull-4">
