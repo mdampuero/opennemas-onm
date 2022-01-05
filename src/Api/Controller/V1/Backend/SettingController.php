@@ -167,16 +167,24 @@ class SettingController extends Controller
     /**
      * Returns the list of settings.
      *
+     * @param Request $request The request object.
+     *
      * @return JsonResponse The response object.
      *
      * @Security("hasExtension('SETTINGS_MANAGER')
      *     and hasPermission('ONM_SETTINGS')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
+        $params   = $request->get('params');
+        if (is_array($params) && !empty($params)) {
+            $keys = array_keys($params);
+        } else {
+            $keys = $this->keys;
+        }
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get($this->keys);
+            ->get($keys);
         $locale   = $this->get('core.locale');
 
         // Decode scripts
@@ -185,19 +193,18 @@ class SettingController extends Controller
                 $settings[$key] = base64_decode($settings[$key]);
             }
         }
-
         $toint = [
             'items_in_blog', 'items_per_page', 'elements_in_rss',
             'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
             'logo_favico', 'logo_embed', 'sitemap', 'frontpage_max_items'
         ];
-
         foreach ($toint as $key) {
-            if (!empty($settings[$key]) && is_array($settings[$key])) {
+            if (array_key_exists($key, $settings) && !empty($settings[$key]) &&
+                is_array($settings[$key])) {
                 foreach ($settings[$key] as $element => $value) {
                     $settings[$key][$element] = (int) $value;
                 }
-            } else {
+            } elseif (array_key_exists($key, $settings)) {
                 $settings[$key] = (int) $settings[$key];
             }
         }

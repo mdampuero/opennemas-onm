@@ -512,10 +512,10 @@
         $scope.save = function() {
           var data = $scope.post();
 
-          if (!data.settings.locale.frontend.language.selected) {
-            messenger.post(window.strings.forms.not_locale, 'error');
-            return null;
-          }
+          // if (!data.settings.locale.frontend.language.selected) {
+          //   messenger.post(window.strings.forms.not_locale, 'error');
+          //   return null;
+          // }
 
           $scope.saving = true;
 

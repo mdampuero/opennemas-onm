@@ -427,10 +427,48 @@ $menuXml = [
                         'privilege'   => 'MASTER'
                     ],
                     [
-                        'id'          => 'settings',
-                        'title'       => _('Settings'),
-                        'icon'        => 'fa fa-cogs',
-                        'link'        => url('admin_system_settings'),
+                        'id'          => 'general_settings',
+                        'title'       => _('General & SEO'),
+                        'icon'        => 'fa fa-cog',
+                        'link'        => url('backend_settings_general'),
+                    ],
+                    [
+                        'id'          => 'appearance_settings',
+                        'title'       => _('Appearance'),
+                        'icon'        => 'fa fa-magic',
+                        'link'        => url('backend_settings_appearance'),
+                    ],
+                    [
+                        'id'          => 'language_settings',
+                        'title'       => _('Language & time'),
+                        'icon'        => 'fa fa-globe',
+                        'link'        => url('backend_settings_language'),
+                    ],
+                    [
+                        'id'          => 'internal_settings',
+                        'title'       => _('Internal'),
+                        'icon'        => 'fa fa-cube',
+                        'link'        => url('backend_settings_internal'),
+                    ],
+                    [
+                        'id'          => 'services_settings',
+                        'title'       => _('External services'),
+                        'icon'        => 'fa fa-cloud',
+                        'link'        => url('backend_settings_external'),
+                    ],
+                    [
+                        'id'          => 'sitemap_settings',
+                        'title'       => _('Sitemap'),
+                        'icon'        => 'fa fa-sitemap',
+                        'link'        => url('backend_settings_sitemap'),
+                        'privilege'   => 'MASTER'
+                    ],
+                    [
+                        'id'          => 'masters_settings',
+                        'title'       => _('Only masters'),
+                        'icon'        => 'fa fa-rebel',
+                        'link'        => url('backend_settings_master'),
+                        'privilege'   => 'MASTER'
                     ]
                 ]
             ],

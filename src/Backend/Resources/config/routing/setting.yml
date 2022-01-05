@@ -30,3 +30,31 @@ backend_settings_subscriber:
     defaults: { _controller: BackendBundle:Subscriber:settings }
     options:
         expose: true
+
+backend_settings_general:
+    path:     /settings/general
+    defaults: { _controller: BackendBundle:GeneralSettings:config }
+
+backend_settings_appearance:
+    path:     /settings/appearance
+    defaults: { _controller: BackendBundle:AppearanceSettings:config }
+
+backend_settings_language:
+    path:     /settings/language
+    defaults: { _controller: BackendBundle:LanguageSettings:config }
+
+backend_settings_internal:
+    path:     /settings/internal
+    defaults: { _controller: BackendBundle:InternalSettings:config }
+
+backend_settings_external:
+    path:     /settings/external
+    defaults: { _controller: BackendBundle:ExternalSettings:config }
+
+backend_settings_sitemap:
+    path:     /settings/sitemap
+    defaults: { _controller: BackendBundle:SitemapSettings:config }
+
+backend_settings_master:
+    path:     /settings/master
+    defaults: { _controller: BackendBundle:MasterSettings:config }
