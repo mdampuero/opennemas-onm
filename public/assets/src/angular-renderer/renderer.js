@@ -85,9 +85,11 @@
             align = 'align=' + align;
           }
 
+          var caption = !image.description ? '' : image.description;
+
           html = html.replace('[align]', align);
           html = html.replace('[alt]', alt);
-          html = html.replace('[caption]', image.description);
+          html = html.replace('[caption]', caption);
           html = html.replace('[width]', image.width);
           html = html.replace('[height]', image.height);
 
