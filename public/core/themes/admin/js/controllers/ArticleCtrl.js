@@ -199,8 +199,46 @@
           });
         };
 
+        /**
+         * @function undo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Shows the change to be made on the input.
+         */
+        $scope.undo = function() {
+          if ($scope.flags.block.title_int || $scope.previous) {
+            return;
+          }
+
+          $scope.undoing        = true;
+          $scope.previous       = $scope.item.title_int;
+          $scope.item.title_int = $scope.item.title;
+        };
+
+        /**
+         * @function redo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Stops showing the change to be made to the input.
+         */
+        $scope.redo = function() {
+          $scope.undoing = false;
+
+          if ($scope.flags.block.title_int || !$scope.previous) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.previous;
+          $scope.previous       = null;
+        };
+
         // Update title int when block flag changes
         $scope.$watch('flags.block.title_int', function(nv) {
+          $scope.previous = null;
+          $scope.undoing  = false;
+
           if (!nv) {
             return;
           }
