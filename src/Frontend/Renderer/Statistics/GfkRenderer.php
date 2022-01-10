@@ -34,6 +34,7 @@ class GfkRenderer extends StatisticsRenderer
         return [
             'content'   => $content,
             'category'  => $this->global->getSection(),
+            'domain'    => $this->config['domain'],
             'mediaId'   => $this->config['media_id'],
             'regionId'  => !empty($this->config['region_id']) ? $this->config['region_id'] : 'es',
             'contentId' => !empty($this->config['content_id']) ? $this->config['content_id'] : 'default'
@@ -47,7 +48,9 @@ class GfkRenderer extends StatisticsRenderer
     {
         if (!is_array($this->config)
             || !array_key_exists('media_id', $this->config)
+            || !array_key_exists('domain', $this->config)
             || empty(trim($this->config['media_id']))
+            || empty(trim($this->config['domain']))
         ) {
             return false;
         }

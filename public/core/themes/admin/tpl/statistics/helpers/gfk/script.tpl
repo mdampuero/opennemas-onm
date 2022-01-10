@@ -71,7 +71,7 @@ var gfkS2sConf = {
 
 // Instantiating a JS Agent
 var agent = gfkS2s.getAgent();
-var customParams = { c1: "bisbarra.es", c2: "{$category}" };
+var customParams = { c1: "{$domain}", c2: "{$category}" };
 
 agent.impression("{$contentId}", customParams);
 </script>

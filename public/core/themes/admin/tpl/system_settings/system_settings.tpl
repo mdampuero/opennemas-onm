@@ -1021,6 +1021,7 @@
                         </div>
                       </div>
                     </div>
+                    {if $app.security->hasPermission('MASTER')}
                     <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
                       <div class="panel panel-default">
                         <div class="panel-heading collapsed">
@@ -1041,11 +1042,20 @@
                               </div>
                             </div>
                             <div class="form-group">
+                              <label class="form-label" for="gfk-domain">
+                                {t}GFK Domain{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-domain" name="gfk-domain" ng-model="settings.gfk.domain" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
                               <label class="form-label" for="gfk-region-id">
                                 {t}GFK Region ID{/t}
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="gfk-region-id" name="gfk-region-id" ng-model="settings.gfk.region_id" type="text">
+                                <div class="help">{t}Default will be set with "es"{/t}</div>
                               </div>
                             </div>
                             <div class="form-group">
@@ -1054,6 +1064,7 @@
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="gfk-content-id" name="gfk-content-id" ng-model="settings.gfk.content_id" type="text">
+                                <div class="help">{t}Default will be set with "default"{/t}</div>
                               </div>
                             </div>
                             <small class="help">
@@ -1064,6 +1075,7 @@
                         </div>
                       </div>
                     </div>
+                    {/if}
                     {is_module_activated name="es.openhost.module.dataLayerHenneo"}
                     <div class="panel-group" id="panel-group-prometeo" data-toggle="collapse">
                       <div class="panel panel-default">

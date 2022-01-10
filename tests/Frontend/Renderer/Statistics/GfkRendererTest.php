@@ -102,7 +102,7 @@ class GfkRendererTest extends TestCase
         $config     = $reflection->getProperty('config');
 
         $config->setAccessible(true);
-        $config->setValue($renderer, ['media_id' => 'Onm']);
+        $config->setValue($renderer, ['media_id' => 'Onm', 'domain' => 'opennemas.com']);
 
         $method = new \ReflectionMethod($renderer, 'validate');
         $method->setAccessible(true);
