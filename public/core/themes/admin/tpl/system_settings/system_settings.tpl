@@ -1021,6 +1021,49 @@
                         </div>
                       </div>
                     </div>
+                    <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
+                      <div class="panel panel-default">
+                        <div class="panel-heading collapsed">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-parent="#panel-group-gfk" data-toggle="collapse" href="#gfk">
+                              <i class="fa fa-signal"></i>{t}GFK{/t}
+                            </a>
+                          </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="gfk">
+                          <div class="panel-body">
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-media-id">
+                                {t}GFK Media ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-media-id" name="gfk-media-id" ng-model="settings.gfk.media_id" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-region-id">
+                                {t}GFK Region ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-region-id" name="gfk-region-id" ng-model="settings.gfk.region_id" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-content-id">
+                                {t}GFK Content ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-content-id" name="gfk-content-id" ng-model="settings.gfk.content_id" type="text">
+                              </div>
+                            </div>
+                            <small class="help">
+                              <i class="fa fa-info-circle m-r-5 text-info"></i>
+                              {t}We are not responsible of the stats or of any third party services{/t}
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     {is_module_activated name="es.openhost.module.dataLayerHenneo"}
                     <div class="panel-group" id="panel-group-prometeo" data-toggle="collapse">
                       <div class="panel panel-default">
