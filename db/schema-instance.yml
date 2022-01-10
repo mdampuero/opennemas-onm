@@ -175,13 +175,19 @@ comments:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: comment_status
+            columns: [status]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: comments_id_contents_id
             source_field: [ content_id ]
             target_table: contents
             target_field: [ pk_content ]
-            restrictions: { onUpdate: 'SET NULL', onDelete: 'SET NULL' }
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
 commentsmeta:
     columns:
         fk_content:

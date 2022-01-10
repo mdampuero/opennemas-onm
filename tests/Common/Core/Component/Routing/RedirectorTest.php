@@ -245,6 +245,101 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getResponse when the URL passed as parameter has redirection /redirect/content
+     * enabled.
+     */
+    public function testGetResponseWhenRedirectContent()
+    {
+        $url = new Url(
+            [
+                'id'          => 637,
+                'redirection' => true,
+                'enabled'     => true,
+                'target'      => 'redirect/content?content_id=$1',
+                'type'        => 4
+            ]
+        );
+
+        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
+            ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
+            ->setMethods([ 'getTarget', 'getUrl', 'getContent' ])
+            ->getMock();
+
+        $redirector->expects($this->once())->method('getTarget')
+            ->willReturn('/redirect/content?content_id=$1');
+
+        $redirector->expects($this->once())->method('getUrl')
+            ->willReturn($url);
+
+        $redirector->expects($this->once())->method('getContent')
+            ->willReturn(111);
+
+        $this->ugh->expects($this->once())->method('generate')
+            ->with(111)->willReturn('/glork/xyzzy');
+
+        $redirector->getResponse($this->request, $url);
+    }
+
+    /**
+     * Tests getResponse when the URL passed as parameter has redirection /redirect/content
+     * with empty ID param.
+     * @expectedException \Exception
+     */
+    public function testGetResponseWhenRedirectContentEmptyId()
+    {
+        $url = new Url(
+            [
+                'id'          => 637,
+                'redirection' => true,
+                'enabled'     => true,
+                'target'      => 'redirect/content?content_id=$1',
+                'type'        => 4
+            ]
+        );
+
+        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
+            ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
+            ->setMethods([ 'getTarget' ])
+            ->getMock();
+
+        $redirector->expects($this->once())->method('getTarget')
+            ->willReturn('/redirect/content?id=$1');
+
+        $redirector->getResponse($this->request, $url);
+    }
+
+    /**
+     * Tests getResponse when the URL passed as parameter has redirection /redirect/content
+     * with empty URL.
+     * @expectedException \Exception
+     */
+    public function testGetResponseWhenRedirectContentEmptyUrl()
+    {
+        $url = new Url(
+            [
+                'id'          => 637,
+                'redirection' => true,
+                'enabled'     => true,
+                'target'      => 'redirect/content?content_id=$1',
+                'type'        => 4
+            ]
+        );
+
+        $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
+            ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
+            ->setMethods([ 'getTarget' , 'getUrl' ])
+            ->getMock();
+
+        $redirector->expects($this->once())->method('getTarget')
+            ->willReturn('/redirect/content?content_id=$1');
+
+        $redirector->expects($this->once())->method('getUrl')
+            ->willReturn(null);
+
+        $redirector->getResponse($this->request, $url);
+    }
+
+    /**
      * Tests getUrl when there is an Url in cache.
      */
     public function testGetUrlWhenCacheHit()
