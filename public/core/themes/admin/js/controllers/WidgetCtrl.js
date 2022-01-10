@@ -51,7 +51,8 @@
           created: null,
           starttime: null,
           endtime: null,
-          renderlet: 'html',
+          widget_type: null,
+          class: null,
           title: '',
           params: [],
           categories: [],
@@ -266,7 +267,7 @@
          * @param {String} uuid The widget uuid.
          */
         $scope.getForm = function(uuid) {
-          if ($scope.item.renderlet === 'html') {
+          if (!$scope.item.widget_type) {
             return;
           }
 
@@ -336,12 +337,13 @@
          */
         $scope.resetContent = function() {
           $('.widget-form').empty();
-          $scope.item.content = null;
-          $scope.widgetForm   = null;
+          $scope.item.class = null;
+          $scope.widgetForm = null;
+          $scope.item.body  = null;
         };
 
-        // Gets the form for widget when widget type changes
-        $scope.$watch('item.content', function(nv) {
+        // Gets the form for widget when widget class changes
+        $scope.$watch('item.class', function(nv) {
           if (!nv) {
             return;
           }

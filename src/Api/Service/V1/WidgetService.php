@@ -1,37 +1,41 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Api\Service\V1;
 
-use Api\Exception\CreateItemException;
-use Api\Exception\FileAlreadyExistsException;
-use Api\Exception\UpdateItemException;
+use Api\Service\V1\ContentService;
 
-class WidgetService extends ContentOldService
+class WidgetService extends ContentService
 {
     /**
-     * Initializes the BaseService.
-     *
-     * @param ServiceContainer $container The service container.
-     * @param string           $entity    The entity fully qualified class name.
-     * @param string           $entity    The validator service name.
+     * {@inheritdoc}
      */
-    public function __construct($container, $entity, $validator = null)
+    protected function getOqlForList($oql)
     {
-        $this->class      = $entity;
-        $this->container  = $container;
-        $this->dispatcher = $container->get('core.dispatcher');
-        $this->em         = $container->get('widget_repository');
-        $this->entity     = substr($entity, strrpos($entity, '\\') + 1);
+        $oql = parent::getOqlForList($oql);
 
-        if (!empty($validator)) {
-            $this->validator = $validator;
+        preg_match('/and widget_type=\"html\"/', $oql, $matches);
+
+        if (!empty($matches)) {
+            $cleanOql = preg_replace('/and widget_type=\"html\"/', '', $oql);
+
+            $intelligent = $this->container->get('api.service.widget')
+                ->getList('widget_type = "intelligentwidget"')['items'];
+
+            $ids = array_map(function ($a) {
+                return $a->id;
+            }, $intelligent);
+
+            return empty($ids)
+                ? $cleanOql
+                : $this->container->get('orm.oql.fixer')->fix($cleanOql)
+                ->addCondition(sprintf('pk_content !in [%s]', implode(',', $ids)))
+                ->getOql();
         }
+
+        preg_match('/and class=\"([a-zA-z]+)\"/', $oql, $matches);
+
+        return empty($matches)
+            ? $oql
+            : preg_replace('/and widget_type=\"intelligentwidget\"/', '', $oql);
     }
 }
