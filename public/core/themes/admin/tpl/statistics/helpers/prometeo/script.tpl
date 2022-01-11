@@ -7,7 +7,7 @@
     publish_time: "{if !empty($content)}{format_date date=get_publication_date($content) format='yyyy-MM-dd HH:mm:ss' type='custom'}{/if}",
     article_id: "{get_id($content)}",
     content_type: "{$type}",
-    section: "{get_category_slug($content)}",
+    section: "{$section}",
     tags: "{$seoTags}",
     thumbnail_image: "{$imagePath}",
     accesstype: "{$accessType}",
