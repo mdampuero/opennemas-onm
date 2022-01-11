@@ -121,7 +121,7 @@
 
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_default">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_defaultID">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -132,11 +132,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_default')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_defaultID">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_defaultID" media-picker-type="photo" ></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default" media-picker-type="photo" ></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -164,7 +164,7 @@
 
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_simple">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simpleID">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -175,11 +175,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_simple')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simpleID">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simpleID" media-picker-type="photo" ></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple" media-picker-type="photo" ></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -207,7 +207,7 @@
 
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_favico">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favicoID">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -218,11 +218,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_favico')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favicoID">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favicoID" media-picker-type="photo" ></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico" media-picker-type="photo" ></div>
                         </dynamic-image>
                       </div>
                     </div>
@@ -250,7 +250,7 @@
 
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_embed">
-                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embedID">
+                        <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed">
                           <i class="fa fa-picture-o fa-2x"></i>
                           <h5>{t}Pick an image{/t}</h5>
                         </div>
@@ -261,11 +261,11 @@
                             <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_embed')">
                               <i class="fa fa-trash-o fa-2x"></i>
                             </div>
-                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embedID">
+                            <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed">
                               <i class="fa fa-camera fa-2x"></i>
                             </div>
                           </div>
-                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embedID" media-picker-type="photo" ></div>
+                          <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed" media-picker-type="photo" ></div>
                         </dynamic-image>
                       </div>
                     </div>

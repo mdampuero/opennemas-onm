@@ -34,6 +34,19 @@ class SettingController extends Controller
         'header_script_amp',
     ];
 
+    protected $toint = [
+        'items_in_blog',
+        'items_per_page',
+        'elements_in_rss',
+        'logo_enabled',
+        'refresh_interval',
+        'logo_default',
+        'logo_simple',
+        'logo_favico',
+        'logo_embed',
+        'sitemap',
+        'frontpage_max_items'
+    ];
     /**
      * The list of settings that can be saved.
      *
@@ -186,26 +199,23 @@ class SettingController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get($keys);
         $locale   = $this->get('core.locale');
-
         // Decode scripts
         foreach ($this->base64Encoded as $key) {
             if (array_key_exists($key, $settings)) {
                 $settings[$key] = base64_decode($settings[$key]);
             }
         }
-        $toint = [
-            'items_in_blog', 'items_per_page', 'elements_in_rss',
-            'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
-            'logo_favico', 'logo_embed', 'sitemap', 'frontpage_max_items'
-        ];
-        foreach ($toint as $key) {
-            if (array_key_exists($key, $settings) && !empty($settings[$key]) &&
-                is_array($settings[$key])) {
-                foreach ($settings[$key] as $element => $value) {
-                    $settings[$key][$element] = (int) $value;
+
+        if ($this->toint && !empty($this->toint)) {
+            foreach ($this->toint as $key) {
+                if (array_key_exists($key, $settings) && !empty($settings[$key]) &&
+                    is_array($settings[$key])) {
+                    foreach ($settings[$key] as $element => $value) {
+                        $settings[$key][$element] = (int) $value;
+                    }
+                } elseif (array_key_exists($key, $settings)) {
+                    $settings[$key] = (int) $settings[$key];
                 }
-            } elseif (array_key_exists($key, $settings)) {
-                $settings[$key] = (int) $settings[$key];
             }
         }
 
@@ -249,16 +259,16 @@ class SettingController extends Controller
     public function saveAction(Request $request)
     {
         $defaults = array_fill_keys($this->keys, null);
-        $country  = $request->get('instance');
+        // $country  = $request->get('instance');
         $settings = $request->get('settings');
         $msg      = $this->get('core.messenger');
 
         // Save country for instance
-        $instance = $this->get('core.instance');
-        $instance->merge($country);
-        $this->get('orm.manager')->persist($instance);
+        // $instance = $this->get('core.instance');
+        // $instance->merge($country);
+        // $this->get('orm.manager')->persist($instance);
 
-        $settings = array_merge($settings, $this->saveFiles($settings));
+        // $settings = array_merge($settings, $this->saveFiles($settings));
         $settings = array_merge($defaults, $settings);
 
         // Remove settings for only masters

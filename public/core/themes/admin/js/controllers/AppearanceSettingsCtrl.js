@@ -11,18 +11,14 @@
      * @requires $scope
      */
     .controller('AppearanceSettingsCtrl', [
-      '$controller', '$scope', 'cleaner', 'http',
-      function($controller, $scope, cleaner, http) {
+      '$controller', '$scope', 'cleaner',
+      function($controller, $scope, cleaner) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
         $scope.settings = {
           site_color: '',
           site_color_secondary: '',
           logo_enabled: false,
-          logo_defaultID: '',
-          logo_simpleID: '',
-          logo_favicoID: '',
-          logo_embedID: '',
           cookies: '',
           cookies_hint_url: '',
           cmp_type: '',
@@ -34,25 +30,29 @@
           elements_in_rss: ''
         };
 
-        $scope.list = function() {
-          $scope.loading = true;
-          const params = $scope.settings;
-
-          http.get({
-            name: 'api_v1_backend_settings_list',
-            params: { params }
-          }).then(function(response) {
-            $scope.instance = response.data.instance;
-            $scope.extra    = response.data.extra;
-            $scope.settings = angular.merge($scope.settings, response.data.settings);
-
-            $scope.pre();
-
-            $scope.loading = false;
-          }, function() {
-            $scope.loading = false;
-          });
+        $scope.routes = {
+          saveConfig: 'api_v1_backend_settings_appearance_save',
+          getConfig:  'api_v1_backend_settings_appearance_list'
         };
+
+        // Updates data to send to server when related contents change
+        $scope.$watch('[ settings.logo_default, settings.logo_simple, settings.logo_favico, settings.logo_embed ]', function(nv) {
+          if (nv[0] && isNaN(nv[0])) {
+            $scope.settings.logo_default =  parseInt(nv[0].pk_content);
+          }
+
+          if (nv[1] && isNaN(nv[1])) {
+            $scope.settings.logo_simple =  parseInt(nv[1].pk_content);
+          }
+
+          if (nv[2] && isNaN(nv[2])) {
+            $scope.settings.logo_favico =  parseInt(nv[2].pk_content);
+          }
+
+          if (nv[3] && isNaN(nv[3])) {
+            $scope.settings.logo_embed =  parseInt(nv[3].pk_content);
+          }
+        });
 
         /**
          * @function pre
@@ -78,25 +78,6 @@
           };
 
           data = cleaner.clean(data, true);
-          if ($scope.settings.logo_defaultID) {
-            data.settings.logo_default = parseInt($scope.settings.logo_defaultID.pk_content);
-            delete data.settings.logo_defaultID;
-          }
-
-          if ($scope.settings.logo_simpleID) {
-            data.settings.logo_simple = parseInt($scope.settings.logo_simpleID.pk_content);
-            delete data.settings.logo_simpleID;
-          }
-
-          if (data.settings.logo_favicoID) {
-            data.settings.logo_favico = parseInt($scope.settings.logo_favicoID.pk_content);
-            delete data.settings.logo_favicoID;
-          }
-
-          if (data.settings.logo_embedID) {
-            data.settings.logo_embed = parseInt($scope.settings.logo_embedID.pk_content);
-            delete data.settings.logo_embedID;
-          }
           return data;
         };
       }

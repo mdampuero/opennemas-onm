@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form name="settingForm" ng-controller="SettingsCtrl" ng-init="list()" class="settings">
+  <form name="settingForm" ng-controller="ExternalSettingsCtrl" ng-init="list()" class="settings">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
