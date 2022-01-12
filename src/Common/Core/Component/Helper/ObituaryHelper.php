@@ -1,21 +1,9 @@
 <?php
 
-/**
- * This file is part of the Onm package.
- *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Common\Core\Component\Helper;
 
-use Api\Exception\GetItemException;
-use Symfony\Component\DependencyInjection\Container;
-
 /**
-* Perform searches in Database related with one content
+* Returns specific properties of the obituary content.
 */
 class ObituaryHelper extends ContentHelper
 {
@@ -59,5 +47,41 @@ class ObituaryHelper extends ContentHelper
         $value = $this->getProperty($item, 'website');
 
         return !empty($value) ? htmlentities($value) : null;
+    }
+
+    /**
+     * Returns the website data for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content website data.
+     */
+    public function hasMaps($item = null) : ?bool
+    {
+        return !empty($this->getMaps($item));
+    }
+
+    /**
+     * Returns the website data for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content website data.
+     */
+    public function hasMortuary($item = null) : ?bool
+    {
+        return !empty($this->getMortuary($item));
+    }
+
+    /**
+     * Returns the website data for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content website data.
+     */
+    public function hasWebsite($item = null) : ?bool
+    {
+        return !empty($this->getWebsite($item));
     }
 }
