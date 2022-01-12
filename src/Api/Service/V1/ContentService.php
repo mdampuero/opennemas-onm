@@ -187,7 +187,6 @@ class ContentService extends OrmService
         $data['changed'] = new \DateTime();
 
         $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
-
         parent::updateItem($id, $data);
     }
 
