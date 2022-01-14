@@ -10,6 +10,8 @@ frontend_obituary_show:
         slug:          '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
+    options:
+        expose: true
 
 frontend_obituary_show_amp:
     path:     /esquela/{slug}/{created}{id}.amp.html

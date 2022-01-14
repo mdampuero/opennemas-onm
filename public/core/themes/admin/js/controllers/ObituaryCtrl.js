@@ -99,7 +99,7 @@
           getItem:     'api_v1_backend_obituary_get_item',
           getPreview:  'api_v1_backend_obituary_get_preview',
           list:        'backend_obituaries_list',
-          public:      'frontend_obituaries_show',
+          public:      'frontend_obituary_show',
           redirect:    'backend_obituaries_show',
           saveItem:    'api_v1_backend_obituary_save_item',
           savePreview: 'api_v1_backend_obituary_save_preview',
@@ -139,10 +139,6 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory) {
-            return '';
-          }
-
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content,
