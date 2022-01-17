@@ -88,11 +88,15 @@ class ObituaryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $response = $this->get($this->service)->getList(sprintf(
-            'content_type_name="obituary" and content_status=1 and in_litter=0 '
+        $response = $this->get($this->service)->getListBySql(sprintf(
+            'select * from contents '
+            . 'inner join contentmeta '
+            . 'on contents.pk_content = contentmeta.fk_content '
+            . 'and contentmeta.meta_name = "date" '
+            . 'where content_type_name="obituary" and content_status=1 and in_litter=0 '
             . 'and (starttime is null or starttime < "%s") '
             . 'and (endtime is null or endtime > "%s") '
-            . 'order by starttime desc limit %d offset %d',
+            . 'order by meta_value desc limit %d offset %d',
             $date,
             $date,
             $params['epp'],
