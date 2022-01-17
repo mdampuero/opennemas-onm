@@ -14,11 +14,6 @@
       {include file="advertisement/partials/ad_position_selector.tpl" position_id="5192" size="(160x600)"}
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="5193" size="(120x600)"}
-    </div>
-  </div>
   <hr>
   <div class="row">
     <div class="col-md-6">
