@@ -54,6 +54,7 @@
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
+      {include datetime=true file="ui/component/content-editor/accordion/input-text.tpl" field="date" icon="fa-calendar" title="{t}Event date{/t}" iRequired=true}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="mortuary" icon="fa-university" title="{t}Mortuary{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-external-link" title="{t}Website{/t}" iRoute="item.website"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google maps url{/t}" iRoute="item.maps"}

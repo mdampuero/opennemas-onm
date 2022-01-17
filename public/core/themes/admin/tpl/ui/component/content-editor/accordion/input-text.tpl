@@ -7,11 +7,19 @@
       {t}Link{/t}
     </a>
   {/if}
+  {if $iRequired}
+    <span class="pull-right" ng-if="!expanded.{$field}">
+      {include file="common/component/icon/status.tpl" iForm="form.{$field}" iNgModel="item.{$field}" iValidation=true}
+    </span>
+  {/if}
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$field} }">
   <div class="form-group no-margin">
     <div class="controls">
-      <input class="form-control" id="{$field}" name="{$field}" ng-model="item.{$field}" type="text" />
+      <input class="form-control" id="{$field}" name="{$field}" ng-model="item.{$field}" {if $datetime}datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-max="item.event_end_date" datetime-picker-use-current="true" type="datetime"{else}type="text"{/if} {if $iRequired}required{/if}/>
+      {if $iRequired}
+        {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.{$field}" iNgModel="item.{$field}" iValidation=true}
+      {/if}
     </div>
   </div>
 </div>
