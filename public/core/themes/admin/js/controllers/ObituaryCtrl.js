@@ -23,10 +23,8 @@
      *   Provides actions to edit, save and update obituaries.
      */
     .controller('ObituaryCtrl', [
-      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
-      'http', 'related', 'routing', 'translator',
-      function($controller, $scope, $timeout, $uibModal, $window, cleaner,
-          http, related, routing, translator) {
+      '$controller', '$scope', '$timeout', '$window', 'related', 'routing', 'translator',
+      function($controller, $scope, $timeout, $window, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -118,7 +116,7 @@
           }
 
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
-            $scope.draftKey = 'article-' + $scope.data.item.pk_content + '-draft';
+            $scope.draftKey = 'obituary-' + $scope.data.item.pk_content + '-draft';
           }
 
           $scope.checkDraft();
