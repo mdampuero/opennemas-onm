@@ -1,13 +1,13 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020-2021.
+# Opennemas Developers <developers@opennemas.com>, 2020-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-23 11:51+0000\n"
-"PO-Revision-Date: 2021-11-23 12:52+0100\n"
+"POT-Creation-Date: 2022-01-17 09:58+0000\n"
+"PO-Revision-Date: 2022-01-17 11:00+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1939,6 +1939,9 @@ msgstr "Kiosko"
 
 msgid "Letter to editor"
 msgstr "Cartas ao director"
+
+msgid "Obituary"
+msgstr "Esquela"
 
 msgid "Menu"
 msgstr "Menú"
@@ -5193,6 +5196,12 @@ msgstr "Non se seleccionou ningunha posición, marque as que quere embaixo."
 
 msgid "Show less…"
 msgstr "Mostrar menos…"
+
+msgid "Obituary: frontpage"
+msgstr "Esquela: portada"
+
+msgid "Obituary: inner"
+msgstr "Esquela: interior"
 
 msgid "Google AMP"
 msgstr "Google AMP"
