@@ -133,7 +133,7 @@ $menuXml = [
                 'title'       => _('Obituaries'),
                 'icon'        => 'fa fa-shield fa-flip-vertical',
                 'link'        => url('backend_obituaries_list'),
-                'module_name' => 'es.openhost.module.obituary',
+                'module_name' => 'es.openhost.module.obituaries',
                 'privilege'   => 'OBITUARY_ADMIN',
             ],
 
