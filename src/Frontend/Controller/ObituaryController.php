@@ -103,6 +103,14 @@ class ObituaryController extends FrontendController
             $params['epp'] * ($params['page'] - 1)
         ));
 
+        $total = $this->get($this->service)->countBy(sprintf(
+            'content_type_name="obituary" and content_status=1 and in_litter=0 '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") ',
+            $date,
+            $date
+        ));
+
         // No first page and no contents
         if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
@@ -110,17 +118,13 @@ class ObituaryController extends FrontendController
 
         $params = array_merge($params, [
             'obituaries'    => $response['items'],
-            'total'         => $response['total'],
+            'total'         => $total,
             'pagination'    => $this->get('paginator')->get([
-                'boundary'    => false,
                 'directional' => true,
-                'maxLinks'    => 0,
                 'epp'         => $params['epp'],
                 'page'        => $params['page'],
-                'total'       => $response['total'],
-                'route'       => [
-                    'name'   => 'frontend_obituaries_frontpage'
-                ]
+                'total'       => $total,
+                'route'       => 'frontend_obituaries'
             ])
         ]);
     }
