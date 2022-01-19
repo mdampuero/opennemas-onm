@@ -61,14 +61,6 @@
           updateItem: 'api_v1_backend_url_update_item'
         };
 
-        /**
-         * @inheritdoc
-         */
-        $scope.buildScope = function() {
-          $scope.checkFields();
-          return true;
-        };
-
         // Updates item target when selected content from content picker changes
         $scope.$watch('data.extra.content', function(nv, ov) {
           if (!nv || nv.length === 0 || nv === ov) {

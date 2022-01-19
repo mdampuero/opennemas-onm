@@ -55,15 +55,6 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      $scope.checkFields();
-      $scope.app.fields.photo.hidden =
-        [
-          'category', 'slug',
-          'bodyLink', 'schedule', 'lists',
-          'featuredFrontpage', 'featuredInner',
-          'relatedFrontpage', 'relatedInner'
-        ];
-
       $scope.localize($scope.data.item, 'item');
 
       if ($scope.draftKey !== null && $scope.data.item.pk_content) {

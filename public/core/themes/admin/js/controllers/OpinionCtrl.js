@@ -8,6 +8,19 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+    $scope.expanded = {};
+    $scope.formSettings = {
+      name: 'opinion',
+      expansibleFields: [
+        { name: 'author', title: 'Author' },
+        { name: 'tags', title: 'Tags' },
+        { name: 'slug', title: 'Slug' },
+        { name: 'bodyLink', title: 'External link' },
+        { name: 'schedule', title: 'Schedule' },
+        { name: 'featuredFrontpage', title: 'Featured frontpage' },
+        { name: 'featuredInner', title: 'Featured inner' },
+      ]
+    };
 
     /**
      * @inheritdoc
@@ -18,11 +31,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @inheritdoc
      */
     $scope.draftKey = 'opinion-draft';
-
-    /**
-     * @inheritdoc
-     */
-    $scope.contentKey = 'opinion';
 
     /**
      * @inheritdoc
@@ -95,12 +103,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      $scope.checkFields();
-      $scope.app.fields.opinion.hidden =
-        [ 'category', 'lists', 'relatedInner', 'relatedFrontpage' ];
-
       $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+      $scope.expandFields();
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;

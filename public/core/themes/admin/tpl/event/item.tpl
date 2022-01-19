@@ -33,6 +33,11 @@
     </h5>
   </li>
   <li class="quicklinks">
+    <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t}Config opinion form{/t}">
+      <span class="fa fa-cog fa-lg"></span>
+    </a>
+  </li>
+  <li class="quicklinks">
     <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
       <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
       {t}Save{/t}
@@ -187,5 +192,8 @@
   </script>
   <script type="text/ng-template" id="modal-translate">
     {include file="common/modals/_translate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}

@@ -19,6 +19,19 @@
       function($controller, $scope, $window, linker, localizer, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'poll',
+          expansibleFields: [
+            { name: 'author', title: 'Author' },
+            { name: 'category', title: 'Category' },
+            { name: 'tags', title: 'Tags' },
+            { name: 'slug', title: 'Slug' },
+            { name: 'schedule', title: 'Schedule' },
+            { name: 'closed', title: 'Vote end date' },
+            { name: 'featuredInner', title: 'Featured inner' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -119,12 +132,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.poll.hidden =
-            [ 'bodyLink', 'featuredFrontpage', 'relatedInner', 'relatedFrontpage', 'lists' ];
-
           $scope.localize($scope.data.item, 'item', true, [ 'items', 'related_contents' ]);
-
+          $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;

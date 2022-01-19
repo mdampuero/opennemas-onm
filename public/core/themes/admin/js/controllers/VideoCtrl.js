@@ -8,6 +8,18 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+    $scope.expanded = {};
+    $scope.formSettings = {
+      name: 'video',
+      expansibleFields: [
+        { name: 'author', title: 'Author' },
+        { name: 'category', title: 'Category' },
+        { name: 'tags', title: 'Tags' },
+        { name: 'slug', title: 'Slug' },
+        { name: 'schedule', title: 'Schedule' },
+        { name: 'featuredFrontpage', title: 'Featured frontpage' },
+      ]
+    };
 
     /**
      * @inheritdoc
@@ -127,14 +139,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
-      $scope.checkFields();
-      $scope.app.fields.video.hidden =
-        [
-          'lists', 'bodyLink', 'featuredInner',
-          'relatedFrontpage', 'relatedInner'
-        ];
       $scope.localize($scope.data.item, 'item', true);
-
+      $scope.expandFields();
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;

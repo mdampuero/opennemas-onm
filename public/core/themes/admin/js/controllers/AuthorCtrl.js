@@ -19,6 +19,13 @@
       '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
       function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'author',
+          expansibleFields: [
+            { name: 'slug', title: 'Slug' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -66,14 +73,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.author.hidden =
-            [
-              'author', 'category', 'tags',
-              'bodyLink', 'schedule', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
+          $scope.expandFields();
 
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};

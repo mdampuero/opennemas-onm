@@ -27,6 +27,15 @@
           routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'letter',
+          expansibleFields: [
+            { name: 'tags', title: 'Tags' },
+            { name: 'slug', title: 'Slug' },
+            { name: 'schedule', title: 'Schedule' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -102,16 +111,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.letter.hidden =
-            [
-              'author', 'category', 'bodyLink', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
-
           $scope.localize($scope.data.item, 'item', true, [ ]);
-
+          $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;

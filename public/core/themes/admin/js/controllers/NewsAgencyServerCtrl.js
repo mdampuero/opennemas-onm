@@ -86,8 +86,6 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-
           if ($scope.item.activated) {
             $scope.item.activated = parseInt($scope.item.activated);
           }

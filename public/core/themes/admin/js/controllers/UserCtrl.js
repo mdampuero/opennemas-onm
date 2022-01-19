@@ -22,6 +22,15 @@
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'user',
+          expansibleFields: [
+            { name: 'slug', title: 'Slug' },
+            { name: 'user_groups', title: 'User groups' },
+            { name: 'language', title: 'Language and time' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -65,14 +74,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.user.hidden =
-            [
-              'author', 'category', 'tags',
-              'bodyLink', 'schedule', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
+          $scope.expandFields();
 
           $scope.backup.activated = $scope.item.activated;
           $scope.flags.categories = { none: false, all: false };

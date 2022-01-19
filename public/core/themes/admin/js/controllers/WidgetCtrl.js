@@ -20,6 +20,13 @@
       function($compile, $controller, $scope, cleaner, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'widget',
+          expansibleFields: [
+            { name: 'schedule', title: 'Schedule' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -239,15 +246,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.widget.hidden =
-            [
-              'author', 'category', 'slug',
-              'bodyLink', 'tags', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
-
+          $scope.expandFields();
           var params = [];
 
           for (var key in $scope.item.params) {

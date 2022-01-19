@@ -23,6 +23,32 @@
   </a>
 {/block}
 
+{block name="primaryActions"}
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+        <h5>
+          <i class="p-r-15">
+            <i class="fa fa-check"></i>
+            {t}Draft saved at {/t}[% draftSaved %]
+          </i>
+        </h5>
+      </li>
+      <li class="quicklinks">
+        <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t}Config kioskos form{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+          <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+          {t}Save{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
+{/block}
+
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -141,5 +167,8 @@
   </script>
   <script type="text/ng-template" id="modal-translate">
     {include file="common/modals/_translate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}

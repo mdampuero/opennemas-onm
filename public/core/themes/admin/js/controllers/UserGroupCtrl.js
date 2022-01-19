@@ -23,6 +23,13 @@
       function($controller, $scope, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'userGroup',
+          expansibleFields: [
+            { name: 'visibility', title: 'Visibility' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -130,14 +137,6 @@
         ];
 
         /**
-         * @inheritdoc
-         */
-        $scope.buildScope = function() {
-          $scope.checkFields();
-          return true;
-        };
-
-        /**
          * @memberOf UserGroupCtrl
          *
          * Selected privileges and flags.
@@ -148,6 +147,13 @@
           all: {},
           allSelected: false,
           privileges: {}
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.expandFields();
         };
 
         /**

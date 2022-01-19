@@ -18,6 +18,22 @@
       '$controller', '$scope', 'related', 'routing', 'translator',
       function($controller, $scope, related, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'event',
+          expansibleFields: [
+            { name: 'author', title: 'Author' },
+            { name: 'category', title: 'Category' },
+            { name: 'tags', title: 'Tags' },
+            { name: 'slug', title: 'Slug' },
+            { name: 'schedule', title: 'Schedule' },
+            { name: 'when', title: 'Date of the event' },
+            { name: 'where', title: 'Location of the event' },
+            { name: 'external_website', title: 'External website' },
+            { name: 'featuredFrontpage', title: 'Featured frontpage' },
+            { name: 'featuredInner', title: 'Featured inner' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -110,12 +126,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.event.hidden =
-            [ 'bodyLink', 'relatedInner', 'relatedFrontpage', 'lists' ];
-
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+          $scope.expandFields();
           // Use default value for new items
           if (!$scope.data.item.pk_content) {
             $scope.data.item.with_comment =

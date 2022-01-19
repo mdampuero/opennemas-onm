@@ -17,8 +17,8 @@
      *   Controller for News Agency listing.
      */
     .controller('ModalCtrl', [
-      '$uibModalInstance', '$scope', 'routing', 'success', 'template',
-      function($uibModalInstance, $scope, routing, success, template) {
+      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template',
+      function($uibModalInstance, $scope, $q, routing, success, template) {
         /**
          * @memberOf ModalCtrl
          *
@@ -69,22 +69,29 @@
           var getType = {};
 
           if (success && getType.toString.call(success) === '[object Function]') {
-            success($uibModalInstance, $scope.template).then(function(response) {
+            $q.when(success($uibModalInstance, $scope.template)).then(function(response) {
               $scope.loading = 0;
-              $uibModalInstance.close({
-                data: response.data,
-                headers: response.headers,
-                status: response.status,
-                success: true
-              });
+              if (response && Object.keys(response) > 0) {
+                $uibModalInstance.close({
+                  data: response.data,
+                  headers: response.headers,
+                  status: response.status,
+                  success: true
+                });
+              } else {
+                $uibModalInstance.close(true);
+              }
             }, function(response) {
-              $scope.loading = 0;
-              $uibModalInstance.close({
-                data: response.data,
-                headers: response.headers,
-                status: response.status,
-                success: false
-              });
+              if (response && Object.keys(response) > 0) {
+                $uibModalInstance.close({
+                  data: response.data,
+                  headers: response.headers,
+                  status: response.status,
+                  success: false
+                });
+              } else {
+                $uibModalInstance.close(true);
+              }
             });
           } else {
             $uibModalInstance.close(true);

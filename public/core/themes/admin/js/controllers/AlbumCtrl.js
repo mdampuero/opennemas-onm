@@ -20,6 +20,19 @@
       function($controller, $scope, $timeout, $uibModal, $window, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'album',
+          expansibleFields: [
+            { name: 'author', title: 'Author' },
+            { name: 'category', title: 'Category' },
+            { name: 'tags', title: 'Tags' },
+            { name: 'slug', title: 'Slug' },
+            { name: 'schedule', title: 'Schedule' },
+            { name: 'featuredFrontpage', title: 'Featured frontpage' },
+            { name: 'agency', title: 'Agency' }
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -141,15 +154,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.album.hidden =
-            [
-              'bodyLink', 'lists', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
-
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+          $scope.expandFields();
           // Use default value for new items
           if (!$scope.data.item.pk_content) {
             $scope.data.item.with_comment =

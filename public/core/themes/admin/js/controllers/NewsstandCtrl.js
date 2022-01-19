@@ -17,6 +17,16 @@
       '$controller', '$scope', '$timeout', '$window', 'routing', 'translator',
       function($controller, $scope, $timeout, $window, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'newsstand',
+          expansibleFields: [
+            { name: 'category', title: 'Category' },
+            { name: 'slug', title: 'Slug' },
+            { name: 'schedule', title: 'Schedule' },
+            { name: 'date', title: 'Date' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -84,16 +94,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.kiosko.hidden =
-            [
-              'author', 'tags', 'bodyLink', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
-
           $scope.localize($scope.data.item, 'item', true);
-
+          $scope.expandFields();
           var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
 
           if (featured.path) {

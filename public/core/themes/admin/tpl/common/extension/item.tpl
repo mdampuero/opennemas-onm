@@ -79,7 +79,7 @@
             {block name="rightColumn"}{/block}
           </div>
           <div class="col-md-8 col-md-pull-4">
-            {include file="common/extension/fields.tpl"}
+
             {block name="leftColumn"}{/block}
           </div>
         </div>

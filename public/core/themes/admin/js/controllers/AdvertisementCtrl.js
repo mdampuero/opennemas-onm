@@ -21,7 +21,7 @@
       function($controller, $rootScope, $scope, $uibModal, $timeout) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
-
+        //TODO: Add form settings functionality when this controller extend RestInnerCtrl
         /**
          * @memberOf AdvertisementCtrl
          *

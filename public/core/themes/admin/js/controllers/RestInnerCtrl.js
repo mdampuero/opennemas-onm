@@ -67,43 +67,46 @@
          */
         $scope.refreshOnUpdate = false;
 
-        /**
-         * @function checkFields
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Checks if the fields exist and creates or expands them
-         */
-        $scope.checkFields = function() {
-          $scope.app.fields.collapsed = true;
-
-          if (!$scope.app.fields.hasOwnProperty($scope.contentKey)) {
-            $scope.app.fields[$scope.contentKey] = {
-              selected: [],
-              hidden: []
-            };
-          } else {
-            $scope.setExpandedFields($scope.app.fields[$scope.contentKey].selected, true);
+        $scope.expandFields = function() {
+          if ($scope.formSettings && $scope.formSettings.name && $scope.app.fields[$scope.formSettings.name] &&
+            $scope.app.fields[$scope.formSettings.name].expanded) {
+            $scope.expanded = Object.assign({}, $scope.app.fields[$scope.formSettings.name].expanded);
           }
         };
 
-        /**
-         * @function isFieldHidden
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Checks if a field is hidden for the current list.
-         *
-         * @param {String} name The field name.
-         */
-        $scope.isFieldHidden = function(name) {
-          var fields = null;
+        $scope.expansibleSettings = function() {
+          var modal = $uibModal.open({
+            backdrop:    'static',
+            templateUrl: 'modal-expansible-fields',
+            controller:  'ModalCtrl',
+            resolve: {
+              template: function() {
+                var fields = $scope.app.fields && $scope.app.fields[$scope.formSettings.name] &&
+                  $scope.app.fields[$scope.formSettings.name].expanded ?
+                  $scope.app.fields[$scope.formSettings.name].expanded : {};
 
-          if ($scope.app.hasOwnProperty('fields') && $scope.app.fields.hasOwnProperty($scope.contentKey)) {
-            fields = $scope.app.fields[$scope.contentKey];
-          }
+                return {
+                  formSettings: $scope.formSettings,
+                  defaultExpanded: Object.assign({}, fields)
+                };
+              },
+              success: function() {
+                return function(modal, template) {
+                  $scope.app.fields[$scope.formSettings.name] = {};
+                  $scope.app.fields[$scope.formSettings.name].expanded = Object.assign({}, template.defaultExpanded);
+                  return true;
+                };
+              }
+            }
+          });
 
-          return fields !== null ? fields.hidden.indexOf(name) !== -1 : false;
+          modal.result.then(function(response) {
+            var fields = $scope.app.fields && $scope.app.fields[$scope.formSettings.name] &&
+              $scope.app.fields[$scope.formSettings.name].expanded ?
+              $scope.app.fields[$scope.formSettings.name].expanded : {};
+
+            $scope.expanded =  Object.assign({}, fields);
+          });
         };
 
         /**
@@ -345,14 +348,6 @@
             $scope.expanded[item] = value;
           });
         };
-
-        // Define watcher to fields
-        $scope.$watch('app.fields', function(nv, ov) {
-          $scope.setExpandedFields(ov[$scope.contentKey].selected, false);
-          $scope.setExpandedFields(nv[$scope.contentKey].selected, true);
-
-          return true;
-        }, true);
       }
     ]);
 })();

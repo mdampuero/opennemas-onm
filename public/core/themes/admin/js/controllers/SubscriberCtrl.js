@@ -23,6 +23,13 @@
       function($controller, $scope, $uibModal, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'subscriber',
+          expansibleFields: [
+            { name: 'subscriptions', title: 'Lists' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -83,8 +90,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-
+          $scope.expandFields();
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }

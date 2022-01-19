@@ -115,14 +115,6 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.attachment.hidden =
-            [
-              'author', 'slug', 'tags', 'bodyLink', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
-
           $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
 
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {

@@ -19,6 +19,13 @@
       function($controller, $scope, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+        $scope.expanded = {};
+        $scope.formSettings = {
+          name: 'staticPage',
+          expansibleFields: [
+            { name: 'slug', title: 'Slug' },
+          ]
+        };
 
         /**
          * @inheritdoc
@@ -89,17 +96,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.checkFields();
-          $scope.app.fields.staticpage.hidden =
-            [
-              'author', 'category', 'tags',
-              'bodyLink', 'schedule', 'lists',
-              'featuredFrontpage', 'featuredInner',
-              'relatedFrontpage', 'relatedInner'
-            ];
-
           $scope.localize($scope.data.item, 'item', true);
-
+          $scope.expandFields();
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'static-page-' + $scope.data.item.pk_content + '-draft';
           }
