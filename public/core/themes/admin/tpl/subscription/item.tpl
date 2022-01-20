@@ -27,7 +27,7 @@
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
       <li class="quicklinks">
-        <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t}Config lists form{/t}">
+        <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t 1=_('Subscription')}Config form: '%1'{/t}">
           <span class="fa fa-cog fa-lg"></span>
         </a>
       </li>

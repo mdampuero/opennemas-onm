@@ -9,6 +9,8 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
+    $scope.expanded = {};
+
     /**
      * @inheritdoc
      */
@@ -51,7 +53,7 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item');
-
+      $scope.expandFields();
       if ($scope.draftKey !== null && $scope.data.item.pk_content) {
         $scope.draftKey = 'photo-' + $scope.data.item.pk_content + '-draft';
       }

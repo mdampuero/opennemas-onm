@@ -38,7 +38,7 @@
         </h5>
       </li>
       <li class="quicklinks">
-        <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t}Config album form{/t}">
+        <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t 1=_('Album')}Config form: '%1'{/t}">
           <span class="fa fa-cog fa-lg"></span>
         </a>
       </li>

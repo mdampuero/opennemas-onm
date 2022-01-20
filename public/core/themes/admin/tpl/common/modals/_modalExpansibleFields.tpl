@@ -11,7 +11,7 @@
   <div class="form-group" ng-repeat="item in template.formSettings.expansibleFields">
     <div class="checkbox">
       <input id="[% item.name %]" name="[% item.name %]" type="checkbox" ng-model="template.defaultExpanded[item.name]" ng-cloak>
-      <label for="[% item.name %]" class="form-label">{t}[% item.title %]{/t}</label>
+      <label for="[% item.name %]" class="form-label">[% item.title %]</label>
     </div>
   </div>
 </div>
