@@ -256,10 +256,6 @@ backend_event:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/event.yml'
 
-backend_obituary:
-    prefix: /
-    resource: '@BackendBundle/Resources/config/routing/obituary.yml'
-
 backend_frontpage:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/frontpage.yml'
@@ -287,6 +283,10 @@ backend_news_agency_server:
 backend_notification:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/notification.yml'
+
+backend_obituary:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/obituary.yml'
 
 backend_opinion:
     prefix:    /
