@@ -1,11 +1,9 @@
 <div class="modal-header form-settings-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
   <h4 class="modal-title">
-      <i class="fa fa-cog"></i>
       {t}Default expanded fields{/t}
   </h4>
   <p class="modal-subtitle">{t}Selected fields will be automatically expanded when the form loads{/t}</p>
-
 </div>
 <div class="modal-body form-settings-body">
   <div class="form-group" ng-repeat="item in template.formSettings.expansibleFields">
