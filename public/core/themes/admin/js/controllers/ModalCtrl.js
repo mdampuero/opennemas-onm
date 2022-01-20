@@ -68,34 +68,33 @@
 
           var getType = {};
 
-          if (success && getType.toString.call(success) === '[object Function]') {
-            $q.when(success($uibModalInstance, $scope.template)).then(function(response) {
-              $scope.loading = 0;
-              if (response && Object.keys(response) > 0) {
-                $uibModalInstance.close({
-                  data: response.data,
-                  headers: response.headers,
-                  status: response.status,
-                  success: true
-                });
-              } else {
-                $uibModalInstance.close(true);
-              }
-            }, function(response) {
-              if (response && Object.keys(response) > 0) {
-                $uibModalInstance.close({
-                  data: response.data,
-                  headers: response.headers,
-                  status: response.status,
-                  success: false
-                });
-              } else {
-                $uibModalInstance.close(true);
-              }
-            });
-          } else {
+          if (!success || !getType.toString.call(success) === '[object Function]') {
             $uibModalInstance.close(true);
+            return;
           }
+
+          $q.when(success($uibModalInstance, $scope.template))
+            .then(function(response) {
+              $scope.resolve(response, true);
+            }, function(response) {
+              $scope.resolve(response, false);
+            });
+        };
+
+        $scope.resolve = function(response, success) {
+          $scope.loading = 0;
+
+          if (!response || Object.keys(response) > 0) {
+            $uibModalInstance.close(success);
+            return;
+          }
+
+          $uibModalInstance.close({
+            data: response.data,
+            headers: response.headers,
+            status: response.status,
+            success: success
+          });
         };
 
         /**

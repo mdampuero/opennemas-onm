@@ -39,7 +39,7 @@
         </h5>
       </li>
       <li class="quicklinks">
-        <a class="btn btn-link" class="" ng-click="expansibleSettings()" title="{t 1=_('Photo')}Config form: '%1'{/t}">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Photo')}Config form: '%1'{/t}">
           <span class="fa fa-cog fa-lg"></span>
         </a>
       </li>

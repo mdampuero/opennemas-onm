@@ -47,6 +47,13 @@
          */
         $scope.refreshOnUpdate = false;
 
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *  Expand fields on form load
+         *
+         */
         $scope.expandFields = function() {
           if ($scope.formSettings && $scope.formSettings.name && $scope.app.fields[$scope.formSettings.name] &&
             $scope.app.fields[$scope.formSettings.name].expanded) {
@@ -54,6 +61,14 @@
           }
         };
 
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *  Call modal and set expanded fields by default in form
+         *
+         * @type {Object}
+         */
         $scope.expansibleSettings = function() {
           var modal = $uibModal.open({
             backdrop:    'static',
@@ -164,6 +179,7 @@
             if (!response.data.item) {
               $scope.data.item = {};
             }
+
             if (response.data.extra && response.data.extra.formSettings) {
               $scope.formSettings = response.data.extra.formSettings;
             }

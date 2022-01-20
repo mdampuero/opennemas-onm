@@ -2,9 +2,9 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
-  '$controller', '$http', '$q', '$uibModal', '$rootScope', '$scope', 'cleaner',
+  '$controller', '$uibModal', '$scope', 'cleaner',
   'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
-  function($controller, $http, $q, $uibModal, $rootScope, $scope, cleaner,
+  function($controller, $uibModal, $scope, cleaner,
       messenger, routing, $timeout, webStorage, $window, translator) {
     'use strict';
 
