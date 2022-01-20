@@ -20,8 +20,6 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
-        $scope.expanded = {};
-
         /**
          * @inheritdoc
          */

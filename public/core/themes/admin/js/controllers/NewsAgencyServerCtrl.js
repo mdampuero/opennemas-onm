@@ -20,8 +20,6 @@
       function($controller, $scope, http) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
-        $scope.expanded = {};
-
         $scope.item = {
           authors_map: [],
           categories_map: [],

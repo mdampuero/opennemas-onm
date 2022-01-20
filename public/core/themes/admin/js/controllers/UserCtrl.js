@@ -22,7 +22,6 @@
       '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner', 'http', 'messenger', 'routing',
       function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
-        $scope.expanded = {};
 
         /**
          * @inheritdoc

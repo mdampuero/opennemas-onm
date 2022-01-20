@@ -20,8 +20,6 @@
       function($controller, $scope, $timeout, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
-        $scope.expanded = {};
-
         /**
          * @memberOf AuthorCtrl
          *

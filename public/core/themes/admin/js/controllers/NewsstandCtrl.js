@@ -18,8 +18,6 @@
       function($controller, $scope, $timeout, $window, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
-        $scope.expanded = {};
-
         /**
          * @inheritdoc
          */

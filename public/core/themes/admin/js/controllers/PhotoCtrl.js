@@ -9,8 +9,6 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
-    $scope.expanded = {};
-
     /**
      * @inheritdoc
      */
