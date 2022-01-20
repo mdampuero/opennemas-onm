@@ -190,4 +190,29 @@ class RelatedHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->helper->hasRelatedContents($content, 'inner'));
     }
+
+    /**
+     * Tests hasRelatedContentswithRelatedObject.
+     */
+    public function testHasRelatedContentswithRelatedObject()
+    {
+        $photo = new \Content();
+
+        $article                 = new \Content();
+        $article->id             = 205;
+        $article->content_status = 1;
+        $article->starttime      = '2020-01-01 00:00:00';
+
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->related_contents  = $photo;
+
+        $this->assertTrue($this->helper->hasRelatedContents($content, 'mumble'));
+        $this->assertTrue($this->helper->hasRelatedContents($content, 'inner'));
+
+        $this->assertTrue($this->helper->hasRelatedContents($content, 'inner'));
+    }
 }

@@ -61,6 +61,11 @@ class RelatedHelper
             return [];
         }
 
+        // Added for Content Listing RSS. Check that it does not cause failures on other places.
+        if (is_object($item->related_contents)) {
+            return [ $item->related_contents ];
+        }
+
         $items = array_filter($item->related_contents, function ($a) use ($type) {
             return $a['type'] === $type;
         });

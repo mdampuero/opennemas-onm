@@ -23,7 +23,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
-            ->setMethods(['isReadyForPublish'])
+            ->setMethods([ 'isReadyForPublish' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -149,6 +149,29 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ])->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault'));
+    }
+
+    /**
+     * Tests getPhotoPath when no item.
+     */
+    public function testGetPhotoPathWhenNoItem()
+    {
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContent' ])
+            ->getMock();
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn(null);
+
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContent' ])
+            ->getMock();
+
+        $this->assertNull(
+            $this->helper->getPhotoPath([ 25 ], null, [], true)
+        );
     }
 
     /**

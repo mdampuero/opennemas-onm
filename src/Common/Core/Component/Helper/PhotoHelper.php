@@ -81,6 +81,11 @@ class PhotoHelper
             return $item;
         }
 
+        // Added for Content Listing RSS. Check that it does not cause failures on other places.
+        if (!empty($item->path) && preg_match('/^https?.*/',$item->path)) {
+            return $item->path;
+        }
+
         $item = $this->contentHelper->getContent($item, 'Photo');
 
         if (empty($item)) {
